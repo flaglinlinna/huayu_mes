@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      xmlns:th="http://www.thymeleaf.org" >
+<!--<head>-->
+<!--<meta charset="UTF-8">-->
+<!--</head>-->
+<head th:include="layout :: htmlhead" th:with="title='角色管理'">
+</head>
+<body>
+<!--查询面板-->
+<div th:replace="api/fragment/search :: searcher"></div>
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="margin:0px;">
+    <ul class="layui-tab-title">
+        <li class="layui-this">生产物料<span class="layui-badge-rim layui-bg-red">未知</span></li>
+    </ul>
+    <div class="layui-tab-content">
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header" style="background:#87CEEB;color:#4682B4;font-weight:bold;">待接受<span class="layui-badge layui-bg-blue" id="toBeAccepted">未知</span></div>
+                    <div class="layui-card-body">
+                        <div class="layui-row">
+                            <div class="layui-col-md6">
+                                <ul class="mui-table-view">
+                                    <li class="mui-table-view-cell" lay-href="/junya/api/po/toPOList?type=newOrderQuantity" lay-text="新订单">新订单
+                                        <span class="layui-badge-rim layui-bg-blue" id="newOrderQuantity"></span>
+                                    </li>
+                                    <li class="mui-table-view-cell" lay-href="/junya/api/po/toPOList?type=deliveryTimeChangedOrderQuantity" lay-text="订单交期修改">订单交期修改
+                                        <span class="layui-badge-rim layui-bg-blue" id="deliveryTimeChangedOrderQuantity"></span>
+                                    </li>
+                                    <li class="mui-table-view-cell" lay-href="/junya/api/po/toPOList?type=cancelledToConfirmedOrderQuantity" lay-text="订单取消确认">订单取消确认
+                                        <span class="layui-badge layui-bg-blue" id="cancelledToConfirmedOrderQuantity"></span>
+                                    </li>
+                                    <li class="mui-table-view-cell">内容变更通知
+                                        <span class="layui-badge layui-bg-blue" id="changedOrderQuantity"></span>
+                                    </li>
+                                    <li class="mui-table-view-cell" lay-href="/junya/api/po/toPOList?type=cancelOrderQuantity" lay-text="订单取消通知">订单取消通知
+                                        <span class="layui-badge layui-bg-blue" id="cancelOrderQuantity"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="layui-col-md6">
+                                <ul class="mui-table-view">
+                                    <li class="mui-table-view-cell" lay-href="/junya/api/po/toPOList?type=deliveryTimeChangedPendingOrderQuantity" lay-text="待华为确认交期更改">待华为确认交期更改
+                                        <span class="layui-badge-rim layui-bg-blue" id="deliveryTimeChangedPendingOrderQuantity"></span>
+                                    </li>
+                                    <li class="mui-table-view-cell" lay-href="/junya/api/po/toPOList?type=vendorApplyQtyChangeOrderQuantity" lay-text="待华为确认数量变更">待华为确认数量变更
+                                        <span class="layui-badge-rim layui-bg-blue" id="vendorApplyQtyChangeOrderQuantity"></span>
+                                    </li>
+                                    <li class="mui-table-view-cell" lay-href="/junya/api/po/toPOList?type=vendorApplyCancelOrderQuantity" lay-text="待华为确认取消">待华为确认取消
+                                        <span class="layui-badge layui-bg-blue" id="vendorApplyCancelOrderQuantity"></span>
+                                    </li>
+                                    <li class="mui-table-view-cell" lay-href="/junya/api/po/toPOList?type=rmaBarterOrderQuantity" lay-text="RMA交货订单通知">RMA交货订单通知
+                                        <span class="layui-badge layui-bg-blue" id="rmaBarterOrderQuantity"></span>
+                                    </li>
+                                    <li class="mui-table-view-cell" lay-href="/junya/api/po/toPOList?type=newPOVciCAQuantity" lay-text="VCI-CA订单">VCI-CA订单
+                                        <span class="layui-badge layui-bg-blue" id="newPOVciCAQuantity"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header" style="background:#AFEEEE;color:#00BFFF;font-weight:bold;">已接受<span class="layui-badge layui-bg-blue" id="accepted">未知</span></div>
+                    <div class="layui-card-body">
+                        <ul class="mui-table-view">
+                            <li lay-href="/junya/api/po/toPOList?type=intransitOrderQuantity" lay-text="在途订单" class="mui-table-view-cell">在途订单
+                                <span class="layui-badge-rim layui-bg-blue" id="intransitOrderQuantity"></span>
+                            </li>
+                            <li lay-href="/junya/api/po/toPOList?type=closed4Receving" lay-text="已交货未付款关闭" class="mui-table-view-cell" >已交货未付款关闭
+                                <span class="layui-badge-rim layui-bg-blue" id="closed4Receving"></span>
+                            </li>
+                            <li lay-href="/junya/api/po/toPOList?type=closedOrderQuantity" lay-text="已付款关闭" class="mui-table-view-cell">已付款关闭
+                                <span class="layui-badge layui-bg-blue" id="closedOrderQuantity"></span>
+                            </li>
+                            <li lay-href="/junya/api/po/toPOList?type=archivedOrder" lay-text="归档订单" class="mui-table-view-cell">归档订单
+                                <span class="layui-badge layui-bg-blue" id="archivedOrder">查看</span>
+                            </li>
+                            <li lay-href="/junya/api/po/toPOList?type=cancelledOrderQuantity" lay-text="取消订单" class="mui-table-view-cell">取消订单
+                                <span class="layui-badge layui-bg-blue" id="cancelledOrderQuantity"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header" style="background:#FFA07A;color:#FF6347;font-weight:bold;">预警<span class="layui-badge layui-bg-blue" id="warning">未知</span></div>
+                    <div class="layui-card-body">
+                        <ul class="mui-table-view">
+                            <li lay-href="/junya/api/po/toPOList?type=expiredOrderQuantity" lay-text="新订单超过三天未处理" class="mui-table-view-cell">新订单超过三天未处理
+                                <span class="layui-badge-rim layui-bg-blue" id="expiredOrderQuantity"></span>
+                            </li>
+                            <li lay-href="/junya/api/po/toPOList?type=arrivalOnWeekOrderQuantity" lay-text="预计两周内到货" class="mui-table-view-cell">预计两周内到货
+                                <span class="layui-badge-rim layui-bg-blue" id="arrivalOnWeekOrderQuantity"></span>
+                            </li>
+                            <li lay-href="/junya/api/po/toPOList?type=nonDeliveryOrderQuantity" lay-text="下单六个月未交货" class="mui-table-view-cell">下单六个月未交货
+                                <span class="layui-badge layui-bg-blue" id="nonDeliveryOrderQuantity"></span>
+                            </li>
+                            <li lay-href="/junya/api/po/toPOList?type=overdueOrderQuantity" lay-text="过期PO" class="mui-table-view-cell">过期PO
+                                <span class="layui-badge layui-bg-blue" id="overdueOrderQuantity"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script  th:inline="none">
+    $(function(){
+        layui.use(['table','form' ,'layer'], function() {
+            var form = layui.form;
+            var layer = layui.layer;
+            getData();
+
+            //监听提交
+            form.on('submit(searchShow)', function(data){
+                //
+                if($(".searchDisplay").css('display') === 'none'){
+                    $('.searchDisplay').css({'display': 'inline'});
+                }else{
+                    $('.searchDisplay').css({'display': 'none'});
+                    $("#agentName").val('');
+                    $("#moreXDaysUndeal").val('');
+                    $("#manufactureSiteInfo").val('');
+                    $("#acceptDate").val('');
+                }
+                return false;
+            });
+        })
+
+    })
+    function getData(){
+        CoreUtil.sendAjax("api/po/board",null,function (res) {
+            if(res.result){
+                for(var key  in res.data.detail){
+                    $("#"+key).html(res.data.detail[key])
+                }
+
+                //total
+                $("#toBeAccepted").html(res.data.toBeAccepted.pageVO.totalRows)
+                $("#accepted").html(res.data.accepted.pageVO.totalRows)
+                $("#warning").html(res.data.detail["expiredOrderQuantity"] + res.data.detail["arrivalOnWeekOrderQuantity"] +
+                    res.data.detail["nonDeliveryOrderQuantity"] + res.data.detail["overdueOrderQuantity"])
+            }else{
+                layer.msg(res.msg, {
+                    time: 20000, //20s后自动关闭
+                    btn: ['知道了']
+                });
+            }
+        },"POST",false,function (res) {
+            layer.msg("抱歉！您暂无获取菜单权限列表的权限");
+            var noAuthorityData=[];
+            renderTable(noAuthorityData);
+        });
+    }
+</script>
+</body>
+</html>

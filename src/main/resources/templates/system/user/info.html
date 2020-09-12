@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='设置我的资料'"></head>
+<body class="layui-layout-body">
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">设置我的资料</div>
+                <div class="layui-card-body" pad15>
+
+                    <div class="layui-form" lay-filter="">
+                        <form id="userForm">
+                            <input type="hidden" id="id" name="id" readonly class="layui-input">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户账号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="bsCode" name="bsCode" readonly lay-verify="required" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">不可修改。一般用于后台登入名</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户昵称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="bsName" name="bsName" lay-verify="required" autocomplete="off" placeholder="请输入用户名称" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">真实名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="realName" name="realName" autocomplete="off" placeholder="请输入用户名称" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">手机号</label>
+                                <div class="layui-input-inline">
+                                    <input id="mobile" name="mobile" lay-verify="required" autocomplete="off" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                           onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">邮箱</label>
+                                <div class="layui-input-inline">
+                                    <input id="email" name="email" lay-verify="required | email" autocomplete="off" class="layui-input" type="text"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">性别</label>
+                                <div class="layui-input-inline">
+                                    <!--<input type="text" id="sex" name="sex" autocomplete="off" placeholder="请输入性别" class="layui-input">-->
+                                    <select id="sex" name="sex" placeholder="请选择性别" class="layui-input">
+                                        <option value=""></option>
+                                        <option value="男">男</option>
+                                        <option value="女">女</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">状态</label>
+                                <div class="layui-input-inline">
+                                    <input id="bsStatus" name="bsStatus" autocomplete="off" readonly class="layui-input" type="text"/>
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">不可修改</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">角色</label>
+                                <div class="layui-input-inline">
+                                    <input id="roleNames" name="roleNames" autocomplete="off" readonly class="layui-input" type="text"/>
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">不可修改</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="editSubmit">确认修改</button>
+                                    <button class="layui-btn" lay-submit lay-filter="resetSubmit">重新填写</button>
+                                    <!--<button class="layui-btn" onclick="reset()">重新填写</button>-->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    var userInfo = [[${userInfo}]];//用户信息
+   // console.log(userInfo);
+
+    layui.use(['table', 'form'], function(){
+        var table = layui.table,
+            form = layui.form;
+
+        //初始化用户信息
+        if(userInfo != undefined && userInfo != null){
+            $("#id").val(userInfo.id);
+            $("#bsCode").val(userInfo.bsCode);
+            $("#bsName").val(userInfo.bsName);
+            $("#realName").val(userInfo.realName);
+            $("#mobile").val(userInfo.mobile);
+            $("#email").val(userInfo.email);
+            $("#sex").val(userInfo.sex);
+            if(userInfo.bsStatus == 0){
+                $("#bsStatus").val("正常");
+            }else{
+                $("#bsStatus").val("禁用");
+            }
+            $("#roleNames").val(userInfo.roleNames);
+            layui.form.render('select');
+        }
+
+        //监听提交
+        form.on('submit(editSubmit)', function(data){
+            //修改
+            editUser();
+            return false;
+        });
+        form.on('submit(resetSubmit)', function(data){
+            //清空数据
+            reset();
+            return false;
+        });
+    });
+
+    //修改提交
+    function editUser() {
+        $.ajax({
+            type: "POST",
+            data: {
+                "id": $("#id").val(),
+                "bsName": $("#bsName").val(),
+                "realName": $("#realName").val(),
+                "mobile": $("#mobile").val(),
+                "email": $("#email").val(),
+                "sex": $("#sex").val()
+            },
+            url: context + "/sysUser/edit",
+            success: function (data) {
+                if (data.result == true) {
+                    layer.alert("操作成功",function(){
+                        //重新登录
+                        parent.location.reload();
+                    });
+                } else {
+                    layer.alert(data.msg,function(){
+                        layer.closeAll();
+                    });
+                }
+            }
+        });
+    }
+
+    //清空数据
+    function reset() {
+        $("#bsName").val("");
+        $("#realName").val("");
+        $("#mobile").val("");
+        $("#email").val("");
+        $("#sex").val("");
+        layui.form.render('select');
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<body>
+<header th:fragment="searcher">
+    <style>
+        .searchDisplay{
+            display: none;
+        }
+    </style>
+    <script th:inline="javascript">
+        $(function(){
+            var demo1 = xmSelect.render({
+                el: '#shipmentStatus',
+                data: [
+                    {name: '新下订单', value: 'NEW'},
+                    {name: '在途订单', value: 'OPEN'},
+                    {name: '已交货未付款关闭', value: 'CLOSED FOR RECEVING'},
+                    {name: '取消订单', value: 'CANCELLED'},
+                    {name: '关闭订单', value: 'CLOSED'}
+                ]
+            });
+
+            var demo2 = xmSelect.render({
+                el: '#businessType',
+                data: [
+                    {name: '新下订单', value: 'huaweiPublishOrder'},
+                    {name: '订单交期修改', value: 'huaweiApplyRequredDateChange'},
+                    {name: '内容变更通知', value: 'huaweiNotifyOrderChange'},
+                    {name: '订单取消确认', value: 'huaweiApplyCancelOrder'}
+                ]
+            })
+        });
+
+        layui.use(['laydate','form'], function(){
+            var laydate = layui.laydate,form = layui.form;
+            //日期范围
+            laydate.render({
+                elem: '#promiseDate'
+                ,range: true
+            });
+
+            laydate.render({
+                elem: '#publishDate'
+                ,range: true
+            });
+
+            laydate.render({
+                elem: '#acceptDate'
+                ,range: true
+            });
+        });
+    </script>
+
+    <div class="layui-collapse">
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title">查询条件</h2>
+            <div class="layui-colla-content layui-show">
+                <div id="searchParam" >
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item">
+
+                            <!--TODO-->
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">业务领域</label>
+                                <div class="layui-input-inline">
+                                    <select id="area" name="area" lay-verify="" style="width:100%;height:30px;border-color:#D2D2D2!important;">
+                                        <option value="E">生产物料</option>
+                                        <option value="P">工程物料</option>
+                                        <option value="G">综合物料</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">华为子公司</label>
+                                <input type="text" id="orgId" name="orgId" class="layui-input" autocomplete="off">
+                            </div>
+
+                            <!--TODO-->
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">组织</label>
+                                <input type="text" id="organization" name="organization" class="layui-input" autocomplete="off">
+                            </div>
+
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">PO号</label>
+                                <input type="text" id="poNumber" name="poNumber" class="layui-input" autocomplete="off" placeholder="多个请以','隔开">
+                            </div>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">Item编码</label>
+                                <input type="text" id="itemCode" name="itemCode" class="layui-input" placeholder="多个请以','隔开">
+                            </div>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">承诺日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" id="promiseDate" name="promiseDate" placeholder=" - ">
+                                </div>
+                                <!-- <div class="layui-row">
+                                    <input type="text" class="layui-input" style="width:45%;float:left;" >
+                                    <input type="text" class="layui-input"  style="width:45%">
+                                </div> -->
+                            </div>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">订单下达日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" id="publishDate" name="publishDate" placeholder=" - ">
+                                </div>
+                            </div>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">厂家型号</label>
+                                <input type="text" id="partNumber" name="partNumber" class="layui-input" autocomplete="off">
+                            </div>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">采购模式</label>
+                                <div class="layui-input-inline">
+                                    <select id="businessMode" name="businessMode" lay-verify="" style="width:100%;height:30px;border-color:#D2D2D2!important;">
+                                        <option value="">全部</option>
+                                        <option value="T_DUN">T_DUN</option>
+                                        <option value="DUN">DUN</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="PO-Consignment">PO-Consignment</option>
+                                        <option value="VMI-Consignment">VMI-Consignment</option>
+                                        <option value="VCI-CA">VCI-CA</option>
+                                        <option value="VCI-PO">VCI-PO</option>
+                                        <option value="VMI_Consignment">VMI_Consignment</option>
+                                        <option value="VMI_TSN">VMI_TSN</option>
+                                        <option value="VMI_VRN">VMI_VRN</option>
+                                        <option value="Candyman">Candyman</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">订单状态</label>
+                                <div class="layui-input-inline"><div id="shipmentStatus"></div></div>
+                            </div>
+                            <div class="layui-input-inline searchDisplay">
+                                <label class="layui-form-label">采购员</label>
+                                <input type="text" id="agentName" name="agentName" class="layui-input" autocomplete="off">
+                            </div>
+                            <div class="layui-input-inline searchDisplay">
+                                <label class="layui-form-label">待办类型</label>
+                                <div class="layui-input-inline"><div id="businessType"></div></div>
+                            </div>
+                            <div class="layui-input-inline searchDisplay">
+                                <label class="layui-form-label">超过X天未处理</label>
+                                <input type="number" id="moreXDaysUndeal" name="moreXDaysUndeal" class="layui-input" autocomplete="off" placeholder="请输入数字">
+                            </div>
+                            <div class="layui-input-inline searchDisplay">
+                                <label class="layui-form-label">生产厂家</label>
+                                <input type="text" id="manufactureSiteInfo" name="manufactureSiteInfo" class="layui-input" autocomplete="off">
+                            </div>
+
+                            <!--TODO-->
+                            <div class="layui-input-inline searchDisplay">
+                                <label class="layui-form-label">订单接受日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" id="acceptDate" name="acceptDate" placeholder=" - ">
+                                </div>
+                            </div>
+
+                            <div class="layui-input-inline">
+                                <button class="layui-btn layui-btn-sm" style="margin-top:20px;" lay-submit="" lay-filter="search">查询</button>
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" style="margin-top:20px;" type="reset">重置</button>
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" style="margin-top:20px;border-color: #ffffff;" lay-submit="" lay-filter="searchShow">高级搜索</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!--<div class="layui-input-inline">-->
+                        <!--<button class="layui-btn layui-btn-sm" id="search">查询</button>-->
+                        <!--<button class="layui-btn layui-btn-sm layui-btn-primary">重置</button>-->
+                        <!--<button class="layui-btn layui-btn-sm layui-btn-primary" style="border-color: #ffffff;" id="searchShow">高级搜索</button>-->
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    <script type="text/javascript" th:src="@{/js/head.js}" src="/js/head.js"></script> -->
+</header>
+
+</body>
+</html>
+
+

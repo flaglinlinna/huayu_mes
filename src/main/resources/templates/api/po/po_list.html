@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      xmlns:th="http://www.thymeleaf.org" >
+<!--<head>-->
+<!--<meta charset="UTF-8">-->
+<!--</head>-->
+<head th:include="layout :: htmlhead" th:with="title='角色管理'">
+</head>
+<body>
+<!--查询面板-->
+<div th:replace="api/fragment/search :: searcher"></div>
+<table class="layui-hide" id="listTable" lay-filter="listTable"></table>
+
+<script type="text/html" id="toolbar1"><!--1_1-->
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">接受</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">打印</button>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnExport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">导出<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出PDF文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出Excel文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出CSV文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnImport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">交期修改导入<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">下载模板</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">上传修改</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">标记为已读</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">取消余量</button>
+    </div>
+</script>
+<script type="text/html" id="toolbar2"><!--1_2,1_3-->
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">接受</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">驳回</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">打印</button>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnExport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">导出<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出PDF文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出Excel文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出CSV文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnImport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">交期修改导入<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">下载模板</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">上传修改</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">标记为已读</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">取消余量</button>
+    </div>
+</script>
+<script type="text/html" id="toolbar3"><!--1_4-->
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">接受</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">打印</button>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnExport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">导出<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出PDF文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出Excel文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出CSV文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnImport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">交期修改导入<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">下载模板</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">上传修改</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">取消余量</button>
+    </div>
+</script>
+<script type="text/html" id="toolbar4"><!--1_5,3_1-->
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">接受</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">打印</button>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnExport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">导出<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出PDF文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出Excel文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出CSV文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnImport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">交期修改导入<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">下载模板</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">上传修改</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</script>
+<script type="text/html" id="toolbar5"><!--1_6,1_7,1_8,2_1-->
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">打印</button>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnExport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">导出<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出PDF文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出Excel文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出CSV文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnImport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">交期修改导入<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">下载模板</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">上传修改</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">取消余量</button>
+    </div>
+</script>
+<script type="text/html" id="toolbar6"><!--1_9-->
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">接受</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">打印</button>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnExport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">导出<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出PDF文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出Excel文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出CSV文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnImport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">交期修改导入<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">下载模板</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">上传修改</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">取消余量</button>
+    </div>
+</script>
+<script type="text/html" id="toolbar7"><!--1_10-->
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">接受</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">打印</button>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnExport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">导出<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出PDF文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出Excel文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出CSV文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">取消余量</button>
+    </div>
+</script>
+<script type="text/html" id="toolbar8"><!--2_2,3_2,3_3-->
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">打印</button>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnExport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">导出<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出PDF文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出Excel文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出CSV文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnImport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">交期修改导入<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">下载模板</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">上传修改</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</script>
+<script type="text/html" id="toolbar9"><!--2_3,2_4,2_5-->
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">打印</button>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnExport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">导出<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出PDF文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出Excel文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出CSV文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</script>
+<script type="text/html" id="toolbar10"><!--3_4-->
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">打印</button>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnExport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">导出<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出PDF文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出Excel文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">导出CSV文件</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-bg-green btnz" style="font-size: 12px;padding:9px 0px 7px 0px;width: 80px;display: inline;margin-right: 10px;">
+            <li class="layui-nav-item" style="line-height: 30px;font-size: 12px;">
+                <a lay-event="btnImport" href="javascript:;" style="color:white;font-size: 12px;padding: 0px 30px 3px 10px;">交期修改导入<span class="layui-nav-more" style="right: 10px;font-size: 12px;margin-top: -4px;"></span></a>
+                <dl class="layui-nav-child" style="top: 30px;line-height: 31px;padding: 0px 0px 0px 0px;"> <!-- 二级菜单 -->
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">下载模板</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">上传修改</button></dd>
+                    <dd><button class="layui-btn layui-btn-sm layui-btn-fluid" style="font-size: 12px;margin-bottom: 0px;">全部导出</button></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</script>
+
+<!--<script src="/layui/layui.all.js"></script>-->
+<!--<script src="/js/core.util.js"></script>-->
+<script th:inline="javascript">
+    var type = [[${type}]];
+    var pageCurr;
+</script>
+<script th:inline="none">
+    $(function(){
+        var toolbarName = 'toolbar1';
+        //判断显示那个工具栏
+        if(type == 'deliveryTimeChangedOrderQuantity' || type == 'cancelledToConfirmedOrderQuantity'){
+            toolbarName = "toolbar2";
+        }else if(type == 'changedOrderQuantity'){
+            toolbarName = "toolbar3";
+        }else if(type == 'cancelOrderQuantity' || type == 'expiredOrderQuantity'){
+            toolbarName = "toolbar4";
+        }else if(type == 'deliveryTimeChangedPendingOrderQuantity' || type == 'vendorApplyQtyChangeOrderQuantity'
+            || type == 'vendorApplyCancelOrderQuantity' || type == 'intransitOrderQuantity'){
+            toolbarName = "toolbar5";
+        }else if(type == 'rmaBarterOrderQuantity'){
+            toolbarName = "toolbar6";
+        }else if(type == 'newPOVciCAQuantity'){
+            toolbarName = "toolbar7";
+        }else if(type == 'closed4Receving' || type == 'arrivalOnWeekOrderQuantity' || type == 'nonDeliveryOrderQuantity'){
+            toolbarName = "toolbar8";
+        }else if(type == 'closedOrderQuantity' || type == 'archivedOrder' || type == 'cancelledOrderQuantity'){
+            toolbarName = "toolbar9";
+        }else if(type == 'overdueOrderQuantity'){
+            toolbarName = "toolbar10";
+        }
+
+        layui.use(['table','form' ,'layer', 'laytpl'], function() {
+            var table = layui.table,form = layui.form,layer = layui.layer,laytpl = layui.laytpl;
+            //getData();
+            tableIns=table.render({
+                elem: '#listTable'
+                ,url:context+'api/po/polist'
+                //,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
+                ,toolbar: '#'+toolbarName //开启头部工具栏，并为其绑定左侧模板
+                ,method: 'post' //默认：get请求
+                ,where:{type:type}
+                ,cellMinWidth: 80,limit:20
+                ,page: true,
+                request: {
+                    pageName: 'page' //页码的参数名称，默认：page
+                    ,limitName: 'rows' //每页数据量的参数名，默认：limit
+                },
+                parseData: function (res) {
+                    console.log(res)
+                    if(res.status == 1){
+                        return {
+                            "code": res.status,//code值为200表示成功
+                            "count": 0,
+                            "msg":res.msg,
+                            "data":[]
+                        }
+                    }
+                    // 可进行数据操作
+                    return {
+                        "code": res.status,//code值为200表示成功
+                        "count": res.data.pageVO.totalRows,
+                        "msg":res.msg,
+                        "data":res.data.result
+                    }
+                },
+                cols: [[
+                    {type: 'numbers', title: '序号'},
+                    {type: 'checkbox', width: 50}
+                    ,{field:'shipmentStatus', title:'订单状态', width:100,align:'center'}
+                    ,{field:'', title:'任务单明细类型', width:130,align:'center'}
+                    ,{field:'', title:'待确认任务单', width:200,align:'center'}
+                    ,{field:'taskQuantity', title:'总任务单', width:100,align:'center'}
+                    ,{field:'businessMode', title:'采购模式',width:100,align:'center'}
+                    ,{field:'minOrderQty', title:'最小订单数',width:100,align:'center'}
+                    ,{field:'', title:'货期(天)', width:100,align:'center'}
+                    ,{field:'', title:'最小包装量',width:100,align:'center'}
+                    ,{field:'callOffDecoupling', title:'备叫分离',width:100,align:'center'}
+                    ,{field:'poNumber', title:'PO号', width:120,align:'center'}
+                    ,{field:'poLineNum', title:'订单行号', width:100,align:'center'}
+                    ,{field:'shipmentNum', title:'发运行号', width:100,align:'center'}
+                    ,{field:'agentName', title:'采购员', hide:true, width:100,align:'center'}
+                    ,{field:'', title:'到货行号', width:100,align:'center'}
+                    ,{field:'promiseDate', title:'需求日期', width:150,align:'center',templet: "<div>{{d.promiseDate ? layui.util.toDateString(d.promiseDate, 'yyyy-MM-dd HH:mm:ss') : ''}}</div>"}
+                    ,{field:'promiseDate', title:'承诺日期', width:150,align:'center',templet: "<div>{{d.promiseDate ? layui.util.toDateString(d.promiseDate, 'yyyy-MM-dd HH:mm:ss') : ''}}</div>"}
+                    ,{field:'quantityReceived', title:'已接收数量', width:100,align:'center'}
+                    ,{field:'quantityAccepted', title:'已接受数量', width:100,align:'center'}
+                    ,{field:'', title:'需求数量', width:100,align:'center'}
+                    ,{field:'dueQty', title:'未交付数量', width:100,align:'center'}
+                    ,{field:'itemCode', title:'Item编码', width:100,align:'center'}
+                    ,{field:'itemDescription', title:'Item描述(英文)', width:150,align:'center'}
+                    ,{field:'itemDescription', title:'Item描述(中文)', width:150,align:'center'}
+                    ,{field:'', title:'供应编码', hide:true, width:100,align:'center'}
+                    ,{field:'hwm', title:'hwm', width:100,align:'center'}
+                    ,{field:'unitOfMeasure', title:'单位', width:100,align:'center'}
+                    ,{field:'itemRevision', title:'物料/服务编码版本', width:150,align:'center'}
+                    ,{field:'partNumber', title:'厂家型号', width:100,align:'center'}
+                    ,{field:'taskNum', title:'任务令', width:100,align:'center'}
+                    ,{field:'publishDate', title:'订单下达日期', width:150,align:'center',templet: "<div>{{d.publishDate ? layui.util.toDateString(d.publishDate, 'yyyy-MM-dd HH:mm:ss') : ''}}</div>"}
+                    ,{field:'firstPromiseDate', title:'首次承诺日期', width:150,align:'center',templet: "<div>{{d.firstPromiseDate ? layui.util.toDateString(d.firstPromiseDate, 'yyyy-MM-dd HH:mm:ss') : ''}}</div>"}
+                    ,{field:'vendorCode', title:'供应商编码', width:100,align:'center'}
+                    ,{field:'vendorName', title:'供应商名称', width:150,align:'center'}
+                    ,{field:'issuOffice', title:'开票单位', width:150,align:'center'}
+                    ,{field:'priceOverride', title:'单价', width:100,align:'center'}
+                    ,{field:'', title:'小计', width:100,align:'center'}
+                    ,{field:'remark', title:'我的备注', width:100,align:'center'}
+                    ,{field:'revisionNum', title:'版本号', width:100,align:'center'}
+                    ,{field:'orgName', title:'华为子公司', width:150,align:'center'}
+                    ,{field:'paymentTerms', title:'支付条款', hide:true, width:100,align:'center'}
+                    ,{field:'billToLocation', title:'开票地址', hide:true, width:100,align:'center'}
+                    ,{field:'exceptionUpdatedDate', title:'例外信息释放时间', hide:true, width:150,align:'center'}
+                    ,{field:'manufactureSiteInfo', title:'生产厂家', hide:true, width:100,align:'center'}
+                    ,{field:'currencyCode', title:'币种', hide:true, width:100,align:'center'}
+                    ,{field:'taxRate', title:'税率', hide:true, width:100,align:'center'}
+                    ,{field:'', title:'发运地址', hide:true, width:100,align:'center'}
+                    ,{field:'carrierName', title:'发运方式', hide:true, width:100,align:'center'}
+                    ,{field:'vendorShortText', title:'给供应商备注', width:120,align:'center'}
+                    ,{field:'vendorShortText', title:'特殊备注', width:100,align:'center'}
+                    ,{field:'quantityBilled', title:'已开票数量', width:100,align:'center'}
+                    ,{field:'quantityCancelled', title:'已取消数量', width:100,align:'center'}
+                    ,{field:'', title:'贸易术语', width:100,align:'center'}
+                    ,{field:'openDate', title:'订单接受日期', width:150,align:'center',templet: "<div>{{d.openDate ? layui.util.toDateString(d.openDate, 'yyyy-MM-dd HH:mm:ss') : ''}}</div>"}
+                ]]
+                ,  done: function(res, curr, count){
+                    //如果是异步请求数据方式，res即为你接口返回的信息。
+                    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                    pageCurr=curr;
+                }
+            });
+
+            //监听提交
+            form.on('submit(searchShow)', function(data){
+                //
+                if($(".searchDisplay").css('display') === 'none'){
+                    $('.searchDisplay').css({'display': 'inline'});
+                }else{
+                    $('.searchDisplay').css({'display': 'none'});
+                    $("#agentName").val('');
+                    $("#moreXDaysUndeal").val('');
+                    $("#manufactureSiteInfo").val('');
+                    $("#acceptDate").val('');
+                }
+                return false;
+            });
+
+            //头工具栏事件
+            table.on('toolbar(listTable)', function(obj){
+                if(obj.event == "btnExport" || obj.event == "btnImport"){
+                    //按钮下拉框
+                    var check = $(this).parent().find('dl').hasClass("layui-show");
+                    if(check){
+                        $(this).parent().find('dl').removeClass("layui-show");
+                    }else{
+                        $(this).parent().find('dl').addClass("layui-show");
+                    }
+                }
+            });
+        })
+
+    });
+
+    //重新加载表格（全部）
+    function loadAll(){
+        //重新加载table
+        tableIns.reload({
+            page: {
+                curr: pageCurr //从当前页码开始
+            }
+        });
+    }
+</script>
+</body>
+</html>

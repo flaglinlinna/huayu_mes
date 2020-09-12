@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<body>
+<header th:fragment="searcher">
+<script th:inline="javascript">
+        $(function(){
+        	 low_flag = xmSelect.render({
+        	    el: '#low_flag',
+        	    name:'level',
+        	    data: [
+        	        {name: '一周欠料', value: 2},
+        	        {name: '二周欠料', value: 3},
+        	        {name: '三周欠料', value: 4},
+        	        {name: '四周欠料', value: 5}
+        	    ]
+        	}) 
+        	
+        	purchase_model = xmSelect.render({
+        	    el: '#purchase_model', 
+        	    name:'purchaseMode',
+        	    data: [
+        	        /* {name: '全部', value: 1}, */
+        	        {name: 'DUN', value: 'DUN'},
+        	        {name: 'JIT', value: 'JIT'},
+        	        {name: 'VMI-Standard', value: 'VMI-Standard'},
+        	        {name: 'PO-Consignment', value: 'PO-Consignment'},
+        	        {name: 'VMI-Consignment', value: 'VMI-Consignment'}
+        	    ]
+        	})
+        	
+        	
+        	
+        });
+        
+        layui.use(['form',  'laydate'], function(){
+      	  var laydate = layui.laydate,form=layui.form;
+      	//日期范围
+      	  laydate.render({
+      	    elem: '#promiseDate'
+      	    ,range: true
+      	    ,value:getCurDate(0)+' - '+getCurDate(90)
+      	  });
+      	
+      });
+    </script>
+    
+    <div class="layui-collapse">
+  <div class="layui-colla-item">
+    <h2 class="layui-colla-title">查询条件</h2>
+    <div class="layui-colla-content layui-show">
+       <div id="searchParam" >
+       <form class="layui-form" action="">
+		    <div class="layui-form-item"  >
+		        <div class="layui-input-inline">
+		            <label class="layui-form-label">供方物料编码</label>
+		            <input type="text" name="suppItemCode" class="layui-input"  autocomplete="off" > 
+		        </div>
+		        <div class="layui-input-inline">
+		            <label class="layui-form-label">华为物料编码</label>
+		            <input type="text" name="itemCode" class="layui-input"  autocomplete="off" >
+		        </div>
+		        <div class="layui-input-inline">
+		            <label class="layui-form-label">库存组织</label>
+		            <div class="layui-input-inline">
+			            <select name="organizationId"  style="width:100%;height:30px;border-color:#D2D2D2!important;">
+			                <option value="218">华为技术有限公司</option>
+			              </select>
+		            </div>
+		        </div>
+		        <div class="layui-input-inline">
+		            <label class="layui-form-label">起止日期</label>
+		            <div class="layui-input-inline">
+				        <input type="text" class="layui-input" name="promiseDate" id="promiseDate" placeholder=" - ">
+				      </div>
+		        </div>
+		        <div class="layui-input-inline">
+		            <label class="layui-form-label">采购模式</label>
+		            <div class="layui-input-inline"><div id="purchase_model" name="purchaseMode"></div></div>
+		        </div>
+		        <div class="layui-input-inline">
+		            <label class="layui-form-label">采购员</label>
+		            <input type="text" class="layui-input" name="buyerName"  autocomplete="off" >
+		            <input type="hidden" class="layui-input" name="type"  value="findForecastList" >
+		        </div>
+		        <div class="layui-input-inline">
+		            <label class="layui-form-label">欠料标识</label>
+		            <div class="layui-input-inline"><div id="low_flag" name="level"></div></div>
+		        </div>
+		        <div class="layui-input-inline ">
+		            <button class="layui-btn layui-btn-sm" style="margin-top:20px;"  lay-submit="" lay-filter="demo1" >查询</button>
+		            <button class="layui-btn layui-btn-sm  layui-btn-primary"   style="margin-top:20px;"  >重置</button>
+		        </div>
+		    </div>
+		    </form>
+
+		</div>
+    </div>
+  </div>
+</div>
+ <!--    <script type="text/javascript" th:src="@{/js/head.js}" src="/js/head.js"></script> -->
+</header>
+
+</body>
+</html>
+
+

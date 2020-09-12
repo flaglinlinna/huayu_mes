@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--head部分-->
+<head th:include="layout :: htmlhead" th:with="title='广东骏亚接口管理平台'">
+</head>
+<body class="layui-layout-body">
+<div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+        <!--头-->
+        <div th:replace="fragments/head :: header"></div>
+        <!--主体区域-->
+        <!-- <div class="layui-body" th:include="channel/channelImport :: authorize"></div> -->
+        <!--<div th:include="channel/body :: body"></div>-->
+
+        <!--<div class="layui-body">-->
+        <!--<div class="layui-container">-->
+        <!--<div class="layui-row">-->
+        <!--<div class="layui-col-xs9">-->
+        <!--&nbsp;-->
+        <!--<h1 style="padding-top:50px;line-height:2.0;"><shiro:principal property="username"></shiro:principal>，欢迎您登录-->
+        <!--<a href="http://blog.51cto.com/wyait"><span style="font-weight: bold;font-size:28px;">后台管理系统</span></a></h1>-->
+        <!--<p><font style="font-size: 18px;">博客链接：</font><a href="http://blog.51cto.com/wyait"><span style="font-weight: bold;font-size:20px;color:blue">http://blog.51cto.com/wyait</span></a>-->
+        <!--</p>-->
+        <!--<p>-->
+        <!--普通请求异常：-->
+        <!--<a href="/error/getError">点击</a>-->
+        <!--</p>-->
+        <!--<p>-->
+        <!--ajax异步请求异常：-->
+        <!--<a href="javascript:void(0)" onclick="ajaxError()">点击</a>-->
+        <!--</p>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!-- 页面标签 -->
+        <div class="layadmin-pagetabs" id="LAY_app_tabs">
+            <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-down">
+                <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;"></a>
+                        <dl class="layui-nav-child layui-anim-fadein">
+                            <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                            <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+                            <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+            <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+                <ul class="layui-tab-title" id="LAY_app_tabsheader">
+                    <li lay-id="/console" lay-attr="/console" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+                </ul>
+            </div>
+        </div>
+        <!-- 主体内容 -->
+        <div class="layui-body" id="LAY_app_body">
+            <div class="layadmin-tabsbody-item layui-show">
+                <iframe  th:src="@{/console/toConsole}" src="/console/toConsole" frameborder="0" scrolling="auto" class="layadmin-iframe"></iframe>
+            </div>
+        </div>
+
+        <script type="text/javascript" th:src="@{/js/error.js}"></script>
+        <!--      底部
+             <div th:replace="fragments/footer :: footer"></div> -->
+    </div>
+</div>
+<!--     <script src="/layuiadmin1/layui/layui.js"></script>
+    <script>
+  layui.config({
+    base: '/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'console']);
+  </script> -->
+</body>
+</html>

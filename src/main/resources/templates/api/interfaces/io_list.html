@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='接口管理'"></head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div style="margin: 10px">
+
+        <!--搜索框-->
+        <form id="formSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">接口编号</label>
+                <div class="layui-input-inline">
+                    <input id="codeSearch" name="codeSearch" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+                <label class="layui-form-label">接口名称</label>
+                <div class="layui-input-inline">
+                    <input id="nameSearch" name="nameSearch" autocomplete="off" class="layui-input" type="text" />
+                </div>
+                <label class="layui-form-label">接口状态</label>
+                <div class="layui-input-inline">
+                    <select id="statusSearch" name="statusSearch" class="layui-input">
+                        <option value=""></option>
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">添加时间</label>
+                    <div class="layui-input-inline" style="width: 175px;">
+                        <input  name="createdTimeStart" id="createdTimeStart" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" type="text"/>
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline" style="width: 175px;">
+                        <input name="createdTimeEnd" id="createdTimeEnd" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" type="text"/>
+                    </div>
+                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="search">查询</button>
+                </div>
+            </div>
+        </form>
+
+        <!--<hr class="layui-bg-blue"/>-->
+        <hr class="layui-bg-black"/>
+
+        <button class="layui-btn layui-btn-sm" onclick="addData()">新增接口</button>
+
+        <div style="display:none;" id="currentUser"><shiro:principal property="id"></shiro:principal></div>
+        <!--<div style="display:none;" id="currentUser"><shiro:principal property="fid"></shiro:principal></div>-->
+
+        <!--列表-->
+        <table id="iList" lay-filter="iTable"></table>
+
+        <script type="text/html" id="statusTpl">
+            {{#  if(!d.bsStatus){ }}
+            <input type="checkbox" name="{{d.bsCode}}" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="isStatusTpl"/>
+            {{#  } else { }}
+            <input type="checkbox" name="{{d.bsCode}}" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  } }}
+        </script>
+
+        <script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="set">配置</a>
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+    </div>
+
+    <!--新增或编辑-->
+    <div id="addDiv" class="layer_self_wrap" style="width:500px;display:none;">
+        <form id="addForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum"/>
+            <input id="id" type="hidden" name="id"/>
+            <div class="layui-inline">
+                <div class="layui-form-item">
+                    <label class="layui-form-label label-right" style="">接口编号</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="bsCode" name="bsCode" placeholder="请输入接口编号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-form-item">
+                    <label class="layui-form-label label-right">接口名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="bsName" name="bsName" placeholder="请输入接口名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-form-item">
+                    <label class="layui-form-label label-right">状态</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" id="bsStatus" value="1" name="bsStatus" lay-skin="switch" lay-filter="switch" lay-text="启用|禁用" checked>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-form-item">
+                    <label class="layui-form-label label-right">请求方式</label>
+                    <div class="layui-input-block">
+                        <select id="bsMethod" name="bsMethod" lay-verify="">
+                            <option value="POST">POST</option>
+                            <option value="GET">GET</option>
+                            <option value="PUT">PUT</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-form-label label-right ">请求地址</div>
+                <div class="layui-input-block">
+                    <input type="text" id="bsUrl" name="bsUrl" placeholder="请输入请求地址" autocomplete="off" class="layui-input" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-form-label label-right ">请求参数</div>
+                <div class="layui-input-block">
+                    <input type="text" id="bsParam" name="bsParam" placeholder="请输入请求参数" autocomplete="off" class="layui-input" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label label-right">执行计划方式</label>
+                <div class="layui-input-block">
+                    <select id="bsType" name="bsType" lay-verify="" lay-filter="bsType">
+                        <option value="1">定时执行</option>
+                        <option value="0">手动执行</option>
+                    </select>
+                </div>
+            </div>
+            <div id="timingDiv" class="layui-form-item">
+                <div class="layui-form-label label-right">执行计划</div>
+                <div class="layui-input-block">
+                    <!-- <div class="layui-row"> -->
+                    <input type="text" class="layui-input" id="startDate" name="startDate" style="width:50%;float:left;"placeholder="请选择开始日期" >
+                    <input type="text" class="layui-input" id="endDate" name="endDate" style="width:50%" placeholder="请选择截止日期">
+                    <select id="timingCode" name="timingCode" lay-verify="" style="width:35%">
+                        <option value="">每隔一个小时</option>
+                        <option value="010">每隔三个小时</option>
+                        <option value="021">每天的1点</option>
+                    </select>
+                    <!--  </div> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-form-label label-right ">备注</div>
+                <div class="layui-input-block">
+                    <input type="text" id="bsRemark" name="bsRemark" placeholder="请输入备注信息" autocomplete="off" class="layui-input" >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="add">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script th:src="@{/js/api/interfaces/io_list.js}" src="/js/api/interfaces/io_list.js"></script>
+</div>
+</body>
+</html>

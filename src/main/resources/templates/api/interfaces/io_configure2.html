@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='接口管理'"></head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div style="margin: 10px">
+        <div class="layui-container" style="width:100%;padding:0;">
+            <div class="layui-row">
+
+                <div class="layui-col-md6">
+                    <!--<fieldset class="layui-elem-field layui-field-title" >-->
+                        <!--<legend>请求参数</legend>-->
+                    <!--</fieldset>-->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">请求参数</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">请求方式</label>
+                        <div class="layui-input-block">
+                            <select id="bsMethod" name="bsMethod" lay-verify="" style="margin-left:10px;float: left;">
+                                <option value="POST">POST</option>
+                                <option value="GET">GET</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">请求地址</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="bsUrl" name="bsUrl" placeholder="请输入请求地址" autocomplete="off" class="layui-input" style="width:80%;margin-left:10px;float: left;"
+                                   value="https://openapi.huawei.com:443/service/esupplier/findProductionPOBoardData/1.0.0">
+                        </div>
+                    </div>
+
+                    <button class="layui-btn layui-btn-sm" onclick="addUser()">新增</button>
+                    <button class="layui-btn layui-btn-sm" onclick="addUser()">删除</button>
+
+                    <table id="iList" lay-filter="iTable"></table>
+
+                </div>
+
+                <div class="layui-col-md6">
+                    <!--<fieldset class="layui-elem-field layui-field-title" >-->
+                        <!--<legend>数据对应配置</legend>-->
+                    <!--</fieldset>-->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">数据对应配置</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">数据库表名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="bsUrl2" name="bsUrl2" value="api_po" autocomplete="off" class="layui-input" style="width:40%;margin-left:10px;float: left;">
+                            <input type="button" class="layui-btn layui-btn-sm" value="获取数据库表字段">
+                        </div>
+                    </div>
+
+                    <!--<button class="layui-btn layui-btn-sm" onclick="addUser()">获取数据库表字段</button>-->
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="none">
+        /**
+         * 接口管理
+         */
+        var pageCurr;
+        $(function() {
+            layui.use(['form', 'table', 'laydate'], function(){
+                var table = layui.table
+                    ,form = layui.form
+                    ,laydate = layui.laydate;
+
+                tableIns=table.render({
+                    elem: '#iList'
+                    ,url:context+'/interfaces/getList'
+                    ,where: {bsStatus:3}
+                    ,method: 'get' //默认：get请求
+                    ,cellMinWidth: 80
+                    ,page: true,
+                    request: {
+                        pageName: 'page' //页码的参数名称，默认：page
+                        ,limitName: 'rows' //每页数据量的参数名，默认：limit
+                    },
+                    parseData: function (res) {
+                        // 可进行数据操作
+                        return {
+                            "count": res.data.total,
+                            "msg":res.msg,
+                            "data":res.data.rows,
+                            "code": res.status //code值为200表示成功
+                        }
+                    },
+                    // response:{
+                    //     statusName: 'status' //数据状态的字段名称，默认：code
+                    //     ,statusCode: 200 //成功的状态码，默认：0
+                    //     ,countName: 'count' //数据总数的字段名称，默认：count
+                    //     ,dataName: 'data' //数据列表的字段名称，默认：data
+                    // },
+                    cols: [[
+                        {type: 'checkbox', width: 50}
+                        ,{field:'bsCode', title:'参数名称'}
+                        ,{field:'bsName', title:'参数值'}
+                        ,{field:'bsUrl', title:'参数类型'}
+                        ,{field:'bsStatus', title:'是否必填'}
+                    ]]
+                    ,done: function(res, curr, count){
+                        //如果是异步请求数据方式，res即为你接口返回的信息。
+                        //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                        //console.log(res);
+                        //得到当前页码
+                        //console.log(curr);
+                        //得到数据总量
+                        //console.log(count);
+                        pageCurr=curr;
+                    }
+                });
+
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

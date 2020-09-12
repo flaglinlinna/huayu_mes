@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--head部分-->
+<head th:include="layout :: htmlhead" th:with="title='广东骏亚接口管理平台'">
+
+</head>
+<body class="bg_login">
+   <div class="second_body">
+             <form id="useLogin" class="layui-form" action="">
+                <div class="logo"><img src="images/logo.png" th:src="@{/images/logo.png}" alt="" style="width:210px;height:160px;" /></div>
+                <div class="title-zh">广东骏亚接口管理平台</div>
+                <ul style="margin-top: 5px;margin-left:0px;color:red;" id="user_msg"></ul> 
+                <!-- <table border="0" style="width:300px;"> -->
+                    <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:40px;">用户名</label>
+                            <div class="layui-input-inline">
+                                <input id="username" name="username" lay-verify="required" autocomplete="off" class="layui-input" type="tel"/>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:40px;">密&nbsp;&nbsp;码</label>
+                            <div class="layui-input-inline">
+                                <input id="password" name="password" lay-verify="required" autocomplete="off" class="layui-input" type="password"/>
+                            </div>
+                        </div>
+                        <!-- <div class="layui-form-item" style="margin-top: -20px;">
+                            <label class="layui-form-label"></label>
+                            <div class="layui-inline">
+                                <input type="checkbox" name="rememberMe" lay-skin="primary"  title="记住我"/>
+                            </div>
+                        </div> -->
+                        <input type="hidden" name="rememberMe" lay-skin="primary"  title="记住我"/>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block" style="margin-left:50px;margin-top:15px;">
+                               <button class="layui-btn layui-btn-primary"  type="reset">重置</button>
+                               <button id="loginBtn"  lay-submit="" lay-filter="login"class="layui-btn" >登录</button>
+                            </div>
+                        </div>
+                <!-- </table> -->
+            </form>
+            <div class="version_info">
+				<span>Copyright &copy;2020  惠州市朋乐信息技术有限公司   All Rights Reserved.</span>
+			</div>
+			
+			<div id="waitMessage" class="message">正在登陆，请稍候.......</div>
+        </div> 
+
+<script type="text/javascript" src="/js/login.js" th:src="@{/js/login.js}"></script>
+<!-- <script type="text/javascript" src="/js/validate.js" th:src="@{/js/validate.js}"></script> -->
+    
+</body>
+</html>

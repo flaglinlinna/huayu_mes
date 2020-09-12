@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='用户管理'"></head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--头-->
+    <!--<div th:replace="fragments/head :: header"></div>-->
+
+    <div style="margin: 10px">
+
+        <form id="userSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">关键字</label>
+                <div class="layui-input-inline">
+                    <input  name="keyword" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+                <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
+            </div>
+
+        </form>
+
+        <!--<hr class="layui-bg-blue"/>-->
+        <hr class="layui-bg-black"/>
+
+        <!-- <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addUser()">新增用户</button>
+
+        <div style="display:none;" id="currentUser"><shiro:principal property="id"></shiro:principal></div> -->
+        <script type="text/html" id="toolbar">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm"  lay-href="/junya/api/database/toDatabaseAdd" lay-text="数据库接口配置新增">新增配置</button>
+    <button class="layui-btn layui-btn-sm layui-btn-warm"  lay-event="doDownload">执行下载数据 </button>    
+    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="doDelete">删除</button>
+    
+  </div>
+	</script>
+        <table id="listTable" lay-filter="listTable"></table>
+    </div>
+
+<script  th:inline="none">
+		     
+		     layui.use(['table','form', 'layedit', 'laydate',], function(){
+		    	  var form = layui.form
+		    	  ,layer = layui.layer
+		    	  ,layedit = layui.layedit
+		    	  ,table = layui.table
+		    	  ,laydate = layui.laydate;
+		    	  
+		    	  tableIns=table.render({
+			            elem: '#listTable'
+			            ,url:context+'api/database/getlist'
+			            ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
+			            ,method: 'get' //默认：get请求
+			            ,where:{keyword:''}
+			            ,cellMinWidth: 80,limit:20
+			            ,page: true,
+			            //data:[] ,
+			            request: {
+			                pageName: 'page' //页码的参数名称，默认：page
+			                ,limitName: 'rows' //每页数据量的参数名，默认：limit
+			            },
+			            parseData: function (res) {
+			            	console.log(res)
+			            	if(!res.result){
+			            		return {
+			                   	 "code": res.status,//code值为200表示成功
+			                       "count": 0,
+			                       "msg":res.msg,
+			                       "data":[]
+			                   }
+			            	}
+			                // 可进行数据操作
+			                return {
+			                	 "code": res.status,//code值为200表示成功
+			                    "count": res.data.total,
+			                    "msg":res.msg,
+			                    "data":res.data.rows
+			                }
+			            },
+			            cols: [[
+			               {type: 'numbers', title: '序号'},
+	                    {type: 'checkbox', width: 50}
+			                ,{field:'bsCode', title:'接口编号', width:120,align:'center'}
+			                ,{field:'bsName', title:'接口名', width:120,align:'center'}
+			                ,{field:'bsStatus', title:'启用', width:80,align:'center'}
+			                ,{field:'bsWay', title:'执行方式', width:150,align:'center'}
+			                ,{field:'bsFromType', title:'源数据库类型',width:100,align:'center'}
+			                ,{field:'bsFromUrl', title:'源数据库地址',width:100,align:'center'}
+			                ,{field:'bsToType', title:'目标数据库类型', width:150,align:'center'}
+			                ,{field:'bsToUrl', title:'目标数据库地址',width:100,align:'center'}
+			                ,{field:'createdTime', title:'创建时间',width:100,align:'center'}
+			            ]]
+			            ,  done: function(res, curr, count){
+			                //如果是异步请求数据方式，res即为你接口返回的信息。
+			                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+			                pageCurr=curr;
+			            }
+			        }); 
+		    	  //监听提交
+		    	  form.on('submit(searchSubmit)', function(data){
+		    		  load(data);
+		    	    return false;
+		    	  });
+		    	 
+		    	  //头工具栏事件
+		    	  table.on('toolbar(listTable)', function(obj){
+		    	    var checkStatus = table.checkStatus(obj.config.id);
+		    	    var data = checkStatus.data;
+		    	    switch(obj.event){
+		    	      case 'addData':
+		    	        var data = checkStatus.data;
+		    	        layer.alert(JSON.stringify(data));
+		    	      break;
+		    	      case 'doDelete':
+		    	        var data = checkStatus.data;
+		    	       // layer.msg('选中了：'+ data.length + ' 个');
+		    	        layer.alert(JSON.stringify(data), {
+		    	            title: '最终的提交信息'
+		    	          })
+		    	      break;
+		    	      case 'doDownload':
+		    	        if(data.length == 0){
+		    	        	layer.alert('请先选中一条记录',function(){
+		                        layer.closeAll();
+		                    });
+		    	        }else if(data.length > 1){
+		    	        	layer.alert('只能选择一条记录，当前已选中'+data.length+'条',function(){
+		                        layer.closeAll();
+		                    });
+		    	        }else{
+		    	        	
+		    	        }
+		    	      break;
+		    	      
+		    	      //自定义头工具栏右侧图标 - 提示
+		    	      case 'LAYTABLE_TIPS':
+		    	        layer.alert('这是工具栏右侧自定义的一个图标按钮');
+		    	      break;
+		    	    };
+		    	  });
+		    	  
+		    	});
+		     
+		     $(function () { 
+		    	 $("#is_export").click(function () { 
+		    		 alert('123')
+			         /* var tips = layer.tips('单购时已支付；<br />团购时团长已支付', '#is_pay_explain',{
+			             tips: [1, '#555555']
+			             // 上右下左四个方向，通过1-4进行方向设定
+			         });
+			         sleep(5000);
+			         layer.close(tips); */
+			     })
+		     });
+		   //重新加载表格（搜索）
+		     function load(obj){
+			/*   layer.alert(JSON.stringify(obj.field), {
+      title: '最终的提交信息'
+    }) */
+    tableIns.reload({
+        where: obj.field
+        , page: {
+            curr: pageCurr //从当前页码开始
+        }
+    });
+
+		     }
+		
+</script>
+</div>
+</body>
+</html>

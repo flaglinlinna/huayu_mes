@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='接口管理'"></head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div style="margin: 10px">
+        <div class="layui-container" style="width:100%;padding:0;">
+            <div class="layui-row">
+
+                <div class="layui-col-md6">
+                    <!--<fieldset class="layui-elem-field layui-field-title" >-->
+                    <!--<legend>请求参数</legend>-->
+                    <!--</fieldset>-->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">请求参数</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">请求方式</label>
+                        <div class="layui-input-block">
+                            <select id="bsMethodShow" name="bsMethodShow" lay-verify="" style="margin-left:10px;float: left;">
+                                <option value="POST">POST</option>
+                                <option value="GET">GET</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">请求地址</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="bsUrlShow" name="bsUrlShow" placeholder="请输入请求地址" autocomplete="off"
+                                   class="layui-input" style="width:80%;margin-left:10px;float: left;">
+                        </div>
+                    </div>
+
+                    <!--<button class="layui-btn layui-btn-sm" onclick="addData()">新增</button>-->
+                    <!--<button class="layui-btn layui-btn-sm" onclick="addData()">删除</button>-->
+
+                    <script type="text/html" id="toolbar">
+                        <a class="layui-btn layui-btn-sm" lay-event="add">新增</a>
+                        <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+                        <a class="layui-btn layui-btn-sm" lay-event="del">删除</a>
+                    </script>
+
+                    <table id="iList" lay-filter="iTable"></table>
+
+                    <script type="text/html" id="optBar">
+                        {{#  if(d.isRequired == 0){ }}
+                        <span>否</span>
+                        {{#  } else if(d.isRequired == 1){ }}
+                        <span>是</span>
+                        {{#  } else { }}
+                        <span></span>
+                        {{#  } }}
+                    </script>
+                </div>
+
+                <div class="layui-col-md6">
+                    <!--<fieldset class="layui-elem-field layui-field-title" >-->
+                    <!--<legend>数据对应配置</legend>-->
+                    <!--</fieldset>-->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">数据对应配置</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">数据库表名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="bsUrl2" name="bsUrl2" value="api_po" autocomplete="off" class="layui-input" style="width:40%;margin-left:10px;float: left;">
+                            <input type="button" class="layui-btn layui-btn-sm" value="获取数据库表字段">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label label-right">item描述</label>
+                        <label class="layui-form-label label-right" style="margin-left: 10px;">itemDescription</label>
+                        <div class="layui-input-block">
+                            <input type="text" autocomplete="off" class="layui-input" style="width:50%;margin-left:40px;float: left;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--新增或编辑-->
+    <div id="addDiv" class="layer_self_wrap" style="width:500px;display:none;">
+        <form id="addForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum"/>
+            <input id="id" type="hidden" name="id"/>
+            <input id="interId" type="hidden" name="interId"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label label-right">参数名称</label>
+                <div class="layui-input-block">
+                    <input type="text" id="bsName" name="bsName" placeholder="请输入参数名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-form-label label-right ">参数类型</div>
+                <div class="layui-input-block">
+                    <input type="text" id="bsType" name="bsType" placeholder="请输入参数类型" autocomplete="off" class="layui-input" >
+                </div>
+            </div>
+            <!--<div class="layui-form-item">-->
+                <!--<div class="layui-form-label label-right ">描述</div>-->
+                <!--<div class="layui-input-block">-->
+                    <!--<input type="text" id="bsDescpt" name="bsDescpt" placeholder="请输入描述" autocomplete="off" class="layui-input" >-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="layui-form-item">
+                <label class="layui-form-label label-right">是否必填</label>
+                <div class="layui-input-block">
+                    <select id="isRequired" name="isRequired" lay-verify="" lay-filter="isRequired">
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-form-label label-right ">参数值</div>
+                <div class="layui-input-block">
+                    <input type="text" id="bsValue" name="bsValue" placeholder="请输入参数值" autocomplete="off" class="layui-input" >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="add">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script th:src="@{/js/api/interfaces/io_configure.js}" src="/js/api/interfaces/io_configure.js"></script>
+    <script th:inline="javascript">
+        var interId = [[${interId}]];
+        var interfaces = [[${interfaces}]];
+        console.log("id:"+interId);
+        console.log("interfaces:"+interfaces);
+    </script>
+</div>
+</body>
+</html>
