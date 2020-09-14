@@ -25,77 +25,75 @@ public class Department extends BaseEntity {
 	    /**
 	     * 部门编码
 	     */
-	    @ApiModelProperty(name = "deCode", value = "部门编码")
+	    @ApiModelProperty(name = "bsCode", value = "部门编码")
 	    @Column(length = 10)
-	    protected String deCode;
+	    protected String bsCode;
 
 	    /**
 	     * 部门名称
 	     */
-	    @ApiModelProperty(name = "deName", value = "部门名称")
+	    @ApiModelProperty(name = "bsName", value = "部门名称")
 	    @Column(length = 15)
-	    protected String deName;
+	    protected String bsName;
 	    
 	    /**
 	     *  部门经理
 	     */
-	    @ApiModelProperty(name = "deManager", value = "部门经理")
+	    @ApiModelProperty(name = "bsManager", value = "部门经理")
 	    @Column(length = 20)
-	    protected String deManager;
+	    protected String bsManager;
 	    
 	    /**
 	     *  部门经理联系方式
 	     */
-	    @ApiModelProperty(name = "deManagerTel", value = "部门经理电话")
+	    @ApiModelProperty(name = "bsManagerTel", value = "部门经理电话")
 	    @Column(length = 20)
-	    protected String deManagerTel;
+	    protected String bsManagerTel;
 	    
 	    /**
 	     * 状态（0：正常 / 1：禁用）
 	     */
-	    @ApiModelProperty(name = "deStatus", value = "状态（0：正常 / 1：禁用）")
+	    @ApiModelProperty(name = "bsStatus", value = "状态（0：正常 / 1：禁用）")
 	    @Column
-	    protected Integer deStatus = 0;
+	    protected Integer bsStatus = 0;
 
-		public String getDeCode() {
-			return deCode;
+		public String getBsCode() {
+			return bsCode;
 		}
 
-		public void setDeCode(String deCode) {
-			this.deCode = deCode;
+		public void setBsCode(String bsCode) {
+			this.bsCode = bsCode;
 		}
 
-		public String getDeName() {
-			return deName;
+		public String getBsName() {
+			return bsName;
 		}
 
-		public void setDeName(String deName) {
-			this.deName = deName;
+		public void setBsName(String bsName) {
+			this.bsName = bsName;
 		}
 
-		public String getDeManager() {
-			return deManager;
+		public String getBsManager() {
+			return bsManager;
 		}
 
-		public void setDeManager(String deManager) {
-			this.deManager = deManager;
+		public void setBsManager(String bsManager) {
+			this.bsManager = bsManager;
 		}
 
-		public String getDeManagerTel() {
-			return deManagerTel;
+		public String getBsManagerTel() {
+			return bsManagerTel;
 		}
 
-		public void setDeManagerTel(String deManagerTel) {
-			this.deManagerTel = deManagerTel;
+		public void setBsManagerTel(String bsManagerTel) {
+			this.bsManagerTel = bsManagerTel;
 		}
 
-		public Integer getDeStatus() {
-			return deStatus;
+		public Integer getBsStatus() {
+			return bsStatus;
 		}
 
-		public void setDeStatus(Integer deStatus) {
-			this.deStatus = deStatus;
-		}
-	    
-	    
+		public void setBsStatus(Integer bsStatus) {
+			this.bsStatus = bsStatus;
+		}    
 }

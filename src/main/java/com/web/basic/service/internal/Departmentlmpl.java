@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
-import com.system.role.entity.SysRole;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.enumeration.BasicStateEnum;
@@ -39,13 +38,13 @@ public class Departmentlmpl implements DepartmentService {
         if(department == null){
             return ApiResponseResult.failure("部门不能为空！");
         }
-        if(StringUtils.isEmpty(department.getDeCode())){
+        if(StringUtils.isEmpty(department.getBsCode())){
             return ApiResponseResult.failure("部门编号不能为空！");
         }
-        if(StringUtils.isEmpty(department.getDeName())){
+        if(StringUtils.isEmpty(department.getBsName())){
             return ApiResponseResult.failure("部门名称不能为空！");
         }
-        int count = departmentDao.countByIsDelAndDeCode(0, department.getDeCode());
+        int count = departmentDao.countByIsDelAndBsCode(0, department.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该部门已存在，请填写其他部门编号！");
         }
@@ -66,10 +65,10 @@ public class Departmentlmpl implements DepartmentService {
         if(department.getId() == null){
             return ApiResponseResult.failure("部门ID不能为空！");
         }
-        if(StringUtils.isEmpty(department.getDeCode())){
+        if(StringUtils.isEmpty(department.getBsCode())){
             return ApiResponseResult.failure("部门编号不能为空！");
         }
-        if(StringUtils.isEmpty(department.getDeName())){
+        if(StringUtils.isEmpty(department.getBsName())){
             return ApiResponseResult.failure("部门名称不能为空！");
         }
         Department o = departmentDao.findById((long) department.getId());
@@ -77,19 +76,19 @@ public class Departmentlmpl implements DepartmentService {
             return ApiResponseResult.failure("该部门不存在！");
         }
         //判断部门编号是否有变化，有则修改；没有则不修改
-        String originalCode = o.getDeCode();
-        if(o.getDeCode().equals(department.getDeCode())){
+        String originalCode = o.getBsCode();
+        if(o.getBsCode().equals(department.getBsCode())){
         }else{
-            int count = departmentDao.countByIsDelAndDeCode(0, department.getDeCode());
+            int count = departmentDao.countByIsDelAndBsCode(0, department.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("部门编号已存在，请填写其他部门编号！");
             }
-            o.setDeCode(department.getDeCode().trim());
+            o.setBsCode(department.getBsCode().trim());
         }
         o.setModifiedTime(new Date());
-        o.setDeName(department.getDeName());
-        o.setDeManager(department.getDeManager());
-        o.setDeManagerTel(department.getDeManagerTel());
+        o.setBsName(department.getBsName());
+        o.setBsManager(department.getBsManager());
+        o.setBsManagerTel(department.getBsManagerTel());
         departmentDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
@@ -102,7 +101,7 @@ public class Departmentlmpl implements DepartmentService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getDepartment(Long id) throws Exception{
+    public ApiResponseResult getDepart(Long id) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("部门ID不能为空！");
         }
@@ -134,11 +133,11 @@ public class Departmentlmpl implements DepartmentService {
     
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long id, Integer deStatus) throws Exception{
+    public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("部门ID不能为空！");
         }
-        if(deStatus == null){
+        if(bsStatus == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
         Department o = departmentDao.findById((long) id);
@@ -146,7 +145,7 @@ public class Departmentlmpl implements DepartmentService {
             return ApiResponseResult.failure("部门不存在！");
         }
         o.setModifiedTime(new Date());
-        o.setDeStatus(deStatus);
+        o.setBsStatus(bsStatus);
         departmentDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
@@ -163,9 +162,9 @@ public class Departmentlmpl implements DepartmentService {
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
-					filters1.add(new SearchFilter("deCode", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("deName", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("deManager", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("bsManager", SearchFilter.Operator.LIKE, keyword));
 				}
 				Specification<Department> spec = Specification.where(BaseService.and(filters, Department.class));
 				Specification<Department> spec1 = spec.and(BaseService.or(filters1, Department.class));

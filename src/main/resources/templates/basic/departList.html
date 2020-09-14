@@ -26,28 +26,19 @@
          <hr class="layui-bg-black"/>
 
         <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addDepartment()">添加部门</button>
-
-        <div style="display:none;" id="currentDepartment"><shiro:principal property="id"></shiro:principal></div>
-        <!--<div style="display:none;" id="currentUser"><shiro:principal property="fid"></shiro:principal></div>-->
-
         <table id="departmentList" lay-filter="departmentTable"></table>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(!d.deStatus){ }}
-            <input type="checkbox" name="{{d.deCode}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(!d.bsStatus){ }}
+            <input type="checkbox" name="{{d.bsName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.deCode}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.bsName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 
         <script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-            <!--{{#  if(d.del){ }}-->
-            <!--<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="recover">恢复</a>-->
-            <!--{{#  } else { }}-->
-            <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
-            <!--{{#  } }}-->
         </script>
 	 </div>
 	 <!--添加或编辑部门-->
@@ -58,25 +49,25 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">部门编号</label>
                 <div class="layui-input-inline">
-                    <input id="deCode" name="deCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsCode" name="bsCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">部门名称</label>
                 <div class="layui-input-inline">
-                    <input id="deName" name="deName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsName" name="bsName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">部门经理</label>
                 <div class="layui-input-inline">
-                    <input id="deManager" name="deManager" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsManager" name="bsManager" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">部门经理电话</label>
                 <div class="layui-input-inline">
-                    <input id="deManagerTel" name="deManagerTel" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsManagerTel" name="bsManagerTel" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -87,10 +78,8 @@
             </div>
         </form>
     </div>
-	 <link  th:href="@{/ztree/css/zTreeStyle/zTreeStyle.css}" href="/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
-    <script th:src="@{/ztree/js/jquery.ztree.all.min.js}" src="/ztree/js/jquery.ztree.all.min.js" type="text/javascript"></script>
     <script th:src="@{/js/dateUtils.js}" src="/js/dateUtils.js"></script>
-    <script th:src="@{/js/basic/departmentList.js}" src="/js/basic/departmentList.js"></script>
+    <script th:src="@{/js/basic/departList.js}" src="/js/basic/departList.js"></script>
 	</div>
 </body>
 </html>

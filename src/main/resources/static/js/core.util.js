@@ -4,7 +4,6 @@ var CoreUtil = (function () {
     var coreUtil = {};
     /*ajax请求*/
     coreUtil.sendAjax = function (url, params, ft, method, headers,noAuthorityFt,contentType, async) {
-    	
         var roleSaveLoading = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.1});
         $.ajax({
             url:  context+url,

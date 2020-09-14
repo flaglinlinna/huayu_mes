@@ -13,7 +13,7 @@ public interface DepartmentService {
 	public ApiResponseResult edit(Department department) throws Exception;
 
 	 //根据ID获取部门
-    public ApiResponseResult getDepartment(Long id) throws Exception;
+    public ApiResponseResult getDepart(Long id) throws Exception;
 	
 	public ApiResponseResult delete(Long id) throws Exception;
 	
