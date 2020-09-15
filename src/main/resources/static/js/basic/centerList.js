@@ -7,8 +7,8 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#departList',
-			url : context + 'base/depart/getList',
+			elem : '#centerList',
+			url : context + 'base/center/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -34,20 +34,10 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'bsCode',
-				title : '编号',
-				width : 120
+				title : '编码'
 			}, {
 				field : 'bsName',
-				title : '名称',
-				width : 120
-			}, {
-				field : 'bsManager',
-				title : '部门经理',
-				Width : 120
-			}, {
-				field : 'bsManagerTel',
-				title : '部门经理电话',
-				Width : 120
+				title : '名称'
 			}, {
 				field : 'bsStatus',
 				title : '状态',
@@ -55,16 +45,13 @@ $(function() {
 				templet : '#statusTpl'
 			}, {
 				field : 'modifiedTime',
-				title : '更新时间',
-				width : 150
+				title : '更新时间'
 			}, {
 				field : 'createdTime',
 				title : '添加时间',
-				width : 150
 			}, {
 				fixed : 'right',
 				title : '操作',
-				width : 150,
 				align : 'center',
 				toolbar : '#optBar'
 			} ] ],
@@ -86,14 +73,15 @@ $(function() {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(departmentTable)', function(obj) {
+		table.on('tool(centerTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delDepartment(data, data.id, data.bsCode);
+				delCenter(data, data.id, data.bsCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				getDepart(data, data.id);
+				console.log("edit");
+				getCenter(data, data.id);
 			}
 		});
 		// 监听提交
@@ -113,33 +101,30 @@ $(function() {
 			load(data);
 			return false;
 		});
-
-		// 编辑部门
-		function getDepart(obj, id) {
+		// 编辑工作中心
+		function getCenter(obj, id) {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/depart/getDepart", JSON.stringify(param),
-					function(data) {
-						if (data.result) {
-							form.val("departForm", { 
-								"id" : data.data.id,
-								"bsCode" : data.data.bsCode,
-								"bsName" : data.data.bsName,
-								"bsManager" : data.data.bsManager,
-								"bsManagerTel" : data.data.bsManagerTel
-							});
-							openDepartment(id, "编辑部门")
-						}
-
-						else {
-							layer.alert(data.msg)
-						}
-					}, "POST", false, function(res) {
-						layer.alert("操作请求错误，请您稍后再试");
+			CoreUtil.sendAjax("base/center/getWoCenter", JSON.stringify(param), function(
+					data) {
+				if (data.result) {
+					form.val("centerForm", { 
+						"id" : data.data.id,
+						"bsCode" : data.data.bsCode,
+						"bsName" : data.data.bsName,
 					});
+					openCenter(id, "编辑工作中心")
+				} else {
+					layer.alert(data.msg)
+				}
+			}, "POST", false, function(res) {
+				layer.alert("操作请求错误，请您稍后再试");
+			});
 		}
+
 	});
+
 });
 
 // 设置用户正常/禁用
@@ -147,7 +132,7 @@ function setStatus(obj, id, name, checked) {
 	var isStatus = checked ? 0 : 1;
 	var deaprtisStatus = checked ? "正常" : "禁用";
 	// 正常/禁用
-	layer.confirm('您确定要把部门：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+	layer.confirm('您确定要把工作中心：' + name + '设置为' + deaprtisStatus + '状态吗？', {
 		btn : [ '确认', '返回' ]
 	// 按钮
 	}, function() {
@@ -155,7 +140,7 @@ function setStatus(obj, id, name, checked) {
 			"id" : id,
 			"bsStatus" : isStatus
 		};
-		CoreUtil.sendAjax("/base/depart/doStatus", JSON.stringify(param),
+		CoreUtil.sendAjax("/base/center/doStatus", JSON.stringify(param),
 				function(data) {
 					if (data.result) {
 						layer.alert("操作成功", function() {
@@ -176,7 +161,7 @@ function setStatus(obj, id, name, checked) {
 }
 
 // 新增编辑弹出框
-function openDepartment(id, title) {
+function openCenter(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -187,28 +172,27 @@ function openDepartment(id, title) {
 		resize : false,
 		shadeClose : true,
 		area : [ '550px' ],
-		content : $('#setDepartment'),
+		content : $('#setCenter'),
 		end : function() {
-			cleanDepartment();
+			cleanCenter();
 		}
 	});
 }
 
-// 添加部门
-function addDepartment() {
+// 添加工作中心
+function addCenter() {
 	// 清空弹出框数据
-	cleanDepartment();
+	cleanCenter();
 	// 打开弹出框
-	openDepartment(null, "添加部门");
+	openCenter(null, "添加工作中心");
 }
-// 新增部门提交
+// 新增工作中心提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/depart/add", JSON.stringify(obj.field), function(
-			data) {
+	CoreUtil.sendAjax("base/center/add",JSON.stringify(obj.field),function (data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanDepartment();
+				cleanCenter();
 				// 加载页面
 				loadAll();
 			});
@@ -217,19 +201,19 @@ function addSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-	}, "POST", false, function(res) {
-		layer.alert(res.msg);
-	});
+       },"POST",false,function (res) {
+    	   layer.alert(res.msg);
+       }); 
 }
 
-// 编辑部门提交
+
+// 编辑工作中心提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/depart/edit", JSON.stringify(obj.field), function(
-			data) {
+	CoreUtil.sendAjax("base/center/edit",JSON.stringify(obj.field),function (data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanDepartment();
+				cleanCenter();
 				// 加载页面
 				loadAll();
 			});
@@ -238,22 +222,22 @@ function editSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-	}, "POST", false, function(res) {
-		layer.alert(res.msg);
-	});
+       },"POST",false,function (res) {
+    	   layer.alert(res.msg);
+       }); 
 }
 
-// 删除部门
-function delDepartment(obj, id, name) {
+// 删除工作中心
+function delCenter(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '部门吗？', {
+		layer.confirm('您确定要删除' + name + '工作中心吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/depart/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("base/center/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -300,7 +284,7 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanDepartment() {
-	$('#departmentForm')[0].reset();
+function cleanCenter() {
+	$('#centerForm')[0].reset();
 	layui.form.render();// 必须写
 }
