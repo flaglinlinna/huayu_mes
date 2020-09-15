@@ -14,16 +14,16 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @EnableScheduling
 @SpringBootApplication
-public class JYApplication extends SpringBootServletInitializer{
+public class WYApplication extends SpringBootServletInitializer{
 	
 
 	public static void main(String[] args) {
-		SpringApplication.run(JYApplication.class, args);
+		SpringApplication.run(WYApplication.class, args);
 	}
 	
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(JYApplication.class);
+        return application.sources(WYApplication.class);
     }
 
 //	@Bean
