@@ -69,7 +69,6 @@ $(function() {
 
 		// 监听在职操作
 		form.on('switch(isStatusTpl)', function(obj) {
-			console.log("switch");
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
@@ -106,59 +105,70 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/center/getWoCenter", JSON.stringify(param), function(
-					data) {
-				if (data.result) {
-					form.val("centerForm", { 
-						"id" : data.data.id,
-						"bsCode" : data.data.bsCode,
-						"bsName" : data.data.bsName,
+			CoreUtil.sendAjax("base/center/getWoCenter", JSON.stringify(param),
+					function(data) {
+						if (data.result) {
+							form.val("centerForm", {
+								"id" : data.data.id,
+								"bsCode" : data.data.bsCode,
+								"bsName" : data.data.bsName,
+							});
+							openCenter(id, "编辑工作中心")
+						} else {
+							layer.alert(data.msg)
+						}
+					}, "POST", false, function(res) {
+						layer.alert("操作请求错误，请您稍后再试");
 					});
-					openCenter(id, "编辑工作中心")
-				} else {
-					layer.alert(data.msg)
-				}
-			}, "POST", false, function(res) {
-				layer.alert("操作请求错误，请您稍后再试");
-			});
 		}
+		// 设置用户正常/禁用
+		function setStatus(obj, id, name, checked) {
+			// setStatus(obj, this.value, this.name, obj.elem.checked);
+			var isStatus = checked ? 0 : 1;
+			var deaprtisStatus = checked ? "正常" : "禁用";
+			// 正常/禁用
 
+			layer.confirm(
+					'您确定要把工作中心：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+						btn1 : function(index) {
+							var param = {
+								"id" : id,
+								"bsStatus" : isStatus
+							};
+							CoreUtil.sendAjax("/base/center/doStatus", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									layer.alert("操作成功", function() {
+										layer.closeAll();
+										loadAll();
+									});
+								} else {
+									layer.alert(data.msg, function() {
+										layer.closeAll();
+									});
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试", function() {
+
+									layer.closeAll();
+								});
+							});
+						},
+						btn2 : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						},
+						cancel : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						}
+					})
+		}
 	});
 
 });
-
-// 设置用户正常/禁用
-function setStatus(obj, id, name, checked) {
-	var isStatus = checked ? 0 : 1;
-	var deaprtisStatus = checked ? "正常" : "禁用";
-	// 正常/禁用
-	layer.confirm('您确定要把工作中心：' + name + '设置为' + deaprtisStatus + '状态吗？', {
-		btn : [ '确认', '返回' ]
-	// 按钮
-	}, function() {
-		var param = {
-			"id" : id,
-			"bsStatus" : isStatus
-		};
-		CoreUtil.sendAjax("/base/center/doStatus", JSON.stringify(param),
-				function(data) {
-					if (data.result) {
-						layer.alert("操作成功", function() {
-							layer.closeAll();
-							loadAll();
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-						});
-					}
-				}, "POST", false, function(res) {
-					layer.alert("操作请求错误，请您稍后再试", function() {
-						layer.closeAll();
-					});
-				});
-	});
-}
 
 // 新增编辑弹出框
 function openCenter(id, title) {
@@ -188,7 +198,8 @@ function addCenter() {
 }
 // 新增工作中心提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/center/add",JSON.stringify(obj.field),function (data) {
+	CoreUtil.sendAjax("base/center/add", JSON.stringify(obj.field), function(
+			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
@@ -201,15 +212,15 @@ function addSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
-
 
 // 编辑工作中心提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/center/edit",JSON.stringify(obj.field),function (data) {
+	CoreUtil.sendAjax("base/center/edit", JSON.stringify(obj.field), function(
+			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
@@ -222,9 +233,9 @@ function editSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
 // 删除工作中心

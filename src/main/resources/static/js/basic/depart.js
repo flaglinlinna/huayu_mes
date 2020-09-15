@@ -122,7 +122,7 @@ $(function() {
 			CoreUtil.sendAjax("base/depart/getDepart", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
-							form.val("departForm", { 
+							form.val("departForm", {
 								"id" : data.data.id,
 								"bsCode" : data.data.bsCode,
 								"bsName" : data.data.bsName,
@@ -139,41 +139,51 @@ $(function() {
 						layer.alert("操作请求错误，请您稍后再试");
 					});
 		}
+		// 设置用户正常/禁用
+		function setStatus(obj, id, name, checked) {
+			var isStatus = checked ? 0 : 1;
+			var deaprtisStatus = checked ? "正常" : "禁用";
+			// 正常/禁用
+
+			layer.confirm('您确定要把部门：' + name + '设置为' + deaprtisStatus + '状态吗？',
+					{
+						btn1 : function(index) {
+							var param = {
+								"id" : id,
+								"bsStatus" : isStatus
+							};
+							CoreUtil.sendAjax("/base/depart/doStatus", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									layer.alert("操作成功", function() {
+										layer.closeAll();
+										loadAll();
+									});
+								} else {
+									layer.alert(data.msg, function() {
+										layer.closeAll();
+									});
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试", function() {
+									layer.closeAll();
+								});
+							});
+						},
+						btn2 : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						},
+						cancel : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						}
+					});
+		}
 	});
 });
-
-// 设置用户正常/禁用
-function setStatus(obj, id, name, checked) {
-	var isStatus = checked ? 0 : 1;
-	var deaprtisStatus = checked ? "正常" : "禁用";
-	// 正常/禁用
-	layer.confirm('您确定要把部门：' + name + '设置为' + deaprtisStatus + '状态吗？', {
-		btn : [ '确认', '返回' ]
-	// 按钮
-	}, function() {
-		var param = {
-			"id" : id,
-			"bsStatus" : isStatus
-		};
-		CoreUtil.sendAjax("/base/depart/doStatus", JSON.stringify(param),
-				function(data) {
-					if (data.result) {
-						layer.alert("操作成功", function() {
-							layer.closeAll();
-							loadAll();
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-						});
-					}
-				}, "POST", false, function(res) {
-					layer.alert("操作请求错误，请您稍后再试", function() {
-						layer.closeAll();
-					});
-				});
-	});
-}
 
 // 新增编辑弹出框
 function openDepartment(id, title) {

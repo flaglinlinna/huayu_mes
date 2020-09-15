@@ -106,59 +106,69 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/proc/getWoProc", JSON.stringify(param), function(
-					data) {
-				if (data.result) {
-					form.val("procForm", { 
-						"id" : data.data.id,
-						"bsCode" : data.data.bsCode,
-						"bsName" : data.data.bsName,
+			CoreUtil.sendAjax("base/proc/getWoProc", JSON.stringify(param),
+					function(data) {
+						if (data.result) {
+							form.val("procForm", {
+								"id" : data.data.id,
+								"bsCode" : data.data.bsCode,
+								"bsName" : data.data.bsName,
+							});
+							openProc(id, "编辑工序")
+						} else {
+							layer.alert(data.msg)
+						}
+					}, "POST", false, function(res) {
+						layer.alert("操作请求错误，请您稍后再试");
 					});
-					openProc(id, "编辑工序")
-				} else {
-					layer.alert(data.msg)
-				}
-			}, "POST", false, function(res) {
-				layer.alert("操作请求错误，请您稍后再试");
-			});
+		}
+		// 设置正常/禁用
+		function setStatus(obj, id, name, checked) {
+			var isStatus = checked ? 0 : 1;
+			var deaprtisStatus = checked ? "正常" : "禁用";
+			// 正常/禁用
+			layer.confirm('您确定要把工序：' + name + '设置为' + deaprtisStatus + '状态吗？',
+					{
+						btn1 : function(index) {
+							var param = {
+								"id" : id,
+								"bsStatus" : isStatus
+							};
+							CoreUtil.sendAjax("/base/proc/doStatus", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									layer.alert("操作成功", function() {
+										layer.closeAll();
+										loadAll();
+									});
+								} else {
+									layer.alert(data.msg, function() {
+										layer.closeAll();
+									});
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试", function() {
+
+									layer.closeAll();
+								});
+							});
+						},
+						btn2 : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						},
+						cancel : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						}
+					});
 		}
 
 	});
 
 });
-
-// 设置用户正常/禁用
-function setStatus(obj, id, name, checked) {
-	var isStatus = checked ? 0 : 1;
-	var deaprtisStatus = checked ? "正常" : "禁用";
-	// 正常/禁用
-	layer.confirm('您确定要把工序：' + name + '设置为' + deaprtisStatus + '状态吗？', {
-		btn : [ '确认', '返回' ]
-	// 按钮
-	}, function() {
-		var param = {
-			"id" : id,
-			"bsStatus" : isStatus
-		};
-		CoreUtil.sendAjax("/base/proc/doStatus", JSON.stringify(param),
-				function(data) {
-					if (data.result) {
-						layer.alert("操作成功", function() {
-							layer.closeAll();
-							loadAll();
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-						});
-					}
-				}, "POST", false, function(res) {
-					layer.alert("操作请求错误，请您稍后再试", function() {
-						layer.closeAll();
-					});
-				});
-	});
-}
 
 // 新增编辑弹出框
 function openProc(id, title) {
@@ -188,28 +198,29 @@ function addProc() {
 }
 // 新增工序提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/proc/add",JSON.stringify(obj.field),function (data) {
-		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				cleanProc();
-				// 加载页面
-				loadAll();
+	CoreUtil.sendAjax("base/proc/add", JSON.stringify(obj.field),
+			function(data) {
+				if (data.result) {
+					layer.alert("操作成功", function() {
+						layer.closeAll();
+						cleanProc();
+						// 加载页面
+						loadAll();
+					});
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+				}
+			}, "POST", false, function(res) {
+				layer.alert(res.msg);
 			});
-		} else {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
-			});
-		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
 }
-
 
 // 编辑工序提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/proc/edit",JSON.stringify(obj.field),function (data) {
+	CoreUtil.sendAjax("base/proc/edit", JSON.stringify(obj.field), function(
+			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
@@ -222,9 +233,9 @@ function editSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
 // 删除工序

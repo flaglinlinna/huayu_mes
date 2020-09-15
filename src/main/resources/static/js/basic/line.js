@@ -106,21 +106,65 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/line/getWoLine", JSON.stringify(param), function(
-					data) {
-				if (data.result) {
-					form.val("lineForm", { 
-						"id" : data.data.id,
-						"bsCode" : data.data.bsCode,
-						"bsName" : data.data.bsName,
+			CoreUtil.sendAjax("base/line/getWoLine", JSON.stringify(param),
+					function(data) {
+						if (data.result) {
+							form.val("lineForm", {
+								"id" : data.data.id,
+								"bsCode" : data.data.bsCode,
+								"bsName" : data.data.bsName,
+							});
+							openLine(id, "编辑线体")
+						} else {
+							layer.alert(data.msg)
+						}
+					}, "POST", false, function(res) {
+						layer.alert("操作请求错误，请您稍后再试");
 					});
-					openLine(id, "编辑线体")
-				} else {
-					layer.alert(data.msg)
-				}
-			}, "POST", false, function(res) {
-				layer.alert("操作请求错误，请您稍后再试");
-			});
+		}
+
+		// 设置正常/禁用
+		function setStatus(obj, id, name, checked) {
+			var isStatus = checked ? 0 : 1;
+			var deaprtisStatus = checked ? "正常" : "禁用";
+			// 正常/禁用
+			layer.confirm('您确定要把线体：' + name + '设置为' + deaprtisStatus + '状态吗？',
+					{
+						btn1 : function(index) {
+							var param = {
+								"id" : id,
+								"bsStatus" : isStatus
+							};
+							CoreUtil.sendAjax("/base/line/doStatus", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									layer.alert("操作成功", function() {
+										layer.closeAll();
+										loadAll();
+									});
+								} else {
+									layer.alert(data.msg, function() {
+										layer.closeAll();
+									});
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试", function() {
+
+									layer.closeAll();
+								});
+							});
+						},
+						btn2 : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						},
+						cancel : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						}
+					});
 		}
 
 	});
@@ -188,28 +232,29 @@ function addLine() {
 }
 // 新增线体提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/line/add",JSON.stringify(obj.field),function (data) {
-		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				cleanLine();
-				// 加载页面
-				loadAll();
+	CoreUtil.sendAjax("base/line/add", JSON.stringify(obj.field),
+			function(data) {
+				if (data.result) {
+					layer.alert("操作成功", function() {
+						layer.closeAll();
+						cleanLine();
+						// 加载页面
+						loadAll();
+					});
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+				}
+			}, "POST", false, function(res) {
+				layer.alert(res.msg);
 			});
-		} else {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
-			});
-		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
 }
-
 
 // 编辑线体提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/line/edit",JSON.stringify(obj.field),function (data) {
+	CoreUtil.sendAjax("base/line/edit", JSON.stringify(obj.field), function(
+			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
@@ -222,9 +267,9 @@ function editSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
 // 删除线体

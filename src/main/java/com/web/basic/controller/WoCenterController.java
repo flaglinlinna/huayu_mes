@@ -36,7 +36,7 @@ public class WoCenterController extends WebController{
 	 @ApiOperation(value = "工作中心列表页", notes = "工作中心列表页", hidden = true)
 	    @RequestMapping(value = "/toWoCenter")
 	    public String toWoCenter(){
-	        return "/basic/center";
+	        return "/web/basic/center";
 	    }
 	    @ApiOperation(value = "获取工作中心列表", notes = "获取工作中心列表")
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)

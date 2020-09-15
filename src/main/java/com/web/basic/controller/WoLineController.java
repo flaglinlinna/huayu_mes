@@ -36,7 +36,7 @@ public class WoLineController extends WebController{
 	 @ApiOperation(value = "线体列表页", notes = "线体列表页", hidden = true)
 	    @RequestMapping(value = "/toWoLine")
 	    public String toWoLine(){
-	        return "/basic/line";
+	        return "/web/basic/line";
 	    }
 	    @ApiOperation(value = "获取线体列表", notes = "获取线体列表")
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)

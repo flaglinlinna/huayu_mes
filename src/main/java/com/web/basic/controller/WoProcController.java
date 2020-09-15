@@ -36,7 +36,7 @@ public class WoProcController extends WebController{
 	 @ApiOperation(value = "工序列表页", notes = "工序列表页", hidden = true)
 	    @RequestMapping(value = "/toWoProc")
 	    public String toWoProc(){
-	        return "/basic/proc";
+	        return "/web/basic/proc";
 	    }
 	    @ApiOperation(value = "获取工序列表", notes = "获取工序列表")
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
