@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='线体信息'">
+<head th:include="layout :: htmlhead" th:with="title='工作中心信息'">
 <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 	 <div style="margin: 10px">
-	 <form id="lineSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+	 <form id="centerSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
            <div class="layui-form-item" style="margin-bottom: 0px">
 					<div class="layui-inline">
 						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
@@ -25,8 +25,8 @@
         </form>
          <hr class="layui-bg-black"/>
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addLine()">添加线体</button>
-        <table id="lineList" lay-filter="lineTable"></table>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addCenter()">添加工作中心</button>
+        <table id="centerList" lay-filter="centerTable"></table>
 
         <script type="text/html" id="statusTpl">
             {{#  if(!d.bsStatus){ }}
@@ -41,19 +41,19 @@
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 	 </div>
-	 <!--添加或编辑线体-->
-    <div id="setLine" class="layer_self_wrap" style="width:500px;display:none;">
-        <form id="lineForm" class="layui-form layui-form-pane" lay-filter="lineForm" method="post" action="" style="margin-top: 20px;">
+	 <!--添加或编辑工作中心-->
+    <div id="setCenter" class="layer_self_wrap" style="width:500px;display:none;">
+        <form id="centerForm" class="layui-form layui-form-pane" lay-filter="centerForm" method="post" action="" style="margin-top: 20px;">
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">线体编码</label>
+                <label class="layui-form-label">工作中心编码</label>
                 <div class="layui-input-inline">
                     <input id="bsCode" name="bsCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">线体名称</label>
+                <label class="layui-form-label">工作中心名称</label>
                 <div class="layui-input-inline">
                     <input id="bsName" name="bsName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
@@ -66,7 +66,7 @@
             </div>
         </form>
     </div>
-    <script th:src="@{/js/basic/lineList.js}" src="/js/basic/lineList.js"></script>
+    <script th:src="@{/js/basic/center.js}" src="/js/basic/center.js"></script>
 	</div>
 </body>
 </html>
