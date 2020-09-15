@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      xmlns:th="http://www.thymeleaf.org" >
+<!--<head>-->
+    <!--<meta charset="UTF-8">-->
+<!--</head>-->
+<head th:include="layout :: htmlhead" th:with="title='通用报表'">
+</head>
+<style th:inline="text">
+		.layui-table-tool-self {
+		    display: none;
+		}
+		.layui-table-tool-temp{
+		   padding-right:0px;
+		}
+		/* 表格头部背景色 */
+	  .layui-table th{
+	        font-weight: bold;
+	  }
+	  /* 背景色*/
+	  /* 偶数行背景色 */
+	.layui-table[lay-even] tr:nth-child(even) {
+	    /* background-color: #aaffaa; */
+	    background-color: #e6e6e6;
+	}
+	</style>
+<body>
+<!--查询面板-->
+        <div th:replace="api/fragment/search_item :: searcher"></div> 
+       
+                    
+<table class="layui-hide" id="listTable" lay-filter="listTable"></table>
+ 
+<script type="text/html" id="toolbar">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">审批通过并且回复华为</button>
+    
+    
+    <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="loadWeek" style="float:right;" id="weekBtn">按周展示</button>
+    <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="loadDay" style="float:right;" id="dayBtn">按日展示</button>
+  </div>
+</script>
+
+<!-- <script src="/layui/layui.all.js"></script>
+<script src="/js/core.util.js"></script> -->
+<script  th:inline="none">
+var f_temp=1;
+		      var initCol = [
+				               {type: 'numbers', title: '序号'},
+			                    {type: 'checkbox', width: 50}
+					                ,{field:'suppItemCode', title:'供方物料编号', width:30,align:'center'}
+					                ,{field:'itemCode', title:'华为物料编码', width:90,align:'center'}
+					                ,{field:'', title:'版本号', width:50,align:'center'}
+					                ,{field:'purchaseMode', title:'采购模式',width:100,align:'center'}
+					                ,{field:'partSort', title:'器件分类',width:50,align:'center'}
+					                ,{field:'buyerName', title:'采购员', width:50,align:'center'}
+					                ,{field:'publishDate', title:'发布日期',width:80,align:'center'}
+					                ,{field:'openPOQty', title:'在途订单数量',width:80,align:'center'}
+					                ,{field:'vmiQty', title:'VMI库存',width:80,align:'center'}
+					                ,{field:'currentInventory', title:'供应商库存',width:80,align:'center'}
+					                ,{field:'dataMeasure', title:'数据类型',width:100,align:'center',templet: function (d) {return getMeatureType(d)} }
+					                ,{field:'total', title:'合计', width:100,align:'center',templet: function (d) {return d.data.total}}
+					            ]; 
+		     layui.use(['table','form', 'layedit', 'laydate',], function(){
+		    	  var form = layui.form
+		    	  ,layer = layui.layer
+		    	  ,layedit = layui.layedit
+		    	  ,table = layui.table
+		    	  ,laydate = layui.laydate;
+		    	  
+		    	  tableIns=table.render({
+			            elem: '#listTable'
+			            //,url:context+'api/item/itemlist'
+			            ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
+			            ,method: 'get' //默认：get请求
+			            ,where:{type:'findForecastList'}
+			            ,cellMinWidth: 80,limit:20
+			            //,even: true
+			            ,page: true,
+			            data:[] ,
+			            request: {
+			                pageName: 'page' //页码的参数名称，默认：page
+			                ,limitName: 'rows' //每页数据量的参数名，默认：limit
+			            },
+			            parseData: function (res) {
+			            	console.log(res)
+			            	if(res.data.failed){
+			            		return {
+			                   	 "code": res.data.code,//code值为200表示成功
+			                       "count": 0,
+			                       "msg":res.data.result,
+			                       "data":[]
+			                   }
+			            	}
+			                // 可进行数据操作
+			                return {
+			                	 "code": 0,//code值为200表示成功
+			                    "count": res.data.data.pageVO.totalRows,
+			                    "msg":res.msg,
+			                    "data":res.data.data.result
+			                }
+			            },
+			            cols: [initCol]
+			            ,  done: function(res, curr, count){
+			                //如果是异步请求数据方式，res即为你接口返回的信息。
+			                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+			                pageCurr=curr;
+			                //merge(res);
+			            }
+			        }); 
+		    	  //监听提交
+		    	  form.on('submit(demo1)', function(data){
+		    		  load(data);
+		    	    return false;
+		    	  });
+		    	  
+		    	//监听单元格编辑
+		    	  table.on('edit(listTable)', function(obj){
+		    	    var value = obj.value //得到修改后的值
+		    	    ,data = obj.data //得到所在行所有键值
+		    	    ,field = obj.field; //得到字段
+		    	    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+		    	  });
+		    	  //头工具栏事件
+		    	  table.on('toolbar(listTable)', function(obj){
+		    	    var checkStatus = table.checkStatus(obj.config.id);
+		    	    switch(obj.event){
+		    	      case 'getCheckData':
+		    	        var data = checkStatus.data;
+		    	        layer.alert(JSON.stringify(data));
+		    	      break;
+		    	      case 'loadWeek':
+		    	        var data = checkStatus.data;
+		    	        layer.msg('选中了：'+ data.length + ' 个');
+		    	      break;
+		    	      case 'loadDay':
+		    	        layer.msg(checkStatus.isAll ? '全选': '未全选');
+		    	      break;
+		    	      case 'isExport':
+		    	    	  var tips = layer.tips('只允许导入天的数据', '#is_export',{
+					             tips: [2, '#555555']
+					             // 上右下左四个方向，通过1-4进行方向设定
+					         });
+					         sleep(5000);
+					         layer.close(tips);
+			    	  break;
+		    	      
+		    	      //自定义头工具栏右侧图标 - 提示
+		    	      case 'LAYTABLE_TIPS':
+		    	        layer.alert('这是工具栏右侧自定义的一个图标按钮');
+		    	      break;
+		    	    };
+		    	  });
+		    	  
+		    	});
+		     
+		     $(function () { 
+		    	 $("#is_export").click(function () { 
+		    		 alert('123')
+			         /* var tips = layer.tips('单购时已支付；<br />团购时团长已支付', '#is_pay_explain',{
+			             tips: [1, '#555555']
+			             // 上右下左四个方向，通过1-4进行方向设定
+			         });
+			         sleep(5000);
+			         layer.close(tips); */
+			     })
+		     });
+		   //重新加载表格（搜索）
+		     function load(obj){
+			  /* layer.alert(JSON.stringify(obj.field), {
+      title: '最终的提交信息'
+    }) */
+		         //重新加载table
+		          /* tableIns.reload({
+		             where: {
+		            	 type:'findForecastList'
+		             }
+		             , page: {
+		                 curr: pageCurr //从当前页码开始
+		             }
+		         });  */
+		    	  CoreUtil.sendAjax('api/item/itemlist',{type:'findForecastList',page:0,rows:0},function (res) {
+		    		  
+		    		  if(res.result){
+		    			  if(!res.result.failed){
+		    				  var mycols =initCol;
+								var arr = res.data.data.result[0].lableDayList;
+								console.log(arr)
+							for(j = 0,len=arr.length; j < len; j++) {
+								var ff = (j+1);
+								mycols.push({
+									field: 'day'+ff, title: arr[j], align: 'center', width: 120, sort: false, edit: 'aa',templet: function (d) {return d.data[this.field]}
+								});	
+								
+							}
+							 	var arr2 = res.data.data.result[0].lableList;
+							for(j2 = 0,len2=arr2.length; j2 < len2; j2++) {
+									var f = 'Q'+(j2+1);
+									mycols.push({
+										field: f, title: arr2[j2], align: 'center', width: 120, sort: false, edit: 'text',templet: function (d) {return d.data[this.field]}
+									});	
+							} 
+							
+							console.log(JSON.stringify(mycols))
+							 tableIns.reload({
+					             cols:[mycols] ,	
+							     data:res.data.data.result,
+							}) 
+		    			  }else{
+		    				  layer.msg(res.data.result, {
+				                    time: 20000, //20s后自动关闭
+				                    btn: ['知道了']
+				                  });
+		    			  }
+		    		  }else{
+		    			  layer.msg(res.msg, {
+			                    time: 20000, //20s后自动关闭
+			                    btn: ['知道了']
+			                  });
+		    		  }
+		    		 
+		            },"GET",false,function (res) {
+		                layer.msg("抱歉！您暂无权限");
+		            });  
+		    	 /* CoreUtil.sendAjax("api/database/add",JSON.stringify(data.field),function (res) {
+						
+		    		 layer.msg(res.msg, {
+		                    time: 20000, //20s后自动关闭
+		                    btn: ['知道了']
+		                  });
+		            },"POST",false,function (res) {
+		                layer.msg("抱歉！您暂无权限");
+		            });  */
+		         
+		     }
+		    	  
+		   function getMeatureType(obj){
+			   if(obj.dataMeasure == 'net_requirement'){
+				   	  return "本期需求"
+			   }else if(obj.dataMeasure == 'supplier_response'){
+				   return "本期供应"
+			   }else if(obj.dataMeasure == 'gap'){
+				   return "本期缺口"
+			   }else{
+				   return obj.dataMeasure;
+			   }
+		   }
+		   function merge(res) {
+	            
+		        var data = res.data;
+		        var mergeIndex = 0;//定位需要添加合并属性的行数
+		        var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+		        var columsName = ['itemCode'];//需要合并的列名称
+		        var columsIndex = [3];//需要合并的列索引值
+		    
+		        for (var k = 0; k < columsName.length; k++) { //这里循环所有要合并的列
+		            var trArr = $(".layui-table-body>.layui-table").find("tr");//所有行
+		                for (var i = 1; i < res.data.length; i++) { //这里循环表格当前的数据
+		                    var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
+		                    var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);//获取相同列的第一列
+		                    
+		                    if (data[i][columsName[k]] === data[i-1][columsName[k]]) { //后一行的值与前一行的值做比较，相同就需要合并
+		                        mark += 1;
+		                        tdPreArr.each(function () {//相同列的第一列增加rowspan属性
+		                            $(this).attr("rowspan", mark);
+		                        });
+		                        tdCurArr.each(function () {//当前行隐藏
+		                            $(this).css("display", "none");
+		                        });
+		                    }else {
+		                        mergeIndex = i;
+		                        mark = 1;//一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+		                    }
+		                }
+		            mergeIndex = 0;
+		            mark = 1;
+		        }
+		    }
+		   
+		   function getDataByDay(obj,v_temp){
+			  return obj.data[v_temp];
+		   }
+		
+</script>
+</body>
+</html>
