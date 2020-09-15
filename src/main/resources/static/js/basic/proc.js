@@ -1,5 +1,5 @@
 /**
- * 角色管理
+ * 工序管理
  */
 var pageCurr;
 $(function() {
@@ -67,7 +67,7 @@ $(function() {
 			}
 		});
 
-		// 监听在职操作
+		// 监听操作
 		form.on('switch(isStatusTpl)', function(obj) {
 			console.log("switch");
 			setStatus(obj, this.value, this.name, obj.elem.checked);

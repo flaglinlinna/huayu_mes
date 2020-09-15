@@ -1,5 +1,5 @@
 /**
- * 角色管理
+ * 工作中心管理
  */
 var pageCurr;
 $(function() {

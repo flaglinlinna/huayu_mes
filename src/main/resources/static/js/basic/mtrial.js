@@ -1,5 +1,5 @@
 /**
- * 部门管理
+ * 物料管理
  */
 var pageCurr;
 $(function() {
@@ -7,8 +7,8 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#departList',
-			url : context + 'base/depart/getList',
+			elem : '#mtrialList',
+			url : context + 'base/mtrial/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -34,20 +34,16 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'bsCode',
-				title : '编号',
-				width : 120
+				title : '编码'
 			}, {
 				field : 'bsName',
-				title : '名称',
-				width : 120
+				title : '名称'
 			}, {
-				field : 'bsManager',
-				title : '部门经理',
-				Width : 120
+				field : 'bsType',
+				title : '类别'
 			}, {
-				field : 'bsManagerTel',
-				title : '部门经理电话',
-				Width : 120
+				field : 'bsUnit',
+				title : '单位'
 			}, {
 				field : 'bsStatus',
 				title : '状态',
@@ -55,16 +51,13 @@ $(function() {
 				templet : '#statusTpl'
 			}, {
 				field : 'modifiedTime',
-				title : '更新时间',
-				width : 150
+				title : '更新时间'
 			}, {
 				field : 'createdTime',
 				title : '添加时间',
-				width : 150
 			}, {
 				fixed : 'right',
 				title : '操作',
-				width : 150,
 				align : 'center',
 				toolbar : '#optBar'
 			} ] ],
@@ -80,20 +73,20 @@ $(function() {
 			}
 		});
 
-		// 监听在职操作
+		// 监听操作
 		form.on('switch(isStatusTpl)', function(obj) {
-			console.log("switch");
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(departmentTable)', function(obj) {
+		table.on('tool(mtrialTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delDepartment(data, data.id, data.bsCode);
+				delMtrial(data, data.id, data.bsCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				getDepart(data, data.id);
+				console.log("edit");
+				getMtrial(data, data.id);
 			}
 		});
 		// 监听提交
@@ -113,26 +106,23 @@ $(function() {
 			load(data);
 			return false;
 		});
-
-		// 编辑部门
-		function getDepart(obj, id) {
+		// 编辑物料信息
+		function getMtrial(obj, id) {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/depart/getDepart", JSON.stringify(param),
+			CoreUtil.sendAjax("base/mtrial/getMtrial", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
-							form.val("departForm", {
+							form.val("mtrialForm", {
 								"id" : data.data.id,
 								"bsCode" : data.data.bsCode,
 								"bsName" : data.data.bsName,
-								"bsManager" : data.data.bsManager,
-								"bsManagerTel" : data.data.bsManagerTel
+								"bsType" : data.data.bsType,
+								"bsUnit" : data.data.bsUnit
 							});
-							openDepartment(id, "编辑部门")
-						}
-
-						else {
+							openMtrial(id, "编辑物料信息")
+						} else {
 							layer.alert(data.msg)
 						}
 					}, "POST", false, function(res) {
@@ -141,18 +131,19 @@ $(function() {
 		}
 		// 设置用户正常/禁用
 		function setStatus(obj, id, name, checked) {
+			// setStatus(obj, this.value, this.name, obj.elem.checked);
 			var isStatus = checked ? 0 : 1;
 			var deaprtisStatus = checked ? "正常" : "禁用";
 			// 正常/禁用
 
-			layer.confirm('您确定要把部门：' + name + '设置为' + deaprtisStatus + '状态吗？',
-					{
+			layer.confirm(
+					'您确定要把物料：' + name + '设置为' + deaprtisStatus + '状态吗？', {
 						btn1 : function(index) {
 							var param = {
 								"id" : id,
 								"bsStatus" : isStatus
 							};
-							CoreUtil.sendAjax("/base/depart/doStatus", JSON
+							CoreUtil.sendAjax("/base/mtrial/doStatus", JSON
 									.stringify(param), function(data) {
 								if (data.result) {
 									layer.alert("操作成功", function() {
@@ -166,6 +157,7 @@ $(function() {
 								}
 							}, "POST", false, function(res) {
 								layer.alert("操作请求错误，请您稍后再试", function() {
+
 									layer.closeAll();
 								});
 							});
@@ -180,13 +172,14 @@ $(function() {
 							form.render();
 							layer.closeAll();
 						}
-					});
+					})
 		}
 	});
+
 });
 
 // 新增编辑弹出框
-function openDepartment(id, title) {
+function openMtrial(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -197,28 +190,28 @@ function openDepartment(id, title) {
 		resize : false,
 		shadeClose : true,
 		area : [ '550px' ],
-		content : $('#setDepartment'),
+		content : $('#setMtrial'),
 		end : function() {
-			cleanDepartment();
+			cleanMtrial();
 		}
 	});
 }
 
-// 添加部门
-function addDepartment() {
+// 添加物料信息
+function addMtrial() {
 	// 清空弹出框数据
-	cleanDepartment();
+	cleanMtrial();
 	// 打开弹出框
-	openDepartment(null, "添加部门");
+	openMtrial(null, "添加物料信息");
 }
-// 新增部门提交
+// 新增物料信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/depart/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("base/mtrial/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanDepartment();
+				cleanMtrial();
 				// 加载页面
 				loadAll();
 			});
@@ -232,14 +225,14 @@ function addSubmit(obj) {
 	});
 }
 
-// 编辑部门提交
+// 编辑物料信息提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/depart/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("base/mtrial/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanDepartment();
+				cleanMtrial();
 				// 加载页面
 				loadAll();
 			});
@@ -253,17 +246,17 @@ function editSubmit(obj) {
 	});
 }
 
-// 删除部门
-function delDepartment(obj, id, name) {
+// 删除物料信息
+function delMtrial(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '部门吗？', {
+		layer.confirm('您确定要删除' + name + '物料吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/depart/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("base/mtrial/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -310,7 +303,7 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanDepartment() {
-	$('#departmentForm')[0].reset();
+function cleanMtrial() {
+	$('#mtrialForm')[0].reset();
 	layui.form.render();// 必须写
 }

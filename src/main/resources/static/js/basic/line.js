@@ -1,5 +1,5 @@
 /**
- * 角色管理
+ * 线体管理
  */
 var pageCurr;
 $(function() {
