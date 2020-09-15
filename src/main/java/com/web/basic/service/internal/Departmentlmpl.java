@@ -76,7 +76,6 @@ public class Departmentlmpl implements DepartmentService {
             return ApiResponseResult.failure("该部门不存在！");
         }
         //判断部门编号是否有变化，有则修改；没有则不修改
-        String originalCode = o.getBsCode();
         if(o.getBsCode().equals(department.getBsCode())){
         }else{
             int count = departmentDao.countByIsDelAndBsCode(0, department.getBsCode());
