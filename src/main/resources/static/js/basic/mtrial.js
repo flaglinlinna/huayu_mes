@@ -1,5 +1,5 @@
 /**
- * 角色管理
+ * 物料管理
  */
 var pageCurr;
 $(function() {
@@ -7,8 +7,8 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#procList',
-			url : context + 'base/proc/getList',
+			elem : '#mtrialList',
+			url : context + 'base/mtrial/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -39,6 +39,12 @@ $(function() {
 				field : 'bsName',
 				title : '名称'
 			}, {
+				field : 'bsType',
+				title : '类别'
+			}, {
+				field : 'bsUnit',
+				title : '单位'
+			}, {
 				field : 'bsStatus',
 				title : '状态',
 				width : 95,
@@ -67,21 +73,20 @@ $(function() {
 			}
 		});
 
-		// 监听在职操作
+		// 监听操作
 		form.on('switch(isStatusTpl)', function(obj) {
-			console.log("switch");
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(procTable)', function(obj) {
+		table.on('tool(mtrialTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delProc(data, data.id, data.bsCode);
+				delMtrial(data, data.id, data.bsCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				console.log("edit");
-				getProc(data, data.id);
+				getMtrial(data, data.id);
 			}
 		});
 		// 监听提交
@@ -101,67 +106,80 @@ $(function() {
 			load(data);
 			return false;
 		});
-		// 编辑工序
-		function getProc(obj, id) {
+		// 编辑物料信息
+		function getMtrial(obj, id) {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/proc/getWoProc", JSON.stringify(param), function(
-					data) {
-				if (data.result) {
-					form.val("procForm", { 
-						"id" : data.data.id,
-						"bsCode" : data.data.bsCode,
-						"bsName" : data.data.bsName,
+			CoreUtil.sendAjax("base/mtrial/getMtrial", JSON.stringify(param),
+					function(data) {
+						if (data.result) {
+							form.val("mtrialForm", {
+								"id" : data.data.id,
+								"bsCode" : data.data.bsCode,
+								"bsName" : data.data.bsName,
+								"bsType" : data.data.bsType,
+								"bsUnit" : data.data.bsUnit
+							});
+							openMtrial(id, "编辑物料信息")
+						} else {
+							layer.alert(data.msg)
+						}
+					}, "POST", false, function(res) {
+						layer.alert("操作请求错误，请您稍后再试");
 					});
-					openProc(id, "编辑工序")
-				} else {
-					layer.alert(data.msg)
-				}
-			}, "POST", false, function(res) {
-				layer.alert("操作请求错误，请您稍后再试");
-			});
 		}
+		// 设置用户正常/禁用
+		function setStatus(obj, id, name, checked) {
+			// setStatus(obj, this.value, this.name, obj.elem.checked);
+			var isStatus = checked ? 0 : 1;
+			var deaprtisStatus = checked ? "正常" : "禁用";
+			// 正常/禁用
 
+			layer.confirm(
+					'您确定要把物料：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+						btn1 : function(index) {
+							var param = {
+								"id" : id,
+								"bsStatus" : isStatus
+							};
+							CoreUtil.sendAjax("/base/mtrial/doStatus", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									layer.alert("操作成功", function() {
+										layer.closeAll();
+										loadAll();
+									});
+								} else {
+									layer.alert(data.msg, function() {
+										layer.closeAll();
+									});
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试", function() {
+
+									layer.closeAll();
+								});
+							});
+						},
+						btn2 : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						},
+						cancel : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						}
+					})
+		}
 	});
 
 });
 
-// 设置用户正常/禁用
-function setStatus(obj, id, name, checked) {
-	var isStatus = checked ? 0 : 1;
-	var deaprtisStatus = checked ? "正常" : "禁用";
-	// 正常/禁用
-	layer.confirm('您确定要把工序：' + name + '设置为' + deaprtisStatus + '状态吗？', {
-		btn : [ '确认', '返回' ]
-	// 按钮
-	}, function() {
-		var param = {
-			"id" : id,
-			"bsStatus" : isStatus
-		};
-		CoreUtil.sendAjax("/base/proc/doStatus", JSON.stringify(param),
-				function(data) {
-					if (data.result) {
-						layer.alert("操作成功", function() {
-							layer.closeAll();
-							loadAll();
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-						});
-					}
-				}, "POST", false, function(res) {
-					layer.alert("操作请求错误，请您稍后再试", function() {
-						layer.closeAll();
-					});
-				});
-	});
-}
-
 // 新增编辑弹出框
-function openProc(id, title) {
+function openMtrial(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -172,27 +190,28 @@ function openProc(id, title) {
 		resize : false,
 		shadeClose : true,
 		area : [ '550px' ],
-		content : $('#setProc'),
+		content : $('#setMtrial'),
 		end : function() {
-			cleanProc();
+			cleanMtrial();
 		}
 	});
 }
 
-// 添加工序
-function addProc() {
+// 添加物料信息
+function addMtrial() {
 	// 清空弹出框数据
-	cleanProc();
+	cleanMtrial();
 	// 打开弹出框
-	openProc(null, "添加工序");
+	openMtrial(null, "添加物料信息");
 }
-// 新增工序提交
+// 新增物料信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/proc/add",JSON.stringify(obj.field),function (data) {
+	CoreUtil.sendAjax("base/mtrial/add", JSON.stringify(obj.field), function(
+			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanProc();
+				cleanMtrial();
 				// 加载页面
 				loadAll();
 			});
@@ -201,19 +220,19 @@ function addSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
-
-// 编辑工序提交
+// 编辑物料信息提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/proc/edit",JSON.stringify(obj.field),function (data) {
+	CoreUtil.sendAjax("base/mtrial/edit", JSON.stringify(obj.field), function(
+			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanProc();
+				cleanMtrial();
 				// 加载页面
 				loadAll();
 			});
@@ -222,22 +241,22 @@ function editSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
-// 删除工序
-function delProc(obj, id, name) {
+// 删除物料信息
+function delMtrial(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '工序吗？', {
+		layer.confirm('您确定要删除' + name + '物料吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/proc/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("base/mtrial/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -284,7 +303,7 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanProc() {
-	$('#procForm')[0].reset();
+function cleanMtrial() {
+	$('#mtrialForm')[0].reset();
 	layui.form.render();// 必须写
 }

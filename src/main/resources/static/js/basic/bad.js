@@ -1,5 +1,5 @@
 /**
- * 角色管理
+ * 不良内容管理
  */
 var pageCurr;
 $(function() {
@@ -7,8 +7,8 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#departList',
-			url : context + 'base/depart/getList',
+			elem : '#badList',
+			url : context + 'base/bad/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -34,20 +34,10 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'bsCode',
-				title : '编号',
-				width : 120
+				title : '编码'
 			}, {
 				field : 'bsName',
-				title : '名称',
-				width : 120
-			}, {
-				field : 'bsManager',
-				title : '部门经理',
-				Width : 120
-			}, {
-				field : 'bsManagerTel',
-				title : '部门经理电话',
-				Width : 120
+				title : '名称'
 			}, {
 				field : 'bsStatus',
 				title : '状态',
@@ -55,16 +45,13 @@ $(function() {
 				templet : '#statusTpl'
 			}, {
 				field : 'modifiedTime',
-				title : '更新时间',
-				width : 150
+				title : '更新时间'
 			}, {
 				field : 'createdTime',
 				title : '添加时间',
-				width : 150
 			}, {
 				fixed : 'right',
 				title : '操作',
-				width : 150,
 				align : 'center',
 				toolbar : '#optBar'
 			} ] ],
@@ -82,18 +69,18 @@ $(function() {
 
 		// 监听在职操作
 		form.on('switch(isStatusTpl)', function(obj) {
-			console.log("switch");
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(departmentTable)', function(obj) {
+		table.on('tool(badTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delDepartment(data, data.id, data.bsCode);
+				delBad(data, data.id, data.bsCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				getDepart(data, data.id);
+				console.log("edit");
+				getBad(data, data.id);
 			}
 		});
 		// 监听提交
@@ -113,70 +100,78 @@ $(function() {
 			load(data);
 			return false;
 		});
-
-		// 编辑部门
-		function getDepart(obj, id) {
+		// 编辑不良内容
+		function getBad(obj, id) {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/depart/getDepart", JSON.stringify(param),
+			CoreUtil.sendAjax("base/bad/getChkBad", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
-							form.val("departForm", { 
+							form.val("badForm", {
 								"id" : data.data.id,
 								"bsCode" : data.data.bsCode,
 								"bsName" : data.data.bsName,
-								"bsManager" : data.data.bsManager,
-								"bsManagerTel" : data.data.bsManagerTel
 							});
-							openDepartment(id, "编辑部门")
-						}
-
-						else {
+							openBad(id, "编辑不良内容")
+						} else {
 							layer.alert(data.msg)
 						}
 					}, "POST", false, function(res) {
 						layer.alert("操作请求错误，请您稍后再试");
 					});
 		}
+		// 设置用户正常/禁用
+		function setStatus(obj, id, name, checked) {
+			// setStatus(obj, this.value, this.name, obj.elem.checked);
+			var isStatus = checked ? 0 : 1;
+			var deaprtisStatus = checked ? "正常" : "禁用";
+			// 正常/禁用
+
+			layer.confirm(
+					'您确定要把不良内容：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+						btn1 : function(index) {
+							var param = {
+								"id" : id,
+								"bsStatus" : isStatus
+							};
+							CoreUtil.sendAjax("/base/bad/doStatus", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									layer.alert("操作成功", function() {
+										layer.closeAll();
+										loadAll();
+									});
+								} else {
+									layer.alert(data.msg, function() {
+										layer.closeAll();
+									});
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试", function() {
+
+									layer.closeAll();
+								});
+							});
+						},
+						btn2 : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						},
+						cancel : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						}
+					})
+		}
 	});
+
 });
 
-// 设置用户正常/禁用
-function setStatus(obj, id, name, checked) {
-	var isStatus = checked ? 0 : 1;
-	var deaprtisStatus = checked ? "正常" : "禁用";
-	// 正常/禁用
-	layer.confirm('您确定要把部门：' + name + '设置为' + deaprtisStatus + '状态吗？', {
-		btn : [ '确认', '返回' ]
-	// 按钮
-	}, function() {
-		var param = {
-			"id" : id,
-			"bsStatus" : isStatus
-		};
-		CoreUtil.sendAjax("/base/depart/doStatus", JSON.stringify(param),
-				function(data) {
-					if (data.result) {
-						layer.alert("操作成功", function() {
-							layer.closeAll();
-							loadAll();
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-						});
-					}
-				}, "POST", false, function(res) {
-					layer.alert("操作请求错误，请您稍后再试", function() {
-						layer.closeAll();
-					});
-				});
-	});
-}
-
 // 新增编辑弹出框
-function openDepartment(id, title) {
+function openBad(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -187,28 +182,28 @@ function openDepartment(id, title) {
 		resize : false,
 		shadeClose : true,
 		area : [ '550px' ],
-		content : $('#setDepartment'),
+		content : $('#setBad'),
 		end : function() {
-			cleanDepartment();
+			cleanBad();
 		}
 	});
 }
 
-// 添加部门
-function addDepartment() {
+// 添加不良内容
+function addBad() {
 	// 清空弹出框数据
-	cleanDepartment();
+	cleanBad();
 	// 打开弹出框
-	openDepartment(null, "添加部门");
+	openBad(null, "添加不良内容");
 }
-// 新增部门提交
+// 新增不良内容提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/depart/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("base/bad/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanDepartment();
+				cleanBad();
 				// 加载页面
 				loadAll();
 			});
@@ -222,14 +217,14 @@ function addSubmit(obj) {
 	});
 }
 
-// 编辑部门提交
+// 编辑不良内容提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/depart/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("base/bad/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanDepartment();
+				cleanBad();
 				// 加载页面
 				loadAll();
 			});
@@ -243,17 +238,17 @@ function editSubmit(obj) {
 	});
 }
 
-// 删除部门
-function delDepartment(obj, id, name) {
+// 删除不良内容
+function delBad(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '部门吗？', {
+		layer.confirm('您确定要删除' + name + '不良内容吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/depart/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("base/bad/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -300,7 +295,7 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanDepartment() {
-	$('#departmentForm')[0].reset();
+function cleanBad() {
+	$('#badForm')[0].reset();
 	layui.form.render();// 必须写
 }

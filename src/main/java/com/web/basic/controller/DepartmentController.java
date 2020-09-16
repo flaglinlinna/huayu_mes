@@ -34,9 +34,9 @@ public class DepartmentController extends WebController{
 	 private DepartmentService departmentService;
 	 
 	 @ApiOperation(value = "部门列表页", notes = "部门列表页", hidden = true)
-	    @RequestMapping(value = "/toDepartList")
-	    public String toDepartList(){
-	        return "/basic/departList";
+	    @RequestMapping(value = "/toDepart")
+	    public String toDepart(){
+	        return "/web/basic/depart";
 	    }
 	    @ApiOperation(value = "获取部门列表", notes = "获取部门列表")
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)

@@ -1,5 +1,5 @@
 /**
- * 角色管理
+ * 部门管理
  */
 var pageCurr;
 $(function() {
@@ -7,8 +7,8 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#lineList',
-			url : context + 'base/line/getList',
+			elem : '#departList',
+			url : context + 'base/depart/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -34,10 +34,20 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'bsCode',
-				title : '编码'
+				title : '编号',
+				width : 120
 			}, {
 				field : 'bsName',
-				title : '名称'
+				title : '名称',
+				width : 120
+			}, {
+				field : 'bsManager',
+				title : '部门经理',
+				Width : 120
+			}, {
+				field : 'bsManagerTel',
+				title : '部门经理电话',
+				Width : 120
 			}, {
 				field : 'bsStatus',
 				title : '状态',
@@ -45,13 +55,16 @@ $(function() {
 				templet : '#statusTpl'
 			}, {
 				field : 'modifiedTime',
-				title : '更新时间'
+				title : '更新时间',
+				width : 150
 			}, {
 				field : 'createdTime',
 				title : '添加时间',
+				width : 150
 			}, {
 				fixed : 'right',
 				title : '操作',
+				width : 150,
 				align : 'center',
 				toolbar : '#optBar'
 			} ] ],
@@ -73,15 +86,14 @@ $(function() {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(lineTable)', function(obj) {
+		table.on('tool(departmentTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delLine(data, data.id, data.bsCode);
+				delDepartment(data, data.id, data.bsCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				console.log("edit");
-				getLine(data, data.id);
+				getDepart(data, data.id);
 			}
 		});
 		// 监听提交
@@ -101,67 +113,80 @@ $(function() {
 			load(data);
 			return false;
 		});
-		// 编辑线体
-		function getLine(obj, id) {
+
+		// 编辑部门
+		function getDepart(obj, id) {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/line/getWoLine", JSON.stringify(param), function(
-					data) {
-				if (data.result) {
-					form.val("lineForm", { 
-						"id" : data.data.id,
-						"bsCode" : data.data.bsCode,
-						"bsName" : data.data.bsName,
+			CoreUtil.sendAjax("base/depart/getDepart", JSON.stringify(param),
+					function(data) {
+						if (data.result) {
+							form.val("departForm", {
+								"id" : data.data.id,
+								"bsCode" : data.data.bsCode,
+								"bsName" : data.data.bsName,
+								"bsManager" : data.data.bsManager,
+								"bsManagerTel" : data.data.bsManagerTel
+							});
+							openDepartment(id, "编辑部门")
+						}
+
+						else {
+							layer.alert(data.msg)
+						}
+					}, "POST", false, function(res) {
+						layer.alert("操作请求错误，请您稍后再试");
 					});
-					openLine(id, "编辑线体")
-				} else {
-					layer.alert(data.msg)
-				}
-			}, "POST", false, function(res) {
-				layer.alert("操作请求错误，请您稍后再试");
-			});
 		}
+		// 设置用户正常/禁用
+		function setStatus(obj, id, name, checked) {
+			var isStatus = checked ? 0 : 1;
+			var deaprtisStatus = checked ? "正常" : "禁用";
+			// 正常/禁用
 
+			layer.confirm('您确定要把部门：' + name + '设置为' + deaprtisStatus + '状态吗？',
+					{
+						btn1 : function(index) {
+							var param = {
+								"id" : id,
+								"bsStatus" : isStatus
+							};
+							CoreUtil.sendAjax("/base/depart/doStatus", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									layer.alert("操作成功", function() {
+										layer.closeAll();
+										loadAll();
+									});
+								} else {
+									layer.alert(data.msg, function() {
+										layer.closeAll();
+									});
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试", function() {
+									layer.closeAll();
+								});
+							});
+						},
+						btn2 : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						},
+						cancel : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						}
+					});
+		}
 	});
-
 });
 
-// 设置用户正常/禁用
-function setStatus(obj, id, name, checked) {
-	var isStatus = checked ? 0 : 1;
-	var deaprtisStatus = checked ? "正常" : "禁用";
-	// 正常/禁用
-	layer.confirm('您确定要把线体：' + name + '设置为' + deaprtisStatus + '状态吗？', {
-		btn : [ '确认', '返回' ]
-	// 按钮
-	}, function() {
-		var param = {
-			"id" : id,
-			"bsStatus" : isStatus
-		};
-		CoreUtil.sendAjax("/base/line/doStatus", JSON.stringify(param),
-				function(data) {
-					if (data.result) {
-						layer.alert("操作成功", function() {
-							layer.closeAll();
-							loadAll();
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-						});
-					}
-				}, "POST", false, function(res) {
-					layer.alert("操作请求错误，请您稍后再试", function() {
-						layer.closeAll();
-					});
-				});
-	});
-}
-
 // 新增编辑弹出框
-function openLine(id, title) {
+function openDepartment(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -172,27 +197,28 @@ function openLine(id, title) {
 		resize : false,
 		shadeClose : true,
 		area : [ '550px' ],
-		content : $('#setLine'),
+		content : $('#setDepartment'),
 		end : function() {
-			cleanLine();
+			cleanDepartment();
 		}
 	});
 }
 
-// 添加线体
-function addLine() {
+// 添加部门
+function addDepartment() {
 	// 清空弹出框数据
-	cleanLine();
+	cleanDepartment();
 	// 打开弹出框
-	openLine(null, "添加线体");
+	openDepartment(null, "添加部门");
 }
-// 新增线体提交
+// 新增部门提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/line/add",JSON.stringify(obj.field),function (data) {
+	CoreUtil.sendAjax("base/depart/add", JSON.stringify(obj.field), function(
+			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanLine();
+				cleanDepartment();
 				// 加载页面
 				loadAll();
 			});
@@ -201,19 +227,19 @@ function addSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
-
-// 编辑线体提交
+// 编辑部门提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/line/edit",JSON.stringify(obj.field),function (data) {
+	CoreUtil.sendAjax("base/depart/edit", JSON.stringify(obj.field), function(
+			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanLine();
+				cleanDepartment();
 				// 加载页面
 				loadAll();
 			});
@@ -222,22 +248,22 @@ function editSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
-// 删除线体
-function delLine(obj, id, name) {
+// 删除部门
+function delDepartment(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '线体吗？', {
+		layer.confirm('您确定要删除' + name + '部门吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/line/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("base/depart/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -284,7 +310,7 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanLine() {
-	$('#lineForm')[0].reset();
+function cleanDepartment() {
+	$('#departmentForm')[0].reset();
 	layui.form.render();// 必须写
 }

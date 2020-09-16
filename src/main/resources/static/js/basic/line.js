@@ -1,5 +1,5 @@
 /**
- * 角色管理
+ * 线体管理
  */
 var pageCurr;
 $(function() {
@@ -7,8 +7,8 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#centerList',
-			url : context + 'base/center/getList',
+			elem : '#lineList',
+			url : context + 'base/line/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -73,15 +73,15 @@ $(function() {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(centerTable)', function(obj) {
+		table.on('tool(lineTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delCenter(data, data.id, data.bsCode);
+				delLine(data, data.id, data.bsCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				console.log("edit");
-				getCenter(data, data.id);
+				getLine(data, data.id);
 			}
 		});
 		// 监听提交
@@ -101,26 +101,70 @@ $(function() {
 			load(data);
 			return false;
 		});
-		// 编辑工作中心
-		function getCenter(obj, id) {
+		// 编辑线体
+		function getLine(obj, id) {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/center/getWoCenter", JSON.stringify(param), function(
-					data) {
-				if (data.result) {
-					form.val("centerForm", { 
-						"id" : data.data.id,
-						"bsCode" : data.data.bsCode,
-						"bsName" : data.data.bsName,
+			CoreUtil.sendAjax("base/line/getWoLine", JSON.stringify(param),
+					function(data) {
+						if (data.result) {
+							form.val("lineForm", {
+								"id" : data.data.id,
+								"bsCode" : data.data.bsCode,
+								"bsName" : data.data.bsName,
+							});
+							openLine(id, "编辑线体")
+						} else {
+							layer.alert(data.msg)
+						}
+					}, "POST", false, function(res) {
+						layer.alert("操作请求错误，请您稍后再试");
 					});
-					openCenter(id, "编辑工作中心")
-				} else {
-					layer.alert(data.msg)
-				}
-			}, "POST", false, function(res) {
-				layer.alert("操作请求错误，请您稍后再试");
-			});
+		}
+
+		// 设置正常/禁用
+		function setStatus(obj, id, name, checked) {
+			var isStatus = checked ? 0 : 1;
+			var deaprtisStatus = checked ? "正常" : "禁用";
+			// 正常/禁用
+			layer.confirm('您确定要把线体：' + name + '设置为' + deaprtisStatus + '状态吗？',
+					{
+						btn1 : function(index) {
+							var param = {
+								"id" : id,
+								"bsStatus" : isStatus
+							};
+							CoreUtil.sendAjax("/base/line/doStatus", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									layer.alert("操作成功", function() {
+										layer.closeAll();
+										loadAll();
+									});
+								} else {
+									layer.alert(data.msg, function() {
+										layer.closeAll();
+									});
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试", function() {
+
+									layer.closeAll();
+								});
+							});
+						},
+						btn2 : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						},
+						cancel : function() {
+							obj.elem.checked = isStatus;
+							form.render();
+							layer.closeAll();
+						}
+					});
 		}
 
 	});
@@ -132,7 +176,7 @@ function setStatus(obj, id, name, checked) {
 	var isStatus = checked ? 0 : 1;
 	var deaprtisStatus = checked ? "正常" : "禁用";
 	// 正常/禁用
-	layer.confirm('您确定要把工作中心：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+	layer.confirm('您确定要把线体：' + name + '设置为' + deaprtisStatus + '状态吗？', {
 		btn : [ '确认', '返回' ]
 	// 按钮
 	}, function() {
@@ -140,7 +184,7 @@ function setStatus(obj, id, name, checked) {
 			"id" : id,
 			"bsStatus" : isStatus
 		};
-		CoreUtil.sendAjax("/base/center/doStatus", JSON.stringify(param),
+		CoreUtil.sendAjax("/base/line/doStatus", JSON.stringify(param),
 				function(data) {
 					if (data.result) {
 						layer.alert("操作成功", function() {
@@ -161,7 +205,7 @@ function setStatus(obj, id, name, checked) {
 }
 
 // 新增编辑弹出框
-function openCenter(id, title) {
+function openLine(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -172,48 +216,49 @@ function openCenter(id, title) {
 		resize : false,
 		shadeClose : true,
 		area : [ '550px' ],
-		content : $('#setCenter'),
+		content : $('#setLine'),
 		end : function() {
-			cleanCenter();
+			cleanLine();
 		}
 	});
 }
 
-// 添加工作中心
-function addCenter() {
+// 添加线体
+function addLine() {
 	// 清空弹出框数据
-	cleanCenter();
+	cleanLine();
 	// 打开弹出框
-	openCenter(null, "添加工作中心");
+	openLine(null, "添加线体");
 }
-// 新增工作中心提交
+// 新增线体提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/center/add",JSON.stringify(obj.field),function (data) {
-		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				cleanCenter();
-				// 加载页面
-				loadAll();
+	CoreUtil.sendAjax("base/line/add", JSON.stringify(obj.field),
+			function(data) {
+				if (data.result) {
+					layer.alert("操作成功", function() {
+						layer.closeAll();
+						cleanLine();
+						// 加载页面
+						loadAll();
+					});
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+				}
+			}, "POST", false, function(res) {
+				layer.alert(res.msg);
 			});
-		} else {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
-			});
-		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
 }
 
-
-// 编辑工作中心提交
+// 编辑线体提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/center/edit",JSON.stringify(obj.field),function (data) {
+	CoreUtil.sendAjax("base/line/edit", JSON.stringify(obj.field), function(
+			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanCenter();
+				cleanLine();
 				// 加载页面
 				loadAll();
 			});
@@ -222,22 +267,22 @@ function editSubmit(obj) {
 				layer.closeAll();
 			});
 		}
-       },"POST",false,function (res) {
-    	   layer.alert(res.msg);
-       }); 
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
-// 删除工作中心
-function delCenter(obj, id, name) {
+// 删除线体
+function delLine(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '工作中心吗？', {
+		layer.confirm('您确定要删除' + name + '线体吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/center/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("base/line/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -284,7 +329,7 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanCenter() {
-	$('#centerForm')[0].reset();
+function cleanLine() {
+	$('#lineForm')[0].reset();
 	layui.form.render();// 必须写
 }
