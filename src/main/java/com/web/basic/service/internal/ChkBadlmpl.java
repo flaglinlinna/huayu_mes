@@ -30,57 +30,57 @@ public class ChkBadlmpl implements ChkBadService {
     private ChkBadDao chkBadDao;
 	
 	 /**
-     * 新增不良内容
+     * 新增不良类别
      */
     @Override
     @Transactional
     public ApiResponseResult add(ChkBad chkBad) throws Exception{
         if(chkBad == null){
-            return ApiResponseResult.failure("不良内容不能为空！");
+            return ApiResponseResult.failure("不良类别不能为空！");
         }
         if(StringUtils.isEmpty(chkBad.getBsCode())){
-            return ApiResponseResult.failure("不良编码不能为空！");
+            return ApiResponseResult.failure("不良类别编码不能为空！");
         }
         if(StringUtils.isEmpty(chkBad.getBsName())){
-            return ApiResponseResult.failure("不良名称不能为空！");
+            return ApiResponseResult.failure("不良类别名称不能为空！");
         }
         int count = chkBadDao.countByIsDelAndBsCode(0, chkBad.getBsCode());
         if(count > 0){
-            return ApiResponseResult.failure("该不良内容已存在，请填写其他不良编码！");
+            return ApiResponseResult.failure("该不良类别编号已存在，请填写其他不良类别编码！");
         }
         chkBad.setCreatedTime(new Date());
         chkBadDao.save(chkBad);
 
-        return ApiResponseResult.success("不良内容添加成功！").data(chkBad);
+        return ApiResponseResult.success("不良类别添加成功！").data(chkBad);
     }
     /**
-     * 修改不良内容
+     * 修改不良类别
      */
     @Override
     @Transactional
     public ApiResponseResult edit(ChkBad chkBad) throws Exception {
         if(chkBad == null){
-            return ApiResponseResult.failure("不良内容不能为空！");
+            return ApiResponseResult.failure("不良类别不能为空！");
         }
         if(chkBad.getId() == null){
-            return ApiResponseResult.failure("不良ID不能为空！");
+            return ApiResponseResult.failure("不良类别ID不能为空！");
         }
         if(StringUtils.isEmpty(chkBad.getBsCode())){
-            return ApiResponseResult.failure("不良编码不能为空！");
+            return ApiResponseResult.failure("不良类别编码不能为空！");
         }
         if(StringUtils.isEmpty(chkBad.getBsName())){
-            return ApiResponseResult.failure("不良名称不能为空！");
+            return ApiResponseResult.failure("不良类别名称不能为空！");
         }
         ChkBad o = chkBadDao.findById((long) chkBad.getId());
         if(o == null){
-            return ApiResponseResult.failure("该不良内容不存在！");
+            return ApiResponseResult.failure("该不良类别不存在！");
         }
-        //判断不良内容编码是否有变化，有则修改；没有则不修改
+        //判断不良类别编码是否有变化，有则修改；没有则不修改
         if(o.getBsCode().equals(chkBad.getBsCode())){
         }else{
             int count = chkBadDao.countByIsDelAndBsCode(0, chkBad.getBsCode());
             if(count > 0){
-                return ApiResponseResult.failure("不良编码已存在，请填写其他不良编码！");
+                return ApiResponseResult.failure("不良类别编码已存在，请填写其他不良类别编码！");
             }
             o.setBsCode(chkBad.getBsCode().trim());
         }
@@ -100,26 +100,26 @@ public class ChkBadlmpl implements ChkBadService {
     @Transactional
     public ApiResponseResult getChkBad(Long id) throws Exception{
         if(id == null){
-            return ApiResponseResult.failure("不良ID不能为空！");
+            return ApiResponseResult.failure("不良类别ID不能为空！");
         }
         ChkBad o = chkBadDao.findById((long) id);
         if(o == null){
-            return ApiResponseResult.failure("该不良内容不存在！");
+            return ApiResponseResult.failure("该不良类别不存在！");
         }
         return ApiResponseResult.success().data(o);
     }
     /**
-     * 删除不良内容
+     * 删除不良类别
      */
     @Override
     @Transactional
     public ApiResponseResult delete(Long id) throws Exception{
         if(id == null){
-            return ApiResponseResult.failure("不良内容ID不能为空！");
+            return ApiResponseResult.failure("不良类别ID不能为空！");
         }
         ChkBad o  = chkBadDao.findById((long) id);
         if(o == null){
-            return ApiResponseResult.failure("不良内容不存在！");
+            return ApiResponseResult.failure("不良类别不存在！");
         }
         o.setModifiedTime(new Date());
         o.setIsDel(1);
@@ -131,14 +131,14 @@ public class ChkBadlmpl implements ChkBadService {
     @Transactional
     public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
         if(id == null){
-            return ApiResponseResult.failure("不良内容ID不能为空！");
+            return ApiResponseResult.failure("不良类别ID不能为空！");
         }
         if(bsStatus == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
         ChkBad o = chkBadDao.findById((long) id);
         if(o == null){
-            return ApiResponseResult.failure("不良内容不存在！");
+            return ApiResponseResult.failure("不良类别不存在！");
         }
         o.setModifiedTime(new Date());
         o.setBsStatus(bsStatus);

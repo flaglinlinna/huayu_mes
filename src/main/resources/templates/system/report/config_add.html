@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='配置'"></head>
+<style th:inline="text">
+		.layui-form-label{
+		   text-align:right;
+		}
+		.layui-form-switch{
+		   margin-top:0px;
+		}
+		.layui-form-radio{
+		  margin:0px 10px 0 0;
+		}
+		.long-item .layui-form-label{
+		   width:160px;
+		}
+		.long-item .layui-input-block{
+		   margin-left:160px;
+		}
+	</style>
+<body class="layui-layout-body" >
+<div class="layui-layout layui-layout-admin">
+    <!--头-->
+    <!--<div th:replace="fragments/head :: header"></div>-->
+
+    <div style="margin: 10px">
+      <form class="layui-form" action="">
+	      <div class="layui-collapse" lay-accordion="">
+			  <div class="layui-colla-item">
+			    <h2 class="layui-colla-title">基础信息配置</h2>
+			    <div class="layui-colla-content layui-show">
+			      <div class="layui-form-item" style="margin-bottom: 0px">
+                           <div class="layui-inline">
+				                  <label class="layui-form-label" >存储过程名称</label>
+				                  <div class="layui-input-inline">
+				                    <input type="text" name="bsPro" lay-verify="required"  autocomplete="off" placeholder="请输入编号" class="layui-input">
+				                  </div>
+				                </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">合并行号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="bsRowspanName" lay-verify="required" autocomplete="off" placeholder="请输入名称" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+				                  <label class="layui-form-label" >合并列名称</label>
+				                  <div class="layui-input-inline">
+				                    <input type="text" name="bsRowspanIndex"  autocomplete="off" placeholder="请输入描述" class="layui-input" style="width:380px;">
+				                  </div>
+				                </div>
+				            <div class="layui-inline">
+				                  <label class="layui-form-label" >是否分页</label>
+				                  <div class="layui-input-inline">
+				                    <input type="checkbox" name="bsStatus" lay-skin="switch" lay-filter="switchTest" lay-text="是|否" value="true">
+				                  </div>
+				                  <div class="layui-input-inline">
+				                    <button type="submit" class="layui-btn  layui-btn-sm" lay-submit="" lay-filter="sunbmitBtn">保存</button>
+				                  </div>
+				                </div>   
+                        </div> 
+			    </div>
+			  </div>
+			  </div>
+                      
+        <div class="layui-container" style="width:100%;padding:0;">  
+		  <div class="layui-row">
+		    <div class="layui-col-md6">
+			   <fieldset class="layui-elem-field layui-field-title" >
+				  <legend>表头设置-第一行</legend>
+				</fieldset>
+				<table id="colTable" lay-filter="colTable"></table>
+				 <fieldset class="layui-elem-field layui-field-title" >
+				  <legend>表头设置-第二行</legend>
+				</fieldset>
+				<table id="colTable2" lay-filter="colTable2"></table>
+		    </div>
+
+		    <div class="layui-col-md6">
+		       <fieldset class="layui-elem-field layui-field-title" >
+				  <legend>判断设置</legend>
+				</fieldset>
+					  <table id="judTable" lay-filter="judTable"></table>
+		            </div>
+		    	</div>
+		      </div>
+		      
+		    </form>
+		  </div>
+    </div>
+    
+    <!--新增或编辑-->
+    <div id="addDiv" class="layer_self_wrap" style="width:500px;display:none;">
+        <form id="addForm" class="layui-form layui-form-pane long-item" method="post" action="" style="margin-top: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum"/>
+            <input id="id" type="hidden" name="id"/>
+            <input id="interId" type="hidden" name="interId"/>
+            <div class="layui-form-item">
+					    <label class="layui-form-label">标题名称</label>
+					    <div class="layui-input-block">
+					      <input type="text"  placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">对应字段</label>
+					    <div class="layui-input-block">
+					      <input type="text"   placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">宽度</label>
+					    <div class="layui-input-block">
+					      <input type="text"   placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">标题字体颜色</label>
+					    <div class="layui-input-block">
+					      <input type="text"   placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">标题的背景色</label>
+					    <div class="layui-input-block">
+					      <input type="text"  placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">单元格内容的字体颜色</label>
+					    <div class="layui-input-block">
+					      <input type="text"   placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">单元格内容的背景色</label>
+					    <div class="layui-input-block">
+					      <input type="text"   placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">序号</label>
+					    <div class="layui-input-block">
+					      <input type="text"   placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item" pane="">
+					    <label class="layui-form-label">是否排序</label>
+					    <div class="layui-input-block">
+					      <input type="checkbox"  name="open" lay-skin="switch" lay-filter="switchTest" lay-text="是|否" value="true">
+					    </div>
+					  </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="add">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div id="addDivJud" class="layer_self_wrap" style="width:500px;display:none;">
+        <form id="addFormJud" class="layui-form layui-form-pane long-item" method="post" action="" style="margin-top: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum"/>
+            <input id="id" type="hidden" name="id"/>
+            <input id="interId" type="hidden" name="interId"/>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">对应字段</label>
+					    <div class="layui-input-block">
+					      <input type="text"   placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">条件</label>
+					    <div class="layui-input-block">
+					      <select name="interest" lay-filter="aihao">
+					        <option value="1">>=</option>
+					        <option value="2">></option>
+					        <option value="3">=</option>
+					        <option value="4"><=</option>
+					        <option value="5"><</option>
+					        <option value="6">!=</option>
+					      </select>
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">固定值</label>
+					    <div class="layui-input-block">
+					      <input type="text"   placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">字体颜色</label>
+					    <div class="layui-input-block">
+					      <input type="text"   placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">单元格颜色</label>
+					    <div class="layui-input-block">
+					      <input type="text"   placeholder="" autocomplete="off" class="layui-input">
+					    </div>
+					  </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="add">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+               <script type="text/html" id="toolbar">
+                        <a class="layui-btn layui-btn-sm" lay-event="add">新增</a>
+                        <a class="layui-btn layui-btn-sm" lay-event="del">删除</a>
+                    </script>
+<script  th:inline="none">
+		     
+		     layui.use(['table','form', 'layedit', 'laydate',], function(){
+		    	  var form = layui.form
+		    	  ,layer = layui.layer
+		    	  ,layedit = layui.layedit
+		    	  ,table = layui.table
+		    	  ,laydate = layui.laydate;
+		    	  
+		    	  tableIns=table.render({
+		              elem: '#colTable'
+		              //,url:context+'/interfaces/getRequestList'
+		              ,where: {  }
+		              ,method: 'get' //默认：get请求
+		              ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
+		              ,defaultToolbar:[]
+		              ,cellMinWidth: 80
+		              ,page: true,
+		              data:[],
+		              request: {
+		                  pageName: 'page' //页码的参数名称，默认：page
+		                  ,limitName: 'rows' //每页数据量的参数名，默认：limit
+		              },
+		              parseData: function (res) {
+		                  // 可进行数据操作
+		                  return {
+		                      "count": res.data.total,
+		                      "msg":res.msg,
+		                      "data":res.data.rows,
+		                      "code": res.status //code值为200表示成功
+		                  }
+		              },
+		              cols: [[
+		                  {type: 'checkbox', width: 50}
+		                  ,{field:'bsName', title:'参数名称'}
+		                  ,{field:'bsValue', title:'参数值'}
+		                  ,{field:'bsType', title:'参数类型'}
+		                  ,{field:'isRequired', title:'是否必填', width:90, toolbar:'#optBar'}
+		              ]]
+		              ,done: function(res, curr, count){
+		                  //如果是异步请求数据方式，res即为你接口返回的信息。
+		                  //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+		                  //console.log(res);
+		                  //得到当前页码
+		                  //console.log(curr);
+		                  //得到数据总量
+		                  //console.log(count);
+		                  pageCurr=curr;
+		              }
+		          });
+		    	  
+		    	  //判断表
+		    	  tableIns=table.render({
+		              elem: '#judTable'
+		              //,url:context+'/interfaces/getRequestList'
+		              ,where: {  }
+		              ,method: 'get' //默认：get请求
+		              ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
+		              ,defaultToolbar:[]
+		              ,cellMinWidth: 80
+		              ,page: true,
+		              data:[],
+		              request: {
+		                  pageName: 'page' //页码的参数名称，默认：page
+		                  ,limitName: 'rows' //每页数据量的参数名，默认：limit
+		              },
+		              parseData: function (res) {
+		                  // 可进行数据操作
+		                  return {
+		                      "count": res.data.total,
+		                      "msg":res.msg,
+		                      "data":res.data.rows,
+		                      "code": res.status //code值为200表示成功
+		                  }
+		              },
+		              cols: [[
+		                  {type: 'checkbox', width: 50}
+		                  ,{field:'bsName', title:'对应字段'}
+		                  ,{field:'bsValue', title:'条件'}
+		                  ,{field:'bsType', title:'固定值'}
+		                  ,{field:'isRequired', title:'字体颜色'}
+		                  ,{field:'isRequired', title:'单元格颜色'}
+		              ]]
+		              ,done: function(res, curr, count){
+		                  //如果是异步请求数据方式，res即为你接口返回的信息。
+		                  //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+		                  //console.log(res);
+		                  //得到当前页码
+		                  //console.log(curr);
+		                  //得到数据总量
+		                  //console.log(count);
+		                  pageCurr=curr;
+		              }
+		          });
+		    	//监听工具条
+		          table.on('toolbar(colTable)', function(obj){
+		              var checkStatus = table.checkStatus(obj.config.id);
+		              var data = checkStatus.data;
+		              if(obj.event === 'add'){
+		                  //新增
+		            	  //cleanData();//清空弹出框数据
+                          openData(null,"新增表头",'addDiv','addDiv');//打开弹出框
+		              }  else if(obj.event === 'del'){
+		                  //删除
+		                  delData(data);
+		              }
+		          });
+		    	
+		          table.on('toolbar(judTable)', function(obj){
+		              var checkStatus = table.checkStatus(obj.config.id);
+		              var data = checkStatus.data;
+		              if(obj.event === 'add'){
+		                  //新增
+		            	  //cleanData();//清空弹出框数据
+                          openData(null,"新增判断设置",'addDivJud');//打开弹出框
+		              }  else if(obj.event === 'del'){
+		                  //删除
+		                  delData(data);
+		              }
+		          });
+		    	
+		    	//监听提交
+		    	  form.on('submit(sunbmitBtn)', function(data){
+		    	    layer.alert(JSON.stringify(data.field), {
+		    	      title: '最终的提交信息'
+		    	    })
+		    	    CoreUtil.sendAjax("api/database/add",JSON.stringify(data.field),function (res) {
+						
+		    		 layer.msg(res.msg, {
+		                    time: 20000, //20s后自动关闭
+		                    btn: ['知道了']
+		                  });
+		            },"POST",false,function (res) {
+		                layer.msg("抱歉！您暂无权限");
+		            }); 
+		    	    return false;
+		    	  });
+		    	 
+		    	  
+		    	});
+
+		   //新增或编辑弹出框
+		     function openData(id,title,elem){
+		         if(id==null || id==""){
+		             $("#id").val("");
+		         }
+		         $("#interId").val(interId);
+		         layer.open({
+		             type:1,
+		             title: title,
+		             fixed:false,
+		             resize :false,
+		             shadeClose: true,
+		             area: ['700px'],
+		             content:$('#'+elem),
+		             end:function(){
+		                 cleanData();
+		             }
+		         });
+		     }
+
+		
+</script>
+</div>
+</body>
+</html>

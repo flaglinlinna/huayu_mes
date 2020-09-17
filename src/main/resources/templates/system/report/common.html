@@ -110,7 +110,7 @@ var f_temp=1;
 			                //如果是异步请求数据方式，res即为你接口返回的信息。
 			                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
 			                pageCurr=curr;
-			                //merge(res);
+			                //merge(res.data,['pbsCode'],[1]);
 			            }
 			        }); 
 		    	  //监听提交
@@ -161,7 +161,7 @@ var f_temp=1;
 
 		   //重新加载表格（搜索）
 		     function load(obj){
-		    	  CoreUtil.sendAjax('report/comm/getlist',{pro_name:_proName,page:1,rows:20},function (res) {
+		    	  CoreUtil.sendAjax('sys/report/getlist',{pro_name:_proName,page:1,rows:20},function (res) {
 		    		  
 		    		  if(res.result){
 	    				  var mycols =initCol;
