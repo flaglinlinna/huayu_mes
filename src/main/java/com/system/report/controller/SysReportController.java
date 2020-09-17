@@ -1,4 +1,4 @@
-package com.web.report.controller;
+package com.system.report.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -13,29 +13,47 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
-import com.web.report.service.CommonService;
+import com.system.report.service.SysReportService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(description = "看板")
+@Api(description = "通用报表")
 @CrossOrigin
 @ControllerAdvice
 //@RestController
 @Controller
-@RequestMapping(value = "/report/comm")
-public class CommonController extends WebController {
+@RequestMapping(value = "/sys/report")
+public class SysReportController extends WebController {
 
     @Autowired
-    private CommonService commonService;
+    private SysReportService sysReportService;
 	
+    @ApiOperation(value = "通用报表配置", notes = "通用报表配置", hidden = true)
+	@RequestMapping(value = "/toConfig", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toConfig() {
+		ModelAndView mav=new ModelAndView();
+		mav.setViewName("/system/report/config");//返回路径
+		return mav;
+	}
+    
+    @ApiOperation(value = "通用报表配置新增", notes = "通用报表配置新增", hidden = true)
+	@RequestMapping(value = "/toConfigAdd", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toConfigAdd() {
+		ModelAndView mav=new ModelAndView();
+		mav.setViewName("/system/report/config_add");//返回路径
+		return mav;
+	}
+    
     @ApiOperation(value = "通用报表页面", notes = "通用报表页面", hidden = true)
 	@RequestMapping(value = "/toCom", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView toCom(String pro) {
 		ModelAndView mav=new ModelAndView();
 		mav.addObject("pro", pro);
-		mav.setViewName("/web/report/common");//返回路径
+		mav.setViewName("/system/report/common");//返回路径
 		return mav;
 	}
     
@@ -47,7 +65,7 @@ public class CommonController extends WebController {
         String method = "/getlist";String methodName ="获取配置列表";
         try {
         	Sort sort = new Sort(Sort.Direction.DESC, "id");
-            ApiResponseResult result = commonService.getlist(keyword,  super.getPageRequest(sort));
+            ApiResponseResult result = sysReportService.getlist(keyword,  super.getPageRequest(sort));
             logger.debug("获取配置列表=getList:");
             getSysLogService().success(method, methodName, null);
             return result;

@@ -161,7 +161,7 @@ var f_temp=1;
 
 		   //重新加载表格（搜索）
 		     function load(obj){
-		    	  CoreUtil.sendAjax('report/comm/getlist',{pro_name:_proName,page:1,rows:20},function (res) {
+		    	  CoreUtil.sendAjax('sys/report/getlist',{pro_name:_proName,page:1,rows:20},function (res) {
 		    		  
 		    		  if(res.result){
 	    				  var mycols =initCol;
