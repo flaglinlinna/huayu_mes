@@ -3,10 +3,11 @@
  */
 var pageCurr;
 $(function () {
-    layui.use(['form', 'table', 'laydate'], function(){
+    layui.use(['form', 'table', 'laydate', 'upload'], function(){
         var table = layui.table
             ,form = layui.form
-            ,laydate = layui.laydate;
+            ,laydate = layui.laydate
+            ,upload = layui.upload;
 
         tableIns=table.render({
             elem: '#iList'
@@ -74,20 +75,85 @@ $(function () {
             location.href = context + "/scheduling/getExcel";
             return false;
         });
+        form.on('submit(importBtn)', function(data){
+            //导入弹出框
+            openUpload('导入');
+            return false;
+        });
 
+        //导入
+        upload.render({
+            elem: '#upload'
+            ,url: context + '/scheduling/doExcel'
+            ,accept: 'file' //普通文件
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+            }
+            ,done: function(res,index, upload){
+                layer.closeAll('loading'); //关闭loading
+                if(res.result){
+                    loadAll();//重新加载表格
+                    layer.alert(res.msg,function () {
+                        layer.closeAll();
+                    });
+                }else{
+                    layer.alert(res.msg,function () {
+                        layer.closeAll();
+                    });
+                }
+                $(window).resize();
+            }
+            ,error: function(index, upload){
+                layer.closeAll('loading'); //关闭loading
+            }
+        });
 
     });
 });
 
+//导入弹出框
+function openUpload(title){
+    layer.open({
+        type:1,
+        title: title,
+        fixed:false,
+        resize :false,
+        shadeClose: true,
+        area: ['700px'],
+        content:$('#uploadDiv'),
+        end:function(){
+
+        }
+    });
+}
+
 //重新加载表格（搜索）
-function load(obj){
+function loadAll(){
     //重新加载table
     tableIns.reload({
-        where: {
-            keyword:obj.field.keyword
-        }
-        , page: {
+        page: {
             curr: pageCurr //从当前页码开始
         }
     });
 }
+
+$("#save").click(function () {
+    $.ajax({
+        type: "POST",
+        data: {  },
+        url: context+"/scheduling/confirmTemp",
+        success: function (data) {
+            if (data.result) {
+                layer.alert(data.msg,function(){
+                });
+            } else {
+                layer.alert(data.msg,function(){
+                });
+            }
+        },
+        error: function () {
+            layer.alert("操作请求错误，请您稍后再试",function(){
+            });
+        }
+    });
+})

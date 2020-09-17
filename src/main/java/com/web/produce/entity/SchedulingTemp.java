@@ -106,6 +106,13 @@ public class SchedulingTemp extends BaseEntity {
     protected String bsMtrialCode;
 
     /**
+     * 物料描述
+     */
+    @ApiModelProperty(name = "bsMtrialDesc", value = "物料描述")
+    @Column
+    protected String bsMtrialDesc;
+
+    /**
      * 加工工艺ID（工序ID）
      */
     @ApiModelProperty(name = "pkProcId", value = "加工工艺ID（工序ID）")
@@ -115,9 +122,9 @@ public class SchedulingTemp extends BaseEntity {
     /**
      * 加工工艺编码或名称
      */
-    @ApiModelProperty(name = "bsProcName", value = "加工工艺编码或名称")
+    @ApiModelProperty(name = "bsProcCode", value = "加工工艺编码或名称")
     @Column(length = 100)
-    protected String bsProcName;
+    protected String bsProcCode;
 
     /**
      * 工单残
@@ -188,6 +195,28 @@ public class SchedulingTemp extends BaseEntity {
     @ApiModelProperty(name = "bsRemark", value = "备注")
     @Column(length = 500)
     protected String bsRemark;
+
+    /**
+     * 错误信息
+     */
+    @ApiModelProperty(name = "bsError", value = "错误信息")
+    @Column(length = 1000)
+    protected String bsError;
+
+    /**
+     * 校验状态（0：校验通过 / 1：校验不通过 / 2：警告）
+     * 警告：检验值不在上下限阀值之间
+     */
+    @ApiModelProperty(name = "bsCheckStatus", value = "校验状态（0：校验通过 / 1：校验不通过 / 2：警告）")
+    @Column
+    protected Integer bsCheckStatus = 0;
+
+    /**
+     * 用户ID
+     */
+    @ApiModelProperty(name = "pkSysUser", value = "用户ID")
+    @Column
+    protected Long pkSysUser;
 
     public Long getPkDepartId() {
         return pkDepartId;
@@ -285,6 +314,14 @@ public class SchedulingTemp extends BaseEntity {
         this.bsMtrialCode = bsMtrialCode;
     }
 
+    public String getBsMtrialDesc() {
+        return bsMtrialDesc;
+    }
+
+    public void setBsMtrialDesc(String bsMtrialDesc) {
+        this.bsMtrialDesc = bsMtrialDesc;
+    }
+
     public Long getPkProcId() {
         return pkProcId;
     }
@@ -293,12 +330,12 @@ public class SchedulingTemp extends BaseEntity {
         this.pkProcId = pkProcId;
     }
 
-    public String getBsProcName() {
-        return bsProcName;
+    public String getBsProcCode() {
+        return bsProcCode;
     }
 
-    public void setBsProcName(String bsProcName) {
-        this.bsProcName = bsProcName;
+    public void setBsProcCode(String bsProcCode) {
+        this.bsProcCode = bsProcCode;
     }
 
     public Integer getBsRestNum() {
@@ -379,5 +416,29 @@ public class SchedulingTemp extends BaseEntity {
 
     public void setBsRemark(String bsRemark) {
         this.bsRemark = bsRemark;
+    }
+
+    public String getBsError() {
+        return bsError;
+    }
+
+    public void setBsError(String bsError) {
+        this.bsError = bsError;
+    }
+
+    public Integer getBsCheckStatus() {
+        return bsCheckStatus;
+    }
+
+    public void setBsCheckStatus(Integer bsCheckStatus) {
+        this.bsCheckStatus = bsCheckStatus;
+    }
+
+    public Long getPkSysUser() {
+        return pkSysUser;
+    }
+
+    public void setPkSysUser(Long pkSysUser) {
+        this.pkSysUser = pkSysUser;
     }
 }

@@ -2,19 +2,30 @@ package com.web.produce.service.internal;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
+import com.system.user.entity.SysUser;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.basic.dao.DepartmentDao;
+import com.web.basic.dao.MtrialDao;
+import com.web.basic.dao.WoProcDao;
+import com.web.basic.entity.Department;
+import com.web.basic.entity.Mtrial;
+import com.web.basic.entity.WoProc;
 import com.web.produce.dao.SchedulingDao;
+import com.web.produce.dao.SchedulingTempDao;
 import com.web.produce.entity.Scheduling;
+import com.web.produce.entity.SchedulingTemp;
 import com.web.produce.service.SchedulingService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,12 +33,17 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,8 +53,17 @@ import java.util.List;
 @Transactional(propagation = Propagation.REQUIRED)
 public class SchedulingImpl implements SchedulingService {
 
+    public final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private SchedulingDao schedulingDao;
+    @Autowired
+    private SchedulingTempDao schedulingTempDao;
+    @Autowired
+    private DepartmentDao departmentDao;
+    @Autowired
+    private MtrialDao mtrialDao;
+    @Autowired
+    private WoProcDao woProcDao;
 
     @Override
     @Transactional
@@ -213,5 +238,464 @@ public class SchedulingImpl implements SchedulingService {
         cellStyleList.add(cellStyle1);
 
         return cellStyleList;
+    }
+
+    @Override
+    @Transactional
+    public ApiResponseResult doExcel(MultipartFile file) throws Exception{
+        try{
+            if (file == null) {
+                return ApiResponseResult.failure("导入文件不存在！");
+            }
+            SysUser currUser = UserUtil.getSessionUser();
+            if(currUser == null){
+                return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+            }
+            //1.获取Excel文件
+            Workbook wb = null;
+            Sheet sheet = null;
+            String fileName = file.getOriginalFilename();
+            //判断excel版本
+            if (fileName.matches("^.+\\.(?i)(xlsx)$")) {
+                //xlsx版本
+                wb = new XSSFWorkbook(file.getInputStream());
+            } else {
+                //xls版本
+                //wb = new HSSFWorkbook(new FileInputStream((File) file));
+                wb = new HSSFWorkbook(file.getInputStream());
+            }
+            //1.1获取第一个sheet
+            if(wb != null){
+                sheet = wb.getSheetAt(0);
+            }else{
+                return ApiResponseResult.failure("导入失败！请导入正确的文件！");
+            }
+            //1.2判断第一个sheet是否有内容
+            if(sheet == null || sheet.getLastRowNum() <= 0){
+                return ApiResponseResult.failure("导入失败！请导入正确的文件！");
+            }
+
+            //删除当前用户关联的临时表原数据
+            schedulingTempDao.updateIsDelByPkSysUser(0, currUser.getId());
+            //初始化临时表
+            List<SchedulingTemp> tempList = new ArrayList<>();
+
+            for(int i = 0; i < sheet.getLastRowNum() + 1; i++){
+                //初始化错误信息字符串
+                String errorStr = "";
+
+                int le = 2 + i;
+                //2.获取当前行，如果为空，则循环结束
+                Row row = sheet.getRow(le -1);
+                if(row == null){
+                    break;
+                }
+                //判断第一列数据是否为空，如果为空，则循环结束
+                String firstCol = "";//
+                try{
+                    firstCol = this.readExcelCell(sheet, le, 1);//
+                }catch (Exception e){
+                }
+                if(StringUtils.isEmpty(firstCol)){
+                    break;
+                }
+
+                //3.判断各数值是否为空和是否填写错误
+                String departCode = "";//部门编码
+                Long departId = null;
+                Date produceTime = null;//日期
+                String shift = "";//班次
+                String customer = "";//客户
+                String line = "";//线别
+                String orderNo = "";//工单号
+                String mtrialCode = "";//物料编码
+                Long mtrialId = null;
+                String mtrialDesc = "";//物料描述
+                String procCode = "";//加工工艺编码
+                Long procId = null;
+                Integer restNum = null;//工单残
+                Integer planNum = null;//计划生产数量
+                Integer peopleNum = null;//用人量
+                Integer capacityNum = null;//产能
+                BigDecimal planHours = null;//预计工时
+                Integer actualNum = null;//实际生产数量
+                BigDecimal actualHours = null;//实际工时
+                BigDecimal planPrice = null;//计划金额
+                BigDecimal actualPrice = null;//实际金额
+                String remark = "";//备注
+
+                //部门
+                try{
+                    departCode = this.readExcelCell(sheet, le, 1);//部门编码
+                    if(StringUtils.isEmpty(departCode)){
+                        errorStr += "部门为空；";
+                    }else{
+                        //获取个编码关联的ID
+                        List<Department> dList = departmentDao.findByBsName(departCode);
+                        departId = dList.size()>0&&dList.get(i)!=null ? dList.get(i).getId() : null;
+                        if(departId == null){
+                            errorStr += "部门填写错误；";
+                        }
+                    }
+                }catch (Exception e){
+                    errorStr += "部门为空或格式错误；";
+                }
+
+                //日期
+                try{
+                    produceTime = this.readExcelDateCell(sheet, le, 2);//日期
+                    if(produceTime == null){
+                        errorStr += "日期为空或格式不正确；";
+                    }
+                }catch (Exception e){
+                    errorStr += "日期为空或格式不正确；";
+                }
+
+                //班次
+                try{
+                    shift = this.readExcelCell(sheet, le, 3);
+                }catch (Exception e){
+                }
+
+                //客户
+                try{
+                    customer = this.readExcelCell(sheet, le, 4);
+                }catch (Exception e){
+                }
+
+                //线别
+                try{
+                    line = this.readExcelCell(sheet, le, 5);
+                }catch (Exception e){
+                }
+
+                //工单号
+                try{
+                    orderNo = this.readExcelCell(sheet, le, 6);
+                }catch (Exception e){
+                }
+
+                //物料编码
+                try{
+                    mtrialCode = this.readExcelCell(sheet, le, 7);//物料编码
+                    if(StringUtils.isEmpty(mtrialCode)){
+                        errorStr += "物料编码为空；";
+                    }else{
+                        //获取个编码关联的ID
+                        List<Mtrial> mList = mtrialDao.findByIsDelAndBsCode(0, mtrialCode);
+                        mtrialId = mList.size()>0&&mList.get(i)!=null ? mList.get(i).getId() : null;
+                        if(departId == null){
+                            errorStr += "物料编码填写错误；";
+                        }
+                    }
+                }catch (Exception e){
+                    errorStr += "物料编码为空或格式错误；";
+                }
+
+                //物料描述
+                try{
+                    mtrialDesc = this.readExcelCell(sheet, le, 8);
+                }catch (Exception e){
+                }
+
+                //加工工艺
+                try{
+                    procCode = this.readExcelCell(sheet, le, 9);//加工工艺
+                    if(StringUtils.isEmpty(procCode)){
+                    }else{
+                        //获取个编码关联的ID
+                        List<WoProc> pList = woProcDao.findByBsName(procCode);
+                        procId = pList.size()>0&&pList.get(i)!=null ? pList.get(i).getId() : null;
+                        if(procId == null){
+                            errorStr += "加工工艺填写错误；";
+                        }
+                    }
+                }catch (Exception e){
+                    errorStr += "加工工艺为空或格式错误；";
+                }
+
+                //工单残
+                try{
+                    String restNumStr = this.readExcelNumberCell(sheet, le, 10);
+                    if(StringUtils.isNotEmpty(restNumStr)){
+                        restNum = Integer.parseInt(restNumStr);
+                    }
+                }catch (Exception e){
+                }
+
+                //计划生产数量
+                try{
+                    String planNumStr = this.readExcelNumberCell(sheet, le, 11);
+                    if(StringUtils.isNotEmpty(planNumStr)){
+                        planNum = Integer.parseInt(planNumStr);
+                    }
+                }catch (Exception e){
+                }
+
+                //用人量
+                try{
+                    String peopleNumStr = this.readExcelNumberCell(sheet, le, 12);
+                    if(StringUtils.isNotEmpty(peopleNumStr)){
+                        peopleNum = Integer.parseInt(peopleNumStr);
+                    }
+                }catch (Exception e){
+                }
+
+                //产能
+                try{
+                    String capacityNumStr = this.readExcelNumberCell(sheet, le, 13);
+                    if(StringUtils.isNotEmpty(capacityNumStr)){
+                        capacityNum = Integer.parseInt(capacityNumStr);
+                    }
+                }catch (Exception e){
+                }
+
+                //预计工时
+                try{
+                    String planHoursStr = this.readExcelNumberCell(sheet, le, 14);
+                    if(StringUtils.isNotEmpty(planHoursStr)){
+                        planHours = new BigDecimal(planHoursStr);
+                    }
+                }catch (Exception e){
+                }
+
+                //实际生产数量
+                try{
+                    String actualNumStr = this.readExcelNumberCell(sheet, le, 15);
+                    if(StringUtils.isNotEmpty(actualNumStr)){
+                        actualNum = Integer.parseInt(actualNumStr);
+                    }
+                }catch (Exception e){
+                }
+
+                //实际工时
+                try{
+                    String actualHoursStr = this.readExcelNumberCell(sheet, le, 16);
+                    if(StringUtils.isNotEmpty(actualHoursStr)){
+                        actualHours = new BigDecimal(actualHoursStr);
+                    }
+                }catch (Exception e){
+                }
+
+                //计划金额
+                try{
+                    String planPriceStr = this.readExcelNumberCell(sheet, le, 17);
+                    if(StringUtils.isNotEmpty(planPriceStr)){
+                        planPrice = new BigDecimal(planPriceStr);
+                    }
+                }catch (Exception e){
+                }
+
+                //实际金额
+                try{
+                    String actualPriceStr = this.readExcelNumberCell(sheet, le, 18);
+                    if(StringUtils.isNotEmpty(actualPriceStr)){
+                        actualPrice = new BigDecimal(actualPriceStr);
+                    }
+                }catch (Exception e){
+                }
+
+                //备注
+                try{
+                    remark = this.readExcelCell(sheet, le, 19);
+                }catch (Exception e){
+                }
+
+                //4.保存临时数据
+                SchedulingTemp temp = new SchedulingTemp();
+                temp.setCreatedTime(new Date());
+                temp.setPkDepartId(departId);//部门
+                temp.setBsDepartCode(departCode);
+                temp.setBsProduceTime(produceTime);
+                temp.setBsShift(shift);
+                temp.setBsCustomer(customer);
+                temp.setBsLine(line);
+                temp.setBsOrderNo(orderNo);
+                temp.setPkMtrialId(mtrialId);
+                temp.setBsMtrialCode(mtrialCode);
+                temp.setBsMtrialDesc(mtrialDesc);
+                temp.setPkProcId(procId);
+                temp.setBsProcCode(procCode);
+                temp.setBsRestNum(restNum);
+                temp.setBsPlanNum(planNum);
+                temp.setBsPeopleNum(peopleNum);
+                temp.setBsCapacityNum(capacityNum);
+                temp.setBsPlanHours(planHours);
+                temp.setBsActualNum(actualNum);
+                temp.setBsActualHours(actualHours);
+                temp.setBsPlanPrice(planPrice);
+                temp.setBsActualPrice(actualPrice);
+                temp.setBsRemark(remark);
+                temp.setBsError(errorStr);
+                if(StringUtils.isNotEmpty(errorStr)){
+                    temp.setBsCheckStatus(1);
+                }else{
+                    temp.setBsCheckStatus(0);
+                }
+                temp.setPkSysUser(currUser.getId());
+                tempList.add(temp);
+            }
+
+            if(tempList.size() > 0){
+                schedulingTempDao.saveAll(tempList);
+                return ApiResponseResult.success("导入成功！").data(tempList);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("SchedulingImpl类的doExcel()导入Excel错误", e);
+        }
+
+        return ApiResponseResult.failure("导入失败！请查看导入文件是否有数据或者产品编码是否填写或格式是否正确！");
+    }
+
+    /**
+     * 读取单元格内容
+     * @param sheet
+     * @param rnum 真实行索引
+     * @param cnum 真实列索引
+     * @return
+     */
+    public String readExcelCell(Sheet sheet, int rnum, int cnum) {
+        Row row = sheet.getRow(rnum-1);
+        return this.getCell(row, cnum-1);
+    }
+    private String getCell(Row row, int num){
+        String str = "";
+        row.getCell(num).setCellType(Cell.CELL_TYPE_STRING);
+        String partNoTemp = row.getCell(num).getStringCellValue();
+        str = StringUtils.isNotEmpty(partNoTemp) ? partNoTemp.trim() : "";
+        return str;
+    }
+
+    //读取单元格日期
+    //说明：（1）HSSFDateUtil.isCellDateFormatted(cell)用来判断当前单元格格式是否是日期格式，
+    // 它内部的实现单元格读取成数字（excel日期格式默认是用数字保存的），
+    // 所以调用这个api判断时需先要判断当前单元格格式不是字符串，否则字符串会导致读取失败
+    //（2）在自定义格式中，所有日期格式都可以通过getDataFormat()值来判断，如下
+    // yyyy-MM-dd----- 14
+    // yyyy年m月d日--- 31
+    // yyyy年m月------- 57
+    // m月d日  ---------- 58
+    // HH:mm----------- 20
+    // h时mm分  ------- 32
+    public Date readExcelDateCell(Sheet sheet, int rnum, int cnum){
+        try{
+            Date date = null;
+            Cell cell = sheet.getRow(rnum-1).getCell(cnum-1);
+            //1.判断是否为数字（日期在POI中会转换成数字处理）
+            if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+                if(HSSFDateUtil.isCellDateFormatted(cell)){
+                    //1.1如果是日期格式，直接获取日期
+                    date = sheet.getRow(rnum-1).getCell(cnum-1).getDateCellValue();
+                }else{
+                    //1.2如果是其他格式（比如自定义），调用getDataFormat()方法判断是否为日期
+                    short format = cell.getCellStyle().getDataFormat();
+                    if (format == 14 || format == 31 || format == 57 || format == 58
+                            || (176<=format && format<=178) || (182<=format && format<=196)
+                            || (210<=format && format<=213) || (208==format ) ) { // 日期
+                        date = sheet.getRow(rnum-1).getCell(cnum-1).getDateCellValue();
+                    } else if (format == 20 || format == 32 || format==183 || (200<=format && format<=209) ) { // 时间
+                        date = null;
+                    } else { // 不是日期时间格式
+                        date = null;
+                    }
+                }
+            }
+            //2.判断是否为字符串
+            if(cell.getCellType() == Cell.CELL_TYPE_STRING){
+                String value = cell.getStringCellValue();
+                if(StringUtils.isNotEmpty(value)){
+                    if(value.contains("-")){
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        date = sdf.parse(value);
+                    }else if(value.contains("/")){
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                        date = sdf.parse(value);
+                    }else if(value.contains(".")){
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+                        date = sdf.parse(value);
+                    }else if(value.contains("日")){
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+                        date = sdf.parse(value);
+                    }else if(value.contains("号")){
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd号");
+                        date = sdf.parse(value);
+                    }else{
+                        date = null;
+                    }
+                }
+            }
+
+            return date;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    //读取单元格数字
+    public String readExcelNumberCell(Sheet sheet, int rnum, int cnum){
+        try{
+            NumberFormat numberFormat = NumberFormat.getInstance();
+            numberFormat.setGroupingUsed(false);
+
+            Cell cell = sheet.getRow(rnum-1).getCell(cnum-1);
+            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                //String value = numberFormat.format(cell.getNumericCellValue());
+                String value = String.valueOf(cell.getNumericCellValue());
+                return value;
+            }
+            if(cell.getCellType() == Cell.CELL_TYPE_STRING){
+                String value = cell.getStringCellValue();
+                return value;
+            }
+            return null;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public ApiResponseResult confirmTemp() throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        List<Scheduling> list = new ArrayList<>();
+
+        //1.获取当前用户关联的临时表
+        List<SchedulingTemp> tempList =schedulingTempDao.findByIsDelAndPkSysUser(0, currUser.getId());
+        for(SchedulingTemp temp : tempList){
+            if(temp != null){
+                //新增
+                Scheduling scheduling = new Scheduling();
+                scheduling.setCreatedTime(new Date());
+                scheduling.setPkDepartId(temp.getPkDepartId());//部门
+                scheduling.setBsProduceTime(temp.getBsProduceTime());
+                scheduling.setBsShift(temp.getBsShift());
+                scheduling.setBsCustomer(temp.getBsCustomer());
+                scheduling.setBsLine(temp.getBsLine());
+                scheduling.setBsOrderNo(temp.getBsOrderNo());
+                scheduling.setPkMtrialId(temp.getPkMtrialId());
+                scheduling.setPkProcId(temp.getPkProcId());
+                scheduling.setBsRestNum(temp.getBsRestNum());
+                scheduling.setBsPlanNum(temp.getBsPlanNum());
+                scheduling.setBsPeopleNum(temp.getBsPeopleNum());
+                scheduling.setBsCapacityNum(temp.getBsCapacityNum());
+                scheduling.setBsPlanHours(temp.getBsPlanHours());
+                scheduling.setBsActualNum(temp.getBsActualNum());
+                scheduling.setBsActualHours(temp.getBsActualHours());
+                scheduling.setBsPlanPrice(temp.getBsPlanPrice());
+                scheduling.setBsActualPrice(temp.getBsActualPrice());
+                scheduling.setBsRemark(temp.getBsRemark());
+                list.add(scheduling);
+            }
+        }
+
+        if(list.size() > 0){
+            schedulingDao.saveAll(list);
+        }
+
+        return ApiResponseResult.success("保存成功！").data(list);
     }
 }

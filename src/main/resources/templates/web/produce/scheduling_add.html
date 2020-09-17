@@ -114,7 +114,15 @@
         </form>
 
         <hr class="layui-bg-black"/>
+    </div>
 
+    <!--导入-->
+    <div id="uploadDiv" class="layer_self_wrap" style="width:500px;display:none;">
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload">上传文件</button>
+        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="save">保存</button>
+
+        <!--导入临时列表-->
+        <table id="iList" lay-filter="iTable"></table>
     </div>
 
     <script th:src="@{/js/web/produce/scheduling_add.js}" src="/js/web/produce/scheduling_add.js"></script>
