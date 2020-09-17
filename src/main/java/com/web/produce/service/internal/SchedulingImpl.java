@@ -90,29 +90,6 @@ public class SchedulingImpl implements SchedulingService {
         List<String> headerList = new ArrayList<String>(); //初始化
         List<List<String>> bodyList = new ArrayList<>();//初始化
 
-        //
-        List<String> bodyItem = new ArrayList<>();
-        bodyItem.add("组一");
-        bodyItem.add("2020-09-02");
-        bodyItem.add("夜班");
-        bodyItem.add("华贝");
-        bodyItem.add("陈彩丽");
-        bodyItem.add("ZA20200937264");
-        bodyItem.add("184114-02006-0018");
-        bodyItem.add("AX2579.底壳组件(5000mAh).锖色.镭雕海外版含CE和垃圾桶标.点胶+热熔.环保.(半成品)");
-        bodyItem.add("点胶");
-        bodyItem.add("67290");
-        bodyItem.add("2600");
-        bodyItem.add("41");
-        bodyItem.add("210");
-        bodyItem.add("508");
-        bodyItem.add("510");
-        bodyItem.add("432");
-        bodyItem.add("80733.4");
-        bodyItem.add("149688");
-        bodyItem.add("欠装饰件晚上入库");
-        bodyList.add(bodyItem);
-
         //2创建表头信息
         headerList.add("部门");//1
         headerList.add("日期");//2

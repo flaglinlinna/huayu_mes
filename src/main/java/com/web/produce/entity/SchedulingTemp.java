@@ -2,7 +2,6 @@ package com.web.produce.entity;
 
 import com.app.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.web.po.entity.Interfaces;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -11,14 +10,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 排产信息
+ * 排产信息导入临时表
  */
-@Entity(name = "Scheduling")
-@Table(name= Scheduling.TABLE_NAME)
+@Entity(name = "SchedulingTemp")
+@Table(name= SchedulingTemp.TABLE_NAME)
 @DynamicUpdate
-public class Scheduling extends BaseEntity {
+public class SchedulingTemp extends BaseEntity {
     private static final long serialVersionUID = -5951531333314901264L;
-    public static final String TABLE_NAME = "produce_scheduling";
+    public static final String TABLE_NAME = "produce_scheduling_temp";
 
     /**
      * 部门ID
@@ -26,6 +25,13 @@ public class Scheduling extends BaseEntity {
     @ApiModelProperty(name = "pkDepartId", value = "部门ID")
     @Column
     protected Long pkDepartId;
+
+    /**
+     * 部门编码或名称
+     */
+    @ApiModelProperty(name = "bsDepartCode", value = "部门编码或名称")
+    @Column(length = 100)
+    protected String bsDepartCode;
 
     /**
      * 生产日期
@@ -93,11 +99,25 @@ public class Scheduling extends BaseEntity {
     protected Long pkMtrialId;
 
     /**
+     * 物料编码或名称
+     */
+    @ApiModelProperty(name = "bsMtrialCode", value = "物料编码或名称")
+    @Column(length = 100)
+    protected String bsMtrialCode;
+
+    /**
      * 加工工艺ID（工序ID）
      */
     @ApiModelProperty(name = "pkProcId", value = "加工工艺ID（工序ID）")
     @Column
     protected Long pkProcId;
+
+    /**
+     * 加工工艺编码或名称
+     */
+    @ApiModelProperty(name = "bsProcName", value = "加工工艺编码或名称")
+    @Column(length = 100)
+    protected String bsProcName;
 
     /**
      * 工单残
@@ -177,6 +197,14 @@ public class Scheduling extends BaseEntity {
         this.pkDepartId = pkDepartId;
     }
 
+    public String getBsDepartCode() {
+        return bsDepartCode;
+    }
+
+    public void setBsDepartCode(String bsDepartCode) {
+        this.bsDepartCode = bsDepartCode;
+    }
+
     public Date getBsProduceTime() {
         return bsProduceTime;
     }
@@ -249,12 +277,28 @@ public class Scheduling extends BaseEntity {
         this.pkMtrialId = pkMtrialId;
     }
 
+    public String getBsMtrialCode() {
+        return bsMtrialCode;
+    }
+
+    public void setBsMtrialCode(String bsMtrialCode) {
+        this.bsMtrialCode = bsMtrialCode;
+    }
+
     public Long getPkProcId() {
         return pkProcId;
     }
 
     public void setPkProcId(Long pkProcId) {
         this.pkProcId = pkProcId;
+    }
+
+    public String getBsProcName() {
+        return bsProcName;
+    }
+
+    public void setBsProcName(String bsProcName) {
+        this.bsProcName = bsProcName;
     }
 
     public Integer getBsRestNum() {
