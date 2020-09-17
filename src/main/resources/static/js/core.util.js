@@ -40,6 +40,51 @@ var CoreUtil = (function () {
             }
         });
     };
+    
+    /**/
+   /* coreUtil.table = function (elem,url, where, method, toolbar,page,defaultToolbar,initCol) {
+       // var roleSaveLoading = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.1});
+        var tableIns=table.render({
+            elem: '#'+elem
+            ,url:context+url
+            ,toolbar: '#'+toolbar //开启头部工具栏，并为其绑定左侧模板
+            ,method: method?method:'get' //默认：get请求
+            ,where:where
+            ,cellMinWidth: 80,limit:20
+            ,defaultToolbar:defaultToolbar
+            //,even: true
+            ,page: page?true:false,
+            request: {
+                pageName: 'page' //页码的参数名称，默认：page
+                ,limitName: 'rows' //每页数据量的参数名，默认：limit
+            },
+            parseData: function (res) {
+            	if(res.result){
+            		return {
+                   	 "code": res.code,//code值为200表示成功
+                       "count": 0,
+                       "msg":res.msg,
+                       "data":[]
+                   }
+            	}
+                // 可进行数据操作
+                return {
+                	 "code": 0,//code值为200表示成功
+                    "count": res.count,
+                    "msg":res.msg,
+                    "data":res.data
+                }
+            },
+            cols: [initCol]
+            ,  done: function(res, curr, count){
+                //如果是异步请求数据方式，res即为你接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                pageCurr=curr;
+                //merge(res);
+            }
+        });
+        return tableIns;
+    };*/
     /*表单数据封装成 json String*/
     coreUtil.formJson = function (frm) {  //frm：form表单的id
         var o = {};

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      xmlns:th="http://www.thymeleaf.org" >
+<!--<head>-->
+    <!--<meta charset="UTF-8">-->
+<!--</head>-->
+<head th:include="layout :: htmlhead" th:with="title='通用报表配置'">
+</head>
+<style th:inline="text">
+		.layui-table-tool-self {
+		    display: none;
+		}
+		.layui-table-tool-temp{
+		   padding-right:0px;
+		}
+		/* 表格头部背景色 */
+	  .layui-table th{
+	        font-weight: bold;
+	  }
+	  /* 背景色*/
+	  /* 偶数行背景色 */
+	.layui-table[lay-even] tr:nth-child(even) {
+	    /* background-color: #aaffaa; */
+	    background-color: #e6e6e6;
+	}
+	</style>
+<body>
+<!--查询面板-->
+<div class="layui-collapse">
+  <div class="layui-colla-item">
+    <h2 class="layui-colla-title">查询条件</h2>
+    <div class="layui-colla-content layui-show">
+       <div id="searchParam" >
+       <form class="layui-form" action="">
+		    <div class="layui-form-item"  >
+		        <div class="layui-input-inline">
+		            <label class="layui-form-label">关键字</label>
+		            <input type="text" name="keywprd" class="layui-input"  autocomplete="off" > 
+		        </div>
+		        <div class="layui-input-inline ">
+		            <button class="layui-btn layui-btn-sm" style="margin-top:20px;"  lay-submit="" lay-filter="demo1" >查询</button>
+		            <button class="layui-btn layui-btn-sm  layui-btn-primary"   style="margin-top:20px;"  >重置</button>
+		        </div>
+		    </div>
+		    </form>
+
+		</div>
+    </div>
+  </div>
+</div>
+        
+                    
+ <table class="layui-hide" id="listTable" lay-filter="listTable"></table> 
+<!--  <table cellspacing="0" cellpadding="0" border="0" class="layui-table"><thead><tr><th data-field="0" data-key="1-0-0" data-unresize="true" class=" layui-table-col-special"><div class="layui-table-cell laytable-cell-1-0-0 laytable-cell-numbers"><span>序号</span></div></th><th data-field="TEST0" data-key="1-0-1" class=""><div class="layui-table-cell laytable-cell-1-0-1" align="center"><span>测试0</span></div></th><th data-field="TEST1" data-key="1-0-2" class=""><div class="layui-table-cell laytable-cell-1-0-2" align="center"><span>测试1</span></div></th><th data-field="TEST2" data-key="1-0-3" class=""><div class="layui-table-cell laytable-cell-1-0-3" align="center"><span>测试2</span></div></th></tr></thead></table>
+ --><script type="text/html" id="toolbar">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-href="/huayu/sys/report/toConfigAdd" lay-text="通用报表配置新增" >新增配置</button>
+    
+    
+    <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="loadWeek" style="float:right;" id="weekBtn">按周展示</button>
+    <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="loadDay" style="float:right;" id="dayBtn">按日展示</button>
+  </div>
+</script>
+
+<script  th:inline="javascript">
+var _proName=[[${pro}]];//后端返回数据
+var f_temp=1;
+		      var initCol = [{type: 'numbers', title: '序号'}]; 
+		     layui.use(['table','form', 'layedit', 'laydate',], function(){
+		    	  var form = layui.form
+		    	  ,layer = layui.layer
+		    	  ,layedit = layui.layedit
+		    	  ,table = layui.table
+		    	  ,laydate = layui.laydate;
+		    	  
+		    	  tableIns=table.render({
+			            elem: '#listTable'
+			            //,url:context+'api/item/itemlist'
+			            ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
+			            ,method: 'get' //默认：get请求
+			            ,where:{pro_name:_proName}
+			            ,cellMinWidth: 80,limit:20
+			            //,even: true
+			            ,page: false,
+			            data:[] ,
+			            request: {
+			                pageName: 'page' //页码的参数名称，默认：page
+			                ,limitName: 'rows' //每页数据量的参数名，默认：limit
+			            },
+			            parseData: function (res) {
+			            	console.log(res)
+			            	if(res.data.failed){
+			            		return {
+			                   	 "code": res.data.code,//code值为200表示成功
+			                       "count": 0,
+			                       "msg":res.data.result,
+			                       "data":[]
+			                   }
+			            	}
+			                // 可进行数据操作
+			                return {
+			                	 "code": 0,//code值为200表示成功
+			                    "count": res.data.data.pageVO.totalRows,
+			                    "msg":res.msg,
+			                    "data":res.data.data.result
+			                }
+			            },
+			            cols: [initCol]
+			            ,  done: function(res, curr, count){
+			                //如果是异步请求数据方式，res即为你接口返回的信息。
+			                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+			                pageCurr=curr;
+			                //merge(res);
+			            }
+			        }); 
+		    	  //监听提交
+		    	  form.on('submit(demo1)', function(data){
+		    		  load(data);
+		    	    return false;
+		    	  });
+		    	  
+		    	//监听单元格编辑
+		    	  table.on('edit(listTable)', function(obj){
+		    	    var value = obj.value //得到修改后的值
+		    	    ,data = obj.data //得到所在行所有键值
+		    	    ,field = obj.field; //得到字段
+		    	    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+		    	  });
+		    	  //头工具栏事件
+		    	  table.on('toolbar(listTable)', function(obj){
+		    	    var checkStatus = table.checkStatus(obj.config.id);
+		    	    switch(obj.event){
+		    	      case 'add':
+		    	        var data = checkStatus.data;
+		    	        layer.alert(JSON.stringify(data));
+		    	      break;
+		    	      case 'loadWeek':
+		    	        var data = checkStatus.data;
+		    	        layer.msg('选中了：'+ data.length + ' 个');
+		    	      break;
+		    	      case 'loadDay':
+		    	        layer.msg(checkStatus.isAll ? '全选': '未全选');
+		    	      break;
+		    	      case 'isExport':
+		    	    	  var tips = layer.tips('只允许导入天的数据', '#is_export',{
+					             tips: [2, '#555555']
+					             // 上右下左四个方向，通过1-4进行方向设定
+					         });
+					         sleep(5000);
+					         layer.close(tips);
+			    	  break;
+		    	      
+		    	      //自定义头工具栏右侧图标 - 提示
+		    	      case 'LAYTABLE_TIPS':
+		    	        layer.alert('这是工具栏右侧自定义的一个图标按钮');
+		    	      break;
+		    	    };
+		    	  });
+		    	  
+		    	});
+
+		   //重新加载表格（搜索）
+		     function load(obj){
+		    	  CoreUtil.sendAjax('sys/report/getlist',{pro_name:_proName,page:1,rows:20},function (res) {
+		    		  
+		    		  if(res.result){
+	    				  var mycols =initCol;
+							var arr = res.data.Cols;
+							console.log(arr)
+							var col_color = [];
+						for(j = 0,len=arr.length; j < len; j++) {
+							mycols.push({
+								field: arr[j].BS_FILED, title: arr[j].BS_TITLE, align: 'center', width: arr[j].BS_WIDTH?arr[j].BS_WIDTH:'100',style:'color:'+arr[j].BS_TBODY_COLOR+";background-color:"+arr[j].BS_TBODY_BG_COLOR+";", sort: false
+							});	
+							if(arr[j].BS_TITLE_COLOR || arr[j].BS_TITLE_BG_COLOR){
+								col_color.push({title:arr[j].BS_FILED,color:arr[j].BS_TITLE_COLOR,bg_color:arr[j].BS_TITLE_BG_COLOR});
+							}
+						}
+						
+						console.log(JSON.stringify(mycols))
+						 tableIns.reload({
+				             cols:[mycols] ,	
+						     data:res.data.List,
+						     page:res.data.Config.page,
+						     done: function(res1, curr, count){
+						    	 pageCurr=curr;
+						    	 
+						    	 //合并列
+						    	 if(res.data.Config.rowspan_name && res.data.Config.rowspan_index){
+						    		 merge(res.data.List,res.data.Config.rowspan_name,res.data.Config.rowspan_index)
+						    	 }
+						    	 
+						    	 //设置表头颜色
+						    	 if(col_color.length>0){
+						    		 $('.layui-table-header th').each(function(){
+						    	            //abbr += $(this).attr('data-field') + ',';
+						    	            console.log($(this).attr('data-field'))
+						    	            var df = $(this).attr('data-field');
+						    	            for(j = 0,len=col_color.length; j < len; j++) {
+						    	            	console.log(col_color[j].title)
+						    	            	console.log(df == col_color[j].title)
+						    	            	if(df == col_color[j].title){
+						    	            		 $(this).css({ color: col_color[j].color, background: col_color[j].bg_color })
+						    	            	}
+						    	            }
+						    	        })
+						    	 }
+						    	 
+						     }
+						}) 
+	    			  }else{
+	    				  layer.msg(res.msg, {
+			                    time: 20000, //20s后自动关闭
+			                    btn: ['知道了']
+			                  });
+	    			  }
+		    		 
+		            },"GET",false,function (res) {
+		                layer.msg("抱歉！您暂无权限");
+		            });  
+		         
+		     }
+
+		   function merge(res,columsName,columsIndex) {
+	            
+		        var data = res;
+		        var mergeIndex = 0;//定位需要添加合并属性的行数
+		        var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+		        //var columsName = ['itemCode'];//需要合并的列名称
+		        //var columsIndex = [3];//需要合并的列索引值
+		    
+		        for (var k = 0; k < columsName.length; k++) { //这里循环所有要合并的列
+		            var trArr = $(".layui-table-body>.layui-table").find("tr");//所有行
+		                for (var i = 1; i < data.length; i++) { //这里循环表格当前的数据
+		                    var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
+		                    var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);//获取相同列的第一列
+		                    
+		                    if (data[i][columsName[k]] === data[i-1][columsName[k]]) { //后一行的值与前一行的值做比较，相同就需要合并
+		                        mark += 1;
+		                        tdPreArr.each(function () {//相同列的第一列增加rowspan属性
+		                            $(this).attr("rowspan", mark);
+		                        });
+		                        tdCurArr.each(function () {//当前行隐藏
+		                            $(this).css("display", "none");
+		                        });
+		                    }else {
+		                        mergeIndex = i;
+		                        mark = 1;//一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+		                    }
+		                }
+		            mergeIndex = 0;
+		            mark = 1;
+		        }
+		    }
+		
+</script>
+</body>
+</html>

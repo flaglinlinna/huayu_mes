@@ -1,4 +1,4 @@
-package com.web.report.service.internal;
+package com.system.report.service.internal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
-import com.web.report.service.CommonService;
+import com.system.report.service.SysReportService;
 
-@Service(value = "CommonService")
+@Service(value = "SysReportService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class CommonImpl  implements CommonService {
+public class SysReportImpl  implements SysReportService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -39,6 +39,7 @@ public class CommonImpl  implements CommonService {
 			map.put("BS_SORT", true);
 			//map.put("BS_LEVEL", 1);//一级目录
 			list.add(map);
+			
 		}
 		
 		//
@@ -58,6 +59,7 @@ public class CommonImpl  implements CommonService {
 		
 		
 		Map map = new HashMap();
+		
 		map.put("Cols", list);
 		map.put("List", list1);
 		map.put("Config", map_config);
