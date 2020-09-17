@@ -94,6 +94,8 @@ $(function() {
 		
 	});
 });
+
+
 //添加工作中心
 function addProc() {
 	// 清空弹出框数据
@@ -106,10 +108,16 @@ function addProc() {
 				tableAddInfo.reload({
 					data:data.data.WoProc
 				});
-				$("#mtrial_id").val(data.data.Mtrial);
+				$("#mtrial_id").empty();
+				var mtl=data.data.Mtrial;
+				for (var i = 0; i < mtl.length; i++) {
+					if(i==0){
+						$("#mtrial_id").append("<option value=''>请点击选择</option>");
+					}
+					$("#mtrial_id").append("<option value=" + mtl[i].id+ ">" + mtl[i].bsName + "</option>");
+					console.log(mtl[i].bsName)
+				}			
 				layui.form.render('select');
-				
-				//layui.form.render('mtrial_id',data.data.Mtrial);  //指定select框重新渲染
 				openProc(null, "添加工序");
 				} else {
 					layer.alert(data.msg)
@@ -131,7 +139,7 @@ function openProc(id, title) {
 		fixed : false,
 		resize : false,
 		shadeClose : true,
-		area : ['700px', '650px'],
+		area : ['700px', '500px'],
 		content : $('#setProc'),
 		end : function() {
 			//cleanCenter();
@@ -141,4 +149,6 @@ function openProc(id, title) {
 		}
 	});
 }
+
+
 

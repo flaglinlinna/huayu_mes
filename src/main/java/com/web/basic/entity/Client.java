@@ -11,37 +11,38 @@ import com.app.base.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 /**
- * 不良类别基础信息表
+ * 不良内容基础信息表
  *
  */
-@Entity(name = "ChkBad")
-@Table(name = ChkBad.TABLE_NAME)
+@Entity(name = "Client")
+@Table(name = Client.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class ChkBad extends BaseEntity {
+public class Client extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_chk_bad";
+	    public static final String TABLE_NAME = "basic_client";
 	    
 	    /**
-	     * 不良类别编码
+	     * 客户编码
 	     */
-	    @ApiModelProperty(name = "bsCode", value = "不良类别编码")
+	    @ApiModelProperty(name = "bsCode", value = "客户编码")
 	    @Column(length = 50)
 	    protected String bsCode;
 
 	    /**
-	     * 不良类别名称
+	     * 客户全称
 	     */
-	    @ApiModelProperty(name = "bsName", value = "不良类别名称")
+	    @ApiModelProperty(name = "bsName", value = "客户全称")
 	    @Column(length = 50)
 	    protected String bsName;
 	    
 	    /**
-	     * 状态（0：正常 / 1：禁用）
+	     * 客户简称
 	     */
-	    @ApiModelProperty(name = "bsStatus", value = "状态（0：正常 / 1：禁用）")
-	    @Column
-	    protected Integer bsStatus = 0;
+	    @ApiModelProperty(name = "bsNameSmpl", value = "客户简称")
+	    @Column(length = 50)
+	    protected String bsNameSmpl;
+	        
 
 		public String getBsCode() {
 			return bsCode;
@@ -59,11 +60,11 @@ public class ChkBad extends BaseEntity {
 			this.bsName = bsName;
 		}
 
-		public Integer getBsStatus() {
-			return bsStatus;
+		public String getBsNameSmpl() {
+			return bsNameSmpl;
 		}
 
-		public void setBsStatus(Integer bsStatus) {
-			this.bsStatus = bsStatus;
-		}    
+		public void setBsNameSmpl(String bsNameSmpl) {
+			this.bsNameSmpl = bsNameSmpl;
+		}
 }

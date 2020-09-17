@@ -1,5 +1,5 @@
 /**
- * 不良类别管理
+ * 不良内容管理
  */
 var pageCurr;
 $(function() {
@@ -7,8 +7,8 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#badList',
-			url : context + 'base/bad/getList',
+			elem : '#clientList',
+			url : context + 'base/client/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -36,13 +36,11 @@ $(function() {
 				field : 'bsCode',
 				title : '编码'
 			}, {
-				field : 'bsName',
-				title : '名称'
+				field : 'bsNameSmpl',
+				title : '名称(简称)'
 			}, {
-				field : 'bsStatus',
-				title : '状态',
-				width : 95,
-				templet : '#statusTpl'
+				field : 'bsName',
+				title : '名称(全称)'
 			}, {
 				field : 'modifiedTime',
 				title : '更新时间'
@@ -67,20 +65,16 @@ $(function() {
 			}
 		});
 
-		// 监听在职操作
-		form.on('switch(isStatusTpl)', function(obj) {
-			setStatus(obj, this.value, this.name, obj.elem.checked);
-		});
 		// 监听工具条
-		table.on('tool(badTable)', function(obj) {
+		table.on('tool(clientTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delBad(data, data.id, data.bsCode);
+				delClient(data, data.id, data.bsCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				console.log("edit");
-				getBad(data, data.id);
+				getClient(data, data.id);
 			}
 		});
 		// 监听提交
@@ -100,20 +94,21 @@ $(function() {
 			load(data);
 			return false;
 		});
-		// 编辑不良类别
-		function getBad(obj, id) {
+		// 编辑不良内容
+		function getClient(obj, id) {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/bad/getChkBad", JSON.stringify(param),
+			CoreUtil.sendAjax("base/client/getClient", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
-							form.val("badForm", {
+							form.val("clientForm", {
 								"id" : data.data.id,
 								"bsCode" : data.data.bsCode,
 								"bsName" : data.data.bsName,
+								"bsNameSmpl" : data.data.bsNameSmpl,
 							});
-							openBad(id, "编辑不良类别")
+							openClient(id, "编辑不良内容")
 						} else {
 							layer.alert(data.msg)
 						}
@@ -123,19 +118,18 @@ $(function() {
 		}
 		// 设置用户正常/禁用
 		function setStatus(obj, id, name, checked) {
-			// setStatus(obj, this.value, this.name, obj.elem.checked);
 			var isStatus = checked ? 0 : 1;
 			var deaprtisStatus = checked ? "正常" : "禁用";
 			// 正常/禁用
 
 			layer.confirm(
-					'您确定要把不良类别：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+					'您确定要把不良内容：' + name + '设置为' + deaprtisStatus + '状态吗？', {
 						btn1 : function(index) {
 							var param = {
 								"id" : id,
 								"bsStatus" : isStatus
 							};
-							CoreUtil.sendAjax("/base/bad/doStatus", JSON
+							CoreUtil.sendAjax("/base/client/doStatus", JSON
 									.stringify(param), function(data) {
 								if (data.result) {
 									layer.alert("操作成功", function() {
@@ -171,7 +165,7 @@ $(function() {
 });
 
 // 新增编辑弹出框
-function openBad(id, title) {
+function openClient(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -182,28 +176,28 @@ function openBad(id, title) {
 		resize : false,
 		shadeClose : true,
 		area : [ '550px' ],
-		content : $('#setBad'),
+		content : $('#setClient'),
 		end : function() {
-			cleanBad();
+			cleanClient();
 		}
 	});
 }
 
-// 添加不良类别
-function addBad() {
+// 添加不良内容
+function addClient() {
 	// 清空弹出框数据
-	cleanBad();
+	cleanClient();
 	// 打开弹出框
-	openBad(null, "添加不良类别");
+	openClient(null, "添加不良内容");
 }
-// 新增不良类别提交
+// 新增不良内容提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/bad/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("base/client/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanBad();
+				cleanClient();
 				// 加载页面
 				loadAll();
 			});
@@ -217,14 +211,14 @@ function addSubmit(obj) {
 	});
 }
 
-// 编辑不良类别提交
+// 编辑不良内容提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/bad/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("base/client/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanBad();
+				cleanClient();
 				// 加载页面
 				loadAll();
 			});
@@ -238,17 +232,17 @@ function editSubmit(obj) {
 	});
 }
 
-// 删除不良类别
-function delBad(obj, id, name) {
+// 删除不良内容
+function delClient(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '不良类别吗？', {
+		layer.confirm('您确定要删除' + name + '不良内容吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/bad/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("base/client/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -295,7 +289,7 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanBad() {
-	$('#badForm')[0].reset();
+function cleanClient() {
+	$('#clientForm')[0].reset();
 	layui.form.render();// 必须写
 }
