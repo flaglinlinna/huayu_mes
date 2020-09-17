@@ -23,9 +23,9 @@ public class Scheduling extends BaseEntity {
     /**
      * 部门ID
      */
-    @ApiModelProperty(name = "pkDepartId", value = "部门ID")
+    @ApiModelProperty(name = "pkDepartment", value = "部门ID")
     @Column
-    protected Long pkDepartId;
+    protected Long pkDepartment;
 
     /**
      * 生产日期
@@ -88,16 +88,16 @@ public class Scheduling extends BaseEntity {
     /**
      * 物料ID
      */
-    @ApiModelProperty(name = "pkMtrialId", value = "物料ID")
+    @ApiModelProperty(name = "pkMtrial", value = "物料ID")
     @Column
-    protected Long pkMtrialId;
+    protected Long pkMtrial;
 
     /**
      * 加工工艺ID（工序ID）
      */
-    @ApiModelProperty(name = "pkProcId", value = "加工工艺ID（工序ID）")
+    @ApiModelProperty(name = "pkWoProc", value = "加工工艺ID（工序ID）")
     @Column
-    protected Long pkProcId;
+    protected Long pkWoProc;
 
     /**
      * 工单残
@@ -169,12 +169,12 @@ public class Scheduling extends BaseEntity {
     @Column(length = 500)
     protected String bsRemark;
 
-    public Long getPkDepartId() {
-        return pkDepartId;
+    public Long getPkDepartment() {
+        return pkDepartment;
     }
 
-    public void setPkDepartId(Long pkDepartId) {
-        this.pkDepartId = pkDepartId;
+    public void setPkDepartment(Long pkDepartment) {
+        this.pkDepartment = pkDepartment;
     }
 
     public Date getBsProduceTime() {
@@ -241,20 +241,20 @@ public class Scheduling extends BaseEntity {
         this.bsStatus = bsStatus;
     }
 
-    public Long getPkMtrialId() {
-        return pkMtrialId;
+    public Long getPkMtrial() {
+        return pkMtrial;
     }
 
-    public void setPkMtrialId(Long pkMtrialId) {
-        this.pkMtrialId = pkMtrialId;
+    public void setPkMtrial(Long pkMtrial) {
+        this.pkMtrial = pkMtrial;
     }
 
-    public Long getPkProcId() {
-        return pkProcId;
+    public Long getPkWoProc() {
+        return pkWoProc;
     }
 
-    public void setPkProcId(Long pkProcId) {
-        this.pkProcId = pkProcId;
+    public void setPkWoProc(Long pkWoProc) {
+        this.pkWoProc = pkWoProc;
     }
 
     public Integer getBsRestNum() {

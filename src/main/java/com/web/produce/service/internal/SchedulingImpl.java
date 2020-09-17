@@ -504,17 +504,17 @@ public class SchedulingImpl implements SchedulingService {
                 //4.保存临时数据
                 SchedulingTemp temp = new SchedulingTemp();
                 temp.setCreatedTime(new Date());
-                temp.setPkDepartId(departId);//部门
+                temp.setPkDepartment(departId);//部门
                 temp.setBsDepartCode(departCode);
                 temp.setBsProduceTime(produceTime);
                 temp.setBsShift(shift);
                 temp.setBsCustomer(customer);
                 temp.setBsLine(line);
                 temp.setBsOrderNo(orderNo);
-                temp.setPkMtrialId(mtrialId);
+                temp.setPkMtrial(mtrialId);
                 temp.setBsMtrialCode(mtrialCode);
                 temp.setBsMtrialDesc(mtrialDesc);
-                temp.setPkProcId(procId);
+                temp.setPkWoProc(procId);
                 temp.setBsProcCode(procCode);
                 temp.setBsRestNum(restNum);
                 temp.setBsPlanNum(planNum);
@@ -670,14 +670,14 @@ public class SchedulingImpl implements SchedulingService {
                 //新增
                 Scheduling scheduling = new Scheduling();
                 scheduling.setCreatedTime(new Date());
-                scheduling.setPkDepartId(temp.getPkDepartId());//部门
+                scheduling.setPkDepartment(temp.getPkDepartment());//部门
                 scheduling.setBsProduceTime(temp.getBsProduceTime());
                 scheduling.setBsShift(temp.getBsShift());
                 scheduling.setBsCustomer(temp.getBsCustomer());
                 scheduling.setBsLine(temp.getBsLine());
                 scheduling.setBsOrderNo(temp.getBsOrderNo());
-                scheduling.setPkMtrialId(temp.getPkMtrialId());
-                scheduling.setPkProcId(temp.getPkProcId());
+                scheduling.setPkMtrial(temp.getPkMtrial());
+                scheduling.setPkWoProc(temp.getPkWoProc());
                 scheduling.setBsRestNum(temp.getBsRestNum());
                 scheduling.setBsPlanNum(temp.getBsPlanNum());
                 scheduling.setBsPeopleNum(temp.getBsPeopleNum());
