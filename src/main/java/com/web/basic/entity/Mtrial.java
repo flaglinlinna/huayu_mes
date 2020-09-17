@@ -26,28 +26,28 @@ public class Mtrial extends BaseEntity {
 	     * 物料编码
 	     */
 	    @ApiModelProperty(name = "bsCode", value = "物料编码")
-	    @Column(length = 15)
+	    @Column(length = 50)
 	    protected String bsCode;
 	    
 	    /**
 	     * 物料信息名称
 	     */
 	    @ApiModelProperty(name = "bsName", value = "物料名称")
-	    @Column(length = 15)
+	    @Column(length = 50)
 	    protected String bsName;
 	    
 	    /**
 	     * 物料类别
 	     */
 	    @ApiModelProperty(name = "bsType", value = "物料类别")
-	    @Column(length = 15)
+	    @Column(length = 50)
 	    protected String bsType;
 	    
 	    /**
 	     * 物料单位
 	     */
 	    @ApiModelProperty(name = "bsUnit", value = "物料单位")
-	    @Column(length = 10)
+	    @Column(length = 15)
 	    protected String bsUnit;
 	    
 	    /**
