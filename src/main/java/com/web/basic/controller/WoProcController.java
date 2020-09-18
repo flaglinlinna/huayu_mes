@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.WoProc;
 import com.web.basic.service.WoProcService;
 
@@ -33,12 +34,19 @@ public class WoProcController extends WebController{
 	 @Autowired
 	 private WoProcService woProcService;
 	 
+	 @ApiOperation(value = "工序基础信息表结构", notes = "工序基础信息表结构"+WoProc.TABLE_NAME)
+	    @RequestMapping(value = "/getWoProc", method = RequestMethod.GET)
+		@ResponseBody
+	    public WoProc getWoProc(){
+	        return new WoProc();
+	    }
+	 
 	 @ApiOperation(value = "工序列表页", notes = "工序列表页", hidden = true)
 	    @RequestMapping(value = "/toWoProc")
 	    public String toWoProc(){
 	        return "/web/basic/proc";
 	    }
-	    @ApiOperation(value = "获取工序列表", notes = "获取工序列表")
+	    @ApiOperation(value = "获取工序列表", notes = "获取工序列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
@@ -59,7 +67,7 @@ public class WoProcController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增工序", notes = "新增工序")
+	    @ApiOperation(value = "新增工序", notes = "新增工序", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody WoProc proc) {
@@ -77,7 +85,7 @@ public class WoProcController extends WebController{
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑工序", notes = "编辑工序")
+	    @ApiOperation(value = "编辑工序", notes = "编辑工序", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody WoProc proc){
@@ -94,7 +102,7 @@ public class WoProcController extends WebController{
 	            return ApiResponseResult.failure("编辑工序失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取工序", notes = "根据ID获取工序")
+		@ApiOperation(value = "根据ID获取工序", notes = "根据ID获取工序", hidden = true)
 	    @RequestMapping(value = "/getWoProc", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getWoProc(@RequestBody Map<String, Object> params){
@@ -113,7 +121,7 @@ public class WoProcController extends WebController{
 	        }
 	    }
 		
-		@ApiOperation(value = "删除工序", notes = "删除工序")
+		@ApiOperation(value = "删除工序", notes = "删除工序", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
@@ -132,7 +140,7 @@ public class WoProcController extends WebController{
 	        }
 	    }
 		
-		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用")
+		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用", hidden = true)
 		    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{

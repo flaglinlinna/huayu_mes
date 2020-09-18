@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.basic.entity.Department;
+import com.web.basic.entity.Mtrial;
 import com.web.basic.service.DepartmentService;
 
 import io.swagger.annotations.Api;
@@ -35,12 +36,19 @@ public class DepartmentController extends WebController{
 	 @Autowired
 	 private DepartmentService departmentService;
 	 
+	 @ApiOperation(value = "部门基础信息表结构", notes = "部门基础信息表结构"+Department.TABLE_NAME)
+	    @RequestMapping(value = "/getDepartment", method = RequestMethod.GET)
+		@ResponseBody
+	    public Department getDepartment(){
+	        return new Department();
+	    }
+	 
 	 @ApiOperation(value = "部门列表页", notes = "部门列表页", hidden = true)
 	    @RequestMapping(value = "/toDepart")
 	    public String toDepart(){
 	        return "/web/basic/depart";
 	    }
-	    @ApiOperation(value = "获取部门列表", notes = "获取部门列表")
+	    @ApiOperation(value = "获取部门列表", notes = "获取部门列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
@@ -61,7 +69,7 @@ public class DepartmentController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增部门", notes = "新增部门")
+	    @ApiOperation(value = "新增部门", notes = "新增部门", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody Department depart) {
@@ -80,7 +88,7 @@ public class DepartmentController extends WebController{
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑部门", notes = "编辑部门")
+	    @ApiOperation(value = "编辑部门", notes = "编辑部门", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody Department depart){
@@ -97,7 +105,7 @@ public class DepartmentController extends WebController{
 	            return ApiResponseResult.failure("编辑部门失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取部门", notes = "根据ID获取部门")
+		@ApiOperation(value = "根据ID获取部门", notes = "根据ID获取部门", hidden = true)
 	    @RequestMapping(value = "/getDepart", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getDepart(@RequestBody Map<String, Object> params){
@@ -116,7 +124,7 @@ public class DepartmentController extends WebController{
 	        }
 	    }
 		
-		@ApiOperation(value = "删除部门", notes = "删除部门")
+		@ApiOperation(value = "删除部门", notes = "删除部门", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
@@ -135,7 +143,7 @@ public class DepartmentController extends WebController{
 	        }
 	    }
 		
-		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用")
+		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用", hidden = true)
 		    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{

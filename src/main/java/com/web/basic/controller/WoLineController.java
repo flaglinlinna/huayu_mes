@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.WoLine;
 import com.web.basic.service.WoLineService;
 
@@ -33,12 +34,19 @@ public class WoLineController extends WebController{
 	 @Autowired
 	 private WoLineService woLineService;
 	 
+	 @ApiOperation(value = "线体基础信息表结构", notes = "线体基础信息表结构"+WoLine.TABLE_NAME)
+	    @RequestMapping(value = "/getWoLine", method = RequestMethod.GET)
+		@ResponseBody
+	    public WoLine getWoLine(){
+	        return new WoLine();
+	    }
+	 
 	 @ApiOperation(value = "线体列表页", notes = "线体列表页", hidden = true)
 	    @RequestMapping(value = "/toWoLine")
 	    public String toWoLine(){
 	        return "/web/basic/line";
 	    }
-	    @ApiOperation(value = "获取线体列表", notes = "获取线体列表")
+	    @ApiOperation(value = "获取线体列表", notes = "获取线体列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
@@ -59,7 +67,7 @@ public class WoLineController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增线体", notes = "新增线体")
+	    @ApiOperation(value = "新增线体", notes = "新增线体", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody WoLine line) {
@@ -77,7 +85,7 @@ public class WoLineController extends WebController{
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑线体", notes = "编辑线体")
+	    @ApiOperation(value = "编辑线体", notes = "编辑线体", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody WoLine line){
@@ -94,7 +102,7 @@ public class WoLineController extends WebController{
 	            return ApiResponseResult.failure("编辑线体失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取线体", notes = "根据ID获取线体")
+		@ApiOperation(value = "根据ID获取线体", notes = "根据ID获取线体", hidden = true)
 	    @RequestMapping(value = "/getWoLine", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getWoLine(@RequestBody Map<String, Object> params){
@@ -113,7 +121,7 @@ public class WoLineController extends WebController{
 	        }
 	    }
 		
-		@ApiOperation(value = "删除线体", notes = "删除线体")
+		@ApiOperation(value = "删除线体", notes = "删除线体", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
@@ -132,7 +140,7 @@ public class WoLineController extends WebController{
 	        }
 	    }
 		
-		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用")
+		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用", hidden = true)
 		    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{

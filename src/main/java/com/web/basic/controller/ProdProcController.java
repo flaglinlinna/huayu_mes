@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.entity.Mtrial;
+import com.web.basic.entity.ProdProc;
 import com.web.basic.service.ProdProcService;
 
 import io.swagger.annotations.Api;
@@ -30,13 +32,20 @@ public class ProdProcController extends WebController{
 	@Autowired
 	 private ProdProcService procProdService;
 	
+	 @ApiOperation(value = "工艺流程基础信息表结构", notes = "工艺流程基础信息表结构"+ProdProc.TABLE_NAME)
+	    @RequestMapping(value = "/getProdProc", method = RequestMethod.GET)
+		@ResponseBody
+	    public ProdProc getProdProc(){
+	        return new ProdProc();
+	    }
+	
 	@ApiOperation(value = "工艺流程列表页", notes = "工艺流程列表页", hidden = true)
     @RequestMapping(value = "/toProdProc")
     public String toProdProc(){
         return "/web/basic/prodproc";
     }
 
-	@ApiOperation(value = "获取工艺流程列表", notes = "获取工艺流程列表")
+	@ApiOperation(value = "获取工艺流程列表", notes = "获取工艺流程列表", hidden = true)
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getList(String keyword) {
@@ -56,7 +65,7 @@ public class ProdProcController extends WebController{
         }
     }
 	
-	@ApiOperation(value = "获取工艺流程-工序列表", notes = "获取工艺流程-工序列表")
+	@ApiOperation(value = "获取工艺流程-工序列表", notes = "获取工艺流程-工序列表", hidden = true)
     @RequestMapping(value = "/getDetailList", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getDetailList(String keyword) {
@@ -76,7 +85,7 @@ public class ProdProcController extends WebController{
         }
     }
 	
-	@ApiOperation(value = "获取物料和工序表", notes = "获取物料和工序表")
+	@ApiOperation(value = "获取物料和工序表", notes = "获取物料和工序表", hidden = true)
     @RequestMapping(value = "/getData", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult getData(){
@@ -94,7 +103,7 @@ public class ProdProcController extends WebController{
         }
     }
 	
-	@ApiOperation(value = "根据ID获取工艺流程", notes = "根据ID获取工艺流程")
+	@ApiOperation(value = "根据ID获取工艺流程", notes = "根据ID获取工艺流程", hidden = true)
     @RequestMapping(value = "/getProdProc", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult getProdProc(@RequestBody Map<String, Object> params){

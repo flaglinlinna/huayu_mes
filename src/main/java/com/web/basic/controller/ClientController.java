@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.basic.entity.Client;
+import com.web.basic.entity.Mtrial;
 import com.web.basic.service.ClientService;
 
 import io.swagger.annotations.Api;
@@ -33,12 +34,20 @@ public class ClientController extends WebController{
 	 @Autowired
 	 private ClientService clientService;
 	 
+	 @ApiOperation(value = "客户基础信息表结构", notes = "客户基础信息表结构"+Client.TABLE_NAME)
+	    @RequestMapping(value = "/getClient", method = RequestMethod.GET)
+		@ResponseBody
+	    public Client getClient(){
+	        return new Client();
+	    }
+	 
+	 
 	 @ApiOperation(value = "客户信息列表页", notes = "客户信息列表页", hidden = true)
 	    @RequestMapping(value = "/toClient")
 	    public String toClient(){
 	        return "/web/basic/client";
 	    }
-	    @ApiOperation(value = "获取客户信息列表", notes = "获取客户信息列表")
+	    @ApiOperation(value = "获取客户信息列表", notes = "获取客户信息列表",hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
@@ -59,7 +68,7 @@ public class ClientController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增客户信息", notes = "新增客户信息")
+	    @ApiOperation(value = "新增客户信息", notes = "新增客户信息",hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody Client client) {
@@ -77,7 +86,7 @@ public class ClientController extends WebController{
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑客户信息", notes = "编辑客户信息")
+	    @ApiOperation(value = "编辑客户信息", notes = "编辑客户信息",hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody Client client){
@@ -94,7 +103,7 @@ public class ClientController extends WebController{
 	            return ApiResponseResult.failure("编辑客户信息失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取客户信息", notes = "根据ID获取客户信息")
+		@ApiOperation(value = "根据ID获取客户信息", notes = "根据ID获取客户信息",hidden = true)
 	    @RequestMapping(value = "/getClient", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getClient(@RequestBody Map<String, Object> params){
@@ -113,7 +122,7 @@ public class ClientController extends WebController{
 	        }
 	    }
 		
-		@ApiOperation(value = "删除客户信息", notes = "删除客户信息")
+		@ApiOperation(value = "删除客户信息", notes = "删除客户信息",hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){

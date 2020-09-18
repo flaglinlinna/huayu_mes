@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.WoCenter;
 import com.web.basic.service.WoCenterService;
 
@@ -33,12 +34,19 @@ public class WoCenterController extends WebController{
 	 @Autowired
 	 private WoCenterService woCenterService;
 	 
+	 @ApiOperation(value = "工作中心信息表结构", notes = "工作中心信息表结构"+WoCenter.TABLE_NAME)
+	    @RequestMapping(value = "/getWoCenter", method = RequestMethod.GET)
+		@ResponseBody
+	    public WoCenter getWoCenter(){
+	        return new WoCenter();
+	    }
+	 
 	 @ApiOperation(value = "工作中心列表页", notes = "工作中心列表页", hidden = true)
 	    @RequestMapping(value = "/toWoCenter")
 	    public String toWoCenter(){
 	        return "/web/basic/center";
 	    }
-	    @ApiOperation(value = "获取工作中心列表", notes = "获取工作中心列表")
+	    @ApiOperation(value = "获取工作中心列表", notes = "获取工作中心列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
@@ -59,7 +67,7 @@ public class WoCenterController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增工作中心", notes = "新增工作中心")
+	    @ApiOperation(value = "新增工作中心", notes = "新增工作中心", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody WoCenter center) {
@@ -77,7 +85,7 @@ public class WoCenterController extends WebController{
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑工作中心", notes = "编辑工作中心")
+	    @ApiOperation(value = "编辑工作中心", notes = "编辑工作中心", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody WoCenter center){
@@ -94,7 +102,7 @@ public class WoCenterController extends WebController{
 	            return ApiResponseResult.failure("编辑工作中心失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取工作中心", notes = "根据ID获取工作中心")
+		@ApiOperation(value = "根据ID获取工作中心", notes = "根据ID获取工作中心", hidden = true)
 	    @RequestMapping(value = "/getWoCenter", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getWoCenter(@RequestBody Map<String, Object> params){
@@ -113,7 +121,7 @@ public class WoCenterController extends WebController{
 	        }
 	    }
 		
-		@ApiOperation(value = "删除工作中心", notes = "删除工作中心")
+		@ApiOperation(value = "删除工作中心", notes = "删除工作中心", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
@@ -132,7 +140,7 @@ public class WoCenterController extends WebController{
 	        }
 	    }
 		
-		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用")
+		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用", hidden = true)
 		    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{

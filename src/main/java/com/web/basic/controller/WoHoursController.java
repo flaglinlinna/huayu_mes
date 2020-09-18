@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.WoHours;
 import com.web.basic.service.WoHoursService;
 
@@ -33,12 +34,19 @@ public class WoHoursController extends WebController{
 	 @Autowired
 	 private WoHoursService woHoursService;
 	 
-	 @ApiOperation(value = "hours列表页", notes = "工时信息列表页", hidden = true)
+	 @ApiOperation(value = "工时信息表结构", notes = "工时信息表结构"+WoHours.TABLE_NAME)
+	    @RequestMapping(value = "/getWoHours", method = RequestMethod.GET)
+		@ResponseBody
+	    public WoHours getWoHours(){
+	        return new WoHours();
+	    }
+	 
+	 @ApiOperation(value = "工时信息列表页", notes = "工时信息列表页", hidden = true)
 	    @RequestMapping(value = "/toWoHours")
 	    public String toWoHours(){
 	        return "/web/basic/hours";
 	    }
-	    @ApiOperation(value = "获取工时信息列表", notes = "获取工时信息列表")
+	    @ApiOperation(value = "获取工时信息列表", notes = "获取工时信息列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
@@ -59,7 +67,7 @@ public class WoHoursController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增工时信息", notes = "新增工时信息")
+	    @ApiOperation(value = "新增工时信息", notes = "新增工时信息", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody WoHours hours) {
@@ -77,7 +85,7 @@ public class WoHoursController extends WebController{
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑工时信息", notes = "编辑工时信息")
+	    @ApiOperation(value = "编辑工时信息", notes = "编辑工时信息", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody WoHours hours){
@@ -94,7 +102,7 @@ public class WoHoursController extends WebController{
 	            return ApiResponseResult.failure("编辑工时信息失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取工时信息", notes = "根据ID获取工时信息")
+		@ApiOperation(value = "根据ID获取工时信息", notes = "根据ID获取工时信息", hidden = true)
 	    @RequestMapping(value = "/getWoHours", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getWoHours(@RequestBody Map<String, Object> params){
@@ -113,7 +121,7 @@ public class WoHoursController extends WebController{
 	        }
 	    }
 		
-		@ApiOperation(value = "删除工时信息", notes = "删除工时信息")
+		@ApiOperation(value = "删除工时信息", notes = "删除工时信息", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
