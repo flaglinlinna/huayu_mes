@@ -2,6 +2,7 @@
  * 生产投入
  */
 var pageCurr;
+var tabledata=[];
 $(function() {
 	layui.use(
 			[ 'table', 'form', 'layedit', 'laydate', 'tableSelect' ],
@@ -41,29 +42,26 @@ $(function() {
 						width : 50
 					},
 					{
-						field : 'bsName',
+						field : 'barcode',
 						title : '条码'
 					},{
-						field : 'bsName',
+						field : 'mtrcode',
 						title : '物料编号'
 					}, {
-						field : 'bsValue',
+						field : 'mtrdescr',
 						title : '物料描述',
 						width : 250
 					}, {
-						field : 'bsType',
+						field : 'qty',
 						title : '数量',
-						width : 100
-					}, {
-						field : 'bsType',
-						title : '创建人'
+						width : 90
 					},{
-						field : 'bsType',
+						field : 'createdTime',
 						title : '创建时间'
 					},  {
-						field : 'isRequired',
+						fixed : 'right',
 						title : '操作',
-						width : 90,
+						align : 'center',
 						toolbar : '#optBar'
 					} ] ],
 					done : function(res, curr, count) {
@@ -125,7 +123,7 @@ $(function() {
 					},
 					done : function(elem, data) {
 						//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
-						console.log(data);
+						//console.log(data);
 						var da=data.data;
 						//console.log(da[0].num)
 						form.val("itemFrom", {
@@ -138,6 +136,19 @@ $(function() {
 						});
 						form.render();// 重新渲染
 					}
+				});
+				// 监听
+				
+				form.on('submit(confirmSubmit)', function(data) {
+					//console.log(data.field)
+					var temp={"barcode":data.field.barcode,
+							"mtrcode":data.field.mtrcode,
+							"mtrdescr":data.field.mtrdescr,
+							"qty":data.field.qty};	
+					tabledata.push(temp)
+					tableIns.reload({
+						data:tabledata
+					});
 				});
 			});	
 });
