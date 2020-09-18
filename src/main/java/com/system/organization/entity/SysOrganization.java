@@ -28,6 +28,13 @@ public class SysOrganization extends BaseEntity{
     @ApiModelProperty(name = "bsName", value = "组织名称")
     @Column(length = 30)
     protected String bsName;
+    
+    /**
+     * 组织级别
+     */
+    @ApiModelProperty(name = "bsLevel", value = "组织级别")
+    @Column(length = 30)
+    protected String bsLevel;
 
     /**
      * 父菜单id
@@ -141,6 +148,14 @@ public class SysOrganization extends BaseEntity{
 
 	public void setBsMobile(String bsMobile) {
 		this.bsMobile = bsMobile;
+	}
+
+	public String getBsLevel() {
+		return bsLevel;
+	}
+
+	public void setBsLevel(String bsLevel) {
+		this.bsLevel = bsLevel;
 	}
 	
 

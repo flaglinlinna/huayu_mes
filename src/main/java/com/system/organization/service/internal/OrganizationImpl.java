@@ -75,6 +75,7 @@ public class OrganizationImpl implements OrganizationService {
 			SysOrganization s = organizationDao.findByIdAndIsDel(perm.getId(), 0);
 			s.setBsCode(perm.getBsCode());
 			s.setBsName(perm.getBsName());
+			s.setBsLevel(perm.getBsLevel());
 			s.setBsPrincipal(perm.getBsPrincipal());
 			s.setBsMobile(perm.getBsMobile());
 			s.setBsZindex(perm.getBsZindex());

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.web.basic.entity.Department;
 import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.WoProc;
-import com.web.po.entity.Interfaces;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;

@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class DefectiveDetail extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_chk_bad_det";
+	    public static final String TABLE_NAME = "basic_defective_detail";
 	    
 	    
 	    /**

@@ -1,6 +1,5 @@
 package com.web.basic.controller;
 
-import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
@@ -33,12 +31,20 @@ public class DefectiveController extends WebController{
 	 @Autowired
 	 private DefectiveService defectiveService;
 	 
+	 @ApiOperation(value = "不良类别表结构", notes = "不良类别表结构"+Defective.TABLE_NAME)
+	    @RequestMapping(value = "/getDefective", method = RequestMethod.GET)
+		@ResponseBody
+	    public Defective getDefective(){
+	        return new Defective();
+	    }
+	 
+	 
 	 @ApiOperation(value = "不良类别列表页", notes = "不良类别列表页", hidden = true)
 	    @RequestMapping(value = "/toDefective")
 	    public String toDefective(){
 	        return "/web/basic/defect";
 	    }
-	    @ApiOperation(value = "获取不良类别列表", notes = "获取不良类别列表")
+	    @ApiOperation(value = "获取不良类别列表", notes = "获取不良类别列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
@@ -59,7 +65,7 @@ public class DefectiveController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增不良类别", notes = "新增不良类别")
+	    @ApiOperation(value = "新增不良类别", notes = "新增不良类别", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody Defective defect) {
@@ -77,7 +83,7 @@ public class DefectiveController extends WebController{
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑不良类别", notes = "编辑不良类别")
+	    @ApiOperation(value = "编辑不良类别", notes = "编辑不良类别", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody Defective defect){
@@ -94,7 +100,7 @@ public class DefectiveController extends WebController{
 	            return ApiResponseResult.failure("编辑不良类别失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取不良类别", notes = "根据ID获取不良类别")
+		@ApiOperation(value = "根据ID获取不良类别", notes = "根据ID获取不良类别", hidden = true)
 	    @RequestMapping(value = "/getDefective", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getDefective(@RequestBody Map<String, Object> params){
@@ -113,7 +119,7 @@ public class DefectiveController extends WebController{
 	        }
 	    }
 		
-		@ApiOperation(value = "删除不良类别", notes = "删除不良类别")
+		@ApiOperation(value = "删除不良类别", notes = "删除不良类别", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
@@ -132,7 +138,7 @@ public class DefectiveController extends WebController{
 	        }
 	    }
 		
-		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用")
+		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用", hidden = true)
 		    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{

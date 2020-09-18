@@ -4,6 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +26,7 @@ import com.web.basic.service.TodoInfoService;
 @Api(description = "待办事项模块")
 @RestController
 @RequestMapping(value= "/todoInfo")
+@ApiIgnore
 public class TodoInfoController extends WebController {
 	@Autowired
 	private TodoInfoService todoInfoService;

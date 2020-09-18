@@ -6,6 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
+
 /**
  * @项目名称：lyd-channel
  * @包名：com.lyd.channel.web
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/")
+@ApiIgnore
 public class IndexController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(IndexController.class);

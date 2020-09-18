@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.entity.Defective;
 import com.web.basic.entity.DefectiveDetail;
 import com.web.basic.service.DefectiveDetailService;
 
@@ -33,12 +34,20 @@ public class DefectiveDetailController extends WebController{
 	 @Autowired
 	 private DefectiveDetailService defectiveDetailService;
 	 
+	 @ApiOperation(value = "不良内容表结构", notes = "不良内容表结构"+DefectiveDetail.TABLE_NAME)
+	    @RequestMapping(value = "/getDefectiveDetail", method = RequestMethod.GET)
+		@ResponseBody
+	    public DefectiveDetail getDefectiveDetail(){
+	        return new DefectiveDetail();
+	    }
+	 
+	 
 	 @ApiOperation(value = "不良内容列表页", notes = "不良内容列表页", hidden = true)
 	    @RequestMapping(value = "/toDefectiveDetail")
 	    public String toDefectiveDetail(){
 	        return "/web/basic/defdetail";
 	    }
-	    @ApiOperation(value = "获取不良内容列表", notes = "获取不良内容列表")
+	    @ApiOperation(value = "获取不良内容列表", notes = "获取不良内容列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
@@ -59,7 +68,7 @@ public class DefectiveDetailController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增不良内容", notes = "新增不良内容")
+	    @ApiOperation(value = "新增不良内容", notes = "新增不良内容", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody DefectiveDetail defdetail) {
@@ -77,7 +86,7 @@ public class DefectiveDetailController extends WebController{
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑不良内容", notes = "编辑不良内容")
+	    @ApiOperation(value = "编辑不良内容", notes = "编辑不良内容", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody DefectiveDetail defdetail){
@@ -94,7 +103,7 @@ public class DefectiveDetailController extends WebController{
 	            return ApiResponseResult.failure("编辑不良内容失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取不良内容", notes = "根据ID获取不良内容")
+		@ApiOperation(value = "根据ID获取不良内容", notes = "根据ID获取不良内容", hidden = true)
 	    @RequestMapping(value = "/getDefectiveDetail", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getDefectiveDetail(@RequestBody Map<String, Object> params){
@@ -113,7 +122,7 @@ public class DefectiveDetailController extends WebController{
 	        }
 	    }
 		
-		 @ApiOperation(value = "获取不良类别列表", notes = "获取不良类别列表")
+		 @ApiOperation(value = "获取不良类别列表", notes = "获取不良类别列表", hidden = true)
 		    @RequestMapping(value = "/getDefectiveList", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult getDefectiveList() {
@@ -131,7 +140,7 @@ public class DefectiveDetailController extends WebController{
 		        }
 		    }
 		
-		@ApiOperation(value = "删除不良内容", notes = "删除不良内容")
+		@ApiOperation(value = "删除不良内容", notes = "删除不良内容", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
@@ -150,7 +159,7 @@ public class DefectiveDetailController extends WebController{
 	        }
 	    }
 		
-		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用")
+		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用", hidden = true)
 		    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{
