@@ -115,18 +115,20 @@ $(function () {
 //导入弹出框
 function openUpload(title){
     deleteTempAll();
-    layer.open({
+    var index = layer.open({
         type:1,
         title: title,
         fixed:false,
         resize :false,
         shadeClose: false,//是否点击遮罩关闭
-        area: ['900px'],
+        area: ['1000px'],
         content:$('#uploadDiv'),
+        macmin:true,
         end:function(){
 
         }
     });
+    layer.full(index);
 }
 
 //重新加载表格（搜索）
