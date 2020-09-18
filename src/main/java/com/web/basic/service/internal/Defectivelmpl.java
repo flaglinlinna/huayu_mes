@@ -18,75 +18,75 @@ import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.enumeration.BasicStateEnum;
-import com.web.basic.dao.ChkBadDao;
-import com.web.basic.entity.ChkBad;
-import com.web.basic.service.ChkBadService;
+import com.web.basic.dao.DefectiveDao;
+import com.web.basic.entity.Defective;
+import com.web.basic.service.DefectiveService;
 
 
-@Service(value = "chkBadService")
+@Service(value = "defectiveService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class ChkBadlmpl implements ChkBadService {
+public class Defectivelmpl implements DefectiveService {
 	@Autowired
-    private ChkBadDao chkBadDao;
+    private DefectiveDao defectiveDao;
 	
 	 /**
      * 新增不良类别
      */
     @Override
     @Transactional
-    public ApiResponseResult add(ChkBad chkBad) throws Exception{
-        if(chkBad == null){
+    public ApiResponseResult add(Defective defective) throws Exception{
+        if(defective == null){
             return ApiResponseResult.failure("不良类别不能为空！");
         }
-        if(StringUtils.isEmpty(chkBad.getBsCode())){
+        if(StringUtils.isEmpty(defective.getBsCode())){
             return ApiResponseResult.failure("不良类别编码不能为空！");
         }
-        if(StringUtils.isEmpty(chkBad.getBsName())){
+        if(StringUtils.isEmpty(defective.getBsName())){
             return ApiResponseResult.failure("不良类别名称不能为空！");
         }
-        int count = chkBadDao.countByIsDelAndBsCode(0, chkBad.getBsCode());
+        int count = defectiveDao.countByIsDelAndBsCode(0, defective.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该不良类别编号已存在，请填写其他不良类别编码！");
         }
-        chkBad.setCreatedTime(new Date());
-        chkBadDao.save(chkBad);
+        defective.setCreatedTime(new Date());
+        defectiveDao.save(defective);
 
-        return ApiResponseResult.success("不良类别添加成功！").data(chkBad);
+        return ApiResponseResult.success("不良类别添加成功！").data(defective);
     }
     /**
      * 修改不良类别
      */
     @Override
     @Transactional
-    public ApiResponseResult edit(ChkBad chkBad) throws Exception {
-        if(chkBad == null){
+    public ApiResponseResult edit(Defective defective) throws Exception {
+        if(defective == null){
             return ApiResponseResult.failure("不良类别不能为空！");
         }
-        if(chkBad.getId() == null){
+        if(defective.getId() == null){
             return ApiResponseResult.failure("不良类别ID不能为空！");
         }
-        if(StringUtils.isEmpty(chkBad.getBsCode())){
+        if(StringUtils.isEmpty(defective.getBsCode())){
             return ApiResponseResult.failure("不良类别编码不能为空！");
         }
-        if(StringUtils.isEmpty(chkBad.getBsName())){
+        if(StringUtils.isEmpty(defective.getBsName())){
             return ApiResponseResult.failure("不良类别名称不能为空！");
         }
-        ChkBad o = chkBadDao.findById((long) chkBad.getId());
+        Defective o = defectiveDao.findById((long) defective.getId());
         if(o == null){
             return ApiResponseResult.failure("该不良类别不存在！");
         }
         //判断不良类别编码是否有变化，有则修改；没有则不修改
-        if(o.getBsCode().equals(chkBad.getBsCode())){
+        if(o.getBsCode().equals(defective.getBsCode())){
         }else{
-            int count = chkBadDao.countByIsDelAndBsCode(0, chkBad.getBsCode());
+            int count = defectiveDao.countByIsDelAndBsCode(0, defective.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("不良类别编码已存在，请填写其他不良类别编码！");
             }
-            o.setBsCode(chkBad.getBsCode().trim());
+            o.setBsCode(defective.getBsCode().trim());
         }
         o.setModifiedTime(new Date());
-        o.setBsName(chkBad.getBsName());
-        chkBadDao.save(o);
+        o.setBsName(defective.getBsName());
+        defectiveDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
     
@@ -98,11 +98,11 @@ public class ChkBadlmpl implements ChkBadService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getChkBad(Long id) throws Exception{
+    public ApiResponseResult getDefective(Long id) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("不良类别ID不能为空！");
         }
-        ChkBad o = chkBadDao.findById((long) id);
+        Defective o = defectiveDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("该不良类别不存在！");
         }
@@ -117,13 +117,13 @@ public class ChkBadlmpl implements ChkBadService {
         if(id == null){
             return ApiResponseResult.failure("不良类别ID不能为空！");
         }
-        ChkBad o  = chkBadDao.findById((long) id);
+        Defective o  = defectiveDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("不良类别不存在！");
         }
         o.setModifiedTime(new Date());
         o.setIsDel(1);
-        chkBadDao.save(o);
+        defectiveDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
     
@@ -136,13 +136,13 @@ public class ChkBadlmpl implements ChkBadService {
         if(bsStatus == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
-        ChkBad o = chkBadDao.findById((long) id);
+        Defective o = defectiveDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("不良类别不存在！");
         }
         o.setModifiedTime(new Date());
         o.setBsStatus(bsStatus);
-        chkBadDao.save(o);
+        defectiveDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
     
@@ -161,9 +161,9 @@ public class ChkBadlmpl implements ChkBadService {
 					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
 					filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
 				}
-				Specification<ChkBad> spec = Specification.where(BaseService.and(filters, ChkBad.class));
-				Specification<ChkBad> spec1 = spec.and(BaseService.or(filters1, ChkBad.class));
-				Page<ChkBad> page = chkBadDao.findAll(spec1, pageRequest);
+				Specification<Defective> spec = Specification.where(BaseService.and(filters, Defective.class));
+				Specification<Defective> spec1 = spec.and(BaseService.or(filters1, Defective.class));
+				Page<Defective> page = defectiveDao.findAll(spec1, pageRequest);
 
 				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));

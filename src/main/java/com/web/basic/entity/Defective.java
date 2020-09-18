@@ -14,11 +14,11 @@ import io.swagger.annotations.ApiModelProperty;
  * 不良类别基础信息表
  *
  */
-@Entity(name = "ChkBad")
-@Table(name = ChkBad.TABLE_NAME)
+@Entity(name = "Defective")
+@Table(name = Defective.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class ChkBad extends BaseEntity {
+public class Defective extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
 	    public static final String TABLE_NAME = "basic_chk_bad";
 	    

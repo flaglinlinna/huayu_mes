@@ -5,15 +5,15 @@ import java.util.Date;
 import org.springframework.data.domain.PageRequest;
 
 import com.app.base.data.ApiResponseResult;
-import com.web.basic.entity.ChkBadDet;
+import com.web.basic.entity.DefectiveDetail;
 
-public interface ChkBadDetService {
-	public ApiResponseResult add(ChkBadDet chkBadDet) throws Exception;
+public interface DefectiveDetailService {
+	public ApiResponseResult add(DefectiveDetail defectiveDetail) throws Exception;
 
-	public ApiResponseResult edit(ChkBadDet chkBadDet) throws Exception;
+	public ApiResponseResult edit(DefectiveDetail defectiveDetail) throws Exception;
 
 	// 根据ID获取
-	public ApiResponseResult getChkBadDet(Long id) throws Exception;
+	public ApiResponseResult getDefectiveDetail(Long id) throws Exception;
 
 	public ApiResponseResult delete(Long id) throws Exception;
 
@@ -21,5 +21,5 @@ public interface ChkBadDetService {
 
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
 	
-	public ApiResponseResult getChkBadList() throws Exception;
+	public ApiResponseResult getDefectiveList() throws Exception;
 }
