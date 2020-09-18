@@ -131,28 +131,28 @@ public class SchedulingTemp extends BaseEntity {
      */
     @ApiModelProperty(name = "bsRestNum", value = "工单残")
     @Column
-    protected Integer bsRestNum;
+    protected String bsRestNum;
 
     /**
      * 计划生产数量
      */
     @ApiModelProperty(name = "bsPlanNum", value = "计划生产数量")
     @Column
-    protected Integer bsPlanNum;
+    protected String bsPlanNum;
 
     /**
      * 用人量
      */
     @ApiModelProperty(name = "bsPeopleNum", value = "用人量")
     @Column
-    protected Integer bsPeopleNum;
+    protected String bsPeopleNum;
 
     /**
      * 产能
      */
     @ApiModelProperty(name = "bsCapacityNum", value = "产能")
     @Column
-    protected Integer bsCapacityNum;
+    protected String bsCapacityNum;
 
     /**
      * 预计工时(H/人)
@@ -166,7 +166,7 @@ public class SchedulingTemp extends BaseEntity {
      */
     @ApiModelProperty(name = "bsActualNum", value = "实际生产数量")
     @Column
-    protected Integer bsActualNum;
+    protected String bsActualNum;
 
     /**
      * 实际工时(H/人)
@@ -338,35 +338,35 @@ public class SchedulingTemp extends BaseEntity {
         this.bsProcCode = bsProcCode;
     }
 
-    public Integer getBsRestNum() {
+    public String getBsRestNum() {
         return bsRestNum;
     }
 
-    public void setBsRestNum(Integer bsRestNum) {
+    public void setBsRestNum(String bsRestNum) {
         this.bsRestNum = bsRestNum;
     }
 
-    public Integer getBsPlanNum() {
+    public String getBsPlanNum() {
         return bsPlanNum;
     }
 
-    public void setBsPlanNum(Integer bsPlanNum) {
+    public void setBsPlanNum(String bsPlanNum) {
         this.bsPlanNum = bsPlanNum;
     }
 
-    public Integer getBsPeopleNum() {
+    public String getBsPeopleNum() {
         return bsPeopleNum;
     }
 
-    public void setBsPeopleNum(Integer bsPeopleNum) {
+    public void setBsPeopleNum(String bsPeopleNum) {
         this.bsPeopleNum = bsPeopleNum;
     }
 
-    public Integer getBsCapacityNum() {
+    public String getBsCapacityNum() {
         return bsCapacityNum;
     }
 
-    public void setBsCapacityNum(Integer bsCapacityNum) {
+    public void setBsCapacityNum(String bsCapacityNum) {
         this.bsCapacityNum = bsCapacityNum;
     }
 
@@ -378,11 +378,11 @@ public class SchedulingTemp extends BaseEntity {
         this.bsPlanHours = bsPlanHours;
     }
 
-    public Integer getBsActualNum() {
+    public String getBsActualNum() {
         return bsActualNum;
     }
 
-    public void setBsActualNum(Integer bsActualNum) {
+    public void setBsActualNum(String bsActualNum) {
         this.bsActualNum = bsActualNum;
     }
 

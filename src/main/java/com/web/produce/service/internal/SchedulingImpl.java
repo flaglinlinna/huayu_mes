@@ -276,7 +276,7 @@ public class SchedulingImpl implements SchedulingService {
             }
 
             //删除当前用户关联的临时表原数据
-            schedulingTempDao.updateIsDelByPkSysUser(0, currUser.getId());
+            schedulingTempDao.updateIsDelByPkSysUser(1, currUser.getId());
             //初始化临时表
             List<SchedulingTemp> tempList = new ArrayList<>();
 
@@ -313,12 +313,12 @@ public class SchedulingImpl implements SchedulingService {
                 String mtrialDesc = "";//物料描述
                 String procCode = "";//加工工艺编码
                 Long procId = null;
-                Integer restNum = null;//工单残
-                Integer planNum = null;//计划生产数量
-                Integer peopleNum = null;//用人量
-                Integer capacityNum = null;//产能
+                String restNum = null;//工单残
+                String planNum = null;//计划生产数量
+                String peopleNum = null;//用人量
+                String capacityNum = null;//产能
                 BigDecimal planHours = null;//预计工时
-                Integer actualNum = null;//实际生产数量
+                String actualNum = null;//实际生产数量
                 BigDecimal actualHours = null;//实际工时
                 BigDecimal planPrice = null;//计划金额
                 BigDecimal actualPrice = null;//实际金额
@@ -416,37 +416,25 @@ public class SchedulingImpl implements SchedulingService {
 
                 //工单残
                 try{
-                    String restNumStr = this.readExcelNumberCell(sheet, le, 10);
-                    if(StringUtils.isNotEmpty(restNumStr)){
-                        restNum = Integer.parseInt(restNumStr);
-                    }
+                    restNum = this.readExcelNumberCell(sheet, le, 10);
                 }catch (Exception e){
                 }
 
                 //计划生产数量
                 try{
-                    String planNumStr = this.readExcelNumberCell(sheet, le, 11);
-                    if(StringUtils.isNotEmpty(planNumStr)){
-                        planNum = Integer.parseInt(planNumStr);
-                    }
+                    planNum = this.readExcelNumberCell(sheet, le, 11);
                 }catch (Exception e){
                 }
 
                 //用人量
                 try{
-                    String peopleNumStr = this.readExcelNumberCell(sheet, le, 12);
-                    if(StringUtils.isNotEmpty(peopleNumStr)){
-                        peopleNum = Integer.parseInt(peopleNumStr);
-                    }
+                    peopleNum = this.readExcelNumberCell(sheet, le, 12);
                 }catch (Exception e){
                 }
 
                 //产能
                 try{
-                    String capacityNumStr = this.readExcelNumberCell(sheet, le, 13);
-                    if(StringUtils.isNotEmpty(capacityNumStr)){
-                        capacityNum = Integer.parseInt(capacityNumStr);
-                    }
+                    capacityNum = this.readExcelNumberCell(sheet, le, 13);
                 }catch (Exception e){
                 }
 
@@ -461,10 +449,7 @@ public class SchedulingImpl implements SchedulingService {
 
                 //实际生产数量
                 try{
-                    String actualNumStr = this.readExcelNumberCell(sheet, le, 15);
-                    if(StringUtils.isNotEmpty(actualNumStr)){
-                        actualNum = Integer.parseInt(actualNumStr);
-                    }
+                    actualNum = this.readExcelNumberCell(sheet, le, 15);
                 }catch (Exception e){
                 }
 

@@ -21,10 +21,15 @@
 
         <hr class="layui-bg-black"/>
 
-        <button class="layui-btn layui-btn-sm" lay-href="/huayu/scheduling/toSchedulingAdd" lay-text="排产新增">添加排产</button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm" lay-href="/huayu/scheduling/toSchedulingAdd" lay-text="排产新增">添加排产</button>
 
         <!--列表-->
         <table id="iList" lay-filter="iTable"></table>
+
+        <script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
     </div>
 
     <script th:src="@{/js/web/produce/scheduling.js}" src="/js/web/produce/scheduling.js"></script>

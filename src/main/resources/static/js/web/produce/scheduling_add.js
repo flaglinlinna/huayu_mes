@@ -93,12 +93,12 @@ $(function () {
                 layer.closeAll('loading'); //关闭loading
                 if(res.result){
                     loadAll();//重新加载表格
-                    layer.alert(res.msg,function () {
-                        layer.closeAll();
-                    });
+                    layer.alert(res.msg,function (index) {
+                        layer.close(index);
+                    })
                 }else{
-                    layer.alert(res.msg,function () {
-                        layer.closeAll();
+                    layer.alert(res.msg,function (index) {
+                        layer.close(index);
                     });
                 }
                 $(window).resize();
