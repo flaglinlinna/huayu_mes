@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.entity.Defective;
 import com.web.basic.entity.Mtrial;
 import com.web.basic.service.MtrialService;
 
@@ -33,12 +34,19 @@ public class MtrialController extends WebController{
 	 @Autowired
 	 private MtrialService mtrialService;
 	 
+	 @ApiOperation(value = "物料基础信息表结构", notes = "物料基础信息表结构"+Mtrial.TABLE_NAME)
+	    @RequestMapping(value = "/getMtrial", method = RequestMethod.GET)
+		@ResponseBody
+	    public Mtrial getMtrial(){
+	        return new Mtrial();
+	    }
+	 
 	 @ApiOperation(value = "物料信息列表页", notes = "物料信息列表页", hidden = true)
 	    @RequestMapping(value = "/toMtrial")
 	    public String toMtrial(){
 	        return "/web/basic/mtrial";
 	    }
-	    @ApiOperation(value = "获取物料信息列表", notes = "获取物料信息列表")
+	    @ApiOperation(value = "获取物料信息列表", notes = "获取物料信息列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
@@ -59,7 +67,7 @@ public class MtrialController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增物料信息", notes = "新增物料信息")
+	    @ApiOperation(value = "新增物料信息", notes = "新增物料信息", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody Mtrial mtrial) {
@@ -77,7 +85,7 @@ public class MtrialController extends WebController{
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑物料信息", notes = "编辑物料信息")
+	    @ApiOperation(value = "编辑物料信息", notes = "编辑物料信息", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody Mtrial mtrial){
@@ -94,7 +102,7 @@ public class MtrialController extends WebController{
 	            return ApiResponseResult.failure("编辑物料信息失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取物料", notes = "根据ID获取物料")
+		@ApiOperation(value = "根据ID获取物料", notes = "根据ID获取物料", hidden = true)
 	    @RequestMapping(value = "/getMtrial", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getMtrial(@RequestBody Map<String, Object> params){
@@ -113,7 +121,7 @@ public class MtrialController extends WebController{
 	        }
 	    }
 		
-		@ApiOperation(value = "删除物料", notes = "删除物料")
+		@ApiOperation(value = "删除物料", notes = "删除物料", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
@@ -132,7 +140,7 @@ public class MtrialController extends WebController{
 	        }
 	    }
 		
-		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用")
+		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用", hidden = true)
 		    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{

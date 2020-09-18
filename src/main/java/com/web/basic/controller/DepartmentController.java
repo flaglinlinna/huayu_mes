@@ -21,8 +21,10 @@ import com.web.basic.service.DepartmentService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
-@Api(description = "部门信息模块")
+@Api(description = "部门信息模块", hidden = true)
+@ApiIgnore
 @CrossOrigin
 @ControllerAdvice
 //@RestController

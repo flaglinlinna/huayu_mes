@@ -19,6 +19,7 @@
                 <tr>
                     <th>组织编码</th>
                     <th>组织名称</th>
+                    <th>级别</th>
                     <th>负责人</th>
                     <th>联系电话</th>
                     <th>优先级</th>
@@ -30,6 +31,7 @@
                 <tr>
                     <td>{{r.bsCode}}</td>
                     <td>{{r.bsName}}</td>
+                    <td>{{r.bsLevel}}</td>
                     <td>{{r.bsPrincipal}}</td>
                     <td>{{r.bsMobile}}</td>
                     <td>{{r.bsZindex}}</td>
@@ -60,6 +62,12 @@
                 <label class="layui-form-label">组织名称</label>
                 <div class="layui-input-inline">
                     <input name="bsName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">组织级别</label>
+                <div class="layui-input-inline">
+                    <input name="bsLevel" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <!-- <div class="layui-form-item" pane="">

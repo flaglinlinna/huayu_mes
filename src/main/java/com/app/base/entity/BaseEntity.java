@@ -21,6 +21,7 @@ public abstract class BaseEntity extends IdEntity {
      */
 	@Column
 	@NotNull
+	@ApiModelProperty(name="isDel",value="删除标志(0:未删除,1:已删除)")
     protected int isDel = 0;
 
     /**
@@ -29,6 +30,7 @@ public abstract class BaseEntity extends IdEntity {
 	@Column
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="createdTime",value="创建时间")
 	protected Date createdTime;
 
     /**
@@ -37,18 +39,21 @@ public abstract class BaseEntity extends IdEntity {
 	@Column
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="modifiedTime",value="修改时间")
 	protected Date modifiedTime;
 
     /**
      * 创建人
      */
     @Column
+    @ApiModelProperty(name="pkCreatedBy",value="创建人Id")
     protected Long pkCreatedBy;
 
     /**
      * 修改人
      */
     @Column
+    @ApiModelProperty(name="pkModifiedBy",value="修改人Id")
     protected Long pkModifiedBy;
 
     public int getIsDel() {

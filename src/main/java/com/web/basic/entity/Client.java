@@ -11,7 +11,7 @@ import com.app.base.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 /**
- * 不良内容基础信息表
+ * 客户基础信息表
  *
  */
 @Entity(name = "Client")

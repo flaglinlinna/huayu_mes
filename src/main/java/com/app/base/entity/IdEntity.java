@@ -1,6 +1,9 @@
 package com.app.base.entity;
 
 import javax.persistence.*;
+
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 @MappedSuperclass
@@ -10,6 +13,7 @@ public abstract class IdEntity implements Serializable {
 	// @GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "id_gen")
 	@TableGenerator(name = "id_gen", table = "id_gen", initialValue = 5000, allocationSize=50)
+	@ApiModelProperty(name="id",value="主键id")
 	protected Long id;
 
 	// @Id
@@ -18,6 +22,7 @@ public abstract class IdEntity implements Serializable {
 	// protected Long id;
 
 	@Version
+	@ApiModelProperty(name="version",value="版本号")
 	protected Integer version;
 
 	public Long getId() {

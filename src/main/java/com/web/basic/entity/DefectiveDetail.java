@@ -18,27 +18,27 @@ import io.swagger.annotations.ApiModelProperty;
  * 不良 基础信息表
  *
  */
-@Entity(name = "ChkBadDet")
-@Table(name = ChkBadDet.TABLE_NAME)
+@Entity(name = "DefectiveDetail")
+@Table(name = DefectiveDetail.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class ChkBadDet extends BaseEntity {
+public class DefectiveDetail extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_chk_bad_det";
+	    public static final String TABLE_NAME = "basic_defective_detail";
 	    
 	    
 	    /**
 	      * 关联不良类别的ID
 	      */
-	     @ApiModelProperty(name="pkChkBad",value="不良类别ID")
+	     @ApiModelProperty(name="pkDefective",value="不良类别ID")
 	     @Column
-	     protected Long pkChkBad;
+	     protected Long pkDefective;
 
-	     @ApiModelProperty(name="chkBad",hidden=true,value="不良类别ID")
+	     @ApiModelProperty(name="defective",hidden=true,value="不良类别ID")
 	     @ManyToOne
-	     @JoinColumn(name = "pkChkBad", insertable = false, updatable = false)
+	     @JoinColumn(name = "pkDefective", insertable = false, updatable = false)
 	     @NotFound(action = NotFoundAction.IGNORE)
-	     protected ChkBad chkBad;
+	     protected Defective defective;
 	    
 	    
 	    /**
@@ -64,20 +64,20 @@ public class ChkBadDet extends BaseEntity {
 	    
 		
 
-		public Long getPkChkBad() {
-			return pkChkBad;
+		public Long getPkDefective() {
+			return pkDefective;
 		}
 
-		public void setPkChkBad(Long pkChkBad) {
-			this.pkChkBad = pkChkBad;
+		public void setPkDefective(Long pkDefective) {
+			this.pkDefective = pkDefective;
 		}
 
-		public ChkBad getChkBad() {
-			return chkBad;
+		public Defective getDefective() {
+			return defective;
 		}
 
-		public void setChkBad(ChkBad chkBad) {
-			this.chkBad = chkBad;
+		public void setDefective(Defective defective) {
+			this.defective = defective;
 		}
 
 		public String getBsCode() {

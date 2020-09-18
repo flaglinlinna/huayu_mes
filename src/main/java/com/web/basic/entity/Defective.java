@@ -3,6 +3,7 @@ package com.web.basic.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -14,14 +15,14 @@ import io.swagger.annotations.ApiModelProperty;
  * 不良类别基础信息表
  *
  */
-@Entity(name = "ChkBad")
-@Table(name = ChkBad.TABLE_NAME)
+@Entity(name = "Defective")
+@Table(name = Defective.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class ChkBad extends BaseEntity {
+public class Defective extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_chk_bad";
-	    
+	   
+	 public static final String TABLE_NAME = "basic_defective";
 	    /**
 	     * 不良类别编码
 	     */
@@ -65,5 +66,7 @@ public class ChkBad extends BaseEntity {
 
 		public void setBsStatus(Integer bsStatus) {
 			this.bsStatus = bsStatus;
-		}    
+		}
+		
+		//@JsonIgnore  //如果想不展示这个字段 用 这个注解
 }

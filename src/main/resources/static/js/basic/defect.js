@@ -1,5 +1,5 @@
 /**
- * 不良内容管理
+ * 不良类别管理
  */
 var pageCurr;
 $(function() {
@@ -7,8 +7,8 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#baddetList',
-			url : context + 'base/baddet/getList',
+			elem : '#defectList',
+			url : context + 'base/defect/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -32,15 +32,12 @@ $(function() {
 				type : 'numbers'
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			,{
-				field : 'pbsName',
-				title : '不良类别名称'
-			}, {
+			, {
 				field : 'bsCode',
-				title : '不良内容编码'
+				title : '编码'
 			}, {
 				field : 'bsName',
-				title : '不良内容名称'
+				title : '名称'
 			}, {
 				field : 'bsStatus',
 				title : '状态',
@@ -48,12 +45,10 @@ $(function() {
 				templet : '#statusTpl'
 			}, {
 				field : 'modifiedTime',
-				title : '更新时间',
-				templet:'<div>{{d.modifiedTime?DateUtils.formatDate(d.modifiedTime):""}}</div>'
+				title : '更新时间'
 			}, {
 				field : 'createdTime',
 				title : '添加时间',
-				templet:'<div>{{DateUtils.formatDate(d.createdTime)}}</div>'
 			}, {
 				fixed : 'right',
 				title : '操作',
@@ -69,7 +64,6 @@ $(function() {
 				// 得到数据总量
 				// console.log(count);
 				pageCurr = curr;
-				merge(res.data,['pbsCode'],[1]);
 			}
 		});
 
@@ -78,14 +72,15 @@ $(function() {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(baddetTable)', function(obj) {
+		table.on('tool(defectTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delBad(data, data.id, data.bsCode);
+				delDefect(data, data.id, data.bsCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				getBad(data, data.id);
+				console.log("edit");
+				getDefect(data, data.id);
 			}
 		});
 		// 监听提交
@@ -100,31 +95,25 @@ $(function() {
 		});
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
-			//console.log(data)
+			console.log(data)
 			// 重新加载table
 			load(data);
 			return false;
 		});
-		// 编辑不良内容
-		function getBad(obj, id) {
-			
+		// 编辑不良类别
+		function getDefect(obj, id) {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/baddet/getChkBadDet", JSON.stringify(param),
+			CoreUtil.sendAjax("base/defect/getDefect", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
-							
-							form.val("baddetForm", {
+							form.val("defectForm", {
 								"id" : data.data.id,
 								"bsCode" : data.data.bsCode,
 								"bsName" : data.data.bsName,
-								//"pkChkBad":
 							});
-							getChkBadList(data.data.pkChkBad);
-							
-							//layui.form.render('select');
-							openBad(id, "编辑不良内容")
+							openDefect(id, "编辑不良类别")
 						} else {
 							layer.alert(data.msg)
 						}
@@ -140,13 +129,13 @@ $(function() {
 			// 正常/禁用
 
 			layer.confirm(
-					'您确定要把不良内容：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+					'您确定要把不良类别：' + name + '设置为' + deaprtisStatus + '状态吗？', {
 						btn1 : function(index) {
 							var param = {
 								"id" : id,
 								"bsStatus" : isStatus
 							};
-							CoreUtil.sendAjax("/base/baddet/doStatus", JSON
+							CoreUtil.sendAjax("/base/defect/doStatus", JSON
 									.stringify(param), function(data) {
 								if (data.result) {
 									layer.alert("操作成功", function() {
@@ -160,6 +149,7 @@ $(function() {
 								}
 							}, "POST", false, function(res) {
 								layer.alert("操作请求错误，请您稍后再试", function() {
+
 									layer.closeAll();
 								});
 							});
@@ -181,7 +171,7 @@ $(function() {
 });
 
 // 新增编辑弹出框
-function openBad(id, title) {
+function openDefect(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -191,110 +181,29 @@ function openBad(id, title) {
 		fixed : false,
 		resize : false,
 		shadeClose : true,
-		area : [ '550px','310px'],
-		content : $('#setBad'),
+		area : [ '550px' ],
+		content : $('#setDefect'),
 		end : function() {
-			cleanBad();
+			cleanDefect();
 		}
 	});
 }
 
-function merge(res,columsName,columsIndex) {
-    
-    var data = res;
-    var mergeIndex = 0;//定位需要添加合并属性的行数
-    var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
-    //var columsName = ['itemCode'];//需要合并的列名称
-    //var columsIndex = [3];//需要合并的列索引值
-
-    for (var k = 0; k < columsName.length; k++) { //这里循环所有要合并的列
-        var trArr = $(".layui-table-body>.layui-table").find("tr");//所有行
-            for (var i = 1; i < data.length; i++) { //这里循环表格当前的数据
-                var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
-                var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);//获取相同列的第一列
-                
-                if (data[i][columsName[k]] === data[i-1][columsName[k]]) { //后一行的值与前一行的值做比较，相同就需要合并
-                    mark += 1;
-                    tdPreArr.each(function () {//相同列的第一列增加rowspan属性
-                        $(this).attr("rowspan", mark);
-                    });
-                    tdCurArr.each(function () {//当前行隐藏
-                        $(this).css("display", "none");
-                    });
-                }else {
-                    mergeIndex = i;
-                    mark = 1;//一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
-                }
-            }
-        mergeIndex = 0;
-        mark = 1;
-    }
-}
-
-
-// 添加不良内容
-function addBad() {
+// 添加不良类别
+function addDefect() {
 	// 清空弹出框数据
-	cleanBad();
-	getChkBadList("");
+	cleanDefect();
 	// 打开弹出框
-	openBad(null, "添加不良内容");
+	openDefect(null, "添加不良类别");
 }
-// 新增不良内容提交
+// 新增不良类别提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/baddet/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("base/defect/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanBad();
-				// 加载页面
-				loadAll();
-			});
-		} else {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
-			});
-		}
-	}, "POST", false, function(res) {
-		layer.alert(res.msg);
-	});
-}
-//获取不良类别
-function getChkBadList(id){
-	CoreUtil.sendAjax("base/baddet/getChkBadList", "",
-			function(data) {
-				if (data.result) {
-				$("#pkChkBad").empty();
-				var bad=data.data;
-				//console.log(data)
-				for (var i = 0; i < bad.length; i++) {
-					if(i==0){
-						$("#pkChkBad").append("<option value=''>请点击选择</option>");
-					}
-					$("#pkChkBad").append("<option value=" + bad[i].id+ ">" + bad[i].bsName + "</option>");
-					if(bad[i].id==id){
-						$("#pkChkBad").val(bad[i].id);
-					}
-				}					
-				layui.form.render('select');
-				//openBad(null, "添加不良内容");
-				} else {
-					layer.alert(data.msg)
-				}
-				console.log(data)
-			}, "POST", false, function(res) {
-				layer.alert("操作请求错误，请您稍后再试");
-			});
-}
-// 编辑不良内容提交
-function editSubmit(obj) {
-	CoreUtil.sendAjax("base/baddet/edit", JSON.stringify(obj.field), function(
-			data) {
-		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				cleanBad();
+				cleanDefect();
 				// 加载页面
 				loadAll();
 			});
@@ -308,17 +217,38 @@ function editSubmit(obj) {
 	});
 }
 
-// 删除不良内容
-function delBad(obj, id, name) {
+// 编辑不良类别提交
+function editSubmit(obj) {
+	CoreUtil.sendAjax("base/defect/edit", JSON.stringify(obj.field), function(
+			data) {
+		if (data.result) {
+			layer.alert("操作成功", function() {
+				layer.closeAll();
+				cleanDefect();
+				// 加载页面
+				loadAll();
+			});
+		} else {
+			layer.alert(data.msg, function() {
+				layer.closeAll();
+			});
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
+// 删除不良类别
+function delDefect(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '不良内容吗？', {
+		layer.confirm('您确定要删除' + name + '不良类别吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/baddet/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("base/defect/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -365,7 +295,7 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanBad() {
-	$('#baddetForm')[0].reset();
+function cleanDefect() {
+	$('#defectForm')[0].reset();
 	layui.form.render();// 必须写
 }

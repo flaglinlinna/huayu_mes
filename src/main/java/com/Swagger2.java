@@ -21,15 +21,15 @@ public class Swagger2 {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.apiInfo(apiInfo())
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com"))
+				.apis(RequestHandlerSelectors.basePackage("com.web"))
 				.paths(PathSelectors.any())
 				.build();
 	}
 	
 	private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-        		.title("骏亚接口平台系统 API 文档")
-//        		.contact(new Contact("Ansel Lee", "https://www.ltysyn.cn", ""))
+        		.title("东莞华誉组装MES系统 API 文档")
+        		//.contact(new Contact("Ansel Lee", "https://www.ltysyn.cn", ""))
         		.version("1.0")
         		.description("API 描述")
         		.build();
