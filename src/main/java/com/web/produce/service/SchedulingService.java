@@ -3,6 +3,7 @@ package com.web.produce.service;
 import com.app.base.data.ApiResponseResult;
 import com.web.produce.entity.Scheduling;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,4 +21,8 @@ public interface SchedulingService {
     public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
 
     public ApiResponseResult getExcel(HttpServletResponse response) throws Exception;
+
+    public ApiResponseResult doExcel(MultipartFile file) throws Exception;
+
+    public ApiResponseResult confirmTemp() throws Exception;
 }

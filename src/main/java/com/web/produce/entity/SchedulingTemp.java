@@ -22,9 +22,9 @@ public class SchedulingTemp extends BaseEntity {
     /**
      * 部门ID
      */
-    @ApiModelProperty(name = "pkDepartId", value = "部门ID")
+    @ApiModelProperty(name = "pkDepartment", value = "部门ID")
     @Column
-    protected Long pkDepartId;
+    protected Long pkDepartment;
 
     /**
      * 部门编码或名称
@@ -94,9 +94,9 @@ public class SchedulingTemp extends BaseEntity {
     /**
      * 物料ID
      */
-    @ApiModelProperty(name = "pkMtrialId", value = "物料ID")
+    @ApiModelProperty(name = "pkMtrial", value = "物料ID")
     @Column
-    protected Long pkMtrialId;
+    protected Long pkMtrial;
 
     /**
      * 物料编码或名称
@@ -106,46 +106,53 @@ public class SchedulingTemp extends BaseEntity {
     protected String bsMtrialCode;
 
     /**
+     * 物料描述
+     */
+    @ApiModelProperty(name = "bsMtrialDesc", value = "物料描述")
+    @Column
+    protected String bsMtrialDesc;
+
+    /**
      * 加工工艺ID（工序ID）
      */
-    @ApiModelProperty(name = "pkProcId", value = "加工工艺ID（工序ID）")
+    @ApiModelProperty(name = "pkWoProc", value = "加工工艺ID（工序ID）")
     @Column
-    protected Long pkProcId;
+    protected Long pkWoProc;
 
     /**
      * 加工工艺编码或名称
      */
-    @ApiModelProperty(name = "bsProcName", value = "加工工艺编码或名称")
+    @ApiModelProperty(name = "bsProcCode", value = "加工工艺编码或名称")
     @Column(length = 100)
-    protected String bsProcName;
+    protected String bsProcCode;
 
     /**
      * 工单残
      */
     @ApiModelProperty(name = "bsRestNum", value = "工单残")
     @Column
-    protected Integer bsRestNum;
+    protected String bsRestNum;
 
     /**
      * 计划生产数量
      */
     @ApiModelProperty(name = "bsPlanNum", value = "计划生产数量")
     @Column
-    protected Integer bsPlanNum;
+    protected String bsPlanNum;
 
     /**
      * 用人量
      */
     @ApiModelProperty(name = "bsPeopleNum", value = "用人量")
     @Column
-    protected Integer bsPeopleNum;
+    protected String bsPeopleNum;
 
     /**
      * 产能
      */
     @ApiModelProperty(name = "bsCapacityNum", value = "产能")
     @Column
-    protected Integer bsCapacityNum;
+    protected String bsCapacityNum;
 
     /**
      * 预计工时(H/人)
@@ -159,7 +166,7 @@ public class SchedulingTemp extends BaseEntity {
      */
     @ApiModelProperty(name = "bsActualNum", value = "实际生产数量")
     @Column
-    protected Integer bsActualNum;
+    protected String bsActualNum;
 
     /**
      * 实际工时(H/人)
@@ -189,12 +196,34 @@ public class SchedulingTemp extends BaseEntity {
     @Column(length = 500)
     protected String bsRemark;
 
-    public Long getPkDepartId() {
-        return pkDepartId;
+    /**
+     * 错误信息
+     */
+    @ApiModelProperty(name = "bsError", value = "错误信息")
+    @Column(length = 1000)
+    protected String bsError;
+
+    /**
+     * 校验状态（0：校验通过 / 1：校验不通过 / 2：警告）
+     * 警告：检验值不在上下限阀值之间
+     */
+    @ApiModelProperty(name = "bsCheckStatus", value = "校验状态（0：校验通过 / 1：校验不通过 / 2：警告）")
+    @Column
+    protected Integer bsCheckStatus = 0;
+
+    /**
+     * 用户ID
+     */
+    @ApiModelProperty(name = "pkSysUser", value = "用户ID")
+    @Column
+    protected Long pkSysUser;
+
+    public Long getPkDepartment() {
+        return pkDepartment;
     }
 
-    public void setPkDepartId(Long pkDepartId) {
-        this.pkDepartId = pkDepartId;
+    public void setPkDepartment(Long pkDepartment) {
+        this.pkDepartment = pkDepartment;
     }
 
     public String getBsDepartCode() {
@@ -269,12 +298,12 @@ public class SchedulingTemp extends BaseEntity {
         this.bsStatus = bsStatus;
     }
 
-    public Long getPkMtrialId() {
-        return pkMtrialId;
+    public Long getPkMtrial() {
+        return pkMtrial;
     }
 
-    public void setPkMtrialId(Long pkMtrialId) {
-        this.pkMtrialId = pkMtrialId;
+    public void setPkMtrial(Long pkMtrial) {
+        this.pkMtrial = pkMtrial;
     }
 
     public String getBsMtrialCode() {
@@ -285,51 +314,59 @@ public class SchedulingTemp extends BaseEntity {
         this.bsMtrialCode = bsMtrialCode;
     }
 
-    public Long getPkProcId() {
-        return pkProcId;
+    public String getBsMtrialDesc() {
+        return bsMtrialDesc;
     }
 
-    public void setPkProcId(Long pkProcId) {
-        this.pkProcId = pkProcId;
+    public void setBsMtrialDesc(String bsMtrialDesc) {
+        this.bsMtrialDesc = bsMtrialDesc;
     }
 
-    public String getBsProcName() {
-        return bsProcName;
+    public Long getPkWoProc() {
+        return pkWoProc;
     }
 
-    public void setBsProcName(String bsProcName) {
-        this.bsProcName = bsProcName;
+    public void setPkWoProc(Long pkWoProc) {
+        this.pkWoProc = pkWoProc;
     }
 
-    public Integer getBsRestNum() {
+    public String getBsProcCode() {
+        return bsProcCode;
+    }
+
+    public void setBsProcCode(String bsProcCode) {
+        this.bsProcCode = bsProcCode;
+    }
+
+    public String getBsRestNum() {
         return bsRestNum;
     }
 
-    public void setBsRestNum(Integer bsRestNum) {
+    public void setBsRestNum(String bsRestNum) {
         this.bsRestNum = bsRestNum;
     }
 
-    public Integer getBsPlanNum() {
+    public String getBsPlanNum() {
         return bsPlanNum;
     }
 
-    public void setBsPlanNum(Integer bsPlanNum) {
+    public void setBsPlanNum(String bsPlanNum) {
         this.bsPlanNum = bsPlanNum;
     }
 
-    public Integer getBsPeopleNum() {
+    public String getBsPeopleNum() {
         return bsPeopleNum;
     }
 
-    public void setBsPeopleNum(Integer bsPeopleNum) {
+    public void setBsPeopleNum(String bsPeopleNum) {
         this.bsPeopleNum = bsPeopleNum;
     }
 
-    public Integer getBsCapacityNum() {
+    public String getBsCapacityNum() {
         return bsCapacityNum;
     }
 
-    public void setBsCapacityNum(Integer bsCapacityNum) {
+    public void setBsCapacityNum(String bsCapacityNum) {
         this.bsCapacityNum = bsCapacityNum;
     }
 
@@ -341,11 +378,11 @@ public class SchedulingTemp extends BaseEntity {
         this.bsPlanHours = bsPlanHours;
     }
 
-    public Integer getBsActualNum() {
+    public String getBsActualNum() {
         return bsActualNum;
     }
 
-    public void setBsActualNum(Integer bsActualNum) {
+    public void setBsActualNum(String bsActualNum) {
         this.bsActualNum = bsActualNum;
     }
 
@@ -379,5 +416,29 @@ public class SchedulingTemp extends BaseEntity {
 
     public void setBsRemark(String bsRemark) {
         this.bsRemark = bsRemark;
+    }
+
+    public String getBsError() {
+        return bsError;
+    }
+
+    public void setBsError(String bsError) {
+        this.bsError = bsError;
+    }
+
+    public Integer getBsCheckStatus() {
+        return bsCheckStatus;
+    }
+
+    public void setBsCheckStatus(Integer bsCheckStatus) {
+        this.bsCheckStatus = bsCheckStatus;
+    }
+
+    public Long getPkSysUser() {
+        return pkSysUser;
+    }
+
+    public void setPkSysUser(Long pkSysUser) {
+        this.pkSysUser = pkSysUser;
     }
 }

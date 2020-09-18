@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -66,6 +67,38 @@ public class SchedulingController extends WebController {
             e.printStackTrace();
             logger.error("导出模板失败！", e);
             getSysLogService().error(method, methodName, e.toString());
+        }
+    }
+
+    @ApiOperation(value = "导入", notes = "导入")
+    @RequestMapping(value = "/doExcel", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doExcel(MultipartFile file) throws Exception{
+        String method = "/scheduling/doExcel";String methodName ="导入";
+        try{
+            ApiResponseResult result = schedulingService.doExcel(file);
+            logger.debug("导入=doExcel:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导入失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("导入失败！");
+        }
+    }
+
+    @ApiOperation(value="确认临时数据", notes="确认临时数据")
+    @ResponseBody
+    @RequestMapping(value = "/confirmTemp", method = RequestMethod.POST)
+    public ApiResponseResult confirmTemp(){
+        String method = "/scheduling/confirmTemp";String methodName ="导入";
+        try {
+            return schedulingService.confirmTemp();
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+            e.printStackTrace();
+            return ApiResponseResult.failure(e.getMessage());
         }
     }
 }

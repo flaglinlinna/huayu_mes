@@ -2,9 +2,14 @@ package com.web.produce.entity;
 
 import com.app.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.web.basic.entity.Department;
+import com.web.basic.entity.Mtrial;
+import com.web.basic.entity.WoProc;
 import com.web.po.entity.Interfaces;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -23,9 +28,15 @@ public class Scheduling extends BaseEntity {
     /**
      * 部门ID
      */
-    @ApiModelProperty(name = "pkDepartId", value = "部门ID")
+    @ApiModelProperty(name = "pkDepartment", value = "部门ID")
     @Column
-    protected Long pkDepartId;
+    protected Long pkDepartment;
+
+    @ApiModelProperty(name = "department", hidden = true, value = "部门")
+    @ManyToOne
+    @JoinColumn(name = "pkDepartment", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected Department department;
 
     /**
      * 生产日期
@@ -88,44 +99,56 @@ public class Scheduling extends BaseEntity {
     /**
      * 物料ID
      */
-    @ApiModelProperty(name = "pkMtrialId", value = "物料ID")
+    @ApiModelProperty(name = "pkMtrial", value = "物料ID")
     @Column
-    protected Long pkMtrialId;
+    protected Long pkMtrial;
+
+    @ApiModelProperty(name = "mtrial", hidden = true, value = "物料")
+    @ManyToOne
+    @JoinColumn(name = "pkMtrial", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected Mtrial mtrial;
 
     /**
      * 加工工艺ID（工序ID）
      */
-    @ApiModelProperty(name = "pkProcId", value = "加工工艺ID（工序ID）")
+    @ApiModelProperty(name = "pkWoProc", value = "加工工艺ID（工序ID）")
     @Column
-    protected Long pkProcId;
+    protected Long pkWoProc;
+
+    @ApiModelProperty(name = "woProc", hidden = true, value = "加工工艺")
+    @ManyToOne
+    @JoinColumn(name = "pkWoProc", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected WoProc woProc;
 
     /**
      * 工单残
      */
     @ApiModelProperty(name = "bsRestNum", value = "工单残")
     @Column
-    protected Integer bsRestNum;
+    protected String bsRestNum;
 
     /**
      * 计划生产数量
      */
     @ApiModelProperty(name = "bsPlanNum", value = "计划生产数量")
     @Column
-    protected Integer bsPlanNum;
+    protected String bsPlanNum;
 
     /**
      * 用人量
      */
     @ApiModelProperty(name = "bsPeopleNum", value = "用人量")
     @Column
-    protected Integer bsPeopleNum;
+    protected String bsPeopleNum;
 
     /**
      * 产能
      */
     @ApiModelProperty(name = "bsCapacityNum", value = "产能")
     @Column
-    protected Integer bsCapacityNum;
+    protected String bsCapacityNum;
 
     /**
      * 预计工时(H/人)
@@ -139,7 +162,7 @@ public class Scheduling extends BaseEntity {
      */
     @ApiModelProperty(name = "bsActualNum", value = "实际生产数量")
     @Column
-    protected Integer bsActualNum;
+    protected String bsActualNum;
 
     /**
      * 实际工时(H/人)
@@ -169,12 +192,20 @@ public class Scheduling extends BaseEntity {
     @Column(length = 500)
     protected String bsRemark;
 
-    public Long getPkDepartId() {
-        return pkDepartId;
+    public Long getPkDepartment() {
+        return pkDepartment;
     }
 
-    public void setPkDepartId(Long pkDepartId) {
-        this.pkDepartId = pkDepartId;
+    public void setPkDepartment(Long pkDepartment) {
+        this.pkDepartment = pkDepartment;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     public Date getBsProduceTime() {
@@ -241,51 +272,67 @@ public class Scheduling extends BaseEntity {
         this.bsStatus = bsStatus;
     }
 
-    public Long getPkMtrialId() {
-        return pkMtrialId;
+    public Long getPkMtrial() {
+        return pkMtrial;
     }
 
-    public void setPkMtrialId(Long pkMtrialId) {
-        this.pkMtrialId = pkMtrialId;
+    public void setPkMtrial(Long pkMtrial) {
+        this.pkMtrial = pkMtrial;
     }
 
-    public Long getPkProcId() {
-        return pkProcId;
+    public Mtrial getMtrial() {
+        return mtrial;
     }
 
-    public void setPkProcId(Long pkProcId) {
-        this.pkProcId = pkProcId;
+    public void setMtrial(Mtrial mtrial) {
+        this.mtrial = mtrial;
     }
 
-    public Integer getBsRestNum() {
+    public Long getPkWoProc() {
+        return pkWoProc;
+    }
+
+    public void setPkWoProc(Long pkWoProc) {
+        this.pkWoProc = pkWoProc;
+    }
+
+    public WoProc getWoProc() {
+        return woProc;
+    }
+
+    public void setWoProc(WoProc woProc) {
+        this.woProc = woProc;
+    }
+
+    public String getBsRestNum() {
         return bsRestNum;
     }
 
-    public void setBsRestNum(Integer bsRestNum) {
+    public void setBsRestNum(String bsRestNum) {
         this.bsRestNum = bsRestNum;
     }
 
-    public Integer getBsPlanNum() {
+    public String getBsPlanNum() {
         return bsPlanNum;
     }
 
-    public void setBsPlanNum(Integer bsPlanNum) {
+    public void setBsPlanNum(String bsPlanNum) {
         this.bsPlanNum = bsPlanNum;
     }
 
-    public Integer getBsPeopleNum() {
+    public String getBsPeopleNum() {
         return bsPeopleNum;
     }
 
-    public void setBsPeopleNum(Integer bsPeopleNum) {
+    public void setBsPeopleNum(String bsPeopleNum) {
         this.bsPeopleNum = bsPeopleNum;
     }
 
-    public Integer getBsCapacityNum() {
+    public String getBsCapacityNum() {
         return bsCapacityNum;
     }
 
-    public void setBsCapacityNum(Integer bsCapacityNum) {
+    public void setBsCapacityNum(String bsCapacityNum) {
         this.bsCapacityNum = bsCapacityNum;
     }
 
@@ -297,11 +344,11 @@ public class Scheduling extends BaseEntity {
         this.bsPlanHours = bsPlanHours;
     }
 
-    public Integer getBsActualNum() {
+    public String getBsActualNum() {
         return bsActualNum;
     }
 
-    public void setBsActualNum(Integer bsActualNum) {
+    public void setBsActualNum(String bsActualNum) {
         this.bsActualNum = bsActualNum;
     }
 

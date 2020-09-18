@@ -30,26 +30,26 @@ $(function () {
             cols: [[
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-                ,{field:'bsCustomer', title:'客户', width:120}
-                ,{field:'bsLine', title:'线别', width:120}
+                ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
+                ,{field:'bsProduceTime', title:'日期', width:100}
+                ,{field:'bsShift', title:'班次', width:60}
+                ,{field:'bsCustomer', title:'客户', width:60}
+                ,{field:'bsLine', title:'线别', width:70}
                 ,{field:'bsOrderNo', title:'工单号', width:120}
-                ,{field:'bsMtrialId', title:'物料编码', width:120}
-                ,{field:'bsMtrialId', title:'物料描述', width:120}
-                ,{field:'bsProcId', title:'加工工艺', width:120}
-                ,{field:'bsRestNum', title:'工单残', width:120}
-                ,{field:'bsPlanNum', title:'计划生产数量', width:120}
-                ,{field:'bsPeopleNum', title:'用人量', width:120}
-                ,{field:'bsCapacityNum', title:'产能', width:120}
+                ,{field:'mtrialCode', title:'物料编码', width:120, templet:'<span>{{d.mtrial ? d.mtrial.bsCode : ""}}<span>'}
+                ,{field:'mtrialDesc', title:'物料描述', width:120, templet:'<span>{{d.mtrial ? d.mtrial.bsName : ""}}<span>'}
+                ,{field:'procName', title:'加工工艺', width:100, templet:'<span>{{d.woProc ? d.woProc.bsName : ""}}<span>'}
+                ,{field:'bsRestNum', title:'工单残', width:80}
+                ,{field:'bsPlanNum', title:'计划生产数量', width:110}
+                ,{field:'bsPeopleNum', title:'用人量', width:80}
+                ,{field:'bsCapacityNum', title:'产能', width:80}
                 ,{field:'bsPlanHours', title:'预计工时(H/人)', width:120}
-                ,{field:'bsActualNum', title:'实际生产数量', width:120}
+                ,{field:'bsActualNum', title:'实际生产数量', width:110}
                 ,{field:'bsActualHours', title:'实际工时(H/人)', width:120}
-                ,{field:'bsPlanPrice', title:'计划金额', width:120}
+                ,{field:'bsPlanPrice', title:'计划金额', width:100}
                 ,{field:'bsActualPrice', title:'实际生产金额 ', width:120}
                 ,{field:'bsRemark', title:'备注', width:120}
-                // ,{field:'bsStatus', title:'状态',width:95,align:'center',templet:'#statusTpl'}
-                // ,{field:'modifiedTime', title: '更新时间', width:150}
-                // ,{field:'createdTime', title: '添加时间', width:150}
-                ,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
+                ,{fixed:'right', title:'操作', width:150, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
                 //如果是异步请求数据方式，res即为你接口返回的信息。
