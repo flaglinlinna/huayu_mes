@@ -20,4 +20,6 @@ public interface SchedulingTempDao extends CrudRepository<SchedulingTemp, Long>,
     public void updateIsDelByPkSysUser(Integer isDel, Long pkSysUser);
 
     public List<SchedulingTemp> findByIsDelAndPkSysUser(Integer isDel, Long pkSysUser);
+
+    public int countByIsDelAndPkSysUser(Integer isDel, Long pkSysUser);
 }

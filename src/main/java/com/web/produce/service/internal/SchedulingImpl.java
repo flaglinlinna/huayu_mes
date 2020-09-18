@@ -45,6 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 排产信息
@@ -68,19 +69,73 @@ public class SchedulingImpl implements SchedulingService {
     @Override
     @Transactional
     public ApiResponseResult add(Scheduling scheduling) throws Exception {
-        return null;
+        if(scheduling == null){
+            return ApiResponseResult.failure("排产信息不能为空！");
+        }
+        SysUser currUser = UserUtil.getSessionUser();
+
+        scheduling.setCreatedTime(new Date());
+        scheduling.setPkCreatedBy(currUser!=null ? currUser.getId() : null);
+        scheduling.setBsUniqueOrderNo(this.getUniqueOrderNo());
+        schedulingDao.save(scheduling);
+
+        return ApiResponseResult.success("新增成功！").data(scheduling);
     }
 
     @Override
     @Transactional
     public ApiResponseResult edit(Scheduling scheduling) throws Exception {
-        return null;
+        if(scheduling == null && scheduling.getId() == null){
+            return ApiResponseResult.failure("排产信息ID不能为空！");
+        }
+        Scheduling o = schedulingDao.findById((long) scheduling.getId());
+        if(o == null){
+            return ApiResponseResult.failure("排产信息不存在！");
+        }
+        SysUser currUser = UserUtil.getSessionUser();
+
+        o.setModifiedTime(new Date());
+        o.setPkModifiedBy(currUser!=null ? currUser.getId() : null);
+        o.setPkDepartment(scheduling.getPkDepartment());//部门
+        o.setBsProduceTime(scheduling.getBsProduceTime());
+        o.setBsShift(scheduling.getBsShift());
+        o.setBsCustomer(scheduling.getBsCustomer());
+        o.setBsLine(scheduling.getBsLine());
+        o.setBsOrderNo(scheduling.getBsOrderNo());
+        o.setPkMtrial(scheduling.getPkMtrial());
+        o.setPkWoProc(scheduling.getPkWoProc());
+        o.setBsRestNum(scheduling.getBsRestNum());
+        o.setBsPlanNum(scheduling.getBsPlanNum());
+        o.setBsPeopleNum(scheduling.getBsPeopleNum());
+        o.setBsCapacityNum(scheduling.getBsCapacityNum());
+        o.setBsPlanHours(scheduling.getBsPlanHours());
+        o.setBsActualNum(scheduling.getBsActualNum());
+        o.setBsActualHours(scheduling.getBsActualHours());
+        o.setBsPlanPrice(scheduling.getBsPlanPrice());
+        o.setBsActualPrice(scheduling.getBsActualPrice());
+        o.setBsRemark(scheduling.getBsRemark());
+        schedulingDao.save(o);
+
+        return ApiResponseResult.success("编辑成功！").data(o);
     }
 
     @Override
     @Transactional
     public ApiResponseResult delete(Long id) throws Exception {
-        return null;
+        if(id == null){
+            return ApiResponseResult.failure("排产信息ID不能为空！");
+        }
+        Scheduling o = schedulingDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("排产信息不存在！");
+        }
+        SysUser currUser = UserUtil.getSessionUser();
+
+        o.setModifiedTime(new Date());
+        o.setPkModifiedBy(currUser!=null ? currUser.getId() : null);
+        schedulingDao.save(o);
+
+        return ApiResponseResult.success("删除成功！");
     }
 
     @Override
@@ -104,6 +159,12 @@ public class SchedulingImpl implements SchedulingService {
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
 
+    /**
+     * 导出模板
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional
     public ApiResponseResult getExcel(HttpServletResponse response) throws Exception{
@@ -240,6 +301,12 @@ public class SchedulingImpl implements SchedulingService {
         return cellStyleList;
     }
 
+    /**
+     * 导入
+     * @param file
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional
     public ApiResponseResult doExcel(MultipartFile file) throws Exception{
@@ -639,6 +706,57 @@ public class SchedulingImpl implements SchedulingService {
         }
     }
 
+    /**
+     * 获取临时表数据
+     * @param pageRequest
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getTempList(PageRequest pageRequest) throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+
+        List<SearchFilter> filters = new ArrayList<SearchFilter>();
+        filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("pkSysUser", SearchFilter.Operator.EQ, currUser.getId()));
+
+        Specification<SchedulingTemp> spec = Specification.where(BaseService.and(filters, SchedulingTemp.class));
+        Page<SchedulingTemp> page = schedulingTempDao.findAll(spec, pageRequest);
+
+        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
+
+    /**
+     * 根据当前登录用户删除临时表所有数据
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult deleteTempAll() throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+
+        int num = schedulingTempDao.countByIsDelAndPkSysUser(0, currUser.getId());
+        if(num > 0){
+            //如果当前用户存在临时数据则删除
+            schedulingTempDao.updateIsDelByPkSysUser(1, currUser.getId());
+        }
+
+        return ApiResponseResult.success("删除成功！");
+    }
+
+    /**
+     * 确认临时表数据
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional
     public ApiResponseResult confirmTemp() throws Exception{
@@ -660,6 +778,7 @@ public class SchedulingImpl implements SchedulingService {
                 scheduling.setBsShift(temp.getBsShift());
                 scheduling.setBsCustomer(temp.getBsCustomer());
                 scheduling.setBsLine(temp.getBsLine());
+                scheduling.setBsUniqueOrderNo(this.getUniqueOrderNo());
                 scheduling.setBsOrderNo(temp.getBsOrderNo());
                 scheduling.setPkMtrial(temp.getPkMtrial());
                 scheduling.setPkWoProc(temp.getPkWoProc());
@@ -682,5 +801,22 @@ public class SchedulingImpl implements SchedulingService {
         }
 
         return ApiResponseResult.success("保存成功！").data(list);
+    }
+
+    //生成随机制令单号
+    private String getUniqueOrderNo(){
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            String dateStr = sdf.format(new Date());
+
+            Random random = new Random();
+            int nextInt = random.nextInt(900000);
+            nextInt = nextInt + 100000;
+            String randonStr = nextInt + "";
+
+            return dateStr + randonStr;
+        }catch (Exception e){
+            return null;
+        }
     }
 }

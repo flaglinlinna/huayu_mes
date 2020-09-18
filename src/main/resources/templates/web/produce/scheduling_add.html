@@ -105,6 +105,7 @@
                         </div>
 
                         <div class="layui-form-item" style="margin-bottom: 0px">
+                            <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="addBtn">保存</button>
                             <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="exportBtn">导出模板</button>
                             <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="importBtn">导入</button>
                         </div>
@@ -117,9 +118,21 @@
     </div>
 
     <!--导入-->
-    <div id="uploadDiv" class="layer_self_wrap" style="width:500px;display:none;">
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload">上传文件</button>
-        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="save">保存</button>
+    <div id="uploadDiv" class="layer_self_wrap" style="display:none;padding: 10px;">
+        <button type="button" class="layui-btn layui-btn-sm" id="upload">上传文件</button>
+        <button type="button" class="layui-btn layui-btn-sm" id="save">保存</button>
+
+        <script type="text/html" id="statusTpl">
+            {{#  if(d.bsCheckStatus == 0){ }}
+            <span style="color: green;">校验通过</span>
+            {{#  } else if(d.bsCheckStatus == 1) { }}
+            <span style="color: red;">校验不通过</span>
+            {{#  } else if(d.bsCheckStatus == 2) { }}
+            <span style="color: orange;">警告</span>
+            {{#  } else { }}
+            <span></span>
+            {{#  } }}
+        </script>
 
         <!--导入临时列表-->
         <table id="iList" lay-filter="iTable"></table>
