@@ -10,7 +10,7 @@ $(function () {
 
         tableIns=table.render({
             elem: '#iList'
-            ,url:context+'/scheduling/getList'
+            ,url:context+'/produce/scheduling/getList'
             ,method: 'get' //默认：get请求
             ,cellMinWidth: 80
             ,page: true,

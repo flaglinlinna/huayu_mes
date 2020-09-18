@@ -24,5 +24,9 @@ public interface SchedulingService {
 
     public ApiResponseResult doExcel(MultipartFile file) throws Exception;
 
+    public ApiResponseResult getTempList(PageRequest pageRequest) throws Exception;
+
+    public ApiResponseResult deleteTempAll() throws Exception;
+
     public ApiResponseResult confirmTemp() throws Exception;
 }

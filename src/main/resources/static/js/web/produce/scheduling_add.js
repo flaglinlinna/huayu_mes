@@ -11,7 +11,7 @@ $(function () {
 
         tableIns=table.render({
             elem: '#iList'
-            ,url:context+'/scheduling/getList'
+            ,url:context+'/produce/scheduling/getTempList'
             ,method: 'get' //默认：get请求
             ,cellMinWidth: 80
             ,page: true,
@@ -30,27 +30,28 @@ $(function () {
             },
             cols: [[
                 {type:'numbers'}
-                // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-                ,{field:'bsCustomer', title:'客户', width:120}
-                ,{field:'bsLine', title:'线别', width:120}
+                ,{field:'bsCheckStatus', title:'状态', width:100, templet:'#statusTpl'}
+                ,{field:'bsError', title:'错误信息', width:100}
+                ,{field:'bsDepartCode', title:'部门', width:60}
+                ,{field:'bsProduceTime', title:'日期', width:100}
+                ,{field:'bsShift', title:'班次', width:60}
+                ,{field:'bsCustomer', title:'客户', width:60}
+                ,{field:'bsLine', title:'线别', width:70}
                 ,{field:'bsOrderNo', title:'工单号', width:120}
-                ,{field:'bsMtrialId', title:'物料编码', width:120}
-                ,{field:'bsMtrialId', title:'物料描述', width:120}
-                ,{field:'bsProcId', title:'加工工艺', width:120}
-                ,{field:'bsRestNum', title:'工单残', width:120}
-                ,{field:'bsPlanNum', title:'计划生产数量', width:120}
-                ,{field:'bsPeopleNum', title:'用人量', width:120}
-                ,{field:'bsCapacityNum', title:'产能', width:120}
+                ,{field:'bsMtrialCode', title:'物料编码', width:120}
+                ,{field:'bsMtrialDesc', title:'物料描述', width:120}
+                ,{field:'bsProcCode', title:'加工工艺', width:100}
+                ,{field:'bsRestNum', title:'工单残', width:80}
+                ,{field:'bsPlanNum', title:'计划生产数量', width:110}
+                ,{field:'bsPeopleNum', title:'用人量', width:80}
+                ,{field:'bsCapacityNum', title:'产能', width:80}
                 ,{field:'bsPlanHours', title:'预计工时(H/人)', width:120}
-                ,{field:'bsActualNum', title:'实际生产数量', width:120}
+                ,{field:'bsActualNum', title:'实际生产数量', width:110}
                 ,{field:'bsActualHours', title:'实际工时(H/人)', width:120}
-                ,{field:'bsPlanPrice', title:'计划金额', width:120}
+                ,{field:'bsPlanPrice', title:'计划金额', width:100}
                 ,{field:'bsActualPrice', title:'实际生产金额 ', width:120}
                 ,{field:'bsRemark', title:'备注', width:120}
-                // ,{field:'bsStatus', title:'状态',width:95,align:'center',templet:'#statusTpl'}
-                // ,{field:'modifiedTime', title: '更新时间', width:150}
-                // ,{field:'createdTime', title: '添加时间', width:150}
-                ,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
+                //,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
                 //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -72,7 +73,7 @@ $(function () {
         });
         form.on('submit(exportBtn)', function(data){
             //导出模板
-            location.href = context + "/scheduling/getExcel";
+            location.href = context + "/produce/scheduling/getExcel";
             return false;
         });
         form.on('submit(importBtn)', function(data){
@@ -84,7 +85,7 @@ $(function () {
         //导入
         upload.render({
             elem: '#upload'
-            ,url: context + '/scheduling/doExcel'
+            ,url: context + '/produce/scheduling/doExcel'
             ,accept: 'file' //普通文件
             ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
                 layer.load(); //上传loading
@@ -113,13 +114,14 @@ $(function () {
 
 //导入弹出框
 function openUpload(title){
+    deleteTempAll();
     layer.open({
         type:1,
         title: title,
         fixed:false,
         resize :false,
-        shadeClose: true,
-        area: ['700px'],
+        shadeClose: false,//是否点击遮罩关闭
+        area: ['900px'],
         content:$('#uploadDiv'),
         end:function(){
 
@@ -135,19 +137,22 @@ function loadAll(){
             curr: pageCurr //从当前页码开始
         }
     });
-}
+};
 
+//确认保存临时数据
 $("#save").click(function () {
     $.ajax({
         type: "POST",
-        data: {  },
-        url: context+"/scheduling/confirmTemp",
+        data: {},
+        url: context+"/produce/scheduling/confirmTemp",
         success: function (data) {
             if (data.result) {
                 layer.alert(data.msg,function(){
+                    layer.closeAll();
                 });
             } else {
-                layer.alert(data.msg,function(){
+                layer.alert(data.msg,function(index){
+                    layer.close(index);
                 });
             }
         },
@@ -156,4 +161,21 @@ $("#save").click(function () {
             });
         }
     });
-})
+});
+
+//根据当前登录用户删除临时表所有数据
+function deleteTempAll(){
+    $.ajax({
+        url:context + '/produce/scheduling/deleteTempAll',
+        type:"POST",
+        data:{},
+        success:function(data){
+            //重新获取临时列表数据
+            loadAll();
+        },
+        error:function(e){
+            layer.alert("操作请求错误，请您稍后再试",function(){
+            });
+        }
+    });
+}
