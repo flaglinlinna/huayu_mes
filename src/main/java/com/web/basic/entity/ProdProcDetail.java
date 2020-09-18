@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class ProdProcDetail extends BaseEntity {
 	private static final long serialVersionUID = 4625660587007894370L;
-	public static final String TABLE_NAME = "basic_prod_proc_detail";
+	public static final String TABLE_NAME = "basic_prodproc_detail";
 
 	/**
 	 * 产品工艺流程主表ID

@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class WoLine extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_wo_line";
+	    public static final String TABLE_NAME = "basic_line";
 	    
 	    /**
 	     * 线体编码
