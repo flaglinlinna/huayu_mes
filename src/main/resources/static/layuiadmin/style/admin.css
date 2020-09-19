@@ -728,11 +728,11 @@ html {
 .layadmin-shortcut li .layui-icon {
 	display: inline-block;
 	width: 100%;
-	height: 60px;
-	line-height: 60px;
+	height: 80px;
+	line-height: 80px;
 	text-align: center;
-	border-radius: 2px;
-	font-size: 30px;
+	border-radius: 10px;
+	font-size: 36px;
 	background-color: #F8F8F8;
 	color: #333;
 	transition: all .3s;

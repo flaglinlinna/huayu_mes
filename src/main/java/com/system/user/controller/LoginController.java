@@ -157,10 +157,6 @@ public class LoginController extends WebController{
         return "你已通过验证";
     }
 
-    @RequestMapping(value = "/console")
-    public String console(){
-        return "/console";
-    }
     
     @ApiOperation(value = "用户登录验证", notes = "根据用户Id验证用户密码是否正确，进行登录验证; 登录成功后，置为上线")
 	@ApiImplicitParam(name = "username", value = "用户Id", paramType = "Query", required = true, dataType = "String")
