@@ -7,9 +7,10 @@
     <div style="margin: 10px">
         <!--搜索框-->
         <form id="addForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <input type="text" id="id" name="id" hidden="true">
             <div class="layui-collapse" lay-accordion="">
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">新增</h2>
+                    <h2 class="layui-colla-title">编辑</h2>
                     <div class="layui-colla-content layui-show">
                         <div class="layui-form-item" style="margin-bottom: 0px">
                             <div class="layui-inline">
@@ -106,8 +107,6 @@
 
                         <div class="layui-form-item" style="margin-bottom: 0px">
                             <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="addBtn">保存</button>
-                            <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="exportBtn">导出模板</button>
-                            <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="importBtn">导入</button>
                         </div>
                     </div>
                 </div>
@@ -115,28 +114,13 @@
         </form>
     </div>
 
-    <!--导入-->
-    <div id="uploadDiv" class="layer_self_wrap" style="display:none;padding: 10px;">
-        <button type="button" class="layui-btn layui-btn-sm" id="upload">上传文件</button>
-        <button type="button" class="layui-btn layui-btn-sm" id="save">保存</button>
-
-        <script type="text/html" id="statusTpl">
-            {{#  if(d.bsCheckStatus == 0){ }}
-            <span style="color: green;">校验通过</span>
-            {{#  } else if(d.bsCheckStatus == 1) { }}
-            <span style="color: red;">校验不通过</span>
-            {{#  } else if(d.bsCheckStatus == 2) { }}
-            <span style="color: orange;">警告</span>
-            {{#  } else { }}
-            <span></span>
-            {{#  } }}
-        </script>
-
-        <!--导入临时列表-->
-        <table id="iList" lay-filter="iTable"></table>
-    </div>
-
-    <script th:src="@{/js/web/produce/scheduling_add.js}" src="/js/web/produce/scheduling_add.js"></script>
+    <script th:inline="javascript">
+        var id = [[${id}]];
+        var scheduling = [[${scheduling}]];
+        console.log("id:"+id);
+        console.log("scheduling:"+scheduling);
+    </script>
+    <script th:src="@{/js/web/produce/scheduling_edit.js}" src="/js/web/produce/scheduling_edit.js"></script>
 </div>
 </body>
 </html>

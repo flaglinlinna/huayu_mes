@@ -63,6 +63,18 @@ $(function () {
             }
         });
 
+        //监听工具条
+        table.on('tool(iTable)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                //删除
+                doDel(data.id);
+            } else if(obj.event === 'edit'){
+                //编辑
+                //window.location = context + "/produce/scheduling/toSchedulingEdit?id=" + data.id;
+            }
+        });
+
         //监听搜索框
         form.on('submit(search)', function(data){
             //重新加载table
@@ -74,6 +86,39 @@ $(function () {
     });
 });
 
+//删除
+function doDel(id) {
+    if(id!=null){
+        layer.confirm('您确定要删除吗？', {
+            btn: ['确认','返回'] //按钮
+        }, function(){
+            $.ajax({
+                type: "POST",
+                data: { "id": id },
+                url: context+"/produce/scheduling/delete",
+                success: function (data) {
+                    if (data.result) {
+                        layer.alert("删除成功",function(){
+                            layer.closeAll();
+                            loadAll();
+                        });
+                    } else {
+                        layer.alert(data.msg,function(index){
+                            layer.close(index);
+                        });
+                    }
+                },
+                error: function () {
+                    layer.alert("操作请求错误，请您稍后再试",function(){
+                    });
+                }
+            });
+        }, function(){
+            layer.closeAll();
+        });
+    }
+}
+
 //重新加载表格（搜索）
 function load(obj){
     //重新加载table
@@ -82,6 +127,16 @@ function load(obj){
             keyword:obj.field.keyword
         }
         , page: {
+            curr: pageCurr //从当前页码开始
+        }
+    });
+}
+
+//重新加载表格（搜索）
+function loadAll(){
+    //重新加载table
+    tableIns.reload({
+        page: {
             curr: pageCurr //从当前页码开始
         }
     });
