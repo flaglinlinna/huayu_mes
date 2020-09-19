@@ -49,7 +49,8 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
       //内置主题配色方案
       color: [{
         main: '#20222A' //主题色
-        	,selected: '#009688' //选中色
+        	//,selected: '#009688' //选中色
+        		,selected: '#1E9FFF' //选中色
                 ,alias: 'default' //默认别名
       },{
         main: '#03152A'
@@ -123,7 +124,7 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
       
       //初始的颜色索引，对应上面的配色方案数组索引
       //如果本地已经有主题色记录，则以本地记录为优先，除非请求本地数据（localStorage）
-      ,initColorIndex: 0
+      ,initColorIndex: 4
     }
   });
 });

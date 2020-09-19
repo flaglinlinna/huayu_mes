@@ -18,10 +18,8 @@ $(function(){
         // 左侧导航区域（可配合layui已有的垂直导航）
         $.get(context+"/sysPermission/getUserPerms",function(data){
             if(data.result){
-                getMenusMySQL(data.data);//连接MySql获取菜单
+                getMenus(data.data);
                 element.render('nav');
-                // getMenus(data.data);//连接Oracle获取菜单
-                // element.render('nav');
             }else{
                 layer.alert(data.msg,function () {
                     //退出
@@ -33,7 +31,7 @@ $(function(){
 })
 var getMenus=function(data){
     //回显选中
-    var ul=$('<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu" style="margin-top:0px;"> '+
+    var ul=$('<ul class="layui-nav layui-nav-tree icon-color" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu" style="margin-top:0px;"> '+
     		' <li data-name="home" class="layui-nav-item layui-nav-itemed"> '+
     		' <a href="javascript:;" lay-tips="主页" lay-direction="2"> '+
     		'   <i class="layui-icon layui-icon-home"></i> '+
@@ -41,7 +39,10 @@ var getMenus=function(data){
     		' </a> '+
     		' <dl class="layui-nav-child"> '+
     		'  <dd data-name="console" class="layui-this"> '+
-    		'     <a lay-href="/console">控制台</a> '+
+    		'     <a lay-href="/console">控制台</a>'+
+    		'   </dd> '+
+    		'  <dd data-name="console1" > '+
+    		'     <a lay-href="'+context+'/console/toConsole1">控制台1</a> '+
     		'   </dd> '+
     		' </dl> '+
     		' </li> '+
@@ -61,7 +62,8 @@ var getMenus=function(data){
                 var childArry = getParentArry(node.ID, data);
                 if(childArry.length>0){
                 	 //父级无page
-                    a=$("<a class='' href='javascript:;' lay-tips='"+node.BS_NAME+"' lay-direction='2'><i class='layui-icon layui-icon-"+node.BS_CODE+"'><cite>"+node.BS_NAME+"</cite></i></a>");
+                	console.log(node.BS_ICON)
+                    a=$("<a class='' href='javascript:;' lay-tips='"+node.BS_NAME+"' lay-direction='2'><i class='layui-icon iconfont "+node.BS_ICON+"'></i><cite>"+node.BS_NAME+"</cite></a>");
                     li.append(a);
                     a.append("<span class='layui-nav-more'></span>");
                     var dl=$("<dl class='layui-nav-child'></dl>");
@@ -77,7 +79,7 @@ var getMenus=function(data){
                     }
                     li.append(dl);
                 }else{
-                	a=$("<a class='' lay-href='"+context+node.PAGE_URL+"'  lay-tips='"+node.BS_NAME+"' lay-direction='2'><i class='layui-icon layui-icon-"+node.BS_CODE+"'><cite>"+node.BS_NAME+"</cite></i></a>");
+                	a=$("<a class='' lay-href='"+context+node.PAGE_URL+"'  lay-tips='"+node.BS_NAME+"' lay-direction='2'><i class='layui-icon iconfont "+node.BS_ICON+"'><cite>"+node.BS_NAME+"</cite></i></a>");
                     li.append(a);
                 }
                 ul.append(li);
@@ -87,62 +89,6 @@ var getMenus=function(data){
     $(".layui-side-scroll").append(ul);
 }
 
-//连接MySQl数据库时菜单显示
-var getMenusMySQL=function(data){
-    //回显选中
-    var ul=$('<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu" style="margin-top:0px;"> '+
-        ' <li data-name="home" class="layui-nav-item layui-nav-itemed"> '+
-        ' <a href="javascript:;" lay-tips="主页" lay-direction="2"> '+
-        '   <i class="layui-icon layui-icon-home"></i> '+
-        '   <cite>主页</cite> '+
-        ' </a> '+
-        ' <dl class="layui-nav-child"> '+
-        '  <dd data-name="console" class="layui-this"> '+
-        '     <a lay-href="/console">控制台</a> '+
-        '   </dd> '+
-        ' </dl> '+
-        ' </li> '+
-        ' 	</ul>');
-    for(var i=0;i < data.length;i++){
-
-        var node=data[i];
-        if( node.istype==0){
-            if(node.pId==0){
-
-                var li=$("<li data-name='"+node.bs_code+"'class='layui-nav-item' ></li>");
-                /* //父级无page
-                 var a=$("<a class='' href='javascript:;' lay-tips='"+node.bs_name+"' lay-direction='2'><i class='layui-icon layui-icon-"+node.bs_name+"'><cite>"+node.BS_NAME+"</cite></i></a>");
-                 li.append(a);*/
-                var a="";
-                //获取子节点
-                var childArry = getParentArryMySql(node.id, data);
-                if(childArry.length>0){
-                    //父级无page
-                    a=$("<a class='' href='javascript:;' lay-tips='"+node.bs_name+"' lay-direction='2'><i class='layui-icon layui-icon-"+node.bs_code+"'><cite>"+node.bs_name+"</cite></i></a>");
-                    li.append(a);
-                    a.append("<span class='layui-nav-more'></span>");
-                    var dl=$("<dl class='layui-nav-child'></dl>");
-                    for (var y in childArry) {
-                        var dd=$("<dd><a lay-href='"+context+childArry[y].page_url+"'>"+childArry[y].bs_name+"</a></dd>");
-                        //判断选中状态
-                        if(pathUri.indexOf(childArry[y].page_url)>0){
-                            li.addClass("layui-nav-itemed");
-                            dd.addClass("layui-this")
-                        }
-                        //TODO 由于layui菜单不是规范统一的，多级菜单需要手动更改样式实现；
-                        dl.append(dd);
-                    }
-                    li.append(dl);
-                }else{
-                    a=$("<a class='' lay-href='"+context+node.page_url+"'  lay-tips='"+node.bs_name+"' lay-direction='2'><i class='layui-icon layui-icon-"+node.bs_code+"'><cite>"+node.bs_name+"</cite></i></a>");
-                    li.append(a);
-                }
-                ul.append(li);
-            }
-        }
-    }
-    $(".layui-side-scroll").append(ul);
-}
 
 var getMenus1=function(data){
     //回显选中

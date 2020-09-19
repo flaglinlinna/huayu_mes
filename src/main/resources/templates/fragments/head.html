@@ -3,6 +3,7 @@
        xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <body>
 <header th:fragment="header">
+
     <script th:inline="javascript">
         /*<![CDATA[*/
         $(function(){
@@ -53,7 +54,11 @@
                   </ul> -->
 
             <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right" style="margin-top:-8px;">
-
+<li class="layui-nav-item layui-hide-xs" lay-unselect="">
+        <a href="javascript:;" layadmin-event="fullscreen">
+          <i class="layui-icon layui-icon-screen-full"></i>
+        </a>
+      </li>
                 <li class="layui-nav-item" lay-unselect style="margin-right:35px;">
                     <a href="javascript:;">
                         <img src="/img/touxiang.png" th:src="@{/images/touxiang.png}" class="layui-nav-img">
@@ -401,6 +406,7 @@
       </script> -->
     <script type="text/javascript" th:src="@{/js/head.js}" src="/js/head.js"></script>
 </header>
+
 </body>
 </html>
 

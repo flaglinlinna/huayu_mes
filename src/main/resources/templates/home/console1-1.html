@@ -1,6 +1,8 @@
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!--  <head>
+<head>
   <meta charset="utf-8">
   <title>layuiAdmin 控制台主页一</title>
   <meta name="renderer" content="webkit">
@@ -8,9 +10,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" th:href="@{/layuiadmin/layui/css/layui.css}" media="all">
   <link rel="stylesheet" href="../../layuiadmin/style/admin.css" th:href="@{/layuiadmin/style/admin.css}" media="all">
-</head> -->
-<head th:include="layout :: htmlhead" th:with="title='东莞华誉组装MES系统'">
 </head>
+<style th:inline="text">
+    .index_bg{
+    padding: 0;margin: 0;height: 100%;
+    background-size: 100%;
+	line-height:23px;
+	margin:0;
+	padding:0;
+	 background:url("[[@{/}]]/images/home.jpg") no-repeat;
+	color: #3b6e81;
+	/*  background-size:100% 100%; background-attachment:fixed; */
+    }
+</style> 
 <body style="background-color:#f2f2f2" >
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
@@ -173,14 +185,15 @@
     </div>
   </div>
 
-
-<!--   <script src="../../layuiadmin/layui/layui.js?t=1"></script>  
-  <script>
+  <script src="../../layuiadmin/layui/layui.js?t=1" th:src="@{/layuiadmin/layui/layui.js?t=1}"></script>  
+  <script th:inline="javascript">
+  var context = [[@{/}]];
   layui.config({
-    base: '../../layuiadmin/' //静态资源所在路径
+    base: context+'/layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
   }).use(['index', 'console']);
-  </script> -->
+  </script>
 </body>
 </html>
+

@@ -73,7 +73,7 @@ $(function () {
         });
         form.on('submit(addBtn)', function(data){
             //新增
-            //doAdd();
+            doAdd();
             return false;
         });
         form.on('submit(exportBtn)', function(data){
@@ -128,12 +128,12 @@ function openUpload(title){
         shadeClose: false,//是否点击遮罩关闭
         area: ['1000px'],
         content:$('#uploadDiv'),
-        macmin:true,
+        macmin:true,//弹出框全屏
         end:function(){
 
         }
     });
-    layer.full(index);
+    layer.full(index);//弹出框全屏
 }
 
 //重新加载表格（搜索）

@@ -31,6 +31,13 @@ public class Scheduling extends BaseEntity {
     @Column
     protected Long pkDepartment;
 
+    /**
+     * 部门编码或名称
+     */
+    @ApiModelProperty(name = "bsDepartCode", value = "部门编码或名称")
+    @Column(length = 100)
+    protected String bsDepartCode;
+
 //    @ApiModelProperty(name = "department", hidden = true, value = "部门")
 //    @ManyToOne
 //    @JoinColumn(name = "pkDepartment", insertable = false, updatable = false)
@@ -102,11 +109,19 @@ public class Scheduling extends BaseEntity {
     @Column
     protected Long pkMtrial;
 
-//    @ApiModelProperty(name = "mtrial", hidden = true, value = "物料")
-//    @ManyToOne
-//    @JoinColumn(name = "pkMtrial", insertable = false, updatable = false)
-//    @NotFound(action = NotFoundAction.IGNORE)
-//    protected Mtrial mtrial;
+    /**
+     * 物料编码或名称
+     */
+    @ApiModelProperty(name = "bsMtrialCode", value = "物料编码或名称")
+    @Column(length = 100)
+    protected String bsMtrialCode;
+
+    /**
+     * 物料描述
+     */
+    @ApiModelProperty(name = "bsMtrialDesc", value = "物料描述")
+    @Column
+    protected String bsMtrialDesc;
 
     /**
      * 加工工艺ID（工序ID）
@@ -115,11 +130,12 @@ public class Scheduling extends BaseEntity {
     @Column
     protected Long pkWoProc;
 
-//    @ApiModelProperty(name = "process", hidden = true, value = "加工工艺")
-//    @ManyToOne
-//    @JoinColumn(name = "pkWoProc", insertable = false, updatable = false)
-//    @NotFound(action = NotFoundAction.IGNORE)
-//    protected Process process;
+    /**
+     * 加工工艺编码或名称
+     */
+    @ApiModelProperty(name = "bsProcCode", value = "加工工艺编码或名称")
+    @Column(length = 100)
+    protected String bsProcCode;
 
     /**
      * 工单残
@@ -199,13 +215,13 @@ public class Scheduling extends BaseEntity {
         this.pkDepartment = pkDepartment;
     }
 
-//    public Department getDepartment() {
-//        return department;
-//    }
-//
-//    public void setDepartment(Department department) {
-//        this.department = department;
-//    }
+    public String getBsDepartCode() {
+        return bsDepartCode;
+    }
+
+    public void setBsDepartCode(String bsDepartCode) {
+        this.bsDepartCode = bsDepartCode;
+    }
 
     public Date getBsProduceTime() {
         return bsProduceTime;
@@ -279,13 +295,21 @@ public class Scheduling extends BaseEntity {
         this.pkMtrial = pkMtrial;
     }
 
-//    public Mtrial getMtrial() {
-//        return mtrial;
-//    }
-//
-//    public void setMtrial(Mtrial mtrial) {
-//        this.mtrial = mtrial;
-//    }
+    public String getBsMtrialCode() {
+        return bsMtrialCode;
+    }
+
+    public void setBsMtrialCode(String bsMtrialCode) {
+        this.bsMtrialCode = bsMtrialCode;
+    }
+
+    public String getBsMtrialDesc() {
+        return bsMtrialDesc;
+    }
+
+    public void setBsMtrialDesc(String bsMtrialDesc) {
+        this.bsMtrialDesc = bsMtrialDesc;
+    }
 
     public Long getPkWoProc() {
         return pkWoProc;
@@ -295,13 +319,13 @@ public class Scheduling extends BaseEntity {
         this.pkWoProc = pkWoProc;
     }
 
-//    public Process getWoProc() {
-//        return process;
-//    }
-//
-//    public void setWoProc(Process process) {
-//        this.woProc = process;
-//    }
+    public String getBsProcCode() {
+    return bsProcCode;
+}
+
+    public void setBsProcCode(String bsProcCode) {
+        this.bsProcCode = bsProcCode;
+    }
 
     public String getBsRestNum() {
         return bsRestNum;

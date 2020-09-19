@@ -30,15 +30,16 @@ $(function () {
             cols: [[
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-                ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
+                // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
+                ,{field:'bsDepartCode', title:'部门', width:60}
                 ,{field:'bsProduceTime', title:'日期', width:100}
                 ,{field:'bsShift', title:'班次', width:60}
                 ,{field:'bsCustomer', title:'客户', width:60}
                 ,{field:'bsLine', title:'线别', width:70}
                 ,{field:'bsOrderNo', title:'工单号', width:120}
-                ,{field:'mtrialCode', title:'物料编码', width:120, templet:'<span>{{d.mtrial ? d.mtrial.bsCode : ""}}<span>'}
-                ,{field:'mtrialDesc', title:'物料描述', width:120, templet:'<span>{{d.mtrial ? d.mtrial.bsName : ""}}<span>'}
-                ,{field:'procName', title:'加工工艺', width:100, templet:'<span>{{d.woProc ? d.woProc.bsName : ""}}<span>'}
+                ,{field:'bsMtrialCode', title:'物料编码', width:120}
+                ,{field:'bsMtrialDesc', title:'物料描述', width:120}
+                ,{field:'bsProcCode', title:'加工工艺', width:100}
                 ,{field:'bsRestNum', title:'工单残', width:80}
                 ,{field:'bsPlanNum', title:'计划生产数量', width:110}
                 ,{field:'bsPeopleNum', title:'用人量', width:80}
@@ -71,7 +72,7 @@ $(function () {
                 doDel(data.id);
             } else if(obj.event === 'edit'){
                 //编辑
-                //window.location = context + "/produce/scheduling/toSchedulingEdit?id=" + data.id;
+                window.location = context + "/produce/scheduling/toSchedulingEdit?id=" + data.id;
             }
         });
 
