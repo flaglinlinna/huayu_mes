@@ -34,13 +34,13 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'bsCode',
-				title : '编码'
+				title : '客户编码'
 			}, {
 				field : 'bsNameSmpl',
-				title : '名称(简称)'
+				title : '客户简称'
 			}, {
 				field : 'bsName',
-				title : '名称(全称)'
+				title : '客户全称'
 			}, {
 				field : 'modifiedTime',
 				title : '更新时间'

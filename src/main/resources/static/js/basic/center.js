@@ -34,10 +34,10 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'bsCode',
-				title : '编码'
+				title : '工作中心编码'
 			}, {
 				field : 'bsName',
-				title : '名称'
+				title : '工作中心名称'
 			}, {
 				field : 'bsStatus',
 				title : '状态',

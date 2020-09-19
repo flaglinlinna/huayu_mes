@@ -34,16 +34,16 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'bsCode',
-				title : '编码'
+				title : '物料编码'
 			}, {
 				field : 'bsName',
-				title : '名称'
+				title : '物料名称'
 			}, {
 				field : 'bsType',
-				title : '类别'
+				title : '物料类别'
 			}, {
 				field : 'bsUnit',
-				title : '单位'
+				title : '物料单位'
 			}, {
 				field : 'bsStatus',
 				title : '状态',

@@ -34,11 +34,11 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'bsCode',
-				title : '编号',
+				title : '部门编号',
 				width : 120
 			}, {
 				field : 'bsName',
-				title : '名称',
+				title : '部门名称',
 				width : 120
 			}, {
 				field : 'bsManager',

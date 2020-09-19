@@ -281,7 +281,7 @@ function getDefectiveList(id){
 					}
 				}					
 				layui.form.render('select');
-				//openBad(null, "添加不良内容");
+
 				} else {
 					layer.alert(data.msg)
 				}
