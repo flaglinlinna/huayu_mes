@@ -9,10 +9,10 @@ import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.DepartmentDao;
 import com.web.basic.dao.MtrialDao;
-import com.web.basic.dao.WoProcDao;
+import com.web.basic.dao.ProcessDao;
 import com.web.basic.entity.Department;
 import com.web.basic.entity.Mtrial;
-import com.web.basic.entity.WoProc;
+import com.web.basic.entity.Process;
 import com.web.produce.dao.SchedulingDao;
 import com.web.produce.dao.SchedulingTempDao;
 import com.web.produce.entity.Scheduling;
@@ -64,7 +64,7 @@ public class SchedulingImpl implements SchedulingService {
     @Autowired
     private MtrialDao mtrialDao;
     @Autowired
-    private WoProcDao woProcDao;
+    private ProcessDao processDao;
 
     @Override
     @Transactional
@@ -471,7 +471,7 @@ public class SchedulingImpl implements SchedulingService {
                     if(StringUtils.isEmpty(procCode)){
                     }else{
                         //获取个编码关联的ID
-                        List<WoProc> pList = woProcDao.findByBsName(procCode);
+                        List<Process> pList = processDao.findByBsName(procCode);
                         procId = pList.size()>0&&pList.get(i)!=null ? pList.get(i).getId() : null;
                         if(procId == null){
                             errorStr += "加工工艺填写错误；";

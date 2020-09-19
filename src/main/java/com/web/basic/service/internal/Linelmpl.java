@@ -18,75 +18,75 @@ import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.enumeration.BasicStateEnum;
-import com.web.basic.dao.WoLineDao;
-import com.web.basic.entity.WoLine;
-import com.web.basic.service.WoLineService;
+import com.web.basic.dao.LineDao;
+import com.web.basic.entity.Line;
+import com.web.basic.service.LineService;
 
 
-@Service(value = "woLineService")
+@Service(value = "lineService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class WoLinelmpl implements WoLineService {
+public class Linelmpl implements LineService {
 	@Autowired
-    private WoLineDao woLineDao;
+    private LineDao lineDao;
 	
 	 /**
      * 新增工作中心
      */
     @Override
     @Transactional
-    public ApiResponseResult add(WoLine woLine) throws Exception{
-        if(woLine == null){
+    public ApiResponseResult add(Line line) throws Exception{
+        if(line == null){
             return ApiResponseResult.failure("工作中心不能为空！");
         }
-        if(StringUtils.isEmpty(woLine.getBsCode())){
+        if(StringUtils.isEmpty(line.getBsCode())){
             return ApiResponseResult.failure("工作中心编号不能为空！");
         }
-        if(StringUtils.isEmpty(woLine.getBsName())){
+        if(StringUtils.isEmpty(line.getBsName())){
             return ApiResponseResult.failure("工作中心名称不能为空！");
         }
-        int count = woLineDao.countByIsDelAndBsCode(0, woLine.getBsCode());
+        int count = lineDao.countByIsDelAndBsCode(0, line.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该工作中心已存在，请填写其他工作中心编号！");
         }
-        woLine.setCreatedTime(new Date());
-        woLineDao.save(woLine);
+        line.setCreatedTime(new Date());
+        lineDao.save(line);
 
-        return ApiResponseResult.success("工作中心添加成功！").data(woLine);
+        return ApiResponseResult.success("工作中心添加成功！").data(line);
     }
     /**
      * 修改工作中心
      */
     @Override
     @Transactional
-    public ApiResponseResult edit(WoLine woLine) throws Exception {
-        if(woLine == null){
+    public ApiResponseResult edit(Line line) throws Exception {
+        if(line == null){
             return ApiResponseResult.failure("工作中心不能为空！");
         }
-        if(woLine.getId() == null){
+        if(line.getId() == null){
             return ApiResponseResult.failure("工作中心ID不能为空！");
         }
-        if(StringUtils.isEmpty(woLine.getBsCode())){
+        if(StringUtils.isEmpty(line.getBsCode())){
             return ApiResponseResult.failure("工作中心编号不能为空！");
         }
-        if(StringUtils.isEmpty(woLine.getBsName())){
+        if(StringUtils.isEmpty(line.getBsName())){
             return ApiResponseResult.failure("工作中心名称不能为空！");
         }
-        WoLine o = woLineDao.findById((long) woLine.getId());
+        Line o = lineDao.findById((long) line.getId());
         if(o == null){
             return ApiResponseResult.failure("该工作中心不存在！");
         }
         //判断工作中心编号是否有变化，有则修改；没有则不修改
-        if(o.getBsCode().equals(woLine.getBsCode())){
+        if(o.getBsCode().equals(line.getBsCode())){
         }else{
-            int count = woLineDao.countByIsDelAndBsCode(0, woLine.getBsCode());
+            int count = lineDao.countByIsDelAndBsCode(0, line.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("工作中心编号已存在，请填写其他工作中心编号！");
             }
-            o.setBsCode(woLine.getBsCode().trim());
+            o.setBsCode(line.getBsCode().trim());
         }
         o.setModifiedTime(new Date());
-        o.setBsName(woLine.getBsName());
-        woLineDao.save(o);
+        o.setBsName(line.getBsName());
+        lineDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
     
@@ -98,11 +98,11 @@ public class WoLinelmpl implements WoLineService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getWoLine(Long id) throws Exception{
+    public ApiResponseResult getLine(Long id) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("工作中心ID不能为空！");
         }
-        WoLine o = woLineDao.findById((long) id);
+        Line o = lineDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("该工作中心不存在！");
         }
@@ -117,13 +117,13 @@ public class WoLinelmpl implements WoLineService {
         if(id == null){
             return ApiResponseResult.failure("工作中心ID不能为空！");
         }
-        WoLine o  = woLineDao.findById((long) id);
+        Line o  = lineDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("该工作中心不存在！");
         }
         o.setModifiedTime(new Date());
         o.setIsDel(1);
-        woLineDao.save(o);
+        lineDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
     
@@ -136,13 +136,13 @@ public class WoLinelmpl implements WoLineService {
         if(bsStatus == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
-        WoLine o = woLineDao.findById((long) id);
+        Line o = lineDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("工作中心不存在！");
         }
         o.setModifiedTime(new Date());
         o.setBsStatus(bsStatus);
-        woLineDao.save(o);
+        lineDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
     
@@ -161,9 +161,9 @@ public class WoLinelmpl implements WoLineService {
 					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
 					filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
 				}
-				Specification<WoLine> spec = Specification.where(BaseService.and(filters, WoLine.class));
-				Specification<WoLine> spec1 = spec.and(BaseService.or(filters1, WoLine.class));
-				Page<WoLine> page = woLineDao.findAll(spec1, pageRequest);
+				Specification<Line> spec = Specification.where(BaseService.and(filters, Line.class));
+				Specification<Line> spec1 = spec.and(BaseService.or(filters1, Line.class));
+				Page<Line> page = lineDao.findAll(spec1, pageRequest);
 
 				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));

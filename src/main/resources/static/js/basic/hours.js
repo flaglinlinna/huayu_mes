@@ -103,7 +103,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/hours/getWoHours", JSON.stringify(param),
+			CoreUtil.sendAjax("base/hours/getHours", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("hoursForm", {

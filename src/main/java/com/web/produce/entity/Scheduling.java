@@ -4,7 +4,7 @@ import com.app.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.web.basic.entity.Department;
 import com.web.basic.entity.Mtrial;
-import com.web.basic.entity.WoProc;
+import com.web.basic.entity.Process;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -115,11 +115,11 @@ public class Scheduling extends BaseEntity {
     @Column
     protected Long pkWoProc;
 
-//    @ApiModelProperty(name = "woProc", hidden = true, value = "加工工艺")
+//    @ApiModelProperty(name = "process", hidden = true, value = "加工工艺")
 //    @ManyToOne
 //    @JoinColumn(name = "pkWoProc", insertable = false, updatable = false)
 //    @NotFound(action = NotFoundAction.IGNORE)
-//    protected WoProc woProc;
+//    protected Process process;
 
     /**
      * 工单残
@@ -295,12 +295,12 @@ public class Scheduling extends BaseEntity {
         this.pkWoProc = pkWoProc;
     }
 
-//    public WoProc getWoProc() {
-//        return woProc;
+//    public Process getWoProc() {
+//        return process;
 //    }
 //
-//    public void setWoProc(WoProc woProc) {
-//        this.woProc = woProc;
+//    public void setWoProc(Process process) {
+//        this.woProc = process;
 //    }
 
     public String getBsRestNum() {

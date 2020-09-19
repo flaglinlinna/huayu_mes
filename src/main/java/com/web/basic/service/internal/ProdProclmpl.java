@@ -23,11 +23,11 @@ import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.MtrialDao;
 import com.web.basic.dao.ProdProcDao;
 import com.web.basic.dao.ProdProcDetailDao;
-import com.web.basic.dao.WoProcDao;
+import com.web.basic.dao.ProcessDao;
 import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.ProdProc;
 import com.web.basic.entity.ProdProcDetail;
-import com.web.basic.entity.WoProc;
+import com.web.basic.entity.Process;
 import com.web.basic.service.ProdProcService;
 
 /**
@@ -44,7 +44,7 @@ public class ProdProclmpl implements ProdProcService {
 	@Autowired
 	private MtrialDao mtrialDao;
 	@Autowired
-	private WoProcDao woProcDao;
+	private ProcessDao processDao;
 	
 	/*
 	 *获取主表数据 
@@ -117,9 +117,9 @@ public class ProdProclmpl implements ProdProcService {
 	public ApiResponseResult getData()throws Exception{
 		Map<String, Object> map = new HashMap<>();
 		List<Mtrial> list1 = mtrialDao.findByIsDel(0);
-		List<WoProc> list2 = woProcDao.findByIsDel(0);
+		List<Process> list2 = processDao.findByIsDel(0);
 		map.put("Mtrial", list1);
-		map.put("WoProc", list2);
+		map.put("Process", list2);
 		
 		return ApiResponseResult.success().data(map);
 		

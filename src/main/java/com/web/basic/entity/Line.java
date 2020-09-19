@@ -11,28 +11,28 @@ import com.app.base.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 /**
- * 工序基础信息表
+ * 线体基础信息表
  *
  */
-@Entity(name = "WoProc")
-@Table(name = WoProc.TABLE_NAME)
+@Entity(name = "Line")
+@Table(name = Line.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class WoProc extends BaseEntity {
+public class Line extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_process";
+	    public static final String TABLE_NAME = "basic_line";
 	    
 	    /**
-	     * 工序编码
+	     * 线体编码
 	     */
-	    @ApiModelProperty(name = "bsCode", value = "工序编码")
+	    @ApiModelProperty(name = "bsCode", value = "线体编码")
 	    @Column(length = 10)
 	    protected String bsCode;
 
 	    /**
-	     * 工序名称
+	     * 线体名称
 	     */
-	    @ApiModelProperty(name = "bsName", value = "工序名称")
+	    @ApiModelProperty(name = "bsName", value = "线体名称")
 	    @Column(length = 15)
 	    protected String bsName;
 	    

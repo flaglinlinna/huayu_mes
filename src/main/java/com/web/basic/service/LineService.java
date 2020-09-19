@@ -5,15 +5,15 @@ import java.util.Date;
 import org.springframework.data.domain.PageRequest;
 
 import com.app.base.data.ApiResponseResult;
-import com.web.basic.entity.WoCenter;
+import com.web.basic.entity.Line;
 
-public interface WoCenterService {
-	public ApiResponseResult add(WoCenter woCenter) throws Exception;
+public interface LineService {
+	public ApiResponseResult add(Line line) throws Exception;
 
-	public ApiResponseResult edit(WoCenter woCenter) throws Exception;
+	public ApiResponseResult edit(Line line) throws Exception;
 
 	// 根据ID获取
-	public ApiResponseResult getWoCenter(Long id) throws Exception;
+	public ApiResponseResult getLine(Long id) throws Exception;
 
 	public ApiResponseResult delete(Long id) throws Exception;
 

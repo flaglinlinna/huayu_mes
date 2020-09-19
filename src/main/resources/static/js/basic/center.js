@@ -105,7 +105,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/center/getWoCenter", JSON.stringify(param),
+			CoreUtil.sendAjax("base/center/getWorkCenter", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("centerForm", {

@@ -17,126 +17,126 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.basic.entity.Mtrial;
-import com.web.basic.entity.WoLine;
-import com.web.basic.service.WoLineService;
+import com.web.basic.entity.WorkCenter;
+import com.web.basic.service.WorkCenterService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(description = "线体信息模块")
+@Api(description = "工作中心信息模块")
 @CrossOrigin
 @ControllerAdvice
 //@RestController
 @Controller
-@RequestMapping(value = "base/line")
-public class WoLineController extends WebController{
+@RequestMapping(value = "base/center")
+public class WorkCenterController extends WebController{
 
 	 @Autowired
-	 private WoLineService woLineService;
+	 private WorkCenterService workCenterService;
 	 
-	 @ApiOperation(value = "线体基础信息表结构", notes = "线体基础信息表结构"+WoLine.TABLE_NAME)
-	    @RequestMapping(value = "/getWoLine", method = RequestMethod.GET)
+	 @ApiOperation(value = "工作中心信息表结构", notes = "工作中心信息表结构"+WorkCenter.TABLE_NAME)
+	    @RequestMapping(value = "/getWorkCenter", method = RequestMethod.GET)
 		@ResponseBody
-	    public WoLine getWoLine(){
-	        return new WoLine();
+	    public WorkCenter getWorkCenter(){
+	        return new WorkCenter();
 	    }
 	 
-	 @ApiOperation(value = "线体列表页", notes = "线体列表页", hidden = true)
-	    @RequestMapping(value = "/toWoLine")
-	    public String toWoLine(){
-	        return "/web/basic/line";
+	 @ApiOperation(value = "工作中心列表页", notes = "工作中心列表页", hidden = true)
+	    @RequestMapping(value = "/toWorkCenter") 
+	    public String toWorkCenter(){
+	        return "/web/basic/center";
 	    }
-	    @ApiOperation(value = "获取线体列表", notes = "获取线体列表", hidden = true)
+	    @ApiOperation(value = "获取工作中心列表", notes = "获取工作中心列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
-	        String method = "base/line/getList";String methodName ="获取线体列表";
+	        String method = "base/center/getList";String methodName ="获取工作中心列表";
 	        try {
 	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result = woLineService.getList(keyword, super.getPageRequest(sort));
-	            logger.debug("获取线体列表=getList:");
+	            ApiResponseResult result = workCenterService.getList(keyword, super.getPageRequest(sort));
+	            logger.debug("获取工作中心列表=getList:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	            logger.error("获取线体列表失败！", e);
+	            logger.error("获取工作中心列表失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("获取线体列表失败！");
+	            return ApiResponseResult.failure("获取工作中心列表失败！");
 	        }
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增线体", notes = "新增线体", hidden = true)
+	    @ApiOperation(value = "新增工作中心", notes = "新增工作中心", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult add(@RequestBody WoLine line) {
-	        String method = "base/line/add";String methodName ="新增线体";
+	    public ApiResponseResult add(@RequestBody WorkCenter center) {
+	        String method = "base/center/add";String methodName ="新增工作中心";
 	        try{
-	            ApiResponseResult result = woLineService.add(line);
-	            logger.debug("新增线体=add:");
+	            ApiResponseResult result = workCenterService.add(center);
+	            logger.debug("新增工作中心=add:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            logger.error("线体新增失败！", e);
+	            logger.error("工作中心新增失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("线体新增失败！");
+	            return ApiResponseResult.failure("工作中心新增失败！");
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑线体", notes = "编辑线体", hidden = true)
+	    @ApiOperation(value = "编辑工作中心", notes = "编辑工作中心", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult edit(@RequestBody WoLine line){
-	        String method = "base/line/edit";String methodName ="编辑线体";
+	    public ApiResponseResult edit(@RequestBody WorkCenter center){
+	        String method = "base/center/edit";String methodName ="编辑工作中心";
 	        try{
-	            ApiResponseResult result = woLineService.edit(line);
-	            logger.debug("编辑线体=edit:");
+	            ApiResponseResult result = workCenterService.edit(center);
+	            logger.debug("编辑工作中心=edit:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            logger.error("编辑线体失败！", e);
+	            logger.error("编辑工作中心失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("编辑线体失败！");
+	            return ApiResponseResult.failure("编辑工作中心失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取线体", notes = "根据ID获取线体", hidden = true)
-	    @RequestMapping(value = "/getWoLine", method = RequestMethod.POST)
+		@ApiOperation(value = "根据ID获取工作中心", notes = "根据ID获取工作中心", hidden = true)
+	    @RequestMapping(value = "/getWorkCenter", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult getWoLine(@RequestBody Map<String, Object> params){
-	        String method = "base/line/getWoLine";String methodName ="根据ID获取线体";
+	    public ApiResponseResult getWorkCenter(@RequestBody Map<String, Object> params){
+	        String method = "base/center/getWorkCenter";String methodName ="根据ID获取工作中心";
 	        long id = Long.parseLong(params.get("id").toString()) ;
 	        try{
-	            ApiResponseResult result = woLineService.getWoLine(id);
-	            logger.debug("根据ID获取线体=getWoLine:");
+	            ApiResponseResult result = workCenterService.getWorkCenter(id);
+	            logger.debug("根据ID获取工作中心=getWorkCenter:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
-	            logger.error("根据ID获取线体失败！", e);
+	            logger.error("根据ID获取工作中心失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("获取线体失败！");
+	            return ApiResponseResult.failure("获取工作中心失败！");
 	        }
 	    }
 		
-		@ApiOperation(value = "删除线体", notes = "删除线体", hidden = true)
+		@ApiOperation(value = "删除工作中心", notes = "删除工作中心", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
-	        String method = "base/line/delete";String methodName ="删除线体";
+	        String method = "base/center/delete";String methodName ="删除工作中心";
 	        try{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
-	            ApiResponseResult result = woLineService.delete(id);
-	            logger.debug("删除线体=delete:");
+	            ApiResponseResult result = workCenterService.delete(id);
+	            logger.debug("删除工作中心=delete:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            logger.error("删除线体失败！", e);
+	            logger.error("删除工作中心失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("删除线体失败！");
+	            return ApiResponseResult.failure("删除工作中心失败！");
 	        }
 	    }
 		
@@ -145,11 +145,11 @@ public class WoLineController extends WebController{
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{
 			 //Long id, Integer deStatus
-		        String method = "base/line/doStatus";String methodName ="设置正常/禁用";
+		        String method = "base/center/doStatus";String methodName ="设置正常/禁用";
 		        try{
 		        	long id = Long.parseLong(params.get("id").toString()) ;
 		        	Integer bsStatus=Integer.parseInt(params.get("bsStatus").toString());
-		            ApiResponseResult result = woLineService.doStatus(id, bsStatus);
+		            ApiResponseResult result = workCenterService.doStatus(id, bsStatus);
 		            logger.debug("设置正常/禁用=doJob:");
 		            getSysLogService().success(method, methodName, null);
 		            return result;
