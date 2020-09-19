@@ -25,7 +25,7 @@
         </form>
          <hr class="layui-bg-black"/>
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addCenter()">添加工作中心</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal"  onclick="addCenter()">添加工作中心</button>
         <table id="centerList" lay-filter="centerTable"></table>
 
         <script type="text/html" id="statusTpl">
@@ -43,7 +43,7 @@
 	 </div>
 	 <!--添加或编辑工作中心-->
     <div id="setCenter" class="layer_self_wrap" style="width:500px;display:none;">
-        <form id="centerForm" class="layui-form layui-form-pane" lay-filter="centerForm" method="post" action="" style="margin-top: 20px;">
+        <form id="centerForm" class="layui-form layui-form-pane" lay-filter="centerForm" method="post" action="" style="margin: 20px;">
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-input-block" style="margin-left: 10px;">
+                <div class="layui-input-block" >
                     <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit">提交</button>
                     <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
                 </div>
