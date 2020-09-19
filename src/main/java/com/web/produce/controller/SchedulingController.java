@@ -45,20 +45,20 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "排产信息列表页", notes = "排产信息列表页", hidden = true)
     @RequestMapping(value = "/toScheduling")
     public String toscheduling(){
-        return "/web/produce/scheduling";
+        return "/web/produce/scheduling/scheduling";
     }
 
     @ApiOperation(value = "新增页", notes = "新增页", hidden = true)
     @RequestMapping(value = "/toSchedulingAdd")
     public String toschedulingAdd(){
-        return "/web/produce/scheduling_add";
+        return "/web/produce/scheduling/scheduling_add";
     }
 
     @ApiOperation(value = "编辑页", notes = "编辑页", hidden = true)
     @RequestMapping(value = "/toSchedulingEdit", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView toSchedulingEdit(Long id){
-        ModelAndView mav = new ModelAndView("/web/produce/scheduling_edit");
+        ModelAndView mav = new ModelAndView("/web/produce/scheduling/scheduling_edit");
         try{
             ApiResponseResult result = schedulingService.getSchedulData(id);
             mav.addObject("id", id);

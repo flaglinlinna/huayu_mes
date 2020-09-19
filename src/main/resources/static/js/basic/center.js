@@ -167,6 +167,43 @@ $(function() {
 					})
 		}
 	});
+	
+	//触发事件
+	  var active = {
+	    add: function(){
+	      var that = this; 
+	      //多窗口模式，层叠置顶
+	      layer.open({
+	        type: 2 //此处以iframe举例
+	        ,title: '当你选择该窗体时，即会在最顶端'
+	        ,area: ['390px', '260px']
+	        ,shade: 0
+	        ,maxmin: true
+	        ,offset: [ //为了演示，随机坐标
+	          Math.random()*($(window).height()-300)
+	          ,Math.random()*($(window).width()-390)
+	        ] 
+	        ,content: '//layer.layui.com/test/settop.html'
+	        ,btn: ['继续弹出', '全部关闭'] //只是为了演示
+	        ,yes: function(){
+	          $(that).click(); 
+	        }
+	        ,btn2: function(){
+	          layer.closeAll();
+	        }
+	        
+	        ,zIndex: layer.zIndex //重点1
+	        ,success: function(layero){
+	          layer.setTop(layero); //重点2
+	        }
+	      });
+	    }
+	  };
+	  
+	  $('#addBtn').on('click', function(){
+		    var othis = $(this), method = othis.data('method');
+		    active[method] ? active[method].call(this, othis) : '';
+		  });
 
 });
 
@@ -181,11 +218,21 @@ function openCenter(id, title) {
 		fixed : false,
 		resize : false,
 		shadeClose : true,
+        shade: 0,
+        maxmin: true,
+        //btn: ['保存', '全部关闭'],
+        //btnAlign: 'c' , //按钮居中
 		area : [ '550px' ],
 		content : $('#setCenter'),
 		end : function() {
 			cleanCenter();
 		}
+	  /*,btn1: function(){
+        alert('1')
+      }
+	  ,btn2: function(){
+        alert('2')
+      }*/
 	});
 }
 

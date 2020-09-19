@@ -50,7 +50,7 @@ $(function () {
                 ,{field:'bsPlanPrice', title:'计划金额', width:100}
                 ,{field:'bsActualPrice', title:'实际生产金额 ', width:120}
                 ,{field:'bsRemark', title:'备注', width:120}
-                ,{fixed:'right', title:'操作', width:150, align:'center', toolbar:'#optBar'}
+                ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
                 //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -141,4 +141,9 @@ function loadAll(){
             curr: pageCurr //从当前页码开始
         }
     });
+}
+
+function exportExcel(){
+	//导出模板
+    location.href = context + "/produce/scheduling/getExcel";
 }
