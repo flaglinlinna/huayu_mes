@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.basic.entity.Mtrial;
-import com.web.basic.entity.WoHours;
-import com.web.basic.service.WoHoursService;
+import com.web.basic.entity.Hours;
+import com.web.basic.service.HoursService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,21 +29,21 @@ import io.swagger.annotations.ApiOperation;
 //@RestController
 @Controller
 @RequestMapping(value = "base/hours")
-public class WoHoursController extends WebController{
+public class HoursController extends WebController{
 
 	 @Autowired
-	 private WoHoursService woHoursService;
+	 private HoursService hoursService;
 	 
-	 @ApiOperation(value = "工时信息表结构", notes = "工时信息表结构"+WoHours.TABLE_NAME)
-	    @RequestMapping(value = "/getWoHours", method = RequestMethod.GET)
+	 @ApiOperation(value = "工时信息表结构", notes = "工时信息表结构"+Hours.TABLE_NAME)
+	    @RequestMapping(value = "/getHours", method = RequestMethod.GET)
 		@ResponseBody
-	    public WoHours getWoHours(){
-	        return new WoHours();
+	    public Hours getHours(){
+	        return new Hours();
 	    }
 	 
 	 @ApiOperation(value = "工时信息列表页", notes = "工时信息列表页", hidden = true)
-	    @RequestMapping(value = "/toWoHours")
-	    public String toWoHours(){
+	    @RequestMapping(value = "/toHours")
+	    public String toHours(){
 	        return "/web/basic/hours";
 	    }
 	    @ApiOperation(value = "获取工时信息列表", notes = "获取工时信息列表", hidden = true)
@@ -54,7 +54,7 @@ public class WoHoursController extends WebController{
 	        try {
 	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result = woHoursService.getList(keyword, super.getPageRequest(sort));
+	            ApiResponseResult result = hoursService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取工时信息列表=getList:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
@@ -70,10 +70,10 @@ public class WoHoursController extends WebController{
 	    @ApiOperation(value = "新增工时信息", notes = "新增工时信息", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult add(@RequestBody WoHours hours) {
+	    public ApiResponseResult add(@RequestBody Hours hours) {
 	        String method = "base/hours/add";String methodName ="新增工时信息";
 	        try{
-	            ApiResponseResult result = woHoursService.add(hours);
+	            ApiResponseResult result = hoursService.add(hours);
 	            logger.debug("新增工时信息=add:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
@@ -88,10 +88,10 @@ public class WoHoursController extends WebController{
 	    @ApiOperation(value = "编辑工时信息", notes = "编辑工时信息", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult edit(@RequestBody WoHours hours){
+	    public ApiResponseResult edit(@RequestBody Hours hours){
 	        String method = "base/hours/edit";String methodName ="编辑工时信息";
 	        try{
-	            ApiResponseResult result = woHoursService.edit(hours);
+	            ApiResponseResult result = hoursService.edit(hours);
 	            logger.debug("编辑工时信息=edit:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
@@ -103,14 +103,14 @@ public class WoHoursController extends WebController{
 	        }
 	    }
 		@ApiOperation(value = "根据ID获取工时信息", notes = "根据ID获取工时信息", hidden = true)
-	    @RequestMapping(value = "/getWoHours", method = RequestMethod.POST)
+	    @RequestMapping(value = "/getHours", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult getWoHours(@RequestBody Map<String, Object> params){
-	        String method = "base/hours/getWoHours";String methodName ="根据ID获取工时信息";
+	    public ApiResponseResult getHours(@RequestBody Map<String, Object> params){
+	        String method = "base/hours/getHours";String methodName ="根据ID获取工时信息";
 	        long id = Long.parseLong(params.get("id").toString()) ;
 	        try{
-	            ApiResponseResult result = woHoursService.getWoHours(id);
-	            logger.debug("根据ID获取工时信息=getWoHours:");
+	            ApiResponseResult result = hoursService.getHours(id);
+	            logger.debug("根据ID获取工时信息=getHours:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        }catch (Exception e){
@@ -128,7 +128,7 @@ public class WoHoursController extends WebController{
 	        String method = "base/hours/delete";String methodName ="删除工时信息";
 	        try{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
-	            ApiResponseResult result = woHoursService.delete(id);
+	            ApiResponseResult result = hoursService.delete(id);
 	            logger.debug("删除工时信息=delete:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;

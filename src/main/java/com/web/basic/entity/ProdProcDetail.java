@@ -37,11 +37,11 @@ public class ProdProcDetail extends BaseEntity {
 	@Column
 	protected Long bsWoProcId;
 
-	@ApiModelProperty(name = "woProc", hidden = true, value = "工序信息")
+	@ApiModelProperty(name = "process", hidden = true, value = "工序信息")
 	@ManyToOne
 	@JoinColumn(name = "bsWoProcId", insertable = false, updatable = false)
 	@NotFound(action = NotFoundAction.IGNORE)
-	protected WoProc woProc;
+	protected Process process;
 
 	/**
 	 * 工序排列序号

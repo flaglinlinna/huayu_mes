@@ -9,10 +9,10 @@ import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.DepartmentDao;
 import com.web.basic.dao.MtrialDao;
-import com.web.basic.dao.WoProcDao;
+import com.web.basic.dao.ProcessDao;
 import com.web.basic.entity.Department;
 import com.web.basic.entity.Mtrial;
-import com.web.basic.entity.WoProc;
+import com.web.basic.entity.Process;
 import com.web.produce.dao.SchedulingDao;
 import com.web.produce.dao.SchedulingTempDao;
 import com.web.produce.entity.Scheduling;
@@ -64,7 +64,7 @@ public class SchedulingImpl implements SchedulingService {
     @Autowired
     private MtrialDao mtrialDao;
     @Autowired
-    private WoProcDao woProcDao;
+    private ProcessDao processDao;
 
     @Override
     @Transactional
@@ -97,23 +97,27 @@ public class SchedulingImpl implements SchedulingService {
         o.setModifiedTime(new Date());
         o.setPkModifiedBy(currUser!=null ? currUser.getId() : null);
         o.setPkDepartment(scheduling.getPkDepartment());//部门
+        o.setBsDepartCode(scheduling.getBsDepartCode());
         o.setBsProduceTime(scheduling.getBsProduceTime());
         o.setBsShift(scheduling.getBsShift());
         o.setBsCustomer(scheduling.getBsCustomer());
         o.setBsLine(scheduling.getBsLine());
         o.setBsOrderNo(scheduling.getBsOrderNo());
-        o.setPkMtrial(scheduling.getPkMtrial());
-        o.setPkWoProc(scheduling.getPkWoProc());
+        o.setPkMtrial(scheduling.getPkMtrial());//物料
+        o.setBsMtrialCode(scheduling.getBsMtrialCode());
+        o.setBsMtrialDesc(scheduling.getBsMtrialDesc());
+        o.setPkWoProc(scheduling.getPkWoProc());//加工工艺
+        o.setBsProcCode(scheduling.getBsProcCode());
         o.setBsRestNum(scheduling.getBsRestNum());
         o.setBsPlanNum(scheduling.getBsPlanNum());
         o.setBsPeopleNum(scheduling.getBsPeopleNum());
         o.setBsCapacityNum(scheduling.getBsCapacityNum());
         o.setBsPlanHours(scheduling.getBsPlanHours());
         o.setBsActualNum(scheduling.getBsActualNum());
-        o.setBsActualHours(scheduling.getBsActualHours());
-        o.setBsPlanPrice(scheduling.getBsPlanPrice());
-        o.setBsActualPrice(scheduling.getBsActualPrice());
-        o.setBsRemark(scheduling.getBsRemark());
+//        o.setBsActualHours(scheduling.getBsActualHours());
+//        o.setBsPlanPrice(scheduling.getBsPlanPrice());
+//        o.setBsActualPrice(scheduling.getBsActualPrice());
+//        o.setBsRemark(scheduling.getBsRemark());
         schedulingDao.save(o);
 
         return ApiResponseResult.success("编辑成功！").data(o);
@@ -148,10 +152,14 @@ public class SchedulingImpl implements SchedulingService {
         //查询条件2
         List<SearchFilter> filters1 =new ArrayList<>();
         if(StringUtils.isNotEmpty(keyword)){
+            filters1.add(new SearchFilter("bsDepartCode", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("bsShift", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("bsCustomer", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("bsLine", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("bsOrderType", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("bsOrderNo", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("bsMtrialCode", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("bsProcCode", SearchFilter.Operator.LIKE, keyword));
         }
         Specification<Scheduling> spec = Specification.where(BaseService.and(filters, Scheduling.class));
         Specification<Scheduling> spec1 =  spec.and(BaseService.or(filters1, Scheduling.class));
@@ -415,16 +423,16 @@ public class SchedulingImpl implements SchedulingService {
                 //部门
                 try{
                     departCode = this.readExcelCell(sheet, le, 1);//部门编码
-                    if(StringUtils.isEmpty(departCode)){
-                        //errorStr += "部门为空；";
-                    }else{
-                        //获取个编码关联的ID
-                        List<Department> dList = departmentDao.findByBsName(departCode);
-                        departId = dList.size()>0&&dList.get(i)!=null ? dList.get(i).getId() : null;
-                        if(departId == null){
-                            //errorStr += "部门填写错误；";
-                        }
-                    }
+//                    if(StringUtils.isEmpty(departCode)){
+//                        //errorStr += "部门为空；";
+//                    }else{
+//                        //获取个编码关联的ID
+//                        List<Department> dList = departmentDao.findByBsName(departCode);
+//                        departId = dList.size()>0&&dList.get(i)!=null ? dList.get(i).getId() : null;
+//                        if(departId == null){
+//                            errorStr += "部门填写错误；";
+//                        }
+//                    }
                 }catch (Exception e){
                     //errorStr += "部门为空或格式错误；";
                 }
@@ -466,16 +474,16 @@ public class SchedulingImpl implements SchedulingService {
                 //物料编码
                 try{
                     mtrialCode = this.readExcelCell(sheet, le, 7);//物料编码
-                    if(StringUtils.isEmpty(mtrialCode)){
-                        //errorStr += "物料编码为空；";
-                    }else{
-                        //获取个编码关联的ID
-                        List<Mtrial> mList = mtrialDao.findByIsDelAndBsCode(0, mtrialCode);
-                        mtrialId = mList.size()>0&&mList.get(i)!=null ? mList.get(i).getId() : null;
-                        if(departId == null){
-                            //errorStr += "物料编码填写错误；";
-                        }
-                    }
+//                    if(StringUtils.isEmpty(mtrialCode)){
+//                        //errorStr += "物料编码为空；";
+//                    }else{
+//                        //获取个编码关联的ID
+//                        List<Mtrial> mList = mtrialDao.findByIsDelAndBsCode(0, mtrialCode);
+//                        mtrialId = mList.size()>0&&mList.get(i)!=null ? mList.get(i).getId() : null;
+//                        if(departId == null){
+//                            errorStr += "物料编码填写错误；";
+//                        }
+//                    }
                 }catch (Exception e){
                     //errorStr += "物料编码为空或格式错误；";
                 }
@@ -489,15 +497,15 @@ public class SchedulingImpl implements SchedulingService {
                 //加工工艺
                 try{
                     procCode = this.readExcelCell(sheet, le, 9);//加工工艺
-                    if(StringUtils.isEmpty(procCode)){
-                    }else{
-                        //获取个编码关联的ID
-                        List<WoProc> pList = woProcDao.findByBsName(procCode);
-                        procId = pList.size()>0&&pList.get(i)!=null ? pList.get(i).getId() : null;
-                        if(procId == null){
-                            //errorStr += "加工工艺填写错误；";
-                        }
-                    }
+//                    if(StringUtils.isEmpty(procCode)){
+//                    }else{
+//                        //获取个编码关联的ID
+//                        List<WoProc> pList = woProcDao.findByBsName(procCode);
+//                        procId = pList.size()>0&&pList.get(i)!=null ? pList.get(i).getId() : null;
+//                        if(procId == null){
+//                            errorStr += "加工工艺填写错误；";
+//                        }
+//                    }
                 }catch (Exception e){
                     //errorStr += "加工工艺为空或格式错误；";
                 }
@@ -795,14 +803,18 @@ public class SchedulingImpl implements SchedulingService {
                 Scheduling scheduling = new Scheduling();
                 scheduling.setCreatedTime(new Date());
                 scheduling.setPkDepartment(temp.getPkDepartment());//部门
+                scheduling.setBsDepartCode(temp.getBsDepartCode());
                 scheduling.setBsProduceTime(temp.getBsProduceTime());
                 scheduling.setBsShift(temp.getBsShift());
                 scheduling.setBsCustomer(temp.getBsCustomer());
                 scheduling.setBsLine(temp.getBsLine());
                 scheduling.setBsUniqueOrderNo(this.getUniqueOrderNo());
                 scheduling.setBsOrderNo(temp.getBsOrderNo());
-                scheduling.setPkMtrial(temp.getPkMtrial());
-                scheduling.setPkWoProc(temp.getPkWoProc());
+                scheduling.setPkMtrial(temp.getPkMtrial());//物料
+                scheduling.setBsMtrialCode(temp.getBsMtrialCode());
+                scheduling.setBsMtrialDesc(temp.getBsMtrialDesc());
+                scheduling.setPkWoProc(temp.getPkWoProc());//加工工艺
+                scheduling.setBsProcCode(temp.getBsProcCode());
                 scheduling.setBsRestNum(temp.getBsRestNum());
                 scheduling.setBsPlanNum(temp.getBsPlanNum());
                 scheduling.setBsPeopleNum(temp.getBsPeopleNum());

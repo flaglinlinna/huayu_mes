@@ -18,75 +18,75 @@ import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.enumeration.BasicStateEnum;
-import com.web.basic.dao.WoProcDao;
-import com.web.basic.entity.WoProc;
-import com.web.basic.service.WoProcService;
+import com.web.basic.dao.ProcessDao;
+import com.web.basic.entity.Process;
+import com.web.basic.service.ProcessService;
 
 
-@Service(value = "woProcService")
+@Service(value = "processService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class WoProclmpl implements WoProcService {
+public class Processlmpl implements ProcessService {
 	@Autowired
-    private WoProcDao woProcDao;
+    private ProcessDao processDao;
 	
 	 /**
      * 新增工序
      */
     @Override
     @Transactional
-    public ApiResponseResult add(WoProc woProc) throws Exception{
-        if(woProc == null){
+    public ApiResponseResult add(Process process) throws Exception{
+        if(process == null){
             return ApiResponseResult.failure("工序不能为空！");
         }
-        if(StringUtils.isEmpty(woProc.getBsCode())){
+        if(StringUtils.isEmpty(process.getBsCode())){
             return ApiResponseResult.failure("工序编码不能为空！");
         }
-        if(StringUtils.isEmpty(woProc.getBsName())){
+        if(StringUtils.isEmpty(process.getBsName())){
             return ApiResponseResult.failure("工序名称不能为空！");
         }
-        int count = woProcDao.countByIsDelAndBsCode(0, woProc.getBsCode());
+        int count = processDao.countByIsDelAndBsCode(0, process.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该工序已存在，请填写其他工序编码！");
         }
-        woProc.setCreatedTime(new Date());
-        woProcDao.save(woProc);
+        process.setCreatedTime(new Date());
+        processDao.save(process);
 
-        return ApiResponseResult.success("工序添加成功！").data(woProc);
+        return ApiResponseResult.success("工序添加成功！").data(process);
     }
     /**
      * 修改工序
      */
     @Override
     @Transactional
-    public ApiResponseResult edit(WoProc woProc) throws Exception {
-        if(woProc == null){
+    public ApiResponseResult edit(Process process) throws Exception {
+        if(process == null){
             return ApiResponseResult.failure("工序不能为空！");
         }
-        if(woProc.getId() == null){
+        if(process.getId() == null){
             return ApiResponseResult.failure("工序ID不能为空！");
         }
-        if(StringUtils.isEmpty(woProc.getBsCode())){
+        if(StringUtils.isEmpty(process.getBsCode())){
             return ApiResponseResult.failure("工序编码不能为空！");
         }
-        if(StringUtils.isEmpty(woProc.getBsName())){
+        if(StringUtils.isEmpty(process.getBsName())){
             return ApiResponseResult.failure("工序名称不能为空！");
         }
-        WoProc o = woProcDao.findById((long) woProc.getId());
+        Process o = processDao.findById((long) process.getId());
         if(o == null){
             return ApiResponseResult.failure("该工序不存在！");
         }
         //判断工序编码是否有变化，有则修改；没有则不修改
-        if(o.getBsCode().equals(woProc.getBsCode())){
+        if(o.getBsCode().equals(process.getBsCode())){
         }else{
-            int count = woProcDao.countByIsDelAndBsCode(0, woProc.getBsCode());
+            int count = processDao.countByIsDelAndBsCode(0, process.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("工序编码已存在，请填写其他工序编码！");
             }
-            o.setBsCode(woProc.getBsCode().trim());
+            o.setBsCode(process.getBsCode().trim());
         }
         o.setModifiedTime(new Date());
-        o.setBsName(woProc.getBsName());
-        woProcDao.save(o);
+        o.setBsName(process.getBsName());
+        processDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
     
@@ -98,11 +98,11 @@ public class WoProclmpl implements WoProcService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getWoProc(Long id) throws Exception{
+    public ApiResponseResult getProcess(Long id) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("工序ID不能为空！");
         }
-        WoProc o = woProcDao.findById((long) id);
+        Process o = processDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("该工序不存在！");
         }
@@ -117,13 +117,13 @@ public class WoProclmpl implements WoProcService {
         if(id == null){
             return ApiResponseResult.failure("工序ID不能为空！");
         }
-        WoProc o  = woProcDao.findById((long) id);
+        Process o  = processDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("该工序不存在！");
         }
         o.setModifiedTime(new Date());
         o.setIsDel(1);
-        woProcDao.save(o);
+        processDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
     
@@ -136,13 +136,13 @@ public class WoProclmpl implements WoProcService {
         if(bsStatus == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
-        WoProc o = woProcDao.findById((long) id);
+        Process o = processDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("工序不存在！");
         }
         o.setModifiedTime(new Date());
         o.setBsStatus(bsStatus);
-        woProcDao.save(o);
+        processDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
     
@@ -161,9 +161,9 @@ public class WoProclmpl implements WoProcService {
 					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
 					filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
 				}
-				Specification<WoProc> spec = Specification.where(BaseService.and(filters, WoProc.class));
-				Specification<WoProc> spec1 = spec.and(BaseService.or(filters1, WoProc.class));
-				Page<WoProc> page = woProcDao.findAll(spec1, pageRequest);
+				Specification<Process> spec = Specification.where(BaseService.and(filters, Process.class));
+				Specification<Process> spec1 = spec.and(BaseService.or(filters1, Process.class));
+				Page<Process> page = processDao.findAll(spec1, pageRequest);
 
 				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));

@@ -65,7 +65,7 @@ public class ProdProc extends BaseEntity {
      @ManyToOne
      @JoinColumn(name = "bsWoHoursId", insertable = false, updatable = false)
      @NotFound(action = NotFoundAction.IGNORE)
-     protected WoProc woHours;
+     protected Process woHours;
 
 	public String getBsClient() {
 		return bsClient;

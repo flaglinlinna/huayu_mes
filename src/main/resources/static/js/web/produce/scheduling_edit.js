@@ -71,9 +71,9 @@ $(function () {
             load(data);
             return false;
         });
-        form.on('submit(addBtn)', function(data){
+        form.on('submit(editBtn)', function(data){
             //新增
-            //doAdd();
+            doEdit();
             return false;
         });
         form.on('submit(exportBtn)', function(data){
@@ -122,15 +122,19 @@ $(function () {
 //渲染基本信息
 function getScheduling(){
     $("#id").val(id);
+    $("#bsDepartCode").val(scheduling.bsDepartCode);
+    $("#bsShift").val(scheduling.bsShift);
+    $("#bsProcCode").val(scheduling.bsProcCode);
     $("#bsOrderType").val(scheduling.bsOrderType);
     $("#bsUniqueOrderNo").val(scheduling.bsUniqueOrderNo);
     $("#bsOrderNo").val(scheduling.bsOrderNo);
     $("#bsStatus").val(scheduling.bsStatus);
-    $("#mtrialCode").val(scheduling.mtrialCode);
-    $("#mtrialDesc").val(scheduling.mtrialDesc);
+    $("#bsMtrialCode").val(scheduling.bsMtrialCode);
+    $("#bsMtrialDesc").val(scheduling.bsMtrialDesc);
     $("#bsPlanNum").val(scheduling.bsPlanNum);
     $("#bsLine").val(scheduling.bsLine);
     $("#bsCustomer").val(scheduling.bsCustomer);
+    $("#bsProduceTime").val(scheduling.bsProduceTime);
     $("#bsPeopleNum").val(scheduling.bsPeopleNum);
     $("#bsPlanHours").val(scheduling.bsPlanHours);
     $("#bsCapacityNum").val(scheduling.bsCapacityNum);
@@ -140,10 +144,10 @@ function getScheduling(){
     layui.form.render('select');
 }
 
-function doAdd(){
+function doEdit(){
     $.ajax({
         type: "POST",
-        data: $("#addForm").serialize(),
+        data: $("#editForm").serialize(),
         url: context+"/produce/scheduling/edit",
         success: function (data) {
             if (data.result) {

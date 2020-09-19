@@ -25,7 +25,7 @@ import com.web.basic.dao.DefectiveDao;
 import com.web.basic.dao.DefectiveDetailDao;
 import com.web.basic.entity.Defective;
 import com.web.basic.entity.DefectiveDetail;
-import com.web.basic.entity.WoProc;
+import com.web.basic.entity.Process;
 import com.web.basic.service.DefectiveDetailService;
 
 

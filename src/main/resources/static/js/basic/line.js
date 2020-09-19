@@ -106,7 +106,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/line/getWoLine", JSON.stringify(param),
+			CoreUtil.sendAjax("base/line/getLine", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("lineForm", {
