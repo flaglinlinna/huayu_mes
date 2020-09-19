@@ -5,15 +5,15 @@ import java.util.Date;
 import org.springframework.data.domain.PageRequest;
 
 import com.app.base.data.ApiResponseResult;
-import com.web.basic.entity.WoLine;
+import com.web.basic.entity.Process;
 
-public interface WoLineService {
-	public ApiResponseResult add(WoLine woLine) throws Exception;
+public interface ProcessService {
+	public ApiResponseResult add(Process process) throws Exception;
 
-	public ApiResponseResult edit(WoLine woLine) throws Exception;
+	public ApiResponseResult edit(Process process) throws Exception;
 
 	// 根据ID获取
-	public ApiResponseResult getWoLine(Long id) throws Exception;
+	public ApiResponseResult getProcess(Long id) throws Exception;
 
 	public ApiResponseResult delete(Long id) throws Exception;
 

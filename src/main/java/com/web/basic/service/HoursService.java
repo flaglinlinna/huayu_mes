@@ -5,14 +5,14 @@ import java.util.Date;
 import org.springframework.data.domain.PageRequest;
 
 import com.app.base.data.ApiResponseResult;
-import com.web.basic.entity.WoHours;
+import com.web.basic.entity.Hours;
 
-public interface WoHoursService {
-	public ApiResponseResult add(WoHours woHours) throws Exception;
+public interface HoursService {
+	public ApiResponseResult add(Hours hours) throws Exception;
 
-	public ApiResponseResult edit(WoHours woHours) throws Exception;
+	public ApiResponseResult edit(Hours hours) throws Exception;
 	// 根据ID获取
-	public ApiResponseResult getWoHours(Long id) throws Exception;
+	public ApiResponseResult getHours(Long id) throws Exception;
 
 	public ApiResponseResult delete(Long id) throws Exception;
 

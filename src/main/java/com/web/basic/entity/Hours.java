@@ -14,11 +14,11 @@ import io.swagger.annotations.ApiModelProperty;
  * 工时基础信息表
  *
  */
-@Entity(name = "WoHours")
-@Table(name = WoHours.TABLE_NAME)
+@Entity(name = "Hours")
+@Table(name = Hours.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class WoHours extends BaseEntity {
+public class Hours extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
 	    public static final String TABLE_NAME = "basic_hours";
 	    

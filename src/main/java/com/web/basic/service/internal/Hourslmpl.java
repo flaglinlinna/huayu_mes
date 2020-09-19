@@ -18,75 +18,75 @@ import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.enumeration.BasicStateEnum;
-import com.web.basic.dao.WoHoursDao;
-import com.web.basic.entity.WoHours;
-import com.web.basic.service.WoHoursService;
+import com.web.basic.dao.HoursDao;
+import com.web.basic.entity.Hours;
+import com.web.basic.service.HoursService;
 
 
-@Service(value = "woHoursService")
+@Service(value = "hoursService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class WoHourslmpl implements WoHoursService {
+public class Hourslmpl implements HoursService {
 	@Autowired
-    private WoHoursDao woHoursDao;
+    private HoursDao hoursDao;
 	
 	 /**
      * 新增产品标准工时
      */
     @Override
     @Transactional
-    public ApiResponseResult add(WoHours woHours) throws Exception{
-        if(woHours == null){
+    public ApiResponseResult add(Hours hours) throws Exception{
+        if(hours == null){
             return ApiResponseResult.failure("产品标准工时不能为空！");
         }
-        if(StringUtils.isEmpty(woHours.getBsCode())){
+        if(StringUtils.isEmpty(hours.getBsCode())){
             return ApiResponseResult.failure("产品编码不能为空！");
         }
-        if(StringUtils.isEmpty(woHours.getBsStdHrs())){
+        if(StringUtils.isEmpty(hours.getBsStdHrs())){
             return ApiResponseResult.failure("标准工时不能为空！");
         }
-        int count = woHoursDao.countByIsDelAndBsCode(0, woHours.getBsCode());
+        int count = hoursDao.countByIsDelAndBsCode(0, hours.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该产品编码已存在，请填写其他产品编码！");
         }
-        woHours.setCreatedTime(new Date());
-        woHoursDao.save(woHours);
+        hours.setCreatedTime(new Date());
+        hoursDao.save(hours);
 
-        return ApiResponseResult.success("产品标准工时添加成功！").data(woHours);
+        return ApiResponseResult.success("产品标准工时添加成功！").data(hours);
     }
     /**
      * 修改工作中心
      */
     @Override
     @Transactional
-    public ApiResponseResult edit(WoHours woHours) throws Exception {
-        if(woHours == null){
+    public ApiResponseResult edit(Hours hours) throws Exception {
+        if(hours == null){
             return ApiResponseResult.failure("产品标准工时不能为空！");
         }
-        if(woHours.getId() == null){
+        if(hours.getId() == null){
             return ApiResponseResult.failure("工作中心ID不能为空！");
         }
-        if(StringUtils.isEmpty(woHours.getBsCode())){
+        if(StringUtils.isEmpty(hours.getBsCode())){
             return ApiResponseResult.failure("产品编码不能为空！");
         }
-        if(StringUtils.isEmpty(woHours.getBsStdHrs())){
+        if(StringUtils.isEmpty(hours.getBsStdHrs())){
             return ApiResponseResult.failure("标准工时不能为空！");
         }
-        WoHours o = woHoursDao.findById((long) woHours.getId());
+        Hours o = hoursDao.findById((long) hours.getId());
         if(o == null){
             return ApiResponseResult.failure("该产品编码不存在！");
         }
         //判断工作中心编号是否有变化，有则修改；没有则不修改
-        if(o.getBsCode().equals(woHours.getBsCode())){
+        if(o.getBsCode().equals(hours.getBsCode())){
         }else{
-            int count = woHoursDao.countByIsDelAndBsCode(0, woHours.getBsCode());
+            int count = hoursDao.countByIsDelAndBsCode(0, hours.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("产品编码已存在，请填写其他产品编码！");
             }
-            o.setBsCode(woHours.getBsCode().trim());
+            o.setBsCode(hours.getBsCode().trim());
         }
         o.setModifiedTime(new Date());
-        o.setBsStdHrs(woHours.getBsStdHrs());
-        woHoursDao.save(o);
+        o.setBsStdHrs(hours.getBsStdHrs());
+        hoursDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
     
@@ -98,11 +98,11 @@ public class WoHourslmpl implements WoHoursService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getWoHours(Long id) throws Exception{
+    public ApiResponseResult getHours(Long id) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("产品编码ID不能为空！");
         }
-        WoHours o = woHoursDao.findById((long) id);
+        Hours o = hoursDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("该产品编码不存在！");
         }
@@ -117,13 +117,13 @@ public class WoHourslmpl implements WoHoursService {
         if(id == null){
             return ApiResponseResult.failure("产品编码ID不能为空！");
         }
-        WoHours o  = woHoursDao.findById((long) id);
+        Hours o  = hoursDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("该产品编码不存在！");
         }
         o.setModifiedTime(new Date());
         o.setIsDel(1);
-        woHoursDao.save(o);
+        hoursDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
     
@@ -143,9 +143,9 @@ public class WoHourslmpl implements WoHoursService {
 					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
 					filters1.add(new SearchFilter("bsStdHrs", SearchFilter.Operator.LIKE, keyword));
 				}
-				Specification<WoHours> spec = Specification.where(BaseService.and(filters, WoHours.class));
-				Specification<WoHours> spec1 = spec.and(BaseService.or(filters1, WoHours.class));
-				Page<WoHours> page = woHoursDao.findAll(spec1, pageRequest);
+				Specification<Hours> spec = Specification.where(BaseService.and(filters, Hours.class));
+				Specification<Hours> spec1 = spec.and(BaseService.or(filters1, Hours.class));
+				Page<Hours> page = hoursDao.findAll(spec1, pageRequest);
 
 				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));

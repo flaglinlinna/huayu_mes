@@ -106,7 +106,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/proc/getWoProc", JSON.stringify(param),
+			CoreUtil.sendAjax("base/proc/getProcess", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("procForm", {

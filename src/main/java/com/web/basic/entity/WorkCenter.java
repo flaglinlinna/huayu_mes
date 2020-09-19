@@ -11,28 +11,28 @@ import com.app.base.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 /**
- * 线体基础信息表
+ * 工作中心基础信息表
  *
  */
-@Entity(name = "WoLine")
-@Table(name = WoLine.TABLE_NAME)
+@Entity(name = "WorkCenter")
+@Table(name = WorkCenter.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class WoLine extends BaseEntity {
+public class WorkCenter extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_line";
+	    public static final String TABLE_NAME = "basic_workcenter";
 	    
 	    /**
-	     * 线体编码
+	     * 工作中心编码
 	     */
-	    @ApiModelProperty(name = "bsCode", value = "线体编码")
+	    @ApiModelProperty(name = "bsCode", value = "工作中心编码")
 	    @Column(length = 10)
 	    protected String bsCode;
 
 	    /**
-	     * 线体名称
+	     * 工作中心名称
 	     */
-	    @ApiModelProperty(name = "bsName", value = "线体名称")
+	    @ApiModelProperty(name = "bsName", value = "工作中心名称")
 	    @Column(length = 15)
 	    protected String bsName;
 	    

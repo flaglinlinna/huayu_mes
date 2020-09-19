@@ -27,6 +27,7 @@ public class Client extends BaseEntity {
 	     */
 	    @ApiModelProperty(name = "bsCode", value = "客户编码")
 	    @Column(length = 50)
+	    //@Column(columnDefinition = "varchar(50) comment '客户编码'")
 	    protected String bsCode;
 
 	    /**

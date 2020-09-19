@@ -11,28 +11,28 @@ import com.app.base.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 /**
- * 工作中心基础信息表
+ * 工序基础信息表
  *
  */
-@Entity(name = "WoCenter")
-@Table(name = WoCenter.TABLE_NAME)
+@Entity(name = "Process")
+@Table(name = Process.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class WoCenter extends BaseEntity {
+public class Process extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_workcenter";
+	    public static final String TABLE_NAME = "basic_process";
 	    
 	    /**
-	     * 工作中心编码
+	     * 工序编码
 	     */
-	    @ApiModelProperty(name = "bsCode", value = "工作中心编码")
+	    @ApiModelProperty(name = "bsCode", value = "工序编码")
 	    @Column(length = 10)
 	    protected String bsCode;
 
 	    /**
-	     * 工作中心名称
+	     * 工序名称
 	     */
-	    @ApiModelProperty(name = "bsName", value = "工作中心名称")
+	    @ApiModelProperty(name = "bsName", value = "工序名称")
 	    @Column(length = 15)
 	    protected String bsName;
 	    

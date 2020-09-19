@@ -4,7 +4,7 @@ import com.app.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.web.basic.entity.Department;
 import com.web.basic.entity.Mtrial;
-import com.web.basic.entity.WoProc;
+import com.web.basic.entity.Process;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -320,8 +320,8 @@ public class Scheduling extends BaseEntity {
     }
 
     public String getBsProcCode() {
-        return bsProcCode;
-    }
+    return bsProcCode;
+}
 
     public void setBsProcCode(String bsProcCode) {
         this.bsProcCode = bsProcCode;

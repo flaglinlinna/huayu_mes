@@ -17,126 +17,126 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.basic.entity.Mtrial;
-import com.web.basic.entity.WoCenter;
-import com.web.basic.service.WoCenterService;
+import com.web.basic.entity.Process;
+import com.web.basic.service.ProcessService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(description = "工作中心信息模块")
+@Api(description = "工序信息模块")
 @CrossOrigin
 @ControllerAdvice
 //@RestController
 @Controller
-@RequestMapping(value = "base/center")
-public class WoCenterController extends WebController{
+@RequestMapping(value = "base/proc")
+public class ProcessController extends WebController{
 
 	 @Autowired
-	 private WoCenterService woCenterService;
+	 private ProcessService processService;
 	 
-	 @ApiOperation(value = "工作中心信息表结构", notes = "工作中心信息表结构"+WoCenter.TABLE_NAME)
-	    @RequestMapping(value = "/getWoCenter", method = RequestMethod.GET)
+	 @ApiOperation(value = "工序基础信息表结构", notes = "工序基础信息表结构"+Process.TABLE_NAME)
+	    @RequestMapping(value = "/getProcess", method = RequestMethod.GET)
 		@ResponseBody
-	    public WoCenter getWoCenter(){
-	        return new WoCenter();
+	    public Process getProcess(){
+	        return new Process();
 	    }
 	 
-	 @ApiOperation(value = "工作中心列表页", notes = "工作中心列表页", hidden = true)
-	    @RequestMapping(value = "/toWoCenter")
-	    public String toWoCenter(){
-	        return "/web/basic/center";
+	 @ApiOperation(value = "工序列表页", notes = "工序列表页", hidden = true)
+	    @RequestMapping(value = "/toProcess")
+	    public String toProcess(){
+	        return "/web/basic/proc";
 	    }
-	    @ApiOperation(value = "获取工作中心列表", notes = "获取工作中心列表", hidden = true)
+	    @ApiOperation(value = "获取工序列表", notes = "获取工序列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
-	        String method = "base/center/getList";String methodName ="获取工作中心列表";
+	        String method = "base/proc/getList";String methodName ="获取工序列表";
 	        try {
 	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result = woCenterService.getList(keyword, super.getPageRequest(sort));
-	            logger.debug("获取工作中心列表=getList:");
+	            ApiResponseResult result = processService.getList(keyword, super.getPageRequest(sort));
+	            logger.debug("获取工序列表=getList:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	            logger.error("获取工作中心列表失败！", e);
+	            logger.error("获取工序列表失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("获取工作中心列表失败！");
+	            return ApiResponseResult.failure("获取工序列表失败！");
 	        }
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增工作中心", notes = "新增工作中心", hidden = true)
+	    @ApiOperation(value = "新增工序", notes = "新增工序", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult add(@RequestBody WoCenter center) {
-	        String method = "base/center/add";String methodName ="新增工作中心";
+	    public ApiResponseResult add(@RequestBody Process proc) {
+	        String method = "base/proc/add";String methodName ="新增工序";
 	        try{
-	            ApiResponseResult result = woCenterService.add(center);
-	            logger.debug("新增工作中心=add:");
+	            ApiResponseResult result = processService.add(proc);
+	            logger.debug("新增工序=add:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            logger.error("工作中心新增失败！", e);
+	            logger.error("工序新增失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("工作中心新增失败！");
+	            return ApiResponseResult.failure("工序新增失败！");
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑工作中心", notes = "编辑工作中心", hidden = true)
+	    @ApiOperation(value = "编辑工序", notes = "编辑工序", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult edit(@RequestBody WoCenter center){
-	        String method = "base/center/edit";String methodName ="编辑工作中心";
+	    public ApiResponseResult edit(@RequestBody Process proc){
+	        String method = "base/proc/edit";String methodName ="编辑工序";
 	        try{
-	            ApiResponseResult result = woCenterService.edit(center);
-	            logger.debug("编辑工作中心=edit:");
+	            ApiResponseResult result = processService.edit(proc);
+	            logger.debug("编辑工序=edit:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            logger.error("编辑工作中心失败！", e);
+	            logger.error("编辑工序失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("编辑工作中心失败！");
+	            return ApiResponseResult.failure("编辑工序失败！");
 	        }
 	    }
-		@ApiOperation(value = "根据ID获取工作中心", notes = "根据ID获取工作中心", hidden = true)
-	    @RequestMapping(value = "/getWoCenter", method = RequestMethod.POST)
+		@ApiOperation(value = "根据ID获取工序", notes = "根据ID获取工序", hidden = true)
+	    @RequestMapping(value = "/getProcess", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult getWoCenter(@RequestBody Map<String, Object> params){
-	        String method = "base/center/getWoCenter";String methodName ="根据ID获取工作中心";
+	    public ApiResponseResult getProcess(@RequestBody Map<String, Object> params){
+	        String method = "base/proc/getProcess";String methodName ="根据ID获取工序";
 	        long id = Long.parseLong(params.get("id").toString()) ;
 	        try{
-	            ApiResponseResult result = woCenterService.getWoCenter(id);
-	            logger.debug("根据ID获取工作中心=getWoCenter:");
+	            ApiResponseResult result = processService.getProcess(id);
+	            logger.debug("根据ID获取工序=getProcess:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
-	            logger.error("根据ID获取工作中心失败！", e);
+	            logger.error("根据ID获取工序失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("获取工作中心失败！");
+	            return ApiResponseResult.failure("获取工序失败！");
 	        }
 	    }
 		
-		@ApiOperation(value = "删除工作中心", notes = "删除工作中心", hidden = true)
+		@ApiOperation(value = "删除工序", notes = "删除工序", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
-	        String method = "base/center/delete";String methodName ="删除工作中心";
+	        String method = "base/proc/delete";String methodName ="删除工序";
 	        try{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
-	            ApiResponseResult result = woCenterService.delete(id);
-	            logger.debug("删除工作中心=delete:");
+	            ApiResponseResult result = processService.delete(id);
+	            logger.debug("删除工序=delete:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            logger.error("删除工作中心失败！", e);
+	            logger.error("删除工序失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("删除工作中心失败！");
+	            return ApiResponseResult.failure("删除工序失败！");
 	        }
 	    }
 		
@@ -145,11 +145,11 @@ public class WoCenterController extends WebController{
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{
 			 //Long id, Integer deStatus
-		        String method = "base/center/doStatus";String methodName ="设置正常/禁用";
+		        String method = "base/proc/doStatus";String methodName ="设置正常/禁用";
 		        try{
 		        	long id = Long.parseLong(params.get("id").toString()) ;
 		        	Integer bsStatus=Integer.parseInt(params.get("bsStatus").toString());
-		            ApiResponseResult result = woCenterService.doStatus(id, bsStatus);
+		            ApiResponseResult result = processService.doStatus(id, bsStatus);
 		            logger.debug("设置正常/禁用=doJob:");
 		            getSysLogService().success(method, methodName, null);
 		            return result;
