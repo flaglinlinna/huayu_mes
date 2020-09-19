@@ -114,84 +114,37 @@ $(function () {
             }
         });
 
+        getScheduling();
+
     });
 });
 
-//导入弹出框
-function openUpload(title){
-    deleteTempAll();
-    var index = layer.open({
-        type:1,
-        title: title,
-        fixed:false,
-        resize :false,
-        shadeClose: false,//是否点击遮罩关闭
-        area: ['1000px'],
-        content:$('#uploadDiv'),
-        macmin:true,
-        end:function(){
+//渲染基本信息
+function getScheduling(){
+    $("#id").val(id);
+    $("#bsOrderType").val(scheduling.bsOrderType);
+    $("#bsUniqueOrderNo").val(scheduling.bsUniqueOrderNo);
+    $("#bsOrderNo").val(scheduling.bsOrderNo);
+    $("#bsStatus").val(scheduling.bsStatus);
+    $("#mtrialCode").val(scheduling.mtrialCode);
+    $("#mtrialDesc").val(scheduling.mtrialDesc);
+    $("#bsPlanNum").val(scheduling.bsPlanNum);
+    $("#bsLine").val(scheduling.bsLine);
+    $("#bsCustomer").val(scheduling.bsCustomer);
+    $("#bsPeopleNum").val(scheduling.bsPeopleNum);
+    $("#bsPlanHours").val(scheduling.bsPlanHours);
+    $("#bsCapacityNum").val(scheduling.bsCapacityNum);
+    $("#bsActualNum").val(scheduling.bsActualNum);
 
-        }
-    });
-    layer.full(index);
-}
-
-//重新加载表格（搜索）
-function loadAll(){
-    //重新加载table
-    tableIns.reload({
-        page: {
-            curr: pageCurr //从当前页码开始
-        }
-    });
-};
-
-//确认保存临时数据
-$("#save").click(function () {
-    $.ajax({
-        type: "POST",
-        data: {},
-        url: context+"/produce/scheduling/confirmTemp",
-        success: function (data) {
-            if (data.result) {
-                layer.alert(data.msg,function(){
-                    layer.closeAll();
-                });
-            } else {
-                layer.alert(data.msg,function(index){
-                    layer.close(index);
-                });
-            }
-        },
-        error: function () {
-            layer.alert("操作请求错误，请您稍后再试",function(){
-            });
-        }
-    });
-});
-
-//根据当前登录用户删除临时表所有数据
-function deleteTempAll(){
-    $.ajax({
-        url:context + '/produce/scheduling/deleteTempAll',
-        type:"POST",
-        data:{},
-        success:function(data){
-            //重新获取临时列表数据
-            loadAll();
-        },
-        error:function(e){
-            layer.alert("操作请求错误，请您稍后再试",function(){
-            });
-        }
-    });
+    //渲染
+    layui.form.render('select');
 }
 
 function doAdd(){
     $.ajax({
         type: "POST",
         data: $("#addForm").serialize(),
-        url: context+"/produce/scheduling/add",
+        url: context+"/produce/scheduling/edit",
         success: function (data) {
             if (data.result) {
                 layer.alert("操作成功",function(){

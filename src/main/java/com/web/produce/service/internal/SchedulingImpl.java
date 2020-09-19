@@ -133,6 +133,7 @@ public class SchedulingImpl implements SchedulingService {
 
         o.setModifiedTime(new Date());
         o.setPkModifiedBy(currUser!=null ? currUser.getId() : null);
+        o.setIsDel(1);
         schedulingDao.save(o);
 
         return ApiResponseResult.success("删除成功！");
@@ -157,6 +158,26 @@ public class SchedulingImpl implements SchedulingService {
         Page<Scheduling> page = schedulingDao.findAll(spec1, pageRequest);
 
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
+
+    /**
+     * 根据ID获取排产信息
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getSchedulData(Long id) throws Exception{
+        if(id == null){
+            return ApiResponseResult.failure("排产信息ID不能为空！");
+        }
+        Scheduling o = schedulingDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("排产信息不存在！");
+        }
+
+        return ApiResponseResult.success().data(o);
     }
 
     /**
@@ -395,27 +416,27 @@ public class SchedulingImpl implements SchedulingService {
                 try{
                     departCode = this.readExcelCell(sheet, le, 1);//部门编码
                     if(StringUtils.isEmpty(departCode)){
-                        errorStr += "部门为空；";
+                        //errorStr += "部门为空；";
                     }else{
                         //获取个编码关联的ID
                         List<Department> dList = departmentDao.findByBsName(departCode);
                         departId = dList.size()>0&&dList.get(i)!=null ? dList.get(i).getId() : null;
                         if(departId == null){
-                            errorStr += "部门填写错误；";
+                            //errorStr += "部门填写错误；";
                         }
                     }
                 }catch (Exception e){
-                    errorStr += "部门为空或格式错误；";
+                    //errorStr += "部门为空或格式错误；";
                 }
 
                 //日期
                 try{
                     produceTime = this.readExcelDateCell(sheet, le, 2);//日期
                     if(produceTime == null){
-                        errorStr += "日期为空或格式不正确；";
+                        //errorStr += "日期为空或格式不正确；";
                     }
                 }catch (Exception e){
-                    errorStr += "日期为空或格式不正确；";
+                    //errorStr += "日期为空或格式不正确；";
                 }
 
                 //班次
@@ -446,17 +467,17 @@ public class SchedulingImpl implements SchedulingService {
                 try{
                     mtrialCode = this.readExcelCell(sheet, le, 7);//物料编码
                     if(StringUtils.isEmpty(mtrialCode)){
-                        errorStr += "物料编码为空；";
+                        //errorStr += "物料编码为空；";
                     }else{
                         //获取个编码关联的ID
                         List<Mtrial> mList = mtrialDao.findByIsDelAndBsCode(0, mtrialCode);
                         mtrialId = mList.size()>0&&mList.get(i)!=null ? mList.get(i).getId() : null;
                         if(departId == null){
-                            errorStr += "物料编码填写错误；";
+                            //errorStr += "物料编码填写错误；";
                         }
                     }
                 }catch (Exception e){
-                    errorStr += "物料编码为空或格式错误；";
+                    //errorStr += "物料编码为空或格式错误；";
                 }
 
                 //物料描述
@@ -474,11 +495,11 @@ public class SchedulingImpl implements SchedulingService {
                         List<Process> pList = processDao.findByBsName(procCode);
                         procId = pList.size()>0&&pList.get(i)!=null ? pList.get(i).getId() : null;
                         if(procId == null){
-                            errorStr += "加工工艺填写错误；";
+                            //errorStr += "加工工艺填写错误；";
                         }
                     }
                 }catch (Exception e){
-                    errorStr += "加工工艺为空或格式错误；";
+                    //errorStr += "加工工艺为空或格式错误；";
                 }
 
                 //工单残
