@@ -64,6 +64,7 @@ function edit(id,type){
                 $("input[name='bsCode']").val(data.data.bsCode);
                 $("input[name='pageUrl']").val(data.data.pageUrl);
                 $("input[name='zindex']").val(data.data.zindex);
+                $("input[name='bsIcon']").val(data.data.bsIcon);
                 $("textarea[name='descpt']").text(data.data.descpt);
                 $("#parentId").val(data.data.parentId);
                 data.data.istype==0?$("input[name='istype']").val(0).checked:$("input[name='istype']").val(1).checked;
