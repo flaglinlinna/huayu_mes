@@ -105,4 +105,22 @@ public class ClientProcessMapController extends WebController{
 	            return ApiResponseResult.failure("工艺信息新增失败！");
 	        }
 	    }
+	    @ApiOperation(value = "获取客户通用工艺信息", notes = "获取客户通用工艺信息",hidden = true)
+	    @RequestMapping(value = "/getClientItem", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult getClientItem(@RequestBody Map<String, Object> params) {   	
+	        String method = "base/client/getClientItem";String methodName ="获取客户通用工艺信息";
+	        try{	        	
+	        	long Id = Long.parseLong(params.get("client").toString());
+	            ApiResponseResult result = clientService.getClientItem(Id);
+	            logger.debug("获取客户通用工艺信息=getClientItem:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            logger.error("获取客户通用工艺失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("获取客户通用工艺失败！");
+	        }
+	    }
 }

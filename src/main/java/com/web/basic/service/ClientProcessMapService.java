@@ -13,7 +13,7 @@ public interface ClientProcessMapService {
 	//public ApiResponseResult edit(ClientProcessMap clientProcess) throws Exception;
 
 	// 根据ID获取记录
-	//public ApiResponseResult getClientProcess(Long id) throws Exception;
+	public ApiResponseResult getClientItem(Long id) throws Exception;
 
 	//public ApiResponseResult delete(Long id) throws Exception;
 

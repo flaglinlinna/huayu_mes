@@ -98,6 +98,7 @@ $(function() {
 			data:[]
 		});	
 		
+		
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
 			var procIdList="";
@@ -122,10 +123,10 @@ function addProc() {
 	// 清空弹出框数据
 	getProcList("");
 	// 打开弹出框
-	openProc(null, "添加不良内容");
+	openProc(null, "添加工艺流程");
 }
 
-//新增不良内容提交
+//新增工艺流程提交
 function addSubmit(procIdlist,client) {
 	var params = {
 			"proc":procIdlist,
@@ -151,7 +152,7 @@ function addSubmit(procIdlist,client) {
 	});
 }
 
-//获取不良类别
+//获取客户，工序信息
 function getProcList(id){
 	CoreUtil.sendAjax("base/client_proc/getProcList", "",
 			function(data) {

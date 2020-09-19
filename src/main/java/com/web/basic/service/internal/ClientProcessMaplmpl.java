@@ -120,6 +120,14 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
     }
 	
 	/**
+     * 客户ID获取原来工序记录
+     */
+	public ApiResponseResult getClientItem(Long id) throws Exception{
+		 List<ClientProcessMap> list = clientProcessMapDao.findByIsDelAndPkClient(0, id);
+		return ApiResponseResult.success().data(list);
+	}
+
+	/**
      * 获取物料数据，工序数据
      */
 	@Override
