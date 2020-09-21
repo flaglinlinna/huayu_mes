@@ -15,7 +15,7 @@ public interface ClientProcessMapService {
 	// 根据ID获取记录
 	public ApiResponseResult getClientItem(Long id) throws Exception;
 
-	//public ApiResponseResult delete(Long id) throws Exception;
+	public ApiResponseResult delete(Long id) throws Exception;
 
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
 	public ApiResponseResult getProcList()throws Exception;

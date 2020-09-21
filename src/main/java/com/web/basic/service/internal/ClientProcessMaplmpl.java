@@ -126,7 +126,26 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 		 List<ClientProcessMap> list = clientProcessMapDao.findByIsDelAndPkClient(0, id);
 		return ApiResponseResult.success().data(list);
 	}
-
+	
+	/**
+	 * 删除工序记录
+	 * */
+	@Override
+    @Transactional
+    public ApiResponseResult delete(Long id) throws Exception{
+        if(id == null){
+            return ApiResponseResult.failure("ID不能为空！");
+        }
+        ClientProcessMap o  = clientProcessMapDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("该工序不存在！");
+        }
+        o.setModifiedTime(new Date());
+        o.setIsDel(1);
+        clientProcessMapDao.save(o);
+        return ApiResponseResult.success("删除成功！");
+    }
+	
 	/**
      * 获取物料数据，工序数据
      */

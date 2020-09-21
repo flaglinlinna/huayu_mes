@@ -73,6 +73,7 @@ $(function() {
 				// console.log(count);
 				pageCurr = curr;
 				merge(res.data,['pClientCode'],[1]);
+				merge(res.data,['pClientName'],[2]);
 			}
 		});
 		tableProc=table.render({
@@ -97,23 +98,38 @@ $(function() {
 			}] ],
 			data:[]
 		});	
+		form.on('select(pkClient)', function(data){//监听选择事件
+			var params={"client":$("#pkClient").val()}
+			getProcByClient(params);
+		})
 		
+		// 监听工具条
+		table.on('tool(client_procTable)', function(obj) {
+			var data = obj.data;
+			if (obj.event === 'del') {
+				// 删除
+				delClientProc(data, data.id, data.pProcName);
+			} else if (obj.event === 'edit') {
+				// 编辑
+				console.log("edit");
+				//getClientProc(data, data.id);//未写
+			}
+		});
 		
 		// 监听提交
-		form.on('submit(addSubmit)', function(data) {
-			var procIdList="";
-			var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
-			for(var i=0;i<cList.length;i++){//获取被选中的行
-				procIdList+=cList[i].id+";"//工序的ID序列，用“；”分隔
+		form.on('submit(addSubmit)', function(data) {			
+			if (data.field.id == null || data.field.id == "") {
+				// 新增
+				var procIdList="";
+				var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
+				for(var i=0;i<cList.length;i++){//获取被选中的行
+					procIdList+=cList[i].id+";"//工序的ID序列，用“；”分隔
+				}
+				var client=data.field.pkClient;
+				addSubmit(procIdList,client);
+			} else {
+				//editSubmit(data);//未写
 			}
-			var client=data.field.pkClient;
-			addSubmit(procIdList,client);
-//			if (data.field.id == null || data.field.id == "") {
-//				// 新增
-//				addSubmit(data);
-//			} else {
-//				editSubmit(data);
-//			}
 			return false;
 		});
 	});
@@ -124,6 +140,53 @@ function addProc() {
 	getProcList("");
 	// 打开弹出框
 	openProc(null, "添加工艺流程");
+}
+
+//根据客户信息获取工序数据
+function getProcByClient(params){
+	CoreUtil.sendAjax("base/client_proc/getClientItem", JSON.stringify(params), function(
+			data) {
+		if (data.result) {
+			
+			var beSelected=data.data;
+			console.log(beSelected)
+			
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
+function delClientProc(obj, id, name) {
+	if (id != null) {
+		var param = {
+			"id" : id
+		};
+		layer.confirm('您确定要删除' + name + '工序吗？', {
+			btn : [ '确认', '返回' ]
+		// 按钮
+		}, function() {
+			CoreUtil.sendAjax("base/client_proc/delete", JSON.stringify(param),
+					function(data) {
+						if (isLogin(data)) {
+							if (data.result == true) {
+								// 回调弹框
+								layer.alert("删除成功！", function() {
+									layer.closeAll();
+									// 加载load方法
+									loadAll();
+								});
+							} else {
+								layer.alert(data, function() {
+									layer.closeAll();
+								});
+							}
+						}
+					});
+		});
+	}
 }
 
 //新增工艺流程提交
@@ -178,7 +241,7 @@ function getProcList(id){
 			});
 }
 function merge(res,columsName,columsIndex) {
-    console.log(res)
+    //console.log(res)
     var data = res;
     var mergeIndex = 0;//定位需要添加合并属性的行数
     var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数

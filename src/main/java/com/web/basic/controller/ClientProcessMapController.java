@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiOperation;
 public class ClientProcessMapController extends WebController{
 
 	 @Autowired
-	 private ClientProcessMapService clientService;
+	 private ClientProcessMapService clientProcessMapService;
 	 
 	 @ApiOperation(value = "客户通用工艺维护列表结构", notes = "客户通用工艺维护列表结构"+ClientProcessMap.TABLE_NAME)
 	    @RequestMapping(value = "/getClientProcessMap", method = RequestMethod.GET)
@@ -56,7 +56,7 @@ public class ClientProcessMapController extends WebController{
 	        try {
 	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result = clientService.getList(keyword, super.getPageRequest(sort));
+	            ApiResponseResult result = clientProcessMapService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取客户通用工艺维护列表=getList:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
@@ -71,9 +71,9 @@ public class ClientProcessMapController extends WebController{
 	    @RequestMapping(value = "/getProcList", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getProcList() {
-	        String method = "base/defdetail/getProcList";String methodName ="获取工序列表";
+	        String method = "base/client_proc/getProcList";String methodName ="获取工序列表";
 	        try {
-	            ApiResponseResult result = clientService.getProcList();
+	            ApiResponseResult result = clientProcessMapService.getProcList();
 	            logger.debug("获取工序列表=getProcList:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
@@ -89,12 +89,12 @@ public class ClientProcessMapController extends WebController{
 	    @RequestMapping(value = "/addItem", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult addItem(@RequestBody Map<String, Object> params) {   	
-	        String method = "base/client/addItem";String methodName ="新增工艺信息";
+	        String method = "base/client_proc/addItem";String methodName ="新增工艺信息";
 	        try{
 	        	
 	        	long clientId = Long.parseLong(params.get("client").toString());
 	        	String procIdList = params.get("proc").toString();
-	            ApiResponseResult result = clientService.addItem(procIdList,clientId);
+	            ApiResponseResult result = clientProcessMapService.addItem(procIdList,clientId);
 	            logger.debug("新增工艺信息=addItem:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
@@ -109,10 +109,10 @@ public class ClientProcessMapController extends WebController{
 	    @RequestMapping(value = "/getClientItem", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getClientItem(@RequestBody Map<String, Object> params) {   	
-	        String method = "base/client/getClientItem";String methodName ="获取客户通用工艺信息";
+	        String method = "base/client_proc/getClientItem";String methodName ="获取客户通用工艺信息";
 	        try{	        	
 	        	long Id = Long.parseLong(params.get("client").toString());
-	            ApiResponseResult result = clientService.getClientItem(Id);
+	            ApiResponseResult result = clientProcessMapService.getClientItem(Id);
 	            logger.debug("获取客户通用工艺信息=getClientItem:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
@@ -121,6 +121,25 @@ public class ClientProcessMapController extends WebController{
 	            logger.error("获取客户通用工艺失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取客户通用工艺失败！");
+	        }
+	    }
+	    
+	    @ApiOperation(value = "删除工序信息", notes = "删除工序信息",hidden = true)
+	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
+	        String method = "base/client_proc/delete";String methodName ="删除工序信息";
+	        try{
+	        	long id = Long.parseLong(params.get("id").toString()) ;
+	            ApiResponseResult result = clientProcessMapService.delete(id);
+	            logger.debug("删除工序信息=delete:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            logger.error("删除工序信息失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("删除客户信息失败！");
 	        }
 	    }
 }

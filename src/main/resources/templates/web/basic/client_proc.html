@@ -33,21 +33,14 @@
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
 					type="hidden" name="id" />
 				<div class="layui-form-item">
-					<label class="layui-form-label">客户编号</label>
+					<label class="layui-form-label">客户</label>
 					<div class="layui-input-inline">
 						<select id="pkClient" name="pkClient" lay-filter="pkClient" lay-verify="required"
 							lay-search>
 						</select>
 					</div>
 				</div>
-				<!--<div class="layui-form-item">
-				<label class="layui-form-label">客户名称</label>
-					<div class="layui-input-inline">
-						<input id="clientName" name="clientName" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text" />
-					</div>
-				</div>  -->
-				<table id="procList" lay-filter="procTable"></table>
+				<table id="procList" lay-filter="procTable" class="layui-table" lay-data="{id: 'procList'}"></table>
 				
 				<div class="layui-form-item">
 					<div class="layui-input-block" >
