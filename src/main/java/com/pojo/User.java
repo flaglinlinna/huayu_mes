@@ -21,8 +21,6 @@ public class User implements Serializable {
 
 	private Date updateTime;
 
-	private Boolean isDel;
-
 	private Boolean isJob;
 
 	private String mcode;
@@ -95,13 +93,6 @@ public class User implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public Boolean getIsDel() {
-		return isDel;
-	}
-
-	public void setIsDel(Boolean isDel) {
-		this.isDel = isDel;
-	}
 
 	public Boolean getIsJob() {
 		return isJob;
@@ -140,7 +131,7 @@ public class User implements Serializable {
 		return "User [id=" + id + ", username=" + username + ", mobile="
 				+ mobile + ", email=" + email + ", password=" + password
 				+ ", insertUid=" + insertUid + ", insertTime=" + insertTime
-				+ ", updateTime=" + updateTime + ", isDel=" + isDel
+				+ ", updateTime=" + updateTime 
 				+ ", isJob=" + isJob + ", mcode=" + mcode + ", sendTime="
 				+ sendTime + ", version=" + version + "]";
 	}
