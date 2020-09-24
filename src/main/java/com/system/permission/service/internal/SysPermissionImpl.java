@@ -35,25 +35,25 @@ public class SysPermissionImpl implements SysPermissionService {
 		/*Iterable<SysPermission> geted = sysPermissionDao.findAll();
 		List<SysPermission> list =  Lists.newArrayList(geted);
 		return list;*/
-		return sysPermissionDao.findByIsDel(0);
+		return sysPermissionDao.findByDelFlag(0);
 	}
 
 	@Override
 	public ApiResponseResult delete(Long id) throws Exception {
 		// TODO Auto-generated method stub
-		SysPermission o = sysPermissionDao.findByIdAndIsDel((long)id,0);
+		SysPermission o = sysPermissionDao.findByIdAndDelFlag((long)id,0);
         if (null == o) {
             return ApiResponseResult.failure("记录ID不存在或已被删除").status("error1");
         }
 		
-		List<SysPermission> list = sysPermissionDao.findByIsDelAndParentId(0, id);
+		List<SysPermission> list = sysPermissionDao.findByDelFlagAndParentId(0, id);
 		if(list.size() >0){
 			return  ApiResponseResult.failure("删除失败，请您先删除该权限的子节点");
 		}
 
-        o.setIsDel(1);
-        o.setCreatedTime(new Date());
-        o.setModifiedTime(new Date());
+        o.setDelFlag(1);
+        o.setCreateDate(new Date());
+        o.setLastupdateDate(new Date());
         sysPermissionDao.save(o);
         return ApiResponseResult.success("删除成功！");
 
@@ -62,7 +62,7 @@ public class SysPermissionImpl implements SysPermissionService {
 	@Override
 	public ApiResponseResult getPermission(Long id) throws Exception {
 		// TODO Auto-generated method stub
-		SysPermission o = sysPermissionDao.findByIdAndIsDel((long)id,0);
+		SysPermission o = sysPermissionDao.findByIdAndDelFlag((long)id,0);
         if (null == o) {
             return ApiResponseResult.failure("记录ID不存在或已被删除").status("error1");
         }
@@ -77,14 +77,14 @@ public class SysPermissionImpl implements SysPermissionService {
 			sysPermissionDao.save(perm);
 		}else{
 			//修改
-			SysPermission s = sysPermissionDao.findByIdAndIsDel(perm.getId(), 0);
+			SysPermission s = sysPermissionDao.findByIdAndDelFlag(perm.getId(), 0);
 			s.setBsCode(perm.getBsCode());
 			s.setBsIcon(perm.getBsIcon());
 			s.setPageUrl(perm.getPageUrl());
 			s.setBsName(perm.getBsName());
 			s.setZindex(perm.getZindex());
 			s.setDescpt(perm.getDescpt());
-			s.setModifiedTime(new Date());
+			s.setLastupdateDate(new Date());
 			sysPermissionDao.save(s);
 		}
 		

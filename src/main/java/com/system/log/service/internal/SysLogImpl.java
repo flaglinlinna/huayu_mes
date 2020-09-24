@@ -61,7 +61,7 @@ public class SysLogImpl implements SysLogService {
     public ApiResponseResult getlist(String keyword, PageRequest pageRequest) throws Exception{
     	//查询条件1
 	    List<SearchFilter> filters =new ArrayList<>();
-        filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         //查询2
         List<SearchFilter> filters1 =new ArrayList<>();
         if(StringUtils.isNotEmpty(keyword)){
@@ -85,7 +85,7 @@ public class SysLogImpl implements SysLogService {
 			sysLog.setType("1");
 			sysLog.setMethod(method);
 			sysLog.setMethodName(methodName);
-			sysLog.setCreatedTime(new Date());
+			sysLog.setCreateDate(new Date());
 			sysLogDao.save(sysLog);
 			sysLog.setUsername(UserUtil.getSessionUser().getBsCode());
 //            sysLog.setUsername(UserUtil.getSessionUser().getFcode());
@@ -117,7 +117,7 @@ public class SysLogImpl implements SysLogService {
 			sysLog.setType("2");
 			sysLog.setMethod(method);
 			sysLog.setMethodName(methodName);
-			sysLog.setCreatedTime(new Date());
+			sysLog.setCreateDate(new Date());
 			sysLog.setOperation("操作成功");
 			sysLog.setUsername(UserUtil.getSessionUser().getBsCode());
 //            sysLog.setUsername(UserUtil.getSessionUser().getFcode());
@@ -142,7 +142,7 @@ public class SysLogImpl implements SysLogService {
 			sysLog.setType("3");
 			sysLog.setMethod(method);
 			sysLog.setMethodName(methodName);
-			sysLog.setCreatedTime(new Date());
+			sysLog.setCreateDate(new Date());
 			sysLog.setOperation("操作失败");
 			sysLog.setParams(param.toString());
 			sysLog.setUsername(UserUtil.getSessionUser().getBsCode());
@@ -168,7 +168,7 @@ public class SysLogImpl implements SysLogService {
 			sysLog.setType("1");
 			sysLog.setMethod(method);
 			sysLog.setMethodName(methodName);
-			sysLog.setCreatedTime(new Date());
+			sysLog.setCreateDate(new Date());
 			sysLog.setParams(param.toString());
 			sysLogDao.save(sysLog);
 			return ApiResponseResult.success();

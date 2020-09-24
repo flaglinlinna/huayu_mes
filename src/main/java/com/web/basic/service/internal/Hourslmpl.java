@@ -44,11 +44,11 @@ public class Hourslmpl implements HoursService {
         if(StringUtils.isEmpty(hours.getBsStdHrs())){
             return ApiResponseResult.failure("标准工时不能为空！");
         }
-        int count = hoursDao.countByIsDelAndBsCode(0, hours.getBsCode());
+        int count = hoursDao.countByDelFlagAndBsCode(0, hours.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该产品编码已存在，请填写其他产品编码！");
         }
-        hours.setCreatedTime(new Date());
+        hours.setCreateDate(new Date());
         hoursDao.save(hours);
 
         return ApiResponseResult.success("产品标准工时添加成功！").data(hours);
@@ -78,13 +78,13 @@ public class Hourslmpl implements HoursService {
         //判断工作中心编号是否有变化，有则修改；没有则不修改
         if(o.getBsCode().equals(hours.getBsCode())){
         }else{
-            int count = hoursDao.countByIsDelAndBsCode(0, hours.getBsCode());
+            int count = hoursDao.countByDelFlagAndBsCode(0, hours.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("产品编码已存在，请填写其他产品编码！");
             }
             o.setBsCode(hours.getBsCode().trim());
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsStdHrs(hours.getBsStdHrs());
         hoursDao.save(o);
         return ApiResponseResult.success("编辑成功！");
@@ -121,8 +121,8 @@ public class Hourslmpl implements HoursService {
         if(o == null){
             return ApiResponseResult.failure("该产品编码不存在！");
         }
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         hoursDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -136,7 +136,7 @@ public class Hourslmpl implements HoursService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
-				filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {

@@ -13,5 +13,5 @@ public interface UserRoleMapDao extends CrudRepository<UserRoleMap, Long>, JpaSp
 
     public List<UserRoleMap> findByUserId(Long userId);
 
-    public List<UserRoleMap> findByIsDelAndUserId(Integer isDel, Long userId);
+    public List<UserRoleMap> findByDelFlagAndUserId(Integer delFlag, Long userId);
 }

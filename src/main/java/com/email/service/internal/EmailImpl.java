@@ -84,7 +84,7 @@ public class EmailImpl  implements EmailService {
             fsFile.setBsFilePath("/"+ymd);
             ApiResponseResult result = ftpClientService.uploadFile(path, dateFileName+fsFile.getBsFileType(), new ByteArrayInputStream(file.getBytes()));
             if(result.isResult()) {
-                fsFile.setCreatedTime(new Date());
+                fsFile.setCreateDate(new Date());
                 fsFileDao.save(fsFile);
                 return ApiResponseResult.success("文件上传成功！").data(fsFile);
             }
@@ -180,7 +180,7 @@ public class EmailImpl  implements EmailService {
         }
         FsFile fsFile = fsFiles.get();
 
-        fsFile.setIsDel(1);
+        fsFile.setDelFlag(1);
         fsFileDao.save(fsFile);
         return ApiResponseResult.success("文件删除成功！");
     }
@@ -199,7 +199,7 @@ public class EmailImpl  implements EmailService {
             Boolean flag = emailUtils_2.sendEmail(subject, toUser, null, "时间的沙漏总是忙碌和紧张_2", null);
             if(flag){
                 SysEmailInfo sysEmailInfo = new SysEmailInfo();
-                sysEmailInfo.setCreatedTime(new Date());
+                sysEmailInfo.setCreateDate(new Date());
                 String emailFrom = env.getProperty("mail.auth.name");
                 sysEmailInfo.setBsEmailFrom(emailFrom);
                 sysEmailInfo.setBsEmailTo(emailTo);

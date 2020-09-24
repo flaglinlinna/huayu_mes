@@ -9,7 +9,7 @@ import com.web.basic.entity.Client;;
 public interface ClientDao extends CrudRepository<Client, Long>,JpaSpecificationExecutor<Client>{
 	
 	public List<Client> findAll();
-	public List<Client> findByIsDel(Integer isDel);
+	public List<Client> findByDelFlag(Integer delFlag);
 	public Client findById(long id);
-	public int countByIsDelAndBsCode(Integer isDel, String bsCode);//查询deCode是否存在
+	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
 }

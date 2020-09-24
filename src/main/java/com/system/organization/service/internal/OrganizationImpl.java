@@ -30,25 +30,25 @@ public class OrganizationImpl implements OrganizationService {
 		/*Iterable<SysPermission> geted = sysPermissionDao.findAll();
 		List<SysPermission> list =  Lists.newArrayList(geted);
 		return list;*/
-		return organizationDao.findByIsDel(0);
+		return organizationDao.findByDelFlag(0);
 	}
 
 	@Override
 	public ApiResponseResult delete(Long id) throws Exception {
 		// TODO Auto-generated method stub
-		SysOrganization o = organizationDao.findByIdAndIsDel((long)id,0);
+		SysOrganization o = organizationDao.findByIdAndDelFlag((long)id,0);
         if (null == o) {
             return ApiResponseResult.failure("记录ID不存在或已被删除").status("error1");
         }
 		
-		List<SysOrganization> list = organizationDao.findByIsDelAndParentId(0, id);
+		List<SysOrganization> list = organizationDao.findByDelFlagAndParentId(0, id);
 		if(list.size() >0){
 			return  ApiResponseResult.failure("删除失败，请您先删除该权限的子节点");
 		}
 
-        o.setIsDel(1);
-        o.setCreatedTime(new Date());
-        o.setModifiedTime(new Date());
+        o.setDelFlag(1);
+        o.setCreateDate(new Date());
+        o.setLastupdateDate(new Date());
         organizationDao.save(o);
         return ApiResponseResult.success("删除成功！");
 
@@ -57,7 +57,7 @@ public class OrganizationImpl implements OrganizationService {
 	@Override
 	public ApiResponseResult getPermission(Long id) throws Exception {
 		// TODO Auto-generated method stub
-		SysOrganization o = organizationDao.findByIdAndIsDel((long)id,0);
+		SysOrganization o = organizationDao.findByIdAndDelFlag((long)id,0);
         if (null == o) {
             return ApiResponseResult.failure("记录ID不存在或已被删除").status("error1");
         }
@@ -72,7 +72,7 @@ public class OrganizationImpl implements OrganizationService {
 			organizationDao.save(perm);
 		}else{
 			//修改
-			SysOrganization s = organizationDao.findByIdAndIsDel(perm.getId(), 0);
+			SysOrganization s = organizationDao.findByIdAndDelFlag(perm.getId(), 0);
 			s.setBsCode(perm.getBsCode());
 			s.setBsName(perm.getBsName());
 			s.setBsLevel(perm.getBsLevel());
@@ -80,7 +80,7 @@ public class OrganizationImpl implements OrganizationService {
 			s.setBsMobile(perm.getBsMobile());
 			s.setBsZindex(perm.getBsZindex());
 			s.setDescpt(perm.getDescpt());
-			s.setModifiedTime(new Date());
+			s.setLastupdateDate(new Date());
 			organizationDao.save(s);
 		}
 		

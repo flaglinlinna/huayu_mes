@@ -44,11 +44,11 @@ public class Processlmpl implements ProcessService {
         if(StringUtils.isEmpty(process.getBsName())){
             return ApiResponseResult.failure("工序名称不能为空！");
         }
-        int count = processDao.countByIsDelAndBsCode(0, process.getBsCode());
+        int count = processDao.countByDelFlagAndBsCode(0, process.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该工序已存在，请填写其他工序编码！");
         }
-        process.setCreatedTime(new Date());
+        process.setCreateDate(new Date());
         processDao.save(process);
 
         return ApiResponseResult.success("工序添加成功！").data(process);
@@ -78,13 +78,13 @@ public class Processlmpl implements ProcessService {
         //判断工序编码是否有变化，有则修改；没有则不修改
         if(o.getBsCode().equals(process.getBsCode())){
         }else{
-            int count = processDao.countByIsDelAndBsCode(0, process.getBsCode());
+            int count = processDao.countByDelFlagAndBsCode(0, process.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("工序编码已存在，请填写其他工序编码！");
             }
             o.setBsCode(process.getBsCode().trim());
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsName(process.getBsName());
         processDao.save(o);
         return ApiResponseResult.success("编辑成功！");
@@ -121,8 +121,8 @@ public class Processlmpl implements ProcessService {
         if(o == null){
             return ApiResponseResult.failure("该工序不存在！");
         }
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         processDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -140,7 +140,7 @@ public class Processlmpl implements ProcessService {
         if(o == null){
             return ApiResponseResult.failure("工序不存在！");
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsStatus(bsStatus);
         processDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
@@ -154,7 +154,7 @@ public class Processlmpl implements ProcessService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
-				filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {

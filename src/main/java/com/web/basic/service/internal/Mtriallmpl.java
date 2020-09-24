@@ -44,11 +44,11 @@ public class Mtriallmpl implements MtrialService {
         if(StringUtils.isEmpty(mtrial.getBsName())){
             return ApiResponseResult.failure("物料名称不能为空！");
         }
-        int count = mtrialDao.countByIsDelAndBsCode(0, mtrial.getBsCode());
+        int count = mtrialDao.countByDelFlagAndBsCode(0, mtrial.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该物料已存在，请填写其他物料编号！");
         }
-        mtrial.setCreatedTime(new Date());
+        mtrial.setCreateDate(new Date());
         mtrialDao.save(mtrial);
 
         return ApiResponseResult.success("物料添加成功！").data(mtrial);
@@ -78,13 +78,13 @@ public class Mtriallmpl implements MtrialService {
         //判断物料编号是否有变化，有则修改；没有则不修改
         if(o.getBsCode().equals(mtrial.getBsCode())){
         }else{
-            int count = mtrialDao.countByIsDelAndBsCode(0, mtrial.getBsCode());
+            int count = mtrialDao.countByDelFlagAndBsCode(0, mtrial.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("物料编号已存在，请填写其他物料编号！");
             }
             o.setBsCode(mtrial.getBsCode().trim());
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsName(mtrial.getBsName());
         o.setBsType(mtrial.getBsType());
         o.setBsUnit(mtrial.getBsUnit());
@@ -123,8 +123,8 @@ public class Mtriallmpl implements MtrialService {
         if(o == null){
             return ApiResponseResult.failure("该物料不存在！");
         }
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         mtrialDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -142,7 +142,7 @@ public class Mtriallmpl implements MtrialService {
         if(o == null){
             return ApiResponseResult.failure("物料不存在！");
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsStatus(bsStatus);
         mtrialDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
@@ -156,7 +156,7 @@ public class Mtriallmpl implements MtrialService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
-				filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {

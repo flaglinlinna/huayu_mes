@@ -44,11 +44,11 @@ public class Defectivelmpl implements DefectiveService {
         if(StringUtils.isEmpty(defective.getBsName())){
             return ApiResponseResult.failure("不良类别名称不能为空！");
         }
-        int count = defectiveDao.countByIsDelAndBsCode(0, defective.getBsCode());
+        int count = defectiveDao.countByDelFlagAndBsCode(0, defective.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该不良类别编号已存在，请填写其他不良类别编码！");
         }
-        defective.setCreatedTime(new Date());
+        defective.setCreateDate(new Date());
         defectiveDao.save(defective);
 
         return ApiResponseResult.success("不良类别添加成功！").data(defective);
@@ -78,13 +78,13 @@ public class Defectivelmpl implements DefectiveService {
         //判断不良类别编码是否有变化，有则修改；没有则不修改
         if(o.getBsCode().equals(defective.getBsCode())){
         }else{
-            int count = defectiveDao.countByIsDelAndBsCode(0, defective.getBsCode());
+            int count = defectiveDao.countByDelFlagAndBsCode(0, defective.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("不良类别编码已存在，请填写其他不良类别编码！");
             }
             o.setBsCode(defective.getBsCode().trim());
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsName(defective.getBsName());
         defectiveDao.save(o);
         return ApiResponseResult.success("编辑成功！");
@@ -121,8 +121,8 @@ public class Defectivelmpl implements DefectiveService {
         if(o == null){
             return ApiResponseResult.failure("不良类别不存在！");
         }
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         defectiveDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -140,7 +140,7 @@ public class Defectivelmpl implements DefectiveService {
         if(o == null){
             return ApiResponseResult.failure("不良类别不存在！");
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsStatus(bsStatus);
         defectiveDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
@@ -154,7 +154,7 @@ public class Defectivelmpl implements DefectiveService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
-				filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {

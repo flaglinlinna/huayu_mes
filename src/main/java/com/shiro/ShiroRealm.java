@@ -113,7 +113,7 @@ public class ShiroRealm extends AuthorizingRealm {
         String userName = token.getUsername();
 		// 调用数据层
         //SysUser user = new SysUser();
-        SysUser user = sysUserDao.findByIsDelAndBsCode(0, userName);
+        SysUser user = sysUserDao.findByDelFlagAndBsCode(0, userName);
         SysUser userMD5 = new SysUser();
         try{
             userMD5.setId(user.getId());
@@ -124,7 +124,7 @@ public class ShiroRealm extends AuthorizingRealm {
         }catch (Exception e){
             userMD5.setBsPassword(DigestUtils.md5Hex("a"));
         }
-//        SysUser user = sysUserDao.findByIsDelAndUserCode(0,userName);
+//        SysUser user = sysUserDao.findByDelFlagAndUserCode(0,userName);
 
 		logger.debug("用户登录认证！用户信息user：" + user);
 		if (user == null) {

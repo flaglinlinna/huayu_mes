@@ -44,11 +44,11 @@ public class WorkCenterlmpl implements WorkCenterService {
         if(StringUtils.isEmpty(workCenter.getBsName())){
             return ApiResponseResult.failure("工作中心名称不能为空！");
         }
-        int count = workCenterDao.countByIsDelAndBsCode(0, workCenter.getBsCode());
+        int count = workCenterDao.countByDelFlagAndBsCode(0, workCenter.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该工作中心已存在，请填写其他工作中心编号！");
         }
-        workCenter.setCreatedTime(new Date());
+        workCenter.setCreateDate(new Date());
         workCenterDao.save(workCenter);
 
         return ApiResponseResult.success("工作中心添加成功！").data(workCenter);
@@ -78,13 +78,13 @@ public class WorkCenterlmpl implements WorkCenterService {
         //判断工作中心编号是否有变化，有则修改；没有则不修改
         if(o.getBsCode().equals(workCenter.getBsCode())){
         }else{
-            int count = workCenterDao.countByIsDelAndBsCode(0, workCenter.getBsCode());
+            int count = workCenterDao.countByDelFlagAndBsCode(0, workCenter.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("工作中心编号已存在，请填写其他工作中心编号！");
             }
             o.setBsCode(workCenter.getBsCode().trim());
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsName(workCenter.getBsName());
         workCenterDao.save(o);
         return ApiResponseResult.success("编辑成功！");
@@ -121,8 +121,8 @@ public class WorkCenterlmpl implements WorkCenterService {
         if(o == null){
             return ApiResponseResult.failure("该工作中心不存在！");
         }
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         workCenterDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -140,7 +140,7 @@ public class WorkCenterlmpl implements WorkCenterService {
         if(o == null){
             return ApiResponseResult.failure("工作中心不存在！");
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsStatus(bsStatus);
         workCenterDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
@@ -154,7 +154,7 @@ public class WorkCenterlmpl implements WorkCenterService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
-				filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {

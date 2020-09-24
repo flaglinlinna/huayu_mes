@@ -71,11 +71,11 @@ public class SysUserImpl implements SysUserService {
         //1.新增
         if(sysUser.getId() == null){
             //判断用户账号是否存在，存在则
-            SysUser existUser = sysUserDao.findByIsDelAndBsCode(0, sysUser.getBsCode());
+            SysUser existUser = sysUserDao.findByDelFlagAndBsCode(0, sysUser.getBsCode());
             if(existUser != null){
                 return ApiResponseResult.failure("该账号已存在！");
             }
-            sysUser.setCreatedTime(new Date());
+            sysUser.setCreateDate(new Date());
             sysUser.setBsStatus(0);//状态（0：正常 / 1：禁用）
             sysUser.setBsPassword(DigestUtils.md5Hex("123456"));//设置密码
             sysUserDao.save(sysUser);
@@ -85,7 +85,7 @@ public class SysUserImpl implements SysUserService {
                 String[] arrays = sysUser.getRoleIds().split(",");
                 for(String roleId : arrays){
                     UserRoleMap urItem = new UserRoleMap();
-                    urItem.setCreatedTime(new Date());
+                    urItem.setCreateDate(new Date());
                     urItem.setUserId(sysUser.getId());
                     urItem.setRoleId(Long.parseLong(roleId));
                     userRoleMapDao.save(urItem);
@@ -98,12 +98,12 @@ public class SysUserImpl implements SysUserService {
             if(o == null){
                 return ApiResponseResult.failure("用户不存在！");
             }
-            int count = sysUserDao.countByIsDelAndBsCodeAndIdNot(0, sysUser.getBsCode(), sysUser.getId());
+            int count = sysUserDao.countByDelFlagAndBsCodeAndIdNot(0, sysUser.getBsCode(), sysUser.getId());
             if(count > 0){
                 return ApiResponseResult.failure("用户编号已存在，请填写其他用户编号！");
             }
 
-            o.setModifiedTime(new Date());
+            o.setLastupdateDate(new Date());
             o.setBsCode(sysUser.getBsCode().trim());
             o.setBsName(sysUser.getBsName());
             o.setRealName(sysUser.getRealName());
@@ -113,11 +113,11 @@ public class SysUserImpl implements SysUserService {
             o.setRegisterSource(sysUser.getRegisterSource());
 
             //删除原来的角色权限
-            List<UserRoleMap> list = userRoleMapDao.findByIsDelAndUserId(0, o.getId());
+            List<UserRoleMap> list = userRoleMapDao.findByDelFlagAndUserId(0, o.getId());
             if(list.size() > 0){
                 for(UserRoleMap urItem : list){
-                    urItem.setModifiedTime(new Date());
-                    urItem.setIsDel(1);
+                    urItem.setLastupdateDate(new Date());
+                    urItem.setDelFlag(1);
                 }
                 userRoleMapDao.saveAll(list);
             }
@@ -127,7 +127,7 @@ public class SysUserImpl implements SysUserService {
                 String[] arrays = sysUser.getRoleIds().split(",");
                 for(String roleId : arrays){
                     UserRoleMap urItem = new UserRoleMap();
-                    urItem.setCreatedTime(new Date());
+                    urItem.setCreateDate(new Date());
                     urItem.setUserId(o.getId());
                     urItem.setRoleId(Long.parseLong(roleId));
                     userRoleMapDao.save(urItem);
@@ -160,7 +160,7 @@ public class SysUserImpl implements SysUserService {
         }
 
         //修改用户信息
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsName(sysUser.getBsName());
         o.setRealName(sysUser.getRealName());
         o.setMobile(sysUser.getMobile());
@@ -192,16 +192,16 @@ public class SysUserImpl implements SysUserService {
         }
 
         //删除用户
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         sysUserDao.save(o);
 
         //删除用户关联角色信息
-        List<UserRoleMap> list = userRoleMapDao.findByIsDelAndUserId(0, id);
+        List<UserRoleMap> list = userRoleMapDao.findByDelFlagAndUserId(0, id);
         if(list.size() > 0){
             for(UserRoleMap urItem : list){
-                urItem.setModifiedTime(new Date());
-                urItem.setIsDel(1);
+                urItem.setLastupdateDate(new Date());
+                urItem.setDelFlag(1);
             }
             userRoleMapDao.saveAll(list);
         }
@@ -256,7 +256,7 @@ public class SysUserImpl implements SysUserService {
             return ApiResponseResult.failure("原密码输入有误！");
         }
         //修改密码
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsPassword(DigestUtils.md5Hex(password.trim()));
         sysUserDao.save(o);
 
@@ -301,7 +301,7 @@ public class SysUserImpl implements SysUserService {
         }
         //获取当前用户角色
         String roleNames = "";
-        List<UserRoleMap> urList = userRoleMapDao.findByIsDelAndUserId(0, sysUser.getId());
+        List<UserRoleMap> urList = userRoleMapDao.findByDelFlagAndUserId(0, sysUser.getId());
         for(UserRoleMap item : urList){
             if(item != null && item.getRoleId() != null){
                 SysRole sysRole = sysRoleDao.findById((long) item.getRoleId());
@@ -350,7 +350,7 @@ public class SysUserImpl implements SysUserService {
 	public ApiResponseResult getList(String keyword, String bsCode, String bsName, String mobile, Integer bsStatus, PageRequest pageRequest) throws Exception {
         //查询条件1
 	    List<SearchFilter> filters =new ArrayList<>();
-        filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         if(StringUtils.isNotEmpty(bsCode)){
             filters.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, bsCode));
         }
@@ -393,10 +393,10 @@ public class SysUserImpl implements SysUserService {
             return ApiResponseResult.failure("用户不存在！");
         }
         //获取当前用户关联角色信息
-        List<UserRoleMap> list = userRoleMapDao.findByIsDelAndUserId(0, id);
+        List<UserRoleMap> list = userRoleMapDao.findByDelFlagAndUserId(0, id);
 
         //获取所有角色信息
-        List<SysRole> list2 = sysRoleDao.findByIsDel(0);
+        List<SysRole> list2 = sysRoleDao.findByDelFlag(0);
 
         Map<String, Object> mapUser = new HashMap<>();
         mapUser.put("id",sysUser.getId());
@@ -438,7 +438,7 @@ public class SysUserImpl implements SysUserService {
             return ApiResponseResult.failure("用户不存在！");
         }
 
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsStatus(bsStatus);
         sysUserDao.save(o);
 
@@ -468,7 +468,7 @@ public class SysUserImpl implements SysUserService {
         if(StringUtils.isEmpty(password) || StringUtils.isEmpty(rePassword)){
             return ApiResponseResult.failure("密码不能为空！");
         }
-        SysUser o = sysUserDao.findByIsDelAndUserCode(BasicStateEnum.FALSE.intValue(), loginName);
+        SysUser o = sysUserDao.findByDelFlagAndUserCode(BasicStateEnum.FALSE.intValue(), loginName);
         if(o == null){
             return ApiResponseResult.failure("该用户不存在或已删除！");
         }
@@ -487,8 +487,8 @@ public class SysUserImpl implements SysUserService {
 
         SysUser currUser = UserUtil.getCurrUser();  //获取当前用户
         o.setUserPassword(MD5Util.MD5(password));
-        o.setModifiedTime(new Date());
-        o.setPkModifiedBy((currUser!=null) ? (currUser.getId()) : null);
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy((currUser!=null) ? (currUser.getId()) : null);
         sysUserDao.save(o);
 */
 
@@ -528,8 +528,8 @@ public class SysUserImpl implements SysUserService {
             return ApiResponseResult.failure("此用户名为管理员用户，无法修改密码！");
         }
 
-        o.setModifiedTime(new Date());
-        o.setPkModifiedBy((currUser!=null) ? (currUser.getId()) : null);
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy((currUser!=null) ? (currUser.getId()) : null);
         o.setBsPassword(DigestUtils.md5Hex(password));
         sysUserDao.save(o);
 
@@ -544,7 +544,7 @@ public class SysUserImpl implements SysUserService {
 				+ userCode.toUpperCase() +  "'";
         List<Map<String, Object>> countList = sysUserDao.findByUserCode(userCode.toUpperCase());//this.findBySql(sql, SQLParameter.newInstance(), null);
 		return countList;
-       //return sysUserDao.findByIsDelAndUserCode(0, userCode);
+       //return sysUserDao.findByDelFlagAndUserCode(0, userCode);
 	}
 
     /**

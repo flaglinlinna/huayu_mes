@@ -54,7 +54,7 @@ public class ProdProclmpl implements ProdProcService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception{
 		// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 		// 查询2
 		List<SearchFilter> filters1 = new ArrayList<>();
 		/*if (StringUtils.isNotEmpty(keyword)) {
@@ -95,7 +95,7 @@ public class ProdProclmpl implements ProdProcService {
 	public ApiResponseResult getDetailList(String keyword, PageRequest pageRequest) throws Exception{
 		// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 		// 查询2
 		List<SearchFilter> filters1 = new ArrayList<>();
 		/*if (StringUtils.isNotEmpty(keyword)) {
@@ -116,8 +116,8 @@ public class ProdProclmpl implements ProdProcService {
 	 */
 	public ApiResponseResult getData()throws Exception{
 		Map<String, Object> map = new HashMap<>();
-		List<Mtrial> list1 = mtrialDao.findByIsDel(0);
-		List<Process> list2 = processDao.findByIsDel(0);
+		List<Mtrial> list1 = mtrialDao.findByDelFlag(0);
+		List<Process> list2 = processDao.findByDelFlag(0);
 		map.put("Mtrial", list1);
 		map.put("Process", list2);
 		

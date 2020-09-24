@@ -9,7 +9,7 @@ import com.web.basic.entity.Line;;
 public interface LineDao extends CrudRepository<Line, Long>,JpaSpecificationExecutor<Line>{
 	
 	public List<Line> findAll();
-	public List<Line> findByIsDel(Integer isDel);
+	public List<Line> findByDelFlag(Integer delFlag);
 	public Line findById(long id);
-	public int countByIsDelAndBsCode(Integer isDel, String bsCode);//查询deCode是否存在
+	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
 }

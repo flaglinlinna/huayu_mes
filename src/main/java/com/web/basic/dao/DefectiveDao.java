@@ -9,8 +9,8 @@ import com.web.basic.entity.Defective;;
 public interface DefectiveDao extends CrudRepository<Defective, Long>,JpaSpecificationExecutor<Defective>{
 	
 	public List<Defective> findAll();
-	public List<Defective> findByIsDel(Integer isDel);
-	public List<Defective> findByIsDelAndBsStatus(Integer isDel,Integer bsStatus);
+	public List<Defective> findByDelFlag(Integer delFlag);
+	public List<Defective> findByDelFlagAndBsStatus(Integer delFlag,Integer bsStatus);
 	public Defective findById(long id);
-	public int countByIsDelAndBsCode(Integer isDel, String bsCode);//查询deCode是否存在
+	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
 }

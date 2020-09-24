@@ -44,11 +44,11 @@ public class Clientlmpl implements ClientService {
         if(StringUtils.isEmpty(client.getBsName())){
             return ApiResponseResult.failure("客户名称不能为空！");
         }
-        int count = clientDao.countByIsDelAndBsCode(0, client.getBsCode());
+        int count = clientDao.countByDelFlagAndBsCode(0, client.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该客户已存在，请填写其他客户编码！");
         }
-        client.setCreatedTime(new Date());
+        client.setCreateDate(new Date());
         clientDao.save(client);
 
         return ApiResponseResult.success("客户添加成功！").data(client);
@@ -78,13 +78,13 @@ public class Clientlmpl implements ClientService {
         //判断客户编码是否有变化，有则修改；没有则不修改
         if(o.getBsCode().equals(client.getBsCode())){
         }else{
-            int count = clientDao.countByIsDelAndBsCode(0, client.getBsCode());
+            int count = clientDao.countByDelFlagAndBsCode(0, client.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("客户编码已存在，请填写其他客户编码！");
             }
             o.setBsCode(client.getBsCode().trim());
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsName(client.getBsName());
         o.setBsNameSmpl(client.getBsNameSmpl());
         clientDao.save(o);
@@ -122,8 +122,8 @@ public class Clientlmpl implements ClientService {
         if(o == null){
             return ApiResponseResult.failure("客户不存在！");
         }
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         clientDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -136,7 +136,7 @@ public class Clientlmpl implements ClientService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
-				filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {

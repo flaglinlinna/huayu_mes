@@ -70,7 +70,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                    } catch (JWTDecodeException j) {
                        throw new RuntimeException("401");
                    }
-                   SysUser user = sysUserDao.findByIsDelAndBsCode(0, userCode);
+                   SysUser user = sysUserDao.findByDelFlagAndBsCode(0, userCode);
 //                   SysUser user = sysUserDao.findByFcode(userCode);
                    if (user == null) {
                        throw new RuntimeException("用户不存在，请重新登录");

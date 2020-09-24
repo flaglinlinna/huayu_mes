@@ -11,5 +11,5 @@ import java.util.List;
  */
 public interface RolePermissionMapDao extends CrudRepository<RolePermissionMap, Long>, JpaSpecificationExecutor<RolePermissionMap> {
 
-    public List<RolePermissionMap> findByIsDelAndAndRoleId(Integer isDel, Long id);
+    public List<RolePermissionMap> findByDelFlagAndAndRoleId(Integer delFlag, Long id);
 }

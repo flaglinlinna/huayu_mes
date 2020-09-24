@@ -10,10 +10,10 @@ import com.web.basic.entity.Process;;
 public interface ProcessDao extends CrudRepository<Process, Long>,JpaSpecificationExecutor<Process>{
 	
 	public List<Process> findAll();
-	public List<Process> findByIsDel(Integer isDel);
+	public List<Process> findByDelFlag(Integer delFlag);
 	public Process findById(long id);
-	public int countByIsDelAndBsCode(Integer isDel, String bsCode);//查询deCode是否存在
-	public List<Process> findByIsDelAndBsStatus(Integer isDel,Integer bsStatus);
+	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
+	public List<Process> findByDelFlagAndBsStatus(Integer delFlag,Integer bsStatus);
 
     @Query(value = "select t.* from "+Process.TABLE_NAME+" t " +
             " where t.is_del=0 and (t.bs_code=?1 or t.bs_name=?1) ", nativeQuery = true)

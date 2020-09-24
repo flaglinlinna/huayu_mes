@@ -74,8 +74,8 @@ public class SchedulingImpl implements SchedulingService {
         }
         SysUser currUser = UserUtil.getSessionUser();
 
-        scheduling.setCreatedTime(new Date());
-        scheduling.setPkCreatedBy(currUser!=null ? currUser.getId() : null);
+        scheduling.setCreateDate(new Date());
+        scheduling.setCreateBy(currUser!=null ? currUser.getId() : null);
         scheduling.setBsUniqueOrderNo(this.getUniqueOrderNo());
         schedulingDao.save(scheduling);
 
@@ -94,8 +94,8 @@ public class SchedulingImpl implements SchedulingService {
         }
         SysUser currUser = UserUtil.getSessionUser();
 
-        o.setModifiedTime(new Date());
-        o.setPkModifiedBy(currUser!=null ? currUser.getId() : null);
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(currUser!=null ? currUser.getId() : null);
         o.setPkDepartment(scheduling.getPkDepartment());//部门
         o.setBsDepartCode(scheduling.getBsDepartCode());
         o.setBsProduceTime(scheduling.getBsProduceTime());
@@ -135,9 +135,9 @@ public class SchedulingImpl implements SchedulingService {
         }
         SysUser currUser = UserUtil.getSessionUser();
 
-        o.setModifiedTime(new Date());
-        o.setPkModifiedBy(currUser!=null ? currUser.getId() : null);
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(currUser!=null ? currUser.getId() : null);
+        o.setDelFlag(1);
         schedulingDao.save(o);
 
         return ApiResponseResult.success("删除成功！");
@@ -148,7 +148,7 @@ public class SchedulingImpl implements SchedulingService {
     public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
         //查询条件1
         List<SearchFilter> filters =new ArrayList<>();
-        filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         //查询条件2
         List<SearchFilter> filters1 =new ArrayList<>();
         if(StringUtils.isNotEmpty(keyword)){
@@ -372,7 +372,7 @@ public class SchedulingImpl implements SchedulingService {
             }
 
             //删除当前用户关联的临时表原数据
-            schedulingTempDao.updateIsDelByPkSysUser(1, currUser.getId());
+            schedulingTempDao.updateDelFlagByPkSysUser(1, currUser.getId());
             //初始化临时表
             List<SchedulingTemp> tempList = new ArrayList<>();
 
@@ -478,7 +478,7 @@ public class SchedulingImpl implements SchedulingService {
 //                        //errorStr += "物料编码为空；";
 //                    }else{
 //                        //获取个编码关联的ID
-//                        List<Mtrial> mList = mtrialDao.findByIsDelAndBsCode(0, mtrialCode);
+//                        List<Mtrial> mList = mtrialDao.findByDelFlagAndBsCode(0, mtrialCode);
 //                        mtrialId = mList.size()>0&&mList.get(i)!=null ? mList.get(i).getId() : null;
 //                        if(departId == null){
 //                            errorStr += "物料编码填写错误；";
@@ -584,7 +584,7 @@ public class SchedulingImpl implements SchedulingService {
 
                 //4.保存临时数据
                 SchedulingTemp temp = new SchedulingTemp();
-                temp.setCreatedTime(new Date());
+                temp.setCreateDate(new Date());
                 temp.setPkDepartment(departId);//部门
                 temp.setBsDepartCode(departCode);
                 temp.setBsProduceTime(produceTime);
@@ -750,7 +750,7 @@ public class SchedulingImpl implements SchedulingService {
         }
 
         List<SearchFilter> filters = new ArrayList<SearchFilter>();
-        filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         filters.add(new SearchFilter("pkSysUser", SearchFilter.Operator.EQ, currUser.getId()));
 
         Specification<SchedulingTemp> spec = Specification.where(BaseService.and(filters, SchedulingTemp.class));
@@ -772,10 +772,10 @@ public class SchedulingImpl implements SchedulingService {
             return ApiResponseResult.failure("当前用户已失效，请重新登录！");
         }
 
-        int num = schedulingTempDao.countByIsDelAndPkSysUser(0, currUser.getId());
+        int num = schedulingTempDao.countByDelFlagAndPkSysUser(0, currUser.getId());
         if(num > 0){
             //如果当前用户存在临时数据则删除
-            schedulingTempDao.updateIsDelByPkSysUser(1, currUser.getId());
+            schedulingTempDao.updateDelFlagByPkSysUser(1, currUser.getId());
         }
 
         return ApiResponseResult.success("删除成功！");
@@ -796,12 +796,12 @@ public class SchedulingImpl implements SchedulingService {
         List<Scheduling> list = new ArrayList<>();
 
         //1.获取当前用户关联的临时表
-        List<SchedulingTemp> tempList =schedulingTempDao.findByIsDelAndPkSysUser(0, currUser.getId());
+        List<SchedulingTemp> tempList =schedulingTempDao.findByDelFlagAndPkSysUser(0, currUser.getId());
         for(SchedulingTemp temp : tempList){
             if(temp != null){
                 //新增
                 Scheduling scheduling = new Scheduling();
-                scheduling.setCreatedTime(new Date());
+                scheduling.setCreateDate(new Date());
                 scheduling.setPkDepartment(temp.getPkDepartment());//部门
                 scheduling.setBsDepartCode(temp.getBsDepartCode());
                 scheduling.setBsProduceTime(temp.getBsProduceTime());

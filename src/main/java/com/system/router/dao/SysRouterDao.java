@@ -13,7 +13,7 @@ import com.system.router.entity.SysRouter;
 public interface SysRouterDao extends  CrudRepository<SysRouter, Long>, JpaSpecificationExecutor<SysRouter>  {
 
 
-    public List<SysRouter> findByIsDelAndRouterStatusOrderByRouterIndexAsc(Integer isDel,int status);
+    public List<SysRouter> findByDelFlagAndRouterStatusOrderByRouterIndexAsc(Integer delFlag,int status);
     
     @Query(value = "select router_code from sys_router r where r.id in (select router_id from t_router_roles_map m where m.role_Code in (select role_Code from t_user_roles_map u where u.user_id=?1))", nativeQuery = true)
 	public List<String> getRolesByUserId(long userId);

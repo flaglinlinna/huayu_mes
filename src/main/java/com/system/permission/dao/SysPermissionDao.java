@@ -17,11 +17,11 @@ import com.system.permission.entity.SysPermission;
  */
 public interface SysPermissionDao extends CrudRepository<SysPermission, Long>, JpaSpecificationExecutor<SysPermission> {
 	
-	public List<SysPermission> findByIsDel(Integer isDel);
+	public List<SysPermission> findByDelFlag(Integer delFlag);
 	
-	public List<SysPermission> findByIsDelAndParentId(Integer isDel,long pid);
+	public List<SysPermission> findByDelFlagAndParentId(Integer delFlag,long pid);
 	
-	public SysPermission findByIdAndIsDel(long id,Integer isDel);
+	public SysPermission findByIdAndDelFlag(long id,Integer delFlag);
 	
 //	@Query(value = "select "+
 //				   "  p.id, p.bs_name,p.parent_id pId, p.zindex, p.istype, p.bs_code, p.icon, p.page_url "+

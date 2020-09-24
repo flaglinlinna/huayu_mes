@@ -16,9 +16,9 @@ public interface SysRoleDao extends CrudRepository<SysRole, Long>, JpaSpecificat
 
     public List<SysRole> findAll();
 
-    public List<SysRole> findByIsDel(Integer isDel);
+    public List<SysRole> findByDelFlag(Integer delFlag);
 
     public SysRole findById(long id);
 
-    public int countByIsDelAndBsCode(Integer isDel, String bsCode);
+    public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);
 }

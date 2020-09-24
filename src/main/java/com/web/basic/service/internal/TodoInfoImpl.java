@@ -51,12 +51,12 @@ public class TodoInfoImpl  implements TodoInfoService {
         }
         todoInfo.setBsTitle(todoInfo.getBsTitle().trim());
         //todoInfo.setBsSystemType(BasicStateEnum.TODO_COST.intValue());//待办类型
-        todoInfo.setCreatedTime(new Date());
+        todoInfo.setCreateDate(new Date());
         //todoInfo.setPkCreatedBy(SessionContextUtils.getCurrentUser().getId());
         if(null == todoInfo.getBsEndTime()){
             //如果没有传截止时间，则默认为一周之后
             Calendar curr = Calendar.getInstance();
-            curr.setTime(todoInfo.getCreatedTime());
+            curr.setTime(todoInfo.getCreateDate());
             curr.add(Calendar.WEEK_OF_YEAR, 1);
             Date after7Days=curr.getTime();
             todoInfo.setBsEndTime(after7Days);                  //有效结束时间
@@ -122,7 +122,7 @@ public class TodoInfoImpl  implements TodoInfoService {
         o.setBsPriority(todoInfo.getBsPriority());
         o.setBsReferId(todoInfo.getBsReferId());
 
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
 	/*	o.setPkModifiedBy(SessionContextUtils.getCurrentUser().getId());*/
 //        o.setPkModifiedBy(Long.parseLong("1"));
         todoInfoDao.save(o);
@@ -159,7 +159,7 @@ public class TodoInfoImpl  implements TodoInfoService {
         if (o.getId() <= 0) {
             return ApiResponseResult.failure("没有操作权限");
         }
-        o.setIsDel(BasicStateEnum.TRUE.intValue());
+        o.setDelFlag(BasicStateEnum.TRUE.intValue());
         todoInfoDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -168,7 +168,7 @@ public class TodoInfoImpl  implements TodoInfoService {
     public ApiResponseResult getlist(int bsStatus, PageRequest pageRequest) throws Exception {
         return null;
 //        List<SearchFilter> filters = new ArrayList<SearchFilter>();
-//        filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+//        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 //        filters.add(new SearchFilter("bsStatus", SearchFilter.Operator.EQ, bsStatus));
 //        filters.add(new SearchFilter("bsUserId", SearchFilter.Operator.EQ, UserUtil.getCurrUser().getId()));
 //        Specification<TodoInfo> spec = Specification.where(BaseService.and(filters, TodoInfo.class));
@@ -178,9 +178,9 @@ public class TodoInfoImpl  implements TodoInfoService {
 //        DataGrid dataGrid = DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize());
 //
 //        //2.统计当前登录用户所有待办数量
-//        int totalNum = todoInfoDao.countByIsDelAndBsUserId(BasicStateEnum.FALSE.intValue(), UserUtil.getCurrUser().getId());
-//        int completedNum = todoInfoDao.countByIsDelAndBsUserIdAndBsStatus(BasicStateEnum.FALSE.intValue(), UserUtil.getCurrUser().getId(), 1);
-//        int inCompleteNum = todoInfoDao.countByIsDelAndBsUserIdAndBsStatus(BasicStateEnum.FALSE.intValue(), UserUtil.getCurrUser().getId(), 0);
+//        int totalNum = todoInfoDao.countByDelFlagAndBsUserId(BasicStateEnum.FALSE.intValue(), UserUtil.getCurrUser().getId());
+//        int completedNum = todoInfoDao.countByDelFlagAndBsUserIdAndBsStatus(BasicStateEnum.FALSE.intValue(), UserUtil.getCurrUser().getId(), 1);
+//        int inCompleteNum = todoInfoDao.countByDelFlagAndBsUserIdAndBsStatus(BasicStateEnum.FALSE.intValue(), UserUtil.getCurrUser().getId(), 0);
 //
 //        //3.封装数据
 //        Map<String, Object> map = new HashMap<>();

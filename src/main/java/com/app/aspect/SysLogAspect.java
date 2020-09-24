@@ -88,7 +88,7 @@ public class SysLogAspect {
         }
         sysLog.setParams(params);
 
-        sysLog.setCreatedTime(new Date());
+        sysLog.setCreateDate(new Date());
         
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;

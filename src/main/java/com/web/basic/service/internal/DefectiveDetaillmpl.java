@@ -52,11 +52,11 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         if(StringUtils.isEmpty(defectiveDetail.getBsName())){
             return ApiResponseResult.failure("不良 名称不能为空！");
         }
-        int count = defectiveDetailDao.countByIsDelAndBsCode(0, defectiveDetail.getBsCode());
+        int count = defectiveDetailDao.countByDelFlagAndBsCode(0, defectiveDetail.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该不良内容编号已存在，请填写其他不良内容编码！");
         }
-        defectiveDetail.setCreatedTime(new Date());
+        defectiveDetail.setCreateDate(new Date());
         defectiveDetailDao.save(defectiveDetail);
 
         return ApiResponseResult.success("不良内容添加成功！").data(defectiveDetail);
@@ -86,13 +86,13 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         //判断不良内容编码是否有变化，有则修改；没有则不修改
         if(o.getBsCode().equals(defectiveDetail.getBsCode())){
         }else{
-            int count = defectiveDetailDao.countByIsDelAndBsCode(0, defectiveDetail.getBsCode());
+            int count = defectiveDetailDao.countByDelFlagAndBsCode(0, defectiveDetail.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("不良内容编码已存在，请填写其他不良内容编码！");
             }
             o.setBsCode(defectiveDetail.getBsCode().trim());
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setPkDefective(defectiveDetail.getPkDefective());
         o.setBsName(defectiveDetail.getBsName());
         o.setBsCode(defectiveDetail.getBsCode());
@@ -131,8 +131,8 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         if(o == null){
             return ApiResponseResult.failure("不良内容不存在！");
         }
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         defectiveDetailDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -150,7 +150,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         if(o == null){
             return ApiResponseResult.failure("不良内容不存在！");
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsStatus(bsStatus);
         defectiveDetailDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
@@ -164,7 +164,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
-				filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
@@ -185,8 +185,8 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
 					map.put("bsCode", bs.getBsCode());
 					map.put("bsName", bs.getBsName());
 					map.put("bsStatus", bs.getBsStatus());
-					map.put("modifiedTime",bs.getModifiedTime());
-					map.put("createdTime", bs.getCreatedTime());
+					map.put("modifiedTime",bs.getLastupdateDate());
+					map.put("createdTime", bs.getCreateDate());
 					list.add(map);
 				}
 				return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
@@ -198,7 +198,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
 	@Override
     @Transactional
 	public ApiResponseResult getDefectiveList() throws Exception {
-		List<Defective> list = defectiveDao.findByIsDelAndBsStatus(0,0);
+		List<Defective> list = defectiveDao.findByDelFlagAndBsStatus(0,0);
 		return ApiResponseResult.success().data(list);
 	}
 }

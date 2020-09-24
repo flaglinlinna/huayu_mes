@@ -13,6 +13,6 @@ import com.system.report.entity.SysReport;
  */
 public interface SysReportDao extends CrudRepository<SysReport, Long>, JpaSpecificationExecutor<SysReport> {
 	
-	public List<SysPermission> findByIsDel(Integer isDel);
+	public List<SysPermission> findByDelFlag(Integer delFlag);
 	
 }

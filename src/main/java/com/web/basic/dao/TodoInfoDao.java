@@ -37,8 +37,8 @@ public interface TodoInfoDao extends CrudRepository<TodoInfo, Long>, JpaSpecific
             "in (select v.pk_user from sys_user_roles_agg v where v.pk_role = ?1)", nativeQuery = true)
     public void closeByRoleIdAndBsReferId(Long roleId, Long bsReferId);
 
-    public int countByIsDelAndBsUserId(Integer isDel, Long bsUserId);
+    public int countByDelFlagAndBsUserId(Integer delFlag, Long bsUserId);
 
-    public int countByIsDelAndBsUserIdAndBsStatus(Integer isDel, Long bsUserId, int bsStatus);
+    public int countByDelFlagAndBsUserIdAndBsStatus(Integer delFlag, Long bsUserId, int bsStatus);
 
 }

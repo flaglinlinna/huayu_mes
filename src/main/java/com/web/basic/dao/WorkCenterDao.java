@@ -9,7 +9,7 @@ import com.web.basic.entity.WorkCenter;;
 public interface WorkCenterDao extends CrudRepository<WorkCenter, Long>,JpaSpecificationExecutor<WorkCenter>{
 	
 	public List<WorkCenter> findAll();
-	public List<WorkCenter> findByIsDel(Integer isDel);
+	public List<WorkCenter> findByDelFlag(Integer delFlag);
 	public WorkCenter findById(long id);
-	public int countByIsDelAndBsCode(Integer isDel, String bsCode);//查询deCode是否存在
+	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
 }

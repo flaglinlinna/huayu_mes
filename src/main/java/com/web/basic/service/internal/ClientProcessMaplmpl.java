@@ -49,7 +49,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
-				filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
@@ -68,8 +68,8 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 					map.put("pProcName", bs.getProcess().getBsName());//工序名
 					
 					map.put("id", bs.getId());
-					map.put("modifiedTime",bs.getModifiedTime());
-					map.put("createdTime", bs.getCreatedTime());
+					map.put("modifiedTime",bs.getLastupdateDate());
+					map.put("createdTime", bs.getCreateDate());
 					list.add(map);
 				}
 				
@@ -95,11 +95,11 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
             }
         }
       //1.删除物料原工序信息
-        List<ClientProcessMap> listOld = clientProcessMapDao.findByIsDelAndPkClient(0, clientId);
+        List<ClientProcessMap> listOld = clientProcessMapDao.findByDelFlagAndPkClient(0, clientId);
         if(listOld.size() > 0){
             for(ClientProcessMap item : listOld){
-                item.setModifiedTime(new Date());
-                item.setIsDel(1);
+                item.setLastupdateDate(new Date());
+                item.setDelFlag(1);
             }
             clientProcessMapDao.saveAll(listOld);
         }
@@ -108,7 +108,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
         if(procList.size() > 0){
             for(Long procId : procList){
             	ClientProcessMap item = new ClientProcessMap();
-                item.setCreatedTime(new Date());
+                item.setCreateDate(new Date());
                 item.setPkClient(clientId);
                 item.setPkProcess(procId);
                 listNew.add(item);
@@ -123,7 +123,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
      * 客户ID获取原来工序记录
      */
 	public ApiResponseResult getClientItem(Long id) throws Exception{
-		 List<ClientProcessMap> list = clientProcessMapDao.findByIsDelAndPkClient(0, id);
+		 List<ClientProcessMap> list = clientProcessMapDao.findByDelFlagAndPkClient(0, id);
 		return ApiResponseResult.success().data(list);
 	}
 	
@@ -140,8 +140,8 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
         if(o == null){
             return ApiResponseResult.failure("该工序不存在！");
         }
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         clientProcessMapDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -153,8 +153,8 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
     @Transactional
 	public ApiResponseResult getProcList() throws Exception {
 		Map<String, Object> map = new HashMap<>();
-		List<Process> pList = processDao.findByIsDelAndBsStatus(0,0);
-		List<Client> cList = clientDao.findByIsDel(0);
+		List<Process> pList = processDao.findByDelFlagAndBsStatus(0,0);
+		List<Client> cList = clientDao.findByDelFlag(0);
 		
 		map.put("process", pList);
 		map.put("client", cList);

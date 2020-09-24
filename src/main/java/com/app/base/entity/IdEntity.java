@@ -21,9 +21,9 @@ public abstract class IdEntity implements Serializable {
 	// @GeneratedValue(generator="sequenceGenerator",strategy=GenerationType.SEQUENCE)
 	// protected Long id;
 
-	@Version
-	@ApiModelProperty(name="version",value="版本号")
-	protected Integer version;
+//	@Version
+//	@ApiModelProperty(name="version",value="版本号")
+//	protected Integer version;
 
 	public Long getId() {
 		return id;
@@ -33,11 +33,11 @@ public abstract class IdEntity implements Serializable {
 		this.id = id;
 	}
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
+//    public Integer getVersion() {
+//        return version;
+//    }
+//
+//    public void setVersion(Integer version) {
+//        this.version = version;
+//    }
 }

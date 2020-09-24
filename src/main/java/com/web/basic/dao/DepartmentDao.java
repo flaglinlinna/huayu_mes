@@ -10,9 +10,9 @@ import com.web.basic.entity.Department;
 public interface DepartmentDao extends CrudRepository<Department, Long>,JpaSpecificationExecutor<Department>{
 	
 	public List<Department> findAll();
-	public List<Department> findByIsDel(Integer isDel);
+	public List<Department> findByDelFlag(Integer delFlag);
 	public Department findById(long id);
-	public int countByIsDelAndBsCode(Integer isDel, String bsCode);//查询deCode是否存在
+	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
 
     @Query(value = "select t.* from "+Department.TABLE_NAME+" t " +
             " where t.is_del=0 and (t.bs_code=?1 or t.bs_name=?1) ", nativeQuery = true)

@@ -9,7 +9,7 @@ import com.web.basic.entity.Hours;;
 public interface HoursDao extends CrudRepository<Hours, Long>,JpaSpecificationExecutor<Hours>{
 	
 	public List<Hours> findAll();
-	public List<Hours> findByIsDel(Integer isDel);
+	public List<Hours> findByDelFlag(Integer delFlag);
 	public Hours findById(long id);
-	public int countByIsDelAndBsCode(Integer isDel, String bsCode);//查询Code是否存在
+	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询Code是否存在
 }

@@ -9,7 +9,7 @@ import com.web.basic.entity.ProdProcDetail;;
 public interface ProdProcDetailDao extends CrudRepository<ProdProcDetail, Long>,JpaSpecificationExecutor<ProdProcDetail>{
 	
 	public List<ProdProcDetail> findAll();
-	//public List<ProdProcDetai> findByIsDel(Integer isDel);
+	//public List<ProdProcDetai> findByDelFlag(Integer delFlag);
 	public ProdProcDetail findById(long id);
-	//public int countByIsDelAndBsCode(Integer isDel, String bsCode);//查询deCode是否存在
+	//public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
 }

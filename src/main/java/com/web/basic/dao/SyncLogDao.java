@@ -11,5 +11,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface SyncLogDao extends CrudRepository<SyncLog, Long>, JpaSpecificationExecutor<SyncLog> {
 
-    public SyncLog findByIsDelAndBsCode(Integer isDel, String bsCode);
+    public SyncLog findByDelFlagAndBsCode(Integer delFlag, String bsCode);
 }

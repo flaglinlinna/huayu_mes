@@ -72,12 +72,12 @@ public class SysRoleImpl implements SysRoleService {
         if(StringUtils.isEmpty(sysRole.getBsName())){
             return ApiResponseResult.failure("角色名称不能为空！");
         }
-        int count = sysRoleDao.countByIsDelAndBsCode(0, sysRole.getBsCode());
+        int count = sysRoleDao.countByDelFlagAndBsCode(0, sysRole.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该角色已存在，请填写其他角色编号！");
         }
 
-        sysRole.setCreatedTime(new Date());
+        sysRole.setCreateDate(new Date());
         sysRoleDao.save(sysRole);
 
         return ApiResponseResult.success("角色添加成功！").data(sysRole);
@@ -107,13 +107,13 @@ public class SysRoleImpl implements SysRoleService {
         String originalCode = o.getBsCode();
         if(o.getBsCode().equals(sysRole.getBsCode())){
         }else{
-            int count = sysRoleDao.countByIsDelAndBsCode(0, sysRole.getBsCode());
+            int count = sysRoleDao.countByDelFlagAndBsCode(0, sysRole.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("角色编号已存在，请填写其他角色编号！");
             }
             o.setBsCode(sysRole.getBsCode().trim());
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsName(sysRole.getBsName());
         o.setDescpt(sysRole.getDescpt());
         sysRoleDao.save(o);
@@ -132,8 +132,8 @@ public class SysRoleImpl implements SysRoleService {
             return ApiResponseResult.failure("该角色不存在！");
         }
 
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         sysRoleDao.save(o);
 
         return ApiResponseResult.success("删除成功！");
@@ -144,7 +144,7 @@ public class SysRoleImpl implements SysRoleService {
 	public ApiResponseResult getList(String keyword, String bsCode,String bsName, Date createdTimeStart, Date createdTimeEnd, Integer bsStatus, PageRequest pageRequest) throws Exception {
         //查询条件1
         List<SearchFilter> filters =new ArrayList<>();
-        filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         if(StringUtils.isNotEmpty(bsCode)){
             filters.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, bsCode));
         }
@@ -221,7 +221,7 @@ public class SysRoleImpl implements SysRoleService {
 //            isSuper = 1;
 //        }else{
 //            //2.2获取当前用户所属角色
-//            List<UserRolesMap> mapList = userRolesMapDao.findByIsDelAndUserId(0, currUser.getId());
+//            List<UserRolesMap> mapList = userRolesMapDao.findByDelFlagAndUserId(0, currUser.getId());
 //            if(mapList != null && mapList.size() > 0){
 //                for(UserRolesMap map : mapList){
 //                    if(map != null && map.getUserId() != null){
@@ -294,10 +294,10 @@ public class SysRoleImpl implements SysRoleService {
         }
 
         //获取当前角色下角色权限关联信息
-        List<RolePermissionMap> list = rolePermissionMapDao.findByIsDelAndAndRoleId(0, id);
+        List<RolePermissionMap> list = rolePermissionMapDao.findByDelFlagAndAndRoleId(0, id);
 
         //获取所有权限信息
-        List<SysPermission> list2 = sysPermissionDao.findByIsDel(0);
+        List<SysPermission> list2 = sysPermissionDao.findByDelFlag(0);
 
         List<Map<String, Object>> mapList = new ArrayList<>();
         for(SysPermission permItem : list2) {
@@ -348,11 +348,11 @@ public class SysRoleImpl implements SysRoleService {
         }
 
         //1.删除角色原权限信息
-        List<RolePermissionMap> listOld = rolePermissionMapDao.findByIsDelAndAndRoleId(0, roleId);
+        List<RolePermissionMap> listOld = rolePermissionMapDao.findByDelFlagAndAndRoleId(0, roleId);
         if(listOld.size() > 0){
             for(RolePermissionMap item : listOld){
-                item.setModifiedTime(new Date());
-                item.setIsDel(1);
+                item.setLastupdateDate(new Date());
+                item.setDelFlag(1);
             }
             rolePermissionMapDao.saveAll(listOld);
         }
@@ -362,7 +362,7 @@ public class SysRoleImpl implements SysRoleService {
         if(permIdList.size() > 0){
             for(Long permId : permIdList){
                 RolePermissionMap item = new RolePermissionMap();
-                item.setCreatedTime(new Date());
+                item.setCreateDate(new Date());
                 item.setRoleId(roleId);
                 item.setPermitId(permId);
                 listNew.add(item);
@@ -387,7 +387,7 @@ public class SysRoleImpl implements SysRoleService {
             return ApiResponseResult.failure("角色不存在！");
         }
 
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsStatus(bsStatus);
         sysRoleDao.save(o);
 

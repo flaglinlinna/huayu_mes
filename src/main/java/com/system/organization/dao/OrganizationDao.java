@@ -18,11 +18,11 @@ import com.system.user.entity.UserRoleMap;
  */
 public interface OrganizationDao extends CrudRepository<SysOrganization, Long>, JpaSpecificationExecutor<SysOrganization> {
 	
-	public List<SysOrganization> findByIsDel(Integer isDel);
+	public List<SysOrganization> findByDelFlag(Integer delFlag);
 	
-	public List<SysOrganization> findByIsDelAndParentId(Integer isDel,long pid);
+	public List<SysOrganization> findByDelFlagAndParentId(Integer delFlag,long pid);
 	
-	public SysOrganization findByIdAndIsDel(long id,Integer isDel);
+	public SysOrganization findByIdAndDelFlag(long id,Integer delFlag);
 	
 //	@Query(value = "select "+
 //				   "  p.id, p.bs_name,p.parent_id pId, p.zindex, p.istype, p.bs_code, p.icon, p.page_url "+

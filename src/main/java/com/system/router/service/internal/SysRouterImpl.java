@@ -41,7 +41,7 @@ public class SysRouterImpl implements SysRouterService {
 		// TODO Auto-generated method stub
 		SysUser currUser = UserUtil.getCurrUser();  //获取当前用户
 		if(sysRouter.getId() == null || sysRouter.getId() <= 0){
-			sysRouter.setCreatedTime(new Date());
+			sysRouter.setCreateDate(new Date());
 //			sysRouter.setPkCreatedBy((currUser!=null) ? (currUser.getId()) : null);
 			sysRouterDao.save(sysRouter);
 		}else{
@@ -50,7 +50,7 @@ public class SysRouterImpl implements SysRouterService {
 			s.setRouterIndex(sysRouter.getRouterIndex());
 			s.setRouterStatus(sysRouter.getRouterStatus());
 			s.setRouterName(sysRouter.getRouterName());
-			s.setModifiedTime(new Date());
+			s.setLastupdateDate(new Date());
 //			s.setPkModifiedBy((currUser!=null) ? (currUser.getId()) : null);
 			sysRouterDao.save(s);
 		}
@@ -76,8 +76,8 @@ public class SysRouterImpl implements SysRouterService {
 	            return ApiResponseResult.failure("该资源不存在或已删除！");
 	        }
 	        SysUser currUser = UserUtil.getCurrUser();  //获取当前用户
-	        s.setIsDel(BasicStateEnum.TRUE.intValue());
-	        s.setModifiedTime(new Date());
+	        s.setDelFlag(BasicStateEnum.TRUE.intValue());
+	        s.setLastupdateDate(new Date());
 //	        s.setPkModifiedBy((currUser!=null) ? (currUser.getId()) : null);
 	        sysRouterDao.save(s);
 
@@ -90,7 +90,7 @@ public class SysRouterImpl implements SysRouterService {
 		
 		//1.精准查询
         List<SearchFilter> filters = new ArrayList<SearchFilter>();
-        filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         if(StringUtils.isNotEmpty(rolecode)){
 			filters.add(new SearchFilter("routerCode", SearchFilter.Operator.LTE, rolecode));
 		}
@@ -120,7 +120,7 @@ public class SysRouterImpl implements SysRouterService {
 	@Override
 	public ApiResponseResult getTreeList() throws Exception {
 		// TODO Auto-generated method stub
-		List<SysRouter> list = sysRouterDao.findByIsDelAndRouterStatusOrderByRouterIndexAsc(0, 0);//所有数据
+		List<SysRouter> list = sysRouterDao.findByDelFlagAndRouterStatusOrderByRouterIndexAsc(0, 0);//所有数据
 		List<Map<String, Object>> resultList = this.getTreeList(list);
 		System.out.println(resultList);
       //return resultList;

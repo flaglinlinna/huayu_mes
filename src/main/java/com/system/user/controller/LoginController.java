@@ -100,7 +100,7 @@ public class LoginController extends WebController{
                 logger.debug("用户登录，用户验证开始！user=" + username);
                 subject.login(token);
                 logger.info("用户登录，用户验证通过！user=" + username);
-                getSysLogService().success(method,methodName,"");
+               // getSysLogService().success(method,methodName,"");--2020-9-24
             } catch (UnknownAccountException uae) {
                 logger.error("用户登录，用户验证未通过：未知用户！user=" + username, uae);
                 getSysLogService().error(method,methodName,"用户不存在");

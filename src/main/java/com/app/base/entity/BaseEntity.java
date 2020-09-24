@@ -16,83 +16,178 @@ public abstract class BaseEntity extends IdEntity {
 	private static final long serialVersionUID = -5249737644031588435L;
 
     /**
-     * 是否删除
+     * 是否删除(删除标识）
      * 0：否 1：是
      */
 	@Column
 	@NotNull
-	@ApiModelProperty(name="isDel",value="删除标志(0:未删除,1:已删除)")
-    protected int isDel = 0;
-
+	@ApiModelProperty(name="delFlag",value="删除标志(0:未删除,1:已删除)")
+    protected int delFlag = 0;
+	
+	/**
+     * 删除人
+     */
+	@ApiModelProperty(name = "delBy", value = "删除人")
+    @Column(length = 30)
+    protected String delBy;
+	
+	/**
+     * 删除时间
+     */
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="delTime",value="删除时间")
+	protected Date delTime;
+	
+	/**
+     * 公司代码
+     */
+	@ApiModelProperty(name = "company", value = "公司代码")
+    @Column(length = 30)
+    protected String company;
+	
+	/**
+     * 工厂编码
+     */
+	@ApiModelProperty(name = "factory", value = "工厂编码")
+    @Column(length = 30)
+    protected String factory;
+	
+	/**
+     * 事业部编码
+     */
+	@ApiModelProperty(name = "division", value = "事业部编码")
+    @Column(length = 30)
+    protected String division;
+	
+	/**
+     * 创建人
+     */
+    @Column
+    @ApiModelProperty(name="createBy",value="创建人")
+    protected Long createBy;
+	
     /**
      * 创建时间
      */
 	@Column
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@ApiModelProperty(name="createdTime",value="创建时间")
-	protected Date createdTime;
+	@ApiModelProperty(name="createDate",value="创建时间")
+	protected Date createDate;
 
     /**
-     * 修改时间
+     * 上次修改人
+     */
+    @Column
+    @ApiModelProperty(name="lastupdateBy",value="上次修改人")
+    protected Long lastupdateBy;
+	
+    /**
+     * 上次修改时间
      */
 	@Column
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@ApiModelProperty(name="modifiedTime",value="修改时间")
-	protected Date modifiedTime;
-
-    /**
-     * 创建人
+	@ApiModelProperty(name="lastupdateDate",value="上次修改时间")
+	protected Date lastupdateDate;
+	
+	/**
+     * 备注
      */
-    @Column
-    @ApiModelProperty(name="pkCreatedBy",value="创建人Id")
-    protected Long pkCreatedBy;
+	@ApiModelProperty(name = "fmemo", value = "备注")
+    @Column(length = 200)
+    protected String fmemo;
 
-    /**
-     * 修改人
-     */
-    @Column
-    @ApiModelProperty(name="pkModifiedBy",value="修改人Id")
-    protected Long pkModifiedBy;
+	public int getDelFlag() {
+		return delFlag;
+	}
 
-    public int getIsDel() {
-        return isDel;
-    }
+	public void setDelFlag(int delFlag) {
+		this.delFlag = delFlag;
+	}
 
-    public void setIsDel(int isDel) {
-        this.isDel = isDel;
-    }
+	public String getDelBy() {
+		return delBy;
+	}
 
-    public Date getCreatedTime() {
-        return createdTime;
-    }
+	public void setDelBy(String delBy) {
+		this.delBy = delBy;
+	}
 
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
+	public Date getDelTime() {
+		return delTime;
+	}
 
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
+	public void setDelTime(Date delTime) {
+		this.delTime = delTime;
+	}
 
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
-    }
+	public String getCompany() {
+		return company;
+	}
 
-    public Long getPkCreatedBy() {
-        return pkCreatedBy;
-    }
+	public void setCompany(String company) {
+		this.company = company;
+	}
 
-    public void setPkCreatedBy(Long pkCreatedBy) {
-        this.pkCreatedBy = pkCreatedBy;
-    }
+	public String getFactory() {
+		return factory;
+	}
 
-    public Long getPkModifiedBy() {
-        return pkModifiedBy;
-    }
+	public void setFactory(String factory) {
+		this.factory = factory;
+	}
 
-    public void setPkModifiedBy(Long pkModifiedBy) {
-        this.pkModifiedBy = pkModifiedBy;
-    }
+	public String getDivision() {
+		return division;
+	}
+
+	public void setDivision(String division) {
+		this.division = division;
+	}
+
+	public Long getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(Long createBy) {
+		this.createBy = createBy;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Long getLastupdateBy() {
+		return lastupdateBy;
+	}
+
+	public void setLastupdateBy(Long lastupdateBy) {
+		this.lastupdateBy = lastupdateBy;
+	}
+
+	public Date getLastupdateDate() {
+		return lastupdateDate;
+	}
+
+	public void setLastupdateDate(Date lastupdateDate) {
+		this.lastupdateDate = lastupdateDate;
+	}
+
+	public String getFmemo() {
+		return fmemo;
+	}
+
+	public void setFmemo(String fmemo) {
+		this.fmemo = fmemo;
+	}
+
+	
+   
 }

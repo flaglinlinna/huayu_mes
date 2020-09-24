@@ -44,11 +44,11 @@ public class Departmentlmpl implements DepartmentService {
         if(StringUtils.isEmpty(department.getBsName())){
             return ApiResponseResult.failure("部门名称不能为空！");
         }
-        int count = departmentDao.countByIsDelAndBsCode(0, department.getBsCode());
+        int count = departmentDao.countByDelFlagAndBsCode(0, department.getBsCode());
         if(count > 0){
             return ApiResponseResult.failure("该部门已存在，请填写其他部门编号！");
         }
-        department.setCreatedTime(new Date());
+        department.setCreateDate(new Date());
         departmentDao.save(department);
 
         return ApiResponseResult.success("部门添加成功！").data(department);
@@ -78,13 +78,13 @@ public class Departmentlmpl implements DepartmentService {
         //判断部门编号是否有变化，有则修改；没有则不修改
         if(o.getBsCode().equals(department.getBsCode())){
         }else{
-            int count = departmentDao.countByIsDelAndBsCode(0, department.getBsCode());
+            int count = departmentDao.countByDelFlagAndBsCode(0, department.getBsCode());
             if(count > 0){
                 return ApiResponseResult.failure("部门编号已存在，请填写其他部门编号！");
             }
             o.setBsCode(department.getBsCode().trim());
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsName(department.getBsName());
         o.setBsManager(department.getBsManager());
         o.setBsManagerTel(department.getBsManagerTel());
@@ -123,8 +123,8 @@ public class Departmentlmpl implements DepartmentService {
         if(o == null){
             return ApiResponseResult.failure("该部门不存在！");
         }
-        o.setModifiedTime(new Date());
-        o.setIsDel(1);
+        o.setLastupdateDate(new Date());
+        o.setDelFlag(1);
         departmentDao.save(o);
 
         return ApiResponseResult.success("删除成功！");
@@ -143,7 +143,7 @@ public class Departmentlmpl implements DepartmentService {
         if(o == null){
             return ApiResponseResult.failure("部门不存在！");
         }
-        o.setModifiedTime(new Date());
+        o.setLastupdateDate(new Date());
         o.setBsStatus(bsStatus);
         departmentDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
@@ -157,7 +157,7 @@ public class Departmentlmpl implements DepartmentService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
-				filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
