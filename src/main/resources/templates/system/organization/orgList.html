@@ -29,15 +29,15 @@
                 <tbody>
                 {{# layui.each(d.rows,function(index,r){ }}
                 <tr>
-                    <td>{{r.bsCode}}</td>
-                    <td>{{r.bsName}}</td>
-                    <td>{{r.bsLevel}}</td>
-                    <td>{{r.bsPrincipal}}</td>
-                    <td>{{r.bsMobile}}</td>
-                    <td>{{r.bsZindex}}</td>
+                    <td>{{r.orgCode}}</td>
+                    <td>{{r.orgName}}</td>
+                    <td>{{r.Flevel}}</td>
+                    <td>{{r.leadBy}}</td>
+                    <td>{{r.mobile}}</td>
+                    <td>{{r.zindex}}</td>
                     <td><a class="layui-btn layui-btn-primary layui-btn-xs" onclick="edit('{{r.id}}',0);">编辑</a>
                         <a class="layui-btn layui-btn-xs" onclick="addPerm('{{r.id}}',1)">添加子节点</a>
-                        <a class="layui-btn layui-btn-danger layui-btn-xs" onclick="del('{{r.id}}','{{r.bsName}}')">删除</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" onclick="del('{{r.id}}','{{r.orgName}}')">删除</a>
                     </td>
                 </tr>
                 {{# }); }}
@@ -55,19 +55,19 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">组织编码</label>
                 <div class="layui-input-inline">
-                    <input name="bsCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input name="orgCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">组织名称</label>
                 <div class="layui-input-inline">
-                    <input name="bsName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input name="orgName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">组织级别</label>
                 <div class="layui-input-inline">
-                    <input name="bsLevel" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input name="Flevel" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <!-- <div class="layui-form-item" pane="">
@@ -81,19 +81,19 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">负责人</label>
                 <div class="layui-input-inline">
-                    <input name="bsPrincipal" autocomplete="off" class="layui-input" type="text"/>
+                    <input name="leadBy" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">负责联系方式</label>
                 <div class="layui-input-inline">
-                    <input name="bsMobile" lautocomplete="off" class="layui-input" type="text"/>
+                    <input name="mobile" lautocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">序号</label>
                 <div class="layui-input-inline">
-                    <input name="bsZindex" autocomplete="off" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    <input name="zindex" autocomplete="off" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
                            onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
                 </div>
                 <div class="layui-form-mid layui-word-aux">请填写大于0的整数数字</div>

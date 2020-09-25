@@ -57,10 +57,10 @@
         <table id="roleList" lay-filter="roleTable"></table>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(!d.bsStatus){ }}
-            <input type="checkbox" name="{{d.bsCode}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(!d.status){ }}
+            <input type="checkbox" name="{{d.roleCode}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.bsCode}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.roleCode}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 
@@ -84,19 +84,19 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">角色编号</label>
                 <div class="layui-input-inline">
-                    <input id="bsCode" name="bsCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="roleCode" name="roleCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">角色名称</label>
                 <div class="layui-input-inline">
-                    <input id="bsName" name="bsName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="roleName" name="roleName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">角色描述</label>
                 <div class="layui-input-inline">
-                    <input id="descpt" name="descpt" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="description" name="description" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -109,7 +109,7 @@
     </div>
 
     <!--设置角色权限-->
-    <div id="setPerm" class="layer_self_wrap"  style="width:500px;display:none;">
+    <div id="setPerm" class="layer_self_wrap"  style="width:500px;display:none;height:500px;">
         <form id="permForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input id="roleId" name="roleId" type="hidden"/>
             <div class="layui-form-item">

@@ -19,65 +19,66 @@ import java.util.Date;
 @ApiModel
 public class SysRole extends BaseEntity {
     private static final long serialVersionUID = 4625660587007894370L;
-    public static final String TABLE_NAME = "sys_role";
+    public static final String TABLE_NAME = "SYS_ROLE";
 
     /**
      * 角色编号
      */
-    @ApiModelProperty(name = "bsCode", value = "角色编号")
-    @Column(length = 20)
-    protected String bsCode;
+    @ApiModelProperty(name = "roleCode", value = "角色编号")
+    @Column(length = 50)
+    protected String roleCode;
 
     /**
      * 角色名称
      */
-    @ApiModelProperty(name = "bsName", value = "角色名称")
-    @Column(length = 30)
-    protected String bsName;
+    @ApiModelProperty(name = "roleName", value = "角色名称")
+    @Column(length = 50)
+    protected String roleName;
 
     /**
      * 角色描述
      */
-    @ApiModelProperty(name = "descpt", value = "角色描述")
-    @Column(length = 50)
-    protected String descpt;
+    @ApiModelProperty(name = "description", value = "角色描述")
+    @Column(length = 100)
+    protected String description;
 
     /**
      * 状态（0：正常 / 1：禁用）
      */
-    @ApiModelProperty(name = "bsStatus", value = "状态（0：正常 / 1：禁用）")
+    @ApiModelProperty(name = "status", value = "状态（0：正常 / 1：禁用）")
     @Column
-    protected Integer bsStatus = 0;
+    protected Integer status = 0;
 
-    public String getBsCode() {
-        return bsCode;
-    }
+	public String getRoleCode() {
+		return roleCode;
+	}
 
-    public void setBsCode(String bsCode) {
-        this.bsCode = bsCode;
-    }
+	public void setRoleCode(String roleCode) {
+		this.roleCode = roleCode;
+	}
 
-    public String getBsName() {
-        return bsName;
-    }
+	public String getRoleName() {
+		return roleName;
+	}
 
-    public void setBsName(String bsName) {
-        this.bsName = bsName;
-    }
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 
-    public String getDescpt() {
-        return descpt;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescpt(String descpt) {
-        this.descpt = descpt;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public Integer getBsStatus() {
-        return bsStatus;
-    }
+	public Integer getStatus() {
+		return status;
+	}
 
-    public void setBsStatus(Integer bsStatus) {
-        this.bsStatus = bsStatus;
-    }
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 }

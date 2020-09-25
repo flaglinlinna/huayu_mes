@@ -50,13 +50,13 @@ $(function() {
 				width : 95,
 				templet : '#statusTpl'
 			}, {
-				field : 'modifiedTime',
+				field : 'lastupdateDate',
 				title : '更新时间',
-				templet:'<div>{{d.modifiedTime?DateUtils.formatDate(d.modifiedTime):""}}</div>'
+				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>'
 			}, {
-				field : 'createdTime',
+				field : 'createDate',
 				title : '添加时间',
-				templet:'<div>{{DateUtils.formatDate(d.createdTime)}}</div>'
+				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>'
 			}, {
 				fixed : 'right',
 				title : '操作',

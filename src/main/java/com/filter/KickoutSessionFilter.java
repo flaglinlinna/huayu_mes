@@ -126,7 +126,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 			//User user = (User) subject.getPrincipal();
             SysUser user = (SysUser) subject.getPrincipal();
 //            String username = user.getFcode();
-			String username = user.getBsCode();
+			String username = user.getUserCode();
 			logger.debug("===当前用户username：==" + username);
 			Serializable sessionId = session.getId();
 			logger.debug("===当前用户sessionId：==" + sessionId);

@@ -78,12 +78,12 @@ public class SysPermissionImpl implements SysPermissionService {
 		}else{
 			//修改
 			SysPermission s = sysPermissionDao.findByIdAndDelFlag(perm.getId(), 0);
-			s.setBsCode(perm.getBsCode());
-			s.setBsIcon(perm.getBsIcon());
+			s.setMenuCode(perm.getMenuCode());
+			s.setMenuIcon(perm.getMenuIcon());
 			s.setPageUrl(perm.getPageUrl());
-			s.setBsName(perm.getBsName());
+			s.setMenuName(perm.getMenuName());
 			s.setZindex(perm.getZindex());
-			s.setDescpt(perm.getDescpt());
+			s.setDescription(perm.getDescription());
 			s.setLastupdateDate(new Date());
 			sysPermissionDao.save(s);
 		}

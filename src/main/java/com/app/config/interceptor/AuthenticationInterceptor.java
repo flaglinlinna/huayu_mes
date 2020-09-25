@@ -70,13 +70,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                    } catch (JWTDecodeException j) {
                        throw new RuntimeException("401");
                    }
-                   SysUser user = sysUserDao.findByDelFlagAndBsCode(0, userCode);
+                   SysUser user = sysUserDao.findByDelFlagAndUserCode(0, userCode);
 //                   SysUser user = sysUserDao.findByFcode(userCode);
                    if (user == null) {
                        throw new RuntimeException("用户不存在，请重新登录");
                    }
                    // 验证 token
-                   JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getBsPassword())).build();
+                   JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
 //                   JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getFpassword())).build();
                    try {
                        jwtVerifier.verify(token);

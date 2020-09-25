@@ -19,11 +19,11 @@ import org.springframework.data.repository.query.Param;
  */
 public interface SysUserDao extends CrudRepository<SysUser, Long>, JpaSpecificationExecutor<SysUser> {
 
-	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);
+	public int countByDelFlagAndUserCode(Integer delFlag, String userCode);
 
-	public int countByDelFlagAndBsCodeAndIdNot(Integer delFlag, String bsCode, Long id);
+	public int countByDelFlagAndUserCodeAndIdNot(Integer delFlag, String userCode, Long id);
 
-    public SysUser findByDelFlagAndBsCode(Integer delFlag, String bsCode);
+    public SysUser findByDelFlagAndUserCode(Integer delFlag, String userCode);
 
     public SysUser findById(long id);
 

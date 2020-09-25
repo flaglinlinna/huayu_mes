@@ -18,36 +18,57 @@ import javax.validation.constraints.NotNull;
 @ApiModel
 public class SysUser extends BaseEntity {
     private static final long serialVersionUID = 4625660587007894370L;
-    public static final String TABLE_NAME = "sys_user";
+    public static final String TABLE_NAME = "SYS_USER";
 
     /**
      * 用户账号
      */
-    @ApiModelProperty(name = "bsCode", value = "用户账号")
+    @ApiModelProperty(name = "userCode", value = "用户账号")
     @Column(length = 50)
-    protected String bsCode;
+    protected String userCode;
 
     /**
      * 用户名称
      */
-    @ApiModelProperty(name = "bsName", value = "用户名称")
+    @ApiModelProperty(name = "userName", value = "用户名称")
     @Column(length = 50)
-    protected String bsName;
-
-    /**
-     * 密码
-     */
-    @ApiModelProperty(name = "bsPassword", value = "密码")
-    @Column(length = 50)
-    protected String bsPassword;
-
+    protected String userName;
+   
     /**
      * 真实名称
      */
     @ApiModelProperty(name = "realName", value = "真实名称")
-    @Column(length = 100)
+    @Column(length = 50)
     protected String realName;
 
+    /**
+     * 密码
+     */
+    @ApiModelProperty(name = "password", value = "密码")
+    @Column(length = 50)
+    protected String password;
+
+    /**
+     * 状态（0：正常 / 1：禁用）
+     */
+    @ApiModelProperty(name = "status", value = "状态（0：正常 / 1：禁用）")
+    @Column
+    protected Integer status = 0;
+
+    /**
+     * 性别（男/女）
+     */
+    @ApiModelProperty(name = "sex", value = "性别")
+    @Column(length = 10)
+    protected String sex;
+    
+    /**
+     * 邮箱
+     */
+    @ApiModelProperty(name = "email", value = "邮箱")
+    @Column(length = 100)
+    protected String email;
+    
     /**
      * 手机号
      */
@@ -56,32 +77,11 @@ public class SysUser extends BaseEntity {
     protected String mobile;
 
     /**
-     * 邮箱
-     */
-    @ApiModelProperty(name = "email", value = "邮箱")
-    @Column(length = 100)
-    protected String email;
-
-    /**
-     * 性别（男/女）
-     */
-    @ApiModelProperty(name = "sex", value = "性别")
-    @Column(length = 10)
-    protected String sex;
-
-    /**
-     * 状态（0：正常 / 1：禁用）
-     */
-    @ApiModelProperty(name = "bsStatus", value = "状态（0：正常 / 1：禁用）")
-    @Column
-    protected Integer bsStatus = 0;
-
-    /**
      * 注册来源
      */
-    @ApiModelProperty(name = "registerSource", value = "注册来源")
+    @ApiModelProperty(name = "registerSrc", value = "注册来源")
     @Column(length = 50)
-    protected String registerSource;
+    protected String registerSrc;
 
     /**
      * 角色ID
@@ -89,83 +89,87 @@ public class SysUser extends BaseEntity {
     @Transient
     protected String roleIds;
 
-    public String getBsCode() {
-        return bsCode;
-    }
+	public String getUserCode() {
+		return userCode;
+	}
 
-    public void setBsCode(String bsCode) {
-        this.bsCode = bsCode;
-    }
+	public void setUserCode(String userCode) {
+		this.userCode = userCode;
+	}
 
-    public String getBsName() {
-        return bsName;
-    }
+	public String getUserName() {
+		return userName;
+	}
 
-    public void setBsName(String bsName) {
-        this.bsName = bsName;
-    }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
-    public String getBsPassword() {
-        return bsPassword;
-    }
+	public String getRealName() {
+		return realName;
+	}
 
-    public void setBsPassword(String bsPassword) {
-        this.bsPassword = bsPassword;
-    }
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
 
-    public String getRealName() {
-        return realName;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public String getMobile() {
-        return mobile;
-    }
+	public Integer getStatus() {
+		return status;
+	}
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getSex() {
+		return sex;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
 
-    public String getSex() {
-        return sex;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public Integer getBsStatus() {
-        return bsStatus;
-    }
+	public String getMobile() {
+		return mobile;
+	}
 
-    public void setBsStatus(Integer bsStatus) {
-        this.bsStatus = bsStatus;
-    }
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
 
-    public String getRegisterSource() {
-        return registerSource;
-    }
+	public String getRegisterSrc() {
+		return registerSrc;
+	}
 
-    public void setRegisterSource(String registerSource) {
-        this.registerSource = registerSource;
-    }
+	public void setRegisterSrc(String registerSrc) {
+		this.registerSrc = registerSrc;
+	}
 
-    public String getRoleIds() {
-        return roleIds;
-    }
+	public String getRoleIds() {
+		return roleIds;
+	}
 
-    public void setRoleIds(String roleIds) {
-        this.roleIds = roleIds;
-    }
+	public void setRoleIds(String roleIds) {
+		this.roleIds = roleIds;
+	}
+
+	
+
+   
 }

@@ -19,15 +19,36 @@ import java.util.Date;
 @ApiModel
 public class SysPermission extends BaseEntity{
     private static final long serialVersionUID = 4625660587007894370L;
-    public static final String TABLE_NAME = "sys_permission";
+    public static final String TABLE_NAME = "SYS_MEMU";
 
+
+    /**
+     * 菜单编号
+     */
+    @ApiModelProperty(name = "menuCode", value = "菜单编号")
+    @Column(length = 50)
+    protected String menuCode;
 
     /**
      * 菜单名称
      */
-    @ApiModelProperty(name = "bsName", value = "菜单名称")
-    @Column(length = 30)
-    protected String bsName;
+    @ApiModelProperty(name = "menuName", value = "菜单名称")
+    @Column(length = 50)
+    protected String menuName;
+    
+    /**
+     * 菜单图标名称
+     */
+    @ApiModelProperty(name = "menuIcon", value = "菜单图标名称")
+    @Column(length = 50)
+    protected String menuIcon;
+    
+    /**
+     * 菜单url
+     */
+    @ApiModelProperty(name = "pageUrl", value = "菜单url")
+    @Column(length = 50)
+    protected String pageUrl;
 
     /**
      * 父菜单id
@@ -53,37 +74,40 @@ public class SysPermission extends BaseEntity{
     /**
      * 描述
      */
-    @ApiModelProperty(name = "descpt", value = "描述")
-    @Column(length = 50)
-    protected String descpt;
+    @ApiModelProperty(name = "description", value = "描述")
+    @Column(length = 100)
+    protected String description;
 
-    /**
-     * 菜单编号
-     */
-    @ApiModelProperty(name = "bsCode", value = "菜单编号")
-    @Column(length = 20)
-    protected String bsCode;
-
-    /**
-     * 菜单图标名称
-     */
-    @ApiModelProperty(name = "bsIcon", value = "菜单图标名称")
-    @Column(length = 30)
-    protected String bsIcon;
-
-    /**
-     * 菜单url
-     */
-    @ApiModelProperty(name = "pageUrl", value = "菜单url")
-    @Column(length = 50)
-    protected String pageUrl;
-
-	public String getBsName() {
-		return bsName;
+	public String getMenuCode() {
+		return menuCode;
 	}
 
-	public void setBsName(String bsName) {
-		this.bsName = bsName;
+	public void setMenuCode(String menuCode) {
+		this.menuCode = menuCode;
+	}
+
+	public String getMenuName() {
+		return menuName;
+	}
+
+	public void setMenuName(String menuName) {
+		this.menuName = menuName;
+	}
+
+	public String getMenuIcon() {
+		return menuIcon;
+	}
+
+	public void setMenuIcon(String menuIcon) {
+		this.menuIcon = menuIcon;
+	}
+
+	public String getPageUrl() {
+		return pageUrl;
+	}
+
+	public void setPageUrl(String pageUrl) {
+		this.pageUrl = pageUrl;
 	}
 
 	public Long getParentId() {
@@ -110,37 +134,11 @@ public class SysPermission extends BaseEntity{
 		this.istype = istype;
 	}
 
-	public String getDescpt() {
-		return descpt;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescpt(String descpt) {
-		this.descpt = descpt;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-
-	public String getBsCode() {
-		return bsCode;
-	}
-
-	public void setBsCode(String bsCode) {
-		this.bsCode = bsCode;
-	}
-
-	public String getBsIcon() {
-		return bsIcon;
-	}
-
-	public void setBsIcon(String bsIcon) {
-		this.bsIcon = bsIcon;
-	}
-
-	public String getPageUrl() {
-		return pageUrl;
-	}
-
-	public void setPageUrl(String pageUrl) {
-		this.pageUrl = pageUrl;
-	}
-
-    
 }

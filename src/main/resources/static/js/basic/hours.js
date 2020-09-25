@@ -39,10 +39,10 @@ $(function() {
 				field : 'bsStdHrs',
 				title : '标准工时'
 			}, {
-				field : 'modifiedTime',
+				field : 'lastupdateDate',
 				title : '更新时间'
 			}, {
-				field : 'createdTime',
+				field : 'createDate',
 				title : '添加时间',
 			}, {
 				fixed : 'right',

@@ -37,12 +37,12 @@ $(function() {
             cols: [[
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-                ,{field:'bsCode', title:'编号', width:120}
-                ,{field:'bsName', title:'名称', width:120}
-                ,{field:'descpt', title: '描述', minWidth:120}
-                ,{field:'bsStatus', title:'状态',width:95,align:'center',templet:'#statusTpl'}
-                ,{field:'modifiedTime', title: '更新时间', width:150}
-                ,{field:'createdTime', title: '添加时间', width:150}
+                ,{field:'roleCode', title:'编号', width:120}
+                ,{field:'roleName', title:'名称', width:120}
+                ,{field:'description', title: '描述', minWidth:120}
+                ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
+                ,{field:'lastupdateDate', title: '更新时间', width:150}
+                ,{field:'createDate', title: '添加时间', width:150}
                 ,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
@@ -66,7 +66,7 @@ $(function() {
             var data = obj.data;
             if(obj.event === 'del'){
                 //删除
-                delRole(data,data.id,data.bsCode);
+                delRole(data,data.id,data.roleCode);
             } else if(obj.event === 'edit'){
                 //编辑
                 getRole(data,data.id);
@@ -122,7 +122,7 @@ function setStatusUser(obj,id,name,checked){
     }, function(){
         $.ajax({
             type: "POST",
-            data: { "id": id, "bsStatus": isStatus},
+            data: { "id": id, "status": isStatus},
             url: context+"/sysRole/doStatus",
             success: function (data) {
                 if (data.result == true) {
@@ -173,7 +173,7 @@ function openPerm(id,title){
         fixed:false,
         resize :false,
         shadeClose: true,
-        area: ['550px'],
+        area: ['550px','500px'],
         content:$('#setPerm'),
         end:function(){
             // cleanRole();
@@ -225,9 +225,9 @@ function getRole(obj,id){
         success: function (data) {
             if (data.result) {
                 $("#id").val(data.data.id==null?'':data.data.id);
-                $("#bsCode").val(data.data.bsCode==null?'':data.data.bsCode);
-                $("#bsName").val(data.data.bsName==null?'':data.data.bsName);
-                $("#descpt").val(data.data.descpt==null?'':data.data.descpt);
+                $("#roleCode").val(data.data.roleCode==null?'':data.data.roleCode);
+                $("#roleName").val(data.data.roleName==null?'':data.data.roleName);
+                $("#description").val(data.data.description==null?'':data.data.description);
                 openRole(id,"编辑角色")
             } else {
                 layer.alert(data.msg,function(){
@@ -377,9 +377,9 @@ function load(obj){
     //重新加载table
     tableIns.reload({
         where: {
-            bsCode:obj.field.codeSearch, bsName:obj.field.nameSearch,
+            roleCode:obj.field.codeSearch, roleName:obj.field.nameSearch,
             createdTimeStart:obj.field.createdTimeStart, createdTimeEnd:obj.field.createdTimeEnd,
-            bsStatus:obj.field.statusSearch
+            status:obj.field.statusSearch
         }
         , page: {
             curr: pageCurr //从当前页码开始
@@ -400,8 +400,8 @@ function loadAll(){
 //清空新增表单数据
 function cleanRole(){
     $("#id").val("");
-    $("#bsCode").val("");
-    $("#bsName").val("");
-    $("#descpt").val("");
+    $("#roleCode").val("");
+    $("#roleName").val("");
+    $("#description").val("");
 }
 

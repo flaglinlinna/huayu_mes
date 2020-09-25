@@ -66,13 +66,13 @@ public class SysRoleImpl implements SysRoleService {
         if(sysRole == null){
             return ApiResponseResult.failure("角色不能为空！");
         }
-        if(StringUtils.isEmpty(sysRole.getBsCode())){
+        if(StringUtils.isEmpty(sysRole.getRoleCode())){
             return ApiResponseResult.failure("角色编号不能为空！");
         }
-        if(StringUtils.isEmpty(sysRole.getBsName())){
+        if(StringUtils.isEmpty(sysRole.getRoleName())){
             return ApiResponseResult.failure("角色名称不能为空！");
         }
-        int count = sysRoleDao.countByDelFlagAndBsCode(0, sysRole.getBsCode());
+        int count = sysRoleDao.countByDelFlagAndRoleCode(0, sysRole.getRoleCode());
         if(count > 0){
             return ApiResponseResult.failure("该角色已存在，请填写其他角色编号！");
         }
@@ -92,10 +92,10 @@ public class SysRoleImpl implements SysRoleService {
         if(sysRole.getId() == null){
             return ApiResponseResult.failure("角色ID不能为空！");
         }
-        if(StringUtils.isEmpty(sysRole.getBsCode())){
+        if(StringUtils.isEmpty(sysRole.getRoleCode())){
             return ApiResponseResult.failure("角色编号不能为空！");
         }
-        if(StringUtils.isEmpty(sysRole.getBsName())){
+        if(StringUtils.isEmpty(sysRole.getRoleName())){
             return ApiResponseResult.failure("角色名称不能为空！");
         }
         SysRole o = sysRoleDao.findById((long) sysRole.getId());
@@ -104,18 +104,18 @@ public class SysRoleImpl implements SysRoleService {
         }
 
         //判断角色编号是否有变化，有则修改；没有则不修改
-        String originalCode = o.getBsCode();
-        if(o.getBsCode().equals(sysRole.getBsCode())){
+        String originalCode = o.getRoleCode();
+        if(o.getRoleCode().equals(sysRole.getRoleCode())){
         }else{
-            int count = sysRoleDao.countByDelFlagAndBsCode(0, sysRole.getBsCode());
+            int count = sysRoleDao.countByDelFlagAndRoleCode(0, sysRole.getRoleCode());
             if(count > 0){
                 return ApiResponseResult.failure("角色编号已存在，请填写其他角色编号！");
             }
-            o.setBsCode(sysRole.getBsCode().trim());
+            o.setRoleCode(sysRole.getRoleCode().trim());
         }
         o.setLastupdateDate(new Date());
-        o.setBsName(sysRole.getBsName());
-        o.setDescpt(sysRole.getDescpt());
+        o.setRoleName(sysRole.getRoleName());
+        o.setDescription(sysRole.getDescription());
         sysRoleDao.save(o);
 
         return ApiResponseResult.success("编辑成功！");
@@ -141,31 +141,31 @@ public class SysRoleImpl implements SysRoleService {
 
 	@Override
     @Transactional
-	public ApiResponseResult getList(String keyword, String bsCode,String bsName, Date createdTimeStart, Date createdTimeEnd, Integer bsStatus, PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getList(String keyword, String roleCode,String roleName, Date createdTimeStart, Date createdTimeEnd, Integer status, PageRequest pageRequest) throws Exception {
         //查询条件1
         List<SearchFilter> filters =new ArrayList<>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-        if(StringUtils.isNotEmpty(bsCode)){
-            filters.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, bsCode));
+        if(StringUtils.isNotEmpty(roleCode)){
+            filters.add(new SearchFilter("roleCode", SearchFilter.Operator.LIKE, roleCode));
         }
-        if(StringUtils.isNotEmpty(bsName)){
-            filters.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, bsName));
+        if(StringUtils.isNotEmpty(roleName)){
+            filters.add(new SearchFilter("roleName", SearchFilter.Operator.LIKE, roleName));
         }
         if(createdTimeStart != null){
-            filters.add(new SearchFilter("createdTime", SearchFilter.Operator.GTE, createdTimeStart));
+            filters.add(new SearchFilter("createDate", SearchFilter.Operator.GTE, createdTimeStart));
         }
         if(createdTimeEnd != null){
-            filters.add(new SearchFilter("createdTime", SearchFilter.Operator.LTE, createdTimeEnd));
+            filters.add(new SearchFilter("createDate", SearchFilter.Operator.LTE, createdTimeEnd));
         }
-        if(bsStatus != null){
-            filters.add(new SearchFilter("bsStatus", SearchFilter.Operator.EQ, bsStatus));
+        if(status != null){
+            filters.add(new SearchFilter("status", SearchFilter.Operator.EQ, status));
         }
         //查询2
         List<SearchFilter> filters1 =new ArrayList<>();
         if(StringUtils.isNotEmpty(keyword)){
-            filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("descpt", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("roleCode", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("roleName", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("description", SearchFilter.Operator.LIKE, keyword));
         }
         Specification<SysRole> spec = Specification.where(BaseService.and(filters, SysRole.class));
         Specification<SysRole> spec1 =  spec.and(BaseService.or(filters1, SysRole.class));
@@ -303,13 +303,13 @@ public class SysRoleImpl implements SysRoleService {
         for(SysPermission permItem : list2) {
             Map<String, Object> map = new HashMap<>();
             map.put("id", permItem.getId()!=null ? permItem.getId().toString() : "");
-            map.put("code", permItem.getBsCode()!=null ? permItem.getBsCode().toString() : "");
-            map.put("name", permItem.getBsName()!=null ? permItem.getBsName().toString() : "");
+            map.put("code", permItem.getMenuCode()!=null ? permItem.getMenuCode().toString() : "");
+            map.put("name", permItem.getMenuName()!=null ? permItem.getMenuName().toString() : "");
             map.put("pId", permItem.getParentId()!=null ? permItem.getParentId().toString() : "");
             map.put("zindex", permItem.getZindex()!=null ? permItem.getZindex().toString() : "");
             map.put("istype", permItem.getIstype()!=null ? permItem.getIstype().toString() : "");
-            map.put("descpt", permItem.getDescpt()!=null ? permItem.getDescpt().toString() : "");
-            map.put("icon", permItem.getBsIcon()!=null ? permItem.getBsIcon().toString() : "");
+            map.put("descpt", permItem.getDescription()!=null ? permItem.getDescription().toString() : "");
+            map.put("icon", permItem.getMenuIcon()!=null ? permItem.getMenuIcon().toString() : "");
             map.put("page", permItem.getPageUrl()!=null ? permItem.getPageUrl().toString() : "");
             map.put("checked", false);
             map.put("open", true);
@@ -375,11 +375,11 @@ public class SysRoleImpl implements SysRoleService {
 
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
+    public ApiResponseResult doStatus(Long id, Integer status) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("角色ID不能为空！");
         }
-        if(bsStatus == null){
+        if(status == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
         SysRole o = sysRoleDao.findById((long) id);
@@ -388,7 +388,7 @@ public class SysRoleImpl implements SysRoleService {
         }
 
         o.setLastupdateDate(new Date());
-        o.setBsStatus(bsStatus);
+        o.setStatus(status);
         sysRoleDao.save(o);
 
         return ApiResponseResult.success("设置成功！").data(o);

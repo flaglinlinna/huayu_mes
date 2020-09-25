@@ -54,11 +54,11 @@ $(function() {
 				width : 95,
 				templet : '#statusTpl'
 			}, {
-				field : 'modifiedTime',
+				field : 'lastupdateDate',
 				title : '更新时间',
 				width : 150
 			}, {
-				field : 'createdTime',
+				field : 'createDate',
 				title : '添加时间',
 				width : 150
 			}, {

@@ -20,5 +20,5 @@ public interface SysRoleDao extends CrudRepository<SysRole, Long>, JpaSpecificat
 
     public SysRole findById(long id);
 
-    public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);
+    public int countByDelFlagAndRoleCode(Integer delFlag, String roleCode);
 }
