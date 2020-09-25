@@ -54,10 +54,10 @@
         <table id="uesrList" lay-filter="userTable"></table>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(!d.bsStatus){ }}
-            <input type="checkbox" name="{{d.bsCode}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(!d.status){ }}
+            <input type="checkbox" name="{{d.userCode}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.bsCode}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.userCode}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 
@@ -78,13 +78,13 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">账号</label>
                 <div class="layui-input-inline">
-                    <input id="bsCode" name="bsCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="userCode" name="userCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">昵称</label>
                 <div class="layui-input-inline">
-                    <input id="bsName" name="bsName" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="userName" name="userName" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">

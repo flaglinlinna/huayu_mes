@@ -42,10 +42,10 @@ $(function() {
 				field : 'bsName',
 				title : '客户全称'
 			}, {
-				field : 'modifiedTime',
+				field : 'lastupdateDate',
 				title : '更新时间'
 			}, {
-				field : 'createdTime',
+				field : 'createDate',
 				title : '添加时间',
 			}, {
 				fixed : 'right',

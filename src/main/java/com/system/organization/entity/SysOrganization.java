@@ -19,79 +19,91 @@ import java.util.Date;
 @ApiModel
 public class SysOrganization extends BaseEntity{
     private static final long serialVersionUID = 4625660587007894370L;
-    public static final String TABLE_NAME = "sys_organization";
+    public static final String TABLE_NAME = "SYS_ORGANIZATION";
 
-
+    /**
+     * 组织编号
+     */
+    @ApiModelProperty(name = "orgCode", value = "组织编号")
+    @Column(length = 50)
+    protected String orgCode;
+    
     /**
      * 组织名称
      */
-    @ApiModelProperty(name = "bsName", value = "组织名称")
-    @Column(length = 30)
-    protected String bsName;
+    @ApiModelProperty(name = "orgName", value = "组织名称")
+    @Column(length = 50)
+    protected String orgName;
     
-    /**
-     * 组织级别
-     */
-    @ApiModelProperty(name = "bsLevel", value = "组织级别")
-    @Column(length = 30)
-    protected String bsLevel;
-
     /**
      * 父菜单id
      */
     @ApiModelProperty(name = "parentId", value = "父菜单id")
     @Column
     protected Long parentId;
+    
+    /**
+     * 组织级别
+     */
+    @ApiModelProperty(name = "flevel", value = "组织级别")
+    @Column(length = 30)
+    protected String flevel;
+
+    
 
     /**
      * 组织排序
      */
-    @ApiModelProperty(name = "bsZindex", value = "菜单排序")
+    @ApiModelProperty(name = "zindex", value = "菜单排序")
     @Column
-    protected Integer bsZindex;
-
-    /**
-     * 组织分类（）
-     * 暂时保留字段
-     */
-    @ApiModelProperty(name = "istype", value = "组织分类（）")
-    @Column
-    protected Integer istype;
-
-    /**
-     * 描述
-     */
-    @ApiModelProperty(name = "descpt", value = "描述")
-    @Column(length = 50)
-    protected String descpt;
-
-    /**
-     * 组织编号
-     */
-    @ApiModelProperty(name = "bsCode", value = "组织编号")
-    @Column(length = 20)
-    protected String bsCode;
+    protected Integer zindex;
+    
 
     /**
      * 负责人
      */
-    @ApiModelProperty(name = "bsPrincipal", value = "负责人")
+    @ApiModelProperty(name = "leadBy", value = "负责人")
     @Column(length = 30)
-    protected String bsPrincipal;
+    protected String leadBy;
+
 
     /**
      * 联系电话
      */
-    @ApiModelProperty(name = "bsMobile", value = "联系电话")
+    @ApiModelProperty(name = "mobile", value = "联系电话")
     @Column(length = 50)
-    protected String bsMobile;
+    protected String mobile;
 
-	public String getBsName() {
-		return bsName;
+
+    /**
+     * 描述
+     */
+    @ApiModelProperty(name = "description", value = "描述")
+    @Column(length = 50)
+    protected String description;
+    
+    /**
+     * 组织分类（）
+     * 暂时保留字段
+     */
+    @ApiModelProperty(name = "menuType", value = "组织分类（）")
+    @Column
+    protected Integer menuType;
+
+	public String getOrgCode() {
+		return orgCode;
 	}
 
-	public void setBsName(String bsName) {
-		this.bsName = bsName;
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
+	}
+
+	public String getOrgName() {
+		return orgName;
+	}
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
 	}
 
 	public Long getParentId() {
@@ -102,62 +114,52 @@ public class SysOrganization extends BaseEntity{
 		this.parentId = parentId;
 	}
 
-	public Integer getIstype() {
-		return istype;
+	public Integer getZindex() {
+		return zindex;
 	}
 
-	public void setIstype(Integer istype) {
-		this.istype = istype;
+	public void setZindex(Integer zindex) {
+		this.zindex = zindex;
 	}
 
-	public String getDescpt() {
-		return descpt;
+	public String getLeadBy() {
+		return leadBy;
 	}
 
-	public void setDescpt(String descpt) {
-		this.descpt = descpt;
+	public void setLeadBy(String leadBy) {
+		this.leadBy = leadBy;
 	}
 
-	public String getBsCode() {
-		return bsCode;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setBsCode(String bsCode) {
-		this.bsCode = bsCode;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
-	public Integer getBsZindex() {
-		return bsZindex;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setBsZindex(Integer bsZindex) {
-		this.bsZindex = bsZindex;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public String getBsPrincipal() {
-		return bsPrincipal;
+	public Integer getMenuType() {
+		return menuType;
 	}
 
-	public void setBsPrincipal(String bsPrincipal) {
-		this.bsPrincipal = bsPrincipal;
+	public void setMenuType(Integer menuType) {
+		this.menuType = menuType;
 	}
 
-	public String getBsMobile() {
-		return bsMobile;
+	public String getFlevel() {
+		return flevel;
 	}
 
-	public void setBsMobile(String bsMobile) {
-		this.bsMobile = bsMobile;
-	}
-
-	public String getBsLevel() {
-		return bsLevel;
-	}
-
-	public void setBsLevel(String bsLevel) {
-		this.bsLevel = bsLevel;
+	public void setFlevel(String flevel) {
+		this.flevel = flevel;
 	}
 	
-
-    
 }

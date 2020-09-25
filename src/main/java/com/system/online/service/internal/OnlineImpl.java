@@ -67,7 +67,7 @@ public class OnlineImpl implements OnlineService {
         			  if(StringUtils.isBlank(keyword)){
         				  flag = true;
         			  }else{
-        				  int result1 = user.getBsName().indexOf(keyword);
+        				  int result1 = user.getUserName().indexOf(keyword);
         				  int result2 = user.getMobile().indexOf(keyword);
 //                          int result1 = user.getFcode().indexOf(keyword);
 //                          int result2 = user.getFname().indexOf(keyword);
@@ -78,8 +78,8 @@ public class OnlineImpl implements OnlineService {
         				  }
         			  }
         			  if(flag){
-        				  o.setBsCode(user.getBsCode());
-            			  o.setBsName(user.getBsName());
+        				  o.setBsCode(user.getUserCode());
+            			  o.setBsName(user.getUserName());
             			  o.setId(user.getId());
             			  o.setMobile(user.getMobile());
 //                          o.setBsCode(user.getFcode());

@@ -35,15 +35,15 @@ $(function() {
             cols: [[
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize: true, sort: true}
-                ,{field:'bsCode', title:'账号', width:120}
+                ,{field:'userCode', title:'账号', width:120}
                 ,{field:'mobile', title:'手机号', width:120}
                 ,{field:'realName', title:'真实名称', width:100}
-                ,{field:'bsName', title:'昵称', width:100}
+                ,{field:'userName', title:'昵称', width:100}
                 ,{field:'email', title: '邮箱', width:180}
                 ,{field:'sex', title: '性别', width:60}
-                ,{field:'bsStatus', title:'状态',width:95,align:'center',templet:'#statusTpl'}
-                ,{field:'registerSource', title: '注册来源', minWidth:100}
-                ,{field:'createdTime', title: '添加时间', width:150}
+                ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
+                ,{field:'registerSrc', title: '注册来源', minWidth:100}
+                ,{field:'createDate', title: '添加时间', width:150}
                 ,{fixed:'right', title:'操作',width:200,align:'center', toolbar:'#optBar'}
             ]]
             ,  done: function(res, curr, count){
@@ -67,13 +67,13 @@ $(function() {
             var data = obj.data;
             if(obj.event === 'del'){
                 //删除
-                delUser(data,data.id,data.bsName);
+                delUser(data,data.id,data.userName);
             } else if(obj.event === 'edit'){
                 //编辑
                 getUserAndRoles(data,data.id);
             } else if(obj.event === 'setPass'){
                 //修改密码
-                setPassword(data,data.id,data.bsName);
+                setPassword(data,data.id,data.userName);
             }
         });
         //监听提交
@@ -118,7 +118,7 @@ function setStatusUser(obj,id,name,checked){
     }, function(){
         $.ajax({
             type: "POST",
-            data: { "id": id, "bsStatus": isStatus},
+            data: { "id": id, "status": isStatus},
             url: context+"/sysUser/doStatus",
             success: function (data) {
                 if (data.result == true) {
@@ -254,7 +254,7 @@ function openPassword(id,title){
 
 //修改密码
 function setPassword(obj,id,name) {
-    if(obj.bsStatus){
+    if(obj.status){
         layer.alert("该用户已经禁用，不可进行密码修改；</br>  如需修改密码，请设置为<font style='font-weight:bold;' color='green'>正常</font>状态。");
     }else{
         $("#userId").val(id);
@@ -308,18 +308,20 @@ function addUser(){
     $.get(context+"/sysRole/getRoles",function(data){
         if(isLogin(data)){
             if(data.result==true && data.data!=null){
-                $("#roleIds").val("");
-                $("#id").val("");
-                $("#version").val("");
-                $("#bsCode").val("");
-                $("#bsName").val("");
-                $("#mobile").val("");
-                $("#email").val("");
-                //显示角色数据
-                $("#roleDiv").empty();
+            	cleanUser();
+//                $("#roleIds").val("");
+//                $("#id").val("");
+//                $("#version").val("");
+//                $("#userCode").val("");
+//                $("#userName").val("");
+//                $("#mobile").val("");
+//                $("#email").val("");
+//                $("#sex").val("");
+//                //显示角色数据
+//                $("#roleDiv").empty();
                 $.each(data.data, function (index, item) {
                     // <input type="checkbox" name="roleId" title="发呆" lay-skin="primary"/>
-                    var roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.bsName+" lay-skin='primary'/>");
+                    var roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.userNameName+" lay-skin='primary'/>");
                     //未选中
                     /*<div class="layui-unselect layui-form-checkbox" lay-skin="primary">
                         <span>发呆</span><i class="layui-icon">&#xe626;</i>
@@ -328,7 +330,7 @@ function addUser(){
                     // <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
                     // <span>写作</span><i class="layui-icon">&#xe627;</i></div>
                     var div=$("<div class='layui-unselect layui-form-checkbox' lay-skin='primary'>" +
-                        "<span>"+item.bsName+"</span><i class='layui-icon'>&#xe626;</i>" +
+                        "<span>"+item.userName+"</span><i class='layui-icon'>&#xe626;</i>" +
                         "</div>");
                     $("#roleDiv").append(roleInput).append(div);
                 })
@@ -365,8 +367,8 @@ function getUserAndRoles(obj,id) {
                     }
                     $("#roleIds").val("");
                     $("#id").val(data.data.user.id==null?'':data.data.user.id);
-                    $("#bsCode").val(data.data.user.bsCode==null?'':data.data.user.bsCode);
-                    $("#bsName").val(data.data.user.bsName==null?'':data.data.user.bsName);
+                    $("#userCode").val(data.data.user.userCode==null?'':data.data.user.userCode);
+                    $("#userName").val(data.data.user.userName==null?'':data.data.user.userName);
                     $("#realName").val(data.data.user.realName==null?'':data.data.user.realName);
                     $("#mobile").val(data.data.user.mobile==null?'':data.data.user.mobile);
                     $("#email").val(data.data.user.email==null?'':data.data.user.email);
@@ -374,20 +376,20 @@ function getUserAndRoles(obj,id) {
                     //显示角色数据
                     $("#roleDiv").empty();
                     $.each(data.data.roles, function (index, item) {
-                        var roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.bsName+" lay-skin='primary'/>");
+                        var roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.userName+" lay-skin='primary'/>");
                         var div=$("<div class='layui-unselect layui-form-checkbox' lay-skin='primary'>" +
-                            "<span>"+item.bsName+"</span><i class='layui-icon'>&#xe626;</i>" +
+                            "<span>"+item.userName+"</span><i class='layui-icon'>&#xe626;</i>" +
                             "</div>");
                         if(existRole.length > 0 && existRole.indexOf(item.id)>=0){
-                            roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.bsName+" lay-skin='primary' checked='checked'/>");
+                            roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.userName+" lay-skin='primary' checked='checked'/>");
                             div=$("<div class='layui-unselect layui-form-checkbox  layui-form-checked' lay-skin='primary'>" +
-                                "<span>"+item.bsName+"</span><i class='layui-icon'>&#xe627;</i>" +
+                                "<span>"+item.userName+"</span><i class='layui-icon'>&#xe627;</i>" +
                                 "</div>");
                         }
                         // if(existRole!='' && existRole.indexOf(item.id)>=0){
-                        //      roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.bsName+" lay-skin='primary' checked='checked'/>");
+                        //      roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.userName+" lay-skin='primary' checked='checked'/>");
                         //      div=$("<div class='layui-unselect layui-form-checkbox  layui-form-checked' lay-skin='primary'>" +
-                        //         "<span>"+item.bsName+"</span><i class='layui-icon'>&#xe627;</i>" +
+                        //         "<span>"+item.userName+"</span><i class='layui-icon'>&#xe627;</i>" +
                         //         "</div>");
                         // }
                         $("#roleDiv").append(roleInput).append(div);
@@ -445,7 +447,7 @@ function load(obj){
     //重新加载table
     tableIns.reload({
         where: {
-            bsCode:obj.field.codeSearch, bsName:obj.field.nameSearch,
+            userCode:obj.field.codeSearch, userName:obj.field.nameSearch,
             mobile:obj.field.mobileSearch, bsStatus:obj.field.statusSearch,
         }
         , page: {
@@ -466,15 +468,18 @@ function loadAll(){
 
 //清空新增表单数据
 function cleanUser(){
-    $("#id").val("");
-    $("roleIds").val("");
-    $("roleNames").val("");
-    $("#bsCode").val("");
-    $("#bsName").val("");
-    $("#realName").val("");
-    $("#mobile").val("");
-    $("#email").val("");
-    $("#sex").val("");
+//    $("#id").val("");
+//    $("roleIds").val("");
+//    $("roleNames").val("");
+//    $("#userCode").val("");
+//    $("#userName").val("");
+//    $("#realName").val("");
+//    $("#mobile").val("");
+//    $("#email").val("");
+//    $("#sex").val("");
+	 $("#roleDiv").empty();
+	$('#userForm')[0].reset();
+	layui.form.render();// 必须写
 }
 
 //清空修改密码表单数据

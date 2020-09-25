@@ -168,13 +168,13 @@ public class SysUserController extends WebController{
     @ApiOperation(value = "获取用户列表", notes = "获取用户列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getList(@RequestParam(value = "keyword", required = false) String keyword, @RequestParam(value = "bsCode", required = false) String bsCode,
-                                     @RequestParam(value = "bsName", required = false) String bsName, @RequestParam(value = "mobile", required = false) String mobile,
-                                     @RequestParam(value = "bsStatus", required = false) Integer bsStatus) {
+    public ApiResponseResult getList(@RequestParam(value = "keyword", required = false) String keyword, @RequestParam(value = "userCode", required = false) String userCode,
+                                     @RequestParam(value = "userName", required = false) String userName, @RequestParam(value = "mobile", required = false) String mobile,
+                                     @RequestParam(value = "status", required = false) Integer status) {
         String method = "/sysUser/getList";String methodName ="获取用户列表";
         try {
         	Sort sort = new Sort(Sort.Direction.DESC, "id");
-            ApiResponseResult result = sysUserService.getList(keyword, bsCode, bsName, mobile, bsStatus, super.getPageRequest(sort));
+            ApiResponseResult result = sysUserService.getList(keyword, userCode, userName, mobile, status, super.getPageRequest(sort));
             logger.debug("获取用户列表=getList:");
             getSysLogService().success(method, methodName, null);
             return result;
@@ -207,10 +207,10 @@ public class SysUserController extends WebController{
     @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用")
     @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
+    public ApiResponseResult doStatus(Long id, Integer status) throws Exception{
         String method = "/sysUser/doStatus";String methodName ="设置正常/禁用";
         try{
-            ApiResponseResult result = sysUserService.doStatus(id, bsStatus);
+            ApiResponseResult result = sysUserService.doStatus(id, status);
             logger.debug("设置正常/禁用=doJob:");
             getSysLogService().success(method, methodName, null);
             return result;

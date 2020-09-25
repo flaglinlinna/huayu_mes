@@ -73,13 +73,13 @@ public class OrganizationImpl implements OrganizationService {
 		}else{
 			//修改
 			SysOrganization s = organizationDao.findByIdAndDelFlag(perm.getId(), 0);
-			s.setBsCode(perm.getBsCode());
-			s.setBsName(perm.getBsName());
-			s.setBsLevel(perm.getBsLevel());
-			s.setBsPrincipal(perm.getBsPrincipal());
-			s.setBsMobile(perm.getBsMobile());
-			s.setBsZindex(perm.getBsZindex());
-			s.setDescpt(perm.getDescpt());
+			s.setOrgCode(perm.getOrgCode());
+			s.setOrgName(perm.getOrgName());
+			s.setFlevel(perm.getFlevel());
+			s.setLeadBy(perm.getLeadBy());
+			s.setMobile(perm.getMobile());
+			s.setZindex(perm.getZindex());
+			s.setDescription(perm.getDescription());
 			s.setLastupdateDate(new Date());
 			organizationDao.save(s);
 		}

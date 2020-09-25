@@ -28,14 +28,14 @@
                 <tbody>
                 {{# layui.each(d.rows,function(index,r){ }}
                 <tr>
-                    <td>{{r.bsName}}</td>
+                    <td>{{r.menuName}}</td>
                     <td>{{r.istype==0?'菜单':'功能'}}</td>
                     <td>{{r.pageUrl}}</td>
-                    <td>{{r.bsCode}}</td>
+                    <td>{{r.menuCode}}</td>
                     <td>{{r.zindex}}</td>
                     <td><a class="layui-btn layui-btn-primary layui-btn-xs" onclick="edit('{{r.id}}',0);">编辑</a>
                         <a class="layui-btn layui-btn-xs" onclick="addPerm('{{r.id}}',1)">添加子节点</a>
-                        <a class="layui-btn layui-btn-danger layui-btn-xs" onclick="del('{{r.id}}','{{r.bsName}}')">删除</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" onclick="del('{{r.id}}','{{r.menuName}}')">删除</a>
                     </td>
                 </tr>
                 {{# }); }}
@@ -53,7 +53,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">权限名称</label>
                 <div class="layui-input-inline">
-                    <input name="bsName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input name="menuName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item" pane="">
@@ -73,7 +73,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">权限code</label>
                 <div class="layui-input-inline">
-                    <input name="bsCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input name="menuCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -87,7 +87,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">图标样式</label>
                 <div class="layui-input-inline">
-                    <input name="bsIcon"   autocomplete="off" class="layui-input" type="text"/>
+                    <input name="menuIcon"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
 

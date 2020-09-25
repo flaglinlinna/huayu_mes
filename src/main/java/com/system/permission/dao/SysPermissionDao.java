@@ -34,12 +34,12 @@ public interface SysPermissionDao extends CrudRepository<SysPermission, Long>, J
 //				   " order by p.zindex ", nativeQuery = true)
 //	  public List<Map<String, Object>> getUserPerms(long id);
     @Query(value = "select distinct "+
-            "  p.id ID, p.BS_NAME,p.parent_id PID, p.ZINDEX , p.ISTYPE, p.BS_CODE, p.BS_ICON, p.PAGE_URL "+
+            "  p.id ID, p.MENU_NAME,p.parent_id PID, p.ZINDEX , p.ISTYPE, p.MENU_CODE, p.MENU_ICON, p.PAGE_URL "+
             " from "+SysPermission.TABLE_NAME+" p "+
            " LEFT JOIN "+RolePermissionMap.TABLE_NAME+" rp ON rp.permit_id=p.id "+
             " LEFT JOIN "+SysRole.TABLE_NAME +" r ON r.id=rp.role_id "+
            " LEFT JOIN "+UserRoleMap.TABLE_NAME+" ur ON ur.role_id=r.id "+
-           " WHERE ur.user_id=?1 and p.is_del=0 and rp.is_del=0 and ur.is_del=0"+
+           " WHERE ur.user_id=?1 and p.del_flag=0 and rp.is_del=0 and ur.is_del=0"+
            " order by p.zindex ", nativeQuery = true)
     public List<Map<String, Object>> getUserPerms(long id);
 }

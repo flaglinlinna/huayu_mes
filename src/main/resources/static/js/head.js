@@ -53,7 +53,7 @@ var getMenus=function(data){
         if( node.ISTYPE==0){
             if(node.PID==0){
                  
-                var li=$("<li data-name='"+node.BS_CODE+"'class='layui-nav-item' ></li>");
+                var li=$("<li data-name='"+node.MENU_CODE+"'class='layui-nav-item' ></li>");
                /* //父级无page
                 var a=$("<a class='' href='javascript:;' lay-tips='"+node.BS_NAME+"' lay-direction='2'><i class='layui-icon layui-icon-"+node.BS_CODE+"'><cite>"+node.BS_NAME+"</cite></i></a>");
                 li.append(a);*/
@@ -62,13 +62,13 @@ var getMenus=function(data){
                 var childArry = getParentArry(node.ID, data);
                 if(childArry.length>0){
                 	 //父级无page
-                	console.log(node.BS_ICON)
-                    a=$("<a class='' href='javascript:;' lay-tips='"+node.BS_NAME+"' lay-direction='2'><i class='layui-icon iconfont "+node.BS_ICON+"'></i><cite>"+node.BS_NAME+"</cite></a>");
+                	console.log(node.MENU_ICON)
+                    a=$("<a class='' href='javascript:;' lay-tips='"+node.MENU_NAME+"' lay-direction='2'><i class='layui-icon iconfont "+node.MENU_ICON+"'></i><cite>"+node.MENU_NAME+"</cite></a>");
                     li.append(a);
                     a.append("<span class='layui-nav-more'></span>");
                     var dl=$("<dl class='layui-nav-child'></dl>");
                     for (var y in childArry) {
-                        var dd=$("<dd><a lay-href='"+context+childArry[y].PAGE_URL+"'>"+childArry[y].BS_NAME+"</a></dd>");
+                        var dd=$("<dd><a lay-href='"+context+childArry[y].PAGE_URL+"'>"+childArry[y].MENU_NAME+"</a></dd>");
                         //判断选中状态
                         if(pathUri.indexOf(childArry[y].PAGE_URL)>0){
                             li.addClass("layui-nav-itemed");
@@ -79,7 +79,7 @@ var getMenus=function(data){
                     }
                     li.append(dl);
                 }else{
-                	a=$("<a class='' lay-href='"+context+node.PAGE_URL+"'  lay-tips='"+node.BS_NAME+"' lay-direction='2'><i class='layui-icon iconfont "+node.BS_ICON+"'><cite>"+node.BS_NAME+"</cite></i></a>");
+                	a=$("<a class='' lay-href='"+context+node.PAGE_URL+"'  lay-tips='"+node.MENU_NAME+"' lay-direction='2'><i class='layui-icon iconfont "+node.MENU_ICON+"'><cite>"+node.MENU_NAME+"</cite></i></a>");
                     li.append(a);
                 }
                 ul.append(li);

@@ -48,7 +48,7 @@ $(function() {
 				field : 'atribt',
 				title : '过程属性',
 			}, {
-				field : 'createdTime',
+				field : 'createDate',
 				title : '创建时间',
 			},{
 				fixed : 'right',

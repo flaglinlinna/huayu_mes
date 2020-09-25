@@ -92,11 +92,11 @@ public class SysRoleController extends WebController {
     @ApiOperation(value = "获取角色列表", notes = "获取角色列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getList(String keyword, String bsCode, String bsName, Date createdTimeStart, Date createdTimeEnd, Integer bsStatus) {
+    public ApiResponseResult getList(String keyword, String roleCode, String roleName, Date createdTimeStart, Date createdTimeEnd, Integer status) {
         String method = "/sysRole/getList";String methodName ="获取角色列表";
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
-            ApiResponseResult result = sysRoleService.getList(keyword, bsCode,bsName, createdTimeStart, createdTimeEnd, bsStatus, super.getPageRequest(sort));
+            ApiResponseResult result = sysRoleService.getList(keyword, roleCode,roleName, createdTimeStart, createdTimeEnd, status, super.getPageRequest(sort));
             logger.debug("获取角色列表=getList:");
             getSysLogService().success(method, methodName, null);
             return result;
@@ -232,10 +232,10 @@ public class SysRoleController extends WebController {
     @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用")
     @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
+    public ApiResponseResult doStatus(Long id, Integer status) throws Exception{
         String method = "/sysRole/doStatus";String methodName ="设置正常/禁用";
         try{
-            ApiResponseResult result = sysRoleService.doStatus(id, bsStatus);
+            ApiResponseResult result = sysRoleService.doStatus(id, status);
             logger.debug("设置正常/禁用=doJob:");
             getSysLogService().success(method, methodName, null);
             return result;

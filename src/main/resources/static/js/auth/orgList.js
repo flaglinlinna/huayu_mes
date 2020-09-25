@@ -60,11 +60,11 @@ function edit(id,type){
         $.get(context+"/sysOrg/getPerm",{"id":id},function(data) {
             // console.log(data);
             if(data.result){
-                $("input[name='bsName']").val(data.data.bsName);
-                $("input[name='bsCode']").val(data.data.bsCode);
+                $("input[name='orgName']").val(data.data.orgName);
+                $("input[name='orgCode']").val(data.data.orgCode);
                 $("input[name='pageUrl']").val(data.data.pageUrl);
                 $("input[name='zindex']").val(data.data.zindex);
-                $("textarea[name='descpt']").text(data.data.descpt);
+                $("textarea[name='description']").text(data.data.description);
                 $("#parentId").val(data.data.parentId);
                 data.data.istype==0?$("input[name='istype']").val(0).checked:$("input[name='istype']").val(1).checked;
                 layer.open({
