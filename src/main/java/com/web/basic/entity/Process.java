@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class Process extends BaseEntity {
     private static final long serialVersionUID = 4625660587007894370L;
-    public static final String TABLE_NAME = "basic_process";
+    public static final String TABLE_NAME = "MES_base_PROC";
 
     /**
      * 工序编码
