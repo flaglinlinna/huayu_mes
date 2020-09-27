@@ -30,49 +30,56 @@ public class ClientProcessMap extends BaseEntity {
 	/**
 	 * 关联客户表
 	 */
-	@ApiModelProperty(name = "pkClient", value = "客户ID")
+	@ApiModelProperty(name = "custId", value = "客户ID")
 	@Column
-	protected Long pkClient;
+	protected Long custId;
 
 	@ApiModelProperty(name = "client", hidden = true, value = "客户ID")
 	@ManyToOne
-	@JoinColumn(name = "pkClient", insertable = false, updatable = false)
+	@JoinColumn(name = "custId", insertable = false, updatable = false)
 	@NotFound(action = NotFoundAction.IGNORE)
 	protected Client client;
 
 	/**
 	 * 关联工序表
 	 */
-	@ApiModelProperty(name = "pkProcess", value = "工序ID")
+	@ApiModelProperty(name = "procId", value = "工序ID")
 	@Column
-	protected Long pkProcess;
+	protected Long procId;
 
 	@ApiModelProperty(name = "process", hidden = true, value = "工序ID")
 	@ManyToOne
-	@JoinColumn(name = "pkProcess", insertable = false, updatable = false)
+	@JoinColumn(name = "procId", insertable = false, updatable = false)
 	@NotFound(action = NotFoundAction.IGNORE)
 	protected Process process;
 
 	/**
 	 * 工序顺序
 	 */
-	@ApiModelProperty(name = "bsOrder", value = "工序顺序")
+	@ApiModelProperty(name = "procOrder", value = "工序顺序")
 	@Column(length = 10)
-	protected String bsOrder;	
+	protected String procOrder;	
 	
 	/**
      * 过程属性（0：被勾选 / 1：无） 默认被勾选
      */
-    @ApiModelProperty(name = "bsProcAttrib", value = "过程属性（0：被勾选 / 1：无）")
+    @ApiModelProperty(name = "jobAttr", value = "过程属性（0：被勾选 / 1：无）")
     @Column
-    protected Integer bsProcAttrib = 0;
+    protected Integer jobAttr = 0;
+    
+    /**
+     * 报工标示
+     */
+    @ApiModelProperty(name = "flag", value = "报工标示")
+    @Column
+    protected Integer flag = 0;
 
-	public Long getPkClient() {
-		return pkClient;
+	public Long getCustId() {
+		return custId;
 	}
 
-	public void setPkClient(Long pkClient) {
-		this.pkClient = pkClient;
+	public void setCustId(Long custId) {
+		this.custId = custId;
 	}
 
 	public Client getClient() {
@@ -83,12 +90,12 @@ public class ClientProcessMap extends BaseEntity {
 		this.client = client;
 	}
 
-	public Long getPkProcess() {
-		return pkProcess;
+	public Long getProcId() {
+		return procId;
 	}
 
-	public void setPkProcess(Long pkProcess) {
-		this.pkProcess = pkProcess;
+	public void setProcId(Long procId) {
+		this.procId = procId;
 	}
 
 	public Process getProcess() {
@@ -99,20 +106,30 @@ public class ClientProcessMap extends BaseEntity {
 		this.process = process;
 	}
 
-	public String getBsOrder() {
-		return bsOrder;
+	public String getProcOrder() {
+		return procOrder;
 	}
 
-	public void setBsOrder(String bsOrder) {
-		this.bsOrder = bsOrder;
+	public void setProcOrder(String procOrder) {
+		this.procOrder = procOrder;
 	}
 
-	public Integer getBsProcAttrib() {
-		return bsProcAttrib;
+	public Integer getJobAttr() {
+		return jobAttr;
 	}
 
-	public void setBsProcAttrib(Integer bsProcAttrib) {
-		this.bsProcAttrib = bsProcAttrib;
+	public void setJobAttr(Integer jobAttr) {
+		this.jobAttr = jobAttr;
 	}
+
+	public Integer getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Integer flag) {
+		this.flag = flag;
+	}
+    
+    
     
 }

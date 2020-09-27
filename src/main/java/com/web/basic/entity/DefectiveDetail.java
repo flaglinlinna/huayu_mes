@@ -24,19 +24,19 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class DefectiveDetail extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_defective_detail";
+	    public static final String TABLE_NAME = "MES_BASE_DEFECT_DET";
 	    
 	    
 	    /**
 	      * 关联不良类别的ID
 	      */
-	     @ApiModelProperty(name="pkDefective",value="不良类别ID")
+	     @ApiModelProperty(name="defectTypeId",value="不良类别ID")
 	     @Column
-	     protected Long pkDefective;
+	     protected Long defectTypeId;
 
 	     @ApiModelProperty(name="defective",hidden=true,value="不良类别ID")
 	     @ManyToOne
-	     @JoinColumn(name = "pkDefective", insertable = false, updatable = false)
+	     @JoinColumn(name = "defectTypeId", insertable = false, updatable = false)
 	     @NotFound(action = NotFoundAction.IGNORE)
 	     protected Defective defective;
 	    
@@ -44,32 +44,30 @@ public class DefectiveDetail extends BaseEntity {
 	    /**
 	     * 不良 编码
 	     */
-	    @ApiModelProperty(name = "bsCode", value = "不良 编码")
+	    @ApiModelProperty(name = "defectCode", value = "不良 编码")
 	    @Column(length = 50)
-	    protected String bsCode;
+	    protected String defectCode;
 
 	    /**
 	     * 不良 名称
 	     */
-	    @ApiModelProperty(name = "bsName", value = "不良 名称")
+	    @ApiModelProperty(name = "defectName", value = "不良 名称")
 	    @Column(length = 50)
-	    protected String bsName;
+	    protected String defectName;
 	    
 	    /**
 	     * 状态（0：正常 / 1：禁用）
 	     */
-	    @ApiModelProperty(name = "bsStatus", value = "状态（0：正常 / 1：禁用）")
+	    @ApiModelProperty(name = "checkStatus", value = "状态（0：正常 / 1：禁用）")
 	    @Column
-	    protected Integer bsStatus = 0;
-	    
-		
+	    protected Integer checkStatus = 0;
 
-		public Long getPkDefective() {
-			return pkDefective;
+		public Long getDefectTypeId() {
+			return defectTypeId;
 		}
 
-		public void setPkDefective(Long pkDefective) {
-			this.pkDefective = pkDefective;
+		public void setDefectTypeId(Long defectTypeId) {
+			this.defectTypeId = defectTypeId;
 		}
 
 		public Defective getDefective() {
@@ -80,28 +78,32 @@ public class DefectiveDetail extends BaseEntity {
 			this.defective = defective;
 		}
 
-		public String getBsCode() {
-			return bsCode;
+		public String getDefectCode() {
+			return defectCode;
 		}
 
-		public void setBsCode(String bsCode) {
-			this.bsCode = bsCode;
+		public void setDefectCode(String defectCode) {
+			this.defectCode = defectCode;
 		}
 
-		public String getBsName() {
-			return bsName;
+		public String getDefectName() {
+			return defectName;
 		}
 
-		public void setBsName(String bsName) {
-			this.bsName = bsName;
+		public void setDefectName(String defectName) {
+			this.defectName = defectName;
 		}
 
-		public Integer getBsStatus() {
-			return bsStatus;
+		public Integer getCheckStatus() {
+			return checkStatus;
 		}
 
-		public void setBsStatus(Integer bsStatus) {
-			this.bsStatus = bsStatus;
-		}    
+		public void setCheckStatus(Integer checkStatus) {
+			this.checkStatus = checkStatus;
+		}
+	    
+		
+
+		  
 		
 }

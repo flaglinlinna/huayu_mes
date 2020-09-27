@@ -21,58 +21,126 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class ProdProcDetail extends BaseEntity {
 	private static final long serialVersionUID = 4625660587007894370L;
-	public static final String TABLE_NAME = "basic_prodproc_detail";
+	public static final String TABLE_NAME = "MES_BASE_ITEM_PROC";
 
 	/**
-	 * 产品工艺流程主表ID
+	 * 关联物料ID
 	 */
-	@ApiModelProperty(name = "bsProcId", value = "产品工艺流程主表ID")
+	@ApiModelProperty(name = "itemId", value = "物料ID")
 	@Column
-	protected Long bsProcId;
+	protected Long itemId;
 
+	@ApiModelProperty(name = "mtrial", hidden = true, value = "工序信息")
+	@ManyToOne
+	@JoinColumn(name = "itemId", insertable = false, updatable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
+	protected Mtrial mtrial;
+	
 	/**
-	 * 关联工序表的ID
+     * 物料编码
+     */
+    @ApiModelProperty(name = "itemNo", value = "物料编码")
+    @Column(length = 50)
+    protected String itemNo;
+    
+    /**
+	 * 关联工序ID
 	 */
-	@ApiModelProperty(name = "bsWoProcId", value = "工序信息ID")
+	@ApiModelProperty(name = "procId", value = "工序ID")
 	@Column
-	protected Long bsWoProcId;
+	protected Long procId;
 
 	@ApiModelProperty(name = "process", hidden = true, value = "工序信息")
 	@ManyToOne
-	@JoinColumn(name = "bsWoProcId", insertable = false, updatable = false)
+	@JoinColumn(name = "procId", insertable = false, updatable = false)
 	@NotFound(action = NotFoundAction.IGNORE)
-	protected Process process;
+	protected Mtrial Process;
 
 	/**
 	 * 工序排列序号
 	 */
-	@ApiModelProperty(name = "bsSort", value = "工序排列序号")
+	@ApiModelProperty(name = "procOrder", value = "工序排列序号")
 	@Column
-	protected Integer bsSort;
+	protected Integer procOrder;
 
-	public Long getBsProcId() {
-		return bsProcId;
+	/**
+	 * 过程属性
+	 */
+	@ApiModelProperty(name = "jobAttr", value = "过程属性")
+	@Column
+	protected Integer jobAttr=0;
+	
+	/**
+	 * 报工标示
+	 */
+	@ApiModelProperty(name = "flag", value = "报工标示")
+	@Column
+	protected Integer flag=0;
+
+	public Long getItemId() {
+		return itemId;
 	}
 
-	public void setBsProcId(Long bsProcId) {
-		this.bsProcId = bsProcId;
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
 	}
 
-	public Long getBsWoProcId() {
-		return bsWoProcId;
+	public Mtrial getMtrial() {
+		return mtrial;
 	}
 
-	public void setBsWoProcId(Long bsWoProcId) {
-		this.bsWoProcId = bsWoProcId;
+	public void setMtrial(Mtrial mtrial) {
+		this.mtrial = mtrial;
 	}
 
-	public Integer getBsSort() {
-		return bsSort;
+	public String getItemNo() {
+		return itemNo;
 	}
 
-	public void setBsSort(Integer bsSort) {
-		this.bsSort = bsSort;
+	public void setItemNo(String itemNo) {
+		this.itemNo = itemNo;
 	}
+
+	public Long getProcId() {
+		return procId;
+	}
+
+	public void setProcId(Long procId) {
+		this.procId = procId;
+	}
+
+	public Mtrial getProcess() {
+		return Process;
+	}
+
+	public void setProcess(Mtrial process) {
+		Process = process;
+	}
+
+	public Integer getProcOrder() {
+		return procOrder;
+	}
+
+	public void setProcOrder(Integer procOrder) {
+		this.procOrder = procOrder;
+	}
+
+	public Integer getJobAttr() {
+		return jobAttr;
+	}
+
+	public void setJobAttr(Integer jobAttr) {
+		this.jobAttr = jobAttr;
+	}
+
+	public Integer getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Integer flag) {
+		this.flag = flag;
+	}
+	
 	
 	
 }
