@@ -10,7 +10,7 @@ public interface DefectiveDao extends CrudRepository<Defective, Long>,JpaSpecifi
 	
 	public List<Defective> findAll();
 	public List<Defective> findByDelFlag(Integer delFlag);
-	public List<Defective> findByDelFlagAndBsStatus(Integer delFlag,Integer bsStatus);
+	public List<Defective> findByDelFlagAndCheckStatus(Integer delFlag,Integer bsStatus);
 	public Defective findById(long id);
-	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
+	public int countByDelFlagAndDefectTypeCode(Integer delFlag, String bsCode);//查询deCode是否存在
 }

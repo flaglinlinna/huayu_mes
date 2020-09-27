@@ -21,11 +21,9 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.MtrialDao;
-import com.web.basic.dao.ProdProcDao;
 import com.web.basic.dao.ProdProcDetailDao;
 import com.web.basic.dao.ProcessDao;
 import com.web.basic.entity.Mtrial;
-import com.web.basic.entity.ProdProc;
 import com.web.basic.entity.ProdProcDetail;
 import com.web.basic.entity.Process;
 import com.web.basic.service.ProdProcService;
@@ -37,8 +35,7 @@ import com.web.basic.service.ProdProcService;
 @Service(value = "prodProcService")
 @Transactional(propagation = Propagation.REQUIRED)
 public class ProdProclmpl implements ProdProcService {
-	@Autowired
-    private ProdProcDao prodProcDao;
+
 	@Autowired
     private ProdProcDetailDao prodProcDetailDao;
 	@Autowired
@@ -48,7 +45,7 @@ public class ProdProclmpl implements ProdProcService {
 	
 	/*
 	 *获取主表数据 
-	 */
+	 
 	@Override
     @Transactional
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception{
@@ -57,11 +54,11 @@ public class ProdProclmpl implements ProdProcService {
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 		// 查询2
 		List<SearchFilter> filters1 = new ArrayList<>();
-		/*if (StringUtils.isNotEmpty(keyword)) {
+		if (StringUtils.isNotEmpty(keyword)) {
 			filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
 		}
-		*/
+		
 		Specification<ProdProc> spec = Specification.where(BaseService.and(filters, ProdProc.class));
 		Specification<ProdProc> spec1 = spec.and(BaseService.or(filters1, ProdProc.class));
 		
@@ -70,11 +67,11 @@ public class ProdProclmpl implements ProdProcService {
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 		
-	}
+	}*/
 	/*
 	 *获取主表字段ID
 	 */
-	@Override
+	/*@Override
     @Transactional
     public ApiResponseResult getProdProc(Long id) throws Exception{
         if(id == null){
@@ -85,7 +82,7 @@ public class ProdProclmpl implements ProdProcService {
             return ApiResponseResult.failure("该内容不存在！");
         }
         return ApiResponseResult.success().data(o);
-    }
+    }*/
 	
 	/*
 	 *获取附表数据 
