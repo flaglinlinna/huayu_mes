@@ -63,6 +63,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 					Map<String, Object> map = new HashMap<>();
 					map.put("pClientCode", bs.getClient().getBsCode());//获取关联表的数据-客户表
 					map.put("pClientName", bs.getClient().getBsName());//客户名
+					map.put("client_id", bs.getClient().getId());
 					
 					map.put("pProcCode", bs.getProcess().getBsCode());//工序表
 					map.put("pProcName", bs.getProcess().getBsName());//工序名

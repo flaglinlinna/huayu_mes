@@ -560,11 +560,12 @@ html {
 .layui-layout-admin .layui-header {
 	border-bottom: 1px solid #f6f6f6;
 	box-sizing: border-box;
-	background-color: #438eb9;
+	background-color: #344058;
 }
 
 .layui-layout-admin .layui-header a,.layui-layout-admin .layui-header a cite {
-	color: #333
+	/* color: #333 */
+	color: #fff
 }
 
 .layui-layout-admin .layui-header a:hover {

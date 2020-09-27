@@ -33,6 +33,11 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			,{
+				field : 'client_id',
+				title : '客户编号',
+				width:0,hidden:true
+			}
+			,{
 				field : 'pClientCode',
 				title : '客户编号',
 				width:120
@@ -72,8 +77,7 @@ $(function() {
 				// 得到数据总量
 				// console.log(count);
 				pageCurr = curr;
-				merge(res.data,['pClientCode'],[1]);
-				merge(res.data,['pClientName'],[2]);
+				merge(res.data,['pClientCode','pClientName'],[1,2]);
 			}
 		});
 		tableProc=table.render({
@@ -85,7 +89,6 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, 
 			{
-				field : 'bsCode',
 				type:"checkbox"
 			},
 			
@@ -99,8 +102,8 @@ $(function() {
 			data:[]
 		});	
 		form.on('select(pkClient)', function(data){//监听选择事件
-			var params={"client":$("#pkClient").val()}
-			getProcByClient(params);
+			//var params={"client":$("#pkClient").val()}
+			getProcByClient($("#pkClient").val());
 		})
 		
 		// 监听工具条
@@ -111,8 +114,9 @@ $(function() {
 				delClientProc(data, data.id, data.pProcName);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				console.log("edit");
+				console.log(data);
 				//getClientProc(data, data.id);//未写
+				addProc(data.client_id)
 			}
 		});
 		
@@ -122,6 +126,7 @@ $(function() {
 				// 新增
 				var procIdList="";
 				var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
+				console.log(cList.length)
 				for(var i=0;i<cList.length;i++){//获取被选中的行
 					procIdList+=cList[i].id+";"//工序的ID序列，用“；”分隔
 				}
@@ -135,22 +140,38 @@ $(function() {
 	});
 });
 //添加不工艺流程
-function addProc() {
+function addProc(id) {
 	// 清空弹出框数据
-	getProcList("");
+	getProcList(id);
 	// 打开弹出框
 	openProc(null, "添加工艺流程");
 }
 
 //根据客户信息获取工序数据
 function getProcByClient(params){
+	var params={"client":params}
 	CoreUtil.sendAjax("base/client_proc/getClientItem", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
 			
 			var beSelected=data.data;
 			console.log(beSelected)
-			
+			tableProc.reload({
+				done : function(res, curr, count) {
+					for(var i =0;i<res.data.length;i++){
+						for(var j=0;j<beSelected.length;j++){
+							if(res.data[i].id == beSelected[j].pkProcess){
+								//这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
+						        res.data[i]["LAY_CHECKED"]='true';
+								//更改css来实现选中的效果
+								//$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
+								$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
+							}
+							
+						}
+					}
+				}
+			})
 		} else {
 			layer.alert(data.msg);
 		}
@@ -196,6 +217,7 @@ function addSubmit(procIdlist,client) {
 			"client" : client
 		};
 	console.log(procIdlist)
+
 	CoreUtil.sendAjax("base/client_proc/addItem", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
@@ -221,7 +243,13 @@ function getProcList(id){
 			function(data) {
 				if (data.result) {
 					tableProc.reload({
-						data:data.data.process
+						data:data.data.process,
+						done : function(res, curr, count) {
+							cleanProc();//清空之前的选中
+							if(id != ''){
+								getProcByClient(id)
+							}
+						}
 					});
 					$("#pkClient").empty();
 					var c=data.data.client;
@@ -229,7 +257,15 @@ function getProcList(id){
 						if(i==0){
 							$("#pkClient").append("<option value=''>请点击选择</option>");
 						}
-						$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].bsName+"</option>");
+						if(id != ''){
+							if(c[i].id == id){
+								$("#pkClient").append("<option value=" + c[i].id+ " selected>"+c[i].bsName+"</option>");
+							}else{
+								$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].bsName+"</option>");
+							}
+						}else{
+							$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].bsName+"</option>");
+						}
 					}			
 					layui.form.render('select');
 				} else {
