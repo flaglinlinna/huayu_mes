@@ -15,11 +15,11 @@ public interface SchedulingTempDao extends CrudRepository<SchedulingTemp, Long>,
 
     public SchedulingTemp findById(long id);
 
-    @Modifying
-    @Query("update SchedulingTemp t set t.delFlag=?1 where t.pkSysUser=?2 and t.delFlag=0")
-    public void updateDelFlagByPkSysUser(Integer delFlag, Long pkSysUser);
-
-    public List<SchedulingTemp> findByDelFlagAndPkSysUser(Integer delFlag, Long pkSysUser);
-
-    public int countByDelFlagAndPkSysUser(Integer delFlag, Long pkSysUser);
+//    @Modifying
+//    @Query("update SchedulingTemp t set t.delFlag=?1 where t.pkSysUser=?2 and t.delFlag=0")
+//    public void updateDelFlagByPkSysUser(Integer delFlag, Long pkSysUser);
+//
+//    public List<SchedulingTemp> findByDelFlagAndPkSysUser(Integer delFlag, Long pkSysUser);
+//
+//    public int countByDelFlagAndPkSysUser(Integer delFlag, Long pkSysUser);
 }

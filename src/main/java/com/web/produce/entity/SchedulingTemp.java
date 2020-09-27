@@ -17,428 +17,217 @@ import java.util.Date;
 @DynamicUpdate
 public class SchedulingTemp extends BaseEntity {
     private static final long serialVersionUID = -5951531333314901264L;
-    public static final String TABLE_NAME = "produce_scheduling_temp";
+    public static final String TABLE_NAME = "MES_PROD_ORDER_IMP";
 
     /**
-     * 部门ID
+     * 组合
      */
-    @ApiModelProperty(name = "pkDepartment", value = "部门ID")
+    @ApiModelProperty(name = "groupNo", value = "组合")
     @Column
-    protected Long pkDepartment;
+    protected Integer groupNo;
 
     /**
-     * 部门编码或名称
+     * 客户ID
      */
-    @ApiModelProperty(name = "bsDepartCode", value = "部门编码或名称")
-    @Column(length = 100)
-    protected String bsDepartCode;
-
-    /**
-     * 生产日期
-     */
-    @ApiModelProperty(name = "bsProduceTime", value = "生产日期")
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
-    protected Date bsProduceTime;
-
-    /**
-     * 班次
-     */
-    @ApiModelProperty(name = "bsShift", value = "班次")
+    @ApiModelProperty(name = "custId", value = "客户ID")
     @Column(length = 50)
-    protected String bsShift;
+    protected String custId;
 
     /**
-     * 客户
+     * 客户编码
      */
-    @ApiModelProperty(name = "bsCustomer", value = "客户")
+    @ApiModelProperty(name = "custNo", value = "客户编码")
     @Column(length = 50)
-    protected String bsCustomer;
-
-    /**
-     * 线别
-     */
-    @ApiModelProperty(name = "bsLine", value = "线别")
-    @Column(length = 50)
-    protected String bsLine;
-
-    /**
-     * 工单类别
-     */
-    @ApiModelProperty(name = "bsOrderType", value = "工单类别")
-    @Column(length = 50)
-    protected String bsOrderType;
-
-    /**
-     * 制令单号
-     */
-    @ApiModelProperty(name = "bsUniqueOrderNo", value = "制令单号")
-    @Column
-    protected String bsUniqueOrderNo;
+    protected String custNo;
 
     /**
      * 工单号
      */
-    @ApiModelProperty(name = "bsOrderNo", value = "工单号")
+    @ApiModelProperty(name = "prodNo", value = "工单号")
     @Column(length = 100)
-    protected String bsOrderNo;
-
-    /**
-     * 生产状态
-     */
-    @ApiModelProperty(name = "bsStatus", value = "生产状态")
-    @Column(length = 50)
-    protected String bsStatus;
+    protected String prodNo;
 
     /**
      * 物料ID
      */
-    @ApiModelProperty(name = "pkMtrial", value = "物料ID")
-    @Column
-    protected Long pkMtrial;
+    @ApiModelProperty(name = "itemId", value = "物料ID")
+    @Column(length = 50)
+    protected String itemId;
 
     /**
-     * 物料编码或名称
+     * 物料编码
      */
-    @ApiModelProperty(name = "bsMtrialCode", value = "物料编码或名称")
+    @ApiModelProperty(name = "itemNo", value = "物料编码")
     @Column(length = 100)
-    protected String bsMtrialCode;
+    protected String itemNo;
 
     /**
-     * 物料描述
+     * 物料全称
      */
-    @ApiModelProperty(name = "bsMtrialDesc", value = "物料描述")
-    @Column
-    protected String bsMtrialDesc;
-
-    /**
-     * 加工工艺ID（工序ID）
-     */
-    @ApiModelProperty(name = "pkWoProc", value = "加工工艺ID（工序ID）")
-    @Column
-    protected Long pkWoProc;
-
-    /**
-     * 加工工艺编码或名称
-     */
-    @ApiModelProperty(name = "bsProcCode", value = "加工工艺编码或名称")
-    @Column(length = 100)
-    protected String bsProcCode;
-
-    /**
-     * 工单残
-     */
-    @ApiModelProperty(name = "bsRestNum", value = "工单残")
-    @Column
-    protected String bsRestNum;
-
-    /**
-     * 计划生产数量
-     */
-    @ApiModelProperty(name = "bsPlanNum", value = "计划生产数量")
-    @Column
-    protected String bsPlanNum;
-
-    /**
-     * 用人量
-     */
-    @ApiModelProperty(name = "bsPeopleNum", value = "用人量")
-    @Column
-    protected String bsPeopleNum;
-
-    /**
-     * 产能
-     */
-    @ApiModelProperty(name = "bsCapacityNum", value = "产能")
-    @Column
-    protected String bsCapacityNum;
-
-    /**
-     * 预计工时(H/人)
-     */
-    @ApiModelProperty(name = "bsPlanHours", value = "预计工时(H/人)")
-    @Column(precision = 24, scale = 5)
-    protected BigDecimal bsPlanHours;
-
-    /**
-     * 实际生产数量
-     */
-    @ApiModelProperty(name = "bsActualNum", value = "实际生产数量")
-    @Column
-    protected String bsActualNum;
-
-    /**
-     * 实际工时(H/人)
-     */
-    @ApiModelProperty(name = "bsActualHours", value = "实际工时(H/人)")
-    @Column(precision = 24, scale = 5)
-    protected BigDecimal bsActualHours;
-
-    /**
-     * 计划金额
-     */
-    @ApiModelProperty(name = "bsPlanPrice", value = "计划金额")
-    @Column(precision = 24, scale = 5)
-    protected BigDecimal bsPlanPrice;
-
-    /**
-     * 实际金额
-     */
-    @ApiModelProperty(name = "bsActualPrice", value = "实际金额")
-    @Column(precision = 24, scale = 5)
-    protected BigDecimal bsActualPrice;
-
-    /**
-     * 备注
-     */
-    @ApiModelProperty(name = "bsRemark", value = "备注")
+    @ApiModelProperty(name = "itemName", value = "物料全称")
     @Column(length = 500)
-    protected String bsRemark;
+    protected String itemName;
+
+    /**
+     * 计划数量
+     */
+    @ApiModelProperty(name = "qtyPlan", value = "计划数量")
+    @Column
+    protected Integer qtyPlan;
+
+    /**
+     * 生产日期
+     */
+    @ApiModelProperty(name = "prodDate", value = "生产日期")
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+    protected Date prodDate;
+
+    /**
+     * 部门ID
+     */
+    @ApiModelProperty(name = "deptId", value = "部门ID")
+    @Column(length = 100)
+    protected String deptId;
+
+    /**
+     * 线长名称
+     */
+    @ApiModelProperty(name = "linerName", value = "线长名称")
+    @Column(length = 50)
+    protected String linerName;
+
+    /**
+     * 班次
+     */
+    @ApiModelProperty(name = "classNo", value = "班次")
+    @Column(length = 50)
+    protected String classNo;
 
     /**
      * 错误信息
      */
-    @ApiModelProperty(name = "bsError", value = "错误信息")
+    @ApiModelProperty(name = "errorInfo", value = "错误信息")
     @Column(length = 1000)
-    protected String bsError;
+    protected String errorInfo;
 
     /**
      * 校验状态（0：校验通过 / 1：校验不通过 / 2：警告）
-     * 警告：检验值不在上下限阀值之间
      */
-    @ApiModelProperty(name = "bsCheckStatus", value = "校验状态（0：校验通过 / 1：校验不通过 / 2：警告）")
-    @Column
-    protected Integer bsCheckStatus = 0;
+    @ApiModelProperty(name = "checkStatus", value = "校验状态（0：校验通过 / 1：校验不通过 / 2：警告）")
+    @Column(length = 1)
+    protected Integer checkStatus = 0;
 
-    /**
-     * 用户ID
-     */
-    @ApiModelProperty(name = "pkSysUser", value = "用户ID")
-    @Column
-    protected Long pkSysUser;
-
-    public Long getPkDepartment() {
-        return pkDepartment;
+    public Integer getGroupNo() {
+        return groupNo;
     }
 
-    public void setPkDepartment(Long pkDepartment) {
-        this.pkDepartment = pkDepartment;
+    public void setGroupNo(Integer groupNo) {
+        this.groupNo = groupNo;
     }
 
-    public String getBsDepartCode() {
-        return bsDepartCode;
+    public String getCustId() {
+        return custId;
     }
 
-    public void setBsDepartCode(String bsDepartCode) {
-        this.bsDepartCode = bsDepartCode;
+    public void setCustId(String custId) {
+        this.custId = custId;
     }
 
-    public Date getBsProduceTime() {
-        return bsProduceTime;
+    public String getCustNo() {
+        return custNo;
     }
 
-    public void setBsProduceTime(Date bsProduceTime) {
-        this.bsProduceTime = bsProduceTime;
+    public void setCustNo(String custNo) {
+        this.custNo = custNo;
     }
 
-    public String getBsShift() {
-        return bsShift;
+    public String getProdNo() {
+        return prodNo;
     }
 
-    public void setBsShift(String bsShift) {
-        this.bsShift = bsShift;
+    public void setProdNo(String prodNo) {
+        this.prodNo = prodNo;
     }
 
-    public String getBsCustomer() {
-        return bsCustomer;
+    public String getItemId() {
+        return itemId;
     }
 
-    public void setBsCustomer(String bsCustomer) {
-        this.bsCustomer = bsCustomer;
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
-    public String getBsLine() {
-        return bsLine;
+    public String getItemNo() {
+        return itemNo;
     }
 
-    public void setBsLine(String bsLine) {
-        this.bsLine = bsLine;
+    public void setItemNo(String itemNo) {
+        this.itemNo = itemNo;
     }
 
-    public String getBsOrderType() {
-        return bsOrderType;
+    public String getItemName() {
+        return itemName;
     }
 
-    public void setBsOrderType(String bsOrderType) {
-        this.bsOrderType = bsOrderType;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
-    public String getBsUniqueOrderNo() {
-        return bsUniqueOrderNo;
+    public Integer getQtyPlan() {
+        return qtyPlan;
     }
 
-    public void setBsUniqueOrderNo(String bsUniqueOrderNo) {
-        this.bsUniqueOrderNo = bsUniqueOrderNo;
+    public void setQtyPlan(Integer qtyPlan) {
+        this.qtyPlan = qtyPlan;
     }
 
-    public String getBsOrderNo() {
-        return bsOrderNo;
+    public Date getProdDate() {
+        return prodDate;
     }
 
-    public void setBsOrderNo(String bsOrderNo) {
-        this.bsOrderNo = bsOrderNo;
+    public void setProdDate(Date prodDate) {
+        this.prodDate = prodDate;
     }
 
-    public String getBsStatus() {
-        return bsStatus;
+    public String getDeptId() {
+        return deptId;
     }
 
-    public void setBsStatus(String bsStatus) {
-        this.bsStatus = bsStatus;
+    public void setDeptId(String deptId) {
+        this.deptId = deptId;
     }
 
-    public Long getPkMtrial() {
-        return pkMtrial;
+    public String getLinerName() {
+        return linerName;
     }
 
-    public void setPkMtrial(Long pkMtrial) {
-        this.pkMtrial = pkMtrial;
+    public void setLinerName(String linerName) {
+        this.linerName = linerName;
     }
 
-    public String getBsMtrialCode() {
-        return bsMtrialCode;
+    public String getClassNo() {
+        return classNo;
     }
 
-    public void setBsMtrialCode(String bsMtrialCode) {
-        this.bsMtrialCode = bsMtrialCode;
+    public void setClassNo(String classNo) {
+        this.classNo = classNo;
     }
 
-    public String getBsMtrialDesc() {
-        return bsMtrialDesc;
+    public String getErrorInfo() {
+        return errorInfo;
     }
 
-    public void setBsMtrialDesc(String bsMtrialDesc) {
-        this.bsMtrialDesc = bsMtrialDesc;
+    public void setErrorInfo(String errorInfo) {
+        this.errorInfo = errorInfo;
     }
 
-    public Long getPkWoProc() {
-        return pkWoProc;
+    public Integer getCheckStatus() {
+        return checkStatus;
     }
 
-    public void setPkWoProc(Long pkWoProc) {
-        this.pkWoProc = pkWoProc;
-    }
-
-    public String getBsProcCode() {
-        return bsProcCode;
-    }
-
-    public void setBsProcCode(String bsProcCode) {
-        this.bsProcCode = bsProcCode;
-    }
-
-    public String getBsRestNum() {
-        return bsRestNum;
-    }
-
-    public void setBsRestNum(String bsRestNum) {
-        this.bsRestNum = bsRestNum;
-    }
-
-    public String getBsPlanNum() {
-        return bsPlanNum;
-    }
-
-    public void setBsPlanNum(String bsPlanNum) {
-        this.bsPlanNum = bsPlanNum;
-    }
-
-    public String getBsPeopleNum() {
-        return bsPeopleNum;
-    }
-
-    public void setBsPeopleNum(String bsPeopleNum) {
-        this.bsPeopleNum = bsPeopleNum;
-    }
-
-    public String getBsCapacityNum() {
-        return bsCapacityNum;
-    }
-
-    public void setBsCapacityNum(String bsCapacityNum) {
-        this.bsCapacityNum = bsCapacityNum;
-    }
-
-    public BigDecimal getBsPlanHours() {
-        return bsPlanHours;
-    }
-
-    public void setBsPlanHours(BigDecimal bsPlanHours) {
-        this.bsPlanHours = bsPlanHours;
-    }
-
-    public String getBsActualNum() {
-        return bsActualNum;
-    }
-
-    public void setBsActualNum(String bsActualNum) {
-        this.bsActualNum = bsActualNum;
-    }
-
-    public BigDecimal getBsActualHours() {
-        return bsActualHours;
-    }
-
-    public void setBsActualHours(BigDecimal bsActualHours) {
-        this.bsActualHours = bsActualHours;
-    }
-
-    public BigDecimal getBsPlanPrice() {
-        return bsPlanPrice;
-    }
-
-    public void setBsPlanPrice(BigDecimal bsPlanPrice) {
-        this.bsPlanPrice = bsPlanPrice;
-    }
-
-    public BigDecimal getBsActualPrice() {
-        return bsActualPrice;
-    }
-
-    public void setBsActualPrice(BigDecimal bsActualPrice) {
-        this.bsActualPrice = bsActualPrice;
-    }
-
-    public String getBsRemark() {
-        return bsRemark;
-    }
-
-    public void setBsRemark(String bsRemark) {
-        this.bsRemark = bsRemark;
-    }
-
-    public String getBsError() {
-        return bsError;
-    }
-
-    public void setBsError(String bsError) {
-        this.bsError = bsError;
-    }
-
-    public Integer getBsCheckStatus() {
-        return bsCheckStatus;
-    }
-
-    public void setBsCheckStatus(Integer bsCheckStatus) {
-        this.bsCheckStatus = bsCheckStatus;
-    }
-
-    public Long getPkSysUser() {
-        return pkSysUser;
-    }
-
-    public void setPkSysUser(Long pkSysUser) {
-        this.pkSysUser = pkSysUser;
+    public void setCheckStatus(Integer checkStatus) {
+        this.checkStatus = checkStatus;
     }
 }
