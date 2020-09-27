@@ -7,7 +7,7 @@ import java.util.List;
 import com.web.basic.entity.Line;;
 
 public interface LineDao extends CrudRepository<Line, Long>,JpaSpecificationExecutor<Line>{
-	
+
 	public List<Line> findAll();
 	public List<Line> findByDelFlag(Integer delFlag);
 	public Line findById(long id);
