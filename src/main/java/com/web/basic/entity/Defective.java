@@ -22,51 +22,51 @@ import io.swagger.annotations.ApiModelProperty;
 public class Defective extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
 	   
-	 public static final String TABLE_NAME = "basic_defective";
+	 public static final String TABLE_NAME = "MES_BASE_DEFECT_TYPE";
 	    /**
 	     * 不良类别编码
 	     */
-	    @ApiModelProperty(name = "bsCode", value = "不良类别编码")
+	    @ApiModelProperty(name = "defectTypeCode", value = "不良类别编码")
 	    @Column(length = 50)
-	    protected String bsCode;
+	    protected String defectTypeCode;
 
 	    /**
 	     * 不良类别名称
 	     */
-	    @ApiModelProperty(name = "bsName", value = "不良类别名称")
+	    @ApiModelProperty(name = "defectTypeName", value = "不良类别名称")
 	    @Column(length = 50)
-	    protected String bsName;
+	    protected String defectTypeName;
 	    
 	    /**
 	     * 状态（0：正常 / 1：禁用）
 	     */
-	    @ApiModelProperty(name = "bsStatus", value = "状态（0：正常 / 1：禁用）")
+	    @ApiModelProperty(name = "checkStatus", value = "状态（0：正常 / 1：禁用）")
 	    @Column
-	    protected Integer bsStatus = 0;
+	    protected Integer checkStatus = 0;
 
-		public String getBsCode() {
-			return bsCode;
+		public String getDefectTypeCode() {
+			return defectTypeCode;
 		}
 
-		public void setBsCode(String bsCode) {
-			this.bsCode = bsCode;
+		public void setDefectTypeCode(String defectTypeCode) {
+			this.defectTypeCode = defectTypeCode;
 		}
 
-		public String getBsName() {
-			return bsName;
+		public String getDefectTypeName() {
+			return defectTypeName;
 		}
 
-		public void setBsName(String bsName) {
-			this.bsName = bsName;
+		public void setDefectTypeName(String defectTypeName) {
+			this.defectTypeName = defectTypeName;
 		}
 
-		public Integer getBsStatus() {
-			return bsStatus;
+		public Integer getCheckStatus() {
+			return checkStatus;
 		}
 
-		public void setBsStatus(Integer bsStatus) {
-			this.bsStatus = bsStatus;
+		public void setCheckStatus(Integer checkStatus) {
+			this.checkStatus = checkStatus;
 		}
+
 		
-		//@JsonIgnore  //如果想不展示这个字段 用 这个注解
 }

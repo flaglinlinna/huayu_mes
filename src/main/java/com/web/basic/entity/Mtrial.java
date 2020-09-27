@@ -20,80 +20,114 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class Mtrial extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_mtrial";
+	    public static final String TABLE_NAME = "MES_base_ITEMS";
 	    
 	    /**
 	     * 物料编码
 	     */
-	    @ApiModelProperty(name = "bsCode", value = "物料编码")
+	    @ApiModelProperty(name = "itemNo", value = "物料编码")
 	    @Column(length = 50)
-	    protected String bsCode;
+	    protected String itemNo;
 	    
 	    /**
 	     * 物料信息名称
 	     */
-	    @ApiModelProperty(name = "bsName", value = "物料名称")
-	    @Column(length = 50)
-	    protected String bsName;
+	    @ApiModelProperty(name = "itemName", value = "物料名称")
+	    @Column(length = 500)
+	    protected String itemName;
+	    
+	    /**
+	     * 物料简称
+	     */
+	    @ApiModelProperty(name = "itemNameS", value = "物料简称")
+	    @Column(length = 200)
+	    protected String itemNameS;
+	    
+	    /**
+	     * 物料规格
+	     */
+	    @ApiModelProperty(name = "itemModel", value = "物料规格")
+	    @Column(length = 100)
+	    protected String itemModel;
+
+	    
 	    
 	    /**
 	     * 物料类别
 	     */
-	    @ApiModelProperty(name = "bsType", value = "物料类别")
+	    @ApiModelProperty(name = "itemType", value = "物料类别")
 	    @Column(length = 50)
-	    protected String bsType;
+	    protected String itemType;
 	    
 	    /**
 	     * 物料单位
 	     */
-	    @ApiModelProperty(name = "bsUnit", value = "物料单位")
+	    @ApiModelProperty(name = "itemUnit", value = "物料单位")
 	    @Column(length = 15)
-	    protected String bsUnit;
+	    protected String itemUnit;
 	    
 	    /**
 	     * 状态（0：正常 / 1：禁用）
 	     */
 	    @ApiModelProperty(name = "bsStatus", value = "状态（0：正常 / 1：禁用）")
 	    @Column
-	    protected Integer bsStatus = 0;
+	    protected Integer checkStatus = 0;
 
-		public String getBsCode() {
-			return bsCode;
+		public String getItemNo() {
+			return itemNo;
 		}
 
-		public void setBsCode(String bsCode) {
-			this.bsCode = bsCode;
+		public void setItemNo(String itemNo) {
+			this.itemNo = itemNo;
 		}
 
-		public String getBsName() {
-			return bsName;
+		public String getItemName() {
+			return itemName;
 		}
 
-		public void setBsName(String bsName) {
-			this.bsName = bsName;
+		public void setItemName(String itemName) {
+			this.itemName = itemName;
 		}
 
-		public String getBsType() {
-			return bsType;
+		public String getItemNameS() {
+			return itemNameS;
 		}
 
-		public void setBsType(String bsType) {
-			this.bsType = bsType;
+		public void setItemNameS(String itemNameS) {
+			this.itemNameS = itemNameS;
 		}
 
-		public String getBsUnit() {
-			return bsUnit;
+		public String getItemModel() {
+			return itemModel;
 		}
 
-		public void setBsUnit(String bsUnit) {
-			this.bsUnit = bsUnit;
+		public void setItemModel(String itemModel) {
+			this.itemModel = itemModel;
 		}
 
-		public Integer getBsStatus() {
-			return bsStatus;
+		public String getItemType() {
+			return itemType;
 		}
 
-		public void setBsStatus(Integer bsStatus) {
-			this.bsStatus = bsStatus;
-		}    
+		public void setItemType(String itemType) {
+			this.itemType = itemType;
+		}
+
+		public String getItemUnit() {
+			return itemUnit;
+		}
+
+		public void setItemUnit(String itemUnit) {
+			this.itemUnit = itemUnit;
+		}
+
+		public Integer getCheckStatus() {
+			return checkStatus;
+		}
+
+		public void setCheckStatus(Integer checkStatus) {
+			this.checkStatus = checkStatus;
+		}
+
+		  
 }

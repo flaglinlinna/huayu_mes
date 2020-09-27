@@ -20,52 +20,53 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class Client extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_client";
+	    public static final String TABLE_NAME = "MES_base_customer";
 	    
 	    /**
 	     * 客户编码
 	     */
-	    @ApiModelProperty(name = "bsCode", value = "客户编码")
+	    @ApiModelProperty(name = "custNo", value = "客户编码")
 	    @Column(length = 50)
 	    //@Column(columnDefinition = "varchar(50) comment '客户编码'")
-	    protected String bsCode;
+	    protected String custNo;
 
 	    /**
 	     * 客户全称
 	     */
-	    @ApiModelProperty(name = "bsName", value = "客户全称")
+	    @ApiModelProperty(name = "custName", value = "客户全称")
 	    @Column(length = 50)
-	    protected String bsName;
+	    protected String custName;
 	    
 	    /**
 	     * 客户简称
 	     */
-	    @ApiModelProperty(name = "bsNameSmpl", value = "客户简称")
+	    @ApiModelProperty(name = "custNameS", value = "客户简称")
 	    @Column(length = 50)
-	    protected String bsNameSmpl;
+	    protected String custNameS;
+
+		public String getCustNo() {
+			return custNo;
+		}
+
+		public void setCustNo(String custNo) {
+			this.custNo = custNo;
+		}
+
+		public String getCustName() {
+			return custName;
+		}
+
+		public void setCustName(String custName) {
+			this.custName = custName;
+		}
+
+		public String getCustNameS() {
+			return custNameS;
+		}
+
+		public void setCustNameS(String custNameS) {
+			this.custNameS = custNameS;
+		}
 	        
-
-		public String getBsCode() {
-			return bsCode;
-		}
-
-		public void setBsCode(String bsCode) {
-			this.bsCode = bsCode;
-		}
-
-		public String getBsName() {
-			return bsName;
-		}
-
-		public void setBsName(String bsName) {
-			this.bsName = bsName;
-		}
-
-		public String getBsNameSmpl() {
-			return bsNameSmpl;
-		}
-
-		public void setBsNameSmpl(String bsNameSmpl) {
-			this.bsNameSmpl = bsNameSmpl;
-		}
+	    
 }
