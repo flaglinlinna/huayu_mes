@@ -66,14 +66,14 @@ function edit(id,type){
                 $("input[name='zindex']").val(data.data.zindex);
                 $("textarea[name='description']").text(data.data.description);
                 $("#parentId").val(data.data.parentId);
-                data.data.istype==0?$("input[name='istype']").val(0).checked:$("input[name='istype']").val(1).checked;
+                data.data.istype==0?$("input[name='menuType']").val(0).checked:$("input[name='menuType']").val(1).checked;
                 layer.open({
                     type:1,
                     title: "更新权限",
                     fixed:false,
                     resize :false,
                     shadeClose: true,
-                    area: ['500px', '580px'],
+                    area: ['500px', '500px'],
                     content:$('#updatePerm'),
                     end:function(){
                         location.reload();
@@ -104,7 +104,7 @@ function addPerm(pid,flag){
             fixed:false,
             resize :false,
             shadeClose: true,
-            area: ['500px', '580px'],
+            area: ['500px', '500px'],
             content:$('#updatePerm'),  //页面自定义的div，样式自定义
             end:function(){
                 location.reload();
