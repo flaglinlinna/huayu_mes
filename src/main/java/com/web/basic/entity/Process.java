@@ -19,51 +19,66 @@ import io.swagger.annotations.ApiModelProperty;
 @DynamicUpdate
 @ApiModel
 public class Process extends BaseEntity {
-	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "basic_process";
-	    
-	    /**
-	     * 工序编码
-	     */
-	    @ApiModelProperty(name = "bsCode", value = "工序编码")
-	    @Column(length = 10)
-	    protected String bsCode;
+    private static final long serialVersionUID = 4625660587007894370L;
+    public static final String TABLE_NAME = "MES_base_PROC";
 
-	    /**
-	     * 工序名称
-	     */
-	    @ApiModelProperty(name = "bsName", value = "工序名称")
-	    @Column(length = 15)
-	    protected String bsName;
-	    
-	    /**
-	     * 状态（0：正常 / 1：禁用）
-	     */
-	    @ApiModelProperty(name = "bsStatus", value = "状态（0：正常 / 1：禁用）")
-	    @Column
-	    protected Integer bsStatus = 0;
+    /**
+     * 工序编码
+     */
+    @ApiModelProperty(name = "procNo", value = "工序编码")
+    @Column(length = 50)
+    protected String procNo;
 
-		public String getBsCode() {
-			return bsCode;
-		}
+    /**
+     * 工序名称
+     */
+    @ApiModelProperty(name = "procName", value = "工序名称")
+    @Column(length = 50)
+    protected String procName;
 
-		public void setBsCode(String bsCode) {
-			this.bsCode = bsCode;
-		}
+    /**
+     * 工序顺序号
+     */
+    @ApiModelProperty(name = "procOrder", value = "工序顺序号")
+    @Column(length = 5)
+    protected Integer procOrder;
 
-		public String getBsName() {
-			return bsName;
-		}
+    /**
+     * 状态
+     */
+    @ApiModelProperty(name = "checkStatus", value = "状态")
+    @Column(length = 1)
+    protected Integer checkStatus = 0;
 
-		public void setBsName(String bsName) {
-			this.bsName = bsName;
-		}
+    public String getProcNo() {
+        return procNo;
+    }
 
-		public Integer getBsStatus() {
-			return bsStatus;
-		}
+    public void setProcNo(String procNo) {
+        this.procNo = procNo;
+    }
 
-		public void setBsStatus(Integer bsStatus) {
-			this.bsStatus = bsStatus;
-		}    
+    public String getProcName() {
+        return procName;
+    }
+
+    public void setProcName(String procName) {
+        this.procName = procName;
+    }
+
+    public Integer getProcOrder() {
+        return procOrder;
+    }
+
+    public void setProcOrder(Integer procOrder) {
+        this.procOrder = procOrder;
+    }
+
+    public Integer getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(Integer checkStatus) {
+        this.checkStatus = checkStatus;
+    }
 }
