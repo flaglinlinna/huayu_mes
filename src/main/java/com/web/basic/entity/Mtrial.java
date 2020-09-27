@@ -69,7 +69,7 @@ public class Mtrial extends BaseEntity {
 	    /**
 	     * 状态（0：正常 / 1：禁用）
 	     */
-	    @ApiModelProperty(name = "bsStatus", value = "状态（0：正常 / 1：禁用）")
+	    @ApiModelProperty(name = "checkStatus", value = "状态（0：正常 / 1：禁用）")
 	    @Column
 	    protected Integer checkStatus = 0;
 

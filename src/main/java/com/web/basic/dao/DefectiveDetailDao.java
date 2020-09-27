@@ -11,5 +11,5 @@ public interface DefectiveDetailDao extends CrudRepository<DefectiveDetail, Long
 	public List<DefectiveDetail> findAll();
 	public List<DefectiveDetail> findByDelFlag(Integer delFlag);
 	public DefectiveDetail findById(long id);
-	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
+	public int countByDelFlagAndDefectCode(Integer delFlag, String bsCode);//查询deCode是否存在
 }
