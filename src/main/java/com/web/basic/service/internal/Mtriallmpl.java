@@ -28,7 +28,7 @@ import com.web.basic.service.MtrialService;
 public class Mtriallmpl implements MtrialService {
 	@Autowired
     private MtrialDao mtrialDao;
-	
+
 	 /**
      * 新增物料
      */
@@ -91,7 +91,7 @@ public class Mtriallmpl implements MtrialService {
         mtrialDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
-    
+
     /**
      * 根据ID获取
      * @param id
@@ -128,7 +128,7 @@ public class Mtriallmpl implements MtrialService {
         mtrialDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
-    
+
     @Override
     @Transactional
     public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
@@ -147,7 +147,7 @@ public class Mtriallmpl implements MtrialService {
         mtrialDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
-    
+
     /**
      * 查询列表
      */
@@ -171,6 +171,6 @@ public class Mtriallmpl implements MtrialService {
 				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
-	
-	
+
+
 }

@@ -28,7 +28,7 @@ import com.web.basic.service.DefectiveService;
 public class Defectivelmpl implements DefectiveService {
 	@Autowired
     private DefectiveDao defectiveDao;
-	
+
 	 /**
      * 新增不良类别
      */
@@ -89,7 +89,7 @@ public class Defectivelmpl implements DefectiveService {
         defectiveDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
-    
+
     /**
      * 根据ID获取
      * @param id
@@ -126,7 +126,7 @@ public class Defectivelmpl implements DefectiveService {
         defectiveDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
-    
+
     @Override
     @Transactional
     public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
@@ -145,7 +145,7 @@ public class Defectivelmpl implements DefectiveService {
         defectiveDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
-    
+
     /**
      * 查询列表
      */
@@ -168,6 +168,6 @@ public class Defectivelmpl implements DefectiveService {
 				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
-	
-	
+
+
 }

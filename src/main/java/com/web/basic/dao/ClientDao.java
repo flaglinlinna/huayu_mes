@@ -7,7 +7,7 @@ import java.util.List;
 import com.web.basic.entity.Client;;
 
 public interface ClientDao extends CrudRepository<Client, Long>,JpaSpecificationExecutor<Client>{
-	
+
 	public List<Client> findAll();
 	public List<Client> findByDelFlag(Integer delFlag);
 	public Client findById(long id);

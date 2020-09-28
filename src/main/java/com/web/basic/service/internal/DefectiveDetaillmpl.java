@@ -34,7 +34,7 @@ import com.web.basic.service.DefectiveDetailService;
 public class DefectiveDetaillmpl implements DefectiveDetailService {
 	@Autowired
     private DefectiveDetailDao defectiveDetailDao;
-	
+
 	@Autowired
     private DefectiveDao defectiveDao;
 	 /**
@@ -99,7 +99,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         defectiveDetailDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
-    
+
     /**
      * 根据ID获取
      * @param id
@@ -136,7 +136,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         defectiveDetailDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
-    
+
     @Override
     @Transactional
     public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
@@ -155,7 +155,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         defectiveDetailDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
-    
+
     /**
      * 查询列表
      */
@@ -180,7 +180,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
 					Map<String, Object> map = new HashMap<>();
 					map.put("pbsCode", bs.getDefective().getBsCode());//获取关联表的数据
 					map.put("pbsName", bs.getDefective().getBsName());
-					
+
 					map.put("id", bs.getId());
 					map.put("bsCode", bs.getBsCode());
 					map.put("bsName", bs.getBsName());

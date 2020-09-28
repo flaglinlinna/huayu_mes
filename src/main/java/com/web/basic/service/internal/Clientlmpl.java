@@ -28,7 +28,7 @@ import com.web.basic.service.ClientService;
 public class Clientlmpl implements ClientService {
 	@Autowired
     private ClientDao clientDao;
-	
+
 	 /**
      * 新增客户
      */
@@ -90,7 +90,7 @@ public class Clientlmpl implements ClientService {
         clientDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
-    
+
     /**
      * 根据ID获取
      * @param id
@@ -127,7 +127,7 @@ public class Clientlmpl implements ClientService {
         clientDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
-     
+
     /**
      * 查询列表
      */
@@ -151,6 +151,6 @@ public class Clientlmpl implements ClientService {
 				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
-	
-	
+
+
 }

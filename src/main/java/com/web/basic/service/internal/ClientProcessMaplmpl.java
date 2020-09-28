@@ -43,7 +43,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 	ProcessDao processDao;
 	@Autowired
 	ClientDao clientDao;
-	
+
 	@Override
     @Transactional
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
@@ -64,16 +64,16 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 					map.put("pClientCode", bs.getClient().getBsCode());//获取关联表的数据-客户表
 					map.put("pClientName", bs.getClient().getBsName());//客户名
 					map.put("client_id", bs.getClient().getId());
-					
+
 					map.put("pProcCode", bs.getProcess().getBsCode());//工序表
 					map.put("pProcName", bs.getProcess().getBsName());//工序名
-					
+
 					map.put("id", bs.getId());
 					map.put("modifiedTime",bs.getLastupdateDate());
 					map.put("createdTime", bs.getCreateDate());
 					list.add(map);
 				}
-				
+
 				return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
@@ -83,7 +83,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 	@Override
     @Transactional
     public ApiResponseResult addItem(String procIdList,Long clientId) throws Exception{
-        
+
 		if(clientId == null){
             return ApiResponseResult.failure("物料数据不能为空！");
         }
@@ -119,7 +119,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 
         return ApiResponseResult.success("工艺流程添加成功！");
     }
-	
+
 	/**
      * 客户ID获取原来工序记录
      */
@@ -127,7 +127,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 		 List<ClientProcessMap> list = clientProcessMapDao.findByDelFlagAndPkClient(0, id);
 		return ApiResponseResult.success().data(list);
 	}
-	
+
 	/**
 	 * 删除工序记录
 	 * */
@@ -146,7 +146,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
         clientProcessMapDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
-	
+
 	/**
      * 获取物料数据，工序数据
      */
@@ -156,7 +156,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 		Map<String, Object> map = new HashMap<>();
 		List<Process> pList = processDao.findByDelFlagAndBsStatus(0,0);
 		List<Client> cList = clientDao.findByDelFlag(0);
-		
+
 		map.put("process", pList);
 		map.put("client", cList);
 		return ApiResponseResult.success().data(map);

@@ -34,6 +34,13 @@ public class SchedulingTemp extends BaseEntity {
     protected String custId;
 
     /**
+     * 客户名称
+     */
+    @ApiModelProperty(name = "custName", value = "客户名称")
+    @Column(length = 50)
+    protected String custName;
+
+    /**
      * 客户编码
      */
     @ApiModelProperty(name = "custNo", value = "客户编码")
@@ -92,6 +99,13 @@ public class SchedulingTemp extends BaseEntity {
     protected String deptId;
 
     /**
+     * 部门名称
+     */
+    @ApiModelProperty(name = "deptName", value = "部门名称")
+    @Column(length = 100)
+    protected String deptName;
+
+    /**
      * 线长名称
      */
     @ApiModelProperty(name = "linerName", value = "线长名称")
@@ -133,6 +147,14 @@ public class SchedulingTemp extends BaseEntity {
 
     public void setCustId(String custId) {
         this.custId = custId;
+    }
+
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
     }
 
     public String getCustNo() {
@@ -197,6 +219,14 @@ public class SchedulingTemp extends BaseEntity {
 
     public void setDeptId(String deptId) {
         this.deptId = deptId;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 
     public String getLinerName() {

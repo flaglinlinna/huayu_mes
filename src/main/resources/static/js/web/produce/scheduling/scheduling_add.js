@@ -30,27 +30,18 @@ $(function () {
             },
             cols: [[
                 {type:'numbers'}
-                ,{field:'bsCheckStatus', title:'状态', width:100, templet:'#statusTpl'}
-                ,{field:'bsError', title:'错误信息', width:100}
-                ,{field:'bsDepartCode', title:'部门', width:60}
-                ,{field:'bsProduceTime', title:'日期', width:100}
-                ,{field:'bsShift', title:'班次', width:60}
-                ,{field:'bsCustomer', title:'客户', width:60}
-                ,{field:'bsLine', title:'线别', width:70}
-                ,{field:'bsOrderNo', title:'工单号', width:120}
-                ,{field:'bsMtrialCode', title:'物料编码', width:120}
-                ,{field:'bsMtrialDesc', title:'物料描述', width:120}
-                ,{field:'bsProcCode', title:'加工工艺', width:100}
-                ,{field:'bsRestNum', title:'工单残', width:80}
-                ,{field:'bsPlanNum', title:'计划生产数量', width:110}
-                ,{field:'bsPeopleNum', title:'用人量', width:80}
-                ,{field:'bsCapacityNum', title:'产能', width:80}
-                ,{field:'bsPlanHours', title:'预计工时(H/人)', width:120}
-                ,{field:'bsActualNum', title:'实际生产数量', width:110}
-                ,{field:'bsActualHours', title:'实际工时(H/人)', width:120}
-                ,{field:'bsPlanPrice', title:'计划金额', width:100}
-                ,{field:'bsActualPrice', title:'实际生产金额 ', width:120}
-                ,{field:'bsRemark', title:'备注', width:120}
+                ,{field:'checkStatus', title:'状态', width:100, templet:'#statusTpl'}
+                ,{field:'errorInfo', title:'错误信息', width:100}
+                ,{field:'groupNo', title:'组合', width:60}
+                ,{field:'custName', title:'客户', width:60}
+                ,{field:'linerName', title:'线别', width:70}
+                ,{field:'prodDate', title:'日期', width:100}
+                ,{field:'deptName', title:'组装部', width:80}
+                ,{field:'classNo', title:'班次', width:60}
+                ,{field:'', title:'工单号', width:120}
+                ,{field:'', title:'物料编码', width:120}
+                ,{field:'', title:'物料描述', width:150}
+                ,{field:'', title:'计划生产数量', width:110}
                 //,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
@@ -119,7 +110,7 @@ $(function () {
 
 //导入弹出框
 function openUpload(title){
-    deleteTempAll();
+    //deleteTempAll();
     var index = layer.open({
         type:1,
         title: title,
