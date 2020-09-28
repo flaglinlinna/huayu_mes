@@ -66,4 +66,4 @@ public class SensorEvents {
 		System.out.println("当机器向 SDK 发送未知事件时，触发该事件===="+arge);
 	}
 
-} 
+}

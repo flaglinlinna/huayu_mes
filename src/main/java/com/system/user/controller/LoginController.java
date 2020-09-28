@@ -50,7 +50,7 @@ public class LoginController extends WebController{
 
     @Autowired
     private SysUserService sysUserService;
-   
+
     @Autowired
     TokenService tokenService;
     @Autowired
@@ -75,7 +75,7 @@ public class LoginController extends WebController{
     			getSysLogService().error(method,methodName,"用户名或密码为空");
                 return ApiResponseResult.failure("用户名或密码不能为空！");
             }
-           
+
             //用户是否存在
             /*SysUser userForBase = sysUserDao.findByFcode(username);
     		if(userForBase == null){
@@ -147,26 +147,26 @@ public class LoginController extends WebController{
         }
 //        return ApiResponseResult.failure();
     }
-    
+
     @UserLoginToken
     @GetMapping("/getMessage")
     public String getMessage(){
         return "你已通过验证";
     }
 
-    
+
     @ApiOperation(value = "用户登录验证", notes = "根据用户Id验证用户密码是否正确，进行登录验证; 登录成功后，置为上线")
 	@ApiImplicitParam(name = "username", value = "用户Id", paramType = "Query", required = true, dataType = "String")
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json")
-	public ApiResponseResult login(@RequestBody Map<String, Object> params) {		
+	public ApiResponseResult login(@RequestBody Map<String, Object> params) {
 		try {
 			String username = params.get("username").toString().toUpperCase();
 			String password = params.get("password").toString();
-    		
+
     		if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
                 return ApiResponseResult.failure("用户名或密码不能为空！");
             }
-    		
+
     		List<Map<String, Object>> userForBase=sysUserService.findByUserCode(username);
             if(userForBase.size() == 0){
             	return ApiResponseResult.failure("用户不存在！");
@@ -185,7 +185,7 @@ public class LoginController extends WebController{
             return ApiResponseResult.failure("用户登录失败！"+e.toString());
         }
 	}
-    
+
 //	 解密算法
 	private String proPass(String src) throws Exception {
 		String result = "";
@@ -201,11 +201,11 @@ public class LoginController extends WebController{
 		result = new String(temp);
 		return result;
 	}
-	
-	
+
+
 	@ApiOperation(value = "查询版本号", notes = "查询版本号")
 	@RequestMapping(value = "/queryVersion", method = RequestMethod.GET, produces = "application/json")
-	public ApiResponseResult queryVersion() {		
+	public ApiResponseResult queryVersion() {
      try {
    		List<Map<String, Object>> userForBase=sysUserService.queryVersion();
            if(userForBase.size() == 0){
@@ -218,10 +218,10 @@ public class LoginController extends WebController{
            return ApiResponseResult.failure("查询版本号失败！");
        }
 	}
-	
+
 	@ApiOperation(value = "查询运行环境", notes = "查询运行环境")
 	@RequestMapping(value = "/queryRunEnv", method = RequestMethod.POST, produces = "application/json")
-	public ApiResponseResult queryRunEnv() {		
+	public ApiResponseResult queryRunEnv() {
      try {
    		List<Map<String, Object>> userForBase=sysUserService.queryRunEnv();
            if(userForBase.size() == 0){
@@ -234,11 +234,11 @@ public class LoginController extends WebController{
            return ApiResponseResult.failure("查询运行环境失败！");
        }
 	}
-	
+
 	@ApiOperation(value = "查询权限", notes = "查询权限")
 	@ApiImplicitParam(name = "userno", value = "用户Id", paramType = "Query", required = true, dataType = "String")
 	@RequestMapping(value = "/queryPurview", method = RequestMethod.POST, produces = "application/json")
-	public ApiResponseResult queryPurview(@RequestParam(value = "userno") String userno) {		
+	public ApiResponseResult queryPurview(@RequestParam(value = "userno") String userno) {
      try {
    		List<Map<String, Object>> userForBase=sysUserService.queryPurview(userno);
            if(userForBase.size() == 0){
@@ -251,11 +251,11 @@ public class LoginController extends WebController{
            return ApiResponseResult.failure("查询权限失败！");
        }
 	}
-	
+
 	@ApiOperation(value = "功能界面", notes = "功能界面")
 	@ApiImplicitParam(name = "functionName", value = "方法名称", paramType = "Query", required = true, dataType = "String")
 	@RequestMapping(value = "/getRfSetup", method = RequestMethod.POST, produces = "application/json")
-	public ApiResponseResult  getRfSetup(@RequestParam(value = "functionName") String functionName) {		
+	public ApiResponseResult  getRfSetup(@RequestParam(value = "functionName") String functionName) {
      try {
    	  System.out.println(functionName);
    	  String username = URLDecoder.decode(functionName,"UTF-8");
@@ -265,13 +265,13 @@ public class LoginController extends WebController{
            return ApiResponseResult.failure("查询功能界面失败！");
        }
 	}
-	
+
 	@ApiOperation(value = "功能执行存储过程 ", notes = "功能执行存储过程 ")
 	@ApiImplicitParam(name = "functionName", value = "方法名称", paramType = "Query", required = true, dataType = "String")
 	@RequestMapping(value = "/getExcProc", method = RequestMethod.POST, produces = "application/json")
 	public ApiResponseResult  getExcProc(@RequestParam(value = "functionName") String functionName,
 			@RequestParam(value = "fileName") String fileName,@RequestParam(value = "pmachtype") String pmachtype,
-			@RequestParam(value = "fileValue") String fileValue,@RequestParam(value = "outFiles") String outFiles) {		
+			@RequestParam(value = "fileValue") String fileValue,@RequestParam(value = "outFiles") String outFiles) {
      try {
    	  System.out.println(functionName);
    	  functionName = URLDecoder.decode(functionName,"UTF-8");
@@ -281,11 +281,11 @@ public class LoginController extends WebController{
            return ApiResponseResult.failure("查询功能界面失败！");
        }
 	}
-	
-	
+
+
 	@ApiOperation(value = "查询app版本号", notes = "查询app版本号")
 	@RequestMapping(value = "/queryAppVersion", method = RequestMethod.POST, produces = "application/json")
-	public ApiResponseResult queryAppVersion() {		
+	public ApiResponseResult queryAppVersion() {
      try {
    		return sysUserService.queryAppVersion();
        } catch (Exception e) {
@@ -293,17 +293,17 @@ public class LoginController extends WebController{
            return ApiResponseResult.failure("查询版本号失败！");
        }
 	}
-	
-	
+
+
 	@ApiOperation(value = "修改密码", notes = "修改密码")
 	@RequestMapping(value = "/changPsw", method = RequestMethod.POST, produces = "application/json")
-	public ApiResponseResult changPsw(@RequestParam(value = "usercode") String usercode,@RequestParam(value = "oldp") String oldp,@RequestParam(value = "newp") String newp) {		
+	public ApiResponseResult changPsw(@RequestParam(value = "usercode") String usercode,@RequestParam(value = "oldp") String oldp,@RequestParam(value = "newp") String newp) {
 		try {
 
    		if(StringUtils.isEmpty(usercode) || StringUtils.isEmpty(oldp) || StringUtils.isEmpty(newp)){
                return ApiResponseResult.failure("用户名或密码不能为空！");
            }
-   		
+
    		List<Map<String, Object>> userForBase=sysUserService.findByUserCode(usercode);
            if(userForBase.size() == 0){
            	return ApiResponseResult.failure("用户不存在！");
@@ -323,7 +323,7 @@ public class LoginController extends WebController{
            return ApiResponseResult.failure("用户登录失败！"+e.toString());
        }
 	}
-   
+
 //	 解密算法
 	private String encryptPass(String str) throws Exception {
 		//byte[] temp = new byte[255] ;
