@@ -39,7 +39,7 @@ public class ZkemSDKUtils {
         boolean result = zkem.invoke("ReadGeneralLogData", 1).getBoolean();
         return result;
     }
-    
+
     /**
      * 读取指纹模板相关到pc缓存。配合ReadAllTemplate使用
      *
@@ -249,7 +249,7 @@ public class ZkemSDKUtils {
         }
         return null;
     }
-    
+
     /**
      * 获取用户信息
      *
@@ -257,10 +257,10 @@ public class ZkemSDKUtils {
      * @return
      */
     public static Map<String, Object> getUserTmpStr() {
-    	 
+
     	int isMachineNumber = 1;
-    	
-    	
+
+
       /*  boolean result = //zkem.invoke("SSR_GetUserTmpStr", v0, sdwEnrollNumber, sName, sPassword, iPrivilege, bEnabled).getBoolean();
         		zkem.invoke("SSR_GetUserTmpStr",  sdwEnrollNumber, "1").getBean();
         */
@@ -268,12 +268,12 @@ public class ZkemSDKUtils {
 
         Variant dwEnrollNumber = new Variant("", true);
 
-        
+
         Variant TmpData = new Variant("", true);
         Variant TmpLength = new Variant(0, true);
-        
+
        Dispatch.call(zkem, "EnableDevice", isMachineNumber, false);//使机器至于不可以状态
-    	
+
        boolean result = zkem.invoke("ReadAllUserID", 1).getBoolean();
 
        Variant v0 = new Variant(1);
@@ -285,32 +285,32 @@ public class ZkemSDKUtils {
        while (result) {
            //从缓存中读取一条条的用户数据
            result = zkem.invoke("SSR_GetAllUserInfo", v0, dwEnrollNumber, sName, sPassword, iPrivilege, bEnabled).getBoolean();
-          
+
            System.out.println(dwEnrollNumber.getStringRef());
-           
+
            for(int i=0;i<10;i++){
            	Variant vResult = Dispatch.call(zkem, "SSR_GetUserTmpStr", dwMachineNumber, dwEnrollNumber,i,TmpData,TmpLength);
-               
+
                //Variant vResult = Dispatch.call(zkem, "SSR_GetUserTmp", dwMachineNumber, dwEnrollNumber,1,TmpData,TmpLength);
-               
-               
+
+
                boolean newresult = vResult.getBoolean();
-               
+
                if(newresult){
             	   System.out.println("i:"+i+";newresult:"+newresult);
             	   System.out.println("TmpData:"+TmpData.getStringRef());
             	   System.out.println("TmpLength:"+TmpLength.getIntRef());
                }
-               
-               
-               
+
+
+
            }
        }
-    	
+
 
         return null;
     }
-    
+
     /**
      * 获取用户信息
      *
@@ -318,32 +318,32 @@ public class ZkemSDKUtils {
      * @return
      */
     public static Map<String, Object> setUserTmpStr() {
-    	 
+
         Variant dwMachineNumber = new Variant(0, true);//机器号
 
         Variant dwEnrollNumber = new Variant("3", true);
-        
-        
-        
+
+
+
         Variant TmpData = new Variant("Ss9TUzIxAAADjJEECAUHCc7QAAAbjWkBAAAAg7EakYxlAJcPfQC1ABKDWACDAIwNBwCKjJoPfwCNAMsPPYyXANAMMABYAMGCRwCdAPMOUQCnjIMP5gCkAOgPIoynAL8OfwBjAASDLgCoANMOJgC7jKsPzADEAOoPm4zTADEP8wAeACyDxgDeAK8PGADjjK4PVgDiAIgPZ4zjAEgP3wA0ADSDiAALAcEPnQAXjccP2gAXAfsPnowhAUkOVYr7iwRzWH6tB96Gi5hdMAOCAnNTGcrytoYw/5aMzN/YEA5yAfOt9CkE6ScOvvwifX2idPpQmgmzAu6Xyexo/K18dIU5+qfZtRM2mIgGnX1Ff8N+PguYg36AD7CehPyhyIKy+AKGEAKaD+94DXhVAgyCNohyiVOPufxGhSyWBIgqCOaIJHs4cWJ6twV7eUKBCYYGkveT2Yv2D8ALRT87ASA6xAIxl+AGAMc4HPPBB4zVOCTA/wnFwD+swUzBVQoAcEEZslpgDAClQtb+T+xUAwCTRzAGBQPGSEPChgwARlAd+MErwSsDAIRsMnAHADBYScUE//6JAVdePcLNBAgD4GEA/MBH/8AAMO0x/8D9BwBsYxTMWAwAZGr6ODY9uQIAY3AA+9YAgv0WbTVMNluQBAOncjfB+xYAmIL5tDD//lT/UIFGAIwlhT3BDgBHjgVwTv7A/cDB6gQDmpRAPQoAeV19wUzDfJENAEte8DC9wf07CgB4Wnp0C4gLAHuldwSAwkzDhgYAmKbTKcOJAeqmK1URxTOkbsH9/zD//u7+V4kB5agwwVrXAIElCP/9/v7/hEdXuwoA/7CpwARaeE0NAJ5MJMKW//xN/kYDABXFhf8HjMzHLVoMAFzVKHL+MsD/wDbOAHpVY8hFSkAExYHZpSMLAHzdNPNAw6YQAFne3P45/Ph3/8D8wP/+B/80gwFm3t76+j8hWMj/BQDy3jAFPgmMed9DaFMuzwDKbjU+/8BGCcVS4NvFYnIEAGAhSW+FAVfmTHn+gQoD6+dGwGDC/pwHA2/1N8BT/wbF3vaxcsADEBgHjMIFnNkbQFTABNXdGLFOBhCcJkkF/yiVEbUrw2vCScLAT8DEwsHCwAbAwXPDZR8QHy4GREO5Mif9/f/BOP/8TP7AQf8FEHIzTNsdEDU/wEaRMf1x//z8//3/O/7Cc/7B/jdSQsULQI0BAAtFUgAAAAAAAAA=", true);
-        
+
         Variant vResult = Dispatch.call(zkem, "SSR_SetUserTmpStr", dwMachineNumber, dwEnrollNumber,6,TmpData);
-        
+
         boolean newresult = vResult.getBoolean();
-        
+
         System.out.println("newresult:"+newresult);
-        
+
         /*if(newresult){
      	   System.out.println("i:"+i+";newresult:"+newresult);
      	   System.out.println("TmpData:"+TmpData.getStringRef());
      	   System.out.println("TmpLength:"+TmpLength.getIntRef());
         }*/
-    
-    	
+
+
 
         return null;
     }
-    
+
     /**
      * 查詢所有/指定ID的打卡信息;
      * @param userNumber
@@ -365,7 +365,7 @@ public class ZkemSDKUtils {
                 String Day = String.valueOf(generalLogDataAll.get(i).get("Day"));
                 String Month = String.valueOf(generalLogDataAll.get(i).get("Month"));
                 String VerifyMode = String.valueOf(generalLogDataAll.get(i).get("VerifyMode"));
-                
+
                 if(EnrollNumber.equals(userNumber)&&userNumber!=null){
                 	strList.add(generalLogDataAll.get(i));
                 }
@@ -382,7 +382,7 @@ public class ZkemSDKUtils {
         if (connFlag) {
             /*boolean flag = sdk.readGeneralLogData();
             System.out.println("flag:" + flag);*/
-           
+
             /*List<Map<String, Object>> strList = sdk.getGeneralLogData();
             map.put("strList", strList);
             System.out.println("flag:" + flag);
@@ -396,11 +396,11 @@ public class ZkemSDKUtils {
             System.out.println(f_d);*/
         	/*boolean flag = sdk.readAllTemplate();
             System.out.println("flag:" + flag);*/
-           
+
             //sdk.getUserTmpStr();
-        	
+
         	sdk.setUserTmpStr();
-            
+
         }
     }
 
