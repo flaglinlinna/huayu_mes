@@ -146,7 +146,7 @@ public class DefectiveController extends WebController{
 		        String method = "base/defect/doStatus";String methodName ="设置正常/禁用";
 		        try{
 		        	long id = Long.parseLong(params.get("id").toString()) ;
-		        	Integer bsStatus=Integer.parseInt(params.get("bsStatus").toString());
+		        	Integer bsStatus=Integer.parseInt(params.get("checkStatus").toString());
 		            ApiResponseResult result = defectiveService.doStatus(id, bsStatus);
 		            logger.debug("设置正常/禁用=doJob:");
 		            getSysLogService().success(method, methodName, null);

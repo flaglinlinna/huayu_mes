@@ -33,13 +33,16 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
-				field : 'bsCode',
+				field : 'procNo',
 				title : '工序编码'
 			}, {
-				field : 'bsName',
+				field : 'procName',
 				title : '工序名称'
+			},{
+				field : 'procOrder',
+				title : '工序排序'
 			}, {
-				field : 'bsStatus',
+				field : 'checkStatus',
 				title : '状态',
 				width : 95,
 				templet : '#statusTpl'
@@ -77,13 +80,19 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delProc(data, data.id, data.bsCode);
+				delProc(data, data.id, data.procNo);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				console.log("edit");
 				getProc(data, data.id);
 			}
 		});
+		form.verify({
+		  order: [
+		   /^\+?[1-9][0-9]*$/
+		    ,'工序顺序应大于0且不含小数点'
+		  ] 
+		});  
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
 			if (data.field.id == null || data.field.id == "") {
@@ -111,8 +120,9 @@ $(function() {
 						if (data.result) {
 							form.val("procForm", {
 								"id" : data.data.id,
-								"bsCode" : data.data.bsCode,
-								"bsName" : data.data.bsName,
+								"procNo" : data.data.procNo,
+								"procName" : data.data.procName,
+								"procOrder":data.data.procOrder
 							});
 							openProc(id, "编辑工序")
 						} else {
@@ -132,7 +142,7 @@ $(function() {
 						btn1 : function(index) {
 							var param = {
 								"id" : id,
-								"bsStatus" : isStatus
+								"checkStatus" : isStatus
 							};
 							CoreUtil.sendAjax("/base/proc/doStatus", JSON
 									.stringify(param), function(data) {

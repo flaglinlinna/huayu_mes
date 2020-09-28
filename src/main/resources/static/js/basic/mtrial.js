@@ -33,19 +33,19 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
-				field : 'bsCode',
+				field : 'itemNo',
 				title : '物料编码'
 			}, {
-				field : 'bsName',
+				field : 'itemName',
 				title : '物料名称'
 			}, {
-				field : 'bsType',
+				field : 'itemType',
 				title : '物料类别'
 			}, {
-				field : 'bsUnit',
+				field : 'itemUnit',
 				title : '物料单位'
 			}, {
-				field : 'bsStatus',
+				field : 'checkStatus',
 				title : '状态',
 				width : 95,
 				templet : '#statusTpl'
@@ -82,7 +82,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delMtrial(data, data.id, data.bsCode);
+				delMtrial(data, data.id, data.itemNo);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				console.log("edit");
@@ -116,10 +116,12 @@ $(function() {
 						if (data.result) {
 							form.val("mtrialForm", {
 								"id" : data.data.id,
-								"bsCode" : data.data.bsCode,
-								"bsName" : data.data.bsName,
-								"bsType" : data.data.bsType,
-								"bsUnit" : data.data.bsUnit
+								"itemNo" : data.data.itemNo,
+								"itemName" : data.data.itemName,
+								"itemNameS" : data.data.itemNameS,
+								"itemModel" : data.data.itemModel,
+								"itemType" : data.data.itemType,
+								"itemUnit" : data.data.itemUnit
 							});
 							openMtrial(id, "编辑物料信息")
 						} else {
@@ -141,7 +143,7 @@ $(function() {
 						btn1 : function(index) {
 							var param = {
 								"id" : id,
-								"bsStatus" : isStatus
+								"checkStatus" : isStatus
 							};
 							CoreUtil.sendAjax("/base/mtrial/doStatus", JSON
 									.stringify(param), function(data) {

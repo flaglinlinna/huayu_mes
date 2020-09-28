@@ -33,35 +33,44 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			,{
-				field : 'client_id',
-				title : '客户编号',
-				width:0,hidden:true
+				field : 'custId',
+				title : '客户Id',
+				width:0,
+				hide:true
 			}
 			,{
-				field : 'pClientCode',
+				field : 'custNo',
 				title : '客户编号',
-				width:120
+				width:90
 			},{
-				field : 'pClientName',
-				title : '客户名称'
+				field : 'custName',
+				title : '客户名称',
+				width:90
 			}, {
-				field : 'bsOrder',
+				field : 'procOrder',
 				title : '工序顺序',
 				width:90
 			}, {
-				field : 'pProcCode',
+				field : 'procNo',
 				title : '工序编号'
 			}, {
-				field : 'pProcName',
+				field : 'procName',
 				title : '工序名称'
+			}, {
+				field : 'jobAttr',
+				title : '过程属性',
+				templet : '#statusTpl',
+				width:90,
+				align : 'center'
+				//type:"checkbox"
 			}, {
 				field : 'lastupdateDate',
 				title : '更新时间',
-				//templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>'
+				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>'
 			}, {
 				field : 'createDate',
 				title : '添加时间',
-				//templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>'
+				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>'
 			}, {
 				fixed : 'right',
 				title : '操作',
@@ -77,8 +86,29 @@ $(function() {
 				// 得到数据总量
 				// console.log(count);
 				pageCurr = curr;
-				merge(res.data,['pClientCode','pClientName'],[1,2]);
+				//console.log(res)
+				for(var i =0;i<res.data.length;i++){
+						if(res.data[i].jobAttr==0){
+							//这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
+					        res.data[i]["LAY_CHECKED"]='true';
+							//更改css来实现选中的效果
+							//$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
+							$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
+						}		
+				}
+				merge(res.data,['custNo','custName'],[2,3]);
 			}
+		});
+		form.on('checkbox(isStatusTpl)', function(obj) {//修改过程属性
+			//console.log(obj, this.value, this.name, obj.elem.checked);
+			setStatus(obj, this.value, this.name, obj.elem.checked);
+		});
+		// 监听搜索框
+		form.on('submit(searchSubmit)', function(data) {
+			console.log(data)
+			// 重新加载table
+			load(data);
+			return false;
 		});
 		tableProc=table.render({
 			elem : '#procList',
@@ -93,14 +123,15 @@ $(function() {
 			},
 			
 			{
-				field : 'bsCode',
+				field : 'procNo',
 				title : '编码'
 			}, {
-				field : 'bsName',
+				field : 'procName',
 				title : '名称',
 			}] ],
 			data:[]
 		});	
+		
 		form.on('select(pkClient)', function(data){//监听选择事件
 			//var params={"client":$("#pkClient").val()}
 			getProcByClient($("#pkClient").val());
@@ -111,12 +142,11 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delClientProc(data, data.id, data.pProcName);
+				delClientProc(data, data.id, data.procName);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				console.log(data);
 				//getClientProc(data, data.id);//未写
-				addProc(data.client_id)
+				addProc(data.custId)
 			}
 		});
 		
@@ -126,7 +156,7 @@ $(function() {
 				// 新增
 				var procIdList="";
 				var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
-				console.log(cList.length)
+				//console.log(cList.length)
 				for(var i=0;i<cList.length;i++){//获取被选中的行
 					procIdList+=cList[i].id+";"//工序的ID序列，用“；”分隔
 				}
@@ -137,6 +167,49 @@ $(function() {
 			}
 			return false;
 		});
+		
+		// 设置过程属性
+		function setStatus(obj, id, name, checked) {
+			var jobAttr = checked ? 0 : 1;
+			var deaprtisStatus = checked ? "勾选" : "不勾选";
+			// 正常/禁用
+			layer.confirm('您确定要把工序：' + name + '过程属性设置为' + deaprtisStatus + '状态吗？',
+					{
+						btn1 : function(index) {
+							var param = {
+								"id" : id,
+								"jobAttr" : jobAttr
+							};
+							CoreUtil.sendAjax("/base/client_proc/doJobAttr", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									layer.alert("操作成功", function() {
+										layer.closeAll();
+										loadAll();
+									});
+								} else {
+									layer.alert(data.msg, function() {
+										layer.closeAll();
+									});
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试", function() {
+									layer.closeAll();
+								});
+							});
+						},
+						btn2 : function() {
+							obj.elem.checked = jobAttr;
+							form.render();
+							layer.closeAll();
+						},
+						cancel : function() {
+							obj.elem.checked = jobAttr;
+							form.render();
+							layer.closeAll();
+						}
+					});
+		}
 	});
 });
 //添加不工艺流程
@@ -153,14 +226,13 @@ function getProcByClient(params){
 	CoreUtil.sendAjax("base/client_proc/getClientItem", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
-			
 			var beSelected=data.data;
 			console.log(beSelected)
 			tableProc.reload({
 				done : function(res, curr, count) {
 					for(var i =0;i<res.data.length;i++){
 						for(var j=0;j<beSelected.length;j++){
-							if(res.data[i].id == beSelected[j].pkProcess){
+							if(res.data[i].id == beSelected[j].procId){
 								//这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
 						        res.data[i]["LAY_CHECKED"]='true';
 								//更改css来实现选中的效果
@@ -179,6 +251,7 @@ function getProcByClient(params){
 		layer.alert(res.msg);
 	});
 }
+
 
 function delClientProc(obj, id, name) {
 	if (id != null) {
@@ -239,6 +312,7 @@ function addSubmit(procIdlist,client) {
 
 //获取客户，工序信息
 function getProcList(id){
+	console.log(id)
 	CoreUtil.sendAjax("base/client_proc/getProcList", "",
 			function(data) {
 				if (data.result) {
@@ -246,6 +320,7 @@ function getProcList(id){
 						data:data.data.process,
 						done : function(res, curr, count) {
 							cleanProc();//清空之前的选中
+							console.log(id)
 							if(id != ''){
 								getProcByClient(id)
 							}
@@ -253,18 +328,19 @@ function getProcList(id){
 					});
 					$("#pkClient").empty();
 					var c=data.data.client;
+					//console.log(c)
 					for (var i = 0; i < c.length; i++) {
 						if(i==0){
 							$("#pkClient").append("<option value=''>请点击选择</option>");
 						}
 						if(id != ''){
 							if(c[i].id == id){
-								$("#pkClient").append("<option value=" + c[i].id+ " selected>"+c[i].bsName+"</option>");
+								$("#pkClient").append("<option value=" + c[i].id+ " selected>"+c[i].custName+"</option>");
 							}else{
-								$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].bsName+"</option>");
+								$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
 							}
 						}else{
-							$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].bsName+"</option>");
+							$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
 						}
 					}			
 					layui.form.render('select');
@@ -325,6 +401,20 @@ function openProc(id, title) {
 		}
 	});
 }
+//重新加载表格（搜索）
+function load(obj) {
+	// 重新加载table
+	tableIns.reload({
+		where : {
+			keyword : obj.field.keywordSearch
+		},
+		page : {
+			curr : pageCurr
+		// 从当前页码开始
+		}
+	});
+}
+
 //重新加载表格（全部）
 function loadAll() {
 	// 重新加载table

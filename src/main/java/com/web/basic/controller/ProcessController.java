@@ -148,7 +148,7 @@ public class ProcessController extends WebController{
 		        String method = "base/proc/doStatus";String methodName ="设置正常/禁用";
 		        try{
 		        	long id = Long.parseLong(params.get("id").toString()) ;
-		        	Integer bsStatus=Integer.parseInt(params.get("bsStatus").toString());
+		        	Integer bsStatus=Integer.parseInt(params.get("checkStatus").toString());
 		            ApiResponseResult result = processService.doStatus(id, bsStatus);
 		            logger.debug("设置正常/禁用=doJob:");
 		            getSysLogService().success(method, methodName, null);

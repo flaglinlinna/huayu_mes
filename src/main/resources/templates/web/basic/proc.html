@@ -29,10 +29,10 @@
         <table id="procList" lay-filter="procTable"></table>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(!d.bsStatus){ }}
-            <input type="checkbox" name="{{d.bsName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(!d.checkStatus){ }}
+            <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.bsName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 
@@ -49,13 +49,19 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">工序编码</label>
                 <div class="layui-input-inline">
-                    <input id="bsCode" name="bsCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="procNo" name="procNo" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">工序名称</label>
                 <div class="layui-input-inline">
-                    <input id="bsName" name="bsName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="procName" name="procName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">工序顺序</label>
+                <div class="layui-input-inline">
+                    <input id="procOrder" name="procOrder" lay-verify="required|number|order" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">

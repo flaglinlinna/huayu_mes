@@ -33,13 +33,21 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
-				field : 'bsCode',
+				field : 'lineNo',
 				title : '线体编码'
 			}, {
-				field : 'bsName',
+				field : 'lineName',
 				title : '线体名称'
+			},
+			{
+				field : 'linerCode',
+				title : '线长工号'
 			}, {
-				field : 'bsStatus',
+				field : 'linerName',
+				title : '线长姓名'
+			}
+			, {
+				field : 'checkStatus',
 				title : '状态',
 				width : 95,
 				templet : '#statusTpl'
@@ -77,7 +85,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delLine(data, data.id, data.bsCode);
+				delLine(data, data.id, data.lineNo);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				console.log("edit");
@@ -111,8 +119,10 @@ $(function() {
 						if (data.result) {
 							form.val("lineForm", {
 								"id" : data.data.id,
-								"bsCode" : data.data.bsCode,
-								"bsName" : data.data.bsName,
+								"lineNo" : data.data.lineNo,
+								"lineName" : data.data.lineName,
+								"linerCode" : data.data.linerCode,
+								"linerName" : data.data.linerName,
 							});
 							openLine(id, "编辑线体")
 						} else {
@@ -133,7 +143,7 @@ $(function() {
 						btn1 : function(index) {
 							var param = {
 								"id" : id,
-								"bsStatus" : isStatus
+								"checkStatus" : isStatus
 							};
 							CoreUtil.sendAjax("/base/line/doStatus", JSON
 									.stringify(param), function(data) {
@@ -182,7 +192,7 @@ function setStatus(obj, id, name, checked) {
 	}, function() {
 		var param = {
 			"id" : id,
-			"bsStatus" : isStatus
+			"checkStatus" : isStatus
 		};
 		CoreUtil.sendAjax("/base/line/doStatus", JSON.stringify(param),
 				function(data) {

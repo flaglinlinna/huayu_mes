@@ -29,10 +29,10 @@
         <table id="lineList" lay-filter="lineTable"></table>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(!d.bsStatus){ }}
-            <input type="checkbox" name="{{d.bsName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(!d.checkStatus){ }}
+            <input type="checkbox" name="{{d.lineName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.bsName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.lineName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 
@@ -48,13 +48,25 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">线体编码</label>
                 <div class="layui-input-inline">
-                    <input id="bsCode" name="bsCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="lineNo" name="lineNo" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">线体名称</label>
                 <div class="layui-input-inline">
-                    <input id="bsName" name="bsName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="lineName" name="lineName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">线长工号</label>
+                <div class="layui-input-inline">
+                    <input id="linerCode" name="linerCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">线长姓名</label>
+                <div class="layui-input-inline">
+                    <input id="linerName" name="linerName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">

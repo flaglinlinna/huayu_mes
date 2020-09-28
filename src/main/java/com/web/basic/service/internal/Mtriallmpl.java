@@ -38,13 +38,13 @@ public class Mtriallmpl implements MtrialService {
         if(mtrial == null){
             return ApiResponseResult.failure("物料不能为空！");
         }
-        if(StringUtils.isEmpty(mtrial.getBsCode())){
+        if(StringUtils.isEmpty(mtrial.getItemNo())){
             return ApiResponseResult.failure("物料编号不能为空！");
         }
-        if(StringUtils.isEmpty(mtrial.getBsName())){
+        if(StringUtils.isEmpty(mtrial.getItemName())){
             return ApiResponseResult.failure("物料名称不能为空！");
         }
-        int count = mtrialDao.countByDelFlagAndBsCode(0, mtrial.getBsCode());
+        int count = mtrialDao.countByDelFlagAndItemNo(0, mtrial.getItemNo());
         if(count > 0){
             return ApiResponseResult.failure("该物料已存在，请填写其他物料编号！");
         }
@@ -65,10 +65,10 @@ public class Mtriallmpl implements MtrialService {
         if(mtrial.getId() == null){
             return ApiResponseResult.failure("物料ID不能为空！");
         }
-        if(StringUtils.isEmpty(mtrial.getBsCode())){
+        if(StringUtils.isEmpty(mtrial.getItemNo())){
             return ApiResponseResult.failure("物料编号不能为空！");
         }
-        if(StringUtils.isEmpty(mtrial.getBsName())){
+        if(StringUtils.isEmpty(mtrial.getItemName())){
             return ApiResponseResult.failure("物料名称不能为空！");
         }
         Mtrial o = mtrialDao.findById((long) mtrial.getId());
@@ -76,18 +76,20 @@ public class Mtriallmpl implements MtrialService {
             return ApiResponseResult.failure("该物料不存在！");
         }
         //判断物料编号是否有变化，有则修改；没有则不修改
-        if(o.getBsCode().equals(mtrial.getBsCode())){
+        if(o.getItemNo().equals(mtrial.getItemNo())){
         }else{
-            int count = mtrialDao.countByDelFlagAndBsCode(0, mtrial.getBsCode());
+            int count = mtrialDao.countByDelFlagAndItemNo(0, mtrial.getItemNo());
             if(count > 0){
                 return ApiResponseResult.failure("物料编号已存在，请填写其他物料编号！");
             }
-            o.setBsCode(mtrial.getBsCode().trim());
+            o.setItemNo(mtrial.getItemNo().trim());
         }
         o.setLastupdateDate(new Date());
-        o.setBsName(mtrial.getBsName());
-        o.setBsType(mtrial.getBsType());
-        o.setBsUnit(mtrial.getBsUnit());
+        o.setItemName(mtrial.getItemName());
+        o.setItemNameS(mtrial.getItemNameS());
+        o.setItemModel(mtrial.getItemModel());
+        o.setItemType(mtrial.getItemType());
+        o.setItemUnit(mtrial.getItemUnit());
         mtrialDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
@@ -131,11 +133,11 @@ public class Mtriallmpl implements MtrialService {
     
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
+    public ApiResponseResult doStatus(Long id, Integer checkStatus) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("物料ID不能为空！");
         }
-        if(bsStatus == null){
+        if(checkStatus == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
         Mtrial o = mtrialDao.findById((long) id);
@@ -143,7 +145,7 @@ public class Mtriallmpl implements MtrialService {
             return ApiResponseResult.failure("物料不存在！");
         }
         o.setLastupdateDate(new Date());
-        o.setBsStatus(bsStatus);
+        o.setCheckStatus(checkStatus);
         mtrialDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
@@ -160,9 +162,11 @@ public class Mtriallmpl implements MtrialService {
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
-					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("bsType", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("itemNo", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("itemName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("itemType", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("itemModel", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("itemUnit", SearchFilter.Operator.LIKE, keyword));
 				}
 				Specification<Mtrial> spec = Specification.where(BaseService.and(filters, Mtrial.class));
 				Specification<Mtrial> spec1 = spec.and(BaseService.or(filters1, Mtrial.class));

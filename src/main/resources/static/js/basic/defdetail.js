@@ -33,19 +33,19 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			,{
-				field : 'pbsCode',
+				field : 'defectTypeCode',
 				title : '不良类别编号'
 			},{
-				field : 'pbsName',
+				field : 'defectTypeName',
 				title : '不良类别名称'
 			}, {
-				field : 'bsCode',
+				field : 'defectCode',
 				title : '不良内容编码'
 			}, {
-				field : 'bsName',
+				field : 'defectName',
 				title : '不良内容名称'
 			}, {
-				field : 'bsStatus',
+				field : 'checkStatus',
 				title : '状态',
 				width : 95,
 				templet : '#statusTpl'
@@ -72,7 +72,7 @@ $(function() {
 				// 得到数据总量
 				// console.log(count);
 				pageCurr = curr;
-				merge(res.data,['pbsCode'],[1]);
+				merge(res.data,['defectTypeCode'],[1]);
 			}
 		});
 
@@ -85,7 +85,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delDef(data, data.id, data.bsCode);
+				delDef(data, data.id, data.defectCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				getDef(data, data.id);
@@ -120,11 +120,11 @@ $(function() {
 							
 							form.val("defdetailForm", {
 								"id" : data.data.id,
-								"bsCode" : data.data.bsCode,
-								"bsName" : data.data.bsName,
-								//"pkDefective":
+								"defectCode" : data.data.defectCode,
+								"defectName" : data.data.defectName,
+								//"defectTypeId":
 							});
-							getDefectiveList(data.data.pkDefective);
+							getDefectiveList(data.data.defectTypeId);
 							
 							//layui.form.render('select');
 							openDef(id, "编辑不良内容")
@@ -147,7 +147,7 @@ $(function() {
 						btn1 : function(index) {
 							var param = {
 								"id" : id,
-								"bsStatus" : isStatus
+								"checkStatus" : isStatus
 							};
 							CoreUtil.sendAjax("/base/defdetail/doStatus", JSON
 									.stringify(param), function(data) {
@@ -268,16 +268,16 @@ function getDefectiveList(id){
 	CoreUtil.sendAjax("base/defdetail/getDefectiveList", "",
 			function(data) {
 				if (data.result) {
-				$("#pkDefective").empty();
+				$("#defectTypeId").empty();
 				var bad=data.data;
-				//console.log(data)
+				console.log(bad)
 				for (var i = 0; i < bad.length; i++) {
 					if(i==0){
-						$("#pkDefective").append("<option value=''>请点击选择</option>");
+						$("#defectTypeId").append("<option value=''>请点击选择</option>");
 					}
-					$("#pkDefective").append("<option value=" + bad[i].id+ ">" + bad[i].bsName + "</option>");
+					$("#defectTypeId").append("<option value=" + bad[i].id+ ">" + bad[i].defectTypeName + "</option>");
 					if(bad[i].id==id){
-						$("#pkDefective").val(bad[i].id);
+						$("#defectTypeId").val(bad[i].id);
 					}
 				}					
 				layui.form.render('select');

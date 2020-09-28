@@ -11,5 +11,5 @@ public interface ClientDao extends CrudRepository<Client, Long>,JpaSpecification
 	public List<Client> findAll();
 	public List<Client> findByDelFlag(Integer delFlag);
 	public Client findById(long id);
-	public int countByDelFlagAndCustNo(Integer delFlag, String bsCode);//查询deCode是否存在
+	public int countByDelFlagAndCustNo(Integer delFlag, String custNo);//查询deCode是否存在
 }

@@ -29,10 +29,10 @@
         <table id="mtrialList" lay-filter="mtrialTable"></table>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(!d.bsStatus){ }}
-            <input type="checkbox" name="{{d.bsName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(!d.checkStatus){ }}
+            <input type="checkbox" name="{{d.itemName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.bsName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.itemName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 
@@ -49,25 +49,37 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">物料编码</label>
                 <div class="layui-input-inline">
-                    <input id="bsCode" name="bsCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="itemNo" name="itemNo" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">物料名称</label>
                 <div class="layui-input-inline">
-                    <input id="bsName" name="bsName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="itemName" name="itemName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+             <div class="layui-form-item">
+                <label class="layui-form-label">物料简称</label>
+                <div class="layui-input-inline">
+                    <input id="itemNameS" name="itemNameS" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">物料类别</label>
                 <div class="layui-input-inline">
-                    <input id="bsType" name="bsType" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="itemType" name="itemType" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">物料规格</label>
+                <div class="layui-input-inline">
+                    <input id="itemModel" name="itemModel" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">物料单位</label>
                 <div class="layui-input-inline">
-                    <input id="bsUnit" name="bsUnit" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="itemUnit" name="itemUnit" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">

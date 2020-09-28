@@ -38,13 +38,13 @@ public class Processlmpl implements ProcessService {
         if(process == null){
             return ApiResponseResult.failure("工序不能为空！");
         }
-        if(StringUtils.isEmpty(process.getBsCode())){
+        if(StringUtils.isEmpty(process.getProcNo())){
             return ApiResponseResult.failure("工序编码不能为空！");
         }
-        if(StringUtils.isEmpty(process.getBsName())){
+        if(StringUtils.isEmpty(process.getProcName())){
             return ApiResponseResult.failure("工序名称不能为空！");
         }
-        int count = processDao.countByDelFlagAndBsCode(0, process.getBsCode());
+        int count = processDao.countByDelFlagAndProcNo(0, process.getProcNo());
         if(count > 0){
             return ApiResponseResult.failure("该工序已存在，请填写其他工序编码！");
         }
@@ -65,10 +65,10 @@ public class Processlmpl implements ProcessService {
         if(process.getId() == null){
             return ApiResponseResult.failure("工序ID不能为空！");
         }
-        if(StringUtils.isEmpty(process.getBsCode())){
+        if(StringUtils.isEmpty(process.getProcNo())){
             return ApiResponseResult.failure("工序编码不能为空！");
         }
-        if(StringUtils.isEmpty(process.getBsName())){
+        if(StringUtils.isEmpty(process.getProcName())){
             return ApiResponseResult.failure("工序名称不能为空！");
         }
         Process o = processDao.findById((long) process.getId());
@@ -76,16 +76,17 @@ public class Processlmpl implements ProcessService {
             return ApiResponseResult.failure("该工序不存在！");
         }
         //判断工序编码是否有变化，有则修改；没有则不修改
-        if(o.getBsCode().equals(process.getBsCode())){
+        if(o.getProcNo().equals(process.getProcNo())){
         }else{
-            int count = processDao.countByDelFlagAndBsCode(0, process.getBsCode());
+            int count = processDao.countByDelFlagAndProcNo(0, process.getProcNo());
             if(count > 0){
                 return ApiResponseResult.failure("工序编码已存在，请填写其他工序编码！");
             }
-            o.setBsCode(process.getBsCode().trim());
+            o.setProcNo(process.getProcNo().trim());
         }
         o.setLastupdateDate(new Date());
-        o.setBsName(process.getBsName());
+        o.setProcName(process.getProcName());
+        o.setProcOrder(process.getProcOrder());
         processDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
@@ -129,11 +130,11 @@ public class Processlmpl implements ProcessService {
     
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
+    public ApiResponseResult doStatus(Long id, Integer checkStatus) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("工序ID不能为空！");
         }
-        if(bsStatus == null){
+        if(checkStatus == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
         Process o = processDao.findById((long) id);
@@ -141,7 +142,7 @@ public class Processlmpl implements ProcessService {
             return ApiResponseResult.failure("工序不存在！");
         }
         o.setLastupdateDate(new Date());
-        o.setBsStatus(bsStatus);
+        o.setCheckStatus(checkStatus);
         processDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
@@ -158,8 +159,9 @@ public class Processlmpl implements ProcessService {
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
-					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("procNo", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("procName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("procOrder", SearchFilter.Operator.LIKE, keyword));
 				}
 				Specification<Process> spec = Specification.where(BaseService.and(filters, Process.class));
 				Specification<Process> spec1 = spec.and(BaseService.or(filters1, Process.class));

@@ -30,62 +30,64 @@ public class Linelmpl implements LineService {
     private LineDao lineDao;
 
 	 /**
-     * 新增工作中心
+     * 新增线体
      */
     @Override
     @Transactional
     public ApiResponseResult add(Line line) throws Exception{
         if(line == null){
-            return ApiResponseResult.failure("工作中心不能为空！");
+            return ApiResponseResult.failure("线体不能为空！");
         }
-        if(StringUtils.isEmpty(line.getBsCode())){
-            return ApiResponseResult.failure("工作中心编号不能为空！");
+        if(StringUtils.isEmpty(line.getLineNo())){
+            return ApiResponseResult.failure("线体编号不能为空！");
         }
-        if(StringUtils.isEmpty(line.getBsName())){
-            return ApiResponseResult.failure("工作中心名称不能为空！");
+        if(StringUtils.isEmpty(line.getLineName())){
+            return ApiResponseResult.failure("线体名称不能为空！");
         }
-        int count = lineDao.countByDelFlagAndBsCode(0, line.getBsCode());
+        int count = lineDao.countByDelFlagAndLineNo(0, line.getLineNo());
         if(count > 0){
-            return ApiResponseResult.failure("该工作中心已存在，请填写其他工作中心编号！");
+            return ApiResponseResult.failure("该线体已存在，请填写其他线体编号！");
         }
         line.setCreateDate(new Date());
         lineDao.save(line);
 
-        return ApiResponseResult.success("工作中心添加成功！").data(line);
+        return ApiResponseResult.success("线体添加成功！").data(line);
     }
     /**
-     * 修改工作中心
+     * 修改线体
      */
     @Override
     @Transactional
     public ApiResponseResult edit(Line line) throws Exception {
         if(line == null){
-            return ApiResponseResult.failure("工作中心不能为空！");
+            return ApiResponseResult.failure("线体不能为空！");
         }
         if(line.getId() == null){
-            return ApiResponseResult.failure("工作中心ID不能为空！");
+            return ApiResponseResult.failure("线体ID不能为空！");
         }
-        if(StringUtils.isEmpty(line.getBsCode())){
-            return ApiResponseResult.failure("工作中心编号不能为空！");
+        if(StringUtils.isEmpty(line.getLineNo())){
+            return ApiResponseResult.failure("线体编号不能为空！");
         }
-        if(StringUtils.isEmpty(line.getBsName())){
-            return ApiResponseResult.failure("工作中心名称不能为空！");
+        if(StringUtils.isEmpty(line.getLineName())){
+            return ApiResponseResult.failure("线体名称不能为空！");
         }
         Line o = lineDao.findById((long) line.getId());
         if(o == null){
-            return ApiResponseResult.failure("该工作中心不存在！");
+            return ApiResponseResult.failure("该线体不存在！");
         }
-        //判断工作中心编号是否有变化，有则修改；没有则不修改
-        if(o.getBsCode().equals(line.getBsCode())){
+        //判断线体编号是否有变化，有则修改；没有则不修改
+        if(o.getLineNo().equals(line.getLineNo())){
         }else{
-            int count = lineDao.countByDelFlagAndBsCode(0, line.getBsCode());
+            int count = lineDao.countByDelFlagAndLineNo(0, line.getLineNo());
             if(count > 0){
-                return ApiResponseResult.failure("工作中心编号已存在，请填写其他工作中心编号！");
+                return ApiResponseResult.failure("线体编号已存在，请填写其他线体编号！");
             }
-            o.setBsCode(line.getBsCode().trim());
+            o.setLineNo(line.getLineNo().trim());
         }
         o.setLastupdateDate(new Date());
-        o.setBsName(line.getBsName());
+        o.setLineName(line.getLineName());
+        o.setLinerCode(line.getLinerCode());
+        o.setLinerName(line.getLinerName());
         lineDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
@@ -100,26 +102,26 @@ public class Linelmpl implements LineService {
     @Transactional
     public ApiResponseResult getLine(Long id) throws Exception{
         if(id == null){
-            return ApiResponseResult.failure("工作中心ID不能为空！");
+            return ApiResponseResult.failure("线体ID不能为空！");
         }
         Line o = lineDao.findById((long) id);
         if(o == null){
-            return ApiResponseResult.failure("该工作中心不存在！");
+            return ApiResponseResult.failure("该线体不存在！");
         }
         return ApiResponseResult.success().data(o);
     }
     /**
-     * 删除工作中心
+     * 删除线体
      */
     @Override
     @Transactional
     public ApiResponseResult delete(Long id) throws Exception{
         if(id == null){
-            return ApiResponseResult.failure("工作中心ID不能为空！");
+            return ApiResponseResult.failure("线体ID不能为空！");
         }
         Line o  = lineDao.findById((long) id);
         if(o == null){
-            return ApiResponseResult.failure("该工作中心不存在！");
+            return ApiResponseResult.failure("该线体不存在！");
         }
         o.setLastupdateDate(new Date());
         o.setDelFlag(1);
@@ -129,19 +131,19 @@ public class Linelmpl implements LineService {
 
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
+    public ApiResponseResult doStatus(Long id, Integer checkStatus) throws Exception{
         if(id == null){
-            return ApiResponseResult.failure("工作中心ID不能为空！");
+            return ApiResponseResult.failure("线体ID不能为空！");
         }
-        if(bsStatus == null){
+        if(checkStatus == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
         Line o = lineDao.findById((long) id);
         if(o == null){
-            return ApiResponseResult.failure("工作中心不存在！");
+            return ApiResponseResult.failure("线体不存在！");
         }
         o.setLastupdateDate(new Date());
-        o.setBsStatus(bsStatus);
+        o.setCheckStatus(checkStatus);
         lineDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
@@ -158,8 +160,10 @@ public class Linelmpl implements LineService {
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
-					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("lineNo", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("lineName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("linerCode", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("linerName", SearchFilter.Operator.LIKE, keyword));
 				}
 				Specification<Line> spec = Specification.where(BaseService.and(filters, Line.class));
 				Specification<Line> spec1 = spec.and(BaseService.or(filters1, Line.class));

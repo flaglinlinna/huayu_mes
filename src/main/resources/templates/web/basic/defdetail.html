@@ -32,10 +32,10 @@
 			<table id="defdetailList" lay-filter="defdetailTable"></table>
 
 			<script type="text/html" id="statusTpl">
-            {{#  if(!d.bsStatus){ }}
-            <input type="checkbox" name="{{d.bsName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(!d.checkStatus){ }}
+            <input type="checkbox" name="{{d.defectName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.bsName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.defectName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 
@@ -55,7 +55,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">不良类别</label>
 					<div class="layui-input-inline">
-						<select id="pkDefective" name="pkDefective" lay-verify="required"
+						<select id="defectTypeId" name="defectTypeId" lay-verify="required"
 							lay-search>
 						</select>
 					</div>
@@ -63,14 +63,14 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">不良编码</label>
 					<div class="layui-input-inline">
-						<input id="bsCode" name="bsCode" lay-verify="required"
+						<input id="defectCode" name="defectCode" lay-verify="required"
 							autocomplete="off" class="layui-input" type="text"/>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">不良名称</label>
 					<div class="layui-input-inline">
-						<input id="bsName" name="bsName" lay-verify="required"
+						<input id="defectName" name="defectName" lay-verify="required"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
