@@ -19,4 +19,5 @@ public interface ClientProcessMapService {
 
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
 	public ApiResponseResult getProcList()throws Exception;
+	public ApiResponseResult doJobAttr(Long id, Integer jobAttr) throws Exception;// 过程属性状态改变
 }

@@ -38,13 +38,13 @@ public class Clientlmpl implements ClientService {
         if(client == null){
             return ApiResponseResult.failure("客户不能为空！");
         }
-        if(StringUtils.isEmpty(client.getBsCode())){
+        if(StringUtils.isEmpty(client.getCustNo())){
             return ApiResponseResult.failure("客户编码不能为空！");
         }
-        if(StringUtils.isEmpty(client.getBsName())){
+        if(StringUtils.isEmpty(client.getCustName())){
             return ApiResponseResult.failure("客户名称不能为空！");
         }
-        int count = clientDao.countByDelFlagAndBsCode(0, client.getBsCode());
+        int count = clientDao.countByDelFlagAndCustNo(0, client.getCustNo());
         if(count > 0){
             return ApiResponseResult.failure("该客户已存在，请填写其他客户编码！");
         }
@@ -65,10 +65,10 @@ public class Clientlmpl implements ClientService {
         if(client.getId() == null){
             return ApiResponseResult.failure("客户ID不能为空！");
         }
-        if(StringUtils.isEmpty(client.getBsCode())){
+        if(StringUtils.isEmpty(client.getCustNo())){
             return ApiResponseResult.failure("客户编码不能为空！");
         }
-        if(StringUtils.isEmpty(client.getBsName())){
+        if(StringUtils.isEmpty(client.getCustName())){
             return ApiResponseResult.failure("客户名称不能为空！");
         }
         Client o = clientDao.findById((long) client.getId());
@@ -76,17 +76,17 @@ public class Clientlmpl implements ClientService {
             return ApiResponseResult.failure("该客户不存在！");
         }
         //判断客户编码是否有变化，有则修改；没有则不修改
-        if(o.getBsCode().equals(client.getBsCode())){
+        if(o.getCustNo().equals(client.getCustNo())){
         }else{
-            int count = clientDao.countByDelFlagAndBsCode(0, client.getBsCode());
+            int count = clientDao.countByDelFlagAndCustNo(0, client.getCustNo());
             if(count > 0){
                 return ApiResponseResult.failure("客户编码已存在，请填写其他客户编码！");
             }
-            o.setBsCode(client.getBsCode().trim());
+            o.setCustNo(client.getCustNo().trim());
         }
         o.setLastupdateDate(new Date());
-        o.setBsName(client.getBsName());
-        o.setBsNameSmpl(client.getBsNameSmpl());
+        o.setCustName(client.getCustName());
+        o.setCustNameS(client.getCustNameS());
         clientDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
@@ -140,9 +140,9 @@ public class Clientlmpl implements ClientService {
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
-					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("bsNameSmpl", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("custNo", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("custName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("custNameS", SearchFilter.Operator.LIKE, keyword));
 				}
 				Specification<Client> spec = Specification.where(BaseService.and(filters, Client.class));
 				Specification<Client> spec1 = spec.and(BaseService.or(filters1, Client.class));

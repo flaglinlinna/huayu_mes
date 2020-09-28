@@ -38,13 +38,13 @@ public class Defectivelmpl implements DefectiveService {
         if(defective == null){
             return ApiResponseResult.failure("不良类别不能为空！");
         }
-        if(StringUtils.isEmpty(defective.getBsCode())){
+        if(StringUtils.isEmpty(defective.getDefectTypeCode())){
             return ApiResponseResult.failure("不良类别编码不能为空！");
         }
-        if(StringUtils.isEmpty(defective.getBsName())){
+        if(StringUtils.isEmpty(defective.getDefectTypeName())){
             return ApiResponseResult.failure("不良类别名称不能为空！");
         }
-        int count = defectiveDao.countByDelFlagAndBsCode(0, defective.getBsCode());
+        int count = defectiveDao.countByDelFlagAndDefectTypeCode(0, defective.getDefectTypeCode());
         if(count > 0){
             return ApiResponseResult.failure("该不良类别编号已存在，请填写其他不良类别编码！");
         }
@@ -65,10 +65,10 @@ public class Defectivelmpl implements DefectiveService {
         if(defective.getId() == null){
             return ApiResponseResult.failure("不良类别ID不能为空！");
         }
-        if(StringUtils.isEmpty(defective.getBsCode())){
+        if(StringUtils.isEmpty(defective.getDefectTypeCode())){
             return ApiResponseResult.failure("不良类别编码不能为空！");
         }
-        if(StringUtils.isEmpty(defective.getBsName())){
+        if(StringUtils.isEmpty(defective.getDefectTypeName())){
             return ApiResponseResult.failure("不良类别名称不能为空！");
         }
         Defective o = defectiveDao.findById((long) defective.getId());
@@ -76,16 +76,16 @@ public class Defectivelmpl implements DefectiveService {
             return ApiResponseResult.failure("该不良类别不存在！");
         }
         //判断不良类别编码是否有变化，有则修改；没有则不修改
-        if(o.getBsCode().equals(defective.getBsCode())){
+        if(o.getDefectTypeCode().equals(defective.getDefectTypeCode())){
         }else{
-            int count = defectiveDao.countByDelFlagAndBsCode(0, defective.getBsCode());
+            int count = defectiveDao.countByDelFlagAndDefectTypeCode(0, defective.getDefectTypeCode());
             if(count > 0){
                 return ApiResponseResult.failure("不良类别编码已存在，请填写其他不良类别编码！");
             }
-            o.setBsCode(defective.getBsCode().trim());
+            o.setDefectTypeCode(defective.getDefectTypeCode().trim());
         }
         o.setLastupdateDate(new Date());
-        o.setBsName(defective.getBsName());
+        o.setDefectTypeName(defective.getDefectTypeName());
         defectiveDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
@@ -129,11 +129,11 @@ public class Defectivelmpl implements DefectiveService {
 
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
+    public ApiResponseResult doStatus(Long id, Integer checkStatus) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("不良类别ID不能为空！");
         }
-        if(bsStatus == null){
+        if(checkStatus == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
         Defective o = defectiveDao.findById((long) id);
@@ -141,7 +141,7 @@ public class Defectivelmpl implements DefectiveService {
             return ApiResponseResult.failure("不良类别不存在！");
         }
         o.setLastupdateDate(new Date());
-        o.setBsStatus(bsStatus);
+        o.setCheckStatus(checkStatus);
         defectiveDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
@@ -158,8 +158,8 @@ public class Defectivelmpl implements DefectiveService {
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
-					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("defectTypeCode", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("defectTypeName", SearchFilter.Operator.LIKE, keyword));
 				}
 				Specification<Defective> spec = Specification.where(BaseService.and(filters, Defective.class));
 				Specification<Defective> spec1 = spec.and(BaseService.or(filters1, Defective.class));

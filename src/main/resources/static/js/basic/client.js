@@ -33,13 +33,13 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
-				field : 'bsCode',
+				field : 'custNo',
 				title : '客户编码'
 			}, {
-				field : 'bsNameSmpl',
+				field : 'custNameS',
 				title : '客户简称'
 			}, {
-				field : 'bsName',
+				field : 'custName',
 				title : '客户全称'
 			}, {
 				field : 'lastupdateDate',
@@ -70,7 +70,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delClient(data, data.id, data.bsCode);
+				delClient(data, data.id, data.custNo);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				console.log("edit");
@@ -104,9 +104,9 @@ $(function() {
 						if (data.result) {
 							form.val("clientForm", {
 								"id" : data.data.id,
-								"bsCode" : data.data.bsCode,
-								"bsName" : data.data.bsName,
-								"bsNameSmpl" : data.data.bsNameSmpl,
+								"custNo" : data.data.custNo,
+								"custName" : data.data.custName,
+								"custNameS" : data.data.custNameS,
 							});
 							openClient(id, "编辑不良内容")
 						} else {
@@ -115,50 +115,6 @@ $(function() {
 					}, "POST", false, function(res) {
 						layer.alert("操作请求错误，请您稍后再试");
 					});
-		}
-		// 设置用户正常/禁用
-		function setStatus(obj, id, name, checked) {
-			var isStatus = checked ? 0 : 1;
-			var deaprtisStatus = checked ? "正常" : "禁用";
-			// 正常/禁用
-
-			layer.confirm(
-					'您确定要把不良内容：' + name + '设置为' + deaprtisStatus + '状态吗？', {
-						btn1 : function(index) {
-							var param = {
-								"id" : id,
-								"bsStatus" : isStatus
-							};
-							CoreUtil.sendAjax("/base/client/doStatus", JSON
-									.stringify(param), function(data) {
-								if (data.result) {
-									layer.alert("操作成功", function() {
-										layer.closeAll();
-										loadAll();
-									});
-								} else {
-									layer.alert(data.msg, function() {
-										layer.closeAll();
-									});
-								}
-							}, "POST", false, function(res) {
-								layer.alert("操作请求错误，请您稍后再试", function() {
-
-									layer.closeAll();
-								});
-							});
-						},
-						btn2 : function() {
-							obj.elem.checked = isStatus;
-							form.render();
-							layer.closeAll();
-						},
-						cancel : function() {
-							obj.elem.checked = isStatus;
-							form.render();
-							layer.closeAll();
-						}
-					})
 		}
 	});
 
@@ -238,7 +194,7 @@ function delClient(obj, id, name) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '不良内容吗？', {
+		layer.confirm('您确定要删除' + name + '客户吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {

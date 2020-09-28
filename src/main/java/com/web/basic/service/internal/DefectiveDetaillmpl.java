@@ -46,13 +46,13 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         if(defectiveDetail == null){
             return ApiResponseResult.failure("不良内容不能为空！");
         }
-        if(StringUtils.isEmpty(defectiveDetail.getBsCode())){
+        if(StringUtils.isEmpty(defectiveDetail.getDefectCode())){
             return ApiResponseResult.failure("不良 编码不能为空！");
         }
-        if(StringUtils.isEmpty(defectiveDetail.getBsName())){
+        if(StringUtils.isEmpty(defectiveDetail.getDefectName())){
             return ApiResponseResult.failure("不良 名称不能为空！");
         }
-        int count = defectiveDetailDao.countByDelFlagAndBsCode(0, defectiveDetail.getBsCode());
+        int count = defectiveDetailDao.countByDelFlagAndDefectCode(0, defectiveDetail.getDefectCode());
         if(count > 0){
             return ApiResponseResult.failure("该不良内容编号已存在，请填写其他不良内容编码！");
         }
@@ -73,10 +73,10 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         if(defectiveDetail.getId() == null){
             return ApiResponseResult.failure("不良内容ID不能为空！");
         }
-        if(StringUtils.isEmpty(defectiveDetail.getBsCode())){
+        if(StringUtils.isEmpty(defectiveDetail.getDefectCode())){
             return ApiResponseResult.failure("不良编码不能为空！");
         }
-        if(StringUtils.isEmpty(defectiveDetail.getBsName())){
+        if(StringUtils.isEmpty(defectiveDetail.getDefectName())){
             return ApiResponseResult.failure("不良名称不能为空！");
         }
         DefectiveDetail o = defectiveDetailDao.findById((long) defectiveDetail.getId());
@@ -84,18 +84,18 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
             return ApiResponseResult.failure("该不良内容不存在！");
         }
         //判断不良内容编码是否有变化，有则修改；没有则不修改
-        if(o.getBsCode().equals(defectiveDetail.getBsCode())){
+        if(o.getDefectCode().equals(defectiveDetail.getDefectCode())){
         }else{
-            int count = defectiveDetailDao.countByDelFlagAndBsCode(0, defectiveDetail.getBsCode());
+            int count = defectiveDetailDao.countByDelFlagAndDefectCode(0, defectiveDetail.getDefectCode());
             if(count > 0){
                 return ApiResponseResult.failure("不良内容编码已存在，请填写其他不良内容编码！");
             }
-            o.setBsCode(defectiveDetail.getBsCode().trim());
+            o.setDefectCode(defectiveDetail.getDefectCode().trim());
         }
         o.setLastupdateDate(new Date());
-        o.setPkDefective(defectiveDetail.getPkDefective());
-        o.setBsName(defectiveDetail.getBsName());
-        o.setBsCode(defectiveDetail.getBsCode());
+        o.setDefectTypeId(defectiveDetail.getDefectTypeId());
+        o.setDefectName(defectiveDetail.getDefectName());
+        o.setDefectCode(defectiveDetail.getDefectCode());
         defectiveDetailDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
@@ -139,11 +139,11 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
 
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
+    public ApiResponseResult doStatus(Long id, Integer checkStatus) throws Exception{
         if(id == null){
             return ApiResponseResult.failure("不良内容ID不能为空！");
         }
-        if(bsStatus == null){
+        if(checkStatus == null){
             return ApiResponseResult.failure("请正确设置正常或禁用！");
         }
         DefectiveDetail o = defectiveDetailDao.findById((long) id);
@@ -151,7 +151,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
             return ApiResponseResult.failure("不良内容不存在！");
         }
         o.setLastupdateDate(new Date());
-        o.setBsStatus(bsStatus);
+        o.setCheckStatus(checkStatus);
         defectiveDetailDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
@@ -168,8 +168,10 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
-					filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("defectCode", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("defectName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("defective.defectTypeCode", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("defective.defectTypeName", SearchFilter.Operator.LIKE, keyword));
 				}
 				Specification<DefectiveDetail> spec = Specification.where(BaseService.and(filters, DefectiveDetail.class));
 				Specification<DefectiveDetail> spec1 = spec.and(BaseService.or(filters1, DefectiveDetail.class));
@@ -178,15 +180,14 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
 				List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
 				for(DefectiveDetail bs:page.getContent()){
 					Map<String, Object> map = new HashMap<>();
-					map.put("pbsCode", bs.getDefective().getBsCode());//获取关联表的数据
-					map.put("pbsName", bs.getDefective().getBsName());
-
+					map.put("defectTypeCode",bs.getDefective().getDefectTypeCode());//获取关联表的数据
+					map.put("defectTypeName", bs.getDefective().getDefectTypeName());
 					map.put("id", bs.getId());
-					map.put("bsCode", bs.getBsCode());
-					map.put("bsName", bs.getBsName());
-					map.put("bsStatus", bs.getBsStatus());
-					map.put("modifiedTime",bs.getLastupdateDate());
-					map.put("createdTime", bs.getCreateDate());
+					map.put("defectCode", bs.getDefectCode());
+					map.put("defectName", bs.getDefectName());
+					map.put("checkStatus", bs.getCheckStatus());
+					map.put("lastupdateDate",bs.getLastupdateDate());
+					map.put("createDate", bs.getCreateDate());
 					list.add(map);
 				}
 				return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
@@ -198,7 +199,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
 	@Override
     @Transactional
 	public ApiResponseResult getDefectiveList() throws Exception {
-		List<Defective> list = defectiveDao.findByDelFlagAndBsStatus(0,0);
+		List<Defective> list = defectiveDao.findByDelFlagAndCheckStatus(0,0);
 		return ApiResponseResult.success().data(list);
 	}
 }

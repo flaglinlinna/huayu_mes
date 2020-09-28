@@ -53,6 +53,10 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
+					filters1.add(new SearchFilter("client.custNo", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("client.custName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("process.procNo", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("process.procName", SearchFilter.Operator.LIKE, keyword));
 				}
 				Specification<ClientProcessMap> spec = Specification.where(BaseService.and(filters, ClientProcessMap.class));
 				Specification<ClientProcessMap> spec1 = spec.and(BaseService.or(filters1, ClientProcessMap.class));
@@ -61,16 +65,18 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 				List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
 				for(ClientProcessMap bs:page.getContent()){
 					Map<String, Object> map = new HashMap<>();
-					map.put("pClientCode", bs.getClient().getBsCode());//获取关联表的数据-客户表
-					map.put("pClientName", bs.getClient().getBsName());//客户名
 					map.put("client_id", bs.getClient().getId());
-
-					map.put("pProcCode", bs.getProcess().getBsCode());//工序表
-					map.put("pProcName", bs.getProcess().getBsName());//工序名
-
+					map.put("custNo", bs.getClient().getCustNo());//获取关联表的数据-客户表
+					map.put("custName", bs.getClient().getCustName());//客户名
+					map.put("custId", bs.getClient().getId());
+					map.put("procOrder", bs.getProcess().getProcOrder());//工序顺序
+					map.put("procNo", bs.getProcess().getProcNo());//工序
+					map.put("procName", bs.getProcess().getProcName());//工序名
+					map.put("procId", bs.getProcess().getId());//工序ID
+					map.put("jobAttr", bs.getJobAttr());
 					map.put("id", bs.getId());
-					map.put("modifiedTime",bs.getLastupdateDate());
-					map.put("createdTime", bs.getCreateDate());
+					map.put("lastupdateDate",bs.getLastupdateDate());
+					map.put("createDate", bs.getCreateDate());
 					list.add(map);
 				}
 
@@ -95,8 +101,8 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
             	procList.add(Long.parseLong(porcIdArray[i]));
             }
         }
-      //1.删除物料原工序信息
-        List<ClientProcessMap> listOld = clientProcessMapDao.findByDelFlagAndPkClient(0, clientId);
+      //1.删除原工序信息
+        List<ClientProcessMap> listOld = clientProcessMapDao.findByDelFlagAndCustId(0, clientId);
         if(listOld.size() > 0){
             for(ClientProcessMap item : listOld){
                 item.setLastupdateDate(new Date());
@@ -104,27 +110,49 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
             }
             clientProcessMapDao.saveAll(listOld);
         }
-      //2.添加物料新工序信息
+      //2.添加新工序信息
         List<ClientProcessMap> listNew = new ArrayList<>();
         if(procList.size() > 0){
             for(Long procId : procList){
             	ClientProcessMap item = new ClientProcessMap();
                 item.setCreateDate(new Date());
-                item.setPkClient(clientId);
-                item.setPkProcess(procId);
+                item.setCustId(clientId);
+                item.setProcId(procId);
+               // item.setJobAttr(jobAttr);
                 listNew.add(item);
             }
             clientProcessMapDao.saveAll(listNew);
         }
-
         return ApiResponseResult.success("工艺流程添加成功！");
     }
+
+	/**
+     * 修改过程属性
+     */
+	 @Override
+	    @Transactional
+	    public ApiResponseResult doJobAttr(Long id, Integer jobAttr) throws Exception{
+	        if(id == null){
+	            return ApiResponseResult.failure("工序ID不能为空！");
+	        }
+	        if(jobAttr == null){
+	            return ApiResponseResult.failure("请正确设置过程属性！");
+	        }
+	        ClientProcessMap o = clientProcessMapDao.findById((long) id);
+	        if(o == null){
+	            return ApiResponseResult.failure("工序记录不存在！");
+	        }
+	        o.setLastupdateDate(new Date());
+	        o.setJobAttr(jobAttr);
+	        clientProcessMapDao.save(o);
+	        return ApiResponseResult.success("设置成功！").data(o);
+	    }
 
 	/**
      * 客户ID获取原来工序记录
      */
 	public ApiResponseResult getClientItem(Long id) throws Exception{
-		 List<ClientProcessMap> list = clientProcessMapDao.findByDelFlagAndPkClient(0, id);
+		 List<ClientProcessMap> list = clientProcessMapDao.findByDelFlagAndCustId(0, id);
 		return ApiResponseResult.success().data(list);
 	}
 
@@ -154,7 +182,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
     @Transactional
 	public ApiResponseResult getProcList() throws Exception {
 		Map<String, Object> map = new HashMap<>();
-		List<Process> pList = processDao.findByDelFlagAndBsStatus(0,0);
+		List<Process> pList = processDao.findByDelFlagAndCheckStatus(0,0);
 		List<Client> cList = clientDao.findByDelFlag(0);
 
 		map.put("process", pList);

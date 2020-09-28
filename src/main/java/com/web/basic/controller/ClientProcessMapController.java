@@ -142,4 +142,24 @@ public class ClientProcessMapController extends WebController{
 	            return ApiResponseResult.failure("删除客户信息失败！");
 	        }
 	    }
+	    
+	    @ApiOperation(value = "设置过程属性", notes = "设置过程属性", hidden = true)
+	    @RequestMapping(value = "/doJobAttr", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult doJobAttr(@RequestBody Map<String, Object> params) throws Exception{
+	        String method = "base/client_proc/doJobAttr";String methodName ="设置过程属性";
+	        try{
+	        	long id = Long.parseLong(params.get("id").toString()) ;
+	        	Integer jobAttr=Integer.parseInt(params.get("jobAttr").toString());
+	            ApiResponseResult result = clientProcessMapService.doJobAttr(id, jobAttr);
+	            logger.debug("设置过程属性=doJobAttr:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	            logger.error("设置过程属性失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("设置过程属性失败！");
+	        }
+	    }
 }

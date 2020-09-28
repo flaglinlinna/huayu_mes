@@ -33,13 +33,13 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
-				field : 'bsCode',
+				field : 'defectTypeCode',
 				title : '编码'
 			}, {
-				field : 'bsName',
+				field : 'defectTypeName',
 				title : '名称'
 			}, {
-				field : 'bsStatus',
+				field : 'checkStatus',
 				title : '状态',
 				width : 95,
 				templet : '#statusTpl'
@@ -76,7 +76,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delDefect(data, data.id, data.bsCode);
+				delDefect(data, data.id, data.defectTypeCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				console.log("edit");
@@ -110,8 +110,8 @@ $(function() {
 						if (data.result) {
 							form.val("defectForm", {
 								"id" : data.data.id,
-								"bsCode" : data.data.bsCode,
-								"bsName" : data.data.bsName,
+								"defectTypeCode" : data.data.defectTypeCode,
+								"defectTypeName" : data.data.defectTypeName,
 							});
 							openDefect(id, "编辑不良类别")
 						} else {
@@ -133,7 +133,7 @@ $(function() {
 						btn1 : function(index) {
 							var param = {
 								"id" : id,
-								"bsStatus" : isStatus
+								"checkStatus" : isStatus
 							};
 							CoreUtil.sendAjax("/base/defect/doStatus", JSON
 									.stringify(param), function(data) {
