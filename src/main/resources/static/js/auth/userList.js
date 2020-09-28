@@ -321,7 +321,7 @@ function addUser(){
 //                $("#roleDiv").empty();
                 $.each(data.data, function (index, item) {
                     // <input type="checkbox" name="roleId" title="发呆" lay-skin="primary"/>
-                    var roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.userNameName+" lay-skin='primary'/>");
+                    var roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.roleName+" lay-skin='primary'/>");
                     //未选中
                     /*<div class="layui-unselect layui-form-checkbox" lay-skin="primary">
                         <span>发呆</span><i class="layui-icon">&#xe626;</i>
@@ -330,7 +330,7 @@ function addUser(){
                     // <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
                     // <span>写作</span><i class="layui-icon">&#xe627;</i></div>
                     var div=$("<div class='layui-unselect layui-form-checkbox' lay-skin='primary'>" +
-                        "<span>"+item.userName+"</span><i class='layui-icon'>&#xe626;</i>" +
+                        "<span>"+item.roleName+"</span><i class='layui-icon'>&#xe626;</i>" +
                         "</div>");
                     $("#roleDiv").append(roleInput).append(div);
                 })
@@ -376,14 +376,14 @@ function getUserAndRoles(obj,id) {
                     //显示角色数据
                     $("#roleDiv").empty();
                     $.each(data.data.roles, function (index, item) {
-                        var roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.userName+" lay-skin='primary'/>");
+                        var roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.roleName+" lay-skin='primary'/>");
                         var div=$("<div class='layui-unselect layui-form-checkbox' lay-skin='primary'>" +
                             "<span>"+item.userName+"</span><i class='layui-icon'>&#xe626;</i>" +
                             "</div>");
                         if(existRole.length > 0 && existRole.indexOf(item.id)>=0){
-                            roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.userName+" lay-skin='primary' checked='checked'/>");
+                            roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.roleName+" lay-skin='primary' checked='checked'/>");
                             div=$("<div class='layui-unselect layui-form-checkbox  layui-form-checked' lay-skin='primary'>" +
-                                "<span>"+item.userName+"</span><i class='layui-icon'>&#xe627;</i>" +
+                                "<span>"+item.roleName+"</span><i class='layui-icon'>&#xe627;</i>" +
                                 "</div>");
                         }
                         // if(existRole!='' && existRole.indexOf(item.id)>=0){

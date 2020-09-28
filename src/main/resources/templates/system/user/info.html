@@ -16,20 +16,20 @@
                             <div class="layui-form-item">
                                 <label class="layui-form-label">用户账号</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="bsCode" name="bsCode" readonly lay-verify="required" class="layui-input">
+                                    <input type="text" id="userCode" name="userCode" readonly lay-verify="required" class="layui-input">
                                 </div>
                                 <div class="layui-form-mid layui-word-aux">不可修改。一般用于后台登入名</div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label">用户昵称</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="bsName" name="bsName" lay-verify="required" autocomplete="off" placeholder="请输入用户名称" class="layui-input">
+                                    <input type="text" id="userName" name="userName" lay-verify="required" autocomplete="off" placeholder="请输入用户名称" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label">真实名称</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="realName" name="realName" autocomplete="off" placeholder="请输入用户名称" class="layui-input">
+                                    <input type="text" id="realName" name="realName" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
@@ -59,7 +59,7 @@
                             <div class="layui-form-item">
                                 <label class="layui-form-label">状态</label>
                                 <div class="layui-input-inline">
-                                    <input id="bsStatus" name="bsStatus" autocomplete="off" readonly class="layui-input" type="text"/>
+                                    <input id="status" name="status" autocomplete="off" readonly class="layui-input" type="text"/>
                                 </div>
                                 <div class="layui-form-mid layui-word-aux">不可修改</div>
                             </div>
@@ -97,16 +97,16 @@
         //初始化用户信息
         if(userInfo != undefined && userInfo != null){
             $("#id").val(userInfo.id);
-            $("#bsCode").val(userInfo.bsCode);
-            $("#bsName").val(userInfo.bsName);
+            $("#userCode").val(userInfo.userCode);
+            $("#userName").val(userInfo.userName);
             $("#realName").val(userInfo.realName);
             $("#mobile").val(userInfo.mobile);
             $("#email").val(userInfo.email);
             $("#sex").val(userInfo.sex);
-            if(userInfo.bsStatus == 0){
-                $("#bsStatus").val("正常");
+            if(userInfo.status == 0){
+                $("#status").val("正常");
             }else{
-                $("#bsStatus").val("禁用");
+                $("#status").val("禁用");
             }
             $("#roleNames").val(userInfo.roleNames);
             layui.form.render('select');
