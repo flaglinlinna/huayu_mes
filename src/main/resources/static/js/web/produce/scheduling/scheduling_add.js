@@ -38,10 +38,10 @@ $(function () {
                 ,{field:'prodDate', title:'日期', width:100}
                 ,{field:'deptName', title:'组装部', width:80}
                 ,{field:'classNo', title:'班次', width:60}
-                ,{field:'', title:'工单号', width:120}
-                ,{field:'', title:'物料编码', width:120}
-                ,{field:'', title:'物料描述', width:150}
-                ,{field:'', title:'计划生产数量', width:110}
+                ,{field:'prodNo', title:'工单号', width:120}
+                ,{field:'itemNo', title:'物料编码', width:120}
+                ,{field:'itemName', title:'物料描述', width:150}
+                ,{field:'qtyPlan', title:'计划生产数量', width:110}
                 //,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){

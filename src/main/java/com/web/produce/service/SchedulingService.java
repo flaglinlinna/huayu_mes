@@ -31,6 +31,4 @@ public interface SchedulingService {
     public ApiResponseResult deleteTempAll() throws Exception;
 
     public ApiResponseResult confirmTemp() throws Exception;
-
-    public ApiResponseResult doExcel_2(MultipartFile file) throws Exception;
 }

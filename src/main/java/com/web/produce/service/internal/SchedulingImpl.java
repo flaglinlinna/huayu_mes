@@ -342,295 +342,177 @@ public class SchedulingImpl implements SchedulingService {
     @Override
     @Transactional
     public ApiResponseResult doExcel(MultipartFile file) throws Exception{
-        return null;
-//        try{
-//            if (file == null) {
-//                return ApiResponseResult.failure("导入文件不存在！");
-//            }
-//            SysUser currUser = UserUtil.getSessionUser();
-//            if(currUser == null){
-//                return ApiResponseResult.failure("当前用户已失效，请重新登录！");
-//            }
-//            //1.获取Excel文件
-//            Workbook wb = null;
-//            Sheet sheet = null;
-//            String fileName = file.getOriginalFilename();
-//            //判断excel版本
-//            if (fileName.matches("^.+\\.(?i)(xlsx)$")) {
-//                //xlsx版本
-//                wb = new XSSFWorkbook(file.getInputStream());
-//            } else {
-//                //xls版本
-//                //wb = new HSSFWorkbook(new FileInputStream((File) file));
-//                wb = new HSSFWorkbook(file.getInputStream());
-//            }
-//            //1.1获取第一个sheet
-//            if(wb != null){
-//                sheet = wb.getSheetAt(0);
-//            }else{
-//                return ApiResponseResult.failure("导入失败！请导入正确的文件！");
-//            }
-//            //1.2判断第一个sheet是否有内容
-//            if(sheet == null || sheet.getLastRowNum() <= 0){
-//                return ApiResponseResult.failure("导入失败！请导入正确的文件！");
-//            }
-//
-//            //删除当前用户关联的临时表原数据
-//            schedulingTempDao.updateDelFlagByPkSysUser(1, currUser.getId());
-//            //初始化临时表
-//            List<SchedulingTemp> tempList = new ArrayList<>();
-//
-//            for(int i = 0; i < sheet.getLastRowNum() + 1; i++){
-//                //初始化错误信息字符串
-//                String errorStr = "";
-//
-//                int le = 2 + i;
-//                //2.获取当前行，如果为空，则循环结束
-//                Row row = sheet.getRow(le -1);
-//                if(row == null){
-//                    break;
-//                }
-//                //判断第一列数据是否为空，如果为空，则循环结束
-//                String firstCol = "";//
-//                try{
-//                    firstCol = this.readExcelCell(sheet, le, 1);//
-//                }catch (Exception e){
-//                }
-//                if(StringUtils.isEmpty(firstCol)){
-//                    break;
-//                }
-//
-//                //3.判断各数值是否为空和是否填写错误
-//                String departCode = "";//部门编码
-//                Long departId = null;
-//                Date produceTime = null;//日期
-//                String shift = "";//班次
-//                String customer = "";//客户
-//                String line = "";//线别
-//                String orderNo = "";//工单号
-//                String mtrialCode = "";//物料编码
-//                Long mtrialId = null;
-//                String mtrialDesc = "";//物料描述
-//                String procCode = "";//加工工艺编码
-//                Long procId = null;
-//                String restNum = null;//工单残
-//                String planNum = null;//计划生产数量
-//                String peopleNum = null;//用人量
-//                String capacityNum = null;//产能
-//                BigDecimal planHours = null;//预计工时
-//                String actualNum = null;//实际生产数量
-//                BigDecimal actualHours = null;//实际工时
-//                BigDecimal planPrice = null;//计划金额
-//                BigDecimal actualPrice = null;//实际金额
-//                String remark = "";//备注
-//
-//                //部门
-//                try{
-//                    departCode = this.readExcelCell(sheet, le, 1);//部门编码
-////                    if(StringUtils.isEmpty(departCode)){
-////                        //errorStr += "部门为空；";
-////                    }else{
-////                        //获取个编码关联的ID
-////                        List<Department> dList = departmentDao.findByBsName(departCode);
-////                        departId = dList.size()>0&&dList.get(i)!=null ? dList.get(i).getId() : null;
-////                        if(departId == null){
-////                            errorStr += "部门填写错误；";
-////                        }
-////                    }
-//                }catch (Exception e){
-//                    //errorStr += "部门为空或格式错误；";
-//                }
-//
-//                //日期
-//                try{
-//                    produceTime = this.readExcelDateCell(sheet, le, 2);//日期
-//                    if(produceTime == null){
-//                        //errorStr += "日期为空或格式不正确；";
-//                    }
-//                }catch (Exception e){
-//                    //errorStr += "日期为空或格式不正确；";
-//                }
-//
-//                //班次
-//                try{
-//                    shift = this.readExcelCell(sheet, le, 3);
-//                }catch (Exception e){
-//                }
-//
-//                //客户
-//                try{
-//                    customer = this.readExcelCell(sheet, le, 4);
-//                }catch (Exception e){
-//                }
-//
-//                //线别
-//                try{
-//                    line = this.readExcelCell(sheet, le, 5);
-//                }catch (Exception e){
-//                }
-//
-//                //工单号
-//                try{
-//                    orderNo = this.readExcelCell(sheet, le, 6);
-//                }catch (Exception e){
-//                }
-//
-//                //物料编码
-//                try{
-//                    mtrialCode = this.readExcelCell(sheet, le, 7);//物料编码
-////                    if(StringUtils.isEmpty(mtrialCode)){
-////                        //errorStr += "物料编码为空；";
-////                    }else{
-////                        //获取个编码关联的ID
-////                        List<Mtrial> mList = mtrialDao.findByDelFlagAndBsCode(0, mtrialCode);
-////                        mtrialId = mList.size()>0&&mList.get(i)!=null ? mList.get(i).getId() : null;
-////                        if(departId == null){
-////                            errorStr += "物料编码填写错误；";
-////                        }
-////                    }
-//                }catch (Exception e){
-//                    //errorStr += "物料编码为空或格式错误；";
-//                }
-//
-//                //物料描述
-//                try{
-//                    mtrialDesc = this.readExcelCell(sheet, le, 8);
-//                }catch (Exception e){
-//                }
-//
-//                //加工工艺
-//                try{
-//                    procCode = this.readExcelCell(sheet, le, 9);//加工工艺
-////                    if(StringUtils.isEmpty(procCode)){
-////                    }else{
-////                        //获取个编码关联的ID
-////                        List<WoProc> pList = woProcDao.findByBsName(procCode);
-////                        procId = pList.size()>0&&pList.get(i)!=null ? pList.get(i).getId() : null;
-////                        if(procId == null){
-////                            errorStr += "加工工艺填写错误；";
-////                        }
-////                    }
-//                }catch (Exception e){
-//                    //errorStr += "加工工艺为空或格式错误；";
-//                }
-//
-//                //工单残
-//                try{
-//                    restNum = this.readExcelNumberCell(sheet, le, 10);
-//                }catch (Exception e){
-//                }
-//
-//                //计划生产数量
-//                try{
-//                    planNum = this.readExcelNumberCell(sheet, le, 11);
-//                }catch (Exception e){
-//                }
-//
-//                //用人量
-//                try{
-//                    peopleNum = this.readExcelNumberCell(sheet, le, 12);
-//                }catch (Exception e){
-//                }
-//
-//                //产能
-//                try{
-//                    capacityNum = this.readExcelNumberCell(sheet, le, 13);
-//                }catch (Exception e){
-//                }
-//
-//                //预计工时
-//                try{
-//                    String planHoursStr = this.readExcelNumberCell(sheet, le, 14);
-//                    if(StringUtils.isNotEmpty(planHoursStr)){
-//                        planHours = new BigDecimal(planHoursStr);
-//                    }
-//                }catch (Exception e){
-//                }
-//
-//                //实际生产数量
-//                try{
-//                    actualNum = this.readExcelNumberCell(sheet, le, 15);
-//                }catch (Exception e){
-//                }
-//
-//                //实际工时
-//                try{
-//                    String actualHoursStr = this.readExcelNumberCell(sheet, le, 16);
-//                    if(StringUtils.isNotEmpty(actualHoursStr)){
-//                        actualHours = new BigDecimal(actualHoursStr);
-//                    }
-//                }catch (Exception e){
-//                }
-//
-//                //计划金额
-//                try{
-//                    String planPriceStr = this.readExcelNumberCell(sheet, le, 17);
-//                    if(StringUtils.isNotEmpty(planPriceStr)){
-//                        planPrice = new BigDecimal(planPriceStr);
-//                    }
-//                }catch (Exception e){
-//                }
-//
-//                //实际金额
-//                try{
-//                    String actualPriceStr = this.readExcelNumberCell(sheet, le, 18);
-//                    if(StringUtils.isNotEmpty(actualPriceStr)){
-//                        actualPrice = new BigDecimal(actualPriceStr);
-//                    }
-//                }catch (Exception e){
-//                }
-//
-//                //备注
-//                try{
-//                    remark = this.readExcelCell(sheet, le, 19);
-//                }catch (Exception e){
-//                }
-//
-//                //4.保存临时数据
-//                SchedulingTemp temp = new SchedulingTemp();
-//                temp.setCreateDate(new Date());
-//                temp.setPkDepartment(departId);//部门
-//                temp.setBsDepartCode(departCode);
-//                temp.setBsProduceTime(produceTime);
-//                temp.setBsShift(shift);
-//                temp.setBsCustomer(customer);
-//                temp.setBsLine(line);
-//                temp.setBsOrderNo(orderNo);
-//                temp.setPkMtrial(mtrialId);
-//                temp.setBsMtrialCode(mtrialCode);
-//                temp.setBsMtrialDesc(mtrialDesc);
-//                temp.setPkWoProc(procId);
-//                temp.setBsProcCode(procCode);
-//                temp.setBsRestNum(restNum);
-//                temp.setBsPlanNum(planNum);
-//                temp.setBsPeopleNum(peopleNum);
-//                temp.setBsCapacityNum(capacityNum);
-//                temp.setBsPlanHours(planHours);
-//                temp.setBsActualNum(actualNum);
-//                temp.setBsActualHours(actualHours);
-//                temp.setBsPlanPrice(planPrice);
-//                temp.setBsActualPrice(actualPrice);
-//                temp.setBsRemark(remark);
-//                temp.setBsError(errorStr);
-//                if(StringUtils.isNotEmpty(errorStr)){
-//                    temp.setBsCheckStatus(1);
-//                }else{
-//                    temp.setBsCheckStatus(0);
-//                }
-//                temp.setPkSysUser(currUser.getId());
-//                tempList.add(temp);
-//            }
-//
-//            if(tempList.size() > 0){
-//                schedulingTempDao.saveAll(tempList);
-//                return ApiResponseResult.success("导入成功！").data(tempList);
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            logger.error("SchedulingImpl类的doExcel()导入Excel错误", e);
-//        }
-//
-//        return ApiResponseResult.failure("导入失败！请查看导入文件是否有数据或者产品编码是否填写或格式是否正确！");
+        try{
+            if (file == null) {
+                return ApiResponseResult.failure("导入文件不存在！");
+            }
+            SysUser currUser = UserUtil.getSessionUser();
+            if(currUser == null){
+                return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+            }
+            //1.获取Excel文件
+            Workbook wb = null;
+            Sheet sheet = null;
+            String fileName = file.getOriginalFilename();
+            //判断excel版本
+            if (fileName.matches("^.+\\.(?i)(xlsx)$")) {
+                //xlsx版本
+                wb = new XSSFWorkbook(file.getInputStream());
+            } else {
+                //xls版本
+                //wb = new HSSFWorkbook(new FileInputStream((File) file));
+                wb = new HSSFWorkbook(file.getInputStream());
+            }
+            //1.1获取第一个sheet
+            if(wb != null){
+                sheet = wb.getSheetAt(0);
+            }else{
+                return ApiResponseResult.failure("导入失败！请导入正确的文件！");
+            }
+            //1.2判断第一个sheet是否有内容
+            if(sheet == null || sheet.getLastRowNum() <= 0){
+                return ApiResponseResult.failure("导入失败！请导入正确的文件！");
+            }
+
+            //删除当前用户关联的临时表原数据
+            schedulingTempDao.updateDelFlagByCreateBy(1, currUser.getId());
+            //初始化临时表
+            List<SchedulingTemp> tempList = new ArrayList<>();
+
+            for(int i = 0; i < sheet.getLastRowNum() + 1; i++){
+                //初始化错误信息字符串
+                String errorStr = "";
+
+                int le = 2 + i;
+                //2.获取当前行，如果为空，则循环结束
+                Row row = sheet.getRow(le -1);
+                if(row == null){
+                    break;
+                }
+                //判断第一列数据是否为空，如果为空，则循环结束
+                String firstCol = "";//
+                try{
+                    firstCol = this.readExcelCell(sheet, le, 1);//
+                }catch (Exception e){
+                }
+                if(StringUtils.isEmpty(firstCol)){
+                    break;
+                }
+
+                //3.判断各数值是否为空和是否填写错误
+                Integer groupNo = null;//组合
+                String custName = "";//客户名称
+                String prodNo = "";//工单号
+                String itemNo = "";//物料编码
+                String itemName = "";//物料描述
+                Integer qtyPlan = null;//计划数量
+                Date prodDate = null;//生产日期
+                String deptName = "";//部门名称
+                String linerName = "";//线长名称
+                String classNo = "";//班次
+
+                //组合
+                try{
+                    String groupNostr = this.readExcelNumberCell(sheet, le, 1);
+                    groupNo = Integer.parseInt(groupNostr);
+                }catch (Exception e){
+                }
+
+                //客户
+                try{
+                    custName = this.readExcelCell(sheet, le, 2);
+                }catch (Exception e){
+                }
+
+                //线别
+                try{
+                    linerName = this.readExcelCell(sheet, le, 3);
+                }catch (Exception e){
+                }
+
+                //日期
+                try{
+                    prodDate = this.readExcelDateCell(sheet, le, 4);
+                }catch (Exception e){
+                }
+
+                //部门
+                try{
+                    deptName = this.readExcelCell(sheet, le, 5);
+                }catch (Exception e){
+                }
+
+                //班次
+                try{
+                    classNo = this.readExcelCell(sheet, le, 6);
+                }catch (Exception e){
+                }
+
+                //工单号
+                try{
+                    prodNo = this.readExcelCell(sheet, le, 7);
+                }catch (Exception e){
+                }
+
+                //物料编码
+                try{
+                    itemNo = this.readExcelCell(sheet, le, 8);
+                }catch (Exception e){
+                }
+
+                //物料描述
+                try{
+                    itemName = this.readExcelCell(sheet, le, 9);
+                }catch (Exception e){
+                }
+
+                //计划生产数量
+                try{
+                    String qtyPlanStr = this.readExcelNumberCell(sheet, le, 10);
+                    qtyPlan = Double.valueOf(qtyPlanStr).intValue();
+                }catch (Exception e){
+                }
+
+                //4.保存临时数据
+                SchedulingTemp temp = new SchedulingTemp();
+                temp.setCreateDate(new Date());
+                temp.setCreateBy(currUser != null ? currUser.getId() : null);
+                temp.setGroupNo(groupNo);
+                temp.setCustName(custName);
+                temp.setProdNo(prodNo);
+                temp.setItemNo(itemNo);
+                temp.setItemName(itemName);
+                temp.setQtyPlan(qtyPlan);
+                temp.setProdDate(prodDate);
+                temp.setDeptName(deptName);
+                temp.setLinerName(linerName);
+                temp.setClassNo(classNo);
+                temp.setErrorInfo(errorStr);
+                if(StringUtils.isNotEmpty(errorStr)){
+                    temp.setCheckStatus(1);
+                }else{
+                    temp.setCheckStatus(0);
+                }
+                tempList.add(temp);
+            }
+
+            if(tempList.size() > 0){
+                schedulingTempDao.saveAll(tempList);
+
+                //检验数据
+                try{
+                    doCheckProc(currUser);
+                }catch (Exception e){
+                }
+
+                return ApiResponseResult.success("导入成功！").data(tempList);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("SchedulingImpl类的doExcel()导入Excel错误", e);
+        }
+
+        return ApiResponseResult.failure("导入失败！请查看导入文件是否有数据或者产品编码是否填写或格式是否正确！");
     }
 
     /**
@@ -736,6 +618,34 @@ public class SchedulingImpl implements SchedulingService {
             return null;
         }catch (Exception e){
             return null;
+        }
+    }
+    //调用校验数据存储过程
+    public Boolean doCheckProc(SysUser currUser){
+        Long userId = currUser.getId();
+        if(userId != null){
+            List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
+                @Override
+                public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                    String storedProc = "{call PRC_CHECK_TASK_INFO(?,?,?,?)}";// 调用的sql
+                    CallableStatement cs = con.prepareCall(storedProc);
+                    cs.setString(1, userId.toString());
+                    cs.registerOutParameter(2,Types.INTEGER);// 注册输出参数 返回标志
+                    cs.registerOutParameter(3,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(4,-10);// 注册输出参数 返回数据集合
+                    return cs;
+                }
+            }, new CallableStatementCallback() {
+                public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                    List<String> result = new ArrayList<String>();
+                    cs.execute();
+                    result.add(cs.getString(2));
+                    return result;
+                }
+            });
+            return true;
+        }else{
+            return false;
         }
     }
 
@@ -859,209 +769,4 @@ public class SchedulingImpl implements SchedulingService {
         }
     }
 
-    //导入测试
-    @Override
-    @Transactional
-    public ApiResponseResult doExcel_2(MultipartFile file) throws Exception{
-        try{
-            if (file == null) {
-                return ApiResponseResult.failure("导入文件不存在！");
-            }
-            SysUser currUser = UserUtil.getSessionUser();
-            if(currUser == null){
-                return ApiResponseResult.failure("当前用户已失效，请重新登录！");
-            }
-            //1.获取Excel文件
-            Workbook wb = null;
-            Sheet sheet = null;
-            String fileName = file.getOriginalFilename();
-            //判断excel版本
-            if (fileName.matches("^.+\\.(?i)(xlsx)$")) {
-                //xlsx版本
-                wb = new XSSFWorkbook(file.getInputStream());
-            } else {
-                //xls版本
-                //wb = new HSSFWorkbook(new FileInputStream((File) file));
-                wb = new HSSFWorkbook(file.getInputStream());
-            }
-            //1.1获取第一个sheet
-            if(wb != null){
-                sheet = wb.getSheetAt(0);
-            }else{
-                return ApiResponseResult.failure("导入失败！请导入正确的文件！");
-            }
-            //1.2判断第一个sheet是否有内容
-            if(sheet == null || sheet.getLastRowNum() <= 0){
-                return ApiResponseResult.failure("导入失败！请导入正确的文件！");
-            }
-
-            //删除当前用户关联的临时表原数据
-            schedulingTempDao.updateDelFlagByCreateBy(1, currUser.getId());
-            //初始化临时表
-            List<SchedulingTemp> tempList = new ArrayList<>();
-
-            for(int i = 0; i < sheet.getLastRowNum() + 1; i++){
-                //初始化错误信息字符串
-                String errorStr = "";
-
-                int le = 2 + i;
-                //2.获取当前行，如果为空，则循环结束
-                Row row = sheet.getRow(le -1);
-                if(row == null){
-                    break;
-                }
-                //判断第一列数据是否为空，如果为空，则循环结束
-                String firstCol = "";//
-                try{
-                    firstCol = this.readExcelCell(sheet, le, 1);//
-                }catch (Exception e){
-                }
-                if(StringUtils.isEmpty(firstCol)){
-                    break;
-                }
-
-                //3.判断各数值是否为空和是否填写错误
-                Integer groupNo = null;//组合
-                String custName = "";//客户名称
-                String prodNo = "";//工单号
-                String itemNo = "";//物料编码
-                String itemName = "";//物料描述
-                Integer qtyPlan = null;//计划数量
-                Date prodDate = null;//生产日期
-                String deptName = "";//部门名称
-                String linerName = "";//线长名称
-                String classNo = "";//班次
-
-                //组合
-                try{
-                    String groupNostr = this.readExcelNumberCell(sheet, le, 1);
-                    groupNo = Integer.parseInt(groupNostr);
-                }catch (Exception e){
-                }
-
-                //客户
-                try{
-                    custName = this.readExcelCell(sheet, le, 2);
-                }catch (Exception e){
-                }
-
-                //线别
-                try{
-                    linerName = this.readExcelCell(sheet, le, 3);
-                }catch (Exception e){
-                }
-
-                //日期
-                try{
-                    prodDate = this.readExcelDateCell(sheet, le, 4);
-                }catch (Exception e){
-                }
-
-                //部门
-                try{
-                    deptName = this.readExcelCell(sheet, le, 5);
-                }catch (Exception e){
-                }
-
-                //班次
-                try{
-                    classNo = this.readExcelCell(sheet, le, 6);
-                }catch (Exception e){
-                }
-
-                //工单号
-                try{
-                    prodNo = this.readExcelCell(sheet, le, 7);
-                }catch (Exception e){
-                }
-
-                //物料编码
-                try{
-                    itemNo = this.readExcelCell(sheet, le, 8);
-                }catch (Exception e){
-                }
-
-                //物料描述
-                try{
-                    itemName = this.readExcelCell(sheet, le, 8);
-                }catch (Exception e){
-                }
-
-                //计划生产数量
-                try{
-                    String qtyPlanStr = this.readExcelNumberCell(sheet, le, 9);
-                    qtyPlan = Integer.parseInt(qtyPlanStr);
-                }catch (Exception e){
-                }
-
-                //4.保存临时数据
-                SchedulingTemp temp = new SchedulingTemp();
-                temp.setCreateDate(new Date());
-                temp.setCreateBy(currUser != null ? currUser.getId() : null);
-                temp.setGroupNo(groupNo);
-                temp.setCustName(custName);
-                temp.setProdNo(prodNo);
-                temp.setItemNo(itemNo);
-                temp.setItemName(itemName);
-                temp.setQtyPlan(qtyPlan);
-                temp.setProdDate(prodDate);
-                temp.setDeptName(deptName);
-                temp.setLinerName(linerName);
-                temp.setClassNo(classNo);
-                temp.setErrorInfo(errorStr);
-                if(StringUtils.isNotEmpty(errorStr)){
-                    temp.setCheckStatus(1);
-                }else{
-                    temp.setCheckStatus(0);
-                }
-                tempList.add(temp);
-            }
-
-            if(tempList.size() > 0){
-                schedulingTempDao.saveAll(tempList);
-
-                //检验数据
-                try{
-                    doCheckProc(currUser);
-                }catch (Exception e){
-                }
-
-                return ApiResponseResult.success("导入成功！").data(tempList);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            logger.error("SchedulingImpl类的doExcel()导入Excel错误", e);
-        }
-
-        return ApiResponseResult.failure("导入失败！请查看导入文件是否有数据或者产品编码是否填写或格式是否正确！");
-    }
-
-    //调用校验数据存储过程
-    public Boolean doCheckProc(SysUser currUser){
-        Long userId = currUser.getId();
-        if(userId != null){
-            List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
-                @Override
-                public CallableStatement createCallableStatement(Connection con) throws SQLException {
-                    String storedProc = "{call PRC_CHECK_TASK_INFO(?,?,?,?)}";// 调用的sql
-                    CallableStatement cs = con.prepareCall(storedProc);
-                    cs.setString(1, userId.toString());
-                    cs.registerOutParameter(2,Types.INTEGER);// 注册输出参数 返回标志
-                    cs.registerOutParameter(3,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
-                    cs.registerOutParameter(4,-10);// 注册输出参数 返回数据集合
-                    return cs;
-                }
-            }, new CallableStatementCallback() {
-                public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
-                    List<String> result = new ArrayList<String>();
-                    cs.execute();
-                    result.add(cs.getString(2));
-                    return result;
-                }
-            });
-            return true;
-        }else{
-            return false;
-        }
-    }
 }

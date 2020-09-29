@@ -169,8 +169,7 @@ public class SchedulingController extends WebController {
     public ApiResponseResult doExcel(MultipartFile file) throws Exception{
         String method = "/scheduling/doExcel";String methodName ="导入";
         try{
-//            ApiResponseResult result = schedulingService.doExcel(file);
-            ApiResponseResult result = schedulingService.doExcel_2(file);
+            ApiResponseResult result = schedulingService.doExcel(file);
             logger.debug("导入=doExcel:");
             getSysLogService().success(method, methodName, null);
             return result;

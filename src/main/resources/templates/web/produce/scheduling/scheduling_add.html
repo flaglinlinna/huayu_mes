@@ -121,11 +121,11 @@
         <button type="button" class="layui-btn layui-btn-sm" id="save">保存</button>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(d.bsCheckStatus == 0){ }}
+            {{#  if(d.checkStatus == 0){ }}
             <span style="color: green;">校验通过</span>
-            {{#  } else if(d.bsCheckStatus == 1) { }}
+            {{#  } else if(d.checkStatus == 1) { }}
             <span style="color: red;">校验不通过</span>
-            {{#  } else if(d.bsCheckStatus == 2) { }}
+            {{#  } else if(d.checkStatus == 2) { }}
             <span style="color: orange;">警告</span>
             {{#  } else { }}
             <span></span>
