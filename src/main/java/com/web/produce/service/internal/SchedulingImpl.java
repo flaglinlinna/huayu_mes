@@ -79,60 +79,50 @@ public class SchedulingImpl implements SchedulingService {
     @Override
     @Transactional
     public ApiResponseResult add(Scheduling scheduling) throws Exception {
-        return null;
-//        if(scheduling == null){
-//            return ApiResponseResult.failure("排产信息不能为空！");
-//        }
-//        SysUser currUser = UserUtil.getSessionUser();
-//
-//        scheduling.setCreateDate(new Date());
-//        scheduling.setCreateBy(currUser!=null ? currUser.getId() : null);
-//        scheduling.setBsUniqueOrderNo(this.getUniqueOrderNo());
-//        schedulingDao.save(scheduling);
-//
-//        return ApiResponseResult.success("新增成功！").data(scheduling);
+        if(scheduling == null){
+            return ApiResponseResult.failure("排产信息不能为空！");
+        }
+        SysUser currUser = UserUtil.getSessionUser();
+
+        scheduling.setCreateDate(new Date());
+        scheduling.setCreateBy(currUser!=null ? currUser.getId() : null);
+        schedulingDao.save(scheduling);
+
+        return ApiResponseResult.success("新增成功！").data(scheduling);
     }
 
     @Override
     @Transactional
     public ApiResponseResult edit(Scheduling scheduling) throws Exception {
-        return null;
-//        if(scheduling == null && scheduling.getId() == null){
-//            return ApiResponseResult.failure("排产信息ID不能为空！");
-//        }
-//        Scheduling o = schedulingDao.findById((long) scheduling.getId());
-//        if(o == null){
-//            return ApiResponseResult.failure("排产信息不存在！");
-//        }
-//        SysUser currUser = UserUtil.getSessionUser();
-//
-//        o.setLastupdateDate(new Date());
-//        o.setLastupdateBy(currUser!=null ? currUser.getId() : null);
-//        o.setPkDepartment(scheduling.getPkDepartment());//部门
-//        o.setBsDepartCode(scheduling.getBsDepartCode());
-//        o.setBsProduceTime(scheduling.getBsProduceTime());
-//        o.setBsShift(scheduling.getBsShift());
-//        o.setBsCustomer(scheduling.getBsCustomer());
-//        o.setBsLine(scheduling.getBsLine());
-//        o.setBsOrderNo(scheduling.getBsOrderNo());
-//        o.setPkMtrial(scheduling.getPkMtrial());//物料
-//        o.setBsMtrialCode(scheduling.getBsMtrialCode());
-//        o.setBsMtrialDesc(scheduling.getBsMtrialDesc());
-//        o.setPkWoProc(scheduling.getPkWoProc());//加工工艺
-//        o.setBsProcCode(scheduling.getBsProcCode());
-//        o.setBsRestNum(scheduling.getBsRestNum());
-//        o.setBsPlanNum(scheduling.getBsPlanNum());
-//        o.setBsPeopleNum(scheduling.getBsPeopleNum());
-//        o.setBsCapacityNum(scheduling.getBsCapacityNum());
-//        o.setBsPlanHours(scheduling.getBsPlanHours());
-//        o.setBsActualNum(scheduling.getBsActualNum());
-////        o.setBsActualHours(scheduling.getBsActualHours());
-////        o.setBsPlanPrice(scheduling.getBsPlanPrice());
-////        o.setBsActualPrice(scheduling.getBsActualPrice());
-////        o.setBsRemark(scheduling.getBsRemark());
-//        schedulingDao.save(o);
-//
-//        return ApiResponseResult.success("编辑成功！").data(o);
+        if(scheduling == null && scheduling.getId() == null){
+            return ApiResponseResult.failure("排产信息ID不能为空！");
+        }
+        Scheduling o = schedulingDao.findById((long) scheduling.getId());
+        if(o == null){
+            return ApiResponseResult.failure("排产信息不存在！");
+        }
+        SysUser currUser = UserUtil.getSessionUser();
+
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(currUser!=null ? currUser.getId() : null);
+        o.setProdNo(scheduling.getProdNo());
+        o.setGroupNo(scheduling.getGroupNo());
+        o.setCustId(scheduling.getCustId());
+        o.setCustName(scheduling.getCustName());
+        o.setCustNo(scheduling.getCustNo());
+        o.setItemId(scheduling.getItemId());
+        o.setItemNo(scheduling.getItemNo());
+        o.setItemName(scheduling.getItemName());
+        o.setQtyPlan(scheduling.getQtyPlan());
+        o.setProdDate(scheduling.getProdDate());
+        o.setDeptId(scheduling.getDeptId());
+        o.setDeptName(scheduling.getDeptName());
+        o.setLinerName(scheduling.getLinerName());
+        o.setLineNo(scheduling.getLineNo());
+        o.setClassNo(scheduling.getClassNo());
+        schedulingDao.save(o);
+
+        return ApiResponseResult.success("编辑成功！").data(o);
     }
 
     @Override
@@ -164,14 +154,14 @@ public class SchedulingImpl implements SchedulingService {
         //查询条件2
         List<SearchFilter> filters1 =new ArrayList<>();
         if(StringUtils.isNotEmpty(keyword)){
-            filters1.add(new SearchFilter("bsDepartCode", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("bsShift", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("bsCustomer", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("bsLine", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("bsOrderType", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("bsOrderNo", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("bsMtrialCode", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("bsProcCode", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("prodNo", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("groupNo", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("custName", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("linerName", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("deptName", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("classNo", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("taskNo", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("itemNo", SearchFilter.Operator.LIKE, keyword));
         }
         Specification<Scheduling> spec = Specification.where(BaseService.and(filters, Scheduling.class));
         Specification<Scheduling> spec1 =  spec.and(BaseService.or(filters1, Scheduling.class));
@@ -498,13 +488,6 @@ public class SchedulingImpl implements SchedulingService {
 
             if(tempList.size() > 0){
                 schedulingTempDao.saveAll(tempList);
-
-                //检验数据
-                try{
-                    doCheckProc(currUser);
-                }catch (Exception e){
-                }
-
                 return ApiResponseResult.success("导入成功！").data(tempList);
             }
         }catch (Exception e){
@@ -620,8 +603,20 @@ public class SchedulingImpl implements SchedulingService {
             return null;
         }
     }
-    //调用校验数据存储过程
-    public Boolean doCheckProc(SysUser currUser){
+
+    /**
+     * 调用校验数据存储过程
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult doCheckProc() throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null && currUser.getId() == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+
         Long userId = currUser.getId();
         if(userId != null){
             List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
@@ -640,13 +635,21 @@ public class SchedulingImpl implements SchedulingService {
                     List<String> result = new ArrayList<String>();
                     cs.execute();
                     result.add(cs.getString(2));
+                    result.add(cs.getString(3));
+                    result.add(cs.getString(4));
                     return result;
                 }
             });
-            return true;
-        }else{
-            return false;
+
+            if(resultList.size() > 0){
+                String flag = resultList.get(0);
+                if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
+                    return ApiResponseResult.success("校验成功！");
+                }
+            }
         }
+
+        return ApiResponseResult.failure("校验失败！");
     }
 
     /**
@@ -681,19 +684,18 @@ public class SchedulingImpl implements SchedulingService {
     @Override
     @Transactional
     public ApiResponseResult deleteTempAll() throws Exception{
-        return null;
-//        SysUser currUser = UserUtil.getSessionUser();
-//        if(currUser == null){
-//            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
-//        }
-//
-//        int num = schedulingTempDao.countByDelFlagAndPkSysUser(0, currUser.getId());
-//        if(num > 0){
-//            //如果当前用户存在临时数据则删除
-//            schedulingTempDao.updateDelFlagByPkSysUser(1, currUser.getId());
-//        }
-//
-//        return ApiResponseResult.success("删除成功！");
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+
+        int num = schedulingTempDao.countByDelFlagAndCreateBy(0, currUser.getId());
+        if(num > 0){
+            //如果当前用户存在临时数据则删除
+            schedulingTempDao.updateDelFlagByCreateBy(1, currUser.getId());
+        }
+
+        return ApiResponseResult.success("删除成功！");
     }
 
     /**
@@ -704,52 +706,66 @@ public class SchedulingImpl implements SchedulingService {
     @Override
     @Transactional
     public ApiResponseResult confirmTemp() throws Exception{
-        return null;
-//        SysUser currUser = UserUtil.getSessionUser();
-//        if(currUser == null){
-//            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
-//        }
-//        List<Scheduling> list = new ArrayList<>();
-//
-//        //1.获取当前用户关联的临时表
-//        List<SchedulingTemp> tempList =schedulingTempDao.findByDelFlagAndPkSysUser(0, currUser.getId());
-//        for(SchedulingTemp temp : tempList){
-//            if(temp != null){
-//                //新增
-//                Scheduling scheduling = new Scheduling();
-//                scheduling.setCreateDate(new Date());
-//                scheduling.setPkDepartment(temp.getPkDepartment());//部门
-//                scheduling.setBsDepartCode(temp.getBsDepartCode());
-//                scheduling.setBsProduceTime(temp.getBsProduceTime());
-//                scheduling.setBsShift(temp.getBsShift());
-//                scheduling.setBsCustomer(temp.getBsCustomer());
-//                scheduling.setBsLine(temp.getBsLine());
-//                scheduling.setBsUniqueOrderNo(this.getUniqueOrderNo());
-//                scheduling.setBsOrderNo(temp.getBsOrderNo());
-//                scheduling.setPkMtrial(temp.getPkMtrial());//物料
-//                scheduling.setBsMtrialCode(temp.getBsMtrialCode());
-//                scheduling.setBsMtrialDesc(temp.getBsMtrialDesc());
-//                scheduling.setPkWoProc(temp.getPkWoProc());//加工工艺
-//                scheduling.setBsProcCode(temp.getBsProcCode());
-//                scheduling.setBsRestNum(temp.getBsRestNum());
-//                scheduling.setBsPlanNum(temp.getBsPlanNum());
-//                scheduling.setBsPeopleNum(temp.getBsPeopleNum());
-//                scheduling.setBsCapacityNum(temp.getBsCapacityNum());
-//                scheduling.setBsPlanHours(temp.getBsPlanHours());
-//                scheduling.setBsActualNum(temp.getBsActualNum());
-//                scheduling.setBsActualHours(temp.getBsActualHours());
-//                scheduling.setBsPlanPrice(temp.getBsPlanPrice());
-//                scheduling.setBsActualPrice(temp.getBsActualPrice());
-//                scheduling.setBsRemark(temp.getBsRemark());
-//                list.add(scheduling);
-//            }
-//        }
-//
-//        if(list.size() > 0){
-//            schedulingDao.saveAll(list);
-//        }
-//
-//        return ApiResponseResult.success("保存成功！").data(list);
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        Long userId = currUser.getId();
+        String company = currUser.getCompany();
+        String factory = currUser.getFactory();
+
+        //检查是否存在
+        int num = schedulingTempDao.countByDelFlagAndCreateByAndCheckStatus(0, userId, 1);
+        if(num > 0){
+            return ApiResponseResult.failure("保存失败！存在检验不通过的排产，请检查！");
+        }
+
+        //将临时数据保存到正式表中
+        List<String> resultList = doSaveProc(currUser);
+        if(resultList.size() > 0){
+            String flag = resultList.get(0);
+            if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
+                return ApiResponseResult.success("保存成功！");
+            }
+        }
+
+        return ApiResponseResult.failure("保存失败！");
+    }
+
+    //调用保存数据存储过程
+    public List<String> doSaveProc(SysUser currUser) {
+        Long userId = currUser.getId();
+        String company = currUser.getCompany();
+        String factory = currUser.getFactory();
+        if (userId != null) {
+            List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
+                @Override
+                public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                    String storedProc = "{call PRC_IMP_TASK_INFO(?,?,?,?,?,?)}";// 调用的sql
+                    CallableStatement cs = con.prepareCall(storedProc);
+                    cs.setString(1, company);
+                    cs.setString(2, factory);
+                    cs.setString(3, userId.toString());
+                    cs.registerOutParameter(4, Types.INTEGER);// 注册输出参数 返回标志
+                    cs.registerOutParameter(5, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(6, -10);// 注册输出参数 返回数据集合
+                    return cs;
+                }
+            }, new CallableStatementCallback() {
+                public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                    List<String> result = new ArrayList<String>();
+                    cs.execute();
+                    result.add(cs.getString(4));
+                    result.add(cs.getString(5));
+                    result.add(cs.getString(6));
+                    return result;
+                }
+            });
+
+            return resultList;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     //生成随机制令单号
