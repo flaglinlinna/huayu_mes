@@ -138,8 +138,9 @@ $(function() {
 		// 设置用户正常/禁用
 		function setStatus(obj, id, name, checked) {
 			// setStatus(obj, this.value, this.name, obj.elem.checked);
-			var isStatus = checked ? 0 : 1;
-			var deaprtisStatus = checked ? "正常" : "禁用";
+			var isStatus = checked ? 1 : 0;
+			console.log(isStatus)
+			var deaprtisStatus = checked ? "正常":"禁用";
 			// 正常/禁用
 
 			layer.confirm(
@@ -168,12 +169,12 @@ $(function() {
 							});
 						},
 						btn2 : function() {
-							obj.elem.checked = isStatus;
+							obj.elem.checked = !isStatus;
 							form.render();
 							layer.closeAll();
 						},
 						cancel : function() {
-							obj.elem.checked = isStatus;
+							obj.elem.checked = !isStatus;
 							form.render();
 							layer.closeAll();
 						}

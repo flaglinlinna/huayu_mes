@@ -48,7 +48,7 @@ public class Process extends BaseEntity {
      */
     @ApiModelProperty(name = "checkStatus", value = "状态")
     @Column(length = 1)
-    protected Integer checkStatus = 0;
+    protected Integer checkStatus = 1;
 
     public String getProcNo() {
         return procNo;

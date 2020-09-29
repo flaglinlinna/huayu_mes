@@ -56,11 +56,11 @@ public class DefectiveDetail extends BaseEntity {
 	    protected String defectName;
 	    
 	    /**
-	     * 状态（0：正常 / 1：禁用）
+	     * 状态（1：正常 / 0：禁用）
 	     */
-	    @ApiModelProperty(name = "checkStatus", value = "状态（0：正常 / 1：禁用）")
+	    @ApiModelProperty(name = "checkStatus", value = "状态（1：正常 / 0：禁用）")
 	    @Column
-	    protected Integer checkStatus = 0;
+	    protected Integer checkStatus = 1;
 
 		public Long getDefectTypeId() {
 			return defectTypeId;

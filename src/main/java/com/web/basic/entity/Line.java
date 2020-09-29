@@ -37,11 +37,11 @@ public class Line extends BaseEntity {
     protected String lineName;
 
     /**
-     * 状态
+     * 状态1:正常 0:禁用
      */
     @ApiModelProperty(name = "checkStatus", value = "状态")
     @Column(length = 1)
-    protected Integer checkStatus = 0;
+    protected Integer checkStatus = 1;
 
     /**
      * 线长工号

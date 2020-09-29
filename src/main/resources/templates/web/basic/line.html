@@ -29,7 +29,7 @@
         <table id="lineList" lay-filter="lineTable"></table>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(!d.checkStatus){ }}
+            {{#  if(d.checkStatus){ }}
             <input type="checkbox" name="{{d.lineName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
             <input type="checkbox" name="{{d.lineName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
@@ -60,13 +60,13 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">线长工号</label>
                 <div class="layui-input-inline">
-                    <input id="linerCode" name="linerCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="linerCode" name="linerCode"  autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">线长姓名</label>
                 <div class="layui-input-inline">
-                    <input id="linerName" name="linerName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="linerName" name="linerName"  autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">

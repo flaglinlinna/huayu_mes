@@ -29,7 +29,7 @@
         <table id="mtrialList" lay-filter="mtrialTable"></table>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(!d.checkStatus){ }}
+            {{#  if(d.checkStatus){ }}
             <input type="checkbox" name="{{d.itemName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
             <input type="checkbox" name="{{d.itemName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>

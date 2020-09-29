@@ -1,5 +1,5 @@
 /**
- * 不良类别管理
+ * 卡机信息管理
  */
 var pageCurr;
 $(function() {
@@ -7,8 +7,8 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#defectList',
-			url : context + 'base/defect/getList',
+			elem : '#devList',
+			url : context + 'produce/dev_clock/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -33,27 +33,50 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
-				field : 'defectTypeCode',
-				title : '编码'
+				field : 'devCode',
+				title : '卡机编码',
+				width : 120,
 			}, {
-				field : 'defectTypeName',
-				title : '名称'
+				field : 'devName',
+				title : '卡机名称',
+				width : 120,
 			}, {
-				field : 'checkStatus',
-				title : '状态',
+				field : 'devIp',
+				title : '卡机IP',
+				width : 120,
+			}, {
+				field : 'devSeries',
+				title : '卡机序列',
+				width : 120,
+			}, {
+				field : 'lineId',
+				title : '线别',
+				width : 120,
+			}, {
+				field : 'devType',
+				title : '卡机类型',
+				width : 120,
+			}, {
+				field : 'enabled',
+				title : '是否有效',
 				width : 95,
 				templet : '#statusTpl'
 			}, {
 				field : 'lastupdateDate',
-				title : '更新时间'
+				title : '更新时间',
+				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
+				width : 150,
 			}, {
 				field : 'createDate',
 				title : '添加时间',
+				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
+				width : 150,
 			}, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
-				toolbar : '#optBar'
+				toolbar : '#optBar',
+				width: 140
 			} ] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
@@ -66,21 +89,20 @@ $(function() {
 				pageCurr = curr;
 			}
 		});
-
-		// 监听在职操作
+		// 监听操作-是否有效
 		form.on('switch(isStatusTpl)', function(obj) {
-			setStatus(obj, this.value, this.name, obj.elem.checked);
+			setEnabled(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(defectTable)', function(obj) {
+		table.on('tool(devTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delDefect(data, data.id, data.defectTypeCode);
+				delDevClock(data, data.id, data.devCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				console.log("edit");
-				getDefect(data, data.id);
+				getDevClock(data, data.id);
 			}
 		});
 		// 监听提交
@@ -100,42 +122,46 @@ $(function() {
 			load(data);
 			return false;
 		});
-		// 编辑不良类别
-		function getDefect(obj, id) {
+		// 编辑卡机信息
+		function getDevClock(obj, id) {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/defect/getDefective", JSON.stringify(param),
-					function(data) {
-						if (data.result) {
-							form.val("defectForm", {
-								"id" : data.data.id,
-								"defectTypeCode" : data.data.defectTypeCode,
-								"defectTypeName" : data.data.defectTypeName,
-							});
-							openDefect(id, "编辑不良类别")
-						} else {
-							layer.alert(data.msg)
-						}
-					}, "POST", false, function(res) {
-						layer.alert("操作请求错误，请您稍后再试");
+			CoreUtil.sendAjax("produce/dev_clock/getDevClock", JSON
+					.stringify(param), function(data) {
+				if (data.result) {
+					form.val("devForm", {
+						"id" : data.data.id,
+						"devCode" : data.data.devCode,
+						"devName" : data.data.devName,
+						"devIp" : data.data.devIp,
+						"devSeries" : data.data.devSeries,
+						"devType" : data.data.devType
 					});
+					getLineList(data.data.lineId);
+					openDevClock(id, "编辑卡机信息")
+				} else {
+					layer.alert(data.msg)
+				}
+			}, "POST", false, function(res) {
+				layer.alert("操作请求错误，请您稍后再试");
+			});
 		}
-		// 设置用户正常/禁用
-		function setStatus(obj, id, name, checked) {
+		// 设置是否在线
+		function setEnabled(obj, id, name, checked) {
 			// setStatus(obj, this.value, this.name, obj.elem.checked);
 			var isStatus = checked ? 1 : 0;
-			var deaprtisStatus = checked ? "正常":"禁用";
-			// 正常/禁用
-
+			var deaprtisStatus = checked ?  "有效":"无效";
+			console.log(isStatus)
+			
 			layer.confirm(
-					'您确定要把不良类别：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+					'您确定要把卡机设备：' + name + '设置为' + deaprtisStatus + '状态吗？', {
 						btn1 : function(index) {
 							var param = {
 								"id" : id,
-								"checkStatus" : isStatus
+								"enabled" : isStatus
 							};
-							CoreUtil.sendAjax("/base/defect/doStatus", JSON
+							CoreUtil.sendAjax("/produce/dev_clock/doEnabled", JSON
 									.stringify(param), function(data) {
 								if (data.result) {
 									layer.alert("操作成功", function() {
@@ -166,12 +192,13 @@ $(function() {
 						}
 					})
 		}
+		
 	});
 
 });
 
 // 新增编辑弹出框
-function openDefect(id, title) {
+function openDevClock(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -182,74 +209,103 @@ function openDefect(id, title) {
 		resize : false,
 		shadeClose : true,
 		area : [ '550px' ],
-		content : $('#setDefect'),
+		content : $('#setDevClock'),
 		end : function() {
-			cleanDefect();
+			cleanDevClock();
 		}
 	});
 }
 
-// 添加不良类别
-function addDefect() {
+// 添加卡机信息
+function addDevClock() {
 	// 清空弹出框数据
-	cleanDefect();
+	cleanDevClock();
 	// 打开弹出框
-	openDefect(null, "添加不良类别");
+	getLineList("");
+	openDevClock(null, "添加卡机信息");
 }
-// 新增不良类别提交
+//获取线体信息
+function getLineList(id){
+	CoreUtil.sendAjax("produce/dev_clock/getLineList", "",
+			function(data) {
+				if (data.result) {
+				$("#lineId").empty();
+				var line=data.data;
+				console.log(line)
+				for (var i = 0; i < line.length; i++) {
+					if(i==0){
+						$("#lineId").append("<option value=''>请点击选择</option>");
+					}
+					$("#lineId").append("<option value=" + line[i].id+ ">" + line[i].lineName + "</option>");
+					if(line[i].id==id){
+						$("#lineId").val(line[i].id);
+					}
+				}					
+				layui.form.render('select');
+
+				} else {
+					layer.alert(data.msg)
+				}
+				console.log(data)
+			}, "POST", false, function(res) {
+				layer.alert("操作请求错误，请您稍后再试");
+			});
+}
+
+// 新增卡机信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/defect/add", JSON.stringify(obj.field), function(
-			data) {
-		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				cleanDefect();
-				// 加载页面
-				loadAll();
+	CoreUtil.sendAjax("produce/dev_clock/add", JSON.stringify(obj.field),
+			function(data) {
+				if (data.result) {
+					layer.alert("操作成功", function() {
+						layer.closeAll();
+						cleanDevClock();
+						// 加载页面
+						loadAll();
+					});
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+				}
+			}, "POST", false, function(res) {
+				layer.alert(res.msg);
 			});
-		} else {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
-			});
-		}
-	}, "POST", false, function(res) {
-		layer.alert(res.msg);
-	});
 }
 
-// 编辑不良类别提交
+// 编辑卡机信息提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/defect/edit", JSON.stringify(obj.field), function(
-			data) {
-		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				cleanDefect();
-				// 加载页面
-				loadAll();
+	CoreUtil.sendAjax("produce/dev_clock/edit", JSON.stringify(obj.field),
+			function(data) {
+				if (data.result) {
+					layer.alert("操作成功", function() {
+						layer.closeAll();
+						cleanDevClock();
+						// 加载页面
+						loadAll();
+					});
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+				}
+			}, "POST", false, function(res) {
+				layer.alert(res.msg);
 			});
-		} else {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
-			});
-		}
-	}, "POST", false, function(res) {
-		layer.alert(res.msg);
-	});
 }
 
-// 删除不良类别
-function delDefect(obj, id, name) {
+// 删除卡机信息
+function delDevClock(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '不良类别吗？', {
+		layer.confirm('您确定要删除' + name + '卡机吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/defect/delete", JSON.stringify(param),
-					function(data) {
+			CoreUtil.sendAjax("produce/dev_clock/delete",
+					JSON.stringify(param), function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
 								// 回调弹框
@@ -295,7 +351,7 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanDefect() {
-	$('#defectForm')[0].reset();
+function cleanDevClock() {
+	$('#devForm')[0].reset();
 	layui.form.render();// 必须写
 }

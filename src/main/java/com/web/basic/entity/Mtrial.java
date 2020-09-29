@@ -63,15 +63,15 @@ public class Mtrial extends BaseEntity {
 	     * 物料单位
 	     */
 	    @ApiModelProperty(name = "itemUnit", value = "物料单位")
-	    @Column(length = 15)
+	    @Column(length = 5)
 	    protected String itemUnit;
 	    
 	    /**
-	     * 状态（0：正常 / 1：禁用）
+	     * 状态（1：正常 / 0：禁用）
 	     */
-	    @ApiModelProperty(name = "checkStatus", value = "状态（0：正常 / 1：禁用）")
+	    @ApiModelProperty(name = "checkStatus", value = "状态（1：正常 / 0：禁用）")
 	    @Column
-	    protected Integer checkStatus = 0;
+	    protected Integer checkStatus = 1;
 
 		public String getItemNo() {
 			return itemNo;

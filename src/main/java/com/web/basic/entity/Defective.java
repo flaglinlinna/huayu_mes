@@ -38,11 +38,11 @@ public class Defective extends BaseEntity {
 	    protected String defectTypeName;
 	    
 	    /**
-	     * 状态（0：正常 / 1：禁用）
+	     * 状态（1：正常 / 0：禁用）
 	     */
-	    @ApiModelProperty(name = "checkStatus", value = "状态（0：正常 / 1：禁用）")
+	    @ApiModelProperty(name = "checkStatus", value = "状态（1：正常 / 0：禁用）")
 	    @Column
-	    protected Integer checkStatus = 0;
+	    protected Integer checkStatus = 1;
 
 		public String getDefectTypeCode() {
 			return defectTypeCode;

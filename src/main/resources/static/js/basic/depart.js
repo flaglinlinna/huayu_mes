@@ -142,7 +142,7 @@ $(function() {
 		// 设置用户正常/禁用
 		function setStatus(obj, id, name, checked) {
 			var isStatus = checked ? 0 : 1;
-			var deaprtisStatus = checked ? "正常" : "禁用";
+			var deaprtisStatus = checked ? "禁用":"正常";
 			// 正常/禁用
 
 			layer.confirm('您确定要把部门：' + name + '设置为' + deaprtisStatus + '状态吗？',

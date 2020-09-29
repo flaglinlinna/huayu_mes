@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='不良类别信息'">
+<head th:include="layout :: htmlhead" th:with="title='卡机信息'">
 <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div style="margin: 10px">
-			<form id="defdetailSearch" class="layui-form layui-form-pane" method="post"
+			<form id="devSearch" class="layui-form layui-form-pane" method="post"
 				action="" style="margin-top: 20px;">
 				<div class="layui-form-item" style="margin-bottom: 0px">
 					<div class="layui-inline">
@@ -28,52 +28,75 @@
 			<hr class="layui-bg-black" />
 
 			<button class="layui-btn layui-btn-sm layui-btn-normal"
-				onclick="addDef()">添加不良内容</button>
-			<table id="defdetailList" lay-filter="defdetailTable"></table>
-
+				onclick="addDevClock()">添加卡机信息</button>
+			<table id="devList" lay-filter="devTable"></table>
 			<script type="text/html" id="statusTpl">
-            {{#  if(d.checkStatus){ }}
-            <input type="checkbox" name="{{d.defectName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(d.enabled){ }}
+            <input type="checkbox" name="{{d.devName}}" value="{{d.id}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.defectName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.devName}}" value="{{d.id}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
+
 
 			<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 		</div>
-		<!--添加或编辑不良类别-->
-		<div id="setDef" class="layer_self_wrap"
+		<!--添加或编辑卡机信息-->
+		<div id="setDevClock" class="layer_self_wrap"
 			style="width: 500px; display: none;">
-			<form id="defdetailForm" class="layui-form layui-form-pane"
-				lay-filter="defdetailForm" method="post" action=""
+			<form id="devForm" class="layui-form layui-form-pane"
+				lay-filter="devForm" method="post" action=""
 				style="margin-top: 20px;">
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
 					type="hidden" name="id" />
 				<div class="layui-form-item">
-					<label class="layui-form-label">不良类别</label>
+					<label class="layui-form-label">卡机编码</label>
 					<div class="layui-input-inline">
-						<select id="defectTypeId" name="defectTypeId" lay-verify="required"
+						<input id="devCode" name="devCode" lay-verify="required"
+							autocomplete="off" class="layui-input" type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">卡机名称</label>
+					<div class="layui-input-inline">
+						<input id="devName" name="devName" lay-verify="required"
+							autocomplete="off" class="layui-input" type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">卡机类型</label>
+					<div class="layui-input-inline">
+						<input id="devType" name="devType" lay-verify="required"
+							autocomplete="off" class="layui-input" type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">卡机IP</label>
+					<div class="layui-input-inline">
+						<input id="devIp" name="devIp" lay-verify="required"
+							autocomplete="off" class="layui-input" type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">卡机序列</label>
+					<div class="layui-input-inline">
+						<input id="devSeries" name="devSeries" lay-verify="required"
+							autocomplete="off" class="layui-input" type="text" />
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">线别</label>
+					<div class="layui-input-inline">
+						<select id="lineId" name="lineId" lay-verify="required"
 							lay-search>
 						</select>
 					</div>
 				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">不良编码</label>
-					<div class="layui-input-inline">
-						<input id="defectCode" name="defectCode" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text"/>
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">不良名称</label>
-					<div class="layui-input-inline">
-						<input id="defectName" name="defectName" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text" />
-					</div>
-				</div>
+
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 10px;">
 						<button class="layui-btn layui-btn-sm" lay-submit=""
@@ -84,8 +107,8 @@
 				</div>
 			</form>
 		</div>
-		<script th:src="@{/js/dateUtils.js}" src="/js/dateUtils.js" type="text/javascript"></script>
-		<script th:src="@{/js/basic/defdetail.js}" src="/js/basic/defdetail.js"></script>
+		<script th:src="@{/js/web/produce/dev_clock/dev_clock.js}"
+			src="/js/web/produce/dev_clock/dev_clock.js"></script>
 	</div>
 </body>
 </html>
