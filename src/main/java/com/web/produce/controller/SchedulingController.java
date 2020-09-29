@@ -181,6 +181,23 @@ public class SchedulingController extends WebController {
         }
     }
 
+    @ApiOperation(value = "检验", notes = "检验", hidden = true)
+    @RequestMapping(value = "/doCheckProc", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doCheckProc(){
+        String method = "/scheduling/doCheckProc";String methodName ="检验";
+        try{
+            ApiResponseResult result = schedulingService.doCheckProc();
+            logger.debug("检验=doCheckProc:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("检验失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("检验失败！");
+        }
+    }
 
     @ApiOperation(value = "获取导入临时数据列表", notes = "获取导入临时数据列表", hidden = true)
     @RequestMapping(value = "/getTempList", method = RequestMethod.GET)

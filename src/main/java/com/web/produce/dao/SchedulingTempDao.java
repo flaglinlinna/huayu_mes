@@ -21,5 +21,7 @@ public interface SchedulingTempDao extends CrudRepository<SchedulingTemp, Long>,
 
     public List<SchedulingTemp> findByDelFlagAndCreateBy(Integer delFlag, Long createBy);
 
+    public int countByDelFlagAndCreateByAndCheckStatus(Integer delFlag, Long createBy, Integer checkStatus);
+
     public int countByDelFlagAndCreateBy(Integer delFlag, Long createBy);
 }

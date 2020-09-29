@@ -33,7 +33,7 @@ $(function () {
                 ,{field:'checkStatus', title:'状态', width:100, templet:'#statusTpl'}
                 ,{field:'errorInfo', title:'错误信息', width:100}
                 ,{field:'groupNo', title:'组合', width:60}
-                ,{field:'custName', title:'客户', width:60}
+                ,{field:'custName', title:'客户', width:70}
                 ,{field:'linerName', title:'线别', width:70}
                 ,{field:'prodDate', title:'日期', width:100}
                 ,{field:'deptName', title:'组装部', width:80}
@@ -89,10 +89,27 @@ $(function () {
             ,done: function(res,index, upload){
                 layer.closeAll('loading'); //关闭loading
                 if(res.result){
-                    loadAll();//重新加载表格
-                    layer.alert(res.msg,function (index) {
-                        layer.close(index);
-                    })
+                    $.ajax({
+                        type: "POST",
+                        data: {},
+                        url: context+"/produce/scheduling/doCheckProc",
+                        success: function (res) {
+                            if (res.result) {
+                                loadAll();//重新加载表格
+                                layer.alert("导入成功！",function(index){
+                                    layer.close(index);
+                                });
+                            } else {
+                                layer.alert(res.msg,function(index){
+                                    layer.close(index);
+                                });
+                            }
+                        },
+                        error: function () {
+                            layer.alert("操作请求错误，请您稍后再试",function(){
+                            });
+                        }
+                    });
                 }else{
                     layer.alert(res.msg,function (index) {
                         layer.close(index);
@@ -110,7 +127,7 @@ $(function () {
 
 //导入弹出框
 function openUpload(title){
-    //deleteTempAll();
+    deleteTempAll();
     var index = layer.open({
         type:1,
         title: title,
