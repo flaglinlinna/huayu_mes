@@ -117,12 +117,17 @@ function login(){
         //     });
         //     return false;
         // }
+    	var loading = layer.load(0, {
+            shade: false,
+            time: 5*1000
+        });
         $.ajax({
             type: "get",
             url: context+"/login1",
             data: { "username":$("#username").val(), "password":$("#password").val(), "rememberMe":$("[name='rememberMe']").is(":checked") },
             dataType: 'json',
             success: function (res) {
+            	layer.close(loading);
                 if(res.result){
                 	//window.location.href = "/home";
                 	setTimeout(function() {
