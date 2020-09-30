@@ -58,7 +58,6 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         }
         defectiveDetail.setCreateDate(new Date());
         defectiveDetailDao.save(defectiveDetail);
-
         return ApiResponseResult.success("不良内容添加成功！").data(defectiveDetail);
     }
     /**

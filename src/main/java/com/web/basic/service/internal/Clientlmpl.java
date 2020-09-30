@@ -17,6 +17,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.ClientDao;
 import com.web.basic.entity.Client;
@@ -49,6 +50,7 @@ public class Clientlmpl implements ClientService {
             return ApiResponseResult.failure("该客户已存在，请填写其他客户编码！");
         }
         client.setCreateDate(new Date());
+        client.setCreateBy(UserUtil.getSessionUser().getId());
         clientDao.save(client);
 
         return ApiResponseResult.success("客户添加成功！").data(client);
@@ -85,6 +87,7 @@ public class Clientlmpl implements ClientService {
             o.setCustNo(client.getCustNo().trim());
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setCustName(client.getCustName());
         o.setCustNameS(client.getCustNameS());
         clientDao.save(o);
@@ -122,8 +125,9 @@ public class Clientlmpl implements ClientService {
         if(o == null){
             return ApiResponseResult.failure("客户不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());
         clientDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }

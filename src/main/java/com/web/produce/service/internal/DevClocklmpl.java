@@ -19,6 +19,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.LineDao;
 import com.web.basic.entity.Client;
@@ -64,6 +65,7 @@ public class DevClocklmpl implements DevClockService {
 			return ApiResponseResult.failure("该卡机已存在，请填写其他卡机编码！");
 		}
 		devClock.setCreateDate(new Date());
+		devClock.setCreateBy(UserUtil.getSessionUser().getId());
 		devClockDao.save(devClock);
 
 		return ApiResponseResult.success("卡机添加成功！").data(devClock);
@@ -101,6 +103,7 @@ public class DevClocklmpl implements DevClockService {
 			o.setDevCode(devClock.getDevCode().trim());
 		}
 		o.setLastupdateDate(new Date());
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		o.setDevName(devClock.getDevName());
 		o.setDevIp(devClock.getDevIp());
 		o.setDevSeries(devClock.getDevSeries());
@@ -145,8 +148,9 @@ public class DevClocklmpl implements DevClockService {
 		if (o == null) {
 			return ApiResponseResult.failure("卡机不存在！");
 		}
-		o.setLastupdateDate(new Date());
+		o.setDelTime(new Date());
 		o.setDelFlag(1);
+		o.setDelBy(UserUtil.getSessionUser().getId());
 		devClockDao.save(o);
 		return ApiResponseResult.success("删除成功！");
 	}
@@ -222,6 +226,7 @@ public class DevClocklmpl implements DevClockService {
 			return ApiResponseResult.failure("卡机不存在！");
 		}
 		o.setLastupdateDate(new Date());
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		o.setEnabled(enabled);
 		devClockDao.save(o);
 		return ApiResponseResult.success("设置成功！").data(o);

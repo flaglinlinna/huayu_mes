@@ -19,9 +19,9 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.EmployeeDao;
-import com.web.basic.dao.LineDao;
 import com.web.basic.entity.Employee;
 import com.web.produce.dao.EmpFingerDao;
 import com.web.produce.entity.EmpFinger;
@@ -55,8 +55,8 @@ public class EmpFingerlmpl implements EmpFingerService {
 			return ApiResponseResult.failure("该指纹模板已存在，请加入其他指纹模板！");
 		}
 		empFinger.setCreateDate(new Date());
+		empFinger.setCreateBy(UserUtil.getSessionUser().getId());
 		empFingerDao.save(empFinger);
-
 		return ApiResponseResult.success("指纹记录添加成功！").data(empFinger);
 	}
 
@@ -95,6 +95,7 @@ public class EmpFingerlmpl implements EmpFingerService {
 			o.setTemplateStr(empFinger.getTemplateStr());
 		}
 		o.setLastupdateDate(new Date());
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		o.setFingerIdx(empFinger.getFingerIdx());
 		o.setEmpId(empFinger.getEmpId());
 		empFingerDao.save(o);
@@ -134,8 +135,9 @@ public class EmpFingerlmpl implements EmpFingerService {
 		if (o == null) {
 			return ApiResponseResult.failure("指纹记录不存在！");
 		}
-		o.setLastupdateDate(new Date());
-		o.setDelFlag(1);
+		o.setDelTime(new Date());
+        o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());	
 		empFingerDao.save(o);
 		return ApiResponseResult.success("删除成功！");
 	}

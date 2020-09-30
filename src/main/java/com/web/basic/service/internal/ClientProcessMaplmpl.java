@@ -20,6 +20,7 @@ import com.app.base.data.DataGrid;
 import com.system.role.entity.RolePermissionMap;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.ClientProcessMapDao;
 import com.web.basic.dao.ClientDao;
@@ -105,8 +106,9 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
         List<ClientProcessMap> listOld = clientProcessMapDao.findByDelFlagAndCustId(0, clientId);
         if(listOld.size() > 0){
             for(ClientProcessMap item : listOld){
-                item.setLastupdateDate(new Date());
-                item.setDelFlag(1);
+            	item.setDelTime(new Date());
+            	item.setDelFlag(1);
+            	item.setDelBy(UserUtil.getSessionUser().getId());
             }
             clientProcessMapDao.saveAll(listOld);
         }
@@ -116,6 +118,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
             for(Long procId : procList){
             	ClientProcessMap item = new ClientProcessMap();
                 item.setCreateDate(new Date());
+                item.setCreateBy(UserUtil.getSessionUser().getId());
                 item.setCustId(clientId);
                 item.setProcId(procId);
                // item.setJobAttr(jobAttr);
@@ -143,6 +146,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 	            return ApiResponseResult.failure("工序记录不存在！");
 	        }
 	        o.setLastupdateDate(new Date());
+	        o.setLastupdateBy(UserUtil.getSessionUser().getId());
 	        o.setJobAttr(jobAttr);
 	        clientProcessMapDao.save(o);
 	        return ApiResponseResult.success("设置成功！").data(o);
@@ -169,8 +173,9 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
         if(o == null){
             return ApiResponseResult.failure("该工序不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());
         clientProcessMapDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
