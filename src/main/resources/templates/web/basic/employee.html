@@ -1,70 +1,109 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='客户信息'">
+<head th:include="layout :: htmlhead" th:with="title='员工信息'">
 <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
-	 <div style="margin: 10px">
-	 <form id="clientSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
-           <div class="layui-form-item" style="margin-bottom: 0px">
+		<div style="margin: 10px">
+			<form id="employeeSearch" class="layui-form layui-form-pane"
+				method="post" action="" style="margin-top: 20px;">
+				<div class="layui-form-item" style="margin-bottom: 0px">
 					<div class="layui-inline">
 						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
 						<div class="layui-input-inline">
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
 								class="layui-input" type="text" />
 						</div>
-						<button type="reset" class="layui-btn layui-btn-primary layui-btn-sm"
-							title="重置">
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
 							<i class="layui-icon">&#xe669;</i>重置
 						</button>
-						 <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="searchSubmit">查询</button>
 					</div>
 				</div>
-        </form>
-         <hr class="layui-bg-black"/>
+			</form>
+			<hr class="layui-bg-black" />
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addClient()">添加客户信息</button>
-        <table id="clientList" lay-filter="clientTable"></table>
-
-        <script type="text/html" id="optBar">
+			<!--  <button class="layui-btn layui-btn-sm layui-btn-normal"
+				onclick="addEmployee()">添加员工信息</button>-->
+			<table id="employeeList" lay-filter="employeeTable"></table>
+			<script type="text/html" id="statusTpl">
+            {{#  if(d.empStatus){ }}
+            <input type="checkbox" name="{{d.empName}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
+            {{#  } else { }}
+            <input type="checkbox" name="{{d.empName}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
+            {{#  } }}
+        </script>
+			<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
-	 </div>
-	 <!--添加或编辑客户信息-->
-    <div id="setClient" class="layer_self_wrap" style="width:500px;display:none;">
-        <form id="clientForm" class="layui-form layui-form-pane" lay-filter="clientForm" method="post" action="" style="margin-top: 20px;">
-            <input id="pageNum" type="hidden" name="pageNum"/>
-            <input id="id" type="hidden" name="id"/>
-            <div class="layui-form-item">
-                <label class="layui-form-label">客户编码</label>
-                <div class="layui-input-inline">
-                    <input id="custNo" name="custNo" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">客户简称</label>
-                <div class="layui-input-inline">
-                    <input id="custNameS" name="custNameS" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">客户名称</label>
-                <div class="layui-input-inline">
-                    <input id="custName" name="custName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block" style="margin-left: 10px;">
-                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit">提交</button>
-                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <script th:src="@{/js/web/basic/client.js}" src="/js/web/basic/client.js"></script>
+		</div>
+		<!--添加或编辑员工信息-->
+		<div id="setEmployee" class="layer_self_wrap"
+			style="width: 500px; display: none;margin-left: 10px;">
+			<form id="employeeForm" class="layui-form layui-form-pane"
+				lay-filter="employeeForm" method="post" action=""
+				style="margin-top: 20px;">
+				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
+					type="hidden" name="id" />
+				<div class="layui-form-item">
+					<label class="layui-form-label">工号</label>
+					<div class="layui-input-inline">
+						<input id="empCode" name="empCode" lay-verify="required"
+							autocomplete="off" class="layui-input" type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">姓名</label>
+					<div class="layui-input-inline">
+						<input id="empName" name="empName" lay-verify="required"
+							autocomplete="off" class="layui-input" type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">部门</label>
+					<div class="layui-input-inline">
+						<input id="custNameS" name="custNameS"
+							autocomplete="off" class="layui-input" type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">人员类型</label>
+					<div class="layui-input-inline">
+						<select id="empType" name="empType">
+							<option value="直接员工">直接员工</option>
+							<option value="间接员工">间接员工</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">入职日期</label>
+					<div class="layui-input-inline">
+					<input type="text" class="layui-input" name="joinDate" id="joinDate">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">离职日期</label>
+					<div class="layui-input-inline">
+					<input type="text" class="layui-input"  name="leaveDate" id="leaveDate">
+					</div>
+				</div>
+				<div class="layui-form-item">	
+					<div class="layui-input-block" style="margin-left: 0px;">
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="addSubmit">提交</button>
+						<button type="reset"
+							class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script th:src="@{/js/web/basic/employee.js}"
+			src="/js/web/basic/employee.js"></script>
 	</div>
 </body>
 </html>

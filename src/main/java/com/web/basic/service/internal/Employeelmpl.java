@@ -20,6 +20,7 @@ import com.utils.SearchFilter;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.EmployeeDao;
 import com.web.basic.entity.Employee;
+import com.web.basic.entity.Mtrial;
 import com.web.basic.service.EmployeeService;
 
 
@@ -155,5 +156,23 @@ public class Employeelmpl implements EmployeeService {
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 
+	@Override
+    @Transactional
+    public ApiResponseResult doStatus(Long id, Integer empStatus) throws Exception{
+        if(id == null){
+            return ApiResponseResult.failure("员工ID不能为空！");
+        }
+        if(empStatus == null){
+            return ApiResponseResult.failure("请正确设置在职或离职！");
+        }
+        Employee o = employeeDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("员工不存在！");
+        }
+        o.setLastupdateDate(new Date());
+        o.setEmpStatus(empStatus);
+        employeeDao.save(o);
+        return ApiResponseResult.success("设置成功！").data(o);
+    }
 
 }

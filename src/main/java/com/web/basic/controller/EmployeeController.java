@@ -139,5 +139,25 @@ public class EmployeeController extends WebController{
 	            return ApiResponseResult.failure("删除员工信息失败！");
 	        }
 	    }
+		@ApiOperation(value = "设置在职/离职", notes = "设置在职/离职", hidden = true)
+	    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{
+		 //Long id, Integer deStatus
+	        String method = "base/employee/doStatus";String methodName ="设置在职/离职";
+	        try{
+	        	long id = Long.parseLong(params.get("id").toString()) ;
+	        	Integer empStatus=Integer.parseInt(params.get("empStatus").toString());
+	            ApiResponseResult result = employeeService.doStatus(id, empStatus);
+	            logger.debug("设置在职/离职=doJob:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	            logger.error("设置在职/离职失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("设置在职/离职失败！");
+	        }
+	    }
 
 }
