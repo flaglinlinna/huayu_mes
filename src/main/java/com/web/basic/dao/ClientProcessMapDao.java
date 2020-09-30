@@ -21,5 +21,5 @@ public interface ClientProcessMapDao extends CrudRepository<ClientProcessMap, Lo
      * 获取已经配置了的客户信息
      */
     @Query(value = "select distinct map.custId,map.client.custName from ClientProcessMap map  where map.delFlag=0  ")
-	public  List<Map<String, Object>> findClient();
+	public  List<ClientProcessMap> findClient();
 }

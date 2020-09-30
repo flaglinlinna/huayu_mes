@@ -92,17 +92,16 @@ public class ProdProclmpl implements ProdProcService {
 			String it = itemIds[i];
 			if(!StringUtils.isEmpty(it)){
 				for(String pro:procs){
-					int j=1;
 					if(!StringUtils.isEmpty(pro)){
+						Process process = processDao.findById(Long.parseLong(pro));
 						ProdProcDetail pd = new ProdProcDetail();
 						pd.setItemId(Long.valueOf(it));
 						pd.setItemNo(itemNos[i]);
 						pd.setProcId(Long.valueOf(pro));
 						pd.setCreateBy(UserUtil.getSessionUser().getId());
 						pd.setCreateDate(new Date());
-						pd.setProcOrder(j);
+						pd.setProcOrder(process.getProcOrder());
 						lp.add(pd);
-						j++;
 					}
 				}
 				
@@ -168,6 +167,25 @@ public class ProdProclmpl implements ProdProcService {
         o.setJobAttr(jobAttr);
         prodProcDetailDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
+	}
+	@Override
+	public ApiResponseResult doProcOrder(Long id, Integer procOrder) throws Exception {
+		// TODO Auto-generated method stub
+		if(id == null){
+            return ApiResponseResult.failure("工序ID不能为空！");
+        }
+        if(procOrder == null){
+            return ApiResponseResult.failure("请填写正确的数字！");
+        }
+        ProdProcDetail o = prodProcDetailDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("工序记录不存在！");
+        }
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setProcOrder(procOrder);
+        prodProcDetailDao.save(o);
+        return ApiResponseResult.success("修改成功！").data(o);
 	}
 	
 	

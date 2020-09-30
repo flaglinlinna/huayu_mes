@@ -52,7 +52,7 @@ public class ProdProcController extends WebController{
         String method = "base/prodproc/getList";String methodName ="获取工艺流程列表";
         try {
         	System.out.println(keyword);
-            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            Sort sort = new Sort(Sort.Direction.DESC, "itemId");
             ApiResponseResult result = procProdService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取工艺流程列表=getList:");
             getSysLogService().success(method, methodName, null);
@@ -184,6 +184,25 @@ public class ProdProcController extends WebController{
         }
     }
 	
+	@ApiOperation(value = "修改顺序", notes = "修改顺序", hidden = true)
+    @RequestMapping(value = "/doProcOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doProcOrder(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "base/prodproc/doProcOrder";String methodName ="修改顺序";
+        try{
+        	Long id = Long.parseLong(params.get("id").toString()) ;
+        	Integer procOrder=Integer.parseInt(params.get("procOrder").toString());
+            ApiResponseResult result = procProdService.doProcOrder(id, procOrder);
+            logger.debug("修改顺序=doProcOrder:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("修改顺序失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("修改顺序失败！");
+        }
+    }
 	
 	
 	

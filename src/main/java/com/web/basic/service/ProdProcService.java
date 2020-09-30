@@ -17,4 +17,6 @@ public interface ProdProcService {
 	ApiResponseResult delete(Long id)  throws Exception;
 	
 	ApiResponseResult doJobAttr(Long id,Integer jobAttr)  throws Exception;
+	
+	ApiResponseResult doProcOrder(Long id,Integer procOrder)  throws Exception;
 }

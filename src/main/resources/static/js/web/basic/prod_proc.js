@@ -48,7 +48,7 @@ $(function() {
 				templet:'<div>{{d.mtrial.itemName}}</div>'
 			}, {
 				field : 'procOrder',
-				title : '工序顺序',
+				title : '工序顺序',"edit":"number","event": "dataCol",
 				width:80
 			}, {
 				field : 'procNo',
@@ -66,16 +66,6 @@ $(function() {
 				templet : '#statusTpl',
 				width:90,
 				align : 'center'
-				/*,templet:function(row){
-                    var html = "<input type='checkbox' lay-skin='primary' lay-filter='checkboxIsSelected' table-index='"+row.LAY_TABLE_INDEX+"' class='checkboxIsSelected' value='1' ";
-                    alert(row.jobAttr === 1)
-                    if(row.jobAttr === 1){
-                        html += " checked ";
-                    }
-                    html += ">";
-                    return html;
-                }*/
-				//type:"checkbox"
 			},{
 				fixed : 'right',
 				title : '操作',
@@ -210,6 +200,26 @@ $(function() {
 			//var params={"client":$("#pkClient").val()}
 			getProcByClient($("#pkClient").val());
 		})
+		//监听单元格编辑
+		  table.on('edit(client_procTable)', function(obj){
+			  console.log(obj)
+		    var value = obj.value //得到修改后的值
+		    ,data = obj.data //得到所在行所有键值
+		    ,field = obj.field; //得到字段
+		   // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+		    var tr = obj.tr;
+	        // 单元格编辑之前的值
+	        var oldtext = $(tr).find("td[data-field='"+obj.field+"'] div").text();
+		    if(field == 'procOrder'){
+		    	//判断是否为数字
+		    	if(isRealNum(value)){
+		    		doProcOrder(data.id,value);
+		    	}else{
+		    		layer.msg('请填写数字!');
+		    		loadAll();
+		    	}
+		    }
+		  });
 		
 		// 监听工具条
 		table.on('tool(client_procTable)', function(obj) {
@@ -284,6 +294,31 @@ $(function() {
 						}
 					});
 		}
+		
+		// 设置过程属性
+		function doProcOrder(id, procOrder) {
+			var param = {
+					"id" : id,
+					"procOrder" : procOrder
+				};
+				CoreUtil.sendAjax("/base/prodproc/doProcOrder", JSON
+						.stringify(param), function(data) {
+					if (data.result) {
+						layer.alert("操作成功", function() {
+							layer.closeAll();
+							loadAll();
+						});
+					} else {
+						layer.alert(data.msg, function() {
+							layer.closeAll();
+						});
+					}
+				}, "POST", false, function(res) {
+					layer.alert("操作请求错误，请您稍后再试", function() {
+						layer.closeAll();
+					});
+				});
+		}
 	});
 });
 //添加不工艺流程
@@ -304,6 +339,7 @@ function getProcByClient(params){
 			console.log(beSelected)
 			tableProc.reload({
 				done : function(res, curr, count) {
+					console.log(res)
 					for(var i =0;i<res.data.length;i++){
 						for(var j=0;j<beSelected.length;j++){
 							if(res.data[i].id == beSelected[j].procId){
@@ -411,12 +447,12 @@ function getAddList(id){
 						}
 						if(id != ''){
 							if(c[i].id == id){
-								$("#pkClient").append("<option value=" + c[i].id+ " selected>"+c[i].custName+"</option>");
+								$("#pkClient").append("<option value=" + c[i][0]+ " selected>"+c[i][1]+"</option>");
 							}else{
-								$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
+								$("#pkClient").append("<option value=" + c[i][0]+ ">"+c[i][1]+"</option>");
 							}
 						}else{
-							$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
+							$("#pkClient").append("<option value=" + c[i][0]+ ">"+c[i][1]+"</option>");
 						}
 					}			
 					layui.form.render('select');
@@ -429,7 +465,6 @@ function getAddList(id){
 			});
 }
 function merge(res,columsName,columsIndex) {
-    console.log(res)
     var data = res;
     var mergeIndex = 0;//定位需要添加合并属性的行数
     var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
@@ -440,7 +475,6 @@ function merge(res,columsName,columsIndex) {
             for (var i = 1; i < data.length; i++) { //这里循环表格当前的数据
                 var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
                 var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);//获取相同列的第一列
-                console.log(data[i][columsName[k]])
                 if (data[i][columsName[0]] === data[i-1][columsName[0]]) { //后一行的值与前一行的值做比较，相同就需要合并
                     mark += 1;
                     tdPreArr.each(function () {//相同列的第一列增加rowspan属性
