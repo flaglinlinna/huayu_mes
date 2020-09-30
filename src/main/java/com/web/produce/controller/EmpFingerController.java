@@ -54,7 +54,7 @@ public class EmpFingerController extends WebController{
 	        String method = "produce/emp_finger/getList";String methodName ="获取指纹登记信息列表";
 	        try {
 	        	System.out.println(keyword);
-	            Sort sort = new Sort(Sort.Direction.DESC, "id");
+	            Sort sort = new Sort(Sort.Direction.DESC, "emp.id");
 	            ApiResponseResult result = empFingerService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取指纹登记列表=getList:");
 	            getSysLogService().success(method, methodName, null);
