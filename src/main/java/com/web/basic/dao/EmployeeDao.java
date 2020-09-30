@@ -10,6 +10,7 @@ public interface EmployeeDao extends CrudRepository<Employee, Long>,JpaSpecifica
 
 	public List<Employee> findAll();
 	public List<Employee> findByDelFlag(Integer delFlag);
+	public List<Employee> findByDelFlagAndEmpStatus(Integer delFlag,Integer empStatus);//查询在职人员
 	public Employee findById(long id);
 	public int countByDelFlagAndEmpCode(Integer delFlag, String empCode);//查询是否存在
 }

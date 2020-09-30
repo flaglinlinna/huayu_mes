@@ -9,9 +9,9 @@ import com.web.produce.entity.DevClock;
 
 
 public interface DevClockService {
-	public ApiResponseResult add(DevClock client) throws Exception;
+	public ApiResponseResult add(DevClock devClock) throws Exception;
 
-	public ApiResponseResult edit(DevClock client) throws Exception;
+	public ApiResponseResult edit(DevClock devClock) throws Exception;
 
 	// 根据ID获取
 	public ApiResponseResult getDevClock(Long id) throws Exception;
