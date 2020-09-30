@@ -53,7 +53,7 @@ public class Employee extends BaseEntity {
 	     */	        
 	    @Column
 	    @Temporal(TemporalType.TIMESTAMP)
-	    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 		@ApiModelProperty(name="joinDate",value="入职日期")
 		protected Date joinDate;
 	   
@@ -63,7 +63,7 @@ public class Employee extends BaseEntity {
 	    
 	    @Column
 	    @Temporal(TemporalType.TIMESTAMP)
-	    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 		@ApiModelProperty(name="leaveDate",value="离职日期")
 		protected Date leaveDate;
  

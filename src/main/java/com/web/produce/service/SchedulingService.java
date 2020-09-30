@@ -33,4 +33,7 @@ public interface SchedulingService {
     public ApiResponseResult deleteTempAll() throws Exception;
 
     public ApiResponseResult confirmTemp() throws Exception;
+
+    //提取工序存储过程
+    public ApiResponseResult getProcessProc() throws Exception;
 }

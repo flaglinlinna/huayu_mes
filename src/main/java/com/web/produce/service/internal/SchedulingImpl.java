@@ -785,4 +785,52 @@ public class SchedulingImpl implements SchedulingService {
         }
     }
 
+    //提取工序存储过程
+    @Override
+    @Transactional
+    public ApiResponseResult getProcessProc() throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        Long userId = currUser.getId();
+        String company = currUser.getCompany();
+        String factory = currUser.getFactory();
+
+        if(userId != null){
+            List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
+                @Override
+                public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                    String storedProc = "{call PRC_GET_TASK_PRO(?,?,?,?,?,?)}";// 调用的sql
+                    CallableStatement cs = con.prepareCall(storedProc);
+                    cs.setString(1, company);
+                    cs.setString(2, factory);
+                    cs.setString(3, userId.toString());
+                    cs.registerOutParameter(4,Types.INTEGER);// 注册输出参数 返回标志
+                    cs.registerOutParameter(5,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(6,-10);// 注册输出参数 返回数据集合
+                    return cs;
+                }
+            }, new CallableStatementCallback() {
+                public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                    List<String> result = new ArrayList<String>();
+                    cs.execute();
+                    result.add(cs.getString(4));
+                    result.add(cs.getString(5));
+                    result.add(cs.getString(6));
+                    return result;
+                }
+            });
+
+            if(resultList.size() > 0){
+                String flag = resultList.get(0);
+                if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
+                    return ApiResponseResult.success("提取工序成功！");
+                }
+            }
+        }
+
+        return ApiResponseResult.failure("提取工序失败！");
+    }
+
 }

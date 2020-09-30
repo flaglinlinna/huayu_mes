@@ -78,7 +78,7 @@ public class SchedulingController extends WebController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult add(Scheduling scheduling) {
-        String method = "/scheduling/add";String methodName ="新增";
+        String method = "/produce/scheduling/add";String methodName ="新增";
         try{
             ApiResponseResult result = schedulingService.add(scheduling);
             logger.debug("新增=add:");
@@ -96,7 +96,7 @@ public class SchedulingController extends WebController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult edit(Scheduling scheduling) {
-        String method = "/scheduling/edit";String methodName ="编辑";
+        String method = "/produce/scheduling/edit";String methodName ="编辑";
         try{
             ApiResponseResult result = schedulingService.edit(scheduling);
             logger.debug("编辑=edit:");
@@ -114,7 +114,7 @@ public class SchedulingController extends WebController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult delete(Long id) {
-        String method = "/scheduling/delete";String methodName ="删除";
+        String method = "/produce/scheduling/delete";String methodName ="删除";
         try{
             ApiResponseResult result = schedulingService.delete(id);
             logger.debug("删除=delete:");
@@ -132,7 +132,7 @@ public class SchedulingController extends WebController {
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getList(String keyword){
-        String method = "/scheduling/getList";String methodName ="获取排产信息列表";
+        String method = "/produce/scheduling/getList";String methodName ="获取排产信息列表";
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingService.getList(keyword, super.getPageRequest(sort));
@@ -151,7 +151,7 @@ public class SchedulingController extends WebController {
     @RequestMapping(value = "/getExcel", method = RequestMethod.GET)
     @ResponseBody
     public void getExcel() {
-        String method = "/scheduling/getExcel";String methodName ="导出模板";
+        String method = "/produce/scheduling/getExcel";String methodName ="导出模板";
         try {
             schedulingService.getExcel(getResponse());
             logger.debug("导出模板=getExcel:");
@@ -167,7 +167,7 @@ public class SchedulingController extends WebController {
     @RequestMapping(value = "/doExcel", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult doExcel(MultipartFile file) throws Exception{
-        String method = "/scheduling/doExcel";String methodName ="导入";
+        String method = "/produce/scheduling/doExcel";String methodName ="导入";
         try{
             ApiResponseResult result = schedulingService.doExcel(file);
             logger.debug("导入=doExcel:");
@@ -185,7 +185,7 @@ public class SchedulingController extends WebController {
     @RequestMapping(value = "/doCheckProc", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult doCheckProc(){
-        String method = "/scheduling/doCheckProc";String methodName ="检验";
+        String method = "/produce/scheduling/doCheckProc";String methodName ="检验";
         try{
             ApiResponseResult result = schedulingService.doCheckProc();
             logger.debug("检验=doCheckProc:");
@@ -203,7 +203,7 @@ public class SchedulingController extends WebController {
     @RequestMapping(value = "/getTempList", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getTempList(){
-        String method = "/scheduling/getTempList";String methodName ="获取导入临时数据列表";
+        String method = "/produce/scheduling/getTempList";String methodName ="获取导入临时数据列表";
         try {
             Sort sort = new Sort(Sort.Direction.ASC, "id");
             ApiResponseResult result = schedulingService.getTempList(super.getPageRequest(sort));
@@ -222,7 +222,7 @@ public class SchedulingController extends WebController {
     @ResponseBody
     @RequestMapping(value = "/deleteTempAll", method = RequestMethod.POST)
     public ApiResponseResult deleteTempAll(){
-        String method = "/scheduling/deleteTempAll";String methodName ="根据当前登录用户删除临时表所有数据";
+        String method = "/produce/scheduling/deleteTempAll";String methodName ="根据当前登录用户删除临时表所有数据";
         try {
             ApiResponseResult result = schedulingService.deleteTempAll();
             logger.debug("根据当前登录用户删除临时表所有数据=deleteTempAll:");
@@ -240,7 +240,7 @@ public class SchedulingController extends WebController {
     @ResponseBody
     @RequestMapping(value = "/confirmTemp", method = RequestMethod.POST)
     public ApiResponseResult confirmTemp(){
-        String method = "/scheduling/confirmTemp";String methodName ="确认临时数据";
+        String method = "/produce/scheduling/confirmTemp";String methodName ="确认临时数据";
         try {
             ApiResponseResult result = schedulingService.confirmTemp();
             logger.debug("确认临时数据=confirmTemp:");
@@ -251,6 +251,24 @@ public class SchedulingController extends WebController {
             logger.error("确认临时数据失败！", e);
             getSysLogService().error(method, methodName, e.toString());
             return ApiResponseResult.failure("确认临时数据失败！");
+        }
+    }
+
+    @ApiOperation(value="提取工序", notes="提取工序", hidden = true)
+    @ResponseBody
+    @RequestMapping(value = "/getProcessProc", method = RequestMethod.POST)
+    public ApiResponseResult getProcessProc(){
+        String method = "/produce/scheduling/getProcessProc";String methodName ="提取工序";
+        try {
+            ApiResponseResult result = schedulingService.getProcessProc();
+            logger.debug("提取工序=getProcessProc:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("提取工序失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("提取工序失败！");
         }
     }
 }
