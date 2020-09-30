@@ -42,7 +42,7 @@ $(function () {
                 ,{field:'classNo', title:'班次', width:60}
                 ,{field:'taskNo', title:'制令单号', width:120}
                 ,{field:'itemNo', title:'物料编码', width:150}
-                ,{field:'itemName', title:'物料描述'}
+                ,{field:'itemName', title:'物料描述', width:200}
                 ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
@@ -127,6 +127,18 @@ $(function () {
         form.on('submit(importBtn)', function(data){
             //导入弹出框
             openUpload('导入');
+            return false;
+        });
+        //监听提取工序按钮
+        form.on('submit(processBtn)', function(data){
+            //提取工序
+            layer.confirm('您确定要提取工序吗？', {
+                btn: ['确认','返回'] //按钮
+            }, function(){
+                getProcess();
+            }, function(){
+                layer.closeAll();
+            });
             return false;
         });
 
@@ -276,6 +288,33 @@ $("#save").click(function () {
         }
     });
 });
+
+//提取工序
+function getProcess(){
+    layer.load(); //loading
+    $.ajax({
+        type: "POST",
+        data: {},
+        url: context+"/produce/scheduling/getProcessProc",
+        success: function (res) {
+            if (res.result) {
+                layer.alert(res.msg,function(){
+                    layer.closeAll();
+                });
+            } else {
+                layer.alert(res.msg,function(index){
+                    layer.closeAll();
+                });
+            }
+            layer.closeAll('loading'); //关闭loading
+        },
+        error: function () {
+            layer.alert("操作请求错误，请您稍后再试",function(){
+                layer.closeAll('loading'); //关闭loading
+            });
+        }
+    });
+}
 
 //重新加载表格（搜索）
 function load(obj){
