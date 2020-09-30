@@ -14,8 +14,10 @@ import com.web.basic.entity.Department;
 import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.Process;
 import com.web.produce.dao.SchedulingDao;
+import com.web.produce.dao.SchedulingProcessDao;
 import com.web.produce.dao.SchedulingTempDao;
 import com.web.produce.entity.Scheduling;
+import com.web.produce.entity.SchedulingProcess;
 import com.web.produce.entity.SchedulingTemp;
 import com.web.produce.service.SchedulingService;
 import org.apache.commons.lang3.StringUtils;
@@ -75,6 +77,8 @@ public class SchedulingImpl implements SchedulingService {
     private ProcessDao processDao;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private SchedulingProcessDao schedulingProcessDao;
 
     @Override
     @Transactional
@@ -833,4 +837,24 @@ public class SchedulingImpl implements SchedulingService {
         return ApiResponseResult.failure("提取工序失败！");
     }
 
+    @Override
+    @Transactional
+    public ApiResponseResult getProcessLst(String keyword, PageRequest pageRequest) throws Exception{
+        //查询条件1
+        List<SearchFilter> filters =new ArrayList<>();
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        //查询条件2
+        List<SearchFilter> filters1 =new ArrayList<>();
+        if(StringUtils.isNotEmpty(keyword)){
+            filters1.add(new SearchFilter("", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("", SearchFilter.Operator.LIKE, keyword));
+        }
+        Specification<SchedulingProcess> spec = Specification.where(BaseService.and(filters, SchedulingProcess.class));
+        Specification<SchedulingProcess> spec1 =  spec.and(BaseService.or(filters1, SchedulingProcess.class));
+        Page<SchedulingProcess> page = schedulingProcessDao.findAll(spec1, pageRequest);
+
+        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
 }

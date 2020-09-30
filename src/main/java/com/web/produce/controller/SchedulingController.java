@@ -271,4 +271,23 @@ public class SchedulingController extends WebController {
             return ApiResponseResult.failure("提取工序失败！");
         }
     }
+
+    @ApiOperation(value = "获取列表", notes = "获取列表", hidden = true)
+    @RequestMapping(value = "/getProcessLst", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getProcessLst(String keyword){
+        String method = "/produce/scheduling/getProcessLst";String methodName ="获取列表";
+        try {
+            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = schedulingService.getProcessLst(keyword, super.getPageRequest(sort));
+            logger.debug("获取列表=getProcessLst:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取列表失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("获取列表失败！");
+        }
+    }
 }

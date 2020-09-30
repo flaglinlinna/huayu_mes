@@ -33,6 +33,7 @@ $(function () {
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
                 // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
+                ,{field:'produceState', title:'生产状态', width:100}
                 ,{field:'prodNo', title:'工单号', width:150}
                 ,{field:'groupNo', title:'组合', width:60}
                 ,{field:'custName', title:'客户', width:70}
@@ -40,6 +41,7 @@ $(function () {
                 ,{field:'prodDate', title:'日期', width:100}
                 ,{field:'deptName', title:'部门', width:80}
                 ,{field:'classNo', title:'班次', width:60}
+                ,{field:'qtyPlan', title:'计划数量', width:80}
                 ,{field:'taskNo', title:'制令单号', width:120}
                 ,{field:'itemNo', title:'物料编码', width:150}
                 ,{field:'itemName', title:'物料描述', width:200}
@@ -113,6 +115,15 @@ $(function () {
             } else if(obj.event === 'edit'){
                 //编辑
                 //window.location = context + "/produce/scheduling/toSchedulingEdit?id=" + data.id;
+                var a = document.createElement('a');
+                a.setAttribute('lay-href', context + "/produce/scheduling/toSchedulingEdit?id=" + data.id);
+                a.setAttribute('lay-text', '排产编辑');
+                a.setAttribute('id', 'js_a');
+                if(document.getElementById('js_a')) {//防止反复添加
+                    document.body.removeChild(document.getElementById('js_a'));
+                }
+                document.body.appendChild(a);//创建
+                a.click();//点击
                 return false;
             }
         });
