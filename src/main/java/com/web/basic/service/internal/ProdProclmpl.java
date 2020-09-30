@@ -143,7 +143,7 @@ public class ProdProclmpl implements ProdProcService {
 	        if(o == null){
 	            return ApiResponseResult.failure("该记录不存在！");
 	        }
-	        o.setLastupdateDate(new Date());
+	        o.setDelTime(new Date());
 	        o.setDelFlag(1);
 	        o.setDelBy(UserUtil.getSessionUser().getId());
 	        prodProcDetailDao.save(o);
