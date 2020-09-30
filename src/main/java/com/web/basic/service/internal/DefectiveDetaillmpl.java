@@ -199,7 +199,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
 	@Override
     @Transactional
 	public ApiResponseResult getDefectiveList() throws Exception {
-		List<Defective> list = defectiveDao.findByDelFlagAndCheckStatus(0,0);
+		List<Defective> list = defectiveDao.findByDelFlagAndCheckStatus(0,1);
 		return ApiResponseResult.success().data(list);
 	}
 }
