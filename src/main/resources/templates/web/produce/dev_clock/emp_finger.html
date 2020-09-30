@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='指纹登记信息'">
+<meta charset="UTF-8">
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div style="margin: 10px">
+			<form id="empSearch" class="layui-form layui-form-pane" method="post"
+				action="" style="margin-top: 20px;">
+				<div class="layui-form-item" style="margin-bottom: 0px;">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+						<div class="layui-input-inline">
+							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
+								class="layui-input" type="text" />
+						</div>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="searchSubmit">查询</button>
+					</div>
+				</div>
+			</form>
+			<hr class="layui-bg-black" />
+
+			<button class="layui-btn layui-btn-sm layui-btn-normal"
+				onclick="addEmpFinger()">添加指纹登记信息</button>
+			<table id="empList" lay-filter="empTable"></table>
+
+			<script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+		</div>
+		<!--添加或编辑指纹登记信息-->
+		<div id="setEmpFinger" class="layer_self_wrap"
+			style="width: 500px; display: none; margin-left: 10px;">
+			<form id="empForm" class="layui-form layui-form-pane"
+				lay-filter="empForm" method="post" action=""
+				style="margin-top: 20px;">
+				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
+					type="hidden" name="id" />
+				<div class="layui-form-item">
+					<label class="layui-form-label">员工</label>
+					<div class="layui-input-inline">
+						<select id="empId" name="empId" lay-verify="required" lay-search>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">手指序号</label>
+					<div class="layui-input-inline">
+					
+					<select id="fingerIdx" name="fingerIdx" lay-verify="required">
+							<option value="">请选择</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">指纹模板</label>
+					<div class="layui-input-inline" style="width:70%;">
+					<textarea id="templateStr" name="templateStr" lay-verify="required"
+						 class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block" style="margin-left: 0px;">
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="addSubmit">提交</button>
+						<button type="reset"
+							class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script th:src="@{/js/web/produce/dev_clock/emp_finger.js}"
+			src="/js/web/produce/dev_clock/emp_finger.js"></script>
+	</div>
+</body>
+</html>

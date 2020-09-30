@@ -182,7 +182,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
     @Transactional
 	public ApiResponseResult getProcList() throws Exception {
 		Map<String, Object> map = new HashMap<>();
-		List<Process> pList = processDao.findByDelFlagAndCheckStatus(0,0);
+		List<Process> pList = processDao.findByDelFlagAndCheckStatus(0,1);
 		List<Client> cList = clientDao.findByDelFlag(0);
 
 		map.put("process", pList);

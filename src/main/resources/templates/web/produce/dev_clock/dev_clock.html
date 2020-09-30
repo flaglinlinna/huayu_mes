@@ -69,8 +69,11 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">卡机类型</label>
 					<div class="layui-input-inline">
-						<input id="devType" name="devType" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text" />
+						<select id="devType" name="devType" lay-verify="required">
+							<option value="">请选择</option>
+							<option value="上线机">上线机</option>
+							<option value="下线机">下线机</option>
+						</select>
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -83,16 +86,16 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">卡机序列</label>
 					<div class="layui-input-inline">
-						<input id="devSeries" name="devSeries" lay-verify="required"
+						<select id="devSeries" name="devSeries">
+							<option value="中控ICLOCK">中控ICLOCK</option>
+						</select> <input id="devSeries" name="devSeries" lay-verify="required"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
-				
 				<div class="layui-form-item">
 					<label class="layui-form-label">线别</label>
 					<div class="layui-input-inline">
-						<select id="lineId" name="lineId" lay-verify="required"
-							lay-search>
+						<select id="lineId" name="lineId" lay-verify="required" lay-search>
 						</select>
 					</div>
 				</div>
