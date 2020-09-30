@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='客户通用工艺信息'">
+<head th:include="layout :: htmlhead" th:with="title='产品工艺'">
 <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
@@ -24,14 +24,14 @@
 				</div>
         </form>
 			<button class="layui-btn layui-btn-sm layui-btn-normal"
-				onclick="addProc('')">添加工艺流程</button>
+				onclick="addProc('')">新增产品工艺</button>
 			<table id="client_procList" lay-filter="client_procTable"></table>
 
 			<script type="text/html" id="statusTpl">
-            {{#  if(d.jobAttr){ }}
-            <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(d.jobAttr===0){ }}
+            <input type="checkbox" name="{{d.process.procName}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.process.procName}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 
@@ -42,13 +42,21 @@
 		</div>
 		<!--添加或编辑工艺流程-->
 		<div id="setClientProc" class="layer_self_wrap"
-			style="width: 500px; display: none;">
+			style="width: 700px; display: none;">
 			<form id="clientProcForm" class="layui-form layui-form-pane"
 				lay-filter="clientProcForm" method="post" action=""
 				style="margin: 20px;">
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
 					type="hidden" name="id" />
+
+					<input type="hidden" name="itemId" />
+					
 				<div class="layui-form-item">
+				    <label class="layui-form-label">物料编码</label>
+					<div class="layui-input-inline">
+						<input type="text" name="num" placeholder="请选择" autocomplete="off"
+							class="layui-input"  readonly="readonly" lay-verify="required" id="num">
+					</div>
 					<label class="layui-form-label">客户</label>
 					<div class="layui-input-inline">
 						<select id="pkClient" name="pkClient" lay-filter="pkClient" lay-verify="required"
@@ -68,8 +76,8 @@
 				</div>
 			</form>
 		</div>
-		<script th:src="@{/js/basic/client_proc.js}"
-			src="/js/basic/client_proc.js"></script>
+		<script th:src="@{/js/web/basic/prod_proc.js}"
+			src="/js/web/basic/prod_proc.js"></script>
 	</div>
 </body>
 </html>

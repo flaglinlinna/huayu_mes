@@ -1,14 +1,14 @@
 /**
- * 客户通用工艺维护
+ * 产品工艺流程
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table' ], function() {
-		var table = layui.table, form = layui.form;
+	layui.use([ 'form', 'table' , 'tableSelect' ], function() {
+		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
 
 		tableIns = table.render({
 			elem : '#client_procList',
-			url : context + 'base/client_proc/getList',
+			url : context + 'base/prodproc/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -33,47 +33,53 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			,{
-				field : 'custId',
-				title : '客户Id',
+				field : 'itemId',
+				title : '物料Id',
 				width:0,
 				hide:true
 			}
 			,{
-				field : 'custNo',
-				title : '客户编号',
-				width:90
+				field : 'itemNo',
+				title : '物料编码',
+				width:140
 			},{
-				field : 'custName',
-				title : '客户名称',
-				width:90
+				field : 'itemName',
+				title : '物料名称',
+				templet:'<div>{{d.mtrial.itemName}}</div>'
 			}, {
 				field : 'procOrder',
 				title : '工序顺序',
-				width:90
+				width:80
 			}, {
 				field : 'procNo',
-				title : '工序编号'
+				title : '工序编号',
+				width:80,
+				templet:'<div>{{d.process.procNo}}</div>'
 			}, {
 				field : 'procName',
-				title : '工序名称'
+				title : '工序名称',
+				width:130,
+				templet:'<div>{{d.process.procName}}</div>'
 			}, {
 				field : 'jobAttr',
 				title : '过程属性',
 				templet : '#statusTpl',
 				width:90,
 				align : 'center'
+				/*,templet:function(row){
+                    var html = "<input type='checkbox' lay-skin='primary' lay-filter='checkboxIsSelected' table-index='"+row.LAY_TABLE_INDEX+"' class='checkboxIsSelected' value='1' ";
+                    alert(row.jobAttr === 1)
+                    if(row.jobAttr === 1){
+                        html += " checked ";
+                    }
+                    html += ">";
+                    return html;
+                }*/
 				//type:"checkbox"
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间',
-				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>'
-			}, {
-				field : 'createDate',
-				title : '添加时间',
-				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>'
-			}, {
+			},{
 				fixed : 'right',
 				title : '操作',
+				width:120,
 				align : 'center',
 				toolbar : '#optBar'
 			} ] ],
@@ -87,7 +93,7 @@ $(function() {
 				// console.log(count);
 				pageCurr = curr;
 				//console.log(res)
-				for(var i =0;i<res.data.length;i++){
+				/*for(var i =0;i<res.data.length;i++){
 						if(res.data[i].jobAttr==0){
 							//这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
 					        res.data[i]["LAY_CHECKED"]='true';
@@ -95,12 +101,80 @@ $(function() {
 							//$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
 							$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
 						}		
-				}
-				merge(res.data,['custNo','custName'],[2,3]);
+				}*/
+				merge(res.data,['itemNo','mtrial.itemName'],[2,3]);
 			}
 		});
+		
+		tableSelect=tableSelect.render({
+			elem : '#num',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '试着搜索',
+			table : {
+				url:  context +'base/prodproc/getProdList',
+				method : 'get',
+				cols : [ [
+				{ type: 'checkbox' },//多选  radio
+				, {
+					field : 'id',
+					title : 'id',
+					width : 0,hide:true
+				}
+                , {
+					field : 'itemNo',
+					title : '物料编码',
+					width : 110
+				},{
+					field : 'itemName',
+					title : '物料描述',
+					width : 240
+				}, {
+					field : 'itemUnit',
+					title : '单位',
+					width : 60
+				} ] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+				parseData : function(res) {
+					console.log(res)
+					if(res.result){
+						// 可进行数据操作
+						return {
+							"count" : res.data.total,
+							"msg" : res.msg,
+							"data" : res.data.rows,
+							"code" : res.status
+						// code值为200表示成功
+						}
+					}
+					
+				},
+			},
+			done : function(elem, data) {
+				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+				//console.log(data);
+				var da=data.data;
+				//console.log(da[0].num)
+				var ids = '';var nos = "";
+				data.data.forEach(function(element) {
+					ids += element.id+",";
+					nos += element.itemNo+",";
+				});
+				form.val("clientProcForm", {
+					"itemId":ids,
+					"num" : nos
+				});
+				form.render();// 重新渲染
+		}
+		});
+		
 		form.on('checkbox(isStatusTpl)', function(obj) {//修改过程属性
-			//console.log(obj, this.value, this.name, obj.elem.checked);
+			console.log(obj);
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听搜索框
@@ -142,7 +216,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delClientProc(data, data.id, data.procName);
+				delClientProc(data.id);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				//getClientProc(data, data.id);//未写
@@ -151,17 +225,17 @@ $(function() {
 		});
 		
 		// 监听提交
-		form.on('submit(addSubmit)', function(data) {			
+		form.on('submit(addSubmit)', function(data) {	
+			console.log(data)
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
 				var procIdList="";
 				var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
 				//console.log(cList.length)
 				for(var i=0;i<cList.length;i++){//获取被选中的行
-					procIdList+=cList[i].id+";"//工序的ID序列，用“；”分隔
+					procIdList+=cList[i].id+","//工序的ID序列，用“；”分隔
 				}
-				var client=data.field.pkClient;
-				addSubmit(procIdList,client);
+				addSubmit(procIdList,data.field.itemId,data.field.num);
 			} else {
 				//editSubmit(data);//未写
 			}
@@ -180,7 +254,7 @@ $(function() {
 								"id" : id,
 								"jobAttr" : jobAttr
 							};
-							CoreUtil.sendAjax("/base/client_proc/doJobAttr", JSON
+							CoreUtil.sendAjax("/base/prodproc/doJobAttr", JSON
 									.stringify(param), function(data) {
 								if (data.result) {
 									layer.alert("操作成功", function() {
@@ -214,8 +288,8 @@ $(function() {
 });
 //添加不工艺流程
 function addProc(id) {
-	// 清空弹出框数据
-	getProcList(id);
+	// 获取初始化信息
+	getAddList(id);
 	// 打开弹出框
 	openProc(null, "添加工艺流程");
 }
@@ -253,16 +327,16 @@ function getProcByClient(params){
 }
 
 
-function delClientProc(obj, id, name) {
+function delClientProc( id) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '工序吗？', {
+		layer.confirm('您确定要删除吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/client_proc/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("base/prodproc/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -284,14 +358,14 @@ function delClientProc(obj, id, name) {
 }
 
 //新增工艺流程提交
-function addSubmit(procIdlist,client) {
+function addSubmit(procIdlist,itemIds,itemNos) {
 	var params = {
 			"proc":procIdlist,
-			"client" : client
+			"itemIds" : itemIds,
+			"itemNos":itemNos
 		};
-	console.log(procIdlist)
 
-	CoreUtil.sendAjax("base/client_proc/addItem", JSON.stringify(params), function(
+	CoreUtil.sendAjax("base/prodproc/add", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -311,13 +385,15 @@ function addSubmit(procIdlist,client) {
 }
 
 //获取客户，工序信息
-function getProcList(id){
+function getAddList(id){
 	console.log(id)
-	CoreUtil.sendAjax("base/client_proc/getProcList", "",
+	CoreUtil.sendAjax("base/prodproc/getAddList", "",
 			function(data) {
+		console.log(data)
 				if (data.result) {
+					//工序表
 					tableProc.reload({
-						data:data.data.process,
+						data:data.data.Process,
 						done : function(res, curr, count) {
 							cleanProc();//清空之前的选中
 							console.log(id)
@@ -327,7 +403,7 @@ function getProcList(id){
 						}
 					});
 					$("#pkClient").empty();
-					var c=data.data.client;
+					var c=data.data.Client;
 					//console.log(c)
 					for (var i = 0; i < c.length; i++) {
 						if(i==0){
@@ -353,20 +429,19 @@ function getProcList(id){
 			});
 }
 function merge(res,columsName,columsIndex) {
-    //console.log(res)
+    console.log(res)
     var data = res;
     var mergeIndex = 0;//定位需要添加合并属性的行数
     var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
     //var columsName = ['itemCode'];//需要合并的列名称
     //var columsIndex = [3];//需要合并的列索引值
-
-    for (var k = 0; k < columsName.length; k++) { //这里循环所有要合并的列
+    for (var k = 0; k < columsIndex.length; k++) { //这里循环所有要合并的列
         var trArr = $(".layui-table-body>.layui-table").find("tr");//所有行
             for (var i = 1; i < data.length; i++) { //这里循环表格当前的数据
                 var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
                 var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);//获取相同列的第一列
-                
-                if (data[i][columsName[k]] === data[i-1][columsName[k]]) { //后一行的值与前一行的值做比较，相同就需要合并
+                console.log(data[i][columsName[k]])
+                if (data[i][columsName[0]] === data[i-1][columsName[0]]) { //后一行的值与前一行的值做比较，相同就需要合并
                     mark += 1;
                     tdPreArr.each(function () {//相同列的第一列增加rowspan属性
                         $(this).attr("rowspan", mark);
@@ -394,7 +469,7 @@ function openProc(id, title) {
 		fixed : false,
 		resize : false,
 		shadeClose : true,
-		area : [ '650px','410px'],
+		area : [ '750px','410px'],
 		content : $('#setClientProc'),
 		end : function() {
 			cleanProc();
