@@ -8,102 +8,81 @@
         <!--搜索框-->
         <form id="editForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input type="text" id="id" name="id" hidden="true">
-            <input type="text" id="bsDepartCode" name="bsDepartCode" hidden="true">
-            <input type="text" id="bsShift" name="bsShift" hidden="true">
-            <input type="text" id="bsProcCode" name="bsProcCode" hidden="true">
             <div class="layui-collapse" lay-accordion="">
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">编辑</h2>
                     <div class="layui-colla-content layui-show">
                         <div class="layui-form-item" style="margin-bottom: 0px">
                             <div class="layui-inline">
-                                <label class="layui-form-label" >工单类别</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" id="bsOrderType" name="bsOrderType" autocomplete="off" placeholder="" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-inline">
                                 <label class="layui-form-label">制令单号</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="bsUniqueOrderNo" name="bsUniqueOrderNo" readonly="true" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="taskNo" name="taskNo" readonly class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label" >工单单号</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="bsOrderNo" name="bsOrderNo" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="prodNo" name="prodNo" readonly class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label" >生产状态</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="bsStatus" name="bsStatus" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="produceState" name="produceState" readonly class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label">物料编码</label>
                                 <div class="layui-input-inline">
-                                    <input type="tex" id="bsMtrialCode" name="bsMtrialCode" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="itemNo" name="itemNo" readonly class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label">物料描述</label>
                                 <div class="layui-input-inline">
-                                    <input type="tex" id="bsMtrialDesc" name="bsMtrialDesc" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="itemName" name="itemName" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">计划数量</label>
+                                <label class="layui-form-label">组合</label>
                                 <div class="layui-input-inline">
-                                    <input type="tex" id="bsPlanNum" name="bsPlanNum" autocomplete="off" placeholder="" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-inline">
-                                <label class="layui-form-label">线别</label>
-                                <div class="layui-input-inline">
-                                    <input type="tex" id="bsLine" name="bsLine" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="groupNo" name="groupNo" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label">客户</label>
                                 <div class="layui-input-inline">
-                                    <input type="tex" id="bsCustomer" name="bsCustomer" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="custName" name="custName" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">创建时间</label>
+                                <label class="layui-form-label">线别</label>
                                 <div class="layui-input-inline">
-                                    <input type="tex" id="bsProduceTime" name="bsProduceTime" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="linerName" name="linerName" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">创建人</label>
+                                <label class="layui-form-label">生产日期</label>
                                 <div class="layui-input-inline">
-                                    <input type="tex" name="createdBy1" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="prodDate" name="prodDate" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">用人量</label>
+                                <label class="layui-form-label">部门</label>
                                 <div class="layui-input-inline">
-                                    <input type="tex" id="bsPeopleNum" name="bsPeopleNum" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="deptName" name="deptName" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">预计工时</label>
+                                <label class="layui-form-label">班次</label>
                                 <div class="layui-input-inline">
-                                    <input type="tex" id="bsPlanHours" name="bsPlanHours" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="classNo" name="classNo" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">产能</label>
+                                <label class="layui-form-label">计划数量</label>
                                 <div class="layui-input-inline">
-                                    <input type="tex" id="bsCapacityNum" name="bsCapacityNum" autocomplete="off" placeholder="" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-inline">
-                                <label class="layui-form-label">实际生产数量</label>
-                                <div class="layui-input-inline">
-                                    <input type="tex" id="bsActualNum" name="bsActualNum" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="qtyPlan" name="qtyPlan" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                         </div>
@@ -117,13 +96,30 @@
         </form>
     </div>
 
+    <!--<div class="layui-tab layui-tab-brief" lay-filter="tabFilter">-->
+        <!--<ul class="layui-tab-title">-->
+            <!--<li lay-id="add" class="layui-this">工艺维护</li>-->
+            <!--<li lay-id="list">工单组件</li>-->
+        <!--</ul>-->
+        <!--<div class="layui-tab-content" style="height: 100px; display: block">-->
+            <!--<div class="layui-tab-item layui-show">-->
+                <!--&lt;!&ndash;工艺维护列表&ndash;&gt;-->
+                <!--<table id="iList" lay-filter="iTable"></table>-->
+            <!--</div>-->
+            <!--<div class="layui-tab-item">-->
+                <!--&lt;!&ndash;工单组件列表&ndash;&gt;-->
+                <!--<table id="iList2" lay-filter="iTable2"></table>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
     <script th:inline="javascript">
         var id = [[${id}]];
         var scheduling = [[${scheduling}]];
         console.log("id:"+id);
         console.log("scheduling:"+scheduling);
     </script>
-    <script th:src="@{/js/web/produce/scheduling_edit.js}" src="/js/web/produce/scheduling_edit.js"></script>
+    <script th:src="@{/js/web/produce/scheduling/scheduling_edit.js}" src="/js/web/produce/scheduling/scheduling_edit.js"></script>
 </div>
 </body>
 </html>

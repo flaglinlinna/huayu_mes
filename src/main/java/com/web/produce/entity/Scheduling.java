@@ -145,6 +145,13 @@ public class Scheduling extends BaseEntity {
     @Column(length = 1)
     protected Integer checkStatus;
 
+    /**
+     * 生产状态（待产/生产/完工/停工）
+     */
+    @ApiModelProperty(name = "produceState", value = "生产状态（待产/生产/完工/停工）")
+    @Column(length = 50)
+    protected String produceState = "待产";
+
     public String getProdNo() {
         return prodNo;
     }
@@ -279,5 +286,13 @@ public class Scheduling extends BaseEntity {
 
     public void setCheckStatus(Integer checkStatus) {
         this.checkStatus = checkStatus;
+    }
+
+    public String getProduceState() {
+        return produceState;
+    }
+
+    public void setProduceState(String produceState) {
+        this.produceState = produceState;
     }
 }
