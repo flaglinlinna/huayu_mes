@@ -29,7 +29,7 @@ public abstract class BaseEntity extends IdEntity {
      */
 	@ApiModelProperty(name = "delBy", value = "删除人")
     @Column(length = 30)
-    protected String delBy;
+    protected Long delBy;
 	
 	/**
      * 删除时间
@@ -108,11 +108,13 @@ public abstract class BaseEntity extends IdEntity {
 		this.delFlag = delFlag;
 	}
 
-	public String getDelBy() {
+	
+
+	public Long getDelBy() {
 		return delBy;
 	}
 
-	public void setDelBy(String delBy) {
+	public void setDelBy(Long delBy) {
 		this.delBy = delBy;
 	}
 

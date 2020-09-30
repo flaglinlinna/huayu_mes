@@ -1,28 +1,22 @@
 package com.web.basic.service;
 
-import java.util.Date;
-
 import org.springframework.data.domain.PageRequest;
 
 import com.app.base.data.ApiResponseResult;
 
 public interface ProdProcService {
-	/**
-	 * 操作主表
-	 * */
-//	public ApiResponseResult add(ProdProc prodProc) throws Exception;
-//
-//	public ApiResponseResult edit(ProdProc prodProc) throws Exception;
 
-	// 根据ID获取
-	//public ApiResponseResult getProdProc(Long id) throws Exception;
+	ApiResponseResult getAddList()  throws Exception;
 	
-//	public ApiResponseResult delete(Long id) throws Exception;
-//
-//	public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;// 状态改变
-
-	//public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
-	public ApiResponseResult getData() throws Exception;
-	//获取附表信息
-	public ApiResponseResult getDetailList(String keyword, PageRequest pageRequest) throws Exception;
+	ApiResponseResult getProdList(String keyword, PageRequest pageRequest)  throws Exception;
+	
+	ApiResponseResult add(String proc,String itemIds,String itemNos)  throws Exception;
+	
+	ApiResponseResult getList(String keyword, PageRequest pageRequest)  throws Exception;
+	
+	ApiResponseResult delete(Long id)  throws Exception;
+	
+	ApiResponseResult doJobAttr(Long id,Integer jobAttr)  throws Exception;
+	
+	ApiResponseResult doProcOrder(Long id,Integer procOrder)  throws Exception;
 }

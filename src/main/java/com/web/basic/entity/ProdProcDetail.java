@@ -54,7 +54,7 @@ public class ProdProcDetail extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "procId", insertable = false, updatable = false)
 	@NotFound(action = NotFoundAction.IGNORE)
-	protected Mtrial Process;
+	protected Process process;
 
 	/**
 	 * 工序排列序号
@@ -109,12 +109,13 @@ public class ProdProcDetail extends BaseEntity {
 		this.procId = procId;
 	}
 
-	public Mtrial getProcess() {
-		return Process;
+	
+	public Process getProcess() {
+		return process;
 	}
 
-	public void setProcess(Mtrial process) {
-		Process = process;
+	public void setProcess(Process process) {
+		this.process = process;
 	}
 
 	public Integer getProcOrder() {

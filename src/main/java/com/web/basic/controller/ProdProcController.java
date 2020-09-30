@@ -3,6 +3,7 @@ package com.web.basic.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -41,17 +42,17 @@ public class ProdProcController extends WebController{
 	@ApiOperation(value = "工艺流程列表页", notes = "工艺流程列表页", hidden = true)
     @RequestMapping(value = "/toProdProc")
     public String toProdProc(){
-        return "/web/basic/prodproc";
+        return "/web/basic/prod_proc";
     }
 
-	/*@ApiOperation(value = "获取工艺流程列表", notes = "获取工艺流程列表", hidden = true)
+	@ApiOperation(value = "获取工艺流程列表", notes = "获取工艺流程列表", hidden = true)
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getList(String keyword) {
         String method = "base/prodproc/getList";String methodName ="获取工艺流程列表";
         try {
         	System.out.println(keyword);
-            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            Sort sort = new Sort(Sort.Direction.DESC, "itemId");
             ApiResponseResult result = procProdService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取工艺流程列表=getList:");
             getSysLogService().success(method, methodName, null);
@@ -62,7 +63,7 @@ public class ProdProcController extends WebController{
             getSysLogService().error(method, methodName, e.toString());
             return ApiResponseResult.failure("获取工艺流程列表失败！");
         }
-    }*/
+    }
 	
 	/*@ApiOperation(value = "获取工艺流程-工序列表", notes = "获取工艺流程-工序列表", hidden = true)
     @RequestMapping(value = "/getDetailList", method = RequestMethod.GET)
@@ -84,40 +85,125 @@ public class ProdProcController extends WebController{
         }
     }*/
 	
-	@ApiOperation(value = "获取物料和工序表", notes = "获取物料和工序表", hidden = true)
-    @RequestMapping(value = "/getData", method = RequestMethod.POST)
+
+	@ApiOperation(value = "获取产品列表", notes = "获取产品列表", hidden = true)
+    @RequestMapping(value = "/getProdList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getData(){
-        String method = "base/prodproc/getData";String methodName ="获取物料和工序表";
+    public ApiResponseResult getProdList(String keyword ){
+        String method = "base/prodproc/getProdList";String methodName ="获取产品列表";
         try{
-            ApiResponseResult result = procProdService.getData();
-            logger.debug("获取物料和工序表=getData:");
+        	Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = procProdService.getProdList(keyword, super.getPageRequest(sort));
+            logger.debug("获取产品列表=getProdList:");
             getSysLogService().success(method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
-            logger.error("获取物料和工序表失败！", e);
+            logger.error("获取产品列表失败！", e);
             getSysLogService().error(method, methodName, e.toString());
-            return ApiResponseResult.failure("获取物料和工序表失败！");
+            return ApiResponseResult.failure("获取产品列表失败！");
         }
     }
 	
-	/*@ApiOperation(value = "根据ID获取工艺流程", notes = "根据ID获取工艺流程", hidden = true)
-    @RequestMapping(value = "/getProdProc", method = RequestMethod.POST)
+	
+	@ApiOperation(value = "获取产品列表,客户列表,工序列表", notes = "获取产品列表,客户列表,工序列表", hidden = true)
+    @RequestMapping(value = "/getAddList", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponseResult getProdProc(@RequestBody Map<String, Object> params){
-        String method = "base/prodproc/getProdProc";String methodName ="根据ID获取工艺流程";
-        long id = Long.parseLong(params.get("id").toString()) ;
+    public ApiResponseResult getAddList(){
+        String method = "base/prodproc/getAddList";String methodName ="获取产品列表,客户列表,工序列表";
         try{
-            ApiResponseResult result = procProdService.getProdProc(id);
-            logger.debug("根据ID获取工艺流程=getProdProc:");
+            ApiResponseResult result = procProdService.getAddList();
+            logger.debug("获取产品列表,客户列表,工序列表=getAddList:");
             getSysLogService().success(method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
-            logger.error("根据ID获取工艺流程失败！", e);
+            logger.error("获取产品列表,客户列表,工序列表失败！", e);
             getSysLogService().error(method, methodName, e.toString());
-            return ApiResponseResult.failure("获取工艺流程失败！");
+            return ApiResponseResult.failure("获取产品列表,客户列表,工序列表失败！");
         }
-    }*/
+    }
+	
+	@ApiOperation(value = "新增", notes = "新增",hidden = true)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult add(@RequestBody Map<String, Object> params) {   	
+        String method = "base/prodproc/add";String methodName ="新增";
+        try{
+        	String proc = params.get("proc").toString();
+        	String itemIds = params.get("itemIds").toString();
+        	String itemNos = params.get("itemNos").toString();
+            ApiResponseResult result = procProdService.add(proc,itemIds,itemNos);
+            logger.debug("新增=add:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("新增失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("新增失败！");
+        }
+    }
+	
+	@ApiOperation(value = "删除", notes = "删除",hidden = true)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
+        String method = "base/prodproc/delete";String methodName ="删除";
+        try{
+        	Long id = Long.parseLong(params.get("id").toString()) ;
+            ApiResponseResult result = procProdService.delete(id);
+            logger.debug("删除=delete:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("删除！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("删除！");
+        }
+    }
+	
+	@ApiOperation(value = "设置过程属性", notes = "设置过程属性", hidden = true)
+    @RequestMapping(value = "/doJobAttr", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doJobAttr(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "base/prodproc/doJobAttr";String methodName ="设置过程属性";
+        try{
+        	Long id = Long.parseLong(params.get("id").toString()) ;
+        	Integer jobAttr=Integer.parseInt(params.get("jobAttr").toString());
+            ApiResponseResult result = procProdService.doJobAttr(id, jobAttr);
+            logger.debug("设置过程属性=doJobAttr:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("设置过程属性失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("设置过程属性失败！");
+        }
+    }
+	
+	@ApiOperation(value = "修改顺序", notes = "修改顺序", hidden = true)
+    @RequestMapping(value = "/doProcOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doProcOrder(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "base/prodproc/doProcOrder";String methodName ="修改顺序";
+        try{
+        	Long id = Long.parseLong(params.get("id").toString()) ;
+        	Integer procOrder=Integer.parseInt(params.get("procOrder").toString());
+            ApiResponseResult result = procProdService.doProcOrder(id, procOrder);
+            logger.debug("修改顺序=doProcOrder:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("修改顺序失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("修改顺序失败！");
+        }
+    }
+	
+	
+	
 }
