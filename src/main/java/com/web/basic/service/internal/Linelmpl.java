@@ -17,6 +17,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.LineDao;
 import com.web.basic.entity.Line;
@@ -49,6 +50,7 @@ public class Linelmpl implements LineService {
             return ApiResponseResult.failure("该线体已存在，请填写其他线体编号！");
         }
         line.setCreateDate(new Date());
+        line.setCreateBy(UserUtil.getSessionUser().getId());
         lineDao.save(line);
 
         return ApiResponseResult.success("线体添加成功！").data(line);
@@ -85,6 +87,7 @@ public class Linelmpl implements LineService {
             o.setLineNo(line.getLineNo().trim());
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setLineName(line.getLineName());
         o.setLinerCode(line.getLinerCode());
         o.setLinerName(line.getLinerName());
@@ -123,8 +126,9 @@ public class Linelmpl implements LineService {
         if(o == null){
             return ApiResponseResult.failure("该线体不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());	
         lineDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -143,6 +147,7 @@ public class Linelmpl implements LineService {
             return ApiResponseResult.failure("线体不存在！");
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setCheckStatus(checkStatus);
         lineDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);

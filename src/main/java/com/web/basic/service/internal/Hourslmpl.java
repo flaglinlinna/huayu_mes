@@ -17,6 +17,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.HoursDao;
 import com.web.basic.entity.Hours;
@@ -49,6 +50,7 @@ public class Hourslmpl implements HoursService {
             return ApiResponseResult.failure("该产品编码已存在，请填写其他产品编码！");
         }
         hours.setCreateDate(new Date());
+        hours.setCreateBy(UserUtil.getSessionUser().getId());
         hoursDao.save(hours);
 
         return ApiResponseResult.success("产品标准工时添加成功！").data(hours);
@@ -85,6 +87,7 @@ public class Hourslmpl implements HoursService {
             o.setBsCode(hours.getBsCode().trim());
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setBsStdHrs(hours.getBsStdHrs());
         hoursDao.save(o);
         return ApiResponseResult.success("编辑成功！");
@@ -121,8 +124,9 @@ public class Hourslmpl implements HoursService {
         if(o == null){
             return ApiResponseResult.failure("该产品编码不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());
         hoursDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }

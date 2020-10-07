@@ -20,6 +20,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.DefectiveDao;
 import com.web.basic.dao.DefectiveDetailDao;
@@ -57,6 +58,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
             return ApiResponseResult.failure("该不良内容编号已存在，请填写其他不良内容编码！");
         }
         defectiveDetail.setCreateDate(new Date());
+        defectiveDetail.setCreateBy(UserUtil.getSessionUser().getId());
         defectiveDetailDao.save(defectiveDetail);
         return ApiResponseResult.success("不良内容添加成功！").data(defectiveDetail);
     }
@@ -92,9 +94,11 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
             o.setDefectCode(defectiveDetail.getDefectCode().trim());
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setDefectTypeId(defectiveDetail.getDefectTypeId());
         o.setDefectName(defectiveDetail.getDefectName());
         o.setDefectCode(defectiveDetail.getDefectCode());
+        
         defectiveDetailDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
@@ -130,8 +134,9 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
         if(o == null){
             return ApiResponseResult.failure("不良内容不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());
         defectiveDetailDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -150,6 +155,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
             return ApiResponseResult.failure("不良内容不存在！");
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setCheckStatus(checkStatus);
         defectiveDetailDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);

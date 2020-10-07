@@ -17,6 +17,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.EmployeeDao;
 import com.web.basic.entity.Employee;
@@ -50,6 +51,7 @@ public class Employeelmpl implements EmployeeService {
             return ApiResponseResult.failure("该员工已存在，请填写其他员工编码！");
         }
         employee.setCreateDate(new Date());
+        employee.setCreateBy(UserUtil.getSessionUser().getId());
         employeeDao.save(employee);
 
         return ApiResponseResult.success("员工添加成功！").data(employee);
@@ -86,6 +88,7 @@ public class Employeelmpl implements EmployeeService {
             o.setEmpCode(employee.getEmpCode().trim());
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setEmpName(employee.getEmpName());
         o.setEmpIdNo(employee.getEmpIdNo());
         o.setEmpType(employee.getEmpType());
@@ -126,8 +129,9 @@ public class Employeelmpl implements EmployeeService {
         if(o == null){
             return ApiResponseResult.failure("员工不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());
         employeeDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }

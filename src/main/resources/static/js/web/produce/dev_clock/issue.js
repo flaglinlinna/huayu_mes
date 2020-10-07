@@ -119,19 +119,15 @@ $(function() {
 			{
 				field : 'devCode',
 				title : '卡机编号',
-				width:120
 			}, {
 				field : 'devName',
 				title : '卡机名称',
-				width:125
 			}, {
 				field : 'devType',
 				title : '卡机类型',
-				width:120
 			},{
 				field : 'devIp',
 				title : '卡机IP',
-				width:130
 			}] ],
 			data:[]
 		});
