@@ -21,6 +21,7 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.attendance.ZkemSDKUtils;
 import com.web.basic.dao.LineDao;
 import com.web.basic.entity.Client;
 import com.web.basic.entity.Defective;
@@ -230,5 +231,18 @@ public class DevClocklmpl implements DevClockService {
 		o.setEnabled(enabled);
 		devClockDao.save(o);
 		return ApiResponseResult.success("设置成功！").data(o);
+	}
+
+	@Override
+	public ApiResponseResult test(DevClock devClock) throws Exception {
+		// TODO Auto-generated method stub
+        boolean connFlag = ZkemSDKUtils.connect(devClock.getDevIp(), 4370);
+        String str = "";
+        if(connFlag){
+        	str = "连接成功!";
+        }else{
+        	str = "连接失败!请检查一下网络以及IP地址!";
+        }
+		return ApiResponseResult.success(str);
 	}
 }

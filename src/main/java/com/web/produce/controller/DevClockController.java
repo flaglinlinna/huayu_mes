@@ -180,4 +180,22 @@ public class DevClockController extends WebController{
 	            return ApiResponseResult.failure("获取线体信息列表失败！");
 	        }
 	    }
+		
+		 @ApiOperation(value = "测试卡机连接", notes = "测试卡机连接",hidden = true)
+		    @RequestMapping(value = "/test", method = RequestMethod.POST)
+		    @ResponseBody
+		    public ApiResponseResult test(@RequestBody DevClock devClock) {
+		        String method = "produce/dev_clock/test";String methodName ="测试卡机连接";
+		        try{
+		            ApiResponseResult result = devClockService.test(devClock);
+		            logger.debug("测试卡机连接=test:");
+		            getSysLogService().success(method, methodName, null);
+		            return result;
+		        }catch(Exception e){
+		            e.printStackTrace();
+		            logger.error("测试卡机连接失败！", e);
+		            getSysLogService().error(method, methodName, e.toString());
+		            return ApiResponseResult.failure("测试卡机连接失败！");
+		        }
+		    }
 }
