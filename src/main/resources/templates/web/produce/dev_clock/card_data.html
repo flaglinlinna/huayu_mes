@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='卡点原始数据'">
+<meta charset="UTF-8">
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div style="margin: 10px">
+			<hr class="layui-bg-black" />
+			<button class="layui-btn layui-btn-sm layui-btn-normal"
+				onclick="addCardData()">添加卡机信息</button>
+			<table id="cardList" lay-filter="cardTable"></table>
+			<script type="text/html" id="statusTpl">
+            {{#  if(d.fstatus){ }}
+            <input disabled type="checkbox" name="{{d.empCode}}" value="{{d.id}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl" checked="checked" />
+            {{#  } else { }}
+            <input disabled type="checkbox" name="{{d.empCode}}" value="{{d.id}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl"/>
+            {{#  } }}
+        </script>
+			<script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+		</div>
+		<!--添加或编辑卡机信息-->
+		<div id="setCardData" class="layer_self_wrap"
+			style="width: 500px; display: none;margin:20px;">
+			<form id="cardForm" class="layui-form layui-form-pane"
+				lay-filter="cardForm" method="post" action=""
+				style="margin-top: 20px;">
+				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
+					type="hidden" name="id" />
+					<div class="layui-form-item">
+					<label class="layui-form-label">员工信息</label>
+					<div class="layui-input-inline">
+						<select id="empId" name="empId" lay-verify="required" lay-search>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">卡机IP</label>
+					<div class="layui-input-inline">
+						<select id="devClockId" name="devClockId" lay-verify="required" lay-search>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">刷卡日期</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="cardDate"
+							id="cardDate">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">刷卡时间</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="cardTime"
+							id="cardTime">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">备注</label>
+					<div class="layui-input-inline" style="width:70%;">
+					<textarea id="fmemo" name="fmemo" lay-verify="required"
+						 class="layui-textarea"></textarea>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-input-block" style="margin-left: 10px;">
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="addSubmit">提交</button>
+						<button type="reset"
+							class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script th:src="@{/js/web/produce/dev_clock/card_data.js}"
+			src="/js/web/produce/dev_clock/card_data.js"></script>
+	</div>
+</body>
+</html>
