@@ -20,7 +20,7 @@ $(function() {
 					,
 					defaultToolbar : [],
 					cellMinWidth : 80,
-					page : true,
+					page : false,
 					data : [],
 					request : {
 						pageName : 'page' //页码的参数名称，默认：page
@@ -38,118 +38,205 @@ $(function() {
 						}
 					},
 					cols : [ [ {
-						type : 'checkbox',
+						type : 'radio',
 						width : 50
+					},{
+						field : 'id',
+						title : 'id',
+						width : 0,hide:true
 					},
 					{
-						field : 'barcode',
-						title : '条码'
+						field : 'ITEM_BARCODE',
+						title : '条码',
+						width : 120
 					},{
-						field : 'mtrcode',
-						title : '物料编号'
+						field : 'ITEM_NO',
+						title : '物料编号',
+						width : 150
 					}, {
-						field : 'mtrdescr',
-						title : '物料描述',
-						width : 250
+						field : 'ITEM_NAME',
+						title : '物料描述'
 					}, {
-						field : 'qty',
+						field : 'QUANTITY',
 						title : '数量',
 						width : 90
 					},{
-						field : 'createdTime',
-						title : '创建时间'
+						field : 'CREATE_DATE',
+						title : '创建时间',
+						width : 150
 					},  {
 						fixed : 'right',
 						title : '操作',
 						align : 'center',
-						toolbar : '#optBar'
+						toolbar : '#optBar',
+						width : 80
 					} ] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;
 					}
 				});
-
-				tableSelect.render({
+				tableSelect=tableSelect.render({
 					elem : '#num',
-					searchKey : 'my',
+					searchKey : 'keyword',
 					checkedKey : 'id',
-					searchPlaceholder : '自定义文字和name',
+					searchPlaceholder : '试着搜索',
 					table : {
-						//url: 'table.json',
+						url:  context +'input/getTaskNo',
+						//url:  context +'base/prodproc/getProdList',
+						method : 'get',
 						cols : [ [
-						//{ type: 'checkbox' },//多选  radio
-						{
-							type : 'radio'
+						{ type: 'radio' },//多选  radio
+						, {
+							field : 'id',
+							title : 'id',
+							width : 0,hide:true
 						}, {
-							field : 'num',
+							field : 'TASK_NO',
 							title : '制令单号',
-							width : 110
+							width : 180
 						}, {
-							field : 'mtrcode',
+							field : 'ITEM_NO',
 							title : '物料编码',
-							width : 110
+							width : 150
 						},{
-							field : 'mtrdescr',
+							field : 'ITEM_NAME',
 							title : '物料描述',
 							width : 240
 						}, {
-							field : 'linecode',
-							title : '拉别',
-							width : 60
+							field : 'LINER_NAME',
+							title : '组长',
+							width : 100
 						},{
-							field : 'qty',
+							field : 'QTY_PLAN',
 							title : '数量',
-							width : 60
+							width : 80
 						},{
-							field : 'inqty',
+							field : 'QUANTITY',
 							title : '投入数量',
 							width : 80
 						}  ] ],
-						data : [ {
-							"num" : "Z000000006",
-							"mtrcode" : "M0000000001",
-							"mtrdescr":"测试物料BBBBBBBBBBB",
-							"linecode" : "S1",
-							"qty":"2000",
-							"inqty":"200"
-						}, {
-							"num" : "Z000000078",
-							"mtrcode" : "M0000000301",
-							"mtrdescr":"测试物料AAAAAAAAAAAA",
-							"linecode" : "S6",
-							"qty":"5000",
-							"inqty":"200"
-						} ],
+						page : false,
+						request : {
+							pageName : 'page' // 页码的参数名称，默认：page
+							,
+							limitName : 'rows' // 每页数据量的参数名，默认：limit
+						},
+						parseData : function(res) {
+							if(res.result){
+								// 可进行数据操作
+								return {
+									"count" : 1000,
+									"msg" : res.msg,
+									"data" : res.data,
+									"code" : res.status
+								// code值为200表示成功
+								}
+							}
+							
+						},
 					},
 					done : function(elem, data) {
 						//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
-						//console.log(data);
 						var da=data.data;
 						//console.log(da[0].num)
 						form.val("itemFrom", {
-							"num":da[0].num,
-							"mtrcode" : da[0].mtrcode,
-							"mtrdescr" : da[0].mtrdescr,
-							"qty" : da[0].qty,
-							"inqty" : da[0].inqty,
-							"linecode":da[0].linecode
+							"num":da[0].TASK_NO,
+							"mtrcode" : da[0].ITEM_NO,
+							"mtrdescr" : da[0].ITEM_NAME,
+							"qty" : da[0].QTY_PLAN,
+							"linecode" : da[0].LINER_NAME,
+							"inqty" : da[0].QUANTITY,
 						});
 						form.render();// 重新渲染
+				}
+				});
+				
+				// 监听工具条
+				table.on('tool(colTable)', function(obj) {
+					console.log(obj)
+					var data = obj.data;
+					console.log(data)
+					if (obj.event === 'del') {
+						// 删除
+						del(obj,data.ID, data.ITEM_BARCODE);
 					}
 				});
+
 				// 监听
-				
 				form.on('submit(confirmSubmit)', function(data) {
-					//console.log(data.field)
-					var temp={"barcode":data.field.barcode,
-							"mtrcode":data.field.mtrcode,
-							"mtrdescr":data.field.mtrdescr,
-							"qty":data.field.qty};	
-					tabledata.push(temp)
-					tableIns.reload({
-						data:tabledata
-					});
+					addPut(data.field)
 				});
 			});	
+	
+	
+	$('#barcode').bind('keypress',function(event){
+        if(event.keyCode == "13") {
+        	//alert('你输入的内容为：' + $('#barcode').val());
+        	if($('#barcode').val()){
+        		getInfoBarcode($('#barcode').val())
+        	}else{
+        		layer.alert("请先扫描条码!");
+        	}
+        }
+    });
 });
+
+ function getInfoBarcode(barcode){
+	 var params={"barcode":barcode}
+		CoreUtil.sendAjax("input/getInfoBarcode", params, function(data) {
+			if (data.result) {
+				$( "input[name='item_code']").val(data.data[0].ITEM_NO);
+				$( "input[name='addqty']").val(data.data[0].QTY);
+			}else{
+				layer.alert(data.msg);
+			}
+		}, "GET", false, function(res) {
+			layer.alert(res.msg);
+		});
+ }
+ 
+ function addPut(obj){
+	 var params={"barcode":obj.barcode,"task_no":obj.num,"item_no":obj.mtrcode,"qty":obj.addqty};
+		CoreUtil.sendAjax("input/addPut", params, function(data) {
+			console.log(data)
+			if (data.result) {
+				$("#qty").val(data.data.Qty);
+				tableIns.reload({
+					data:data.data.List
+				});
+			}else{
+				layer.alert(data.msg);
+			}
+		}, "GET", false, function(res) {
+			layer.alert(res.msg);
+		});
+ }
+ 
+//删除
+ function del(obj,id, barcode) {
+ 	if (id != null) {
+ 		var params={"barcode":id};
+ 		layer.confirm('您确定要删除条码' + barcode + '吗？', {
+ 			btn : [ '确认', '返回' ]
+ 		// 按钮
+ 		}, function() {
+ 			CoreUtil.sendAjax("input/delete", params, function(data) {
+ 				console.log(data)
+ 				if (data.result == true) {
+					// 回调弹框
+					layer.alert("删除成功！", function() {
+						obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+						layer.closeAll();
+					});
+				} else {
+					layer.alert(data, function() {
+						layer.closeAll();
+					});
+				}
+ 			}, "GET", false, function(res) {
+ 				layer.alert(res.msg);
+ 			});
+ 		});
+ 	}
+ }
 
