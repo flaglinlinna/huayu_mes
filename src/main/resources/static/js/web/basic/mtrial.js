@@ -85,7 +85,6 @@ $(function() {
 				delMtrial(data, data.id, data.itemNo);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				console.log("edit");
 				getMtrial(data, data.id);
 			}
 		});
@@ -101,7 +100,6 @@ $(function() {
 		});
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
-			console.log(data)
 			// 重新加载table
 			load(data);
 			return false;

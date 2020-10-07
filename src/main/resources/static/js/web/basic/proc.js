@@ -72,7 +72,6 @@ $(function() {
 
 		// 监听操作
 		form.on('switch(isStatusTpl)', function(obj) {
-			console.log("switch");
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
@@ -83,7 +82,6 @@ $(function() {
 				delProc(data, data.id, data.procNo);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				console.log("edit");
 				getProc(data, data.id);
 			}
 		});
@@ -105,7 +103,6 @@ $(function() {
 		});
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
-			console.log(data)
 			// 重新加载table
 			load(data);
 			return false;

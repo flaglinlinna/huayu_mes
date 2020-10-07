@@ -100,12 +100,10 @@ $(function() {
 			}
 		});
 		form.on('checkbox(isStatusTpl)', function(obj) {//修改过程属性
-			//console.log(obj, this.value, this.name, obj.elem.checked);
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
-			console.log(data)
 			// 重新加载table
 			load(data);
 			return false;
@@ -156,7 +154,6 @@ $(function() {
 				// 新增
 				var procIdList="";
 				var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
-				//console.log(cList.length)
 				for(var i=0;i<cList.length;i++){//获取被选中的行
 					procIdList+=cList[i].id+";"//工序的ID序列，用“；”分隔
 				}
@@ -172,8 +169,6 @@ $(function() {
 		function setStatus(obj, id, name, checked) {
 			var jobAttr = checked ? 0 : 1;
 			var deaprtisStatus = checked ?  "勾选":"不勾选";
-			console.log(checked)
-			console.log(jobAttr)
 			layer.confirm('您确定要把工序：' + name + '过程属性设置为' + deaprtisStatus + '状态吗？',
 					{
 						btn1 : function(index) {
@@ -228,7 +223,6 @@ function getProcByClient(params){
 			data) {
 		if (data.result) {
 			var beSelected=data.data;
-			console.log(beSelected)
 			tableProc.reload({
 				done : function(res, curr, count) {
 					for(var i =0;i<res.data.length;i++){
@@ -290,7 +284,6 @@ function addSubmit(procIdlist,client) {
 			"proc":procIdlist,
 			"client" : client
 		};
-	console.log(procIdlist)
 
 	CoreUtil.sendAjax("base/client_proc/addItem", JSON.stringify(params), function(
 			data) {
@@ -313,7 +306,6 @@ function addSubmit(procIdlist,client) {
 
 //获取客户，工序信息
 function getProcList(id){
-	console.log(id)
 	CoreUtil.sendAjax("base/client_proc/getProcList", "",
 			function(data) {
 				if (data.result) {
@@ -321,7 +313,6 @@ function getProcList(id){
 						data:data.data.process,
 						done : function(res, curr, count) {
 							cleanProc();//清空之前的选中
-							console.log(id)
 							if(id != ''){
 								getProcByClient(id)
 							}

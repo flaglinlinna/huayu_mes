@@ -82,7 +82,6 @@ $(function() {
 
 		// 监听在职操作
 		form.on('switch(isStatusTpl)', function(obj) {
-			console.log("switch");
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
@@ -108,7 +107,6 @@ $(function() {
 		});
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
-			console.log(data)
 			// 重新加载table
 			load(data);
 			return false;

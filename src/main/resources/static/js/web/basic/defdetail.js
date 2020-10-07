@@ -139,7 +139,7 @@ $(function() {
 		function setStatus(obj, id, name, checked) {
 			// setStatus(obj, this.value, this.name, obj.elem.checked);
 			var isStatus = checked ? 1 : 0;
-			console.log(isStatus)
+			//console.log(isStatus)
 			var deaprtisStatus = checked ? "正常":"禁用";
 			// 正常/禁用
 
@@ -271,7 +271,6 @@ function getDefectiveList(id){
 				if (data.result) {
 				$("#defectTypeId").empty();
 				var bad=data.data;
-				console.log(bad)
 				for (var i = 0; i < bad.length; i++) {
 					if(i==0){
 						$("#defectTypeId").append("<option value=''>请点击选择</option>");
@@ -286,7 +285,6 @@ function getDefectiveList(id){
 				} else {
 					layer.alert(data.msg)
 				}
-				console.log(data)
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试");
 			});

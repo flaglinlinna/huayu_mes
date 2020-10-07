@@ -90,7 +90,6 @@ $(function() {
 				delCardData(data, data.id, data.empCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				//console.log("edit");
 				getCardData(data, data.id);
 			}
 		});
