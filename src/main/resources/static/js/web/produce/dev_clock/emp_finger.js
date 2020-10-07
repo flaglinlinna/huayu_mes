@@ -47,13 +47,13 @@ $(function() {
 			}, {
 				field : 'templateStr',
 				title : '指纹模板',
-				width : 450,
-			}, {
+			
+			},/* {
 				field : 'lastupdateDate',
 				title : '更新时间',
 				width : 145,
 				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
-			}, {
+			},*/ {
 				field : 'createDate',
 				title : '添加时间',
 				width : 145,
@@ -62,6 +62,7 @@ $(function() {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
+				width : 120,
 				toolbar : '#optBar'
 			} ] ],
 			done : function(res, curr, count) {

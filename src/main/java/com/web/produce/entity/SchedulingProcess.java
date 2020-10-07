@@ -2,8 +2,11 @@ package com.web.produce.entity;
 
 import com.app.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.web.basic.entity.Employee;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -95,6 +98,12 @@ public class SchedulingProcess extends BaseEntity {
     @ApiModelProperty(name = "empId", value = "员工ID")
     @Column
     protected Long empId;
+
+    @ApiModelProperty(name = "employee", hidden = true, value = "员工ID")
+    @ManyToOne
+    @JoinColumn(name = "empId", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected Employee employee;
 
     /**
      * 员工工号
@@ -221,6 +230,14 @@ public class SchedulingProcess extends BaseEntity {
 
     public void setEmpId(Long empId) {
         this.empId = empId;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public String getEmpCode() {

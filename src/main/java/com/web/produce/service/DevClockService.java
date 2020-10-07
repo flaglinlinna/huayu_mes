@@ -23,4 +23,6 @@ public interface DevClockService {
 	public ApiResponseResult getLineList() throws Exception;//获取线体
 	
 	public ApiResponseResult doEnabled(Long id, Integer enabled) throws Exception;// 是否有效
+	
+	public ApiResponseResult test(DevClock devClock) throws Exception;
 }

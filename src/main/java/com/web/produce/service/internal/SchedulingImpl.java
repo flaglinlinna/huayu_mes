@@ -8,9 +8,11 @@ import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.DepartmentDao;
+import com.web.basic.dao.EmployeeDao;
 import com.web.basic.dao.MtrialDao;
 import com.web.basic.dao.ProcessDao;
 import com.web.basic.entity.Department;
+import com.web.basic.entity.Employee;
 import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.Process;
 import com.web.produce.dao.SchedulingDao;
@@ -32,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.CallableStatementCreator;
@@ -52,10 +55,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 /**
  * 排产信息
@@ -159,7 +160,6 @@ public class SchedulingImpl implements SchedulingService {
         List<SearchFilter> filters1 =new ArrayList<>();
         if(StringUtils.isNotEmpty(keyword)){
             filters1.add(new SearchFilter("prodNo", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("groupNo", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("custName", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("linerName", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("deptName", SearchFilter.Operator.LIKE, keyword));
@@ -837,24 +837,61 @@ public class SchedulingImpl implements SchedulingService {
         return ApiResponseResult.failure("提取工序失败！");
     }
 
+    /**
+     * 获取生产制令单从表-工艺
+     * @param keyword
+     * @param pageRequest
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional
-    public ApiResponseResult getProcessLst(String keyword, PageRequest pageRequest) throws Exception{
+    public ApiResponseResult getProcessList(String keyword, Long mid, PageRequest pageRequest) throws Exception{
         //查询条件1
+        Sort sort = new Sort(Sort.Direction.ASC, "procOrder");
         List<SearchFilter> filters =new ArrayList<>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-        //查询条件2
-        List<SearchFilter> filters1 =new ArrayList<>();
-        if(StringUtils.isNotEmpty(keyword)){
-            filters1.add(new SearchFilter("", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("", SearchFilter.Operator.LIKE, keyword));
-            filters1.add(new SearchFilter("", SearchFilter.Operator.LIKE, keyword));
-        }
+        filters.add(new SearchFilter("mid", SearchFilter.Operator.EQ, mid));
         Specification<SchedulingProcess> spec = Specification.where(BaseService.and(filters, SchedulingProcess.class));
-        Specification<SchedulingProcess> spec1 =  spec.and(BaseService.or(filters1, SchedulingProcess.class));
-        Page<SchedulingProcess> page = schedulingProcessDao.findAll(spec1, pageRequest);
+        List<SchedulingProcess> list = schedulingProcessDao.findAll(spec, sort);
+        List<Process> list2 = processDao.findByDelFlagAndCheckStatus(0, 1);
 
-        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+        //封装数据
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        for(Process process : list2){
+            Map<String, Object> map = new HashMap<>();
+            //已选择
+            if(list.size() > 0){
+                for(SchedulingProcess item : list){
+                    if(process != null && item != null && StringUtils.equals(process.getProcNo(), item.getProcNo())){
+                        map.put("id", item.getId());
+                        map.put("mid", mid);
+                        map.put("procOrder", item.getProcOrder());
+                        map.put("procNo", item.getProcNo());
+                        map.put("procName", process.getProcName());
+                        map.put("jobAttr", item.getJobAttr());
+                        map.put("empId", item.getEmpId());
+                        map.put("empName", item.getEmployee()!=null ? item.getEmployee().getEmpName() : "");
+                        map.put("isCheck", 1);
+                        mapList.add(map);
+                        break;
+                    }
+                }
+            }
+
+            //未选择
+            map.put("id", null);
+            map.put("mid", mid);
+            map.put("procOrder", process.getProcOrder());
+            map.put("procNo", process.getProcNo());
+            map.put("procName", process.getProcName());
+            map.put("jobAttr", 0);
+            map.put("empId", null);
+            map.put("empName", "");
+            map.put("isCheck", 0);
+            mapList.add(map);
+        }
+
+        return ApiResponseResult.success().data(DataGrid.create(mapList, mapList.size(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
 }

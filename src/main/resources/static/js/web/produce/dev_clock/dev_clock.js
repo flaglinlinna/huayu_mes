@@ -101,9 +101,13 @@ $(function() {
 				delDevClock(data, data.id, data.devCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				console.log("edit");
 				getDevClock(data, data.id);
 			}
+		});
+		// 监听测试连接
+		form.on('submit(testLink)', function(data) {
+			testLink(data);
+			return false;
 		});
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
@@ -117,7 +121,6 @@ $(function() {
 		});
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
-			console.log(data)
 			// 重新加载table
 			load(data);
 			return false;
@@ -152,7 +155,6 @@ $(function() {
 			// setStatus(obj, this.value, this.name, obj.elem.checked);
 			var isStatus = checked ? 1 : 0;
 			var deaprtisStatus = checked ?  "有效":"无效";
-			console.log(isStatus)
 			
 			layer.confirm(
 					'您确定要把卡机设备：' + name + '设置为' + deaprtisStatus + '状态吗？', {
@@ -231,7 +233,6 @@ function getLineList(id){
 				if (data.result) {
 				$("#lineId").empty();
 				var line=data.data;
-				console.log(line)
 				for (var i = 0; i < line.length; i++) {
 					if(i==0){
 						$("#lineId").append("<option value=''>请点击选择</option>");
@@ -246,12 +247,31 @@ function getLineList(id){
 				} else {
 					layer.alert(data.msg)
 				}
-				console.log(data)
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试");
 			});
 }
-
+//测试连接
+function testLink(obj) {
+	CoreUtil.sendAjax("produce/dev_clock/test", JSON.stringify(obj.field),
+			function(data) {
+	         	layer.alert(data.msg);
+				/*if (data.result) {
+					layer.alert("操作成功", function() {
+						layer.closeAll();
+						cleanDevClock();
+						// 加载页面
+						loadAll();
+					});
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+				}*/
+			}, "POST", false, function(res) {
+				layer.alert(res.msg);
+			});
+}
 // 新增卡机信息提交
 function addSubmit(obj) {
 	CoreUtil.sendAjax("produce/dev_clock/add", JSON.stringify(obj.field),
