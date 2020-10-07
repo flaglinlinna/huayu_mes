@@ -37,5 +37,6 @@ public interface SchedulingService {
     //提取工序存储过程
     public ApiResponseResult getProcessProc() throws Exception;
 
-    public ApiResponseResult getProcessLst(String keyword, PageRequest pageRequest) throws Exception;
+    //获取生产制令单从表-工艺
+    public ApiResponseResult getProcessList(String keyword, Long mid, PageRequest pageRequest) throws Exception;
 }

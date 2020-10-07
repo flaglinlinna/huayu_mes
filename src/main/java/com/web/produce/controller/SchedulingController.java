@@ -273,13 +273,13 @@ public class SchedulingController extends WebController {
     }
 
     @ApiOperation(value = "获取列表", notes = "获取列表", hidden = true)
-    @RequestMapping(value = "/getProcessLst", method = RequestMethod.GET)
+    @RequestMapping(value = "/getProcessList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getProcessLst(String keyword){
-        String method = "/produce/scheduling/getProcessLst";String methodName ="获取列表";
+    public ApiResponseResult getProcessList(String keyword, Long mid){
+        String method = "/produce/scheduling/getProcessList";String methodName ="获取列表";
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
-            ApiResponseResult result = schedulingService.getProcessLst(keyword, super.getPageRequest(sort));
+            ApiResponseResult result = schedulingService.getProcessList(keyword, mid, super.getPageRequest(sort));
             logger.debug("获取列表=getProcessLst:");
             getSysLogService().success(method, methodName, null);
             return result;

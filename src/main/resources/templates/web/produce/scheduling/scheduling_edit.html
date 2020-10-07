@@ -96,28 +96,26 @@
         </form>
     </div>
 
-    <!--<div class="layui-tab layui-tab-brief" lay-filter="tabFilter">-->
-        <!--<ul class="layui-tab-title">-->
-            <!--<li lay-id="add" class="layui-this">工艺维护</li>-->
-            <!--<li lay-id="list">工单组件</li>-->
-        <!--</ul>-->
-        <!--<div class="layui-tab-content" style="height: 100px; display: block">-->
-            <!--<div class="layui-tab-item layui-show">-->
-                <!--&lt;!&ndash;工艺维护列表&ndash;&gt;-->
-                <!--<table id="iList" lay-filter="iTable"></table>-->
-            <!--</div>-->
-            <!--<div class="layui-tab-item">-->
-                <!--&lt;!&ndash;工单组件列表&ndash;&gt;-->
-                <!--<table id="iList2" lay-filter="iTable2"></table>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
+    <div class="layui-tab layui-tab-brief" lay-filter="tabFilter">
+        <ul class="layui-tab-title">
+            <li lay-id="add" class="layui-this">工艺维护</li>
+            <li lay-id="list">工单组件</li>
+        </ul>
+        <div class="layui-tab-content" style="height: 100px; display: block">
+            <div class="layui-tab-item layui-show">
+                <!--工艺维护列表-->
+                <table id="iList" lay-filter="iTable"></table>
+            </div>
+            <div class="layui-tab-item">
+                <!--工单组件列表-->
+                <table id="iList2" lay-filter="iTable2"></table>
+            </div>
+        </div>
+    </div>
 
     <script th:inline="javascript">
         var id = [[${id}]];
         var scheduling = [[${scheduling}]];
-        console.log("id:"+id);
-        console.log("scheduling:"+scheduling);
     </script>
     <script th:src="@{/js/web/produce/scheduling/scheduling_edit.js}" src="/js/web/produce/scheduling/scheduling_edit.js"></script>
 </div>
