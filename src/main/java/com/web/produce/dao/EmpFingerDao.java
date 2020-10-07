@@ -14,4 +14,5 @@ public interface EmpFingerDao extends CrudRepository<EmpFinger, Long>,JpaSpecifi
 	public List<EmpFinger> findByDelFlag(Integer delFlag);
 	public EmpFinger findById(long id);
 	public int countByDelFlagAndTemplateStr(Integer delFlag, String templateStr);//查询指纹是否存在
+	
 }
