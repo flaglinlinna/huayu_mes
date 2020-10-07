@@ -73,7 +73,6 @@ $(function() {
 				delClient(data, data.id, data.custNo);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				console.log("edit");
 				getClient(data, data.id);
 			}
 		});
@@ -89,7 +88,6 @@ $(function() {
 		});
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
-			console.log(data)
 			// 重新加载table
 			load(data);
 			return false;

@@ -62,7 +62,7 @@ public class DevClock extends BaseEntity {
     @Column
     protected Long lineId;
 
-    @ApiModelProperty(name="line",hidden=true,value="不良类别ID")
+    @ApiModelProperty(name="line",hidden=true,value="线别ID")
     @ManyToOne
     @JoinColumn(name = "lineId", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)

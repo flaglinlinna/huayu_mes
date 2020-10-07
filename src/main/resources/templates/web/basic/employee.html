@@ -32,9 +32,9 @@
 			<table id="employeeList" lay-filter="employeeTable"></table>
 			<script type="text/html" id="statusTpl">
             {{#  if(d.empStatus){ }}
-            <input type="checkbox" name="{{d.empName}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
+            <input type="checkbox" name="{{d.empName}}" value="{{d.id}}"  lay-skin="switch" lay-text="在职|离职" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.empName}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.empName}}" value="{{d.id}}" lay-skin="switch" lay-text="在职|离职"  lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 			<script type="text/html" id="optBar">
@@ -43,7 +43,7 @@
 		</div>
 		<!--添加或编辑员工信息-->
 		<div id="setEmployee" class="layer_self_wrap"
-			style="width: 500px; display: none;margin-left: 10px;">
+			style="width: 500px; display: none; margin-left: 10px;">
 			<form id="employeeForm" class="layui-form layui-form-pane"
 				lay-filter="employeeForm" method="post" action=""
 				style="margin-top: 20px;">
@@ -66,8 +66,8 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">部门</label>
 					<div class="layui-input-inline">
-						<input id="custNameS" name="custNameS"
-							autocomplete="off" class="layui-input" type="text" />
+						<input id="custNameS" name="custNameS" autocomplete="off"
+							class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -82,16 +82,18 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">入职日期</label>
 					<div class="layui-input-inline">
-					<input type="text" class="layui-input" name="joinDate" id="joinDate">
+						<input type="text" class="layui-input" name="joinDate"
+							id="joinDate">
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">离职日期</label>
 					<div class="layui-input-inline">
-					<input type="text" class="layui-input"  name="leaveDate" id="leaveDate">
+						<input type="text" class="layui-input" name="leaveDate"
+							id="leaveDate">
 					</div>
 				</div>
-				<div class="layui-form-item">	
+				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 0px;">
 						<button class="layui-btn layui-btn-sm" lay-submit=""
 							lay-filter="addSubmit">提交</button>
