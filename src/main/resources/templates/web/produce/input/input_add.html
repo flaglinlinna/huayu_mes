@@ -37,7 +37,7 @@
 							method="post" action="">
 							<div class="layui-form-item">
 								<label class="layui-form-label">制令单号</label>
-								<div class="layui-input-inline">
+								<div class="layui-input-inline" style="width: 310px;">
 									<input type="text" name="num" placeholder="请选择" autocomplete="off"
 										class="layui-input"  readonly="readonly" lay-verify="required" id="num">
 								</div>
@@ -56,11 +56,11 @@
 							<div class="layui-form-item">
 								<div class="layui-inline">
 									<label class="layui-form-label">物料描述</label>
-									<div class="layui-input-inline" style="width: 310px;">
+									<div class="layui-input-inline" style="width: 430px;">
 										<input id="mtrdescr" name="mtrdescr" autocomplete="off"
 											style="background: #efefef;" class="layui-input" disabled type="text" />
 									</div>
-									<label class="layui-form-label">拉别</label>
+									<label class="layui-form-label">组长</label>
 									<div class="layui-input-inline" style="width: 70px;">
 										<input id="linecode" name="linecode" autocomplete="off"
 											style="background: #efefef;" class="layui-input" disabled type="text" />
@@ -77,12 +77,17 @@
 								<div class="layui-inline">
 									<label class="layui-form-label">条码</label>
 									<div class="layui-input-inline">
-										<input id="barcode" name="barcode" autocomplete="off"
-											lay-verify="required" class="layui-input" type="text" />
+										<input  id="barcode" name="barcode" autocomplete="off"
+											 class="layui-input" type="text" />
+									</div>
+									<label class="layui-form-label">物料编号</label>
+									<div class="layui-input-inline">
+										<input  name="item_code" autocomplete="off"
+										lay-verify="required"	class="layui-input" type="text" />
 									</div>
 									<label class="layui-form-label">数量</label>
 									<div class="layui-input-inline">
-										<input id="addqty" name="addqty" autocomplete="off"
+										<input name="addqty" autocomplete="off"
 										lay-verify="required"	class="layui-input" type="text" />
 									</div>
 									<button type="button" class="layui-btn layui-btn-sm" lay-submit=""
@@ -102,7 +107,6 @@
 			</fieldset>
 			<table id="colTable" lay-filter="colTable" style="margin-top: -20px;"></table>
 			<script type="text/html" id="optBar">
-            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 		</div>
