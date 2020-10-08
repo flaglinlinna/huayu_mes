@@ -131,7 +131,6 @@ $(function() {
 					limitName : 'rows' // 每页数据量的参数名，默认：limit
 				},
 				parseData : function(res) {
-					console.log(res)
 					if(res.result){
 						// 可进行数据操作
 						return {
@@ -164,12 +163,10 @@ $(function() {
 		});
 		
 		form.on('checkbox(isStatusTpl)', function(obj) {//修改过程属性
-			console.log(obj);
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
-			console.log(data)
 			// 重新加载table
 			load(data);
 			return false;
@@ -202,7 +199,6 @@ $(function() {
 		})
 		//监听单元格编辑
 		  table.on('edit(client_procTable)', function(obj){
-			  console.log(obj)
 		    var value = obj.value //得到修改后的值
 		    ,data = obj.data //得到所在行所有键值
 		    ,field = obj.field; //得到字段
@@ -236,12 +232,10 @@ $(function() {
 		
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {	
-			console.log(data)
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
 				var procIdList="";
 				var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
-				//console.log(cList.length)
 				for(var i=0;i<cList.length;i++){//获取被选中的行
 					procIdList+=cList[i].id+","//工序的ID序列，用“；”分隔
 				}
@@ -336,10 +330,8 @@ function getProcByClient(params){
 			data) {
 		if (data.result) {
 			var beSelected=data.data;
-			console.log(beSelected)
 			tableProc.reload({
 				done : function(res, curr, count) {
-					console.log(res)
 					for(var i =0;i<res.data.length;i++){
 						for(var j=0;j<beSelected.length;j++){
 							if(res.data[i].id == beSelected[j].procId){
@@ -422,17 +414,14 @@ function addSubmit(procIdlist,itemIds,itemNos) {
 
 //获取客户，工序信息
 function getAddList(id){
-	console.log(id)
 	CoreUtil.sendAjax("base/prodproc/getAddList", "",
 			function(data) {
-		console.log(data)
 				if (data.result) {
 					//工序表
 					tableProc.reload({
 						data:data.data.Process,
 						done : function(res, curr, count) {
 							cleanProc();//清空之前的选中
-							console.log(id)
 							if(id != ''){
 								getProcByClient(id)
 							}
@@ -440,7 +429,6 @@ function getAddList(id){
 					});
 					$("#pkClient").empty();
 					var c=data.data.Client;
-					//console.log(c)
 					for (var i = 0; i < c.length; i++) {
 						if(i==0){
 							$("#pkClient").append("<option value=''>请点击选择</option>");

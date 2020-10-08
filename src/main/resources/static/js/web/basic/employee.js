@@ -53,7 +53,7 @@ $(function() {
 				title : '员工状态',
 				templet : '#statusTpl',
 				align : 'center',
-				width:90
+				width:100
 			}, {
 				field : 'joinDate',
 				title : '入职日期',
@@ -91,7 +91,7 @@ $(function() {
 				pageCurr = curr;
 			}
 		});
-		form.on('checkbox(isStatusTpl)', function(obj) {//修改员工状态
+		form.on('switch(isStatusTpl)', function(obj) {//修改员工状态
 			//console.log(obj, this.value, this.name, obj.elem.checked);
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
@@ -103,7 +103,6 @@ $(function() {
 				delEmployee(data, data.id, data.custNo);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				console.log("edit");
 				getEmployee(data, data.id);
 			}
 		});
@@ -119,7 +118,6 @@ $(function() {
 		});
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
-			console.log(data)
 			// 重新加载table
 			load(data);
 			return false;

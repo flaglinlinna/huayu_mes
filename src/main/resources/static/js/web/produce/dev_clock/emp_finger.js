@@ -85,7 +85,6 @@ $(function() {
 				delEmpFinger(data, data.id, data.empName);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				console.log("edit");
 				getEmpFinger(data, data.id);
 			}
 		});
@@ -101,7 +100,6 @@ $(function() {
 		});
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
-			console.log(data)
 			// 重新加载table
 			load(data);
 			return false;
@@ -166,7 +164,6 @@ function getEmpList(id){
 				if (data.result) {
 				$("#empId").empty();
 				var emp=data.data;
-				console.log(emp)
 				for (var i = 0; i < emp.length; i++) {
 					if(i==0){
 						$("#empId").append("<option value=''>请点击选择</option>");
@@ -181,7 +178,7 @@ function getEmpList(id){
 				} else {
 					layer.alert(data.msg)
 				}
-				console.log(data)
+				//console.log(data)
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试");
 			});

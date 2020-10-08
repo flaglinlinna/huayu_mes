@@ -115,14 +115,14 @@ function addProc() {
 						$("#mtrial_id").append("<option value=''>请点击选择</option>");
 					}
 					$("#mtrial_id").append("<option value=" + mtl[i].id+ ">" + mtl[i].bsName + "</option>");
-					console.log(mtl[i].bsName)
+					//console.log(mtl[i].bsName)
 				}			
 				layui.form.render('select');
 				openProc(null, "添加工序");
 				} else {
 					layer.alert(data.msg)
 				}
-				console.log(data)
+				//console.log(data)
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试");
 			});
