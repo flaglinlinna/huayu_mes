@@ -4,6 +4,8 @@ import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.basic.entity.Defective;
 import com.web.produce.entity.Scheduling;
+import com.web.produce.entity.SchedulingItem;
+import com.web.produce.entity.SchedulingProcess;
 import com.web.produce.entity.SchedulingTemp;
 import com.web.produce.service.SchedulingService;
 import io.swagger.annotations.Api;
@@ -63,9 +65,9 @@ public class SchedulingController extends WebController {
             ApiResponseResult result = schedulingService.getSchedulData(id);
             mav.addObject("id", id);
             if(result != null){
-                mav.addObject("scheduling", result.getData());
+                mav.addObject("mapData", result.getData());
             }else{
-                mav.addObject("scheduling", null);
+                mav.addObject("mapData", null);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -272,22 +274,77 @@ public class SchedulingController extends WebController {
         }
     }
 
-    @ApiOperation(value = "获取列表", notes = "获取列表", hidden = true)
+    @ApiOperation(value = "获取工艺列表", notes = "获取工艺列表", hidden = true)
     @RequestMapping(value = "/getProcessList", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getProcessList(String keyword, Long mid){
-        String method = "/produce/scheduling/getProcessList";String methodName ="获取列表";
+        String method = "/produce/scheduling/getProcessList";String methodName ="获取工艺列表";
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingService.getProcessList(keyword, mid, super.getPageRequest(sort));
-            logger.debug("获取列表=getProcessLst:");
+            logger.debug("获取工艺列表=getProcessLst:");
             getSysLogService().success(method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("获取列表失败！", e);
+            logger.error("获取工艺列表失败！", e);
             getSysLogService().error(method, methodName, e.toString());
-            return ApiResponseResult.failure("获取列表失败！");
+            return ApiResponseResult.failure("获取工艺列表失败！");
+        }
+    }
+
+    @ApiOperation(value = "编辑工艺", notes = "编辑工艺", hidden = true)
+    @RequestMapping(value = "/editProcess", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult editProcess(SchedulingProcess schedulingProcess){
+        String method = "/produce/scheduling/editProcess";String methodName ="编辑工艺";
+        try{
+            ApiResponseResult result = schedulingService.editProcess(schedulingProcess);
+            logger.debug("编辑工艺=editProcess:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("编辑工艺失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("编辑工艺失败！");
+        }
+    }
+
+    @ApiOperation(value = "获取组件列表", notes = "获取组件列表", hidden = true)
+    @RequestMapping(value = "/getItemList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getItemList(String keyword, Long mid){
+        String method = "/produce/scheduling/getItemList";String methodName ="获取组件列表";
+        try {
+            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = schedulingService.getItemList(keyword, mid, super.getPageRequest(sort));
+            logger.debug("获取组件列表=getItemList:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取组件列表失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("获取组件列表失败！");
+        }
+    }
+
+    @ApiOperation(value = "编辑组件", notes = "编辑组件", hidden = true)
+    @RequestMapping(value = "/editItem", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult editItem(SchedulingItem schedulingItem){
+        String method = "/produce/scheduling/editItem";String methodName ="编辑组件";
+        try {
+            ApiResponseResult result = schedulingService.editItem(schedulingItem);
+            logger.debug("编辑组件=editItem:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("编辑组件失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("编辑组件失败！");
         }
     }
 }

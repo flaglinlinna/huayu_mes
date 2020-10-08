@@ -2,6 +2,8 @@ package com.web.produce.service;
 
 import com.app.base.data.ApiResponseResult;
 import com.web.produce.entity.Scheduling;
+import com.web.produce.entity.SchedulingItem;
+import com.web.produce.entity.SchedulingProcess;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,4 +41,11 @@ public interface SchedulingService {
 
     //获取生产制令单从表-工艺
     public ApiResponseResult getProcessList(String keyword, Long mid, PageRequest pageRequest) throws Exception;
+
+    public ApiResponseResult editProcess(SchedulingProcess schedulingProcess) throws Exception;
+
+    //获取生产制令单从表-组件
+    public ApiResponseResult getItemList(String keyword, Long mid, PageRequest pageRequest) throws Exception;
+
+    public ApiResponseResult editItem(SchedulingItem schedulingItem) throws Exception;
 }

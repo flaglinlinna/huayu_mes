@@ -10,6 +10,31 @@ $(function () {
             ,laydate = layui.laydate
             ,upload = layui.upload;
 
+        //监听搜索框
+        form.on('submit(search)', function(data){
+            //重新加载table
+            load(data);
+            return false;
+        });
+        form.on('submit(editBtn)', function(data){
+            //新增
+            doEdit();
+            return false;
+        });
+        form.on('select(itemId)', function(data){
+            var itemId = data.value;
+            for(var i = 0; i < itemList.length; i++){
+                if(itemId == itemList[i].id){
+                    $("#itemName").val(itemList[i].itemName);
+                    break;
+                }
+            }
+            return false;
+        });
+        laydate.render({
+            elem: '#prodDate'
+        });
+
         tableIns=table.render({
             elem: '#iList'
             ,url:context+'/produce/scheduling/getProcessList'
@@ -36,7 +61,7 @@ $(function () {
                 ,{field:'procOrder', title:'工序顺序', width:100}
                 ,{field:'procNo', title:'工序编号', width:100}
                 ,{field:'procName', title:'工序名称', width:150}
-                ,{field:'jobAttr', title:'过程属性', width:100}
+                ,{field:'jobAttr', title:'过程属性', width:100, templet:'#statusTpl'}
                 ,{field:'empName', title:'作业人员', width:150}
                 ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar'}
                 //,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
@@ -51,10 +76,23 @@ $(function () {
                 }
             }
         });
+        //监听工具条-工艺维护
+        table.on('tool(iTable)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'edit1'){
+                //编辑
+                getProcess(data,data.id);
+            }
+        });
+        form.on('submit(editSubmit1)', function(data){
+            //编辑-工艺维护
+            doEditProcess();
+            return false;
+        });
 
         tableIns2=table.render({
             elem: '#iList2'
-            ,url:context+'/produce/scheduling/getProcessList'
+            ,url:context+'/produce/scheduling/getItemList'
             ,method: 'get' //默认：get请求
             ,where:{ mid:id }
             ,cellMinWidth: 80
@@ -74,11 +112,11 @@ $(function () {
             },
             cols: [[
                 {type:'numbers'}
-                ,{field:'', title:'物料编号', width:100}
-                ,{field:'', title:'物料描述', width:100}
-                ,{field:'', title:'用量', width:100}
-                ,{field:'', title:'作业员', width:100}
-                ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar'}
+                ,{field:'itemNo', title:'物料编号', width:150}
+                ,{field:'itemName', title:'物料描述', width:250, templet:'<span>{{d.mtrial ? d.mtrial.itemName : ""}}</span>'}
+                ,{field:'itemQty', title:'用量', width:100}
+                ,{field:'empName', title:'作业员', width:100, templet:'<span>{{ d.employee ? d.employee.empName : "" }}</span>'}
+                ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
             ]]
             ,done: function(res, curr, count){
                 //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -91,16 +129,17 @@ $(function () {
                 pageCurr2=curr;
             }
         });
-
-        //监听搜索框
-        form.on('submit(search)', function(data){
-            //重新加载table
-            load(data);
-            return false;
+        //监听工具条-工单组件
+        table.on('tool(iTable2)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'edit2'){
+                //编辑
+                getItem(data,data.id);
+            }
         });
-        form.on('submit(editBtn)', function(data){
-            //新增
-            //doEdit();
+        form.on('submit(editSubmit2)', function(data){
+            //编辑-工单组件
+            doEditItem();
             return false;
         });
 
@@ -111,17 +150,42 @@ $(function () {
 
 //渲染基本信息
 function getScheduling(){
+    var optionHtml = '<option value=""></option>';
+    var optionHtml2 = '<option value=""></option>';
+    var optionHtml3 = '<option value=""></option>';
+    var optionHtml4 = '<option value=""></option>';
+    //添加物料列表
+    for(var i = 0; i < itemList.length; i++){
+        optionHtml += '<option value="'+itemList[i].id+'">'+itemList[i].itemNo+'</option>';
+    }
+    $("#itemId").html(optionHtml);
+    //添加客户信息
+    for(var i = 0; i < clientList.length; i++){
+        optionHtml2 += '<option value="'+clientList[i].id+'">'+clientList[i].custName+'</option>';
+    }
+    $("#custId").html(optionHtml2);
+    //添加线别信息
+    for(var i = 0; i < lineList.length; i++){
+        optionHtml3 += '<option value="'+lineList[i].lineNo+'">'+lineList[i].custName+'</option>';
+    }
+    //$("#lineNo").html(optionHtml3);
+    //添加部门信息
+    for(var i = 0; i < orgList.length; i++){
+        optionHtml4 += '<option value="'+orgList[i].id+'">'+orgList[i].orgName+'</option>';
+    }
+    $("#deptId").html(optionHtml4);
+
     $("#id").val(id);
     $("#taskNo").val(scheduling.taskNo);
     $("#prodNo").val(scheduling.prodNo);
     $("#produceState").val(scheduling.produceState);
-    $("#itemNo").val(scheduling.itemNo);
+    $("#itemId").val(scheduling.itemId);
     $("#itemName").val(scheduling.itemName);
     $("#groupNo").val(scheduling.groupNo);
-    $("#custName").val(scheduling.custName);
+    $("#custId").val(scheduling.custId);
     $("#linerName").val(scheduling.linerName);
     $("#prodDate").val(scheduling.prodDate);
-    $("#deptName").val(scheduling.deptName);
+    $("#deptId").val(scheduling.deptId);
     $("#classNo").val(scheduling.classNo);
     $("#qtyPlan").val(scheduling.qtyPlan);
 
@@ -129,6 +193,7 @@ function getScheduling(){
     layui.form.render('select');
 }
 
+//编辑
 function doEdit(){
     $.ajax({
         type: "POST",
@@ -152,3 +217,181 @@ function doEdit(){
         }
     });
 }
+
+//获取编辑信息-工艺维护
+function getProcess(obj, id){
+    console.log(obj);
+    var optionHtml = '<option value=""></option>';
+    //添加作业员列表
+    for(var i = 0; i < employeeList.length; i++){
+        optionHtml += '<option value="'+employeeList[i].id+'">'+employeeList[i].empName+'</option>';
+    }
+    $("#empId1").html(optionHtml);
+
+    $("#processId1").val(id);
+    $("#mid1").val(obj.mid);
+    $("#procOrder1").val(obj.procOrder);
+    // $("#jobAttr1").val(obj.jobAttr);
+    if(obj.jobAttr==1){
+        $("#jobAttr1").prop("checked", true);
+    }
+    $("#empId1").val(obj.empId);
+    $("#procNo1").val(obj.procNo);
+    $("#procName1").val(obj.procName);
+
+    //渲染
+    layui.form.render('select');
+    layui.form.render('checkbox');
+
+    //打开弹出框
+    openProcess("编辑工艺");
+}
+//编辑弹出框-工艺维护
+function openProcess(title){
+    layer.open({
+        type:1,
+        title: title,
+        fixed:false,
+        resize :false,
+        shadeClose: true,
+        area: ['600px'],
+        content:$('#editDiv1'),
+        end:function(){
+            cleanProcess();
+        }
+    });
+}
+//清空编辑框数据-工艺维护
+function cleanProcess(){
+    $("#processId1").val("");
+    $("#mid1").val("");
+    $("#procOrder1").val("");
+    $("#jobAttr1").val("");
+    $("#empId1").val("");
+    $("#procNo1").val("");
+    $("#procName1").val("");
+
+    //渲染
+    layui.form.render('select');
+}
+//编辑-工艺维护
+function doEditProcess(){
+    $.ajax({
+        type: "POST",
+        data: $("#editForm1").serialize(),
+        url: context+"/produce/scheduling/editProcess",
+        success: function (res) {
+            if (res.result) {
+                layer.alert("编辑成功",function(){
+                    layer.closeAll();
+                    loadAll1();
+                });
+            } else {
+                layer.alert(res.msg,function(){
+                    layer.closeAll();
+                });
+            }
+        },
+        error: function () {
+            layer.alert("操作请求错误，请您稍后再试",function(){
+                layer.closeAll();
+            });
+        }
+    });
+}
+
+
+//获取编辑信息-工单组件
+function getItem(obj, id){
+    var optionHtml = '<option value=""></option>';
+    //添加作业员列表
+    for(var i = 0; i < employeeList.length; i++){
+        optionHtml += '<option value="'+employeeList[i].id+'">'+employeeList[i].empName+'</option>';
+    }
+    $("#empId2").html(optionHtml);
+
+    $("#itemId2").val(id);
+    $("#mid2").val(obj.mid);
+    $("#itemNo2").val(obj.itemNo);
+    $("#itemName2").val(obj.mtrial ? obj.mtrial.itemName : "");
+    $("#itemQty2").val(obj.itemQty);
+    $("#empId2").val(obj.empId);
+
+    //渲染
+    layui.form.render('select');
+
+    //打开弹出框
+    openItem("编辑工单组件");
+}
+//编辑弹出框-工单组件
+function openItem(title){
+    layer.open({
+        type:1,
+        title: title,
+        fixed:false,
+        resize :false,
+        shadeClose: true,
+        area: ['600px'],
+        content:$('#editDiv2'),
+        end:function(){
+            cleanItem();
+        }
+    });
+}
+//清空编辑框数据-工单组件
+function cleanItem(){
+    $("#itemId2").val("");
+    $("#mid2").val("");
+    $("#itemNo2").val("");
+    $("#itemName2").val("");
+    $("#itemQty2").val("");
+    $("#empId2").val("");
+
+    //渲染
+    layui.form.render('select');
+}
+//编辑-工单组件
+function doEditItem(){
+    $.ajax({
+        type: "POST",
+        data: $("#editForm2").serialize(),
+        url: context+"/produce/scheduling/editItem",
+        success: function (res) {
+            if (res.result) {
+                layer.alert("编辑成功",function(){
+                    layer.closeAll();
+                    loadAll2();
+                });
+            } else {
+                layer.alert(res.msg,function(){
+                    layer.closeAll();
+                });
+            }
+        },
+        error: function () {
+            layer.alert("操作请求错误，请您稍后再试",function(){
+                layer.closeAll();
+            });
+        }
+    });
+}
+
+//重新加载表格-工艺维护（全部）
+function loadAll1(){
+    //重新加载table
+    tableIns.reload({
+        page: {
+            curr: pageCurr //从当前页码开始
+        }
+    });
+}
+//重新加载表格-工单组件（全部）
+function loadAll2(){
+    //重新加载table
+    tableIns2.reload({
+        page: {
+            curr: pageCurr2 //从当前页码开始
+        }
+    });
+}
+

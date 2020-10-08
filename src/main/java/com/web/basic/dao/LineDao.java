@@ -12,4 +12,5 @@ public interface LineDao extends CrudRepository<Line, Long>,JpaSpecificationExec
 	public List<Line> findByDelFlag(Integer delFlag);
 	public Line findById(long id);
 	public int countByDelFlagAndLineNo(Integer delFlag, String lineNo);//查询编号是否存在
+    public List<Line> findByDelFlagAndCheckStatus(Integer delFalg, Integer checkStatus);
 }
