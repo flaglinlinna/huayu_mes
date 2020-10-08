@@ -157,7 +157,7 @@ public class PrcUtils {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call " + prc_name + "(?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call " + prc_name + "(?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, company);
 				cs.setString(2, facoty);
@@ -165,6 +165,7 @@ public class PrcUtils {
 				cs.setString(4, user_id+"");
 				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
 				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
 				//cs.registerOutParameter(7, -10);// 输出参数 追溯数据
 				return cs;
 			}
@@ -175,7 +176,7 @@ public class PrcUtils {
 				cs.execute();
 				result.add(cs.getInt(5));
 				result.add(cs.getString(6));
-				
+				result.add(cs.getInt(7));
 				System.out.println(l);
 				return result;
 			}
