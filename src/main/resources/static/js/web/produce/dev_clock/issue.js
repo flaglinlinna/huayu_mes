@@ -185,14 +185,16 @@ $(function() {
 						time : 10000, // 10s后自动关闭
 						btn : [ '确定' ]
 					});
+				}else{
+					for (var i = 0; i < dList.length; i++) {// 获取被选中的行
+						devList += dList[i].id + ";"// 用“；”分隔
+					}
+					for (var i = 0; i < eList.length; i++) {// 获取被选中的行
+						empList += eList[i].id + ";"// 用“；”分隔
+					}
+					addSubmit(devList, empList);
 				}
-				for (var i = 0; i < dList.length; i++) {// 获取被选中的行
-					devList += dList[i].id + ";"// 用“；”分隔
-				}
-				for (var i = 0; i < eList.length; i++) {// 获取被选中的行
-					empList += eList[i].id + ";"// 用“；”分隔
-				}
-				addSubmit(devList, empList);
+				
 			} else {
 				// editSubmit(data);
 			}
