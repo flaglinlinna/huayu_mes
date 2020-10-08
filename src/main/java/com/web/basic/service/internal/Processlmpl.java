@@ -17,6 +17,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.ProcessDao;
 import com.web.basic.entity.Process;
@@ -49,6 +50,7 @@ public class Processlmpl implements ProcessService {
             return ApiResponseResult.failure("该工序已存在，请填写其他工序编码！");
         }
         process.setCreateDate(new Date());
+        process.setCreateBy(UserUtil.getSessionUser().getId());
         processDao.save(process);
 
         return ApiResponseResult.success("工序添加成功！").data(process);
@@ -85,6 +87,7 @@ public class Processlmpl implements ProcessService {
             o.setProcNo(process.getProcNo().trim());
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setProcName(process.getProcName());
         o.setProcOrder(process.getProcOrder());
         processDao.save(o);
@@ -122,8 +125,9 @@ public class Processlmpl implements ProcessService {
         if(o == null){
             return ApiResponseResult.failure("该工序不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());
         processDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -142,6 +146,7 @@ public class Processlmpl implements ProcessService {
             return ApiResponseResult.failure("工序不存在！");
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setCheckStatus(checkStatus);
         processDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);

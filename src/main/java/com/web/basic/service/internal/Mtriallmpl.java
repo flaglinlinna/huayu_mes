@@ -17,6 +17,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.MtrialDao;
 import com.web.basic.entity.Mtrial;
@@ -49,6 +50,7 @@ public class Mtriallmpl implements MtrialService {
             return ApiResponseResult.failure("该物料已存在，请填写其他物料编号！");
         }
         mtrial.setCreateDate(new Date());
+        mtrial.setCreateBy(UserUtil.getSessionUser().getId());
         mtrialDao.save(mtrial);
 
         return ApiResponseResult.success("物料添加成功！").data(mtrial);
@@ -85,6 +87,7 @@ public class Mtriallmpl implements MtrialService {
             o.setItemNo(mtrial.getItemNo().trim());
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setItemName(mtrial.getItemName());
         o.setItemNameS(mtrial.getItemNameS());
         o.setItemModel(mtrial.getItemModel());
@@ -125,8 +128,9 @@ public class Mtriallmpl implements MtrialService {
         if(o == null){
             return ApiResponseResult.failure("该物料不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());
         mtrialDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -145,6 +149,7 @@ public class Mtriallmpl implements MtrialService {
             return ApiResponseResult.failure("物料不存在！");
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setCheckStatus(checkStatus);
         mtrialDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
