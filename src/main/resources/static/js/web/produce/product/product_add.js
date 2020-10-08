@@ -184,7 +184,7 @@ $(function() {
 						},{
 							field : 'QTY_PLAN',
 							title : '数量',
-							edit:'text',
+							edit:'text',style:'background: #98FB98;opacity: 0.3',
 							width : 80
 						}] ],
 						page : false,
