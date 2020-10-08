@@ -5,7 +5,6 @@
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div style="margin: 10px">
-        <!--搜索框-->
         <form id="editForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input type="text" id="id" name="id" hidden="true">
             <div class="layui-collapse" lay-accordion="">
@@ -28,19 +27,29 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label" >生产状态</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="produceState" name="produceState" readonly class="layui-input">
+                                    <!--<input type="text" id="produceState" name="produceState" readonly class="layui-input">-->
+                                    <select id="produceState" name='produceState' class="layui-input">
+                                        <option value=""></option>
+                                        <option value="待产">待产</option>
+                                        <option value="生产">生产</option>
+                                        <option value="完工">完工</option>
+                                        <option value="停工">停工</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label">物料编码</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="itemNo" name="itemNo" readonly class="layui-input">
+                                    <!--<input type="text" id="itemNo" name="itemNo" class="layui-input">-->
+                                    <select id="itemId" name='itemId' lay-filter="itemId" class="layui-input">
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label">物料描述</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="itemName" name="itemName" autocomplete="off" placeholder="" class="layui-input">
+                                    <input type="text" id="itemName" name="itemName" readonly placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -52,13 +61,19 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">客户</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="custName" name="custName" autocomplete="off" placeholder="" class="layui-input">
+                                    <!--<input type="text" id="custName" name="custName" autocomplete="off" placeholder="" class="layui-input">-->
+                                    <select id="custId" name='custId' class="layui-input" lay-event="custId">
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label">线别</label>
                                 <div class="layui-input-inline">
                                     <input type="text" id="linerName" name="linerName" autocomplete="off" placeholder="" class="layui-input">
+                                    <!--<select id="lineNo" name='lineNo' class="layui-input">-->
+                                        <!--<option value=""></option>-->
+                                    <!--</select>-->
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -70,7 +85,10 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">部门</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="deptName" name="deptName" autocomplete="off" placeholder="" class="layui-input">
+                                    <!--<input type="text" id="deptName" name="deptName" autocomplete="off" placeholder="" class="layui-input">-->
+                                    <select id="deptId" name='deptId' class="layui-input">
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -105,17 +123,126 @@
             <div class="layui-tab-item layui-show">
                 <!--工艺维护列表-->
                 <table id="iList" lay-filter="iTable"></table>
+                <script type="text/html" id="statusTpl">
+                    {{#  if(d.jobAttr===1){ }}
+                    <input type="checkbox" name="{{d.procNo}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
+                    {{#  } else { }}
+                    <input type="checkbox" name="{{d.procNo}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
+                    {{#  } }}
+                </script>
+                <script type="text/html" id="optBar">
+                    <button type="button" class="layui-btn layui-btn-xs" lay-event="edit1">编辑</button>
+                    <!--{{#  if(d.isCheck===1){ }}-->
+                    <!--<button type="button" class="layui-btn layui-btn-xs" lay-event="edit1">编辑</button>-->
+                    <!--{{#  } else { }}-->
+                    <!--<button type="button" class="layui-btn layui-btn-xs" lay-event="edit1" disabled="true">编辑</button>-->
+                    <!--{{#  } }}-->
+                </script>
             </div>
             <div class="layui-tab-item">
                 <!--工单组件列表-->
                 <table id="iList2" lay-filter="iTable2"></table>
+                <script type="text/html" id="optBar2">
+                    <a class="layui-btn layui-btn-xs" lay-event="edit2">编辑</a>
+                </script>
             </div>
         </div>
     </div>
 
+    <!--编辑工艺维护-->
+    <div id="editDiv1" class="layer_self_wrap" style="width:500px;display:none;">
+        <form id="editForm1" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <input id="processId1" type="hidden" name="id"/>
+            <input id="mid1" type="hidden" name="mid"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">工序顺序</label>
+                <div class="layui-input-inline" style="width: 350px;">
+                    <input id="procOrder1" name="procOrder" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">过程属性</label>
+                <div class="layui-input-inline" style="width: 350px;">
+                    <input type="checkbox" id="jobAttr1" name="jobAttr" value="1" lay-skin="primary" />
+                    <!--<input id="jobAttr1" name="jobAttr" autocomplete="off" class="layui-input" type="text"/>-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">作业员</label>
+                <div class="layui-input-inline" style="width: 350px;">
+                    <select id="empId1" name="empId" class="layui-input">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">物料编号</label>
+                <div class="layui-input-inline" style="width: 350px;">
+                    <input id="procNo1" name="procNo" readonly class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">物料描述</label>
+                <div class="layui-input-inline" style="width: 350px;">
+                    <input id="procName1" name="procName" readonly class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="editSubmit1">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--编辑工单组件-->
+    <div id="editDiv2" class="layer_self_wrap" style="width:500px;display:none;">
+        <form id="editForm2" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <input id="itemId2" type="hidden" name="id"/>
+            <input id="mid2" type="hidden" name="mid"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">作业员</label>
+                <div class="layui-input-inline" style="width: 350px;">
+                    <select id="empId2" name="empId" class="layui-input">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">物料编号</label>
+                <div class="layui-input-inline" style="width: 350px;">
+                    <input id="itemNo2" name="itemNo" readonly class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">物料描述</label>
+                <div class="layui-input-inline" style="width: 350px;">
+                    <input id="itemName2" name="itemName" readonly class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用量</label>
+                <div class="layui-input-inline" style="width: 350px;">
+                    <input id="itemQty2" name="itemQty" readonly class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="editSubmit2">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <script th:inline="javascript">
         var id = [[${id}]];
-        var scheduling = [[${scheduling}]];
+        var mapData = [[${mapData}]];
+        var scheduling = mapData ? mapData.scheduling : null;
+        var itemList = mapData ? mapData.itemList : null;
+        var clientList = mapData ? mapData.clientList : null;
+        var lineList = mapData ? mapData.lineList : null;
+        var orgList = mapData ? mapData.orgList : null;
+        var employeeList = mapData ? mapData.employeeList : null;
     </script>
     <script th:src="@{/js/web/produce/scheduling/scheduling_edit.js}" src="/js/web/produce/scheduling/scheduling_edit.js"></script>
 </div>

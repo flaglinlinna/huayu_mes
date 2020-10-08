@@ -2,23 +2,22 @@ package com.web.produce.service.internal;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
+import com.system.organization.dao.OrganizationDao;
+import com.system.organization.entity.SysOrganization;
 import com.system.user.entity.SysUser;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
-import com.web.basic.dao.DepartmentDao;
-import com.web.basic.dao.EmployeeDao;
-import com.web.basic.dao.MtrialDao;
-import com.web.basic.dao.ProcessDao;
-import com.web.basic.entity.Department;
-import com.web.basic.entity.Employee;
-import com.web.basic.entity.Mtrial;
+import com.web.basic.dao.*;
+import com.web.basic.entity.*;
 import com.web.basic.entity.Process;
 import com.web.produce.dao.SchedulingDao;
+import com.web.produce.dao.SchedulingItemDao;
 import com.web.produce.dao.SchedulingProcessDao;
 import com.web.produce.dao.SchedulingTempDao;
 import com.web.produce.entity.Scheduling;
+import com.web.produce.entity.SchedulingItem;
 import com.web.produce.entity.SchedulingProcess;
 import com.web.produce.entity.SchedulingTemp;
 import com.web.produce.service.SchedulingService;
@@ -80,6 +79,16 @@ public class SchedulingImpl implements SchedulingService {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private SchedulingProcessDao schedulingProcessDao;
+    @Autowired
+    private SchedulingItemDao schedulingItemDao;
+    @Autowired
+    private ClientDao clientDao;
+    @Autowired
+    private LineDao lineDao;
+    @Autowired
+    private OrganizationDao organizationDao;
+    @Autowired
+    private EmployeeDao employeeDao;
 
     @Override
     @Transactional
@@ -108,23 +117,40 @@ public class SchedulingImpl implements SchedulingService {
         }
         SysUser currUser = UserUtil.getSessionUser();
 
+        //获取物料信息
+        Mtrial mtrial = null;
+        if(StringUtils.isNotEmpty(scheduling.getItemId())){
+            mtrial = mtrialDao.findById((long) Long.parseLong(scheduling.getItemId()));
+        }
+        //获取客户信息
+        Client client = null;
+        if(StringUtils.isNotEmpty(scheduling.getCustId())){
+            client = clientDao.findById((long) Long.parseLong(scheduling.getCustId()));
+        }
+        //获取部门信息
+        SysOrganization org = null;
+        if(StringUtils.isNotEmpty(scheduling.getDeptId())){
+            org = organizationDao.findById((long) Long.parseLong(scheduling.getDeptId()));
+        }
+
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(currUser!=null ? currUser.getId() : null);
         o.setProdNo(scheduling.getProdNo());
         o.setGroupNo(scheduling.getGroupNo());
         o.setCustId(scheduling.getCustId());
-        o.setCustName(scheduling.getCustName());
-        o.setCustNo(scheduling.getCustNo());
+        o.setCustName(client!=null ? client.getCustName() : null);
+        o.setCustNo(client!=null ? client.getCustNo() : null);
         o.setItemId(scheduling.getItemId());
-        o.setItemNo(scheduling.getItemNo());
-        o.setItemName(scheduling.getItemName());
+        o.setItemNo(mtrial!=null ? mtrial.getItemNo() : null);
+        o.setItemName(mtrial!=null ? mtrial.getItemName() : null);
         o.setQtyPlan(scheduling.getQtyPlan());
         o.setProdDate(scheduling.getProdDate());
         o.setDeptId(scheduling.getDeptId());
-        o.setDeptName(scheduling.getDeptName());
+        o.setDeptName(org!=null ? org.getOrgName() : null);
         o.setLinerName(scheduling.getLinerName());
         o.setLineNo(scheduling.getLineNo());
         o.setClassNo(scheduling.getClassNo());
+        o.setProduceState(scheduling.getProduceState());
         schedulingDao.save(o);
 
         return ApiResponseResult.success("编辑成功！").data(o);
@@ -186,12 +212,31 @@ public class SchedulingImpl implements SchedulingService {
         if(id == null){
             return ApiResponseResult.failure("排产信息ID不能为空！");
         }
+        //获取排产信息
         Scheduling o = schedulingDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("排产信息不存在！");
         }
+        //获取物料信息
+        List<Mtrial> itemList = mtrialDao.findByDelFlagAndCheckStatus(0, 1);
+        //获取客户信息
+        List<Client> clientList = clientDao.findByDelFlag(0);
+        //获取线体信息
+        List<Line> lineList = lineDao.findByDelFlagAndCheckStatus(0, 1);
+        //获取部门信息
+        List<SysOrganization> orgList = organizationDao.findByDelFlag(0);
+        //获取人员信息
+        List<Employee> employeeList = employeeDao.findByDelFlagAndEmpStatus(0, 1);
 
-        return ApiResponseResult.success().data(o);
+        Map<String, Object> map = new HashMap<>();
+        map.put("scheduling", o);
+        map.put("itemList", itemList);
+        map.put("clientList", clientList);
+        map.put("lineList", lineList);
+        map.put("orgList", orgList);
+        map.put("employeeList", employeeList);
+
+        return ApiResponseResult.success().data(map);
     }
 
     /**
@@ -860,10 +905,12 @@ public class SchedulingImpl implements SchedulingService {
         List<Map<String, Object>> mapList = new ArrayList<>();
         for(Process process : list2){
             Map<String, Object> map = new HashMap<>();
-            //已选择
+            boolean flag = false;//从表工艺是否存在
+
             if(list.size() > 0){
                 for(SchedulingProcess item : list){
                     if(process != null && item != null && StringUtils.equals(process.getProcNo(), item.getProcNo())){
+                        //已选择
                         map.put("id", item.getId());
                         map.put("mid", mid);
                         map.put("procOrder", item.getProcOrder());
@@ -874,24 +921,115 @@ public class SchedulingImpl implements SchedulingService {
                         map.put("empName", item.getEmployee()!=null ? item.getEmployee().getEmpName() : "");
                         map.put("isCheck", 1);
                         mapList.add(map);
+                        flag = true;
                         break;
                     }
                 }
             }
-
-            //未选择
-            map.put("id", null);
-            map.put("mid", mid);
-            map.put("procOrder", process.getProcOrder());
-            map.put("procNo", process.getProcNo());
-            map.put("procName", process.getProcName());
-            map.put("jobAttr", 0);
-            map.put("empId", null);
-            map.put("empName", "");
-            map.put("isCheck", 0);
-            mapList.add(map);
+            if(!flag){
+                //未选择
+                map.put("id", null);
+                map.put("mid", mid);
+                map.put("procOrder", process.getProcOrder());
+                map.put("procNo", process.getProcNo());
+                map.put("procName", process.getProcName());
+                map.put("jobAttr", 0);
+                map.put("empId", null);
+                map.put("empName", "");
+                map.put("isCheck", 0);
+                mapList.add(map);
+            }
         }
 
         return ApiResponseResult.success().data(DataGrid.create(mapList, mapList.size(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
+
+    //编辑工艺信息
+    @Override
+    @Transactional
+    public ApiResponseResult editProcess(SchedulingProcess schedulingProcess) throws Exception{
+        if(schedulingProcess == null || schedulingProcess.getId() == null){
+            return ApiResponseResult.failure("记录ID不能为空！");
+        }
+        SchedulingProcess o = schedulingProcessDao.findById((long) schedulingProcess.getId());
+        if(o == null){
+            return ApiResponseResult.failure("工艺信息不存在！");
+        }
+        SysUser currUser = UserUtil.getSessionUser();
+
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(currUser!=null ? currUser.getId() : null);
+        o.setProcOrder(schedulingProcess.getProcOrder());
+        o.setJobAttr(schedulingProcess.getJobAttr()==null ? 0 : schedulingProcess.getJobAttr());
+        o.setEmpId(schedulingProcess.getEmpId());
+        if(schedulingProcess.getEmpId() != null){
+            Employee employee = employeeDao.findById((long) schedulingProcess.getEmpId());
+            if(employee != null){
+                o.setEmpCode(employee.getEmpCode());
+            }
+        }
+        schedulingProcessDao.save(o);
+
+        return ApiResponseResult.success("编辑成功！");
+    }
+
+    /**
+     * 获取生产制令单从表-组件
+     * @param keyword
+     * @param mid
+     * @param pageRequest
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getItemList(String keyword, Long mid, PageRequest pageRequest) throws Exception{
+        //查询条件1
+        Sort sort = new Sort(Sort.Direction.ASC, "procOrder");
+        List<SearchFilter> filters =new ArrayList<>();
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("mid", SearchFilter.Operator.EQ, mid));
+
+        //查询条件2
+        List<SearchFilter> filters1 =new ArrayList<>();
+        if(StringUtils.isNotEmpty(keyword)){
+            filters1.add(new SearchFilter("taskNo", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("itemNo", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("itemUnit", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("empCode", SearchFilter.Operator.LIKE, keyword));
+        }
+
+        Specification<SchedulingItem> spec = Specification.where(BaseService.and(filters, SchedulingItem.class));
+        Specification<SchedulingItem> spec1 =  spec.and(BaseService.or(filters1, SchedulingItem.class));
+        Page<SchedulingItem> page = schedulingItemDao.findAll(spec1, pageRequest);
+
+        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
+
+    //编辑组件信息
+    @Override
+    @Transactional
+    public ApiResponseResult editItem(SchedulingItem schedulingItem) throws Exception{
+        if(schedulingItem == null || schedulingItem.getId() == null){
+            return ApiResponseResult.failure("记录ID不能为空！");
+        }
+        SchedulingItem o = schedulingItemDao.findById((long) schedulingItem.getId());
+        if(o == null){
+            return ApiResponseResult.failure("组件信息不存在！");
+        }
+        SysUser currUser = UserUtil.getSessionUser();
+
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(currUser!=null ? currUser.getId() : null);
+        o.setEmpId(schedulingItem.getEmpId());
+        if(schedulingItem.getEmpId() != null){
+            Employee employee = employeeDao.findById((long) schedulingItem.getEmpId());
+            if(employee != null){
+                o.setEmpCode(employee.getEmpCode());
+            }
+        }
+        schedulingItemDao.save(o);
+
+        return ApiResponseResult.success("编辑成功！");
     }
 }

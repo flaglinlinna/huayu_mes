@@ -8,7 +8,7 @@ import java.util.List;
 import com.web.basic.entity.Department;
 
 public interface DepartmentDao extends CrudRepository<Department, Long>,JpaSpecificationExecutor<Department>{
-	
+
 	public List<Department> findAll();
 	public List<Department> findByDelFlag(Integer delFlag);
 	public Department findById(long id);

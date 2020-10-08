@@ -1,12 +1,14 @@
 package com.web.produce.entity;
 
 import com.app.base.entity.BaseEntity;
+import com.web.basic.entity.Employee;
+import com.web.basic.entity.Mtrial;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
@@ -39,6 +41,12 @@ public class SchedulingItem extends BaseEntity {
     @ApiModelProperty(name = "itemId", value = "组件ID")
     @Column
     protected Long itemId;
+
+    @ApiModelProperty(name = "mtrial", hidden = true, value = "组件")
+    @ManyToOne
+    @JoinColumn(name = "itemId", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected Mtrial mtrial;
 
     /**
      * 物料编码
@@ -74,6 +82,12 @@ public class SchedulingItem extends BaseEntity {
     @ApiModelProperty(name = "empId", value = "员工ID")
     @Column
     protected Long empId;
+
+    @ApiModelProperty(name = "employee", hidden = true, value = "员工")
+    @ManyToOne
+    @JoinColumn(name = "empId", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected Employee employee;
 
     /**
      * 员工工号
@@ -111,6 +125,14 @@ public class SchedulingItem extends BaseEntity {
 
     public void setItemId(Long itemId) {
         this.itemId = itemId;
+    }
+
+    public Mtrial getMtrial() {
+        return mtrial;
+    }
+
+    public void setMtrial(Mtrial mtrial) {
+        this.mtrial = mtrial;
     }
 
     public String getItemNo() {
@@ -151,6 +173,14 @@ public class SchedulingItem extends BaseEntity {
 
     public void setEmpId(Long empId) {
         this.empId = empId;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public String getEmpCode() {
