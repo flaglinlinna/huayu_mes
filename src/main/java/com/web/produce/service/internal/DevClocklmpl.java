@@ -65,6 +65,10 @@ public class DevClocklmpl implements DevClockService {
 		if (count > 0) {
 			return ApiResponseResult.failure("该卡机已存在，请填写其他卡机编码！");
 		}
+		int ipCount=devClockDao.countByDelFlagAndDevIp(0, devClock.getDevIp());
+		if (ipCount > 0) {
+			return ApiResponseResult.failure("该IP地址已存在，请填写其他IP！");
+		}
 		devClock.setCreateDate(new Date());
 		devClock.setCreateBy(UserUtil.getSessionUser().getId());
 		devClockDao.save(devClock);
@@ -102,6 +106,12 @@ public class DevClocklmpl implements DevClockService {
 				return ApiResponseResult.failure("卡机编码已存在，请填写其他卡机编码！");
 			}
 			o.setDevCode(devClock.getDevCode().trim());
+		}
+		if(o.getDevIp().equals(devClock.getDevIp())){
+			int ipCount=devClockDao.countByDelFlagAndDevIp(0, devClock.getDevIp());
+			if (ipCount > 0) {
+				return ApiResponseResult.failure("该IP地址已存在，请填写其他IP！");
+			}
 		}
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());

@@ -1,5 +1,5 @@
 /**
- * 指纹下发管理
+ * 指纹清除管理
  */
 var pageCurr;
 $(function() {
@@ -7,8 +7,8 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#issueList',
-			url : context + 'produce/issue/getList',
+			elem : '#clearList',
+			url : context + 'produce/clear/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -160,14 +160,14 @@ $(function() {
 			return false;
 		});
 		// 监听工具条
-		table.on('tool(issueTable)', function(obj) {
+		table.on('tool(clearTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delIssue(data, data.id);
+				delClear(data, data.id);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				//getIssue(data, data.id);
+				//getClear(data, data.id);
 			}
 		});
 		// 监听提交
@@ -201,7 +201,7 @@ $(function() {
 	});
 });
 // 新增编辑弹出框
-function openIssue(id, title) {
+function openClear(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -212,7 +212,7 @@ function openIssue(id, title) {
 		resize : false,
 		shadeClose : false,// 是否点击遮罩关闭
 		area : [ '1000px' ],
-		content : $('#setIssue'),
+		content : $('#setClear'),
 		macmin : true,// 弹出框全屏
 		end : function() {
 
@@ -221,18 +221,18 @@ function openIssue(id, title) {
 	layer.full(index);// 弹出框全屏
 }
 
-// 添加指纹下发信息
-function addIssue() {
+// 添加指纹清除信息
+function addClear() {
 	// 清空弹出框数据
-	cleanIssue();
+	cleanClear();
 	//getEmp();//
 	//getDev();//表格后续操作
 	// 打开弹出框
-	openIssue(null, "添加指纹下发信息");
+	openClear(null, "添加指纹清除信息");
 }
 // 获取员工信息
 function getEmp() {
-	CoreUtil.sendAjax("produce/issue/getEmp", "", function(data) {
+	CoreUtil.sendAjax("produce/clear/getEmp", "", function(data) {
 		if (data.result) {
 			// var beSelected=data.data;
 			// console.log(data.data.rows)
@@ -256,12 +256,12 @@ function getEmp() {
 }
 // 获取卡机信息
 function getDev() {
-	CoreUtil.sendAjax("produce/issue/getDev", "", function(data) {
+	CoreUtil.sendAjax("produce/clear/getDev", "", function(data) {
 		if (data.result) {
 			tableDev.reload({
 				data : data.data.rows,
 				done : function(res, curr, count) {
-					// cleanIssue();//清空之前的选中
+					// cleanClear();//清空之前的选中
 
 				}
 			})
@@ -305,7 +305,7 @@ function merge(res, columsName, columsIndex) {
 	}
 }
 
-// 新增指纹下发信息提交
+//指纹清除信息提交
 function addSubmit(devList, empList) {
 	console.log(devList)
 	console.log(empList)
@@ -313,12 +313,12 @@ function addSubmit(devList, empList) {
 		"devList" : devList,
 		"empList" : empList
 	};
-	CoreUtil.sendAjax("produce/issue/add", JSON.stringify(params), function(
+	CoreUtil.sendAjax("produce/clear/add", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanIssue();
+				cleanClear();
 				// 加载页面
 				loadAll();
 			});
@@ -331,7 +331,7 @@ function addSubmit(devList, empList) {
 		layer.alert(res.msg);
 	});
 }
-function delIssue(obj, id) {
+function delClear(obj, id) {
 	if (id != null) {
 		var param = {
 			"id" : id
@@ -340,7 +340,7 @@ function delIssue(obj, id) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/issue/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("produce/clear/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -364,7 +364,7 @@ function delIssue(obj, id) {
 function loadDev(obj) {
 	// 重新加载table
 	tableDev.reload({
-		url : context + 'produce/issue/getDev',
+		url : context + 'produce/clear/getDev',
 		where : {
 			devKeyword : obj.field.devKeyword
 		},
@@ -379,7 +379,7 @@ function loadEmp(obj) {
 	// 重新加载table
 	console.log(obj)
 	tableEmp.reload({
-		url : context + 'produce/issue/getEmp',
+		url : context + 'produce/clear/getEmp',
 		where : {
 			empKeyword : obj.field.empKeyword
 		},
@@ -401,10 +401,10 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanIssue() {
+function cleanClear() {
 	$('#devSearch')[0].reset();
 	tableDev.reload({
-		url : context + 'produce/issue/getDev',
+		url : context + 'produce/clear/getDev',
 		where : {
 			devKeyword : ""
 		},
@@ -415,7 +415,7 @@ function cleanIssue() {
 	});
 	$('#empSearch')[0].reset();
 	tableEmp.reload({
-		url : context + 'produce/issue/getEmp',
+		url : context + 'produce/clear/getEmp',
 		where : {
 			empKeyword : ""
 		},
@@ -424,6 +424,6 @@ function cleanIssue() {
 		// 从当前页码开始
 		}
 	});
-	$('#issueForm')[0].reset();
+	$('#clearForm')[0].reset();
 	layui.form.render();// 必须写
 }

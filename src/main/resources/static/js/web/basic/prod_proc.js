@@ -248,7 +248,9 @@ $(function() {
 		
 		// 设置过程属性
 		function setStatus(obj, id, name, checked) {
-			var jobAttr = checked ? 0 : 1;
+			console.log(checked)
+			var jobAttr = checked ? 1 : 0;
+			console.log(jobAttr)
 			var deaprtisStatus = checked ? "勾选" : "不勾选";
 			// 正常/禁用
 			layer.confirm('您确定要把工序：' + name + '过程属性设置为' + deaprtisStatus + '状态吗？',
@@ -277,12 +279,12 @@ $(function() {
 							});
 						},
 						btn2 : function() {
-							obj.elem.checked = jobAttr;
+							obj.elem.checked = !jobAttr;
 							form.render();
 							layer.closeAll();
 						},
 						cancel : function() {
-							obj.elem.checked = jobAttr;
+							obj.elem.checked = !jobAttr;
 							form.render();
 							layer.closeAll();
 						}

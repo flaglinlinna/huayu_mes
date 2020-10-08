@@ -9,14 +9,14 @@
 		<div style="margin: 10px">
 			<hr class="layui-bg-black" />
 			<button class="layui-btn layui-btn-sm layui-btn-normal"
-				onclick="addIssue()">指纹下发</button>
-			<table id="issueList" lay-filter="issueTable"></table>
+				onclick="addClear()">指纹清除</button>
+			<table id="clearList" lay-filter="clearTable"></table>
 			<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 		</div>
 		<!--添加或编辑卡机信息-->
-		<div id="setIssue" class="layer_self_wrap"
+		<div id="setClear" class="layer_self_wrap"
 			style="width: 100%; display: none; margin: 2px;">
 			<div class="layui-row">
 				<div class="layui-col-xs6">
@@ -61,13 +61,13 @@
 				</div>
 			</div>
 			<hr class="layui-bg-black" />
-			<form id="issueForm" class="layui-form layui-form-pane"
-				lay-filter="issueForm" method="post" action=""
+			<form id="clearForm" class="layui-form layui-form-pane"
+				lay-filter="clearForm" method="post" action=""
 				style="margin-top: 1px;">
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 1px;">
 						<button class="layui-btn layui-btn-sm" lay-submit=""
-							lay-filter="addSubmit">指纹下发</button>
+							lay-filter="addSubmit">指纹清除</button>
 					</div>
 				</div>
 				<div class="layui-row">
@@ -86,8 +86,8 @@
 				</div>
 			</form>
 		</div>
-		<script th:src="@{/js/web/produce/dev_clock/issue.js}"
-			src="/js/web/produce/dev_clock/issue.js"></script>
+		<script th:src="@{/js/web/produce/dev_clock/clear.js}"
+			src="/js/web/produce/dev_clock/clear.js"></script>
 	</div>
 </body>
 </html>
