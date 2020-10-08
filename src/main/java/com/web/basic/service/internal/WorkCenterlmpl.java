@@ -17,6 +17,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.WorkCenterDao;
 import com.web.basic.entity.WorkCenter;
@@ -49,6 +50,7 @@ public class WorkCenterlmpl implements WorkCenterService {
             return ApiResponseResult.failure("该工作中心已存在，请填写其他工作中心编号！");
         }
         workCenter.setCreateDate(new Date());
+        workCenter.setCreateBy(UserUtil.getSessionUser().getId());
         workCenterDao.save(workCenter);
 
         return ApiResponseResult.success("工作中心添加成功！").data(workCenter);
@@ -85,6 +87,7 @@ public class WorkCenterlmpl implements WorkCenterService {
             o.setBsCode(workCenter.getBsCode().trim());
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setBsName(workCenter.getBsName());
         workCenterDao.save(o);
         return ApiResponseResult.success("编辑成功！");
@@ -121,8 +124,9 @@ public class WorkCenterlmpl implements WorkCenterService {
         if(o == null){
             return ApiResponseResult.failure("该工作中心不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());
         workCenterDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -141,6 +145,7 @@ public class WorkCenterlmpl implements WorkCenterService {
             return ApiResponseResult.failure("工作中心不存在！");
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setBsStatus(bsStatus);
         workCenterDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);

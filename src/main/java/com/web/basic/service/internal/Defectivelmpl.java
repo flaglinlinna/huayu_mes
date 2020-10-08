@@ -17,6 +17,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.DefectiveDao;
 import com.web.basic.entity.Defective;
@@ -49,8 +50,8 @@ public class Defectivelmpl implements DefectiveService {
             return ApiResponseResult.failure("该不良类别编号已存在，请填写其他不良类别编码！");
         }
         defective.setCreateDate(new Date());
+        defective.setCreateBy(UserUtil.getSessionUser().getId());
         defectiveDao.save(defective);
-
         return ApiResponseResult.success("不良类别添加成功！").data(defective);
     }
     /**
@@ -85,6 +86,7 @@ public class Defectivelmpl implements DefectiveService {
             o.setDefectTypeCode(defective.getDefectTypeCode().trim());
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setDefectTypeName(defective.getDefectTypeName());
         defectiveDao.save(o);
         return ApiResponseResult.success("编辑成功！");
@@ -121,8 +123,9 @@ public class Defectivelmpl implements DefectiveService {
         if(o == null){
             return ApiResponseResult.failure("不良类别不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());
         defectiveDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
@@ -141,6 +144,7 @@ public class Defectivelmpl implements DefectiveService {
             return ApiResponseResult.failure("不良类别不存在！");
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setCheckStatus(checkStatus);
         defectiveDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);

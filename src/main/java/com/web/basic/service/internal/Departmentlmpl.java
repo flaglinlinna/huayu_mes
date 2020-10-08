@@ -17,6 +17,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
+import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.DepartmentDao;
 import com.web.basic.entity.Department;
@@ -49,6 +50,7 @@ public class Departmentlmpl implements DepartmentService {
             return ApiResponseResult.failure("该部门已存在，请填写其他部门编号！");
         }
         department.setCreateDate(new Date());
+        department.setCreateBy(UserUtil.getSessionUser().getId());
         departmentDao.save(department);
 
         return ApiResponseResult.success("部门添加成功！").data(department);
@@ -85,6 +87,7 @@ public class Departmentlmpl implements DepartmentService {
             o.setBsCode(department.getBsCode().trim());
         }
         o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setBsName(department.getBsName());
         o.setBsManager(department.getBsManager());
         o.setBsManagerTel(department.getBsManagerTel());
@@ -123,8 +126,9 @@ public class Departmentlmpl implements DepartmentService {
         if(o == null){
             return ApiResponseResult.failure("该部门不存在！");
         }
-        o.setLastupdateDate(new Date());
+        o.setDelTime(new Date());
         o.setDelFlag(1);
+        o.setDelBy(UserUtil.getSessionUser().getId());	
         departmentDao.save(o);
 
         return ApiResponseResult.success("删除成功！");
