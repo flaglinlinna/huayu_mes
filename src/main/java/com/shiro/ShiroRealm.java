@@ -121,6 +121,8 @@ public class ShiroRealm extends AuthorizingRealm {
             userMD5.setUserName(user.getUserName());
 //            userMD5.setBsPassword(DigestUtils.md5Hex(proPass(user.getBsPassword())));
             userMD5.setPassword(user.getPassword());
+            userMD5.setFactory(user.getFactory());
+            userMD5.setCompany(user.getCompany());
         }catch (Exception e){
             userMD5.setPassword(DigestUtils.md5Hex("a"));
         }
