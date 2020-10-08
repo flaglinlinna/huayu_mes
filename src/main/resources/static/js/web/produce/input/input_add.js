@@ -164,6 +164,7 @@ $(function() {
 
 				// 监听
 				form.on('submit(confirmSubmit)', function(data) {
+					console.log(data.field)
 					addPut(data.field)
 				});
 			});	
@@ -196,17 +197,20 @@ $(function() {
  }
  
  function addPut(obj){
-	 var params={"barcode":obj.barcode,"task_no":obj.num,"item_no":obj.mtrcode,"qty":obj.addqty};
+	 var params={"barcode":obj.barcode,"task_no":obj.num,"item_no":obj.item_code,"qty":obj.addqty};
 		CoreUtil.sendAjax("input/addPut", params, function(data) {
 			console.log(data)
 			if (data.result) {
-				$("#qty").val(data.data.Qty);
+				$("#inqty").val(data.data.Qty);
 				tableIns.reload({
 					data:data.data.List
 				});
 			}else{
 				layer.alert(data.msg);
 			}
+			$( "input[name='barcode']").val('');
+			$( "input[name='item_code']").val('');
+			$( "input[name='addqty']").val('');
 		}, "GET", false, function(res) {
 			layer.alert(res.msg);
 		});
@@ -225,6 +229,7 @@ $(function() {
  				if (data.result == true) {
 					// 回调弹框
 					layer.alert("删除成功！", function() {
+						$("#inqty").val(data.data);
 						obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
 						layer.closeAll();
 					});

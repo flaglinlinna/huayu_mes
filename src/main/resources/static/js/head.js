@@ -62,7 +62,6 @@ var getMenus=function(data){
                 var childArry = getParentArry(node.ID, data);
                 if(childArry.length>0){
                 	 //父级无page
-                	console.log(node.MENU_ICON)
                     a=$("<a class='' href='javascript:;' lay-tips='"+node.MENU_NAME+"' lay-direction='2'><i class='layui-icon iconfont "+node.MENU_ICON+"'></i><cite>"+node.MENU_NAME+"</cite></a>");
                     li.append(a);
                     a.append("<span class='layui-nav-more'></span>");

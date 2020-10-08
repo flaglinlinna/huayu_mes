@@ -99,7 +99,7 @@ public class SchedulingProcess extends BaseEntity {
     @Column
     protected Long empId;
 
-    @ApiModelProperty(name = "employee", hidden = true, value = "员工ID")
+    @ApiModelProperty(name = "employee", hidden = true, value = "员工")
     @ManyToOne
     @JoinColumn(name = "empId", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)

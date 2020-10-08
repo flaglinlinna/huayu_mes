@@ -35,7 +35,7 @@ public class Inputlmpl extends PrcUtils implements InputService {
 	@Override
 	public ApiResponseResult getTaskNo(String keyword) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getTaskNoPrc(1,UserUtil.getSessionUser().getId()+"",keyword,"prc_choose_task_no");
+		List<Object> list = getTaskNoPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",1,UserUtil.getSessionUser().getId()+"",keyword);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -71,7 +71,10 @@ public class Inputlmpl extends PrcUtils implements InputService {
 	public ApiResponseResult delete(String id) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = deletePrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",id,UserUtil.getSessionUser().getId(),"PRC_BATCH_DEL_BARCODE");
-		return ApiResponseResult.success().data(list.get(1));
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success(list.get(1).toString()).data(list.get(2));
 	}
 	
 	

@@ -17,13 +17,13 @@ import com.system.user.entity.UserRoleMap;
  * 菜单基础信息表
  */
 public interface OrganizationDao extends CrudRepository<SysOrganization, Long>, JpaSpecificationExecutor<SysOrganization> {
-	
+
 	public List<SysOrganization> findByDelFlag(Integer delFlag);
-	
+
 	public List<SysOrganization> findByDelFlagAndParentId(Integer delFlag,long pid);
-	
+
 	public SysOrganization findByIdAndDelFlag(long id,Integer delFlag);
-	
+
 //	@Query(value = "select "+
 //				   "  p.id, p.bs_name,p.parent_id pId, p.zindex, p.istype, p.bs_code, p.icon, p.page_url "+
 //				   " from permission p "+
@@ -43,4 +43,6 @@ public interface OrganizationDao extends CrudRepository<SysOrganization, Long>, 
            " WHERE ur.user_id=?1 and p.del_flag=0 and rp.del_flag=0 and ur.del_flag=0"+
            " order by p.zindex ", nativeQuery = true)
     public List<Map<String, Object>> getUserPerms(long id);
+
+    public SysOrganization findById(long id);
 }
