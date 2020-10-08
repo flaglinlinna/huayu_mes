@@ -168,8 +168,8 @@ public class SchedulingImpl implements SchedulingService {
         }
         SysUser currUser = UserUtil.getSessionUser();
 
-        o.setLastupdateDate(new Date());
-        o.setLastupdateBy(currUser!=null ? currUser.getId() : null);
+        o.setDelTime(new Date());
+        o.setDelBy(currUser!=null ? currUser.getId() : null);
         o.setDelFlag(1);
         schedulingDao.save(o);
 
@@ -814,23 +814,6 @@ public class SchedulingImpl implements SchedulingService {
             return resultList;
         } else {
             return new ArrayList<>();
-        }
-    }
-
-    //生成随机制令单号
-    private String getUniqueOrderNo(){
-        try{
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-            String dateStr = sdf.format(new Date());
-
-            Random random = new Random();
-            int nextInt = random.nextInt(900000);
-            nextInt = nextInt + 100000;
-            String randonStr = nextInt + "";
-
-            return dateStr + randonStr;
-        }catch (Exception e){
-            return null;
         }
     }
 
