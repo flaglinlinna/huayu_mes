@@ -1,9 +1,12 @@
 package com.web.produce.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,21 +51,24 @@ public class CheckCodeController extends WebController {
 	             return ApiResponseResult.failure("获取指令单信息失败！");
 	        }
 	    }
-	  @ApiOperation(value="确认投入", notes="确认投入", hidden = true)
-	    @RequestMapping(value = "/subCode", method = RequestMethod.GET)
+	  @ApiOperation(value="小码校验", notes="小码校验", hidden = true)
+	    @RequestMapping(value = "/subCode", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult subCode(String taskNo,String barcode1,String barcode2) {
-	        String method = "produce/check_code/subCode";String methodName ="确认投入";
+	    public ApiResponseResult subCode(@RequestBody Map<String, Object> params) {
+	        String method = "produce/check_code/subCode";String methodName ="小码校验";
 	        try {
+	        	String taskNo = params.get("taskNo").toString();
+	        	String barcode1 = params.get("barcode1") == null?"":params.get("barcode1").toString();
+	        	String barcode2 = params.get("barcode2") == null?"":params.get("barcode2").toString();
 	            ApiResponseResult result = checkCodeService.subCode(taskNo,barcode1,barcode2);
-	            logger.debug("确认投入=addPut:");
+	            logger.debug("小码校验=subCode:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
-	             logger.error("确认投入失败！", e);
+	             logger.error("小码校验失败！", e);
 	             getSysLogService().error(method, methodName, e.toString());
-	             return ApiResponseResult.failure("确认投入失败！");
+	             return ApiResponseResult.failure("小码校验失败！");
 	        }
 	    }
 }

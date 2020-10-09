@@ -20,7 +20,6 @@ $(function() {
 							// ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
 							,
 							defaultToolbar : [],
-							cellMinWidth : 80,
 							page : false,
 							data : [],
 							request : {
@@ -40,38 +39,22 @@ $(function() {
 								}
 							},
 							cols : [ [ {
-								type : 'radio',
-								width : 50
+								type : 'numbers'
+							},{
+								field : 'taskNo',
+								title : '制定单号',
+								width : 350
 							}, {
-								field : 'id',
-								title : 'id',
-								width : 0,
-								hide : true
+								field : 'barcode1',
+								title : '条码1',
+								width : 200
 							}, {
-								field : 'ITEM_BARCODE',
-								title : '条码',
-								width : 120
+								field : 'barcode2',
+								title : '条码2',
+								width : 200
 							}, {
-								field : 'ITEM_NO',
-								title : '物料编号',
-								width : 150
-							}, {
-								field : 'ITEM_NAME',
-								title : '物料描述'
-							}, {
-								field : 'QUANTITY',
-								title : '数量',
-								width : 90
-							}, {
-								field : 'CREATE_DATE',
-								title : '创建时间',
-								width : 150
-							}, {
-								fixed : 'right',
-								title : '操作',
-								align : 'center',
-								toolbar : '#optBar',
-								width : 80
+								field : 'result',
+								title : '校验结果'
 							} ] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
@@ -102,10 +85,6 @@ $(function() {
 									title : '物料编码',
 									width : 150
 								}, {
-									field : 'ITEM_NAME',
-									title : '物料描述',
-									width : 240
-								}, {
 									field : 'LINER_NAME',
 									title : '组长',
 									width : 100
@@ -115,11 +94,11 @@ $(function() {
 									width : 100
 								} ] ],
 								parseData : function(res) {
-									console.log(res)
+									//console.log(res)
 									if (res.result) {
 										// 可进行数据操作
 										return {
-											"count" : 1000,
+											"count" : 0,
 											"msg" : res.msg,
 											"data" : res.data,
 											"code" : res.status
@@ -164,88 +143,74 @@ $(function() {
 
 	$('#barcode').bind('keypress', function(event) {
 		if (event.keyCode == "13") {
-			// alert('你输入的内容为：' + $('#barcode').val());
+			$('#barcode1').val("");
+			$('#barcode2').val("");
 			if ($('#barcode').val()) {
-				subCode($('#barcode').val())
+				if ($('#taskno').val()) {
+					subCode($('#taskno').val(), $('#barcode').val(), "")
+				} else {
+					layer.alert("请选择制令单号!");
+				}
+
 			} else {
 				layer.alert("请先扫描条码!");
 			}
 		}
 	});
+	$('#barcode2').bind(
+			'keypress',
+			function(event) {
+				if (event.keyCode == "13") {
+					$('#barcode').val("");
+					if ($('#barcode1').val() || $('#barcode2').val()) {
+						if ($('#taskno').val()) {
+							subCode($('#taskno').val(), $('#barcode1').val(),
+									$('#barcode2').val())
+						} else {
+							layer.alert("请选择制令单号!");
+						}
+					} else {
+						layer.alert("请先扫描条码!");
+					}
+				}
+			});
 });
 
-function subCode(barcode) {
+function subCode(taskNo, barcode1, barcode2) {
 	var params = {
-		"barcode" : barcode
+		"taskNo" : taskNo,
+		"barcode1" : barcode1,
+		"barcode2" : barcode2
 	}
-	CoreUtil.sendAjax("produce/check_code/subCode", params, function(data) {
+	CoreUtil.sendAjax("produce/check_code/subCode", JSON.stringify(params),
+			function(data) {
 		console.log(data)
-		if (data.result) {
-			
-		} else {
-			layer.alert(data.msg);
-		}
-	}, "GET", false, function(res) {
-		layer.alert(res.msg);
-	});
-}
-
-
-
-
-
-function addPut(obj) {
-	var params = {
-		"barcode" : obj.barcode,
-		"task_no" : obj.num,
-		"item_no" : obj.item_code,
-		"qty" : obj.addqty
-	};
-	CoreUtil.sendAjax("input/addPut", params, function(data) {
-		console.log(data)
-		if (data.result) {
-			$("#inqty").val(data.data.Qty);
-			tableIns.reload({
-				data : data.data.List
-			});
-		} else {
-			layer.alert(data.msg);
-		}
-		$("input[name='barcode']").val('');
-		$("input[name='item_code']").val('');
-		$("input[name='addqty']").val('');
-	}, "GET", false, function(res) {
-		layer.alert(res.msg);
-	});
-}
-
-// 删除
-function del(obj, id, barcode) {
-	if (id != null) {
-		var params = {
-			"barcode" : id
-		};
-		layer.confirm('您确定要删除条码' + barcode + '吗？', {
-			btn : [ '确认', '返回' ]
-		// 按钮
-		}, function() {
-			CoreUtil.sendAjax("input/delete", params, function(data) {
-				console.log(data)
-				if (data.result == true) {
-					// 回调弹框
-					layer.alert("删除成功！", function() {
-						$("#inqty").val(data.data);
-						obj.del(); // 删除对应行（tr）的DOM结构，并更新缓存
-						layer.closeAll();
+				if (data.result) {
+					var dataT={
+							taskNo:	taskNo,
+							barcode1:barcode1,
+							barcode2:barcode2,
+							result:"校验成功"
+					}
+					tabledata.push(dataT);
+					tableIns.reload({
+						data : tabledata
 					});
 				} else {
-					layer.alert(data, function() {
-						layer.closeAll();
+					var dataT={
+							taskNo:	taskNo,
+							barcode1:barcode1,
+							barcode2:barcode2,
+							result:data.msg
+					}
+					tabledata.push(dataT);
+					tableIns.reload({
+						data : tabledata
 					});
+					layer.alert(data.msg);
 				}
-			}, "GET", false, function(res) {
+				//console.log(tabledata)
+			}, "POST", false, function(res) {
 				layer.alert(res.msg);
 			});
-		});
-	}
 }
