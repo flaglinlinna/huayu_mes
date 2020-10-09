@@ -64,6 +64,14 @@ $(function() {
 						field : 'ITEM_BARCODE',
 						title : '物料编号',
 						width : 150
+					},{
+						field : 'CREATE_BY',
+						title : '操作人',
+						width : 80
+					},{
+						field : 'CREATE_DATE',
+						title : '操作时间',
+						width : 100
 					}] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;

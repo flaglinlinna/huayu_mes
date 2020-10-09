@@ -232,7 +232,7 @@ public class PrcUtils {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call PRC_BOX_IMP_BARCODE (?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call PRC_BOX_IMP_BARCODE (?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, company);
 				cs.setString(2, facoty);
@@ -245,7 +245,8 @@ public class PrcUtils {
 				cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
 				cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
 				cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(12, -10);// 输出参数 追溯数据
+				cs.registerOutParameter(12, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(13, -10);// 输出参数 追溯数据
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -256,9 +257,10 @@ public class PrcUtils {
 				result.add(cs.getInt(9));
 				result.add(cs.getString(10));
 				result.add(cs.getString(11));
+				result.add(cs.getString(12));
 				if (cs.getString(9).toString().equals("0")) {
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(12);
+					ResultSet rs = (ResultSet) cs.getObject(13);
 					try {
 						l = fitMap(rs);
 					} catch (Exception e) {
