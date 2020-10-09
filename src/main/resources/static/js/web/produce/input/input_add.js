@@ -125,7 +125,7 @@ $(function() {
 							if(res.result){
 								// 可进行数据操作
 								return {
-									"count" : 1000,
+									"count" :0,
 									"msg" : res.msg,
 									"data" : res.data,
 									"code" : res.status
