@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='生产投入'"></head>
+<style th:inline="text">
+.layui-form-label {
+	text-align: right;
+}
+
+.layui-form-switch {
+	margin-top: 0px;
+}
+
+.layui-form-radio {
+	margin: 0px 10px 0 0;
+}
+
+.long-item .layui-form-label {
+	width: 160px;
+}
+
+.long-item .layui-input-block {
+	margin-left: 160px;
+}
+</style>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<!--头-->
+		<!--<div th:replace="fragments/head :: header"></div>-->
+
+		<div style="margin: 10px">
+			<div class="layui-collapse" lay-accordion="">
+				<div class="layui-colla-item">
+					<h2 class="layui-colla-title">填写信息</h2>
+					<div class="layui-colla-content layui-show">
+						<form id="itemFrom" class="layui-form layui-form-pane"
+							lay-filter="itemFrom" method="post" action="">
+							<div class="layui-form-item">
+								<label class="layui-form-label">制令单号</label>
+								<div class="layui-input-inline" style="width: 320px;">
+									<input type="text" name="taskno" placeholder="请选择"
+										autocomplete="off" class="layui-input" readonly="readonly"
+										lay-verify="required" id="taskno">
+								</div>
+								<label class="layui-form-label">组长</label>
+								<div class="layui-input-inline" style="width: 120px;">
+									<input id=liner name="liner" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">产品编码</label>
+								<div class="layui-input-inline" style="width: 320px;">
+									<input id="itemcode" name="itemcode" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>
+								<label class="layui-form-label">客户简称</label>
+								<div class="layui-input-inline" style="width: 120px;">
+									<input id="cust" name="cust" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>
+							</div>
+							<div class="layui-form-item">
+							<div class="layui-word-aux" style="margin:5px;">一个条码，请在此操作</div>
+								<label class="layui-form-label">条码</label>
+								<div class="layui-input-inline">
+									<input id="barcode" name="barcode1" autocomplete="off"
+										class="layui-input" type="text" />
+								</div>
+								<div class="layui-form-mid layui-word-aux">请输入或者扫描条码后回车</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-word-aux" style="margin:5px;">两个条码，请在此操作</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label">条码1</label>
+									<div class="layui-input-inline">
+										<input id="barcode1" name="barcode1" autocomplete="off"
+											class="layui-input" type="text" />
+									</div>
+									<label class="layui-form-label">条码2</label>
+									<div class="layui-input-inline">
+										<input id="barcode2" name="barcode1" autocomplete="off"
+											class="layui-input" type="text" />
+									</div>
+									<div class="layui-form-mid layui-word-aux">请输入或者扫描条码后回车</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title">
+				<legend style="font-size: 14px;">条码列表</legend>
+			</fieldset>
+			<table id="colTable" lay-filter="colTable" style="margin-top: -20px;"></table>
+			<script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+		</div>
+		<script th:src="@{/js/web/produce/check_code.js}"
+			src="/js/web/produce/check_code.js"></script>
+	</div>
+</body>
+</html>
