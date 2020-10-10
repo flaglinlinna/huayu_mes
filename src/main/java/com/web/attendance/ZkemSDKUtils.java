@@ -377,7 +377,7 @@ public class ZkemSDKUtils {
     public static void main(String[] args) {
         ZkemSDKUtils sdk = new ZkemSDKUtils();
         Map<String, Object> map = new HashMap<String, Object>();
-        boolean connFlag = sdk.connect("192.168.0.201", 4370);
+        boolean connFlag = sdk.connect("192.168.1.201", 4370);
         System.out.println(connFlag);
         if (connFlag) {
             /*boolean flag = sdk.readGeneralLogData();
@@ -397,9 +397,9 @@ public class ZkemSDKUtils {
         	/*boolean flag = sdk.readAllTemplate();
             System.out.println("flag:" + flag);*/
 
-            //sdk.getUserTmpStr();
+            sdk.getUserTmpStr();
 
-        	sdk.setUserTmpStr();
+        	//sdk.setUserTmpStr();
 
         }
     }
