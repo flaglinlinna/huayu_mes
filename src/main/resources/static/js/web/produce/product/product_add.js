@@ -44,11 +44,11 @@ $(function() {
 					{
 						field : 'ITEM_BARCODE',
 						title : '箱内条码',
-						width : 140
+						width : 130
 					},{
 						field : 'ITEM_BARCODE',
 						title : '箱外条码',
-						width : 140
+						width : 130
 					}, {
 						field : 'TYPE',
 						title : '类型',
@@ -63,7 +63,15 @@ $(function() {
 					},{
 						field : 'ITEM_BARCODE',
 						title : '物料编号',
-						width : 150
+						width : 130
+					},{
+						field : 'CREATE_BY',
+						title : '操作人',
+						width : 80
+					},{
+						field : 'CREATE_DATE',
+						title : '操作时间',
+						width : 100
 					}] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;
@@ -123,7 +131,7 @@ $(function() {
 							if(res.result){
 								// 可进行数据操作
 								return {
-									"count" : 1000,
+									"count" : 0,
 									"msg" : res.msg,
 									"data" : res.data,
 									"code" : res.status
@@ -197,7 +205,7 @@ $(function() {
 							if(res.result){
 								// 可进行数据操作
 								return {
-									"count" : 1000,
+									"count" : 0,
 									"msg" : res.msg,
 									"data" : res.data,
 									"code" : res.status
@@ -307,6 +315,7 @@ $(function() {
 			console.log(data)
 			if (data.result) {
 				$('#inqty').val(data.data.Qty);
+				$('#rate').val(data.data.Rate);
 				tableIns.reload({
 					data:data.data.List
 				});
