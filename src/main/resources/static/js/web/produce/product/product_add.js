@@ -44,11 +44,11 @@ $(function() {
 					{
 						field : 'ITEM_BARCODE',
 						title : '箱内条码',
-						width : 140
+						width : 130
 					},{
 						field : 'ITEM_BARCODE',
 						title : '箱外条码',
-						width : 140
+						width : 130
 					}, {
 						field : 'TYPE',
 						title : '类型',
@@ -63,7 +63,7 @@ $(function() {
 					},{
 						field : 'ITEM_BARCODE',
 						title : '物料编号',
-						width : 150
+						width : 130
 					},{
 						field : 'CREATE_BY',
 						title : '操作人',
@@ -315,6 +315,7 @@ $(function() {
 			console.log(data)
 			if (data.result) {
 				$('#inqty').val(data.data.Qty);
+				$('#rate').val(data.data.Rate);
 				tableIns.reload({
 					data:data.data.List
 				});
