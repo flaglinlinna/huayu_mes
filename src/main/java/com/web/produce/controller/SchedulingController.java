@@ -311,6 +311,24 @@ public class SchedulingController extends WebController {
         }
     }
 
+    @ApiOperation(value = "保存工艺", notes = "保存工艺", hidden = true)
+    @RequestMapping(value = "/saveProcess", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult saveProcess(String mid, String processIds){
+        String method = "/produce/scheduling/saveProcess";String methodName ="保存工艺";
+        try{
+            ApiResponseResult result = schedulingService.saveProcess(mid, processIds);
+            logger.debug("保存工艺=saveProcess:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("保存工艺失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("保存工艺失败！");
+        }
+    }
+
     @ApiOperation(value = "获取组件列表", notes = "获取组件列表", hidden = true)
     @RequestMapping(value = "/getItemList", method = RequestMethod.GET)
     @ResponseBody

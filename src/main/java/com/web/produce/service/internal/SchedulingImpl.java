@@ -139,6 +139,7 @@ public class SchedulingImpl implements SchedulingService {
         o.setGroupNo(scheduling.getGroupNo());
         o.setCustId(scheduling.getCustId());
         o.setCustName(client!=null ? client.getCustName() : null);
+        o.setCustNameS(client!=null ? client.getCustNameS() : null);
         o.setCustNo(client!=null ? client.getCustNo() : null);
         o.setItemId(scheduling.getItemId());
         o.setItemNo(mtrial!=null ? mtrial.getItemNo() : null);
@@ -899,6 +900,7 @@ public class SchedulingImpl implements SchedulingService {
                         map.put("procOrder", item.getProcOrder());
                         map.put("procNo", item.getProcNo());
                         map.put("procName", process.getProcName());
+                        map.put("procId", process.getId());
                         map.put("jobAttr", item.getJobAttr());
                         map.put("empId", item.getEmpId());
                         map.put("empName", item.getEmployee()!=null ? item.getEmployee().getEmpName() : "");
@@ -954,6 +956,26 @@ public class SchedulingImpl implements SchedulingService {
         schedulingProcessDao.save(o);
 
         return ApiResponseResult.success("编辑成功！");
+    }
+
+    /**
+     * 保存工艺
+     * @param mid
+     * @param processIds
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult saveProcess(String mid, String processIds) throws Exception{
+        // TODO: 2020/10/10
+        if(StringUtils.isEmpty(mid)){
+            return ApiResponseResult.failure("排产ID不能为空！");
+        }
+
+        //调用保存存储过程
+
+        return ApiResponseResult.success("保存成功！");
     }
 
     /**

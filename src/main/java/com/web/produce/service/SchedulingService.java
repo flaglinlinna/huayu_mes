@@ -44,6 +44,8 @@ public interface SchedulingService {
 
     public ApiResponseResult editProcess(SchedulingProcess schedulingProcess) throws Exception;
 
+    public ApiResponseResult saveProcess(String mid, String processIds) throws Exception;
+
     //获取生产制令单从表-组件
     public ApiResponseResult getItemList(String keyword, Long mid, PageRequest pageRequest) throws Exception;
 
