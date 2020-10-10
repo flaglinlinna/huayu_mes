@@ -1,5 +1,5 @@
 /**
- * 生产投入
+ * 小码校验
  */
 var pageCurr;
 var tabledata = [];
@@ -155,6 +155,11 @@ $(function() {
 			} else {
 				layer.alert("请先扫描条码!");
 			}
+		}
+	});
+	$('#barcode1').bind('keypress', function(event) {
+		if (event.keyCode == "13") {
+			document.getElementById("barcode2").focus();
 		}
 	});
 	$('#barcode2').bind(

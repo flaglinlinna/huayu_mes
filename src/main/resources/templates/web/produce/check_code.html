@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='生产投入'"></head>
+<head th:include="layout :: htmlhead" th:with="title='小码校验'"></head>
 <style th:inline="text">
 .layui-form-label {
 	text-align: right;
@@ -65,7 +65,7 @@
 							</div>
 							<div class="layui-form-item">
 							<div class="layui-word-aux" style="margin:5px;">一个条码，请在此操作</div>
-								<label class="layui-form-label">条码</label>
+								<label class="layui-form-label">条码1</label>
 								<div class="layui-input-inline">
 									<input id="barcode" name="barcode1" autocomplete="off"
 										class="layui-input" type="text" />
@@ -98,9 +98,6 @@
 				<legend style="font-size: 14px;">条码列表</legend>
 			</fieldset>
 			<table id="colTable" lay-filter="colTable" style="margin-top: -20px;"></table>
-			<script type="text/html" id="optBar">
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        </script>
 		</div>
 		<script th:src="@{/js/web/produce/check_code.js}"
 			src="/js/web/produce/check_code.js"></script>
