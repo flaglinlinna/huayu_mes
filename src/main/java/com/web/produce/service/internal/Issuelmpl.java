@@ -1,5 +1,7 @@
 package com.web.produce.service.internal;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,19 +23,16 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.attendance.ZkemSDKUtils;
 import com.web.basic.dao.EmployeeDao;
-import com.web.basic.dao.LineDao;
-import com.web.basic.entity.Client;
-import com.web.basic.entity.ClientProcessMap;
-import com.web.basic.entity.Defective;
-import com.web.basic.entity.DefectiveDetail;
 import com.web.basic.entity.Employee;
-import com.web.basic.entity.Line;
-import com.web.basic.entity.Mtrial;
-import com.web.produce.dao.IssueDao;
+import com.web.produce.dao.CardDataDao;
 import com.web.produce.dao.DevClockDao;
-import com.web.produce.entity.Issue;
+import com.web.produce.dao.IssueDao;
+import com.web.produce.entity.CardData;
 import com.web.produce.entity.DevClock;
+import com.web.produce.entity.EmpFinger;
+import com.web.produce.entity.Issue;
 import com.web.produce.service.IssueService;
 
 /**
@@ -52,6 +51,9 @@ public class Issuelmpl implements IssueService {
 
 	@Autowired
 	DevClockDao devClockDao;
+	
+	@Autowired
+	CardDataDao cardDataDao;
 
 	/**
 	 * 查询列表
@@ -232,4 +234,82 @@ public class Issuelmpl implements IssueService {
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
+	
+	/**
+	 * 下发指纹
+	 * fyx
+	 * @param devIp
+	 * @param empFinger
+	 * @return
+	 */
+	private boolean doIssuedByUser(String devIp,List<EmpFinger> empFingers){
+		ZkemSDKUtils sdk = new ZkemSDKUtils();
+        boolean connFlag = sdk.connect(devIp, 4370);
+        System.out.println(connFlag);
+        if (connFlag) {
+        	for(EmpFinger empFinger:empFingers){
+        		//新增人员
+        		boolean f= sdk.setUserInfo("3", "test1", "", 0, true);//新增人员,如果编号一样则修改信息
+        		if(f){
+        			continue;
+        		}
+        		//新增指纹
+        		return sdk.setUserTmpStr(empFinger.getEmp().getEmpCode(),Integer.parseInt(empFinger.getFingerIdx()), empFinger.getTemplateStr());
+        	}
+        }
+        return false;
+	}
+	
+	/**
+	 * 删除指纹
+	 * fyx
+	 * @param devIp
+	 * @param empFinger
+	 * @return
+	 */
+	private boolean deleteTmpByUser(String devIp,Long dev_id,List<EmpFinger> empFingers){
+		ZkemSDKUtils sdk = new ZkemSDKUtils();
+        boolean connFlag = sdk.connect(devIp, 4370);
+        System.out.println(connFlag);
+        if (connFlag) {
+        	
+        	boolean flag = sdk.readGeneralLogData();
+            System.out.println("flag:" + flag);
+            
+        	for(EmpFinger empFinger:empFingers){
+        		//先保存改人员的考勤数据
+                List<Map<String, Object>> strList = sdk.getUserOneDayInfo(empFinger.getEmp().getEmpCode());
+                System.out.println(strList.toString());
+                
+                for(Map<String, Object> map:strList){
+                	//判断信息是否已经保存过
+                	DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");         
+                	DateFormat format2= new SimpleDateFormat("HH:mm:ss");  
+                	
+                	String carDate=format1.format(map.get("Time").toString());
+                    String cardTime=format2.format(map.get("Time").toString());
+
+                    List<CardData> cc = cardDataDao.findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTime(0, empFinger.getEmpId(), dev_id,
+                    		carDate, cardTime);
+                    if(cc.size()>0){
+                    	continue ;
+                    }
+                    CardData cd = new CardData();
+                    cd.setCardDate(carDate);
+                    cd.setCardTime(cardTime);
+                    cd.setDevClockId(dev_id);
+                    cd.setEmpId(empFinger.getEmpId());
+                    cd.setCreateDate(new Date());
+                    cd.setCompany(empFinger.getCompany());
+                    cd.setFactory(empFinger.getFactory());
+                    cardDataDao.save(cd);
+                    
+                    //删除指纹
+                    return sdk.delectUserById(empFinger.getEmp().getEmpCode());
+                }
+        	}
+        }
+        return false;
+	}
+	
 }
