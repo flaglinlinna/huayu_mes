@@ -33,6 +33,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
             var t = elem.offset().top + elem.outerHeight()+"px";
             var l = elem.offset().left +"px";
             var tableName = "tableSelect_table_" + new Date().getTime();
+            _tableSelectEdite = [];
             var tableBox = '<div class="tableSelect layui-anim layui-anim-upbit" style="left:'+l+';top:'+t+';border: 1px solid #d2d2d2;background-color: #fff;box-shadow: 0 2px 4px rgba(0,0,0,.12);padding:10px 10px 0 10px;position: absolute;z-index:66666666;margin: 5px 0;border-radius: 2px;min-width:530px;">';
                 tableBox += '<div class="tableSelectBar">';
                 tableBox += '<form class="layui-form" action="" style="display:inline-block;">';
@@ -52,7 +53,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
             opt.table.elem = "#"+tableName;
             opt.table.id = tableName;
             opt.table.done = function(res, curr, count){
-                defaultChecked(res, curr, count);
+                //defaultChecked(res, curr, count);
                 setChecked(res, curr, count);
                 tableDone(res, curr, count);
             };
@@ -206,7 +207,18 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                 }
                 selectDone(checkStatus);
             })
+            
+            //监听单元格编辑
+			  table.on('edit('+tableName+')', function(obj){
+			    var value = obj.value //得到修改后的值
+			    ,data = obj.data //得到所在行所有键值
+			    ,field = obj.field; //得到字段
+			    var temp={"id":data.ID,
+						"value":value}	
+			    _tableSelectEdite.push(temp);
 
+			  })
+			            
             //写值回调和关闭
             function selectDone (checkStatus){
                 if(opt.checkedKey){

@@ -43,7 +43,7 @@ public class ZkemSDK {
 
    public static void main(String[] args) {
        ZkemSDK sdk = new ZkemSDK();
-       boolean  connFlag = sdk.connect("192.168.0.201", 4370);
+       boolean  connFlag = sdk.connect("192.168.1.201", 4370);
        System.out.println("conn:"+connFlag);
    }
 }

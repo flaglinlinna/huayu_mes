@@ -69,7 +69,7 @@ public class LoginController extends WebController{
                                    @RequestParam(value = "rememberMe", required = false) boolean rememberMe) {
     	String method = "/login1";String methodName ="登录";
     	try {
-    		 username = username.toUpperCase();//用户名转换成大写
+    		// username = username.toUpperCase();//用户名转换成大写
 
     		if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
     			getSysLogService().error(method,methodName,"用户名或密码为空");

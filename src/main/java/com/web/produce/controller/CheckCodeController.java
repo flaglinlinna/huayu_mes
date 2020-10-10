@@ -28,7 +28,7 @@ public class CheckCodeController extends WebController {
 	 @Autowired
 	 private CheckCodeService checkCodeService;
 	 
-	 @ApiOperation(value = "生产投料页", notes = "生产投料页", hidden = true)
+	 @ApiOperation(value = "小码校验页", notes = "小码校验页", hidden = true)
 	    @RequestMapping(value = "/toCheckCode")
 	    public String toCheckCode(){
 	        return "/web/produce/check_code";

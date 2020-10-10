@@ -122,23 +122,6 @@ $(function() {
 								form.render();// 重新渲染
 							}
 						});
-
-						// 监听工具条
-						table.on('tool(colTable)', function(obj) {
-							console.log(obj)
-							var data = obj.data;
-							console.log(data)
-							if (obj.event === 'del') {
-								// 删除
-								del(obj, data.ID, data.ITEM_BARCODE);
-							}
-						});
-
-						// 监听
-						form.on('submit(confirmSubmit)', function(data) {
-							console.log(data.field)
-							addPut(data.field)
-						});
 					});
 
 	$('#barcode').bind('keypress', function(event) {

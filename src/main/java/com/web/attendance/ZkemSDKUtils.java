@@ -109,11 +109,11 @@ public class ZkemSDKUtils {
                     day = "0" + dwDay.getIntRef();
                 }
                 String validDate = dwYear.getIntRef() + "-" + month + "-" + day;
-                String currentDate = "2020-09-25";//DateUtils.getCurrentTime("yyyy-MM-dd");
-                if (currentDate.equals(validDate)) {
+                String currentDate = "2020-10-10";//DateUtils.getCurrentTime("yyyy-MM-dd");
+                //if (currentDate.equals(validDate)) {
                     Map<String, Object> m = new HashMap<String, Object>();
                     //Map<String, Object> user = getUserInfoByNumber(enrollNumber);
-                    m.put("EnrollNumber", enrollNumber);
+                    m.put("EnrollNumber", enrollNumber);//用户id或者账号
                     m.put("Time", dwYear.getIntRef() + "-" + dwMonth.getIntRef() + "-" + dwDay.getIntRef() + " " + dwHour.getIntRef() + ":" + dwMinute.getIntRef() + ":" + dwSecond.getIntRef());
                     m.put("VerifyMode", dwVerifyMode.getIntRef());
                     m.put("InOutMode", dwInOutMode.getIntRef());
@@ -124,11 +124,25 @@ public class ZkemSDKUtils {
                     m.put("Minute", dwMinute.getIntRef());
                     m.put("Second", dwSecond.getIntRef());
                     strList.add(m);
-                }
+                //}
             }
         } while (newresult == true);
         return strList;
     }
+    
+    /**
+     * 删除某个日期之前的所有考勤记录
+     * @param time (YYYY-MM-DD hh:mm:ss )
+     * @return
+     */
+    public static boolean deleteGeneralLogData(String time) {
+        Variant dwMachineNumber = new Variant(1, true);//机器号
+
+        Variant sTime = new Variant(time, true);
+       
+        return zkem.invoke("DeleteAttlogByTime",  dwMachineNumber, sTime).getBoolean();
+    }
+
 
     /**
      * 获取用户信息
@@ -312,36 +326,28 @@ public class ZkemSDKUtils {
     }
 
     /**
-     * 获取用户信息
+     * 设置用户指纹
      *
      * @param number 考勤号码
      * @return
      */
-    public static Map<String, Object> setUserTmpStr() {
+    public static boolean setUserTmpStr(String usercode,int finger,String tmp) {
 
         Variant dwMachineNumber = new Variant(0, true);//机器号
 
-        Variant dwEnrollNumber = new Variant("3", true);
+        Variant dwEnrollNumber = new Variant(usercode, true);
 
 
+        //Variant TmpData = new Variant("Ss9TUzIxAAADjJEECAUHCc7QAAAbjWkBAAAAg7EakYxlAJcPfQC1ABKDWACDAIwNBwCKjJoPfwCNAMsPPYyXANAMMABYAMGCRwCdAPMOUQCnjIMP5gCkAOgPIoynAL8OfwBjAASDLgCoANMOJgC7jKsPzADEAOoPm4zTADEP8wAeACyDxgDeAK8PGADjjK4PVgDiAIgPZ4zjAEgP3wA0ADSDiAALAcEPnQAXjccP2gAXAfsPnowhAUkOVYr7iwRzWH6tB96Gi5hdMAOCAnNTGcrytoYw/5aMzN/YEA5yAfOt9CkE6ScOvvwifX2idPpQmgmzAu6Xyexo/K18dIU5+qfZtRM2mIgGnX1Ff8N+PguYg36AD7CehPyhyIKy+AKGEAKaD+94DXhVAgyCNohyiVOPufxGhSyWBIgqCOaIJHs4cWJ6twV7eUKBCYYGkveT2Yv2D8ALRT87ASA6xAIxl+AGAMc4HPPBB4zVOCTA/wnFwD+swUzBVQoAcEEZslpgDAClQtb+T+xUAwCTRzAGBQPGSEPChgwARlAd+MErwSsDAIRsMnAHADBYScUE//6JAVdePcLNBAgD4GEA/MBH/8AAMO0x/8D9BwBsYxTMWAwAZGr6ODY9uQIAY3AA+9YAgv0WbTVMNluQBAOncjfB+xYAmIL5tDD//lT/UIFGAIwlhT3BDgBHjgVwTv7A/cDB6gQDmpRAPQoAeV19wUzDfJENAEte8DC9wf07CgB4Wnp0C4gLAHuldwSAwkzDhgYAmKbTKcOJAeqmK1URxTOkbsH9/zD//u7+V4kB5agwwVrXAIElCP/9/v7/hEdXuwoA/7CpwARaeE0NAJ5MJMKW//xN/kYDABXFhf8HjMzHLVoMAFzVKHL+MsD/wDbOAHpVY8hFSkAExYHZpSMLAHzdNPNAw6YQAFne3P45/Ph3/8D8wP/+B/80gwFm3t76+j8hWMj/BQDy3jAFPgmMed9DaFMuzwDKbjU+/8BGCcVS4NvFYnIEAGAhSW+FAVfmTHn+gQoD6+dGwGDC/pwHA2/1N8BT/wbF3vaxcsADEBgHjMIFnNkbQFTABNXdGLFOBhCcJkkF/yiVEbUrw2vCScLAT8DEwsHCwAbAwXPDZR8QHy4GREO5Mif9/f/BOP/8TP7AQf8FEHIzTNsdEDU/wEaRMf1x//z8//3/O/7Cc/7B/jdSQsULQI0BAAtFUgAAAAAAAAA=", true);
 
-        Variant TmpData = new Variant("Ss9TUzIxAAADjJEECAUHCc7QAAAbjWkBAAAAg7EakYxlAJcPfQC1ABKDWACDAIwNBwCKjJoPfwCNAMsPPYyXANAMMABYAMGCRwCdAPMOUQCnjIMP5gCkAOgPIoynAL8OfwBjAASDLgCoANMOJgC7jKsPzADEAOoPm4zTADEP8wAeACyDxgDeAK8PGADjjK4PVgDiAIgPZ4zjAEgP3wA0ADSDiAALAcEPnQAXjccP2gAXAfsPnowhAUkOVYr7iwRzWH6tB96Gi5hdMAOCAnNTGcrytoYw/5aMzN/YEA5yAfOt9CkE6ScOvvwifX2idPpQmgmzAu6Xyexo/K18dIU5+qfZtRM2mIgGnX1Ff8N+PguYg36AD7CehPyhyIKy+AKGEAKaD+94DXhVAgyCNohyiVOPufxGhSyWBIgqCOaIJHs4cWJ6twV7eUKBCYYGkveT2Yv2D8ALRT87ASA6xAIxl+AGAMc4HPPBB4zVOCTA/wnFwD+swUzBVQoAcEEZslpgDAClQtb+T+xUAwCTRzAGBQPGSEPChgwARlAd+MErwSsDAIRsMnAHADBYScUE//6JAVdePcLNBAgD4GEA/MBH/8AAMO0x/8D9BwBsYxTMWAwAZGr6ODY9uQIAY3AA+9YAgv0WbTVMNluQBAOncjfB+xYAmIL5tDD//lT/UIFGAIwlhT3BDgBHjgVwTv7A/cDB6gQDmpRAPQoAeV19wUzDfJENAEte8DC9wf07CgB4Wnp0C4gLAHuldwSAwkzDhgYAmKbTKcOJAeqmK1URxTOkbsH9/zD//u7+V4kB5agwwVrXAIElCP/9/v7/hEdXuwoA/7CpwARaeE0NAJ5MJMKW//xN/kYDABXFhf8HjMzHLVoMAFzVKHL+MsD/wDbOAHpVY8hFSkAExYHZpSMLAHzdNPNAw6YQAFne3P45/Ph3/8D8wP/+B/80gwFm3t76+j8hWMj/BQDy3jAFPgmMed9DaFMuzwDKbjU+/8BGCcVS4NvFYnIEAGAhSW+FAVfmTHn+gQoD6+dGwGDC/pwHA2/1N8BT/wbF3vaxcsADEBgHjMIFnNkbQFTABNXdGLFOBhCcJkkF/yiVEbUrw2vCScLAT8DEwsHCwAbAwXPDZR8QHy4GREO5Mif9/f/BOP/8TP7AQf8FEHIzTNsdEDU/wEaRMf1x//z8//3/O/7Cc/7B/jdSQsULQI0BAAtFUgAAAAAAAAA=", true);
+        Variant TmpData = new Variant(tmp, true);
 
-        Variant vResult = Dispatch.call(zkem, "SSR_SetUserTmpStr", dwMachineNumber, dwEnrollNumber,6,TmpData);
+        Variant vResult = Dispatch.call(zkem, "SSR_SetUserTmpStr", dwMachineNumber, dwEnrollNumber,finger,TmpData);
 
         boolean newresult = vResult.getBoolean();
 
         System.out.println("newresult:"+newresult);
-
-        /*if(newresult){
-     	   System.out.println("i:"+i+";newresult:"+newresult);
-     	   System.out.println("TmpData:"+TmpData.getStringRef());
-     	   System.out.println("TmpLength:"+TmpLength.getIntRef());
-        }*/
-
-
-
-        return null;
+        return newresult;
     }
 
     /**
@@ -377,16 +383,14 @@ public class ZkemSDKUtils {
     public static void main(String[] args) {
         ZkemSDKUtils sdk = new ZkemSDKUtils();
         Map<String, Object> map = new HashMap<String, Object>();
-        boolean connFlag = sdk.connect("192.168.0.201", 4370);
+        boolean connFlag = sdk.connect("192.168.1.201", 4370);
         System.out.println(connFlag);
         if (connFlag) {
-            /*boolean flag = sdk.readGeneralLogData();
-            System.out.println("flag:" + flag);*/
-
-            /*List<Map<String, Object>> strList = sdk.getGeneralLogData();
-            map.put("strList", strList);
-            System.out.println("flag:" + flag);
-            System.out.println(strList.toString());*/
+//            boolean flag = sdk.readGeneralLogData();
+//            System.out.println("flag:" + flag);
+//
+//            List<Map<String, Object>> strList = sdk.getGeneralLogData();
+//            System.out.println(strList.toString());
            /*List<Map<String, Object>> userList = sdk.getUserInfo();//获取所有人员信息
             System.out.println(userList.toString());*/
             //[{Enabled=true, EnrollNumber=2, Privilege=0, Name=, Password=}]
@@ -399,7 +403,15 @@ public class ZkemSDKUtils {
 
             //sdk.getUserTmpStr();
 
-        	sdk.setUserTmpStr();
+            //sdk.setUserTmpStr("fyx",6,"");
+            
+           /* System.out.println(sdk.deleteGeneralLogData("2020-09-26 00:00:00"));
+            
+            flag = sdk.readGeneralLogData();
+            System.out.println("flag:" + flag);
+
+            List<Map<String, Object>> strList1 = sdk.getGeneralLogData();
+            System.out.println(strList1.toString());*/
 
         }
     }
