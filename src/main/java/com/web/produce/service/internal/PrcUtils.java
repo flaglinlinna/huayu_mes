@@ -245,7 +245,7 @@ public class PrcUtils {
 				cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
 				cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
 				cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(12, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(12, java.sql.Types.VARCHAR);// 输出参数 返回标识
 				cs.registerOutParameter(13, -10);// 输出参数 追溯数据
 				return cs;
 			}

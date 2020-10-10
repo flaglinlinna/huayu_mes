@@ -44,11 +44,11 @@ $(function() {
 					{
 						field : 'ITEM_BARCODE',
 						title : '箱内条码',
-						width : 140
+						width : 130
 					},{
 						field : 'ITEM_BARCODE',
 						title : '箱外条码',
-						width : 140
+						width : 130
 					}, {
 						field : 'TYPE',
 						title : '类型',
@@ -59,11 +59,11 @@ $(function() {
 						width : 90
 					},{
 						field : 'TASK_NO',
-						title : '指令单号'
+						title : '制令单号'
 					},{
 						field : 'ITEM_BARCODE',
 						title : '物料编号',
-						width : 150
+						width : 130
 					},{
 						field : 'CREATE_BY',
 						title : '操作人',
@@ -170,9 +170,9 @@ $(function() {
 						cols : [ [
 						{ type: 'checkbox' },//多选  radio
 						, {
-							field : 'id',
+							field : 'ID',
 							title : 'id',
-							width : 0,hide:true
+							width : 10,hide:true
 						}, {
 							field : 'TASK_NO',
 							title : '制令单号',
@@ -215,19 +215,26 @@ $(function() {
 							
 						},
 					},
-					done : function(elem, data) {
+					 done : function(elem, data) {
 						//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
 						var da=data.data;
 						console.log(da)
+						//console.log(_tableSelectEdite)
 						var str = "";
-						da.forEach(function(d){  
-						   if(d.QTY_PLAN){
-							   str += d.TASK_NO+"@"+d.QTY_PLAN+",";
-						   }else{
-							   layer.alert("请在"+d.TASK_NO+"行输入数量!");
-							   return false;
-						   }
+						da.forEach(function(d){
+							_tableSelectEdite.forEach(function(d2){
+								if(d2.id == d.ID){
+									d.QTY_PLAN = d2.value;
+								}
+							})
+							if(d.QTY_PLAN){
+								   str += d.TASK_NO+"@"+d.QTY_PLAN+",";
+							   }else{
+								   layer.alert("请在"+d.TASK_NO+"行输入数量!");
+								   return false;
+							   }
 						});
+						//console.log(str)
 						$('#num2').val(str)
 				}
 				});
@@ -315,6 +322,7 @@ $(function() {
 			console.log(data)
 			if (data.result) {
 				$('#inqty').val(data.data.Qty);
+				$('#rate').val(data.data.Rate);
 				tableIns.reload({
 					data:data.data.List
 				});

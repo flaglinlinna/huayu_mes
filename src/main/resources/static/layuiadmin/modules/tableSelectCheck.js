@@ -52,8 +52,8 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
             opt.table.elem = "#"+tableName;
             opt.table.id = tableName;
             opt.table.done = function(res, curr, count){
-                //defaultChecked(res, curr, count);
-                //setChecked(res, curr, count);
+                defaultChecked(res, curr, count);
+                setChecked(res, curr, count);
                 tableDone(res, curr, count);
             };
             var tableSelect_table = table.render(opt.table);

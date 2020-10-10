@@ -69,7 +69,8 @@ public class Productlmpl extends PrcUtils implements ProductService {
 		}
 		Map m = new HashMap();
 		m.put("Qty", list.get(2));
-		m.put("List", list.get(3));
+		m.put("Rate", list.get(3));
+		m.put("List", list.get(4));
 		return ApiResponseResult.success().data(m);
 	}
 
