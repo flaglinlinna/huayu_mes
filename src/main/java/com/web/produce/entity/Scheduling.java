@@ -46,11 +46,18 @@ public class Scheduling extends BaseEntity {
     protected String custId;
 
     /**
-     * 客户名称
+     * 客户全称
      */
-    @ApiModelProperty(name = "custName", value = "客户名称")
+    @ApiModelProperty(name = "custName", value = "客户全称")
     @Column(length = 50)
     protected String custName;
+
+    /**
+     * 客户简称
+     */
+    @ApiModelProperty(name = "custNameS", value = "客户简称")
+    @Column(name = "cust_name_s", length = 50)
+    protected String custNameS;
 
     /**
      * 客户编码
@@ -168,6 +175,14 @@ public class Scheduling extends BaseEntity {
         this.groupNo = groupNo;
     }
 
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
+    }
+
     public String getCustName() {
         return custName;
     }
@@ -176,12 +191,12 @@ public class Scheduling extends BaseEntity {
         this.custName = custName;
     }
 
-    public String getCustId() {
-        return custId;
+    public String getCustNameS() {
+        return custNameS;
     }
 
-    public void setCustId(String custId) {
-        this.custId = custId;
+    public void setCustNameS(String custNameS) {
+        this.custNameS = custNameS;
     }
 
     public String getCustNo() {

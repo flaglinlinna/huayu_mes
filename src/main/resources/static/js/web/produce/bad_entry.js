@@ -165,10 +165,37 @@ $(function() {
 							}
 							// console.log(data.field)
 						});
+						/*
 						form.on('select(defcode)', function(data) {
 							console.log(data)
 							$("#defcode1").val("");
 						});
+						
+						form.on('select(hc_select)', function (data) {   //选择移交单位 赋值给input框
+							  var select_text = data.elem[data.elem.selectedIndex].text;
+					      $("#HandoverCompany").val(select_text );
+					      $("#hc_select").next().find("dl").css({ "display": "none" });
+					      form.render();
+					  });
+						
+						$('#HandoverCompany').bind('input propertychange', function () {
+							  var value = $("#HandoverCompany").val();
+							  $("#hc_select").val(value);
+							  form.render();
+							  $("#hc_select").next().find("dl").css({ "display": "block" });
+							  var dl = $("#hc_select").next().find("dl").children();
+							  var j = -1;
+							  for (var i = 0; i < dl.length; i++) {
+							      if (dl[i].innerHTML.indexOf(value) <= -1) {
+							          dl[i].style.display = "none";
+							          j++;
+							      }
+							      if (j == dl.length-1) {
+							          $("#hc_select").next().find("dl").css({ "display": "none" });
+							      }
+							  }
+						  
+						});*/
 						
 					});
 	$('#barcode').bind('keypress', function(event) {
@@ -196,23 +223,28 @@ $(function() {
 			}
 		}
 	});
+	
+	
+
+	
 
 });
 
 function getBadInfo(keyword) {
 	var params = {
-		"keyword" : keyword
+		"keyword" : ""
 	}
 	CoreUtil
 			.sendAjax(
 					"produce/bad_entry/getBadInfo",
 					JSON.stringify(params),
 					function(data) {
+						 console.log(data)
 						if (data.result) {
 							var def = data.data;
 							// console.log(def)
 							// console.log(keyword)
-							if (keyword == "Null") {
+							
 								$("#defcode").empty();
 								for (var i = 0; i < def.length; i++) {
 									if (i == 0) {
@@ -229,17 +261,7 @@ function getBadInfo(keyword) {
 													+ "</option>");
 								}
 
-							} else {
-								if (def.length == 0) {
-									
-									$("#defcode").val("");
-									layer.alert("无此不良代码数据");
-								} else {
-									$("#defcode").val('');
-									$("#defname").val(def[0].DEFECT_NAME)
-								}
-								//layui.form.render('select');
-							}
+							
 							
 						} else {
 							layer.alert(data.msg);
