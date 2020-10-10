@@ -124,14 +124,14 @@
                 <!--工艺维护列表-->
                 <table id="iList" lay-filter="iTable"></table>
                 <script type="text/html" id="statusTpl">
-                    {{#  if(d.jobAttr===1){ }}
+                    {{# if(d.jobAttr==1){ }}
                     <input type="checkbox" name="{{d.procNo}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
                     {{#  } else { }}
                     <input type="checkbox" name="{{d.procNo}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
                     {{#  } }}
                 </script>
                 <script type="text/html" id="optBar">
-                    {{#  if(d.isCheck===1){ }}
+                    {{#  if(d.isCheck==1){ }}
                     <button type="button" class="layui-btn layui-btn-xs" lay-event="edit1">编辑</button>
                     {{#  } else { }}
                     <button type="button" class="layui-btn layui-btn-xs" lay-event="edit1" disabled="true">编辑</button>

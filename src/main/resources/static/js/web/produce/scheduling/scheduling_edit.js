@@ -220,7 +220,6 @@ function doEdit(){
 
 //获取编辑信息-工艺维护
 function getProcess(obj, id){
-    console.log(obj);
     var optionHtml = '<option value=""></option>';
     //添加作业员列表
     for(var i = 0; i < employeeList.length; i++){
@@ -258,6 +257,7 @@ function openProcess(title){
         content:$('#editDiv1'),
         end:function(){
             cleanProcess();
+            loadAll1();
         }
     });
 }
