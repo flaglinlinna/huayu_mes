@@ -28,6 +28,7 @@ import com.web.basic.dao.EmployeeDao;
 import com.web.basic.entity.Employee;
 import com.web.produce.dao.CardDataDao;
 import com.web.produce.dao.DevClockDao;
+import com.web.produce.dao.EmpFingerDao;
 import com.web.produce.dao.IssueDao;
 import com.web.produce.entity.CardData;
 import com.web.produce.entity.DevClock;
@@ -48,6 +49,9 @@ public class Issuelmpl implements IssueService {
 
 	@Autowired
 	EmployeeDao employeeDao;
+	
+	@Autowired
+	EmpFingerDao empFingerDao;
 
 	@Autowired
 	DevClockDao devClockDao;
@@ -115,28 +119,22 @@ public class Issuelmpl implements IssueService {
 				empList.add(Long.parseLong(empIdArray[i]));
 			}
 		}
+		//记录有就忽略，没有就增加
 		List<Issue> listNew = new ArrayList<>();
 		if (devList.size() > 0) {
 			for (Long devId : devList) {
-				// 1.删除原有的记录
-				List<Issue> listOld = issueDao.findByDelFlagAndDevClockId(0, devId);
-				if (listOld.size() > 0) {
-					for (Issue item : listOld) {
-						item.setDelTime(new Date());
-						item.setDelFlag(1);
-						item.setDelBy(UserUtil.getSessionUser().getId());
-					}
-					issueDao.saveAll(listOld);
-				}
-				// 2.添加新指纹下发记录
 				if (empList.size() > 0) {
 					for (Long empId : empList) {
-						Issue item = new Issue();
-						item.setCreateDate(new Date());
-						item.setCreateBy(UserUtil.getSessionUser().getId());
-						item.setDevClockId(devId);
-						item.setEmpId(empId);
-						listNew.add(item);
+						//doIssuedByUser(String devIp,List<EmpFinger> empFingers)
+						int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
+						if(count==0){
+							Issue item = new Issue();
+							item.setCreateDate(new Date());
+							item.setCreateBy(UserUtil.getSessionUser().getId());
+							item.setDevClockId(devId);
+							item.setEmpId(empId);
+							listNew.add(item);	
+						}		
 					}
 					issueDao.saveAll(listNew);
 				}
@@ -186,30 +184,65 @@ public class Issuelmpl implements IssueService {
 	}
 
 	/**
-	 * 获取员工数据
+	 * 获取员工数据[已录取手指信息的员工]-未去重
 	 */
+	/*
 	@Override
 	@Transactional
 	public ApiResponseResult getEmp(String empKeyword, PageRequest pageRequest) throws Exception {
 		
 		List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		//filters.add(new SearchFilter("empStatus", SearchFilter.Operator.EQ, BasicStateEnum.TRUE.intValue()));
+		// 查询2
+		List<SearchFilter> filters1 = new ArrayList<>();
+		if (StringUtils.isNotEmpty(empKeyword)) {
+			filters1.add(new SearchFilter("emp.empName", SearchFilter.Operator.LIKE, empKeyword));
+			filters1.add(new SearchFilter("emp.empCode", SearchFilter.Operator.LIKE, empKeyword));
+			filters1.add(new SearchFilter("emp.empType", SearchFilter.Operator.LIKE, empKeyword));
+		}
+		Specification<EmpFinger> spec = Specification.where(BaseService.and(filters, EmpFinger.class));
+		Specification<EmpFinger> spec1 = spec.and(BaseService.or(filters1, EmpFinger.class));
+		Page<EmpFinger> page = empFingerDao.findAll(spec1, pageRequest);
+
+		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+		for(EmpFinger bs:page.getContent()){ 
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", bs.getId());
+			map.put("empCode",bs.getEmp().getEmpCode());//获取关联表的数据-工号
+			map.put("empName",bs.getEmp().getEmpName());//获取关联表的数据-姓名
+			map.put("empType",bs.getEmp().getEmpType());
+			list.add(map);
+		}
+		
+		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+	}*/
+
+	/**
+	 * 获取员工数据
+	 */
+	@Override
+	@Transactional
+	public ApiResponseResult getEmp(String empKeyword, PageRequest pageRequest) throws Exception {	
+		List<SearchFilter> filters = new ArrayList<>();
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 		filters.add(new SearchFilter("empStatus", SearchFilter.Operator.EQ, BasicStateEnum.TRUE.intValue()));
 		// 查询2
 		List<SearchFilter> filters1 = new ArrayList<>();
 		if (StringUtils.isNotEmpty(empKeyword)) {
-			filters1.add(new SearchFilter("empCode", SearchFilter.Operator.LIKE, empKeyword));
 			filters1.add(new SearchFilter("empName", SearchFilter.Operator.LIKE, empKeyword));
+			filters1.add(new SearchFilter("empCode", SearchFilter.Operator.LIKE, empKeyword));
 			filters1.add(new SearchFilter("empType", SearchFilter.Operator.LIKE, empKeyword));
 		}
 		Specification<Employee> spec = Specification.where(BaseService.and(filters, Employee.class));
 		Specification<Employee> spec1 = spec.and(BaseService.or(filters1, Employee.class));
 		Page<Employee> page = employeeDao.findAll(spec1, pageRequest);
-
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 
+	
 	/**
 	 * 获取卡机数据
 	 */

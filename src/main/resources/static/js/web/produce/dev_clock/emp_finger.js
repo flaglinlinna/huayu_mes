@@ -130,10 +130,13 @@ $(function() {
 
 });
 
-// 新增编辑弹出框
+// 新增/编辑弹出框
 function openEmpFinger(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
+		$('#templateStr').removeAttr("disabled");
+	}else{
+		$('#templateStr').attr("disabled","disabled");
 	}
 	layer.open({
 		type : 1,
@@ -168,7 +171,7 @@ function getEmpList(id){
 					if(i==0){
 						$("#empId").append("<option value=''>请点击选择</option>");
 					}
-					$("#empId").append("<option value=" + emp[i].id+ ">" + emp[i].empName + "</option>");
+					$("#empId").append("<option value=" + emp[i].id+ ">" +emp[i].empCode+ emp[i].empName + "</option>");
 					if(emp[i].id==id){
 						$("#empId").val(emp[i].id);
 					}
@@ -196,9 +199,7 @@ function addSubmit(obj) {
 						loadAll();
 					});
 				} else {
-					layer.alert(data.msg, function() {
-						layer.closeAll();
-					});
+					layer.alert(data.msg);
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
@@ -217,9 +218,7 @@ function editSubmit(obj) {
 						loadAll();
 					});
 				} else {
-					layer.alert(data.msg, function() {
-						layer.closeAll();
-					});
+					layer.alert(data.msg);
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);

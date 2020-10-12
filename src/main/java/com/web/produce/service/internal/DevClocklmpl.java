@@ -63,9 +63,13 @@ public class DevClocklmpl implements DevClockService {
 		}
 		int count = devClockDao.countByDelFlagAndDevCode(0, devClock.getDevCode());
 		if (count > 0) {
-			return ApiResponseResult.failure("该卡机已存在，请填写其他卡机编码！");
+			return ApiResponseResult.failure("该卡机编码已存在，请填写其他卡机编码！");
 		}
-		int ipCount=devClockDao.countByDelFlagAndDevIp(0, devClock.getDevIp());
+		int nameCount = devClockDao.countByDelFlagAndDevName(0, devClock.getDevName());
+		if (nameCount > 0) {
+			return ApiResponseResult.failure("该卡机名称已存在，请填写其他卡机名称！");
+		}
+		int ipCount = devClockDao.countByDelFlagAndDevIp(0, devClock.getDevIp());
 		if (ipCount > 0) {
 			return ApiResponseResult.failure("该IP地址已存在，请填写其他IP！");
 		}
@@ -107,16 +111,26 @@ public class DevClocklmpl implements DevClockService {
 			}
 			o.setDevCode(devClock.getDevCode().trim());
 		}
-		if(o.getDevIp().equals(devClock.getDevIp())){
-			int ipCount=devClockDao.countByDelFlagAndDevIp(0, devClock.getDevIp());
+		// 判断卡机名称是否有变化，有则修改；没有则不修改
+		if (o.getDevName().equals(devClock.getDevName())) {
+		} else {
+			int nameCount = devClockDao.countByDelFlagAndDevName(0, devClock.getDevName());
+			if (nameCount > 0) {
+				return ApiResponseResult.failure("该卡机名称已存在，请填写其他卡机名称！");
+			}
+			o.setDevName(devClock.getDevName());
+		}
+		// 判断卡机Ip是否有变化，有则修改；没有则不修改
+		if (o.getDevIp().equals(devClock.getDevIp())) {
+		} else {
+			int ipCount = devClockDao.countByDelFlagAndDevIp(0, devClock.getDevIp());
 			if (ipCount > 0) {
 				return ApiResponseResult.failure("该IP地址已存在，请填写其他IP！");
 			}
+			o.setDevIp(devClock.getDevIp());
 		}
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
-		o.setDevName(devClock.getDevName());
-		o.setDevIp(devClock.getDevIp());
 		o.setDevSeries(devClock.getDevSeries());
 		o.setDevType(devClock.getDevType());
 		o.setLineId(devClock.getLineId());
@@ -189,10 +203,10 @@ public class DevClocklmpl implements DevClockService {
 		Specification<DevClock> spec1 = spec.and(BaseService.or(filters1, DevClock.class));
 		Page<DevClock> page = devClockDao.findAll(spec1, pageRequest);
 
-		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
-		for(DevClock bs:page.getContent()){ 
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for (DevClock bs : page.getContent()) {
 			Map<String, Object> map = new HashMap<>();
-			map.put("lineId",bs.getLine().getLineName());//获取关联表的数据
+			map.put("lineId", bs.getLine().getLineName());// 获取关联表的数据
 			map.put("id", bs.getId());
 			map.put("devCode", bs.getDevCode());
 			map.put("devName", bs.getDevName());
@@ -200,11 +214,11 @@ public class DevClocklmpl implements DevClockService {
 			map.put("devSeries", bs.getDevSeries());
 			map.put("devType", bs.getDevType());
 			map.put("enabled", bs.getEnabled());
-			map.put("lastupdateDate",bs.getLastupdateDate());
+			map.put("lastupdateDate", bs.getLastupdateDate());
 			map.put("createDate", bs.getCreateDate());
 			list.add(map);
 		}
-		
+
 		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
@@ -218,7 +232,6 @@ public class DevClocklmpl implements DevClockService {
 		List<Line> list = lineDao.findByDelFlag(0);
 		return ApiResponseResult.success().data(list);
 	}
-
 
 	/**
 	 * 是否有效
@@ -246,13 +259,13 @@ public class DevClocklmpl implements DevClockService {
 	@Override
 	public ApiResponseResult test(DevClock devClock) throws Exception {
 		// TODO Auto-generated method stub
-        boolean connFlag = ZkemSDKUtils.connect(devClock.getDevIp(), 4370);
-        String str = "";
-        if(connFlag){
-        	str = "连接成功!";
-        }else{
-        	str = "连接失败!请检查一下网络以及IP地址!";
-        }
+		boolean connFlag = ZkemSDKUtils.connect(devClock.getDevIp(), 4370);
+		String str = "";
+		if (connFlag) {
+			str = "连接成功!";
+		} else {
+			str = "连接失败!请检查一下网络以及IP地址!";
+		}
 		return ApiResponseResult.success(str);
 	}
 }

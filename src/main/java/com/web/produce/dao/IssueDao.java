@@ -14,4 +14,7 @@ public interface IssueDao extends CrudRepository<Issue, Long>,JpaSpecificationEx
 	public List<Issue> findByDelFlag(Integer delFlag);
 	public Issue findById(long id);
 	public  List<Issue> findByDelFlagAndDevClockId(Integer delFlag,long devClockId);
+	public int countByDelFlagAndEmpIdAndDevClockId(Integer delFlag, Long empId,Long devClockId);
+	
+	
 }

@@ -88,7 +88,7 @@ public class Clearlmpl implements ClearService {
 	}
 
 	/**
-	 * 新增下发记录（会覆盖原有记录）
+	 * 清除下发记录
 	 */
 	@Override
 	@Transactional
@@ -113,34 +113,29 @@ public class Clearlmpl implements ClearService {
 				empList.add(Long.parseLong(empIdArray[i]));
 			}
 		}
-		List<Clear> listNew = new ArrayList<>();
+		//存在就删，不存在则忽略
 		if (devList.size() > 0) {
 			for (Long devId : devList) {
-				// 1.删除原有的记录
-				List<Clear> listOld = clearDao.findByDelFlagAndDevClockId(0, devId);
-				if (listOld.size() > 0) {
-					for (Clear item : listOld) {
-						item.setDelTime(new Date());
-						item.setDelFlag(1);
-						item.setDelBy(UserUtil.getSessionUser().getId());
-					}
-					clearDao.saveAll(listOld);
-				}
-				// 2.添加新指纹下发记录
 				if (empList.size() > 0) {
-					for (Long empId : empList) {
-						Clear item = new Clear();
-						item.setCreateDate(new Date());
-						item.setCreateBy(UserUtil.getSessionUser().getId());
-						item.setDevClockId(devId);
-						item.setEmpId(empId);
-						listNew.add(item);
+					for (Long empId : empList) {					
+						int count=clearDao.countByDelFlagAndEmpIdAndDevClockId(0, empId, devId);
+						if(count>0){
+							List<Clear> listOld = clearDao.findByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
+							if (listOld.size() > 0) {
+								for (Clear item : listOld) {
+									item.setDelTime(new Date());
+									item.setDelFlag(1);
+									item.setDelBy(UserUtil.getSessionUser().getId());
+								}
+								clearDao.saveAll(listOld);
+							}
+						}
 					}
-					clearDao.saveAll(listNew);
 				}
 			}
 		}
-		return ApiResponseResult.success("下发记录添加成功！");
+		
+		return ApiResponseResult.success("下发记录清除成功！");
 	}
 
 	/**

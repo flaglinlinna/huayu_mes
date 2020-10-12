@@ -171,15 +171,10 @@ $(function() {
 										loadAll();
 									});
 								} else {
-									layer.alert(data.msg, function() {
-										layer.closeAll();
-									});
+									layer.alert(data.msg);
 								}
 							}, "POST", false, function(res) {
-								layer.alert("操作请求错误，请您稍后再试", function() {
-
-									layer.closeAll();
-								});
+								layer.alert("操作请求错误，请您稍后再试");
 							});
 						},
 						btn2 : function() {
@@ -284,9 +279,7 @@ function addSubmit(obj) {
 						loadAll();
 					});
 				} else {
-					layer.alert(data.msg, function() {
-						layer.closeAll();
-					});
+					layer.alert(data.msg);
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
@@ -305,9 +298,7 @@ function editSubmit(obj) {
 						loadAll();
 					});
 				} else {
-					layer.alert(data.msg, function() {
-						layer.closeAll();
-					});
+					layer.alert(data.msg);
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);

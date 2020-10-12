@@ -14,4 +14,6 @@ public interface ClearDao extends CrudRepository<Clear, Long>,JpaSpecificationEx
 	public List<Clear> findByDelFlag(Integer delFlag);
 	public Clear findById(long id);
 	public  List<Clear> findByDelFlagAndDevClockId(Integer delFlag,long devClockId);
+	public  List<Clear> findByDelFlagAndEmpIdAndDevClockId(Integer delFlag,Long empId,long devClockId);
+	public int countByDelFlagAndEmpIdAndDevClockId(Integer delFlag, Long empId,Long devClockId);
 }

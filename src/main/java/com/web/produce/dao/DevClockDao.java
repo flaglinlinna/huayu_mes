@@ -14,5 +14,7 @@ public interface DevClockDao extends CrudRepository<DevClock, Long>,JpaSpecifica
 	public List<DevClock> findByDelFlag(Integer delFlag);
 	public DevClock findById(long id);
 	public int countByDelFlagAndDevCode(Integer delFlag, String devCode);//查询devCode是否存在
+	public int countByDelFlagAndDevName(Integer delFlag, String devName);//查询devName是否存在
 	public int countByDelFlagAndDevIp(Integer delFlag, String devIp);//查询devIp是否存在
+	
 }

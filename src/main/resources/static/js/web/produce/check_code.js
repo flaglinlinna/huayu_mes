@@ -142,6 +142,7 @@ $(function() {
 	});
 	$('#barcode1').bind('keypress', function(event) {
 		if (event.keyCode == "13") {
+			$('#barcode').val("");
 			document.getElementById("barcode2").focus();
 		}
 	});
@@ -186,7 +187,7 @@ function subCode(taskNo, barcode1, barcode2) {
 					});
 					$('#barcode').val("");
 					$('#barcode1').val("");
-					$('#barcode2').val("");
+					$('#barcode2').val("");		
 				} else {
 					layer.alert(data.msg);
 				}

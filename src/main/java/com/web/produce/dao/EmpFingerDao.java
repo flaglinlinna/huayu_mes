@@ -1,11 +1,17 @@
 package com.web.produce.dao;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import com.system.permission.entity.SysPermission;
+import com.system.role.entity.RolePermissionMap;
+import com.system.role.entity.SysRole;
+import com.system.user.entity.UserRoleMap;
 import com.web.produce.entity.EmpFinger;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface EmpFingerDao extends CrudRepository<EmpFinger, Long>,JpaSpecificationExecutor<EmpFinger>{
@@ -14,5 +20,9 @@ public interface EmpFingerDao extends CrudRepository<EmpFinger, Long>,JpaSpecifi
 	public List<EmpFinger> findByDelFlag(Integer delFlag);
 	public EmpFinger findById(long id);
 	public int countByDelFlagAndTemplateStr(Integer delFlag, String templateStr);//查询指纹是否存在
+	public int countByDelFlagAndEmpId(Integer delFlag, Long empId);//查询员工指纹记录数
+	public int countByDelFlagAndEmpIdAndFingerIdx(Integer delFlag, Long empId,String fingerIdx);//员工+手指序号保证唯一
 	
+	@Query(value = "select distinct EMP_ID  from mes_base_emp_finger where DEL_FLAG=0", nativeQuery = true)
+	public List<EmpFinger> getNotRepeatEmp();//获取不重复是员工数据
 }

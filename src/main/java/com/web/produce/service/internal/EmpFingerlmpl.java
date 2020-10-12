@@ -54,6 +54,14 @@ public class EmpFingerlmpl implements EmpFingerService {
 		if (count > 0) {
 			return ApiResponseResult.failure("该指纹模板已存在，请加入其他指纹模板！");
 		}
+		int empCount=empFingerDao.countByDelFlagAndEmpId(0, empFinger.getEmpId());
+		if (empCount >=2) {
+			return ApiResponseResult.failure("每位员工只需登记两枚指纹！");
+		}
+		int empFIndxCount = empFingerDao.countByDelFlagAndEmpIdAndFingerIdx(0,empFinger.getEmpId(),empFinger.getFingerIdx());
+		if (empFIndxCount > 0) {
+			return ApiResponseResult.failure("该员工的此项手指序号已存在，请选择其他手指序号！");
+		}
 		empFinger.setCreateDate(new Date());
 		empFinger.setCreateBy(UserUtil.getSessionUser().getId());
 		empFingerDao.save(empFinger);
@@ -94,10 +102,15 @@ public class EmpFingerlmpl implements EmpFingerService {
 			}
 			o.setTemplateStr(empFinger.getTemplateStr());
 		}
+		int empFIndxCount = empFingerDao.countByDelFlagAndEmpIdAndFingerIdx(0,empFinger.getEmpId(),empFinger.getFingerIdx());
+		if (empFIndxCount > 0) {
+			return ApiResponseResult.failure("该员工的此项手指序号已存在，请选择其他手指序号！");
+		}else{
+			o.setFingerIdx(empFinger.getFingerIdx());
+			o.setEmpId(empFinger.getEmpId());
+		}
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
-		o.setFingerIdx(empFinger.getFingerIdx());
-		o.setEmpId(empFinger.getEmpId());
 		empFingerDao.save(o);
 		return ApiResponseResult.success("编辑成功！");
 	}

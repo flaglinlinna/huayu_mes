@@ -42,6 +42,20 @@ public class Issue extends BaseEntity {
     protected Employee employee;
     
     /**
+     * 指纹记录Id
+     */
+    @ApiModelProperty(name="empFingerId",value=" 指纹记录Id")
+    @Column
+    protected Long empFingerId;
+
+    @ApiModelProperty(name="empFinger",hidden=true,value=" 指纹记录Id")
+    @ManyToOne
+    @JoinColumn(name = "empFingerId", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected EmpFinger empFinger;
+    
+    
+    /**
      * 卡机Id
      */
     @ApiModelProperty(name="devClockId",value="卡机Id")
@@ -85,4 +99,21 @@ public class Issue extends BaseEntity {
 	public void setDevClock(DevClock devClock) {
 		this.devClock = devClock;
 	}
+
+	public Long getEmpFingerId() {
+		return empFingerId;
+	}
+
+	public void setEmpFingerId(Long empFingerId) {
+		this.empFingerId = empFingerId;
+	}
+
+	public EmpFinger getEmpFinger() {
+		return empFinger;
+	}
+
+	public void setEmpFinger(EmpFinger empFinger) {
+		this.empFinger = empFinger;
+	}
+	
 }
