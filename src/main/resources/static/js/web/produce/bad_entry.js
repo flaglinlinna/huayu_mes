@@ -165,6 +165,7 @@ $(function() {
 							}
 							// console.log(data.field)
 						});
+						/*
 						form.on('select(defcode)', function(data) {
 							console.log(data)
 							$("#defcode1").val("");
@@ -194,7 +195,7 @@ $(function() {
 							      }
 							  }
 						  
-						});
+						});*/
 						
 					});
 	$('#barcode').bind('keypress', function(event) {
@@ -231,18 +232,19 @@ $(function() {
 
 function getBadInfo(keyword) {
 	var params = {
-		"keyword" : keyword
+		"keyword" : ""
 	}
 	CoreUtil
 			.sendAjax(
 					"produce/bad_entry/getBadInfo",
 					JSON.stringify(params),
 					function(data) {
+						 console.log(data)
 						if (data.result) {
 							var def = data.data;
 							// console.log(def)
 							// console.log(keyword)
-							if (keyword == "Null") {
+							
 								$("#defcode").empty();
 								for (var i = 0; i < def.length; i++) {
 									if (i == 0) {
@@ -259,17 +261,7 @@ function getBadInfo(keyword) {
 													+ "</option>");
 								}
 
-							} else {
-								if (def.length == 0) {
-									
-									$("#defcode").val("");
-									layer.alert("无此不良代码数据");
-								} else {
-									$("#defcode").val('');
-									$("#defname").val(def[0].DEFECT_NAME)
-								}
-								//layui.form.render('select');
-							}
+							
 							
 						} else {
 							layer.alert(data.msg);
