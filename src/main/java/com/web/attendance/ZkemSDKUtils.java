@@ -129,7 +129,7 @@ public class ZkemSDKUtils {
         } while (newresult == true);
         return strList;
     }
-    
+
     /**
      * 删除某个日期之前的所有考勤记录
      * @param time (YYYY-MM-DD hh:mm:ss )
@@ -139,7 +139,7 @@ public class ZkemSDKUtils {
         Variant dwMachineNumber = new Variant(1, true);//机器号
 
         Variant sTime = new Variant(time, true);
-       
+
         return zkem.invoke("DeleteAttlogByTime",  dwMachineNumber, sTime).getBoolean();
     }
 
@@ -404,9 +404,9 @@ public class ZkemSDKUtils {
             //sdk.getUserTmpStr();
 
             //sdk.setUserTmpStr("fyx",6,"");
-            
+
            /* System.out.println(sdk.deleteGeneralLogData("2020-09-26 00:00:00"));
-            
+
             flag = sdk.readGeneralLogData();
             System.out.println("flag:" + flag);
 
