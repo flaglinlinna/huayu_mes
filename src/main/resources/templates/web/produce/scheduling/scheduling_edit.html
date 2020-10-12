@@ -123,9 +123,9 @@
             <div class="layui-tab-item layui-show">
                 <!--工艺维护列表-->
                 <table id="iList" lay-filter="iTable"></table>
-                <!--<form>-->
-                    <!--<button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="saveProcess">保存</button>-->
-                <!--</form>-->
+                <form>
+                    <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="saveProcess">保存</button>
+                </form>
                 <script type="text/html" id="statusTpl">
                     {{# if(d.jobAttr==1){ }}
                     <input type="checkbox" name="{{d.procNo}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />

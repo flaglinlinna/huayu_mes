@@ -335,6 +335,7 @@ function doEditProcess(){
 
 //保存工艺
 function saveProcess(table) {
+    debugger;
     //获取选中工艺
     var processIds = "";
     var checkStatus = table.checkStatus("iList");
@@ -347,26 +348,49 @@ function saveProcess(table) {
     }
 
     var param = {
-        mid: $("#id"),
+        mid: $("#id").val(),
         processIds: processIds
     }
 
-    CoreUtil.sendAjax("/produce/scheduling/saveProcess",param,function (res) {
-        if (res.result == true) {
-            layer.alert("保存成功",function(){
-                layer.closeAll();
-                loadAll1();
-            });
-        } else {
-            layer.alert(res.msg,function(){
+    $.ajax({
+        type: "POST",
+        data: param,
+        url: context+"/produce/scheduling/saveProcessProc",
+        success: function (res) {
+            if (res.result) {
+                layer.alert("保存成功！",function(){
+                    layer.closeAll();
+                    loadAll1();
+                });
+            } else {
+                layer.alert(res.msg,function(){
+                    layer.closeAll();
+                });
+            }
+        },
+        error: function () {
+            layer.alert("操作请求错误，请您稍后再试！",function(){
                 layer.closeAll();
             });
         }
-    },"POST",false,function (res) {
-        layer.alert("抱歉！您暂无权限",function(){
-            layer.closeAll();
-        });
-    }, "application/x-www-form-urlencoded");
+    });
+
+    // CoreUtil.sendAjax("/produce/scheduling/saveProcess",param,function (res) {
+    //     if (res.result == true) {
+    //         layer.alert("保存成功",function(){
+    //             layer.closeAll();
+    //             loadAll1();
+    //         });
+    //     } else {
+    //         layer.alert(res.msg,function(){
+    //             layer.closeAll();
+    //         });
+    //     }
+    // },"POST",false,function (res) {
+    //     layer.alert("抱歉！您暂无权限",function(){
+    //         layer.closeAll();
+    //     });
+    // });
 }
 
 //获取编辑信息-工单组件

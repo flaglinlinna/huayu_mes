@@ -967,15 +967,54 @@ public class SchedulingImpl implements SchedulingService {
      */
     @Override
     @Transactional
-    public ApiResponseResult saveProcess(String mid, String processIds) throws Exception{
+    public ApiResponseResult saveProcessProc(Long mid, String processIds) throws Exception{
         // TODO: 2020/10/10
-        if(StringUtils.isEmpty(mid)){
+        if(mid == null){
             return ApiResponseResult.failure("排产ID不能为空！");
+        }
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null && currUser.getId() == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
         }
 
         //调用保存存储过程
+        Long userId = currUser.getId();
+        String company = currUser.getCompany();
+        String factory = currUser.getFactory();
+        if(userId != null){
+            List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
+                @Override
+                public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                    String storedProc = "{call PRC_MES_TASK_PROC_UPD(?,?,?,?,?,?,?)}";// 调用的sql
+                    CallableStatement cs = con.prepareCall(storedProc);
+                    cs.setString(1, company);
+                    cs.setString(2, factory);
+                    cs.setLong(3, mid);
+                    cs.setString(4, processIds);
+                    cs.setString(5, userId.toString());
+                    cs.registerOutParameter(6,Types.INTEGER);// 注册输出参数 返回标志
+                    cs.registerOutParameter(7,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    return cs;
+                }
+            }, new CallableStatementCallback() {
+                public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                    List<String> result = new ArrayList<String>();
+                    cs.execute();
+                    result.add(cs.getString(6));
+                    result.add(cs.getString(7));
+                    return result;
+                }
+            });
 
-        return ApiResponseResult.success("保存成功！");
+            if(resultList.size() > 0){
+                String flag = resultList.get(0);
+                if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
+                    return ApiResponseResult.success("保存成功！");
+                }
+            }
+        }
+
+        return ApiResponseResult.success("保存失败！");
     }
 
     /**

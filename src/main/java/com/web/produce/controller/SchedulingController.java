@@ -312,12 +312,12 @@ public class SchedulingController extends WebController {
     }
 
     @ApiOperation(value = "保存工艺", notes = "保存工艺", hidden = true)
-    @RequestMapping(value = "/saveProcess", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveProcessProc", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponseResult saveProcess(String mid, String processIds){
-        String method = "/produce/scheduling/saveProcess";String methodName ="保存工艺";
+    public ApiResponseResult saveProcessProc(Long mid, String processIds){
+        String method = "/produce/scheduling/saveProcessProc";String methodName ="保存工艺";
         try{
-            ApiResponseResult result = schedulingService.saveProcess(mid, processIds);
+            ApiResponseResult result = schedulingService.saveProcessProc(mid, processIds);
             logger.debug("保存工艺=saveProcess:");
             getSysLogService().success(method, methodName, null);
             return result;
