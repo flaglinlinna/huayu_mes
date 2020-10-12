@@ -17,12 +17,12 @@ import com.web.produce.entity.CardData;
 import com.web.produce.entity.DevClock;
 
 public class AttenDanceUtils {
-	
+
 	@Autowired
 	EmployeeDao employeeDao;
 	@Autowired
 	CardDataDao cardDataDao;
-	
+
 	/**
 	 * 根据卡机获取卡机上的考勤记录
 	 * @param DevClock
@@ -38,7 +38,7 @@ public class AttenDanceUtils {
 
             List<Map<String, Object>> strList = sdk.getGeneralLogData();
             System.out.println(strList.toString());
-            
+
             for(Map<String, Object> map:strList){
             	//先判断员工信息是否存在
             	String user_code = map.get("EnrollNumber")==null?"":map.get("EnrollNumber").toString();//获取用户账号
@@ -64,13 +64,13 @@ public class AttenDanceUtils {
                 cd.setCreateDate(new Date());
                 cd.setCompany(le.get(0).getCompany());
                 cd.setFactory(le.get(0).getFactory());
-                
+
                 lc.add(cd);
             }
         }
 		return lc;
 	}
-	
+
 	/**
 	 * 根据卡机删除卡机上的所有考勤记录
 	 * @param DevClock
