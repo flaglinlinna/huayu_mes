@@ -173,48 +173,32 @@ $(function() {
 							$("#defcode1").val("");
 						});
 
-						form
-								.on(
-										'select(selectCode)',
-										function(data) { // 选择移交单位 赋值给input框
+						form.on('select(selectCode)',function(data) { // 选择移交单位 赋值给input框
 											var select_text = data.elem[data.elem.selectedIndex].text;
-											$("#inputCode").val(select_text);
-											$("#selectCode").next().find("dl")
-													.css({
-														"display" : "none"
-													});
-											$("#defName").val("");
+											var str=select_text;
+											//console.log(str.substring(0,5))
+											//console.log(str.substring(7,str.length))
+											$("#inputCode").val(str.substring(0,5));
+											$("#selectCode").next().find("dl").css({"display" : "none"});
+											$("#defName").val(str.substring(7,str.length));
 											form.render();
 										});
 						
-						$('#inputCode')
-								.bind(
-										'input propertychange',
-										function() {
+						$('#inputCode').bind('input propertychange',function() {
 											var value = $("#inputCode").val();
 											$("#selectCode").val(value);
 											form.render();
 											$("#selectCode").next().find("dl")
-													.css({
-														"display" : "block"
-													});
-											var dl = $("#selectCode").next()
-													.find("dl").children();
+													.css({"display" : "block"});
+											var dl = $("#selectCode").next().find("dl").children();
 											var j = -1;
 											for (var i = 0; i < dl.length; i++) {
-												if (dl[i].innerHTML
-														.indexOf(value) <= -1) {
+												if (dl[i].innerHTML.indexOf(value) <= -1) {
 													dl[i].style.display = "none";
 													j++;
 												}
 												if (j == dl.length - 1) {
-													$("#selectCode")
-															.next()
-															.find("dl")
-															.css(
-																	{
-																		"display" : "none"
-																	});
+													$("#selectCode").next().find("dl").css({"display" : "none"});
 												}
 											}
 										});
@@ -310,8 +294,6 @@ function saveBad(obj) {
 		layer.alert("请输入正确的不良代码");
 		return false;
 	}
-	str=str.substring(0,5);
-	console.log(str)
 	var params = {
 		"taskNo" : obj.taskno,
 		"barcode" : obj.barcode,
