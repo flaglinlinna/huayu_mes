@@ -63,25 +63,20 @@
 										type="text" />
 								</div>
 							</div>
-							<div class="layui-form-item">
-								<div class="layui-word-aux" style="margin: 5px;">请选择不良信息</div>
-								<label class="layui-form-label">不良代码</label>
-
-								<div class="layui-input-inline" style="width: 310px;">
-									<select id="defcode" name="defcode" lay-search></select>
-								</div>
-							</div>
-							<!-- <div class="layui-input-inline" style="width: 250px;">
-									<input type="text" name="HandoverCompany" id="HandoverCompany" class="layui-input" style="position:absolute;z-index:2;width:80%;" lay-verify="required" value="111" onkeyup="search()" autocomplete="off">
-				                    <select type="text" id="hc_select" lay-filter="hc_select" autocomplete="off" placeholder="移交单位全称" lay-verify="required" class="layui-select" lay-search>
-				                        <option value="111">111</option>
-				                        <option value="222">222</option>
-				                        <option value="333">333</option>
-				                        <option value="444">444</option>
-				                        <option value="555">555</option>
+							<div class="layui-form-item">			
+							<label class="layui-form-label">不良代码</label>
+							<div class="layui-input-inline" style="width: 190px;">
+									<input type="text" name="inputCode" id="inputCode" class="layui-input" style="position:absolute;z-index:2;width:80%;" lay-verify="required"  autocomplete="off">
+				                    <select  id="selectCode" lay-filter="selectCode" autocomplete="off" placeholder="选择或扫描输入不良代码" lay-verify="required" class="layui-select" lay-search>
+				                       
 				                    </select>
-								</div>	 -->							
-							
+							</div>	
+							<label class="layui-form-label">不良现象</label>
+								<div class="layui-input-inline">
+									<input id="defName" name="defName" autocomplete="off"
+											style="background: #efefef;" class="layui-input"  disabled type="text" />
+								</div> 						
+							</div>
 							<div class="layui-form-item">
 								<div class="layui-word-aux" style="margin: 5px;">请输入或者扫描条码后回车</div>
 								<div class="layui-inline">
@@ -93,8 +88,7 @@
 									<label class="layui-form-label">数量</label>
 									<div class="layui-input-inline" >
 										<input id="qty" name="qty" autocomplete="off"
-											style="background: #efefef;" class="layui-input" disabled
-											type="text" />
+											 class="layui-input"  type="text" />
 									</div>
 								</div>
 							</div>

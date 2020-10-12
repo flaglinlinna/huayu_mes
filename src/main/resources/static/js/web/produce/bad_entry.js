@@ -4,8 +4,10 @@
 var pageCurr;
 var tabledata = [];
 $(function() {
-	getBadInfo("Null");
-	layui.use([ 'table', 'form', 'layedit', 'tableSelect' ],
+	getBadInfo("", "NA");
+	layui
+			.use(
+					[ 'table', 'form', 'layedit', 'tableSelect' ],
 					function() {
 						var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table, tableSelect = layui.tableSelect;
 						tableIns = table.render({
@@ -156,47 +158,66 @@ $(function() {
 
 						// 监听
 						form.on('submit(saveDef)', function(data) {
-							if (data.field.defcode == "") {
+							if (data.field.inputCode == "") {
 								layer.alert("请选择不良信息！");
 							} else if (data.field.qty == "") {
-								layer.alert("请先扫描条码获取数量！");
+								layer.alert("数量不可为空！");
 							} else {
 								saveBad(data.field)
 							}
 							// console.log(data.field)
 						});
-						/*
+
 						form.on('select(defcode)', function(data) {
 							console.log(data)
 							$("#defcode1").val("");
 						});
+
+						form
+								.on(
+										'select(selectCode)',
+										function(data) { // 选择移交单位 赋值给input框
+											var select_text = data.elem[data.elem.selectedIndex].text;
+											$("#inputCode").val(select_text);
+											$("#selectCode").next().find("dl")
+													.css({
+														"display" : "none"
+													});
+											$("#defName").val("");
+											form.render();
+										});
 						
-						form.on('select(hc_select)', function (data) {   //选择移交单位 赋值给input框
-							  var select_text = data.elem[data.elem.selectedIndex].text;
-					      $("#HandoverCompany").val(select_text );
-					      $("#hc_select").next().find("dl").css({ "display": "none" });
-					      form.render();
-					  });
-						
-						$('#HandoverCompany').bind('input propertychange', function () {
-							  var value = $("#HandoverCompany").val();
-							  $("#hc_select").val(value);
-							  form.render();
-							  $("#hc_select").next().find("dl").css({ "display": "block" });
-							  var dl = $("#hc_select").next().find("dl").children();
-							  var j = -1;
-							  for (var i = 0; i < dl.length; i++) {
-							      if (dl[i].innerHTML.indexOf(value) <= -1) {
-							          dl[i].style.display = "none";
-							          j++;
-							      }
-							      if (j == dl.length-1) {
-							          $("#hc_select").next().find("dl").css({ "display": "none" });
-							      }
-							  }
-						  
-						});*/
-						
+						$('#inputCode')
+								.bind(
+										'input propertychange',
+										function() {
+											var value = $("#inputCode").val();
+											$("#selectCode").val(value);
+											form.render();
+											$("#selectCode").next().find("dl")
+													.css({
+														"display" : "block"
+													});
+											var dl = $("#selectCode").next()
+													.find("dl").children();
+											var j = -1;
+											for (var i = 0; i < dl.length; i++) {
+												if (dl[i].innerHTML
+														.indexOf(value) <= -1) {
+													dl[i].style.display = "none";
+													j++;
+												}
+												if (j == dl.length - 1) {
+													$("#selectCode")
+															.next()
+															.find("dl")
+															.css(
+																	{
+																		"display" : "none"
+																	});
+												}
+											}
+										});
 					});
 	$('#barcode').bind('keypress', function(event) {
 		if (event.keyCode == "13") {
@@ -213,56 +234,49 @@ $(function() {
 			}
 		}
 	});
-	$('#defcode1').bind('keypress', function(event) {
+
+	$('#inputCode').bind('keypress', function(event) {
 		if (event.keyCode == "13") {
-			if ($('#defcode1').val()) {
-				getBadInfo($('#defcode1').val())
-				return false;
-			} else {
-				layer.alert("请输入或选择不良信息!");
-			}
+			getBadInfo($('#inputCode').val(), "0")
 		}
 	});
-	
-	
-
-	
-
 });
 
-function getBadInfo(keyword) {
+function getBadInfo(keyword, type) {
 	var params = {
-		"keyword" : ""
+		"keyword" : keyword
 	}
 	CoreUtil
 			.sendAjax(
 					"produce/bad_entry/getBadInfo",
 					JSON.stringify(params),
 					function(data) {
-						 console.log(data)
+						//console.log(data)
 						if (data.result) {
 							var def = data.data;
-							// console.log(def)
-							// console.log(keyword)
-							
-								$("#defcode").empty();
+							if (type == "NA") {
+								 //console.log(def)
+								$("#selectCode").empty();
 								for (var i = 0; i < def.length; i++) {
 									if (i == 0) {
-										$("#defcode")
-												.append(
-														"<option value=''>请点击选择</option>");
+										$("#selectCode").append("<option value=''>请点击选择</option>");
 									}
-									$("#defcode").append(
+									$("#selectCode").append(
 											"<option value="
 													+ def[i].DEFECT_CODE + ">"
 													+ def[i].DEFECT_CODE
-													+ " —— "
+													+ "——"
 													+ def[i].DEFECT_NAME
 													+ "</option>");
 								}
-
-							
-							
+								layui.form.render('select');
+							} else {
+								if(def.length==0){
+									$("#defName").val("无此不良代码数据");
+									return false;
+								}else{$("#defName").val(def[0].DEFECT_NAME);}
+								
+							}
 						} else {
 							layer.alert(data.msg);
 						}
@@ -290,16 +304,24 @@ function checkBarCode(taskNo, barcode) {
 			});
 }
 function saveBad(obj) {
+	var str=obj.inputCode;
+	console.log(str)
+	if(str.length<5){
+		layer.alert("请输入正确的不良代码");
+		return false;
+	}
+	str=str.substring(0,5);
+	console.log(str)
 	var params = {
 		"taskNo" : obj.taskno,
 		"barcode" : obj.barcode,
 		"qty" : obj.qty,
-		"defCode" : obj.defcode,
+		"defCode" : str,
 		"memo" : obj.memo
 	}
 	CoreUtil.sendAjax("produce/bad_entry/saveBad", JSON.stringify(params),
 			function(data) {
-				// console.log(data)
+				//console.log(data)
 				if (data.result) {
 					tableIns.reload({
 						data : data.data

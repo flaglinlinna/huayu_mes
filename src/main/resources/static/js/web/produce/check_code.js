@@ -184,17 +184,10 @@ function subCode(taskNo, barcode1, barcode2) {
 					tableIns.reload({
 						data : tabledata
 					});
+					$('#barcode').val("");
+					$('#barcode1').val("");
+					$('#barcode2').val("");
 				} else {
-					var dataT={
-							taskNo:	taskNo,
-							barcode1:barcode1,
-							barcode2:barcode2,
-							result:data.msg
-					}
-					tabledata.push(dataT);
-					tableIns.reload({
-						data : tabledata
-					});
 					layer.alert(data.msg);
 				}
 				//console.log(tabledata)
