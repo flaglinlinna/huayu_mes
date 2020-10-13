@@ -65,7 +65,7 @@ public class SysPermission extends BaseEntity{
     protected Integer zindex;
 
     /**
-     * 权限分类（0 菜单；1 功能）
+     * 权限分类（0 菜单；1 按钮）
      */
     @ApiModelProperty(name = "istype", value = "权限分类（0 菜单；1 功能）")
     @Column

@@ -1,14 +1,7 @@
 package com.shiro;
 
-/*import com.wyait.manage.dao.UserMapper;
-import com.wyait.manage.pojo.Permission;
-import com.wyait.manage.pojo.Role;
-import com.wyait.manage.pojo.User;
-import com.wyait.manage.service.AuthService;
-import com.wyait.manage.service.UserServiceImpl;*/
+import java.util.List;
 
-import com.system.user.dao.SysUserDao;
-import com.system.user.entity.SysUser;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -28,7 +21,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pojo.User;
+import com.system.permission.dao.SysPermissionDao;
+import com.system.permission.entity.SysPermission;
+import com.system.role.dao.SysRoleDao;
+import com.system.role.entity.SysRole;
+
+/*import com.wyait.manage.dao.UserMapper;
+import com.wyait.manage.pojo.Permission;
+import com.wyait.manage.pojo.Role;
+import com.wyait.manage.pojo.User;
+import com.wyait.manage.service.AuthService;
+import com.wyait.manage.service.UserServiceImpl;*/
+
+import com.system.user.dao.SysUserDao;
+import com.system.user.entity.SysUser;
 
 /**
  * @项目名称：wyait-manage
@@ -51,6 +57,12 @@ public class ShiroRealm extends AuthorizingRealm {
 	private UserMapper userMapper;
 	@Autowired
 	private AuthService authService;*/
+	
+	@Autowired
+	private SysRoleDao sysRoleDao;
+	
+	@Autowired
+	private SysPermissionDao sysPermissionDao;
 
 	/**
 	 * 授予角色和权限
@@ -68,32 +80,32 @@ public class ShiroRealm extends AuthorizingRealm {
 		Subject subject = SecurityUtils.getSubject();
 		SysUser user = (SysUser) subject.getPrincipal();
 //		if (user.getUserMobile().equals("18516596566")) {
-        if (user.getUserCode().equals("ADMIN")) {
-			// 超级管理员，添加所有角色、添加所有权限
-			authorizationInfo.addRole("*");
-			authorizationInfo.addStringPermission("*");
-		} else {
-			// 普通用户，查询用户的角色，根据角色查询权限
-//			Long userId = user.getId();
-			/*List<Role> roles = this.authService.getRoleByUser(userId);
-			if (null != roles && roles.size() > 0) {
-				for (Role role : roles) {
-					authorizationInfo.addRole(role.getCode());
-					// 角色对应的权限数据
-					List<Permission> perms = this.authService.findPermsByRoleId(role
-							.getId());
-					if (null != perms && perms.size() > 0) {
-						// 授权角色下所有权限
-						for (Permission perm : perms) {
-							authorizationInfo.addStringPermission(perm
-									.getCode());
+	       /* if (user.getBsCode().equals("ADMIN")) {
+				// 超级管理员，添加所有角色、添加所有权限
+				authorizationInfo.addRole("*");
+				authorizationInfo.addStringPermission("*");
+			} else {*/
+				// 普通用户，查询用户的角色，根据角色查询权限
+				Long userId = user.getId();
+				//List<SysRole> roles = this.authService.getRoleByUser(userId);
+				List<SysRole> roles = sysRoleDao.getRoleByUser(userId);
+				if (null != roles && roles.size() > 0) {
+					for (SysRole role : roles) {
+						authorizationInfo.addRole(role.getRoleCode());
+						// 角色对应的权限数据
+						//List<SysPermission> perms = this.authService.findPermsByRoleId(role.getId());
+						List<SysPermission> perms = sysPermissionDao.findPermsByRoleId(role.getId());
+						if (null != perms && perms.size() > 0) {
+							// 授权角色下所有权限
+							for (SysPermission perm : perms) {
+								authorizationInfo.addStringPermission(perm.getMenuCode());
+							}
 						}
 					}
 				}
-			}*/
+			//}
+			return authorizationInfo;
 		}
-		return authorizationInfo;
-	}
 
 	/**
 	 * 登录认证

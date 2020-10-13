@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.system.role.entity.SysRole;
@@ -21,4 +22,7 @@ public interface SysRoleDao extends CrudRepository<SysRole, Long>, JpaSpecificat
     public SysRole findById(long id);
 
     public int countByDelFlagAndRoleCode(Integer delFlag, String roleCode);
+    
+    @Query(value = "select t from SysRole t left join UserRoleMap m on m.roleId = t.id and m.userId =:userId")
+	public List<SysRole> getRoleByUser(@Param("userId") Long userId);
 }

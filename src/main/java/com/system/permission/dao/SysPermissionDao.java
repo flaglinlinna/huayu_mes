@@ -9,6 +9,7 @@ import com.system.user.entity.UserRoleMap;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.system.permission.entity.SysPermission;
 
@@ -42,4 +43,8 @@ public interface SysPermissionDao extends CrudRepository<SysPermission, Long>, J
            " WHERE ur.user_id=?1 and p.del_flag=0 and rp.del_flag=0 and ur.del_flag=0"+
            " order by p.zindex ", nativeQuery = true)
     public List<Map<String, Object>> getUserPerms(long id);
+    
+    @Query(value = "select t from SysPermission t left join RolePermissionMap m on m.permitId = t.id and m.roleId =:roleId")
+	public List<SysPermission> findPermsByRoleId(@Param("roleId") Long roleId);
+    
 }

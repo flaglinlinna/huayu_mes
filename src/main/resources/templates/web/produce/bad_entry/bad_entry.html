@@ -99,8 +99,11 @@
 										<input id="memo" name="memo" autocomplete="off"
 											class="layui-input" type="text" />
 									</div>
+									<shiro:hasPermission name="bad_entry:save">
 									<button type="button" class="layui-btn layui-btn-sm" lay-submit=""
 										lay-filter="saveDef">保存不良</button>
+									</shiro:hasPermission>
+									
 								</div>
 							</div>
 						</form>
