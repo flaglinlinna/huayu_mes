@@ -31,7 +31,7 @@ public class CheckCodeController extends WebController {
 	 @ApiOperation(value = "小码校验页", notes = "小码校验页", hidden = true)
 	    @RequestMapping(value = "/toCheckCode")
 	    public String toCheckCode(){
-	        return "/web/produce/check_code";
+	        return "/web/produce/check_code/check_code";
 	    }
 	 
 	  @ApiOperation(value="获取指令单信息", notes="获取指令单信息", hidden = true)

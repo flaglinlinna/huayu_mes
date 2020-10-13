@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='小码校验'"></head>
+<head th:include="layout :: htmlhead" th:with="title='不良录入'"></head>
 <style th:inline="text">
 .layui-form-label {
 	text-align: right;
@@ -115,8 +115,8 @@
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 		</div>
-		<script th:src="@{/js/web/produce/bad_entry.js}"
-			src="/js/web/produce/bad_entry.js"></script>
+		<script th:src="@{/js/web/produce/bad_entry/bad_entry.js}"
+			src="/js/web/produce/bad_entry/bad_entry.js"></script>
 	</div>
 </body>
 </html>

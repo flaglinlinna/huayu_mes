@@ -32,7 +32,7 @@ public class BadEntryController extends WebController {
 	 @ApiOperation(value = "不良录入页", notes = "不良录入页", hidden = true)
 	    @RequestMapping(value = "/toBadEntry")
 	    public String toBadEntry(){
-	        return "/web/produce/bad_entry";
+	        return "/web/produce/bad_entry/bad_entry";
 	    }
 	 
 	  @ApiOperation(value="获取指令单信息", notes="获取指令单信息", hidden = true)
