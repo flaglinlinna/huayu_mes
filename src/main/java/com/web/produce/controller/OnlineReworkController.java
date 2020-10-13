@@ -31,7 +31,7 @@ public class OnlineReworkController extends WebController {
 	 @ApiOperation(value = "在线返工页", notes = "在线返工页", hidden = true)
 	    @RequestMapping(value = "/toOnlineRework")
 	    public String toOnlineRework(){
-	        return "/web/produce/rework";
+	        return "/web/produce/rework/rework";
 	    }
 	 
 	  @ApiOperation(value="获取指令单信息", notes="获取指令单信息", hidden = true)
@@ -92,25 +92,25 @@ public class OnlineReworkController extends WebController {
 	        }
 	    }
 	  
-	  @ApiOperation(value="在线返工", notes="在线返工", hidden = true)
+	  @ApiOperation(value="查询返工", notes="查询返工", hidden = true)
 	    @RequestMapping(value = "/search", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult search(@RequestBody Map<String, Object> params) {
-	        String method = "produce/rework/search";String methodName ="在线返工";
+	        String method = "produce/rework/search";String methodName ="查询返工";
 	        try {
 	        	String startTime = params.get("startTime") == null?"":params.get("startTime").toString();
 	        	String endTime = params.get("endTime") == null?"":params.get("endTime").toString();
 	        	String taskNo = params.get("taskNo") == null?"":params.get("taskNo").toString();
 	        	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
-	            ApiResponseResult result = onlineReworkService.subCode(startTime,endTime,taskNo,barcode);
-	            logger.debug("在线返工=search:");
+	            ApiResponseResult result = onlineReworkService.search(startTime,endTime,taskNo,barcode);
+	            logger.debug("查询返工=search:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
-	             logger.error("在线返工失败！", e);
+	             logger.error("查询返工失败！", e);
 	             getSysLogService().error(method, methodName, e.toString());
-	             return ApiResponseResult.failure("在线返工失败！");
+	             return ApiResponseResult.failure("查询返工失败！");
 	        }
 	    }
 }

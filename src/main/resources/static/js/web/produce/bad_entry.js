@@ -169,7 +169,7 @@ $(function() {
 						});
 
 						form.on('select(defcode)', function(data) {
-							console.log(data)
+							//console.log(data)
 							$("#defcode1").val("");
 						});
 

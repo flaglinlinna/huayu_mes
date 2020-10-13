@@ -74,10 +74,10 @@ public class OnlineReworklmpl extends PrcUtils implements OnlineReworkService {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  PRC_MES_BARCODE_RETURN(?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  PRC_MES_BARCODE_RETURN(?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
-				cs.setString(1, facoty);
-				cs.setString(2, company);
+				cs.setString(1, company);
+				cs.setString(2, facoty);
 				cs.setString(3, user_id);
 				cs.setString(4, taskNo);
 				cs.setString(5, type);
@@ -95,9 +95,9 @@ public class OnlineReworklmpl extends PrcUtils implements OnlineReworkService {
 				cs.execute();
 				result.add(cs.getInt(8));
 				result.add(cs.getString(9));
-				if (cs.getString(6).toString().equals("0")) {
+				if (cs.getString(8).toString().equals("0")) {
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(8);
+					ResultSet rs = (ResultSet) cs.getObject(10);
 
 					try {
 						l = fitMap(rs);
@@ -133,7 +133,7 @@ public class OnlineReworklmpl extends PrcUtils implements OnlineReworkService {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
-					String storedProc = "{call  prc_mes_BARCODE_RETURN_chs(?,?,?,?,?,?,?,?)}";// 调用的sql
+					String storedProc = "{call  prc_mes_BARCODE_RETURN_chs(?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 					CallableStatement cs = con.prepareCall(storedProc);
 					cs.setString(1, facoty);
 					cs.setString(2, company);
@@ -154,9 +154,9 @@ public class OnlineReworklmpl extends PrcUtils implements OnlineReworkService {
 					cs.execute();
 					result.add(cs.getInt(8));
 					result.add(cs.getString(9));
-					if (cs.getString(6).toString().equals("0")) {
+					if (cs.getString(8).toString().equals("0")) {
 						// 游标处理
-						ResultSet rs = (ResultSet) cs.getObject(8);
+						ResultSet rs = (ResultSet) cs.getObject(10);
 
 						try {
 							l = fitMap(rs);
