@@ -58,7 +58,7 @@ $(function () {
             cols: [[
                 {type:'numbers'}
                 ,{type:"checkbox", field:'checkColumn'}
-                ,{field:'procOrder', title:'工序顺序', width:100}
+                ,{field:'procOrder', title:'工序顺序', width:100, sort:true}
                 ,{field:'procNo', title:'工序编号', width:100}
                 ,{field:'procName', title:'工序名称', width:150}
                 ,{field:'jobAttr', title:'过程属性', width:100, templet:'#statusTpl'}
@@ -71,7 +71,9 @@ $(function () {
                 for(var i = 0; i < res.data.length; i++){
                     if(res.data[i].isCheck == "1"){
                         res.data[i]["LAY_CHECKED"]='true';
-                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] div.layui-form-checkbox').addClass('layui-form-checked');
+                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+                        // $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] div.layui-form-checkbox').addClass('layui-form-checked');
                         // $('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
                     }
                 }
@@ -335,7 +337,6 @@ function doEditProcess(){
 
 //保存工艺
 function saveProcess(table) {
-    debugger;
     //获取选中工艺
     var processIds = "";
     var checkStatus = table.checkStatus("iList");
@@ -374,23 +375,6 @@ function saveProcess(table) {
             });
         }
     });
-
-    // CoreUtil.sendAjax("/produce/scheduling/saveProcess",param,function (res) {
-    //     if (res.result == true) {
-    //         layer.alert("保存成功",function(){
-    //             layer.closeAll();
-    //             loadAll1();
-    //         });
-    //     } else {
-    //         layer.alert(res.msg,function(){
-    //             layer.closeAll();
-    //         });
-    //     }
-    // },"POST",false,function (res) {
-    //     layer.alert("抱歉！您暂无权限",function(){
-    //         layer.closeAll();
-    //     });
-    // });
 }
 
 //获取编辑信息-工单组件
