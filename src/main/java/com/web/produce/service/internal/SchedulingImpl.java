@@ -695,6 +695,8 @@ public class SchedulingImpl implements SchedulingService {
                 String flag = resultList.get(0);
                 if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
                     return ApiResponseResult.success("校验成功！");
+                }else{
+                    return ApiResponseResult.failure(resultList.get(1));
                 }
             }
         }
@@ -776,6 +778,8 @@ public class SchedulingImpl implements SchedulingService {
             String flag = resultList.get(0);
             if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
                 return ApiResponseResult.success("保存成功！");
+            }else{
+                return ApiResponseResult.failure(resultList.get(1));
             }
         }
 
@@ -859,6 +863,8 @@ public class SchedulingImpl implements SchedulingService {
                 String flag = resultList.get(0);
                 if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
                     return ApiResponseResult.success("提取工序成功！");
+                }else{
+                    return ApiResponseResult.failure(resultList.get(1));
                 }
             }
         }
@@ -1030,6 +1036,8 @@ public class SchedulingImpl implements SchedulingService {
                 String flag = resultList.get(0);
                 if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
                     return ApiResponseResult.success("保存成功！");
+                }else{
+                    return ApiResponseResult.failure(resultList.get(1));
                 }
             }
         }
