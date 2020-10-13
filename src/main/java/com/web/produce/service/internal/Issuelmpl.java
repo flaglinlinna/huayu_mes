@@ -17,8 +17,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
+import com.app.query.dao.Parameter;
+import com.app.query.dao.SQLParameter;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
@@ -36,13 +43,15 @@ import com.web.produce.entity.EmpFinger;
 import com.web.produce.entity.Issue;
 import com.web.produce.service.IssueService;
 
+import net.sf.ehcache.util.ProductInfo;
+
 /**
  * 下发原始数据采集
  *
  */
 @Service(value = "IssueService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class Issuelmpl implements IssueService {
+public class Issuelmpl  implements IssueService {
 
 	@Autowired
 	IssueDao issueDao;
@@ -120,27 +129,40 @@ public class Issuelmpl implements IssueService {
 			}
 		}
 		//记录有就忽略，没有就增加
+		String msg = "";//记录信息
 		List<Issue> listNew = new ArrayList<>();
 		if (devList.size() > 0) {
 			for (Long devId : devList) {
 				if (empList.size() > 0) {
 					for (Long empId : empList) {
-						//doIssuedByUser(String devIp,List<EmpFinger> empFingers)
-						int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
-						if(count==0){
-							Issue item = new Issue();
-							item.setCreateDate(new Date());
-							item.setCreateBy(UserUtil.getSessionUser().getId());
-							item.setDevClockId(devId);
-							item.setEmpId(empId);
-							listNew.add(item);	
-						}		
+						Employee em = employeeDao.findById((long)empId);
+						if(em != null){
+							List<EmpFinger> le = empFingerDao.findByDelFlagAndEmpId(0, empId);
+							if(le.size() >0){
+								if(doIssuedByUser(devId+"",le)){
+									int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
+									if(count==0){
+										Issue item = new Issue();
+										item.setCreateDate(new Date());
+										item.setCreateBy(UserUtil.getSessionUser().getId());
+										item.setDevClockId(devId);
+										item.setEmpId(empId);
+										listNew.add(item);	
+									}
+								}else{
+									msg += em.getEmpName()+"下发指纹失败"+",";
+								}
+							}
+						}
+						
+						
+								
 					}
 					issueDao.saveAll(listNew);
 				}
 			}
 		}
-		return ApiResponseResult.success("下发记录添加成功！");
+		return ApiResponseResult.success("下发记录添加成功！"+msg);
 	}
 
 	/**
@@ -183,41 +205,6 @@ public class Issuelmpl implements IssueService {
 		return ApiResponseResult.success("删除成功！");
 	}
 
-	/**
-	 * 获取员工数据[已录取手指信息的员工]-未去重
-	 */
-	/*
-	@Override
-	@Transactional
-	public ApiResponseResult getEmp(String empKeyword, PageRequest pageRequest) throws Exception {
-		
-		List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-		//filters.add(new SearchFilter("empStatus", SearchFilter.Operator.EQ, BasicStateEnum.TRUE.intValue()));
-		// 查询2
-		List<SearchFilter> filters1 = new ArrayList<>();
-		if (StringUtils.isNotEmpty(empKeyword)) {
-			filters1.add(new SearchFilter("emp.empName", SearchFilter.Operator.LIKE, empKeyword));
-			filters1.add(new SearchFilter("emp.empCode", SearchFilter.Operator.LIKE, empKeyword));
-			filters1.add(new SearchFilter("emp.empType", SearchFilter.Operator.LIKE, empKeyword));
-		}
-		Specification<EmpFinger> spec = Specification.where(BaseService.and(filters, EmpFinger.class));
-		Specification<EmpFinger> spec1 = spec.and(BaseService.or(filters1, EmpFinger.class));
-		Page<EmpFinger> page = empFingerDao.findAll(spec1, pageRequest);
-
-		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
-		for(EmpFinger bs:page.getContent()){ 
-			Map<String, Object> map = new HashMap<>();
-			map.put("id", bs.getId());
-			map.put("empCode",bs.getEmp().getEmpCode());//获取关联表的数据-工号
-			map.put("empName",bs.getEmp().getEmpName());//获取关联表的数据-姓名
-			map.put("empType",bs.getEmp().getEmpType());
-			list.add(map);
-		}
-		
-		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
-	}*/
 
 	/**
 	 * 获取员工数据
@@ -225,7 +212,7 @@ public class Issuelmpl implements IssueService {
 	@Override
 	@Transactional
 	public ApiResponseResult getEmp(String empKeyword, PageRequest pageRequest) throws Exception {	
-		List<SearchFilter> filters = new ArrayList<>();
+		/*List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 		filters.add(new SearchFilter("empStatus", SearchFilter.Operator.EQ, BasicStateEnum.TRUE.intValue()));
 		// 查询2
@@ -239,9 +226,20 @@ public class Issuelmpl implements IssueService {
 		Specification<Employee> spec1 = spec.and(BaseService.or(filters1, Employee.class));
 		Page<Employee> page = employeeDao.findAll(spec1, pageRequest);
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
+		// 排序方式
+        Sort sort = pageRequest.getSort();  // 记住一定要是实体类的属性，而不能是数据库的字段
+        Pageable pageable = new PageRequest(pageRequest.getPageNumber() , pageRequest.getPageSize(), sort); // （当前页， 每页记录数， 排序方式）
+		Page<Map<String, Object>> page = null;
+		if(StringUtils.isNotEmpty(empKeyword)){
+			page =issueDao.findByKeyword(empKeyword, pageable);
+		}else{
+			page =issueDao.findpage(empKeyword, pageable);
+		}
+		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+		
 	}
-
 	
 	/**
 	 * 获取卡机数据
@@ -343,6 +341,69 @@ public class Issuelmpl implements IssueService {
         	}
         }
         return false;
+	}
+
+	@Override
+	public ApiResponseResult clear(String dev, String emp) throws Exception {
+		// TODO Auto-generated method stub
+		if (dev == null || emp == null) {
+			return ApiResponseResult.failure("删除记录必须含有卡机和员工信息！");
+		}
+		// 数据格式转换-卡机设备
+		String[] devIdArray = dev.split(";");
+		List<Long> devList = new ArrayList<Long>();
+		for (int i = 0; i < devIdArray.length; i++) {
+			if (StringUtils.isNotEmpty(devIdArray[i])) {
+				devList.add(Long.parseLong(devIdArray[i]));
+			}
+		}
+		// 数据格式转换-员工
+		String[] empIdArray = emp.split(";");
+		List<Long> empList = new ArrayList<Long>();
+		for (int i = 0; i < empIdArray.length; i++) {
+			if (StringUtils.isNotEmpty(empIdArray[i])) {
+				empList.add(Long.parseLong(empIdArray[i]));
+			}
+		}
+		//记录有就忽略，没有就增加
+		String msg = "";//记录信息
+		List<Issue> listNew = new ArrayList<>();
+		if (devList.size() > 0) {
+			for (Long devId : devList) {
+				DevClock devClock = devClockDao.findById((long)devId);
+				if(devClock != null){
+					if (empList.size() > 0) {
+						for (Long empId : empList) {
+							Employee em = employeeDao.findById((long)empId);
+							if(em != null){
+								List<EmpFinger> le = empFingerDao.findByDelFlagAndEmpId(0, empId);
+								if(le.size() >0){
+									if(deleteTmpByUser(devClock.getDevIp(),devId,le)){
+										int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
+										if(count==0){
+											Issue item = new Issue();
+											item.setCreateDate(new Date());
+											item.setCreateBy(UserUtil.getSessionUser().getId());
+											item.setDevClockId(devId);
+											item.setEmpId(empId);
+											listNew.add(item);	
+										}
+									}else{
+										msg += em.getEmpName()+"删除指纹失败"+",";
+									}
+								}
+							}
+							
+							
+									
+						}
+						issueDao.saveAll(listNew);
+					}
+				}
+				
+			}
+		}
+		return ApiResponseResult.success("下发记录添加成功！"+msg);
 	}
 	
 }

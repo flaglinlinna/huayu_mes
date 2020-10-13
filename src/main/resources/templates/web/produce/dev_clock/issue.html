@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='卡点原始数据'">
+<head th:include="layout :: htmlhead" th:with="title='指纹下发'">
 <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
@@ -17,7 +17,7 @@
 		</div>
 		<!--添加或编辑卡机信息-->
 		<div id="setIssue" class="layer_self_wrap"
-			style="width: 100%; display: none; margin: 2px;">
+			style="width: 99%; display: none; margin: 2px;">
 			<div class="layui-row">
 				<div class="layui-col-xs6">
 					<form id="devSearch" class="layui-form layui-form-pane"
@@ -70,7 +70,7 @@
 							lay-filter="addSubmit">指纹下发</button>
 					</div>
 				</div>
-				<div class="layui-row" style="margin-top: -15px;">
+				<div class="layui-row layui-col-space5" style="margin-top: -15px;">
 					<div class="layui-col-xs6">
 						<fieldset class="layui-elem-field layui-field-title">
 							<legend style="font-size: 15px;">卡机列表</legend>

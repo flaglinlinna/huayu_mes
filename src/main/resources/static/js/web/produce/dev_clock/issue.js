@@ -71,6 +71,7 @@ $(function() {
 			elem : '#empList',
 			method : 'post',// 默认：get请求
 			page : true,
+			height: 'full-220',
 			request : {
 				pageName : 'page',// 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -94,13 +95,13 @@ $(function() {
 			},
 
 			{
-				field : 'empCode',
+				field : 'EMP_CODE',
 				title : '员工工号'
 			}, {
-				field : 'empName',
+				field : 'EMP_NAME',
 				title : '员工姓名'
 			}, {
-				field : 'empType',
+				field : 'EMP_TYPE',
 				title : '员工类型'
 			} ] ],
 			data : []
@@ -108,6 +109,7 @@ $(function() {
 		tableDev = table.render({
 			elem : '#devList',
 			method : 'post',// 
+			height: 'full-220',
 			page : true,
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
@@ -190,7 +192,7 @@ $(function() {
 						devList += dList[i].id + ";"// 用“；”分隔
 					}
 					for (var i = 0; i < eList.length; i++) {// 获取被选中的行
-						empList += eList[i].id + ";"// 用“；”分隔
+						empList += eList[i].ID + ";"// 用“；”分隔
 					}
 					addSubmit(devList, empList);
 				}

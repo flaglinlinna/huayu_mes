@@ -17,12 +17,18 @@ import java.util.Map;
 public interface EmpFingerDao extends CrudRepository<EmpFinger, Long>,JpaSpecificationExecutor<EmpFinger>{
 
 	public List<EmpFinger> findAll();
+	
 	public List<EmpFinger> findByDelFlag(Integer delFlag);
+	
+	public List<EmpFinger> findByDelFlagAndEmpId(Integer delFlag, Long empId);
+	
 	public EmpFinger findById(long id);
+	
 	public int countByDelFlagAndTemplateStr(Integer delFlag, String templateStr);//查询指纹是否存在
+	
 	public int countByDelFlagAndEmpId(Integer delFlag, Long empId);//查询员工指纹记录数
+	
 	public int countByDelFlagAndEmpIdAndFingerIdx(Integer delFlag, Long empId,String fingerIdx);//员工+手指序号保证唯一
 	
-	@Query(value = "select distinct EMP_ID  from mes_base_emp_finger where DEL_FLAG=0", nativeQuery = true)
-	public List<EmpFinger> getNotRepeatEmp();//获取不重复是员工数据
+
 }

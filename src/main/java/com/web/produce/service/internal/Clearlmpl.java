@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,6 +34,7 @@ import com.web.basic.entity.Line;
 import com.web.basic.entity.Mtrial;
 import com.web.produce.dao.ClearDao;
 import com.web.produce.dao.DevClockDao;
+import com.web.produce.dao.IssueDao;
 import com.web.produce.entity.Clear;
 import com.web.produce.entity.DevClock;
 import com.web.produce.service.ClearService;
@@ -52,6 +55,9 @@ public class Clearlmpl implements ClearService {
 
 	@Autowired
 	DevClockDao devClockDao;
+	
+	@Autowired
+	IssueDao issueDao;
 
 	/**
 	 * 查询列表
@@ -185,20 +191,14 @@ public class Clearlmpl implements ClearService {
 	@Transactional
 	public ApiResponseResult getEmp(String empKeyword, PageRequest pageRequest) throws Exception {
 		
-		List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-		filters.add(new SearchFilter("empStatus", SearchFilter.Operator.EQ, BasicStateEnum.TRUE.intValue()));
-		// 查询2
-		List<SearchFilter> filters1 = new ArrayList<>();
-		if (StringUtils.isNotEmpty(empKeyword)) {
-			filters1.add(new SearchFilter("empCode", SearchFilter.Operator.LIKE, empKeyword));
-			filters1.add(new SearchFilter("empName", SearchFilter.Operator.LIKE, empKeyword));
-			filters1.add(new SearchFilter("empType", SearchFilter.Operator.LIKE, empKeyword));
+		Sort sort = pageRequest.getSort();  // 记住一定要是实体类的属性，而不能是数据库的字段
+        Pageable pageable = new PageRequest(pageRequest.getPageNumber() , pageRequest.getPageSize(), sort); // （当前页， 每页记录数， 排序方式）
+		Page<Map<String, Object>> page = null;
+		if(StringUtils.isNotEmpty(empKeyword)){
+			page =issueDao.findByKeyword(empKeyword, pageable);
+		}else{
+			page =issueDao.findpage(empKeyword, pageable);
 		}
-		Specification<Employee> spec = Specification.where(BaseService.and(filters, Employee.class));
-		Specification<Employee> spec1 = spec.and(BaseService.or(filters1, Employee.class));
-		Page<Employee> page = employeeDao.findAll(spec1, pageRequest);
-
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}

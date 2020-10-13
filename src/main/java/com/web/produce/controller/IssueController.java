@@ -34,6 +34,18 @@ public class IssueController extends WebController{
 	 @Autowired
 	 private IssueService issueService;
 	 
+	 @ApiOperation(value = "指纹下发记录列表页", notes = "指纹下发记录列表页", hidden = true)
+	    @RequestMapping(value = "/toIssue")
+	    public String toIssue(){
+	        return "/web/produce/dev_clock/issue";
+	    }
+	 
+	 @ApiOperation(value = "指纹下发记录列表页", notes = "指纹下发记录列表页", hidden = true)
+	    @RequestMapping(value = "/toClear")
+	    public String toClear(){
+	        return "/web/produce/dev_clock/clear";
+	    }
+	 
 	 @ApiOperation(value = "指纹下发记录表结构", notes = "指纹下发记录表结构"+Issue.TABLE_NAME)
 	    @RequestMapping(value = "/getIssue", method = RequestMethod.GET)
 		@ResponseBody
@@ -41,11 +53,7 @@ public class IssueController extends WebController{
 	        return new Issue();
 	    }
 	  
-	 @ApiOperation(value = "指纹下发记录列表页", notes = "指纹下发记录列表页", hidden = true)
-	    @RequestMapping(value = "/toIssue")
-	    public String toIssue(){
-	        return "/web/produce/dev_clock/issue";
-	    }
+	 
 	 
 	    @ApiOperation(value = "获取指纹下发记录列表", notes = "获取指纹下发记录列表",hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
@@ -131,7 +139,7 @@ public class IssueController extends WebController{
 	    public ApiResponseResult getEmp(String empKeyword) {
 	        String method = "produce/issue/getEmp";String methodName ="获取人员信息列表";
 	        try {
-	        	Sort sort = new Sort(Sort.Direction.DESC, "id");
+	        	Sort sort = new Sort(Sort.Direction.DESC, "emp_id");
 	            ApiResponseResult result = issueService.getEmp(empKeyword, super.getPageRequest(sort));
 	            logger.debug("获取人员信息列表=getEmp:");
 	            getSysLogService().success(method, methodName, null);
@@ -161,4 +169,24 @@ public class IssueController extends WebController{
 	            return ApiResponseResult.failure("获取卡机信息列表失败！");
 	        }
 	    }
+		
+		 @ApiOperation(value = "删除下发记录", notes = "删除下发记录",hidden = true)
+		    @RequestMapping(value = "/clear", method = RequestMethod.POST)
+		    @ResponseBody
+		    public ApiResponseResult clear(@RequestBody Map<String, Object> params) {
+		        String method = "produce/issue/clear";String methodName ="删除下发记录";
+		        try{
+		        	String devList = params.get("devList").toString();
+		        	String empList = params.get("empList").toString();
+		            ApiResponseResult result = issueService.clear(devList,empList);
+		            logger.debug("删除下发记录=add:");
+		            getSysLogService().success(method, methodName, null);
+		            return result;
+		        }catch(Exception e){
+		            e.printStackTrace();
+		            logger.error("删除记录新增失败！", e);
+		            getSysLogService().error(method, methodName, e.toString());
+		            return ApiResponseResult.failure("删除记录新增失败！");
+		        }
+		    }
 }

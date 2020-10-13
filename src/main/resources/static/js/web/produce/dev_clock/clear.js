@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#clearList',
-			url : context + 'produce/clear/getList',
+			url : context + 'produce/issue/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -71,6 +71,7 @@ $(function() {
 			elem : '#empList',
 			method : 'post',// 默认：get请求
 			page : true,
+			height: 'full-220',
 			request : {
 				pageName : 'page',// 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -94,13 +95,13 @@ $(function() {
 			},
 
 			{
-				field : 'empCode',
+				field : 'EMP_CODE',
 				title : '员工工号'
 			}, {
-				field : 'empName',
+				field : 'EMP_NAME',
 				title : '员工姓名'
 			}, {
-				field : 'empType',
+				field : 'EMP_TYPE',
 				title : '员工类型'
 			} ] ],
 			data : []
@@ -109,6 +110,7 @@ $(function() {
 			elem : '#devList',
 			method : 'post',// 
 			page : true,
+			height: 'full-220',
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -190,7 +192,7 @@ $(function() {
 						devList += dList[i].id + ";"// 用“；”分隔
 					}
 					for (var i = 0; i < eList.length; i++) {// 获取被选中的行
-						empList += eList[i].id + ";"// 用“；”分隔
+						empList += eList[i].ID + ";"// 用“；”分隔
 					}
 					addSubmit(devList, empList);
 				}	
@@ -233,7 +235,7 @@ function addClear() {
 }
 // 获取员工信息
 function getEmp() {
-	CoreUtil.sendAjax("produce/clear/getEmp", "", function(data) {
+	CoreUtil.sendAjax("produce/issue/getEmp", "", function(data) {
 		if (data.result) {
 			// var beSelected=data.data;
 			// console.log(data.data.rows)
@@ -257,7 +259,7 @@ function getEmp() {
 }
 // 获取卡机信息
 function getDev() {
-	CoreUtil.sendAjax("produce/clear/getDev", "", function(data) {
+	CoreUtil.sendAjax("produce/issue/getDev", "", function(data) {
 		if (data.result) {
 			tableDev.reload({
 				data : data.data.rows,
@@ -314,7 +316,7 @@ function addSubmit(devList, empList) {
 		"devList" : devList,
 		"empList" : empList
 	};
-	CoreUtil.sendAjax("produce/clear/add", JSON.stringify(params), function(
+	CoreUtil.sendAjax("produce/issue/clear", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -380,7 +382,7 @@ function loadEmp(obj) {
 	// 重新加载table
 	console.log(obj)
 	tableEmp.reload({
-		url : context + 'produce/clear/getEmp',
+		url : context + 'produce/issue/getEmp',
 		where : {
 			empKeyword : obj.field.empKeyword
 		},
@@ -405,7 +407,7 @@ function loadAll() {
 function cleanClear() {
 	$('#devSearch')[0].reset();
 	tableDev.reload({
-		url : context + 'produce/clear/getDev',
+		url : context + 'produce/issue/getDev',
 		where : {
 			devKeyword : ""
 		},
@@ -416,7 +418,7 @@ function cleanClear() {
 	});
 	$('#empSearch')[0].reset();
 	tableEmp.reload({
-		url : context + 'produce/clear/getEmp',
+		url : context + 'produce/issue/getEmp',
 		where : {
 			empKeyword : ""
 		},
