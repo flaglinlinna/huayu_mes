@@ -897,7 +897,7 @@ public class SchedulingImpl implements SchedulingService {
                         //已选择
                         map.put("id", item.getId());
                         map.put("mid", mid);
-                        map.put("procOrder", item.getProcOrder());
+                        map.put("procOrder", item.getProcOrder() != null ? item.getProcOrder() : "0");
                         map.put("procNo", item.getProcNo());
                         map.put("procName", process.getProcName());
                         map.put("procId", process.getId());
@@ -915,15 +915,36 @@ public class SchedulingImpl implements SchedulingService {
                 //未选择
                 map.put("id", null);
                 map.put("mid", mid);
-                map.put("procOrder", process.getProcOrder());
+                map.put("procOrder", process.getProcOrder() != null ? process.getProcOrder().toString() : "0");
                 map.put("procNo", process.getProcNo());
                 map.put("procName", process.getProcName());
+                map.put("procId", process.getId());
                 map.put("jobAttr", 0);
                 map.put("empId", null);
                 map.put("empName", "");
                 map.put("isCheck", 0);
                 mapList.add(map);
             }
+        }
+
+        try{
+            if(mapList.size() > 0){
+                Collections.sort(mapList, new Comparator<Map<String, Object>>(){
+                    @Override
+                    public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                        Integer order1 = Integer.parseInt(o1.get("procOrder").toString());
+                        Integer order2 = Integer.parseInt(o2.get("procOrder").toString());
+                        if(order1.compareTo(order2) > 0){
+                            return 1;
+                        }
+                        if(order1.compareTo(order2) == 0){
+                            return 0;
+                        }
+                        return -1;
+                    }
+                });
+            }
+        }catch (Exception e){
         }
 
         return ApiResponseResult.success().data(DataGrid.create(mapList, mapList.size(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
@@ -968,7 +989,6 @@ public class SchedulingImpl implements SchedulingService {
     @Override
     @Transactional
     public ApiResponseResult saveProcessProc(Long mid, String processIds) throws Exception{
-        // TODO: 2020/10/10
         if(mid == null){
             return ApiResponseResult.failure("排产ID不能为空！");
         }
