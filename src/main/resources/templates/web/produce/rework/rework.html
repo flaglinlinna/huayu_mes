@@ -58,17 +58,19 @@
 											</div>
 										</div>
 										<div class="layui-form-item">
-											<label class="layui-form-label">备注</label>
-											<div class="layui-input-inline" style="width: 320px;">
-												<input id="sMemo" name="" sMemo"" autocomplete="off"
-													class="layui-input" type="text" />
-											</div>
 											<label class="layui-form-label">外箱号条码</label>
-											<div class="layui-input-inline" style="width: 190px;">
+											<div class="layui-input-inline" style="width: 250px;">
 												<input id="sBarcode" name="sBarcode" autocomplete="off"
 													class="layui-input" type="text" />
 											</div>
 											<div class="layui-form-mid layui-word-aux">请输入或者扫描条码后回车</div>
+										</div>
+										<div class="layui-form-item">
+											<label class="layui-form-label">备注</label>
+											<div class="layui-input-inline" style="width: 300px;">
+												<input id="sMemo" name="" sMemo"" autocomplete="off"
+													class="layui-input" type="text" />
+											</div>
 										</div>
 									</form>
 								</div>
@@ -94,26 +96,24 @@
 											<div class="layui-input-inline" style="width: 320px;">
 												<input type="text" name="hTaskno" placeholder="请选择"
 													autocomplete="off" class="layui-input" readonly="readonly"
-													lay-verify="required" id="hTaskno">
+													id="hTaskno">
 											</div>
 											<label class="layui-form-label">箱号条码</label>
 											<div class="layui-input-inline">
 												<input id="hBarcode" name="hBarcode" autocomplete="off"
-													class="layui-input" type="text" lay-verify="required" />
+													class="layui-input" type="text"/>
 											</div>
 										</div>
 										<div class="layui-form-item">
 											<label class="layui-form-label">开始日期</label>
 											<div class="layui-input-inline">
 												<input type="text" name="hStartTime" autocomplete="off"
-													class="layui-input" readonly="readonly"
-													lay-verify="required" id="hStartTime">
+													class="layui-input" readonly="readonly"id="hStartTime">
 											</div>
 											<label class="layui-form-label">结束日期</label>
 											<div class="layui-input-inline">
 												<input type="text" name="hEndTime" autocomplete="off"
-													class="layui-input" readonly="readonly"
-													lay-verify="required" id="hEndTime">
+													class="layui-input" readonly="readonly" id="hEndTime">
 											</div>
 											<button type="reset"
 												class="layui-btn layui-btn-primary layui-btn-sm" title="重置">

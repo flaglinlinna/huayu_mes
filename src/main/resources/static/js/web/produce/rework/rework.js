@@ -234,13 +234,9 @@ $(function() {
 						});
 						// 监听
 						form.on('submit(searchSubmit)', function(data) {
-							if (data.field.hTaskno == "") {
-								layer.alert("请选择制令单！");
-							} else if (data.field.hBarcode == "") {
-								layer.alert("请扫描条码！");
-							} else {
-								search(data.field)
-							}
+							
+								search(data.field);
+							
 							// console.log(data.field)
 						});
 					});
@@ -252,8 +248,8 @@ $(function() {
 	});
 });
 function reworkCode() {
-	if ($("#sTaskno").val() == "" || $("#sBarcode").val() == "") {
-		layer.alert("请先完善信息！")
+	if ($("#sTaskno").val()==""&&$("input[name='isRecord']:checked").val()=="1") {
+		layer.alert("请先选择制令单！")
 		return false;
 	}
 	var params = {
