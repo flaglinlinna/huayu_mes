@@ -158,5 +158,23 @@ public class CardDataController extends WebController{
 	        }
 	    }
 		
+		
+		@ApiOperation(value="手动更新卡机打卡数据", notes="手动更新卡机打卡数据", hidden = true)
+	    @RequestMapping(value = "/updateData", method = RequestMethod.GET)
+	    @ResponseBody
+	    public ApiResponseResult updateData(String devIds,String stype) {
+	        String method = "/product/card_data/updateData";String methodName ="手动更新卡机打卡数据";
+	        try {
+	            ApiResponseResult result = cardDataService.updateData(devIds,stype);
+	            logger.debug("手动更新卡机打卡数据=getHXTaskNo:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        } catch (Exception e) {
+	        	 e.printStackTrace();
+	             logger.error("手动更新卡机打卡数据失败！", e);
+	             getSysLogService().error(method, methodName, e.toString());
+	             return ApiResponseResult.failure("手动更新卡机打卡数据失败！");
+	        }
+	    }
 	   
 }
