@@ -21,5 +21,8 @@ public interface CardDataService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
 	
 	public ApiResponseResult getEmp() throws Exception;
+	
 	public ApiResponseResult getDev() throws Exception;
+	
+	public ApiResponseResult updateData(String devIds) throws Exception;
 }

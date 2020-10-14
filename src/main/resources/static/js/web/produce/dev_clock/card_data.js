@@ -65,13 +65,51 @@ $(function() {
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-				// console.log(res);
-				// 得到当前页码
-				// console.log(curr);
-				// 得到数据总量
-				// console.log(count);
 				pageCurr = curr;
 			}
+		});
+		tableDev = table.render({
+			elem : '#devTable',
+			method : 'post',// 
+			height: '400',
+			page : true,
+			request : {
+				pageName : 'page', // 页码的参数名称，默认：page
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			},
+			parseData : function(res) {
+				console.log(res)
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+				// code值为200表示成功
+				}
+			},
+			cols : [ [ {
+				type : 'numbers'
+			}
+			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
+			, {
+				type : "checkbox"
+			},
+
+			{
+				field : 'devCode',
+				title : '卡机编号',
+			}, {
+				field : 'devName',
+				title : '卡机名称',
+			}, {
+				field : 'devType',
+				title : '卡机类型',
+			}, {
+				field : 'devIp',
+				title : '卡机IP',
+			} ] ],
+			data : []
 		});
 		// 日期选择器
 		laydate.render({
@@ -93,6 +131,15 @@ $(function() {
 				getCardData(data, data.id);
 			}
 		});
+		
+		// 监听搜索框
+		form.on('submit(searchSubmit)', function(data) {
+			// 重新加载table
+			load(data);
+			return false;
+		});
+		
+		
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
 			if (data.field.id == null || data.field.id == "") {
@@ -100,6 +147,31 @@ $(function() {
 				addSubmit(data);
 			} else {
 				editSubmit(data);
+			}
+			return false;
+		});
+		
+		// 监听卡机查询
+		form.on('submit(searchDev)', function(data) {
+			loadDev(data.field.keywordDev);
+			return false;
+		});
+		
+		// 监听卡机同步
+		form.on('submit(updateData)', function(data) {
+			//loadDev(data.field.keywordDev);
+			var devList = "";
+			var dList = table.checkStatus('devTable').data;// 被选中行的数据 id
+			if(dList == ""){
+				layer.msg('请先选择卡机', {
+					time : 10000, // 10s后自动关闭
+					btn : [ '确定' ]
+				});
+			}else{
+				for (var i = 0; i < dList.length; i++) {// 获取被选中的行
+					devList += dList[i].id + ";"// 用“;”分隔
+				}
+				updateData(devList);
 			}
 			return false;
 		});
@@ -124,7 +196,19 @@ function openCardData(id, title) {
 		}
 	});
 }
-
+//重新加载表格（搜索）
+function load(obj) {
+	// 重新加载table
+	tableIns.reload({
+		where : {
+			keyword : obj.field.keywordSearch
+		},
+		page : {
+			curr : pageCurr
+		// 从当前页码开始
+		}
+	});
+}
 // 添加卡点数据信息
 function addCardData() {
 	// 清空弹出框数据
@@ -248,4 +332,54 @@ function loadAll() {
 function cleanCardData() {
 	$('#cardForm')[0].reset();
 	layui.form.render();// 必须写
+}
+
+//同步卡机信息
+function update() {
+	loadDev('');
+	layer.open({
+		type : 1,
+		title : '手动同步卡机数据',
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '650px' ],
+		content : $('#getCardData'),
+		end : function() {
+			loadDev('');
+		}
+	});
+}
+//重新加载表格-设备（搜索）
+function loadDev(keyword) {
+	// 重新加载table
+	tableDev.reload({
+		url : context + 'produce/issue/getDev',
+		where : {
+			devKeyword : keyword
+		},
+		page : {
+			curr : pageCurr
+		// 从当前页码开始
+		}
+	});
+}
+
+function updateData(devIds){
+	CoreUtil.sendAjax("produce/card_data/updateData", {"devIds" : devIds}, function(
+			data) {
+		if (data.result) {
+			layer.alert(data.msg, function() {
+				layer.closeAll();
+				// 加载页面
+				loadAll();
+			});
+		} else {
+			layer.alert(data.msg, function() {
+				layer.closeAll();
+			});
+		}
+	}, "GET", false, function(res) {
+		layer.alert(res.msg);
+	});
 }

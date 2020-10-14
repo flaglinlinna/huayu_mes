@@ -70,6 +70,13 @@ public class CardData extends BaseEntity {
     @ApiModelProperty(name = "fstatus", value = "卡点状态  1(有效，默认)/0(失效)")
     @Column
     protected Integer fstatus=1;
+    
+    /**
+     * 数据类型  1(卡机数据，默认)/0(手动新增)
+     */  
+    @ApiModelProperty(name = "fstype", value = "数据类型  1(卡机数据，默认)/0(手动新增)")
+    @Column
+    protected Integer fstype=1;
 
 	public Long getEmpId() {
 		return empId;
@@ -126,4 +133,14 @@ public class CardData extends BaseEntity {
 	public void setFstatus(Integer fstatus) {
 		this.fstatus = fstatus;
 	}
+
+	public Integer getFstype() {
+		return fstype;
+	}
+
+	public void setFstype(Integer fstype) {
+		this.fstype = fstype;
+	}
+	
+	
 }

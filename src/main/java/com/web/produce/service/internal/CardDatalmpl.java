@@ -1,5 +1,7 @@
 package com.web.produce.service.internal;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,6 +23,7 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.attendance.ZkemSDKUtils;
 import com.web.basic.dao.EmployeeDao;
 import com.web.basic.dao.LineDao;
 import com.web.basic.entity.Client;
@@ -64,7 +67,12 @@ public class CardDatalmpl implements CardDataService {
 		// 查询2
 		List<SearchFilter> filters1 = new ArrayList<>();
 		if (StringUtils.isNotEmpty(keyword)) {
-			
+			filters1.add(new SearchFilter("employee.empCode", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("employee.empName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("employee.empType", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("devClock.devCode", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("devClock.devName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("devClock.devIp", SearchFilter.Operator.LIKE, keyword));
 		}
 		Specification<CardData> spec = Specification.where(BaseService.and(filters, CardData.class));
 		Specification<CardData> spec1 = spec.and(BaseService.or(filters1, CardData.class));
@@ -99,6 +107,7 @@ public class CardDatalmpl implements CardDataService {
 		}
 		cardData.setCreateDate(new Date());
 		cardData.setCreateBy(UserUtil.getSessionUser().getId());
+		cardData.setDelFlag(0);
 		cardDataDao.save(cardData);
 
 		return ApiResponseResult.success("卡点记录添加成功！").data(cardData);
@@ -160,5 +169,81 @@ public class CardDatalmpl implements CardDataService {
 	public ApiResponseResult getDev() throws Exception {
 		List<DevClock> list = devClockDao.findByDelFlag(0);
 		return ApiResponseResult.success().data(list);
+	}
+
+	@Override
+	public ApiResponseResult updateData(String devIds) throws Exception {
+		// TODO Auto-generated method stub
+		if(StringUtils.isEmpty(devIds)){
+			return ApiResponseResult.failure("请先选择卡机");
+		}
+		String[] dev_ids = devIds.split(";");
+		String msg = "";
+		for(String did:dev_ids){
+			if(!StringUtils.isEmpty(did)){
+				DevClock dc = devClockDao.findById(Long.parseLong(did));
+				if(dc != null){
+					ApiResponseResult api = this.saveCardData(dc);
+					if(!api.isResult()){
+						msg += api.getMsg()+";";
+					}
+				}
+			}
+		}
+		return ApiResponseResult.success("同步成功!"+msg);
+	}
+	
+	/**
+	 * 根据卡机获取卡机上的考勤记录
+	 * @param DevClock
+	 */
+	private ApiResponseResult saveCardData(DevClock devClock){
+		List<CardData> lc = new ArrayList<CardData>();
+		ZkemSDKUtils sdk = new ZkemSDKUtils();
+        boolean connFlag = sdk.connect(devClock.getDevIp(), 4370);
+        System.out.println(connFlag);
+        if (connFlag) {
+        	
+            boolean flag = sdk.readGeneralLogData();
+            
+            if(flag){
+            	List<Map<String, Object>> strList = sdk.getGeneralLogData();
+
+                for(Map<String, Object> map:strList){
+                	//先判断员工信息是否存在
+                	String user_code = map.get("EnrollNumber")==null?"":map.get("EnrollNumber").toString();//获取用户账号
+                	List<Employee> le = employeeDao.findByDelFlagAndEmpCode(0,user_code);
+                	if(le.size() == 0){
+                		continue ;
+                	}
+                	//判断信息是否已经保存过
+                	String carDate=LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    String cardTime=LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+                    System.out.println("当前时间为:"+carDate);
+                    System.out.println("当前时间为:"+cardTime);
+                    List<CardData> cc = cardDataDao.findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTime(0, le.get(0).getId(), devClock.getId(),
+                    		carDate, cardTime);
+                    if(cc.size()>0){
+                    	continue ;
+                    }
+                    CardData cd = new CardData();
+                    cd.setCardDate(carDate);
+                    cd.setCardTime(cardTime);
+                    cd.setDevClockId(devClock.getId());
+                    cd.setEmpId(le.get(0).getId());
+                    cd.setCreateDate(new Date());
+                    cd.setCompany(le.get(0).getCompany());
+                    cd.setFactory(le.get(0).getFactory());
+
+                    lc.add(cd);
+                }
+                cardDataDao.saveAll(lc);
+            }else{
+            	return ApiResponseResult.failure("读取卡机"+devClock.getDevIp()+"内容失败");
+            }
+        }else{
+        	return ApiResponseResult.failure("连接卡机"+devClock.getDevIp()+"失败");
+        }
+		return ApiResponseResult.success();
 	}
 }
