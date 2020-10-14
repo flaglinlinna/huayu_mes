@@ -113,11 +113,11 @@ $(function() {
 		});
 		// 日期选择器
 		laydate.render({
-			elem : '#cardDate',
+			elem : '#cardDate',trigger: 'click',
 			type : 'date' // 默认，可不填
 		});
 		laydate.render({
-			elem : '#cardTime',
+			elem : '#cardTime', trigger: 'click',
 			type : 'time' // 默认，可不填
 		});
 		// 监听工具条
@@ -171,7 +171,26 @@ $(function() {
 				for (var i = 0; i < dList.length; i++) {// 获取被选中的行
 					devList += dList[i].id + ";"// 用“;”分隔
 				}
-				updateData(devList);
+				updateData(devList,'1');
+			}
+			return false;
+		});
+		
+		// 监听卡机同步并清除数据
+		form.on('submit(updateAndDelData)', function(data) {
+			//loadDev(data.field.keywordDev);
+			var devList = "";
+			var dList = table.checkStatus('devTable').data;// 被选中行的数据 id
+			if(dList == ""){
+				layer.msg('请先选择卡机', {
+					time : 10000, // 10s后自动关闭
+					btn : [ '确定' ]
+				});
+			}else{
+				for (var i = 0; i < dList.length; i++) {// 获取被选中的行
+					devList += dList[i].id + ";"// 用“;”分隔
+				}
+				updateData(devList,'2');
 			}
 			return false;
 		});
@@ -343,7 +362,7 @@ function update() {
 		fixed : false,
 		resize : false,
 		shadeClose : true,
-		area : [ '650px' ],
+		area : [ '800px' ],
 		content : $('#getCardData'),
 		end : function() {
 			loadDev('');
@@ -365,8 +384,8 @@ function loadDev(keyword) {
 	});
 }
 
-function updateData(devIds){
-	CoreUtil.sendAjax("produce/card_data/updateData", {"devIds" : devIds}, function(
+function updateData(devIds,stype){
+	CoreUtil.sendAjax("produce/card_data/updateData", {"devIds" : devIds,"stype":stype}, function(
 			data) {
 		if (data.result) {
 			layer.alert(data.msg, function() {

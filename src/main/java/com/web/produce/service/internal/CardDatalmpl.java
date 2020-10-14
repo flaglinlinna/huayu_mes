@@ -1,5 +1,7 @@
 package com.web.produce.service.internal;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,13 +27,7 @@ import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.attendance.ZkemSDKUtils;
 import com.web.basic.dao.EmployeeDao;
-import com.web.basic.dao.LineDao;
-import com.web.basic.entity.Client;
-import com.web.basic.entity.Defective;
-import com.web.basic.entity.DefectiveDetail;
 import com.web.basic.entity.Employee;
-import com.web.basic.entity.Line;
-import com.web.basic.entity.Mtrial;
 import com.web.produce.dao.CardDataDao;
 import com.web.produce.dao.DevClockDao;
 import com.web.produce.entity.CardData;
@@ -105,6 +101,13 @@ public class CardDatalmpl implements CardDataService {
 		if (cardData == null) {
 			return ApiResponseResult.failure("卡点记录不能为空！");
 		}
+		
+		List<CardData> cc = cardDataDao.findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTime(0, cardData.getEmpId(), cardData.getDevClockId(),
+				cardData.getCardDate(), cardData.getCardTime());
+        if(cc.size()>0){
+        	return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
+        }
+        
 		cardData.setCreateDate(new Date());
 		cardData.setCreateBy(UserUtil.getSessionUser().getId());
 		cardData.setDelFlag(0);
@@ -172,7 +175,7 @@ public class CardDatalmpl implements CardDataService {
 	}
 
 	@Override
-	public ApiResponseResult updateData(String devIds) throws Exception {
+	public ApiResponseResult updateData(String devIds,String stype) throws Exception {
 		// TODO Auto-generated method stub
 		if(StringUtils.isEmpty(devIds)){
 			return ApiResponseResult.failure("请先选择卡机");
@@ -186,6 +189,14 @@ public class CardDatalmpl implements CardDataService {
 					ApiResponseResult api = this.saveCardData(dc);
 					if(!api.isResult()){
 						msg += api.getMsg()+";";
+					}
+					if(stype.equals("2")){
+						Date date = new Date(); 
+						DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
+						api = this.delCardData(dc, format.format(date));
+						if(!api.isResult()){
+							msg += api.getMsg()+";";
+						}
 					}
 				}
 			}
@@ -245,5 +256,28 @@ public class CardDatalmpl implements CardDataService {
         	return ApiResponseResult.failure("连接卡机"+devClock.getDevIp()+"失败");
         }
 		return ApiResponseResult.success();
+	}
+	
+	/**
+	 * 根据卡机删除卡机上的所有考勤记录
+	 * @param DevClock
+	 * @param time(YYYY-MM-DD hh:mm:ss )
+	 */
+	public ApiResponseResult delCardData(DevClock devClock,String time){
+		List<CardData> lc = new ArrayList<CardData>();
+		ZkemSDKUtils sdk = new ZkemSDKUtils();
+        boolean connFlag = sdk.connect(devClock.getDevIp(), 4370);
+        System.out.println(connFlag);
+        if (connFlag) {
+            boolean f = sdk.deleteGeneralLogData(time);
+            if(f){
+            	return ApiResponseResult.success();
+            }else{
+            	return ApiResponseResult.failure("删除卡机"+devClock.getDevIp()+"数据失败");
+            }
+        }else{
+        	return ApiResponseResult.failure("连接卡机"+devClock.getDevIp()+"失败");
+        }
+
 	}
 }
