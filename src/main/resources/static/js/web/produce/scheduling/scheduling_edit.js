@@ -286,52 +286,52 @@ function cleanProcess(){
 }
 //编辑-工艺维护
 function doEditProcess(){
-    var param = {
-        "id": $("#processId1").val(),
-        "mid": $("#mid1").val(),
-        "procOrder": $("#procOrder1").val(),
-        "jobAttr": $("#jobAttr1").val(),
-        "empId": $("#empId1").val(),
-        "procNo": $("#procNo1").val(),
-        "procName": $("#procName1").val()
-    };
-    CoreUtil.sendAjax("/produce/scheduling/editProcess",JSON.stringify(param),function (res) {
-        if (res.result == true) {
-            layer.alert("编辑成功",function(){
-                layer.closeAll();
-                loadAll1();
-            });
-        } else {
-            layer.alert(res.msg,function(){
+    $.ajax({
+        type: "POST",
+        data: $("#editForm1").serialize(),
+        url: context+"/produce/scheduling/editProcess",
+        success: function (res) {
+            if (res.result) {
+                layer.alert("编辑成功",function(){
+                    layer.closeAll();
+                    loadAll1();
+                });
+            } else {
+                layer.alert(res.msg,function(){
+                    layer.closeAll();
+                });
+            }
+        },
+        error: function () {
+            layer.alert("操作请求错误，请您稍后再试",function(){
                 layer.closeAll();
             });
         }
-    },"POST",false,function (res) {
-        layer.alert("抱歉！您暂无权限",function(){
-            layer.closeAll();
-        });
     });
-    // $.ajax({
-    //     type: "POST",
-    //     data: $("#editForm1").serialize(),
-    //     url: context+"/produce/scheduling/editProcess",
-    //     success: function (res) {
-    //         if (res.result) {
-    //             layer.alert("编辑成功",function(){
-    //                 layer.closeAll();
-    //                 loadAll1();
-    //             });
-    //         } else {
-    //             layer.alert(res.msg,function(){
-    //                 layer.closeAll();
-    //             });
-    //         }
-    //     },
-    //     error: function () {
-    //         layer.alert("操作请求错误，请您稍后再试",function(){
+    // var param = {
+    //     "id": $("#processId1").val(),
+    //     "mid": $("#mid1").val(),
+    //     "procOrder": $("#procOrder1").val(),
+    //     "jobAttr": $("#jobAttr1").val(),
+    //     "empId": $("#empId1").val(),
+    //     "procNo": $("#procNo1").val(),
+    //     "procName": $("#procName1").val()
+    // };
+    // CoreUtil.sendAjax("/produce/scheduling/editProcess",JSON.stringify(param),function (res) {
+    //     if (res.result == true) {
+    //         layer.alert("编辑成功",function(){
+    //             layer.closeAll();
+    //             loadAll1();
+    //         });
+    //     } else {
+    //         layer.alert(res.msg,function(){
     //             layer.closeAll();
     //         });
     //     }
+    // },"POST",false,function (res) {
+    //     layer.alert("抱歉！您暂无权限",function(){
+    //         layer.closeAll();
+    //     });
     // });
 }
 
