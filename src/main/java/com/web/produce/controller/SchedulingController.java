@@ -296,7 +296,7 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "编辑工艺", notes = "编辑工艺", hidden = true)
     @RequestMapping(value = "/editProcess", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponseResult editProcess(SchedulingProcess schedulingProcess){
+    public ApiResponseResult editProcess(@RequestBody SchedulingProcess schedulingProcess){
         String method = "/produce/scheduling/editProcess";String methodName ="编辑工艺";
         try{
             ApiResponseResult result = schedulingService.editProcess(schedulingProcess);
