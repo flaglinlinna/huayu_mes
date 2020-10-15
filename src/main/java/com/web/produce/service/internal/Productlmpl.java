@@ -74,5 +74,15 @@ public class Productlmpl extends PrcUtils implements ProductService {
 		return ApiResponseResult.success().data(m);
 	}
 
+	@Override
+	public ApiResponseResult getDetailByTask(String taskNo) throws Exception {
+		// TODO Auto-generated method stub
+		List<Object> list = getDetailByTaskPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",3,UserUtil.getSessionUser().getId()+"",taskNo);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success().data(list.get(2));
+	}
+
 	
 }

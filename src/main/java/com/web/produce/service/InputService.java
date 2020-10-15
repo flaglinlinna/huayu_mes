@@ -12,4 +12,6 @@ public interface InputService {
 	public ApiResponseResult addPut(String barcode,String task_no,String item_no,String qty) throws Exception;
 	
 	public ApiResponseResult delete(String id) throws Exception;
+	
+	public ApiResponseResult getDetailByTask(String taskNo) throws Exception;
 }

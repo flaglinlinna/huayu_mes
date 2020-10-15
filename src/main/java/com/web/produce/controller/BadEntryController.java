@@ -134,4 +134,22 @@ public class BadEntryController extends WebController {
 	             return ApiResponseResult.failure("删除不良失败！");
 	        }
 	    }
+	  
+	  @ApiOperation(value="根据指令单获取扫描信息", notes="根据指令单获取扫描信息", hidden = true)
+	    @RequestMapping(value = "/getDetailByTask", method = RequestMethod.GET)
+	    @ResponseBody
+	    public ApiResponseResult getDetailByTask(String taskNo) {
+	        String method = "/product/bad_entry/getDetailByTask";String methodName ="根据指令单获取扫描信息";
+	        try {
+	            ApiResponseResult result = badEntryService.getDetailByTask(taskNo);
+	            logger.debug("根据指令单获取扫描信息=getDetailByTask:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        } catch (Exception e) {
+	        	 e.printStackTrace();
+	             logger.error("根据指令单获取扫描信息失败！", e);
+	             getSysLogService().error(method, methodName, e.toString());
+	             return ApiResponseResult.failure("根据指令单获取扫描信息失败！");
+	        }
+	    }
 }

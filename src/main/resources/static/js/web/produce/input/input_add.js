@@ -148,6 +148,9 @@ $(function() {
 							"inqty" : da[0].QUANTITY,
 						});
 						form.render();// 重新渲染
+						
+						getDetailByTask(da[0].TASK_NO);
+						
 				}
 				});
 				
@@ -188,6 +191,22 @@ $(function() {
 			if (data.result) {
 				$( "input[name='item_code']").val(data.data[0].ITEM_NO);
 				$( "input[name='addqty']").val(data.data[0].QTY);
+			}else{
+				layer.alert(data.msg);
+			}
+		}, "GET", false, function(res) {
+			layer.alert(res.msg);
+		});
+ }
+ 
+ function getDetailByTask(taskNo){
+	 var params={"taskNo":taskNo}
+		CoreUtil.sendAjax("input/getDetailByTask", params, function(data) {
+			console.log(data)
+			if (data.result) {
+				tableIns.reload({
+					data:data.data
+				});
 			}else{
 				layer.alert(data.msg);
 			}
