@@ -143,6 +143,7 @@ $(function() {
 									"itemName" : da[0].ITEM_NAME
 								});
 								form.render();// 重新渲染
+								getDetailByTask(da[0].TASK_NO);
 							}
 						});
 
@@ -268,7 +269,21 @@ function getBadInfo(keyword, type) {
 						layer.alert(res.msg);
 					});
 }
-
+function getDetailByTask(taskNo){
+	 var params={"taskNo":taskNo}
+		CoreUtil.sendAjax("produce/bad_entry/getDetailByTask", params, function(data) {
+			console.log(data)
+			if (data.result) {
+				tableIns.reload({
+					data:data.data
+				});
+			}else{
+				layer.alert(data.msg);
+			}
+		}, "GET", false, function(res) {
+			layer.alert(res.msg);
+		});
+}
 function checkBarCode(taskNo, barcode) {
 	var params = {
 		"taskNo" : taskNo,

@@ -89,7 +89,7 @@ $(function () {
         });
         form.on('submit(editSubmit1)', function(data){
             //编辑-工艺维护
-            doEditProcess();
+            doEditProcess(data.field);
             return false;
         });
         form.on('submit(saveProcess)', function(data){
@@ -276,62 +276,59 @@ function cleanProcess(){
     $("#processId1").val("");
     $("#mid1").val("");
     $("#procOrder1").val("");
-    $("#jobAttr1").val("");
+    $("#jobAttr1").prop("checked", false);
     $("#empId1").val("");
     $("#procNo1").val("");
     $("#procName1").val("");
 
     //渲染
     layui.form.render('select');
+    layui.form.render('checkbox');
 }
 //编辑-工艺维护
-function doEditProcess(){
-    $.ajax({
-        type: "POST",
-        data: $("#editForm1").serialize(),
-        url: context+"/produce/scheduling/editProcess",
-        success: function (res) {
-            if (res.result) {
-                layer.alert("编辑成功",function(){
-                    layer.closeAll();
-                    loadAll1();
-                });
-            } else {
-                layer.alert(res.msg,function(){
-                    layer.closeAll();
-                });
-            }
-        },
-        error: function () {
-            layer.alert("操作请求错误，请您稍后再试",function(){
+function doEditProcess(obj){
+    //checkbox转换
+    if(!obj.jobAttr){
+        obj.jobAttr = 0;
+    }
+    CoreUtil.sendAjax("/produce/scheduling/editProcess",JSON.stringify(obj),function (res) {
+        if (res.result == true) {
+            layer.alert("编辑成功",function(){
+                layer.closeAll();
+                loadAll1();
+            });
+        } else {
+            layer.alert(res.msg,function(){
                 layer.closeAll();
             });
         }
+    },"POST",false,function (res) {
+        layer.alert("操作请求错误，请您稍后再试",function(){
+            layer.closeAll();
+        });
     });
-    // var param = {
-    //     "id": $("#processId1").val(),
-    //     "mid": $("#mid1").val(),
-    //     "procOrder": $("#procOrder1").val(),
-    //     "jobAttr": $("#jobAttr1").val(),
-    //     "empId": $("#empId1").val(),
-    //     "procNo": $("#procNo1").val(),
-    //     "procName": $("#procName1").val()
-    // };
-    // CoreUtil.sendAjax("/produce/scheduling/editProcess",JSON.stringify(param),function (res) {
-    //     if (res.result == true) {
-    //         layer.alert("编辑成功",function(){
-    //             layer.closeAll();
-    //             loadAll1();
-    //         });
-    //     } else {
-    //         layer.alert(res.msg,function(){
+
+    // $.ajax({
+    //     type: "POST",
+    //     data: $("#editForm1").serialize(),
+    //     url: context+"/produce/scheduling/editProcess",
+    //     success: function (res) {
+    //         if (res.result) {
+    //             layer.alert("编辑成功",function(){
+    //                 layer.closeAll();
+    //                 loadAll1();
+    //             });
+    //         } else {
+    //             layer.alert(res.msg,function(){
+    //                 layer.closeAll();
+    //             });
+    //         }
+    //     },
+    //     error: function () {
+    //         layer.alert("操作请求错误，请您稍后再试",function(){
     //             layer.closeAll();
     //         });
     //     }
-    // },"POST",false,function (res) {
-    //     layer.alert("抱歉！您暂无权限",function(){
-    //         layer.closeAll();
-    //     });
     // });
 }
 

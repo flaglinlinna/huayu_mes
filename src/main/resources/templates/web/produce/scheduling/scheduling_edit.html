@@ -137,7 +137,7 @@
                     {{#  if(d.isCheck==1){ }}
                     <button type="button" class="layui-btn layui-btn-xs" lay-event="edit1">编辑</button>
                     {{#  } else { }}
-                    <button type="button" class="layui-btn layui-btn-xs" lay-event="edit1" disabled="true">编辑</button>
+                    <!--<button type="button" class="layui-btn layui-btn-xs" lay-event="edit1" disabled="true">编辑</button>-->
                     {{#  } }}
                 </script>
             </div>
@@ -152,7 +152,7 @@
     </div>
 
     <!--编辑工艺维护-->
-    <div id="editDiv1" class="layer_self_wrap" style="width:500px;display:none;">
+    <div id="editDiv1" class="layer_self_wrap" style="width:500px;height:300px;display:none;">
         <form id="editForm1" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input id="processId1" type="hidden" name="id"/>
             <input id="mid1" type="hidden" name="mid"/>
@@ -165,7 +165,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">过程属性</label>
                 <div class="layui-input-inline" style="width: 350px;">
-                    <input type="checkbox" id="jobAttr1" name="jobAttr" value="1" lay-skin="primary" />
+                    <input type="checkbox" id="jobAttr1" name="jobAttr" value="1" lay-skin="primary" checked="" />
                     <!--<input id="jobAttr1" name="jobAttr" autocomplete="off" class="layui-input" type="text"/>-->
                 </div>
             </div>
@@ -198,7 +198,7 @@
     </div>
 
     <!--编辑工单组件-->
-    <div id="editDiv2" class="layer_self_wrap" style="width:500px;display:none;">
+    <div id="editDiv2" class="layer_self_wrap" style="width:500px;height:250px;display:none;">
         <form id="editForm2" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input id="itemId2" type="hidden" name="id"/>
             <input id="mid2" type="hidden" name="mid"/>

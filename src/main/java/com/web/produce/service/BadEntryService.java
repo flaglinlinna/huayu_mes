@@ -14,4 +14,6 @@ public interface BadEntryService {
 			int qty,String defCode,String memo) throws Exception;//保存不良
 	
 	public ApiResponseResult deleteBad(String recordId) throws  Exception;//删除不良
+	
+	public ApiResponseResult getDetailByTask(String taskNo) throws Exception;
 }

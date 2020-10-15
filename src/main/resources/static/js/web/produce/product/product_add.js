@@ -155,6 +155,8 @@ $(function() {
 							"rate" : da[0].ORDER_RATE,
 						});
 						form.render();// 重新渲染
+						
+						getDetailByTask(da[0].TASK_NO);
 				}
 				});
 				
@@ -299,7 +301,21 @@ $(function() {
         }
     });
 });
-
+function getDetailByTask(taskNo){
+	 var params={"taskNo":taskNo}
+		CoreUtil.sendAjax("product/getDetailByTask", params, function(data) {
+			console.log(data)
+			if (data.result) {
+				tableIns.reload({
+					data:data.data
+				});
+			}else{
+				layer.alert(data.msg);
+			}
+		}, "GET", false, function(res) {
+			layer.alert(res.msg);
+		});
+}
  function afterNei(barcode){
 	 var params={"barcode":barcode,"task_no":$( "input[name='num']").val()}
 		CoreUtil.sendAjax("product/afterNei", params, function(data) {

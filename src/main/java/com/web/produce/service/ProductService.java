@@ -13,4 +13,5 @@ public interface ProductService {
 	
 	public ApiResponseResult afterWai(String nbarcode,String task_no,String wbarcode,String hx,String ptype) throws Exception;
 	
+	public ApiResponseResult getDetailByTask(String taskNo) throws Exception;
 }
