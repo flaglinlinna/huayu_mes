@@ -25,4 +25,6 @@ public interface CardDataService {
 	public ApiResponseResult getDev() throws Exception;
 	
 	public ApiResponseResult updateData(String devIds,String stype) throws Exception;
+	
+	public ApiResponseResult updateDataByLine(String line_ids) throws Exception;
 }

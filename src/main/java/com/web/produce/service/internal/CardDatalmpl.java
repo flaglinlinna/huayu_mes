@@ -280,4 +280,30 @@ public class CardDatalmpl implements CardDataService {
         }
 
 	}
+
+	@Override
+	public ApiResponseResult updateDataByLine(String line_ids) throws Exception {
+		// TODO Auto-generated method stub
+		if(StringUtils.isEmpty(line_ids)){
+			return ApiResponseResult.failure("无产线信息");
+		}
+		String[] line_id = line_ids.split(";");
+		String msg = "";
+		for(String lid:line_id){
+			List<DevClock> ld = devClockDao.findByDelFlagAndLineId(0,Long.parseLong(lid));
+			if(ld.size() > 0){
+				for(DevClock dc:ld){
+					ApiResponseResult api = this.saveCardData(dc);
+					if(!api.isResult()){
+						msg += api.getMsg()+";";
+					}
+				}
+			}else{
+				return ApiResponseResult.failure("该产线未配置卡机!");
+			}
+			
+		}
+		
+		return ApiResponseResult.success("同步数据成功！"+msg);
+	}
 }

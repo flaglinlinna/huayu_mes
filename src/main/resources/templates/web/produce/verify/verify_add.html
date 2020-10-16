@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='上线确认'"></head>
+<style th:inline="text">
+.layui-form-label {
+	text-align: right;
+}
+
+.label-width  .layui-form-label{
+	width: 80px;
+}
+.label-width .layui-input-inline{
+    width: 150px;
+}
+
+</style>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<!--头-->
+		<!--<div th:replace="fragments/head :: header"></div>-->
+
+		<div style="margin: 10px">
+			<div class="layui-collapse" lay-accordion="">
+				<div class="layui-colla-item">
+					<h2 class="layui-colla-title">填写信息</h2>
+					<div class="layui-colla-content layui-show">
+						<form id="itemFrom" class="layui-form layui-form-pane label-width" lay-filter="itemFrom"
+							method="post" action="">
+							<div class="layui-form-item">
+								<label class="layui-form-label">制令单号</label>
+								<div class="layui-input-inline" style="width: 310px;">
+									<input type="text" name="num" placeholder="请选择" autocomplete="off"
+										class="layui-input"  readonly="readonly"  id="num">
+								</div>
+								<label class="layui-form-label">物料名称</label>
+								<div class="layui-input-inline" >
+									<input id="mtrcode" name="mtrcode" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled type="text" />
+								</div>
+								<label class="layui-form-label">客户简称</label>
+								<div class="layui-input-inline" style="width: 100px;">
+									<input  name="cus" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled type="text" />
+								</div>
+							</div>
+							<hr />
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label">工时类型</label>
+									<div class="layui-input-inline" >
+										<select lay-filter="ptyle" name="ptyle" lay-verify="required">
+									        <option value="正常班">正常班</option>
+									        <option value="平时加班">平时加班</option>
+									        <option value="周末加班">周末加班</option>
+									        <option value="法定加班">法定加班</option>
+									      </select>
+									</div>
+									<label class="layui-form-label">上线日期</label>
+									<div  class="layui-input-inline" >
+										<input type="text" name="pdate" class="layui-input" id="on_date" placeholder="yyyy-MM-dd">
+									</div>	
+									<label class="layui-form-label">线体</label>
+									<div class="layui-input-inline" >
+										<select lay-filter="pline" id="pline" name="pline" lay-verify="required">
+									      </select>
+									</div>
+									<label class="layui-form-label ">班次</label>
+									<div class="layui-input-inline" >
+										<select lay-filter="pclass" id="pclass" name="pclass" lay-verify="required">
+									      </select>
+									</div>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-inline">
+								    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
+										lay-filter="update">采集打卡数据</button>
+									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
+										lay-filter="add">创建在线返工制令单</button>
+									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
+										lay-filter="save">确认</button>		
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title">
+				<legend style="font-size:14px;">上线人员列表</legend>
+			</fieldset>
+			<table id="colTable" lay-filter="colTable" style="margin-top: -20px;"></table>
+			<script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+		</div>
+		
+		<!--添加或编辑客户信息-->
+    <div id="setClient" class="layer_self_wrap" style="width:500px;display:none;">
+        <form id="clientForm" class="layui-form layui-form-pane" lay-filter="clientForm" method="post" action="" style="margin-top: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum"/>
+            <input id="id" type="hidden" name="id"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户编码</label>
+                <div class="layui-input-inline">
+                    <input id="custNo" name="custNo" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户简称</label>
+                <div class="layui-input-inline">
+                    <input id="custNameS" name="custNameS" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户名称</label>
+                <div class="layui-input-inline">
+                    <input id="custName" name="custName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+		<script th:src="@{/js/web/produce/verify/verify_add.js}" src="/js/web/produce/verify/verify_add.js"></script>
+	</div>
+</body>
+</html>
