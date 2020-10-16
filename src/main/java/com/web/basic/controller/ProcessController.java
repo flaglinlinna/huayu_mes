@@ -53,7 +53,7 @@ public class ProcessController extends WebController{
 	        String method = "base/proc/getList";String methodName ="获取工序列表";
 	        try {
 	        	System.out.println(keyword);
-	            Sort sort = new Sort(Sort.Direction.DESC, "id");
+	            Sort sort = new Sort(Sort.Direction.ASC, "procOrder");
 	            ApiResponseResult result = processService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取工序列表=getList:");
 	            getSysLogService().success(method, methodName, null);
