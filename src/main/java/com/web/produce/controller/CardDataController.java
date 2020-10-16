@@ -176,5 +176,23 @@ public class CardDataController extends WebController{
 	             return ApiResponseResult.failure("手动更新卡机打卡数据失败！");
 	        }
 	    }
+		
+		@ApiOperation(value="根据产线更新指纹机信息", notes="根据产线更新指纹机信息", hidden = true)
+	    @RequestMapping(value = "/updateDataByLine", method = RequestMethod.GET)
+	    @ResponseBody
+	    public ApiResponseResult updateDataByLine(String line_ids) {
+	        String method = "/product/card_data/updateDataByLine";String methodName ="根据产线更新指纹机信息";
+	        try {
+	            ApiResponseResult result = cardDataService.updateDataByLine(line_ids);
+	            logger.debug("根据产线更新指纹机信息=updateDataByLine:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        } catch (Exception e) {
+	        	 e.printStackTrace();
+	             logger.error("根据产线更新指纹机信息失败！", e);
+	             getSysLogService().error(method, methodName, e.toString());
+	             return ApiResponseResult.failure("根据产线更新指纹机信息失败！");
+	        }
+	    }
 	   
 }

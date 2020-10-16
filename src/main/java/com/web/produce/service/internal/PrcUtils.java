@@ -320,6 +320,142 @@ public class PrcUtils {
 			return resultList;
 		}
 		
+		//上线确认-获取产线
+		public List getLinePrc(String company,String facoty,String user_id, String keyword) throws Exception {
+			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+				@Override
+				public CallableStatement createCallableStatement(Connection con) throws SQLException {
+					String storedProc = "{call  prc_mes_cof_line_chs (?,?,?,?,?,?,?)}";// 调用的sql
+					CallableStatement cs = con.prepareCall(storedProc);
+					cs.setString(1, company);
+					cs.setString(2, facoty);
+					cs.setString(3, user_id);
+					cs.setString(4, keyword);
+					cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(7, -10);// 输出参数 追溯数据
+					return cs;
+				}
+			}, new CallableStatementCallback() {
+				public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+					List<Object> result = new ArrayList<>();
+					List<Map<String, Object>> l = new ArrayList();
+					cs.execute();
+					result.add(cs.getInt(5));
+					result.add(cs.getString(6));
+					if (cs.getString(5).toString().equals("0")) {
+						// 游标处理
+						ResultSet rs = (ResultSet) cs.getObject(7);
+
+						try {
+							l = fitMap(rs);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						result.add(l);
+					}
+					System.out.println(l);
+					return result;
+				}
+
+			});
+			return resultList;
+		}
+		
+		//上线确认-获取产线未分配人员
+		public List getUserByLinePrc(String company,String facoty,String user_id, String line_id) throws Exception {
+			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+				@Override
+				public CallableStatement createCallableStatement(Connection con) throws SQLException {
+					String storedProc = "{call  prc_mes_cof_affirm_emp_chs (?,?,?,?,?,?,?)}";// 调用的sql
+					CallableStatement cs = con.prepareCall(storedProc);
+					cs.setString(1, company);
+					cs.setString(2, facoty);
+					cs.setString(3, user_id);
+					cs.setString(4, line_id);
+					cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(7, -10);// 输出参数 追溯数据
+					return cs;
+				}
+			}, new CallableStatementCallback() {
+				public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+					List<Object> result = new ArrayList<>();
+					List<Map<String, Object>> l = new ArrayList();
+					cs.execute();
+					result.add(cs.getInt(5));
+					result.add(cs.getString(6));
+					if (cs.getString(5).toString().equals("0")) {
+						// 游标处理
+						ResultSet rs = (ResultSet) cs.getObject(7);
+
+						try {
+							l = fitMap(rs);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						result.add(l);
+					}
+					System.out.println(l);
+					return result;
+				}
+
+			});
+			return resultList;
+		}
+		
+		//上线确认-保存分配
+		public List getEmpSavePrc(String company,String facoty,String user_id, String task_no,String line_id,
+				String hour_type,String class_id,String wdate,String emp_ids) throws Exception {
+			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+				@Override
+				public CallableStatement createCallableStatement(Connection con) throws SQLException {
+					String storedProc = "{call  PRC_MES_COF_EMP_SAVE (?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+					CallableStatement cs = con.prepareCall(storedProc);
+					cs.setString(1, company);
+					cs.setString(2, facoty);
+					cs.setString(3, user_id);
+					cs.setString(4, task_no);
+					cs.setString(5, line_id);
+					cs.setString(6, hour_type);
+					cs.setString(7, class_id);
+					cs.setString(8, wdate);
+					cs.setString(9, emp_ids);
+					cs.registerOutParameter(10, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(11, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(12, -10);// 输出参数 追溯数据
+					return cs;
+				}
+			}, new CallableStatementCallback() {
+				public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+					List<Object> result = new ArrayList<>();
+					List<Map<String, Object>> l = new ArrayList();
+					cs.execute();
+					result.add(cs.getInt(10));
+					result.add(cs.getString(11));
+					if (cs.getString(10).toString().equals("0")) {
+						// 游标处理
+						ResultSet rs = (ResultSet) cs.getObject(12);
+
+						try {
+							l = fitMap(rs);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						result.add(l);
+					}
+					System.out.println(l);
+					return result;
+				}
+
+			});
+			return resultList;
+		}
+		
+		
 	private List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();
 		if (null != rs) {
