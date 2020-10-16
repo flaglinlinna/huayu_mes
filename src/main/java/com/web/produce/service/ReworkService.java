@@ -2,7 +2,7 @@ package com.web.produce.service;
 
 import com.app.base.data.ApiResponseResult;
 
-public interface OnlineReworkService {
+public interface ReworkService {
 
 	public ApiResponseResult getTaskNo(String keyword) throws Exception;
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
-import com.web.produce.service.OnlineReworkService;
+import com.web.produce.service.ReworkService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,14 +23,14 @@ import io.swagger.annotations.ApiOperation;
 @ControllerAdvice
 @Controller
 @RequestMapping(value = "produce/rework")
-public class OnlineReworkController extends WebController {
+public class ReworkController extends WebController {
 
 	 @Autowired
-	 private OnlineReworkService onlineReworkService;
+	 private ReworkService reworkService;
 	 
 	 @ApiOperation(value = "在线返工页", notes = "在线返工页", hidden = true)
-	    @RequestMapping(value = "/toOnlineRework")
-	    public String toOnlineRework(){
+	    @RequestMapping(value = "/toRework")
+	    public String toRework(){
 	        return "/web/produce/rework/rework";
 	    }
 	 
@@ -40,7 +40,7 @@ public class OnlineReworkController extends WebController {
 	    public ApiResponseResult getTaskNo(String keyword) {
 	        String method = "produce/rework/getTaskNo";String methodName ="获取指令单信息";
 	        try {
-	            ApiResponseResult result = onlineReworkService.getTaskNo(keyword);
+	            ApiResponseResult result = reworkService.getTaskNo(keyword);
 	            logger.debug("获取指令单信息=getTaskNo:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
@@ -58,7 +58,7 @@ public class OnlineReworkController extends WebController {
 	    public ApiResponseResult getReworkTaskNo(String keyword) {
 	        String method = "produce/rework/getReworkTaskNo";String methodName ="获取返工指令单信息";
 	        try {
-	            ApiResponseResult result = onlineReworkService.getReworkTaskNo(keyword);
+	            ApiResponseResult result = reworkService.getReworkTaskNo(keyword);
 	            logger.debug("获取返工指令单信息=getReworkTaskNo:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
@@ -80,7 +80,7 @@ public class OnlineReworkController extends WebController {
 	        	String type = params.get("type") == null?"":params.get("type").toString();
 	        	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
 	        	String memo = params.get("memo") == null?"":params.get("memo").toString();
-	            ApiResponseResult result = onlineReworkService.subCode(taskNo,type,barcode,memo);
+	            ApiResponseResult result = reworkService.subCode(taskNo,type,barcode,memo);
 	            logger.debug("在线返工=subCode:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;
@@ -102,7 +102,7 @@ public class OnlineReworkController extends WebController {
 	        	String endTime = params.get("endTime") == null?"":params.get("endTime").toString();
 	        	String taskNo = params.get("taskNo") == null?"":params.get("taskNo").toString();
 	        	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
-	            ApiResponseResult result = onlineReworkService.search(startTime,endTime,taskNo,barcode);
+	            ApiResponseResult result = reworkService.search(startTime,endTime,taskNo,barcode);
 	            logger.debug("查询返工=search:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;

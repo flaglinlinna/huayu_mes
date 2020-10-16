@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
 import com.utils.UserUtil;
-import com.web.produce.service.OnlineReworkService;
+import com.web.produce.service.ReworkService;
 
 /**
  * 小码校验
@@ -28,7 +28,7 @@ import com.web.produce.service.OnlineReworkService;
  */
 @Service(value = "OnlineReworkService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class OnlineReworklmpl extends PrcUtils implements OnlineReworkService {
+public class Reworklmpl extends PrcUtils implements ReworkService {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;

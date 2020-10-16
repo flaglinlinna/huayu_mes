@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='中转送检'"></head>
+<style th:inline="text">
+.layui-form-label {
+	text-align: right;
+}
+
+.layui-form-switch {
+	margin-top: 0px;
+}
+
+.layui-form-radio {
+	margin: 0px 10px 0 0;
+}
+
+.long-item .layui-form-label {
+	width: 160px;
+}
+
+.long-item .layui-input-block {
+	margin-left: 160px;
+}
+</style>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<!--头-->
+		<!--<div th:replace="fragments/head :: header"></div>-->
+
+		<div style="margin: 10px">
+			<div class="layui-collapse" lay-accordion="">
+				<div class="layui-colla-item">
+					<h2 class="layui-colla-title">填写信息</h2>
+					<div class="layui-colla-content layui-show">
+						<form id="itemFrom" class="layui-form layui-form-pane"
+							lay-filter="itemFrom" method="post" action="">
+							<div class="layui-form-item">
+								<label class="layui-form-label">送检节点</label>
+								<div class="layui-input-inline">
+									<select id="proc" lay-filter="proc" autocomplete="off"
+										lay-verify="required" class="layui-select" lay-search>
+
+									</select>
+								</div>
+								<label class="layui-form-label">送检类型</label>
+								<div class="layui-input-inline">
+									<select id="in_type" lay-filter="in_type" autocomplete="off"
+										lay-verify="required" class="layui-select" lay-search>
+
+									</select>
+								</div>
+								<label class="layui-form-label">条码</label>
+								<div class="layui-input-inline">
+									<input id="barcode" name="barcode" autocomplete="off"
+										class="layui-input"placeholder="请输入或者扫描条码后回车"  type="text" />
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title">
+				<legend style="font-size: 14px;">条码列表</legend>
+			</fieldset>
+			<table id="colTable" lay-filter="colTable" style="margin-top: -20px;"></table>
+		</div>
+		<script th:src="@{/js/web/produce/transit/transit.js}"
+			src="/js/web/produce/transit/transit.js"></script>
+	</div>
+</body>
+</html>
