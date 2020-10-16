@@ -342,6 +342,12 @@ function getDetailByTask(taskNo){
 				tableIns.reload({
 					data:data.data.List
 				});
+				$("#nbarcode").val("");//10-15内箱标签置空
+				$("#wbarcode").val("");//10-15外箱标签标签置空
+				$("#nbarcode").focus();//10-15光标移动到内箱标签栏
+				if($("select[name='ptyle'] option:selected").val()=='2'){//若为合箱扫描模式则执行-2020-10-16
+					$("#num2").val("");//合箱制令单置空
+				}
 				/*var ptype = "正常扫描";
 				if($("select[name='ptyle'] option:selected").val()=='2'){
 					ptype = "合箱扫描";
