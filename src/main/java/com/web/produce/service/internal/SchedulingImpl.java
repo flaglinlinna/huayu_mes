@@ -446,7 +446,7 @@ public class SchedulingImpl implements SchedulingService {
                 String itemNo = "";//物料编码
                 String itemName = "";//物料描述
                 Integer qtyPlan = null;//计划数量
-                Date prodDate = null;//生产日期
+                String prodDate = null;//生产日期
                 String deptName = "";//部门名称
                 String linerName = "";//线长名称
                 String classNo = "";//班次
@@ -472,7 +472,7 @@ public class SchedulingImpl implements SchedulingService {
 
                 //日期
                 try{
-                    prodDate = this.readExcelDateCell(sheet, le, 4);
+                    prodDate = this.readExcelDateCellToString(sheet, le, 4);
                 }catch (Exception e){
                 }
 
@@ -631,6 +631,55 @@ public class SchedulingImpl implements SchedulingService {
             return null;
         }
     }
+    //读取单元格日期，返回String格式
+    //说明：（1）HSSFDateUtil.isCellDateFormatted(cell)用来判断当前单元格格式是否是日期格式，
+    // 它内部的实现单元格读取成数字（excel日期格式默认是用数字保存的），
+    // 所以调用这个api判断时需先要判断当前单元格格式不是字符串，否则字符串会导致读取失败
+    //（2）在自定义格式中，所有日期格式都可以通过getDataFormat()值来判断，如下
+    // yyyy-MM-dd----- 14
+    // yyyy年m月d日--- 31
+    // yyyy年m月------- 57
+    // m月d日  ---------- 58
+    // HH:mm----------- 20
+    // h时mm分  ------- 32
+    public String readExcelDateCellToString(Sheet sheet, int rnum, int cnum){
+        try{
+            String dateStr = null;
+            Date date = null;
+            Cell cell = sheet.getRow(rnum-1).getCell(cnum-1);
+            //1.判断是否为数字（日期在POI中会转换成数字处理）
+            if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+                if(HSSFDateUtil.isCellDateFormatted(cell)){
+                    //1.1如果是日期格式，直接获取日期
+                    date = sheet.getRow(rnum-1).getCell(cnum-1).getDateCellValue();
+                }else{
+                    //1.2如果是其他格式（比如自定义），调用getDataFormat()方法判断是否为日期
+                    short format = cell.getCellStyle().getDataFormat();
+                    if (format == 14 || format == 31 || format == 57 || format == 58
+                            || (176<=format && format<=178) || (182<=format && format<=196)
+                            || (210<=format && format<=213) || (208==format ) ) { // 日期
+                        date = sheet.getRow(rnum-1).getCell(cnum-1).getDateCellValue();
+                    } else if (format == 20 || format == 32 || format==183 || (200<=format && format<=209) ) { // 时间
+                        date = null;
+                    } else { // 不是日期时间格式
+                        date = null;
+                    }
+                }
+                if(date != null){
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                    dateStr = sdf.format(date);
+                }
+            }
+            //2.判断是否为字符串
+            if(cell.getCellType() == Cell.CELL_TYPE_STRING){
+                dateStr = cell.getStringCellValue();
+            }
+
+            return dateStr;
+        }catch (Exception e){
+            return null;
+        }
+    }
 
     //读取单元格数字
     public String readExcelNumberCell(Sheet sheet, int rnum, int cnum){
@@ -720,7 +769,7 @@ public class SchedulingImpl implements SchedulingService {
 
         List<SearchFilter> filters = new ArrayList<SearchFilter>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-        //filters.add(new SearchFilter("createBy", SearchFilter.Operator.EQ, currUser.getId()));
+        filters.add(new SearchFilter("createBy", SearchFilter.Operator.EQ, currUser.getId()));
 
         Specification<SchedulingTemp> spec = Specification.where(BaseService.and(filters, SchedulingTemp.class));
         Page<SchedulingTemp> page = schedulingTempDao.findAll(spec, pageRequest);
