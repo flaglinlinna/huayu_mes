@@ -160,7 +160,7 @@ $(function () {
 function getScheduling(){
     var optionHtml = '<option value=""></option>';
     var optionHtml2 = '<option value=""></option>';
-    var optionHtml3 = '<option value=""></option>';
+    var optionHtml3 = '';
     var optionHtml4 = '<option value=""></option>';
     //添加物料列表
     for(var i = 0; i < itemList.length; i++){
@@ -176,7 +176,7 @@ function getScheduling(){
     for(var i = 0; i < lineList.length; i++){
         optionHtml3 += '<option value="'+lineList[i].linerName+'">'+lineList[i].linerName+'</option>';
     }
-    // $("#linerName").html(optionHtml3);
+    $("#linerName").html(optionHtml3);
     //添加部门信息
     for(var i = 0; i < orgList.length; i++){
         optionHtml4 += '<option value="'+orgList[i].id+'">'+orgList[i].orgName+'</option>';
