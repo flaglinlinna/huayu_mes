@@ -454,7 +454,41 @@ public class PrcUtils {
 			});
 			return resultList;
 		}
-		
+	
+		//创建在线返工制令单
+		public List getCreateReturnPrc(String company,String facoty,String user_id, String task_no,String item_no,String liner_name,int qty,String pdate) throws Exception {
+			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+				@Override
+				public CallableStatement createCallableStatement(Connection con) throws SQLException {
+					String storedProc = "{call  PRC_MES_TASK_OLN_CREATE (?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+					CallableStatement cs = con.prepareCall(storedProc);
+					cs.setString(1, company);
+					cs.setString(2, facoty);
+					cs.setString(3, user_id);
+					cs.setString(4, task_no);
+					cs.setString(5, item_no);
+					cs.setString(6, liner_name);
+					cs.setInt(7, qty);
+					cs.setString(8, pdate);
+					cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					
+					return cs;
+				}
+			}, new CallableStatementCallback() {
+				public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+					List<Object> result = new ArrayList<>();
+					List<Map<String, Object>> l = new ArrayList();
+					cs.execute();
+					result.add(cs.getInt(9));
+					result.add(cs.getString(10));
+					System.out.println(l);
+					return result;
+				}
+
+			});
+			return resultList;
+		}
 		
 	private List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();

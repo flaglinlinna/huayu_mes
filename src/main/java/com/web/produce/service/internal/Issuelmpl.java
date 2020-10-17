@@ -403,7 +403,7 @@ public class Issuelmpl  implements IssueService {
 				
 			}
 		}
-		return ApiResponseResult.success("下发记录添加成功！"+msg);
+		return ApiResponseResult.success("删除记录操作成功！"+msg);
 	}
 	
 }
