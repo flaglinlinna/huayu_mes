@@ -38,11 +38,11 @@ $(function() {
                 ,{field:'type', title:'type', width:120}
                 ,{field:'username', title:'操作账号', width:'8%'}
                 ,{field:'method', title:'路径', width:'18%'}
-                ,{field:'methodName', title:'操作', width:'18%'}
+                ,{field:'methodName', title:'操作', width:'32%'}
                 ,{field:'ip', title: '登录IP', width:'12%'}
                 ,{field:'operation', title: '结果', width:'11%'}
-                ,{field:'createdTime', title: '时间', width:'15%'}
-                ,{field:'params', title: '参数', width:'15%'}
+                ,{field:'createDate', title: '时间', width:'15%'}
+               /* ,{field:'params', title: '参数', width:'15%'}*/
             ]]
             ,  done: function(res, curr, count){
             	$("[data-field='id']").css('display','none');
