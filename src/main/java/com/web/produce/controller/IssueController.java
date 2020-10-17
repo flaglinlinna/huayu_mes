@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
@@ -35,10 +36,14 @@ public class IssueController extends WebController{
 	 private IssueService issueService;
 	 
 	 @ApiOperation(value = "指纹下发记录列表页", notes = "指纹下发记录列表页", hidden = true)
-	    @RequestMapping(value = "/toIssue")
-	    public String toIssue(){
-	        return "/web/produce/dev_clock/issue";
-	    }
+	 @RequestMapping(value = "/toIssue")
+	 public ModelAndView toIssue(String ptype) {
+			ModelAndView mav=new ModelAndView();
+			mav.addObject("ptype", ptype);
+			mav.setViewName("/web/produce/dev_clock/issue");//返回路径
+			return mav;
+		}
+
 	 
 	 @ApiOperation(value = "指纹下发记录列表页", notes = "指纹下发记录列表页", hidden = true)
 	    @RequestMapping(value = "/toClear")
@@ -58,12 +63,12 @@ public class IssueController extends WebController{
 	    @ApiOperation(value = "获取指纹下发记录列表", notes = "获取指纹下发记录列表",hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
-	    public ApiResponseResult getList(String keyword) {
+	    public ApiResponseResult getList(String keyword,String ptype) {
 	        String method = "produce/issue/getList";String methodName ="获取指纹下发记录列表";
 	        try {
 	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result = issueService.getList(keyword, super.getPageRequest(sort));
+	            ApiResponseResult result = issueService.getList(keyword,ptype, super.getPageRequest(sort));
 	            logger.debug("获取指纹下发记录列表=getList:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;

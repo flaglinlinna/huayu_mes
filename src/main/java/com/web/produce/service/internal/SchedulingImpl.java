@@ -111,6 +111,9 @@ public class SchedulingImpl implements SchedulingService {
         if(scheduling == null && scheduling.getId() == null){
             return ApiResponseResult.failure("排产信息ID不能为空！");
         }
+        if(StringUtils.isEmpty(scheduling.getLinerName())){
+            return ApiResponseResult.failure("线别不能为空！");
+        }
         Scheduling o = schedulingDao.findById((long) scheduling.getId());
         if(o == null){
             return ApiResponseResult.failure("排产信息不存在！");

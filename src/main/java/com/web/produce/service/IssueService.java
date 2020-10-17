@@ -18,7 +18,7 @@ public interface IssueService {
 
 	public ApiResponseResult delete(Long id) throws Exception;
 
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getList(String keyword,String ptype, PageRequest pageRequest) throws Exception;
 	
 	public ApiResponseResult getEmp(String empKeyword, PageRequest pageRequest) throws Exception;
 	

@@ -12,20 +12,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
-import com.app.query.dao.Parameter;
-import com.app.query.dao.SQLParameter;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
@@ -35,15 +30,15 @@ import com.web.basic.dao.EmployeeDao;
 import com.web.basic.entity.Employee;
 import com.web.produce.dao.CardDataDao;
 import com.web.produce.dao.DevClockDao;
+import com.web.produce.dao.DevLogDao;
 import com.web.produce.dao.EmpFingerDao;
 import com.web.produce.dao.IssueDao;
 import com.web.produce.entity.CardData;
 import com.web.produce.entity.DevClock;
+import com.web.produce.entity.DevLog;
 import com.web.produce.entity.EmpFinger;
 import com.web.produce.entity.Issue;
 import com.web.produce.service.IssueService;
-
-import net.sf.ehcache.util.ProductInfo;
 
 /**
  * 下发原始数据采集
@@ -67,14 +62,17 @@ public class Issuelmpl  implements IssueService {
 	
 	@Autowired
 	CardDataDao cardDataDao;
+	
+	@Autowired
+	DevLogDao devLogDao;
 
 	/**
 	 * 查询列表
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
-		// 查询条件1
+	public ApiResponseResult getList(String keyword,String ptype, PageRequest pageRequest) throws Exception {
+		/*// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 		// 查询2
@@ -99,7 +97,32 @@ public class Issuelmpl  implements IssueService {
 		}
 
 		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
+		if(ptype.equals("1")){
+			ptype = "指纹下发";
+		}else{
+			ptype = "指纹删除";
+		}
+		// 查询条件1
+				List<SearchFilter> filters = new ArrayList<>();
+				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+				filters.add(new SearchFilter("description", SearchFilter.Operator.EQ, ptype));
+				// 查询2
+				List<SearchFilter> filters1 = new ArrayList<>();
+				if (StringUtils.isNotEmpty(keyword)) {
+					filters1.add(new SearchFilter("emp.empName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("emp.empCode", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("devClock.devName", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("devIp", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("createUser.userCode", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("description", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("fmemo", SearchFilter.Operator.LIKE, keyword));
+				}
+				Specification<DevLog> spec = Specification.where(BaseService.and(filters, DevLog.class));
+				Specification<DevLog> spec1 = spec.and(BaseService.or(filters1, DevLog.class));
+				Page<DevLog> page = devLogDao.findAll(spec1, pageRequest);
+				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 
 	/**
@@ -131,6 +154,9 @@ public class Issuelmpl  implements IssueService {
 		//记录有就忽略，没有就增加
 		String msg = "";//记录信息
 		List<Issue> listNew = new ArrayList<>();
+		
+		List<DevLog> listLog = new ArrayList<DevLog>();
+		
 		if (devList.size() > 0) {
 			for (Long devId : devList) {
 				DevClock devClock = devClockDao.findById((long)devId);
@@ -139,9 +165,19 @@ public class Issuelmpl  implements IssueService {
 						for (Long empId : empList) {
 							Employee em = employeeDao.findById((long)empId);
 							if(em != null){
+								//日记
+								DevLog devLog = new DevLog();
+								devLog.setCreateBy(UserUtil.getSessionUser().getId());
+								devLog.setCreateDate(new Date());
+								devLog.setDevId(devClock.getId());
+								devLog.setDevIp(devClock.getDevIp());
+								devLog.setEmpId(em.getId());
+								devLog.setDescription("指纹下发");
+								devLog.setFmemo("失败");
 								List<EmpFinger> le = empFingerDao.findByDelFlagAndEmpId(0, empId);
 								if(le.size() >0){
 									if(doIssuedByUser(devClock.getDevIp(),le)){
+										devLog.setFmemo("成功");
 										int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
 										if(count==0){
 											Issue item = new Issue();
@@ -155,11 +191,10 @@ public class Issuelmpl  implements IssueService {
 										msg += em.getEmpName()+"下发指纹失败"+",";
 									}
 								}
+								listLog.add(devLog);
 							}
-							
-							
-									
 						}
+						devLogDao.saveAll(listLog);
 						issueDao.saveAll(listNew);
 					}
 				}
@@ -375,6 +410,7 @@ public class Issuelmpl  implements IssueService {
 		//记录有就忽略，没有就增加
 		String msg = "";//记录信息
 		List<Issue> listNew = new ArrayList<>();
+		List<DevLog> listLog = new ArrayList<DevLog>();
 		if (devList.size() > 0) {
 			for (Long devId : devList) {
 				DevClock devClock = devClockDao.findById((long)devId);
@@ -385,7 +421,17 @@ public class Issuelmpl  implements IssueService {
 							if(em != null){
 								List<EmpFinger> le = empFingerDao.findByDelFlagAndEmpId(0, empId);
 								if(le.size() >0){
+									//日记
+									DevLog devLog = new DevLog();
+									devLog.setCreateBy(UserUtil.getSessionUser().getId());
+									devLog.setCreateDate(new Date());
+									devLog.setDevId(devClock.getId());
+									devLog.setDevIp(devClock.getDevIp());
+									devLog.setEmpId(em.getId());
+									devLog.setDescription("指纹删除");
+									devLog.setFmemo("失败");
 									if(deleteTmpByUser(devClock.getDevIp(),devId,le)){
+										devLog.setFmemo("成功");
 										int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
 										if(count==0){
 											Issue item = new Issue();
@@ -399,11 +445,9 @@ public class Issuelmpl  implements IssueService {
 										msg += em.getEmpName()+"删除指纹失败"+",";
 									}
 								}
-							}
-							
-							
-									
+							}		
 						}
+						devLogDao.saveAll(listLog);
 						issueDao.saveAll(listNew);
 					}
 				}
