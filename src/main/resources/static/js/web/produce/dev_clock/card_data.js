@@ -138,7 +138,10 @@ $(function() {
 			load(data);
 			return false;
 		});
-		
+		// 监听switch操作
+		form.on('switch(isStatusTpl)', function(obj) {
+			setStatus(obj, this.value, this.name, obj.elem.checked);
+		});
 		
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
@@ -194,7 +197,51 @@ $(function() {
 			}
 			return false;
 		});
+		//设置用户正常/禁用
+		function setStatus(obj, id, name, checked) {
+			// setStatus(obj, this.value, this.name, obj.elem.checked);
+			var isStatus = checked ? 1 : 0;
+			var deaprtisStatus = checked ? "有效":"无效";
+			// 正常/禁用
 
+			layer.confirm(
+					'您确定要把' + name + '的卡点信息设置为' + deaprtisStatus + '状态吗？', {
+						btn1 : function(index) {
+							var param = {
+								"id" : id,
+								"checkStatus" : isStatus
+							};
+							CoreUtil.sendAjax("/produce/card_data/doStatus", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									layer.alert("操作成功", function() {
+										layer.closeAll();
+										loadAll();
+									});
+								} else {
+									layer.alert(data.msg, function() {
+										layer.closeAll();
+									});
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试", function() {
+
+									layer.closeAll();
+								});
+							});
+						},
+						btn2 : function() {
+							obj.elem.checked = !isStatus;
+							form.render();
+							layer.closeAll();
+						},
+						cancel : function() {
+							obj.elem.checked = !isStatus;
+							form.render();
+							layer.closeAll();
+						}
+					})
+		}
 	});
 });
 // 新增编辑弹出框
@@ -307,6 +354,7 @@ function addSubmit(obj) {
 				layer.alert(res.msg);
 			});
 }
+
 function delCardData(obj, id, name) {
 	if (id != null) {
 		var param = {

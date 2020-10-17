@@ -194,5 +194,25 @@ public class CardDataController extends WebController{
 	             return ApiResponseResult.failure("根据产线更新指纹机信息失败！");
 	        }
 	    }
-	   
+		
+		@ApiOperation(value="设置卡点状态",notes="设置卡点状态",hidden=true)
+		@RequestMapping(value = "/doStatus", method = RequestMethod.POST)
+		@ResponseBody
+		public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) {
+			String method = "/produce/card_data/doStatus";String methodName ="设置卡点状态";
+			try {
+				long id = Long.parseLong(params.get("id").toString()) ;
+				Integer fstatus=Integer.parseInt(params.get("checkStatus").toString());
+	            ApiResponseResult result = cardDataService.doStatus(id,fstatus);
+	            logger.debug("根据产线更新指纹机信息=doStatus:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        } catch (Exception e) {
+	        	 e.printStackTrace();
+	             logger.error("设置卡点状态失败！", e);
+	             getSysLogService().error(method, methodName, e.toString());
+	             return ApiResponseResult.failure("设置卡点状态失败！");
+	        }
+			
+		}
 }
