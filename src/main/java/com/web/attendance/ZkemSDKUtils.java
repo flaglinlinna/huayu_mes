@@ -386,8 +386,8 @@ public class ZkemSDKUtils {
         boolean connFlag = sdk.connect("192.168.1.201", 4370);
         System.out.println(connFlag);
         if (connFlag) {
-//            boolean flag = sdk.readGeneralLogData();
-//            System.out.println("flag:" + flag);
+            boolean flag = sdk.readGeneralLogData();
+            System.out.println("flag:" + flag);
 //
 //            List<Map<String, Object>> strList = sdk.getGeneralLogData();
 //            System.out.println(strList.toString());

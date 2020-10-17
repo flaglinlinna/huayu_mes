@@ -147,10 +147,16 @@ $(function() {
 				    ,value:getCurDate(0)
 				  });
 				
+				laydate.render({
+				    elem: '#pdate1'
+				    ,value:getCurDate(0)
+				  });
+				
 				// 监听
 				form.on('submit(update)', function(data) {
 					update(data.field.pline);//获取打卡数据
 				});
+
 				form.on('submit(save)', function(data) {
 					if($('#num').val() != ''){
 						//save(data.field);//保存
@@ -175,6 +181,15 @@ $(function() {
 				});
 				
 				getInfoAdd();
+				
+				$(document).on('click','#addBtn',function(){
+					open();
+					});
+				
+				form.on('submit(add)', function(data) {
+					add(data.field);//保存创建在线返工制令单
+					return false;
+				});
 
 			});	
 
@@ -259,4 +274,79 @@ function getUserByLine(lineId){
 	}, "GET", false, function(res) {
 		layer.alert(res.msg);
 	});
+}
+function open(){
+	CoreUtil.sendAjax("verify/getInfoCreateReturn", {}, function(data) {
+		console.log(data)
+		if (data.result) {
+			if(data.data.Task){
+				$("#ptask").empty();
+				var ptask=data.data.Task;
+				for (var i = 0; i < ptask.length; i++) {
+					if(i == 0){
+						$("#ptask").append("<option value=''>请选择单号</option>");
+					}
+					$("#ptask").append("<option value=" + ptask[i].TASK_NO+ ">" + ptask[i].TASK_NO + "</option>");
+				}					
+				layui.form.render('select');
+			}
+			if(data.data.Liao){
+				$("#pliao").empty();
+				var pliao=data.data.Liao;
+				for (var i = 0; i < pliao.length; i++) {
+					if(i == 0){
+						$("#pliao").append("<option value=''>请选择料号</option>");
+					}
+					$("#pliao").append("<option value=" + pliao[i].ITEM_NO+ ">" + pliao[i].ITEM_NO + "</option>");
+				}					
+				layui.form.render('select');
+			}
+			if(data.data.User){
+				$("#puser").empty();
+				var puser=data.data.User;
+				for (var i = 0; i < puser.length; i++) {
+					if(i == 0){
+						$("#puser").append("<option value=''>请选择组长</option>");
+					}
+					$("#puser").append("<option value=" + puser[i].LINER_NAME+ ">" + puser[i].LINER_NAME + "</option>");
+				}					
+				layui.form.render('select');
+			}
+			layer.open({
+				type : 1,
+				title : '创建在线返工制令单',
+				fixed : false,
+				resize : false,
+				shadeClose : true,
+				area : [ '650px' ],
+				content : $('#createDiv'),
+				end : function() {
+					cleanForm();
+				}
+			});
+		}else{
+			layer.alert(data.msg);
+		}
+	}, "GET", false, function(res) {
+		layer.alert(res.msg);
+	});
+	return false;
+}
+function add(params){
+	console.log(params)
+	var param = {"task_no":params.ptask,"item_no":params.pliao,"liner_name":params.puser,
+			"qty":params.qty,"pdate":params.pdate1};
+	CoreUtil.sendAjax("verify/add", JSON.stringify(param), function(
+			data) {
+		layer.alert(data.msg, function() {
+			layer.closeAll();
+		});
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+//清空新增表单数据
+function cleanForm() {
+	$('#createForm')[0].reset();
+	layui.form.render();// 必须写
 }
