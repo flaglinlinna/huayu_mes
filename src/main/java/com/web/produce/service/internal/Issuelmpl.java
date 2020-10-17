@@ -289,7 +289,7 @@ public class Issuelmpl  implements IssueService {
         			continue;
         		}
         		//新增指纹
-        	    return sdk.setUserTmpStr(empFinger.getEmp().getEmpCode(),Integer.parseInt(empFinger.getFingerIdx()), empFinger.getTemplateStr());
+        		return ZkemSDKUtils.setUserTmpStr(empFinger.getEmp().getEmpCode(),Integer.parseInt(empFinger.getFingerIdx()), empFinger.getTemplateStr().trim());
         	}
         	return true;
         }else{
