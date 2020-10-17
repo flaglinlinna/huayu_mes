@@ -76,8 +76,7 @@
 								<div class="layui-inline">
 								    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
 										lay-filter="update">采集打卡数据</button>
-									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
-										lay-filter="add">创建在线返工制令单</button>
+									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="addBtn"  >创建在线返工制令单</button>
 									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
 										lay-filter="save">确认</button>		
 								</div>
@@ -96,32 +95,45 @@
 		</div>
 		
 		<!--添加或编辑客户信息-->
-    <div id="setClient" class="layer_self_wrap" style="width:500px;display:none;">
-        <form id="clientForm" class="layui-form layui-form-pane" lay-filter="clientForm" method="post" action="" style="margin-top: 20px;">
-            <input id="pageNum" type="hidden" name="pageNum"/>
-            <input id="id" type="hidden" name="id"/>
+    <div id="createDiv" class="layer_self_wrap" style="width:600px;display:none;">
+        <form id="createForm" class="layui-form layui-form-pane" lay-filter="createForm" method="post" action="" style="margin: 20px;">
             <div class="layui-form-item">
-                <label class="layui-form-label">客户编码</label>
+                <label class="layui-form-label">工单号</label>
                 <div class="layui-input-inline">
-                    <input id="custNo" name="custNo" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <select lay-filter="ptask" id="ptask" name="ptask" lay-verify="required">
+					</select>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">客户简称</label>
+                <label class="layui-form-label">返工料号</label>
                 <div class="layui-input-inline">
-                    <input id="custNameS" name="custNameS" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <select lay-filter="pliao" id="pliao" name="pliao" lay-verify="required">
+					</select>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">客户名称</label>
+                <label class="layui-form-label">组长</label>
                 <div class="layui-input-inline">
-                    <input id="custName" name="custName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <select lay-filter="puser" id="puser" name="puser" lay-verify="required">
+					</select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">日期</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="pdate1" class="layui-input" id="pdate1" placeholder="yyyy-MM-dd">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单数量</label>
+                <div class="layui-input-inline">
+                    <input  name="qty" lay-verify="required|number" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block" style="margin-left: 10px;">
-                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit">提交</button>
-                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="add">创建</button>
+                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">取消</button>
                 </div>
             </div>
         </form>

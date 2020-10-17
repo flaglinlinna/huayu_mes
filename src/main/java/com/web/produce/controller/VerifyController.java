@@ -114,5 +114,45 @@ public class VerifyController extends WebController {
         }
     }
     
+    @ApiOperation(value="加载在线返工页面默认数据", notes="加载在线返工页面默认数据", hidden = true)
+    @RequestMapping(value = "/getInfoCreateReturn", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getInfoCreateReturn() {
+        String method = "/verify/getInfoCreateReturn";String methodName ="加载在线返工页面默认数据";
+        try {
+            ApiResponseResult result = verifyService.getInfoCreateReturn();
+            logger.debug("加载在线返工页面默认数据=getInfoCreateReturn:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        } catch (Exception e) {
+        	 e.printStackTrace();
+             logger.error("加载在线返工页面默认数据失败！", e);
+             getSysLogService().error(method, methodName, e.toString());
+             return ApiResponseResult.failure("加载在线返工页面默认数据失败！");
+        }
+    }
+    
+    @ApiOperation(value = "创建返工制令单", notes = "创建返工制令单",hidden = true)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult add(@RequestBody Map<String, Object> params){
+        String method = "verify/add";String methodName ="创建返工制令单";
+        String task_no = params.get("task_no").toString();
+        String item_no = params.get("item_no").toString();
+		String liner_name = params.get("liner_name").toString();
+		String qty = params.get("qty").toString();
+		String pdate = params.get("pdate").toString();
+        try{
+            ApiResponseResult result = verifyService.add(task_no,item_no,liner_name,qty,pdate);
+            logger.debug("创建返工制令单=add:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("创建返工制令单失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure("创建返工制令单失败！");
+        }
+    }
 
 }
