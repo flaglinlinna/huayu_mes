@@ -86,10 +86,8 @@ public class SchedulingTemp extends BaseEntity {
      * 生产日期
      */
     @ApiModelProperty(name = "prodDate", value = "生产日期")
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
-    protected Date prodDate;
+    @Column(length = 100)
+    protected String prodDate;
 
     /**
      * 部门ID
@@ -205,11 +203,11 @@ public class SchedulingTemp extends BaseEntity {
         this.qtyPlan = qtyPlan;
     }
 
-    public Date getProdDate() {
+    public String getProdDate() {
         return prodDate;
     }
 
-    public void setProdDate(Date prodDate) {
+    public void setProdDate(String prodDate) {
         this.prodDate = prodDate;
     }
 

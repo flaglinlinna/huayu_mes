@@ -174,9 +174,9 @@ function getScheduling(){
     $("#custId").html(optionHtml2);
     //添加线别信息
     for(var i = 0; i < lineList.length; i++){
-        optionHtml3 += '<option value="'+lineList[i].lineNo+'">'+lineList[i].custName+'</option>';
+        optionHtml3 += '<option value="'+lineList[i].linerName+'">'+lineList[i].linerName+'</option>';
     }
-    //$("#lineNo").html(optionHtml3);
+    // $("#linerName").html(optionHtml3);
     //添加部门信息
     for(var i = 0; i < orgList.length; i++){
         optionHtml4 += '<option value="'+orgList[i].id+'">'+orgList[i].orgName+'</option>';
