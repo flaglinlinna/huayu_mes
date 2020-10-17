@@ -320,7 +320,7 @@ function addSubmit(devList, empList) {
 	CoreUtil.sendAjax("produce/issue/add", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
-			layer.alert("操作成功", function() {
+			layer.alert(data.msg, function() {
 				layer.closeAll();
 				cleanIssue();
 				// 加载页面

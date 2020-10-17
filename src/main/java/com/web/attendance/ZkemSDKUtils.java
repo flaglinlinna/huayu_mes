@@ -386,8 +386,8 @@ public class ZkemSDKUtils {
         boolean connFlag = sdk.connect("192.168.1.201", 4370);
         System.out.println(connFlag);
         if (connFlag) {
-            boolean flag = sdk.readGeneralLogData();
-            System.out.println("flag:" + flag);
+            /*boolean flag = sdk.readGeneralLogData();
+            System.out.println("flag:" + flag);*/
 //
 //            List<Map<String, Object>> strList = sdk.getGeneralLogData();
 //            System.out.println(strList.toString());
@@ -412,6 +412,8 @@ public class ZkemSDKUtils {
 
             List<Map<String, Object>> strList1 = sdk.getGeneralLogData();
             System.out.println(strList1.toString());*/
+        	
+        	//setUserTmpStr("514260aa",2,"Ss9TUzIxAAADjJEECAUHCc7QAAAbjWkBAAAAg7EakYxlAJcPfQC1ABKDWACDAIwNBwCKjJoPfwCNAMsPPYyXANAMMABYAMGCRwCdAPMOUQCnjIMP5gCkAOgPIoynAL8OfwBjAASDLgCoANMOJgC7jKsPzADEAOoPm4zTADEP8wAeACyDxgDeAK8PGADjjK4PVgDiAIgPZ4zjAEgP3wA0ADSDiAALAcEPnQAXjccP2gAXAfsPnowhAUkOVYr7iwRzWH6tB96Gi5hdMAOCAnNTGcrytoYw/5aMzN/YEA5yAfOt9CkE6ScOvvwifX2idPpQmgmzAu6Xyexo/K18dIU5+qfZtRM2mIgGnX1Ff8N+PguYg36AD7CehPyhyIKy+AKGEAKaD+94DXhVAgyCNohyiVOPufxGhSyWBIgqCOaIJHs4cWJ6twV7eUKBCYYGkveT2Yv2D8ALRT87ASA6xAIxl+AGAMc4HPPBB4zVOCTA/wnFwD+swUzBVQoAcEEZslpgDAClQtb+T+xUAwCTRzAGBQPGSEPChgwARlAd+MErwSsDAIRsMnAHADBYScUE//6JAVdePcLNBAgD4GEA/MBH/8AAMO0x/8D9BwBsYxTMWAwAZGr6ODY9uQIAY3AA+9YAgv0WbTVMNluQBAOncjfB+xYAmIL5tDD//lT/UIFGAIwlhT3BDgBHjgVwTv7A/cDB6gQDmpRAPQoAeV19wUzDfJENAEte8DC9wf07CgB4Wnp0C4gLAHuldwSAwkzDhgYAmKbTKcOJAeqmK1URxTOkbsH9/zD//u7+V4kB5agwwVrXAIElCP/9/v7/hEdXuwoA/7CpwARaeE0NAJ5MJMKW//xN/kYDABXFhf8HjMzHLVoMAFzVKHL+MsD/wDbOAHpVY8hFSkAExYHZpSMLAHzdNPNAw6YQAFne3P45/Ph3/8D8wP/+B/80gwFm3t76+j8hWMj/BQDy3jAFPgmMed9DaFMuzwDKbjU+/8BGCcVS4NvFYnIEAGAhSW+FAVfmTHn+gQoD6+dGwGDC/pwHA2/1N8BT/wbF3vaxcsADEBgHjMIFnNkbQFTABNXdGLFOBhCcJkkF/yiVEbUrw2vCScLAT8DEwsHCwAbAwXPDZR8QHy4GREO5Mif9/f/BOP/8TP7AQf8FEHIzTNsdEDU/wEaRMf1x//z8//3/O/7Cc/7B/jdSQsULQI0BAAtFUgAAAAAAAAA=");
 
         }
     }

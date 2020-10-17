@@ -133,33 +133,37 @@ public class Issuelmpl  implements IssueService {
 		List<Issue> listNew = new ArrayList<>();
 		if (devList.size() > 0) {
 			for (Long devId : devList) {
-				if (empList.size() > 0) {
-					for (Long empId : empList) {
-						Employee em = employeeDao.findById((long)empId);
-						if(em != null){
-							List<EmpFinger> le = empFingerDao.findByDelFlagAndEmpId(0, empId);
-							if(le.size() >0){
-								if(doIssuedByUser(devId+"",le)){
-									int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
-									if(count==0){
-										Issue item = new Issue();
-										item.setCreateDate(new Date());
-										item.setCreateBy(UserUtil.getSessionUser().getId());
-										item.setDevClockId(devId);
-										item.setEmpId(empId);
-										listNew.add(item);	
+				DevClock devClock = devClockDao.findById((long)devId);
+				if(devClock != null){
+					if (empList.size() > 0) {
+						for (Long empId : empList) {
+							Employee em = employeeDao.findById((long)empId);
+							if(em != null){
+								List<EmpFinger> le = empFingerDao.findByDelFlagAndEmpId(0, empId);
+								if(le.size() >0){
+									if(doIssuedByUser(devClock.getDevIp(),le)){
+										int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
+										if(count==0){
+											Issue item = new Issue();
+											item.setCreateDate(new Date());
+											item.setCreateBy(UserUtil.getSessionUser().getId());
+											item.setDevClockId(devId);
+											item.setEmpId(empId);
+											listNew.add(item);	
+										}
+									}else{
+										msg += em.getEmpName()+"下发指纹失败"+",";
 									}
-								}else{
-									msg += em.getEmpName()+"下发指纹失败"+",";
 								}
 							}
+							
+							
+									
 						}
-						
-						
-								
+						issueDao.saveAll(listNew);
 					}
-					issueDao.saveAll(listNew);
 				}
+				
 			}
 		}
 		return ApiResponseResult.success("下发记录添加成功！"+msg);
@@ -280,15 +284,18 @@ public class Issuelmpl  implements IssueService {
         if (connFlag) {
         	for(EmpFinger empFinger:empFingers){
         		//新增人员
-        		boolean f= sdk.setUserInfo("3", "test1", "", 0, true);//新增人员,如果编号一样则修改信息
-        		if(f){
+        		boolean f= sdk.setUserInfo(empFinger.getEmp().getEmpCode(), empFinger.getEmp().getEmpName(),"", 0, true);//新增人员,如果编号一样则修改信息
+        		if(!f){
         			continue;
         		}
         		//新增指纹
-        		return sdk.setUserTmpStr(empFinger.getEmp().getEmpCode(),Integer.parseInt(empFinger.getFingerIdx()), empFinger.getTemplateStr());
+        	    return sdk.setUserTmpStr(empFinger.getEmp().getEmpCode(),Integer.parseInt(empFinger.getFingerIdx()), empFinger.getTemplateStr());
         	}
+        	return true;
+        }else{
+        	return false;
         }
-        return false;
+        
 	}
 	
 	/**
