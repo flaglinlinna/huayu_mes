@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface DevLogDao extends CrudRepository<DevLog, Long>,JpaSpecificationExecutor<DevLog>{
 
-	public List<DevLog> findAll();
+	/*public List<DevLog> findAll();
 	public List<DevLog> findByDelFlag(Integer delFlag);
-	public DevLog findById(long id);	
+	public DevLog findById(long id);*/	
 }

@@ -70,8 +70,6 @@ $(function() {
 						        $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
 						        $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
 							}
-							 
-
 						}
 					}
 				});

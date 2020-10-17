@@ -1,5 +1,5 @@
 /**
- * 指纹下发管理
+ * 指纹下发/删除管理
  */
 var pageCurr;
 $(function() {
@@ -11,7 +11,7 @@ $(function() {
 			url : context + 'produce/issue/getList',
 			method : 'get' // 默认：get请求
 			,
-			cellMinWidth : 80,
+			cellMinWidth : 80,where:{ptype:ptype},
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -29,6 +29,41 @@ $(function() {
 				}
 			},
 			cols : [ [ {
+				type : 'numbers'
+			}
+			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
+			, {
+				field : 'description',
+				title : '类型',
+			}, {
+				field : 'devIp',
+				title : '卡机IP'
+			}, {
+				field : 'devName',
+				title : '卡机名字',
+				templet: function (d) {return d.devClock.devName}
+			}, {
+				field : 'empCode',
+				title : '员工工号',
+				templet: function (d) {return d.emp.empCode}
+			}, , {
+				field : 'empName',
+				title : '员工姓名',
+				width:120,
+				templet: function (d) {return d.emp.empName}
+			},{
+				field : 'fmemo',
+				title : '操作结果'
+			},{
+				field : 'createDate',
+				title : '操作时间',
+				width:150
+			},{
+				field : 'userCode',
+				title : '操作人',
+				templet: function (d) {return d.createUser.userCode}
+			}] ],
+			/*cols : [ [ {
 				type : 'numbers'
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
@@ -53,18 +88,11 @@ $(function() {
 				align : 'center',
 				toolbar : '#optBar',
 				width : 100
-			} ] ],
+			} ] ],*/
 			done : function(res, curr, count) {
-				// 如果是异步请求数据方式，res即为你接口返回的信息。
-				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-				// console.log(res);
-				// 得到当前页码
-				// console.log(curr);
-				// 得到数据总量
-				// console.log(count);
 				pageCurr = curr;
-				merge(res.data, [ 'devCode', 'devName', 'devType' ],
-						[ 1, 2, 3 ]);
+				/*merge(res.data, [ 'devCode', 'devName', 'devType' ],
+						[ 1, 2, 3 ]);*/
 			}
 		});
 		tableEmp = table.render({
@@ -116,7 +144,6 @@ $(function() {
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
-				console.log(res)
 				// 可进行数据操作
 				return {
 					"count" : res.data.total,
@@ -146,8 +173,14 @@ $(function() {
 			}, {
 				field : 'devIp',
 				title : '卡机IP',
+				width:120
 			} ] ],
 			data : []
+		});
+		form.on('submit(search)', function(data) {
+			// 重新加载table
+			load(data);
+			return false;
 		});
 		// 监听搜索框-卡机设备
 		form.on('submit(searchDev)', function(data) {
@@ -202,13 +235,17 @@ $(function() {
 			}
 			return false;
 		});
+		
+		$(document).on('click','#addBtn',function(){
+				addIssue();
+				return false;
+			});
+		
 	});
 });
 // 新增编辑弹出框
-function openIssue(id, title) {
-	if (id == null || id == "") {
-		$("#id").val("");
-	}
+function openIssue( title) {
+	
 	var index = layer.open({
 		type : 1,
 		title : title,
@@ -219,20 +256,24 @@ function openIssue(id, title) {
 		content : $('#setIssue'),
 		macmin : true,// 弹出框全屏
 		end : function() {
-
 		}
 	});
 	layer.full(index);// 弹出框全屏
 }
 
 // 添加指纹下发信息
-function addIssue() {
+function addIssue(title) {
 	// 清空弹出框数据
 	cleanIssue();
 	//getEmp();//
 	//getDev();//表格后续操作
 	// 打开弹出框
-	openIssue(null, "添加指纹下发信息");
+	if(ptype == '1'){
+		openIssue("添加指纹下发信息");
+    }else{
+    	openIssue("删除指纹信息");
+    }
+	return false;
 }
 // 获取员工信息
 function getEmp() {
@@ -243,11 +284,18 @@ function getEmp() {
 			tableEmp.reload({
 				data : data.data.rows,
 				done : function(res, curr, count) {
-
 					pageCurr = curr;
-					// if(id != ''){
-					// getSelected(id)
-					// }
+					console.log(ptype)
+					if(ptype == '1'){
+						console.log(res.data.rows)
+						for(j = 0,len=res.data.rows.length; j < len; j++) {
+							res.data[j]["LAY_CHECKED"]='true';
+					        //下面三句是通过更改css来实现选中的效果
+					        var index= res.data[j]['LAY_TABLE_INDEX'];
+					        $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+					        $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+						}
+				    }
 				}
 			})
 		} else {
@@ -278,7 +326,6 @@ function getDev() {
 	});
 }
 function merge(res, columsName, columsIndex) {
-	// console.log(res)
 	var data = res;
 	var mergeIndex = 0;// 定位需要添加合并属性的行数
 	var mark = 1; // 这里涉及到简单的运算，mark是计算每次需要合并的格子数
@@ -317,7 +364,11 @@ function addSubmit(devList, empList) {
 		"devList" : devList,
 		"empList" : empList
 	};
-	CoreUtil.sendAjax("produce/issue/add", JSON.stringify(params), function(
+	var url = "produce/issue/clear";
+	if(ptype == '1'){
+		url = "produce/issue/add"
+	}
+	CoreUtil.sendAjax(url, JSON.stringify(params), function(
 			data) {
 		if (data.result) {
 			layer.alert(data.msg, function() {
@@ -426,8 +477,37 @@ function cleanIssue() {
 		page : {
 			curr : pageCurr
 		// 从当前页码开始
+		},done : function(res, curr, count) {
+			pageCurr = curr;
+			if(ptype == '1'){
+				for(j = 0,len=res.data.length; j < len; j++) {
+					res.data[j]["LAY_CHECKED"]='true';
+			        //下面三句是通过更改css来实现选中的效果
+			        var index= res.data[j]['LAY_TABLE_INDEX'];
+			        /* $(' tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+			        $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+			        */
+			        var td = $('#empList').next().find("tr[data-index='"+index+"'] div.layui-form-checkbox");           
+			         td.click();
+				}
+		    }
 		}
 	});
 	$('#issueForm')[0].reset();
 	layui.form.render();// 必须写
+}
+
+//重新加载表格（搜索）
+function load(obj) {
+	// 重新加载table
+	tableIns.reload({
+		where : {
+			keyword : obj.field.keywordSearch,
+			ptype:ptype
+		},
+		page : {
+			curr : pageCurr
+		// 从当前页码开始
+		}
+	});
 }
