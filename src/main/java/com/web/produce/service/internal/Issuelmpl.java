@@ -341,10 +341,10 @@ public class Issuelmpl  implements IssueService {
                     cd.setCompany(empFinger.getCompany());
                     cd.setFactory(empFinger.getFactory());
                     cardDataDao.save(cd);
-                    
-                    //删除指纹
-                    return sdk.delectUserById(empFinger.getEmp().getEmpCode());
                 }
+              //删除指纹
+                return sdk.delectUserById(empFinger.getEmp().getEmpCode());
+                
         	}
         }
         return false;
