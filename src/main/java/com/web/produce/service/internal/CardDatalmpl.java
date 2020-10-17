@@ -28,6 +28,7 @@ import com.utils.enumeration.BasicStateEnum;
 import com.web.attendance.ZkemSDKUtils;
 import com.web.basic.dao.EmployeeDao;
 import com.web.basic.entity.Employee;
+import com.web.basic.entity.Mtrial;
 import com.web.produce.dao.CardDataDao;
 import com.web.produce.dao.DevClockDao;
 import com.web.produce.entity.CardData;
@@ -305,5 +306,25 @@ public class CardDatalmpl implements CardDataService {
 		}
 		
 		return ApiResponseResult.success("同步数据成功！"+msg);
+	}
+	
+	@Override 
+	@Transactional
+	public ApiResponseResult doStatus(Long id, Integer fstatus) throws Exception{
+        if(id == null){
+            return ApiResponseResult.failure("记录ID不能为空！");
+        }
+        if(fstatus == null){
+            return ApiResponseResult.failure("请正确设置状态！");
+        }
+        CardData o = cardDataDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("记录不存在！");
+        }
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setFstatus(fstatus);
+        cardDataDao.save(o);
+        return ApiResponseResult.success("设置成功！").data(o);
 	}
 }
