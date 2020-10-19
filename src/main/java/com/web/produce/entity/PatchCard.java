@@ -86,6 +86,13 @@ public class PatchCard extends BaseEntity{
     protected String cardType;
     
     /**
+     * 生产日期
+     */
+    @ApiModelProperty(name="workDate",value="生产日期")
+    @Column(length = 20)
+    protected String workDate;
+    
+    /**
      * 签卡时间
      */
     @ApiModelProperty(name="signTime",value="签卡时间")
@@ -225,4 +232,13 @@ public class PatchCard extends BaseEntity{
 	public void setCheckDate(Date checkDate) {
 		this.checkDate = checkDate;
 	}
+
+	public String getWorkDate() {
+		return workDate;
+	}
+
+	public void setWorkDate(String workDate) {
+		this.workDate = workDate;
+	}
+	
 }

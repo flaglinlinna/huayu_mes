@@ -31,6 +31,7 @@ import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.produce.dao.PatchCardDao;
 import com.web.produce.entity.CardData;
+import com.web.produce.entity.DevClock;
 import com.web.produce.entity.PatchCard;
 import com.web.produce.entity.PatchCard;
 import com.web.produce.service.PatchCardService;
@@ -77,10 +78,10 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  prc_mes_cof_emp_chs(?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  prc_mes_cof_emp_chs(?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
-				cs.setString(1, company);
-				cs.setString(2, facoty);
+				cs.setString(1, facoty);
+				cs.setString(2, company);
 				cs.setString(3, user_id);
 				cs.setString(4, keyword);
 				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
@@ -149,6 +150,12 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 		if (StringUtils.isNotEmpty(keyword)) {
 			filters1.add(new SearchFilter("employee.empCode", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("employee.empName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("line.lineName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("hourType", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("taskNo", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("cardType", SearchFilter.Operator.LIKE, keyword));
+			//filters1.add(new SearchFilter("signTime", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("signDate", SearchFilter.Operator.LIKE, keyword));
 		}
 		Specification<PatchCard> spec = Specification.where(BaseService.and(filters, PatchCard.class));
 		Specification<PatchCard> spec1 = spec.and(BaseService.or(filters1, PatchCard.class));
@@ -240,18 +247,20 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 	@Override
 	@Transactional
 	public ApiResponseResult edit(PatchCard patchCard) throws Exception {
-		PatchCard o =new PatchCard();
-		int cc = patchCardDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0, patchCard.getEmpId(),
-				patchCard.getSignTime(), patchCard.getSignDate());
-		if (cc > 0) {
-			return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
-		}
+		PatchCard o = patchCardDao.findById((long) patchCard.getId());
+//		int cc = patchCardDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0, patchCard.getEmpId(),
+//				patchCard.getSignTime(), patchCard.getSignDate());
+//		if (cc > 0) {
+//			return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
+//		}
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
-		o.setCardType(patchCard.getCardType());
-		o.setClassId(patchCard.getClassId());
-		o.setHourType(patchCard.getHourType());
+		o.setEmpId(patchCard.getEmpId());
 		o.setLineId(patchCard.getLineId());
+		o.setClassId(patchCard.getClassId());
+		o.setWorkDate(patchCard.getWorkDate());
+		o.setCardType(patchCard.getCardType());
+		o.setHourType(patchCard.getHourType());	
 		o.setSignDate(patchCard.getSignDate());
 		o.setSignTime(patchCard.getSignTime());
 		o.setTaskNo(patchCard.getTaskNo());

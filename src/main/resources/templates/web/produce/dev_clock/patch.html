@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='补卡处理'">
+<meta charset="UTF-8">
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div style="margin: 10px">
+
+			<form id="cardSearch" class="layui-form layui-form-pane"
+				method="post" action="" style="margin-top: 0px;">
+				<div class="layui-form-item" style="margin-bottom: 0px;">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+						<div class="layui-input-inline">
+							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
+								class="layui-input" type="text" />
+						</div>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="searchSubmit">查询</button>
+					</div>
+				</div>
+			</form>
+			<hr class="layui-bg-black" />
+			<button class="layui-btn layui-btn-sm layui-btn-normal"
+				onclick="addPatchCard()">添加补卡记录</button>
+			<table id="cardList" lay-filter="cardTable"></table>
+			<script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+		</div>
+		<!--添加或编辑卡机信息-->
+		<div id="setPatchCard" class="layer_self_wrap"
+			style="width: 500px; display: none; margin: 20px;">
+			<form id="cardForm" class="layui-form layui-form-pane"
+				lay-filter="cardForm" method="post" action=""
+				style="margin-top: 20px;">
+				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
+					type="hidden" name="id" />
+				<div class="layui-form-item">
+					<input id="empId" type="hidden" name="empId" /> <label
+						class="layui-form-label">员工工号</label>
+					<div class="layui-input-inline" style="width:25%;">
+						<input type="text" name="empCode" placeholder="请选择"
+							autocomplete="off" class="layui-input" readonly="readonly"
+							lay-verify="required" id="empCode">
+					</div>
+					<label class="layui-form-label">员工姓名</label>
+					<div class="layui-input-inline" style="width:25%;">
+						<input type="text" disabled class="layui-input" name="empName" 
+						style="background: #efefef;" lay-verify="required"id="empName">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">制令单</label>
+					<div class="layui-input-inline" style="width:74%;">
+					<input type="text" name="taskNo" placeholder="请选择"
+							autocomplete="off" class="layui-input" readonly="readonly"
+							lay-verify="required" id="taskNo">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">工时类型</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="hourType" disabled
+							style="background: #efefef;"lay-verify="required" id="hourType">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">生产日期</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="workDate" disabled
+							style="background: #efefef;"lay-verify="required" id="workDate">
+					</div>
+				</div>
+				<input id="lineId" type="hidden" name="lineId" />
+				<div class="layui-form-item">
+					<label class="layui-form-label">线体</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="lineName" disabled
+							style="background: #efefef;"lay-verify="required" id="lineName">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">卡点类型</label>
+					<div class="layui-input-inline">
+					<select id="cardType" name="cardType" lay-verify="required">
+							<option value="">请选择</option>
+							<option value="上线">上线</option>
+							<option value="下线">下线</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">签卡日期</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="signDate" readonly="readonly"
+							lay-verify="required" id="signDate">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">签卡时间</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="signTime" readonly="readonly"
+							lay-verify="required" id="signTime">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block" style="margin-left: 10px;">
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="addSubmit">提交</button>
+						<button type="reset"
+							class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script th:src="@{/js/web/produce/dev_clock/patch.js}"
+			src="/js/web/produce/dev_clock/patch.js"></script>
+	</div>
+</body>
+</html>

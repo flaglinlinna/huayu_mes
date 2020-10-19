@@ -26,100 +26,161 @@ import io.swagger.annotations.ApiOperation;
 @Api(description = "补卡 数据模块")
 @CrossOrigin
 @ControllerAdvice
-//@RestController
+// @RestController
 @Controller
 @RequestMapping(value = "produce/patch")
-public class PatchCardController extends WebController{
+public class PatchCardController extends WebController {
 
-	 @Autowired
-	 private PatchCardService patchCardService;
-	 
-	 @ApiOperation(value = "补卡 数据表结构", notes = "补卡 数据表结构"+PatchCard.TABLE_NAME)
-	    @RequestMapping(value = "/getPatchCard", method = RequestMethod.GET)
-		@ResponseBody
-	    public PatchCard getPatchCard(){
-	        return new PatchCard();
-	    }
-	  
-	 @ApiOperation(value = "补卡 数据列表页", notes = "补卡 数据列表页", hidden = true)
-	    @RequestMapping(value = "/toPatchCard")
-	    public String toPatchCard(){
-	        return "/web/produce/dev_clock/patch";
-	    }
-	 
-	    @ApiOperation(value = "获取补卡 数据列表", notes = "获取补卡 数据列表",hidden = true)
-	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
-	    @ResponseBody
-	    public ApiResponseResult getList(String keyword) {
-	        String method = "produce/patch/getList";String methodName ="获取补卡 数据列表";
-	        try {
-	        	System.out.println(keyword);
-	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result = patchCardService.getList(keyword, super.getPageRequest(sort));
-	            logger.debug("获取补卡 数据列表=getList:");
-	            getSysLogService().success(method, methodName, null);
-	            return result;
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            logger.error("获取补卡 数据列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("获取补卡 数据列表失败！");
-	        }
-	    }
-	    
-	    
-	    @ApiOperation(value = "新增补卡数据记录", notes = "新增补卡数据记录",hidden = true)
-	    @RequestMapping(value = "/add", method = RequestMethod.POST)
-	    @ResponseBody
-	    public ApiResponseResult add(@RequestBody PatchCard patchCard) {
-	        String method = "produce/patch/add";String methodName ="新增补卡数据记录";
-	        try{
-	            ApiResponseResult result = patchCardService.add(patchCard);
-	            logger.debug("新增补卡数据记录=add:");
-	            getSysLogService().success(method, methodName, null);
-	            return result;
-	        }catch(Exception e){
-	            e.printStackTrace();
-	            logger.error("补卡数据记录新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("补卡数据记录新增失败！");
-	        }
-	    }
-	    @ApiOperation(value = "根据ID获取补卡数据记录", notes = "根据ID获取补卡数据记录",hidden = true)
-	    @RequestMapping(value = "/getPatchCard", method = RequestMethod.POST)
-	    @ResponseBody
-	    public ApiResponseResult getPatchCard(@RequestBody Map<String, Object> params){
-	        String method = "produce/patch/getPatchCard";String methodName ="根据ID获取补卡数据记录";
-	        long id = Long.parseLong(params.get("id").toString()) ;
-	        try{
-	            ApiResponseResult result = patchCardService.getPatchCard(id);
-	            logger.debug("根据ID获取补卡数据记录=getPatchCard:");
-	            getSysLogService().success(method, methodName, null);
-	            return result;
-	        }catch (Exception e){
-	            e.printStackTrace();
-	            logger.error("根据ID获取补卡数据记录失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("获取补卡数据记录失败！");
-	        }
-	    }
-		
-		@ApiOperation(value = "删除补卡数据记录", notes = "删除补卡数据记录",hidden = true)
-	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-	    @ResponseBody
-	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
-	        String method = "produce/patch/delete";String methodName ="删除补卡数据记录";
-	        try{
-	        	long id = Long.parseLong(params.get("id").toString()) ;
-	            ApiResponseResult result = patchCardService.delete(id);
-	            logger.debug("删除补卡数据记录=delete:");
-	            getSysLogService().success(method, methodName, null);
-	            return result;
-	        }catch(Exception e){
-	            e.printStackTrace();
-	            logger.error("删除补卡数据记录失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
-	            return ApiResponseResult.failure("删除补卡数据记录失败！");
-	        }
-	    }	
+	@Autowired
+	private PatchCardService patchCardService;
+
+	@ApiOperation(value = "补卡 数据表结构", notes = "补卡 数据表结构" + PatchCard.TABLE_NAME)
+	@RequestMapping(value = "/getPatchCard", method = RequestMethod.GET)
+	@ResponseBody
+	public PatchCard getPatchCard() {
+		return new PatchCard();
+	}
+
+	@ApiOperation(value = "补卡 数据列表页", notes = "补卡 数据列表页", hidden = true)
+	@RequestMapping(value = "/toPatchCard")
+	public String toPatchCard() {
+		return "/web/produce/dev_clock/patch";
+	}
+
+	@ApiOperation(value = "获取补卡 数据列表", notes = "获取补卡 数据列表", hidden = true)
+	@RequestMapping(value = "/getList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getList(String keyword) {
+		String method = "produce/patch/getList";
+		String methodName = "获取补卡 数据列表";
+		try {
+			System.out.println(keyword);
+			Sort sort = new Sort(Sort.Direction.DESC, "id");
+			ApiResponseResult result = patchCardService.getList(keyword, super.getPageRequest(sort));
+			logger.debug("获取补卡 数据列表=getList:");
+			getSysLogService().success(method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取补卡 数据列表失败！", e);
+			getSysLogService().error(method, methodName, e.toString());
+			return ApiResponseResult.failure("获取补卡 数据列表失败！");
+		}
+	}
+
+	@ApiOperation(value = "新增补卡数据记录", notes = "新增补卡数据记录", hidden = true)
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult add(@RequestBody PatchCard patchCard) {
+		String method = "produce/patch/add";
+		String methodName = "新增补卡数据记录";
+		try {
+			ApiResponseResult result = patchCardService.add(patchCard);
+			logger.debug("新增补卡数据记录=add:");
+			getSysLogService().success(method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("补卡数据记录新增失败！", e);
+			getSysLogService().error(method, methodName, e.toString());
+			return ApiResponseResult.failure("补卡数据记录新增失败！");
+		}
+	}
+
+	@ApiOperation(value = "修改补卡数据记录", notes = "修改补卡数据记录", hidden = true)
+	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult edit(@RequestBody PatchCard patchCard) {
+		String method = "produce/patch/edit";
+		String methodName = "修改补卡数据记录";
+		try {
+			ApiResponseResult result = patchCardService.edit(patchCard);
+			logger.debug("修改补卡数据记录=edit:");
+			getSysLogService().success(method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("修改补卡数据记录失败！", e);
+			getSysLogService().error(method, methodName, e.toString());
+			return ApiResponseResult.failure("修改补卡数据记录失败！");
+		}
+	}
+
+	@ApiOperation(value = "根据ID获取补卡数据记录", notes = "根据ID获取补卡数据记录", hidden = true)
+	@RequestMapping(value = "/getPatchCard", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getPatchCard(@RequestBody Map<String, Object> params) {
+		String method = "produce/patch/getPatchCard";
+		String methodName = "根据ID获取补卡数据记录";
+		long id = Long.parseLong(params.get("id").toString());
+		try {
+			ApiResponseResult result = patchCardService.getPatchCard(id);
+			logger.debug("根据ID获取补卡数据记录=getPatchCard:");
+			getSysLogService().success(method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("根据ID获取补卡数据记录失败！", e);
+			getSysLogService().error(method, methodName, e.toString());
+			return ApiResponseResult.failure("获取补卡数据记录失败！");
+		}
+	}
+
+	@ApiOperation(value = "删除补卡数据记录", notes = "删除补卡数据记录", hidden = true)
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult delete(@RequestBody Map<String, Object> params) {
+		String method = "produce/patch/delete";
+		String methodName = "删除补卡数据记录";
+		try {
+			long id = Long.parseLong(params.get("id").toString());
+			ApiResponseResult result = patchCardService.delete(id);
+			logger.debug("删除补卡数据记录=delete:");
+			getSysLogService().success(method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("删除补卡数据记录失败！", e);
+			getSysLogService().error(method, methodName, e.toString());
+			return ApiResponseResult.failure("删除补卡数据记录失败！");
+		}
+	}
+
+	@ApiOperation(value = "获取员工数据", notes = "获取员工数据", hidden = true)
+	@RequestMapping(value = "/getEmpInfo", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getEmpInfo(String keyword) {
+		String method = "produce/patch/getEmpInfo";
+		String methodName = "获取员工数据";
+		try {
+			ApiResponseResult result = patchCardService.getEmpInfo(keyword);
+			logger.debug("获取员工数据=getEmpInfo:");
+			getSysLogService().success(method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取员工数据失败！", e);
+			getSysLogService().error(method, methodName, e.toString());
+			return ApiResponseResult.failure("获取员工数据失败！");
+		}
+	}
+
+	@ApiOperation(value = "获取指令单信息", notes = "获取指令单信息", hidden = true)
+	@RequestMapping(value = "/getTaskNo", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getTaskNo(String keyword) {
+		String method = "produce/patch/getTaskNo";
+		String methodName = "获取指令单信息";
+		try {
+			ApiResponseResult result = patchCardService.getTaskNo(keyword);
+			logger.debug("获取指令单信息=getTaskNo:");
+			getSysLogService().success(method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取指令单信息失败！", e);
+			getSysLogService().error(method, methodName, e.toString());
+			return ApiResponseResult.failure("获取指令单信息失败！");
+		}
+	}
 }
