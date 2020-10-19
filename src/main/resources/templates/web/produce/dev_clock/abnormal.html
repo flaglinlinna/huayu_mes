@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='补卡处理'">
+<head th:include="layout :: htmlhead" th:with="title='异常工时登记'">
 <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
@@ -28,15 +28,15 @@
 			</form>
 			<hr class="layui-bg-black" />
 			<button class="layui-btn layui-btn-sm layui-btn-normal"
-				onclick="addPatchCard()">添加补卡记录</button>
+				onclick="addAbnormalHours()">添加异常工时记录</button>
 			<table id="cardList" lay-filter="cardTable"></table>
 			<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 		</div>
-		<!--添加或编辑补卡信息-->
-		<div id="setPatchCard" class="layer_self_wrap"
+		<!--添加或编辑异常工时信息-->
+		<div id="setAbnormalHours" class="layer_self_wrap"
 			style="width: 500px; display: none; margin: 20px;">
 			<form id="cardForm" class="layui-form layui-form-pane"
 				lay-filter="cardForm" method="post" action=""
@@ -121,8 +121,8 @@
 				</div>
 			</form>
 		</div>
-		<script th:src="@{/js/web/produce/dev_clock/patch.js}"
-			src="/js/web/produce/dev_clock/patch.js"></script>
+		<script th:src="@{/js/web/produce/dev_clock/abnormal.js}"
+			src="/js/web/produce/dev_clock/abnormal.js"></script>
 	</div>
 </body>
 </html>

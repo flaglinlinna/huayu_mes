@@ -1,5 +1,5 @@
 /**
- * 补卡数据信息管理
+ * 异常工时数据信息管理
  */
 var pageCurr;
 $(function() {
@@ -8,7 +8,7 @@ $(function() {
 		tableSelect = layui.tableSelect, laydate = layui.laydate;
 		tableIns = table.render({
 			elem : '#cardList',
-			url : context + 'produce/patch/getList',
+			url : context + 'produce/abnormal/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -41,28 +41,32 @@ $(function() {
 				title : '员工姓名',
 				width:100
 			}, {
-				field : 'cardType',
-				title : '卡点类型',
+				field : 'lineName',
+				title : '线体',
 				width:80
 			}, {
 				field : 'taskNo',
 				title : '制令单',
 				width:350
 			}, {
-				field : 'hourType',
-				title : '工时类型',
+				field : 'timeBegin',
+				title : '开始时间',
 				width:80
 			},{
-				field : 'signTime',
-				title : '签卡时间',
+				field : 'timeEnd',
+				title : '结束时间',
 				width:100
 			},{
-				field : 'signDate',
-				title : '签卡日期',
+				field : 'duration',
+				title : '时长',
 				width:100
 			},{
-				field : 'lineName',
-				title : '线体',
+				field : 'description',
+				title : '异常描述',
+				width:120
+			},{
+				field : 'forReason',
+				title : '异常原因',
 				width:120
 			},{
 				field : 'lastupdateDate',
@@ -95,7 +99,7 @@ $(function() {
 			searchPlaceholder : '试着搜索',
 			table : {
 				url : context
-						+ 'produce/patch/getEmpInfo',
+						+ 'produce/abnormal/getEmpInfo',
 				method : 'get',
 				cols : [ [ {
 					type : 'radio'
@@ -107,13 +111,15 @@ $(function() {
 					hide : true
 				}, {
 					field : 'EMP_CODE',
-					title : '工号'
+					title : '工号',
+					width:100
 				}, {
 					field : 'EMP_NAME',
-					title : '姓名'
+					title : '姓名',
+					width:100
 				} ] ],
 				parseData : function(res) {
-					//console.log(res)
+					console.log(res)
 					if (res.result) {
 						// 可进行数据操作
 						return {
@@ -147,7 +153,7 @@ $(function() {
 			searchPlaceholder : '试着搜索',
 			table : {
 				url : context
-						+ 'produce/patch/getTaskNo',
+						+ 'produce/abnormal/getTaskNo',
 				method : 'get',
 				cols : [ [ {
 					type : 'radio'
@@ -155,23 +161,26 @@ $(function() {
 				{
 					field : 'TASK_NO',
 					title : '制令单号',
-					width:350
+					width:400
 				}, {
-					field : 'HOUR_TYPE',
-					title : '工时类型',
+					field : 'CUST_NAME_S',
+					title : '客户简称',
 					width:80
 				}, {
-					field : 'WORK_DATE',
-					title : '生产时间',
-					templet:'<div>{{d.WORK_DATE.substring(0,d.WORK_DATE.indexOf(" "))}}</div>',
+					field : 'ITEM_NAME',
+					title : '物料描述',
+					width:200
+				}, {
+					field : 'ITEM_NO',
+					title : '物料编号',
 					width:150
 				}, {
-					field : 'LINE_NAME',
-					title : '线体',
-					width:120
+					field : 'LINER_NAME',
+					title : '线长',
+					width:100
 				}] ],
 				parseData : function(res) {
-					//console.log(res)
+					console.log(res)
 					if (res.result) {
 						// 可进行数据操作
 						return {
@@ -188,11 +197,9 @@ $(function() {
 			done : function(elem, data) {
 				//console.log(data)
 				var da = data.data;
-				var wd=da[0].WORK_DATE.substring(0,da[0].WORK_DATE.indexOf(" "))
 				 form.val("cardForm", {
 				 "taskNo":da[0].TASK_NO,
 				 "hourType" : da[0].HOUR_TYPE,
-				 "workDate":wd,
 				 "lineName":da[0].LINE_NAME,
 				 "lineId":da[0].LINE_ID
 				 });
@@ -214,10 +221,10 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delPatchCard(data, data.id, data.empCode);
+				delAbnormalHours(data, data.id, data.empCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				getPatchCard(data, data.id);
+				getAbnormalHours(data, data.id);
 			}
 		});
 		
@@ -244,19 +251,19 @@ $(function() {
 			return false;
 		});
 		
-		// 监听补卡查询
+		// 监听异常工时查询
 		form.on('submit(searchDev)', function(data) {
 			loadDev(data.field.keywordDev);
 			return false;
 		});
-		// 编辑补卡信息提交
+		// 编辑异常工时信息提交
 		function editSubmit(obj) {
-			CoreUtil.sendAjax("produce/patch/edit", JSON.stringify(obj.field),
+			CoreUtil.sendAjax("produce/abnormal/edit", JSON.stringify(obj.field),
 					function(data) {
 						if (data.result) {
 							layer.alert("操作成功", function() {
 								layer.closeAll();
-								cleanPatchCard();
+								cleanAbnormalHours();
 								// 加载页面
 								loadAll();
 							});
@@ -267,11 +274,11 @@ $(function() {
 						layer.alert(res.msg);
 					});
 		}
-		function getPatchCard(obj, id) {
+		function getAbnormalHours(obj, id) {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("produce/patch/getPatchCard", JSON
+			CoreUtil.sendAjax("produce/abnormal/getAbnormalHours", JSON
 					.stringify(param), function(data) {
 				//console.log(data)
 				if (data.result) {
@@ -290,7 +297,7 @@ $(function() {
 						"signTime" : data.data.signTime,
 					});
 					$('#empCode').attr("disabled","disabled");
-					openPatchCard(id, "编辑补卡信息")
+					openAbnormalHours(id, "编辑异常工时信息")
 				} else {
 					layer.alert(data.msg)
 				}
@@ -300,16 +307,16 @@ $(function() {
 		}
 	});
 });
-//添加补卡数据信息
-function addPatchCard() {
+//添加异常工时数据信息
+function addAbnormalHours() {
 	// 清空弹出框数据
-	cleanPatchCard();
+	cleanAbnormalHours();
 	// 打开弹出框
 	$('#empCode').removeAttr("disabled");
-	openPatchCard(null, "添加补卡数据信息");
+	openAbnormalHours(null, "添加异常工时数据信息");
 }
 // 新增编辑弹出框
-function openPatchCard(id, title) {
+function openAbnormalHours(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -320,9 +327,9 @@ function openPatchCard(id, title) {
 		resize : false,
 		shadeClose : true,
 		area : [ '550px' ],
-		content : $('#setPatchCard'),
+		content : $('#setAbnormalHours'),
 		end : function() {
-			cleanPatchCard();
+			cleanAbnormalHours();
 		}
 	});
 }
@@ -340,14 +347,14 @@ function load(obj) {
 	});
 }
 
-// 新增补卡数据信息提交
+// 新增异常工时数据信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("produce/patch/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("produce/abnormal/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
 						layer.closeAll();
-						cleanPatchCard();
+						cleanAbnormalHours();
 						// 加载页面
 						loadAll();
 					});
@@ -359,16 +366,16 @@ function addSubmit(obj) {
 			});
 }
 
-function delPatchCard(obj, id, name) {
+function delAbnormalHours(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '补卡数据吗？', {
+		layer.confirm('您确定要删除' + name + '异常工时数据吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/patch/delete",
+			CoreUtil.sendAjax("produce/abnormal/delete",
 					JSON.stringify(param), function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -398,7 +405,7 @@ function loadAll() {
 }
 
 // 清空新增表单数据
-function cleanPatchCard() {
+function cleanAbnormalHours() {
 	$('#cardForm')[0].reset();
 	layui.form.render();// 必须写
 }

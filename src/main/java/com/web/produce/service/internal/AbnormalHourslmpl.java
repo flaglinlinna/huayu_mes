@@ -29,22 +29,22 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
-import com.web.produce.dao.PatchCardDao;
+import com.web.produce.dao.AbnormalHoursDao;
 import com.web.produce.entity.CardData;
 import com.web.produce.entity.DevClock;
-import com.web.produce.entity.PatchCard;
-import com.web.produce.entity.PatchCard;
-import com.web.produce.service.PatchCardService;
+import com.web.produce.entity.AbnormalHours;
+import com.web.produce.entity.AbnormalHours;
+import com.web.produce.service.AbnormalHoursService;
 
 /**
- * 补卡处理
+ * 异常工时登记处理
  *
  */
-@Service(value = "PatchCardService")
+@Service(value = "AbnormalHoursService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class PatchCardlmpl extends PrcUtils implements PatchCardService {
+public class AbnormalHourslmpl extends PrcUtils implements AbnormalHoursService {
 	@Autowired
-	PatchCardDao patchCardDao;
+	AbnormalHoursDao abnormalHoursDao;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -54,7 +54,7 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 	 */
 	public ApiResponseResult getTaskNo(String keyword) throws Exception {
 		List<Object> list = getTaskNoPrc(UserUtil.getSessionUser().getCompany() + "",
-				UserUtil.getSessionUser().getFactory() + "", 10, UserUtil.getSessionUser().getId() + "", keyword);
+				UserUtil.getSessionUser().getFactory() + "", 7, UserUtil.getSessionUser().getId() + "", keyword);
 		if (!list.get(0).toString().equals("0")) {
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -151,27 +151,25 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 			filters1.add(new SearchFilter("employee.empCode", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("employee.empName", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("line.lineName", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("hourType", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("taskNo", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("cardType", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("signDate", SearchFilter.Operator.LIKE, keyword));
+			
 		}
-		Specification<PatchCard> spec = Specification.where(BaseService.and(filters, PatchCard.class));
-		Specification<PatchCard> spec1 = spec.and(BaseService.or(filters1, PatchCard.class));
-		Page<PatchCard> page = patchCardDao.findAll(spec1, pageRequest);
+		Specification<AbnormalHours> spec = Specification.where(BaseService.and(filters, AbnormalHours.class));
+		Specification<AbnormalHours> spec1 = spec.and(BaseService.or(filters1, AbnormalHours.class));
+		Page<AbnormalHours> page = abnormalHoursDao.findAll(spec1, pageRequest);
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for (PatchCard bs : page.getContent()) {
+		for (AbnormalHours bs : page.getContent()) {
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", bs.getId());
 			map.put("empCode", bs.getEmployee().getEmpCode());// 获取关联表的数据-工号
 			map.put("empName", bs.getEmployee().getEmpName());// 获取关联表的数据-姓名
-			map.put("cardType", bs.getCardType());
+			map.put("lineName", bs.getLine().getLineName());// 获取关联表的数据
 			map.put("taskNo", bs.getTaskNo());
-			map.put("hourType", bs.getHourType());
-			map.put("signTime", bs.getSignTime());
-			map.put("signDate", bs.getSignDate());
-			map.put("lineName", bs.getLine().getLineName());
+			map.put("timeBegin", bs.getTimeBegin());
+			map.put("timeEnd", bs.getTimeEnd());
+			map.put("duration", bs.getDuration());
+			map.put("description", bs.getDescription());
+			map.put("forReason", bs.getForReason());
 			map.put("createDate", bs.getCreateDate());
 			map.put("lastupdateDate", bs.getLastupdateDate());
 			list.add(map);
@@ -181,26 +179,26 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 	}
 
 	/**
-	 * 新增补卡记录
+	 * 新增异常工时记录
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult add(PatchCard patchCard) throws Exception {
-		if (patchCard == null) {
-			return ApiResponseResult.failure("补卡记录不能为空！");
+	public ApiResponseResult add(AbnormalHours abnormalHours) throws Exception {
+		if (abnormalHours == null) {
+			return ApiResponseResult.failure("异常工时记录不能为空！");
 		}
 
-		int cc = patchCardDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0, patchCard.getEmpId(),
-				patchCard.getSignTime(), patchCard.getSignDate());
-		if (cc > 0) {
-			return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
-		}
-		patchCard.setCreateDate(new Date());
-		patchCard.setCreateBy(UserUtil.getSessionUser().getId());
-		patchCard.setDelFlag(0);
-		patchCardDao.save(patchCard);
+//		int cc = abnormalHoursDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0, abnormalHours.getEmpId(),
+//				abnormalHours.getSignTime(), abnormalHours.getSignDate());
+//		if (cc > 0) {
+//			return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
+//		}
+		abnormalHours.setCreateDate(new Date());
+		abnormalHours.setCreateBy(UserUtil.getSessionUser().getId());
+		abnormalHours.setDelFlag(0);
+		abnormalHoursDao.save(abnormalHours);
 
-		return ApiResponseResult.success("补卡记录添加成功！").data(patchCard);
+		return ApiResponseResult.success("异常工时记录添加成功！").data(abnormalHours);
 	}
 
 	/**
@@ -212,58 +210,56 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getPatchCard(Long id) throws Exception {
+	public ApiResponseResult getAbnormalHours(Long id) throws Exception {
 		if (id == null) {
-			return ApiResponseResult.failure("补卡记录ID不能为空！");
+			return ApiResponseResult.failure("异常工时记录ID不能为空！");
 		}
-		PatchCard o = patchCardDao.findById((long) id);
+		AbnormalHours o = abnormalHoursDao.findById((long) id);
 		if (o == null) {
-			return ApiResponseResult.failure("该补卡记录不存在！");
+			return ApiResponseResult.failure("该异常工时记录不存在！");
 		}
 		return ApiResponseResult.success().data(o);
 	}
 
 	/**
-	 * 删除补卡记录
+	 * 删除异常工时记录
 	 */
 	@Override
 	@Transactional
 	public ApiResponseResult delete(Long id) throws Exception {
 		if (id == null) {
-			return ApiResponseResult.failure("补卡记录ID不能为空！");
+			return ApiResponseResult.failure("异常工时记录ID不能为空！");
 		}
-		PatchCard o = patchCardDao.findById((long) id);
+		AbnormalHours o = abnormalHoursDao.findById((long) id);
 		if (o == null) {
-			return ApiResponseResult.failure("补卡记录不存在！");
+			return ApiResponseResult.failure("异常工时记录不存在！");
 		}
 		o.setDelTime(new Date());
 		o.setDelFlag(1);
 		o.setDelBy(UserUtil.getSessionUser().getId());
-		patchCardDao.save(o);
+		abnormalHoursDao.save(o);
 		return ApiResponseResult.success("删除成功！");
 	}
 	
 	@Override
 	@Transactional
-	public ApiResponseResult edit(PatchCard patchCard) throws Exception {
-		PatchCard o = patchCardDao.findById((long) patchCard.getId());
-//		int cc = patchCardDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0, patchCard.getEmpId(),
-//				patchCard.getSignTime(), patchCard.getSignDate());
+	public ApiResponseResult edit(AbnormalHours abnormalHours) throws Exception {
+		AbnormalHours o = abnormalHoursDao.findById((long) abnormalHours.getId());
+//		int cc = abnormalHoursDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0, abnormalHours.getEmpId(),
+//				abnormalHours.getSignTime(), abnormalHours.getSignDate());
 //		if (cc > 0) {
 //			return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
 //		}
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
-		o.setEmpId(patchCard.getEmpId());
-		o.setLineId(patchCard.getLineId());
-		o.setClassId(patchCard.getClassId());
-		o.setWorkDate(patchCard.getWorkDate());
-		o.setCardType(patchCard.getCardType());
-		o.setHourType(patchCard.getHourType());	
-		o.setSignDate(patchCard.getSignDate());
-		o.setSignTime(patchCard.getSignTime());
-		o.setTaskNo(patchCard.getTaskNo());
-		patchCardDao.save(o);
+		o.setEmpId(abnormalHours.getEmpId());
+		o.setTaskNo(abnormalHours.getTaskNo());
+		o.setTimeBegin(abnormalHours.getTimeBegin());
+		o.setTimeEnd(abnormalHours.getTimeEnd());	
+		o.setDuration(abnormalHours.getDuration());
+		o.setDescription(abnormalHours.getDescription());
+		o.setForReason(abnormalHours.getForReason());
+		abnormalHoursDao.save(o);
 		return ApiResponseResult.success("编辑成功！");
 	}
 }
