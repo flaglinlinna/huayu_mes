@@ -251,10 +251,10 @@ public class CardDatalmpl implements CardDataService {
                 }
                 cardDataDao.saveAll(lc);
             }else{
-            	return ApiResponseResult.failure("读取卡机"+devClock.getDevIp()+"内容失败");
+            	return ApiResponseResult.failure("读取卡机IP"+devClock.getDevIp()+"内容失败");
             }
         }else{
-        	return ApiResponseResult.failure("连接卡机"+devClock.getDevIp()+"失败");
+        	return ApiResponseResult.failure("连接卡机IP"+devClock.getDevIp()+"失败");
         }
 		return ApiResponseResult.success();
 	}
