@@ -22,14 +22,14 @@ import com.web.basic.entity.Line;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 补卡处理
+ * 工时异常登记处理
  */
-@Entity(name = "PatchCard")
-@Table(name= PatchCard.TABLE_NAME)
+@Entity(name = "AbnormalHours")
+@Table(name= AbnormalHours.TABLE_NAME)
 @DynamicUpdate
-public class PatchCard extends BaseEntity{
+public class AbnormalHours extends BaseEntity{
 	private static final long serialVersionUID = -5951531333314901264L;
-    public static final String TABLE_NAME = "MES_ATT_SIGN_CARD";
+    public static final String TABLE_NAME = "MES_ATT_ABNORMAL_HOURS";
     
     /**
      * 员工Id
@@ -58,20 +58,6 @@ public class PatchCard extends BaseEntity{
     protected Line line;
     
     /**
-     * 班次Id
-     */
-    @ApiModelProperty(name="classId",value="班次Id")
-    @Column 
-    protected Long classId;
-    
-    /**
-     * 工时类型
-     */
-    @ApiModelProperty(name="hourType",value="工时类型")
-    @Column(length = 100)
-    protected String hourType;
-    
-    /**
      * 制令单号
      */
     @ApiModelProperty(name="taskNo",value="制令单号")
@@ -79,32 +65,39 @@ public class PatchCard extends BaseEntity{
     protected String taskNo;
     
     /**
-     * 卡点类型
+     * 开始时间
      */
-    @ApiModelProperty(name="cardType",value="卡点类型")
-    @Column(length = 10)
-    protected String cardType;
+    @ApiModelProperty(name="timeBegin",value="开始时间")
+    @Column(length = 50)
+    protected String timeBegin;
     
     /**
-     * 生产日期
+     * 结束时间
      */
-    @ApiModelProperty(name="workDate",value="生产日期")
-    @Column(length = 20)
-    protected String workDate;
+    @ApiModelProperty(name="timeEnd",value="结束时间")
+    @Column(length = 50)
+    protected String timeEnd;  
     
     /**
-     * 签卡时间
+     * 时长
      */
-    @ApiModelProperty(name="signTime",value="签卡时间")
-    @Column(length = 20)
-    protected String signTime;
+    @ApiModelProperty(name="duration",value="时长")
+    protected Long duration;  
     
     /**
-     * 签卡日期
+     * 异常描述
      */
-    @ApiModelProperty(name="signDate",value="签卡日期")
-    @Column(length = 20)
-    protected String signDate;
+    @ApiModelProperty(name="description",value="异常描述")
+    @Column(length = 500)
+    protected String description;
+    
+    /**
+     * 异常原因
+     */
+    @ApiModelProperty(name="forReason",value="异常原因")
+    @Column(length = 50)
+    protected String forReason;
+    
     
     /**
      * 审核标识  1(有效)/0(无效，默认)
@@ -145,38 +138,6 @@ public class PatchCard extends BaseEntity{
 		this.employee = employee;
 	}
 
-	public Long getLineId() {
-		return lineId;
-	}
-
-	public void setLineId(Long lineId) {
-		this.lineId = lineId;
-	}
-
-	public Line getLine() {
-		return line;
-	}
-
-	public void setLine(Line line) {
-		this.line = line;
-	}
-
-	public Long getClassId() {
-		return classId;
-	}
-
-	public void setClassId(Long classId) {
-		this.classId = classId;
-	}
-
-	public String getHourType() {
-		return hourType;
-	}
-
-	public void setHourType(String hourType) {
-		this.hourType = hourType;
-	}
-
 	public String getTaskNo() {
 		return taskNo;
 	}
@@ -185,28 +146,44 @@ public class PatchCard extends BaseEntity{
 		this.taskNo = taskNo;
 	}
 
-	public String getCardType() {
-		return cardType;
+	public String getTimeBegin() {
+		return timeBegin;
 	}
 
-	public void setCardType(String cardType) {
-		this.cardType = cardType;
+	public void setTimeBegin(String timeBegin) {
+		this.timeBegin = timeBegin;
 	}
 
-	public String getSignTime() {
-		return signTime;
+	public String getTimeEnd() {
+		return timeEnd;
 	}
 
-	public void setSignTime(String signTime) {
-		this.signTime = signTime;
+	public void setTimeEnd(String timeEnd) {
+		this.timeEnd = timeEnd;
 	}
 
-	public String getSignDate() {
-		return signDate;
+	public Long getDuration() {
+		return duration;
 	}
 
-	public void setSignDate(String signDate) {
-		this.signDate = signDate;
+	public void setDuration(Long duration) {
+		this.duration = duration;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getForReason() {
+		return forReason;
+	}
+
+	public void setForReason(String forReason) {
+		this.forReason = forReason;
 	}
 
 	public Integer getCheckStatus() {
@@ -233,12 +210,19 @@ public class PatchCard extends BaseEntity{
 		this.checkDate = checkDate;
 	}
 
-	public String getWorkDate() {
-		return workDate;
+	public Long getLineId() {
+		return lineId;
 	}
 
-	public void setWorkDate(String workDate) {
-		this.workDate = workDate;
+	public void setLineId(Long lineId) {
+		this.lineId = lineId;
 	}
-	
+
+	public Line getLine() {
+		return line;
+	}
+
+	public void setLine(Line line) {
+		this.line = line;
+	}
 }
