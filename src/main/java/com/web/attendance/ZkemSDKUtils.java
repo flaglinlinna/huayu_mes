@@ -3,6 +3,9 @@ package com.web.attendance;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -380,18 +383,27 @@ public class ZkemSDKUtils {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ZkemSDKUtils sdk = new ZkemSDKUtils();
         Map<String, Object> map = new HashMap<String, Object>();
         boolean connFlag = sdk.connect("192.168.1.201", 4370);
         System.out.println(connFlag);
         if (connFlag) {
-            /*boolean flag = sdk.readGeneralLogData();
-            System.out.println("flag:" + flag);*/
-//
-//            List<Map<String, Object>> strList = sdk.getGeneralLogData();
-//            System.out.println(strList.toString());
-           /*List<Map<String, Object>> userList = sdk.getUserInfo();//获取所有人员信息
+            boolean flag = sdk.readGeneralLogData();
+            System.out.println("flag:" + flag);
+
+            List<Map<String, Object>> strList = sdk.getGeneralLogData();
+            System.out.println(strList.toString());
+          //日期转换
+       	 SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd") ;        // 实例化模板对象    
+            SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss") ;        // 实例化模板对象
+            String d = strList.get(0).get("Year")+"-"+strList.get(0).get("Month")+"-"+strList.get(0).get("Day");
+        	String t = strList.get(0).get("Hour")+":"+strList.get(0).get("Minute")+":"+strList.get(0).get("Second");
+        	String carDate=sdf1.format(sdf1.parse(d));//LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String cardTime=sdf2.format(sdf2.parse(t));//LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            System.out.println("当前时间为:"+carDate);
+            System.out.println("当前时间为:"+cardTime);
+         /*  List<Map<String, Object>> userList = sdk.getUserInfo();//获取所有人员信息
             System.out.println(userList.toString());*/
             //[{Enabled=true, EnrollNumber=2, Privilege=0, Name=, Password=}]
             /*boolean f= sdk.setUserInfo("3", "test1", "", 0, true);//新增人员,如果编号一样则修改信息
