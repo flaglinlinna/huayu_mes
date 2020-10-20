@@ -1,6 +1,7 @@
 package com.web.produce.service.internal;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -208,8 +209,9 @@ public class CardDatalmpl implements CardDataService {
 	/**
 	 * 根据卡机获取卡机上的考勤记录
 	 * @param DevClock
+	 * @throws Exception 
 	 */
-	private ApiResponseResult saveCardData(DevClock devClock){
+	private ApiResponseResult saveCardData(DevClock devClock) throws Exception{
 		List<CardData> lc = new ArrayList<CardData>();
 		ZkemSDKUtils sdk = new ZkemSDKUtils();
         boolean connFlag = sdk.connect(devClock.getDevIp(), 4370);
@@ -228,11 +230,16 @@ public class CardDatalmpl implements CardDataService {
                 	if(le.size() == 0){
                 		continue ;
                 	}
+                	//日期转换
+                	 SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd") ;        // 实例化模板对象    
+                     SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss") ;        // 实例化模板对象
+                     
                 	//判断信息是否已经保存过
-                	String carDate=LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    String cardTime=LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-                    System.out.println("当前时间为:"+carDate);
-                    System.out.println("当前时间为:"+cardTime);
+                    String d = map.get("Year")+"-"+map.get("Month")+"-"+map.get("Day");
+                	String t = map.get("Hour")+":"+map.get("Minute")+":"+map.get("Second");
+                	String carDate=sdf1.format(sdf1.parse(d));//LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    String cardTime=sdf2.format(sdf2.parse(t));//LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+
                     List<CardData> cc = cardDataDao.findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTime(0, le.get(0).getId(), devClock.getId(),
                     		carDate, cardTime);
                     if(cc.size()>0){
