@@ -20,4 +20,6 @@ public interface AbnormalHoursService {
 	public ApiResponseResult getEmpInfo(String keyword)throws Exception;
 	
 	public ApiResponseResult getTaskNo(String keyword)throws Exception;
+	
+	public ApiResponseResult getTaskNoInfo(String taskNo)throws Exception;
 }

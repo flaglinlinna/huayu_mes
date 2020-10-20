@@ -47,7 +47,7 @@ public class AbnormalHours extends BaseEntity{
     /**
      * 线体Id
      */
-    @ApiModelProperty(name="lineId",value="线体Id")
+    /*@ApiModelProperty(name="lineId",value="线体Id")
     @Column
     protected Long lineId;
 
@@ -55,7 +55,7 @@ public class AbnormalHours extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "lineId", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
-    protected Line line;
+    protected Line line;*/
     
     /**
      * 制令单号
@@ -82,7 +82,7 @@ public class AbnormalHours extends BaseEntity{
      * 时长
      */
     @ApiModelProperty(name="duration",value="时长")
-    protected Long duration;  
+    protected Float duration;  
     
     /**
      * 异常描述
@@ -162,13 +162,7 @@ public class AbnormalHours extends BaseEntity{
 		this.timeEnd = timeEnd;
 	}
 
-	public Long getDuration() {
-		return duration;
-	}
-
-	public void setDuration(Long duration) {
-		this.duration = duration;
-	}
+	
 
 	public String getDescription() {
 		return description;
@@ -210,7 +204,16 @@ public class AbnormalHours extends BaseEntity{
 		this.checkDate = checkDate;
 	}
 
-	public Long getLineId() {
+	public Float getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Float duration) {
+		this.duration = duration;
+	}
+	
+
+	/*public Long getLineId() {
 		return lineId;
 	}
 
@@ -224,5 +227,5 @@ public class AbnormalHours extends BaseEntity{
 
 	public void setLine(Line line) {
 		this.line = line;
-	}
+	}*/
 }

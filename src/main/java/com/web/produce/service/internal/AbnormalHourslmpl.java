@@ -73,7 +73,7 @@ public class AbnormalHourslmpl extends PrcUtils implements AbnormalHoursService 
 		return ApiResponseResult.success().data(list.get(2));
 	}
 
-	// 获取指令单
+	// 获取员工信息
 	public List getEmpInfoPrc(String company, String facoty, String user_id, String keyword) throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
@@ -116,6 +116,60 @@ public class AbnormalHourslmpl extends PrcUtils implements AbnormalHoursService 
 		return resultList;
 	}
 
+	/**
+	 * 获取制令单信息
+	 */
+	public ApiResponseResult getTaskNoInfo(String taskNo) throws Exception {
+		List<Object> list = getTaskNoInfoPrc(UserUtil.getSessionUser().getCompany() + "",
+				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "", taskNo);
+		if (!list.get(0).toString().equals("0")) {
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success().data(list.get(2));
+	}
+
+	// 获取制令单信息
+	public List getTaskNoInfoPrc(String company, String facoty, String user_id, String taskNo) throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  prc_mes_task_no_chs(?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, facoty);
+				cs.setString(2, company);
+				cs.setString(3, user_id);
+				cs.setString(4, taskNo);
+				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(7, -10);// 输出参数 追溯数据
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				List<Map<String, Object>> l = new ArrayList();
+				cs.execute();
+				result.add(cs.getInt(5));
+				result.add(cs.getString(6));
+				if (cs.getString(5).toString().equals("0")) {
+					// 游标处理
+					ResultSet rs = (ResultSet) cs.getObject(7);
+					try {
+						l = fitMap(rs);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(l);
+				}
+				System.out.println(l);
+				return result;
+			}
+
+		});
+		return resultList;
+	}
+
 	private List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();
 		if (null != rs) {
@@ -142,41 +196,64 @@ public class AbnormalHourslmpl extends PrcUtils implements AbnormalHoursService 
 	@Override
 	@Transactional
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
-		// 查询条件1
-		List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-		// 查询2
-		List<SearchFilter> filters1 = new ArrayList<>();
-		if (StringUtils.isNotEmpty(keyword)) {
-			filters1.add(new SearchFilter("employee.empCode", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("employee.empName", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("line.lineName", SearchFilter.Operator.LIKE, keyword));
-			
+		
+		List<Object> list = getListPrc(UserUtil.getSessionUser().getCompany() + "",
+				UserUtil.getSessionUser().getFactory() + "",
+				UserUtil.getSessionUser().getId() + "",keyword, pageRequest.getPageNumber()+1,
+				pageRequest.getPageSize());//getNumber() 获取当前页码,getSize() 每页指定有多少元素
+		if (!list.get(0).toString().equals("0")) {
+			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		Specification<AbnormalHours> spec = Specification.where(BaseService.and(filters, AbnormalHours.class));
-		Specification<AbnormalHours> spec1 = spec.and(BaseService.or(filters1, AbnormalHours.class));
-		Page<AbnormalHours> page = abnormalHoursDao.findAll(spec1, pageRequest);
-
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for (AbnormalHours bs : page.getContent()) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("id", bs.getId());
-			map.put("empCode", bs.getEmployee().getEmpCode());// 获取关联表的数据-工号
-			map.put("empName", bs.getEmployee().getEmpName());// 获取关联表的数据-姓名
-			map.put("lineName", bs.getLine().getLineName());// 获取关联表的数据
-			map.put("taskNo", bs.getTaskNo());
-			map.put("timeBegin", bs.getTimeBegin());
-			map.put("timeEnd", bs.getTimeEnd());
-			map.put("duration", bs.getDuration());
-			map.put("description", bs.getDescription());
-			map.put("forReason", bs.getForReason());
-			map.put("createDate", bs.getCreateDate());
-			map.put("lastupdateDate", bs.getLastupdateDate());
-			list.add(map);
-		}
-		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
+		List<Map<String, Object>> l = (List<Map<String, Object>>) list.get(2);
+		return ApiResponseResult.success().data(DataGrid.create(l, (int) list.get(3),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
+	
+	public List getListPrc(String company, String facoty, String user_id, String keyword,
+			int pageNumber,int pageSize) throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  prc_mes_cof_abnormal_hours_chs(?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, facoty);
+				cs.setString(2, company);
+				cs.setString(3, user_id);
+				cs.setString(4, keyword);//--条件
+				cs.setInt(5, pageSize);// --每页记录数
+				cs.setInt(6, pageNumber);//--页码
+				cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 --总记录数
+				cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(10, -10);// 输出参数 追溯数据
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				List<Map<String, Object>> l = new ArrayList();
+				cs.execute();
+				result.add(cs.getInt(8));
+				result.add(cs.getString(9));
+				if (cs.getString(8).toString().equals("0")) {
+					// 游标处理
+					ResultSet rs = (ResultSet) cs.getObject(10);
+					try {
+						l = fitMap(rs);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(l);
+					result.add(cs.getInt(7));
+				}
+				System.out.println(l);
+				return result;
+			}
+		});
+		return resultList;
+	}
+	
 
 	/**
 	 * 新增异常工时记录
@@ -188,11 +265,13 @@ public class AbnormalHourslmpl extends PrcUtils implements AbnormalHoursService 
 			return ApiResponseResult.failure("异常工时记录不能为空！");
 		}
 
-//		int cc = abnormalHoursDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0, abnormalHours.getEmpId(),
-//				abnormalHours.getSignTime(), abnormalHours.getSignDate());
-//		if (cc > 0) {
-//			return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
-//		}
+		// int cc =
+		// abnormalHoursDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0,
+		// abnormalHours.getEmpId(),
+		// abnormalHours.getSignTime(), abnormalHours.getSignDate());
+		// if (cc > 0) {
+		// return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
+		// }
 		abnormalHours.setCreateDate(new Date());
 		abnormalHours.setCreateBy(UserUtil.getSessionUser().getId());
 		abnormalHours.setDelFlag(0);
@@ -240,22 +319,24 @@ public class AbnormalHourslmpl extends PrcUtils implements AbnormalHoursService 
 		abnormalHoursDao.save(o);
 		return ApiResponseResult.success("删除成功！");
 	}
-	
+
 	@Override
 	@Transactional
 	public ApiResponseResult edit(AbnormalHours abnormalHours) throws Exception {
 		AbnormalHours o = abnormalHoursDao.findById((long) abnormalHours.getId());
-//		int cc = abnormalHoursDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0, abnormalHours.getEmpId(),
-//				abnormalHours.getSignTime(), abnormalHours.getSignDate());
-//		if (cc > 0) {
-//			return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
-//		}
+		// int cc =
+		// abnormalHoursDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0,
+		// abnormalHours.getEmpId(),
+		// abnormalHours.getSignTime(), abnormalHours.getSignDate());
+		// if (cc > 0) {
+		// return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
+		// }
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		o.setEmpId(abnormalHours.getEmpId());
 		o.setTaskNo(abnormalHours.getTaskNo());
 		o.setTimeBegin(abnormalHours.getTimeBegin());
-		o.setTimeEnd(abnormalHours.getTimeEnd());	
+		o.setTimeEnd(abnormalHours.getTimeEnd());
 		o.setDuration(abnormalHours.getDuration());
 		o.setDescription(abnormalHours.getDescription());
 		o.setForReason(abnormalHours.getForReason());
