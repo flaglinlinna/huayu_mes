@@ -23,10 +23,10 @@ import com.utils.UserUtil;
 import com.web.produce.service.ReworkService;
 
 /**
- * 小码校验
+ * 在线返工
  *
  */
-@Service(value = "OnlineReworkService")
+@Service(value = "ReworkService")
 @Transactional(propagation = Propagation.REQUIRED)
 public class Reworklmpl extends PrcUtils implements ReworkService {
 
