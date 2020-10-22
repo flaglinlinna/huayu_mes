@@ -156,7 +156,7 @@ public class QualInspectlmpl  implements QualInspectService {
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, factory);
 				cs.setString(2, company);
-				cs.setInt(3, 1);
+				cs.setInt(3, 2);
 				cs.setString(4, keyword);
 				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
 				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识

@@ -36,21 +36,6 @@ public class QualInspectController extends WebController {
 	 * @RequestMapping(value = "/toQualInspect") public String toQualInspect(){
 	 * return "/web/produce/inspect/inspect"; }
 	 */
-	/*
-	 * @ApiOperation(value="获取检验节点列表", notes="获取检验节点列表", hidden = true)
-	 * 
-	 * @RequestMapping(value = "/getProcList", method = RequestMethod.POST)
-	 * 
-	 * @ResponseBody public ApiResponseResult getProcList(String keyword) {
-	 * String method = "produce/inspect/getProcList";String methodName
-	 * ="获取检验节点列表"; try { ApiResponseResult result =
-	 * inspectService.getProcList(company,facoty,keyword);
-	 * logger.debug("获取检验节点列表=getProcList:"); getSysLogService().success(method,
-	 * methodName, null); return result; } catch (Exception e) {
-	 * e.printStackTrace(); logger.error("获取检验节点列表失败！", e);
-	 * getSysLogService().error(method, methodName, e.toString()); return
-	 * ApiResponseResult.failure("获取检验节点列表失败！"); } }
-	 */
 
 	@ApiOperation(value = "PDA-获取检验节点列表", notes = "PDA-获取检验节点列表", hidden = true)
 	@RequestMapping(value = "/getProcList", method = RequestMethod.POST, produces = "application/json")
