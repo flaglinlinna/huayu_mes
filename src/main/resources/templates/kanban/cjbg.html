@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>报工看板</title>
+    <link href="../kanban/styles/common.css" th:href="@{/kanban/styles/common.css}" rel="stylesheet">
+    <script src="../kanban/scripts/Plugin/jquery-3.3.1.min.js" th:src="@{/kanban/scripts/Plugin/jquery-3.3.1.min.js}"></script>
+    <script src="../kanban/scripts/Plugin/echarts.min.js" th:src="@{/kanban/scripts/Plugin/echarts.min.js}"></script>
+    <script src="../kanban/scripts/common.js" th:src="@{/kanban/scripts/common.js}"></script>
+    <script src="../kanban/scripts/quota.js" th:src="@{/kanban/scripts/quota.js}"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css" th:href="@{/layui/css/layui.css}"></link>
+
+</head>
+<body>
+<!--顶部-->
+<header class="header left">
+<div class="total_chose_box" >
+            <div style="height: 5px;"></div>
+            <span class="chose_tltle">请选择年份：</span>
+            <select class="year_chose">
+                <option>2017</option>
+                <option>2016</option>
+                <option>2015</option>
+                <option>2014</option>
+                <option>2013</option>
+                <option>2012</option>
+            </select>
+            <span class="chose_tltle">请输入月份：</span>
+            <input class="chose_text_in">
+            <span class="chose_tltle">请选择区域：</span>
+            <select class="year_chose">
+                <option> 北京市</option>
+                <option>自贡市</option>
+                <option>攀枝花市</option>
+                <option>泸州市</option>
+                <option>德阳市</option>
+                <option>绵阳市</option>
+                <option>广元市</option>
+                <option>遂宁市</option>
+                <option>内江市</option>
+                <option>乐山市</option>
+                <option>南充市</option>
+                <option>宜宾市</option>
+                <option>广安市</option>
+                <option>达州市</option>
+                <option>巴中市</option>
+                <option>雅安市</option>
+                <option>眉山市</option>
+                <option>资阳市</option>
+                <option>阿坝州</option>
+                <option>甘孜州</option>
+                <option>凉山州</option>
+            </select>
+            <button class="chose_enter">确定</button>
+        </div>
+  <div class="left nav">
+      <ul>
+          <li><i class="nav_1"></i> </li>
+          <li><i class="nav_2"></i></li>
+          <li><i class="nav_3"></i></li>
+          </ul>
+  </div>
+    <div class="header_center left" style="position:relative">
+        
+        <h2><strong>组装二部报工看板</strong></h2>
+
+    </div>
+    <div class="right nav text_right">
+        
+    </div>
+
+</header>
+<!--内容部分-->
+<div class="con left">
+  <!--数据总概-->
+  <div class="con_div">
+      <div  class="con_div_text" id="chartDiv" style="width:100%;height:220px;"></div>
+  </div>
+    <!--统计分析图-->
+    <div class="div_any">
+     <div class="layui-row">
+	    <div class="layui-col-md3">
+	        <div class="div_any_child">
+                <div class="div_any_title">L1</div>
+                
+                  <div id="xxzb" class="tip-container">
+
+   <div class="tip-content" style="width: 238px;">
+    <div id="qybxspm">
+     <div id="qybxspm" class="speed-container">
+      <div class="speed-content">
+       <ul>
+        <li><span>中部</span><span class="speed-line"><span id="qybxspm0" class="speed-num" style="background-color: rgb(85, 218, 237); width: 86.4%;"></span><span class="numText">1123</span></span></li>
+        <li><span>东部</span><span class="speed-line"><span id="qybxspm1" class="speed-num" style="background-color: rgb(85, 182, 237); width: 69.5%;"></span><span class="numText">904</span></span></li>
+        <li><span>西部</span><span class="speed-line"><span id="qybxspm2" class="speed-num" style="background-color: rgb(63, 128, 210); width: 65%;"></span><span class="numText">845</span></span></li>
+        <li><span>北部</span><span class="speed-line"><span id="qybxspm3" class="speed-num" style="background-color: rgb(43, 93, 184); width: 58.2%;"></span><span class="numText">756</span></span></li>
+        <li><span>南部</span><span class="speed-line"><span id="qybxspm4" class="speed-num" style="background-color: rgb(24, 100, 227); width: 52.6%;"></span><span class="numText">684</span></span></li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div> 
+                
+            </div>
+            
+	    </div>
+	  </div>
+        <!-- <div class="left div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title">L1</div>
+                <p id="histogramChart1" class="p_chart"></p>
+            </div>
+            <div class="div_any_child">
+                <div class="div_any_title">L2</div>
+                <p id="histogramChart2" class="p_chart"></p>
+            </div>
+        </div>
+        <div class="left div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title"><img src="../kanban/images/title_7.png">各医院医疗费用(元)</div>
+                <p id="lineChart1" class="p_chart"></p>
+            </div>
+            <div class="div_any_child">
+                <div class="div_any_title"><img src="../kanban/images/title_8.png">各医院体检人次(人)</div>
+                <p id="lineChart2" class="p_chart"></p>
+            </div>
+        </div>
+        <div class="left div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title"><img src="../kanban/images/title_9.png">药占比(%)</div>
+                <p id="histogramChart3" class="p_chart"></p>
+            </div>
+            <div class="div_any_child">
+                <div class="div_any_title"><img src="../kanban/images/title_10.png">平均住院天数(天)</div>
+                <p id="histogramChart4" class="p_chart"></p>
+            </div>
+        </div>
+        <div class="left div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title"><img src="../kanban/images/title_11.png">手术工作量(台)</div>
+                <p id="pieChart1" class="p_chart"></p>
+            </div>
+            <div class="div_any_child">
+                <div class="div_any_title"><img src="../kanban/images/title_12.png">床位数量分布(床)</div>
+                <p id="pieChart2" class="p_chart"></p>
+            </div>
+        </div> -->
+    </div>
+
+
+</div>
+</body>
+</html>

@@ -48,5 +48,16 @@ public class kanbanController extends WebController {
 		mav.setViewName("/kanban/demo");//返回路径
 		return mav;
 	}
+	
+	@RequestMapping(value = "/toCjbg", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCjbg() {
+		String method = "/kanban/toCjbg";String methodName ="车间报工看板";
+		ModelAndView mav=new ModelAndView();
+		//mav.addObject("pname", p);
+		mav.setViewName("/kanban/cjbg");//返回路径
+		return mav;
+	}
+
     
 }

@@ -203,7 +203,7 @@ public class EmpFingerlmpl  implements EmpFingerService {
 	@Override
 	public ApiResponseResult open() throws Exception {
 		// TODO Auto-generated method stub
-		ZKFPUtil2 zp = new ZKFPUtil2();
+		/*ZKFPUtil2 zp = new ZKFPUtil2();
 		ApiResponseResult api = zp.close();
 		api = zp.open();//打开指纹仪
 		if(api.isResult()){
@@ -211,8 +211,8 @@ public class EmpFingerlmpl  implements EmpFingerService {
 			return api;
 		}else{
 			return api;
-		}
-		
+		}*/
+		return null;
 		//return api;
 	}
 
