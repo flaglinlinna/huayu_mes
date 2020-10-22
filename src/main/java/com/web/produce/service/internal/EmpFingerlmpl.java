@@ -21,6 +21,7 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.attendance.ZKFPUtil2;
 import com.web.basic.dao.EmployeeDao;
 import com.web.basic.entity.Employee;
 import com.web.produce.dao.EmpFingerDao;
@@ -33,7 +34,7 @@ import com.web.produce.service.EmpFingerService;
  */
 @Service(value = "EmpFingerService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class EmpFingerlmpl implements EmpFingerService {
+public class EmpFingerlmpl  implements EmpFingerService {
 
 	@Autowired
 	EmpFingerDao empFingerDao;
@@ -199,4 +200,21 @@ public class EmpFingerlmpl implements EmpFingerService {
 		return ApiResponseResult.success().data(list);
 	}
 
+	@Override
+	public ApiResponseResult open() throws Exception {
+		// TODO Auto-generated method stub
+		ZKFPUtil2 zp = new ZKFPUtil2();
+		ApiResponseResult api = zp.close();
+		api = zp.open();//打开指纹仪
+		if(api.isResult()){
+			api = zp.enroll();
+			return api;
+		}else{
+			return api;
+		}
+		
+		//return api;
+	}
+
+	
 }

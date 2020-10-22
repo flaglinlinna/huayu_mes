@@ -57,6 +57,10 @@ $(function() {
 						field : 'DEV_IP',
 						title : '卡机IP',
 						width : 120
+					}, {
+						field : 'FMEMO',
+						title : '备注',
+						//width : 180
 					}] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;

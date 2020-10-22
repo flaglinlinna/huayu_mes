@@ -23,4 +23,6 @@ public interface EmpFingerService {
 	public ApiResponseResult getEmpList() throws Exception;//获取人员信息
 	
 	//public ApiResponseResult doEnabled(Long id, Integer enabled) throws Exception;// 是否有效
+	
+	public ApiResponseResult open() throws Exception;
 }

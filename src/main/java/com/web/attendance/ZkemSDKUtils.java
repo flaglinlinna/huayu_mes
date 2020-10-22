@@ -389,20 +389,11 @@ public class ZkemSDKUtils {
         boolean connFlag = sdk.connect("192.168.1.201", 4370);
         System.out.println(connFlag);
         if (connFlag) {
-            boolean flag = sdk.readGeneralLogData();
+            /*boolean flag = sdk.readGeneralLogData();
             System.out.println("flag:" + flag);
 
             List<Map<String, Object>> strList = sdk.getGeneralLogData();
-            System.out.println(strList.toString());
-          //日期转换
-       	 SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd") ;        // 实例化模板对象    
-            SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss") ;        // 实例化模板对象
-            String d = strList.get(0).get("Year")+"-"+strList.get(0).get("Month")+"-"+strList.get(0).get("Day");
-        	String t = strList.get(0).get("Hour")+":"+strList.get(0).get("Minute")+":"+strList.get(0).get("Second");
-        	String carDate=sdf1.format(sdf1.parse(d));//LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String cardTime=sdf2.format(sdf2.parse(t));//LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-            System.out.println("当前时间为:"+carDate);
-            System.out.println("当前时间为:"+cardTime);
+            System.out.println(strList.toString());*/
          /*  List<Map<String, Object>> userList = sdk.getUserInfo();//获取所有人员信息
             System.out.println(userList.toString());*/
             //[{Enabled=true, EnrollNumber=2, Privilege=0, Name=, Password=}]
@@ -425,7 +416,7 @@ public class ZkemSDKUtils {
             List<Map<String, Object>> strList1 = sdk.getGeneralLogData();
             System.out.println(strList1.toString());*/
         	
-        	//setUserTmpStr("514260aa",2,"Ss9TUzIxAAADjJEECAUHCc7QAAAbjWkBAAAAg7EakYxlAJcPfQC1ABKDWACDAIwNBwCKjJoPfwCNAMsPPYyXANAMMABYAMGCRwCdAPMOUQCnjIMP5gCkAOgPIoynAL8OfwBjAASDLgCoANMOJgC7jKsPzADEAOoPm4zTADEP8wAeACyDxgDeAK8PGADjjK4PVgDiAIgPZ4zjAEgP3wA0ADSDiAALAcEPnQAXjccP2gAXAfsPnowhAUkOVYr7iwRzWH6tB96Gi5hdMAOCAnNTGcrytoYw/5aMzN/YEA5yAfOt9CkE6ScOvvwifX2idPpQmgmzAu6Xyexo/K18dIU5+qfZtRM2mIgGnX1Ff8N+PguYg36AD7CehPyhyIKy+AKGEAKaD+94DXhVAgyCNohyiVOPufxGhSyWBIgqCOaIJHs4cWJ6twV7eUKBCYYGkveT2Yv2D8ALRT87ASA6xAIxl+AGAMc4HPPBB4zVOCTA/wnFwD+swUzBVQoAcEEZslpgDAClQtb+T+xUAwCTRzAGBQPGSEPChgwARlAd+MErwSsDAIRsMnAHADBYScUE//6JAVdePcLNBAgD4GEA/MBH/8AAMO0x/8D9BwBsYxTMWAwAZGr6ODY9uQIAY3AA+9YAgv0WbTVMNluQBAOncjfB+xYAmIL5tDD//lT/UIFGAIwlhT3BDgBHjgVwTv7A/cDB6gQDmpRAPQoAeV19wUzDfJENAEte8DC9wf07CgB4Wnp0C4gLAHuldwSAwkzDhgYAmKbTKcOJAeqmK1URxTOkbsH9/zD//u7+V4kB5agwwVrXAIElCP/9/v7/hEdXuwoA/7CpwARaeE0NAJ5MJMKW//xN/kYDABXFhf8HjMzHLVoMAFzVKHL+MsD/wDbOAHpVY8hFSkAExYHZpSMLAHzdNPNAw6YQAFne3P45/Ph3/8D8wP/+B/80gwFm3t76+j8hWMj/BQDy3jAFPgmMed9DaFMuzwDKbjU+/8BGCcVS4NvFYnIEAGAhSW+FAVfmTHn+gQoD6+dGwGDC/pwHA2/1N8BT/wbF3vaxcsADEBgHjMIFnNkbQFTABNXdGLFOBhCcJkkF/yiVEbUrw2vCScLAT8DEwsHCwAbAwXPDZR8QHy4GREO5Mif9/f/BOP/8TP7AQf8FEHIzTNsdEDU/wEaRMf1x//z8//3/O/7Cc/7B/jdSQsULQI0BAAtFUgAAAAAAAAA=");
+        	//setUserTmpStr("514036",3,"TcdTUzIxAAAEhIsECAUHCc7QAAAohZEBAAAAhKkqloQHARsEkgDLAVOGlwAjASsHtwAXhVcLdADGALEP9YT3ACwPWgDaAUuLrABOAakMCwBThT4NzgBqAXgEZYSGAHcN/gBIACWLvACEAZ4B1QF3hKUJkADkAEUNxITTAJoPgQDhAUeC4gAAATAPtQAghUoMkwBCAe4OSoThAGkLgwCRATSLsABiAdMHPQBShTQL2QBuAQEGq4SAAZUIewBFASiMyQBOAJ0PRQDwhHALugAXAWQPk4S6ABYPggDiAUWIiwA3ATAOGAC+hCIPUQAPAZMNl4SOAIMPyQBJAJ2L+QCXAKIPTQB1hIYNdwBuAMMNo4RPAJAP4ACEABuPpcYFrqHzLT5lqYQXze3V6cjVdYhMFlEXAmHr9nOIvPzvlwsLGPk5giD7EdlpgydthQFwfrZs0PtAgVZo63D28xP1cYM++OKJbQi64A/dMgA3B3+HYRL7ZaaKy3p/hFsdtQW5fDwZOQS/kDKbMYz49D0N+fxw/m0DAvRXFCv66AYehE+LZS26GGeUtvbP+7t4TAushiat9PiuxNLa2/9THUJb0YNmDOIH9XYwWjocUnqvTnYP36WymyqXNQFplcT5dQT98cTtxg47gw+NVQn3AEKJs/yifzpvNvgf/ep5tIO6A/+DhQQvBGYTgYAfkJoD8/RPCFuPCIffF4J/m5KTjtrxJLkAAmgg9QvFvC2T/8BQwMBowACarhErDQCxKt9BdN00CgDOLRaH/8R4bAUAkzAM7gwEAjUMNVNK/8EAfr0NQgUAbz/M/neCAeNEHsDAO8IXhGZKAz/A/jo+Zs5SCACtUxc6RF+NAc1TIlvBrRQE2lf6/VT+/45rXHtWCwBUZPQ7O/rO/gsATnD3Bf/7eEdqFQBMej/AxHlAWP9DwEWQBwQVjYzDwsI+ywBGCuUi//7+/5A/DoTMkB5YwFUEBQWEkSJbEACYVxNCRD/AwMDAYMIAlBeIxHPBBQA7miZERhcAP63tg/8uRfxVPsHA/zppE4RBtPBPMP46/0C6RsFqCACSfoyMDAkA4bscN48EBB69E0wJAN54JsTgVBcAP8DmO//6t0DANlRRW8sAnkYbaP//L0UFBQT3x3rCgBgA/dbtRP8w/f5V/zr++3vB/sH/wf06CQQI4YzEm8DABw0EEOUTO8D9QQXA+5wBO+XtZf84IkC1R1T8xAgAS+aHRsOUwwgAgjB6x0fAw1oGAPI8KcR6dhcQNwDgBcD6e//9KP7ALzhGxXr+CBDiAS2UwDmOEYEDdMTCBmuBjxGNBWCIfgfAx44RlQUQ/f/v/jWDEZMKHsD/OTwHlE4SV8AJELUUWkduwcDEDhB8FaBGw8PEwMTBBnTGjRF0F1eEhAcFFBYfOpMFEFnkT8XlFBA9I9bAOMD6e/00/i7A//TCDpR+JU+I/8MBwMaAEZgmKVkJ1XAj1ML+k4gKEEcvQvzCw5YIEIfqQMUInAcQjTo9V4cBlJJELcGYDNW1SzPCetHHxMKrBhQBWTSVwQ==");
 
         }
     }

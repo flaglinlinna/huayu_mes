@@ -23,6 +23,7 @@ public class WYApplication extends SpringBootServletInitializer{
 	
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		 
         return application.sources(WYApplication.class);
     }
 
