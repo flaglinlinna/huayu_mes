@@ -68,81 +68,81 @@ public class AbnormalHoursController extends WebController {
 		}
 	}
 
-	@ApiOperation(value = "新增补卡数据记录", notes = "新增补卡数据记录", hidden = true)
+	@ApiOperation(value = "新增异常工时登记数据记录", notes = "新增异常工时登记数据记录", hidden = true)
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult add(@RequestBody AbnormalHours abnormalHours) {
 		String method = "produce/abnormal/add";
-		String methodName = "新增补卡数据记录";
+		String methodName = "新增异常工时登记数据记录";
 		try {
 			ApiResponseResult result = abnormalHoursService.add(abnormalHours);
-			logger.debug("新增补卡数据记录=add:");
+			logger.debug("新增异常工时登记数据记录=add:");
 			getSysLogService().success(method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("补卡数据记录新增失败！", e);
+			logger.error("异常工时登记数据记录新增失败！", e);
 			getSysLogService().error(method, methodName, e.toString());
-			return ApiResponseResult.failure("补卡数据记录新增失败！");
+			return ApiResponseResult.failure("异常工时登记数据记录新增失败！");
 		}
 	}
 
-	@ApiOperation(value = "修改补卡数据记录", notes = "修改补卡数据记录", hidden = true)
+	@ApiOperation(value = "修改异常工时登记数据记录", notes = "修改异常工时登记数据记录", hidden = true)
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult edit(@RequestBody AbnormalHours abnormalHours) {
 		String method = "produce/abnormal/edit";
-		String methodName = "修改补卡数据记录";
+		String methodName = "修改异常工时登记数据记录";
 		try {
 			ApiResponseResult result = abnormalHoursService.edit(abnormalHours);
-			logger.debug("修改补卡数据记录=edit:");
+			logger.debug("修改异常工时登记数据记录=edit:");
 			getSysLogService().success(method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("修改补卡数据记录失败！", e);
+			logger.error("修改异常工时登记数据记录失败！", e);
 			getSysLogService().error(method, methodName, e.toString());
-			return ApiResponseResult.failure("修改补卡数据记录失败！");
+			return ApiResponseResult.failure("修改异常工时登记数据记录失败！");
 		}
 	}
 
-	@ApiOperation(value = "根据ID获取补卡数据记录", notes = "根据ID获取补卡数据记录", hidden = true)
+	@ApiOperation(value = "根据ID获取异常工时登记记录", notes = "根据ID获取异常工时登记数据记录", hidden = true)
 	@RequestMapping(value = "/getAbnormalHours", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult getAbnormalHours(@RequestBody Map<String, Object> params) {
 		String method = "produce/abnormal/getAbnormalHours";
-		String methodName = "根据ID获取补卡数据记录";
+		String methodName = "根据ID获取异常工时登记数据记录";
 		long id = Long.parseLong(params.get("id").toString());
 		try {
 			ApiResponseResult result = abnormalHoursService.getAbnormalHours(id);
-			logger.debug("根据ID获取补卡数据记录=getAbnormalHours:");
+			logger.debug("根据ID获取异常工时登记数据记录=getAbnormalHours:");
 			getSysLogService().success(method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("根据ID获取补卡数据记录失败！", e);
+			logger.error("根据ID获取异常工时登记数据记录失败！", e);
 			getSysLogService().error(method, methodName, e.toString());
-			return ApiResponseResult.failure("获取补卡数据记录失败！");
+			return ApiResponseResult.failure("获取异常工时登记数据记录失败！");
 		}
 	}
 
-	@ApiOperation(value = "删除补卡数据记录", notes = "删除补卡数据记录", hidden = true)
+	@ApiOperation(value = "删除异常工时登记数据记录", notes = "删除异常工时登记记录", hidden = true)
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult delete(@RequestBody Map<String, Object> params) {
 		String method = "produce/abnormal/delete";
-		String methodName = "删除补卡数据记录";
+		String methodName = "删除异常工时登记记录";
 		try {
 			long id = Long.parseLong(params.get("id").toString());
 			ApiResponseResult result = abnormalHoursService.delete(id);
-			logger.debug("删除补卡数据记录=delete:");
+			logger.debug("删除异常工时登记=delete:");
 			getSysLogService().success(method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("删除补卡数据记录失败！", e);
+			logger.error("删除异常工时登记失败！", e);
 			getSysLogService().error(method, methodName, e.toString());
-			return ApiResponseResult.failure("删除补卡数据记录失败！");
+			return ApiResponseResult.failure("删除异常工时登记失败！");
 		}
 	}
 

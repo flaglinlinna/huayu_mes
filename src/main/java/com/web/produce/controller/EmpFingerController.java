@@ -158,4 +158,23 @@ public class EmpFingerController extends WebController{
 	            return ApiResponseResult.failure("获取线体信息列表失败！");
 	        }
 	    }
+		
+		@ApiOperation(value = "打开指纹仪", notes = "打开指纹仪",hidden = true)
+	    @RequestMapping(value = "/open", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult open(@RequestBody Map<String, Object> params){
+	        String method = "produce/emp_finger/open";String methodName ="打开指纹仪";
+	        try{
+	            ApiResponseResult result = empFingerService.open();
+	            logger.debug("打开指纹仪=open:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            logger.error("打开指纹仪失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("打开指纹仪失败！");
+	        }
+	    }
+		
 }

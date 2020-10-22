@@ -1,7 +1,7 @@
 /**
  * 指纹登记信息管理
  */
-var pageCurr;
+var pageCurr;var timer=null;
 $(function() {
 	layui.use([ 'form', 'table' ], function() {
 		var table = layui.table, form = layui.form;
@@ -104,6 +104,16 @@ $(function() {
 			load(data);
 			return false;
 		});
+		// 监听打开指纹仪
+		form.on('submit(open)', function(data) {
+			open(data.field)
+			return false;
+		});
+		
+		/*$(document).on('click','#openBtn',function(){
+			open();
+			});
+		*/
 		// 编辑指纹登记信息
 		function getEmpFinger(obj, id) {
 			var param = {
@@ -268,6 +278,25 @@ function load(obj) {
 		// 从当前页码开始
 		}
 	});
+}
+
+//打开指纹登记
+function open(params){
+	CoreUtil.sendAjax("produce/emp_finger/open", JSON.stringify(params),
+			function(data) {
+		console.log(data);
+				if (data.result) {
+					/*timer=setInterval(function()   //开启循环：每秒出现一次提示框
+					        {
+					            alert('a');
+					        },2000);*/
+				} else {
+					layer.alert(data.msg);
+				}
+			}, "POST", false, function(res) {
+				clearInterval(timer);        //关闭循环
+				layer.alert(res.msg);
+			});
 }
 function merge(res,columsName,columsIndex) {
     //console.log(res)

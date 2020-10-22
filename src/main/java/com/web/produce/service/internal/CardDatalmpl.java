@@ -298,7 +298,7 @@ public class CardDatalmpl implements CardDataService {
 		String[] line_id = line_ids.split(";");
 		String msg = "";
 		for(String lid:line_id){
-			List<DevClock> ld = devClockDao.findByDelFlagAndLineId(0,Long.parseLong(lid));
+			List<DevClock> ld = devClockDao.findByDelFlagAndLineIdAndDevType(0,Long.parseLong(lid),"上线机");
 			if(ld.size() > 0){
 				for(DevClock dc:ld){
 					ApiResponseResult api = this.saveCardData(dc);
@@ -307,7 +307,7 @@ public class CardDatalmpl implements CardDataService {
 					}
 				}
 			}else{
-				return ApiResponseResult.failure("该产线未配置卡机!");
+				return ApiResponseResult.failure("该产线未配置上线卡机!");
 			}
 			
 		}
