@@ -160,7 +160,7 @@ public class LoginController extends WebController{
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json")
 	public ApiResponseResult login(@RequestBody Map<String, Object> params) {
 		try {
-			String username = params.get("username").toString().toUpperCase();
+			String username = params.get("username").toString();
 			String password = params.get("password").toString();
 
     		if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
@@ -172,8 +172,8 @@ public class LoginController extends WebController{
             	return ApiResponseResult.failure("用户不存在！");
             }else {
             	//验证密码
-            	String p = userForBase.get(0).get("FPASSWORD").toString();
-            	p =proPass(p);
+            	String p = userForBase.get(0).get("PASSWORD").toString();
+            	password=DigestUtils.md5Hex(password);
             	if(!p.equals(password)){
             		return ApiResponseResult.failure("用户名或者密码不正确！");
             	}else{

@@ -46,69 +46,80 @@
 				<div class="layui-form-item">
 					<input id="empId" type="hidden" name="empId" /> <label
 						class="layui-form-label">员工工号</label>
-					<div class="layui-input-inline" style="width:25%;">
+					<div class="layui-input-inline" style="width:26%;">
 						<input type="text" name="empCode" placeholder="请选择"
 							autocomplete="off" class="layui-input" readonly="readonly"
 							lay-verify="required" id="empCode">
 					</div>
 					<label class="layui-form-label">员工姓名</label>
-					<div class="layui-input-inline" style="width:25%;">
+					<div class="layui-input-inline" style="width:26%;">
 						<input type="text" disabled class="layui-input" name="empName" 
 						style="background: #efefef;" lay-verify="required"id="empName">
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">制令单</label>
-					<div class="layui-input-inline" style="width:74%;">
+					<div class="layui-input-inline" style="width:76%;">
 					<input type="text" name="taskNo" placeholder="请选择"
 							autocomplete="off" class="layui-input" readonly="readonly"
 							lay-verify="required" id="taskNo">
 					</div>
 				</div>
 				<div class="layui-form-item">
+					<label class="layui-form-label">物料描述</label>
+					<div class="layui-input-inline" style="width:76%;">
+						<input type="text" class="layui-input" name="itemName" disabled
+							style="background: #efefef;" id="itemName">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">物料编号</label>
+					<div class="layui-input-inline" style="width:76%;">
+						<input type="text" class="layui-input" name="itemNo" disabled
+							style="background: #efefef;" id="itemNo">
+					</div>
+				</div>
+				<div class="layui-form-item">
 					<label class="layui-form-label">客户简称</label>
-					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="hourType" disabled
-							style="background: #efefef;"lay-verify="required" id="hourType">
+					<div class="layui-input-inline" style="width:26%;">
+						<input type="text" class="layui-input" name="custNameS" disabled
+							style="background: #efefef;" id="custNameS">
+					</div>
+					<label class="layui-form-label">线长</label>
+					<div class="layui-input-inline" style="width:26%;">
+						<input type="text" class="layui-input" name="linerName" disabled
+							style="background: #efefef;" id="linerName">
+					</div>
+				</div>						
+				<div class="layui-form-item">
+					<label class="layui-form-label">开始时间</label>
+					<div class="layui-input-inline" style="width:26%;">
+						<input type="text" class="layui-input" name="timeBegin" readonly="readonly"
+							lay-verify="required" id="timeBegin">
+					</div>
+					<label class="layui-form-label">结束时间</label>
+					<div class="layui-input-inline" style="width:26%;">
+						<input type="text" class="layui-input" name="timeEnd" readonly="readonly"
+							lay-verify="required" id="timeEnd">
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">生产日期</label>
-					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="workDate" disabled
-							style="background: #efefef;"lay-verify="required" id="workDate">
+					<label class="layui-form-label">时长(分钟)</label>
+					<div class="layui-input-inline" style="width:26%;">
+						<input class="layui-input" name="duration" disabled
+							style="background: #efefef;"lay-verify="required" id="duration">
 					</div>
-				</div>
-				<input id="lineId" type="hidden" name="lineId" />
-				<div class="layui-form-item">
-					<label class="layui-form-label">线体</label>
-					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="lineName" disabled
-							style="background: #efefef;"lay-verify="required" id="lineName">
+					<label class="layui-form-label">异常原因</label>
+					<div class="layui-input-inline" style="width:26%;">
+					<input type="text" class="layui-input" name="forReason" 
+					lay-verify="required" id="forReason">
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">卡点类型</label>
-					<div class="layui-input-inline">
-					<select id="cardType" name="cardType" lay-verify="required">
-							<option value="">请选择</option>
-							<option value="上线">上线</option>
-							<option value="下线">下线</option>
-						</select>
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">签卡日期</label>
-					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="signDate" readonly="readonly"
-							lay-verify="required" id="signDate">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">签卡时间</label>
-					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="signTime" readonly="readonly"
-							lay-verify="required" id="signTime">
+					<label class="layui-form-label">异常描述</label>
+					<div class="layui-input-inline" style="width:76%;">
+					<textarea id="description" name="description" lay-verify="required"
+						 class="layui-textarea"></textarea>
 					</div>
 				</div>
 				<div class="layui-form-item">

@@ -104,6 +104,7 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/layout", "anon");
 		
 		filterChainDefinitionMap.put("/kanban/toDemo", "anon");//看板demo
+		filterChainDefinitionMap.put("/produce/inspect/*", "anon");//品质检查-PDA
 
 		filterChainDefinitionMap.put("/user/sendMsg", "anon");
 		filterChainDefinitionMap.put("/user/login", "anon");

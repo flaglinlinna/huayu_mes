@@ -36,7 +36,7 @@ public interface SysUserDao extends CrudRepository<SysUser, Long>, JpaSpecificat
 //    @Query(value = " call p_production_plan_check(:inParam1,:inParam2,:inParam3,:inParam4)", nativeQuery = true)
 //    List<Map<String, Object>> pPlanCheck(@Param("inParam1") String calStart,@Param("inParam2") String calEnd,@Param("inParam3") String workshopcode,@Param("inParam4") String orderno);
 
-    @Query(value = "select s.fcode,s.fname,s.fpassword,s.fcompany,s.ffactory from sys_user s where  upper(s.fcode) =?1 ", nativeQuery = true)
+    @Query(value = "select s.ID,s.USER_CODE,s.USER_NAME,s.PASSWORD,s.COMPANY,s.FACTORY from sys_user s where  s.USER_CODE =?1 and DEL_FLAG='0'", nativeQuery = true)
     public List<Map<String, Object>> findByUserCode(String usercode);
 
     @Query(value = "select m.param_value pv from mes_sys_params m where m.param_code='AppVersion' ", nativeQuery = true)
@@ -50,7 +50,7 @@ public interface SysUserDao extends CrudRepository<SysUser, Long>, JpaSpecificat
 
     @Modifying
     @Transactional
-	@Query(value = "update sys_user i set i.fpassword=?2 where upper(i.fcode) =?1 ", nativeQuery = true)
+	@Query(value = "update sys_user i set i.fpassword=?2 where i.fcode =?1 ", nativeQuery = true)
 	public void updatePwsByUserCode(String usercode,String pwd);
     /**
      *  User.pluslIO自定义存储过程的名字

@@ -183,4 +183,24 @@ public class AbnormalHoursController extends WebController {
 			return ApiResponseResult.failure("获取指令单信息失败！");
 		}
 	}
+	
+	@ApiOperation(value = "获取指令单详细信息", notes = "获取指令单详细信息", hidden = true)
+	@RequestMapping(value = "/getTaskNoInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getTaskNoInfo(@RequestBody Map<String, Object> params) {
+		String method = "produce/abnormal/getTaskNoInfo";
+		String methodName = "获取指令单详细信息";
+		try {
+			String taskNo = params.get("taskNo") == null?"":params.get("taskNo").toString();
+			ApiResponseResult result = abnormalHoursService.getTaskNoInfo(taskNo);
+			logger.debug("获取指令单详细信息=getTaskNoInfo:");
+			getSysLogService().success(method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取指令单详细信息失败！", e);
+			getSysLogService().error(method, methodName, e.toString());
+			return ApiResponseResult.failure("获取指令单详细信息失败！");
+		}
+	}
 }
