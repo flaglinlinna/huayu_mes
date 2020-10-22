@@ -86,11 +86,10 @@ public class QualInspectlmpl  implements QualInspectService {
 	}
 	
 	@Override
-	public ApiResponseResult scanBarcode(String proc, String barcode) throws Exception {
+	public ApiResponseResult scanBarcode(String company,String factory,String user_id,
+			String proc, String barcode) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = scanBarcodePrc(UserUtil.getSessionUser().getCompany() + "",
-				UserUtil.getSessionUser().getFactory() + "",
-				UserUtil.getSessionUser().getId()+"",proc, barcode);
+		List<Object> list = scanBarcodePrc(company,factory,user_id,proc, barcode);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -140,19 +139,16 @@ public class QualInspectlmpl  implements QualInspectService {
 	}
 	
 	@Override
-	public ApiResponseResult getDepatrList(String keyword) throws Exception {
+	public ApiResponseResult getDepatrList(String factory,String company,String keyword) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getDepatrListPrc(UserUtil.getSessionUser().getCompany() + "",
-				UserUtil.getSessionUser().getFactory() + "",keyword);
+		List<Object> list = getDepatrListPrc(factory,company,keyword);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
 		return ApiResponseResult.success().data(list.get(2));
 	}
 	
-	public List getDepatrListPrc(String company, String factory,
-			String keyword)
-			throws Exception {
+	public List getDepatrListPrc( String factory,String company,String keyword)throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
@@ -193,10 +189,9 @@ public class QualInspectlmpl  implements QualInspectService {
 	}
 	
 	@Override
-	public ApiResponseResult getBadList(String keyword) throws Exception {
+	public ApiResponseResult getBadList(String company,String factory,String keyword) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getBadListPrc(UserUtil.getSessionUser().getCompany() + "",
-				UserUtil.getSessionUser().getFactory() + "",keyword);
+		List<Object> list = getBadListPrc(company,factory,keyword);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -244,12 +239,11 @@ public class QualInspectlmpl  implements QualInspectService {
 	}
 	
 	@Override
-	public ApiResponseResult saveData(String proc,String barcodeList,int checkTotal,int badTotal,
+	public ApiResponseResult saveData(String factory,String company,String user_id, String proc,String barcodeList,int checkTotal,int badTotal,
 			String chkResult,String departCode,String badList) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = saveDataPrc(UserUtil.getSessionUser().getCompany() + "",
-				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "",
-				proc, barcodeList, checkTotal,badTotal,chkResult,departCode,badList);
+		List<Object> list = saveDataPrc(company,factory,user_id,proc, barcodeList, 
+				checkTotal,badTotal,chkResult,departCode,badList);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

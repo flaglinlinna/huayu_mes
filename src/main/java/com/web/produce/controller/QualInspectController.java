@@ -52,7 +52,7 @@ public class QualInspectController extends WebController {
 	 * ApiResponseResult.failure("获取检验节点列表失败！"); } }
 	 */
 
-	@ApiOperation(value = "PDA-获取检验节点列表", notes = "PDA-获取检验节点列表")
+	@ApiOperation(value = "PDA-获取检验节点列表", notes = "PDA-获取检验节点列表", hidden = true)
 	@RequestMapping(value = "/getProcList", method = RequestMethod.POST, produces = "application/json")
 	public ApiResponseResult getProcList(@RequestParam(value = "company") String company,
 			@RequestParam(value = "factory") String factory,
@@ -72,72 +72,97 @@ public class QualInspectController extends WebController {
 		}
 	}
 
-	@ApiOperation(value = "扫描条码", notes = "扫描条码", hidden = true)
+	@ApiOperation(value = "PDA-扫描条码", notes = "PDA-扫描条码", hidden = true)
 	@RequestMapping(value = "/scanBarcode", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult scanBarcode(@RequestBody Map<String, Object> params) {
+	public ApiResponseResult scanBarcode(@RequestParam(value = "company") String company,
+			@RequestParam(value = "factory") String factory,
+			@RequestParam(value = "user_id") String user_id,
+			@RequestParam(value = "proc") String proc,
+			@RequestParam(value = "barcode") String barcode) {
 		String method = "produce/inspect/scanBarcode";
-		String methodName = "扫描条码";
+		String methodName = "PDA-扫描条码";
 		try {
-			String proc = params.get("proc").toString();
-			String barcode = params.get("barcode") == null ? "" : params.get("barcode").toString();
-
-			ApiResponseResult result = inspectService.scanBarcode(proc, barcode);
-			logger.debug("扫描条码=scanBarcode:");
+			ApiResponseResult result = inspectService.scanBarcode(company,factory,user_id,proc, barcode);
+			logger.debug("PDA-扫描条码=scanBarcode:");
 			getSysLogService().success(method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("扫描条码失败！", e);
+			logger.error("PDA-扫描条码失败！", e);
 			getSysLogService().error(method, methodName, e.toString());
-			return ApiResponseResult.failure("扫描条码失败！");
+			return ApiResponseResult.failure("PDA-扫描条码失败！");
 		}
 	}
 
-	@ApiOperation(value = "获取不良内容列表", notes = "获取不良内容列表", hidden = true)
+	@ApiOperation(value = "PDA-获取责任部门列表", notes = "PDA-获取责任部门列表", hidden = true)
+	@RequestMapping(value = "/getDepatrList", method = RequestMethod.POST, produces = "application/json")
+	public ApiResponseResult getDepatrList(@RequestParam(value = "company") String company,
+			@RequestParam(value = "factory") String factory,
+			@RequestParam(value = "keyword") String keyword) {
+		String method = "produce/inspect/getDepatrList";
+		String methodName = "PDA-获取责任部门列表";
+		try {
+			ApiResponseResult result = inspectService.getDepatrList(factory,company, keyword);
+			logger.debug("PDA-获取责任部门列表=getDepatrList:");
+			getSysLogService().success(method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("PDA-获取责任部门列表失败！", e);
+			getSysLogService().error(method, methodName, e.toString());
+			return ApiResponseResult.failure("PDA-获取责任部门列表失败！");
+		}
+	}
+	
+	
+	@ApiOperation(value = "PDA-获取不良内容列表", notes = "PDA-获取不良内容列表", hidden = true)
 	@RequestMapping(value = "/getBadList", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult getBadList(String keyword) {
+	public ApiResponseResult getBadList(@RequestParam(value = "company") String company,
+			@RequestParam(value = "factory") String factory,
+			@RequestParam(value = "keyword") String keyword) {
 		String method = "produce/inspect/getBadList";
-		String methodName = "获取不良内容列表";
+		String methodName = "PDA-获取不良内容列表";
 		try {
-			ApiResponseResult result = inspectService.getBadList(keyword);
-			logger.debug("获取不良内容列表=getBadList:");
+			ApiResponseResult result = inspectService.getBadList(company,factory,keyword);
+			logger.debug("PDA-获取不良内容列表=getBadList:");
 			getSysLogService().success(method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("获取不良内容列表失败！", e);
+			logger.error("PDA-获取不良内容列表失败！", e);
 			getSysLogService().error(method, methodName, e.toString());
-			return ApiResponseResult.failure("获取不良内容列表失败！");
+			return ApiResponseResult.failure("PDA-获取不良内容列表失败！");
 		}
 	}
 
-	@ApiOperation(value = "保存PDA品质检查数据", notes = "保存PDA品质检查数据", hidden = true)
+	@ApiOperation(value = "PDA-保存PDA品质检查数据", notes = "PDA-保存PDA品质检查数据", hidden = true)
 	@RequestMapping(value = "/saveData", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult saveData(@RequestBody Map<String, Object> params) {
+	public ApiResponseResult saveData(@RequestParam(value = "factory") String factory,
+			@RequestParam(value = "company") String company,
+			@RequestParam(value = "user_id") String user_id,
+			@RequestParam(value = "proc") String proc,
+			@RequestParam(value = "barcodeList") String barcodeList,
+			@RequestParam(value = "checkTotal") int checkTotal,
+			@RequestParam(value = "badTotal") int badTotal,
+			@RequestParam(value = "chkResult") String chkResult,
+			@RequestParam(value = "departCode") String departCode,
+			@RequestParam(value = "badList") String badList) {
 		String method = "produce/inspect/saveData";
-		String methodName = "保存PDA品质检查数据";
+		String methodName = "PDA-保存PDA品质检查数据";
 		try {
-			String proc = params.get("proc") == null ? "" : params.get("proc").toString();
-			String barcodeList = params.get("barcodeList") == null ? "" : params.get("barcodeList").toString();
-			int checkTotal = params.get("checkTotal") == null ? 0 : (int) params.get("checkTotal");
-			int badTotal = params.get("badTotal") == null ? 0 : (int) params.get("badTotal");
-			String chkResult = params.get("chkResult") == null ? "" : params.get("chkResult").toString();
-			String departCode = params.get("departCode") == null ? "" : params.get("departCode").toString();
-			String badList = params.get("badList") == null ? "" : params.get("badList").toString();
-
-			ApiResponseResult result = inspectService.saveData(proc, barcodeList, checkTotal, badTotal, chkResult,
-					departCode, badList);
-			logger.debug("保存PDA品质检查数据=saveData:");
+			ApiResponseResult result = inspectService.saveData(factory,company,user_id, proc, 
+					barcodeList, checkTotal, badTotal, chkResult,departCode, badList);
+			logger.debug("PDA-保存PDA品质检查数据=saveData:");
 			getSysLogService().success(method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("保存PDA品质检查数据失败！", e);
+			logger.error("PDA-保存PDA品质检查数据失败！", e);
 			getSysLogService().error(method, methodName, e.toString());
-			return ApiResponseResult.failure("保存PDA品质检查数据失败！");
+			return ApiResponseResult.failure("PDA-保存PDA品质检查数据失败！");
 		}
 	}
 }
