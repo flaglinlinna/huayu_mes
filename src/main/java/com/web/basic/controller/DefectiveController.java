@@ -30,25 +30,25 @@ public class DefectiveController extends WebController{
 
 	 @Autowired
 	 private DefectiveService defectiveService;
-	 
+
 	 @ApiOperation(value = "不良类别表结构", notes = "不良类别表结构"+Defective.TABLE_NAME)
 	    @RequestMapping(value = "/getDefective", method = RequestMethod.GET)
 		@ResponseBody
 	    public Defective getDefective(){
 	        return new Defective();
 	    }
-	 
-	 
+
+
 	 @ApiOperation(value = "不良类别列表页", notes = "不良类别列表页", hidden = true)
 	    @RequestMapping(value = "/toDefective")
 	    public String toDefective(){
-	        return "/web/basic/defect";
+	        return "/web/basic/SysDefect";
 	    }
 	    @ApiOperation(value = "获取不良类别列表", notes = "获取不良类别列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword) {
-	        String method = "base/defect/getList";String methodName ="获取不良类别列表";
+	        String method = "base/SysDefect/getList";String methodName ="获取不良类别列表";
 	        try {
 	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -63,13 +63,13 @@ public class DefectiveController extends WebController{
 	            return ApiResponseResult.failure("获取不良类别列表失败！");
 	        }
 	    }
-	    
-	    
+
+
 	    @ApiOperation(value = "新增不良类别", notes = "新增不良类别", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody Defective defect) {
-	        String method = "base/defect/add";String methodName ="新增不良类别";
+	        String method = "base/SysDefect/add";String methodName ="新增不良类别";
 	        try{
 	            ApiResponseResult result = defectiveService.add(defect);
 	            logger.debug("新增不良类别=add:");
@@ -82,12 +82,12 @@ public class DefectiveController extends WebController{
 	            return ApiResponseResult.failure("不良类别新增失败！");
 	        }
 	    }
-	    
+
 	    @ApiOperation(value = "编辑不良类别", notes = "编辑不良类别", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody Defective defect){
-	        String method = "base/defect/edit";String methodName ="编辑不良类别";
+	        String method = "base/SysDefect/edit";String methodName ="编辑不良类别";
 	        try{
 	            ApiResponseResult result = defectiveService.edit(defect);
 	            logger.debug("编辑不良类别=edit:");
@@ -104,7 +104,7 @@ public class DefectiveController extends WebController{
 	    @RequestMapping(value = "/getDefective", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult getDefective(@RequestBody Map<String, Object> params){
-	        String method = "base/defect/getDefective";String methodName ="根据ID获取不良类别";
+	        String method = "base/SysDefect/getDefective";String methodName ="根据ID获取不良类别";
 	        long id = Long.parseLong(params.get("id").toString()) ;
 	        try{
 	            ApiResponseResult result = defectiveService.getDefective(id);
@@ -118,12 +118,12 @@ public class DefectiveController extends WebController{
 	            return ApiResponseResult.failure("获取不良类别失败！");
 	        }
 	    }
-		
+
 		@ApiOperation(value = "删除不良类别", notes = "删除不良类别", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
-	        String method = "base/defect/delete";String methodName ="删除不良类别";
+	        String method = "base/SysDefect/delete";String methodName ="删除不良类别";
 	        try{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = defectiveService.delete(id);
@@ -137,13 +137,13 @@ public class DefectiveController extends WebController{
 	            return ApiResponseResult.failure("删除不良类别失败！");
 	        }
 	    }
-		
+
 		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用", hidden = true)
 		    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{
 			 //Long id, Integer deStatus
-		        String method = "base/defect/doStatus";String methodName ="设置正常/禁用";
+		        String method = "base/SysDefect/doStatus";String methodName ="设置正常/禁用";
 		        try{
 		        	long id = Long.parseLong(params.get("id").toString()) ;
 		        	Integer bsStatus=Integer.parseInt(params.get("checkStatus").toString());
