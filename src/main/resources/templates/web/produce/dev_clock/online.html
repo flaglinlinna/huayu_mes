@@ -41,8 +41,47 @@
 			<form id="onlineForm" class="layui-form layui-form-pane"
 				lay-filter="onlineForm" method="post" action=""
 				style="margin-top: 1px;">
+				<!-- 主表数据 -->
+				<input id="id" type="hidden" name="id" /> <input id="lineId"
+					type="hidden" name="lineId" />
 				<div class="layui-form-item">
-					<!-- 主表数据 -->
+					<label class="layui-form-label">制令单号</label>
+					<div class="layui-input-inline" style="width: 330px;'">
+						<input id="taskNo" name="taskNo" lay-verify="required"
+							style="background: #efefef;" autocomplete="off" disabled
+							class="layui-input" type="text" />
+					</div>
+					<label class="layui-form-label">线体</label>
+					<div class="layui-input-inline">
+						<input id="lineName" name="lineName" lay-verify="required"
+							style="background: #efefef;" autocomplete="off" disabled
+							class="layui-input" type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">工时类型</label>
+					<div class="layui-input-inline" style="width:110px;">
+						<select id="hourType" name="hourType" lay-verify="required">
+							<option value="">请选择</option>
+							<option value="正常班">正常班</option>
+							<option value="平时加班">平时加班</option>
+							<option value="周末加班">周末加班</option>
+							<option value="法定加班">法定加班</option>
+						</select>
+					</div>
+					<label class="layui-form-label">班次</label>
+					<div class="layui-input-inline" style="width:100px;">
+						<select id="classId" name="classId" lay-verify="required">
+							
+						</select>
+					</div>
+					<label class="layui-form-label">生产日期</label>
+					<div class="layui-input-inline">
+						<input id="workDate" name="workDate" lay-verify="required" autocomplete="off" 
+							class="layui-input" type="text" />
+					</div>
+					<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="sumbitMain">保存</button>
 				</div>
 			</form>
 			<div class="layui-row" style="margin-top: 5px;">

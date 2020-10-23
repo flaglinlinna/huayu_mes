@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.basic.entity.Employee;
+import com.web.basic.entity.Line;
 import com.web.produce.dao.OnlineStaffDao;
 import com.web.produce.entity.CardData;
 import com.web.produce.entity.DevClock;
@@ -83,6 +86,20 @@ public class OnlineStafflmpl implements OnlineStaffService {
 	}
 	
 	/**
+	 * 获取班次
+	 * 
+	 * @param 
+	 * @return
+	 * @throws Exception
+	 */
+	public ApiResponseResult getClassList()throws Exception{
+		
+		List<Map<String, Object>> list = onlineStaffDao.queryClass();
+		return ApiResponseResult.success().data(list);
+	}
+	
+	
+	/**
 	 * 根据ID获取
 	 * 
 	 * @param id
@@ -100,6 +117,119 @@ public class OnlineStafflmpl implements OnlineStaffService {
 			return ApiResponseResult.failure("该上线记录不存在！");
 		}
 		return ApiResponseResult.success().data(o);
+	}
+	
+	@Override
+	public ApiResponseResult editMain(OnlineStaff onlineStaff) throws Exception {
+		// TODO Auto-generated method stub
+		
+		OnlineStaff o = onlineStaffDao.findById((long) onlineStaff.getId());
+	       
+	        o.setLastupdateDate(new Date());
+	        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+	        o.setHourType(onlineStaff.getHourType());
+	        o.setClassId(onlineStaff.getClassId());
+	        o.setWorkDate(onlineStaff.getWorkDate());
+	        onlineStaffDao.save(o);
+	        return ApiResponseResult.success("编辑成功！");
+	}
+	
+	
+	@Override
+	public ApiResponseResult deleteVice(String taskNo,Long devId,Long empId,String beginTime) throws Exception {
+		List<Object> list = deleteVicePrc(UserUtil.getSessionUser().getCompany() + "",
+				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "",
+				taskNo,devId,empId,beginTime);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success();
+	}
+	
+	public List deleteVicePrc(String company, String facoty, String user_id,
+			String taskNo,Long devId,Long empId,String beginTime)
+			throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  PRC_MES_COF_AFFIRM_EMP_DEL(?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, company);
+				cs.setString(2, facoty);
+				cs.setString(3, user_id);
+				cs.setString(4, taskNo);
+				cs.setLong(5, devId);
+				cs.setLong(6, empId);
+				cs.setString(7,beginTime);
+				cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				cs.execute();
+				result.add(cs.getInt(8));
+				result.add(cs.getString(9));
+				return result;
+			}
+		});
+		return resultList;
+	}
+	
+	/**
+	 * 删除主表数据
+	 */
+	@Override
+	@Transactional
+	public ApiResponseResult deleteMain(Long id) throws Exception {
+		List<Object> list = deleteMainPrc(UserUtil.getSessionUser().getCompany() + "",
+				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "",
+				id);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success().data(list.get(2));
+	}
+	
+	public List deleteMainPrc(String company, String facoty, String user_id,Long  main_id)
+			throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  PRC_MES_COF_AFFIRM_DEL(?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, company);
+				cs.setString(2, facoty);
+				cs.setString(3, user_id);
+				cs.setLong(4, main_id);
+				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(7, -10);// 输出参数 追溯数据
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				List<Map<String, Object>> l = new ArrayList();
+				cs.execute();
+				result.add(cs.getInt(5));
+				result.add(cs.getString(6));
+				if (cs.getString(5).toString().equals("0")) {
+					// 游标处理
+					ResultSet rs = (ResultSet) cs.getObject(7);
+					try {
+						l = fitMap(rs);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(l);
+				}
+				return result;
+			}
+		});
+		return resultList;
 	}
 	
 	@Override
@@ -140,7 +270,6 @@ public class OnlineStafflmpl implements OnlineStaffService {
 				if (cs.getString(5).toString().equals("0")) {
 					// 游标处理
 					ResultSet rs = (ResultSet) cs.getObject(7);
-
 					try {
 						l = fitMap(rs);
 					} catch (Exception e) {

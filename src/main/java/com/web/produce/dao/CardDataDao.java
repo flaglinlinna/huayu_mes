@@ -18,7 +18,7 @@ public interface CardDataDao extends CrudRepository<CardData, Long>,JpaSpecifica
 	
 	public List<CardData> findByDelFlag(Integer delFlag);
 	
-	public List<CardData> findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTime(Integer delFlag,Long emppId,Long devClockId,String carDate,String cardTime);
+	public List<CardData> findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTimeAndFstatus(Integer delFlag,Long emppId,Long devClockId,String carDate,String cardTime,Integer fstatus);
 	
 	public CardData findById(long id);
 	

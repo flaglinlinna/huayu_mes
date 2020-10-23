@@ -104,8 +104,8 @@ public class CardDatalmpl implements CardDataService {
 			return ApiResponseResult.failure("卡点记录不能为空！");
 		}
 		
-		List<CardData> cc = cardDataDao.findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTime(0, cardData.getEmpId(), cardData.getDevClockId(),
-				cardData.getCardDate(), cardData.getCardTime());
+		List<CardData> cc = cardDataDao.findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTimeAndFstatus(0, cardData.getEmpId(), cardData.getDevClockId(),
+				cardData.getCardDate(), cardData.getCardTime(),1);
         if(cc.size()>0){
         	return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
         }
@@ -240,8 +240,8 @@ public class CardDatalmpl implements CardDataService {
                 	String carDate=sdf1.format(sdf1.parse(d));//LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     String cardTime=sdf2.format(sdf2.parse(t));//LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
-                    List<CardData> cc = cardDataDao.findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTime(0, le.get(0).getId(), devClock.getId(),
-                    		carDate, cardTime);
+                    List<CardData> cc = cardDataDao.findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTimeAndFstatus(0, le.get(0).getId(), devClock.getId(),
+                    		carDate, cardTime,1);
                     if(cc.size()>0){
                     	continue ;
                     }
