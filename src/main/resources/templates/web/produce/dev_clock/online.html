@@ -42,22 +42,18 @@
 				lay-filter="onlineForm" method="post" action=""
 				style="margin-top: 1px;">
 				<div class="layui-form-item">
-					<div class="layui-input-block" style="margin-left: 1px;">
-						<button class="layui-btn layui-btn-sm layui-btn-normal"
-							lay-submit="" id="btn" lay-filter="addSubmit">指纹下发</button>
-					</div>
+					<!-- 主表数据 -->
 				</div>
 			</form>
-			<div class="layui-row layui-col-space5" style="margin-top: -15px;">
-
-					<fieldset class="layui-elem-field layui-field-title">
-						<legend style="font-size: 15px;">员工列表</legend>
-					</fieldset>
-					<form id="empSearch" class="layui-form layui-form-pane"
+			<div class="layui-row" style="margin-top: 5px;">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend style="font-size: 15px;">上线人员列表</legend>
+				</fieldset>
+				<!--  <form id="empSearch" class="layui-form layui-form-pane"
 						method="post" action="" style="margin-top: 0px; margin-left: 0px;">
 						<div class="layui-form-item" style="margin-bottom: 0px">
 							<div class="layui-inline">
-								<label class="layui-form-label" style="width: 150px;">员工信息查询:</label>
+								<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
 								<div class="layui-input-inline">
 									<input id="empKeyword" name="empKeyword" autocomplete="off"
 										class="layui-input" type="text" />
@@ -70,8 +66,11 @@
 									lay-filter="searchEmp">查询</button>
 							</div>
 						</div>
-					</form>
-					<table id="empList" lay-filter="empTable" style="margin-top: -5px;"></table>		
+					</form>-->
+				<table id="empList" lay-filter="empTable" style="margin-top: -5px;"></table>
+				<script type="text/html" id="optBar1">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
 			</div>
 		</div>
 		<script th:src="@{/js/web/produce/dev_clock/online.js}"

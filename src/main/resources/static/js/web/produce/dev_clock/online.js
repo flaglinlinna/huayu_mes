@@ -3,147 +3,214 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table','laydate'], function() {
-		var table = layui.table, form = layui.form, laydate = layui.laydate;
+	layui
+			.use(
+					[ 'form', 'table', 'laydate' ],
+					function() {
+						var table = layui.table, form = layui.form, laydate = layui.laydate;
 
-		tableIns = table.render({
-			elem : '#onlineList',
-			url : context + 'produce/online/getList',
-			method : 'get', // 默认：get请求
-			cellMinWidth : 80,
-			page : true,
-			request : {
-				pageName : 'page' ,// 页码的参数名称，默认：page
-				limitName : 'rows', // 每页数据量的参数名，默认：limit
-			},
-			parseData : function(res) {
-				// 可进行数据操作
-				return {
-					"count" : res.data.total,
-					"msg" : res.msg,
-					"data" : res.data.rows,
-					"code" : res.status
-				// code值为200表示成功
-				}
-			},
-			cols : [ [ {
-				type : 'numbers'
-			}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
-				field : 'taskNo',
-				title : '制令单号'
-			},{
-				field : 'hourType',
-				title : '工时类型',
-				width:100
-			}, {
-				field : 'lineName',
-				title : '线体',
-				width:150
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间',
-				width:180,
-				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
-			}, {
-				field : 'createDate',
-				title : '创建时间',
-				width:180,
-				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
-			} , {
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar',
-				width: 150
-			} ] ],
-			done : function(res, curr, count) {
-				// 如果是异步请求数据方式，res即为你接口返回的信息。
-				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-				pageCurr = curr;
-			}
-		});
-		// 监听工具条
-		table.on('tool(onlineTable)', function(obj) {
-			var data = obj.data;
-			if (obj.event === 'del') {
-				// 删除
-				//delOnlineStaff(data, data.id, data.taskNo);
-			} else if (obj.event === 'edit') {
-				// 编辑
-				getOnlineStaff(data, data.id);
-				
-			}
-		});
-		
-		// 监听搜索框
-		form.on('submit(searchSubmit)', function(data) {
-			// 重新加载table
-			load(data);
-			return false;
-		});
-		
-		// 监听提交
-		form.on('submit(addSubmit)', function(data) {
-			if (data.field.id == null || data.field.id == "") {
-				// 新增
-				addSubmit(data);
-			} else {
-				editSubmit(data);
-			}
-			return false;
-		});
-		
-		// 编辑上线人员信息
-		function getOnlineStaff(obj, id) {
-			var param = {
-				"id" : id
-			};
-			CoreUtil.sendAjax("produce/online/getMain", JSON
-					.stringify(param), function(data) {
-				if (data.result) {
-					console.log(data)
-//					form.val("devForm", {
-//						"id" : data.data.id
-//					});
-					getMainInfo(id);
-					//openDevClock(id, "编辑卡机信息")
-				} else {
-					layer.alert(data.msg)
-				}
-			}, "POST", false, function(res) {
-				layer.alert("操作请求错误，请您稍后再试");
-			});
-		}
-		// 编辑上线人员信息
-		function getMainInfo(id) {
-			var param = {
-				"id" : id
-			};
-			CoreUtil.sendAjax("produce/online/getMainInfo", JSON
-					.stringify(param), function(data) {
-				if (data.result) {
-					console.log(data)
-//					form.val("devForm", {
-//						"id" : data.data.id
-//					});		
-				} else {
-					layer.alert(data.msg)
-				}
-			}, "POST", false, function(res) {
-				layer.alert("操作请求错误，请您稍后再试");
-			});
-		}
-		
-	});
+						tableIns = table
+								.render({
+									elem : '#onlineList',
+									url : context + 'produce/online/getList',
+									method : 'get', // 默认：get请求
+									cellMinWidth : 80,
+									page : true,
+									request : {
+										pageName : 'page',// 页码的参数名称，默认：page
+										limitName : 'rows', // 每页数据量的参数名，默认：limit
+									},
+									parseData : function(res) {
+										// 可进行数据操作
+										return {
+											"count" : res.data.total,
+											"msg" : res.msg,
+											"data" : res.data.rows,
+											"code" : res.status
+										// code值为200表示成功
+										}
+									},
+									cols : [ [
+											{
+												type : 'numbers'
+											}
+											// ,{field:'id', title:'ID',
+											// width:80, unresize:true,
+											// sort:true}
+											,
+											{
+												field : 'taskNo',
+												title : '制令单号'
+											},
+											{
+												field : 'hourType',
+												title : '工时类型',
+												width : 100
+											},
+											{
+												field : 'lineName',
+												title : '线体',
+												width : 150
+											},
+											{
+												field : 'lastupdateDate',
+												title : '更新时间',
+												width : 180,
+												templet : '<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
+											},
+											{
+												field : 'createDate',
+												title : '创建时间',
+												width : 180,
+												templet : '<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
+											}, {
+												fixed : 'right',
+												title : '操作',
+												align : 'center',
+												toolbar : '#optBar',
+												width : 150
+											} ] ],
+									done : function(res, curr, count) {
+										// 如果是异步请求数据方式，res即为你接口返回的信息。
+										// 如果是直接赋值的方式，res即为：{data: [], count:
+										// 99} data为当前页数据、count为数据总长度
+										pageCurr = curr;
+									}
+								});
+						tableEmp = table.render({
+							elem : '#empList',
+							method : 'post',// 默认：get请求
+							page : true,
+							request : {
+								pageName : 'page',// 页码的参数名称，默认：page
+								limitName : 'rows' // 每页数据量的参数名，默认：limit
+							},
+							parseData : function(res) {
+								// 可进行数据操作
+								return {
+									"count" : res.data.total,
+									"msg" : res.msg,
+									"data" : res.data.rows,
+									"code" : res.status
+								// code值为200表示成功
+								}
+							},
+							cols : [ [ {
+								type : 'numbers'
+							},{
+								field : 'EMP_CODE',
+								title : '员工工号',
+								width:150
+							}, {
+								field : 'EMP_NAME',
+								title : '员工姓名',
+								width:150
+							}, {
+								field : 'DEV_IP',
+								title : '设备IP',
+								width:150
+							}, {
+								field : 'TIME_BEGIN',
+								title : '开始时间',
+								width:200
+							}, {
+								field : 'TIME_END',
+								title : '结束时间',
+								width:200
+							}, {
+																title : '操作',
+								align : 'center',
+								toolbar : '#optBar1',
+								width:200
+							}  ] ],
+							data : []
+						});
+						// 监听工具条
+						table.on('tool(onlineTable)', function(obj) {
+							var data = obj.data;
+							if (obj.event === 'del') {
+								// 删除
+								// delOnlineStaff(data, data.id, data.taskNo);
+							} else if (obj.event === 'edit') {
+								// 编辑
+								getOnlineStaff(data, data.id);
+
+							}
+						});
+
+						// 监听搜索框
+						form.on('submit(searchSubmit)', function(data) {
+							// 重新加载table
+							load(data);
+							return false;
+						});
+
+						// 监听提交
+						form.on('submit(addSubmit)', function(data) {
+							if (data.field.id == null || data.field.id == "") {
+								// 新增
+								addSubmit(data);
+							} else {
+								editSubmit(data);
+							}
+							return false;
+						});
+
+						// 编辑上线人员信息
+						function getOnlineStaff(obj, id) {
+							var param = {
+								"id" : id
+							};
+							CoreUtil.sendAjax("produce/online/getMain", JSON
+									.stringify(param), function(data) {
+								if (data.result) {
+									console.log(data)
+									// form.val("devForm", {
+									// "id" : data.data.id
+									// });
+									getMainInfo(id);
+
+								} else {
+									layer.alert(data.msg)
+								}
+							}, "POST", false, function(res) {
+								layer.alert("操作请求错误，请您稍后再试");
+							});
+						}
+						// 编辑上线人员信息
+						function getMainInfo(id) {
+							var param = {
+								"id" : id
+							};
+							CoreUtil.sendAjax("produce/online/getMainInfo",
+									JSON.stringify(param), function(data) {
+										if (data.result) {
+											console.log(data)
+
+											tableEmp.reload({
+												data : data.data,
+												done : function(res, curr,
+														count) {
+													pageCurr = curr;
+												}
+											})
+											openOnlineStaff(id, "编辑上线人员信息")
+										} else {
+											layer.alert(data.msg)
+										}
+									}, "POST", false, function(res) {
+										layer.alert("操作请求错误，请您稍后再试");
+									});
+						}
+
+					});
 });
 // 新增编辑弹出框
 function openOnlineStaff(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	
+
 	var index = layer.open({
 		type : 1,
 		title : title,
@@ -159,7 +226,7 @@ function openOnlineStaff(id, title) {
 	});
 	layer.full(index);// 弹出框全屏
 }
-//重新加载表格（搜索）
+// 重新加载表格（搜索）
 function load(obj) {
 	console.log(obj)
 	// 重新加载table
@@ -173,17 +240,15 @@ function load(obj) {
 		}
 	});
 }
-//// 添加上线人员信息
-//function addOnlineStaff() {
-//	// 清空弹出框数据
-//	cleanOnlineStaff();
-//	getEmp();
-//	getDev();
-//	// 打开弹出框
-//	openOnlineStaff(null, "添加上线人员信息");
-//}
-
-
+// // 添加上线人员信息
+// function addOnlineStaff() {
+// // 清空弹出框数据
+// cleanOnlineStaff();
+// getEmp();
+// getDev();
+// // 打开弹出框
+// openOnlineStaff(null, "添加上线人员信息");
+// }
 
 // 重新加载表格（全部）
 function loadAll() {
