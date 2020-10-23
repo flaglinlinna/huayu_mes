@@ -148,10 +148,11 @@ public class OnlineStaffController extends WebController{
 	        String method = "produce/online/deleteVice";String methodName ="删除副表记录";
 	        try{
 	        	String taskNo=params.get("taskNo")==null?"":params.get("taskNo").toString();
-	        	Long devId=Long.parseLong(params.get("devId").toString()) ;
-	        	Long empId=Long.parseLong(params.get("empId").toString()) ;
+	        	String devId=params.get("devId")==null?"":params.get("devId").toString();
+	        	String empId=params.get("empId")==null?"":params.get("empId").toString();
+	        	String viceId=params.get("viceId")==null?"":params.get("viceId").toString();
 	        	String beginTime=params.get("beginTime")==null?"":params.get("beginTime").toString();
-	            ApiResponseResult result = onlineStaffService.deleteVice(taskNo,devId, empId,beginTime);
+	            ApiResponseResult result = onlineStaffService.deleteVice(taskNo,devId, empId,viceId,beginTime);
 	            logger.debug("删除副表记录=deleteVice:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;

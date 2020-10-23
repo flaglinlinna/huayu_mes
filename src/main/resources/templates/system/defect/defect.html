@@ -60,49 +60,37 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">优先级</label>
                 <div class="layui-input-inline">
-                    <input id="priority" name="priority" autocomplete="off" class="layui-input" type="text"/>
+                 <select id="priority" name="priority" lay-verify="required">
+							<option value="">请选择</option>
+							<option value="3">低</option>
+							<option value="2">中</option>
+							<option value="1">高</option>
+						</select>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">状态</label>
                 <div class="layui-input-inline">
-                    <input id="status" name="status" autocomplete="off" class="layui-input" type="text"/>
+                <select id="status" name="status" lay-verify="required">
+							<option value="">请选择</option>
+							<option value="新建">新建</option>
+							<option value="已修复">已修复</option>
+							<option value="关闭">关闭</option>
+							<option value="完成">完成</option>
+						</select>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">问题描述</label>
-                <div class="layui-input-inline">
-                    <input id="descript" name="descript" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">提出人</label>
-                <div class="layui-input-inline">
-                    <input id="offerName" name="offerName" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">提出日期</label>
-                <div class="layui-input-inline">
-                    <input id="offerDate" name="offerDate" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">处理人</label>
-                <div class="layui-input-inline">
-                    <input id="handlerName" name="handlerName" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">解决日期</label>
-                <div class="layui-input-inline">
-                    <input id="handlerDate" name="handlerDate" autocomplete="off" class="layui-input" type="text"/>
+                <div class="layui-input-inline" style="width:70%;">
+               <textarea id="descript" name="descript" 
+						 class="layui-textarea"></textarea> 
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">备注</label>
-                <div class="layui-input-inline">
-                    <input id="remark" name="remark" autocomplete="off" class="layui-input" type="text"/>
+                <div class="layui-input-inline" style="width:70%;">
+               <textarea id="remark" name="remark"  class="layui-textarea"></textarea> 
                 </div>
             </div>
 

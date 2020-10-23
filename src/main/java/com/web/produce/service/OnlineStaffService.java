@@ -9,7 +9,7 @@ public interface OnlineStaffService {
 	
 	public ApiResponseResult editMain(OnlineStaff onlineStaff)throws Exception;//修改主表
 	
-	public ApiResponseResult deleteVice(String taskNo,Long devId,Long empId,String beginTime)throws Exception;//删除从表数据
+	public ApiResponseResult deleteVice(String taskNo,String devId,String empId,String viceId,String beginTime)throws Exception;//删除从表数据
 	
 	public ApiResponseResult deleteMain(Long id)throws Exception;//删除主表数据
 	

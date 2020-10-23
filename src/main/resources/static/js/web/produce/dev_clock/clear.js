@@ -2,6 +2,7 @@
  * 指纹清除管理
  */
 var pageCurr;
+
 $(function() {
 	layui.use([ 'form', 'table' ], function() {
 		var table = layui.table, form = layui.form;
@@ -12,6 +13,7 @@ $(function() {
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
+			//where:{ptype:ptype},
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -19,6 +21,7 @@ $(function() {
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
+				console.log(res)
 				// 可进行数据操作
 				return {
 					"count" : res.data.total,
@@ -55,6 +58,7 @@ $(function() {
 				width : 100
 			} ] ],
 			done : function(res, curr, count) {
+				console.log(res)
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
 				// console.log(res);

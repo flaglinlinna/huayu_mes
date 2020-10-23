@@ -41,7 +41,9 @@ public class SysDefectImpl implements SysDefectService {
             return ApiResponseResult.failure("缺陷记录不能为空！");
         }
         SysUser currUser = UserUtil.getSessionUser();
-
+        
+        sysDefect.setOfferName(currUser!=null ? currUser.getUserName() : null);
+        sysDefect.setOfferDate(new Date());
         sysDefect.setCreateDate(new Date());
         sysDefect.setCreateBy(currUser!=null ? currUser.getId() : null);
         sysDefectDao.save(sysDefect);
@@ -67,10 +69,10 @@ public class SysDefectImpl implements SysDefectService {
         o.setPriority(sysDefect.getPriority());
         o.setStatus(sysDefect.getStatus());
         o.setDescript(sysDefect.getDescript());
-        o.setOfferName(sysDefect.getOfferName());
-        o.setOfferDate(sysDefect.getOfferDate());
-        o.setHandlerName(sysDefect.getHandlerName());
-        o.setHandlerDate(sysDefect.getHandlerDate());
+        
+        o.setHandlerName(currUser!=null ? currUser.getUserName() : null);
+        o.setHandlerDate(new Date());
+        
         o.setRemark(sysDefect.getRemark());
         sysDefectDao.save(o);
 

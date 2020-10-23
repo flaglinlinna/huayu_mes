@@ -31,15 +31,23 @@ $(function() {
             cols: [[
                 {type:'numbers'}
                 ,{field:'moduleName', title:'模块名称', width:120}
-                ,{field:'priority', title:'优先级', width:100}
-                ,{field:'status', title:'状态', width:100}
-                ,{field:'descript', title:'问题描述', width:180}
-                ,{field:'offerName', title: '提出人', width:120}
-                ,{field:'offerDate', title: '提出日期', width:120}
-                ,{field:'handlerName', title:'处理人',width:120}
+                ,{field:'priority', title:'优先级', width:80,templet:function (d){	
+                	if(d.priority=="1"){
+                		return "高"
+                	}else if(d.priority=="2"){
+                		return "中"
+                	}else if(d.priority=="3"){
+                		return "低"
+                	}
+                }}
+                ,{field:'status', title:'状态', width:80}
+                ,{field:'descript', title:'问题描述', width:450}
+                ,{field:'offerName', title: '提出人', width:100}
+                ,{field:'offerDate', title: '提出日期', width:100}
+                ,{field:'handlerName', title:'处理人',width:100}
                 ,{field:'handlerDate', title: '解决日期', minWidth:120}
                 ,{field:'remark', title: '备注', width:150}
-                ,{fixed:'right', title:'操作',width:200,align:'center', toolbar:'#optBar'}
+                ,{fixed:'right', title:'操作',width:120,align:'center', toolbar:'#optBar'}
             ]]
             ,  done: function(res, curr, count){
                 //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -58,11 +66,19 @@ $(function() {
             var data = obj.data;
             if(obj.event === 'del'){
                 //删除
+            	del(data)
             } else if(obj.event === 'edit'){
                 //编辑
                 edit(data);
             }
         });
+        //校验
+        form.verify({
+			  intValue: [
+			   /^\+?[1-9][0-9]*$/
+			    ,'此项数据应大于0且不含小数点'
+			  ] 
+			}); 
         //监听提交
         form.on('submit(add)', function(data){
             debugger;
@@ -155,6 +171,36 @@ function edit(obj){
     $("#handlerDate").val(obj.handlerDate);
     $("#remark").val(obj.remark);
     openAdd(obj.id,"编辑");
+}
+
+function del(obj){
+	layer.confirm('您确定要删除吗？', {
+			btn : [ '确认', '返回' ]
+		// 按钮
+		}, function() {
+			$.ajax({
+		        type: "POST",
+		        data: {"id" : obj.id},
+		        url: context+"/sysDefect/delete",
+		        success: function (res) {
+		            if (res.result == true) {
+		                layer.alert("操作成功",function(){
+		                    layer.closeAll();
+		                    loadAll();
+		                });
+		            } else {
+		                layer.alert(res.msg,function(){
+		                    layer.closeAll();
+		                });
+		            }
+		        },
+		        error: function () {
+		            layer.alert("操作请求错误，请您稍后再试",function(){
+		                layer.closeAll();
+		            });
+		        }
+		    });
+		});
 }
 function doEdit(obj){
     $.ajax({
