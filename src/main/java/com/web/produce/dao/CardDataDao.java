@@ -20,6 +20,8 @@ public interface CardDataDao extends CrudRepository<CardData, Long>,JpaSpecifica
 	
 	public List<CardData> findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTimeAndFstatus(Integer delFlag,Long emppId,Long devClockId,String carDate,String cardTime,Integer fstatus);
 	
+	public List<CardData> findByDelFlagAndEmpIdAndDevClockIdAndCardDateAndCardTime(Integer delFlag,Long emppId,Long devClockId,String carDate,String cardTime);
+	
 	public CardData findById(long id);
 	
 	@Query(value = "select c.class_no,c.id,c.class_name from MES_BASE_CLASS_TYPE c where c.del_flag=0 ", nativeQuery = true)
