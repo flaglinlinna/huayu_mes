@@ -4,12 +4,12 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 import com.app.base.data.ApiResponseResult;
-import com.zkteco.biometric.FingerprintSensorErrorCode;
-import com.zkteco.biometric.FingerprintSensorEx;
+/*import com.zkteco.biometric.FingerprintSensorErrorCode;
+import com.zkteco.biometric.FingerprintSensorEx;*/
 
 public class ZKFPUtil2 {
 	
-	//the width of fingerprint image
+	/*//the width of fingerprint image
 	int fpWidth = 0;
 	//the height of fingerprint image
 	int fpHeight = 0;
@@ -406,5 +406,5 @@ public class ZKFPUtil2 {
 		
 		public static void main(String[] args) {
 			
-		}
+		}*/
 }

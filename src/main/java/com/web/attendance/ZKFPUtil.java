@@ -13,11 +13,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-import com.zkteco.biometric.FingerprintSensorErrorCode;
-import com.zkteco.biometric.FingerprintSensorEx;
+/*import com.zkteco.biometric.FingerprintSensorErrorCode;
+import com.zkteco.biometric.FingerprintSensorEx;*/
 
 public class ZKFPUtil extends JFrame{
-	JButton btnOpen = null;
+	/*JButton btnOpen = null;
 	JButton btnEnroll = null;
 	JButton btnVerify = null;
 	JButton btnIdentify = null;
@@ -464,5 +464,5 @@ public class ZKFPUtil extends JFrame{
 		
 		public static void main(String[] args) {
 			new ZKFPUtil().launchFrame();
-		}
+		}*/
 }
