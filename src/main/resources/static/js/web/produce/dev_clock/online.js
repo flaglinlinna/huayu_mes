@@ -80,7 +80,7 @@ $(function() {
 						tableEmp = table.render({
 							elem : '#empList',
 							method : 'post',// 默认：get请求
-							page : true,
+							page : false,
 							request : {
 								pageName : 'page',// 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -97,44 +97,60 @@ $(function() {
 							},
 							cols : [ [ {
 								type : 'numbers'
-							},{
+							}, {
 								field : 'EMP_CODE',
 								title : '员工工号',
-								width:150
+								width : 195
 							}, {
 								field : 'EMP_NAME',
 								title : '员工姓名',
-								width:150
+								width : 195
 							}, {
 								field : 'DEV_IP',
 								title : '设备IP',
-								width:150
+								width : 150
 							}, {
 								field : 'TIME_BEGIN',
-								title : '开始时间',
-								width:200
+								title : '上线时间',
+								width : 200
 							}, {
 								field : 'TIME_END',
-								title : '结束时间',
-								width:200
+								title : '下线时间',
+								width : 200
 							}, {
-																title : '操作',
+								title : '操作',
 								align : 'center',
 								toolbar : '#optBar1',
-								width:200
-							}  ] ],
+								width : 200
+							} ] ],
 							data : []
 						});
+						
+						//日期选择器
+						laydate.render({ 
+						  elem: '#workDate',
+						  type: 'date' //默认，可不填
+						});
+						
 						// 监听工具条
 						table.on('tool(onlineTable)', function(obj) {
 							var data = obj.data;
 							if (obj.event === 'del') {
+								console.log(data)
 								// 删除
-								// delOnlineStaff(data, data.id, data.taskNo);
+								 delOnlineStaff(data, data.id, data.taskNo);
 							} else if (obj.event === 'edit') {
 								// 编辑
 								getOnlineStaff(data, data.id);
-
+							}
+						});
+						// 监听工具条
+						table.on('tool(empTable)', function(obj) {
+							var data = obj.data;
+							if (obj.event === 'del') {
+								// 删除
+								 delVice(data,  data.EMP_NAME);
+								//console.log(data)
 							}
 						});
 
@@ -146,13 +162,8 @@ $(function() {
 						});
 
 						// 监听提交
-						form.on('submit(addSubmit)', function(data) {
-							if (data.field.id == null || data.field.id == "") {
-								// 新增
-								addSubmit(data);
-							} else {
-								editSubmit(data);
-							}
+						form.on('submit(sumbitMain)', function(data) {
+							editMain(data);
 							return false;
 						});
 
@@ -165,11 +176,17 @@ $(function() {
 									.stringify(param), function(data) {
 								if (data.result) {
 									console.log(data)
-									// form.val("devForm", {
-									// "id" : data.data.id
-									// });
-									getMainInfo(id);
+									form.val("onlineForm", {
+										"id" : data.data.id,
+										"taskNo" : data.data.taskNo,
+										"lineId" : data.data.line.id,
+										"lineName" : data.data.line.lineName,
+										"hourType" : data.data.hourType,
+										"workDate":data.data.workDate
+									});
 
+									getClass(data.data.classId);
+									getMainInfo(id);
 								} else {
 									layer.alert(data.msg)
 								}
@@ -202,7 +219,41 @@ $(function() {
 										layer.alert("操作请求错误，请您稍后再试");
 									});
 						}
+						function getClass(id) {
+							//console.log(id)
+							CoreUtil
+									.sendAjax(
+											"produce/online/getClassList",
+											"",
+											function(data) {
+												if (data.result) {
+													//console.log(data)
+													$("#classId").empty();
+													var da = data.data;
+													for (var i = 0; i < da.length; i++) {
+														if (i == 0) {
+															$("#classId").append(
+																			"<option value=''>请点击选择</option>");
+														}
+														$("#classId").append(
+																		"<option value="
+																				+ da[i].ID
+																				+ ">"
+																				+ da[i].CLASS_NAME
+																				+ "</option>");
+														if (da[i].ID == id) {
+															$("#classId").val(da[i].ID);
+														}
+													}
+													layui.form.render('select');
 
+												} else {
+													layer.alert(data.msg)
+												}
+											}, "POST", false, function(res) {
+												layer.alert("操作请求错误，请您稍后再试");
+											});
+						}
 					});
 });
 // 新增编辑弹出框
@@ -240,16 +291,85 @@ function load(obj) {
 		}
 	});
 }
-// // 添加上线人员信息
-// function addOnlineStaff() {
-// // 清空弹出框数据
-// cleanOnlineStaff();
-// getEmp();
-// getDev();
-// // 打开弹出框
-// openOnlineStaff(null, "添加上线人员信息");
-// }
+function editMain(obj){
+	CoreUtil.sendAjax("produce/online/editMain", JSON.stringify(obj.field),
+			function(data) {
+				if (data.result) {
+					layer.alert("操作成功", function() {
+						layer.closeAll();
+						cleanOnlineStaff();
+						// 加载页面
+						loadAll();
+					});
+				} else {
+					layer.alert(data.msg);
+				}
+			}, "POST", false, function(res) {
+				layer.alert(res.msg);
+			});
+}
 
+//删除副表
+function delVice(obj,  name) {
+	if (id != null) {
+		var param = {
+			"taskNo":obj.TASK_NO ,
+			"devId":obj.DEV_ID ,
+			"empId":obj.EMP_ID ,
+			"beginTime":obj.TIME_BEGIN
+		};
+		layer.confirm('您确定要删除上线人员 ' + name + ' 吗？', {
+			btn : [ '确认', '返回' ]
+		// 按钮
+		}, function() {
+			CoreUtil.sendAjax("produce/online/deleteVice",
+					JSON.stringify(param), function(data) {
+						if (isLogin(data)) {
+							if (data.result == true) {
+								// 回调弹框
+								layer.alert("删除成功！", function() {
+									tableEmp.reload({
+										page : {
+											curr : pageCurr
+										// 从当前页码开始
+										}
+									});
+								});
+							} else {
+								layer.alert(data);
+							}
+						}
+					});
+		});
+	}
+}
+//删除主表记录
+function delOnlineStaff(obj, id, name){
+	if (id != null) {
+		var param = {
+			"id":id 
+		};
+		layer.confirm('您确定要删除制令单 ' + name + ' 的记录吗？', {
+			btn : [ '确认', '返回' ]
+		// 按钮
+		}, function() {
+			CoreUtil.sendAjax("produce/online/deleteMain",
+					JSON.stringify(param), function(data) {
+						if (isLogin(data)) {
+							if (data.result == true) {
+								// 回调弹框
+								layer.alert("删除成功！", function() {
+									layer.closeAll();
+									loadAll()
+								});
+							} else {
+								layer.alert(data);
+							}
+						}
+					});
+		});
+	}
+}
 // 重新加载表格（全部）
 function loadAll() {
 	// 重新加载table

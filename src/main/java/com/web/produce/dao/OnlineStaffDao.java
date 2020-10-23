@@ -20,4 +20,7 @@ public interface OnlineStaffDao extends CrudRepository<OnlineStaff, Long>,JpaSpe
 	
 	public OnlineStaff findById(long id);
 	
+	@Query(value = "select c.class_no,c.id,c.class_name from MES_BASE_CLASS_TYPE c where c.del_flag=0 ", nativeQuery = true)
+    public List<Map<String, Object>> queryClass();
+	
 }

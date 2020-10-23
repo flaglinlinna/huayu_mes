@@ -8,7 +8,7 @@ import com.app.base.data.ApiResponseResult;
 import com.zkteco.biometric.FingerprintSensorEx;*/
 
 public class ZKFPUtil2 {
-	
+
 	/*//the width of fingerprint image
 	int fpWidth = 0;
 	//the height of fingerprint image
@@ -25,23 +25,23 @@ public class ZKFPUtil2 {
 	private boolean bIdentify = true;
 	//finger id
 	private int iFid = 1;
-	
+
 	private int nFakeFunOn = 1;
 	//must be 3
 	static final int enroll_cnt = 3;
 	//the index of pre-register function
 	private int enroll_idx = 0;
-	
+
 	private byte[] imgbuf = null;
 	private byte[] template = new byte[2048];
 	private int[] templateLen = new int[1];
-	
-	
+
+
 	private boolean mbStop = true;
 	private long mhDevice = 0;
 	private long mhDB = 0;
 	private WorkThread workThread = null;
-	
+
 	private void FreeSensor()
 	{
 		mbStop = true;
@@ -63,25 +63,22 @@ public class ZKFPUtil2 {
 		}
 		FingerprintSensorEx.Terminate();
 	}
-	
+
 	public static void writeBitmap(byte[] imageBuf, int nWidth, int nHeight,
 			String path) throws IOException {
 		java.io.FileOutputStream fos = new java.io.FileOutputStream(path);
 		java.io.DataOutputStream dos = new java.io.DataOutputStream(fos);
-
 		int w = (((nWidth+3)/4)*4);
 		int bfType = 0x424d; // 浣嶅浘鏂囦欢绫诲瀷锛�0鈥�1瀛楄妭锛�
 		int bfSize = 54 + 1024 + w * nHeight;// bmp鏂囦欢鐨勫ぇ灏忥紙2鈥�5瀛楄妭锛�
 		int bfReserved1 = 0;// 浣嶅浘鏂囦欢淇濈暀瀛楋紝蹇呴』涓�0锛�6-7瀛楄妭锛�
 		int bfReserved2 = 0;// 浣嶅浘鏂囦欢淇濈暀瀛楋紝蹇呴』涓�0锛�8-9瀛楄妭锛�
 		int bfOffBits = 54 + 1024;// 鏂囦欢澶村紑濮嬪埌浣嶅浘瀹為檯鏁版嵁涔嬮棿鐨勫瓧鑺傜殑鍋忕Щ閲忥紙10-13瀛楄妭锛�
-
 		dos.writeShort(bfType); // 杈撳叆浣嶅浘鏂囦欢绫诲瀷'BM'
 		dos.write(changeByte(bfSize), 0, 4); // 杈撳叆浣嶅浘鏂囦欢澶у皬
 		dos.write(changeByte(bfReserved1), 0, 2);// 杈撳叆浣嶅浘鏂囦欢淇濈暀瀛�
 		dos.write(changeByte(bfReserved2), 0, 2);// 杈撳叆浣嶅浘鏂囦欢淇濈暀瀛�
 		dos.write(changeByte(bfOffBits), 0, 4);// 杈撳叆浣嶅浘鏂囦欢鍋忕Щ閲�
-
 		int biSize = 40;// 淇℃伅澶存墍闇�鐨勫瓧鑺傛暟锛�14-17瀛楄妭锛�
 		int biWidth = nWidth;// 浣嶅浘鐨勫锛�18-21瀛楄妭锛�
 		int biHeight = nHeight;// 浣嶅浘鐨勯珮锛�22-25瀛楄妭锛�
@@ -93,7 +90,6 @@ public class ZKFPUtil2 {
 		int biYPelsPerMeter = 0;// 浣嶅浘鍨傜洿鍒嗚鲸鐜囷紝姣忕背鍍忕礌鏁帮紙42-45瀛楄妭锛夎繖涓暟鏄郴缁熼粯璁ゅ��
 		int biClrUsed = 0;// 浣嶅浘瀹為檯浣跨敤鐨勯鑹茶〃涓殑棰滆壊鏁帮紙46-49瀛楄妭锛夛紝濡傛灉涓�0鐨勮瘽锛岃鏄庡叏閮ㄤ娇鐢ㄤ簡
 		int biClrImportant = 0;// 浣嶅浘鏄剧ず杩囩▼涓噸瑕佺殑棰滆壊鏁�(50-53瀛楄妭)锛屽鏋滀负0鐨勮瘽锛岃鏄庡叏閮ㄩ噸瑕�
-
 		dos.write(changeByte(biSize), 0, 4);// 杈撳叆淇℃伅澶存暟鎹殑鎬诲瓧鑺傛暟
 		dos.write(changeByte(biWidth), 0, 4);// 杈撳叆浣嶅浘鐨勫
 		dos.write(changeByte(biHeight), 0, 4);// 杈撳叆浣嶅浘鐨勯珮
@@ -105,20 +101,18 @@ public class ZKFPUtil2 {
 		dos.write(changeByte(biYPelsPerMeter), 0, 4);// 杈撳叆浣嶅浘鐨勫瀭鐩村垎杈ㄧ巼
 		dos.write(changeByte(biClrUsed), 0, 4);// 杈撳叆浣嶅浘浣跨敤鐨勬�婚鑹叉暟
 		dos.write(changeByte(biClrImportant), 0, 4);// 杈撳叆浣嶅浘浣跨敤杩囩▼涓噸瑕佺殑棰滆壊鏁�
-
 		for (int i = 0; i < 256; i++) {
 			dos.writeByte(i);
 			dos.writeByte(i);
 			dos.writeByte(i);
 			dos.writeByte(0);
 		}
-
 		byte[] filter = null;
 		if (w > nWidth)
 		{
 			filter = new byte[w-nWidth];
 		}
-		
+
 		for(int i=0;i<nHeight;i++)
 		{
 			dos.write(imageBuf, (nHeight-1-i)*nWidth, nWidth);
@@ -129,31 +123,30 @@ public class ZKFPUtil2 {
 		dos.close();
 		fos.close();
 	}
-
 	public static byte[] changeByte(int data) {
 		return intToByteArray(data);
 	}
-	
+
 	public static byte[] intToByteArray (final int number) {
-		byte[] abyte = new byte[4];  
-	    // "&" 涓庯紙AND锛夛紝瀵逛袱涓暣鍨嬫搷浣滄暟涓搴斾綅鎵ц甯冨皵浠ｆ暟锛屼袱涓綅閮戒负1鏃惰緭鍑�1锛屽惁鍒�0銆�  
-	    abyte[0] = (byte) (0xff & number);  
-	    // ">>"鍙崇Щ浣嶏紝鑻ヤ负姝ｆ暟鍒欓珮浣嶈ˉ0锛岃嫢涓鸿礋鏁板垯楂樹綅琛�1  
-	    abyte[1] = (byte) ((0xff00 & number) >> 8);  
-	    abyte[2] = (byte) ((0xff0000 & number) >> 16);  
-	    abyte[3] = (byte) ((0xff000000 & number) >> 24);  
-	    return abyte; 
-	}	 
-		 
+		byte[] abyte = new byte[4];
+	    // "&" 涓庯紙AND锛夛紝瀵逛袱涓暣鍨嬫搷浣滄暟涓搴斾綅鎵ц甯冨皵浠ｆ暟锛屼袱涓綅閮戒负1鏃惰緭鍑�1锛屽惁鍒�0銆�
+	    abyte[0] = (byte) (0xff & number);
+	    // ">>"鍙崇Щ浣嶏紝鑻ヤ负姝ｆ暟鍒欓珮浣嶈ˉ0锛岃嫢涓鸿礋鏁板垯楂樹綅琛�1
+	    abyte[1] = (byte) ((0xff00 & number) >> 8);
+	    abyte[2] = (byte) ((0xff0000 & number) >> 16);
+	    abyte[3] = (byte) ((0xff000000 & number) >> 24);
+	    return abyte;
+	}
+
 		public static int byteArrayToInt(byte[] bytes) {
-			int number = bytes[0] & 0xFF;  
-		    // "|="鎸変綅鎴栬祴鍊笺��  
-		    number |= ((bytes[1] << 8) & 0xFF00);  
-		    number |= ((bytes[2] << 16) & 0xFF0000);  
-		    number |= ((bytes[3] << 24) & 0xFF000000);  
-		    return number;  
+			int number = bytes[0] & 0xFF;
+		    // "|="鎸変綅鎴栬祴鍊笺��
+		    number |= ((bytes[1] << 8) & 0xFF00);
+		    number |= ((bytes[2] << 16) & 0xFF0000);
+		    number |= ((bytes[3] << 24) & 0xFF000000);
+		    return number;
 		 }
-	
+
 		public class WorkThread extends Thread {
 	        @Override
 	        public void run() {
@@ -179,7 +172,6 @@ public class ZKFPUtil2 {
             					System.out.println("请问是正常的人体指纹吗?");
             					return;
             				}
-
                     	}
                     	OnCatpureOK(imgbuf);
                     	OnExtractOK(template, templateLen[0]);
@@ -191,16 +183,14 @@ public class ZKFPUtil2 {
 	                } catch (InterruptedException e) {
 	                    e.printStackTrace();
 	                }
-
 	            }
 	        }
-
 			private void runOnUiThread(Runnable runnable) {
 				// TODO Auto-generated method stub
-				
+
 			}
 	    }
-		
+
 		private void OnCatpureOK(byte[] imgBuf)
 		{
 			try {
@@ -211,7 +201,7 @@ public class ZKFPUtil2 {
 				e.printStackTrace();
 			}
 		}
-		
+
 		private void OnExtractOK(byte[] template, int len)
 		{
 			if(bRegister)
@@ -239,7 +229,7 @@ public class ZKFPUtil2 {
                 	int[] _retLen = new int[1];
                     _retLen[0] = 2048;
                     byte[] regTemp = new byte[_retLen[0]];
-                    
+
                     if (0 == (ret = FingerprintSensorEx.DBMerge(mhDB, regtemparray[0], regtemparray[1], regtemparray[2], regTemp, _retLen)) &&
                     		0 == (ret = FingerprintSensorEx.DBAdd(mhDB, iFid, regTemp))) {
                     	iFid++;
@@ -277,7 +267,7 @@ public class ZKFPUtil2 {
                     	System.out.println("Identify fail, errcode=" + ret);
                     	//textArea.setText("Identify fail, errcode=" + ret);
                     }
-                        
+
 				}
 				else
 				{
@@ -303,7 +293,7 @@ public class ZKFPUtil2 {
 				}
 			}
 		}
-		
+
 		//打开
 		public ApiResponseResult open() {
 			// TODO Auto-generated method stub
@@ -349,19 +339,19 @@ public class ZKFPUtil2 {
 				FreeSensor();
 				return ApiResponseResult.failure("初始化数据库失败,et = " + ret + "！");
 			}
-			
-			
+
+
 			//set fakefun off
-			
+
 			//FingerprintSensorEx.SetParameter(mhDevice, 2002, changeByte(nFakeFunOn), 4);
-						
+
 			byte[] paramValue = new byte[4];
 			int[] size = new int[1];
 			//GetFakeOn
 			//size[0] = 4;
 			//FingerprintSensorEx.GetParameters(mhDevice, 2002, paramValue, size);
 			//nFakeFunOn = byteArrayToInt(paramValue);
-			
+
 			size[0] = 4;
 			FingerprintSensorEx.GetParameters(mhDevice, 1, paramValue, size);
 			fpWidth = byteArrayToInt(paramValue);
@@ -377,10 +367,10 @@ public class ZKFPUtil2 {
 		    workThread.start();// 绾跨▼鍚姩
             //textArea.setText("Open succ!");
 		    System.out.println("Open succ!");
-		    
+
 		    return ApiResponseResult.success("初始化成功！");
 		}
-		
+
 		//注册指纹
 		public ApiResponseResult enroll(){
 			if(0 == mhDevice)
@@ -403,8 +393,8 @@ public class ZKFPUtil2 {
 			System.out.println("关闭成功!");
 			return ApiResponseResult.success("关闭成功!");
 		}
-		
+
 		public static void main(String[] args) {
-			
+
 		}*/
 }
