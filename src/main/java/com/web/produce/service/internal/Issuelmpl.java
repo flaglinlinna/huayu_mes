@@ -53,16 +53,16 @@ public class Issuelmpl  implements IssueService {
 
 	@Autowired
 	EmployeeDao employeeDao;
-	
+
 	@Autowired
 	EmpFingerDao empFingerDao;
 
 	@Autowired
 	DevClockDao devClockDao;
-	
+
 	@Autowired
 	CardDataDao cardDataDao;
-	
+
 	@Autowired
 	DevLogDao devLogDao;
 
@@ -154,9 +154,9 @@ public class Issuelmpl  implements IssueService {
 		//记录有就忽略，没有就增加
 		String msg = "";//记录信息
 		List<Issue> listNew = new ArrayList<>();
-		
+
 		List<DevLog> listLog = new ArrayList<DevLog>();
-		
+
 		if (devList.size() > 0) {
 			for (Long devId : devList) {
 				DevClock devClock = devClockDao.findById((long)devId);
@@ -185,7 +185,7 @@ public class Issuelmpl  implements IssueService {
 											item.setCreateBy(UserUtil.getSessionUser().getId());
 											item.setDevClockId(devId);
 											item.setEmpId(empId);
-											listNew.add(item);	
+											listNew.add(item);
 										}
 									}else{
 										msg += em.getEmpName()+"下发指纹失败"+",";
@@ -198,7 +198,7 @@ public class Issuelmpl  implements IssueService {
 						issueDao.saveAll(listNew);
 					}
 				}
-				
+
 			}
 		}
 		return ApiResponseResult.success("下发记录添加成功！"+msg);
@@ -206,7 +206,7 @@ public class Issuelmpl  implements IssueService {
 
 	/**
 	 * 根据ID获取
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -250,7 +250,7 @@ public class Issuelmpl  implements IssueService {
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getEmp(String empKeyword, PageRequest pageRequest) throws Exception {	
+	public ApiResponseResult getEmp(String empKeyword, PageRequest pageRequest) throws Exception {
 		/*List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 		filters.add(new SearchFilter("empStatus", SearchFilter.Operator.EQ, BasicStateEnum.TRUE.intValue()));
@@ -277,16 +277,16 @@ public class Issuelmpl  implements IssueService {
 		}
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
-		
+
 	}
-	
+
 	/**
 	 * 获取卡机数据
 	 */
 	@Override
 	@Transactional
 	public ApiResponseResult getDev(String devKeyword, PageRequest pageRequest) throws Exception {
-		
+
 		List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 		filters.add(new SearchFilter("enabled", SearchFilter.Operator.EQ, BasicStateEnum.TRUE.intValue()));
@@ -304,7 +304,7 @@ public class Issuelmpl  implements IssueService {
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
-	
+
 	/**
 	 * 下发指纹
 	 * fyx
@@ -330,9 +330,9 @@ public class Issuelmpl  implements IssueService {
         }else{
         	return false;
         }
-        
+
 	}
-	
+
 	/**
 	 * 删除指纹
 	 * fyx
@@ -345,20 +345,20 @@ public class Issuelmpl  implements IssueService {
         boolean connFlag = sdk.connect(devIp, 4370);
         System.out.println(connFlag);
         if (connFlag) {
-        	
+
         	boolean flag = sdk.readGeneralLogData();
             System.out.println("flag:" + flag);
-            
+
         	for(EmpFinger empFinger:empFingers){
         		//先保存改人员的考勤数据
                 List<Map<String, Object>> strList = sdk.getUserOneDayInfo(empFinger.getEmp().getEmpCode());
                 System.out.println(strList.toString());
-                
+
                 for(Map<String, Object> map:strList){
                 	//判断信息是否已经保存过
-                	DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");         
-                	DateFormat format2= new SimpleDateFormat("HH:mm:ss");  
-                	
+                	DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+                	DateFormat format2= new SimpleDateFormat("HH:mm:ss");
+
                 	String carDate=format1.format(map.get("Time").toString());
                     String cardTime=format2.format(map.get("Time").toString());
 
@@ -379,7 +379,7 @@ public class Issuelmpl  implements IssueService {
                 }
               //删除指纹
                 return sdk.delectUserById(empFinger.getEmp().getEmpCode());
-                
+
         	}
         }
         return false;
@@ -439,22 +439,22 @@ public class Issuelmpl  implements IssueService {
 											item.setCreateBy(UserUtil.getSessionUser().getId());
 											item.setDevClockId(devId);
 											item.setEmpId(empId);
-											listNew.add(item);	
+											listNew.add(item);
 										}
 									}else{
 										msg += em.getEmpName()+"删除指纹失败"+",";
 									}
 								}
-							}		
+							}
 						}
 						devLogDao.saveAll(listLog);
 						issueDao.saveAll(listNew);
 					}
 				}
-				
+
 			}
 		}
 		return ApiResponseResult.success("删除记录操作成功！"+msg);
 	}
-	
+
 }
