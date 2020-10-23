@@ -104,4 +104,82 @@ public class OnlineStaffController extends WebController{
 	            return ApiResponseResult.failure("获取上线人员记录信息失败！");
 	        }
 	    }
+	    
+	    @ApiOperation(value = "获取班次信息", notes = "获取班次",hidden = true)
+	    @RequestMapping(value = "/getClassList", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult getClassList(){
+	        String method = "produce/online/getClassList";String methodName ="获取班次信息";
+	        try{
+	            ApiResponseResult result = onlineStaffService.getClassList();
+	            logger.debug("获取班次信息=getClassList:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	            logger.error("获取班次信息失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("获取班次信息失败！");
+	        }
+	    }
+	    
+	    @ApiOperation(value = "修改上线人员主表", notes = "修改上线人员主表",hidden = true)
+	    @RequestMapping(value = "/editMain", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult editMain(@RequestBody OnlineStaff onlineStaff){
+	        String method = "produce/online/editMain";String methodName ="修改上线人员主表";
+	        try{
+	            ApiResponseResult result = onlineStaffService.editMain(onlineStaff);
+	            logger.debug("修改上线人员主表=editMain:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	            logger.error("修改上线人员主表失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("修改上线人员主表失败！");
+	        }
+	    }
+	    
+	    @ApiOperation(value = "删除副表记录", notes = "删除副表记录",hidden = true)
+	    @RequestMapping(value = "/deleteVice", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult deleteVice(@RequestBody Map<String, Object> params){
+	        String method = "produce/online/deleteVice";String methodName ="删除副表记录";
+	        try{
+	        	String taskNo=params.get("taskNo")==null?"":params.get("taskNo").toString();
+	        	Long devId=Long.parseLong(params.get("devId").toString()) ;
+	        	Long empId=Long.parseLong(params.get("empId").toString()) ;
+	        	String beginTime=params.get("beginTime")==null?"":params.get("beginTime").toString();
+	            ApiResponseResult result = onlineStaffService.deleteVice(taskNo,devId, empId,beginTime);
+	            logger.debug("删除副表记录=deleteVice:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	            logger.error("删除副表记录失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("删除副表主表失败！");
+	        }
+	    }
+	    
+	    @ApiOperation(value = "删除上线人员记录信息", notes = "删除上线人员记录",hidden = true)
+	    @RequestMapping(value = "/deleteMain", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult deleteMain(@RequestBody Map<String, Object> params){
+	        String method = "produce/online/deleteMain";String methodName ="删除上线人员记录信息";
+	        long id = Long.parseLong(params.get("id").toString()) ;
+	        try{
+	            ApiResponseResult result = onlineStaffService.deleteMain(id);
+	            logger.debug("删除上线人员记录信息=deleteMain:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	            logger.error("删除上线人员记录信息失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("获取上线人员记录信息失败！");
+	        }
+	    }
+	    
 }
