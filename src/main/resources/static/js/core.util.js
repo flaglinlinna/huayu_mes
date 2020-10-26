@@ -41,6 +41,41 @@ var CoreUtil = (function () {
         });
     };
     
+    coreUtil.sendAjax.Kanban = function (url, params, ft, method, headers,noAuthorityFt,contentType, async) {
+        $.ajax({
+            url:  context+url,
+            cache: false,
+            async: async == undefined ? true : async,
+            data: params,
+            type: method == undefined ? "POST" : method,
+            contentType: contentType == undefined ? 'application/json; charset=UTF-8': contentType ,
+            dataType: "json",
+            beforeSend: function(request) {
+                /*if(headers == undefined){
+
+                }else if(headers){
+                    request.setRequestHeader("authorization", CoreUtil.getData("access_token"));
+                    request.setRequestHeader("refresh_token", CoreUtil.getData("refresh_token"));
+                }else {
+                    request.setRequestHeader("authorization", CoreUtil.getData("access_token"));
+                }*/
+
+            },
+            success: function (res) {
+                if(ft!=null&&ft!=undefined){
+                    ft(res);
+                }
+            },
+            error:function (XMLHttpRequest, textStatus, errorThrown) {
+               if(XMLHttpRequest.status==404){
+                    top.window.location.href= context+"/index/404";
+                }else{
+                    layer.msg("服务器好像除了点问题！请稍后试试");
+                }
+            }
+        });
+    };
+    
     /**/
    /* coreUtil.table = function (elem,url, where, method, toolbar,page,defaultToolbar,initCol) {
        // var roleSaveLoading = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.1});
