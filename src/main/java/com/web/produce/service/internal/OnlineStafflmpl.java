@@ -76,6 +76,8 @@ public class OnlineStafflmpl implements OnlineStaffService {
 			map.put("id", bs.getId());
 			map.put("taskNo", bs.getTaskNo());
 			map.put("hourType", bs.getHourType());
+			map.put("classId", bs.getClassId());
+			map.put("workDate", bs.getWorkDate());
 			map.put("lineName", bs.getLine().getLineName());
 			map.put("lastupdateDate", bs.getLastupdateDate());
 			map.put("createDate", bs.getCreateDate());
@@ -133,13 +135,16 @@ public class OnlineStafflmpl implements OnlineStaffService {
 	        onlineStaffDao.save(o);
 	        return ApiResponseResult.success("编辑成功！");
 	}
-	
+	/**
+	 * 删除副表数据
+	 * 2020-10-23
+	 * ***/
 	
 	@Override
-	public ApiResponseResult deleteVice(String taskNo,Long devId,Long empId,String beginTime) throws Exception {
+	public ApiResponseResult deleteVice(String taskNo,String devId,String empId,String viceId,String beginTime) throws Exception {
 		List<Object> list = deleteVicePrc(UserUtil.getSessionUser().getCompany() + "",
 				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "",
-				taskNo,devId,empId,beginTime);
+				taskNo,devId,empId,viceId,beginTime);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -147,30 +152,31 @@ public class OnlineStafflmpl implements OnlineStaffService {
 	}
 	
 	public List deleteVicePrc(String company, String facoty, String user_id,
-			String taskNo,Long devId,Long empId,String beginTime)
+			String taskNo,String devId,String empId,String viceId,String beginTime)
 			throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  PRC_MES_COF_AFFIRM_EMP_DEL(?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  PRC_MES_COF_AFFIRM_EMP_DEL(?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, company);
 				cs.setString(2, facoty);
 				cs.setString(3, user_id);
 				cs.setString(4, taskNo);
-				cs.setLong(5, devId);
-				cs.setLong(6, empId);
-				cs.setString(7,beginTime);
-				cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.setString(5, devId);
+				cs.setString(6, empId);
+				cs.setString(7,viceId);
+				cs.setString(8,beginTime);
+				cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
 				return cs;
 			}
 		}, new CallableStatementCallback() {
 			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
 				List<Object> result = new ArrayList<>();
 				cs.execute();
-				result.add(cs.getInt(8));
-				result.add(cs.getString(9));
+				result.add(cs.getInt(9));
+				result.add(cs.getString(10));
 				return result;
 			}
 		});

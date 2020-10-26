@@ -11,7 +11,8 @@ $(function() {
 			url : context + 'produce/issue/getList',
 			method : 'get' // 默认：get请求
 			,
-			cellMinWidth : 80,where:{ptype:ptype},
+			//cellMinWidth : 80,
+			where:{ptype:ptype},
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -46,7 +47,7 @@ $(function() {
 				field : 'empCode',
 				title : '员工工号',
 				templet: function (d) {return d.emp.empCode}
-			}, , {
+			} , {
 				field : 'empName',
 				title : '员工姓名',
 				width:120,
@@ -90,6 +91,7 @@ $(function() {
 				width : 100
 			} ] ],*/
 			done : function(res, curr, count) {
+				//console.log(res)
 				pageCurr = curr;
 				/*merge(res.data, [ 'devCode', 'devName', 'devType' ],
 						[ 1, 2, 3 ]);*/
@@ -207,6 +209,7 @@ $(function() {
 		});
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
+			//console.log(ptype)
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
 				var devList = "";
@@ -227,6 +230,7 @@ $(function() {
 					for (var i = 0; i < eList.length; i++) {// 获取被选中的行
 						empList += eList[i].ID + ";"// 用“；”分隔
 					}
+					
 					addSubmit(devList, empList);
 				}
 				
@@ -368,6 +372,8 @@ function addSubmit(devList, empList) {
 	if(ptype == '1'){
 		url = "produce/issue/add"
 	}
+	console.log(ptype)
+	console.log(url)
 	CoreUtil.sendAjax(url, JSON.stringify(params), function(
 			data) {
 		if (data.result) {

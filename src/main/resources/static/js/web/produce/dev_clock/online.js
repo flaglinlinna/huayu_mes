@@ -2,6 +2,7 @@
  * 上线人员信息管理
  */
 var pageCurr;
+var set_main_id;
 $(function() {
 	layui
 			.use(
@@ -21,6 +22,7 @@ $(function() {
 										limitName : 'rows', // 每页数据量的参数名，默认：limit
 									},
 									parseData : function(res) {
+										//console.log(res)
 										// 可进行数据操作
 										return {
 											"count" : res.data.total,
@@ -40,7 +42,28 @@ $(function() {
 											,
 											{
 												field : 'taskNo',
-												title : '制令单号'
+												title : '制令单号',
+												width : 375
+											},
+											{
+												field : 'classId',
+												title : '班次',
+												width : 80,
+												templet:function (d){	
+								                	if(d.classId=="1"){
+								                		return "白班"
+								                	}else if(d.classId=="2"){
+								                		return "晚班"
+								                	}else{
+								                		return "其他"
+								                	}
+								                }
+											},
+											{
+												field : 'workDate',
+												title : '生产时间',
+												width : 100,
+												templet : '<div>{{d.workDate?DateUtils.formatterDate(d.workDate):""}}</div>',
 											},
 											{
 												field : 'hourType',
@@ -50,7 +73,7 @@ $(function() {
 											{
 												field : 'lineName',
 												title : '线体',
-												width : 150
+												width : 130
 											},
 											{
 												field : 'lastupdateDate',
@@ -80,7 +103,7 @@ $(function() {
 						tableEmp = table.render({
 							elem : '#empList',
 							method : 'post',// 默认：get请求
-							page : false,
+							page : true,
 							request : {
 								pageName : 'page',// 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -136,7 +159,7 @@ $(function() {
 						table.on('tool(onlineTable)', function(obj) {
 							var data = obj.data;
 							if (obj.event === 'del') {
-								console.log(data)
+								
 								// 删除
 								 delOnlineStaff(data, data.id, data.taskNo);
 							} else if (obj.event === 'edit') {
@@ -151,6 +174,7 @@ $(function() {
 								// 删除
 								 delVice(data,  data.EMP_NAME);
 								//console.log(data)
+							
 							}
 						});
 
@@ -175,7 +199,7 @@ $(function() {
 							CoreUtil.sendAjax("produce/online/getMain", JSON
 									.stringify(param), function(data) {
 								if (data.result) {
-									console.log(data)
+									//console.log(data)
 									form.val("onlineForm", {
 										"id" : data.data.id,
 										"taskNo" : data.data.taskNo,
@@ -187,6 +211,7 @@ $(function() {
 
 									getClass(data.data.classId);
 									getMainInfo(id);
+									openOnlineStaff(id, "编辑上线人员信息")
 								} else {
 									layer.alert(data.msg)
 								}
@@ -194,31 +219,7 @@ $(function() {
 								layer.alert("操作请求错误，请您稍后再试");
 							});
 						}
-						// 编辑上线人员信息
-						function getMainInfo(id) {
-							var param = {
-								"id" : id
-							};
-							CoreUtil.sendAjax("produce/online/getMainInfo",
-									JSON.stringify(param), function(data) {
-										if (data.result) {
-											console.log(data)
-
-											tableEmp.reload({
-												data : data.data,
-												done : function(res, curr,
-														count) {
-													pageCurr = curr;
-												}
-											})
-											openOnlineStaff(id, "编辑上线人员信息")
-										} else {
-											layer.alert(data.msg)
-										}
-									}, "POST", false, function(res) {
-										layer.alert("操作请求错误，请您稍后再试");
-									});
-						}
+						
 						function getClass(id) {
 							//console.log(id)
 							CoreUtil
@@ -261,7 +262,7 @@ function openOnlineStaff(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-
+	set_main_id=id;
 	var index = layer.open({
 		type : 1,
 		title : title,
@@ -279,7 +280,7 @@ function openOnlineStaff(id, title) {
 }
 // 重新加载表格（搜索）
 function load(obj) {
-	console.log(obj)
+	//console.log(obj)
 	// 重新加载table
 	tableIns.reload({
 		where : {
@@ -290,6 +291,29 @@ function load(obj) {
 		// 从当前页码开始
 		}
 	});
+}
+//编辑上线人员信息
+function getMainInfo(id) {
+	var param = {
+		"id" : id
+	};
+	CoreUtil.sendAjax("produce/online/getMainInfo",
+			JSON.stringify(param), function(data) {
+				if (data.result) {
+					tableEmp.reload({
+						data : data.data,
+						done : function(res, curr,
+								count) {
+							pageCurr = curr;
+						}
+					})
+					
+				} else {
+					layer.alert(data.msg)
+				}
+			}, "POST", false, function(res) {
+				layer.alert("操作请求错误，请您稍后再试");
+			});
 }
 function editMain(obj){
 	CoreUtil.sendAjax("produce/online/editMain", JSON.stringify(obj.field),
@@ -316,6 +340,7 @@ function delVice(obj,  name) {
 			"taskNo":obj.TASK_NO ,
 			"devId":obj.DEV_ID ,
 			"empId":obj.EMP_ID ,
+			"viceId":obj.ID,
 			"beginTime":obj.TIME_BEGIN
 		};
 		layer.confirm('您确定要删除上线人员 ' + name + ' 吗？', {
@@ -327,16 +352,10 @@ function delVice(obj,  name) {
 						if (isLogin(data)) {
 							if (data.result == true) {
 								// 回调弹框
-								layer.alert("删除成功！", function() {
-									tableEmp.reload({
-										page : {
-											curr : pageCurr
-										// 从当前页码开始
-										}
-									});
-								});
+								layer.alert("删除成功！");
+								getMainInfo(set_main_id)
 							} else {
-								layer.alert(data);
+								layer.alert(data.msg);
 							}
 						}
 					});

@@ -442,8 +442,9 @@ public class Issuelmpl  implements IssueService {
 											listNew.add(item);
 										}
 									}else{
-										msg += em.getEmpName()+"删除指纹失败"+",";
+										msg += em.getEmpName()+"，但删除指纹失败"+",";
 									}
+									listLog.add(devLog);
 								}
 							}
 						}

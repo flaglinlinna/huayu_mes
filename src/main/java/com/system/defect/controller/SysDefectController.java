@@ -81,7 +81,7 @@ public class SysDefectController extends WebController {
     @ResponseBody
     public ApiResponseResult getList(String keyword, Integer priority, String status) {
         try {
-            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            Sort sort = new Sort(Sort.Direction.ASC, "id");
             return sysDefectService.getList(keyword, priority, status, super.getPageRequest(sort));
         } catch (Exception e) {
             e.printStackTrace();
