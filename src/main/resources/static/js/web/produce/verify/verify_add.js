@@ -163,6 +163,12 @@ $(function() {
 					if($('#num').val() != ''){
 						//save(data.field);//保存
 						var list = table.checkStatus('colTable').data;// 被选中行的数据 id
+						
+						if(list.length==0){
+							layer.alert("请至少选择一位人员上线")
+							return false;
+						}
+						
 						var empList ="";
 						for (var i = 0; i < list.length; i++) {// 获取被选中的行
 							empList += list[i].ID + ","// 用“；”分隔
@@ -231,8 +237,9 @@ function getInfoAdd(){
 function update(lineId){
 	CoreUtil.sendAjax("produce/card_data/updateDataByLine", {"line_ids" : lineId}, function(
 			data) {
-		getUserByLine(lineId);
+		
 		layer.alert(data.msg, function() {
+			getUserByLine(lineId);
 			layer.closeAll();
 		});
 		/*if (data.result) {
@@ -252,7 +259,9 @@ function save(params,emp_ids){
 			"class_id":params.pclass,"wdate":params.pdate,"emp_ids":emp_ids};
 	CoreUtil.sendAjax("verify/save", JSON.stringify(param), function(
 			data) {
+		
 		layer.alert(data.msg, function() {
+			getUserByLine(params.pline);
 			layer.closeAll();
 		});
 	}, "POST", false, function(res) {
@@ -340,6 +349,7 @@ function add(params){
 			"qty":params.qty,"pdate":params.pdate1};
 	CoreUtil.sendAjax("verify/add", JSON.stringify(param), function(
 			data) {
+		
 		layer.alert(data.msg, function() {
 			layer.closeAll();
 		});

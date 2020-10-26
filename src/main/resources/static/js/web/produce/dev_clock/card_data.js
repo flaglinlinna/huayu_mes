@@ -19,6 +19,14 @@ $(function() {
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
+				if(res.status == 1){
+		              return {
+		                     "code": res.status,//code值为200表示成功
+		                       "count": 0,
+		                       "msg":res.msg,
+		                       "data":[]
+		                   }
+		             }
 				// 可进行数据操作
 				return {
 					"count" : res.data.total,

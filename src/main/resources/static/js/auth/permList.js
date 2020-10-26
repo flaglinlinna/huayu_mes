@@ -74,7 +74,7 @@ function edit(id,type){
                     fixed:false,
                     resize :false,
                     shadeClose: true,
-                    area: ['500px', '580px'],
+                    area: ['500px'],
                     content:$('#updatePerm'),
                     end:function(){
                         location.reload();
@@ -105,7 +105,7 @@ function addPerm(pid,flag){
             fixed:false,
             resize :false,
             shadeClose: true,
-            area: ['500px', '580px'],
+            area: ['500px'],
             content:$('#updatePerm'),  //页面自定义的div，样式自定义
             end:function(){
                 location.reload();

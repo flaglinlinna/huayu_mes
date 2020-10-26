@@ -119,6 +119,7 @@ public class SysDefectImpl implements SysDefectService {
             filters1.add(new SearchFilter("offerName", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("handlerName", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("remark", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("status", SearchFilter.Operator.LIKE, keyword));
         }
         Specification<SysDefect> spec = Specification.where(BaseService.and(filters, SysDefect.class));
         Specification<SysDefect> spec1 =  spec.and(BaseService.or(filters1, SysDefect.class));

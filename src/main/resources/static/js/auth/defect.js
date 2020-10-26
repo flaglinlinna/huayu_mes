@@ -31,7 +31,7 @@ $(function() {
             cols: [[
                 {type:'numbers'}
                 ,{field:'moduleName', title:'模块名称', width:120}
-                ,{field:'priority', title:'优先级', width:80,templet:function (d){	
+                ,{field:'priority', title:'优先级',sort: true, width:90,templet:function (d){	
                 	if(d.priority=="1"){
                 		return "高"
                 	}else if(d.priority=="2"){

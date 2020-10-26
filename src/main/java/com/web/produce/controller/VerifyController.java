@@ -110,7 +110,7 @@ public class VerifyController extends WebController {
             e.printStackTrace();
             logger.error("上线确认失败！", e);
             getSysLogService().error(method, methodName, e.toString());
-            return ApiResponseResult.failure("上线确认失败！");
+            return ApiResponseResult.failure("上线确认失败！"+e.toString());
         }
     }
     

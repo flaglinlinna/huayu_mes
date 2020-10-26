@@ -61,8 +61,15 @@ public class PatchCard extends BaseEntity{
      * 班次Id
      */
     @ApiModelProperty(name="classId",value="班次Id")
-    @Column 
+    @Column
     protected Long classId;
+
+    @ApiModelProperty(name="classType",hidden=true,value="班次Id")
+    @ManyToOne
+    @JoinColumn(name = "classId", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected ClassType classType;   
+    
     
     /**
      * 工时类型
@@ -240,5 +247,12 @@ public class PatchCard extends BaseEntity{
 	public void setWorkDate(String workDate) {
 		this.workDate = workDate;
 	}
-	
+
+	public ClassType getClassType() {
+		return classType;
+	}
+
+	public void setClassType(ClassType classType) {
+		this.classType = classType;
+	}
 }
