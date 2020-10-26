@@ -58,6 +58,40 @@ public class kanbanController extends WebController {
 		mav.setViewName("/kanban/cjbg");//返回路径
 		return mav;
 	}
+	
+	@ApiOperation(value="获取车间报工看板-部门信息", notes="获取车间报工看板-部门信息", hidden = true)
+    @RequestMapping(value = "/getCjbgDepList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getCjbgDepList(String class_nos,String dep_id,String sdata,String edata) {
+        String method = "/kanban/getCjbgDepList";String methodName ="获取车间报工看板-部门信息";
+        try {
+            ApiResponseResult result = kanbanService.getCjbgDepList();
+            logger.debug("获取车间报工看板-部门信息=getCjbgList:"+result);
+            getSysLogService().success(method, methodName, null);
+            return result;
+        } catch (Exception e) {
+        	 e.printStackTrace();
+             logger.error("获取车间报工看板-部门信息失败！", e);
+             getSysLogService().error(method, methodName, e.toString());
+             return ApiResponseResult.failure("获取车间报工看板-部门信息失败！");
+        }
+    }
 
-    
+	@ApiOperation(value="获取车间报工看板信息", notes="获取车间报工看板信息", hidden = true)
+    @RequestMapping(value = "/getCjbgList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getCjbgList(String class_nos,String dep_id,String sdata,String edata) {
+        String method = "/kanban/getCjbgList";String methodName ="获取车间报工看板信息";
+        try {
+            ApiResponseResult result = kanbanService.getCjbgList(class_nos, dep_id, sdata, edata,this.getIpAddr());
+            logger.debug("获取车间报工看板信息=getCjbgList:"+result);
+            getSysLogService().success(method, methodName, null);
+            return result;
+        } catch (Exception e) {
+        	 e.printStackTrace();
+             logger.error("获取车间报工看板信息失败！", e);
+             getSysLogService().error(method, methodName, e.toString());
+             return ApiResponseResult.failure("获取车间报工看板信息失败！");
+        }
+    }
 }
