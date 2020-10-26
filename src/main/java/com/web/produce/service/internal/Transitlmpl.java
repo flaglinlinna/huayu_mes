@@ -213,7 +213,7 @@ public class Transitlmpl implements TransitService{
 				cs.setString(2, company);
 				cs.setString(3, user_id);
 				cs.setString(4, proc);
-				cs.setString(5, barcode);
+				cs.setString(5, type);
 				cs.setString(6, barcode);
 				cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
 				cs.registerOutParameter(8, java.sql.Types.VARCHAR);// 输出参数 返回标识
