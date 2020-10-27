@@ -460,5 +460,5 @@ function updateData(devIds,stype){
 }
 //导出
 function doExport(){
-	
+	  location.href = context + "/produce/card_data/doExport";
 }
