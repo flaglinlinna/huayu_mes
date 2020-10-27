@@ -1,12 +1,23 @@
 package com.web.produce.service.internal;
 
+import java.io.IOException;
+
+//import java.io.OutputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.utils.ExcelExport;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,14 +34,13 @@ import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.attendance.ZkemSDKUtils;
 import com.web.basic.dao.LineDao;
-import com.web.basic.entity.Client;
-import com.web.basic.entity.Defective;
-import com.web.basic.entity.DefectiveDetail;
+
 import com.web.basic.entity.Line;
-import com.web.basic.entity.Mtrial;
 import com.web.produce.dao.DevClockDao;
 import com.web.produce.entity.DevClock;
 import com.web.produce.service.DevClockService;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 打卡机设备维护
@@ -221,6 +231,100 @@ public class DevClocklmpl implements DevClockService {
 
 		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+	}
+
+
+	/**
+	 * 导出
+	 */
+	@Override
+	@Transactional
+	public void exportList(String keyword, HttpServletResponse response) throws Exception {
+		// 查询条件1
+		List<SearchFilter> filters = new ArrayList<>();
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		// 查询2
+		List<SearchFilter> filters1 = new ArrayList<>();
+		if (StringUtils.isNotEmpty(keyword)) {
+			filters1.add(new SearchFilter("devCode", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("devName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("devIp", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("devSeries", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("devType", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("line.lineName", SearchFilter.Operator.LIKE, keyword));
+		}
+		Specification<DevClock> spec = Specification.where(BaseService.and(filters, DevClock.class));
+		Specification<DevClock> spec1 = spec.and(BaseService.or(filters1, DevClock.class));
+		List<DevClock> devClockList  = devClockDao.findAll(spec1);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for (DevClock bs : devClockList) {
+			Map<String, Object> map = new HashMap<>();
+//			map.put("lineId", bs.getLine().getLineName());// 获取关联表的数据
+//			map.put("id", bs.getId());
+			map.put("devCode", bs.getDevCode());
+			map.put("devName", bs.getDevName());
+			map.put("devIp", bs.getDevIp());
+			map.put("devSeries", bs.getDevSeries());
+			map.put("lineName", bs.getLine().getLineName());
+			map.put("devType", bs.getDevType());
+			map.put("enabled", bs.getEnabled()==1?"有效":"无效");
+			map.put("lastupdateDate", sdf.format(bs.getLastupdateDate()));
+			map.put("createDate", sdf.format(bs.getCreateDate()));
+			list.add(map);
+		}
+		//创建一个数组用于设置表头
+		String[] arr = new String[]{"卡机编号","卡机名称","卡机IP","卡机序列","线别","卡机类型","是否有效","更新时间","添加时间"};
+		String[] map_arr = new String[]{"devCode","devName","devIp","devSeries","lineName","devType","enabled","lastupdateDate","createDate"};
+		//调用Excel导出工具类
+		ExcelExport.export(response,list,arr,map_arr,"卡机信息.xls");
+	}
+
+
+	//Excel样式
+	public List<XSSFCellStyle> getStyle(XSSFWorkbook workbook) {
+		List<XSSFCellStyle> cellStyleList = new ArrayList<XSSFCellStyle>();
+
+		//添加字体
+		//0.
+		XSSFFont font = workbook.createFont();
+		font.setFontName("宋体");
+		font.setFontHeightInPoints((short) 10);
+		font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);  //字体加粗
+
+		//1.
+		XSSFFont font1 = workbook.createFont();
+		font1.setFontName("宋体");
+		font1.setFontHeightInPoints((short) 10);
+
+		//添加样式
+		//0.实线边框
+		XSSFCellStyle cellStyle = workbook.createCellStyle();
+		cellStyle.setFont(font);
+		cellStyle.setBorderTop(CellStyle.BORDER_THIN);  //上边框
+		cellStyle.setBorderRight(CellStyle.BORDER_THIN);  //右边框
+		cellStyle.setBorderBottom(CellStyle.BORDER_THIN);  //下边框
+		cellStyle.setBorderLeft(CellStyle.BORDER_THIN);  //左边框
+		cellStyle.setAlignment(CellStyle.ALIGN_CENTER);  //水平居中
+		cellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);  //垂直居中
+		cellStyle.setWrapText(true);  //自动换行
+		//cellStyle.setFillForegroundColor(new XSSFColor(new Color(184, 204, 228)));//背景颜色
+		//cellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		cellStyleList.add(cellStyle);
+
+		//1.实线边框
+		XSSFCellStyle cellStyle1 = workbook.createCellStyle();
+		cellStyle1.setFont(font1);
+		cellStyle1.setBorderTop(CellStyle.BORDER_THIN);  //上边框
+		cellStyle1.setBorderRight(CellStyle.BORDER_THIN);  //右边框
+		cellStyle1.setBorderBottom(CellStyle.BORDER_THIN);  //下边框
+		cellStyle1.setBorderLeft(CellStyle.BORDER_THIN);  //左边框
+		cellStyle1.setAlignment(CellStyle.ALIGN_CENTER);  //水平居中
+		cellStyle1.setVerticalAlignment(CellStyle.VERTICAL_CENTER);  //垂直居中
+		cellStyle1.setWrapText(true);  //自动换行
+		cellStyleList.add(cellStyle1);
+
+		return cellStyleList;
 	}
 
 	/**

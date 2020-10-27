@@ -29,6 +29,7 @@
 
 			<button class="layui-btn layui-btn-sm layui-btn-normal"
 				onclick="addDevClock()">添加卡机信息</button>
+			<button class="layui-btn layui-btn-sm" onclick="exportDevClock()">导出Excel</button>
 			<table id="devList" lay-filter="devTable"></table>
 			<script type="text/html" id="statusTpl">
             {{#  if(d.enabled){ }}
