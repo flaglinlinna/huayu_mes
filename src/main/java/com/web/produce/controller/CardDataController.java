@@ -215,4 +215,20 @@ public class CardDataController extends WebController{
 	        }
 			
 		}
+		
+		@ApiOperation(value="导出数据", notes="导出数据", hidden = true)
+	    @RequestMapping(value = "/doExport", method = RequestMethod.GET)
+	    @ResponseBody
+	    public void  doExport(String keywork) {
+	        String method = "/product/card_data/doExport";String methodName ="导出数据";
+	        try {
+	            cardDataService.doExport(this.getResponse(),keywork);
+	            logger.debug(methodName+method);
+	            getSysLogService().success(method, methodName, null);
+	        } catch (Exception e) {
+	        	 e.printStackTrace();
+	             logger.error(methodName+"失败！", e);
+	             getSysLogService().error(method, methodName, e.toString());
+	        }
+	    }
 }

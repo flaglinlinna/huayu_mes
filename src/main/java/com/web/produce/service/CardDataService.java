@@ -1,6 +1,6 @@
 package com.web.produce.service;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.data.domain.PageRequest;
 
@@ -29,4 +29,6 @@ public interface CardDataService {
 	public ApiResponseResult updateData(String devIds,String stype) throws Exception;
 	
 	public ApiResponseResult updateDataByLine(String line_ids) throws Exception;
+	
+	public void doExport(HttpServletResponse response,String keywork)throws Exception;
 }

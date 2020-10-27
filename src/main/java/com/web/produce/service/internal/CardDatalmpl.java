@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
+import com.utils.ExcelExport;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
@@ -333,5 +336,16 @@ public class CardDatalmpl implements CardDataService {
         o.setFstatus(fstatus);
         cardDataDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
+	}
+
+	@Override
+	public void doExport(HttpServletResponse response, String keywork) throws Exception {
+		// TODO Auto-generated method stub
+		//创建一个数组用于设置表头
+        String[] arr = new String[]{"序号","员工工号","员工姓名","卡机IP","打卡日期","打卡时间","卡点状态"};
+        String[] map_arr = new String[]{"NUM1","EMP_CODE","EMP_NAME","DEV_IP","CARD_DATE","CARD_TIME","FSTATUS"};
+      //调用Excel导出工具类
+        ExcelExport.export(response,cardDataDao.queryExport(),arr,map_arr,"打卡记录.xls");
+        
 	}
 }

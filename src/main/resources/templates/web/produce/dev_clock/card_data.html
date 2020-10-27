@@ -29,6 +29,7 @@
 				<hr class="layui-bg-black" />
 			<!-- <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addCardData()">手工添加卡点记录</button> -->
 			<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="update()">同步卡机信息</button>
+			<button class="layui-btn layui-btn-sm" onclick="doExport()">导出Excel</button>
 			<table id="cardList" lay-filter="cardTable"></table>
 			<script type="text/html" id="statusTpl">
             {{#  if(d.fstatus){ }}

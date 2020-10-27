@@ -458,3 +458,7 @@ function updateData(devIds,stype){
 		layer.alert(res.msg);
 	});
 }
+//导出
+function doExport(){
+	  location.href = context + "/produce/card_data/doExport";
+}
