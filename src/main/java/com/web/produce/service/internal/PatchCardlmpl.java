@@ -168,6 +168,7 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 			map.put("empName", bs.getEmployee().getEmpName());// 获取关联表的数据-姓名
 			map.put("cardType", bs.getCardType());
 			map.put("taskNo", bs.getTaskNo());
+			map.put("className", bs.getClassType().getClassName());
 			map.put("hourType", bs.getHourType());
 			map.put("signTime", bs.getSignTime());
 			map.put("signDate", bs.getSignDate());
@@ -259,6 +260,7 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 		o.setClassId(patchCard.getClassId());
 		o.setWorkDate(patchCard.getWorkDate());
 		o.setCardType(patchCard.getCardType());
+		o.setClassId(patchCard.getClassId());
 		o.setHourType(patchCard.getHourType());	
 		o.setSignDate(patchCard.getSignDate());
 		o.setSignTime(patchCard.getSignTime());

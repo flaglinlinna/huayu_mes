@@ -151,7 +151,7 @@ $(function() {
 			function(event) {
 				if (event.keyCode == "13") {
 					$('#barcode').val("");
-					if ($('#barcode1').val() || $('#barcode2').val()) {
+					if ($('#barcode1').val()!="" && $('#barcode2').val()!="") {
 						if ($('#taskno').val()) {
 							subCode($('#taskno').val(), $('#barcode1').val(),
 									$('#barcode2').val())

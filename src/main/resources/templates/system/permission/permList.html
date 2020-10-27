@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='权限管理'"></head>
+<head th:include="layout :: htmlhead" th:with="title='菜单管理'"></head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <!--头-->
@@ -8,7 +8,7 @@
 
     <div  style="margin: 1%">
         <div class="demoTable">
-            &nbsp;&nbsp;<button class="layui-btn layui-btn-sm" onclick="addPerm('{{r.id}}',0)">开通权限</button>
+            &nbsp;&nbsp;<button class="layui-btn layui-btn-sm" onclick="addPerm('{{r.id}}',0)">新建菜单</button>
         </div>
 
         <div id="permTable" class="grid">
@@ -17,10 +17,10 @@
             <table class="layui-table">
                 <thead>
                 <tr>
-                    <th>权限名称</th>
-                    <th>权限分类</th>
-                    <th>权限路径</th>
-                    <th>权限code</th>
+                    <th>菜单名称</th>
+                    <th>菜单分类</th>
+                    <th>菜单路径</th>
+                    <th>菜单code</th>
                     <th>优先级</th>
                     <th style="width:140px;">操作</th>
                 </tr>
@@ -44,20 +44,20 @@
         </script>
     </div>
 
-    <!--添加或编辑权限-->
+    <!--添加或编辑菜单-->
     <div id="updatePerm" class="layer_self_wrap" style="width:500px;display:none;">
         <form id="permForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input id="type" type="hidden" name="type"/>
             <input id="parentId" type="hidden" name="parentId"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">权限名称</label>
+                <label class="layui-form-label">菜单名称</label>
                 <div class="layui-input-inline">
                     <input name="menuName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item" pane="">
-                <label class="layui-form-label">权限分类</label>
+                <label class="layui-form-label">菜单分类</label>
                 <div class="layui-input-block">
                     <input name="istype" value="0" title="菜单" checked="" type="radio"/>
                     <input name="istype" value="1" title="按钮" type="radio"/>
@@ -65,19 +65,19 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">权限路径</label>
+                <label class="layui-form-label">菜单路径</label>
                 <div class="layui-input-inline">
                     <input name="pageUrl" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">权限code</label>
+                <label class="layui-form-label">菜单code</label>
                 <div class="layui-input-inline">
                     <input name="menuCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">权限优先级</label>
+                <label class="layui-form-label">菜单优先级</label>
                 <div class="layui-input-inline">
                     <input name="zindex" autocomplete="off" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
                            onafterpaste="this.value=this.value.replace(/\D/g,'')"/>

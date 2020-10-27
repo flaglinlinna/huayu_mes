@@ -189,9 +189,9 @@ public class IssueController extends WebController{
 		            return result;
 		        }catch(Exception e){
 		            e.printStackTrace();
-		            logger.error("删除记录新增失败！", e);
+		            logger.error("删除记录失败！", e);
 		            getSysLogService().error(method, methodName, e.toString());
-		            return ApiResponseResult.failure("删除记录新增失败！");
+		            return ApiResponseResult.failure("删除记录失败！");
 		        }
 		    }
 }

@@ -35,11 +35,13 @@ $(function() {
 			, {
 				field : 'empCode',
 				title : '员工工号',
-				width:100
+				width:100,
+				sort: true,
 			}, {
 				field : 'empName',
 				title : '员工姓名',
-				width:120
+				width:120,
+				sort: true,
 			}, {
 				field : 'empType',
 				title : '员工类型',
@@ -57,11 +59,13 @@ $(function() {
 			}, {
 				field : 'joinDate',
 				title : '入职日期',
-				width:110
+				width:110,
+				sort: true,
 			}, {
 				field : 'leaveDate',
 				title : '离职日期',
-				width:110
+				width:110,
+				sort: true,
 			}, {
 				field : 'deptId',
 				title : '部门ID',

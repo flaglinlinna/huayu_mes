@@ -22,7 +22,14 @@ $(function() {
 										limitName : 'rows' // 每页数据量的参数名，默认：limit
 									},
 									parseData : function(res) {
-										//console.log(res)
+										if(res.status == 1){
+								              return {
+								                     "code": res.status,//code值为200表示成功
+								                       "count": 0,
+								                       "msg":res.msg,
+								                       "data":[]
+								                   }
+								             }
 										// 可进行数据操作
 										return {
 											"count" : res.data.total,
@@ -145,6 +152,14 @@ $(function() {
 								parseData : function(res) {
 									console.log(res)
 									if (res.result) {
+										if(res.status == 1){
+								              return {
+								                     "code": res.status,//code值为200表示成功
+								                       "count": 0,
+								                       "msg":res.msg,
+								                       "data":[]
+								                   }
+								             }
 										// 可进行数据操作
 										return {
 											"count" : 0,
@@ -202,9 +217,16 @@ $(function() {
 									title : '线长',
 									width : 100
 								} ] ],
-								parseData : function(res) {
-									console.log(res)
+								parseData : function(res) {	
 									if (res.result) {
+										if(res.status == 1){
+								              return {
+								                     "code": res.status,//code值为200表示成功
+								                       "count": 0,
+								                       "msg":res.msg,
+								                       "data":[]
+								                   }
+								             }
 										// 可进行数据操作
 										return {
 											"count" : 0,
@@ -484,13 +506,19 @@ function delAbnormalHours(obj, id, name) {
 function calTime() { // 计算开始与结束的时长
 	var start = $("#timeBegin").val();
 	var end = $("#timeEnd").val();
-	var timeBegin = new Date(start.replace(/-/g, "-"));
-	var timeEnd = new Date(end.replace(/-/g, "-"));
+	
+	
+	
+	var timeBegin=new Date(start);
+	var timeEnd =new Date(end);
+			
+	//var timeBegin = new Date(start.replace(/-/g, "-"));
+	//var timeEnd = new Date(end.replace(/-/g, "-"));
 
 	var diff = (timeEnd.getTime() - timeBegin.getTime()) / (1000 * 60);// 单位 分钟
 	console.log(diff)
 	if (diff < 0) {
-		layer.alert("请选择正确的开始结束时间");
+		layer.alert("请选择或输入正确的开始/结束时间");
 		$("#duration").val("");
 		return false;
 	}

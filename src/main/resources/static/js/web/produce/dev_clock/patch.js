@@ -41,6 +41,10 @@ $(function() {
 				title : '员工姓名',
 				width:100
 			}, {
+				field : 'className',
+				title : '班次',
+				width:80
+			}, {
 				field : 'cardType',
 				title : '卡点类型',
 				width:80
@@ -155,7 +159,11 @@ $(function() {
 				{
 					field : 'TASK_NO',
 					title : '制令单号',
-					width:350
+					width:300
+				},{
+					field : 'CLASS_NAME',
+					title : '班次',
+					width:60
 				}, {
 					field : 'HOUR_TYPE',
 					title : '工时类型',
@@ -164,14 +172,14 @@ $(function() {
 					field : 'WORK_DATE',
 					title : '生产时间',
 					templet:'<div>{{d.WORK_DATE.substring(0,d.WORK_DATE.indexOf(" "))}}</div>',
-					width:150
+					width:100
 				}, {
 					field : 'LINE_NAME',
 					title : '线体',
 					width:120
 				}] ],
 				parseData : function(res) {
-					//console.log(res)
+					console.log(res)
 					if (res.result) {
 						// 可进行数据操作
 						return {
@@ -186,7 +194,7 @@ $(function() {
 				},
 			},
 			done : function(elem, data) {
-				//console.log(data)
+				console.log(data)
 				var da = data.data;
 				var wd=da[0].WORK_DATE.substring(0,da[0].WORK_DATE.indexOf(" "))
 				 form.val("cardForm", {
@@ -194,7 +202,9 @@ $(function() {
 				 "hourType" : da[0].HOUR_TYPE,
 				 "workDate":wd,
 				 "lineName":da[0].LINE_NAME,
-				 "lineId":da[0].LINE_ID
+				 "lineId":da[0].LINE_ID,
+				 "className":da[0].CLASS_NAME,
+				 "classId":da[0].CLASS_ID,
 				 });
 				 form.render();// 重新渲染
 			}
@@ -268,12 +278,13 @@ $(function() {
 					});
 		}
 		function getPatchCard(obj, id) {
+			console.log(obj)
 			var param = {
 				"id" : id
 			};
 			CoreUtil.sendAjax("produce/patch/getPatchCard", JSON
 					.stringify(param), function(data) {
-				//console.log(data)
+				console.log(data)
 				if (data.result) {
 					form.val("cardForm", {
 						"id" : data.data.id,
@@ -281,6 +292,8 @@ $(function() {
 						"empCode" : data.data.employee.empCode,
 						"empName" : data.data.employee.empName,
 						"taskNo" : data.data.taskNo,
+						"className" : data.data.classType.className,
+						"classId" : data.data.classId,
 						"hourType" : data.data.hourType,
 						"workDate" : data.data.workDate,
 						"lineId" : data.data.lineId,
