@@ -22,6 +22,8 @@ import com.web.produce.service.DevClockService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Api(description = "卡机信息模块")
 @CrossOrigin
 @ControllerAdvice
@@ -66,6 +68,26 @@ public class DevClockController extends WebController{
 	            return ApiResponseResult.failure("获取卡机信息列表失败！");
 	        }
 	    }
+
+
+	@ApiOperation(value = "导出卡机信息", notes = "导出卡机信息",hidden = true)
+	@RequestMapping(value = "/exportList", method = RequestMethod.GET)
+	@ResponseBody
+	public void exportList(String keyword) {
+		String method = "produce/dev_clock/exportList";String methodName ="导出卡机信息";
+		try {
+			System.out.println(keyword);
+			devClockService.exportList(keyword,getResponse());
+			logger.debug("导出卡机信息=exportList:");
+			getSysLogService().success(method, methodName, null);
+//			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("导出卡机信息！", e);
+			getSysLogService().error(method, methodName, e.toString());
+//			return ApiResponseResult.failure("导出卡机信息！");
+		}
+	}
 	    
 	    
 	    @ApiOperation(value = "新增卡机信息", notes = "新增卡机信息",hidden = true)
