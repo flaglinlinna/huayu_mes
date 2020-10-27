@@ -19,6 +19,7 @@ $(function() {
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
+				
 				if(res.status == 1){
 		              return {
 		                     "code": res.status,//code值为200表示成功
@@ -46,6 +47,9 @@ $(function() {
 			},{
 				field : 'empName',
 				title : '员工姓名'
+			},{
+				field : 'devType',
+				title : '卡机类型',
 			}, {
 				field : 'devIp',
 				title : '卡机IP',
@@ -211,7 +215,7 @@ $(function() {
 			var isStatus = checked ? 1 : 0;
 			var deaprtisStatus = checked ? "有效":"无效";
 			// 正常/禁用
-
+			console.log(id,isStatus)
 			layer.confirm(
 					'您确定要把' + name + '的卡点信息设置为' + deaprtisStatus + '状态吗？', {
 						btn1 : function(index) {
