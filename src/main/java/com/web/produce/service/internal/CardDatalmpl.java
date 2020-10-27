@@ -298,7 +298,7 @@ public class CardDatalmpl implements CardDataService {
 		String[] line_id = line_ids.split(";");
 		String msg = "";
 		for(String lid:line_id){
-			List<DevClock> ld = devClockDao.findByDelFlagAndLineIdAndDevType(0,Long.parseLong(lid),"上线机");
+			List<DevClock> ld = devClockDao.findByDelFlagAndLineIdAndDevTypeAndEnabled(0,Long.parseLong(lid),"上线机",1);
 			if(ld.size() > 0){
 				for(DevClock dc:ld){
 					ApiResponseResult api = this.saveCardData(dc);
