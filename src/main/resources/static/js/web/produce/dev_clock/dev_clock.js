@@ -225,14 +225,6 @@ function addDevClock() {
 function exportDevClock(){
 	var keywords = $("#keywordSearch").val();
 	location.href = context + "/produce/dev_clock/exportList?keyword="+keywords;
-
-	//  console.log(keywords);
-	// CoreUtil.sendAjax("produce/dev_clock/exportList?keyword="+keywords,"",
-	// 	function(data) {
-	// 		layer.msg(data.msg);
-	// 	}, "get", false, function(res) {
-	// 		layer.msg(res.msg);
-	// 	});
 }
 
 //获取线体信息

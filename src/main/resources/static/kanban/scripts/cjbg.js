@@ -27,6 +27,7 @@ function chartDiv(xAxis_data,series1_data,series2_data,series3_data){
                     color: '#ffffff'//字体颜色
                 },
 		    },
+		    color: ['#66FFCC','#6699FF', '#9966FF'],
 		    xAxis: [
 		        {
 		            type: 'category',
@@ -131,7 +132,7 @@ function getList(){
             	 var html = "";var xAxis=[];var series1=[];var series2=[];var series3=[];
             	 for(j = 0,len=res.data.List.length; j < len; j++) {
             		 var arr = res.data.List[j]
-            		 html += '<div class="layui-col-md3"> '+
+            		/* html += '<div class="layui-col-md3"> '+
 						       ' <div class="div_any_child"> '+
 					                '<div class="div_any_title">'+arr.LINER_NAME+'</div> '+
 					                 ' <div  class="tip-container"> '+
@@ -149,7 +150,27 @@ function getList(){
 										   '</div> '+
 					                   '</div>  '+
 					            '</div> '+
-						    '</div> ';
+						    '</div> ';*/
+            		 
+            		 html += '<div style="width:24%;" class="layui-input-inline"> '+
+				       ' <div class="div_any_child"> '+
+			                '<div class="div_any_title">'+arr.LINER_NAME+'</div> '+
+			                 ' <div  class="tip-container"> '+
+								   '<div class="tip-content" > '+
+								     '<div  class="speed-container"> '+
+								      '<div class="speed-content"> '+
+								       '<ul> '+
+								       '<li><span class="zhzb-li-name">在线人数</span><span class="zhzb-li-num">'+arr.NUM_LINE_ON+'</span></li> '+
+								       '<li><span class="zhzb-li-name">标准工时</span><span class="zhzb-li-num">'+arr.HOUR_ST+'</span></li> '+
+								       '<li><span class="zhzb-li-name">实际工时</span><span class="zhzb-li-num">'+arr.HOUR_ACT+'</span></li> '+
+								       '<li><span>生产效率</span><span class="speed-line"><span  class="speed-num" style="background-color: rgb(85, 182, 237); width: '+arr.EFFICIENCY_RATE+'%;"></span><span class="numText">'+arr.EFFICIENCY_RATE+'%</span></span></li> '+
+								       '</ul> '+
+								      '</div> '+
+								     '</div> '+
+								   '</div> '+
+			                   '</div>  '+
+			            '</div> '+
+				    '</div> ';
             		 
             		 xAxis[j] = arr.LINER_NAME;
             		 series1[j] = arr.HOUR_ST;
