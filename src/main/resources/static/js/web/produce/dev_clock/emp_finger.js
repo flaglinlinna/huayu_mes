@@ -44,11 +44,11 @@ $(function() {
 				field : 'fingerIdx',
 				title : '手指序号',
 				width : 80,
-			}, {
+			},/*  {
 				field : 'templateStr',
 				title : '指纹模板',
 			
-			},/* {
+			},{
 				field : 'lastupdateDate',
 				title : '更新时间',
 				width : 145,
@@ -58,13 +58,13 @@ $(function() {
 				title : '添加时间',
 				width : 145,
 				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
-			}, {
+			}/*, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
 				width : 120,
 				toolbar : '#optBar'
-			} ] ],
+			} */] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
@@ -122,6 +122,7 @@ $(function() {
 			CoreUtil.sendAjax("produce/emp_finger/getEmpFinger", JSON
 					.stringify(param), function(data) {
 				if (data.result) {
+					console.log(data)
 					form.val("empForm", {
 						"id" : data.data.id,
 						"templateStr" : data.data.templateStr,

@@ -103,7 +103,7 @@ $(function() {
 						},{
 							field : 'ITEM_NAME',
 							title : '物料描述',
-							width : 240
+							width : 240,
 						}, {
 							field : 'LINER_NAME',
 							title : '组长',

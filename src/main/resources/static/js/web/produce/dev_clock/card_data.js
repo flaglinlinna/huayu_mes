@@ -63,13 +63,13 @@ $(function() {
 			}, {
 				field : 'fmemo',
 				title : '备注',
-			} , {
+			} /*, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
 				toolbar : '#optBar',
 				width: 100
-			} ] ],
+			} */] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
@@ -155,9 +155,9 @@ $(function() {
 		form.on('submit(addSubmit)', function(data) {
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
-				addSubmit(data);
+				//addSubmit(data);
 			} else {
-				editSubmit(data);
+				//editSubmit(data);
 			}
 			return false;
 		});

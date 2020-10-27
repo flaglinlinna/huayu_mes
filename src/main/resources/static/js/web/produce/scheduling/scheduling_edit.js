@@ -172,7 +172,7 @@ function getScheduling(){
         optionHtml2 += '<option value="'+clientList[i].id+'">'+clientList[i].custName+'</option>';
     }
     $("#custId").html(optionHtml2);
-    //添加线别信息
+    //添加组长信息
     for(var i = 0; i < lineList.length; i++){
         optionHtml3 += '<option value="'+lineList[i].linerName+'">'+lineList[i].linerName+'</option>';
     }
