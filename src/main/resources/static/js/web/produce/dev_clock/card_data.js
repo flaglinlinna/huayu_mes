@@ -450,3 +450,7 @@ function updateData(devIds,stype){
 		layer.alert(res.msg);
 	});
 }
+//导出
+function doExport(){
+	
+}
