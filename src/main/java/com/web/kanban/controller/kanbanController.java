@@ -49,6 +49,16 @@ public class kanbanController extends WebController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/toIndex", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toIndex() {
+		String method = "/kanban/toIndex";String methodName ="看板demo";
+		ModelAndView mav=new ModelAndView();
+		//mav.addObject("pname", p);
+		mav.setViewName("/kanban/index");//返回路径
+		return mav;
+	}
+	
 	@RequestMapping(value = "/toCjbg", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView toCjbg() {
@@ -56,6 +66,15 @@ public class kanbanController extends WebController {
 		ModelAndView mav=new ModelAndView();
 		//mav.addObject("pname", p);
 		mav.setViewName("/kanban/cjbg");//返回路径
+		return mav;
+	}
+	@RequestMapping(value = "/toCjbg1", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCjbg1() {
+		String method = "/kanban/toCjbg1";String methodName ="车间报工看板";
+		ModelAndView mav=new ModelAndView();
+		//mav.addObject("pname", p);
+		mav.setViewName("/kanban/cjbg1");//返回路径
 		return mav;
 	}
 	
@@ -92,6 +111,24 @@ public class kanbanController extends WebController {
              logger.error("获取车间报工看板信息失败！", e);
              getSysLogService().error(method, methodName, e.toString());
              return ApiResponseResult.failure("获取车间报工看板信息失败！");
+        }
+    }
+	
+	@ApiOperation(value="获取生产电子看板信息", notes="获取生产电子看板信息", hidden = true)
+    @RequestMapping(value = "/getScdzList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getScdzList(String class_nos,String dep_id,String sdata,String edata) {
+        String method = "/kanban/getScdzList";String methodName ="获取生产电子看板信息";
+        try {
+            ApiResponseResult result = kanbanService.getScdzList(class_nos, dep_id, sdata, edata,this.getIpAddr());
+            logger.debug("获取生产电子看板信息=getScdzList:"+result);
+            getSysLogService().success(method, methodName, null);
+            return result;
+        } catch (Exception e) {
+        	 e.printStackTrace();
+             logger.error("获取生产电子看板信息失败！", e);
+             getSysLogService().error(method, methodName, e.toString());
+             return ApiResponseResult.failure("获取生产电子看板信息失败！");
         }
     }
 }

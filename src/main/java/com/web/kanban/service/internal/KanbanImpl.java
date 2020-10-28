@@ -40,4 +40,26 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		return ApiResponseResult.success().data(kanbanDao.getDepList());
 	}
 
+	@Override
+	public ApiResponseResult getScdzList(String class_no, String dep_id, String sdata, String edata, String dev_ip)
+			throws Exception {
+		// TODO Auto-generated method stub
+		List<Object> list = getScdzListPrc("","","",class_no,  dep_id,  sdata,  edata, dev_ip);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("List", list.get(2));
+		map.put("Sdata", list.get(3));
+		map.put("Edata", list.get(5));
+		map.put("LINE_NUM_PLN", list.get(6));//
+		map.put("LINE_NUM_NOW", list.get(7));
+		map.put("EMP_NUM_PLN", list.get(8));
+		map.put("EMP_NUM_NOW", list.get(9));
+		map.put("PRD_NUM_PLN", list.get(10));
+		map.put("PRD_NUM_DONE", list.get(11));
+		map.put("PRD_RATE_DONE", list.get(12));
+		return ApiResponseResult.success().data(map);
+	}
+
 }
