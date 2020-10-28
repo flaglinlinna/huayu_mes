@@ -12,4 +12,6 @@ public interface KanbanService {
 	
 	public ApiResponseResult getCjbgDepList()throws Exception;
 	
+	public ApiResponseResult getScdzList(String class_no,String dep_id,String sdata,String edata,String dev_ip)throws Exception;
+	
 }

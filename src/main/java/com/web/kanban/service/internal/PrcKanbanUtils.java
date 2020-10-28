@@ -71,6 +71,72 @@ public class PrcKanbanUtils {
 		});
 		return resultList;
 	}
+	
+	// 获取生产电子看板信息
+		public List getScdzListPrc(String company,String facoty,String user_id, String class_id,
+				String dep_id, String sdata, String edata,String dev_ip) throws Exception {
+			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+				@Override
+				public CallableStatement createCallableStatement(Connection con) throws SQLException {
+					String storedProc = "{call  PRC_MES_RPT_SCDZ (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+					CallableStatement cs = con.prepareCall(storedProc);
+					cs.setString(1, company);
+					cs.setString(2, facoty);
+					cs.setString(3, class_id);
+					cs.setString(4, dep_id);
+					cs.setString(5, sdata);
+					cs.setString(6, dev_ip);
+					cs.setString(7, user_id);
+					cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(10, -10);// 输出参数 追溯数据
+					cs.registerOutParameter(11, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(12, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(13, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(14, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(15, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(16, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(17, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(18, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(19, java.sql.Types.INTEGER);// 输出参数 返回标识
+					return cs;
+				}
+			}, new CallableStatementCallback() {
+				public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+					List<Object> result = new ArrayList<>();
+					List<Map<String, Object>> l = new ArrayList();
+					cs.execute();
+					result.add(cs.getInt(8));
+					result.add(cs.getString(9));
+					if (cs.getString(8).toString().equals("0")) {
+						// 游标处理
+						ResultSet rs = (ResultSet) cs.getObject(10);
+
+						try {
+							l = fitMap(rs);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						result.add(l);
+						
+						result.add(cs.getString(11));
+						result.add(cs.getString(12));
+						result.add(cs.getString(13));
+						result.add(cs.getString(14));
+						result.add(cs.getString(15));
+						result.add(cs.getString(16));
+						result.add(cs.getString(17));
+						result.add(cs.getString(18));
+						result.add(cs.getString(19));
+					}
+					System.out.println(l);
+					return result;
+				}
+
+			});
+			return resultList;
+		}
 
 		
 	private List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
