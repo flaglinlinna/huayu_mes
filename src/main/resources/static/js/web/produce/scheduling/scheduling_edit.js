@@ -152,17 +152,15 @@ $(function () {
         });
      // 监听勾选过程属性操作
 		form.on('checkbox(isStatusTpl)', function(obj) {
-			console.log(obj,this.value, this.name, obj.elem.checked)
-			 /*
-			  *  res.data[i]["LAY_CHECKED"]='true';
-                 $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
-                 $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
-			  * */
-			if(obj.elem.checked==true){
-				
-			}else{
-				
-			}
+			//console.log(obj,this.value, this.name, obj.elem.checked)
+			console.log(obj)
+			 //当前元素
+            var data = $(obj.elem);
+			var rowIndex = data.parents('tr').first().attr("data-index");
+			console.log(rowIndex)
+			//res.data[rowIndex]["LAY_CHECKED"]='true';
+                 $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+                 $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
 		});
 		//监听行选择事件
        /* 
