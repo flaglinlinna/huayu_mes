@@ -45,13 +45,13 @@ public class OrganizationController extends WebController {
     
     
     /**
-	 * 权限列表
+	 * 组织列表
 	 * @return ok/fail
 	 */
 	@RequestMapping(value = "/toOrgList", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView permList() {
-		String method = "/sysOrg/toOrgList";String methodName ="权限列表";
+		String method = "/sysOrg/toOrgList";String methodName ="组织列表";
 		//getSysLogService().debug(method,methodName);
 		logger.debug(method);
 		ModelAndView mav = new ModelAndView("/system/organization/orgList");
@@ -63,7 +63,7 @@ public class OrganizationController extends WebController {
 			mav.addObject("msg", "ok");
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("权限查询异常！", e);
+			logger.error("组织列表查询异常！", e);
 			getSysLogService().error(method,methodName,e.toString());
 		}
 		return mav;
@@ -97,7 +97,7 @@ public class OrganizationController extends WebController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
     public ApiResponseResult delete(@RequestParam(value = "id", required = false) Long id){
-		String method = "/sysPermission/delete";String methodName ="删除权限";
+		String method = "/sysPermission/delete";String methodName ="删除组织列表记录";
         try{
         	ApiResponseResult api = organizationService.delete(id);
         	getSysLogService().success(method,methodName,id);
@@ -105,48 +105,48 @@ public class OrganizationController extends WebController {
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             getSysLogService().error(method,methodName,e.toString());
-            return  ApiResponseResult.failure("删除权限操作失败，请联系管理员！");
+            return  ApiResponseResult.failure("删除组织列表记录操作失败，请联系管理员！");
         }
     }
 	
 	/**
-	 * 添加权限
-	 * @param type [0：编辑；1：新增子节点权限]
+	 * 添加组织列表记录
+	 * @param type [0：编辑；1：新增子节点组织列表记录]
 	 * @param permission
 	 * @return ModelAndView ok/fail
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody public ApiResponseResult add(
 			@RequestParam("type") int type, SysOrganization permission) {
-		logger.debug("设置权限--区分type-" + type + "【0：编辑；1：新增子节点权限】，权限--permission-"
+		logger.debug("设置组织列表记录--区分type-" + type + "【0：编辑；1：新增子节点组织列表记录】，组织列表记录--permission-"
 				+ permission);
-		String method = "/sysPermission/add";String methodName ="添加权限";
+		String method = "/sysPermission/add";String methodName ="添加组织列表记录";
 		try {
 			ApiResponseResult api = organizationService.savePerm(permission);
-        	getSysLogService().success(method,methodName,"权限实体");
+        	getSysLogService().success(method,methodName,"组织列表记录实体");
             return api;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("设置权限异常！", e);
+			logger.error("设置组织列表记录异常！", e);
 			getSysLogService().error(method,methodName,e.toString());
-			return ApiResponseResult.failure("设置权限异常，请联系管理员");
+			return ApiResponseResult.failure("设置组织列表记录异常，请联系管理员");
 		}
-		//return "设置权限出错，请您稍后再试";
+		//return "设置组织列表记录出错，请您稍后再试";
 	}
 	
 	/**
-	 * 根据用户id查询权限树数据
+	 * 根据用户id查询组织列表记录树数据
 	 * @return List<Map<String, Object>>
 	 */
 	@RequestMapping(value = "/getUserPerms", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getUserPerms() {
-		String method = "/sysPermission/getUserPerms";String methodName ="查询用户的权限";
+		String method = "/sysPermission/getUserPerms";String methodName ="查询用户的组织列表记录";
 		logger.debug("根据用户id查询限树列表！");
 		SysUser existUser= (SysUser) SecurityUtils.getSubject().getPrincipal();
 		if(null==existUser){
 			logger.debug("根据用户id查询限树列表！用户未登录");
-			getSysLogService().error(method,methodName,"查询用户权限失败,用户未登录");
+			getSysLogService().error(method,methodName,"查询用户组织列表记录失败,用户未登录");
 			return ApiResponseResult.failure("用户未登录");
 		}
 		try {
@@ -154,8 +154,8 @@ public class OrganizationController extends WebController {
 //            return sysPermissionService.getUserPerms(Long.parseLong(existUser.getFid()));
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("根据用户id查询权限树列表查询异常！", e);
-			return ApiResponseResult.failure("根据用户id查询权限树列表查询异常");
+			logger.error("根据用户id查询组织列表记录树列表查询异常！", e);
+			return ApiResponseResult.failure("根据用户id查询组织列表记录树列表查询异常");
 		}
 	}
 	

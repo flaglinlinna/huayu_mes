@@ -258,7 +258,7 @@ $(function() {
 							elem : '#timeBegin',
 							trigger : 'click',
 							type : 'datetime', // 默认，可不填
-							done : function(value, date, endDate) {
+							change : function(value, date, endDate) {
 								// 年月日时间被切换时都会触发。回调返回三个参数，分别代表：生成的值、日期时间对象、结束的日期时间对象
 								$('#timeBegin').change();
 								// console.log(value); // 得到日期生成的值，如：2017-08-18
@@ -507,22 +507,45 @@ function calTime() { // 计算开始与结束的时长
 	var start = $("#timeBegin").val();
 	var end = $("#timeEnd").val();
 	
+	var chkStart=checkDatetime(start);
+	var chkEnd=checkDatetime(end);
 	
-	
-	var timeBegin=new Date(start);
-	var timeEnd =new Date(end);
-			
-	//var timeBegin = new Date(start.replace(/-/g, "-"));
-	//var timeEnd = new Date(end.replace(/-/g, "-"));
+	console.log(chkStart);
+	console.log(chkEnd);
+	if(chkStart&&chkEnd){
+		var timeBegin=new Date(start);
+		var timeEnd =new Date(end);
+		
+		//var timeBegin = new Date(start.replace(/-/g, "-"));
+		//var timeEnd = new Date(end.replace(/-/g, "-"));
 
-	var diff = (timeEnd.getTime() - timeBegin.getTime()) / (1000 * 60);// 单位 分钟
-	console.log(diff)
-	if (diff < 0) {
-		layer.alert("请选择或输入正确的开始/结束时间");
-		$("#duration").val("");
+		var diff = (timeEnd.getTime() - timeBegin.getTime()) / (1000 * 60);// 单位 分钟
+		console.log(diff)
+		if (diff < 0) {
+			layer.alert("请选择或输入正确的开始/结束时间");
+			$("#duration").val("");
+			return false;
+		}
+		$("#duration").val(diff.toFixed(2));
+	}else{
+		layer.alert("输入的日期格式不正确，请检查！")
 		return false;
 	}
-	$("#duration").val(diff.toFixed(2));
+}
+
+function checkDatetime(str){
+	var reg = /^(\d+)-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;
+	var r = str.match(reg);
+	if(r==null)return false;
+	r[2]=r[2]-1;
+	var d= new Date(r[1], r[2],r[3], r[4],r[5], r[6]);
+	if(d.getFullYear()!=r[1])return false;
+	if(d.getMonth()!=r[2])return false;
+	if(d.getDate()!=r[3])return false;
+	if(d.getHours()!=r[4])return false;
+	if(d.getMinutes()!=r[5])return false;
+	if(d.getSeconds()!=r[6])return false;
+	return true;
 }
 
 // 重新加载表格（全部）

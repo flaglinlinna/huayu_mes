@@ -1,5 +1,8 @@
 package com.web.produce.service.internal;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,9 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.jdbc.core.CallableStatementCallback;
+import org.springframework.jdbc.core.CallableStatementCreator;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +63,9 @@ public class CardDatalmpl implements CardDataService {
 	@Autowired
 	DevClockDao devClockDao;
 	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
 	/**
 	 * 查询列表
 	 */
@@ -74,6 +84,7 @@ public class CardDatalmpl implements CardDataService {
 			filters1.add(new SearchFilter("devClock.devCode", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("devClock.devName", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("devClock.devIp", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("devClock.devType", SearchFilter.Operator.LIKE, keyword));
 		}
 		Specification<CardData> spec = Specification.where(BaseService.and(filters, CardData.class));
 		Specification<CardData> spec1 = spec.and(BaseService.or(filters1, CardData.class));
@@ -85,6 +96,7 @@ public class CardDatalmpl implements CardDataService {
 			map.put("id", bs.getId());
 			map.put("empCode",bs.getEmployee().getEmpCode());//获取关联表的数据-工号
 			map.put("empName",bs.getEmployee().getEmpName());//获取关联表的数据-姓名
+			map.put("devType", bs.getDevClock().getDevType());
 			map.put("devIp",bs.getDevClock().getDevIp());//获取关联表的数据-卡机IP
 			map.put("cardDate", bs.getCardDate());
 			map.put("cardTime", bs.getCardTime());
@@ -335,7 +347,46 @@ public class CardDatalmpl implements CardDataService {
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setFstatus(fstatus);
         cardDataDao.save(o);
-        return ApiResponseResult.success("设置成功！").data(o);
+        return ApiResponseResult.success("设置成功！").data(o); 
+		/*
+		String id_str=id.toString();
+		String fstatus_str=fstatus.toString();
+
+		List<Object> list = doStatusPrc(UserUtil.getSessionUser().getCompany() + "",
+			UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getId()+"",
+			id_str,fstatus_str);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success();*/
+	}
+	
+	public List doStatusPrc(String company,String facoty,String user_id,
+			String id,String fstatus)throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  prc_mes_cof_carddata_invalid(?,?,?,?,?,?,?,}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, facoty);
+				cs.setString(2, company);
+				cs.setString(3, user_id);
+				cs.setString(4, id);
+				cs.setString(5, fstatus);
+				cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				cs.execute();
+				result.add(cs.getInt(6));
+				result.add(cs.getString(7));
+				return result;
+			}
+		});
+		return resultList;
 	}
 
 	@Override

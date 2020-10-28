@@ -34,7 +34,7 @@ $(function () {
                 ,{field:'errorInfo', title:'错误信息', width:100}
                 ,{field:'groupNo', title:'组合', width:60}
                 ,{field:'custName', title:'客户', width:70}
-                ,{field:'linerName', title:'线别', width:70}
+                ,{field:'linerName', title:'组长', width:70}
                 ,{field:'prodDate', title:'日期', width:100}
                 ,{field:'deptName', title:'组装部', width:80}
                 ,{field:'classNo', title:'班次', width:60}

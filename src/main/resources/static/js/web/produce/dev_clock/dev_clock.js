@@ -221,6 +221,12 @@ function addDevClock() {
 	getLineList("");
 	openDevClock(null, "添加卡机信息");
 }
+
+function exportDevClock(){
+	var keywords = $("#keywordSearch").val();
+	location.href = context + "/produce/dev_clock/exportList?keyword="+keywords;
+}
+
 //获取线体信息
 function getLineList(id){
 	CoreUtil.sendAjax("produce/dev_clock/getLineList", "",

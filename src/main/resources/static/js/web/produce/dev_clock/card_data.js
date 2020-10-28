@@ -19,6 +19,7 @@ $(function() {
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
+				
 				if(res.status == 1){
 		              return {
 		                     "code": res.status,//code值为200表示成功
@@ -46,6 +47,9 @@ $(function() {
 			},{
 				field : 'empName',
 				title : '员工姓名'
+			},{
+				field : 'devType',
+				title : '卡机类型',
 			}, {
 				field : 'devIp',
 				title : '卡机IP',
@@ -63,13 +67,13 @@ $(function() {
 			}, {
 				field : 'fmemo',
 				title : '备注',
-			} , {
+			} /*, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
 				toolbar : '#optBar',
 				width: 100
-			} ] ],
+			} */] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
@@ -155,9 +159,9 @@ $(function() {
 		form.on('submit(addSubmit)', function(data) {
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
-				addSubmit(data);
+				//addSubmit(data);
 			} else {
-				editSubmit(data);
+				//editSubmit(data);
 			}
 			return false;
 		});
@@ -211,7 +215,7 @@ $(function() {
 			var isStatus = checked ? 1 : 0;
 			var deaprtisStatus = checked ? "有效":"无效";
 			// 正常/禁用
-
+			console.log(id,isStatus)
 			layer.confirm(
 					'您确定要把' + name + '的卡点信息设置为' + deaprtisStatus + '状态吗？', {
 						btn1 : function(index) {

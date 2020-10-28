@@ -58,18 +58,31 @@ function edit(id,type){
         $("#type").val(type);
         $("#id").val(id);
         $.get(context+"/sysOrg/getPerm",{"id":id},function(data) {
-            // console.log(data);
+             console.log(data);
             if(data.result){
+            	/*
                 $("input[name='orgName']").val(data.data.orgName);
                 $("input[name='orgCode']").val(data.data.orgCode);
                 $("input[name='pageUrl']").val(data.data.pageUrl);
                 $("input[name='zindex']").val(data.data.zindex);
                 $("textarea[name='description']").text(data.data.description);
+                $("#parentId").val(data.data.parentId);*/
+            	
+            	
+            	$("#orgName").val(data.data.orgName);
+                $("#orgCode").val(data.data.orgCode);
+                $("#leadBy").val(data.data.leadBy);
+                $("#mobile").val(data.data.mobile);
+                $("#flevel").val(data.data.flevel);
+                $("#zindex").val(data.data.zindex);
+                $("#description").val(data.data.description);
                 $("#parentId").val(data.data.parentId);
-                data.data.istype==0?$("input[name='menuType']").val(0).checked:$("input[name='menuType']").val(1).checked;
+                
+               data.data.istype==0?$("input[name='menuType']").val(0).checked:$("input[name='menuType']").val(1).checked;
+              
                 layer.open({
                     type:1,
-                    title: "更新权限",
+                    title: "部门编辑",
                     fixed:false,
                     resize :false,
                     shadeClose: true,
@@ -100,7 +113,7 @@ function addPerm(pid,flag){
         }
         layer.open({
             type:1,
-            title: "添加权限",
+            title: "新增",
             fixed:false,
             resize :false,
             shadeClose: true,

@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import com.app.base.data.ApiResponseResult;
 import com.web.produce.entity.DevClock;
 
+import javax.servlet.http.HttpServletResponse;
+
 
 public interface DevClockService {
 	public ApiResponseResult add(DevClock devClock) throws Exception;
@@ -19,6 +21,8 @@ public interface DevClockService {
 	public ApiResponseResult delete(Long id) throws Exception;
 
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
+
+	public void exportList(String keyword, HttpServletResponse response) throws Exception;
 	
 	public ApiResponseResult getLineList() throws Exception;//获取线体
 	
