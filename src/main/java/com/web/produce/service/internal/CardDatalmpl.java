@@ -333,7 +333,7 @@ public class CardDatalmpl implements CardDataService {
 	@Override 
 	@Transactional
 	public ApiResponseResult doStatus(Long id, Integer fstatus) throws Exception{
-        if(id == null){
+        /*if(id == null){
             return ApiResponseResult.failure("记录ID不能为空！");
         }
         if(fstatus == null){
@@ -347,8 +347,8 @@ public class CardDatalmpl implements CardDataService {
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setFstatus(fstatus);
         cardDataDao.save(o);
-        return ApiResponseResult.success("设置成功！").data(o); 
-		/*
+        return ApiResponseResult.success("设置成功！").data(o); */
+		
 		String id_str=id.toString();
 		String fstatus_str=fstatus.toString();
 
@@ -358,7 +358,7 @@ public class CardDatalmpl implements CardDataService {
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		return ApiResponseResult.success();*/
+		return ApiResponseResult.success();
 	}
 	
 	public List doStatusPrc(String company,String facoty,String user_id,
