@@ -75,6 +75,7 @@ function edit(id,type){
                 $("#mobile").val(data.data.mobile);
                 $("#flevel").val(data.data.flevel);
                 $("#zindex").val(data.data.zindex);
+                $("#empNum").val(data.data.empNum);
                 $("#description").val(data.data.description);
                 $("#parentId").val(data.data.parentId);
                 

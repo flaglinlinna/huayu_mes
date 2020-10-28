@@ -150,6 +150,12 @@ $(function () {
             doEditItem();
             return false;
         });
+     // 监听勾选过程属性操作
+		table.on('checkbox(isStatusTpl)', function(obj){
+			  console.log(obj.checked); //当前是否选中状态
+			  console.log(obj.data); //选中行的相关数据
+			  console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+			});
 
         getScheduling();
 
@@ -173,8 +179,10 @@ function getScheduling(){
     }
     $("#custId").html(optionHtml2);
     //添加组长信息
-    for(var i = 0; i < lineList.length; i++){
-        optionHtml3 += '<option value="'+lineList[i].linerName+'">'+lineList[i].linerName+'</option>';
+    
+    var lineData=lineList[2];
+    for(var i = 0; i < lineData.length; i++){
+        optionHtml3 += '<option value="'+lineData[i].ORG_NAME+'">'+lineData[i].ORG_NAME+'</option>';
     }
     $("#linerName").html(optionHtml3);
     //添加部门信息

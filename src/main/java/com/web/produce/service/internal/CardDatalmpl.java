@@ -324,9 +324,7 @@ public class CardDatalmpl implements CardDataService {
 			}else{
 				return ApiResponseResult.failure("该产线未配置上线卡机!");
 			}
-			
-		}
-		
+		}		
 		return ApiResponseResult.success("同步数据成功！"+msg);
 	}
 	
@@ -366,7 +364,7 @@ public class CardDatalmpl implements CardDataService {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  prc_mes_cof_carddata_invalid(?,?,?,?,?,?,?,}";// 调用的sql
+				String storedProc = "{call  prc_mes_cof_carddata_invalid(?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
 				cs.setString(2, company);

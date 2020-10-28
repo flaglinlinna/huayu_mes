@@ -58,6 +58,13 @@ public class SysOrganization extends BaseEntity{
     @Column
     protected Integer zindex;
     
+    /**
+     * 在职人数
+     */
+    @ApiModelProperty(name = "empNum", value = "在职人数")
+    @Column
+    protected Integer empNum;
+    
 
     /**
      * 负责人
@@ -160,6 +167,14 @@ public class SysOrganization extends BaseEntity{
 
 	public void setFlevel(String flevel) {
 		this.flevel = flevel;
+	}
+
+	public Integer getEmpNum() {
+		return empNum;
+	}
+
+	public void setEmpNum(Integer empNum) {
+		this.empNum = empNum;
 	}
 	
 }

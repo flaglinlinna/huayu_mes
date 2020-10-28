@@ -309,5 +309,5 @@ public class Scheduling extends BaseEntity {
 
     public void setProduceState(String produceState) {
         this.produceState = produceState;
-    }
+    }    
 }

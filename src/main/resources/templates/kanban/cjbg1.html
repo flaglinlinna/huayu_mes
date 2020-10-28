@@ -6,6 +6,25 @@
 <script type="text/javascript" src="../kanban/js/jquery.js"></script>
 <link rel="stylesheet" href="../kanban/css/comon0.css">
 </head>
+<style>
+th, td{
+text-align:center;
+vertical-align:middle;
+padding:4px;
+color:#FFFFFF;
+}
+table,table tr td {
+    border: 2px solid #333399;
+    border-collapse: collapse;
+}
+th{
+font-size:18px;
+}
+td{
+font-size:20px;
+}
+
+</style>
 	<script>
 	$(window).load(function(){  
              $(".loading").fadeOut()
@@ -64,9 +83,9 @@ var t = null;
       <div class="boxall">
       <div class="alltitle">模块标题样式</div>
 			<div class="data_table">
-							<table id="table" class="table table-bordered">
+							<table id="table" class="table table-bordered" style="width:99%;">
 				      			<thead>
-				        			<tr class="blue_bg">
+				        			<tr class="blue_bg" style="background: #333399;">
 				          				<th>线号</th>
 				          				<th>工序</th>
 				          				<th>计划数量</th>
@@ -77,7 +96,67 @@ var t = null;
 				          				<th>计划达成率</th>
 				        			</tr>
       							</thead>
-								<tbody> 
+								<tbody >
+								 <tr >
+				          				<td>L1</td>
+				          				<td>SMT</td>
+				          				<td>5000</td>
+				          				<td>3000</td>
+				          				<td>2500</td>
+				          				<td>15</td>
+				          				<td>0.6%</td>
+				          				<td>50%</td>
+				        			</tr>
+				        			 <tr >
+				          				<td>L2</td>
+				          				<td>注塑</td>
+				          				<td>5000</td>
+				          				<td>2500</td>
+				          				<td>2000</td>
+				          				<td>20</td>
+				          				<td>1%</td>
+				          				<td>40%</td>
+				        			</tr>
+				        			<tr >
+				          				<td>L1</td>
+				          				<td>SMT</td>
+				          				<td>5000</td>
+				          				<td>3000</td>
+				          				<td>2500</td>
+				          				<td>15</td>
+				          				<td>0.6%</td>
+				          				<td>50%</td>
+				        			</tr>
+				        			 <tr >
+				          				<td>L2</td>
+				          				<td>注塑</td>
+				          				<td>5000</td>
+				          				<td>2500</td>
+				          				<td>2000</td>
+				          				<td>20</td>
+				          				<td>1%</td>
+				          				<td>40%</td>
+				        			</tr>
+				        			<tr >
+				          				<td>L1</td>
+				          				<td>SMT</td>
+				          				<td>5000</td>
+				          				<td>3000</td>
+				          				<td>2500</td>
+				          				<td>15</td>
+				          				<td>0.6%</td>
+				          				<td>50%</td>
+				        			</tr>
+				        			 <tr >
+				          				<td>L2</td>
+				          				<td>注塑</td>
+				          				<td>5000</td>
+				          				<td>2500</td>
+				          				<td>2000</td>
+				          				<td>20</td>
+				          				<td>1%</td>
+				          				<td>40%</td>
+				        			</tr>
 								</tbody>				
 							</table>
 						</div>	

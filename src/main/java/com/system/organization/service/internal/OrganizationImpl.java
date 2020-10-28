@@ -78,6 +78,7 @@ public class OrganizationImpl implements OrganizationService {
 			s.setFlevel(perm.getFlevel());
 			s.setLeadBy(perm.getLeadBy());
 			s.setMobile(perm.getMobile());
+			s.setEmpNum(perm.getEmpNum());
 			s.setZindex(perm.getZindex());
 			s.setDescription(perm.getDescription());
 			s.setLastupdateDate(new Date());
