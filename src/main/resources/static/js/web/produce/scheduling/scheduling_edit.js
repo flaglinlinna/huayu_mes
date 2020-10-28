@@ -151,12 +151,27 @@ $(function () {
             return false;
         });
      // 监听勾选过程属性操作
-		table.on('checkbox(isStatusTpl)', function(obj){
+		form.on('checkbox(isStatusTpl)', function(obj) {
+			console.log(obj,this.value, this.name, obj.elem.checked)
+			 /*
+			  *  res.data[i]["LAY_CHECKED"]='true';
+                 $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+                 $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+			  * */
+			if(obj.elem.checked==true){
+				
+			}else{
+				
+			}
+		});
+		//监听行选择事件
+       /* 
+		table.on('checkbox(iTable)', function(obj){
 			  console.log(obj.checked); //当前是否选中状态
 			  console.log(obj.data); //选中行的相关数据
 			  console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
-			});
-
+			});*/
+		
         getScheduling();
 
     });
