@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" >
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <title>车间看板</title>
@@ -7,25 +7,27 @@
 <link rel="stylesheet" href="../kanban/css/comon0.css">
 </head>
 <style>
-th, td{
-text-align:center;
-vertical-align:middle;
-padding:4px;
-color:#FFFFFF;
-}
-table,table tr td {
-    border: 2px solid #333399;
-    border-collapse: collapse;
-}
-th{
-font-size:18px;
-}
-td{
-font-size:20px;
+th, td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
 }
 
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+th {
+	font-size: 18px;
+}
+
+td {
+	font-size: 20px;
+}
 </style>
-	<script>
+<script>
 	$(window).load(function(){  
              $(".loading").fadeOut()
             })  
@@ -40,20 +42,26 @@ $(document).ready(function(){
 });
 	});
 	</script>
-	<script type="text/javascript" src="../kanban/js/echarts.min.js"></script> 
-	<script language="JavaScript" src="../kanban/js/js.js"></script> 
+<script type="text/javascript" src="../kanban/js/echarts.min.js"></script>
+<!--  <script language="JavaScript" src="../kanban/js/js.js"></script>-->
 <body>
-<div class="canvas" style="opacity: .2">
-	<iframe frameborder="0" src="../kanban/js/index.html" style="width: 100%; height: 100%"></iframe>
+	<div class="canvas" style="opacity: .2">
+		<iframe frameborder="0" src="../kanban/js/index.html"
+			style="width: 100%; height: 100%"></iframe>
 	</div>
-<div class="loading">
-  <div class="loadbox"> <img src="picture/loading.gif"> 页面加载中... </div>
-</div>
-<div class="head">
-  <h1>大数据可视化展板通用模板</h1>
-  <div class="weather"><!--<img src="picture/weather.png"><span>多云转小雨</span>--><span id="showTime"></span></div>
-	
-	<script>
+	<!-- <div class="loading">
+		<div class="loadbox">
+			<img src="picture/loading.gif"> 页面加载中...
+		</div>
+	</div> -->
+	<div class="head">
+		<h1>组装二部报工看板</h1>
+		<div class="weather">
+			<!--<img src="picture/weather.png"><span>多云转小雨</span>-->
+			<span id="showTime"></span>
+		</div>
+
+		<script>
 var t = null;
     t = setTimeout(time,1000);//開始运行
     function time()
@@ -71,98 +79,98 @@ var t = null;
     } 
 
 </script>
-	
-	
-</div>
-<div class="mainbox">
-<div class="boxall" style="height: 3.2rem">
-        <div class="alltitle">模块标题样式</div>
-        <div class="allnav" id="echart1"></div>
-        
-      </div>
-      <div class="boxall">
-      <div class="alltitle">模块标题样式</div>
+
+
+	</div>
+	<div class="mainbox">
+		<div class="boxall" style="height: 230px" >
+			
+			<div class="allnav" id="echart1" style="width:100%;height:220px;"></div>
+
+		</div>
+		<div class="boxall">
+			
 			<div class="data_table">
-							<table id="table" class="table table-bordered" style="width:99%;">
-				      			<thead>
-				        			<tr class="blue_bg" style="background: #333399;">
-				          				<th>线号</th>
-				          				<th>工序</th>
-				          				<th>计划数量</th>
-				          				<th>投入数量</th>
-				          				<th>产出数量</th>
-				          				<th>不良数量</th>
-				          				<th>不良率</th>
-				          				<th>计划达成率</th>
-				        			</tr>
-      							</thead>
-								<tbody >
-								 <tr >
-				          				<td>L1</td>
-				          				<td>SMT</td>
-				          				<td>5000</td>
-				          				<td>3000</td>
-				          				<td>2500</td>
-				          				<td>15</td>
-				          				<td>0.6%</td>
-				          				<td>50%</td>
-				        			</tr>
-				        			 <tr >
-				          				<td>L2</td>
-				          				<td>注塑</td>
-				          				<td>5000</td>
-				          				<td>2500</td>
-				          				<td>2000</td>
-				          				<td>20</td>
-				          				<td>1%</td>
-				          				<td>40%</td>
-				        			</tr>
-				        			<tr >
-				          				<td>L1</td>
-				          				<td>SMT</td>
-				          				<td>5000</td>
-				          				<td>3000</td>
-				          				<td>2500</td>
-				          				<td>15</td>
-				          				<td>0.6%</td>
-				          				<td>50%</td>
-				        			</tr>
-				        			 <tr >
-				          				<td>L2</td>
-				          				<td>注塑</td>
-				          				<td>5000</td>
-				          				<td>2500</td>
-				          				<td>2000</td>
-				          				<td>20</td>
-				          				<td>1%</td>
-				          				<td>40%</td>
-				        			</tr>
-				        			<tr >
-				          				<td>L1</td>
-				          				<td>SMT</td>
-				          				<td>5000</td>
-				          				<td>3000</td>
-				          				<td>2500</td>
-				          				<td>15</td>
-				          				<td>0.6%</td>
-				          				<td>50%</td>
-				        			</tr>
-				        			 <tr >
-				          				<td>L2</td>
-				          				<td>注塑</td>
-				          				<td>5000</td>
-				          				<td>2500</td>
-				          				<td>2000</td>
-				          				<td>20</td>
-				          				<td>1%</td>
-				          				<td>40%</td>
-				        			</tr>
-								</tbody>				
-							</table>
-						</div>	
-                  <div class="boxfoot"></div>
-		  </div>
-<!--   <ul class="clearfix">
+				<table id="table" class="table table-bordered" style="width: 99%;margin-top:10px;">
+					<thead>
+						<tr class="blue_bg" style="background: #333399;">
+							<th>线号</th>
+							<th>工序</th>
+							<th>计划数量</th>
+							<th>投入数量</th>
+							<th>产出数量</th>
+							<th>不良数量</th>
+							<th>不良率</th>
+							<th>计划达成率</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>L1</td>
+							<td>SMT</td>
+							<td>5000</td>
+							<td>3000</td>
+							<td>2500</td>
+							<td>15</td>
+							<td>0.6%</td>
+							<td>50%</td>
+						</tr>
+						<tr>
+							<td>L2</td>
+							<td>注塑</td>
+							<td>5000</td>
+							<td>2500</td>
+							<td>2000</td>
+							<td>20</td>
+							<td>1%</td>
+							<td>40%</td>
+						</tr>
+						<tr>
+							<td>L1</td>
+							<td>SMT</td>
+							<td>5000</td>
+							<td>3000</td>
+							<td>2500</td>
+							<td>15</td>
+							<td>0.6%</td>
+							<td>50%</td>
+						</tr>
+						<tr>
+							<td>L2</td>
+							<td>注塑</td>
+							<td>5000</td>
+							<td>2500</td>
+							<td>2000</td>
+							<td>20</td>
+							<td>1%</td>
+							<td>40%</td>
+						</tr>
+						<tr>
+							<td>L1</td>
+							<td>SMT</td>
+							<td>5000</td>
+							<td>3000</td>
+							<td>2500</td>
+							<td>15</td>
+							<td>0.6%</td>
+							<td>50%</td>
+						</tr>
+						<tr>
+							<td>L2</td>
+							<td>注塑</td>
+							<td>5000</td>
+							<td>2500</td>
+							<td>2000</td>
+							<td>20</td>
+							<td>1%</td>
+							<td>40%</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="boxfoot"></div>
+		</div>
+		<!--   <ul class="clearfix">
     <li>
       <div class="boxall" style="height: 3.2rem">
         <div class="alltitle">模块标题样式</div>
@@ -225,11 +233,11 @@ var t = null;
       </div>
     </li>
   </ul> -->
-</div>
-<div class="back"></div>
-
-
-<script type="text/javascript" src="../kanban/js/china.js"></script> 
-<script type="text/javascript" src="../kanban/js/area_echarts.js"></script> 
+		<script th:inline="javascript">
+        var kanbanDataList=[[${kanbanDataList}]];
+    </script>
+		<script src="/kanban/scripts/cjbg1.js"
+			th:src="@{/kanban/scripts/cjbg1.js}"></script>
+	</div>
 </body>
 </html>

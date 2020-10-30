@@ -233,6 +233,8 @@ $(function() {
 									});
 								} else {
 									layer.alert(data.msg, function() {
+										obj.elem.checked = isStatus;
+										form.render();
 										layer.closeAll();
 									});
 								}

@@ -30,17 +30,17 @@ $(function () {
             },
             cols: [[
                 {type:'numbers'}
-                ,{field:'checkStatus', title:'状态', width:100, templet:'#statusTpl'}
-                ,{field:'errorInfo', title:'错误信息', width:100}
-                ,{field:'groupNo', title:'组合', width:60}
+                ,{field:'checkStatus', title:'状态', width:110, templet:'#statusTpl'}
+                ,{field:'errorInfo', title:'错误信息', width:110}
+                ,{field:'groupNo', title:'组合', width:70}
                 ,{field:'custName', title:'客户', width:70}
                 ,{field:'linerName', title:'组长', width:70}
                 ,{field:'prodDate', title:'日期', width:100}
-                ,{field:'deptName', title:'组装部', width:80}
+                //,{field:'deptName', title:'组装部', width:80}
                 ,{field:'classNo', title:'班次', width:60}
                 ,{field:'prodNo', title:'工单号', width:120}
                 ,{field:'itemNo', title:'物料编码', width:120}
-                ,{field:'itemName', title:'物料描述', width:150}
+                ,{field:'itemName', title:'物料描述', width:200}
                 ,{field:'qtyPlan', title:'计划生产数量', width:110}
                 //,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
             ]]
@@ -69,7 +69,8 @@ $(function () {
         });
         form.on('submit(exportBtn)', function(data){
             //导出模板
-            location.href = context + "/produce/scheduling/getExcel";
+            //location.href = context + "/produce/scheduling/getExcel";
+        	location.href = "../../excelFile/排产导入模板.xlsx";//从文件夹内直接提取
             return false;
         });
         form.on('submit(importBtn)', function(data){

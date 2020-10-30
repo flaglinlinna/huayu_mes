@@ -113,7 +113,7 @@ public class SchedulingImpl implements SchedulingService {
             return ApiResponseResult.failure("排产信息ID不能为空！");
         }
         if(StringUtils.isEmpty(scheduling.getLinerName())){
-            return ApiResponseResult.failure("线别不能为空！");
+            return ApiResponseResult.failure("组长不能为空！");
         }
         Scheduling o = schedulingDao.findById((long) scheduling.getId());
         if(o == null){
@@ -323,16 +323,16 @@ public class SchedulingImpl implements SchedulingService {
         List<List<String>> bodyList = new ArrayList<>();//初始化
 
         //2创建表头信息
-        headerList.add("组合");//1
-        headerList.add("客户");//2
-        headerList.add("线别");//3
-        headerList.add("日期");//4
-        headerList.add("组装部");//5
-        headerList.add("班次");//6
-        headerList.add("工单号");//7
-        headerList.add("物料编码");//8
-        headerList.add("物料描述");//9
-        headerList.add("计划生产数量");//10
+        headerList.add("组合*");//1
+        headerList.add("客户*");//2
+        headerList.add("组长*");//3
+        headerList.add("日期*");//4
+        //headerList.add("组装部");//5
+        headerList.add("班次*");//6->5
+        headerList.add("工单号*");//7->6
+        headerList.add("物料编码*");//8->7
+        headerList.add("物料描述*");//9->8
+        headerList.add("计划生产数量*");//10->9
 
         //创建行（表头）
         Row createRow1 = sheet.createRow(0);
@@ -341,18 +341,18 @@ public class SchedulingImpl implements SchedulingService {
         }
         //设置列宽
         for(int i = 0; i < headerList.size(); i++){
-            if(headerList.get(i).equals("物料描述")){
+            if(headerList.get(i).equals("物料描述*")){
                 sheet.setColumnWidth(i, 80*256);
-            }else if(headerList.get(i).equals("物料编码") || headerList.get(i).equals("计划生产数量")){
+            }else if(headerList.get(i).equals("物料编码*") || headerList.get(i).equals("计划生产数量*")){
                 sheet.setColumnWidth(i, 25*256);
-            }else if(headerList.get(i).equals("工单号")){
+            }else if(headerList.get(i).equals("工单号*")){
                 sheet.setColumnWidth(i, 20*256);
-            }else if(headerList.get(i).equals("日期") || headerList.get(i).equals("组装部")){
+            }else if(headerList.get(i).equals("日期*")){
                 sheet.setColumnWidth(i, 10*256);
-            }else if(headerList.get(i).equals("线别")) {
-                sheet.setColumnWidth(i, 7*256);
+            }else if(headerList.get(i).equals("组长*")) {
+                sheet.setColumnWidth(i, 9*256);
             }else {
-                sheet.setColumnWidth(i, 5*256);
+                sheet.setColumnWidth(i, 7*256);
             }
         }
         //添加样式和数据
@@ -512,7 +512,7 @@ public class SchedulingImpl implements SchedulingService {
                 String itemName = "";//物料描述
                 Integer qtyPlan = null;//计划数量
                 String prodDate = null;//生产日期
-                String deptName = "";//部门名称
+                //String deptName = "";//部门名称
                 String linerName = "";//线长名称
                 String classNo = "";//班次
 
@@ -529,7 +529,7 @@ public class SchedulingImpl implements SchedulingService {
                 }catch (Exception e){
                 }
 
-                //线别
+                //线别->组长
                 try{
                     linerName = this.readExcelCell(sheet, le, 3);
                 }catch (Exception e){
@@ -542,38 +542,38 @@ public class SchedulingImpl implements SchedulingService {
                 }
 
                 //部门
-                try{
-                    deptName = this.readExcelCell(sheet, le, 5);
-                }catch (Exception e){
-                }
+                //try{
+                //    deptName = this.readExcelCell(sheet, le, 5);
+               // }catch (Exception e){
+               // }
 
                 //班次
                 try{
-                    classNo = this.readExcelCell(sheet, le, 6);
+                    classNo = this.readExcelCell(sheet, le, 5);
                 }catch (Exception e){
                 }
 
                 //工单号
                 try{
-                    prodNo = this.readExcelCell(sheet, le, 7);
+                    prodNo = this.readExcelCell(sheet, le, 6);
                 }catch (Exception e){
                 }
 
                 //物料编码
                 try{
-                    itemNo = this.readExcelCell(sheet, le, 8);
+                    itemNo = this.readExcelCell(sheet, le, 7);
                 }catch (Exception e){
                 }
 
                 //物料描述
                 try{
-                    itemName = this.readExcelCell(sheet, le, 9);
+                    itemName = this.readExcelCell(sheet, le, 8);
                 }catch (Exception e){
                 }
 
                 //计划生产数量
                 try{
-                    String qtyPlanStr = this.readExcelNumberCell(sheet, le, 10);
+                    String qtyPlanStr = this.readExcelNumberCell(sheet, le, 9);
                     qtyPlan = Double.valueOf(qtyPlanStr).intValue();
                 }catch (Exception e){
                 }
@@ -589,7 +589,7 @@ public class SchedulingImpl implements SchedulingService {
                 temp.setItemName(itemName);
                 temp.setQtyPlan(qtyPlan);
                 temp.setProdDate(prodDate);
-                temp.setDeptName(deptName);
+               // temp.setDeptName(deptName);
                 temp.setLinerName(linerName);
                 temp.setClassNo(classNo);
                 temp.setErrorInfo(errorStr);

@@ -152,24 +152,31 @@ $(function () {
         });
      // 监听勾选过程属性操作
 		form.on('checkbox(isStatusTpl)', function(obj) {
-			//console.log(obj,this.value, this.name, obj.elem.checked)
-			console.log(obj)
+			//console.log(obj)
 			 //当前元素
             var data = $(obj.elem);
 			var rowIndex = data.parents('tr').first().attr("data-index");
-			console.log(rowIndex)
-			//res.data[rowIndex]["LAY_CHECKED"]='true';
-                 $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
-                 $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+			//console.log(rowIndex)
+			if(obj.elem.checked){
+				//res.data[rowIndex]["LAY_CHECKED"]='true';
+                $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+                $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+			}else{
+				  $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', false);
+	              $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+			}
+			
 		});
-		//监听行选择事件
-       /* 
-		table.on('checkbox(iTable)', function(obj){
-			  console.log(obj.checked); //当前是否选中状态
-			  console.log(obj.data); //选中行的相关数据
-			  console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
-			});*/
-		
+		//监听行选择事件---根据顺序（错误），应当获取行号【未修改】
+	   table.on('checkbox(iTable)', function(obj){
+			if(!obj.checked){	 
+				  obj.data.jobAttr = 0;
+				  var rowIndex=$(obj.tr).attr("data-index");
+				  console.log(rowIndex)
+				  $('tbody tr[data-index="'+rowIndex+'"] td[data-field="jobAttr"] input[type="checkbox"]').prop('checked', false);
+				 $('tbody tr[data-index="'+rowIndex+'"] td[data-field="jobAttr"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+			  }
+			});		
         getScheduling();
 
     });
