@@ -19,5 +19,5 @@ public interface EmployeeService {
 	
 	public ApiResponseResult doStatus(Long id, Integer empStatus) throws Exception;// 状态改变
 
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getList(String keyword,String empStatus, PageRequest pageRequest) throws Exception;
 }

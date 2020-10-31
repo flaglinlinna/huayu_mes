@@ -5,7 +5,7 @@ var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table' ,'laydate'], function() {
 		var table = layui.table, form = layui.form,laydate = layui.laydate;
-
+		layui.form.render('select');
 		tableIns = table.render({
 			elem : '#employeeList',
 			url : context + 'base/employee/getList',
@@ -123,7 +123,7 @@ $(function() {
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
 			// 重新加载table
-			load(data);
+			load(data.field);
 			return false;
 		});
 		//日期选择器
@@ -135,6 +135,21 @@ $(function() {
 			  elem: '#leaveDate',
 			  type: 'date' //默认，可不填
 			});
+		
+		form.on('select(empStatus)', function(data){
+			//console.log(data)
+			var search_par = {'keywordSearch':$('#keywordSearch').val(),'empStatus':data.value};
+			load(search_par)
+			/*if(data.value == 1){
+				$("#searchSessionNum").attr("disabled","true");
+				form.render('select');
+			}else{
+				$("#searchSessionNum").removeAttr("disabled");
+				form.render('select');//select是固定写法 不是选择器
+			}*/
+		});
+		
+		
 		// 编辑员工信息
 		function getEmployee(obj, id) {
 			var param = {
@@ -311,12 +326,13 @@ function load(obj) {
 	// 重新加载table
 	tableIns.reload({
 		where : {
-			keyword : obj.field.keywordSearch
+			keyword : obj.keywordSearch,
+			empStatus:obj.empStatus
 		},
-		page : {
+		/*page : {
 			curr : pageCurr
 		// 从当前页码开始
-		}
+		}*/
 	});
 }
 

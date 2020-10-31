@@ -11,6 +11,14 @@
 				method="post" action="" style="margin-top: 20px;">
 				<div class="layui-form-item" style="margin-bottom: 0px">
 					<div class="layui-inline">
+					<label class="layui-form-label">员工状态</label>
+		            <div class="layui-input-inline">
+			            <select name="empStatus" lay-filter="empStatus">
+			                <option value="">请选择</option>
+			                <option value="1">在职</option>
+			                <option value="0">离职</option>
+			              </select>
+		            </div>
 						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
 						<div class="layui-input-inline">
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"

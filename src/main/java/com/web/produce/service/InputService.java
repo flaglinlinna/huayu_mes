@@ -1,6 +1,8 @@
 package com.web.produce.service;
 
 
+import org.springframework.data.domain.PageRequest;
+
 import com.app.base.data.ApiResponseResult;
 
 public interface InputService {
@@ -14,4 +16,7 @@ public interface InputService {
 	public ApiResponseResult delete(String id) throws Exception;
 	
 	public ApiResponseResult getDetailByTask(String taskNo) throws Exception;
+	
+	public ApiResponseResult getHistoryList(String keyword, String hStartTime,String hEndTime,PageRequest pageRequest) throws Exception;
+	
 }

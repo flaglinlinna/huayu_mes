@@ -141,7 +141,7 @@ public class Employeelmpl implements EmployeeService {
      */
 	@Override
     @Transactional
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getList(String keyword,String empStatus, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
 				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
@@ -151,6 +151,9 @@ public class Employeelmpl implements EmployeeService {
 					filters1.add(new SearchFilter("empCode", SearchFilter.Operator.LIKE, keyword));
 					filters1.add(new SearchFilter("empName", SearchFilter.Operator.LIKE, keyword));
 					filters1.add(new SearchFilter("empType", SearchFilter.Operator.LIKE, keyword));
+				}
+				if (StringUtils.isNotEmpty(empStatus)) {
+					filters1.add(new SearchFilter("empStatus", SearchFilter.Operator.EQ, empStatus));
 				}
 				Specification<Employee> spec = Specification.where(BaseService.and(filters, Employee.class));
 				Specification<Employee> spec1 = spec.and(BaseService.or(filters1, Employee.class));

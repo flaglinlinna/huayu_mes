@@ -1,11 +1,13 @@
 package com.web.produce.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
@@ -121,6 +123,28 @@ public class ProductController extends WebController {
              return ApiResponseResult.failure("根据指令单获取扫描信息失败！");
         }
     }
+    
+    @ApiOperation(value = "获取历史列表", notes = "获取历史列表")
+    @RequestMapping(value = "/getHistoryList", method = RequestMethod.GET)
+    @ResponseBody
+	public ApiResponseResult getHistoryList(
+			@RequestParam(value = "hkeywork", required = false) String hkeywork,
+			@RequestParam(value = "hStartTime", required = false) String hStartTime,
+			@RequestParam(value = "hEndTime", required = false) String hEndTime){
+	  String method = "product/getHistoryList";String methodName ="获取历史列表";
+        try {
+            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result =productService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
+            logger.debug(methodName+"=getList:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(methodName+"失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure(methodName+"失败！");
+        }
+	}
     
 
 }

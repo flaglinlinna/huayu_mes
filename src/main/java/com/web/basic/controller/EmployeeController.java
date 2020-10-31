@@ -49,12 +49,12 @@ public class EmployeeController extends WebController{
 	    @ApiOperation(value = "获取员工信息列表", notes = "获取员工信息列表",hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
-	    public ApiResponseResult getList(String keyword) {
+	    public ApiResponseResult getList(String keyword,String empStatus) {
 	        String method = "base/employee/getList";String methodName ="获取员工信息列表";
 	        try {
 	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result = employeeService.getList(keyword, super.getPageRequest(sort));
+	            ApiResponseResult result = employeeService.getList(keyword,empStatus, super.getPageRequest(sort));
 	            logger.debug("获取员工信息列表=getList:");
 	            getSysLogService().success(method, methodName, null);
 	            return result;

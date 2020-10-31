@@ -152,7 +152,7 @@ $(function () {
         });
      // 监听勾选过程属性操作
 		form.on('checkbox(isStatusTpl)', function(obj) {
-			//console.log(obj)
+			console.log(obj)
 			 //当前元素
             var data = $(obj.elem);
 			var rowIndex = data.parents('tr').first().attr("data-index");
@@ -162,8 +162,8 @@ $(function () {
                 $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
                 $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
 			}else{
-				  $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', false);
-	              $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+			    $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', false);
+	            $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().removeClass('layui-form-checked');
 			}
 			
 		});
@@ -364,14 +364,23 @@ function doEditProcess(obj){
 function saveProcess(table) {
     //获取选中工艺
     var processIds = "";
-    var checkStatus = table.checkStatus("iList");
-    for(var i = 0; i < checkStatus.data.length; i++){
+   // var checkStatus = table.checkStatus("iList");
+    console.log(table.cache.iList);
+    var checkStatus = table.cache.iList;
+    $('tbody tr td[data-field="checkColumn"] input[type="checkbox"]').each(function(i){
+        if ($(this).is(":checked")) {
+			    //操作
+        	processIds += checkStatus[i].procId+",";
+			  }
+         });
+
+   /* for(var i = 0; i < checkStatus.data.length; i++){
         if(i == 0){
             processIds += checkStatus.data[i].procId;
         }else{
             processIds += "," + checkStatus.data[i].procId;
         }
-    }
+    }*/
 
     var param = {
         mid: $("#id").val(),
