@@ -160,6 +160,29 @@ $(function() {
 			}
 		}
 	});
+	
+	function getType(keyword) {
+		CoreUtil.sendAjax("produce/transit/getType", keyword, function(data) {
+			//console.log(data)
+			if (data.result) {
+				var da = data.data;
+				$("#in_type").empty();
+				for (var i = 0; i < da.length; i++) {
+					if (i == 0) {
+						$("#in_type").append("<option value=''>请点击选择</option>");
+					}
+					$("#in_type").append(
+							"<option value=" + da[i].INSP_CODE + ">"
+									+ da[i].INSP_NAME + "</option>");
+				}
+				//layui.form.render('select');
+			} else {
+				layer.alert(data.msg);
+			}
+		}, "GET", false, function(res) {
+			layer.alert(res.msg);
+		});
+	}
 });
 
 function getProc(keyword) {
@@ -185,7 +208,7 @@ function getProc(keyword) {
 	});
 }
 
-function getType(keyword) {
+function getType1(keyword) {
 	CoreUtil.sendAjax("produce/transit/getType", keyword, function(data) {
 		//console.log(data)
 		if (data.result) {
@@ -199,7 +222,7 @@ function getType(keyword) {
 						"<option value=" + da[i].INSP_CODE + ">"
 								+ da[i].INSP_NAME + "</option>");
 			}
-			layui.form.render('select');
+			//layui.form.render('select');
 		} else {
 			layer.alert(data.msg);
 		}
