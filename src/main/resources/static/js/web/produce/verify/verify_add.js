@@ -7,7 +7,7 @@ $(function() {
 	layui.use(
 			[ 'table', 'form', 'layedit', 'laydate', 'tableSelect' ],
 			function() {
-				var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table, laydate = layui.laydate, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect;
+				var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table, table1 = layui.table,laydate = layui.laydate, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect;
 				;
 
 				tableIns = table.render({
@@ -197,6 +197,62 @@ $(function() {
 				form.on('submit(add)', function(data) {
 					add(data.field);//保存创建在线返工制令单
 					return false;
+				});
+				
+				//监听提交
+		    	  form.on('submit(hsearchSubmit)', function(data){
+		    		  hTableIns.reload({
+		    			  url:context+'verify/getHistoryList',
+		                  where:data.field 
+						});
+		    	    return false;
+		    	  });
+				hTableIns = table1.render({// 历史
+					elem : '#hcolTable',
+					where : {},
+					method : 'get',// 默认：get请求
+					defaultToolbar : [],
+					page : true,
+					data : [],
+					height: 'full-210',
+					request : {
+						pageName : 'page', // 页码的参数名称，默认：page
+						limitName : 'rows' // 每页数据量的参数名，默认：limit
+					},
+					parseData : function(res) {// 可进行数据操作
+						return {
+							"count" : res.data.total,
+							"msg" : res.msg,
+							"data" : res.data.rows,
+							"code" : res.status
+						// code值为200表示成功
+						}
+					},
+					cols : [ [ {
+						type : 'numbers'
+					},{
+						field : 'TASK_NO',
+						title : '制定单号',
+						width : 350
+					}, {
+						field : 'LINE_NAME',
+						title : '线体',
+						width : 200
+					}, {
+						field : 'DEV_IP',
+						title : '卡机IP',
+						width : 200
+					}, {
+						field : 'EMP_NAME',
+						title : '员工姓名'
+					}, {
+						field : 'CREATE_DATE',
+						title : '上线时间',
+						width : 150
+					} ] ],
+					done : function(res, curr, count) {
+						pageCurr = curr;
+					}
 				});
 
 			});	

@@ -1,5 +1,7 @@
 package com.web.produce.service;
 
+import org.springframework.data.domain.PageRequest;
+
 import com.app.base.data.ApiResponseResult;
 
 public interface BadEntryService {
@@ -16,4 +18,7 @@ public interface BadEntryService {
 	public ApiResponseResult deleteBad(String recordId) throws  Exception;//删除不良
 	
 	public ApiResponseResult getDetailByTask(String taskNo) throws Exception;
+	
+	
+	public ApiResponseResult getHistoryList(String keyword, String hStartTime,String hEndTime,PageRequest pageRequest) throws Exception;
 }

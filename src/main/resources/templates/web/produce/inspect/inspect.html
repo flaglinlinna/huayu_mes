@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='品质检验历史查询'"></head>
+<style th:inline="text">
+.layui-form-label {
+	text-align: right;
+}
+
+.layui-form-switch {
+	margin-top: 0px;
+}
+
+.layui-form-radio {
+	margin: 0px 10px 0 0;
+}
+
+.long-item .layui-form-label {
+	width: 160px;
+}
+
+.long-item .layui-input-block {
+	margin-left: 160px;
+}
+</style>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<!--头-->
+		<!--<div th:replace="fragments/head :: header"></div>-->
+
+					<div style="margin: 5px">
+					<!--查询面板-->
+        <div th:replace="web/fragment/search_history :: searcher"></div> 
+						<fieldset class="layui-elem-field layui-field-title">
+							<legend style="font-size: 14px;">条码列表</legend>
+						</fieldset>
+						<table id="hcolTable" lay-filter="hcolTable"
+							style="margin-top: -20px;"></table>
+					</div>
+
+
+		<script th:src="@{/js/web/produce/inspect/inspect.js}"
+			src="/js/web/produce/inspect/inspect.js"></script>
+	</div>
+</body>
+</html>

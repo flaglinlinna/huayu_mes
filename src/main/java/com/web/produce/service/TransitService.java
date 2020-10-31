@@ -1,5 +1,7 @@
 package com.web.produce.service;
 
+import org.springframework.data.domain.PageRequest;
+
 import com.app.base.data.ApiResponseResult;
 
 public interface TransitService {
@@ -11,4 +13,7 @@ public interface TransitService {
 	public ApiResponseResult checkBarcode(String proc,String barcode)throws Exception;//检查 箱号条码-成功执行保存数据，失败返回错误信息
 	
 	public ApiResponseResult saveData(String proc,String type,String barcode)throws Exception;//保存数据
+	
+	public ApiResponseResult getHistoryList(String keyword, String hStartTime,String hEndTime,PageRequest pageRequest) throws Exception;
+	
 }

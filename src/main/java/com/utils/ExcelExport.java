@@ -48,7 +48,7 @@ public final class ExcelExport {
         //获取对象get方法
         List<Method> methodList = ClassUtil.getMethodGet(importlist.get(0));*/
 
-        //循环字段名数组，创建标题行
+        //循环字段名数组，创建标题行-16
         Row row = sheet.createRow(0);
         for (int j = 0; j< tableAttributeName.length; j++){
             //创建列

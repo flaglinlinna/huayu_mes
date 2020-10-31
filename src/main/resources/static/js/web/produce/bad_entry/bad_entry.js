@@ -168,6 +168,8 @@ $(function() {
 							}
 							// console.log(data.field)
 						});
+						
+						
 
 						form.on('select(defcode)', function(data) {
 							//console.log(data)
@@ -203,6 +205,90 @@ $(function() {
 												}
 											}
 										});
+						
+						//监听提交
+				    	  form.on('submit(hsearchSubmit)', function(data){
+				    		  hTableIns.reload({
+				    			  url:context+'produce/bad_entry/getHistoryList',
+				                  where:data.field 
+								});
+				    	    return false;
+				    	  });
+						hTableIns = table.render({// 历史
+							elem : '#hcolTable',
+							where : {},
+							method : 'get',// 默认：get请求
+							defaultToolbar : [],
+							page : true,
+							data : [],
+							height: 'full-210',
+							request : {
+								pageName : 'page', // 页码的参数名称，默认：page
+								limitName : 'rows' // 每页数据量的参数名，默认：limit
+							},
+							parseData : function(res) {// 可进行数据操作
+								return {
+									"count" : res.data.total,
+									"msg" : res.msg,
+									"data" : res.data.rows,
+									"code" : res.status
+								// code值为200表示成功
+								}
+							},
+							cols : [ [ {
+								type : 'numbers'
+							}, {
+								field : 'BOARD_BARCODE',
+								title : '物料条码',
+								width : 150
+							}, {
+								field : 'BOARD_ITEM',
+								title : '物料编码',
+								width : 170
+							}, {
+								field : 'TASK_NO',
+								title : '制定单号',
+								width : 350
+							}, {
+								field : 'CLASS_NO',
+								title : '班次',
+								width : 80
+							}, {
+								field : 'DEFECT_NAME',
+								title : '不良信息',
+								width : 100
+							}, {
+								field : 'DEFECT_CODE',
+								title : '不良代码',
+								width : 80
+							}, {
+								field : 'DEFECT_NUM',
+								title : '不良数量',
+								width : 80
+							},  {
+								field : 'CREATE_BY',
+								title : '录入人工号',
+								width : 90
+							}, {
+								field : 'REAL_NAME',
+								title : '录入人姓名',
+								width : 90
+							},  {
+								field : 'CREATE_DATE',
+								title : '录入时间',
+								width : 150
+							},   {
+								field : 'FMEMO',
+								title : '备注',
+								width : 100
+							} ] ],
+							done : function(res, curr, count) {
+								pageCurr = curr;
+							}
+						});
+						
+						
+						
 					});
 	$('#barcode').bind('keypress', function(event) {
 		if (event.keyCode == "13") {

@@ -27,8 +27,16 @@
 	<div class="layui-layout layui-layout-admin">
 		<!--头-->
 		<!--<div th:replace="fragments/head :: header"></div>-->
+		<div class="layui-tab layui-tab-card">
+			<ul class="layui-tab-title">
+				<li class="layui-this">在线不良录入</li>
+				<li>历史查询</li>
+			</ul>
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+				
 
-		<div style="margin: 10px">
+		<div style="margin: 5px">
 			<div class="layui-collapse" lay-accordion="">
 				<div class="layui-colla-item">
 					<h2 class="layui-colla-title">填写信息</h2>
@@ -65,6 +73,22 @@
 			</fieldset>
 			<table id="colTable" lay-filter="colTable" style="margin-top: -20px;"></table>
 		</div>
+		
+		</div>
+				<div class="layui-tab-item">
+					<div style="margin: 5px">
+					<!--查询面板-->
+        <div th:replace="web/fragment/search_history :: searcher"></div> 
+						<fieldset class="layui-elem-field layui-field-title">
+							<legend style="font-size: 14px;">条码列表</legend>
+						</fieldset>
+						<table id="hcolTable" lay-filter="hcolTable"
+							style="margin-top: -20px;"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		<script th:src="@{/js/web/produce/transit/transit.js}"
 			src="/js/web/produce/transit/transit.js"></script>
 	</div>

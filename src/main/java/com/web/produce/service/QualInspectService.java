@@ -1,5 +1,7 @@
 package com.web.produce.service;
 
+import org.springframework.data.domain.PageRequest;
+
 import com.app.base.data.ApiResponseResult;
 
 public interface QualInspectService {
@@ -16,4 +18,5 @@ public interface QualInspectService {
 	public ApiResponseResult saveData(String factory,String company,String user_id, String proc,String barcodeList,int checkTotal,int badTotal,
 			String chkResult,String departCode,String badList)throws Exception;
 	
+	public ApiResponseResult getHistoryList(String keyword, String hStartTime,String hEndTime,PageRequest pageRequest) throws Exception;
 }

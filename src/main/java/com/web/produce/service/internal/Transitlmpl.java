@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,7 +29,7 @@ import com.web.produce.service.TransitService;
  */
 @Service(value = "TransitService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class Transitlmpl implements TransitService{
+public class Transitlmpl  extends PrcUtils implements TransitService{
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -250,4 +251,21 @@ public class Transitlmpl implements TransitService{
 		}
 		return list;
 	}
+	
+	@Override
+	public ApiResponseResult getHistoryList(String keyword, String hStartTime, String hEndTime, PageRequest pageRequest)
+			throws Exception {
+		// TODO Auto-generated method stub
+		List<Object> list = getHistoryPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				hStartTime,hEndTime,keyword,
+				pageRequest.getPageNumber()+1,pageRequest.getPageSize(),"prc_mes_qc_insp_trans_chs");
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
+	}
+	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,6 +113,21 @@ public class Veritylmpl extends PrcUtils implements VerifyService {
 		return ApiResponseResult.success("保存成功!");
 	}
 
+	@Override
+	public ApiResponseResult getHistoryList(String keyword, String hStartTime, String hEndTime, PageRequest pageRequest)
+			throws Exception {
+		// TODO Auto-generated method stub
+		List<Object> list = getHistoryPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				hStartTime,hEndTime,keyword,
+				pageRequest.getPageNumber()+1,pageRequest.getPageSize(),"PRC_LINE_AFFIRM_EMP");
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
+	}
 
 	
 }

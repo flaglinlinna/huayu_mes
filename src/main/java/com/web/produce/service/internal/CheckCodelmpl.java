@@ -5,11 +5,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -84,5 +86,20 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 			}
 		});
 		return resultList;
+	}
+	@Override
+	public ApiResponseResult getHistoryList(String keyword, String hStartTime, String hEndTime, PageRequest pageRequest)
+			throws Exception {
+		// TODO Auto-generated method stub
+		List<Object> list = getHistoryPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				hStartTime,hEndTime,keyword,
+				pageRequest.getPageNumber()+1,pageRequest.getPageSize(),"prc_mes_cof_bar_s_chs");
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
 	}
 }

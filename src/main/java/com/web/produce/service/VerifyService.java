@@ -1,6 +1,8 @@
 package com.web.produce.service;
 
 
+import org.springframework.data.domain.PageRequest;
+
 import com.app.base.data.ApiResponseResult;
 
 public interface VerifyService {
@@ -17,4 +19,7 @@ public interface VerifyService {
 	public ApiResponseResult getInfoCreateReturn() throws Exception;
 
 	public ApiResponseResult add(String task_no,String item_no,String liner_name,String qty,String pdate) throws Exception;
+	
+	public ApiResponseResult getHistoryList(String keyword, String hStartTime,String hEndTime,PageRequest pageRequest) throws Exception;
+	
 }

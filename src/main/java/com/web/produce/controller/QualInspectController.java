@@ -3,6 +3,7 @@ package com.web.produce.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,21 +22,22 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(description = "品质检验模块")
-@RestController
+/*@RestController
+@RequestMapping(value = "produce/inspect")*/
+@CrossOrigin
+@ControllerAdvice
+@Controller
 @RequestMapping(value = "produce/inspect")
 public class QualInspectController extends WebController {
 
 	@Autowired
 	private QualInspectService inspectService;
 
-	/*
-	 * //pda应用，无页面
-	 * 
-	 * @ApiOperation(value = "品质检验", notes = "品质检验", hidden = true)
-	 * 
-	 * @RequestMapping(value = "/toQualInspect") public String toQualInspect(){
-	 * return "/web/produce/inspect/inspect"; }
-	 */
+	@ApiOperation(value = "品质检验历史查询页", notes = "品质检验历史查询", hidden = true)
+	@RequestMapping(value = "/toInspect")
+	public String toInspect() {
+		return "/web/produce/inspect/inspect";
+	}
 
 	@ApiOperation(value = "PDA-获取检验节点列表", notes = "PDA-获取检验节点列表", hidden = true)
 	@RequestMapping(value = "/getProcList", method = RequestMethod.POST, produces = "application/json")
@@ -149,5 +151,27 @@ public class QualInspectController extends WebController {
 			getSysLogService().error(method, methodName, e.toString());
 			return ApiResponseResult.failure("PDA-保存PDA品质检查数据失败！");
 		}
+	}
+	
+	@ApiOperation(value = "获取历史列表", notes = "获取历史列表")
+    @RequestMapping(value = "/getHistoryList", method = RequestMethod.GET)
+    @ResponseBody
+	public ApiResponseResult getHistoryList(
+			@RequestParam(value = "hkeywork", required = false) String hkeywork,
+			@RequestParam(value = "hStartTime", required = false) String hStartTime,
+			@RequestParam(value = "hEndTime", required = false) String hEndTime){
+	  String method = "/product/inspect/getHistoryList";String methodName ="获取历史列表";
+        try {
+            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result =inspectService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
+            logger.debug(methodName+"=getList:");
+            getSysLogService().success(method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(methodName+"失败！", e);
+            getSysLogService().error(method, methodName, e.toString());
+            return ApiResponseResult.failure(methodName+"失败！");
+        }
 	}
 }
