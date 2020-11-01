@@ -41,6 +41,7 @@ public class QualInspectController extends WebController {
 
 	@ApiOperation(value = "PDA-获取检验节点列表", notes = "PDA-获取检验节点列表", hidden = true)
 	@RequestMapping(value = "/getProcList", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
 	public ApiResponseResult getProcList(@RequestParam(value = "company") String company,
 			@RequestParam(value = "factory") String factory,
 			@RequestParam(value = "keyword") String keyword) {
@@ -84,6 +85,7 @@ public class QualInspectController extends WebController {
 
 	@ApiOperation(value = "PDA-获取责任部门列表", notes = "PDA-获取责任部门列表", hidden = true)
 	@RequestMapping(value = "/getDepatrList", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
 	public ApiResponseResult getDepatrList(@RequestParam(value = "company") String company,
 			@RequestParam(value = "factory") String factory,
 			@RequestParam(value = "keyword") String keyword) {

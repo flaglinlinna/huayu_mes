@@ -364,15 +364,18 @@ function doEditProcess(obj){
 function saveProcess(table) {
     //获取选中工艺
     var processIds = "";
+    //var processIds1 = "";
    // var checkStatus = table.checkStatus("iList");
     console.log(table.cache.iList);
     var checkStatus = table.cache.iList;
     $('tbody tr td[data-field="checkColumn"] input[type="checkbox"]').each(function(i){
         if ($(this).is(":checked")) {
 			    //操作
-        	processIds += checkStatus[i].procId+",";
+        	//processIds += checkStatus[i].procId+",";
+        	processIds += checkStatus[i].procId+"@"+checkStatus[i].jobAttr+",";
 			  }
          });
+    //console.log(processIds)
 
    /* for(var i = 0; i < checkStatus.data.length; i++){
         if(i == 0){

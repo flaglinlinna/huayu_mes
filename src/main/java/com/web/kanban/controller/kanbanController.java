@@ -91,6 +91,46 @@ public class kanbanController extends WebController {
 		}
 		return mav;
 	}
+	
+	@RequestMapping(value = "/toScdz", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toScdz(String line) {
+		ModelAndView mav = new ModelAndView();
+		String method = "kanban/toScdz";
+		String methodName = "生产电子看板";
+		try {	
+			ApiResponseResult result = kanbanService.getScdzList("999",line,"","","");
+			logger.debug("获取生产电子看板=toScdz:" + result);
+			getSysLogService().success(method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.setViewName("/kanban/scdz");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取生产电子看板异常！", e);
+			getSysLogService().error(method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/toZcbl", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toZcbl(String line) {
+		ModelAndView mav = new ModelAndView();
+		String method = "kanban/toZcbl";
+		String methodName = "制程不良看板";
+		try {	
+			ApiResponseResult result = kanbanService.getZcblList();
+			logger.debug("制程不良看板=toZcbl:" + result);
+			getSysLogService().success(method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.setViewName("/kanban/zcbl");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取制程不良看板异常！", e);
+			getSysLogService().error(method,methodName,e.toString());
+		}
+		return mav;
+	}
 
 	@ApiOperation(value = "获取车间报工看板-部门信息", notes = "获取车间报工看板-部门信息", hidden = true)
 	@RequestMapping(value = "/getCjbgDepList", method = RequestMethod.GET)
