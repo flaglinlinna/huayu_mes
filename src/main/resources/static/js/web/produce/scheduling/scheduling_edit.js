@@ -380,7 +380,7 @@ function saveProcess(table) {
         	//processIds += checkStatus[i].procId+"@"+checkStatus[i].jobAttr+",";
 			  }
          });
-   // console.log(processIds1)
+    console.log(processIds)
 
    /* for(var i = 0; i < checkStatus.data.length; i++){
         if(i == 0){

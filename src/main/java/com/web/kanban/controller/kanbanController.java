@@ -131,7 +131,32 @@ public class kanbanController extends WebController {
 		}
 		return mav;
 	}
+	
+	@RequestMapping(value = "/toXlpm", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toXlpm(String line) {
+		ModelAndView mav = new ModelAndView();
+		String method = "kanban/toXlpm";
+		String methodName = "效率排名看板";
+		try {	
+			ApiResponseResult result = kanbanService.getXlpmList();
+			logger.debug("效率排名看板=toXlpm:" + result);
+			getSysLogService().success(method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.setViewName("/kanban/xlpm");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取效率排名看板异常！", e);
+			getSysLogService().error(method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
 
+	
+	
+	
+	
 	@ApiOperation(value = "获取车间报工看板-部门信息", notes = "获取车间报工看板-部门信息", hidden = true)
 	@RequestMapping(value = "/getCjbgDepList", method = RequestMethod.GET)
 	@ResponseBody
