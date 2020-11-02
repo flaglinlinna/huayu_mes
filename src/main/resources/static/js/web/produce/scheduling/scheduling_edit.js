@@ -363,8 +363,8 @@ function doEditProcess(obj){
 //保存工艺
 function saveProcess(table) {
     //获取选中工艺
-    var processIds = "";
-    //var processIds1 = "";
+    var processIds = ""; //lst-获取的jobAttr有问题
+   // var processIds1 = "";
    // var checkStatus = table.checkStatus("iList");
     console.log(table.cache.iList);
     var checkStatus = table.cache.iList;
@@ -375,7 +375,7 @@ function saveProcess(table) {
         	processIds += checkStatus[i].procId+"@"+checkStatus[i].jobAttr+",";
 			  }
          });
-    //console.log(processIds)
+   // console.log(processIds1)
 
    /* for(var i = 0; i < checkStatus.data.length; i++){
         if(i == 0){
