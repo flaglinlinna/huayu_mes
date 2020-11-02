@@ -34,6 +34,11 @@ td {
 	top: 0;
 	line-height: .75rem;
 }
+h2{text-align:center;
+margin-top: 8px;
+ color:#ffffff;
+font-size:20px;
+}
 ul {
     list-style: none;
     margin-left: 20px;
@@ -43,6 +48,12 @@ ul {
 li {
     line-height: 40px;
     color:#ffffff;
+    font-size:16px;
+}
+.span_li{
+ margin-left: 15px;
+    color:#ffffff;
+    font-size:16px;
 }
 </style>
 <script>
@@ -100,12 +111,14 @@ var t = null;
 	<div class="mainbox">
 		<div class="boxall" style="height: 230px">
 		<div id="echart1" style="width: 29%; height: 220px; float: left;color:#ffffff;">
-		<ul>
-		<li>123</li>
-		<li>123</li>
-		<li>123</li>
-		</ul>
+	
+		<h2>产线信息</h2>
 		
+		<ul>
+		<li>组长:<span class="span_li" id="liner"></span></li>
+		<li>排名:<span class="span_li" id="rownum"></span></li>
+		<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
+		</ul>	
 		</div>
 			<div id="echart2" style="width: 35%; height: 220px; float: left;"></div>			
 			<div id="echart3" style="width: 35%; height: 220px; float: left;"></div>

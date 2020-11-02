@@ -21,6 +21,14 @@ function dealData() {
 	
 	getChart2(hr_abn, hr_act,hr_st,eff_rate);
 	
+	var liner= kanbanData_t[0].FLINER;//组长
+	var rownum=kanbanData_t[0].FROWNUM==null?"无":kanbanData_t[0].FROWNUM;//排名
+	var onlineEmp= kanbanData_t[0].NUM_EMP_ON==null?"0":kanbanData_t[0].NUM_EMP_ON;//在线人数
+	console.log(liner)
+	
+	$("#liner").text(liner)
+	$("#rownum").text(rownum)
+	$("#onlineEmp").text(onlineEmp)
 	/*	
 	$("#showLine").text(
 			"开线数：" + kanbanDataList.data.LINE_NUM_NOW + "     " + "总线体数："
