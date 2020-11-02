@@ -152,7 +152,6 @@ $(function () {
         });
      // 监听勾选过程属性操作
 		form.on('checkbox(isStatusTpl)', function(obj) {
-			console.log(obj)
 			 //当前元素
             var data = $(obj.elem);
 			var rowIndex = data.parents('tr').first().attr("data-index");
@@ -366,13 +365,19 @@ function saveProcess(table) {
     var processIds = ""; //lst-获取的jobAttr有问题
    // var processIds1 = "";
    // var checkStatus = table.checkStatus("iList");
-    console.log(table.cache.iList);
     var checkStatus = table.cache.iList;
     $('tbody tr td[data-field="checkColumn"] input[type="checkbox"]').each(function(i){
         if ($(this).is(":checked")) {
+        	//fyx-202011-02
+        	var checks = $('tbody tr[data-index="'+i+'"] td[data-field="jobAttr"] input[type="checkbox"]:checked');
+        	if(checks.length == 1){
+        		processIds += checkStatus[i].procId+"@1,";
+        	}else{
+        		processIds += checkStatus[i].procId+"@0,";
+        	}
 			    //操作
         	//processIds += checkStatus[i].procId+",";
-        	processIds += checkStatus[i].procId+"@"+checkStatus[i].jobAttr+",";
+        	//processIds += checkStatus[i].procId+"@"+checkStatus[i].jobAttr+",";
 			  }
          });
    // console.log(processIds1)
