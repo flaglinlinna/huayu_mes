@@ -1,6 +1,8 @@
 package com.web.basic.dao;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
@@ -12,4 +14,8 @@ public interface ProdProcDetailDao extends CrudRepository<ProdProcDetail, Long>,
 	//public List<ProdProcDetai> findByDelFlag(Integer delFlag);
 	public ProdProcDetail findById(long id);
 	//public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
+	
+	@Modifying
+    @Query("update ProdProcDetail t set t.delFlag=1 where t.itemId=?1 and t.delFlag=0")
+    public void delteProdProcDetailByItemIdAnd(Long itemId);
 }

@@ -179,7 +179,7 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, 
-			{
+			{field : 'checkColumn',
 				type:"checkbox"
 			},
 			
@@ -189,6 +189,9 @@ $(function() {
 			}, {
 				field : 'procName',
 				title : '名称',
+			}, {
+				field : 'jobAttr',
+				title : '过程属性',templet:'#add_statusTpl'
 			}] ],
 			data:[]
 		});	
@@ -231,11 +234,28 @@ $(function() {
 		});
 		
 		// 监听提交
-		form.on('submit(addSubmit)', function(data) {	
-			if (data.field.id == null || data.field.id == "") {
+		form.on('submit(addSubmit)', function(data) {
+			var checkStatus = table.cache.procList;
+			var procIdList="";
+			$('#clientProcForm tbody tr td[data-field="checkColumn"] input[type="checkbox"]').each(function(i){
+		        if ($(this).is(":checked")) {
+		        	//fyx-202011-02
+		        	var checks = $('tbody tr[data-index="'+i+'"] td[data-field="jobAttr"] input[type="checkbox"]:checked');
+		        	if(checks.length == 1){
+		        		procIdList += checkStatus[i].id+"@1,";
+		        	}else{
+		        		procIdList += checkStatus[i].id+"@0,";
+		        	}
+				}
+		    });
+			addSubmit(procIdList,data.field.itemId,data.field.num);
+			return false;
+			
+			/*if (data.field.id == null || data.field.id == "") {
 				// 新增
 				var procIdList="";
 				var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
+				return false;
 				for(var i=0;i<cList.length;i++){//获取被选中的行
 					procIdList+=cList[i].id+","//工序的ID序列，用“；”分隔
 				}
@@ -243,14 +263,14 @@ $(function() {
 			} else {
 				//editSubmit(data);//未写
 			}
-			return false;
+			return false;*/
 		});
 		
 		// 设置过程属性
 		function setStatus(obj, id, name, checked) {
-			console.log(checked)
+			//console.log(checked)
 			var jobAttr = checked ? 1 : 0;
-			console.log(jobAttr)
+			//console.log(jobAttr)
 			var deaprtisStatus = checked ? "勾选" : "不勾选";
 			// 正常/禁用
 			layer.confirm('您确定要把工序：' + name + '过程属性设置为' + deaprtisStatus + '状态吗？',
@@ -338,10 +358,14 @@ function getProcByClient(params){
 						for(var j=0;j<beSelected.length;j++){
 							if(res.data[i].id == beSelected[j].procId){
 								//这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
-						        res.data[i]["LAY_CHECKED"]='true';
+						      /*  res.data[i]["LAY_CHECKED"]='true';
 								//更改css来实现选中的效果
 								//$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
-								$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
+								$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');*/
+								
+								res.data[i]["LAY_CHECKED"]='true';
+		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
 							}
 							
 						}

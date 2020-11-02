@@ -1,5 +1,7 @@
 package com.web.basic.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,13 @@ public class ProdProcController extends WebController{
         String method = "base/prodproc/getList";String methodName ="获取工艺流程列表";
         try {
         	System.out.println(keyword);
-            Sort sort = new Sort(Sort.Direction.DESC, "itemId");
+            //Sort sort = new Sort(Sort.Direction.DESC, "itemId");
+            Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "itemId");
+	       	 Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "process.procOrder");
+	       	 List<Sort.Order> list = new ArrayList<>();
+	       	 list.add(order1);
+	       	 list.add(order2);
+	       	 Sort sort = new Sort(list);
             ApiResponseResult result = procProdService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取工艺流程列表=getList:");
             getSysLogService().success(method, methodName, null);

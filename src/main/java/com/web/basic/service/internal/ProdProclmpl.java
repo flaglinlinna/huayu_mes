@@ -91,16 +91,22 @@ public class ProdProclmpl implements ProdProcService {
 		for(int i=0;i<itemIds.length;i++){
 			String it = itemIds[i];
 			if(!StringUtils.isEmpty(it)){
+				//20201102-fyx-先删除后在新增
+				prodProcDetailDao.delteProdProcDetailByItemIdAnd(Long.parseLong(it));
+				//--end
+				
 				for(String pro:procs){
 					if(!StringUtils.isEmpty(pro)){
-						Process process = processDao.findById(Long.parseLong(pro));
+						String[] pros =  pro.split("\\@");
+						Process process = processDao.findById(Long.parseLong(pros[0]));
 						ProdProcDetail pd = new ProdProcDetail();
 						pd.setItemId(Long.valueOf(it));
 						pd.setItemNo(itemNos[i]);
-						pd.setProcId(Long.valueOf(pro));
+						pd.setProcId(Long.valueOf(pros[0]));
 						pd.setCreateBy(UserUtil.getSessionUser().getId());
 						pd.setCreateDate(new Date());
 						pd.setProcOrder(process.getProcOrder());
+						pd.setJobAttr(Integer.valueOf(pros[1]));
 						lp.add(pd);
 					}
 				}
