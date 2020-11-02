@@ -1,11 +1,6 @@
 
 $(function(){
-  //chartDiv();
   dealData();
-	//getDepList();
-	/*$("#searchBtn").click(function(){
-		getList();
-		});*/
 })
 console.log(kanbanDataList);
 function dealData(){	

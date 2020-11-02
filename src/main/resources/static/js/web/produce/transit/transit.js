@@ -175,7 +175,7 @@ $(function() {
 							"<option value=" + da[i].INSP_CODE + ">"
 									+ da[i].INSP_NAME + "</option>");
 				}
-				//layui.form.render('select');
+				layui.form.render('select');
 			} else {
 				layer.alert(data.msg);
 			}
@@ -199,7 +199,7 @@ function getProc(keyword) {
 						"<option value=" + da[i].PROC_NO + ">"
 								+ da[i].PROC_NAME + "</option>");
 			}
-			//layui.form.render('select');
+			layui.form.render('select');
 		} else {
 			layer.alert(data.msg);
 		}

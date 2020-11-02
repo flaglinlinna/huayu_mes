@@ -227,6 +227,7 @@ $(function() {
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
 							},
 							parseData : function(res) {// 可进行数据操作
+								console.log(res)
 								return {
 									"count" : res.data.total,
 									"msg" : res.msg,
@@ -270,7 +271,7 @@ $(function() {
 								title : '录入人工号',
 								width : 90
 							}, {
-								field : 'REAL_NAME',
+								field : 'USER_NAME',
 								title : '录入人姓名',
 								width : 90
 							},  {

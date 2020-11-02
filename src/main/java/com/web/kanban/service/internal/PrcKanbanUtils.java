@@ -141,7 +141,7 @@ public class PrcKanbanUtils {
 			return resultList;
 		}
 
-		// 获取车间报工看板信息
+		// 获取制程不良看板信息
 		public List getZcblListPrc() throws Exception {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
@@ -191,6 +191,68 @@ public class PrcKanbanUtils {
 			});
 			return resultList;
 		}
+		
+		
+		//获取效率排名看板
+		public List getXlpmListPrc() throws Exception {
+			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+				@Override
+				public CallableStatement createCallableStatement(Connection con) throws SQLException {
+					String storedProc = "{call  PRC_MES_RPT_XLPM(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+					CallableStatement cs = con.prepareCall(storedProc);
+					cs.setString(1, "");//-公司
+					cs.setString(2, "");//工厂
+					cs.setString(3, "");// 班次
+					cs.setString(4, "");//--部门ID
+					cs.setString(5, "朱元其");//-组长
+					cs.setString(6, "2020/11/01");//日期
+					cs.setString(7, "4");//电视IP或mac
+					cs.setString(8, "1");//用户id
+					cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(11, -10);// 输出参数 追溯数据
+					cs.registerOutParameter(12, -10);// 输出参数 追溯数据
+					cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(14, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					return cs;
+				}
+			}, new CallableStatementCallback() {
+				public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+					List<Object> result = new ArrayList<>();
+					List<Map<String, Object>> l = new ArrayList();
+					List<Map<String, Object>> l_2 = new ArrayList();
+					cs.execute();
+					result.add(cs.getInt(9));
+					result.add(cs.getString(10));
+					if (cs.getString(9).toString().equals("0")) {
+						// 游标处理
+						ResultSet rs = (ResultSet) cs.getObject(11);
+						try {
+							l = fitMap(rs);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						result.add(l);
+						
+						ResultSet rs_2 = (ResultSet) cs.getObject(12);
+						try {
+							l_2 = fitMap(rs_2);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						result.add(l_2);
+						result.add(cs.getString(13));
+						result.add(cs.getString(14));
+					}
+					System.out.println(l);
+					return result;
+				}
+			});
+			return resultList;
+		}
+		
 		
 	private List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();
