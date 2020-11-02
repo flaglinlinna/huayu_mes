@@ -54,7 +54,7 @@ public class BarcodeRuleController extends WebController{
 	        String method = "base/rule/getList";String methodName ="获取小码校验规则信息列表";
 	        try {
 	        	System.out.println(keyword);
-	            Sort sort = new Sort(Sort.Direction.DESC, "id");
+	            Sort sort = new Sort(Sort.Direction.DESC, "itemNo");
 	            ApiResponseResult result = ruleService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取小码校验规则信息列表=getList:");
 	            getSysLogService().success(method, methodName, null);

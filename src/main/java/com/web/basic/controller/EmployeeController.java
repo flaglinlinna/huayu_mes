@@ -53,7 +53,7 @@ public class EmployeeController extends WebController{
 	        String method = "base/employee/getList";String methodName ="获取员工信息列表";
 	        try {
 	        	System.out.println(keyword);
-	            Sort sort = new Sort(Sort.Direction.DESC, "id");
+	            Sort sort = new Sort(Sort.Direction.ASC, "empCode");
 	            ApiResponseResult result = employeeService.getList(keyword,empStatus, super.getPageRequest(sort));
 	            logger.debug("获取员工信息列表=getList:");
 	            getSysLogService().success(method, methodName, null);

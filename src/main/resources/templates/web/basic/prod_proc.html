@@ -28,9 +28,9 @@
 			<table id="client_procList" lay-filter="client_procTable"></table>
               <script type="text/html" id="statusTpl">
                     {{# if(d.jobAttr==1){ }}
-                    <input type="checkbox" name="{{d.procNo}}" value="{{d.jobAttr}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
+                    <input type="checkbox" name="{{d.itemNo}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
                     {{#  } else { }}
-                    <input type="checkbox" name="{{d.procNo}}" value="{{d.jobAttr}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
+                    <input type="checkbox" name="{{d.itemNo}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
                     {{#  } }}
               </script>
 			<script type="text/html" id="add_statusTpl">
