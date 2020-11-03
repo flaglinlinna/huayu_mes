@@ -146,12 +146,14 @@ $(function() {
 				});
 				
 				laydate.render({
-				    elem: '#on_date'
+				    elem: '#on_date',
+				    trigger: 'click'//呼出事件改成click
 				    ,value:getCurDate(0)
 				  });
 				
 				laydate.render({
-				    elem: '#pdate1'
+				    elem: '#pdate1',
+				    trigger: 'click'//呼出事件改成click
 				    ,value:getCurDate(0)
 				  });
 				
