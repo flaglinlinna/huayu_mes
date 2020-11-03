@@ -9,7 +9,6 @@ $(function() {
 			function() {
 				var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table, table1 = layui.table,laydate = layui.laydate, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect;
 				;
-
 				tableIns = table.render({
 					elem : '#colTable'
 					//,url:context+'/interfaces/getRequestList'
@@ -20,7 +19,7 @@ $(function() {
 					,
 					defaultToolbar : [],
 					cellMinWidth : 80,
-					page : false,
+					page : true,
 					data : [],
 					request : {
 						pageName : 'page' //页码的参数名称，默认：page
@@ -28,6 +27,7 @@ $(function() {
 						limitName : 'rows' //每页数据量的参数名，默认：limit
 					},
 					parseData : function(res) {
+						console.log(res)
 						// 可进行数据操作
 						return {
 							"count" : res.data.total,
@@ -42,7 +42,7 @@ $(function() {
 						width : 50
 					},
 					{
-						field : 'EMP_CODE',
+						field : 'EMP_ID',
 						title : '工号',
 						width : 130
 					},{
@@ -63,10 +63,11 @@ $(function() {
 						//width : 180
 					}] ],
 					done : function(res, curr, count) {
+						//console.log(res)
 						pageCurr = curr;
 						
 						for(j = 0,len=res.data.length; j < len; j++) {
-							console.log(res.data[j])
+							//console.log(res.data[j])
 							if(res.data[j].CHECK_STATUS == '1'){
 								res.data[j]["LAY_CHECKED"]='true';
 						        //下面三句是通过更改css来实现选中的效果
@@ -261,7 +262,7 @@ $(function() {
 
 function getInfoAdd(){
 	CoreUtil.sendAjax("verify/getInfoAdd", {}, function(data) {
-		console.log(data)
+		//console.log(data)
 		if (data.result) {
 			if(data.data.Class){
 				$("#pclass").empty();
@@ -326,12 +327,19 @@ function save(params,emp_ids){
 }
 
 function getUserByLine(lineId){
-	CoreUtil.sendAjax("verify/getUserByLine", {"lineId" : lineId}, function(
+	
+	tableIns.reload({
+		url:context+'verify/getUserByLine?lineId='+lineId,
+		
+	});
+	
+	/*CoreUtil.sendAjax("verify/getUserByLine", {"lineId" : lineId}, function(
 			data) {
 		console.log(data);
 		if (data.result) {
 			tableIns.reload({
-				data:data.data
+				url:context+'verify/getUserByLine?lineId='+lineId,
+				
 			});
 		} else {
 			layer.alert(data.msg, function() {
@@ -340,13 +348,13 @@ function getUserByLine(lineId){
 		}
 	}, "GET", false, function(res) {
 		layer.alert(res.msg);
-	});
+	});*/
 }
 function open(){
 	CoreUtil.sendAjax("verify/getInfoCreateReturn", {}, function(data) {
 		console.log(data)
 		if (data.result) {
-			if(data.data.Task){
+			/*if(data.data.Task){
 				$("#ptask").empty();
 				var ptask=data.data.Task;
 				for (var i = 0; i < ptask.length; i++) {
@@ -356,7 +364,7 @@ function open(){
 					$("#ptask").append("<option value=" + ptask[i].TASK_NO+ ">" + ptask[i].TASK_NO + "</option>");
 				}					
 				layui.form.render('select');
-			}
+			}*/
 			if(data.data.Liao){
 				$("#pliao").empty();
 				var pliao=data.data.Liao;
@@ -401,7 +409,8 @@ function open(){
 }
 function add(params){
 	console.log(params)
-	var param = {"task_no":params.ptask,"item_no":params.pliao,"liner_name":params.puser,
+	//"task_no":params.ptask--2020/11/03废除工单号
+	var param = {"task_no":"","item_no":params.pliao,"liner_name":params.puser,
 			"qty":params.qty,"pdate":params.pdate1};
 	CoreUtil.sendAjax("verify/add", JSON.stringify(param), function(
 			data) {

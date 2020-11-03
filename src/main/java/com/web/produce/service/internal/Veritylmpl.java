@@ -41,14 +41,18 @@ public class Veritylmpl extends PrcUtils implements VerifyService {
 	}
 
 	@Override
-	public ApiResponseResult getUserByLine(String lineId) throws Exception {
+	public ApiResponseResult getUserByLine(String lineId,PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = getUserByLinePrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
-				lineId);
+				lineId,pageRequest.getPageNumber()+1,pageRequest.getPageSize());
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		return ApiResponseResult.success("").data(list.get(2));
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
+		//return ApiResponseResult.success("").data(list.get(2));
 	}
 
 	@Override
