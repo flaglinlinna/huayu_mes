@@ -1,7 +1,7 @@
 $(function() {
 	dealData();
 })
-// console.log(kanbanDataList);
+console.log(dev_ip);
 function dealData() {
 	var kanbanData = kanbanDataList.data.List;
 	var xAxis = [];

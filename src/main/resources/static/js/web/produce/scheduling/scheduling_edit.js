@@ -18,7 +18,7 @@ $(function () {
         });
         form.on('submit(editBtn)', function(data){
             //新增
-            doEdit();
+           // doEdit();
             return false;
         });
         form.on('select(itemId)', function(data){

@@ -15,6 +15,7 @@ $(function() {
 							elem : '#colTable',
 							// ,url:context+'/interfaces/getRequestList'
 							where : {},
+							height: 'full-210',
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
 							page : true,
