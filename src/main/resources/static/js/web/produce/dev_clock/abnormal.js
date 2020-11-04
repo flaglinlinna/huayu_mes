@@ -258,15 +258,16 @@ $(function() {
 							elem : '#timeBegin',
 							trigger : 'click',
 							type : 'datetime', // 默认，可不填
-							change : function(value, date, endDate) {
+							done : function(value, date, endDate) {
 								// 年月日时间被切换时都会触发。回调返回三个参数，分别代表：生成的值、日期时间对象、结束的日期时间对象
 								$('#timeBegin').change();
 								// console.log(value); // 得到日期生成的值，如：2017-08-18
 								setTimeout(function() {
 									if ($("#timeEnd").val() != "") {
+										//alert("begin")
 										calTime();
 									}
-								}, 500);
+								}, 150);
 							}
 						});
 						laydate.render({
@@ -279,9 +280,10 @@ $(function() {
 								// console.log(value); // 得到日期生成的值，如：2017-08-18
 								setTimeout(function() {
 									if ($("#timeBegin").val() != "") {
+										//alert("end")
 										calTime();
 									}
-								}, 500);
+								}, 150);
 							}
 						});
 						// 监听工具条
@@ -507,30 +509,33 @@ function calTime() { // 计算开始与结束的时长
 	var start = $("#timeBegin").val();
 	var end = $("#timeEnd").val();
 	
+	var timeBegin=new Date(start);
+	var timeEnd =new Date(end);
+	
+	//var timeBegin = new Date(start.replace(/-/g, "-"));
+	//var timeEnd = new Date(end.replace(/-/g, "-"));
+
+	var diff = (timeEnd.getTime() - timeBegin.getTime()) / (1000 * 60);// 单位 分钟
+	console.log(diff)
+	if (diff < 0) {
+		layer.alert("请选择或输入正确的开始/结束时间");
+		$("#duration").val("");
+		return false;
+	}
+	$("#duration").val(diff.toFixed(2));
+	
+	/*
 	var chkStart=checkDatetime(start);
 	var chkEnd=checkDatetime(end);
 	
 	console.log(chkStart);
 	console.log(chkEnd);
 	if(chkStart&&chkEnd){
-		var timeBegin=new Date(start);
-		var timeEnd =new Date(end);
 		
-		//var timeBegin = new Date(start.replace(/-/g, "-"));
-		//var timeEnd = new Date(end.replace(/-/g, "-"));
-
-		var diff = (timeEnd.getTime() - timeBegin.getTime()) / (1000 * 60);// 单位 分钟
-		console.log(diff)
-		if (diff < 0) {
-			layer.alert("请选择或输入正确的开始/结束时间");
-			$("#duration").val("");
-			return false;
-		}
-		$("#duration").val(diff.toFixed(2));
 	}else{
 		layer.alert("输入的日期格式不正确，请检查！")
 		return false;
-	}
+	}*/
 }
 
 function checkDatetime(str){

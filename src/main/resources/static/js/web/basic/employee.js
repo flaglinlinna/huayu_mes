@@ -78,12 +78,12 @@ $(function() {
 				field : 'createDate',
 				title : '添加时间',
 				width:150
-			}, {
+			}/*, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
 				toolbar : '#optBar'
-			} ] ],
+			}*/ ] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
@@ -97,7 +97,7 @@ $(function() {
 		});
 		form.on('switch(isStatusTpl)', function(obj) {//修改员工状态
 			//console.log(obj, this.value, this.name, obj.elem.checked);
-			setStatus(obj, this.value, this.name, obj.elem.checked);
+			//setStatus(obj, this.value, this.name, obj.elem.checked);//此功能取消
 		});
 		// 监听工具条
 		table.on('tool(employeeTable)', function(obj) {
@@ -177,7 +177,7 @@ $(function() {
 			});
 		}
 		// 设置员工状态
-		function setStatus(obj, id, name, checked) {
+		/*function setStatus(obj, id, name, checked) {
 			var empStatus = checked ? 1 : 0;
 			var deaprtisStatus = checked ? "在职" : "离职";
 			// 正常/禁用
@@ -217,7 +217,7 @@ $(function() {
 							layer.closeAll();
 						}
 					});
-		}
+		}*/
 	});
 
 });
@@ -240,6 +240,30 @@ function openEmployee(id, title) {
 		}
 	});
 }
+
+$("#getData").click(function(){
+	
+	layer.confirm('是否执行同步操作？',
+			{
+				btn1 : function(index) {
+					CoreUtil.sendAjax("base/employee/getUpdateData","", function(data) {
+						console.log(data)
+						if (data.result) {
+							layer.alert("操作成功", function() {
+								layer.closeAll();
+								loadAll();
+							});
+						} else {
+							layer.alert(data.msg, function() {
+								layer.closeAll();
+							});
+						}
+					}, "POST", false, function(res) {
+						layer.alert(res.msg);
+					});
+				}	
+			});
+});
 
 // 添加员工信息
 function addEmployee() {

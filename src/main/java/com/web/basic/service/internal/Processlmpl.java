@@ -166,7 +166,7 @@ public class Processlmpl implements ProcessService {
 				if (StringUtils.isNotEmpty(keyword)) {
 					filters1.add(new SearchFilter("procNo", SearchFilter.Operator.LIKE, keyword));
 					filters1.add(new SearchFilter("procName", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("procOrder", SearchFilter.Operator.LIKE, keyword));
+				
 				}
 				Specification<Process> spec = Specification.where(BaseService.and(filters, Process.class));
 				Specification<Process> spec1 = spec.and(BaseService.or(filters1, Process.class));

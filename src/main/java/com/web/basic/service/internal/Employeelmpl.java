@@ -1,14 +1,23 @@
 package com.web.basic.service.internal;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.jdbc.core.CallableStatementCallback;
+import org.springframework.jdbc.core.CallableStatementCreator;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +40,9 @@ public class Employeelmpl implements EmployeeService {
 	@Autowired
     private EmployeeDao employeeDao;
 
+	@Autowired
+    private JdbcTemplate jdbcTemplate;
+	
 	 /**
      * 新增员工
      */
@@ -181,5 +193,46 @@ public class Employeelmpl implements EmployeeService {
         employeeDao.save(o);
         return ApiResponseResult.success("设置成功！").data(o);
     }
+	
+	/**
+	 * 同步数据
+	 * */
+	@Override
+	public ApiResponseResult getUpdateData() throws Exception{
+		List<Object> list = getUpdateDataPrc(UserUtil.getSessionUser().getCompany() + "",
+				UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getId() + "");
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success(list.get(1).toString());
+	}
+	
+	public List getUpdateDataPrc(String company,String facoty,String user_id) throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  prc_mes_download (?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, company);
+				cs.setString(2, facoty);
+				cs.setInt(3, 1);
+				cs.setString(4, "员工信息");
+				cs.setString(5, user_id);
+				cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				
+				cs.execute();
+				result.add(cs.getInt(6));
+				result.add(cs.getString(7));
+				return result;
+			}
 
+		});
+		return resultList;
+	}
 }

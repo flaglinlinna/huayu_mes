@@ -159,5 +159,23 @@ public class EmployeeController extends WebController{
 	            return ApiResponseResult.failure("设置在职/离职失败！");
 	        }
 	    }
+		
+		@ApiOperation(value = "同步员工信息", notes = "同步员工信息", hidden = true)
+	    @RequestMapping(value = "/getUpdateData", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult getUpdateData() throws Exception{
+	        String method = "base/employee/getUpdateData";String methodName ="同步员工信息";
+	        try{
+	            ApiResponseResult result = employeeService.getUpdateData();
+	            logger.debug("同步员工信息 getUpdateData:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	            logger.error("同步员工信息失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("同步员工信息失败！");
+	        }
+	    }
 
 }

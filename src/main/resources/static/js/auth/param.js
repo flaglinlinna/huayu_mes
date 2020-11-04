@@ -34,19 +34,20 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'paramType',
-				title : '系统参数类型'
-			}, {
-				field : 'paramSort',
-				title : '系统参数种类'
-			}, {
+				title : '系统参数类型',
+				templet: function(d){
+					if(d.paramType=="1"){
+						 return  "用户级"
+					}else if(d.paramType==0){
+						return  "系统级"
+					}  
+			      }
+			},  {
 				field : 'paramCode',
 				title : '参数编码'
 			}, {
 				field : 'paramName',
 				title : '参数名称'
-			}, {
-				field : 'dataType',
-				title : '数据类型',
 			}, {
 				field : 'paramValue',
 				title : '参数值'
@@ -115,10 +116,8 @@ $(function() {
 							form.val("paramForm", {
 								"id" : data.data.id,
 								"paramType" : data.data.paramType,
-								"paramSort" : data.data.paramSort,
 								"paramCode" : data.data.paramCode,
 								"paramName" : data.data.paramName,
-								"dataType" : data.data.dataType,
 								"paramValue" : data.data.paramValue,
 								"fmemo" : data.data.fmemo
 							});

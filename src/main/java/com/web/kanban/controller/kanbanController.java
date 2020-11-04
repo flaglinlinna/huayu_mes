@@ -79,11 +79,14 @@ public class kanbanController extends WebController {
 		String method = "/kanban/toCjbg1";
 		String methodName = "车间报工看板";
 		try {	
-			ApiResponseResult result = kanbanService.getCjbgList("999",line,"","","");
+			//参数 String class_no, String dep_id, String sdata, String edata,String dev_ip
+			ApiResponseResult result = kanbanService.getCjbgList("999",line,"","",this.getIpAddr());
 			logger.debug("获取看板=toCjbg1:" + result);
 			getSysLogService().success(method,methodName,result);
 			mav.addObject("kanbanDataList", result);
+			mav.addObject("dev_ip", this.getIpAddr());
 			mav.setViewName("/kanban/cjbg1");// 返回路径
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("看板异常！", e);
@@ -99,10 +102,11 @@ public class kanbanController extends WebController {
 		String method = "kanban/toScdz";
 		String methodName = "生产电子看板";
 		try {	
-			ApiResponseResult result = kanbanService.getScdzList("999",line,"","","");
+			ApiResponseResult result = kanbanService.getScdzList("999",line,"","",this.getIpAddr());
 			logger.debug("获取生产电子看板=toScdz:" + result);
 			getSysLogService().success(method,methodName,result);
 			mav.addObject("kanbanDataList", result);
+			mav.addObject("dev_ip", this.getIpAddr());
 			mav.setViewName("/kanban/scdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,10 +123,11 @@ public class kanbanController extends WebController {
 		String method = "kanban/toZcbl";
 		String methodName = "制程不良看板";
 		try {	
-			ApiResponseResult result = kanbanService.getZcblList();
+			ApiResponseResult result = kanbanService.getZcblList("999",line,"",this.getIpAddr());
 			logger.debug("制程不良看板=toZcbl:" + result);
 			getSysLogService().success(method,methodName,result);
 			mav.addObject("kanbanDataList", result);
+			mav.addObject("dev_ip", this.getIpAddr());
 			mav.setViewName("/kanban/zcbl");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -134,15 +139,16 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toXlpm", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toXlpm(String line) {
+	public ModelAndView toXlpm(String line,String liner) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toXlpm";
 		String methodName = "效率排名看板";
 		try {	
-			ApiResponseResult result = kanbanService.getXlpmList();
+			ApiResponseResult result = kanbanService.getXlpmList("999",line,"",this.getIpAddr(),liner);
 			logger.debug("效率排名看板=toXlpm:" + result);
 			getSysLogService().success(method,methodName,result);
 			mav.addObject("kanbanDataList", result);
+			mav.addObject("dev_ip", this.getIpAddr());
 			mav.setViewName("/kanban/xlpm");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
