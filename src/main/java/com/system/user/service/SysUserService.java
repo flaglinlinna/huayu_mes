@@ -32,6 +32,8 @@ public interface SysUserService {
 
     public ApiResponseResult getUserAndRoles(Long id) throws Exception;
 
+    public String getUserNameById(Long id) throws Exception;
+
     public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;
     
 
