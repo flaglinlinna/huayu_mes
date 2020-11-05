@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +28,14 @@ public interface SysUserDao extends CrudRepository<SysUser, Long>, JpaSpecificat
     public SysUser findByDelFlagAndUserCode(Integer delFlag, String userCode);
 
     public SysUser findById(long id);
+
+
+    @Query(value = "select * from sys_user su left join SYS_USER_ROLE sur on su.ID =sur.USER_ID" +
+            " where su.DEL_FLAG = 0 and sur.ROLE_ID = ?1 and sur.DEL_FLAG = 0",
+            countQuery = "select count(*) from sys_user su left join SYS_USER_ROLE sur on su.ID =sur.USER_ID" +
+                    " where su.DEL_FLAG = 0 and sur.ROLE_ID = 5152 and sur.DEL_FLAG = 0",
+            nativeQuery = true)
+    public Page<Map<String, Object>> getListByRoleId(Long roleId, Pageable pageable);
 
 //    public int countByFcode(String userCode);
 //
