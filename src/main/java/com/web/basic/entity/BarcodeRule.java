@@ -101,6 +101,13 @@ public class BarcodeRule extends BaseEntity {
 	@ApiModelProperty(name = "barcodeLen", value = "条码长度")
 	@Column
 	protected Long barcodeLen;
+	
+	//一下复写具体输出形式自己定
+    public String toString(){
+        return "客户表ID:" + this.custId + ", 物料表ID:"+this.itemId+",物料编码:"+this.itemNo+
+        		",客户物料编码:"+this.itemNoCus+",华勤物料编码:"+this.itemNoInside+",开始位置:"+this.positionBegin+
+        		",结束位置:"+positionEnd+",验证数据:"+chkString+",条码长度:"+barcodeLen;
+    }
 
 	public Long getCustId() {
 		return custId;

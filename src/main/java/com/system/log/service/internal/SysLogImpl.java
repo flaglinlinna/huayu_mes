@@ -62,6 +62,7 @@ public class SysLogImpl implements SysLogService {
     	//查询条件1
 	    List<SearchFilter> filters =new ArrayList<>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        //filters.add(new SearchFilter("moduleName", SearchFilter.Operator.NEQ, ""));
         //查询2
         List<SearchFilter> filters1 =new ArrayList<>();
         if(StringUtils.isNotEmpty(keyword)){
@@ -86,15 +87,16 @@ public class SysLogImpl implements SysLogService {
 			sysLog.setMethod(method);
 			sysLog.setMethodName(methodName);
 			sysLog.setCreateDate(new Date());
-			sysLogDao.save(sysLog);
 			sysLog.setUsername(UserUtil.getSessionUser().getUserCode());
+			sysLogDao.save(sysLog);
+			
 //            sysLog.setUsername(UserUtil.getSessionUser().getFcode());
 			return ApiResponseResult.success();
 		}catch(Exception e){
-			SysLog s = new SysLog();
+			/*SysLog s = new SysLog();
 			s.setType("2");
-			s.setRemark("发送保存日记错误!"+e.toString());
-			sysLogDao.save(s);
+			s.setRemark("debug发送保存日记错误!"+e.toString());
+			sysLogDao.save(s);*/
 			return ApiResponseResult.failure();
 		}
 		
@@ -109,7 +111,7 @@ public class SysLogImpl implements SysLogService {
 	}
 
 	@Override
-	public ApiResponseResult success(String method, String methodName, Object param) {
+	public ApiResponseResult success(String module,String method, String methodName, Object param) {
 		// TODO Auto-generated method stub
 		try{
 			SysLog sysLog = new SysLog();
@@ -120,21 +122,23 @@ public class SysLogImpl implements SysLogService {
 			sysLog.setCreateDate(new Date());
 			sysLog.setOperation("操作成功");
 			sysLog.setUsername(UserUtil.getSessionUser().getUserCode());
+			sysLog.setParams(param==null?"":param.toString());
+			sysLog.setModuleName(module);
 //            sysLog.setUsername(UserUtil.getSessionUser().getFcode());
 			sysLogDao.save(sysLog);
 			return ApiResponseResult.success();
 		}catch(Exception e){
-			SysLog s = new SysLog();
+			/*SysLog s = new SysLog();
 			s.setType("2");
-			s.setRemark("发送保存日记错误!"+e.toString());
+			s.setRemark("success发送保存日记错误!"+e.toString());
 			
-			sysLogDao.save(s);
+			sysLogDao.save(s);*/
 			return ApiResponseResult.failure();
 		}
 	}
 
 	@Override
-	public ApiResponseResult error(String method, String methodName, Object param) {
+	public ApiResponseResult error(String module,String method, String methodName, Object param) {
 		// TODO Auto-generated method stub
 		try{
 			SysLog sysLog = new SysLog();
@@ -142,19 +146,20 @@ public class SysLogImpl implements SysLogService {
 			sysLog.setType("3");
 			sysLog.setMethod(method);
 			sysLog.setMethodName(methodName);
+			sysLog.setModuleName(module);
 			sysLog.setCreateDate(new Date());
 			sysLog.setOperation("操作失败");
-			sysLog.setParams(param.toString());
+			sysLog.setParams(param==null?"":param.toString());
 			sysLog.setUsername(UserUtil.getSessionUser().getUserCode());
 //            sysLog.setUsername(UserUtil.getSessionUser().getFcode());
 			sysLogDao.save(sysLog);
 			return ApiResponseResult.success();
 		}catch(Exception e){
-			SysLog s = new SysLog();
+			/*SysLog s = new SysLog();
 			s.setType("2");
-			s.setRemark("发送保存日记错误!"+e.toString());
+			s.setRemark("error发送保存日记错误!"+e.toString());
 			
-			sysLogDao.save(s);
+			sysLogDao.save(s);*/
 			return ApiResponseResult.failure();
 		}
 	}
@@ -169,14 +174,14 @@ public class SysLogImpl implements SysLogService {
 			sysLog.setMethod(method);
 			sysLog.setMethodName(methodName);
 			sysLog.setCreateDate(new Date());
-			sysLog.setParams(param.toString());
+			sysLog.setParams(param==null?"":param.toString());
 			sysLogDao.save(sysLog);
 			return ApiResponseResult.success();
 		}catch(Exception e){
-			SysLog s = new SysLog();
+			/*SysLog s = new SysLog();
 			s.setType("2");
 			s.setRemark("发送保存日记错误!"+e.toString());
-			sysLogDao.save(s);
+			sysLogDao.save(s);*/
 			return ApiResponseResult.failure();
 		}
 	}

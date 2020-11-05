@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#ruleList',
-			url : context + 'base/rule/getList',
+			url : context + '/base/rule/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -140,7 +140,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/rule/getBarcodeRule",
+			CoreUtil.sendAjax("/base/rule/getBarcodeRule",
 					JSON.stringify(param), function(data) {
 						if (data.result) {
 							form.val("ruleForm", {
@@ -199,7 +199,7 @@ function addSubmit(obj) {
 	str=str.slice(0,str.indexOf("="));
 	obj.field.itemId=str;
 	//console.log(obj)
-	CoreUtil.sendAjax("base/rule/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/base/rule/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -223,7 +223,7 @@ function editSubmit(obj) {
 	var str=obj.field.itemId
 	str=str.slice(0,str.indexOf("="));
 	obj.field.itemId=str;
-	CoreUtil.sendAjax("base/rule/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/rule/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -252,7 +252,7 @@ function delBarcodeRule(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/rule/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/rule/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -273,7 +273,7 @@ function delBarcodeRule(obj, id, name) {
 	}
 }
 function getMtrial(item_id) {
-	CoreUtil.sendAjax("base/rule/getMtrialList", "", function(data) {
+	CoreUtil.sendAjax("/base/rule/getMtrialList", "", function(data) {
 		if (data.result) {
 			//console.log(data)
 			$("#itemId").empty();

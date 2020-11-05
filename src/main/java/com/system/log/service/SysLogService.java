@@ -13,9 +13,9 @@ public interface SysLogService {
     
     public ApiResponseResult debug(String method,String methodName) ;
     
-    public ApiResponseResult success(String method,String methodName,Object param) ;
+    public ApiResponseResult success(String module,String method,String methodName,Object param) ;
     
-    public ApiResponseResult error(String method,String methodName,Object param) ;
+    public ApiResponseResult error(String module,String method,String methodName,Object param) ;
     
     public ApiResponseResult login(String method,String methodName,String param) ;
 

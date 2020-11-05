@@ -30,6 +30,8 @@ import io.swagger.annotations.ApiOperation;
 @Controller
 @RequestMapping(value = "/sysPermission")
 public class SysPermissionController extends WebController {
+	
+	private String module = "菜单管理";
 
     @Autowired
     private SysPermissionService sysPermissionService;
@@ -48,13 +50,13 @@ public class SysPermissionController extends WebController {
 		try {
 			List<SysPermission> permList = sysPermissionService.permList();
 			logger.debug("权限列表查询=permList:" + permList);
-			getSysLogService().success(method,methodName,permList);
+			getSysLogService().success(module,method,methodName,permList);
 			mav.addObject("permList", permList);
 			mav.addObject("msg", "ok");
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("权限查询异常！", e);
-			getSysLogService().error(method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,e.toString());
 		}
 		return mav;
 	}
@@ -73,12 +75,12 @@ public class SysPermissionController extends WebController {
 		getSysLogService().debug(method,methodName);
 		try {
 			ApiResponseResult api = sysPermissionService.getPermission(id);
-			getSysLogService().success(method,methodName,"权限实体");
+			getSysLogService().success(module,method,methodName,"权限实体");
 			return api;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取权限异常！", e);
-			getSysLogService().error(method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,e.toString());
 			return  ApiResponseResult.failure("获取权限操作失败，请联系管理员！");
 		}
 	}
@@ -90,11 +92,11 @@ public class SysPermissionController extends WebController {
 		String method = "/sysPermission/delete";String methodName ="删除权限";
         try{
         	ApiResponseResult api = sysPermissionService.delete(id);
-        	getSysLogService().success(method,methodName,id);
+        	getSysLogService().success(module,method,methodName,id);
             return api;
         }catch(Exception e){
             logger.error(e.getMessage(), e);
-            getSysLogService().error(method,methodName,e.toString());
+            getSysLogService().error(module,method,methodName,e.toString());
             return  ApiResponseResult.failure("删除权限操作失败，请联系管理员！");
         }
     }
@@ -113,12 +115,12 @@ public class SysPermissionController extends WebController {
 		String method = "/sysPermission/add";String methodName ="添加权限";
 		try {
 			ApiResponseResult api = sysPermissionService.savePerm(permission);
-        	getSysLogService().success(method,methodName,"权限实体");
+        	getSysLogService().success(module,method,methodName,"权限实体");
             return api;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("设置权限异常！", e);
-			getSysLogService().error(method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,e.toString());
 			return ApiResponseResult.failure("设置权限异常，请联系管理员");
 		}
 		//return "设置权限出错，请您稍后再试";
@@ -136,7 +138,7 @@ public class SysPermissionController extends WebController {
 		SysUser existUser= (SysUser) SecurityUtils.getSubject().getPrincipal();
 		if(null==existUser){
 			logger.debug("根据用户id查询限树列表！用户未登录");
-			getSysLogService().error(method,methodName,"查询用户权限失败,用户未登录");
+			getSysLogService().error(module,method,methodName,"查询用户权限失败,用户未登录");
 			return ApiResponseResult.failure("用户未登录");
 		}
 		try {

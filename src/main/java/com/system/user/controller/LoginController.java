@@ -47,6 +47,8 @@ import io.swagger.models.Model;
 @Api(description = "登录管理模块")
 @RestController
 public class LoginController extends WebController{
+	
+	private String module = "登录模块";
 
     @Autowired
     private SysUserService sysUserService;
@@ -67,12 +69,12 @@ public class LoginController extends WebController{
     @GetMapping("/login1")
     public ApiResponseResult login(@RequestParam(value = "username",required=false) String username, @RequestParam(value = "password",required=false) String password,
                                    @RequestParam(value = "rememberMe", required = false) boolean rememberMe) {
-    	String method = "/login1";String methodName ="登录";
+    	String method = "/login1";String methodName ="登录";String params = "登录账号:"+username;
     	try {
     		// username = username.toUpperCase();//用户名转换成大写
 
     		if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
-    			getSysLogService().error(method,methodName,"用户名或密码为空");
+    			getSysLogService().error(module,method,methodName,"用户名或密码为空");
                 return ApiResponseResult.failure("用户名或密码不能为空！");
             }
 
@@ -97,24 +99,24 @@ public class LoginController extends WebController{
                 logger.debug("用户登录，用户验证开始！user=" + username);
                 subject.login(token);
                 logger.info("用户登录，用户验证通过！user=" + username);
-                getSysLogService().success(method,methodName,"");
+                getSysLogService().success(module,method,methodName,params);
             } catch (UnknownAccountException uae) {
                 logger.error("用户登录，用户验证未通过：未知用户！user=" + username, uae);
-                getSysLogService().error(method,methodName,"用户不存在");
+                getSysLogService().error(module,method,methodName,"用户不存在!"+params);
                 return ApiResponseResult.failure("该用户不存在，请联系管理员！");
             } catch (IncorrectCredentialsException ice) {
                 // 获取输错次数
                 logger.error("用户登录，用户验证未通过：错误的凭证，密码输入错误！user=" + username, ice);
-                getSysLogService().error(method,methodName,"用户验证未通过");
+                getSysLogService().error(module,method,methodName,"用户验证未通过!"+params);
                 return ApiResponseResult.failure("用户名或密码不正确！");
             } catch (LockedAccountException lae) {
                 logger.error("用户登录，用户验证未通过：账户已锁定！user=" + username, lae);
-                getSysLogService().error(method,methodName,"账户已锁定");
+                getSysLogService().error(module,method,methodName,"账户已锁定!"+params);
                 return ApiResponseResult.failure("账户已锁定！");
             } catch (ExcessiveAttemptsException eae) {
                 logger.error(
                         "用户登录，用户验证未通过：错误次数大于5次,账户已锁定！user=" + username, eae);
-                getSysLogService().error(method,methodName,"用户名或密码错误次数大于5次,账户已锁定");
+                getSysLogService().error(module,method,methodName,"用户名或密码错误次数大于5次,账户已锁定!"+params);
                 return ApiResponseResult.failure("用户名或密码错误次数大于5次,账户已锁定!</br><span style='color:red;font-weight:bold; '>2分钟后可再次登录，或联系管理员解锁</span>");
                 // 这里结合了，另一种密码输错限制的实现，基于redis或mysql的实现；也可以直接使用RetryLimitHashedCredentialsMatcher限制5次
             } catch (DisabledAccountException sae){
@@ -123,11 +125,11 @@ public class LoginController extends WebController{
 		}catch (AuthenticationException ae) {
                 // 通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
                 logger.error("用户登录，用户验证未通过：认证异常，异常信息如下！user=" + username, ae);
-                getSysLogService().error(method,methodName,"用户名或密码不正确");
+                getSysLogService().error(module,method,methodName,"用户名或密码不正确!"+params);
                 return ApiResponseResult.failure("用户名或密码不正确！");
             } catch (Exception e) {
                 logger.error("用户登录，用户验证未通过：操作异常，异常信息如下！user=" + username, e);
-                getSysLogService().error(method,methodName,"用户登录失败");
+                getSysLogService().error(module,method,methodName,"用户登录失败!"+params);
                 return ApiResponseResult.failure("用户登录失败，请您稍后再试！");
             }
             Cache<String, AtomicInteger> passwordRetryCache = ecm

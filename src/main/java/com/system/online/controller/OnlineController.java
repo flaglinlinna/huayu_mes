@@ -27,6 +27,8 @@ import io.swagger.annotations.ApiOperation;
 @Controller
 @RequestMapping(value = "/online")
 public class OnlineController extends WebController {
+	
+	private String module = "在线用户";
 
     @Autowired
     private OnlineService onlineService;
@@ -52,7 +54,7 @@ public class OnlineController extends WebController {
     }
     @RequestMapping(value = "/toOnline")
     public String toUserList(){
-        return "/system/online/online";
+        return "system/online/online";
     }
     
     @ApiOperation(value = "踢出用户", notes = "踢出用户")
@@ -65,7 +67,7 @@ public class OnlineController extends WebController {
             return onlineService.delete(sessionId);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
-            getSysLogService().error(method,methodName,e.toString());
+            getSysLogService().error(module,method,methodName,e.toString());
             return  ApiResponseResult.failure("踢出用户操作失败，请联系管理员！");
         }
     }

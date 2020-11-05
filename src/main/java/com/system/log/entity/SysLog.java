@@ -34,6 +34,8 @@ public class SysLog extends BaseEntity {
     private String remark; //注解
     
     private String type;//类型.1:debug;2:sucess;3:error
+    
+    private String moduleName;//功能模块名
 
 	public String getUsername() {
 		return username;
@@ -97,6 +99,14 @@ public class SysLog extends BaseEntity {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getModuleName() {
+		return moduleName;
+	}
+
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
 	}
 	
     

@@ -19,17 +19,20 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping(value = "/sysLog")
 public class SysLogController extends WebController {
+	
+	private String module = "日志管理";
 
     @Autowired
     private SysLogService sysLogService;
 
-    @ApiOperation(value = "获取用户列表", notes = "获取用户列表")
+    @ApiOperation(value = "获取日志列表", notes = "获取日志列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keyword", value = "搜索关键字", dataType = "String", paramType = "query", defaultValue = "")
     })
     @RequestMapping(value = "/getlist", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getlist(String keyword){
+    	String method = "/getlist";String methodName ="获取日志列表";
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             return sysLogService.getlist(keyword, super.getPageRequest(sort));

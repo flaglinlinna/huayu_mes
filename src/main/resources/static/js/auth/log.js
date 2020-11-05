@@ -26,23 +26,15 @@ $(function() {
                     "code": res.status //code值为200表示成功
                 }
             },
-            // response:{
-            //     statusName: 'status' //数据状态的字段名称，默认：code
-            //     ,statusCode: 200 //成功的状态码，默认：0
-            //     ,countName: 'count' //数据总数的字段名称，默认：count
-            //     ,dataName: 'data' //数据列表的字段名称，默认：data
-            // },
             cols: [[
-                {type:'numbers'}
-                ,{field:'id', title:'ID', width:80, unresize: true, sort: true}
-                ,{field:'type', title:'type', width:120}
+                {type:'numbers', width:'3%'}
                 ,{field:'username', title:'操作账号', width:'8%'}
-                ,{field:'method', title:'路径', width:'18%'}
-                ,{field:'methodName', title:'操作', width:'32%'}
+                ,{field:'moduleName', title:'模块', width:'12%'}
+                ,{field:'methodName', title:'操作', width:'20%'}
                 ,{field:'ip', title: '登录IP', width:'12%'}
                 ,{field:'operation', title: '结果', width:'11%'}
                 ,{field:'createDate', title: '时间', width:'15%'}
-               /* ,{field:'params', title: '参数', width:'15%'}*/
+                ,{field:'params', title: '参数', width:'20%'}
             ]]
             ,  done: function(res, curr, count){
             	$("[data-field='id']").css('display','none');

@@ -29,6 +29,8 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/sysUser")
 public class SysUserController extends WebController{
+	
+	private String module = "用户管理";
 
     @Autowired
     private SysUserService sysUserService;
@@ -41,12 +43,12 @@ public class SysUserController extends WebController{
         try{
             ApiResponseResult result = sysUserService.add(sysUser);
             logger.debug("新增(编辑)用户=add:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("新增(编辑)用户失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("新增(编辑)用户失败！");
         }
     }
@@ -59,12 +61,12 @@ public class SysUserController extends WebController{
         try{
             ApiResponseResult result = sysUserService.edit(sysUser);
             logger.debug("编辑用户=edit:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("编辑用户失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("编辑用户失败！");
         }
     }
@@ -77,12 +79,12 @@ public class SysUserController extends WebController{
         try{
             ApiResponseResult result = sysUserService.delete(id);
             logger.debug("删除用户=delete:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("删除用户失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("删除用户失败！");
         }
     }
@@ -116,12 +118,12 @@ public class SysUserController extends WebController{
         try{
             ApiResponseResult result = sysUserService.changePassword(oldPassword, password, rePassword);
             logger.debug("修改密码=doChangePassword:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("修改密码失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("修改密码失败！");
         }
     }
@@ -136,12 +138,12 @@ public class SysUserController extends WebController{
         try{
             ApiResponseResult result = sysUserService.resetPassword(id, password, rePassword);
             logger.debug("修改密码=doSetPassword:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("修改密码失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("修改密码失败！");
         }
     }
@@ -176,12 +178,12 @@ public class SysUserController extends WebController{
         	Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = sysUserService.getList(keyword, userCode, userName, mobile, status, super.getPageRequest(sort));
             logger.debug("获取用户列表=getList:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取用户列表失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("获取用户列表失败！");
         }
     }
@@ -194,12 +196,12 @@ public class SysUserController extends WebController{
         try{
             ApiResponseResult result = sysUserService.getUserAndRoles(id);
             logger.debug("获取用户和角色信息=getUserAndRoles:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("获取用户和角色信息失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("获取用户和角色信息失败！");
         }
     }
@@ -212,12 +214,12 @@ public class SysUserController extends WebController{
         try{
             ApiResponseResult result = sysUserService.doStatus(id, status);
             logger.debug("设置正常/禁用=doJob:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("设置正常/禁用失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("设置正常/禁用失败！");
         }
     }

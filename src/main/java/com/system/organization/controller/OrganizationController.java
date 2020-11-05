@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.system.organization.entity.SysOrganization;
@@ -30,6 +31,8 @@ import io.swagger.annotations.ApiOperation;
 @Controller
 @RequestMapping(value = "/sysOrg")
 public class OrganizationController extends WebController {
+	
+	private String module = "组织管理";
 
     @Autowired
     private OrganizationService organizationService;
@@ -40,9 +43,7 @@ public class OrganizationController extends WebController {
     public SysOrganization getOrganization(){
         return new SysOrganization();
     }
-
-    
-    
+ 
     
     /**
 	 * 组织列表
@@ -58,13 +59,13 @@ public class OrganizationController extends WebController {
 		try {
 			List<SysOrganization> permList = organizationService.permList();
 			logger.debug("组织列表查询=permList:" + permList);
-			getSysLogService().success(method,methodName,permList);
+			getSysLogService().success(module,method,methodName,permList);
 			mav.addObject("permList", permList);
 			mav.addObject("msg", "ok");
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("组织列表查询异常！", e);
-			getSysLogService().error(method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,e.toString());
 		}
 		return mav;
 	}
@@ -79,16 +80,16 @@ public class OrganizationController extends WebController {
 	public ApiResponseResult getPerm(
 			@RequestParam("id") Long id) {
 		logger.debug("获取权限--id-" + id);
-		String method = "/sysPermission/getPerm";String methodName ="获取权限";
+		String method = "/sysPermission/getPerm";String methodName ="获取权限";String params = "获取权限id:" + id;
 		getSysLogService().debug(method,methodName);
 		try {
 			ApiResponseResult api = organizationService.getPermission(id);
-			getSysLogService().success(method,methodName,"权限实体");
+			getSysLogService().success(module,method,methodName,params);
 			return api;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取权限异常！", e);
-			getSysLogService().error(method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,params+e.toString());
 			return  ApiResponseResult.failure("获取权限操作失败，请联系管理员！");
 		}
 	}
@@ -97,14 +98,14 @@ public class OrganizationController extends WebController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
     public ApiResponseResult delete(@RequestParam(value = "id", required = false) Long id){
-		String method = "/sysPermission/delete";String methodName ="删除组织列表记录";
+		String method = "/sysPermission/delete";String methodName ="删除组织列表记录";String params ="id:"+id;
         try{
         	ApiResponseResult api = organizationService.delete(id);
-        	getSysLogService().success(method,methodName,id);
+        	getSysLogService().success(module,method,methodName,params);
             return api;
         }catch(Exception e){
             logger.error(e.getMessage(), e);
-            getSysLogService().error(method,methodName,e.toString());
+            getSysLogService().error(module,method,methodName,params+";"+e.toString());
             return  ApiResponseResult.failure("删除组织列表记录操作失败，请联系管理员！");
         }
     }
@@ -121,14 +122,16 @@ public class OrganizationController extends WebController {
 		logger.debug("设置组织列表记录--区分type-" + type + "【0：编辑；1：新增子节点组织列表记录】，组织列表记录--permission-"
 				+ permission);
 		String method = "/sysPermission/add";String methodName ="添加组织列表记录";
+		String param = "设置组织列表记录--区分type-" + type + "【0：编辑；1：新增子节点组织列表记录】，组织列表记录--permission-"
+				+ JSON.toJSONString(permission);
 		try {
 			ApiResponseResult api = organizationService.savePerm(permission);
-        	getSysLogService().success(method,methodName,"组织列表记录实体");
+        	getSysLogService().success(module,method,methodName,param);
             return api;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("设置组织列表记录异常！", e);
-			getSysLogService().error(method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,param+";"+e.toString());
 			return ApiResponseResult.failure("设置组织列表记录异常，请联系管理员");
 		}
 		//return "设置组织列表记录出错，请您稍后再试";
@@ -146,7 +149,7 @@ public class OrganizationController extends WebController {
 		SysUser existUser= (SysUser) SecurityUtils.getSubject().getPrincipal();
 		if(null==existUser){
 			logger.debug("根据用户id查询限树列表！用户未登录");
-			getSysLogService().error(method,methodName,"查询用户组织列表记录失败,用户未登录");
+			getSysLogService().error(module,method,methodName,"查询用户组织列表记录失败,用户未登录");
 			return ApiResponseResult.failure("用户未登录");
 		}
 		try {
