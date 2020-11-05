@@ -37,8 +37,8 @@ $(function() {
                 // ,{field:'id', title:'ID', width:80, unresize: true, sort: true}
                 ,{field:'userCode', title:'账号', width:120}
                 ,{field:'mobile', title:'手机号', width:120}
-                ,{field:'realName', title:'真实名称', width:100}
-                ,{field:'userName', title:'昵称', width:100}
+                //,{field:'realName', title:'真实名称', width:100}
+                ,{field:'userName', title:'名称', width:100}
                 ,{field:'email', title: '邮箱', width:180}
                 ,{field:'sex', title: '性别', width:60}
                 ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}

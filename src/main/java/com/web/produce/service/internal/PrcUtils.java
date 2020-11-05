@@ -364,19 +364,22 @@ public class PrcUtils {
 		}
 		
 		//上线确认-获取产线未分配人员
-		public List getUserByLinePrc(String company,String facoty,String user_id, String line_id) throws Exception {
+		public List getUserByLinePrc(String company,String facoty,String user_id, String line_id,int page,int rows) throws Exception {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
-					String storedProc = "{call  prc_mes_cof_affirm_emp_chs (?,?,?,?,?,?,?)}";// 调用的sql
+					String storedProc = "{call  prc_mes_cof_affirm_emp_chs (?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 					CallableStatement cs = con.prepareCall(storedProc);
 					cs.setString(1, company);
 					cs.setString(2, facoty);
 					cs.setString(3, user_id);
 					cs.setString(4, line_id);
-					cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
-					cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
-					cs.registerOutParameter(7, -10);// 输出参数 追溯数据
+					cs.setInt(5, rows);
+					cs.setInt(6, page);
+					cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识 -总记录数
+					cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(10, -10);// 输出参数 追溯数据
 					return cs;
 				}
 			}, new CallableStatementCallback() {
@@ -384,11 +387,12 @@ public class PrcUtils {
 					List<Object> result = new ArrayList<>();
 					List<Map<String, Object>> l = new ArrayList();
 					cs.execute();
-					result.add(cs.getInt(5));
-					result.add(cs.getString(6));
-					if (cs.getString(5).toString().equals("0")) {
+					result.add(cs.getInt(8));
+					result.add(cs.getString(9));
+					if (cs.getString(8).toString().equals("0")) {
+						result.add(cs.getString(7));
 						// 游标处理
-						ResultSet rs = (ResultSet) cs.getObject(7);
+						ResultSet rs = (ResultSet) cs.getObject(10);
 
 						try {
 							l = fitMap(rs);
@@ -398,6 +402,7 @@ public class PrcUtils {
 						}
 						result.add(l);
 					}
+					
 					System.out.println(l);
 					return result;
 				}
@@ -465,7 +470,7 @@ public class PrcUtils {
 					cs.setString(1, company);
 					cs.setString(2, facoty);
 					cs.setString(3, user_id);
-					cs.setString(4, task_no);
+					cs.setString(4, "");//task_no--废除2020-11-03
 					cs.setString(5, item_no);
 					cs.setString(6, liner_name);
 					cs.setInt(7, qty);

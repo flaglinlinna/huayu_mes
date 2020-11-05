@@ -54,7 +54,7 @@ public class ClientController extends WebController{
 	        String method = "base/client/getList";String methodName ="获取客户信息列表";
 	        try {
 	        	System.out.println(keyword);
-	            Sort sort = new Sort(Sort.Direction.DESC, "id");
+	            Sort sort = new Sort(Sort.Direction.ASC, "custNo");
 	            ApiResponseResult result = clientService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取客户信息列表=getList:");
 	            getSysLogService().success(method, methodName, null);

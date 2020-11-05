@@ -27,12 +27,12 @@ public class PrcKanbanUtils {
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
 				String storedProc = "{call  prc_mes_rpt_cjbg (?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
-				cs.setString(1, "");//company
-				cs.setString(2, "");//facoty
-				cs.setString(3, "");//class_id
-				cs.setString(4, "");//dep_id
-				cs.setString(5, "");//sdata
-				cs.setString(6, "1");//dev_ip
+				cs.setString(1, company);//company
+				cs.setString(2, facoty);//facoty
+				cs.setString(3, class_id);//class_id
+				cs.setString(4, dep_id);//dep_id--部门ID
+				cs.setString(5, sdata);//sdata
+				cs.setString(6, dev_ip);//dev_ip
 				cs.setString(7, user_id);
 				cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
 				cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
@@ -81,12 +81,12 @@ public class PrcKanbanUtils {
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
 					String storedProc = "{call  PRC_MES_RPT_SCDZ (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 					CallableStatement cs = con.prepareCall(storedProc);
-					cs.setString(1, "");//company
-					cs.setString(2, "");//facoty
-					cs.setString(3, "");//class_id
-					cs.setString(4, "");//dep_id
-					cs.setString(5, "");//sdata
-					cs.setString(6, "2");//dev_ip
+					cs.setString(1, company);//company
+					cs.setString(2, facoty);//facoty
+					cs.setString(3, class_id);//class_id
+					cs.setString(4, dep_id);//dep_id
+					cs.setString(5, sdata);//sdata
+					cs.setString(6, dev_ip);//dev_ip
 					cs.setString(7, user_id);//
 					cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
 					cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
@@ -142,19 +142,20 @@ public class PrcKanbanUtils {
 		}
 
 		// 获取制程不良看板信息
-		public List getZcblListPrc() throws Exception {
+		public List getZcblListPrc(String company,String facoty,String user_id, String class_id,
+				String dep_id, String sdata, String dev_ip) throws Exception {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
 					String storedProc = "{call  prc_mes_rpt_zcbl (?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 					CallableStatement cs = con.prepareCall(storedProc);
-					cs.setString(1, "");//facoty
-					cs.setString(2, "");//company
-					cs.setString(3, "3");//唯一硬件标识
-					cs.setString(4, "5602");//user_id
-					cs.setString(5, "1");//班次ID
-					cs.setString(6, "2020/10/31");//日期
-					cs.setString(7, "5253");//部门ID
+					cs.setString(1, facoty);//facoty
+					cs.setString(2, company);//company
+					cs.setString(3, dev_ip);//唯一硬件标识/ip
+					cs.setString(4, user_id);//user_id
+					cs.setString(5, class_id);//班次ID
+					cs.setString(6, sdata);//日期
+					cs.setString(7, dep_id);//部门ID
 					cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
 					cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					cs.registerOutParameter(10, -10);// 输出参数 追溯数据
@@ -194,20 +195,21 @@ public class PrcKanbanUtils {
 		
 		
 		//获取效率排名看板
-		public List getXlpmListPrc() throws Exception {
+		public List getXlpmListPrc(String company,String facoty,String user_id, String class_id,
+				String dep_id, String sdata, String dev_ip,String liner) throws Exception {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
 					String storedProc = "{call  PRC_MES_RPT_XLPM(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 					CallableStatement cs = con.prepareCall(storedProc);
-					cs.setString(1, "");//-公司
-					cs.setString(2, "");//工厂
-					cs.setString(3, "");// 班次
-					cs.setString(4, "");//--部门ID
-					cs.setString(5, "朱元其");//-组长
-					cs.setString(6, "2020/11/01");//日期
-					cs.setString(7, "4");//电视IP或mac
-					cs.setString(8, "1");//用户id
+					cs.setString(1, company);//-公司
+					cs.setString(2, facoty);//工厂
+					cs.setString(3, class_id);// 班次
+					cs.setString(4, dep_id);//--部门ID*
+					cs.setString(5, liner);//-组长*
+					cs.setString(6, sdata);//日期*
+					cs.setString(7, dev_ip);//电视IP或mac*
+					cs.setString(8, user_id);//用户id
 					cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
 					cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					cs.registerOutParameter(11, -10);// 输出参数 追溯数据

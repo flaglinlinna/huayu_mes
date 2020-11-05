@@ -417,6 +417,25 @@ public class SysUserImpl implements SysUserService {
         return ApiResponseResult.success().data(map);
     }
 
+
+    /**
+     * 根据ID获取用户姓名
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public String getUserNameById(Long id) throws Exception{
+        if(id == null){
+            return null;
+        }
+        SysUser sysUser = sysUserDao.findById((long) id);
+        if(sysUser == null){
+            return null;
+        }
+        return sysUser.getUserName();
+    }
     /**
      * 设置正常/禁用
      * @param id

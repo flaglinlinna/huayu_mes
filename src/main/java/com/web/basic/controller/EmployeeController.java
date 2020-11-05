@@ -53,7 +53,7 @@ public class EmployeeController extends WebController{
 	        String method = "base/employee/getList";String methodName ="获取员工信息列表";
 	        try {
 	        	System.out.println(keyword);
-	            Sort sort = new Sort(Sort.Direction.DESC, "id");
+	            Sort sort = new Sort(Sort.Direction.ASC, "empCode");
 	            ApiResponseResult result = employeeService.getList(keyword,empStatus, super.getPageRequest(sort));
 	            logger.debug("获取员工信息列表=getList:");
 	            getSysLogService().success(method, methodName, null);
@@ -157,6 +157,24 @@ public class EmployeeController extends WebController{
 	            logger.error("设置在职/离职失败！", e);
 	            getSysLogService().error(method, methodName, e.toString());
 	            return ApiResponseResult.failure("设置在职/离职失败！");
+	        }
+	    }
+		
+		@ApiOperation(value = "同步员工信息", notes = "同步员工信息", hidden = true)
+	    @RequestMapping(value = "/getUpdateData", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult getUpdateData() throws Exception{
+	        String method = "base/employee/getUpdateData";String methodName ="同步员工信息";
+	        try{
+	            ApiResponseResult result = employeeService.getUpdateData();
+	            logger.debug("同步员工信息 getUpdateData:");
+	            getSysLogService().success(method, methodName, null);
+	            return result;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	            logger.error("同步员工信息失败！", e);
+	            getSysLogService().error(method, methodName, e.toString());
+	            return ApiResponseResult.failure("同步员工信息失败！");
 	        }
 	    }
 

@@ -5319,5 +5319,13 @@ body .layui-util-face .layui-layer-content {
 	right:15px;
 	transform:translateY(-50%);
 }
+/*2020-11-05*/
+.layui-required:after{
+        content:"*";
+        color:red;
+        position: absolute;
+        top:5px;
+        left:15px;
+    }
 
         

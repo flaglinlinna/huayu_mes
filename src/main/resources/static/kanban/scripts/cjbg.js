@@ -53,7 +53,7 @@ function chartDiv(xAxis_data,series1_data,series2_data,series3_data){
 		            interval: 50,
 		            splitLine:{show:false},
 		            axisLabel: {
-		                formatter: '{value} 个',
+		                formatter: '{value} 小时',
 		                textStyle: {
                             color: '#ffffff'
                         }

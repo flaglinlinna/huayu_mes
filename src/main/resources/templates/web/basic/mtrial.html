@@ -15,11 +15,12 @@
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
 								class="layui-input" type="text" />
 						</div>
-						<button type="reset" class="layui-btn layui-btn-primary layui-btn-sm"
+						
+						 <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
+					<button type="reset" class="layui-btn layui-btn-primary layui-btn-sm"
 							title="重置">
 							<i class="layui-icon">&#xe669;</i>重置
 						</button>
-						 <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
 					</div>
 				</div>
         </form>
@@ -38,46 +39,46 @@
 
         <script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+           
         </script>
 	 </div>
 	 <!--添加或编辑物料-->
-    <div id="setMtrial" class="layer_self_wrap" style="width:500px;display:none;">
+    <div id="setMtrial" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
         <form id="mtrialForm" class="layui-form layui-form-pane" lay-filter="mtrialForm" method="post" action="" style="margin-top: 20px;">
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">物料编码</label>
+                <label class="layui-form-label layui-required">物料编码</label>
                 <div class="layui-input-inline">
                     <input id="itemNo" name="itemNo" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">物料名称</label>
+                <label class="layui-form-label layui-required">物料名称</label>
                 <div class="layui-input-inline">
                     <input id="itemName" name="itemName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
              <div class="layui-form-item">
-                <label class="layui-form-label">物料简称</label>
+                <label class="layui-form-label layui-required">物料简称</label>
                 <div class="layui-input-inline">
                     <input id="itemNameS" name="itemNameS" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">物料类别</label>
+                <label class="layui-form-label layui-required">物料类别</label>
                 <div class="layui-input-inline">
                     <input id="itemType" name="itemType" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">物料规格</label>
+                <label class="layui-form-label layui-required">物料规格</label>
                 <div class="layui-input-inline">
                     <input id="itemModel" name="itemModel" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">物料单位</label>
+                <label class="layui-form-label layui-required">物料单位</label>
                 <div class="layui-input-inline">
                     <input id="itemUnit" name="itemUnit" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>

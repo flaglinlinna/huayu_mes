@@ -78,8 +78,8 @@ public class VerifyController extends WebController {
     @ResponseBody
     public ApiResponseResult getUserByLine(String lineId) {
         String method = "/verify/getUserByLine";String methodName ="根据产线id获取未分配人员";
-        try {
-            ApiResponseResult result = verifyService.getUserByLine(lineId);
+        try {      	
+            ApiResponseResult result = verifyService.getUserByLine(lineId,super.getPageRequest());
             logger.debug("根据产线id获取未分配人员=afterNei:");
             getSysLogService().success(method, methodName, null);
             return result;

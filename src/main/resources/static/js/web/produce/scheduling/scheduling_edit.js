@@ -18,7 +18,7 @@ $(function () {
         });
         form.on('submit(editBtn)', function(data){
             //新增
-            doEdit();
+           // doEdit();
             return false;
         });
         form.on('select(itemId)', function(data){
@@ -183,6 +183,7 @@ $(function () {
 
 //渲染基本信息
 function getScheduling(){
+	/*
     var optionHtml = '<option value=""></option>';
     var optionHtml2 = '<option value=""></option>';
     var optionHtml3 = '';
@@ -209,7 +210,8 @@ function getScheduling(){
         optionHtml4 += '<option value="'+orgList[i].id+'">'+orgList[i].orgName+'</option>';
     }
     $("#deptId").html(optionHtml4);
-
+*/
+	console.log(scheduling)
     $("#id").val(id);
     $("#taskNo").val(scheduling.taskNo);
     $("#prodNo").val(scheduling.prodNo);
@@ -225,7 +227,7 @@ function getScheduling(){
     $("#qtyPlan").val(scheduling.qtyPlan);
 
     //渲染
-    layui.form.render('select');
+   // layui.form.render('select');
 }
 
 //编辑

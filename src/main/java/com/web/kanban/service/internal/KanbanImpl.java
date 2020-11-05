@@ -65,10 +65,10 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	}
 	
 	@Override
-	public ApiResponseResult getZcblList()
+	public ApiResponseResult getZcblList(String class_no, String dep_id, String sdata,String dev_ip)
 			throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getZcblListPrc();
+		List<Object> list = getZcblListPrc("","","",class_no,  dep_id,  sdata, dev_ip);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -82,8 +82,8 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	}
 	
 	@Override
-	public ApiResponseResult getXlpmList() throws Exception{	
-		List<Object> list = getXlpmListPrc();
+	public ApiResponseResult getXlpmList( String class_id,String dep_id, String sdata, String dev_ip,String liner) throws Exception{	
+		List<Object> list = getXlpmListPrc("","","",class_id,dep_id,sdata,dev_ip,liner);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

@@ -30,23 +30,25 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label" >生产状态</label>
                                 <div class="layui-input-inline">
-                                    <!--<input type="text" id="produceState" name="produceState" readonly class="layui-input">-->
-                                    <select id="produceState" name='produceState' disabled  class="layui-input">
+                                   <input type="text" id="produceState" name="produceState" readonly class="layui-input" style="background-color: #F2F2F2;">
+                                   <!-- <select id="produceState" name='produceState' disabled  class="layui-input">
                                         <option value=""></option>
                                         <option value="待产">待产</option>
                                         <option value="生产">生产</option>
                                         <option value="完工">完工</option>
                                         <option value="停工">停工</option>
-                                    </select>
+                                    </select>-->
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label">物料编码</label>
                                 <div class="layui-input-inline">
                                     <!--<input type="text" id="itemNo" name="itemNo" class="layui-input">-->
-                                    <select id="itemId" name='itemId' lay-filter="itemId" disabled lay-search class="layui-input">
+                                  <!--  <select id="itemId" name='itemId' lay-filter="itemId" disabled lay-search class="layui-input">
                                         <option value=""></option>
-                                    </select>
+                                    </select> --> 
+                                    <input type="text" id="itemId" name="itemId" readonly style="background-color: #F2F2F2;" class="layui-input">
+                                    
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -65,18 +67,20 @@
                                 <label class="layui-form-label">客户</label>
                                 <div class="layui-input-inline">
                                     <!--<input type="text" id="custName" name="custName" autocomplete="off" placeholder="" class="layui-input">-->
-                                    <select id="custId" name='custId' disabled class="layui-input" lay-event="custId" lay-search>
+                                    <!-- <select id="custId" name='custId' disabled class="layui-input" lay-event="custId" lay-search>
                                         <option value=""></option>
-                                    </select>
+                                    </select>-->
+                                    <input type="text" id="custName" name="custName" readonly style="background-color: #F2F2F2;" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label">组长</label>
                                 <div class="layui-input-inline">
                                     <!--<input type="text" id="linerName" name="linerName" autocomplete="off" placeholder="" class="layui-input">-->
-                                    <select id="linerName" disabled name='linerName' lay-search style="background-color: #F2F2F2;" class="layui-input">
+                                   <!-- <select id="linerName" disabled name='linerName' lay-search style="background-color: #F2F2F2;" class="layui-input">
                                         <option value=""></option>
-                                    </select>
+                                    </select>-->
+                                     <input type="text" id="linerName" name="linerName" readonly style="background-color: #F2F2F2;" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -89,9 +93,10 @@
                                 <label class="layui-form-label">部门</label>
                                 <div class="layui-input-inline">
                                     <!--<input type="text" id="deptName" name="deptName" autocomplete="off" placeholder="" class="layui-input">-->
-                                    <select id="deptId" name='deptId' disabled lay-search class="layui-input">
+                                    <!--<select id="deptId" name='deptId' disabled lay-search class="layui-input">
                                         <option value=""></option>
-                                    </select>
+                                    </select>-->
+                                     <input type="text" id="deptId" name="deptId" readonly style="background-color: #F2F2F2;" autocomplete="off" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -108,9 +113,9 @@
                             </div>
                         </div>
 
-                        <div class="layui-form-item" style="margin-bottom: 0px;text-align: center;">
+                        <!-- <div class="layui-form-item" style="margin-bottom: 0px;text-align: center;">
                             <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="editBtn">保存</button>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -131,9 +136,9 @@
                 </form>
                 <script type="text/html" id="statusTpl">
                     {{# if(d.jobAttr==1){ }}
-                    <input type="checkbox" name="{{d.procNo}}" value="{{d.jobAttr}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
+                    <input type="checkbox" name="{{d.procNo}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
                     {{#  } else { }}
-                    <input type="checkbox" name="{{d.procNo}}" value="{{d.jobAttr}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
+                    <input type="checkbox" name="{{d.procNo}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
                     {{#  } }}
                 </script>
                 <script type="text/html" id="optBar">

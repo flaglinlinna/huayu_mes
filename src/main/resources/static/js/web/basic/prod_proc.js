@@ -163,6 +163,7 @@ $(function() {
 		});
 		
 		form.on('checkbox(isStatusTpl)', function(obj) {//修改过程属性
+			console.log(this)
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听搜索框
