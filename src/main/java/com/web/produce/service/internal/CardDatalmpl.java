@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,6 +66,9 @@ public class CardDatalmpl implements CardDataService {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired  
+	 private Environment env;
 	
 	/**
 	 * 查询列表
@@ -316,9 +320,11 @@ public class CardDatalmpl implements CardDataService {
 			List<DevClock> ld = devClockDao.findByDelFlagAndLineIdAndDevTypeAndEnabled(0,Long.parseLong(lid),"上线机",1);
 			if(ld.size() > 0){
 				for(DevClock dc:ld){
-					ApiResponseResult api = this.saveCardData(dc);
-					if(!api.isResult()){
-						msg += api.getMsg()+";";
+					if( env.getProperty("envi").equals("windows")){
+						ApiResponseResult api = this.saveCardData(dc);
+						if(!api.isResult()){
+							msg += api.getMsg()+";";
+						}
 					}
 				}
 			}else{

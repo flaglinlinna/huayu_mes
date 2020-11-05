@@ -3,6 +3,7 @@ package com.web.produce.controller;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.shiro.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,7 @@ public class IssueController extends WebController{
 
 	 @Autowired
 	 private IssueService issueService;
+	 
 	 
 	 @ApiOperation(value = "指纹下发记录列表页", notes = "指纹下发记录列表页", hidden = true)
 	 @RequestMapping(value = "/toIssue")
@@ -87,6 +89,7 @@ public class IssueController extends WebController{
 	    public ApiResponseResult add(@RequestBody Map<String, Object> params) {
 	        String method = "produce/issue/add";String methodName ="新增下发记录";
 	        try{
+	        	
 	        	String devList = params.get("devList").toString();
 	        	String empList = params.get("empList").toString();
 	            ApiResponseResult result = issueService.add(devList,empList);

@@ -20,4 +20,6 @@ public interface DevClockDao extends CrudRepository<DevClock, Long>,JpaSpecifica
 	public List<DevClock> findByDelFlagAndLineIdAndDevTypeAndEnabled(Integer delFlag,Long lid,String devType,Integer enabled);
 	
 	
+	public List<DevClock> findByDelFlagAndDevCode(Integer delFlag, String devCode);
+	
 }

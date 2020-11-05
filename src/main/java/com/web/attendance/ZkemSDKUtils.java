@@ -389,13 +389,13 @@ public class ZkemSDKUtils {
         boolean connFlag = sdk.connect("192.168.1.201", 4370);
         System.out.println(connFlag);
         if (connFlag) {
-            boolean flag = sdk.readGeneralLogData();
+            /*boolean flag = sdk.readGeneralLogData();
             System.out.println("flag:" + flag);
 
             List<Map<String, Object>> strList = sdk.getGeneralLogData();
             System.out.println(strList.toString());
            List<Map<String, Object>> userList = sdk.getUserInfo();//获取所有人员信息
-            System.out.println(userList.toString());
+            System.out.println(userList.toString());*/
             //[{Enabled=true, EnrollNumber=2, Privilege=0, Name=, Password=}]
             /*boolean f= sdk.setUserInfo("3", "test1", "", 0, true);//新增人员,如果编号一样则修改信息
             System.out.println(f);*/
@@ -418,7 +418,7 @@ public class ZkemSDKUtils {
         	
         	//setUserTmpStr("514036",3,"TcdTUzIxAAAEhIsECAUHCc7QAAAohZEBAAAAhKkqloQHARsEkgDLAVOGlwAjASsHtwAXhVcLdADGALEP9YT3ACwPWgDaAUuLrABOAakMCwBThT4NzgBqAXgEZYSGAHcN/gBIACWLvACEAZ4B1QF3hKUJkADkAEUNxITTAJoPgQDhAUeC4gAAATAPtQAghUoMkwBCAe4OSoThAGkLgwCRATSLsABiAdMHPQBShTQL2QBuAQEGq4SAAZUIewBFASiMyQBOAJ0PRQDwhHALugAXAWQPk4S6ABYPggDiAUWIiwA3ATAOGAC+hCIPUQAPAZMNl4SOAIMPyQBJAJ2L+QCXAKIPTQB1hIYNdwBuAMMNo4RPAJAP4ACEABuPpcYFrqHzLT5lqYQXze3V6cjVdYhMFlEXAmHr9nOIvPzvlwsLGPk5giD7EdlpgydthQFwfrZs0PtAgVZo63D28xP1cYM++OKJbQi64A/dMgA3B3+HYRL7ZaaKy3p/hFsdtQW5fDwZOQS/kDKbMYz49D0N+fxw/m0DAvRXFCv66AYehE+LZS26GGeUtvbP+7t4TAushiat9PiuxNLa2/9THUJb0YNmDOIH9XYwWjocUnqvTnYP36WymyqXNQFplcT5dQT98cTtxg47gw+NVQn3AEKJs/yifzpvNvgf/ep5tIO6A/+DhQQvBGYTgYAfkJoD8/RPCFuPCIffF4J/m5KTjtrxJLkAAmgg9QvFvC2T/8BQwMBowACarhErDQCxKt9BdN00CgDOLRaH/8R4bAUAkzAM7gwEAjUMNVNK/8EAfr0NQgUAbz/M/neCAeNEHsDAO8IXhGZKAz/A/jo+Zs5SCACtUxc6RF+NAc1TIlvBrRQE2lf6/VT+/45rXHtWCwBUZPQ7O/rO/gsATnD3Bf/7eEdqFQBMej/AxHlAWP9DwEWQBwQVjYzDwsI+ywBGCuUi//7+/5A/DoTMkB5YwFUEBQWEkSJbEACYVxNCRD/AwMDAYMIAlBeIxHPBBQA7miZERhcAP63tg/8uRfxVPsHA/zppE4RBtPBPMP46/0C6RsFqCACSfoyMDAkA4bscN48EBB69E0wJAN54JsTgVBcAP8DmO//6t0DANlRRW8sAnkYbaP//L0UFBQT3x3rCgBgA/dbtRP8w/f5V/zr++3vB/sH/wf06CQQI4YzEm8DABw0EEOUTO8D9QQXA+5wBO+XtZf84IkC1R1T8xAgAS+aHRsOUwwgAgjB6x0fAw1oGAPI8KcR6dhcQNwDgBcD6e//9KP7ALzhGxXr+CBDiAS2UwDmOEYEDdMTCBmuBjxGNBWCIfgfAx44RlQUQ/f/v/jWDEZMKHsD/OTwHlE4SV8AJELUUWkduwcDEDhB8FaBGw8PEwMTBBnTGjRF0F1eEhAcFFBYfOpMFEFnkT8XlFBA9I9bAOMD6e/00/i7A//TCDpR+JU+I/8MBwMaAEZgmKVkJ1XAj1ML+k4gKEEcvQvzCw5YIEIfqQMUInAcQjTo9V4cBlJJELcGYDNW1SzPCetHHxMKrBhQBWTSVwQ==");
 
-        	sdk.getUserTmpStr();
+        	//sdk.getUserTmpStr();
         }
     }
 

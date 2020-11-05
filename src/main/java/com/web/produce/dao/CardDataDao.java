@@ -32,4 +32,9 @@ public interface CardDataDao extends CrudRepository<CardData, Long>,JpaSpecifica
  " WHERE C.DEL_FLAG=0 ORDER BY C.CARD_DATE DESC,C.CARD_TIME DESC )A", nativeQuery = true)
     public List<Map<String, Object>> queryExport();
 	
+	@Query(value = "SELECT D.* FROM MES_ATT_CARDDATA D LEFT JOIN MES_BASE_DEV_CLOCK C ON D.DEV_CLOCK_ID = C.ID "+
+" LEFT JOIN MES_BASE_EMPLOYEE E ON E.ID = D.EMP_ID WHERE D.DEL_FLAG=0 AND D.CARD_DATE=?1 AND D.CARD_TIME=?2 AND E.EMP_CODE=?3 AND C.DEV_CODE=?4 ", nativeQuery = true)
+	 public List<Map<String, Object>> findBySnAndTime(String cdate,String ctime,String ecode,String sn);
+	
+	
 }

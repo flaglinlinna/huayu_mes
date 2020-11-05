@@ -4,17 +4,18 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +66,9 @@ public class Issuelmpl  implements IssueService {
 
 	@Autowired
 	DevLogDao devLogDao;
+	
+	 @Autowired  
+	 private Environment env;
 
 	/**
 	 * 查询列表
@@ -126,11 +130,92 @@ public class Issuelmpl  implements IssueService {
 	}
 
 	/**
-	 * 新增下发记录（会覆盖原有记录）
+	 * 新增下发记录（指纹下发命令）
 	 */
 	@Override
 	@Transactional
 	public ApiResponseResult add(String dev, String emp) throws Exception {
+
+		if (dev == null || emp == null) {
+			return ApiResponseResult.failure("下发记录必须含有卡机和员工信息！");
+		}
+		// 数据格式转换-卡机设备
+		String[] devIdArray = dev.split(";");
+		List<Long> devList = new ArrayList<Long>();
+		for (int i = 0; i < devIdArray.length; i++) {
+			if (StringUtils.isNotEmpty(devIdArray[i])) {
+				devList.add(Long.parseLong(devIdArray[i]));
+			}
+		}
+		// 数据格式转换-员工
+		String[] empIdArray = emp.split(";");
+		List<Long> empList = new ArrayList<Long>();
+		for (int i = 0; i < empIdArray.length; i++) {
+			if (StringUtils.isNotEmpty(empIdArray[i])) {
+				empList.add(Long.parseLong(empIdArray[i]));
+			}
+		}
+		//记录有就忽略，没有就增加
+		String msg = "";//记录信息
+		List<Issue> listNew = new ArrayList<>();
+
+		List<DevLog> listLog = new ArrayList<DevLog>();
+
+		if (devList.size() > 0) {
+			for (Long devId : devList) {
+				DevClock devClock = devClockDao.findById((long)devId);
+				if(devClock != null){
+					if (empList.size() > 0) {
+						for (Long empId : empList) {
+							Employee em = employeeDao.findById((long)empId);
+							if(em != null){
+								//日记
+								DevLog devLog = new DevLog();
+								devLog.setCreateBy(UserUtil.getSessionUser().getId());
+								devLog.setCreateDate(new Date());
+								devLog.setDevId(devClock.getId());
+								devLog.setDevIp(devClock.getDevIp());
+								devLog.setDevCode(devClock.getDevCode());
+								devLog.setEmpId(em.getId());
+								devLog.setDescription("指纹下发");
+								devLog.setFmemo("操作中");
+								List<EmpFinger> le = empFingerDao.findByDelFlagAndEmpId(0, empId);
+								if(le.size() >0){
+									if( env.getProperty("envi").equals("windows")){
+										if(doIssuedByUser(devClock.getDevIp(),le)){
+											devLog.setFmemo("成功");
+											int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
+											if(count==0){
+												Issue item = new Issue();
+												item.setCreateDate(new Date());
+												item.setCreateBy(UserUtil.getSessionUser().getId());
+												item.setDevClockId(devId);
+												item.setEmpId(empId);
+												listNew.add(item);
+											}
+										}else{
+											msg += em.getEmpName()+"下发指纹失败"+",";
+										}
+									}
+								}
+								listLog.add(devLog);
+							}
+						}
+						devLogDao.saveAll(listLog);
+						issueDao.saveAll(listNew);
+					}
+				}
+
+			}
+		}
+		return ApiResponseResult.success("下发记录添加成功！"+msg);
+	}
+	
+	/**
+	 * 新增下发记录（会覆盖原有记录）
+	 */
+	@Transactional
+	public ApiResponseResult add_bak(String dev, String emp) throws Exception {
 
 		if (dev == null || emp == null) {
 			return ApiResponseResult.failure("下发记录必须含有卡机和员工信息！");
@@ -352,7 +437,6 @@ public class Issuelmpl  implements IssueService {
         	for(EmpFinger empFinger:empFingers){
         		//先保存改人员的考勤数据
                 List<Map<String, Object>> strList = sdk.getUserOneDayInfo(empFinger.getEmp().getEmpCode());
-                System.out.println(strList.toString());
 
                 for(Map<String, Object> map:strList){
                 	//判断信息是否已经保存过
@@ -427,9 +511,84 @@ public class Issuelmpl  implements IssueService {
 									devLog.setCreateDate(new Date());
 									devLog.setDevId(devClock.getId());
 									devLog.setDevIp(devClock.getDevIp());
+									devLog.setDevCode(devClock.getDevCode());
 									devLog.setEmpId(em.getId());
 									devLog.setDescription("指纹删除");
-									devLog.setFmemo("失败");
+									devLog.setFmemo("操作中");
+									if( env.getProperty("envi").equals("windows")){
+										if(deleteTmpByUser(devClock.getDevIp(),devId,le)){
+											devLog.setFmemo("成功");
+											int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
+											if(count==0){
+												Issue item = new Issue();
+												item.setCreateDate(new Date());
+												item.setCreateBy(UserUtil.getSessionUser().getId());
+												item.setDevClockId(devId);
+												item.setEmpId(empId);
+												listNew.add(item);
+											}
+										}else{
+											msg += em.getEmpName()+"，但删除指纹失败"+",";
+										}
+									}
+									listLog.add(devLog);
+								}
+							}
+						}
+						devLogDao.saveAll(listLog);
+						issueDao.saveAll(listNew);
+					}
+				}
+
+			}
+		}
+		return ApiResponseResult.success("删除记录操作成功！"+msg);
+	}
+	
+	public ApiResponseResult clear_bak(String dev, String emp) throws Exception {
+		// TODO Auto-generated method stub
+		if (dev == null || emp == null) {
+			return ApiResponseResult.failure("删除记录必须含有卡机和员工信息！");
+		}
+		// 数据格式转换-卡机设备
+		String[] devIdArray = dev.split(";");
+		List<Long> devList = new ArrayList<Long>();
+		for (int i = 0; i < devIdArray.length; i++) {
+			if (StringUtils.isNotEmpty(devIdArray[i])) {
+				devList.add(Long.parseLong(devIdArray[i]));
+			}
+		}
+		// 数据格式转换-员工
+		String[] empIdArray = emp.split(";");
+		List<Long> empList = new ArrayList<Long>();
+		for (int i = 0; i < empIdArray.length; i++) {
+			if (StringUtils.isNotEmpty(empIdArray[i])) {
+				empList.add(Long.parseLong(empIdArray[i]));
+			}
+		}
+		//记录有就忽略，没有就增加
+		String msg = "";//记录信息
+		List<Issue> listNew = new ArrayList<>();
+		List<DevLog> listLog = new ArrayList<DevLog>();
+		if (devList.size() > 0) {
+			for (Long devId : devList) {
+				DevClock devClock = devClockDao.findById((long)devId);
+				if(devClock != null){
+					if (empList.size() > 0) {
+						for (Long empId : empList) {
+							Employee em = employeeDao.findById((long)empId);
+							if(em != null){
+								List<EmpFinger> le = empFingerDao.findByDelFlagAndEmpId(0, empId);
+								if(le.size() >0){
+									//日记
+									DevLog devLog = new DevLog();
+									devLog.setCreateBy(UserUtil.getSessionUser().getId());
+									devLog.setCreateDate(new Date());
+									devLog.setDevId(devClock.getId());
+									devLog.setDevIp(devClock.getDevIp());
+									devLog.setEmpId(em.getId());
+									devLog.setDescription("指纹删除");
+									devLog.setFmemo("操作中");
 									if(deleteTmpByUser(devClock.getDevIp(),devId,le)){
 										devLog.setFmemo("成功");
 										int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
@@ -456,6 +615,95 @@ public class Issuelmpl  implements IssueService {
 			}
 		}
 		return ApiResponseResult.success("删除记录操作成功！"+msg);
+	}
+
+	@Override
+	public List<String> getCmdBySn(String sn) {
+		// TODO Auto-generated method stub
+		
+		List<DevLog> ld = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹下发");
+		List<DevLog> ld_del = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹删除");
+		List<String> ls = new ArrayList();
+		for(DevLog dl:ld){
+			
+			ls.add("C:"+dl.getId()+":DATA UPDATE USERINFO PIN="+dl.getEmp().getEmpCode()+"	Name="+dl.getEmp().getEmpName()+"	Pri=0	Passwd=	Grp=0");
+			
+			List<EmpFinger> fl = empFingerDao.findByDelFlagAndEmpId(0, dl.getEmpId());
+			for(EmpFinger ef:fl){
+				ls.add("C:"+dl.getId()+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	fid="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
+			    System.out.println("C:"+dl.getId()+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	fid="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
+			}
+			/*String[] param = {dl.getId()+"",dl.getEmp().getEmpCode(),dl.getEmp().getEmpName()} ;
+			ls.add(param);*/
+		}
+		for(DevLog dl:ld_del){
+			ls.add("C:"+dl.getId()+":DATA DELETE USERINFO PIN="+dl.getEmp().getEmpCode());
+		}
+		return ls;
+	}
+
+	@Override
+	public void updateDevicecmd(String sn, String data) {
+		// TODO Auto-generated method stub
+		if(!StringUtils.isEmpty(data)){
+			String[] list = data.split("\n");
+			for(String da:list){
+				String[] das = da.split("&");
+				String id = das[0].replace("ID=", "");
+				String res = das[1].replace("Return=", "");
+				String fmemo = "失败";
+				if(res.equals("0")){
+					fmemo = "成功";
+				}
+				try{
+					devLogDao.updateDelFlagBySn(fmemo,sn,Long.valueOf(id));
+				}catch(Exception e){
+					System.out.println(e.toString());
+				}
+				
+			}
+			
+		}
+	}
+
+	@Override
+	public void uploadAttLog(String sn, String data) {
+		// TODO Auto-generated method stub
+		if(!StringUtils.isEmpty(data)){
+			String[] list = data.split("\n");
+			for(String da:list){
+				String[] b = da.split("	");
+				String[] times = b[1].split(" ");
+				System.out.println("日期:"+times[0]);
+				System.out.println("时间:"+times[1]);
+				System.out.println("账号:"+b[0]);
+				//判断数据是否重复
+				List<Map<String, Object>> lm =  cardDataDao.findBySnAndTime(times[0], times[1], b[0], sn);
+				//保存数据
+				if(lm.size() == 0){
+					List<DevClock> ld =  devClockDao.findByDelFlagAndDevCode(0, sn);
+					List<Employee> le = employeeDao.findByDelFlagAndEmpCode(0, b[0]);
+					if(ld.size()>0 && le.size()>0){
+						CardData cd = new CardData();
+		                cd.setCardDate(times[0]);
+		                cd.setCardTime(times[1]);
+		                cd.setDevClockId(ld.get(0).getId());
+		                cd.setEmpId(le.get(0).getId());
+		                cd.setCreateDate(new Date());
+		                cd.setCompany(le.get(0).getCompany());
+		                cd.setFactory(le.get(0).getFactory());
+		                try{
+		                	cardDataDao.save(cd);
+		                }catch(Exception e){
+		                	System.out.println(e.toString());
+		                }
+					}
+				}
+			}
+			
+			
+		}
+		
 	}
 
 }

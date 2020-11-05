@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -52,6 +53,21 @@ public class DevLog extends BaseEntity {
     @ApiModelProperty(name = "devIp", value = "卡机IP")
     @Column(length = 100)
     protected String devIp;
+    
+    /**
+     * 卡机序列号
+     */
+    @ApiModelProperty(name = "devCode", value = "卡机序列号")
+    @Column(length = 100)
+    protected String devCode;
+    
+    /**
+     * 是否执行(执行标识）
+     * 0：否 1：是
+     */
+	@Column
+	@ApiModelProperty(name="cmdFlag",value="执行标志(0:未执行,1:已执行)")
+    protected int cmdFlag = 0;
     
     /**
      * 卡机Id
@@ -127,7 +143,22 @@ public class DevLog extends BaseEntity {
 	public void setCreateUser(SysUser createUser) {
 		this.createUser = createUser;
 	}
-	
-	
 
+	public String getDevCode() {
+		return devCode;
+	}
+
+	public void setDevCode(String devCode) {
+		this.devCode = devCode;
+	}
+
+	public int getCmdFlag() {
+		return cmdFlag;
+	}
+
+	public void setCmdFlag(int cmdFlag) {
+		this.cmdFlag = cmdFlag;
+	}
+	
+	
 }

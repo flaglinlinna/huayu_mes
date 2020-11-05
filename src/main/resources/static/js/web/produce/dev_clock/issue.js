@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#issueList',
-			url : context + 'produce/issue/getList',
+			url : context + '/produce/issue/getList',
 			method : 'get' // 默认：get请求
 			,
 			//cellMinWidth : 80,
@@ -281,7 +281,7 @@ function addIssue(title) {
 }
 // 获取员工信息
 function getEmp() {
-	CoreUtil.sendAjax("produce/issue/getEmp", "", function(data) {
+	CoreUtil.sendAjax("/produce/issue/getEmp", "", function(data) {
 		if (data.result) {
 			// var beSelected=data.data;
 			// console.log(data.data.rows)
@@ -312,7 +312,7 @@ function getEmp() {
 }
 // 获取卡机信息
 function getDev() {
-	CoreUtil.sendAjax("produce/issue/getDev", "", function(data) {
+	CoreUtil.sendAjax("/produce/issue/getDev", "", function(data) {
 		if (data.result) {
 			tableDev.reload({
 				data : data.data.rows,
@@ -368,9 +368,9 @@ function addSubmit(devList, empList) {
 		"devList" : devList,
 		"empList" : empList
 	};
-	var url = "produce/issue/clear";
+	var url = "/produce/issue/clear";
 	if(ptype == '1'){
-		url = "produce/issue/add"
+		url = "/produce/issue/add"
 	}
 	console.log(ptype)
 	console.log(url)
@@ -401,7 +401,7 @@ function delIssue(obj, id) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/issue/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/produce/issue/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -425,7 +425,7 @@ function delIssue(obj, id) {
 function loadDev(obj) {
 	// 重新加载table
 	tableDev.reload({
-		url : context + 'produce/issue/getDev',
+		url : context + '/produce/issue/getDev',
 		where : {
 			devKeyword : obj.field.devKeyword
 		},
@@ -440,7 +440,7 @@ function loadEmp(obj) {
 	// 重新加载table
 	console.log(obj)
 	tableEmp.reload({
-		url : context + 'produce/issue/getEmp',
+		url : context + '/produce/issue/getEmp',
 		where : {
 			empKeyword : obj.field.empKeyword
 		},
@@ -465,7 +465,7 @@ function loadAll() {
 function cleanIssue() {
 	$('#devSearch')[0].reset();
 	tableDev.reload({
-		url : context + 'produce/issue/getDev',
+		url : context + '/produce/issue/getDev',
 		where : {
 			devKeyword : ""
 		},
@@ -476,7 +476,7 @@ function cleanIssue() {
 	});
 	$('#empSearch')[0].reset();
 	tableEmp.reload({
-		url : context + 'produce/issue/getEmp',
+		url : context + '/produce/issue/getEmp',
 		where : {
 			empKeyword : ""
 		},

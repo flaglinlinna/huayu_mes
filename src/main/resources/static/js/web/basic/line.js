@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#lineList',
-			url : context + 'base/line/getList',
+			url : context + '/base/line/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
