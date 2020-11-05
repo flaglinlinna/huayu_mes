@@ -115,5 +115,18 @@ public class Issue extends BaseEntity {
 	public void setEmpFinger(EmpFinger empFinger) {
 		this.empFinger = empFinger;
 	}
-	
+
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(",empId:").append(this.empId);
+		sb.append(",employee:").append(this.employee);
+		sb.append(",empFingerId:").append(this.empFingerId);
+		sb.append(",empFinger:").append(this.empFinger);
+		sb.append(",devClockId:").append(this.devClockId);
+		sb.append(",devClock:").append(this.devClock);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }

@@ -27,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "produce/transit")
 public class TransitController extends WebController {
 
+    private String module = "中转送检信息";
 	@Autowired
 	private TransitService transitService;
 
@@ -44,12 +45,12 @@ public class TransitController extends WebController {
         try {
             ApiResponseResult result = transitService.getProc(keyword);
             logger.debug("获取送验节点列表=getProc:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("获取送验节点列表失败！", e);
-             getSysLogService().error(method, methodName, e.toString());
+             getSysLogService().error(module,method, methodName, e.toString());
              return ApiResponseResult.failure("获取送验节点列表失败！");
         }
     }
@@ -62,12 +63,12 @@ public class TransitController extends WebController {
         try {
             ApiResponseResult result = transitService.getType(keyword);
             logger.debug("获取送检类型列表=getType:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("获取送检类型列表失败！", e);
-             getSysLogService().error(method, methodName, e.toString());
+             getSysLogService().error(module,method, methodName, e.toString());
              return ApiResponseResult.failure("获取送检类型列表失败！");
         }
     }
@@ -82,12 +83,12 @@ public class TransitController extends WebController {
         	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
             ApiResponseResult result = transitService.checkBarcode(proc,barcode);
             logger.debug("检查箱号条码信息=checkBarcode:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("检查箱号条码失败！", e);
-             getSysLogService().error(method, methodName, e.toString());
+             getSysLogService().error(module,method, methodName, e.toString());
              return ApiResponseResult.failure("检查箱号条码失败！");
         }
     }
@@ -103,12 +104,12 @@ public class TransitController extends WebController {
         	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
             ApiResponseResult result = transitService.saveData(proc,type,barcode);
             logger.debug("保存送检数据信息=saveData:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("保存送检数据失败！", e);
-             getSysLogService().error(method, methodName, e.toString());
+             getSysLogService().error(module,method, methodName, e.toString());
              return ApiResponseResult.failure("保存送检数据失败！");
         }
     }
@@ -125,12 +126,12 @@ public class TransitController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result =transitService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
             logger.debug(methodName+"=getList:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(methodName+"失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure(methodName+"失败！");
         }
 	}

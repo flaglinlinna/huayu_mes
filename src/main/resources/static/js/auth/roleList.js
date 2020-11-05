@@ -4,13 +4,17 @@
  * 角色管理
  */
 var pageCurr;
+function showUser(id){
+    openUserShow
+}
 $(function() {
     layui.use(['form' ,'table'], function(){
         var table = layui.table
             ,form = layui.form;
 
-        tableIns1 ="";
+        function openUserShow(id){
 
+        }
 
         tableIns=table.render({
             elem: '#roleList'
@@ -401,84 +405,6 @@ function loadAll(){
             curr: pageCurr //从当前页码开始
         }
     });
-}
-
-function showUser(id){
-    tableIns1 = table.render({
-        elem : '#UserShowList',
-        url : context + 'base/sysUser/getListByRoleId?in='+ id,
-        method : 'get' // 默认：get请求
-        ,
-        cellMinWidth : 80,
-        page : true,
-        request : {
-            pageName : 'page' // 页码的参数名称，默认：page
-            ,
-            limitName : 'rows' // 每页数据量的参数名，默认：limit
-        },
-        parseData : function(res) {
-            // 可进行数据操作
-            return {
-                "count" : res.data.total,
-                "msg" : res.msg,
-                "data" : res.data.rows,
-                "code" : res.status
-                // code值为200表示成功
-            }
-        },
-        cols : [ [ {
-            type : 'numbers'
-        },
-            {
-                field : 'taskNo',
-                title : '生产工单',
-                width:105,
-            },
-            {
-                field : 'procOrder',
-                title : '工序顺序号',
-                width:105,
-            },
-            {
-                field : 'procNo',
-                title : '工序编码',
-            },
-            {
-                field : 'procName',
-                title : '工序名称',
-            },
-            {
-                fixed : 'right',
-                title : '操作',
-                align : 'center',
-                toolbar : '#optBar1',
-                width :150,
-            } ] ],
-        done : function(res, curr, count) {
-            // 如果是异步请求数据方式，res即为你接口返回的信息。
-            // 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-            // console.log(res);
-            // 得到当前页码
-            // console.log(curr);
-            // 得到数据总量
-            // console.log(count);
-            pageCurr1 = curr;
-        }
-    });
-
-    var index = layer.open({
-        type : 1,
-        title : "工单排产查看",
-        fixed : true,
-        resize : true,
-        shadeClose : false,
-        content : $('#SchemeInfo'),
-        end : function() {
-            // cleanTaskRoadParm();
-            location.reload();
-        }
-    });
-    layer.full(index);
 }
 
 //清空新增表单数据

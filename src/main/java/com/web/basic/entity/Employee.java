@@ -153,4 +153,17 @@ public class Employee extends BaseEntity {
 			this.empStatus = empStatus;
 		}
 
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("员工工号:").append(this.empCode);
+		sb.append(",员工姓名:").append(this.empName);
+		sb.append(",身份证:").append(this.empIdNo);
+		sb.append(",入职日期:").append(this.joinDate);
+		sb.append(",离职日期:").append(this.leaveDate);
+		sb.append(",员工类型:").append(this.empType);
+		sb.append(",部门ID:").append(this.deptId);
+		sb.append(",员工状态:").append(this.empStatus);
+		return sb.toString();
+	}
 }

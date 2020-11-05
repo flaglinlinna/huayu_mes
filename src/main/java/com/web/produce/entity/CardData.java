@@ -141,6 +141,20 @@ public class CardData extends BaseEntity {
 	public void setFstype(Integer fstype) {
 		this.fstype = fstype;
 	}
-	
-	
+
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(",empId:").append(this.empId);
+		sb.append(",employee:").append(this.employee);
+		sb.append(",devClockId:").append(this.devClockId);
+		sb.append(",devClock:").append(this.devClock);
+		sb.append(",cardDate:").append(this.cardDate);
+		sb.append(",cardTime:").append(this.cardTime);
+		sb.append(",fstatus:").append(this.fstatus);
+		sb.append(",fstype:").append(this.fstype);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }

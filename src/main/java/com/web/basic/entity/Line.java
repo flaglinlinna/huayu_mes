@@ -96,4 +96,15 @@ public class Line extends BaseEntity {
     public void setLinerName(String linerName) {
         this.linerName = linerName;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append("线体编码:").append(this.lineNo);
+        sb.append(",线体名称:").append(this.lineName);
+        sb.append(",状态:").append(this.checkStatus);
+        sb.append(",线长工号:").append(this.linerCode);
+        sb.append(",线长姓名:").append(this.linerName);
+        return sb.toString();
+    }
 }

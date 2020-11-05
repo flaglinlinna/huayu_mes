@@ -36,6 +36,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping(value = "/kanban")
 public class kanbanController extends WebController {
 
+	private String module = "看板信息";
+
 	@Autowired
 	private KanbanService kanbanService;
 
@@ -82,7 +84,7 @@ public class kanbanController extends WebController {
 			//参数 String class_no, String dep_id, String sdata, String edata,String dev_ip
 			ApiResponseResult result = kanbanService.getCjbgList("999",line,"","",this.getIpAddr());
 			logger.debug("获取看板=toCjbg1:" + result);
-			getSysLogService().success(method,methodName,result);
+			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("dev_ip", this.getIpAddr());
 			mav.setViewName("/kanban/cjbg1");// 返回路径
@@ -90,7 +92,7 @@ public class kanbanController extends WebController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("看板异常！", e);
-			getSysLogService().error(method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,e.toString());
 		}
 		return mav;
 	}
@@ -104,14 +106,14 @@ public class kanbanController extends WebController {
 		try {	
 			ApiResponseResult result = kanbanService.getScdzList("999",line,"","",this.getIpAddr());
 			logger.debug("获取生产电子看板=toScdz:" + result);
-			getSysLogService().success(method,methodName,result);
+			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("dev_ip", this.getIpAddr());
 			mav.setViewName("/kanban/scdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取生产电子看板异常！", e);
-			getSysLogService().error(method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,e.toString());
 		}
 		return mav;
 	}
@@ -125,14 +127,14 @@ public class kanbanController extends WebController {
 		try {	
 			ApiResponseResult result = kanbanService.getZcblList("999",line,"",this.getIpAddr());
 			logger.debug("制程不良看板=toZcbl:" + result);
-			getSysLogService().success(method,methodName,result);
+			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("dev_ip", this.getIpAddr());
 			mav.setViewName("/kanban/zcbl");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取制程不良看板异常！", e);
-			getSysLogService().error(method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,e.toString());
 		}
 		return mav;
 	}
@@ -146,14 +148,14 @@ public class kanbanController extends WebController {
 		try {	
 			ApiResponseResult result = kanbanService.getXlpmList("999",line,"",this.getIpAddr(),liner);
 			logger.debug("效率排名看板=toXlpm:" + result);
-			getSysLogService().success(method,methodName,result);
+			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("dev_ip", this.getIpAddr());
 			mav.setViewName("/kanban/xlpm");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取效率排名看板异常！", e);
-			getSysLogService().error(method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,e.toString());
 		}
 		return mav;
 	}
@@ -172,12 +174,12 @@ public class kanbanController extends WebController {
 		try {
 			ApiResponseResult result = kanbanService.getCjbgDepList();
 			logger.debug("获取车间报工看板-部门信息=getCjbgList:" + result);
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取车间报工看板-部门信息失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取车间报工看板-部门信息失败！");
 		}
 	}
@@ -191,12 +193,12 @@ public class kanbanController extends WebController {
 		try {
 			ApiResponseResult result = kanbanService.getCjbgList(class_nos, dep_id, sdata, edata, this.getIpAddr());
 			logger.debug("获取车间报工看板信息=getCjbgList:" + result);
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取车间报工看板信息失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取车间报工看板信息失败！");
 		}
 	}
@@ -210,12 +212,12 @@ public class kanbanController extends WebController {
 		try {
 			ApiResponseResult result = kanbanService.getScdzList(class_nos, dep_id, sdata, edata, this.getIpAddr());
 			logger.debug("获取生产电子看板信息=getScdzList:" + result);
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取生产电子看板信息失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取生产电子看板信息失败！");
 		}
 	}

@@ -30,7 +30,9 @@ import io.swagger.annotations.ApiOperation;
 @Controller
 @RequestMapping(value = "base/prodproc")
 public class ProdProcController extends WebController{
-	
+
+    private String module = "工艺流程";
+
 	@Autowired
 	 private ProdProcService procProdService;
 	
@@ -63,12 +65,12 @@ public class ProdProcController extends WebController{
 	       	 Sort sort = new Sort(list);
             ApiResponseResult result = procProdService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取工艺流程列表=getList:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取工艺流程列表失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,keyword+":"+ e.toString());
             return ApiResponseResult.failure("获取工艺流程列表失败！");
         }
     }
@@ -83,12 +85,12 @@ public class ProdProcController extends WebController{
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = procProdService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取工艺流程-工序列表=getDetailList:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取工艺流程-工序列表失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("获取工艺流程-工序列表失败！");
         }
     }*/
@@ -103,12 +105,12 @@ public class ProdProcController extends WebController{
         	Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = procProdService.getProdList(keyword, super.getPageRequest(sort));
             logger.debug("获取产品列表=getProdList:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, keyword);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("获取产品列表失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, keyword+":"+e.toString());
             return ApiResponseResult.failure("获取产品列表失败！");
         }
     }
@@ -122,12 +124,12 @@ public class ProdProcController extends WebController{
         try{
             ApiResponseResult result = procProdService.getAddList();
             logger.debug("获取产品列表,客户列表,工序列表=getAddList:");
-            getSysLogService().success(method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("获取产品列表,客户列表,工序列表失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("获取产品列表,客户列表,工序列表失败！");
         }
     }
@@ -143,12 +145,13 @@ public class ProdProcController extends WebController{
         	String itemNos = params.get("itemNos").toString();
             ApiResponseResult result = procProdService.add(proc,itemIds,itemNos);
             logger.debug("新增=add:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName,
+                    "物料id:"+itemIds+";物料编码:"+itemNos+";工序Id:"+proc);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("新增失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("新增失败！");
         }
     }
@@ -162,12 +165,12 @@ public class ProdProcController extends WebController{
         	Long id = Long.parseLong(params.get("id").toString()) ;
             ApiResponseResult result = procProdService.delete(id);
             logger.debug("删除=delete:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, params);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("删除！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
             return ApiResponseResult.failure("删除！");
         }
     }
@@ -182,12 +185,12 @@ public class ProdProcController extends WebController{
         	Integer jobAttr=Integer.parseInt(params.get("jobAttr").toString());
             ApiResponseResult result = procProdService.doJobAttr(id, jobAttr);
             logger.debug("设置过程属性=doJobAttr:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, params);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("设置过程属性失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
             return ApiResponseResult.failure("设置过程属性失败！");
         }
     }
@@ -202,12 +205,12 @@ public class ProdProcController extends WebController{
         	Integer procOrder=Integer.parseInt(params.get("procOrder").toString());
             ApiResponseResult result = procProdService.doProcOrder(id, procOrder);
             logger.debug("修改顺序=doProcOrder:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, params);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("修改顺序失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
             return ApiResponseResult.failure("修改顺序失败！");
         }
     }

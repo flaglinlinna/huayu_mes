@@ -129,5 +129,16 @@ public class Mtrial extends BaseEntity {
 			this.checkStatus = checkStatus;
 		}
 
-		  
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("物料编码:").append(this.itemNo);
+		sb.append(",物料名称:").append(this.itemName);
+		sb.append(",物料简称:").append(this.itemNameS);
+		sb.append(",物料规格:").append(this.itemModel);
+		sb.append(",物料类别:").append(this.itemType);
+		sb.append(",物料单位:").append(this.itemUnit);
+		sb.append(",状态:").append(this.checkStatus);
+		return sb.toString();
+	}
 }

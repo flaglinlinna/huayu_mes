@@ -309,5 +309,31 @@ public class Scheduling extends BaseEntity {
 
     public void setProduceState(String produceState) {
         this.produceState = produceState;
-    }    
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(",prodNo:").append(this.prodNo);
+        sb.append(",groupNo:").append(this.groupNo);
+        sb.append(",custId:").append(this.custId);
+        sb.append(",custName:").append(this.custName);
+        sb.append(",custNameS:").append(this.custNameS);
+        sb.append(",custNo:").append(this.custNo);
+        sb.append(",taskNo:").append(this.taskNo);
+        sb.append(",itemId:").append(this.itemId);
+        sb.append(",itemNo:").append(this.itemNo);
+        sb.append(",itemName:").append(this.itemName);
+        sb.append(",qtyPlan:").append(this.qtyPlan);
+        sb.append(",prodDate:").append(this.prodDate);
+        sb.append(",deptId:").append(this.deptId);
+        sb.append(",deptName:").append(this.deptName);
+        sb.append(",linerName:").append(this.linerName);
+        sb.append(",lineNo:").append(this.lineNo);
+        sb.append(",classNo:").append(this.classNo);
+        sb.append(",checkStatus:").append(this.checkStatus);
+        sb.append(",produceState:").append(this.produceState);
+        sb.append("\n]");
+        return sb.toString();
+    }
 }

@@ -31,6 +31,8 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "base/center")
 public class WorkCenterController extends WebController{
 
+	private String module = "工作中心信息";
+
 	 @Autowired
 	 private WorkCenterService workCenterService;
 	 
@@ -56,12 +58,12 @@ public class WorkCenterController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = workCenterService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取工作中心列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取工作中心列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取工作中心列表失败！");
 	        }
 	    }
@@ -75,12 +77,12 @@ public class WorkCenterController extends WebController{
 	        try{
 	            ApiResponseResult result = workCenterService.add(center);
 	            logger.debug("新增工作中心=add:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, center.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("工作中心新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,center.toString()+";"+ e.toString());
 	            return ApiResponseResult.failure("工作中心新增失败！");
 	        }
 	    }
@@ -93,12 +95,12 @@ public class WorkCenterController extends WebController{
 	        try{
 	            ApiResponseResult result = workCenterService.edit(center);
 	            logger.debug("编辑工作中心=edit:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, center.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑工作中心失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, center.toString()+";"+e.toString());
 	            return ApiResponseResult.failure("编辑工作中心失败！");
 	        }
 	    }
@@ -111,12 +113,12 @@ public class WorkCenterController extends WebController{
 	        try{
 	            ApiResponseResult result = workCenterService.getWorkCenter(id);
 	            logger.debug("根据ID获取工作中心=getWorkCenter:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取工作中心失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params+";"+ e.toString());
 	            return ApiResponseResult.failure("获取工作中心失败！");
 	        }
 	    }
@@ -130,12 +132,12 @@ public class WorkCenterController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = workCenterService.delete(id);
 	            logger.debug("删除工作中心=delete:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除工作中心失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, params+";"+e.toString());
 	            return ApiResponseResult.failure("删除工作中心失败！");
 	        }
 	    }
@@ -151,12 +153,12 @@ public class WorkCenterController extends WebController{
 		        	Integer bsStatus=Integer.parseInt(params.get("bsStatus").toString());
 		            ApiResponseResult result = workCenterService.doStatus(id, bsStatus);
 		            logger.debug("设置正常/禁用=doJob:");
-		            getSysLogService().success(method, methodName, null);
+		            getSysLogService().success(module,method, methodName, params);
 		            return result;
 		        }catch (Exception e){
 		            e.printStackTrace();
 		            logger.error("设置正常/禁用失败！", e);
-		            getSysLogService().error(method, methodName, e.toString());
+		            getSysLogService().error(module,method, methodName, params+";"+e.toString());
 		            return ApiResponseResult.failure("设置正常/禁用失败！");
 		        }
 		    }

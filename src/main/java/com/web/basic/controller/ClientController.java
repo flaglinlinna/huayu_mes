@@ -31,6 +31,8 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "base/client")
 public class ClientController extends WebController{
 
+	private String module = "客户基础信息";
+
 	 @Autowired
 	 private ClientService clientService;
 	 
@@ -57,12 +59,12 @@ public class ClientController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.ASC, "custNo");
 	            ApiResponseResult result = clientService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取客户信息列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取客户信息列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取客户信息列表失败！");
 	        }
 	    }
@@ -76,12 +78,12 @@ public class ClientController extends WebController{
 	        try{
 	            ApiResponseResult result = clientService.add(client);
 	            logger.debug("新增客户信息=add:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, client.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("客户信息新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, client.toString()+';'+e.toString());
 	            return ApiResponseResult.failure("客户信息新增失败！");
 	        }
 	    }
@@ -94,12 +96,12 @@ public class ClientController extends WebController{
 	        try{
 	            ApiResponseResult result = clientService.edit(client);
 	            logger.debug("编辑客户信息=edit:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, client.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑客户信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, client.toString()+';'+e.toString());
 	            return ApiResponseResult.failure("编辑客户信息失败！");
 	        }
 	    }
@@ -112,12 +114,12 @@ public class ClientController extends WebController{
 	        try{
 	            ApiResponseResult result = clientService.getClient(id);
 	            logger.debug("根据ID获取客户信息=getClient:");
-	            getSysLogService().success(method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取客户信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取客户信息失败！");
 	        }
 	    }
@@ -131,12 +133,12 @@ public class ClientController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = clientService.delete(id);
 	            logger.debug("删除客户信息=delete:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除客户信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("删除客户信息失败！");
 	        }
 	    }

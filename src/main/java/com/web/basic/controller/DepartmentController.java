@@ -33,6 +33,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping(value = "base/depart")
 public class DepartmentController extends WebController{
 
+	private String module = "部门信息";
+
 	 @Autowired
 	 private DepartmentService departmentService;
 	 
@@ -58,12 +60,12 @@ public class DepartmentController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = departmentService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取部门列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取部门列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取部门列表失败！");
 	        }
 	    }
@@ -78,12 +80,12 @@ public class DepartmentController extends WebController{
 	        try{
 	            ApiResponseResult result = departmentService.add(depart);
 	            logger.debug("新增部门=add:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, depart.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("部门新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, depart.toString()+";"+e.toString());
 	            return ApiResponseResult.failure("部门新增失败！");
 	        }
 	    }
@@ -96,12 +98,12 @@ public class DepartmentController extends WebController{
 	        try{
 	            ApiResponseResult result = departmentService.edit(depart);
 	            logger.debug("编辑部门=edit:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, depart.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑部门失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,depart.toString()+";"+ e.toString());
 	            return ApiResponseResult.failure("编辑部门失败！");
 	        }
 	    }
@@ -114,12 +116,12 @@ public class DepartmentController extends WebController{
 	        try{
 	            ApiResponseResult result = departmentService.getDepart(id);
 	            logger.debug("根据ID获取部门=getDepart:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取部门失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, params+";"+e.toString());
 	            return ApiResponseResult.failure("获取部门失败！");
 	        }
 	    }
@@ -133,12 +135,12 @@ public class DepartmentController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = departmentService.delete(id);
 	            logger.debug("删除部门=delete:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除部门失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params+";"+ e.toString());
 	            return ApiResponseResult.failure("删除部门失败！");
 	        }
 	    }
@@ -154,12 +156,12 @@ public class DepartmentController extends WebController{
 		        	Integer bsStatus=Integer.parseInt(params.get("bsStatus").toString());
 		            ApiResponseResult result = departmentService.doStatus(id, bsStatus);
 		            logger.debug("设置正常/禁用=doJob:");
-		            getSysLogService().success(method, methodName, null);
+		            getSysLogService().success(module,method, methodName, params);
 		            return result;
 		        }catch (Exception e){
 		            e.printStackTrace();
 		            logger.error("设置正常/禁用失败！", e);
-		            getSysLogService().error(method, methodName, e.toString());
+		            getSysLogService().error(module,method, methodName, params+";"+e.toString());
 		            return ApiResponseResult.failure("设置正常/禁用失败！");
 		        }
 		    }

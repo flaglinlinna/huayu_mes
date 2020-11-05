@@ -33,6 +33,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "produce/issue")
 public class IssueController extends WebController{
 
+	private String module = "指纹下发记录";
 	 @Autowired
 	 private IssueService issueService;
 	 
@@ -72,12 +73,12 @@ public class IssueController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = issueService.getList(keyword,ptype, super.getPageRequest(sort));
 	            logger.debug("获取指纹下发记录列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取指纹下发记录列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取指纹下发记录列表失败！");
 	        }
 	    }
@@ -94,12 +95,12 @@ public class IssueController extends WebController{
 	        	String empList = params.get("empList").toString();
 	            ApiResponseResult result = issueService.add(devList,empList);
 	            logger.debug("新增下发记录=add:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("下发记录新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("下发记录新增失败！");
 	        }
 	    }
@@ -112,12 +113,12 @@ public class IssueController extends WebController{
 	        try{
 	            ApiResponseResult result = issueService.getIssue(id);
 	            logger.debug("根据ID获取下发记录=getIssue:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取下发记录失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取下发记录失败！");
 	        }
 	    }
@@ -131,12 +132,12 @@ public class IssueController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = issueService.delete(id);
 	            logger.debug("删除下发记录=delete:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除下发记录失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("删除下发记录失败！");
 	        }
 	    }
@@ -150,12 +151,12 @@ public class IssueController extends WebController{
 	        	Sort sort = new Sort(Sort.Direction.DESC, "emp_id");
 	            ApiResponseResult result = issueService.getEmp(empKeyword, super.getPageRequest(sort));
 	            logger.debug("获取人员信息列表=getEmp:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取人员信息列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取人员信息列表失败！");
 	        }
 	    }
@@ -168,12 +169,12 @@ public class IssueController extends WebController{
 	        	Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = issueService.getDev(devKeyword, super.getPageRequest(sort));
 	            logger.debug("获取卡机信息列表=getDev:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取卡机信息列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取卡机信息列表失败！");
 	        }
 	    }
@@ -188,12 +189,12 @@ public class IssueController extends WebController{
 		        	String empList = params.get("empList").toString();
 		            ApiResponseResult result = issueService.clear(devList,empList);
 		            logger.debug("删除下发记录=add:");
-		            getSysLogService().success(method, methodName, null);
+		            getSysLogService().success(module,method, methodName, null);
 		            return result;
 		        }catch(Exception e){
 		            e.printStackTrace();
 		            logger.error("删除记录失败！", e);
-		            getSysLogService().error(method, methodName, e.toString());
+		            getSysLogService().error(module,method, methodName, e.toString());
 		            return ApiResponseResult.failure("删除记录失败！");
 		        }
 		    }

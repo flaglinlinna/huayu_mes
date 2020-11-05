@@ -30,6 +30,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "produce/emp_finger")
 public class EmpFingerController extends WebController{
 
+	 private String module = "指纹登陆信息";
 	 @Autowired
 	 private EmpFingerService empFingerService;
 	 
@@ -57,12 +58,12 @@ public class EmpFingerController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "emp.id");
 	            ApiResponseResult result = empFingerService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取指纹登记列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取指纹登记列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取指纹登记列表失败！");
 	        }
 	    }
@@ -76,12 +77,12 @@ public class EmpFingerController extends WebController{
 	        try{
 	            ApiResponseResult result = empFingerService.add(empFinger);
 	            logger.debug("新增指纹登记信息=add:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("指纹登记信息新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("指纹登记信息新增失败！");
 	        }
 	    }
@@ -94,12 +95,12 @@ public class EmpFingerController extends WebController{
 	        try{
 	            ApiResponseResult result = empFingerService.edit(empFinger);
 	            logger.debug("编辑指纹登记信息=edit:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑指纹登记信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("编辑指纹登记信息失败！");
 	        }
 	    }
@@ -112,12 +113,12 @@ public class EmpFingerController extends WebController{
 	        try{
 	            ApiResponseResult result = empFingerService.getEmpFinger(id);
 	            logger.debug("根据ID获取指纹登记信息=getEmpFinger:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取指纹登记信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取指纹登记信息失败！");
 	        }
 	    }
@@ -131,12 +132,12 @@ public class EmpFingerController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = empFingerService.delete(id);
 	            logger.debug("删除指纹登记信息=delete:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除指纹登记信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("删除指纹登记信息失败！");
 	        }
 	    }
@@ -149,12 +150,12 @@ public class EmpFingerController extends WebController{
 	        try {
 	            ApiResponseResult result = empFingerService.getEmpList();
 	            logger.debug("获取线体信息列表=getEmpList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取线体信息列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取线体信息列表失败！");
 	        }
 	    }
@@ -167,12 +168,12 @@ public class EmpFingerController extends WebController{
 	        try{
 	            ApiResponseResult result = empFingerService.open();
 	            logger.debug("打开指纹仪=open:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("打开指纹仪失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("打开指纹仪失败！");
 	        }
 	    }

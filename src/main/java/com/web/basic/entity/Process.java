@@ -81,4 +81,14 @@ public class Process extends BaseEntity {
     public void setCheckStatus(Integer checkStatus) {
         this.checkStatus = checkStatus;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append("工序编码:").append(this.procNo);
+        sb.append(",工序名称:").append(this.procName);
+        sb.append(",工序顺序号:").append(this.procOrder);
+        sb.append(",状态:").append(this.checkStatus);
+        return sb.toString();
+    }
 }

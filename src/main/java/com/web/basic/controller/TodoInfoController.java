@@ -28,6 +28,9 @@ import com.web.basic.service.TodoInfoService;
 @RequestMapping(value= "/todoInfo")
 @ApiIgnore
 public class TodoInfoController extends WebController {
+
+	private String module = "待办事项";
+
 	@Autowired
 	private TodoInfoService todoInfoService;
 	

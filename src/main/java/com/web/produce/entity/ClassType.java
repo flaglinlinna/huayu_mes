@@ -79,6 +79,16 @@ public class ClassType extends BaseEntity{
 	public void setFcard2(String fcard2) {
 		this.fcard2 = fcard2;
 	}
-    
-    
+
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(",classNo:").append(this.classNo);
+		sb.append(",className:").append(this.className);
+		sb.append(",fcard1:").append(this.fcard1);
+		sb.append(",fcard2:").append(this.fcard2);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }

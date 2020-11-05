@@ -258,4 +258,27 @@ public class SchedulingTemp extends BaseEntity {
     public void setCheckStatus(Integer checkStatus) {
         this.checkStatus = checkStatus;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(",groupNo:").append(this.groupNo);
+        sb.append(",custId:").append(this.custId);
+        sb.append(",custName:").append(this.custName);
+        sb.append(",custNo:").append(this.custNo);
+        sb.append(",prodNo:").append(this.prodNo);
+        sb.append(",itemId:").append(this.itemId);
+        sb.append(",itemNo:").append(this.itemNo);
+        sb.append(",itemName:").append(this.itemName);
+        sb.append(",qtyPlan:").append(this.qtyPlan);
+        sb.append(",prodDate:").append(this.prodDate);
+        sb.append(",deptId:").append(this.deptId);
+        sb.append(",deptName:").append(this.deptName);
+        sb.append(",linerName:").append(this.linerName);
+        sb.append(",classNo:").append(this.classNo);
+        sb.append(",errorInfo:").append(this.errorInfo);
+        sb.append(",checkStatus:").append(this.checkStatus);
+        sb.append("\n]");
+        return sb.toString();
+    }
 }

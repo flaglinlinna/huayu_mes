@@ -31,6 +31,8 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "base/defdetail")
 public class DefectiveDetailController extends WebController{
 
+	private String module = "不良内容信息";
+
 	 @Autowired
 	 private DefectiveDetailService defectiveDetailService;
 	 
@@ -57,12 +59,12 @@ public class DefectiveDetailController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "Defective.id");
 	            ApiResponseResult result = defectiveDetailService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取不良内容列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取不良内容列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, keyword +";"+e.toString());
 	            return ApiResponseResult.failure("获取不良内容列表失败！");
 	        }
 	    }
@@ -76,12 +78,12 @@ public class DefectiveDetailController extends WebController{
 	        try{
 	            ApiResponseResult result = defectiveDetailService.add(defdetail);
 	            logger.debug("新增不良内容=add:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, defdetail.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("不良内容新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,defdetail.toString()+";"+ e.toString());
 	            return ApiResponseResult.failure("不良内容新增失败！");
 	        }
 	    }
@@ -94,12 +96,12 @@ public class DefectiveDetailController extends WebController{
 	        try{
 	            ApiResponseResult result = defectiveDetailService.edit(defdetail);
 	            logger.debug("编辑不良内容=edit:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, defdetail.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑不良内容失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,defdetail.toString()+";"+e.toString());
 	            return ApiResponseResult.failure("编辑不良内容失败！");
 	        }
 	    }
@@ -112,12 +114,12 @@ public class DefectiveDetailController extends WebController{
 	        try{
 	            ApiResponseResult result = defectiveDetailService.getDefectiveDetail(id);
 	            logger.debug("根据ID获取不良内容=getDefectiveDetail:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取不良内容失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, params+";"+e.toString());
 	            return ApiResponseResult.failure("获取不良内容失败！");
 	        }
 	    }
@@ -130,12 +132,12 @@ public class DefectiveDetailController extends WebController{
 		        try {
 		            ApiResponseResult result = defectiveDetailService.getDefectiveList();
 		            logger.debug("获取不良类别列表=getDefectiveList:");
-		            getSysLogService().success(method, methodName, null);
+//		            getSysLogService().success(module,method, methodName, null);
 		            return result;
 		        } catch (Exception e) {
 		            e.printStackTrace();
 		            logger.error("获取不良类别列表失败！", e);
-		            getSysLogService().error(method, methodName, e.toString());
+		            getSysLogService().error(module,method, methodName, e.toString());
 		            return ApiResponseResult.failure("获取不良类别列表失败！");
 		        }
 		    }
@@ -149,12 +151,12 @@ public class DefectiveDetailController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = defectiveDetailService.delete(id);
 	            logger.debug("删除不良内容=delete:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除不良内容失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, params+";"+e.toString());
 	            return ApiResponseResult.failure("删除不良内容失败！");
 	        }
 	    }
@@ -170,12 +172,12 @@ public class DefectiveDetailController extends WebController{
 		        	Integer bsStatus=Integer.parseInt(params.get("checkStatus").toString());
 		            ApiResponseResult result = defectiveDetailService.doStatus(id, bsStatus);
 		            logger.debug("设置正常/禁用=doJob:");
-		            getSysLogService().success(method, methodName, null);
+		            getSysLogService().success(module,method, methodName, params);
 		            return result;
 		        }catch (Exception e){
 		            e.printStackTrace();
 		            logger.error("设置正常/禁用失败！", e);
-		            getSysLogService().error(method, methodName, e.toString());
+		            getSysLogService().error(module,method, methodName, e.toString());
 		            return ApiResponseResult.failure("设置正常/禁用失败！");
 		        }
 		    }

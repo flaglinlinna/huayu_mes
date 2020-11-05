@@ -159,6 +159,20 @@ public class DevLog extends BaseEntity {
 	public void setCmdFlag(int cmdFlag) {
 		this.cmdFlag = cmdFlag;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(",description:").append(this.description);
+		sb.append(",empId:").append(this.empId);
+		sb.append(",emp:").append(this.emp);
+		sb.append(",devIp:").append(this.devIp);
+		sb.append(",devCode:").append(this.devCode);
+		sb.append(",cmdFlag:").append(this.cmdFlag);
+		sb.append(",devId:").append(this.devId);
+		sb.append(",devClock:").append(this.devClock);
+		sb.append(",createUser:").append(this.createUser);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }

@@ -65,5 +65,14 @@ public class WorkCenter extends BaseEntity {
 
 		public void setBsStatus(Integer bsStatus) {
 			this.bsStatus = bsStatus;
-		}    
+		}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("工作中心编码:").append(this.bsCode);
+		sb.append(",工作中心名称:").append(this.bsName);
+		sb.append(",状态:").append(this.bsStatus);
+		return sb.toString();
+	}
 }

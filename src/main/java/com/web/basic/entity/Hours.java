@@ -50,5 +50,13 @@ public class Hours extends BaseEntity {
 
 		public void setBsStdHrs(String bsStdHrs) {
 			this.bsStdHrs = bsStdHrs;
-		}  
+		}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("产品编码:").append(this.bsCode);
+		sb.append(",标准工时:").append(this.bsStdHrs);
+		return sb.toString();
+	}
 }

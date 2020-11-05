@@ -81,7 +81,7 @@ public class LoginController extends WebController{
             //用户是否存在
             /*SysUser userForBase = sysUserDao.findByFcode(username);
     		if(userForBase == null){
-    			getSysLogService().error(method,methodName,"用户不存在");
+    			getSysLogService().error(module,method,methodName,"用户不存在");
                 return ApiResponseResult.failure("该用户不存在，请联系管理员！");
             }*/
 

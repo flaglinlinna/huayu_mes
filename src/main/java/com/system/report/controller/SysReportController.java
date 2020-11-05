@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "/sys/report")
 public class SysReportController extends WebController {
 
+	private String module = "通用报表信息";
     @Autowired
     private SysReportService sysReportService;
 	
@@ -67,12 +68,12 @@ public class SysReportController extends WebController {
         	Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = sysReportService.getlist(keyword,  super.getPageRequest(sort));
             logger.debug("获取配置列表=getList:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取配置列表失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("获取配置列表失败！");
         }
     }

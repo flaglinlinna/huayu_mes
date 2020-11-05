@@ -193,18 +193,18 @@ public class SysUserController extends WebController{
     @RequestMapping(value = "/getListByRoleId", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getListByRoleId(Long roleId) {
-        String method = "/sysUser/getListByRoleId";String methodName ="获取用户列表";
+        String method = "/sysUser/getListByRoleId";String methodName ="查询角色下用户列表";
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = sysUserService.getListByRoleId(roleId, super.getPageRequest(sort));
-            logger.debug("获取用户列表=getList:");
-            getSysLogService().success(method, methodName, null);
+            logger.debug("查询角色下用户列表=getList:");
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("获取用户列表失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
-            return ApiResponseResult.failure("获取用户列表失败！");
+            logger.error("查询角色下用户列表失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("查询角色下用户列表失败！");
         }
     }
 

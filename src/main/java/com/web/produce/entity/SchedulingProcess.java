@@ -279,4 +279,28 @@ public class SchedulingProcess extends BaseEntity {
     public void setQtyPlan(Integer qtyPlan) {
         this.qtyPlan = qtyPlan;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(",mid:").append(this.mid);
+        sb.append(",taskNo:").append(this.taskNo);
+        sb.append(",prodNo:").append(this.prodNo);
+        sb.append(",procNo:").append(this.procNo);
+        sb.append(",procOrder:").append(this.procOrder);
+        sb.append(",sampleQty:").append(this.sampleQty);
+        sb.append(",qtyProc:").append(this.qtyProc);
+        sb.append(",qtyDone:").append(this.qtyDone);
+        sb.append(",defectNum:").append(this.defectNum);
+        sb.append(",jobAttr:").append(this.jobAttr);
+        sb.append(",empId:").append(this.empId);
+        sb.append(",employee:").append(this.employee);
+        sb.append(",empCode:").append(this.empCode);
+        sb.append(",timeBegin:").append(this.timeBegin);
+        sb.append(",timeEnd:").append(this.timeEnd);
+        sb.append(",prodStatus:").append(this.prodStatus);
+        sb.append(",qtyPlan:").append(this.qtyPlan);
+        sb.append("\n]");
+        return sb.toString();
+    }
 }

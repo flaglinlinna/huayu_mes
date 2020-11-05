@@ -31,6 +31,8 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "base/hours")
 public class HoursController extends WebController{
 
+	private String module = "工时信息";
+
 	 @Autowired
 	 private HoursService hoursService;
 	 
@@ -56,12 +58,12 @@ public class HoursController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = hoursService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取工时信息列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取工时信息列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取工时信息列表失败！");
 	        }
 	    }
@@ -75,12 +77,12 @@ public class HoursController extends WebController{
 	        try{
 	            ApiResponseResult result = hoursService.add(hours);
 	            logger.debug("新增工时信息=add:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, hours.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("工时信息新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,hours.toString()+";"+ e.toString());
 	            return ApiResponseResult.failure("工时信息新增失败！");
 	        }
 	    }
@@ -93,12 +95,12 @@ public class HoursController extends WebController{
 	        try{
 	            ApiResponseResult result = hoursService.edit(hours);
 	            logger.debug("编辑工时信息=edit:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, hours.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑工时信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, hours.toString()+';'+e.toString());
 	            return ApiResponseResult.failure("编辑工时信息失败！");
 	        }
 	    }
@@ -111,12 +113,12 @@ public class HoursController extends WebController{
 	        try{
 	            ApiResponseResult result = hoursService.getHours(id);
 	            logger.debug("根据ID获取工时信息=getHours:");
-	            getSysLogService().success(method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取工时信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取工时信息失败！");
 	        }
 	    }
@@ -130,12 +132,12 @@ public class HoursController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = hoursService.delete(id);
 	            logger.debug("删除工时信息=delete:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除工时信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("删除工时信息失败！");
 	        }
 	    }

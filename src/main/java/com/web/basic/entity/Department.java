@@ -95,5 +95,16 @@ public class Department extends BaseEntity {
 
 		public void setBsStatus(Integer bsStatus) {
 			this.bsStatus = bsStatus;
-		}    
+		}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("部门编码:").append(this.bsCode);
+		sb.append(",部门名称:").append(this.bsName);
+		sb.append(",部门经理:").append(this.bsManager);
+		sb.append(",部门经理电话:").append(this.bsManagerTel);
+		sb.append(",状态:").append(this.bsStatus);
+		return sb.toString();
+	}
 }

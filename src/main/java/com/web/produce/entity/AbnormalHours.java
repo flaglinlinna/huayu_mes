@@ -162,7 +162,6 @@ public class AbnormalHours extends BaseEntity{
 		this.timeEnd = timeEnd;
 	}
 
-	
 
 	public String getDescription() {
 		return description;
@@ -228,4 +227,22 @@ public class AbnormalHours extends BaseEntity{
 	public void setLine(Line line) {
 		this.line = line;
 	}*/
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(",empId:").append(this.empId);
+		sb.append(",employee:").append(this.employee);
+		sb.append(",taskNo:").append(this.taskNo);
+		sb.append(",timeBegin:").append(this.timeBegin);
+		sb.append(",timeEnd:").append(this.timeEnd);
+		sb.append(",duration:").append(this.duration);
+		sb.append(",description:").append(this.description);
+		sb.append(",forReason:").append(this.forReason);
+		sb.append(",checkStatus:").append(this.checkStatus);
+		sb.append(",checkBy:").append(this.checkBy);
+		sb.append(",checkDate:").append(this.checkDate);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }

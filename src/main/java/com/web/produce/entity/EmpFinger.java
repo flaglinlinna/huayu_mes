@@ -105,4 +105,15 @@ public class EmpFinger extends BaseEntity {
 		this.fprivilege = fprivilege;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(",empId:").append(this.empId);
+		sb.append(",emp:").append(this.emp);
+		sb.append(",templateStr:").append(this.templateStr);
+		sb.append(",fingerIdx:").append(this.fingerIdx);
+		sb.append(",fprivilege:").append(this.fprivilege);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }

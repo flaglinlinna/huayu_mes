@@ -31,6 +31,8 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "base/mtrial")
 public class MtrialController extends WebController{
 
+	private String module = "物料信息";
+
 	 @Autowired
 	 private MtrialService mtrialService;
 	 
@@ -56,12 +58,12 @@ public class MtrialController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.ASC, "itemNo");
 	            ApiResponseResult result = mtrialService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取物料信息列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取物料信息列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,keyword+";"+ e.toString());
 	            return ApiResponseResult.failure("获取物料信息列表失败！");
 	        }
 	    }
@@ -75,12 +77,12 @@ public class MtrialController extends WebController{
 	        try{
 	            ApiResponseResult result = mtrialService.add(mtrial);
 	            logger.debug("新增物料信息=add:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, mtrial.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("物料信息新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,mtrial.toString()+":"+ e.toString());
 	            return ApiResponseResult.failure("物料信息新增失败！");
 	        }
 	    }
@@ -93,12 +95,12 @@ public class MtrialController extends WebController{
 	        try{
 	            ApiResponseResult result = mtrialService.edit(mtrial);
 	            logger.debug("编辑物料信息=edit:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, mtrial.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑物料信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,mtrial.toString()+":"+ e.toString());
 	            return ApiResponseResult.failure("编辑物料信息失败！");
 	        }
 	    }
@@ -111,12 +113,12 @@ public class MtrialController extends WebController{
 	        try{
 	            ApiResponseResult result = mtrialService.getMtrial(id);
 	            logger.debug("根据ID获取物料=getMtrial:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取物料失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, params+":"+e.toString());
 	            return ApiResponseResult.failure("获取物料失败！");
 	        }
 	    }
@@ -130,12 +132,12 @@ public class MtrialController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = mtrialService.delete(id);
 	            logger.debug("删除物料=delete:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除物料失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params+":"+ e.toString());
 	            return ApiResponseResult.failure("删除物料失败！");
 	        }
 	    }
@@ -151,12 +153,12 @@ public class MtrialController extends WebController{
 		        	Integer bsStatus=Integer.parseInt(params.get("checkStatus").toString());
 		            ApiResponseResult result = mtrialService.doStatus(id, bsStatus);
 		            logger.debug("设置正常/禁用=doJob:");
-		            getSysLogService().success(method, methodName, null);
+		            getSysLogService().success(module,method, methodName, params);
 		            return result;
 		        }catch (Exception e){
 		            e.printStackTrace();
 		            logger.error("设置正常/禁用失败！", e);
-		            getSysLogService().error(method, methodName, e.toString());
+		            getSysLogService().error(module,method, methodName,params+":"+ e.toString());
 		            return ApiResponseResult.failure("设置正常/禁用失败！");
 		        }
 		    }

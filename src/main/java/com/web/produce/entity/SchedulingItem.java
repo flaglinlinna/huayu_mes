@@ -198,4 +198,23 @@ public class SchedulingItem extends BaseEntity {
     public void setFokRate(BigDecimal fokRate) {
         this.fokRate = fokRate;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(",mid:").append(this.mid);
+        sb.append(",taskNo:").append(this.taskNo);
+        sb.append(",itemId:").append(this.itemId);
+        sb.append(",mtrial:").append(this.mtrial);
+        sb.append(",itemNo:").append(this.itemNo);
+        sb.append(",itemQty:").append(this.itemQty);
+        sb.append(",itemUnit:").append(this.itemUnit);
+        sb.append(",itemQtyPr:").append(this.itemQtyPr);
+        sb.append(",empId:").append(this.empId);
+        sb.append(",employee:").append(this.employee);
+        sb.append(",empCode:").append(this.empCode);
+        sb.append(",fokRate:").append(this.fokRate);
+        sb.append("\n]");
+        return sb.toString();
+    }
 }

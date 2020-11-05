@@ -29,6 +29,8 @@ import io.swagger.models.auth.In;
 @RequestMapping(value = "produce/bad_entry")
 public class BadEntryController extends WebController {
 
+	private String module = "不良录入";
+
 	 @Autowired
 	 private BadEntryService badEntryService;
 	 
@@ -46,12 +48,12 @@ public class BadEntryController extends WebController {
 	        try {
 	            ApiResponseResult result = badEntryService.getTaskNo(keyword);
 	            logger.debug("获取指令单信息=getTaskNo:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("获取指令单信息失败！", e);
-	             getSysLogService().error(method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, e.toString());
 	             return ApiResponseResult.failure("获取指令单信息失败！");
 	        }
 	    }
@@ -65,12 +67,12 @@ public class BadEntryController extends WebController {
 	        	String keyword = params.get("keyword") == null?"":params.get("keyword").toString();
 	            ApiResponseResult result = badEntryService.getBadInfo(keyword);
 	            logger.debug("获取不良信息信息=getBadInfo:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("获取不良信息失败！", e);
-	             getSysLogService().error(method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, e.toString());
 	             return ApiResponseResult.failure("获取不良信息失败！");
 	        }
 	    }
@@ -85,12 +87,12 @@ public class BadEntryController extends WebController {
 	        	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
 	            ApiResponseResult result = badEntryService.checkBarCode(taskNo,barcode);
 	            logger.debug("条码扫描=checkBarCode:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("条码扫描失败！", e);
-	             getSysLogService().error(method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, e.toString());
 	             return ApiResponseResult.failure("条码扫描失败！");
 	        }
 	    }
@@ -109,12 +111,12 @@ public class BadEntryController extends WebController {
 	            ApiResponseResult result = badEntryService.saveBad(taskNo,barcode,
 	        			qty,defCode,memo);
 	            logger.debug("保存不良=saveBad:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("保存不良失败！", e);
-	             getSysLogService().error(method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, e.toString());
 	             return ApiResponseResult.failure("保存不良失败！");
 	        }
 	    }
@@ -128,12 +130,12 @@ public class BadEntryController extends WebController {
 	        	String recordId = params.get("recordId").toString();
 	            ApiResponseResult result = badEntryService.deleteBad(recordId);
 	            logger.debug("删除不良=deleteBad:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("删除不良失败！", e);
-	             getSysLogService().error(method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, e.toString());
 	             return ApiResponseResult.failure("删除不良失败！");
 	        }
 	    }
@@ -146,12 +148,12 @@ public class BadEntryController extends WebController {
 	        try {
 	            ApiResponseResult result = badEntryService.getDetailByTask(taskNo);
 	            logger.debug("根据指令单获取扫描信息=getDetailByTask:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("根据指令单获取扫描信息失败！", e);
-	             getSysLogService().error(method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, e.toString());
 	             return ApiResponseResult.failure("根据指令单获取扫描信息失败！");
 	        }
 	    }
@@ -168,12 +170,12 @@ public class BadEntryController extends WebController {
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result =badEntryService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
 	            logger.debug(methodName+"=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error(methodName+"失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure(methodName+"失败！");
 	        }
 		}

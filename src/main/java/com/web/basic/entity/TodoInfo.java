@@ -283,4 +283,25 @@ public class TodoInfo extends BaseEntity {
 //    public void setModifiedBy(SysUser modifiedBy) {
 //        this.modifiedBy = modifiedBy;
 //    }
+
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append("页面ID:").append(this.bsUserId);
+        sb.append(",页面路由:").append(this.bsRouter);
+        sb.append(",状态:").append(this.bsStatus);
+        sb.append(",标题:").append(this.bsTitle);
+        sb.append(",内容:").append(this.bsContent);
+        sb.append(",备注:").append(this.bsRemark);
+        sb.append(",类型:").append(this.bsType);
+        sb.append(",优先级:").append(this.bsPriority);
+        sb.append(",开始日期:").append(this.bsStartTime);
+        sb.append(",截至日期:").append(this.bsEndTime);
+        sb.append(",关联id:").append(this.bsReferId);
+        sb.append(",拓展内容:").append(this.bsExtend);
+        sb.append(",创建人:").append(this.pkCreatedBy);
+        sb.append(",修改人:").append(this.pkModifiedBy);
+        return sb.toString();
+    }
 }

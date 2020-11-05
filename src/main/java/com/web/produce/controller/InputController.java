@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiOperation;
 @Controller
 @RequestMapping(value = "/input")
 public class InputController extends WebController {
-	
+    private String module = "生产投料";
 	 @Autowired
 	 private InputService inputService;
 
@@ -50,12 +50,12 @@ public class InputController extends WebController {
         try {
             ApiResponseResult result = inputService.getTaskNo(keyword);
             logger.debug("获取指令单信息=getTaskNo:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("获取指令单信息失败！", e);
-             getSysLogService().error(method, methodName, e.toString());
+             getSysLogService().error(module,method, methodName, e.toString());
              return ApiResponseResult.failure("获取指令单信息失败！");
         }
     }
@@ -68,12 +68,12 @@ public class InputController extends WebController {
         try {
             ApiResponseResult result = inputService.getInfoBarcode(barcode);
             logger.debug("根据指令单获取物料编号和数量=getTaskNo:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("根据指令单获取物料编号和数量失败！", e);
-             getSysLogService().error(method, methodName, e.toString());
+             getSysLogService().error(module,method, methodName, e.toString());
              return ApiResponseResult.failure("根据指令单获取物料编号和数量失败！");
         }
     }
@@ -86,12 +86,12 @@ public class InputController extends WebController {
         try {
             ApiResponseResult result = inputService.addPut(barcode,task_no,item_no,qty);
             logger.debug("确认投入=addPut:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("确认投入失败！", e);
-             getSysLogService().error(method, methodName, e.toString());
+             getSysLogService().error(module,method, methodName, e.toString());
              return ApiResponseResult.failure("确认投入失败！");
         }
     }
@@ -104,12 +104,12 @@ public class InputController extends WebController {
         try{
             ApiResponseResult result = inputService.delete(barcode);
             logger.debug("删除=delete:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("删除失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("删除失败！");
         }
     }
@@ -123,12 +123,12 @@ public class InputController extends WebController {
         try {
             ApiResponseResult result = inputService.getDetailByTask(taskNo);
             logger.debug("根据指令单获取扫描信息=getDetailByTask:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("根据指令单获取扫描信息失败！", e);
-             getSysLogService().error(method, methodName, e.toString());
+             getSysLogService().error(module,method, methodName, e.toString());
              return ApiResponseResult.failure("根据指令单获取扫描信息失败！");
         }
     }
@@ -145,12 +145,12 @@ public class InputController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result =inputService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
             logger.debug(methodName+"=getList:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(methodName+"失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure(methodName+"失败！");
         }
 	}

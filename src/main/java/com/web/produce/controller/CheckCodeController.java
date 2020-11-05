@@ -27,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "produce/check_code")
 public class CheckCodeController extends WebController {
 
+	 private String module = "小码校验";
 	 @Autowired
 	 private CheckCodeService checkCodeService;
 	 
@@ -44,12 +45,12 @@ public class CheckCodeController extends WebController {
 	        try {
 	            ApiResponseResult result = checkCodeService.getTaskNo(keyword);
 	            logger.debug("获取指令单信息=getTaskNo:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("获取指令单信息失败！", e);
-	             getSysLogService().error(method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, e.toString());
 	             return ApiResponseResult.failure("获取指令单信息失败！");
 	        }
 	    }
@@ -64,12 +65,12 @@ public class CheckCodeController extends WebController {
 	        	String barcode2 = params.get("barcode2") == null?"":params.get("barcode2").toString();
 	            ApiResponseResult result = checkCodeService.subCode(taskNo,barcode1,barcode2);
 	            logger.debug("小码校验=subCode:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("小码校验失败！", e);
-	             getSysLogService().error(method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, e.toString());
 	             return ApiResponseResult.failure("小码校验失败！");
 	        }
 	    }
@@ -86,12 +87,12 @@ public class CheckCodeController extends WebController {
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result =checkCodeService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
 	            logger.debug(methodName+"=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error(methodName+"失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure(methodName+"失败！");
 	        }
 		}

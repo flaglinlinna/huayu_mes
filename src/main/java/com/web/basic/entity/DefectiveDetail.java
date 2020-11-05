@@ -101,9 +101,15 @@ public class DefectiveDetail extends BaseEntity {
 		public void setCheckStatus(Integer checkStatus) {
 			this.checkStatus = checkStatus;
 		}
-	    
-		
 
-		  
-		
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("不良类别ID:").append(this.defectTypeId);
+		sb.append(",不良编码:").append(this.defectCode);
+		sb.append(",不良名称:").append(this.defectName);
+		sb.append(",状态:").append(this.checkStatus);
+		return sb.toString();
+	}
 }

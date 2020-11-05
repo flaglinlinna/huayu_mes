@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiOperation;
 @Controller
 @RequestMapping(value = "produce/inspect")
 public class QualInspectController extends WebController {
-
+	private String module = "品质检验信息";
 	@Autowired
 	private QualInspectService inspectService;
 
@@ -50,12 +50,12 @@ public class QualInspectController extends WebController {
 		try {
 			ApiResponseResult result = inspectService.getProcList(company, factory, keyword);
 			logger.debug("PDA-获取检验节点列表=getProcList:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取检验节点列表失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取检验节点列表失败！");
 		}
 	}
@@ -73,12 +73,12 @@ public class QualInspectController extends WebController {
 		try {
 			ApiResponseResult result = inspectService.scanBarcode(company,factory,user_id,proc, barcode);
 			logger.debug("PDA-扫描条码=scanBarcode:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("PDA-扫描条码失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("PDA-扫描条码失败！");
 		}
 	}
@@ -94,12 +94,12 @@ public class QualInspectController extends WebController {
 		try {
 			ApiResponseResult result = inspectService.getDepatrList(factory,company, keyword);
 			logger.debug("PDA-获取责任部门列表=getDepatrList:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("PDA-获取责任部门列表失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("PDA-获取责任部门列表失败！");
 		}
 	}
@@ -116,12 +116,12 @@ public class QualInspectController extends WebController {
 		try {
 			ApiResponseResult result = inspectService.getBadList(company,factory,keyword);
 			logger.debug("PDA-获取不良内容列表=getBadList:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("PDA-获取不良内容列表失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("PDA-获取不良内容列表失败！");
 		}
 	}
@@ -145,12 +145,12 @@ public class QualInspectController extends WebController {
 			ApiResponseResult result = inspectService.saveData(factory,company,user_id, proc, 
 					barcodeList, checkTotal, badTotal, chkResult,departCode, badList);
 			logger.debug("PDA-保存PDA品质检查数据=saveData:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("PDA-保存PDA品质检查数据失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("PDA-保存PDA品质检查数据失败！");
 		}
 	}
@@ -167,12 +167,12 @@ public class QualInspectController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result =inspectService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
             logger.debug(methodName+"=getList:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(methodName+"失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure(methodName+"失败！");
         }
 	}

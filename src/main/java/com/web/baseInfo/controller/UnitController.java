@@ -29,6 +29,8 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "baseInfo/unit")
 public class UnitController extends WebController{
 
+    private String module = "基本单位维护信息";
+
     @Autowired
     private UnitService unitService;
 
@@ -55,12 +57,12 @@ public class UnitController extends WebController{
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = unitService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取基本单位维护列表=getList:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取基本单位维护列表失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("获取基本单位维护列表失败！");
         }
     }
@@ -73,12 +75,12 @@ public class UnitController extends WebController{
         try{
             ApiResponseResult result = unitService.add(unit);
             logger.debug("新增基本单位维护=add:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("基本单位维护新增失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("基本单位维护新增失败！");
         }
     }
@@ -91,12 +93,12 @@ public class UnitController extends WebController{
         try{
             ApiResponseResult result = unitService.edit(unit);
             logger.debug("编辑基本单位维护=edit:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("编辑基本单位维护失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("编辑基本单位维护失败！");
         }
     }
@@ -110,12 +112,12 @@ public class UnitController extends WebController{
         try{
             ApiResponseResult result = unitService.getUnit(id);
             logger.debug("根据ID获取基本单位维护=getUnit:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("根据ID获取基本单位维护失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("获取基本单位维护失败！");
         }
     }
@@ -129,12 +131,12 @@ public class UnitController extends WebController{
             long id = Long.parseLong(params.get("id").toString()) ;
             ApiResponseResult result = unitService.delete(id);
             logger.debug("删除基本单位维护=delete:");
-            getSysLogService().success(method, methodName, null);
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("删除基本单位维护失败！", e);
-            getSysLogService().error(method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("删除基本单位维护失败！");
         }
     }

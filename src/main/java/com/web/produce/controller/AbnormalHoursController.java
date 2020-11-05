@@ -31,6 +31,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "produce/abnormal")
 public class AbnormalHoursController extends WebController {
 
+	private String module = "异常工时登记信息";
 	@Autowired
 	private AbnormalHoursService abnormalHoursService;
 
@@ -58,12 +59,12 @@ public class AbnormalHoursController extends WebController {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = abnormalHoursService.getList(keyword, super.getPageRequest(sort));
 			logger.debug("获取异常工时登记数据列表=getList:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, keyword);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取异常工时登记数据列表失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, keyword+";"+e.toString());
 			return ApiResponseResult.failure("获取异常工时登记数据列表失败！");
 		}
 	}
@@ -77,12 +78,12 @@ public class AbnormalHoursController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.add(abnormalHours);
 			logger.debug("新增异常工时登记数据记录=add:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, abnormalHours.toString());
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("异常工时登记数据记录新增失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("异常工时登记数据记录新增失败！");
 		}
 	}
@@ -96,12 +97,12 @@ public class AbnormalHoursController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.edit(abnormalHours);
 			logger.debug("修改异常工时登记数据记录=edit:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("修改异常工时登记数据记录失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("修改异常工时登记数据记录失败！");
 		}
 	}
@@ -116,12 +117,12 @@ public class AbnormalHoursController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.getAbnormalHours(id);
 			logger.debug("根据ID获取异常工时登记数据记录=getAbnormalHours:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("根据ID获取异常工时登记数据记录失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取异常工时登记数据记录失败！");
 		}
 	}
@@ -136,12 +137,12 @@ public class AbnormalHoursController extends WebController {
 			long id = Long.parseLong(params.get("id").toString());
 			ApiResponseResult result = abnormalHoursService.delete(id);
 			logger.debug("删除异常工时登记=delete:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("删除异常工时登记失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("删除异常工时登记失败！");
 		}
 	}
@@ -155,12 +156,12 @@ public class AbnormalHoursController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.getEmpInfo(keyword);
 			logger.debug("获取员工数据=getEmpInfo:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取员工数据失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取员工数据失败！");
 		}
 	}
@@ -174,12 +175,12 @@ public class AbnormalHoursController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.getTaskNo(keyword);
 			logger.debug("获取指令单信息=getTaskNo:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取指令单信息失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取指令单信息失败！");
 		}
 	}
@@ -194,12 +195,12 @@ public class AbnormalHoursController extends WebController {
 			String taskNo = params.get("taskNo") == null?"":params.get("taskNo").toString();
 			ApiResponseResult result = abnormalHoursService.getTaskNoInfo(taskNo);
 			logger.debug("获取指令单详细信息=getTaskNoInfo:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取指令单详细信息失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取指令单详细信息失败！");
 		}
 	}

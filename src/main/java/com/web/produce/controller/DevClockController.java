@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "produce/dev_clock")
 public class DevClockController extends WebController{
 
+	 private String module = "卡机信息";
 	 @Autowired
 	 private DevClockService devClockService;
 	 
@@ -59,12 +60,12 @@ public class DevClockController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = devClockService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取卡机信息列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取卡机信息列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取卡机信息列表失败！");
 	        }
 	    }
@@ -79,12 +80,12 @@ public class DevClockController extends WebController{
 			System.out.println(keyword);
 			devClockService.exportList(keyword,getResponse());
 			logger.debug("导出卡机信息=exportList:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 //			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("导出卡机信息！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 //			return ApiResponseResult.failure("导出卡机信息！");
 		}
 	}
@@ -98,12 +99,12 @@ public class DevClockController extends WebController{
 	        try{
 	            ApiResponseResult result = devClockService.add(devClock);
 	            logger.debug("新增卡机信息=add:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("卡机信息新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("卡机信息新增失败！");
 	        }
 	    }
@@ -116,12 +117,12 @@ public class DevClockController extends WebController{
 	        try{
 	            ApiResponseResult result = devClockService.edit(devClock);
 	            logger.debug("编辑卡机信息=edit:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑卡机信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("编辑卡机信息失败！");
 	        }
 	    }
@@ -134,12 +135,12 @@ public class DevClockController extends WebController{
 	        try{
 	            ApiResponseResult result = devClockService.getDevClock(id);
 	            logger.debug("根据ID获取卡机信息=getDevClock:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取卡机信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取卡机信息失败！");
 	        }
 	    }
@@ -153,12 +154,12 @@ public class DevClockController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = devClockService.delete(id);
 	            logger.debug("删除卡机信息=delete:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除卡机信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("删除卡机信息失败！");
 	        }
 	    }
@@ -175,12 +176,12 @@ public class DevClockController extends WebController{
 	        	Integer bsStatus=Integer.parseInt(params.get("enabled").toString());
 	            ApiResponseResult result = devClockService.doEnabled(id, bsStatus);
 	            logger.debug("设置有效/无效=doJob:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("设置有效/无效！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("设置有效/无效失败！");
 	        }
 	    }
@@ -193,12 +194,12 @@ public class DevClockController extends WebController{
 	        try {
 	            ApiResponseResult result = devClockService.getLineList();
 	            logger.debug("获取线体信息列表=getLineList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取线体信息列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取线体信息列表失败！");
 	        }
 	    }
@@ -211,12 +212,12 @@ public class DevClockController extends WebController{
 		        try{
 		            ApiResponseResult result = devClockService.test(devClock);
 		            logger.debug("测试卡机连接=test:");
-		            getSysLogService().success(method, methodName, null);
+		            getSysLogService().success(module,method, methodName, null);
 		            return result;
 		        }catch(Exception e){
 		            e.printStackTrace();
 		            logger.error("测试卡机连接失败！", e);
-		            getSysLogService().error(method, methodName, e.toString());
+		            getSysLogService().error(module,method, methodName, e.toString());
 		            return ApiResponseResult.failure("测试卡机连接失败！");
 		        }
 		    }

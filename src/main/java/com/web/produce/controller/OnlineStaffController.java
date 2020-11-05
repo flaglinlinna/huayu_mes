@@ -31,6 +31,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "produce/online")
 public class OnlineStaffController extends WebController{
 
+	private String module = "上线人员信息";
 	 @Autowired
 	 private OnlineStaffService onlineStaffService;
 	 
@@ -57,12 +58,12 @@ public class OnlineStaffController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = onlineStaffService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取上线人员列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取上线人员列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取上线人员列表失败！");
 	        }
 	    }
@@ -76,12 +77,12 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.getMain(id);
 	            logger.debug("根据ID获取上线人员记录=getMain:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取上线人员记录失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取上线人员记录失败！");
 	        }
 	    }
@@ -95,12 +96,12 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.getMainInfo(id);
 	            logger.debug("根据ID获取上线人员记录信息=getMainInfo:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取上线人员记录信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取上线人员记录信息失败！");
 	        }
 	    }
@@ -113,12 +114,12 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.getClassList();
 	            logger.debug("获取班次信息=getClassList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("获取班次信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取班次信息失败！");
 	        }
 	    }
@@ -131,12 +132,12 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.editMain(onlineStaff);
 	            logger.debug("修改上线人员主表=editMain:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("修改上线人员主表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("修改上线人员主表失败！");
 	        }
 	    }
@@ -154,12 +155,12 @@ public class OnlineStaffController extends WebController{
 	        	String beginTime=params.get("beginTime")==null?"":params.get("beginTime").toString();
 	            ApiResponseResult result = onlineStaffService.deleteVice(taskNo,devId, empId,viceId,beginTime);
 	            logger.debug("删除副表记录=deleteVice:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("删除副表记录失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("删除副表主表失败！");
 	        }
 	    }
@@ -173,12 +174,12 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.deleteMain(id);
 	            logger.debug("删除上线人员记录信息=deleteMain:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("删除上线人员记录信息失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("获取上线人员记录信息失败！");
 	        }
 	    }

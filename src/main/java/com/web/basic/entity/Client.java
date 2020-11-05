@@ -67,6 +67,9 @@ public class Client extends BaseEntity {
 		public void setCustNameS(String custNameS) {
 			this.custNameS = custNameS;
 		}
-	        
-	    
+
+	@Override
+	public String toString() {
+		return "客户编码:" + this.custNo + ", 客户全称:" + this.custName  + ", 客户简称:'" + this.custNameS;
+	}
 }

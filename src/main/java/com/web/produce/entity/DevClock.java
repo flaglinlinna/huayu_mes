@@ -164,4 +164,20 @@ public class DevClock extends BaseEntity {
 	public void setLine(Line line) {
 		this.line = line;
 	}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(",devCode:").append(this.devCode);
+		sb.append(",devName:").append(this.devName);
+		sb.append(",devIp:").append(this.devIp);
+		sb.append(",devSeries:").append(this.devSeries);
+		sb.append(",lineId:").append(this.lineId);
+		sb.append(",line:").append(this.line);
+		sb.append(",devType:").append(this.devType);
+		sb.append(",isOnline:").append(this.isOnline);
+		sb.append(",enabled:").append(this.enabled);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }

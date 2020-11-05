@@ -114,4 +114,17 @@ public class OnlineStaff extends BaseEntity {
 	public void setWorkDate(Date workDate) {
 		this.workDate = workDate;
 	}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(",lineId:").append(this.lineId);
+		sb.append(",line:").append(this.line);
+		sb.append(",taskNo:").append(this.taskNo);
+		sb.append(",hourType:").append(this.hourType);
+		sb.append(",classId:").append(this.classId);
+		sb.append(",workDate:").append(this.workDate);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }

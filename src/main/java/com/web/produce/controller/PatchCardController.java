@@ -31,6 +31,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "produce/patch")
 public class PatchCardController extends WebController {
 
+	private String module = "补卡数据信息";
 	@Autowired
 	private PatchCardService patchCardService;
 
@@ -58,12 +59,12 @@ public class PatchCardController extends WebController {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = patchCardService.getList(keyword, super.getPageRequest(sort));
 			logger.debug("获取补卡 数据列表=getList:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取补卡 数据列表失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取补卡 数据列表失败！");
 		}
 	}
@@ -77,12 +78,12 @@ public class PatchCardController extends WebController {
 		try {
 			ApiResponseResult result = patchCardService.add(patchCard);
 			logger.debug("新增补卡数据记录=add:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("补卡数据记录新增失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("补卡数据记录新增失败！");
 		}
 	}
@@ -96,12 +97,12 @@ public class PatchCardController extends WebController {
 		try {
 			ApiResponseResult result = patchCardService.edit(patchCard);
 			logger.debug("修改补卡数据记录=edit:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("修改补卡数据记录失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("修改补卡数据记录失败！");
 		}
 	}
@@ -116,12 +117,12 @@ public class PatchCardController extends WebController {
 		try {
 			ApiResponseResult result = patchCardService.getPatchCard(id);
 			logger.debug("根据ID获取补卡数据记录=getPatchCard:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("根据ID获取补卡数据记录失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取补卡数据记录失败！");
 		}
 	}
@@ -136,12 +137,12 @@ public class PatchCardController extends WebController {
 			long id = Long.parseLong(params.get("id").toString());
 			ApiResponseResult result = patchCardService.delete(id);
 			logger.debug("删除补卡数据记录=delete:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("删除补卡数据记录失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("删除补卡数据记录失败！");
 		}
 	}
@@ -155,12 +156,12 @@ public class PatchCardController extends WebController {
 		try {
 			ApiResponseResult result = patchCardService.getEmpInfo(keyword);
 			logger.debug("获取员工数据=getEmpInfo:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取员工数据失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取员工数据失败！");
 		}
 	}
@@ -174,12 +175,12 @@ public class PatchCardController extends WebController {
 		try {
 			ApiResponseResult result = patchCardService.getTaskNo(keyword);
 			logger.debug("获取指令单信息=getTaskNo:");
-			getSysLogService().success(method, methodName, null);
+			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取指令单信息失败！", e);
-			getSysLogService().error(method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取指令单信息失败！");
 		}
 	}

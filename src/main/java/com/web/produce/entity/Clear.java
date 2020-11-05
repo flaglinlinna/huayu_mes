@@ -85,4 +85,15 @@ public class Clear extends BaseEntity {
 	public void setDevClock(DevClock devClock) {
 		this.devClock = devClock;
 	}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(",empId:").append(this.empId);
+		sb.append(",employee:").append(this.employee);
+		sb.append(",devClockId:").append(this.devClockId);
+		sb.append(",devClock:").append(this.devClock);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }

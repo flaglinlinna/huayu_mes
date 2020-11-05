@@ -31,6 +31,8 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "base/proc")
 public class ProcessController extends WebController{
 
+	private String module = "工序信息";
+
 	 @Autowired
 	 private ProcessService processService;
 	 
@@ -56,12 +58,12 @@ public class ProcessController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.ASC, "procOrder");
 	            ApiResponseResult result = processService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取工序列表=getList:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取工序列表失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, keyword+":"+e.toString());
 	            return ApiResponseResult.failure("获取工序列表失败！");
 	        }
 	    }
@@ -75,12 +77,12 @@ public class ProcessController extends WebController{
 	        try{
 	            ApiResponseResult result = processService.add(proc);
 	            logger.debug("新增工序=add:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, proc.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("工序新增失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,proc.toString()+":"+ e.toString());
 	            return ApiResponseResult.failure("工序新增失败！");
 	        }
 	    }
@@ -93,12 +95,12 @@ public class ProcessController extends WebController{
 	        try{
 	            ApiResponseResult result = processService.edit(proc);
 	            logger.debug("编辑工序=edit:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, proc.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑工序失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, proc.toString()+":"+e.toString());
 	            return ApiResponseResult.failure("编辑工序失败！");
 	        }
 	    }
@@ -111,12 +113,12 @@ public class ProcessController extends WebController{
 	        try{
 	            ApiResponseResult result = processService.getProcess(id);
 	            logger.debug("根据ID获取工序=getProcess:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取工序失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params+":"+ e.toString());
 	            return ApiResponseResult.failure("获取工序失败！");
 	        }
 	    }
@@ -130,12 +132,12 @@ public class ProcessController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = processService.delete(id);
 	            logger.debug("删除工序=delete:");
-	            getSysLogService().success(method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除工序失败！", e);
-	            getSysLogService().error(method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params+":"+ e.toString());
 	            return ApiResponseResult.failure("删除工序失败！");
 	        }
 	    }
@@ -151,12 +153,12 @@ public class ProcessController extends WebController{
 		        	Integer bsStatus=Integer.parseInt(params.get("checkStatus").toString());
 		            ApiResponseResult result = processService.doStatus(id, bsStatus);
 		            logger.debug("设置正常/禁用=doJob:");
-		            getSysLogService().success(method, methodName, null);
+		            getSysLogService().success(module,method, methodName, params);
 		            return result;
 		        }catch (Exception e){
 		            e.printStackTrace();
 		            logger.error("设置正常/禁用失败！", e);
-		            getSysLogService().error(method, methodName, e.toString());
+		            getSysLogService().error(module,method, methodName, params+":"+e.toString());
 		            return ApiResponseResult.failure("设置正常/禁用失败！");
 		        }
 		    }

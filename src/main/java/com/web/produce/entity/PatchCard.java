@@ -255,4 +255,26 @@ public class PatchCard extends BaseEntity{
 	public void setClassType(ClassType classType) {
 		this.classType = classType;
 	}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(",empId:").append(this.empId);
+		sb.append(",employee:").append(this.employee);
+		sb.append(",lineId:").append(this.lineId);
+		sb.append(",line:").append(this.line);
+		sb.append(",classId:").append(this.classId);
+		sb.append(",classType:").append(this.classType);
+		sb.append(",hourType:").append(this.hourType);
+		sb.append(",taskNo:").append(this.taskNo);
+		sb.append(",cardType:").append(this.cardType);
+		sb.append(",workDate:").append(this.workDate);
+		sb.append(",signTime:").append(this.signTime);
+		sb.append(",signDate:").append(this.signDate);
+		sb.append(",checkStatus:").append(this.checkStatus);
+		sb.append(",checkBy:").append(this.checkBy);
+		sb.append(",checkDate:").append(this.checkDate);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }

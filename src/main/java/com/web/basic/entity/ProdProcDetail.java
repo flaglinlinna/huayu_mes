@@ -141,7 +141,16 @@ public class ProdProcDetail extends BaseEntity {
 	public void setFlag(Integer flag) {
 		this.flag = flag;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("物料ID:").append(this.itemId);
+		sb.append(",物料编码:").append(this.itemNo);
+		sb.append(",工序ID:").append(this.procId);
+		sb.append(",工序排列序号:").append(this.procOrder);
+		sb.append(",过程属性:").append(this.jobAttr);
+		sb.append(",报工标示:").append(this.flag);
+		return sb.toString();
+	}
 }

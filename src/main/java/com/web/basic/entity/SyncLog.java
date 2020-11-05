@@ -102,4 +102,15 @@ public class SyncLog extends BaseEntity {
     public void setBsRemark(String bsRemark) {
         this.bsRemark = bsRemark;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append("编码:").append(this.bsCode);
+        sb.append(",名称:").append(this.bsName);
+        sb.append(",上次同步时间:").append(this.bsLastSyncTime);
+        sb.append(",同步状态:").append(this.bsStatus);
+        sb.append(",备注:").append(this.bsRemark);
+        return sb.toString();
+    }
 }

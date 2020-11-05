@@ -110,4 +110,17 @@ public class SysParam extends BaseEntity {
 		public void setParamValue(String paramValue) {
 			this.paramValue = paramValue;
 		}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("系统参数类型:").append(this.paramType);
+		sb.append(",系统参数种类:").append(this.paramSort);
+		sb.append(",参数编码:").append(this.paramCode);
+		sb.append(",参数名称:").append(this.paramName);
+		sb.append(",数据类型:").append(this.dataType);
+		sb.append(",参数值:").append(this.paramValue);
+		sb.append("\n]");
+		return sb.toString();
+	}
 }
