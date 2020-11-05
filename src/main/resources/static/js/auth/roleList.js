@@ -9,6 +9,9 @@ $(function() {
         var table = layui.table
             ,form = layui.form;
 
+        tableIns1 ="";
+
+
         tableIns=table.render({
             elem: '#roleList'
             ,url:context+'/sysRole/getList'
@@ -37,12 +40,14 @@ $(function() {
             cols: [[
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-                ,{field:'roleCode', title:'编号', width:120}
-                ,{field:'roleName', title:'名称', width:120}
-                ,{field:'description', title: '描述', minWidth:120}
+                ,{field:'roleCode', title:'编号',align:'center', width:120}
+                ,{field:'roleName', title:'名称',align:'center', width:120}
+                ,{field:'description', title: '描述',align:'center', minWidth:120}
+                ,{field:'userCount', title: '用户数量',align:'center', width:120,
+                 templet: '<div><a cursor: pointer; onclick="showUser({{d.id}})">{{ d.userCount }}</a></div>'}
                 ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
-                ,{field:'lastupdateDate', title: '更新时间', width:150}
-                ,{field:'createDate', title: '添加时间', width:150}
+                ,{field:'lastupdateDate', title: '更新时间', align:'center',width:150}
+                ,{field:'createDate', title: '添加时间',align:'center', width:150}
                 ,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
@@ -56,6 +61,7 @@ $(function() {
                 pageCurr=curr;
             }
         });
+
 
         //监听在职操作
         form.on('switch(isStatusTpl)', function(obj){
@@ -395,6 +401,84 @@ function loadAll(){
             curr: pageCurr //从当前页码开始
         }
     });
+}
+
+function showUser(id){
+    tableIns1 = table.render({
+        elem : '#UserShowList',
+        url : context + 'base/sysUser/getListByRoleId?in='+ id,
+        method : 'get' // 默认：get请求
+        ,
+        cellMinWidth : 80,
+        page : true,
+        request : {
+            pageName : 'page' // 页码的参数名称，默认：page
+            ,
+            limitName : 'rows' // 每页数据量的参数名，默认：limit
+        },
+        parseData : function(res) {
+            // 可进行数据操作
+            return {
+                "count" : res.data.total,
+                "msg" : res.msg,
+                "data" : res.data.rows,
+                "code" : res.status
+                // code值为200表示成功
+            }
+        },
+        cols : [ [ {
+            type : 'numbers'
+        },
+            {
+                field : 'taskNo',
+                title : '生产工单',
+                width:105,
+            },
+            {
+                field : 'procOrder',
+                title : '工序顺序号',
+                width:105,
+            },
+            {
+                field : 'procNo',
+                title : '工序编码',
+            },
+            {
+                field : 'procName',
+                title : '工序名称',
+            },
+            {
+                fixed : 'right',
+                title : '操作',
+                align : 'center',
+                toolbar : '#optBar1',
+                width :150,
+            } ] ],
+        done : function(res, curr, count) {
+            // 如果是异步请求数据方式，res即为你接口返回的信息。
+            // 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            // console.log(res);
+            // 得到当前页码
+            // console.log(curr);
+            // 得到数据总量
+            // console.log(count);
+            pageCurr1 = curr;
+        }
+    });
+
+    var index = layer.open({
+        type : 1,
+        title : "工单排产查看",
+        fixed : true,
+        resize : true,
+        shadeClose : false,
+        content : $('#SchemeInfo'),
+        end : function() {
+            // cleanTaskRoadParm();
+            location.reload();
+        }
+    });
+    layer.full(index);
 }
 
 //清空新增表单数据

@@ -376,6 +376,15 @@ public class SysUserImpl implements SysUserService {
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 
+
+    @Override
+    @Transactional
+    public ApiResponseResult getListByRoleId(Long roleId, PageRequest pageRequest) throws Exception {
+        Page<Map<String, Object>> mapList= sysUserDao.getListByRoleId(roleId,pageRequest);
+        return ApiResponseResult.success().data(DataGrid.create(mapList.getContent(), (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
+
+
     /**
      * 根据ID获取用户信息
      * @param id

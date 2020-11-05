@@ -1,5 +1,6 @@
 package com.system.role.service.internal;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -170,8 +171,23 @@ public class SysRoleImpl implements SysRoleService {
         Specification<SysRole> spec = Specification.where(BaseService.and(filters, SysRole.class));
         Specification<SysRole> spec1 =  spec.and(BaseService.or(filters1, SysRole.class));
         Page<SysRole> page = sysRoleDao.findAll(spec1, pageRequest);
+        List<SysRole> sysRoleList = page.getContent();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<Map<String,Object>> mapList = new ArrayList<>();
+        for(SysRole sysRole:sysRoleList){
+            Map<String,Object> map = new HashMap<>();
+            map.put("id",sysRole.getId());
+            map.put("roleName",sysRole.getRoleName());
+            map.put("roleCode",sysRole.getRoleCode());
+            map.put("description",sysRole.getDescription());
+            map.put("status",sysRole.getStatus());
+            map.put("createDate",df.format(sysRole.getCreateDate()));
+            map.put("lastupdateDate",df.format(sysRole.getLastupdateDate()));
+            map.put("userCount",userRoleMapDao.countByRoleIdAndAndDelFlag(sysRole.getId(),0));
+            mapList.add(map);
+        }
 
-        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+        return ApiResponseResult.success().data(DataGrid.create(mapList, (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 
 	@Override

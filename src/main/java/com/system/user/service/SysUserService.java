@@ -4,6 +4,7 @@ import org.springframework.data.domain.PageRequest;
 
 import com.app.base.data.ApiResponseResult;
 import com.system.user.entity.SysUser;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,8 @@ public interface SysUserService {
     public SysUser findByUserCode2(String userCode) throws Exception;
     
     public ApiResponseResult getList(String keyword, String bsCode, String bsName, String mobile, Integer bsStatus, PageRequest pageRequest) throws Exception;
+
+    public ApiResponseResult getListByRoleId(Long roleId, PageRequest pageRequest) throws Exception;
 
     public ApiResponseResult getUserAndRoles(Long id) throws Exception;
 
