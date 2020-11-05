@@ -29,6 +29,8 @@
 	
 	<script src="/layui/xmSelects/xm-select.js"  th:src="@{/layui/xmSelects/xm-select.js}"></script>
 	
+	<script src="/layui/tableFilter/tableFilter.js"  th:src="@{/layui/tableFilter/tableFilter.js}"></script>
+	<link href="/layui/tableFilter/tableFilter.css" th:href="@{/layui/tableFilter/tableFilter.css}" rel="stylesheet" type="text/css" />
 	<!-- <script src="/layui/tableSelect/tableSelect.js"  th:src="@{/layui/tableSelect/tableSelect.js}"></script>
 	 -->
 <script src="/js/core.util.js" th:src="@{/js/core.util.js}"></script>
@@ -50,7 +52,7 @@
     var context ="";
     var _tableSelectEdite=[];
    layui.config({
-    base: context+'layuiadmin/' //静态资源所在路径
+    base: context+'/layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
   }).use(['index']);  

@@ -28,13 +28,13 @@ $(function() {
             },
             cols: [[
                 {type:'numbers', width:'3%'}
-                ,{field:'username', title:'操作账号', width:'8%'}
-                ,{field:'moduleName', title:'模块', width:'12%'}
-                ,{field:'methodName', title:'操作', width:'20%'}
-                ,{field:'ip', title: '登录IP', width:'12%'}
-                ,{field:'operation', title: '结果', width:'11%'}
-                ,{field:'createDate', title: '时间', width:'15%'}
-                ,{field:'params', title: '参数', width:'20%'}
+                ,{field:'username', title:'操作账号', width:'8%', sort: true}
+                ,{field:'moduleName', title:'模块', width:'12%', sort: true}
+                ,{field:'methodName', title:'操作', width:'20%', sort: true}
+                ,{field:'ip', title: '登录IP', width:'12%', sort: true}
+                ,{field:'operation', title: '结果', width:'11%', sort: true}
+                ,{field:'createDate', title: '时间', width:'15%', sort: true}
+                ,{field:'params', title: '参数', width:'20%', sort: true}
             ]]
             ,  done: function(res, curr, count){
             	$("[data-field='id']").css('display','none');

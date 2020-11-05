@@ -3,15 +3,15 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table' ], function() {
-		var table = layui.table, form = layui.form;
+	layui.use([ 'form', 'table','tableFilter' ], function() {
+		var table = layui.table, form = layui.form,tableFilter = layui.tableFilter;
 
 		tableIns = table.render({
-			elem : '#lineList',
+			elem : '#listTable',
 			url : context + '/base/line/getList',
 			method : 'get' // 默认：get请求
-			,
-			cellMinWidth : 80,
+			, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+			,cellMinWidth : 80,
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -30,33 +30,34 @@ $(function() {
 			},
 			cols : [ [ {
 				type : 'numbers'
-			}
+			},
+			{type:'checkbox'}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'lineNo',
-				title : '线体编码'
+				title : '线体编码', sort: true,filter: true
 			}, {
 				field : 'lineName',
-				title : '线体名称'
+				title : '线体名称', sort: true
 			},
 			{
 				field : 'linerCode',
-				title : '线长工号'
+				title : '线长工号', sort: true
 			}, {
 				field : 'linerName',
-				title : '线长姓名'
+				title : '线长姓名', sort: true
 			}
 			, {
 				field : 'checkStatus',
 				title : '状态',
 				width : 95,
-				templet : '#statusTpl'
+				templet : '#statusTpl', sort: true
 			}, {
 				field : 'lastupdateDate',
-				title : '更新时间'
+				title : '更新时间', sort: true
 			}, {
 				field : 'createDate',
-				title : '添加时间',
+				title : '添加时间', sort: true
 			}, {
 				fixed : 'right',
 				title : '操作',
@@ -64,6 +65,7 @@ $(function() {
 				toolbar : '#optBar'
 			} ] ],
 			done : function(res, curr, count) {
+				localtableFilterIns.reload();
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
 				// console.log(res);
@@ -74,17 +76,67 @@ $(function() {
 				pageCurr = curr;
 			}
 		});
+		
+		var localtableFilterIns = tableFilter.render({
+			'elem' : '#listTable',
+			//'parent' : '#doc-content',
+			'mode' : 'local',
+			'filters' : [
+				{field: 'lineNo', type:'checkbox'},
+				{field: 'lastupdateDate', type:'date'},
+				{field: 'checkStatus', type:'radio'},
+				{field: 'linerName', type:'input'},
+				/*{field: 'id', type:'input'},
+				{field: 'date', type:'date'},
+				{field: 'username', type:'checkbox', url:'json/filter.json'},
+				{field: 'sex', type:'radio'},
+				{field: 'class', type:'checkbox', data:[{ "key":"12", "value":"十二班"}]}*/
+			],
+			'done': function(filters){}
+		})
+		
+		
+		//头工具栏事件
+		table.on('toolbar(listTable)', function(obj){
+		    var checkStatus = table.checkStatus(obj.config.id);
+		    switch(obj.event){
+		      case 'doAdd':
+		    	  addLine();
+		      break;
+		      case 'doDelete':
+		        var data = checkStatus.data;
+		        console.log(data)
+		        if(data.length == 0){
+		        	layer.msg("请先勾选数据!");
+		        }else{
+		        	var id="";
+		        	for(var i = 0; i < data.length; i++) {
+		        		id += data[i].id+",";
+		        		console.log(data[i])
+		        	}
+		        	delLine(id);
+		        }
+		        
+		      break;
+		    };
+		  });
 
 		// 监听在职操作
 		form.on('switch(isStatusTpl)', function(obj) {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(lineTable)', function(obj) {
+		table.on('tool(listTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delLine(data, data.id, data.lineNo);
+				
+				layer.confirm('您确定要删除' + data.lineNo + '线体吗？', {
+					btn : [ '确认', '返回' ]
+				// 按钮
+				}, function() {
+					delLine(data.id);
+				});
 			} else if (obj.event === 'edit') {
 				// 编辑
 				getLine(data, data.id);
@@ -278,36 +330,34 @@ function editSubmit(obj) {
 		layer.alert(res.msg);
 	});
 }
-
+function doDelete(){
+	/*var check_id = tableIns.checkStatus('#lineList');
+	alert(check_id)*/
+	var checkStatus = tableIns.checkStatus("lineList");
+}
 // 删除线体
-function delLine(obj, id, name) {
-	if (id != null) {
+function delLine(id) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '线体吗？', {
-			btn : [ '确认', '返回' ]
-		// 按钮
-		}, function() {
-			CoreUtil.sendAjax("base/line/delete", JSON.stringify(param),
-					function(data) {
-						if (isLogin(data)) {
-							if (data.result == true) {
-								// 回调弹框
-								layer.alert("删除成功！", function() {
-									layer.closeAll();
-									// 加载load方法
-									loadAll();
-								});
-							} else {
-								layer.alert(data, function() {
-									layer.closeAll();
-								});
-							}
+		CoreUtil.sendAjax("/base/line/delete", JSON.stringify(param),
+				function(data) {
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("删除成功！", function() {
+								layer.closeAll();
+								// 加载load方法
+								loadAll();
+							});
+						} else {
+							layer.alert(data, function() {
+								layer.closeAll();
+							});
 						}
-					});
-		});
-	}
+					}
+				});
+
 }
 
 // 重新加载表格（搜索）

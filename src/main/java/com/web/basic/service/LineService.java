@@ -15,7 +15,7 @@ public interface LineService {
 	// 根据ID获取
 	public ApiResponseResult getLine(Long id) throws Exception;
 
-	public ApiResponseResult delete(Long id) throws Exception;
+	public ApiResponseResult delete(String ids) throws Exception;
 
 	public ApiResponseResult doStatus(Long id, Integer checkStatus) throws Exception;// 状态改变
 

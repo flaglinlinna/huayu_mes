@@ -118,18 +118,22 @@ public class Linelmpl implements LineService {
      */
     @Override
     @Transactional
-    public ApiResponseResult delete(Long id) throws Exception{
-        if(id == null){
+    public ApiResponseResult delete(String ids) throws Exception{
+        if(StringUtils.isEmpty(ids)){
             return ApiResponseResult.failure("线体ID不能为空！");
         }
-        Line o  = lineDao.findById((long) id);
-        if(o == null){
-            return ApiResponseResult.failure("该线体不存在！");
+        String[] id_s = ids.split(",");
+        List<Line> ll = new ArrayList<Line>();
+        for(String id:id_s){
+        	Line o  = lineDao.findById(Long.parseLong(id));
+            if(o != null){
+            	o.setDelTime(new Date());
+                o.setDelFlag(1);
+                o.setDelBy(UserUtil.getSessionUser().getId());
+                ll.add(o);
+            }
         }
-        o.setDelTime(new Date());
-        o.setDelFlag(1);
-        o.setDelBy(UserUtil.getSessionUser().getId());	
-        lineDao.save(o);
+        lineDao.saveAll(ll);
         return ApiResponseResult.success("删除成功！");
     }
 

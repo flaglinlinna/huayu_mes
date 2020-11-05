@@ -6,7 +6,7 @@
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
-	 <div style="margin: 10px">
+	 <div style="margin: 5px">
 	 <form id="lineSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
            <div class="layui-form-item" style="margin-bottom: 0px">
 					<div class="layui-inline">
@@ -25,9 +25,15 @@
 				</div>
         </form>
          <hr class="layui-bg-black"/>
+         
+         <script type="text/html" id="toolbar">
+           <div class="layui-btn-container layui-inline">
+               <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="doAdd" >添加线体</button>
+               <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="doDelete">批量删除</button>
+           </div>
+	     </script>
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addLine()">添加线体</button>
-        <table id="lineList" lay-filter="lineTable"></table>
+        <table id="listTable" lay-filter="listTable"></table>
 
         <script type="text/html" id="statusTpl">
             {{#  if(d.checkStatus){ }}
