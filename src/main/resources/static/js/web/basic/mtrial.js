@@ -8,9 +8,10 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#mtrialList',
-			url : context + 'base/mtrial/getList',
+			url : context + '/base/mtrial/getList',
 			method : 'get' // 默认：get请求
 			,
+			width:1400,//设置表格宽度
 			cellMinWidth : 80,
 			page : true,
 			request : {
@@ -34,13 +35,15 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'itemNo',
-				title : '物料编码'
+				title : '物料编码',
+				sort: true
 			}, {
 				field : 'itemName',
-				title : '物料名称'
+				title : '物料名称',
+				width : '30%',
 			}, {
 				field : 'itemType',
-				title : '物料类别'
+				title : '物料类别',
 			}, {
 				field : 'itemUnit',
 				title : '物料单位'
@@ -59,9 +62,11 @@ $(function() {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
-				toolbar : '#optBar'
+				toolbar : '#optBar',
+				width : 95,
 			} ] ],
 			done : function(res, curr, count) {
+				$("table").css("width", "100%");
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
 				// console.log(res);
@@ -82,7 +87,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delMtrial(data, data.id, data.itemNo);
+				//delMtrial(data, data.id, data.itemNo);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				getMtrial(data, data.id);
@@ -109,7 +114,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/mtrial/getMtrial", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/mtrial/getMtrial", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("mtrialForm", {
@@ -206,7 +211,7 @@ function addMtrial() {
 }
 // 新增物料信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/mtrial/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/mtrial/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -227,7 +232,7 @@ function addSubmit(obj) {
 
 // 编辑物料信息提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/mtrial/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/mtrial/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -256,7 +261,7 @@ function delMtrial(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/mtrial/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/mtrial/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
