@@ -2,7 +2,9 @@ package com.web.basic.service.internal;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,17 +170,16 @@ public class Linelmpl  extends BaseOprService implements LineService {
     @Transactional
 	public ApiResponseResult getList(String keyword,String lineNo,String linerName,String lastupdateDate,
     		String checkStatus,String createDate,String linerCode,String lineName, PageRequest pageRequest) throws Exception {
-    			String hql = "select new Line(a.lineNo, a.linerName, a.lineName,a.linerCode, "
-    					+ "		a.createDate, a.lastupdateDate,	a.checkStatus, "
-    					+ "			 a.id  "
-    					+ "			) from Line a" + " where 1=1 and delFlag=:bsIsDel  ";
+    			String hql = "select a.* from "+Line.TABLE_NAME+" a" + " where 1=1 and del_Flag=0  ";
     			
-    			SQLParameter<Parameter> params = SQLParameter.newInstance(Parameter.class);
-    			params.add(Parameter.build("bsIsDel", 0));// 删除标识
+    			//SQLParameter<Parameter> params = SQLParameter.newInstance(Parameter.class);
+    			//params.add(Parameter.build("bsIsDel", 0));// 删除标识
     			
     			if (StringUtils.isNotEmpty(keyword)) {
-    				hql += "and ( CONCAT(a.lineNo,a.lineName,a.linerCode,a.linerName) like '%:keyword%') ";
-    				params.add(Parameter.build("keyword", keyword));
+    				//hql += "and ( CONCAT(a.line_No,a.line_Name,a.liner_Code,a.liner_Name) like '%:keyword%') ";
+    				//params.add(Parameter.build("keyword", keyword));
+    				hql += "  and INSTR((a.line_No || a.line_Name || a.liner_Code || a.liner_Name ),  '"
+    						+ keyword + "') > 0 ";
     			}
     			//lineNo--in查询类型
     			/*if (StringUtils.isNotEmpty(lineNo)) {
@@ -196,41 +197,60 @@ public class Linelmpl  extends BaseOprService implements LineService {
     			}*/
     			//linerName,linerCode,lineName--模糊搜索类型
     			if (StringUtils.isNotEmpty(lineNo)) {
-    				hql += " and a.lineNo like '%"+lineNo+"%'";
+    				hql += " and a.line_No like '%"+lineNo+"%'";
     			}
     			if (StringUtils.isNotEmpty(linerName)) {
-    				hql += " and a.linerName like '%"+linerName+"%'";
+    				hql += " and a.liner_Name like '%"+linerName+"%'";
     			}
     			if (StringUtils.isNotEmpty(linerCode)) {
-    				hql += " and a.linerCode like '%"+linerCode+"%'";
+    				hql += " and a.liner_Code like '%"+linerCode+"%'";
     			}
     			if (StringUtils.isNotEmpty(lineName)) {
-    				hql += " and a.lineName like '%"+lineName+"%'";
+    				hql += " and a.line_Name like '%"+lineName+"%'";
     			}
     			//createDate,lastupdateDate--日期类型
     			if(StringUtils.isNotEmpty(createDate)){
     				String[] dates = createDate.split(" - ");
-    				hql += " and to_char(a.createDate,'yyyy-MM-dd') >= '"+dates[0]+"'";
-    				hql += " and to_char(a.createDate,'yyyy-MM-dd') <= '"+dates[1]+"'";
+    				hql += " and to_char(a.create_Date,'yyyy-MM-dd') >= '"+dates[0]+"'";
+    				hql += " and to_char(a.create_Date,'yyyy-MM-dd') <= '"+dates[1]+"'";
     			}
     			if(StringUtils.isNotEmpty(lastupdateDate)){
     				String[] dates = lastupdateDate.split(" - ");
-    				hql += " and to_char(a.lastupdateDate,'yyyy-MM-dd') >= '"+dates[0]+"'";
-    				hql += " and to_char(a.lastupdateDate,'yyyy-MM-dd') <= '"+dates[1]+"'";
+    				hql += " and to_char(a.lastupdate_Date,'yyyy-MM-dd') >= '"+dates[0]+"'";
+    				hql += " and to_char(a.lastupdate_Date,'yyyy-MM-dd') <= '"+dates[1]+"'";
     			}
     			//checkStatus--需要转移的类型
     			if(StringUtils.isNotEmpty(checkStatus)){
     				if(checkStatus.equals("禁用")){
-    					hql += " and a.checkStatus =0 ";
+    					hql += " and a.check_Status =0 ";
     				}else{
-    					hql += " and a.checkStatus =1 ";
+    					hql += " and a.check_Status =1 ";
     				}
     			}
-
-    			List<Line> list = super.findByHql(hql, params.toList(), pageRequest);
-    			long count = super.countByHql(hql,  params.toList());
+    			int pn = pageRequest.getPageNumber() + 1;
+    			String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
+    					+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
+    					+ pageRequest.getPageSize() + " ";
     			
-    			return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
+    			Map<String, Object> param = new HashMap<String, Object>();
+    			List<Map<String, Object>> list = super.findBySql(sql, param);
+    			long count = super.countBySql(hql, param);
+    			
+    			List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
+    			for(Map<String, Object> map:list){
+    				Map<String, Object> m = new HashMap<String, Object>();
+    				m.put("lineNo", map.get("LINE_NO"));
+    				m.put("lineName", map.get("LINE_NAME"));
+    				m.put("checkStatus", map.get("CHECK_STATUS"));
+    				m.put("linerCode", map.get("LINER_CODE"));
+    				m.put("linerName", map.get("LINER_NAME"));
+    				m.put("id", map.get("ID"));
+    				m.put("createDate", map.get("CREATE_DATE"));
+    				m.put("lastupdateDate", map.get(""));
+    				list_new.add(m);
+    			}
+    			
+    			return ApiResponseResult.success().data(DataGrid.create(list_new, (int) count,
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
 	}
     
