@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
-import com.app.query.dao.SQLParameter;
 import com.system.user.entity.SysUser;
 import com.utils.UserUtil;
 import com.web.produce.dao.CardDataDao;

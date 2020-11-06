@@ -1,4 +1,4 @@
-package com.app.query.dao;
+package provider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * sql参数
+ * sql鍙傛暟
  * @author tanxiang
  *
  * @param <T>
@@ -15,11 +15,11 @@ public class SQLParameter<T> {
 	public final static int DEFAULT_PAG = 1;
 	public final static int DEFAULT_PAGESIZE = 10000;
 	/**
-	 * 页码
+	 * 椤电爜
 	 */
 	private int page = DEFAULT_PAG;
 	/**
-	 * 页大小
+	 * 椤靛ぇ灏�
 	 */
 	private int pageSize = DEFAULT_PAGESIZE;
 

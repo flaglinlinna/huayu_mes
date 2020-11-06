@@ -1,12 +1,14 @@
-package com.app.query.dao;
+package provider;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import javax.sql.DataSource;
-import java.util.List;
-import java.util.Map;
+//import com.unind.base.dbconnection.query.SQLParameter;
 
 public class JdbcDao extends NamedParameterJdbcTemplate {
 	protected DataSource dataSource;

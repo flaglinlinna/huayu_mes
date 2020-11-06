@@ -19,5 +19,6 @@ public interface LineService {
 
 	public ApiResponseResult doStatus(Long id, Integer checkStatus) throws Exception;// 状态改变
 
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getList(String keyword,String lineNo,String linerName,String lastupdateDate,
+    		String checkStatus,String createDate,String linerCode,String lineName, PageRequest pageRequest) throws Exception;
 }

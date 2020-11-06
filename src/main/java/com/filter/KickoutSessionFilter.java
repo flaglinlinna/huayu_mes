@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import com.entity.ResponseResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pojo.User;
 import com.utils.IStatusMessage;
 import com.utils.ShiroFilterUtils;
 

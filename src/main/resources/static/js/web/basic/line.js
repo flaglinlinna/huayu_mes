@@ -12,6 +12,7 @@ $(function() {
 			method : 'get' // 默认：get请求
 			, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 			,cellMinWidth : 80,
+			height: 'full',
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -19,6 +20,14 @@ $(function() {
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
+				if(!res.result){
+					return {
+						"count" : 0,
+						"msg" : res.msg,
+						"data" : [],
+						"code" : res.status
+					} 
+				}
 				// 可进行数据操作
 				return {
 					"count" : res.data.total,
@@ -66,13 +75,6 @@ $(function() {
 			} ] ],
 			done : function(res, curr, count) {
 				localtableFilterIns.reload();
-				// 如果是异步请求数据方式，res即为你接口返回的信息。
-				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-				// console.log(res);
-				// 得到当前页码
-				// console.log(curr);
-				// 得到数据总量
-				// console.log(count);
 				pageCurr = curr;
 			}
 		});
@@ -80,12 +82,15 @@ $(function() {
 		var localtableFilterIns = tableFilter.render({
 			'elem' : '#listTable',
 			//'parent' : '#doc-content',
-			'mode' : 'local',
+			'mode' : 'api',//服务端过滤
 			'filters' : [
 				{field: 'lineNo', type:'checkbox'},
 				{field: 'lastupdateDate', type:'date'},
 				{field: 'checkStatus', type:'radio'},
 				{field: 'linerName', type:'input'},
+				{field: 'createDate', type:'date'},
+				{field: 'linerCode', type:'input'},
+				{field: 'lineName', type:'input'},
 				/*{field: 'id', type:'input'},
 				{field: 'date', type:'date'},
 				{field: 'username', type:'checkbox', url:'json/filter.json'},

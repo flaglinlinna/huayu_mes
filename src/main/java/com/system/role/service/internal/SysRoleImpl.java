@@ -182,7 +182,7 @@ public class SysRoleImpl implements SysRoleService {
             map.put("description",sysRole.getDescription());
             map.put("status",sysRole.getStatus());
             map.put("createDate",df.format(sysRole.getCreateDate()));
-            map.put("lastupdateDate",df.format(sysRole.getLastupdateDate()));
+            //map.put("lastupdateDate",df.format(sysRole.getLastupdateDate()));
             map.put("userCount",userRoleMapDao.countByRoleIdAndAndDelFlag(sysRole.getId(),0));
             mapList.add(map);
         }

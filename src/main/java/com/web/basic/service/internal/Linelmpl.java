@@ -23,10 +23,14 @@ import com.web.basic.dao.LineDao;
 import com.web.basic.entity.Line;
 import com.web.basic.service.LineService;
 
+import provider.BaseOprService;
+import provider.Parameter;
+import provider.SQLParameter;
+
 
 @Service(value = "lineService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class Linelmpl implements LineService {
+public class Linelmpl  extends BaseOprService implements LineService {
 	@Autowired
     private LineDao lineDao;
 
@@ -160,9 +164,76 @@ public class Linelmpl implements LineService {
     /**
      * 查询列表
      */
-	@Override
+    @Override
     @Transactional
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getList(String keyword,String lineNo,String linerName,String lastupdateDate,
+    		String checkStatus,String createDate,String linerCode,String lineName, PageRequest pageRequest) throws Exception {
+    			String hql = "select new Line(a.lineNo, a.linerName, a.lineName,a.linerCode, "
+    					+ "		a.createDate, a.lastupdateDate,	a.checkStatus, "
+    					+ "			 a.id  "
+    					+ "			) from Line a" + " where 1=1 and delFlag=:bsIsDel  ";
+    			
+    			SQLParameter<Parameter> params = SQLParameter.newInstance(Parameter.class);
+    			params.add(Parameter.build("bsIsDel", 0));// 删除标识
+    			
+    			if (StringUtils.isNotEmpty(keyword)) {
+    				hql += "and ( CONCAT(a.lineNo,a.lineName,a.linerCode,a.linerName) like '%:keyword%') ";
+    				params.add(Parameter.build("keyword", keyword));
+    			}
+    			//lineNo--in查询类型
+    			if (StringUtils.isNotEmpty(lineNo)) {
+    				String[] lineNos = lineNo.split(",");
+    				String lines = "";
+    				for(String line:lineNos){
+    					if(StringUtils.isNotEmpty(line)){
+    						lines += "'"+line+"',";
+    					}
+    				}
+    				if(StringUtils.isNotEmpty(lines)){
+    					lines = lines.substring(0, lines.length() - 1);
+    				}
+    				hql += " and a.lineNo in ("+lines+")";
+    			}
+    			//linerName,linerCode,lineName--模糊搜索类型
+    			if (StringUtils.isNotEmpty(linerName)) {
+    				hql += " and a.linerName like '%"+linerName+"%'";
+    			}
+    			if (StringUtils.isNotEmpty(linerCode)) {
+    				hql += " and a.linerCode like '%"+linerCode+"%'";
+    			}
+    			if (StringUtils.isNotEmpty(lineName)) {
+    				hql += " and a.lineName like '%"+lineName+"%'";
+    			}
+    			//createDate,lastupdateDate--日期类型
+    			if(StringUtils.isNotEmpty(createDate)){
+    				String[] dates = createDate.split(" - ");
+    				hql += " and to_char(a.createDate,'yyyy-MM-dd') >= '"+dates[0]+"'";
+    				hql += " and to_char(a.createDate,'yyyy-MM-dd') <= '"+dates[1]+"'";
+    			}
+    			if(StringUtils.isNotEmpty(lastupdateDate)){
+    				String[] dates = lastupdateDate.split(" - ");
+    				hql += " and to_char(a.lastupdateDate,'yyyy-MM-dd') >= '"+dates[0]+"'";
+    				hql += " and to_char(a.lastupdateDate,'yyyy-MM-dd') <= '"+dates[1]+"'";
+    			}
+    			//checkStatus--需要转移的类型
+    			if(StringUtils.isNotEmpty(checkStatus)){
+    				if(checkStatus.equals("禁用")){
+    					hql += " and a.checkStatus =0 ";
+    				}else{
+    					hql += " and a.checkStatus =1 ";
+    				}
+    			}
+
+    			List<Line> list = super.findByHql(hql, params.toList(), pageRequest);
+    			long count = super.countByHql(hql,  params.toList());
+    			
+    			return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
+						pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
+	}
+    
+    @Transactional
+	public ApiResponseResult getList_bak(String keyword,String lineNo,String linerName,String lastupdateDate,
+    		String checkStatus,String createDate,String linerCode,String lineName, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 				List<SearchFilter> filters = new ArrayList<>();
 				filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));

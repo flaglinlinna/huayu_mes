@@ -1,15 +1,17 @@
 package com.web.basic.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
-
 import com.app.base.entity.BaseEntity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 线体基础信息表
  *
@@ -21,6 +23,19 @@ import io.swagger.annotations.ApiModelProperty;
 public class Line extends BaseEntity {
     private static final long serialVersionUID = 4625660587007894370L;
     public static final String TABLE_NAME = "MES_base_LINE";
+    
+    public Line(String lineNo1,String linerName1,String lineName1,
+    		String linerCode1, Date createDate1,Date lastupdateDate1,
+    		int checkStatus1,Long idd){
+    	lineNo = lineNo1;
+    	lineName = lineName1;
+    	checkStatus = checkStatus1;
+    	linerCode = linerCode1;
+    	linerName = linerName1;
+    	createDate = createDate1;
+    	lastupdateDate = lastupdateDate1;
+    	id= idd;
+    }
 
     /**
      * 线体编码

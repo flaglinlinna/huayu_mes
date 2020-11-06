@@ -1,5 +1,4 @@
-package com.app.query.dao;
-
+package provider;
 public class Parameter {
 
 	private String name;

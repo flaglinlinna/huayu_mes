@@ -51,19 +51,23 @@ public class LineController extends WebController{
 	    @ApiOperation(value = "获取线体列表", notes = "获取线体列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
-	    public ApiResponseResult getList(String keyword) {
+	    public ApiResponseResult getList(String keyword,String lineNo,String linerName,String lastupdateDate,
+	    		String checkStatus,String createDate,String linerCode,String lineName) {
 	        String method = "base/line/getList";String methodName ="获取线体列表";
+	        String param = "关键字:"+keyword+";线体编码:"+lineNo+";线体名称"+lineName+";线长工号"+linerCode+
+	        		";线长姓名"+linerName+";状态:"+checkStatus+";更新时间:"+lastupdateDate+";添加时间:"+createDate;
 	        try {
-	        	System.out.println(keyword);
+	        	System.out.println(param);
 	            Sort sort = new Sort(Sort.Direction.ASC, "lineNo");
-	            ApiResponseResult result = lineService.getList(keyword, super.getPageRequest(sort));
+	            ApiResponseResult result = lineService.getList(keyword, lineNo, linerName, lastupdateDate,
+	    	    		 checkStatus, createDate, linerCode, lineName, super.getPageRequest(sort));
 	            logger.debug("获取线体列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取线体列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, param+";"+e.toString());
 	            return ApiResponseResult.failure("获取线体列表失败！");
 	        }
 	    }
