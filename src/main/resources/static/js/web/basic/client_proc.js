@@ -7,10 +7,11 @@ $(function() {
 		var table = layui.table, form = layui.form;
 
 		tableIns = table.render({
-			elem : '#client_procList',
+			elem : '#listTable',
 			url : context + '/base/client_proc/getList',
 			method : 'get' // 默认：get请求
 			,
+			toolbar: '#toolbar', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 			cellMinWidth : 80,
 			page : true,
 			request : {
@@ -41,41 +42,54 @@ $(function() {
 			,{
 				field : 'custNo',
 				title : '客户编号',
-				width:90
+				sort: true,
+				width:100
 			},{
 				field : 'custName',
 				title : '客户名称',
-				width:90
+				sort: true,
+				width:150
 			}, {
 				field : 'procOrder',
 				title : '工序顺序',
-				width:90
+				sort: true,
+				width:100
 			}, {
 				field : 'procNo',
-				title : '工序编号'
+				title : '工序编号',
+				sort: true,
+				width:100
 			}, {
 				field : 'procName',
-				title : '工序名称'
+				title : '工序名称',
+				sort: true,
+				width:100
 			}, {
 				field : 'jobAttr',
 				title : '过程属性',
 				templet : '#statusTpl',
-				width:90,
+				sort: true,
+				width:95,
 				align : 'center'
 				//type:"checkbox"
 			}, {
 				field : 'lastupdateDate',
 				title : '更新时间',
+				sort: true,
+				width:150,
 				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>'
 			}, {
 				field : 'createDate',
 				title : '添加时间',
+				sort: true,
+				width:150,
 				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>'
 			}, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
-				toolbar : '#optBar'
+				toolbar : '#optBar',
+				width:130,
 			} ] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
@@ -99,6 +113,8 @@ $(function() {
 				merge(res.data,['custNo','custName'],[2,3]);
 			}
 		});
+		
+		
 		form.on('checkbox(isStatusTpl)', function(obj) {//修改过程属性
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
@@ -122,7 +138,8 @@ $(function() {
 			
 			{
 				field : 'procNo',
-				title : '编码'
+				title : '编码',
+				
 			}, {
 				field : 'procName',
 				title : '名称',
@@ -136,17 +153,49 @@ $(function() {
 		})
 		
 		// 监听工具条
-		table.on('tool(client_procTable)', function(obj) {
+		table.on('tool(listTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delClientProc(data, data.id, data.procName);
+				
+				layer.confirm('您确定要删除' + data.procName + '工序信息吗？', {
+					btn : [ '确认', '返回' ]
+				// 按钮
+				}, function() {
+					delClientProc( data.id );
+				});
+				
+				
 			} else if (obj.event === 'edit') {
 				// 编辑
 				//getClientProc(data, data.id);//未写
 				addProc(data.custId)
 			}
 		});
+		//头工具栏事件
+		table.on('toolbar(listTable)', function(obj){
+		    var checkStatus = table.checkStatus(obj.config.id);
+		    switch(obj.event){
+		      case 'doAdd':
+		    	  addProc();
+		      break;
+		      case 'doDelete':
+		        var data = checkStatus.data;
+		        console.log(data)
+		        if(data.length == 0){
+		        	layer.msg("请先勾选数据!");
+		        }else{
+		        	var id="";
+		        	for(var i = 0; i < data.length; i++) {
+		        		id += data[i].id+",";
+		        		console.log(data[i])
+		        	}
+		        	delClientProc(id);
+		        }
+		        
+		      break;
+		    };
+		  });
 		
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {			
@@ -248,7 +297,7 @@ function getProcByClient(params){
 }
 
 
-function delClientProc(obj, id, name) {
+function delClientProc( id) {
 	if (id != null) {
 		var param = {
 			"id" : id

@@ -24,9 +24,21 @@
 					</div>
 				</div>
         </form>
-			<button class="layui-btn layui-btn-sm layui-btn-normal"
-				onclick="addProc('')">添加工艺流程</button>
-			<table id="client_procList" lay-filter="client_procTable"></table>
+        <hr class="layui-bg-black"/>
+         <script type="text/html" id="toolbar">
+           <div class="layui-btn-container layui-inline">
+               <shiro:hasPermission name="client-process-add">
+                  <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="doAdd" >添加线体</button>
+               </shiro:hasPermission>
+               <shiro:hasPermission name="client-process-deleteAll">
+                  <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="doDelete">批量删除</button>
+               </shiro:hasPermission>
+           </div>
+	     </script>
+        
+			<!--<button class="layui-btn layui-btn-sm layui-btn-normal"
+				onclick="addProc('')">添加工艺流程</button>-->
+			<table id="listTable" lay-filter="listTable"></table>
 
 			<script type="text/html" id="statusTpl">
             {{#  if(!d.jobAttr){ }}
@@ -37,8 +49,12 @@
         </script>
 
 			<script type="text/html" id="optBar">
-            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+             <shiro:hasPermission name="client-process-edit">
+             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="client-process-delete">
+             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </shiro:hasPermission>
         </script>
 		</div>
 		<!--添加或编辑工艺流程-->
