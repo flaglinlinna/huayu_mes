@@ -42,7 +42,7 @@ $(function() {
 						width : 50
 					},
 					{
-						field : 'EMP_ID',
+						field : 'EMP_CODE',
 						title : '工号',
 						width : 130,sort: true
 					},{

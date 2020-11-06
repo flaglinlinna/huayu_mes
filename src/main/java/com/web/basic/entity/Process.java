@@ -10,6 +10,9 @@ import com.app.base.entity.BaseEntity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
+
 /**
  * 工序基础信息表
  *
@@ -21,6 +24,8 @@ import io.swagger.annotations.ApiModelProperty;
 public class Process extends BaseEntity {
     private static final long serialVersionUID = 4625660587007894370L;
     public static final String TABLE_NAME = "MES_base_PROC";
+
+
 
     /**
      * 工序编码

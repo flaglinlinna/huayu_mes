@@ -19,5 +19,8 @@ public interface ProcessService {
 
 	public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;// 状态改变
 
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getList(String keyword,String procNo,String procName,String procOrder,
+									 String checkStatus,String createDate,String lastupdateDate, PageRequest pageRequest) throws Exception;
+
+	public ApiResponseResult getList_bak(String keyword, PageRequest pageRequest) throws Exception;
 }

@@ -36,6 +36,7 @@ $(function () {
                 ,{field:'produceState', title:'生产状态', width:100}
                 ,{field:'prodNo', title:'工单号', width:150}
                 ,{field:'groupNo', title:'组合', width:60}
+                // ,{field:'deptName', title:'部门', width:70}
                 ,{field:'custNameS', title:'客户', width:70}
                 ,{field:'linerName', title:'组长', width:70}
                 ,{field:'prodDate', title:'日期', width:100}

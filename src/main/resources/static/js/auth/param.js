@@ -123,6 +123,7 @@ $(function() {
 								"paramType" : data.data.paramType,
 								"paramCode" : data.data.paramCode,
 								"paramName" : data.data.paramName,
+								"paramSort" :data.data.paramSort,
 								"paramValue" : data.data.paramValue,
 								"fmemo" : data.data.fmemo
 							});
