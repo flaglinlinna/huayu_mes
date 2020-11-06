@@ -259,22 +259,18 @@ public class PatchCard extends BaseEntity{
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append(",empId:").append(this.empId);
-		sb.append(",employee:").append(this.employee);
-		sb.append(",lineId:").append(this.lineId);
-		sb.append(",line:").append(this.line);
-		sb.append(",classId:").append(this.classId);
-		sb.append(",classType:").append(this.classType);
-		sb.append(",hourType:").append(this.hourType);
-		sb.append(",taskNo:").append(this.taskNo);
-		sb.append(",cardType:").append(this.cardType);
-		sb.append(",workDate:").append(this.workDate);
-		sb.append(",signTime:").append(this.signTime);
-		sb.append(",signDate:").append(this.signDate);
-		sb.append(",checkStatus:").append(this.checkStatus);
-		sb.append(",checkBy:").append(this.checkBy);
-		sb.append(",checkDate:").append(this.checkDate);
-		sb.append("\n]");
+		sb.append("员工Id:").append(this.empId);
+		sb.append(",线体id:").append(this.lineId);
+		sb.append(",班次id:").append(this.classId);
+		sb.append(",时间类型:").append(this.hourType);
+		sb.append(",指令单号:").append(this.taskNo);
+		sb.append(",卡点类型:").append(this.cardType);
+		sb.append(",生产日期:").append(this.workDate);
+		sb.append(",签卡时间:").append(this.signTime);
+		sb.append(",签卡日期:").append(this.signDate);
+		sb.append(",审核标识:").append(this.checkStatus);
+		sb.append(",审核人:").append(this.checkBy);
+		sb.append(",审核时间:").append(this.checkDate);
 		return sb.toString();
 	}
 }

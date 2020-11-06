@@ -83,7 +83,7 @@ $(function() {
 					checkedKey : 'id',
 					searchPlaceholder : '试着搜索',
 					table : {
-						url:  context +'product/getTaskNo',
+						url:  context +'/product/getTaskNo',
 						//url:  context +'base/prodproc/getProdList',
 						method : 'get',
 						cols : [ [
@@ -166,7 +166,7 @@ $(function() {
 					checkedKey : 'TASK_NO',
 					searchPlaceholder : '试着搜索',
 					table : {
-						url:  context +'product/getHXTaskNo',
+						url:  context +'/product/getHXTaskNo',
 						//url:  context +'base/prodproc/getProdList',
 						method : 'get',
 						cols : [ [
@@ -267,7 +267,7 @@ $(function() {
 				//监听提交
 		    	  form.on('submit(hsearchSubmit)', function(data){
 		    		  hTableIns.reload({
-		    			  url:context+'product/getHistoryList',
+		    			  url:context+'/product/getHistoryList',
 		                  where:data.field 
 						});
 		    	    return false;
@@ -380,7 +380,7 @@ $(function() {
 });
 function getDetailByTask(taskNo){
 	 var params={"taskNo":taskNo}
-		CoreUtil.sendAjax("product/getDetailByTask", params, function(data) {
+		CoreUtil.sendAjax("/product/getDetailByTask", params, function(data) {
 			console.log(data)
 			if (data.result) {
 				tableIns.reload({
@@ -395,7 +395,7 @@ function getDetailByTask(taskNo){
 }
  function afterNei(barcode){
 	 var params={"barcode":barcode,"task_no":$( "input[name='num']").val()}
-		CoreUtil.sendAjax("product/afterNei", params, function(data) {
+		CoreUtil.sendAjax("/product/afterNei", params, function(data) {
 			
 			if (data.result) {
 				 $("#wbarcode").get(0).focus();

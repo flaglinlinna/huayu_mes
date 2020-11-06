@@ -120,13 +120,9 @@ public class Issue extends BaseEntity {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append(",empId:").append(this.empId);
-		sb.append(",employee:").append(this.employee);
-		sb.append(",empFingerId:").append(this.empFingerId);
-		sb.append(",empFinger:").append(this.empFinger);
-		sb.append(",devClockId:").append(this.devClockId);
-		sb.append(",devClock:").append(this.devClock);
-		sb.append("\n]");
+		sb.append("员工Id:").append(this.empId);
+		sb.append(",指纹id:").append(this.empFingerId);
+		sb.append(",卡机id:").append(this.devClockId);
 		return sb.toString();
 	}
 }

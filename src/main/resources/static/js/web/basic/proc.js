@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#procList',
-			url : context + 'base/proc/getList',
+			url : context + '/base/proc/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -112,7 +112,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/proc/getProcess", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/proc/getProcess", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("procForm", {
@@ -205,7 +205,7 @@ function addProc() {
 }
 // 新增工序提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/proc/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/base/proc/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -226,7 +226,7 @@ function addSubmit(obj) {
 
 // 编辑工序提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/proc/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/proc/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -255,7 +255,7 @@ function delProc(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/proc/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/proc/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

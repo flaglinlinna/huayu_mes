@@ -146,15 +146,12 @@ public class CardData extends BaseEntity {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append(",empId:").append(this.empId);
-		sb.append(",employee:").append(this.employee);
-		sb.append(",devClockId:").append(this.devClockId);
-		sb.append(",devClock:").append(this.devClock);
-		sb.append(",cardDate:").append(this.cardDate);
-		sb.append(",cardTime:").append(this.cardTime);
-		sb.append(",fstatus:").append(this.fstatus);
-		sb.append(",fstype:").append(this.fstype);
-		sb.append("\n]");
+		sb.append("员工id:").append(this.empId);
+		sb.append(",卡机id:").append(this.devClockId);
+		sb.append(",刷卡日期:").append(this.cardDate);
+		sb.append(",刷卡时间:").append(this.cardTime);
+		sb.append(",卡点状态:").append(this.fstatus);
+		sb.append(",数据类型:").append(this.fstype);
 		return sb.toString();
 	}
 }

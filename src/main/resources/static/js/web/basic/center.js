@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#centerList',
-			url : context + 'base/center/getList',
+			url : context + '/base/center/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -103,7 +103,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/center/getWorkCenter", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/center/getWorkCenter", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("centerForm", {
@@ -243,7 +243,7 @@ function addCenter() {
 }
 // 新增工作中心提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/center/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/center/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -264,7 +264,7 @@ function addSubmit(obj) {
 
 // 编辑工作中心提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/center/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/center/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -293,7 +293,7 @@ function delCenter(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/center/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/center/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

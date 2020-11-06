@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#defectList',
-			url : context + 'base/defect/getList',
+			url : context + '/base/defect/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -103,7 +103,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/defect/getDefective", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/defect/getDefective", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("defectForm", {
@@ -196,7 +196,7 @@ function addDefect() {
 }
 // 新增不良类别提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/defect/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/defect/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -217,7 +217,7 @@ function addSubmit(obj) {
 
 // 编辑不良类别提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/defect/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/defect/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -246,7 +246,7 @@ function delDefect(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/defect/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/defect/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

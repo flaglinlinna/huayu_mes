@@ -13,7 +13,7 @@ $(function() {
 						//监听提交
 				    	  form.on('submit(hsearchSubmit)', function(data){
 				    		  hTableIns.reload({
-				    			  url:context+'produce/inspect/getHistoryList',
+				    			  url:context+'/produce/inspect/getHistoryList',
 				                  where:data.field 
 								});
 				    	    return false;

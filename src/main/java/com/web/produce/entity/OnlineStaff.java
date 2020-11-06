@@ -118,13 +118,11 @@ public class OnlineStaff extends BaseEntity {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append(",lineId:").append(this.lineId);
-		sb.append(",line:").append(this.line);
-		sb.append(",taskNo:").append(this.taskNo);
-		sb.append(",hourType:").append(this.hourType);
-		sb.append(",classId:").append(this.classId);
-		sb.append(",workDate:").append(this.workDate);
-		sb.append("\n]");
+		sb.append("线体id:").append(this.lineId);
+		sb.append(",制令单号:").append(this.taskNo);
+		sb.append(",时间类型:").append(this.hourType);
+		sb.append(",班次Id:").append(this.classId);
+		sb.append(",生产日期:").append(this.workDate);
 		return sb.toString();
 	}
 }

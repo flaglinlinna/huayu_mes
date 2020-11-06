@@ -7,7 +7,7 @@ $(function() {
 		var table = layui.table, form = layui.form;
 		tableIns = table.render({
 			elem : '#prodprocList',
-			url : context + 'base/prodproc/getList',
+			url : context + '/base/prodproc/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -102,7 +102,7 @@ function addProc() {
 	//cleanCenter();
 	//GET Info
 	
-	CoreUtil.sendAjax("base/prodproc/getData", "",
+	CoreUtil.sendAjax("/base/prodproc/getData", "",
 			function(data) {
 				if (data.result) {
 				tableAddInfo.reload({

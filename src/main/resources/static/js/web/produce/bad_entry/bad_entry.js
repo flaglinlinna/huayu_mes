@@ -89,7 +89,7 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
-								url : context + 'produce/bad_entry/getTaskNo',
+								url : context + '/produce/bad_entry/getTaskNo',
 								method : 'get',
 								cols : [ [ {
 									type : 'radio'
@@ -209,7 +209,7 @@ $(function() {
 						//监听提交
 				    	  form.on('submit(hsearchSubmit)', function(data){
 				    		  hTableIns.reload({
-				    			  url:context+'produce/bad_entry/getHistoryList',
+				    			  url:context+'/produce/bad_entry/getHistoryList',
 				                  where:data.field 
 								});
 				    	    return false;
@@ -320,7 +320,7 @@ function getBadInfo(keyword, type) {
 	}
 	CoreUtil
 			.sendAjax(
-					"produce/bad_entry/getBadInfo",
+					"/produce/bad_entry/getBadInfo",
 					JSON.stringify(params),
 					function(data) {
 						//console.log(data)
@@ -358,7 +358,7 @@ function getBadInfo(keyword, type) {
 }
 function getDetailByTask(taskNo){
 	 var params={"taskNo":taskNo}
-		CoreUtil.sendAjax("produce/bad_entry/getDetailByTask", params, function(data) {
+		CoreUtil.sendAjax("/produce/bad_entry/getDetailByTask", params, function(data) {
 			console.log(data)
 			if (data.result) {
 				tableIns.reload({
@@ -376,7 +376,7 @@ function checkBarCode(taskNo, barcode) {
 		"taskNo" : taskNo,
 		"barcode" : barcode,
 	}
-	CoreUtil.sendAjax("produce/bad_entry/checkBarCode", JSON.stringify(params),
+	CoreUtil.sendAjax("/produce/bad_entry/checkBarCode", JSON.stringify(params),
 			function(data) {
 				// console.log(data)
 				if (data.result) {
@@ -403,7 +403,7 @@ function saveBad(obj) {
 		"defCode" : str,
 		"memo" : obj.memo
 	}
-	CoreUtil.sendAjax("produce/bad_entry/saveBad", JSON.stringify(params),
+	CoreUtil.sendAjax("/produce/bad_entry/saveBad", JSON.stringify(params),
 			function(data) {
 				//console.log(data)
 				if (data.result) {
@@ -427,7 +427,7 @@ function del(obj, id, code) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/bad_entry/deleteBad", JSON
+			CoreUtil.sendAjax("/produce/bad_entry/deleteBad", JSON
 					.stringify(params), function(data) {
 				console.log(data)
 				if (data.result == true) {

@@ -119,7 +119,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("produce/emp_finger/getEmpFinger", JSON
+			CoreUtil.sendAjax("/produce/emp_finger/getEmpFinger", JSON
 					.stringify(param), function(data) {
 				if (data.result) {
 					console.log(data)
@@ -173,7 +173,7 @@ function addEmpFinger() {
 }
 //获取线体信息
 function getEmpList(id){
-	CoreUtil.sendAjax("produce/emp_finger/getEmpList", "",
+	CoreUtil.sendAjax("/produce/emp_finger/getEmpList", "",
 			function(data) {
 				if (data.result) {
 				$("#empId").empty();
@@ -200,7 +200,7 @@ function getEmpList(id){
 
 // 新增指纹登记信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("produce/emp_finger/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/produce/emp_finger/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -219,7 +219,7 @@ function addSubmit(obj) {
 
 // 编辑指纹登记信息提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("produce/emp_finger/edit", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/produce/emp_finger/edit", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -246,7 +246,7 @@ function delEmpFinger(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/emp_finger/delete",
+			CoreUtil.sendAjax("/produce/emp_finger/delete",
 					JSON.stringify(param), function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -283,7 +283,7 @@ function load(obj) {
 
 //打开指纹登记
 function open(params){
-	CoreUtil.sendAjax("produce/emp_finger/open", JSON.stringify(params),
+	CoreUtil.sendAjax("/produce/emp_finger/open", JSON.stringify(params),
 			function(data) {
 		console.log(data);
 				if (data.result) {

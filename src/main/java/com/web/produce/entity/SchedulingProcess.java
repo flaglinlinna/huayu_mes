@@ -283,24 +283,22 @@ public class SchedulingProcess extends BaseEntity {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer();
-        sb.append(",mid:").append(this.mid);
-        sb.append(",taskNo:").append(this.taskNo);
-        sb.append(",prodNo:").append(this.prodNo);
-        sb.append(",procNo:").append(this.procNo);
-        sb.append(",procOrder:").append(this.procOrder);
-        sb.append(",sampleQty:").append(this.sampleQty);
-        sb.append(",qtyProc:").append(this.qtyProc);
-        sb.append(",qtyDone:").append(this.qtyDone);
-        sb.append(",defectNum:").append(this.defectNum);
-        sb.append(",jobAttr:").append(this.jobAttr);
-        sb.append(",empId:").append(this.empId);
-        sb.append(",employee:").append(this.employee);
-        sb.append(",empCode:").append(this.empCode);
-        sb.append(",timeBegin:").append(this.timeBegin);
-        sb.append(",timeEnd:").append(this.timeEnd);
-        sb.append(",prodStatus:").append(this.prodStatus);
-        sb.append(",qtyPlan:").append(this.qtyPlan);
-        sb.append("\n]");
+        sb.append("排产父表ID:").append(this.mid);
+        sb.append(",制令单号:").append(this.taskNo);
+        sb.append(",工单号:").append(this.prodNo);
+        sb.append(",工序编码:").append(this.procNo);
+        sb.append(",工序顺序号:").append(this.procOrder);
+        sb.append(",抽检总量:").append(this.sampleQty);
+        sb.append(",加工数量:").append(this.qtyProc);
+        sb.append(",完工数量:").append(this.qtyDone);
+        sb.append(",不良数量:").append(this.defectNum);
+        sb.append(",过程属性:").append(this.jobAttr);
+        sb.append(",员工id:").append(this.empId);
+        sb.append(",员工工号:").append(this.empCode);
+        sb.append(",工序开始时间:").append(this.timeBegin);
+        sb.append(",工序结束时间:").append(this.timeEnd);
+        sb.append(",生产状态:").append(this.prodStatus);
+        sb.append(",计划数量:").append(this.qtyPlan);
         return sb.toString();
     }
 }

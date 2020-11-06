@@ -81,7 +81,7 @@ $(function() {
 					checkedKey : 'id',
 					searchPlaceholder : '试着搜索',
 					table : {
-						url:  context +'input/getTaskNo',
+						url:  context +'/input/getTaskNo',
 						//url:  context +'base/prodproc/getProdList',
 						method : 'get',
 						cols : [ [
@@ -248,7 +248,7 @@ $(function() {
 
  function getInfoBarcode(barcode){
 	 var params={"barcode":barcode}
-		CoreUtil.sendAjax("input/getInfoBarcode", params, function(data) {
+		CoreUtil.sendAjax("/input/getInfoBarcode", params, function(data) {
 			if (data.result) {
 				$( "input[name='item_code']").val(data.data[0].ITEM_NO);
 				$( "input[name='addqty']").val(data.data[0].QTY);
@@ -262,7 +262,7 @@ $(function() {
  
  function getDetailByTask(taskNo){
 	 var params={"taskNo":taskNo}
-		CoreUtil.sendAjax("input/getDetailByTask", params, function(data) {
+		CoreUtil.sendAjax("/input/getDetailByTask", params, function(data) {
 			console.log(data)
 			if (data.result) {
 				tableIns.reload({
@@ -278,7 +278,7 @@ $(function() {
  
  function addPut(obj){
 	 var params={"barcode":obj.barcode,"task_no":obj.num,"item_no":obj.item_code,"qty":obj.addqty};
-		CoreUtil.sendAjax("input/addPut", params, function(data) {
+		CoreUtil.sendAjax("/input/addPut", params, function(data) {
 			console.log(data)
 			if (data.result) {
 				$("#inqty").val(data.data.Qty);
@@ -304,7 +304,7 @@ $(function() {
  			btn : [ '确认', '返回' ]
  		// 按钮
  		}, function() {
- 			CoreUtil.sendAjax("input/delete", params, function(data) {
+ 			CoreUtil.sendAjax("/input/delete", params, function(data) {
  				console.log(data)
  				if (data.result == true) {
 					// 回调弹框

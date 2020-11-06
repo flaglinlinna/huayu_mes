@@ -202,18 +202,16 @@ public class SchedulingItem extends BaseEntity {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer();
-        sb.append(",mid:").append(this.mid);
-        sb.append(",taskNo:").append(this.taskNo);
-        sb.append(",itemId:").append(this.itemId);
-        sb.append(",mtrial:").append(this.mtrial);
-        sb.append(",itemNo:").append(this.itemNo);
-        sb.append(",itemQty:").append(this.itemQty);
-        sb.append(",itemUnit:").append(this.itemUnit);
-        sb.append(",itemQtyPr:").append(this.itemQtyPr);
-        sb.append(",empId:").append(this.empId);
-        sb.append(",employee:").append(this.employee);
-        sb.append(",empCode:").append(this.empCode);
-        sb.append(",fokRate:").append(this.fokRate);
+        sb.append("排产父表ID:").append(this.mid);
+        sb.append(",制令单号:").append(this.taskNo);
+        sb.append(",组件ID:").append(this.itemId);
+        sb.append(",物料编码:").append(this.itemNo);
+        sb.append(",组件数量:").append(this.itemQty);
+        sb.append(",组件单位:").append(this.itemUnit);
+        sb.append(",单位用量:").append(this.itemQtyPr);
+        sb.append(",员工id:").append(this.empId);
+        sb.append(",员工编号:").append(this.empCode);
+        sb.append(",良率:").append(this.fokRate);
         sb.append("\n]");
         return sb.toString();
     }

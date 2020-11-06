@@ -84,7 +84,7 @@ $(function() {
 					checkedKey : 'id',
 					searchPlaceholder : '试着搜索',
 					table : {
-						url:  context +'verify/getTaskNo',
+						url:  context +'/verify/getTaskNo',
 						//url:  context +'base/prodproc/getProdList',
 						method : 'get',
 						cols : [ [
@@ -205,7 +205,7 @@ $(function() {
 				//监听提交
 		    	  form.on('submit(hsearchSubmit)', function(data){
 		    		  hTableIns.reload({
-		    			  url:context+'verify/getHistoryList',
+		    			  url:context+'/verify/getHistoryList',
 		                  where:data.field 
 						});
 		    	    return false;
@@ -263,7 +263,7 @@ $(function() {
 });
 
 function getInfoAdd(){
-	CoreUtil.sendAjax("verify/getInfoAdd", {}, function(data) {
+	CoreUtil.sendAjax("/verify/getInfoAdd", {}, function(data) {
 		//console.log(data)
 		if (data.result) {
 			if(data.data.Class){
@@ -294,7 +294,7 @@ function getInfoAdd(){
 }
  
 function update(lineId){
-	CoreUtil.sendAjax("produce/card_data/updateDataByLine", {"line_ids" : lineId}, function(
+	CoreUtil.sendAjax("/produce/card_data/updateDataByLine", {"line_ids" : lineId}, function(
 			data) {
 		
 		layer.alert(data.msg, function() {
@@ -316,7 +316,7 @@ function update(lineId){
 function save(params,emp_ids){
 	var param = {"task_no":params.num,"line_id":params.pline,"hour_type":params.ptyle,
 			"class_id":params.pclass,"wdate":params.pdate,"emp_ids":emp_ids};
-	CoreUtil.sendAjax("verify/save", JSON.stringify(param), function(
+	CoreUtil.sendAjax("/verify/save", JSON.stringify(param), function(
 			data) {
 		
 		layer.alert(data.msg, function() {
@@ -331,7 +331,7 @@ function save(params,emp_ids){
 function getUserByLine(lineId){
 	
 	tableIns.reload({
-		url:context+'verify/getUserByLine?lineId='+lineId,
+		url:context+'/verify/getUserByLine?lineId='+lineId,
 		
 	});
 	
@@ -353,7 +353,7 @@ function getUserByLine(lineId){
 	});*/
 }
 function open(){
-	CoreUtil.sendAjax("verify/getInfoCreateReturn", {}, function(data) {
+	CoreUtil.sendAjax("/verify/getInfoCreateReturn", {}, function(data) {
 		console.log(data)
 		if (data.result) {
 			/*if(data.data.Task){
@@ -414,7 +414,7 @@ function add(params){
 	//"task_no":params.ptask--2020/11/03废除工单号
 	var param = {"task_no":"","item_no":params.pliao,"liner_name":params.puser,
 			"qty":params.qty,"pdate":params.pdate1};
-	CoreUtil.sendAjax("verify/add", JSON.stringify(param), function(
+	CoreUtil.sendAjax("/verify/add", JSON.stringify(param), function(
 			data) {
 		
 		layer.alert(data.msg, function() {

@@ -127,7 +127,7 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
-								url : context + 'produce/rework/getTaskNo',
+								url : context + '/produce/rework/getTaskNo',
 								method : 'get',
 								cols : [ [ {
 									type : 'radio'
@@ -173,7 +173,7 @@ $(function() {
 							searchPlaceholder : '试着搜索',
 							table : {
 								url : context
-										+ 'produce/rework/getReworkTaskNo',
+										+ '/produce/rework/getReworkTaskNo',
 								method : 'get',
 								cols : [ [ {
 									type : 'radio'
@@ -259,7 +259,7 @@ function reworkCode() {
 		"memo" : $("#sMemo").val()
 	}
 	// console.log(params);
-	CoreUtil.sendAjax("produce/rework/subCode", JSON.stringify(params),
+	CoreUtil.sendAjax("/produce/rework/subCode", JSON.stringify(params),
 			function(data) {
 				// console.log(data)
 				if (data.result) {
@@ -282,7 +282,7 @@ function search(obj) {
 		"barcode" : obj.hBarcode
 	};
 
-	CoreUtil.sendAjax("produce/rework/search", JSON.stringify(params),
+	CoreUtil.sendAjax("/produce/rework/search", JSON.stringify(params),
 			function(data) {
 				console.log(data)
 				if (data.result) {

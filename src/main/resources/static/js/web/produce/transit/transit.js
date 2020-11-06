@@ -92,7 +92,7 @@ $(function() {
 						//监听提交
 				    	  form.on('submit(hsearchSubmit)', function(data){
 				    		  hTableIns.reload({
-				    			  url:context+'produce/check_code/getHistoryList',
+				    			  url:context+'/produce/check_code/getHistoryList',
 				                  where:data.field 
 								});
 				    	    return false;
@@ -163,7 +163,7 @@ $(function() {
 	});
 	
 	function getType(keyword) {
-		CoreUtil.sendAjax("produce/transit/getType", keyword, function(data) {
+		CoreUtil.sendAjax("/produce/transit/getType", keyword, function(data) {
 			//console.log(data)
 			if (data.result) {
 				var da = data.data;
@@ -187,7 +187,7 @@ $(function() {
 });
 
 function getProc(keyword) {
-	CoreUtil.sendAjax("produce/transit/getProc", keyword, function(data) {
+	CoreUtil.sendAjax("/produce/transit/getProc", keyword, function(data) {
 		//console.log(data)
 		if (data.result) {
 			var da = data.data;
@@ -210,7 +210,7 @@ function getProc(keyword) {
 }
 
 function getType1(keyword) {
-	CoreUtil.sendAjax("produce/transit/getType", keyword, function(data) {
+	CoreUtil.sendAjax("/produce/transit/getType", keyword, function(data) {
 		//console.log(data)
 		if (data.result) {
 			var da = data.data;
@@ -242,7 +242,7 @@ function checkBarcode(proc, barcode) {
 		"proc" : proc,
 		"barcode" : barcode,
 	}
-	CoreUtil.sendAjax("produce/transit/checkBarcode", JSON.stringify(params),
+	CoreUtil.sendAjax("/produce/transit/checkBarcode", JSON.stringify(params),
 			function(data) {
 				console.log(data)
 				if (data.result) {
@@ -269,7 +269,7 @@ function saveData(proc, type, barcode) {
 		"type" : type,
 		"barcode" : barcode
 	}
-	CoreUtil.sendAjax("produce/transit/saveData", JSON.stringify(params),
+	CoreUtil.sendAjax("/produce/transit/saveData", JSON.stringify(params),
 			function(data) {
 				console.log(data)
 				$("#barcode").val("")

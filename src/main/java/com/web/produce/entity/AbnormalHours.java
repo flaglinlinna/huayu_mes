@@ -231,18 +231,16 @@ public class AbnormalHours extends BaseEntity{
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append(",empId:").append(this.empId);
-		sb.append(",employee:").append(this.employee);
-		sb.append(",taskNo:").append(this.taskNo);
-		sb.append(",timeBegin:").append(this.timeBegin);
-		sb.append(",timeEnd:").append(this.timeEnd);
-		sb.append(",duration:").append(this.duration);
-		sb.append(",description:").append(this.description);
-		sb.append(",forReason:").append(this.forReason);
-		sb.append(",checkStatus:").append(this.checkStatus);
-		sb.append(",checkBy:").append(this.checkBy);
-		sb.append(",checkDate:").append(this.checkDate);
-		sb.append("\n]");
+		sb.append("员工Id:").append(this.empId);
+		sb.append(",制令单号:").append(this.taskNo);
+		sb.append(",开始时间:").append(this.timeBegin);
+		sb.append(",结束时间:").append(this.timeEnd);
+		sb.append(",时长:").append(this.duration);
+		sb.append(",描述:").append(this.description);
+		sb.append(",异常原因:").append(this.forReason);
+		sb.append(",审核标识:").append(this.checkStatus);
+		sb.append(",审核人:").append(this.checkBy);
+		sb.append(",审核时间:").append(this.checkDate);
 		return sb.toString();
 	}
 }

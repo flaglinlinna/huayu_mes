@@ -11,7 +11,7 @@ $(function() {
 						tableIns = table
 								.render({
 									elem : '#cardList',
-									url : context + 'produce/abnormal/getList',
+									url : context + '/produce/abnormal/getList',
 									method : 'get' // 默认：get请求
 									,
 									cellMinWidth : 80,
@@ -130,7 +130,7 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
-								url : context + 'produce/abnormal/getEmpInfo',
+								url : context + '/produce/abnormal/getEmpInfo',
 								method : 'get',
 								cols : [ [ {
 									type : 'radio'
@@ -191,7 +191,7 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
-								url : context + 'produce/abnormal/getTaskNo',
+								url : context + '/produce/abnormal/getTaskNo',
 								method : 'get',
 								cols : [ [ {
 									type : 'radio'
@@ -330,7 +330,7 @@ $(function() {
 						});
 						// 编辑异常工时信息提交
 						function editSubmit(obj) {
-							CoreUtil.sendAjax("produce/abnormal/edit", JSON
+							CoreUtil.sendAjax("/produce/abnormal/edit", JSON
 									.stringify(obj.field), function(data) {
 								if (data.result) {
 									layer.alert("操作成功", function() {
@@ -352,7 +352,7 @@ $(function() {
 							};
 							CoreUtil
 									.sendAjax(
-											"produce/abnormal/getAbnormalHours",
+											"/produce/abnormal/getAbnormalHours",
 											JSON.stringify(param),
 											function(data) {
 												 console.log(data)
@@ -393,7 +393,7 @@ $(function() {
 							};
 							CoreUtil
 									.sendAjax(
-											"produce/abnormal/getTaskNoInfo",
+											"/produce/abnormal/getTaskNoInfo",
 											JSON.stringify(params),
 											function(data) {
 												//console.log(data)
@@ -461,7 +461,7 @@ function load(obj) {
 
 // 新增异常工时数据信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("produce/abnormal/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/produce/abnormal/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -487,7 +487,7 @@ function delAbnormalHours(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/abnormal/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/produce/abnormal/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

@@ -84,10 +84,10 @@ public class ClassType extends BaseEntity{
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append(",classNo:").append(this.classNo);
-		sb.append(",className:").append(this.className);
-		sb.append(",fcard1:").append(this.fcard1);
-		sb.append(",fcard2:").append(this.fcard2);
+		sb.append("班次编码:").append(this.classNo);
+		sb.append(",班次名称:").append(this.className);
+		sb.append(",上班时间:").append(this.fcard1);
+		sb.append(",下班时间:").append(this.fcard2);
 		sb.append("\n]");
 		return sb.toString();
 	}

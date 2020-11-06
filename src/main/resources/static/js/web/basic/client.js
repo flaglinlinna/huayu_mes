@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#clientList',
-			url : context + 'base/client/getList',
+			url : context + '/base/client/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -97,7 +97,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/client/getClient", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/client/getClient", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("clientForm", {
@@ -146,7 +146,7 @@ function addClient() {
 }
 // 新增不良内容提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/client/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/client/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -167,7 +167,7 @@ function addSubmit(obj) {
 
 // 编辑不良内容提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/client/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/client/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -196,7 +196,7 @@ function delClient(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/client/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/client/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

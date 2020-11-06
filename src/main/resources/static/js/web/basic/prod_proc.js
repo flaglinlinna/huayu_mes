@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#client_procList',
-			url : context + 'base/prodproc/getList',
+			url : context + '/base/prodproc/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -102,7 +102,7 @@ $(function() {
 			checkedKey : 'id',
 			searchPlaceholder : '试着搜索',
 			table : {
-				url:  context +'base/prodproc/getProdList',
+				url:  context +'/base/prodproc/getProdList',
 				method : 'get',
 				cols : [ [
 				{ type: 'checkbox' },//多选  radio
@@ -349,7 +349,7 @@ function addProc(id) {
 //根据客户信息获取工序数据
 function getProcByClient(params){
 	var params={"client":params}
-	CoreUtil.sendAjax("base/client_proc/getClientItem", JSON.stringify(params), function(
+	CoreUtil.sendAjax("/base/client_proc/getClientItem", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
 			var beSelected=data.data;
@@ -391,7 +391,7 @@ function delClientProc( id) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/prodproc/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/prodproc/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -420,7 +420,7 @@ function addSubmit(procIdlist,itemIds,itemNos) {
 			"itemNos":itemNos
 		};
 
-	CoreUtil.sendAjax("base/prodproc/add", JSON.stringify(params), function(
+	CoreUtil.sendAjax("/base/prodproc/add", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -441,7 +441,7 @@ function addSubmit(procIdlist,itemIds,itemNos) {
 
 //获取客户，工序信息
 function getAddList(id){
-	CoreUtil.sendAjax("base/prodproc/getAddList", "",
+	CoreUtil.sendAjax("/base/prodproc/getAddList", "",
 			function(data) {
 				if (data.result) {
 					//工序表

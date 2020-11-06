@@ -66,7 +66,7 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
-								url : context + 'produce/check_code/getTaskNo',
+								url : context + '/produce/check_code/getTaskNo',
 								method : 'get',
 								cols : [ [ {
 									type : 'radio'
@@ -126,7 +126,7 @@ $(function() {
 						//监听提交
 				    	  form.on('submit(hsearchSubmit)', function(data){
 				    		  hTableIns.reload({
-				    			  url:context+'produce/check_code/getHistoryList',
+				    			  url:context+'/produce/check_code/getHistoryList',
 				                  where:data.field 
 								});
 				    	    return false;
@@ -232,7 +232,7 @@ function subCode(taskNo, barcode1, barcode2) {
 		"barcode1" : barcode1,
 		"barcode2" : barcode2
 	}
-	CoreUtil.sendAjax("produce/check_code/subCode", JSON.stringify(params),
+	CoreUtil.sendAjax("/produce/check_code/subCode", JSON.stringify(params),
 			function(data) {
 		console.log(data)
 				if (data.result) {

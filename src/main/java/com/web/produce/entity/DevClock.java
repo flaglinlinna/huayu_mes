@@ -168,16 +168,14 @@ public class DevClock extends BaseEntity {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append(",devCode:").append(this.devCode);
-		sb.append(",devName:").append(this.devName);
-		sb.append(",devIp:").append(this.devIp);
-		sb.append(",devSeries:").append(this.devSeries);
-		sb.append(",lineId:").append(this.lineId);
-		sb.append(",line:").append(this.line);
-		sb.append(",devType:").append(this.devType);
-		sb.append(",isOnline:").append(this.isOnline);
-		sb.append(",enabled:").append(this.enabled);
-		sb.append("\n]");
+		sb.append("卡机编码:").append(this.devCode);
+		sb.append(",卡机名称:").append(this.devName);
+		sb.append(",卡机ip:").append(this.devIp);
+		sb.append(",卡机序列:").append(this.devSeries);
+		sb.append(",线体id:").append(this.lineId);
+		sb.append(",卡机类型:").append(this.devType);
+		sb.append(",是否在线:").append(this.isOnline);
+		sb.append(",是否有效:").append(this.enabled);
 		return sb.toString();
 	}
 }

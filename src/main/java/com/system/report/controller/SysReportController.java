@@ -68,7 +68,7 @@ public class SysReportController extends WebController {
         	Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = sysReportService.getlist(keyword,  super.getPageRequest(sort));
             logger.debug("获取配置列表=getList:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

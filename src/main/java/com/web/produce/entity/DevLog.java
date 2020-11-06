@@ -163,15 +163,13 @@ public class DevLog extends BaseEntity {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append(",description:").append(this.description);
-		sb.append(",empId:").append(this.empId);
-		sb.append(",emp:").append(this.emp);
-		sb.append(",devIp:").append(this.devIp);
-		sb.append(",devCode:").append(this.devCode);
-		sb.append(",cmdFlag:").append(this.cmdFlag);
-		sb.append(",devId:").append(this.devId);
-		sb.append(",devClock:").append(this.devClock);
-		sb.append(",createUser:").append(this.createUser);
+		sb.append("操作描述:").append(this.description);
+		sb.append(",员工id:").append(this.empId);
+		sb.append(",卡机ip:").append(this.devIp);
+		sb.append(",卡机序列:").append(this.devCode);
+		sb.append(",执行标识:").append(this.cmdFlag);
+		sb.append(",卡机id:").append(this.devId);
+		sb.append(",操作人:").append(this.createUser);
 		sb.append("\n]");
 		return sb.toString();
 	}

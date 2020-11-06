@@ -262,23 +262,22 @@ public class SchedulingTemp extends BaseEntity {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer();
-        sb.append(",groupNo:").append(this.groupNo);
-        sb.append(",custId:").append(this.custId);
-        sb.append(",custName:").append(this.custName);
-        sb.append(",custNo:").append(this.custNo);
-        sb.append(",prodNo:").append(this.prodNo);
-        sb.append(",itemId:").append(this.itemId);
-        sb.append(",itemNo:").append(this.itemNo);
-        sb.append(",itemName:").append(this.itemName);
-        sb.append(",qtyPlan:").append(this.qtyPlan);
-        sb.append(",prodDate:").append(this.prodDate);
-        sb.append(",deptId:").append(this.deptId);
-        sb.append(",deptName:").append(this.deptName);
-        sb.append(",linerName:").append(this.linerName);
-        sb.append(",classNo:").append(this.classNo);
-        sb.append(",errorInfo:").append(this.errorInfo);
-        sb.append(",checkStatus:").append(this.checkStatus);
-        sb.append("\n]");
+        sb.append("组合:").append(this.groupNo);
+        sb.append(",客户id:").append(this.custId);
+        sb.append(",客户名称:").append(this.custName);
+        sb.append(",客户编号:").append(this.custNo);
+        sb.append(",工单号:").append(this.prodNo);
+        sb.append(",物料id:").append(this.itemId);
+        sb.append(",物料编号:").append(this.itemNo);
+        sb.append(",物料名称:").append(this.itemName);
+        sb.append(",计划数量:").append(this.qtyPlan);
+        sb.append(",生产日期:").append(this.prodDate);
+        sb.append(",部门id:").append(this.deptId);
+        sb.append(",部门名称:").append(this.deptName);
+        sb.append(",线长名称:").append(this.linerName);
+        sb.append(",班次:").append(this.classNo);
+        sb.append(",错误信息:").append(this.errorInfo);
+        sb.append(",校验状态:").append(this.checkStatus);
         return sb.toString();
     }
 }

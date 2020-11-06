@@ -8,7 +8,7 @@ $(function() {
 		layui.form.render('select');
 		tableIns = table.render({
 			elem : '#employeeList',
-			url : context + 'base/employee/getList',
+			url : context + '/base/employee/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -155,7 +155,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/employee/getEmployee", JSON
+			CoreUtil.sendAjax("/base/employee/getEmployee", JSON
 					.stringify(param), function(data) {
 				if (data.result) {
 					form.val("employeeForm", {
@@ -246,7 +246,7 @@ $("#getData").click(function(){
 	layer.confirm('是否执行同步操作？',
 			{
 				btn1 : function(index) {
-					CoreUtil.sendAjax("base/employee/getUpdateData","", function(data) {
+					CoreUtil.sendAjax("/base/employee/getUpdateData","", function(data) {
 						console.log(data)
 						if (data.result) {
 							layer.alert("操作成功", function() {
@@ -274,7 +274,7 @@ function addEmployee() {
 }
 // 新增员工信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/employee/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/employee/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -295,7 +295,7 @@ function addSubmit(obj) {
 
 // 编辑员工信息提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/employee/edit", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/base/employee/edit", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -324,7 +324,7 @@ function delEmployee(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/employee/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/employee/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

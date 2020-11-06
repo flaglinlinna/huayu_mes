@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#hoursList',
-			url : context + 'base/hours/getList',
+			url : context + '/base/hours/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -101,7 +101,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/hours/getHours", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/hours/getHours", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("hoursForm", {
@@ -149,7 +149,7 @@ function addHours() {
 }
 // 新增产品工时提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/hours/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/hours/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -170,7 +170,7 @@ function addSubmit(obj) {
 
 // 编辑产品工时提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/hours/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/hours/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -199,7 +199,7 @@ function delHours(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/hours/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/hours/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

@@ -108,12 +108,10 @@ public class EmpFinger extends BaseEntity {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append(",empId:").append(this.empId);
-		sb.append(",emp:").append(this.emp);
-		sb.append(",templateStr:").append(this.templateStr);
-		sb.append(",fingerIdx:").append(this.fingerIdx);
-		sb.append(",fprivilege:").append(this.fprivilege);
-		sb.append("\n]");
+		sb.append("员工id:").append(this.empId);
+		sb.append(",指纹模板:").append(this.templateStr);
+		sb.append(",手指序号:").append(this.fingerIdx);
+		sb.append(",指纹权限:").append(this.fprivilege);
 		return sb.toString();
 	}
 }

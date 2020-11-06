@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#client_procList',
-			url : context + 'base/client_proc/getList',
+			url : context + '/base/client_proc/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -219,7 +219,7 @@ function addProc(id) {
 //根据客户信息获取工序数据
 function getProcByClient(params){
 	var params={"client":params}
-	CoreUtil.sendAjax("base/client_proc/getClientItem", JSON.stringify(params), function(
+	CoreUtil.sendAjax("/base/client_proc/getClientItem", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
 			var beSelected=data.data;
@@ -257,7 +257,7 @@ function delClientProc(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/client_proc/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/client_proc/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -285,7 +285,7 @@ function addSubmit(procIdlist,client) {
 			"client" : client
 		};
 
-	CoreUtil.sendAjax("base/client_proc/addItem", JSON.stringify(params), function(
+	CoreUtil.sendAjax("/base/client_proc/addItem", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -306,7 +306,7 @@ function addSubmit(procIdlist,client) {
 
 //获取客户，工序信息
 function getProcList(id){
-	CoreUtil.sendAjax("base/client_proc/getProcList", "",
+	CoreUtil.sendAjax("/base/client_proc/getProcList", "",
 			function(data) {
 				if (data.result) {
 					tableProc.reload({

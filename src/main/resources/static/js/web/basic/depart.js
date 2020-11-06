@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#departList',
-			url : context + 'base/depart/getList',
+			url : context + '/base/depart/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -117,7 +117,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/depart/getDepart", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/depart/getDepart", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("departForm", {
@@ -211,7 +211,7 @@ function addDepartment() {
 }
 // 新增部门提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/depart/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/depart/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -232,7 +232,7 @@ function addSubmit(obj) {
 
 // 编辑部门提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/depart/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/depart/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -261,7 +261,7 @@ function delDepartment(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("base/depart/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/depart/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

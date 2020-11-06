@@ -13,7 +13,7 @@ $(function() {
 						tableIns = table
 								.render({
 									elem : '#onlineList',
-									url : context + 'produce/online/getList',
+									url : context + '/produce/online/getList',
 									method : 'get', // 默认：get请求
 									cellMinWidth : 80,
 									page : true,
@@ -196,7 +196,7 @@ $(function() {
 							var param = {
 								"id" : id
 							};
-							CoreUtil.sendAjax("produce/online/getMain", JSON
+							CoreUtil.sendAjax("/produce/online/getMain", JSON
 									.stringify(param), function(data) {
 								if (data.result) {
 									//console.log(data)
@@ -224,7 +224,7 @@ $(function() {
 							//console.log(id)
 							CoreUtil
 									.sendAjax(
-											"produce/online/getClassList",
+											"/produce/online/getClassList",
 											"",
 											function(data) {
 												if (data.result) {
@@ -297,7 +297,7 @@ function getMainInfo(id) {
 	var param = {
 		"id" : id
 	};
-	CoreUtil.sendAjax("produce/online/getMainInfo",
+	CoreUtil.sendAjax("/produce/online/getMainInfo",
 			JSON.stringify(param), function(data) {
 				if (data.result) {
 					tableEmp.reload({
@@ -316,7 +316,7 @@ function getMainInfo(id) {
 			});
 }
 function editMain(obj){
-	CoreUtil.sendAjax("produce/online/editMain", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/produce/online/editMain", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -347,7 +347,7 @@ function delVice(obj,  name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/online/deleteVice",
+			CoreUtil.sendAjax("/produce/online/deleteVice",
 					JSON.stringify(param), function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -372,7 +372,7 @@ function delOnlineStaff(obj, id, name){
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/online/deleteMain",
+			CoreUtil.sendAjax("/produce/online/deleteMain",
 					JSON.stringify(param), function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

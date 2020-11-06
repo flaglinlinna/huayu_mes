@@ -301,7 +301,7 @@ function addCardData() {
 }
 // 获取员工信息
 function getEmp() {
-	CoreUtil.sendAjax("produce/card_data/getEmp", "", function(data) {
+	CoreUtil.sendAjax("/produce/card_data/getEmp", "", function(data) {
 		if (data.result) {
 			$("#empId").empty();
 			var emp = data.data;
@@ -326,7 +326,7 @@ function getEmp() {
 }
 // 获取卡机信息
 function getDev() {
-	CoreUtil.sendAjax("produce/card_data/getDev", "", function(data) {
+	CoreUtil.sendAjax("/produce/card_data/getDev", "", function(data) {
 		if (data.result) {
 			$("#devClockId").empty();
 			var dev = data.data;
@@ -351,7 +351,7 @@ function getDev() {
 }
 // 新增卡点数据信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("produce/card_data/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/produce/card_data/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -379,7 +379,7 @@ function delCardData(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/card_data/delete",
+			CoreUtil.sendAjax("/produce/card_data/delete",
 					JSON.stringify(param), function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -436,7 +436,7 @@ function update() {
 function loadDev(keyword) {
 	// 重新加载table
 	tableDev.reload({
-		url : context + 'produce/issue/getDev',
+		url : context + '/produce/issue/getDev',
 		where : {
 			devKeyword : keyword
 		},
@@ -448,7 +448,7 @@ function loadDev(keyword) {
 }
 
 function updateData(devIds,stype){
-	CoreUtil.sendAjax("produce/card_data/updateData", {"devIds" : devIds,"stype":stype}, function(
+	CoreUtil.sendAjax("/produce/card_data/updateData", {"devIds" : devIds,"stype":stype}, function(
 			data) {
 		if (data.result) {
 			layer.alert(data.msg, function() {

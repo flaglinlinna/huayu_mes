@@ -130,7 +130,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("produce/dev_clock/getDevClock", JSON
+			CoreUtil.sendAjax("/produce/dev_clock/getDevClock", JSON
 					.stringify(param), function(data) {
 				if (data.result) {
 					form.val("devForm", {
@@ -229,7 +229,7 @@ function exportDevClock(){
 
 //获取线体信息
 function getLineList(id){
-	CoreUtil.sendAjax("produce/dev_clock/getLineList", "",
+	CoreUtil.sendAjax("/produce/dev_clock/getLineList", "",
 			function(data) {
 				if (data.result) {
 				$("#lineId").empty();
@@ -254,7 +254,7 @@ function getLineList(id){
 }
 //测试连接
 function testLink(obj) {
-	CoreUtil.sendAjax("produce/dev_clock/test", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/produce/dev_clock/test", JSON.stringify(obj.field),
 			function(data) {
 	         	layer.alert(data.msg);
 				/*if (data.result) {
@@ -275,7 +275,7 @@ function testLink(obj) {
 }
 // 新增卡机信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("produce/dev_clock/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/produce/dev_clock/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -294,7 +294,7 @@ function addSubmit(obj) {
 
 // 编辑卡机信息提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("produce/dev_clock/edit", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/produce/dev_clock/edit", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -321,7 +321,7 @@ function delDevClock(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/dev_clock/delete",
+			CoreUtil.sendAjax("/produce/dev_clock/delete",
 					JSON.stringify(param), function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

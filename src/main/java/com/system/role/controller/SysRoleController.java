@@ -39,12 +39,12 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.add(sysRole);
             logger.debug("新增角色=add:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, sysRole);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("角色新增失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, sysRole.toString()+";"+e.toString());
             return ApiResponseResult.failure("角色新增失败！");
         }
     }
@@ -57,12 +57,12 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.edit(sysRole);
             logger.debug("编辑角色=edit:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, sysRole.toString());
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("编辑角色失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,sysRole+";"+ e.toString());
             return ApiResponseResult.failure("编辑角色失败！");
         }
     }
@@ -75,12 +75,12 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.delete(id);
             logger.debug("删除角色=delete:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, id);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("删除角色失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, "id:"+id+";"+e.toString());
             return ApiResponseResult.failure("删除角色失败！");
         }
     }
@@ -100,12 +100,14 @@ public class SysRoleController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = sysRoleService.getList(keyword, roleCode,roleName, createdTimeStart, createdTimeEnd, status, super.getPageRequest(sort));
             logger.debug("获取角色列表=getList:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";角色编码:"+roleCode+";角色名称"+roleName+
+                            ";时间大于:"+createdTimeStart+";时间小于"+createdTimeEnd+";状态"+status);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取角色列表失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, "关键字:"+keyword+";角色编码:"+roleCode+";角色名称"+roleName+
+                    ";时间大于:"+createdTimeStart+";时间小于"+createdTimeEnd+";状态"+status+";"+e.toString());
             return ApiResponseResult.failure("获取角色列表失败！");
         }
     }
@@ -167,12 +169,12 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.getRole(id);
             logger.debug("根据ID获取角色=getRole:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, id);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("根据ID获取角色失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, "id："+id+";"+e.toString());
             return ApiResponseResult.failure("获取角色失败！");
         }
     }
@@ -203,12 +205,12 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.getRolePerm(id);
             logger.debug("根据角色ID获取权限信息=getRolePerm:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, "id:"+id);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("获取权限信息失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,"id:"+id+":"+ e.toString());
             return ApiResponseResult.failure("获取权限信息失败！");
         }
     }
@@ -221,12 +223,12 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.doRolePerm(roleId, permIds);
             logger.debug("设置权限=doRolePerm:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, "角色id:"+roleId+";权限id:"+permIds);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("设置权限失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,"角色id:"+roleId+";权限id:"+permIds+";"+ e.toString());
             return ApiResponseResult.failure("设置权限失败！");
         }
     }
@@ -239,12 +241,12 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.doStatus(id, status);
             logger.debug("设置正常/禁用=doJob:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, "id:"+id+";状态:"+status);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("设置正常/禁用失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, "id:"+id+";状态:"+status+";"+e.toString());
             return ApiResponseResult.failure("设置正常/禁用失败！");
         }
     }

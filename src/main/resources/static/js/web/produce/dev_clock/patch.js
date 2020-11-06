@@ -8,7 +8,7 @@ $(function() {
 		tableSelect = layui.tableSelect, laydate = layui.laydate;
 		tableIns = table.render({
 			elem : '#cardList',
-			url : context + 'produce/patch/getList',
+			url : context + '/produce/patch/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -151,7 +151,7 @@ $(function() {
 			searchPlaceholder : '试着搜索',
 			table : {
 				url : context
-						+ 'produce/patch/getTaskNo',
+						+ '/produce/patch/getTaskNo',
 				method : 'get',
 				cols : [ [ {
 					type : 'radio'
@@ -261,7 +261,7 @@ $(function() {
 		});
 		// 编辑补卡信息提交
 		function editSubmit(obj) {
-			CoreUtil.sendAjax("produce/patch/edit", JSON.stringify(obj.field),
+			CoreUtil.sendAjax("/produce/patch/edit", JSON.stringify(obj.field),
 					function(data) {
 						if (data.result) {
 							layer.alert("操作成功", function() {
@@ -282,7 +282,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("produce/patch/getPatchCard", JSON
+			CoreUtil.sendAjax("/produce/patch/getPatchCard", JSON
 					.stringify(param), function(data) {
 				console.log(data)
 				if (data.result) {
@@ -355,7 +355,7 @@ function load(obj) {
 
 // 新增补卡数据信息提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("produce/patch/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/produce/patch/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -381,7 +381,7 @@ function delPatchCard(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/patch/delete",
+			CoreUtil.sendAjax("/produce/patch/delete",
 					JSON.stringify(param), function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

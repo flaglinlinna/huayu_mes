@@ -9,7 +9,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#clearList',
-			url : context + 'produce/issue/getList',
+			url : context + '/produce/issue/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -239,7 +239,7 @@ function addClear() {
 }
 // 获取员工信息
 function getEmp() {
-	CoreUtil.sendAjax("produce/issue/getEmp", "", function(data) {
+	CoreUtil.sendAjax("/produce/issue/getEmp", "", function(data) {
 		if (data.result) {
 			// var beSelected=data.data;
 			// console.log(data.data.rows)
@@ -263,7 +263,7 @@ function getEmp() {
 }
 // 获取卡机信息
 function getDev() {
-	CoreUtil.sendAjax("produce/issue/getDev", "", function(data) {
+	CoreUtil.sendAjax("/produce/issue/getDev", "", function(data) {
 		if (data.result) {
 			tableDev.reload({
 				data : data.data.rows,
@@ -320,7 +320,7 @@ function addSubmit(devList, empList) {
 		"devList" : devList,
 		"empList" : empList
 	};
-	CoreUtil.sendAjax("produce/issue/clear", JSON.stringify(params), function(
+	CoreUtil.sendAjax("/produce/issue/clear", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
 			layer.alert(data.msg, function() {
@@ -347,7 +347,7 @@ function delClear(obj, id) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("produce/clear/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/produce/clear/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -371,7 +371,7 @@ function delClear(obj, id) {
 function loadDev(obj) {
 	// 重新加载table
 	tableDev.reload({
-		url : context + 'produce/clear/getDev',
+		url : context + '/produce/clear/getDev',
 		where : {
 			devKeyword : obj.field.devKeyword
 		},
@@ -386,7 +386,7 @@ function loadEmp(obj) {
 	// 重新加载table
 	console.log(obj)
 	tableEmp.reload({
-		url : context + 'produce/issue/getEmp',
+		url : context + '/produce/issue/getEmp',
 		where : {
 			empKeyword : obj.field.empKeyword
 		},
@@ -411,7 +411,7 @@ function loadAll() {
 function cleanClear() {
 	$('#devSearch')[0].reset();
 	tableDev.reload({
-		url : context + 'produce/issue/getDev',
+		url : context + '/produce/issue/getDev',
 		where : {
 			devKeyword : ""
 		},
@@ -422,7 +422,7 @@ function cleanClear() {
 	});
 	$('#empSearch')[0].reset();
 	tableEmp.reload({
-		url : context + 'produce/issue/getEmp',
+		url : context + '/produce/issue/getEmp',
 		where : {
 			empKeyword : ""
 		},
