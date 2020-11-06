@@ -176,8 +176,10 @@ public class Linelmpl  extends BaseOprService implements LineService {
     			//params.add(Parameter.build("bsIsDel", 0));// 删除标识
     			
     			if (StringUtils.isNotEmpty(keyword)) {
-    				hql += "and ( CONCAT(a.line_No,a.line_Name,a.liner_Code,a.liner_Name) like '%:keyword%') ";
+    				//hql += "and ( CONCAT(a.line_No,a.line_Name,a.liner_Code,a.liner_Name) like '%:keyword%') ";
     				//params.add(Parameter.build("keyword", keyword));
+    				hql += "  and INSTR((a.line_No || a.line_Name || a.liner_Code || a.liner_Name ),  '"
+    						+ keyword + "') > 0 ";
     			}
     			//lineNo--in查询类型
     			/*if (StringUtils.isNotEmpty(lineNo)) {
