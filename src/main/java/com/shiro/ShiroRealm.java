@@ -26,12 +26,6 @@ import com.system.permission.entity.SysPermission;
 import com.system.role.dao.SysRoleDao;
 import com.system.role.entity.SysRole;
 
-/*import com.wyait.manage.dao.UserMapper;
-import com.wyait.manage.pojo.Permission;
-import com.wyait.manage.pojo.Role;
-import com.wyait.manage.pojo.User;
-import com.wyait.manage.service.AuthService;
-import com.wyait.manage.service.UserServiceImpl;*/
 
 import com.system.user.dao.SysUserDao;
 import com.system.user.entity.SysUser;
@@ -98,7 +92,7 @@ public class ShiroRealm extends AuthorizingRealm {
 						if (null != perms && perms.size() > 0) {
 							// 授权角色下所有权限
 							for (SysPermission perm : perms) {
-								authorizationInfo.addStringPermission(perm.getMenuCode());
+								authorizationInfo.addStringPermission(perm.getMenuCode().trim());
 							}
 						}
 					}

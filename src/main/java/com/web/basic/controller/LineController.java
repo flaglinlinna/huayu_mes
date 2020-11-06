@@ -36,13 +36,6 @@ public class LineController extends WebController{
 	 @Autowired
 	 private LineService lineService;
 	 
-	 @ApiOperation(value = "线体基础信息表结构", notes = "线体基础信息表结构"+Line.TABLE_NAME)
-	    @RequestMapping(value = "/getLine", method = RequestMethod.GET)
-		@ResponseBody
-	    public Line getLine(){
-	        return new Line();
-	    }
-	 
 	 @ApiOperation(value = "线体列表页", notes = "线体列表页", hidden = true)
 	    @RequestMapping(value = "/toLine")
 	    public String toLine(){

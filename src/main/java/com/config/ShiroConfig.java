@@ -137,17 +137,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/v2/**", "anon");
         filterChainDefinitionMap.put("/webjars/**", "anon");
 
-        filterChainDefinitionMap.put("/wd_rf/login1", "anon");
-        filterChainDefinitionMap.put("/wd_rf/queryPurview", "anon");
-        filterChainDefinitionMap.put("/wd_rf/getRfSetup", "anon");
-        filterChainDefinitionMap.put("/wd_rf/getExcProc", "anon");
-        filterChainDefinitionMap.put("/wd_rf/create/*", "anon");
-        filterChainDefinitionMap.put("/wd_rf/little/*", "anon");
-        filterChainDefinitionMap.put("/wd_rf/pinput/*", "anon");
-        filterChainDefinitionMap.put("/wd_rf/out/*", "anon");
-        //filterChainDefinitionMap.put("/console", "anon");//首页内容
-//		/*filterChainDefinitionMap.put("/page", "anon");
-//		filterChainDefinitionMap.put("/channel/record", "anon");*/
+
 		filterChainDefinitionMap.put("/user/delUser", "authc,perms[usermanage]");
 //		//add操作，该用户必须有【addOperation】权限
 ////		filterChainDefinitionMap.put("/add", "perms[addOperation]");
