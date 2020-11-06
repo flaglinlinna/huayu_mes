@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='客户通用工艺信息'">
-<meta charset="UTF-8">
-</head>
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='线体信息'"></head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div style="margin: 10px">
@@ -27,7 +25,7 @@
         <hr class="layui-bg-black"/>
          <script type="text/html" id="toolbar">
            <div class="layui-btn-container layui-inline">
-               <shiro:hasPermission name="client-process-add">
+               <shiro:hasPermission name="clientprocess-add">
                   <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="doAdd" >添加线体</button>
                </shiro:hasPermission>
                <shiro:hasPermission name="client-process-deleteAll">

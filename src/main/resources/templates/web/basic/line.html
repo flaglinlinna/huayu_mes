@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='排产信息'"></head>
+<head th:include="layout :: htmlhead" th:with="title='线体信息'"></head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 	 <div >
@@ -55,16 +55,16 @@
 	 </div>
 	 <!--添加或编辑线体-->
     <div id="setLine" class="layer_self_wrap" style="width:500px;display:none;">
-        <form id="lineForm" class="layui-form layui-form-pane" lay-filter="lineForm" method="post" action="" style="margin-top: 20px;">
+        <form id="lineForm" class="layui-form layui-form-pane" lay-filter="lineForm" method="post" action="" style="margin: 20px;">
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">线体编码</label>
+                <label class="layui-form-label layui-required">线体编码</label>
                 <div class="layui-input-inline">
                     <input id="lineNo" name="lineNo" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">线体名称</label>
+                <label class="layui-form-label layui-required">线体名称</label>
                 <div class="layui-input-inline">
                     <input id="lineName" name="lineName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
