@@ -34,23 +34,23 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '条码',
-								width : 150
+								width : 150,sort: true
 							}, {
 								field : 'FTYPE',
 								title : '类型',
-								width : 150
+								width : 150,sort: true
 							}, {
 								field : 'LINER_NAME',
 								title : '线长',
-								width : 80
+								width : 80,sort: true
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
-								width : 170
+								width : 170,sort: true
 							}, {
 								field : 'TASK_NO',
 								title : '制定单号',
-								width : 350
+								width : 350,sort: true
 							}, {
 								field : 'FMEMO',
 								title : '备注',
@@ -58,7 +58,7 @@ $(function() {
 							}, {
 								field : 'CREATE_DATE',
 								title : '创建时间',
-								width : 170
+								width : 170,sort: true
 							} ] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
@@ -90,23 +90,23 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '条码',
-								width : 150
+								width : 150,sort: true
 							}, {
 								field : 'FTYPE',
 								title : '类型',
-								width : 150
+								width : 150,sort: true
 							}, {
 								field : 'LINER_NAME',
 								title : '线长',
-								width : 80
+								width : 80,sort: true
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
-								width : 170
+								width : 170,sort: true
 							}, {
 								field : 'TASK_NO',
 								title : '制定单号',
-								width : 350
+								width : 350,sort: true
 							}, {
 								field : 'FMEMO',
 								title : '备注',
@@ -114,7 +114,7 @@ $(function() {
 							}, {
 								field : 'CREATE_DATE',
 								title : '创建时间',
-								width : 170
+								width : 170,sort: true
 							} ] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
@@ -139,7 +139,7 @@ $(function() {
 									hide : true
 								}, {
 									field : 'TASK_NO',
-									title : '制令单号'
+									title : '制令单号',sort: true
 								} ] ],
 								parseData : function(res) {
 									// console.log(res)
@@ -185,7 +185,7 @@ $(function() {
 									hide : true
 								}, {
 									field : 'TASK_NO',
-									title : '制令单号'
+									title : '制令单号',sort: true
 								} ] ],
 								parseData : function(res) {
 									// console.log(res)

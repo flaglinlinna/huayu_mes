@@ -48,22 +48,22 @@ $(function() {
 					{
 						field : 'ITEM_BARCODE',
 						title : '条码',
-						width : 120
+						width : 120,sort: true
 					},{
 						field : 'ITEM_NO',
 						title : '物料编号',
-						width : 150
+						width : 150,sort: true
 					}, {
 						field : 'ITEM_NAME',
-						title : '物料描述'
+						title : '物料描述',sort: true
 					}, {
 						field : 'QUANTITY',
 						title : '数量',
-						width : 90
+						width : 90,sort: true
 					},{
 						field : 'CREATE_DATE',
 						title : '创建时间',
-						width : 150
+						width : 150,sort: true
 					},  {
 						fixed : 'right',
 						title : '操作',
@@ -93,7 +93,7 @@ $(function() {
 						}, {
 							field : 'TASK_NO',
 							title : '制令单号',
-							width : 180
+							width : 180,sort: true
 						}, {
 							field : 'ITEM_NO',
 							title : '物料编码',
@@ -204,8 +204,8 @@ $(function() {
 						type : 'numbers'
 					},{
 						field : 'TASK_NO',
-						title : '制定单号',
-						width : 340
+						title : '制令单号',
+						width : 340,sort: true
 					}, {
 						field : 'ITEM_BARCODE',
 						title : '物料条码',

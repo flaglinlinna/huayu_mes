@@ -45,43 +45,43 @@ $(function() {
 							}, {
 								field : 'ITEM_BARCODE',
 								title : '箱号条码',
-								width : 150
+								width : 150,sort: true
 							}, {
 								field : 'PROD_DATE',
 								title : '生产日期',
-								width : 130
+								width : 130,sort: true
 							}, {
 								field : 'LINE_MAN',
 								title : '组长',
-								width : 100
+								width : 100,sort: true
 							}, {
 								field : 'ITEM_MODEL',
 								title : '机型',
-								width : 120
+								width : 120,sort: true
 							}, {
 								field : 'QTY',
 								title : '数量',
-								width : 80
+								width : 80,sort: true
 							}, {
 								field : 'COLOUR',
 								title : '颜色',
-								width : 100
+								width : 100,sort: true
 							}, {
 								field : 'ITEM_NAME_S',
 								title : '物料简称',
-								width : 100
+								width : 100,sort: true
 							}, {
 								field : 'TASK_NO',
 								title : '生产制令单',
-								width : 300
+								width : 300,sort: true
 							}, {
 								field : 'USER_NAME',
 								title : '送检人',
-								width : 100
+								width : 100,sort: true
 							}, {
 								field : 'SYSDATE',
 								title : '送检时间',
-								width : 160
+								width : 160,sort: true
 							} ] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
@@ -123,26 +123,26 @@ $(function() {
 							},{
 								field : 'TASK_NO',
 								title : '制定单号',
-								width : 350
+								width : 350,sort: true
 							}, {
 								field : 'BARCODE_S_1',
 								title : '条码1',
-								width : 200
+								width : 200,sort: true
 							}, {
 								field : 'BARCODE_S_2',
 								title : '条码2',
-								width : 200
+								width : 200,sort: true
 							}, {
 								field : 'CHK_RESULT',
-								title : '校验结果'
+								title : '校验结果',sort: true
 							},  {
 								field : 'USER_NAME',
 								title : '操作人',
-								width : 90
+								width : 90,sort: true
 							},  {
 								field : 'CREATE_DATE',
 								title : '操作时间',
-								width : 150
+								width : 150,sort: true
 							} ] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;

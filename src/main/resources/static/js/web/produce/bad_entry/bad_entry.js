@@ -43,35 +43,37 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '条码',
-								width : 210
+								width : 210,
+								sort: true
 							}, {
 								field : 'DEFECT_NUM',
 								title : '数量',
 								width : 70
+								,sort: true
 							}, {
 								field : 'TASK_NO',
 								title : '制令单',
-								width : 330
+								width : 330,sort: true
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
-								width : 150
+								width : 150,sort: true
 							}, {
 								field : 'DEFECT_TYPE_NAME',
 								title : '不良类型',
-								width : 100
+								width : 100,sort: true
 							}, {
 								field : 'DEFECT_CODE',
 								title : '不良代码',
-								width : 100
+								width : 100,sort: true
 							}, {
 								field : 'DEFECT_NAME',
 								title : '不良现象',
-								width : 180
+								width : 180,sort: true
 							}, {
 								field : 'CREATE_DATE',
 								title : '创建时间',
-								width : 160
+								width : 160,sort: true
 							}, {
 								fixed : 'right',
 								title : '操作',
