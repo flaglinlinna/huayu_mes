@@ -405,8 +405,9 @@ public class SysUserImpl implements SysUserService {
         List<UserRoleMap> list = userRoleMapDao.findByDelFlagAndUserId(0, id);
 
         //获取所有角色信息
-        List<SysRole> list2 = sysRoleDao.findByDelFlag(0);
-
+        //List<SysRole> list2 = sysRoleDao.findByDelFlag(0);
+        List<SysRole> list2 = sysRoleDao.findByDelFlagAndStatus(0,0);
+        
         Map<String, Object> mapUser = new HashMap<>();
         mapUser.put("id",sysUser.getId());
         mapUser.put("userCode", sysUser.getUserCode());
