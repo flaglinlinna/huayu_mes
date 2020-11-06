@@ -138,7 +138,7 @@ public class Mtrial extends BaseEntity {
 		sb.append(",物料规格:").append(this.itemModel);
 		sb.append(",物料类别:").append(this.itemType);
 		sb.append(",物料单位:").append(this.itemUnit);
-		sb.append(",状态:").append(this.checkStatus);
+		sb.append(",状态:").append(this.checkStatus==0?"禁用":"正常");
 		return sb.toString();
 	}
 }

@@ -99,7 +99,7 @@ $(function() {
 			searchPlaceholder : '试着搜索',
 			table : {
 				url : context
-						+ 'produce/patch/getEmpInfo',
+						+ '/produce/patch/getEmpInfo',
 				method : 'get',
 				cols : [ [ {
 					type : 'radio'

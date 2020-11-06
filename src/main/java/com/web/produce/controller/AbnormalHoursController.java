@@ -83,7 +83,7 @@ public class AbnormalHoursController extends WebController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("异常工时登记数据记录新增失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, abnormalHours.toString()+";"+e.toString());
 			return ApiResponseResult.failure("异常工时登记数据记录新增失败！");
 		}
 	}
@@ -97,12 +97,12 @@ public class AbnormalHoursController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.edit(abnormalHours);
 			logger.debug("修改异常工时登记数据记录=edit:");
-			getSysLogService().success(module,method, methodName, null);
+			getSysLogService().success(module,method, methodName, abnormalHours.toString());
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("修改异常工时登记数据记录失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, abnormalHours.toString()+";"+ e.toString());
 			return ApiResponseResult.failure("修改异常工时登记数据记录失败！");
 		}
 	}
@@ -117,12 +117,12 @@ public class AbnormalHoursController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.getAbnormalHours(id);
 			logger.debug("根据ID获取异常工时登记数据记录=getAbnormalHours:");
-			getSysLogService().success(module,method, methodName, null);
+			getSysLogService().success(module,method, methodName, params);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("根据ID获取异常工时登记数据记录失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName,params+";"+ e.toString());
 			return ApiResponseResult.failure("获取异常工时登记数据记录失败！");
 		}
 	}
@@ -137,12 +137,12 @@ public class AbnormalHoursController extends WebController {
 			long id = Long.parseLong(params.get("id").toString());
 			ApiResponseResult result = abnormalHoursService.delete(id);
 			logger.debug("删除异常工时登记=delete:");
-			getSysLogService().success(module,method, methodName, null);
+			getSysLogService().success(module,method, methodName, params);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("删除异常工时登记失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
 			return ApiResponseResult.failure("删除异常工时登记失败！");
 		}
 	}
@@ -156,12 +156,12 @@ public class AbnormalHoursController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.getEmpInfo(keyword);
 			logger.debug("获取员工数据=getEmpInfo:");
-			getSysLogService().success(module,method, methodName, null);
+			getSysLogService().success(module,method, methodName, keyword);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取员工数据失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
 			return ApiResponseResult.failure("获取员工数据失败！");
 		}
 	}
@@ -175,12 +175,12 @@ public class AbnormalHoursController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.getTaskNo(keyword);
 			logger.debug("获取指令单信息=getTaskNo:");
-			getSysLogService().success(module,method, methodName, null);
+			getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取指令单信息失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName,"关键字:"+keyword+";"+ e.toString());
 			return ApiResponseResult.failure("获取指令单信息失败！");
 		}
 	}
@@ -195,12 +195,12 @@ public class AbnormalHoursController extends WebController {
 			String taskNo = params.get("taskNo") == null?"":params.get("taskNo").toString();
 			ApiResponseResult result = abnormalHoursService.getTaskNoInfo(taskNo);
 			logger.debug("获取指令单详细信息=getTaskNoInfo:");
-			getSysLogService().success(module,method, methodName, null);
+			getSysLogService().success(module,method, methodName, params);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取指令单详细信息失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, params+";"+e.toString());
 			return ApiResponseResult.failure("获取指令单详细信息失败！");
 		}
 	}

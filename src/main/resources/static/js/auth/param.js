@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#paramList',
-			url : context + 'sysParam/getList',
+			url : context + '/sysParam/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -51,7 +51,12 @@ $(function() {
 			}, {
 				field : 'paramValue',
 				title : '参数值'
-			}, {
+			},
+				{
+					field : 'paramSort',
+					title : '功能模块'
+				},
+				{
 				field : 'fmemo',
 				title : '备注',
 			}, {
@@ -110,7 +115,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("sysParam/getSysParam", JSON.stringify(param),
+			CoreUtil.sendAjax("/sysParam/getSysParam", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("paramForm", {
@@ -161,7 +166,7 @@ function addSysParam() {
 }
 // 新增系统参数提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("sysParam/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/sysParam/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -182,7 +187,7 @@ function addSubmit(obj) {
 
 // 编辑系统参数提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("sysParam/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/sysParam/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -211,7 +216,7 @@ function delSysParam(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("sysParam/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/sysParam/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

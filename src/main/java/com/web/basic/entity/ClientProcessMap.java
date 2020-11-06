@@ -137,7 +137,7 @@ public class ClientProcessMap extends BaseEntity {
 		sb.append("客户ID:").append(this.custId);
 		sb.append(",工序ID:").append(this.procId);
 		sb.append(",工序顺序:").append(this.procOrder);
-		sb.append(",过程属性:").append(this.jobAttr);
+		sb.append(",过程属性:").append(this.jobAttr==0?"是":"否");
 		sb.append(",报工标示:").append(this.flag);
 		return sb.toString();
 	}

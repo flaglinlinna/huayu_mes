@@ -109,7 +109,7 @@ public class DefectiveDetail extends BaseEntity {
 		sb.append("不良类别ID:").append(this.defectTypeId);
 		sb.append(",不良编码:").append(this.defectCode);
 		sb.append(",不良名称:").append(this.defectName);
-		sb.append(",状态:").append(this.checkStatus);
+		sb.append(",状态:").append(this.checkStatus==0?"禁用":"正常");
 		return sb.toString();
 	}
 }
