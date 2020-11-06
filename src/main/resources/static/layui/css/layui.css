@@ -2847,9 +2847,14 @@ a cite {
 	font-weight: 400;
 }
 
-.layui-table tbody tr:hover,.layui-table thead tr,.layui-table-click,.layui-table-header,.layui-table-hover,.layui-table-mend,.layui-table-patch,.layui-table-tool,.layui-table-total,.layui-table-total tr,.layui-table[lay-even] tr:nth-child(even) {
+.layui-table tbody tr:hover,.layui-table-click,.layui-table-header,.layui-table-hover,.layui-table-mend,.layui-table-patch,.layui-table-tool,.layui-table-total,.layui-table-total tr,.layui-table[lay-even] tr:nth-child(even) {
 	background-color: #f2f2f2
 }
+
+.layui-table thead tr {
+	background-color: #B0C4DE
+}
+
 
 .layui-table td,.layui-table th,.layui-table-col-set,.layui-table-fixed-r,.layui-table-grid-down,.layui-table-header,.layui-table-page,.layui-table-tips-main,.layui-table-tool,.layui-table-total,.layui-table-view,.layui-table[lay-skin=line],.layui-table[lay-skin=row] {
 	border-width: 1px;
