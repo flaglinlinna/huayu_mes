@@ -44,7 +44,7 @@
 						<form id="itemFrom" class="layui-form layui-form-pane"
 							lay-filter="itemFrom" method="post" action="">
 							<div class="layui-form-item">
-								<label class="layui-form-label">制令单号</label>
+								<label class="layui-form-label layui-required">制令单号</label>
 								<div class="layui-input-inline" style="width: 330px;">
 									<input type="text" name="taskno" placeholder="请选择"
 										autocomplete="off" class="layui-input" readonly="readonly"
@@ -72,7 +72,7 @@
 								</div>
 							</div>
 							<div class="layui-form-item">			
-							<label class="layui-form-label">不良代码</label>
+							<label class="layui-form-label layui-required">不良代码</label>
 							<div class="layui-input-inline" style="width: 190px;">
 									<input type="text" name="inputCode" id="inputCode" class="layui-input" style="position:absolute;z-index:2;width:80%;" lay-verify="required"  autocomplete="off">
 				                    <select  id="selectCode" lay-filter="selectCode" autocomplete="off" placeholder="选择或扫描输入不良代码" lay-verify="required" class="layui-select" lay-search>
@@ -88,12 +88,12 @@
 							<div class="layui-form-item">
 								<div class="layui-word-aux" style="margin: 5px;">请输入或者扫描条码后回车</div>
 								<div class="layui-inline">
-									<label class="layui-form-label">条码</label>
+									<label class="layui-form-label layui-required">条码</label>
 									<div class="layui-input-inline">
 										<input id="barcode" name="barcode" autocomplete="off"
 											class="layui-input" type="text" />
 									</div>
-									<label class="layui-form-label">数量</label>
+									<label class="layui-form-label layui-required">数量</label>
 									<div class="layui-input-inline" >
 										<input id="qty" name="qty" autocomplete="off"
 											 class="layui-input"  type="text" />

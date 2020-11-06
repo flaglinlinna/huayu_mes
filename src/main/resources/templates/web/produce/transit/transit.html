@@ -44,21 +44,21 @@
 						<form id="itemFrom" class="layui-form layui-form-pane"
 							lay-filter="itemFrom" method="post" action="">
 							<div class="layui-form-item">
-								<label class="layui-form-label">送检节点</label>
+								<label class="layui-form-label layui-required">送检节点</label>
 								<div class="layui-input-inline">
 									<select id="proc" lay-filter="proc" autocomplete="off"
 										lay-verify="required" class="layui-select" lay-search>
 
 									</select>
 								</div>
-								<label class="layui-form-label">送检类型</label>
+								<label class="layui-form-label layui-required">送检类型</label>
 								<div class="layui-input-inline">
 									<select id="in_type" lay-filter="in_type" autocomplete="off"
 										lay-verify="required" class="layui-select" lay-search>
 
 									</select>
 								</div>
-								<label class="layui-form-label">条码</label>
+								<label class="layui-form-label layui-required">条码</label>
 								<div class="layui-input-inline">
 									<input id="barcode" name="barcode" autocomplete="off"
 										class="layui-input"placeholder="请输入或者扫描条码后回车"  type="text" />

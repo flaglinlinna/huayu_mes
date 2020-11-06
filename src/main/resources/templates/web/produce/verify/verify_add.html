@@ -8,7 +8,7 @@
 }
 
 .label-width  .layui-form-label{
-	width: 80px;
+	width: 90px;
 }
 .label-width .layui-input-inline{
     width: 150px;
@@ -36,7 +36,7 @@
 						<form id="itemFrom" class="layui-form layui-form-pane label-width" lay-filter="itemFrom"
 							method="post" action="">
 							<div class="layui-form-item">
-								<label class="layui-form-label">制令单号</label>
+								<label class="layui-form-label layui-required">制令单号</label>
 								<div class="layui-input-inline" style="width: 310px;">
 									<input type="text" name="num" placeholder="请选择" autocomplete="off"
 										class="layui-input"  readonly="readonly"  id="num">
@@ -55,7 +55,7 @@
 							<hr />
 							<div class="layui-form-item">
 								<div class="layui-inline">
-									<label class="layui-form-label">工时类型</label>
+									<label class="layui-form-label layui-required">工时类型</label>
 									<div class="layui-input-inline" >
 										<select lay-filter="ptyle" name="ptyle" lay-verify="required">
 									        <option value="正常班">正常班</option>
@@ -64,16 +64,16 @@
 									        <option value="法定加班">法定加班</option>
 									      </select>
 									</div>
-									<label class="layui-form-label">上线日期</label>
+									<label class="layui-form-label layui-required">上线日期</label>
 									<div  class="layui-input-inline" >
 										<input type="text" name="pdate" class="layui-input" id="on_date" placeholder="yyyy-MM-dd">
 									</div>	
-									<label class="layui-form-label">线体</label>
+									<label class="layui-form-label layui-required">线体</label>
 									<div class="layui-input-inline" >
 										<select lay-filter="pline" id="pline" name="pline" lay-verify="required">
 									      </select>
 									</div>
-									<label class="layui-form-label ">班次</label>
+									<label class="layui-form-label layui-required">班次</label>
 									<div class="layui-input-inline" >
 										<select lay-filter="pclass" id="pclass" name="pclass" lay-verify="required">
 									      </select>

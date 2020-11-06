@@ -43,18 +43,18 @@ $(function() {
 							},{
 								field : 'taskNo',
 								title : '制定单号',
-								width : 350
+								width : 350,sort: true
 							}, {
 								field : 'barcode1',
 								title : '条码1',
-								width : 200
+								width : 200,sort: true
 							}, {
 								field : 'barcode2',
 								title : '条码2',
-								width : 200
+								width : 200,sort: true
 							}, {
 								field : 'result',
-								title : '校验结果'
+								title : '校验结果',sort: true
 							} ] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
@@ -79,7 +79,7 @@ $(function() {
 								}, {
 									field : 'TASK_NO',
 									title : '制令单号',
-									width : 180
+									width : 180,sort: true
 								}, {
 									field : 'ITEM_NO',
 									title : '物料编码',
