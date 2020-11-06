@@ -174,7 +174,7 @@ $(function() {
 				//监听提交
 		    	  form.on('submit(hsearchSubmit)', function(data){
 		    		  hTableIns.reload({
-		    			  url:context+'input/getHistoryList',
+		    			  url:context+'/input/getHistoryList',
 		                  where:data.field 
 						});
 		    	    return false;
