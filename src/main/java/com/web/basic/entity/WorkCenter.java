@@ -72,7 +72,7 @@ public class WorkCenter extends BaseEntity {
 		final StringBuffer sb = new StringBuffer();
 		sb.append("工作中心编码:").append(this.bsCode);
 		sb.append(",工作中心名称:").append(this.bsName);
-		sb.append(",状态:").append(this.bsStatus);
+		sb.append(",状态:").append(this.bsStatus==0?"正常":"禁用");
 		return sb.toString();
 	}
 }

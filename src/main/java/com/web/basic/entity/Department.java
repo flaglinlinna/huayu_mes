@@ -104,7 +104,7 @@ public class Department extends BaseEntity {
 		sb.append(",部门名称:").append(this.bsName);
 		sb.append(",部门经理:").append(this.bsManager);
 		sb.append(",部门经理电话:").append(this.bsManagerTel);
-		sb.append(",状态:").append(this.bsStatus);
+		sb.append(",状态:").append(this.bsStatus==0?"正常":"禁用");
 		return sb.toString();
 	}
 }

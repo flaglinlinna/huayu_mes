@@ -163,7 +163,7 @@ public class Employee extends BaseEntity {
 		sb.append(",离职日期:").append(this.leaveDate);
 		sb.append(",员工类型:").append(this.empType);
 		sb.append(",部门ID:").append(this.deptId);
-		sb.append(",员工状态:").append(this.empStatus);
+		sb.append(",员工状态:").append(this.empStatus==0?"离职":"在职");
 		return sb.toString();
 	}
 }

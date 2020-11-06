@@ -88,7 +88,6 @@ public class ClassType extends BaseEntity{
 		sb.append(",班次名称:").append(this.className);
 		sb.append(",上班时间:").append(this.fcard1);
 		sb.append(",下班时间:").append(this.fcard2);
-		sb.append("\n]");
 		return sb.toString();
 	}
 }

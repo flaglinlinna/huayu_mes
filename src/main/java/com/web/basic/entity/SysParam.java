@@ -29,9 +29,9 @@ public class SysParam extends BaseEntity {
 	    protected Long paramType;
 
 	    /**
-	     * 系统参数种类|业务分类
+	     * 功能模块
 	     */
-	    @ApiModelProperty(name = "paramSort", value = "系统参数种类")
+	    @ApiModelProperty(name = "paramSort", value = "功能模块")
 	    @Column(length = 100)
 	    protected String paramSort;
 	    
@@ -48,7 +48,8 @@ public class SysParam extends BaseEntity {
 	    @ApiModelProperty(name = "paramName", value = "参数名称")
 	    @Column(length = 100)
 	    protected String paramName;
-	    
+
+
 	    /**
 	     * 数据类型|String/Int/Float/Date/Time/DATE/Boolean
 	     */

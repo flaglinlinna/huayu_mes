@@ -58,13 +58,15 @@ $(function() {
 			}, {
 				field : 'createDate',
 				title : '添加时间',
-			}, {
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar',
-				width : 95,
-			} ] ],
+			},
+			// 	{
+			// 	fixed : 'right',
+			// 	title : '操作',
+			// 	align : 'center',
+			// 	toolbar : '#optBar',
+			// 	width : 95,
+			// }
+			] ],
 			done : function(res, curr, count) {
 				$("table").css("width", "100%");
 				// 如果是异步请求数据方式，res即为你接口返回的信息。

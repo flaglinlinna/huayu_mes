@@ -59,7 +59,7 @@ public class CardDataController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = cardDataService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取卡点原始数据列表=getList:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -78,12 +78,12 @@ public class CardDataController extends WebController{
 	        try{
 	            ApiResponseResult result = cardDataService.add(cardData);
 	            logger.debug("新增卡点数据记录=add:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, cardData.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("卡点数据记录新增失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,cardData.toString()+";"+ e.toString());
 	            return ApiResponseResult.failure("卡点数据记录新增失败！");
 	        }
 	    }
@@ -96,12 +96,12 @@ public class CardDataController extends WebController{
 	        try{
 	            ApiResponseResult result = cardDataService.getCardData(id);
 	            logger.debug("根据ID获取卡点数据记录=getCardData:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取卡点数据记录失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, params+";"+e.toString());
 	            return ApiResponseResult.failure("获取卡点数据记录失败！");
 	        }
 	    }
@@ -115,12 +115,12 @@ public class CardDataController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = cardDataService.delete(id);
 	            logger.debug("删除卡点数据记录=delete:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除卡点数据记录失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params+":"+ e.toString());
 	            return ApiResponseResult.failure("删除卡点数据记录失败！");
 	        }
 	    }
@@ -169,12 +169,12 @@ public class CardDataController extends WebController{
 	        try {
 	            ApiResponseResult result = cardDataService.updateData(devIds,stype);
 	            logger.debug("手动更新卡机打卡数据=getHXTaskNo:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, "卡机id:"+devIds);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("手动更新卡机打卡数据失败！", e);
-	             getSysLogService().error(module,method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, "卡机id:"+devIds+";"+e.toString());
 	             return ApiResponseResult.failure("手动更新卡机打卡数据失败！");
 	        }
 	    }
@@ -187,12 +187,12 @@ public class CardDataController extends WebController{
 	        try {
 	            ApiResponseResult result = cardDataService.updateDataByLine(line_ids);
 	            logger.debug("根据产线更新指纹机信息=updateDataByLine:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, "产线id;"+line_ids);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("根据产线更新指纹机信息失败！", e);
-	             getSysLogService().error(module,method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName,"产线id;"+line_ids+";"+ e.toString());
 	             return ApiResponseResult.failure("根据产线更新指纹机信息失败！");
 	        }
 	    }
@@ -207,12 +207,12 @@ public class CardDataController extends WebController{
 				Integer fstatus=Integer.parseInt(params.get("checkStatus").toString());
 	            ApiResponseResult result = cardDataService.doStatus(id,fstatus);
 	            logger.debug("根据产线更新指纹机信息=doStatus:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("设置卡点状态失败！", e);
-	             getSysLogService().error(module,method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName,params+";"+ e.toString());
 	             return ApiResponseResult.failure("设置卡点状态失败！");
 	        }
 			
@@ -226,11 +226,11 @@ public class CardDataController extends WebController{
 	        try {
 	            cardDataService.doExport(this.getResponse(),keywork);
 	            logger.debug(methodName+method);
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, "关键字:"+keywork);
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error(methodName+"失败！", e);
-	             getSysLogService().error(module,method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, "关键字:"+keywork+";"+e.toString());
 	        }
 	    }
 }

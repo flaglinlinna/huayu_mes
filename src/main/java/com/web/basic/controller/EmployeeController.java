@@ -1,8 +1,8 @@
 package com.web.basic.controller;
 
-import java.util.Date;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
@@ -58,7 +57,12 @@ public class EmployeeController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.ASC, "empCode");
 	            ApiResponseResult result = employeeService.getList(keyword,empStatus, super.getPageRequest(sort));
 	            logger.debug("获取员工信息列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword+";"+empStatus);
+	            if(StringUtils.isNotEmpty(empStatus)){
+					empStatus = empStatus=="0"?"离职":"在职";
+				}else {
+	            	empStatus = "所有";
+				}
+	            getSysLogService().success(module,method, methodName, "关键词:"+keyword+";"+empStatus);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();

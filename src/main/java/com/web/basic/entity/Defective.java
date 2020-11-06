@@ -73,7 +73,7 @@ public class Defective extends BaseEntity {
 		final StringBuffer sb = new StringBuffer();
 		sb.append("不良类别编码:").append(this.defectTypeCode);
 		sb.append("不良类别名称:").append(this.defectTypeName);
-		sb.append("状态:").append(this.checkStatus);
+		sb.append("状态:").append(this.checkStatus==0?"禁用":"正常");
 		return sb.toString();
 	}
 }

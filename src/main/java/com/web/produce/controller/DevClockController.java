@@ -60,12 +60,12 @@ public class DevClockController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = devClockService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取卡机信息列表=getList:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取卡机信息列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取卡机信息列表失败！");
 	        }
 	    }
@@ -80,12 +80,12 @@ public class DevClockController extends WebController{
 			System.out.println(keyword);
 			devClockService.exportList(keyword,getResponse());
 			logger.debug("导出卡机信息=exportList:");
-			getSysLogService().success(module,method, methodName, null);
+			getSysLogService().success(module,method, methodName, "关键字:"+keyword);
 //			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("导出卡机信息！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
 //			return ApiResponseResult.failure("导出卡机信息！");
 		}
 	}
@@ -99,12 +99,12 @@ public class DevClockController extends WebController{
 	        try{
 	            ApiResponseResult result = devClockService.add(devClock);
 	            logger.debug("新增卡机信息=add:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, devClock.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("卡机信息新增失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,  devClock.toString()+";"+e.toString());
 	            return ApiResponseResult.failure("卡机信息新增失败！");
 	        }
 	    }
@@ -117,12 +117,12 @@ public class DevClockController extends WebController{
 	        try{
 	            ApiResponseResult result = devClockService.edit(devClock);
 	            logger.debug("编辑卡机信息=edit:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, devClock.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑卡机信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,devClock.toString() +";"+e.toString());
 	            return ApiResponseResult.failure("编辑卡机信息失败！");
 	        }
 	    }
@@ -135,12 +135,12 @@ public class DevClockController extends WebController{
 	        try{
 	            ApiResponseResult result = devClockService.getDevClock(id);
 	            logger.debug("根据ID获取卡机信息=getDevClock:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取卡机信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params+";"+ e.toString());
 	            return ApiResponseResult.failure("获取卡机信息失败！");
 	        }
 	    }
@@ -154,12 +154,12 @@ public class DevClockController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = devClockService.delete(id);
 	            logger.debug("删除卡机信息=delete:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除卡机信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, params+";"+e.toString());
 	            return ApiResponseResult.failure("删除卡机信息失败！");
 	        }
 	    }
