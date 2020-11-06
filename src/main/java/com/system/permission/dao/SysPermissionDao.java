@@ -47,4 +47,7 @@ public interface SysPermissionDao extends CrudRepository<SysPermission, Long>, J
     @Query(value = "select t from SysPermission t left join RolePermissionMap m on m.permitId = t.id and m.roleId =:roleId")
 	public List<SysPermission> findPermsByRoleId(@Param("roleId") Long roleId);
     
+    @Query(value = "select t from SysPermission t left join RolePermissionMap m on m.permitId = t.id where m.roleId =:roleId and t.istype=1 and t.delFlag = 0 and m.delFlag = 0")
+   	public List<SysPermission> findPermsByRoleIdAndBtn(@Param("roleId") Long roleId);
+    
 }
