@@ -181,7 +181,7 @@ public class Linelmpl  extends BaseOprService implements LineService {
     				params.add(Parameter.build("keyword", keyword));
     			}
     			//lineNo--in查询类型
-    			if (StringUtils.isNotEmpty(lineNo)) {
+    			/*if (StringUtils.isNotEmpty(lineNo)) {
     				String[] lineNos = lineNo.split(",");
     				String lines = "";
     				for(String line:lineNos){
@@ -193,8 +193,11 @@ public class Linelmpl  extends BaseOprService implements LineService {
     					lines = lines.substring(0, lines.length() - 1);
     				}
     				hql += " and a.lineNo in ("+lines+")";
-    			}
+    			}*/
     			//linerName,linerCode,lineName--模糊搜索类型
+    			if (StringUtils.isNotEmpty(lineNo)) {
+    				hql += " and a.lineNo like '%"+lineNo+"%'";
+    			}
     			if (StringUtils.isNotEmpty(linerName)) {
     				hql += " and a.linerName like '%"+linerName+"%'";
     			}

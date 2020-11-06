@@ -84,7 +84,8 @@ $(function() {
 			//'parent' : '#doc-content',
 			'mode' : 'api',//服务端过滤
 			'filters' : [
-				{field: 'lineNo', type:'checkbox'},
+				/*{field: 'lineNo', type:'checkbox'},*/
+				{field: 'lineNo', type:'input'},
 				{field: 'lastupdateDate', type:'date'},
 				{field: 'checkStatus', type:'radio'},
 				{field: 'linerName', type:'input'},
