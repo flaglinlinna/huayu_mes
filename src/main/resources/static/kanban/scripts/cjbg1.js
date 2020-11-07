@@ -1,23 +1,32 @@
 $(function() {
-	dealData();
+	var kanbanList=kanbanDataList;
+	dealData(kanbanList);
+	getDepList();
+	$("#searchBtn").click(function() {
+		getList();
+	});
 })
-console.log(dev_ip);
-function dealData() {
-	var kanbanData = kanbanDataList.data.List;
-	var xAxis = [];
-	var series1 = [];
-	var series2 = [];
-	var series3 = [];
-	for (var i = 0; i < kanbanData.length - 1; i++) {
-		xAxis.push(kanbanData[i].LINER_NAME);
-		series1.push(kanbanData[i].HOUR_ST);// 标准工时
-		series2.push(kanbanData[i].HOUR_ACT);// 实际工时
-		series3.push(kanbanData[i].EFFICIENCY_RATE);// 生产效率
-	}
-	// console.log(kanbanDataList.data.LineNum);
-	$("#showLine").text("总开线数：" + kanbanDataList.data.LineNum);
-	chartDiv(xAxis, series1, series2, series3);
-	setTable(kanbanData);
+
+// console.log(dev_ip);
+function dealData(kanbanList) {
+	console.log(kanbanList)
+	
+		var kanbanData = kanbanList.data.List;
+		var xAxis = [];
+		var series1 = [];
+		var series2 = [];
+		var series3 = [];
+		for (var i = 0; i < kanbanData.length - 1; i++) {
+			xAxis.push(kanbanData[i].LINER_NAME);
+			series1.push(kanbanData[i].HOUR_ST);// 标准工时
+			series2.push(kanbanData[i].HOUR_ACT);// 实际工时
+			series3.push(kanbanData[i].EFFICIENCY_RATE);// 生产效率
+		}
+		// console.log(kanbanList.data.LineNum);
+		$("#showLine").text("总开线数：" + kanbanList.data.LineNum);
+		chartDiv(xAxis, series1, series2, series3);
+		setTable(kanbanData);
+	
 }
 function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 	option = {
@@ -87,16 +96,28 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 		series : [ {
 			name : '标准工时',
 			type : 'bar',
-			data : series1_data
+			data : series1_data,
+			label : {
+				show : true,
+				position : 'top'
+			},
 		}, {
 			name : '实际工时',
 			type : 'bar',
-			data : series2_data
+			data : series2_data,
+			label : {
+				show : true,
+				position : 'top'
+			},
 		}, {
 			name : '生产效率',
 			type : 'line',
 			yAxisIndex : 1,
-			data : series3_data
+			data : series3_data,
+			label : {
+				show : true,
+				position : 'top'
+			},
 		} ]
 	};
 	// 创建echarts对象在哪个节点上
@@ -116,4 +137,55 @@ function setTable(kanbanData) {
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
+}
+function getDepList() {
+	$.ajax({
+		type : "GET",
+		url : context + "kanban/getCjbgDepList",
+		data : {},
+		dataType : "json",
+		success : function(res) {
+			//console.log(res)
+			if (res.result) {
+				$("#dep_select").empty();
+				var html = "<option value=''>请选择部门</option>";
+				for (j = 0, len = res.data.length; j < len; j++) {
+					var arr = res.data[j];
+					html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME
+							+ "</option>";
+				}
+
+				$("#dep_select").append(html);
+			}
+		}
+	});
+}
+function getList() {
+	var date = $("#date").val();
+	var sdata = date.substring(0, date.indexOf(" "))
+	var edata = date.substring(date.indexOf(" ") + 3, date.length);
+	// console.log(sdata)
+	// console.log(edata)
+	var class_no=$("#class_select").val();
+	var dep_id=$("#dep_select").val();
+	var params = {
+		"class_nos" : class_no,
+		"dep_id" : dep_id,
+		"sdata" : sdata,
+		"edata" : edata
+	};
+	$.ajax({
+		type : "GET",
+		url : context + "kanban/getCjbgList",
+		data : params,
+		dataType : "json",
+		success : function(res) {
+			console.log(res)
+			if (res.result) {
+				dealData(res)
+			}
+
+		}
+	});
+
 }

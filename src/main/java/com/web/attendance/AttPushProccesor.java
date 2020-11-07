@@ -1,11 +1,7 @@
 package com.web.attendance;
 
-import ch.qos.logback.core.db.dialect.PostgreSQLDialect;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import com.web.produce.service.IssueService;
@@ -13,11 +9,8 @@ import com.web.produce.service.IssueService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * 所有的设备请求都会在url参数里携带SN，这是设备序列号(serial number的缩写)，每个设备唯一标识
