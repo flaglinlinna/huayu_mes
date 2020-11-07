@@ -42,7 +42,7 @@ $(function() {
 						width : 50
 					},
 					{
-						field : 'EMP_ID',
+						field : 'EMP_CODE',
 						title : '工号',
 						width : 130,sort: true
 					},{
@@ -96,12 +96,22 @@ $(function() {
 						}, {
 							field : 'TASK_NO',
 							title : '制令单号',
-							width : 180,sort: true
+							cellMinWidth : 100,sort: true
 						}, {
 							field : 'ITEM_NO',
 							title : '物料编码',
 							width : 150,sort: true
-						},{
+						},
+							{
+								field : 'LINER_NAME',
+								title : '组长',
+								width : 100,sort: true
+							}, {
+								field : 'PROD_DATE',
+								title : '计划日期',
+								width : 150,sort: true
+							},
+							{
 							field : 'ITEM_NAME',
 							title : '物料描述',
 							width : 240,sort: true

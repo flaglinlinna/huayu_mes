@@ -106,11 +106,12 @@ public class PrcUtils {
 	}
 	
 	// 确定投入
-	public List addPutPrc(String company,String facoty,String barcode,String task_no,String item_no,String qty,String user_code,String prc_name) throws Exception {
+	public List addPutPrc(String company,String facoty,String barcode,String task_no,String item_no,String qty,String user_code,
+						  String feedType,String prc_name) throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call " + prc_name + "(?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call " + prc_name + "(?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, company);
 				cs.setString(2, facoty);
@@ -119,10 +120,11 @@ public class PrcUtils {
 				cs.setInt(5, Integer.parseInt(qty));
 				cs.setString(6, item_no);
 				cs.setString(7, user_code);
-				cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
-				cs.registerOutParameter(10, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(11, -10);// 输出参数 追溯数据
+				cs.setString(8, feedType);
+				cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(12, -10);// 输出参数 追溯数据
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -130,12 +132,12 @@ public class PrcUtils {
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(8));
-				result.add(cs.getString(9));
+				result.add(cs.getInt(9));
 				result.add(cs.getString(10));
-				if (cs.getString(8).toString().equals("0")) {
+				result.add(cs.getString(11));
+				if (cs.getString(9).toString().equals("0")) {
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(11);
+					ResultSet rs = (ResultSet) cs.getObject(12);
 
 					try {
 						l = fitMap(rs);

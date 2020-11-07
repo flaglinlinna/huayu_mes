@@ -3,15 +3,17 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table' ], function() {
-		var table = layui.table, form = layui.form;
+	layui.use([ 'form', 'table','tableFilter' ], function() {
+		var table = layui.table, form = layui.form,tableFilter = layui.tableFilter;
 
 		tableIns = table.render({
-			elem : '#procList',
+			elem : '#listTable',
 			url : context + '/base/proc/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
+			toolbar: '#toolbar', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+			height: 'full',
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -30,7 +32,8 @@ $(function() {
 			},
 			cols : [ [ {
 				type : 'numbers'
-			}
+			},
+				{type:'checkbox'}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'procNo',
@@ -66,8 +69,57 @@ $(function() {
 				// console.log(curr);
 				// 得到数据总量
 				// console.log(count);
+				localtableFilterIns.reload();
 				pageCurr = curr;
 			}
+		});
+
+		var localtableFilterIns = tableFilter.render({
+			'elem' : '#listTable',
+			//'parent' : '#doc-content',
+			'mode' : 'api',//服务端过滤
+			'filters' : [
+				/*{field: 'lineNo', type:'checkbox'},*/
+				{field: 'procNo', type:'input'},
+				{field: 'procName', type:'input'},
+				{field: 'checkStatus', type:'radio'},
+				{field: 'procOrder', type:'input'},
+				{field: 'lastupdateDate', type:'date'},
+				{field: 'createDate', type:'date'},
+				// {field: 'linerCode', type:'input'},
+				// {field: 'lineName', type:'input'},
+				/*{field: 'id', type:'input'},
+				{field: 'date', type:'date'},
+				{field: 'username', type:'checkbox', url:'json/filter.json'},
+				{field: 'sex', type:'radio'},
+				{field: 'class', type:'checkbox', data:[{ "key":"12", "value":"十二班"}]}*/
+			],
+			'done': function(filters){}
+		})
+
+		//头工具栏事件
+		table.on('toolbar(listTable)', function(obj){
+			var checkStatus = table.checkStatus(obj.config.id);
+			switch(obj.event){
+				case 'doAdd':
+					addProc();
+					break;
+				case 'doDelete':
+					var data = checkStatus.data;
+					console.log(data)
+					if(data.length == 0){
+						layer.msg("请先勾选数据!");
+					}else{
+						var id="";
+						for(var i = 0; i < data.length; i++) {
+							id += data[i].id+",";
+							console.log(data[i])
+						}
+						delLine(id);
+					}
+
+					break;
+			};
 		});
 
 		// 监听操作
@@ -75,7 +127,7 @@ $(function() {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(procTable)', function(obj) {
+		table.on('tool(listTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
@@ -194,6 +246,12 @@ function openProc(id, title) {
 			cleanProc();
 		}
 	});
+}
+
+function doDelete(){
+	/*var check_id = tableIns.checkStatus('#lineList');
+	alert(check_id)*/
+	var checkStatus = tableIns.checkStatus("lineList");
 }
 
 // 添加工序

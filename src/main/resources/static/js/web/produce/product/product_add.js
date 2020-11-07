@@ -411,7 +411,7 @@ function getDetailByTask(taskNo){
  function afterWai(barcode){
 	 var params={"wbarcode":barcode,"task_no":$( "input[name='num']").val(),"nbarcode":$('#nbarcode').val(),
 			 "ptype":$("select[name='ptyle'] option:selected").val(),"hx":$('#num2').val()}
-		CoreUtil.sendAjax("product/afterWai", params, function(data) {
+		CoreUtil.sendAjax("/product/afterWai", params, function(data) {
 			console.log(data)
 			if (data.result) {
 				$('#inqty').val(data.data.Qty);
