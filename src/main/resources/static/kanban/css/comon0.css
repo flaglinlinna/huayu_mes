@@ -198,4 +198,46 @@ to {transform: rotate(-359deg);}
 .str_wrap img {
 	max-width:none !important;	
 }
+/*2020-11-07*/
+.header {
+    width: 100%;
+    height: 40px;
+    background-color: #030829;
+}
+.total_chose_box {
+    height: 40px;
+}
+.chose_tltle {
+    margin-left: 22px;
+    display: block;
+    float: left;
+    color: white;
+}
+.year_chose {
+    background-color: transparent;
+    color: #72e3ff;
+    border: #00c0ef 2px solid;
+    width: 120px;
+    text-indent: 0.6em;
+    border-radius: 5px;
+    float: left;
+}
+.chose_text_in {
+    background-color: transparent;
+    color: #72e3ff;
+    border: #00c0ef 2px solid;
+    width: 120px;
+    text-indent: 0.6em;
+    border-radius: 5px;
+    float: left;
+}
+.chose_enter {
+    background-color: #00c0ef;
+    color: white;
+    border: #00cdff 2px solid;
+    width: 50px;
+    border-radius: 5px;
+    float: left;
+    margin-left: 20px;
+}
 
