@@ -43,14 +43,14 @@
 									<form id="scanFrom" class="layui-form layui-form-pane"
 										lay-filter="scanFrom" method="post" action="">
 										<div class="layui-form-item">
-											<label class="layui-form-label">是否记录工时</label>
+											<label class="layui-form-label layui-required">是否记录工时</label>
 											<div class="layui-input-inline">
 												<input type="radio" name="isRecord" value="1" title="是"
 													checked="" lay-filter="isRecord"> <input
 													type="radio" name="isRecord" value="0" title="否"
 													lay-filter="isRecord">
 											</div>
-											<label class="layui-form-label">制令单号</label>
+											<label class="layui-form-label layui-required">制令单号</label>
 											<div class="layui-input-inline" style="width: 320px;">
 												<input type="text" name="sTaskno" placeholder="请选择"
 													autocomplete="off" class="layui-input" readonly="readonly"
@@ -58,7 +58,7 @@
 											</div>
 										</div>
 										<div class="layui-form-item">
-											<label class="layui-form-label">外箱号条码</label>
+											<label class="layui-form-label layui-required">外箱号条码</label>
 											<div class="layui-input-inline" style="width: 250px;">
 												<input id="sBarcode" name="sBarcode" autocomplete="off"
 													class="layui-input" type="text" />

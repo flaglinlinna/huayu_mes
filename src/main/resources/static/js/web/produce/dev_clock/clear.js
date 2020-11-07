@@ -75,6 +75,8 @@ $(function() {
 			elem : '#empList',
 			method : 'post',// 默认：get请求
 			page : true,
+			limit:20,
+			limits: [20,100,500,1000,2000,5000],
 			height: 'full-220',
 			request : {
 				pageName : 'page',// 页码的参数名称，默认：page

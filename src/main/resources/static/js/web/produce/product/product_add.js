@@ -44,34 +44,34 @@ $(function() {
 					{
 						field : 'ITEM_BARCODE',
 						title : '箱内条码',
-						width : 130
+						width : 130,sort: true
 					},{
 						field : 'ITEM_BARCODE',
 						title : '箱外条码',
-						width : 130
+						width : 130,sort: true
 					}, {
 						field : 'TYPE',
 						title : '类型',
-						width : 90
+						width : 90,sort: true
 					}, {
 						field : 'QUANTITY',
 						title : '数量',
-						width : 90
+						width : 90,sort: true
 					},{
 						field : 'TASK_NO',
-						title : '制令单号'
+						title : '制令单号',sort: true
 					},{
 						field : 'ITEM_BARCODE',
 						title : '物料编号',
-						width : 130
+						width : 130,sort: true
 					},{
 						field : 'CREATE_BY',
-						title : '操作人',
+						title : '操作人',sort: true,
 						width : 80
 					},{
 						field : 'CREATE_DATE',
 						title : '操作时间',
-						width : 100
+						width : 100,sort: true
 					}] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;
@@ -95,31 +95,31 @@ $(function() {
 						}, {
 							field : 'TASK_NO',
 							title : '制令单号',
-							width : 180
+							width : 180,sort: true
 						}, {
 							field : 'ITEM_NO',
 							title : '物料编码',
-							width : 150
+							width : 150,sort: true
 						},{
 							field : 'ITEM_NAME',
 							title : '物料描述',
-							width : 240,
+							width : 240,sort: true
 						}, {
 							field : 'LINER_NAME',
 							title : '组长',
-							width : 100
+							width : 100,sort: true
 						},{
 							field : 'QTY_PLAN',
 							title : '制单数量',
-							width : 80
+							width : 80,sort: true
 						},{
 							field : 'OTPT_QTY',
 							title : '产出数量',
-							width : 80
+							width : 80,sort: true
 						},{
 							field : 'ORDER_RATE',
 							title : '达成率',
-							width : 80
+							width : 80,sort: true
 						}    ] ],
 						page : false,
 						request : {
@@ -178,22 +178,22 @@ $(function() {
 						}, {
 							field : 'TASK_NO',
 							title : '制令单号',
-							width : 180
+							width : 180,sort: true
 						}, {
 							field : 'ITEM_NO',
 							title : '物料编码',
-							width : 150
+							width : 150,sort: true
 						},{
 							field : 'ITEM_NAME',
 							title : '物料描述',
-							width : 240
+							width : 240,sort: true
 						}, {
 							field : 'LINER_NAME',
 							title : '组长',
-							width : 100
+							width : 100,sort: true
 						},{
 							field : 'QTY_PLAN',
-							title : '数量',
+							title : '数量',sort: true,
 							edit:'text',style:'background: #98FB98;opacity: 0.3',
 							width : 80
 						}] ],
@@ -298,39 +298,39 @@ $(function() {
 					},{
 						field : 'TASK_NO',
 						title : '制定单号',
-						width : 330
+						width : 330,sort: true
 					}, {
 						field : 'LINE_NO',
 						title : '组装名',
-						width : 80
+						width : 80,sort: true
 					}, {
 						field : 'ITEM_BARCODE',
 						title : '产品条码',
-						width : 150
+						width : 150,sort: true
 					}, {
 						field : 'ITEM_NO',
 						title : '产品编码',
-						width : 150
+						width : 150,sort: true
 					}, {
 						field : 'QUANTITY',
 						title : '投入数量',
-						width : 100
+						width : 100,sort: true
 					},{
 						field : 'SCAN_TYPE',
 						title : '扫描类型',
-						width : 100
+						width : 100,sort: true
 					},{
 						field : 'RESULT',
 						title : '结果',
-						width : 100
+						width : 100,sort: true
 					},{
 						field : 'USER_NAME',
 						title : '操作人',
-						width : 100
+						width : 100,sort: true
 					} ,{
 						field : 'CREATE_DATE',
 						title : '过站时间',
-						width : 150
+						width : 150,sort: true
 					} ,{
 						field : 'FMEMO',
 						title : '备注',
@@ -411,7 +411,7 @@ function getDetailByTask(taskNo){
  function afterWai(barcode){
 	 var params={"wbarcode":barcode,"task_no":$( "input[name='num']").val(),"nbarcode":$('#nbarcode').val(),
 			 "ptype":$("select[name='ptyle'] option:selected").val(),"hx":$('#num2').val()}
-		CoreUtil.sendAjax("product/afterWai", params, function(data) {
+		CoreUtil.sendAjax("/product/afterWai", params, function(data) {
 			console.log(data)
 			if (data.result) {
 				$('#inqty').val(data.data.Qty);

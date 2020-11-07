@@ -44,7 +44,7 @@
 						<form id="itemFrom" class="layui-form layui-form-pane" lay-filter="itemFrom"
 							method="post" action="">
 							<div class="layui-form-item">
-								<label class="layui-form-label">制令单号</label>
+								<label class="layui-form-label layui-required">制令单号</label>
 								<div class="layui-input-inline" style="width: 310px;">
 									<input type="text" name="num" placeholder="请选择" autocomplete="off"
 										class="layui-input"  readonly="readonly" lay-verify="required" id="num">
@@ -83,18 +83,18 @@
 							<hr />
 							<div class="layui-form-item">
 								<div class="layui-inline">
-									<label class="layui-form-label">条码</label>
+									<label class="layui-form-label layui-required">条码</label>
 									<div class="layui-input-inline">
 										<input  id="barcode" name="barcode" autocomplete="off"
 											 class="layui-input" type="text" />
 									</div>
-									<label class="layui-form-label">物料编号</label>
+									<label class="layui-form-label layui-required">物料编号</label>
 									<div class="layui-input-inline">
 										<input  name="item_code" autocomplete="off"
 										lay-verify="required"	class="layui-input" type="text" />
 									</div>
-									<label class="layui-form-label">数量</label>
-									<div class="layui-input-inline">
+									<label class="layui-form-label layui-required">数量</label>
+									<div class="layui-input-inline" style="width:110px;">
 										<input name="addqty" autocomplete="off"
 										lay-verify="required"	class="layui-input" type="text" />
 									</div>

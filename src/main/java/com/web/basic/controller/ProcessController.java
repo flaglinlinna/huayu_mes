@@ -51,12 +51,14 @@ public class ProcessController extends WebController{
 	    @ApiOperation(value = "获取工序列表", notes = "获取工序列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
-	    public ApiResponseResult getList(String keyword) {
+	    public ApiResponseResult getList(String keyword,String procNo,String procName,String procOrder,
+										 String checkStatus,String createDate,String lastupdateDate) {
 	        String method = "base/proc/getList";String methodName ="获取工序列表";
 	        try {
-	        	System.out.println(keyword);
+
 	            Sort sort = new Sort(Sort.Direction.ASC, "procOrder");
-	            ApiResponseResult result = processService.getList(keyword, super.getPageRequest(sort));
+	            ApiResponseResult result = processService.getList(keyword,procNo,procName,procOrder,checkStatus,
+						createDate,lastupdateDate,super.getPageRequest(sort));
 	            logger.debug("获取工序列表=getList:");
 	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;

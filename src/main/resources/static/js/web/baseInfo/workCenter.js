@@ -114,7 +114,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("baseInfo/workCenter/getWorkCenterDetail", JSON.stringify(param),
+			CoreUtil.sendAjax("/baseInfo/workCenter/getWorkCenterDetail", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("workCenterForm", {
@@ -161,7 +161,7 @@ function addWorkCenter() {
 }
 // 新增工作中心维护的提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("baseInfo/workCenter/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/baseInfo/workCenter/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -182,7 +182,7 @@ function addSubmit(obj) {
 
 // 编辑工作中心维护的提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("baseInfo/workCenter/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/baseInfo/workCenter/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -211,7 +211,7 @@ function delWorkCenter(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("baseInfo/workCenter/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/baseInfo/workCenter/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {

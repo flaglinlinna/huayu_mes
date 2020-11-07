@@ -87,8 +87,8 @@ public class ShiroRealm extends AuthorizingRealm {
 					for (SysRole role : roles) {
 						authorizationInfo.addRole(role.getRoleCode());
 						// 角色对应的权限数据
-						//List<SysPermission> perms = this.authService.findPermsByRoleId(role.getId());
-						List<SysPermission> perms = sysPermissionDao.findPermsByRoleId(role.getId());
+						//List<SysPermission> perms = sysPermissionDao.findPermsByRoleId(role.getId());
+						List<SysPermission> perms = sysPermissionDao.findPermsByRoleIdAndBtn(role.getId());
 						if (null != perms && perms.size() > 0) {
 							// 授权角色下所有权限
 							for (SysPermission perm : perms) {

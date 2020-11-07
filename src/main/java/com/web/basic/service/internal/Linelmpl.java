@@ -2,9 +2,15 @@ package com.web.basic.service.internal;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
+import com.utils.BaseSql;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
@@ -30,10 +37,11 @@ import provider.SQLParameter;
 
 @Service(value = "lineService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class Linelmpl  extends BaseOprService implements LineService {
+public class Linelmpl extends BaseSql  implements LineService {
 	@Autowired
     private LineDao lineDao;
-
+	
+	
 	 /**
      * 新增线体
      */
@@ -168,17 +176,16 @@ public class Linelmpl  extends BaseOprService implements LineService {
     @Transactional
 	public ApiResponseResult getList(String keyword,String lineNo,String linerName,String lastupdateDate,
     		String checkStatus,String createDate,String linerCode,String lineName, PageRequest pageRequest) throws Exception {
-    			String hql = "select new Line(a.lineNo, a.linerName, a.lineName,a.linerCode, "
-    					+ "		a.createDate, a.lastupdateDate,	a.checkStatus, "
-    					+ "			 a.id  "
-    					+ "			) from Line a" + " where 1=1 and delFlag=:bsIsDel  ";
+    			String hql = "select a.* from "+Line.TABLE_NAME+" a" + " where 1=1 and del_Flag=0  ";
     			
-    			SQLParameter<Parameter> params = SQLParameter.newInstance(Parameter.class);
-    			params.add(Parameter.build("bsIsDel", 0));// 删除标识
+    			//SQLParameter<Parameter> params = SQLParameter.newInstance(Parameter.class);
+    			//params.add(Parameter.build("bsIsDel", 0));// 删除标识
     			
     			if (StringUtils.isNotEmpty(keyword)) {
-    				hql += "and ( CONCAT(a.lineNo,a.lineName,a.linerCode,a.linerName) like '%:keyword%') ";
-    				params.add(Parameter.build("keyword", keyword));
+    				//hql += "and ( CONCAT(a.line_No,a.line_Name,a.liner_Code,a.liner_Name) like '%:keyword%') ";
+    				//params.add(Parameter.build("keyword", keyword));
+    				hql += "  and INSTR((a.line_No || a.line_Name || a.liner_Code || a.liner_Name ),  '"
+    						+ keyword + "') > 0 ";
     			}
     			//lineNo--in查询类型
     			/*if (StringUtils.isNotEmpty(lineNo)) {
@@ -196,43 +203,52 @@ public class Linelmpl  extends BaseOprService implements LineService {
     			}*/
     			//linerName,linerCode,lineName--模糊搜索类型
     			if (StringUtils.isNotEmpty(lineNo)) {
-    				hql += " and a.lineNo like '%"+lineNo+"%'";
+    				hql += " and a.line_No like '%"+lineNo+"%'";
     			}
     			if (StringUtils.isNotEmpty(linerName)) {
-    				hql += " and a.linerName like '%"+linerName+"%'";
+    				hql += " and a.liner_Name like '%"+linerName+"%'";
     			}
     			if (StringUtils.isNotEmpty(linerCode)) {
-    				hql += " and a.linerCode like '%"+linerCode+"%'";
+    				hql += " and a.liner_Code like '%"+linerCode+"%'";
     			}
     			if (StringUtils.isNotEmpty(lineName)) {
-    				hql += " and a.lineName like '%"+lineName+"%'";
+    				hql += " and a.line_Name like '%"+lineName+"%'";
     			}
     			//createDate,lastupdateDate--日期类型
     			if(StringUtils.isNotEmpty(createDate)){
     				String[] dates = createDate.split(" - ");
-    				hql += " and to_char(a.createDate,'yyyy-MM-dd') >= '"+dates[0]+"'";
-    				hql += " and to_char(a.createDate,'yyyy-MM-dd') <= '"+dates[1]+"'";
+    				hql += " and to_char(a.create_Date,'yyyy-MM-dd') >= '"+dates[0]+"'";
+    				hql += " and to_char(a.create_Date,'yyyy-MM-dd') <= '"+dates[1]+"'";
     			}
     			if(StringUtils.isNotEmpty(lastupdateDate)){
     				String[] dates = lastupdateDate.split(" - ");
-    				hql += " and to_char(a.lastupdateDate,'yyyy-MM-dd') >= '"+dates[0]+"'";
-    				hql += " and to_char(a.lastupdateDate,'yyyy-MM-dd') <= '"+dates[1]+"'";
+    				hql += " and to_char(a.lastupdate_Date,'yyyy-MM-dd') >= '"+dates[0]+"'";
+    				hql += " and to_char(a.lastupdate_Date,'yyyy-MM-dd') <= '"+dates[1]+"'";
     			}
     			//checkStatus--需要转移的类型
     			if(StringUtils.isNotEmpty(checkStatus)){
     				if(checkStatus.equals("禁用")){
-    					hql += " and a.checkStatus =0 ";
+    					hql += " and a.check_Status =0 ";
     				}else{
-    					hql += " and a.checkStatus =1 ";
+    					hql += " and a.check_Status =1 ";
     				}
     			}
-
-    			List<Line> list = super.findByHql(hql, params.toList(), pageRequest);
-    			long count = super.countByHql(hql,  params.toList());
+    			int pn = pageRequest.getPageNumber() + 1;
+    			String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
+    					+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
+    					+ pageRequest.getPageSize() + " ";
+    			
+    			Map<String, Object> param = new HashMap<String, Object>();
+    			
+    			//List<Map<String, Object>> list = super.findBySql(sql, param);
+    			List<Line> list = createSQLQuery(sql, param, Line.class);
+    			long count = createSQLQuery(hql, param, null).size();
+    			
     			
     			return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
 	}
+    
     
     @Transactional
 	public ApiResponseResult getList_bak(String keyword,String lineNo,String linerName,String lastupdateDate,

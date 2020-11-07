@@ -24,7 +24,7 @@ public class Line extends BaseEntity {
     private static final long serialVersionUID = 4625660587007894370L;
     public static final String TABLE_NAME = "MES_base_LINE";
     
-    public Line(String lineNo1,String linerName1,String lineName1,
+   /* public Line(String lineNo1,String linerName1,String lineName1,
     		String linerCode1, Date createDate1,Date lastupdateDate1,
     		int checkStatus1,Long idd){
     	lineNo = lineNo1;
@@ -35,7 +35,7 @@ public class Line extends BaseEntity {
     	createDate = createDate1;
     	lastupdateDate = lastupdateDate1;
     	id= idd;
-    }
+    }*/
 
     /**
      * 线体编码
