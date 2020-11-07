@@ -1,7 +1,7 @@
 /**
  * 检验批次报表(FQC)
  */
-var pageCurr;
+var pageCurr;var localtableFilterIns;
 $(function() {
 	layui.use([ 'form', 'table','tableFilter','laydate', 'tableSelect' ], function() {
 		var table = layui.table, form = layui.form,tableFilter = layui.tableFilter,laydate = layui.laydate, tableSelect = layui.tableSelect;
@@ -87,11 +87,11 @@ $(function() {
 				title : 'FQC', sort: true
 			}] ],
 			done : function(res, curr, count) {
-				localtableFilterIns.reload();
+				//localtableFilterIns.reload();
 				pageCurr = curr;
 			}
 		});	
-		var localtableFilterIns = tableFilter.render({
+		 localtableFilterIns = tableFilter.render({
 			'elem' : '#listTable',
 			//'parent' : '#doc-content',
 			'mode' : 'local',//本地过滤
@@ -204,7 +204,10 @@ function getReport(dates,dept,item) {
 				if (data.result) {
 					if (data.result) {
 						tableIns.reload({
-							data : data.data
+							data : data.data,
+							done: function(res1, curr, count){
+								localtableFilterIns.reload();
+							}
 						});
 					} else {
 						layer.alert(data.msg);
