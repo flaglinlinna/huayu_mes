@@ -72,8 +72,8 @@ $(document).ready(function(){
 			</select> <span class="chose_tltle">请输入部门：</span> <select class="year_chose"
 				id="dep_select">
 
-			</select> <span class="chose_tltle">请选择日期范围：</span> <input style="width:15%;" type="text"
-				name="date" id="date" lay-verify="date" placeholder="请选择两个日期"
+			</select> <span class="chose_tltle">请选择日期：</span> <input style="width:15%;" type="text"
+				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
 				autocomplete="off" class="chose_text_in ">
 			<!-- <input class="chose_text_in"> -->
 			<button class="chose_enter" id="searchBtn">确定</button>
@@ -217,7 +217,7 @@ var t = null;
     		  //日期
     		  laydate.render({
     		    elem: '#date',
-    		    range: true
+    		   // range: true
     		  });
     	});
     </script>

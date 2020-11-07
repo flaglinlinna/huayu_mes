@@ -162,8 +162,8 @@ function getDepList() {
 }
 function getList() {
 	var date = $("#date").val();
-	var sdata = date.substring(0, date.indexOf(" "))
-	var edata = date.substring(date.indexOf(" ") + 3, date.length);
+	//var sdata = date.substring(0, date.indexOf(" "))
+//	var edata = date.substring(date.indexOf(" ") + 3, date.length);
 	// console.log(sdata)
 	// console.log(edata)
 	var class_no=$("#class_select").val();
@@ -171,8 +171,7 @@ function getList() {
 	var params = {
 		"class_nos" : class_no,
 		"dep_id" : dep_id,
-		"sdata" : sdata,
-		"edata" : edata
+		"sdata" : date
 	};
 	$.ajax({
 		type : "GET",

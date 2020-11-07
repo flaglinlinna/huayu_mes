@@ -2,12 +2,14 @@
  * 缺陷管理
  */
 var pageCurr;
+var _index = 0;
 $(function() {
-    layui.use(['table','form','laydate'], function(){
+    layui.use(['table','form','laydate','upload'], function(){
         var table = layui.table
             ,form = layui.form
             ,layer = layui.layer
-            ,laydate = layui.laydate;
+            ,laydate = layui.laydate
+            ,upload = layui.upload;
 
         tableIns=table.render({
             elem: '#iList'
@@ -31,7 +33,7 @@ $(function() {
             cols: [[
                 {type:'numbers'}
                 ,{field:'moduleName', title:'模块名称', width:120}
-                ,{field:'priority', title:'优先级',sort: true, width:90,templet:function (d){	
+                ,{field:'priority', title:'优先级',sort: true, width:90,templet:function (d){
                 	if(d.priority=="1"){
                 		return "高"
                 	}else if(d.priority=="2"){
@@ -47,7 +49,7 @@ $(function() {
                 ,{field:'handlerName', title:'处理人',width:100}
                 ,{field:'handlerDate', title: '解决日期', minWidth:120}
                 ,{field:'remark', title: '备注', width:150}
-                ,{fixed:'right', title:'操作',width:120,align:'center', toolbar:'#optBar'}
+                ,{fixed:'right', title:'操作',width:180,align:'center', toolbar:'#optBar'}
             ]]
             ,  done: function(res, curr, count){
                 //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -70,6 +72,9 @@ $(function() {
             } else if(obj.event === 'edit'){
                 //编辑
                 edit(data);
+            } else if(obj.event === 'file'){
+                //附件管理
+                fileView(data.id);
             }
         });
         //校验
@@ -77,11 +82,10 @@ $(function() {
 			  intValue: [
 			   /^\+?[1-9][0-9]*$/
 			    ,'此项数据应大于0且不含小数点'
-			  ] 
-			}); 
+			  ]
+			});
         //监听提交
         form.on('submit(add)', function(data){
-            debugger;
             var obj = data.field;
             // 新增或编辑
             if(obj.id){
@@ -105,6 +109,65 @@ $(function() {
             return false;
         });
 
+        //上传控件
+        upload.render({
+            elem: '#upload'
+            ,url: context+'/file/upload'
+            ,accept: 'file' //普通文件
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致。
+                layer.load(); //上传loading
+            }
+            ,done: function(res,index, upload){
+                layer.closeAll('loading'); //关闭loading
+                if(res.result == true){
+                    document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data)
+                    _index++;
+                }
+            }
+            ,error: function(index, upload){
+                layer.closeAll('loading'); //关闭loading
+            }
+        });
+
+        //上传控件
+        upload.render({
+            elem: "#upload2"
+            ,url: context + "/file/upload"
+            ,accept: "file" //普通文件
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致。
+                layer.load(); //上传loading
+            }
+            ,done: function(res,index, upload){
+                layer.closeAll("loading"); //关闭loading
+                if(res.result == true){
+                    //文件上传成功后再添加文件关联信息表
+                    $.ajax({
+                        type: "POST",
+                        data: { "defectId":$("#defectId").val(), "fileId":res.data.id, "fileName":res.data.bsName },
+                        url: context+"/sysDefect/addFile",
+                        success: function (res2) {
+                            if (res2.result == true){
+                                //显示新添加的文件
+                                document.getElementById("filelist2").innerHTML = $("#filelist2").html()+getExcFieldBefore(res.data,$('#defectId').val(),'/sysDefect/delFile');
+                            } else {
+                                layer.alert(res2.msg,function(index){
+                                    layer.close(index);
+                                });
+                            }
+                        },
+                        error: function(index, upload){
+                            layer.alert("操作请求错误，请您稍后再试",function(index){
+                                layer.close(index);
+                            });
+                        }
+                    });
+                }
+            }
+            ,error: function(index, upload){
+                layer.closeAll('loading'); //关闭loading
+            }
+        });
+
     });
 });
 
@@ -113,7 +176,7 @@ function openAdd(id,title){
     if(id==null || id==""){
         $("#id").val("");
     }
-    layer.open({
+    var index = layer.open({
         type:1,
         title: title,
         fixed:false,
@@ -121,15 +184,19 @@ function openAdd(id,title){
         shadeClose: true,
         area: ['550px'],
         content:$('#addDiv'),
+        macmin:true,//弹出框全屏
         end:function(){
             clean();
         }
     });
+    layer.full(index);//弹出框全屏
 }
 
 //新增
 function add(){
     clean();
+    $("#itemDiv1").css("display", "block");
+    $("#itemDiv2").css("display", "block");
     openAdd(null,"新增");
 }
 function doAdd(){
@@ -160,6 +227,8 @@ function doAdd(){
 //编辑
 function edit(obj){
     clean();
+    $("#itemDiv1").css("display", "none");
+    $("#itemDiv2").css("display", "none");
     $("#id").val(obj.id);
     $("#moduleName").val(obj.moduleName);
     $("#priority").val(obj.priority);
@@ -253,6 +322,53 @@ function loadAll(){
 //清空新增表单数据
 function clean(){
     $('#addForm')[0].reset();
+    _index = 0;
+    document.getElementById("filelist").innerHTML = "";
     layui.form.render();// 必须写
+}
+
+//附件管理弹出框
+function openFileView(id,title){
+    if(id==null || id==""){
+        $("#defectId").val("");
+    }
+    layer.open({
+        type:1,
+        title: title,
+        fixed:false,
+        resize :false,
+        shadeClose: true,
+        area: ['700px'],
+        content:$('#fileDiv'),
+        end:function(){
+        }
+    });
+}
+//附件管理
+function fileView(id){
+    $("#defectId").val(id);
+    $.ajax({
+        type: "POST",
+        data: { defectId:id },
+        url: context+"/sysDefect/getFile",
+        success: function (res) {
+            if (res.result == true) {
+                document.getElementById("filelist2").innerHTML = "";
+                for(var i = 0; i < res.data.length; i++){
+                    document.getElementById("filelist2").innerHTML = $("#filelist2").html()+getExcFieldBefore(res.data[i],id,"/sysDefect/delFile");
+                }
+                openFileView(id,"附件管理");
+            } else {
+                layer.alert(res.msg,function(){
+                    layer.closeAll();
+                });
+            }
+        },
+        error: function () {
+            layer.alert("操作请求错误，请您稍后再试",function(){
+                layer.closeAll();
+            });
+        }
+    });
 }
 

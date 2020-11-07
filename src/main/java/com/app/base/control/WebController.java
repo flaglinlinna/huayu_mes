@@ -5,6 +5,9 @@ import org.springframework.core.io.Resource;
 
 import com.system.session.service.MySessionService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class WebController extends BaseController {
 
 	protected String autoView(String name) {
@@ -13,5 +16,16 @@ public abstract class WebController extends BaseController {
             return name;
         }
         return "_" + name;
+    }
+
+    //过滤掉数组里面的空字符串
+    public List removeNullStringArray(String[] arrayString) {
+        List<String> list1 = new ArrayList<String>();
+        for (int i=0 ;i<arrayString.length; i++) {
+            if(arrayString[i]!=null && arrayString[i].length()!=0){ //过滤掉数组arrayString里面的空字符串
+                list1.add(arrayString[i]);
+            }
+        }
+        return list1;
     }
 }
