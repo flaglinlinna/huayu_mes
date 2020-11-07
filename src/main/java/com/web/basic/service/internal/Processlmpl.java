@@ -21,8 +21,6 @@ import com.web.basic.dao.ProcessDao;
 import com.web.basic.entity.Process;
 import com.web.basic.service.ProcessService;
 import provider.BaseOprService;
-import provider.Parameter;
-import provider.SQLParameter;
 
 
 @Service(value = "processService")

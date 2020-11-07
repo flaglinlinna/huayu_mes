@@ -105,7 +105,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("baseInfo/unit/getUnitDetail", JSON.stringify(param),
+			CoreUtil.sendAjax("/baseInfo/unit/getUnitDetail", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("unitForm", {
@@ -154,7 +154,7 @@ function addUnit() {
 }
 // 新增基本单位维护的提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("baseInfo/unit/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/baseInfo/unit/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -175,7 +175,7 @@ function addSubmit(obj) {
 
 // 编辑基本单位维护的提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("baseInfo/unit/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/baseInfo/unit/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -204,7 +204,7 @@ function delUnit(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("baseInfo/unit/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/baseInfo/unit/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
