@@ -171,8 +171,7 @@ function getList() {
 	var params = {
 		"class_nos" : class_no,
 		"dep_id" : dep_id,
-		"sdata" : date,
-		"edata" : ""
+		"sdata" : date
 	};
 	$.ajax({
 		type : "GET",

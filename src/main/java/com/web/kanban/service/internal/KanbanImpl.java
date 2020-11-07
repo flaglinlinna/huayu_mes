@@ -21,7 +21,7 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	KanbanDao kanbanDao;
 
 	@Override
-	public ApiResponseResult getCjbgList(String class_no, String dep_id, String sdata, String edata,String dev_ip) throws Exception {
+	public ApiResponseResult getCjbgList(String class_no, String dep_id, String sdata, String dev_ip) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = getCjbgListPrc("","","",class_no,  dep_id,  sdata,  dev_ip);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
@@ -42,7 +42,7 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	}
 
 	@Override
-	public ApiResponseResult getScdzList(String class_no, String dep_id, String sdata, String edata, String dev_ip)
+	public ApiResponseResult getScdzList(String class_no, String dep_id, String sdata,  String dev_ip)
 			throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = getScdzListPrc("","","",class_no,  dep_id,  sdata,  dev_ip);

@@ -82,7 +82,7 @@ public class kanbanController extends WebController {
 		String methodName = "车间报工看板";
 		try {	
 			//参数 String class_no, String dep_id, String sdata, String edata,String dev_ip
-			ApiResponseResult result = kanbanService.getCjbgList("999",line,"","",this.getIpAddr());
+			ApiResponseResult result = kanbanService.getCjbgList("999",line,"",this.getIpAddr());
 			logger.debug("获取看板=toCjbg1:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
@@ -104,7 +104,7 @@ public class kanbanController extends WebController {
 		String method = "kanban/toScdz";
 		String methodName = "生产电子看板";
 		try {	
-			ApiResponseResult result = kanbanService.getScdzList("999","","","",this.getIpAddr());
+			ApiResponseResult result = kanbanService.getScdzList("999","","",this.getIpAddr());
 			logger.debug("获取生产电子看板=toScdz:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
@@ -166,11 +166,11 @@ public class kanbanController extends WebController {
 	@ApiOperation(value = "获取车间报工看板信息", notes = "获取车间报工看板信息", hidden = true)
 	@RequestMapping(value = "/getCjbgList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getCjbgList(String class_nos, String dep_id, String sdata, String edata) {
+	public ApiResponseResult getCjbgList(String class_nos, String dep_id, String sdata) {
 		String method = "/kanban/getCjbgList";
 		String methodName = "获取车间报工看板信息";
 		try {
-			ApiResponseResult result = kanbanService.getCjbgList(class_nos, dep_id, sdata, edata, this.getIpAddr());
+			ApiResponseResult result = kanbanService.getCjbgList(class_nos, dep_id, sdata, this.getIpAddr());
 			logger.debug("获取车间报工看板信息=getCjbgList:" + result);
 			getSysLogService().success(module,method, methodName, null);
 			return result;
@@ -206,11 +206,11 @@ public class kanbanController extends WebController {
 	@ApiOperation(value = "获取生产电子看板信息", notes = "获取生产电子看板信息", hidden = true)
 	@RequestMapping(value = "/getScdzList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getScdzList(String class_nos, String dep_id, String sdata, String edata) {
+	public ApiResponseResult getScdzList(String class_nos, String dep_id, String sdata) {
 		String method = "/kanban/getScdzList";
 		String methodName = "获取生产电子看板信息";
 		try {
-			ApiResponseResult result = kanbanService.getScdzList(class_nos, dep_id, sdata, edata, this.getIpAddr());
+			ApiResponseResult result = kanbanService.getScdzList(class_nos, dep_id, sdata,  this.getIpAddr());
 			logger.debug("获取生产电子看板信息=getScdzList:" + result);
 			getSysLogService().success(module,method, methodName, null);
 			return result;
