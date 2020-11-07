@@ -34,6 +34,9 @@ public interface SysRoleService {
     //获取所有角色
     public ApiResponseResult getRoles() throws Exception;
 
+    //获取所有角色
+    public ApiResponseResult getRolesByStatus() throws Exception;
+
     //根据角色ID获取权限信息
     public ApiResponseResult getRolePerm(Long id) throws Exception;
 

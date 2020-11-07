@@ -5,11 +5,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
+import com.app.base.data.DataGrid;
 import com.utils.UserUtil;
 import com.web.report.service.CheckBatchService;
 
@@ -43,15 +46,18 @@ public class CheckBatchlmpl extends ReportPrcUtils implements CheckBatchService 
 	}
 	
 	@Override
-	public ApiResponseResult getItemList(String keyword) throws Exception {
+	public ApiResponseResult getItemList(String keyword, PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = getItemListPrc(UserUtil.getSessionUser().getFactory() + "",
 				UserUtil.getSessionUser().getCompany() + "",UserUtil.getSessionUser().getId() + "",
-				"成品", keyword);
+				"成品", keyword,pageRequest.getPageSize(),pageRequest.getPageNumber()+1);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		return ApiResponseResult.success().data(list.get(2));
+		Map map = new HashMap();
+		map.put("Total", list.get(2));
+		map.put("List", list.get(3));
+		return ApiResponseResult.success().data(map);
 	}
 	
 	@Override

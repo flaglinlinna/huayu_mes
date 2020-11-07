@@ -2,14 +2,18 @@ package com.web.report.controller;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
@@ -31,16 +35,25 @@ public class CheckBatchController extends WebController {
 	@Autowired
 	private CheckBatchService checkBatchService;
 
-	@ApiOperation(value = "检验批次报表", notes = "检验批次报表", hidden = true)
+	/*@ApiOperation(value = "检验批次报表", notes = "检验批次报表", hidden = true)
 	@RequestMapping(value = "/toCheckBatch")
 	public String toCheckBatch() {
-		return "/web/report/batch";
+		return "/web/report/check_batch";
+	}*/
+	@ApiOperation(value = "检验批次报表", notes = "检验批次报表", hidden = true)
+	@RequestMapping(value = "/toCheckBatch", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCheckBatch() {
+		ModelAndView mav = new ModelAndView();
+		 mav.addObject("Depart", this.getDeptInfo(""));
+		mav.setViewName("/web/report/check_batch");// 返回路径
+		return mav;
 	}
 
 	@ApiOperation(value = "获取部门信息", notes = "获取部门信息", hidden = true)
 	@RequestMapping(value = "/getDeptInfo", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getTaskNo(String keyword) {
+	public ApiResponseResult getDeptInfo(String keyword) {
 		String method = "report/batch/getDeptInfo";
 		String methodName = "获取部门信息";
 		try {
@@ -63,7 +76,8 @@ public class CheckBatchController extends WebController {
 		String method = "report/batch/getItemList";
 		String methodName = "获取物料信息";
 		try {
-			ApiResponseResult result = checkBatchService.getItemList(keyword);
+			Sort sort = new Sort(Sort.Direction.DESC, "id");
+			ApiResponseResult result = checkBatchService.getItemList(keyword, super.getPageRequest(sort));
 			logger.debug("获取物料信息=getItemList:");
 			getSysLogService().success(module, method, methodName, null);
 			return result;
@@ -78,15 +92,18 @@ public class CheckBatchController extends WebController {
 	@ApiOperation(value = "获取检验批次报表(FQC)", notes = "获取获取检验批次报表(FQC)", hidden = true)
 	@RequestMapping(value = "/getCheckBatchReport", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getCheckBatchReport(@RequestBody Map<String, Object> params) {
+	public ApiResponseResult getCheckBatchReport(@RequestParam(value = "dates", required = false) String dates,
+			@RequestParam(value = "deptId", required = false) String deptId,
+			@RequestParam(value = "itemNo", required = false) String itemNo) {
 		String method = "report/batch/getCheckBatchReport";
 		String methodName = "获取获取检验批次报表(FQC)";
 		try {
-			String beginTime = params.get("beginTime") == null?"":params.get("beginTime").toString();
-        	String endTime = params.get("endTime") == null?"":params.get("endTime").toString();
-        	String deptId = params.get("deptId") == null?"":params.get("deptId").toString();
-        	String itemNo = params.get("itemNo") == null?"":params.get("itemNo").toString();
-			ApiResponseResult result = checkBatchService.getCheckBatchReport(beginTime,endTime,
+			
+			String[] date = {"",""};
+			if(StringUtils.isNotEmpty(dates)){
+				date = dates.split(" - ");
+			}	
+			ApiResponseResult result = checkBatchService.getCheckBatchReport(date[0],date[1],
 					deptId, itemNo);
 			logger.debug("获取获取检验批次报表(FQC)=getCheckBatchReport:");
 			getSysLogService().success(module, method, methodName, null);
