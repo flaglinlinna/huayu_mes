@@ -6,7 +6,7 @@ var tableSelect1;
 $(function() {
     layui.use('table', function(){
         var table = layui.table
-            ,form = layui.form;
+            ,form = layui.form, formSelects = layui.formSelects;;
 
         tableIns=table.render({
             elem: '#uesrList'
@@ -43,8 +43,8 @@ $(function() {
                 ,{field:'email', title: '邮箱', width:180}
                 ,{field:'sex', title: '性别', width:60}
                 ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
-                ,{field:'registerSrc', title: '注册来源', minWidth:100}
-                ,{field:'createDate', title: '添加时间', width:150}
+                ,{field:'roles', title: '拥有角色', minWidth:150}
+                ,{field:'createDate', title: '添加时间', width:120}
                 ,{fixed:'right', title:'操作',width:200,align:'center', toolbar:'#optBar'}
             ]]
             ,  done: function(res, curr, count){

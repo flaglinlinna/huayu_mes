@@ -39,6 +39,8 @@ public interface SysUserService {
 
     public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;
     
+    public ApiResponseResult getListRole() throws Exception;
+    
 
     
 //手持

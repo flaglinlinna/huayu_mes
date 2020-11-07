@@ -373,7 +373,32 @@ public class SysUserImpl implements SysUserService {
         Specification<SysUser> spec = Specification.where(BaseService.and(filters, SysUser.class));
         Specification<SysUser> spec1 =  spec.and(BaseService.or(filters1, SysUser.class));
         Page<SysUser> page = sysUserDao.findAll(spec1, pageRequest);
-        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+        
+        List<SysUser> ls = page.getContent();
+        List<Map<String,Object>> mapList = new ArrayList<>();
+        for(SysUser su:ls){
+        	Map<String,Object> map = new HashMap<>();
+        	map.put("id", su.getId());
+        	map.put("userCode", su.getUserCode());
+        	map.put("mobile", su.getMobile());
+        	map.put("userName",su.getUserName() );
+        	map.put("email", su.getEmail());
+        	map.put("sex", su.getSex());
+        	map.put("status", su.getStatus());
+        	map.put("createDate", su.getCreateDate());
+        	
+        	List<SysRole> lr = sysRoleDao.getRoleByUser(su.getId());
+        	List mll = new ArrayList<>();
+        	if(lr.size() > 0){
+        		for(SysRole sr:lr){
+        			mll.add(sr.getRoleName());
+        		}
+        	}
+        	map.put("roles", mll);
+        	mapList.add(map);
+        }
+        
+        return ApiResponseResult.success().data(DataGrid.create(mapList, (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 
 
@@ -893,6 +918,12 @@ public class SysUserImpl implements SysUserService {
 	public SysUser findByUserCode2(String userCode) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ApiResponseResult getListRole() throws Exception {
+		// TODO Auto-generated method stub
+		return ApiResponseResult.success("").data(sysRoleDao.findByDelFlagAndStatus(0,0));
 	}
 	
 }

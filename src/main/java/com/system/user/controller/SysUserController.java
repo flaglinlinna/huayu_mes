@@ -162,10 +162,17 @@ public class SysUserController extends WebController{
         }
     }
 
-    @RequestMapping(value = "/toUserList")
+   /* @RequestMapping(value = "/toUserList")
     public String toUserList(){
         return "/system/user/userList";
-    }
+    }*/
+	@RequestMapping(value = "/toUserList", method = RequestMethod.GET)
+	public ModelAndView toUserList() throws Exception {
+		ModelAndView mav = new ModelAndView();
+		//mav.addObject("Roles", sysUserService.getListRole().getData());
+		mav.setViewName("/system/user/userList");// 返回路径
+		return mav;
+	}
    
     @ApiOperation(value = "获取用户列表", notes = "获取用户列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)

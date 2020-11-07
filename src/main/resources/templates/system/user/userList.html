@@ -171,6 +171,26 @@
 
     <script src="/js/dateUtils.js" th:src="@{/js/dateUtils.js}"></script>
     <script src="/js/auth/userList.js" th:src="@{/js/auth/userList.js}"></script>
+    
+    <script th:inline="javascript">
+        /* var roles_list=[[${Roles}]];
+        function rolesLike(d){
+        	 return [
+        	            '<select name="like" xm-select="like_selects_' + (d.id || (new Date().getTime() + '_' + Math.ceil(Math.random() * 1000000))) + '" xm-select-show-count="2" xm-select-type="1">', // xm-select实际的作用就跟id差不多，所以实际使用中要注意唯一性，
+        	            function () {
+        	              var str = '';
+        	              var values = d.roles;// ? d.roles.split(',') : [];
+        	              layui.each(roles_list, function (index, like) {
+        	                str += '<option value="' + like.id + '" ' + (values.indexOf(like.id) !== -1 ? 'selected' : '') + '>' + like.roleName + '</option>'
+        	              });
+        	              console.log(str)
+        	              return str;
+        	            }(),
+        	            '</select>'
+        	          ].join('');
+        } */
+    </script>
+    
 </div>
 </body>
 </html>

@@ -26,6 +26,6 @@ public interface SysRoleDao extends CrudRepository<SysRole, Long>, JpaSpecificat
 
     public int countByDelFlagAndRoleCode(Integer delFlag, String roleCode);
     
-    @Query(value = "select t from SysRole t left join UserRoleMap m on m.roleId = t.id and m.userId =:userId")
+    @Query(value = "select t from SysRole t left join UserRoleMap m on m.roleId = t.id and m.userId =:userId where m.delFlag = 0 and t.delFlag = 0")
 	public List<SysRole> getRoleByUser(@Param("userId") Long userId);
 }
