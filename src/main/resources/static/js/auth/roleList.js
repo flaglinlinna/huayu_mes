@@ -124,7 +124,7 @@ function showUser(id) {
     console.log(id);
     tableIns1=table1.render({
         elem: '#UserShowList'
-        ,url:context+'/sysUser/getList'
+        ,url:context+'/sysUser/getListByRoleId?roleId='+id
         ,method: 'get' //默认：get请求
         ,cellMinWidth: 80
         ,page: true,
@@ -150,16 +150,15 @@ function showUser(id) {
         cols: [[
             {type:'numbers'}
             // ,{field:'id', title:'ID', width:80, unresize: true, sort: true}
-            ,{field:'userCode', title:'账号', width:120}
-            ,{field:'mobile', title:'手机号', width:120}
+            ,{field:'USER_CODE', title:'账号', width:120}
+            ,{field:'MOBILE', title:'手机号', width:120}
             //,{field:'realName', title:'真实名称', width:100}
-            ,{field:'userName', title:'名称', width:100}
-            ,{field:'email', title: '邮箱', width:180}
-            ,{field:'sex', title: '性别', width:60}
-            ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
-            ,{field:'registerSrc', title: '注册来源', minWidth:100}
-            ,{field:'createDate', title: '添加时间', width:150}
-            ,{fixed:'right', title:'操作',width:200,align:'center', toolbar:'#optBar'}
+            ,{field:'USER_NAME', title:'名称', width:100}
+            ,{field:'EMAIL', title: '邮箱', width:180}
+            ,{field:'SEX', title: '性别', width:60}
+            // ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
+            ,{field:'REGISTER_SRC', title: '注册来源', minWidth:100}
+            ,{field:'CREATE_DATE', title: '添加时间', width:150}
         ]]
         ,  done: function(res, curr, count){
             //如果是异步请求数据方式，res即为你接口返回的信息。
