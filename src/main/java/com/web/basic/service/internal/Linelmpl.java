@@ -6,7 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
+import com.utils.BaseSql;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
@@ -32,10 +37,11 @@ import provider.SQLParameter;
 
 @Service(value = "lineService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class Linelmpl  extends BaseOprService implements LineService {
+public class Linelmpl extends BaseSql  implements LineService {
 	@Autowired
     private LineDao lineDao;
-
+	
+	
 	 /**
      * 新增线体
      */
@@ -233,26 +239,16 @@ public class Linelmpl  extends BaseOprService implements LineService {
     					+ pageRequest.getPageSize() + " ";
     			
     			Map<String, Object> param = new HashMap<String, Object>();
-    			List<Map<String, Object>> list = super.findBySql(sql, param);
-    			long count = super.countBySql(hql, param);
     			
-    			List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
-    			for(Map<String, Object> map:list){
-    				Map<String, Object> m = new HashMap<String, Object>();
-    				m.put("lineNo", map.get("LINE_NO"));
-    				m.put("lineName", map.get("LINE_NAME"));
-    				m.put("checkStatus", map.get("CHECK_STATUS"));
-    				m.put("linerCode", map.get("LINER_CODE"));
-    				m.put("linerName", map.get("LINER_NAME"));
-    				m.put("id", map.get("ID"));
-    				m.put("createDate", map.get("CREATE_DATE"));
-    				m.put("lastupdateDate", map.get(""));
-    				list_new.add(m);
-    			}
+    			//List<Map<String, Object>> list = super.findBySql(sql, param);
+    			List<Line> list = createSQLQuery(sql, param, Line.class);
+    			long count = createSQLQuery(hql, param, null).size();
     			
-    			return ApiResponseResult.success().data(DataGrid.create(list_new, (int) count,
+    			
+    			return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
 	}
+    
     
     @Transactional
 	public ApiResponseResult getList_bak(String keyword,String lineNo,String linerName,String lastupdateDate,
