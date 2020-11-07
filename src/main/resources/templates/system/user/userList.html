@@ -47,7 +47,7 @@
         <!--<hr class="layui-bg-blue"/>-->
         <hr class="layui-bg-black"/>
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addUser()">新增用户</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" id="addUser" lay-event="addUser" >新增用户</button>
 
         <div style="display:none;" id="currentUser"><shiro:principal property="id"></shiro:principal></div>
         <!--<div style="display:none;" id="currentUser"><shiro:principal property="fid"></shiro:principal></div>-->
@@ -71,7 +71,7 @@
 
     <!--添加或编辑用户-->
     <div id="setUser" class="layer_self_wrap" style="width:500px;display:none;">
-        <form id="userForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+        <form id="userForm" lay-filter="userForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="roleIds" type="hidden" name="roleIds"/>
             <input id="roleNames" type="hidden" name="roleNames"/>
@@ -129,8 +129,11 @@
 
             <div class="layui-form-item">
                 <label class="layui-form-label">授予角色</label>
-                <div class="layui-input-block" id="roleDiv">
+                <div class="layui-input-inline">
+                <input id="roleId" name="roleId" lay-verify="roleId" autocomplete="off" class="layui-input" type="text"/>
                 </div>
+                    <!--<div class="layui-input-block" id="roleDiv">-->
+                <!--</div>-->
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block" style="margin-left: 10px;">

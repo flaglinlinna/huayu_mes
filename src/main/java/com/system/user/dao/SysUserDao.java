@@ -30,10 +30,14 @@ public interface SysUserDao extends CrudRepository<SysUser, Long>, JpaSpecificat
     public SysUser findById(long id);
 
 
-    @Query(value = "select * from sys_user su left join SYS_USER_ROLE sur on su.ID =sur.USER_ID" +
-            " where su.DEL_FLAG = 0 and sur.ROLE_ID = ?1 and sur.DEL_FLAG = 0",
-            countQuery = "select count(*) from sys_user su left join SYS_USER_ROLE sur on su.ID =sur.USER_ID" +
-                    " where su.DEL_FLAG = 0 and sur.ROLE_ID = 5152 and sur.DEL_FLAG = 0",
+//    @Query(value = "select * from sys_user su left join SYS_USER_ROLE sur on su.ID =sur.USER_ID" +
+//            " where su.DEL_FLAG = 0 and sur.ROLE_ID = ?1 and sur.DEL_FLAG = 0",
+//            countQuery = "select count(*) from sys_user su left join SYS_USER_ROLE sur on su.ID =sur.USER_ID" +
+//                    " where su.DEL_FLAG = 0 and sur.ROLE_ID = 5152 and sur.DEL_FLAG = 0",
+//            nativeQuery = true)
+
+    @Query( value = "select u.* from  sys_user u left join  sys_user_role r on r.user_id=u.id  where u.del_flag=0 and u.status=0 and r.role_id=?1 and r.del_flag=0 ",
+            countQuery = "select count(u.id)c from  sys_user u left join  sys_user_role r on r.user_id=u.id  where u.del_flag=0 and u.status=0 and r.role_id=?1 and r.del_flag=0 ",
             nativeQuery = true)
     public Page<Map<String, Object>> getListByRoleId(Long roleId, Pageable pageable);
 
