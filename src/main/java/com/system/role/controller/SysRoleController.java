@@ -197,6 +197,25 @@ public class SysRoleController extends WebController {
         }
     }
 
+    @ApiOperation(value = "获取所有有效角色", notes = "获取所有有效角色")
+    @RequestMapping(value = "/getRolesByStatus", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getRolesByStatus(){
+        String method = "/sysRole/getRolesByStatus";String methodName ="获取所有有效角色";
+        try{
+            ApiResponseResult result = sysRoleService.getRolesByStatus();
+            logger.debug("获取所有有效角色=getRoles:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("获取所有有效角色！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取所有有效角色！");
+        }
+    }
+
+
     @ApiOperation(value = "根据角色ID获取权限信息", notes = "根据角色ID获取权限信息")
     @RequestMapping(value = "/getRolePerm", method = RequestMethod.POST)
     @ResponseBody

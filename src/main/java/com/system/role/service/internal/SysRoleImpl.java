@@ -293,6 +293,19 @@ public class SysRoleImpl implements SysRoleService {
         return ApiResponseResult.success().data(list);
     }
 
+
+    /**
+     * 获取所有有效角色
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponseResult getRolesByStatus() throws Exception{
+        List<SysRole> list = sysRoleDao.findByDelFlagAndStatus(0,0);
+        return ApiResponseResult.success().data(list);
+    }
+
     /**
      * 根据角色ID获取权限信息
      * @param id
