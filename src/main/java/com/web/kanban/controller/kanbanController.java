@@ -104,7 +104,7 @@ public class kanbanController extends WebController {
 		String method = "kanban/toScdz";
 		String methodName = "生产电子看板";
 		try {	
-			ApiResponseResult result = kanbanService.getScdzList("999",line,"","",this.getIpAddr());
+			ApiResponseResult result = kanbanService.getScdzList("999","","","",this.getIpAddr());
 			logger.debug("获取生产电子看板=toScdz:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);

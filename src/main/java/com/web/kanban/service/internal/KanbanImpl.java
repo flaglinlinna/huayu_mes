@@ -23,7 +23,7 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	@Override
 	public ApiResponseResult getCjbgList(String class_no, String dep_id, String sdata, String edata,String dev_ip) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getCjbgListPrc("","","",class_no,  dep_id,  sdata,  edata, dev_ip);
+		List<Object> list = getCjbgListPrc("","","",class_no,  dep_id,  sdata,  dev_ip);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -45,7 +45,7 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	public ApiResponseResult getScdzList(String class_no, String dep_id, String sdata, String edata, String dev_ip)
 			throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getScdzListPrc("","","",class_no,  dep_id,  sdata,  edata, dev_ip);
+		List<Object> list = getScdzListPrc("","","",class_no,  dep_id,  sdata,  dev_ip);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

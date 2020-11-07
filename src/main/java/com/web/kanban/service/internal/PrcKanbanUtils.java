@@ -21,7 +21,7 @@ public class PrcKanbanUtils {
 
 	// 获取车间报工看板信息
 	public List getCjbgListPrc(String company,String facoty,String user_id, String class_id,
-			String dep_id, String sdata, String edata,String dev_ip) throws Exception {
+			String dep_id, String sdata, String dev_ip) throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
@@ -75,7 +75,7 @@ public class PrcKanbanUtils {
 	
 	// 获取生产电子看板信息
 		public List getScdzListPrc(String company,String facoty,String user_id, String class_id,
-				String dep_id, String sdata, String edata,String dev_ip) throws Exception {
+				String dep_id, String sdata, String dev_ip) throws Exception {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {

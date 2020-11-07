@@ -1,32 +1,40 @@
 $(function() {
-	dealData();
+	var kanbanList=kanbanDataList
+	getDepList()
+	dealData(kanbanList);
+		$("#searchBtn").click(function(){
+			getList();
+		});
 })
-console.log(kanbanDataList);
-function dealData() {
-	var kanbanData = kanbanDataList.data.List;
-	var xAxis = [];
-	var series1 = [];
-	var series2 = [];
-	var series3 = [];
-	for (var i = 0; i < kanbanData.length; i++) {
-		xAxis.push(kanbanData[i].LINER_NAME);
-		series1.push(kanbanData[i].QTY_PLAN);// 计划数量
-		series2.push(kanbanData[i].QTY_DONE);// 完成数量
-		series3.push(kanbanData[i].RATE_DONE);// 完工率
+//console.log(kanbanDataList);
+function dealData(kanbanList) {
+	console.log(kanbanList)
+	if(kanbanList.data!=null){
+		var kanbanData = kanbanList.data.List;
+		var xAxis = [];
+		var series1 = [];
+		var series2 = [];
+		var series3 = [];
+		for (var i = 0; i < kanbanData.length; i++) {
+			xAxis.push(kanbanData[i].LINER_NAME);
+			series1.push(kanbanData[i].QTY_PLAN);// 计划数量
+			series2.push(kanbanData[i].QTY_DONE);// 完成数量
+			series3.push(kanbanData[i].RATE_DONE);// 完工率
+		}
+		chartDiv(xAxis, series1, series2, series3);
+		setTable(kanbanData);//表格数据
+		var emp_plan = parseInt(kanbanList.data.EMP_NUM_PLN);
+		var emp_now = parseInt(kanbanList.data.EMP_NUM_NOW);
+		var emp_off = parseInt(kanbanList.data.PO_NUM_EMP_OFF);
+		getChart2(emp_plan, emp_now, emp_off);
+		var done = parseInt(kanbanList.data.PRD_NUM_DONE);
+		var plan = parseInt(kanbanList.data.PRD_NUM_PLN);
+		var doneRate = kanbanList.data.PRD_RATE_DONE;
+		getChart3(done, plan, doneRate);
+		$("#showLine").text(
+				"开线数：" + kanbanList.data.LINE_NUM_NOW + "     " + "总线体数："
+						+ kanbanList.data.LINE_NUM_PLN);
 	}
-	chartDiv(xAxis, series1, series2, series3);
-	setTable(kanbanData);//表格数据
-	var emp_plan = parseInt(kanbanDataList.data.EMP_NUM_PLN);
-	var emp_now = parseInt(kanbanDataList.data.EMP_NUM_NOW);
-	var emp_off = parseInt(kanbanDataList.data.PO_NUM_EMP_OFF);
-	getChart2(emp_plan, emp_now, emp_off);
-	var done = parseInt(kanbanDataList.data.PRD_NUM_DONE);
-	var plan = parseInt(kanbanDataList.data.PRD_NUM_PLN);
-	var doneRate = kanbanDataList.data.PRD_RATE_DONE;
-	getChart3(done, plan, doneRate);
-	$("#showLine").text(
-			"开线数：" + kanbanDataList.data.LINE_NUM_NOW + "     " + "总线体数："
-					+ kanbanDataList.data.LINE_NUM_PLN);
 }
 
 function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
@@ -52,7 +60,7 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			y : 'bottom',
 			data : [ '计划产量', '达成产量', '完工率' ],
 			textStyle : {
-				fontSize : 18,// 字体大小
+				fontSize : 17,// 字体大小
 				color : '#ffffff'// 字体颜色
 			},
 		},
@@ -191,7 +199,8 @@ function getChart3(done, plan, doneRate) {
 		title : {
 			text : '完工率:' + doneRate + '%',
 			textStyle : {
-				color : '#FFFFFF' // 图例文字颜色
+				color : '#FFFFFF' ,// 图例文字颜色
+				fontSize:'14px'
 			},
 			x : 'right'
 		},
@@ -281,4 +290,49 @@ function setTable(kanbanData) {
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
+}
+function getDepList(){
+	$.ajax({
+        type: "GET",
+        url: context+"kanban/getCjbgDepList",
+        data: {},
+        dataType: "json",
+        success: function(res){
+           // console.log(res)
+            if(res.result){
+            	$("#dep_select").empty();
+            	var html = "<option value=''>请选择部门</option>";
+            	for(j = 0,len=res.data.length; j < len; j++) {
+            		var arr = res.data[j];
+            		html += "<option value='"+arr.ID+"'>"+arr.ORG_NAME+"</option>";
+            	}
+            	
+           	   $("#dep_select").append(html);
+            }
+         }
+    });
+}
+function getList(){
+	var class_no=$("#class_select").val();
+	var dep_id=$("#dep_select").val();
+	var date=$("#date").val();
+	var params = {
+			"class_nos":class_no,
+			"dep_id":dep_id,
+			"sdata":date
+		};
+	$.ajax({
+         type: "GET",
+         url: context+"kanban/getScdzList",
+         data: params,
+         dataType: "json",
+         success: function(res){
+             console.log(res)
+             if(res.result){
+            	 dealData(res)
+             }else{
+            	 alert(res.msg);
+             }
+          }
+     });
 }
