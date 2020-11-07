@@ -2,6 +2,7 @@
  * 用户管理
  */
 var pageCurr;
+var tableSelect1;
 $(function() {
     layui.use('table', function(){
         var table = layui.table
@@ -89,9 +90,10 @@ $(function() {
         });
     });
     //搜索框
-    layui.use(['form','laydate'], function(){
+    layui.use(['form','laydate','tableSelect'], function(){
         var form = layui.form ,layer = layui.layer
             ,laydate = layui.laydate;
+        tableSelect1 = layer.tableSelect;
         // //日期
         // laydate.render({
         //     elem: '#createdTimeStart'
@@ -305,6 +307,89 @@ function doSetPassAjax(obj,currentUser){
 
 //新增用户-获取用户信息
 function addUser(){
+
+    // tableSelect=tableSelect1.render({
+    //     elem : '#num',
+    //     searchKey : 'keyword',
+    //     checkedKey : 'id',
+    //     searchPlaceholder : '试着搜索',
+    //     table : {
+    //         url:  context +'/sysRole/getRoles',
+    //         method : 'get',
+    //         cols : [ [
+    //             { type: 'radio' },//多选  radio
+    //             , {
+    //                 field : 'id',
+    //                 title : 'id',
+    //                 width : 0,hide:true
+    //             }, {
+    //                 field : 'TASK_NO',
+    //                 title : '制令单号',
+    //                 width : 180,sort: true
+    //             }, {
+    //                 field : 'ITEM_NO',
+    //                 title : '物料编码',
+    //                 width : 150,sort: true
+    //             },{
+    //                 field : 'ITEM_NAME',
+    //                 title : '物料描述',
+    //                 width : 240,sort: true
+    //             }, {
+    //                 field : 'LINER_NAME',
+    //                 title : '组长',
+    //                 width : 100,sort: true
+    //             },{
+    //                 field : 'QTY_PLAN',
+    //                 title : '制单数量',
+    //                 width : 80,sort: true
+    //             },{
+    //                 field : 'OTPT_QTY',
+    //                 title : '产出数量',
+    //                 width : 80,sort: true
+    //             },{
+    //                 field : 'ORDER_RATE',
+    //                 title : '达成率',
+    //                 width : 80,sort: true
+    //             }    ] ],
+    //         page : false,
+    //         request : {
+    //             pageName : 'page' // 页码的参数名称，默认：page
+    //             ,
+    //             limitName : 'rows' // 每页数据量的参数名，默认：limit
+    //         },
+    //         parseData : function(res) {
+    //             if(res.result){
+    //                 // 可进行数据操作
+    //                 return {
+    //                     "count" : 0,
+    //                     "msg" : res.msg,
+    //                     "data" : res.data,
+    //                     "code" : res.status
+    //                     // code值为200表示成功
+    //                 }
+    //             }
+    //
+    //         },
+    //     },
+    //     done : function(elem, data) {
+    //         //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+    //         var da=data.data;
+    //         //console.log(da[0])
+    //         form.val("itemFrom", {
+    //             "num":da[0].TASK_NO,
+    //             "mtrcode" : da[0].ITEM_NO,
+    //             "mtrdescr" : da[0].ITEM_NAME,
+    //             "qty" : da[0].QTY_PLAN,
+    //             "linecode" : da[0].LINER_NAME,
+    //             "inqty" : da[0].OTPT_QTY,
+    //             "rate" : da[0].ORDER_RATE,
+    //         });
+    //         form.render();// 重新渲染
+    //
+    //         getDetailByTask(da[0].TASK_NO);
+    //     }
+    // });
+
     $.get(context+"/sysRole/getRoles",function(data){
         if(isLogin(data)){
             if(data.result==true && data.data!=null){

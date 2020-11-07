@@ -56,7 +56,7 @@ public class Inputlmpl extends PrcUtils implements InputService {
 	public ApiResponseResult addPut(String barcode, String task_no, String item_no, String qty) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = addPutPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",barcode,
-				task_no, item_no, qty,UserUtil.getSessionUser().getUserCode(),
+				task_no, item_no, qty,UserUtil.getSessionUser().getId().toString(),
 				"主料","PRC_BATCH_IMP_BARCODE");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());

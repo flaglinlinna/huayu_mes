@@ -204,7 +204,7 @@ function delUser(obj,id,name) {
             layer.confirm('您确定要踢出'+name+'用户吗？', {
                 btn: ['确认','返回'] //按钮
             }, function(){
-            	alert(sessionId)
+            	// alert(sessionId)
                 $.post("/online/delete",{"id":id,"sessionId":sessionId},function(data){
                 	if(data.result){
                         //回调弹框

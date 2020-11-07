@@ -14,20 +14,20 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
+import com.utils.BaseSql;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.ProcessDao;
+import com.web.basic.entity.Line;
 import com.web.basic.entity.Process;
 import com.web.basic.service.ProcessService;
 import provider.BaseOprService;
-import provider.Parameter;
-import provider.SQLParameter;
 
 
 @Service(value = "processService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class Processlmpl extends BaseOprService implements ProcessService {
+public class Processlmpl extends BaseSql implements ProcessService {
 	@Autowired
     private ProcessDao processDao;
 
@@ -206,22 +206,10 @@ public class Processlmpl extends BaseOprService implements ProcessService {
                 + pageRequest.getPageSize() + " ";
 
         Map<String, Object> param = new HashMap<String, Object>();
-        List<Map<String, Object>> list = super.findBySql(sql, param);
-        long count = super.countBySql(hql, param);
-
-        List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
-        for(Map<String, Object> map:list){
-            Map<String, Object> m = new HashMap<String, Object>();
-            m.put("procNo", map.get("PROC_NO"));
-            m.put("procName", map.get("PROC_NAME"));
-            m.put("procOrder", map.get("PROC_ORDER"));
-            m.put("checkStatus", map.get("CHECK_STATUS"));
-            m.put("id", map.get("ID"));
-            m.put("createDate", map.get("CREATE_DATE"));
-            m.put("lastupdateDate", map.get("LASTUPDATE_DATE"));
-            list_new.add(m);
-        }
-        return ApiResponseResult.success().data(DataGrid.create(list_new, (int) count,
+        List<Process> list = createSQLQuery(sql, param, Process.class);
+		long count = createSQLQuery(hql, param, null).size();
+		
+        return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
 
