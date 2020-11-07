@@ -13,7 +13,7 @@
                 <div class="layui-input-inline">
                     <input id="keyword" name="keyword" autocomplete="off" class="layui-input" type="text"/>
                 </div>
-                
+
                 <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
                 <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
                 <!--<label class="layui-form-label">昵称</label>-->
@@ -44,23 +44,24 @@
 
         <script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="file">附件管理</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
     </div>
 
     <!--添加或编辑用户-->
-    <div id="addDiv" class="layer_self_wrap" style="width:500px;display:none;">
+    <div id="addDiv" class="layer_self_wrap" style="display:none;">
         <form id="addForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
                 <label class="layui-form-label">模块名称</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-inline" style="width:30%;">
                     <input id="moduleName" name="moduleName" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">优先级</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-inline" style="width:30%;">
                  <select id="priority" name="priority" lay-verify="required">
 							<option value="">请选择</option>
 							<option value="3">低</option>
@@ -71,27 +72,43 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">状态</label>
-                <div class="layui-input-inline">
-                <select id="status" name="status" lay-verify="required">
-							<option value="">请选择</option>
-							<option value="新建">新建</option>
-							<option value="已修复">已修复</option>
-							<option value="关闭">关闭</option>
-							<option value="完成">完成</option>
-						</select>
+                <div class="layui-input-inline" style="width:30%;">
+                    <select id="status" name="status" lay-verify="required">
+                        <option value="">请选择</option>
+                        <option value="新建">新建</option>
+                        <option value="已修复">已修复</option>
+                        <option value="关闭">关闭</option>
+                        <option value="完成">完成</option>
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">问题描述</label>
                 <div class="layui-input-inline" style="width:70%;">
-               <textarea id="descript" name="descript" 
-						 class="layui-textarea"></textarea> 
+                    <textarea id="descript" name="descript" class="layui-textarea"></textarea>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">备注</label>
                 <div class="layui-input-inline" style="width:70%;">
-               <textarea id="remark" name="remark"  class="layui-textarea"></textarea> 
+                    <textarea id="remark" name="remark"  class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div id="itemDiv1" class="layui-form-item" style="display:none;">
+                <label class="layui-form-label">附件上传</label>
+                <div class="layui-input-inline" style="width:70%;">
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload">
+                        <i class="layui-icon layui-icon-upload-circle"></i>上传
+                    </button>
+                </div>
+            </div>
+            <div id="itemDiv2" class="layui-form-item" style="display:none;">
+                <label class="layui-form-label">附件列表</label>
+                <div class="layui-input-inline" style="width:70%;">
+                    <div style="position:relative;padding:10px 30px;width:90%">
+                        <div class="exc-area" id="filelist">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -99,6 +116,22 @@
                 <div class="layui-input-block" style="margin-left: 10px;">
                     <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="add">提交</button>
                     <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--附件管理-->
+    <div id="fileDiv" class="layer_self_wrap" style="display:none;">
+        <form id="fileForm" class="layui-form" method="post" action="" style="margin-top: 10px;">
+            <input id="defectId" type="hidden" name="defectId"/>
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload2" style="margin-left:15px;">
+                <i class="layui-icon layui-icon-upload-circle"></i>上传
+            </button>
+            <div class="layui-form-item"><div class="layui-card-header">附件列表</div>
+                <div style="position:relative;padding:10px 30px;width:90%">
+                    <div class="exc-area" id="filelist2">
+                    </div>
                 </div>
             </div>
         </form>

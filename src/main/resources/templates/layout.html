@@ -125,19 +125,34 @@
             }
         }
 
-        //封装附件列表的样式
-        function getExcFieldBefore(data,rid,url,isDel){
-            //IsDel：是否显示删除按钮
+        //封装附近列表的样式
+        function getExcField(index,data){
+            var html = ' <div class="exc-field" id="div'+data.id+'"> <input type="hidden" name="fileIds['+index+']" value="'+data.id+'">'+
+                ' <button type="button" class="layui-btn layui-btn-sm exc-down" > '+
+                ' <a href="'+context+'/file/get?fsFileId='+data.id+'" th:href="@{/file/get?fsFileId='+data.id+'}"><i class="layui-icon">&#xe601;</i>下载</a> '+
+                ' </button> '+
+                ' <button onclick="_DelFile('+data.id+')" type="button" class="layui-btn layui-btn-sm layui-btn-danger exc-delete"> '+
+                '   <i class="layui-icon">&#xe640;</i>删除'+
+                '  </button> '+
+                '  <span class="exc-icon exc-icon-'+getType(data.bsContentType)+'"></span> '+
+                '  <div class="exc-info"><span class="exc-fileName" >'+data.bsName+'</span> '+
+                '       <div class="exc-progress"> '+
+                '          <div class="exc-progress-bar"></div> '+
+                '     </div> '+
+                '  </div> '+
+                ' </div>';
+            return html
+        }
+        //封装附件列表的样式2
+        function getExcFieldBefore(data,rid,url){
             var html = ' <div class="exc-field" id="div'+data.id+'"> '+
-                ' <button  type="button" class="layui-btn layui-btn-sm exc-down" > '+
-                ' <a href="'+context+'/file/get?fsFileId='+data.id+'" th:href="@{/file/get?fsFileId='+data.id+'}"><i class="layui-icon">&#xe601;</i></a> '+
-                ' </button> ';
-            if(isDel){
-                html += ' <button onclick="_DelFileAndRecord('+rid+','+data.id+',\''+url+'\')" type="button" class="layui-btn layui-btn-sm layui-btn-danger exc-delete"> '+
-                    '   <i class="layui-icon">&#xe640;</i>'+
-                    '  </button> ';
-            }
-            html += '  <span class="exc-icon exc-icon-'+getType(data.bsContentType)+'"></span> '+
+                ' <button type="button" class="layui-btn layui-btn-sm exc-down" > '+
+                ' <a href="'+context+'/file/get?fsFileId='+data.id+'" th:href="@{/file/get?fsFileId='+data.id+'}"><i class="layui-icon">&#xe601;</i>下载</a> '+
+                ' </button> '+
+                ' <button onclick="_DelFileAndRecord('+rid+','+data.id+',\''+url+'\')" type="button" class="layui-btn layui-btn-sm layui-btn-danger exc-delete"> '+
+                '   <i class="layui-icon">&#xe640;</i>删除'+
+                '  </button> '+
+                '  <span class="exc-icon exc-icon-'+getType(data.bsContentType)+'"></span> '+
                 '  <div class="exc-info"><span class="exc-fileName" >'+data.bsName+'</span> '+
                 '       <div class="exc-progress"> '+
                 '          <div class="exc-progress-bar"></div> '+
@@ -147,7 +162,35 @@
 
             return html
         }
+
         //公有的删除业务附件的方法
+        function _DelFile(fid){
+            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                //do something
+                layer.close(index);
+                $.ajax({
+                    type: "POST",
+                    data: {fsFileId:fid},
+                    url: context + "/file/delete",
+                    success: function (data) {
+                        if (data.result == true) {
+                            $("#div"+fid).remove();
+
+                            layer.msg("删除成功");
+                        } else {
+                            layer.msg("删除失败");
+                        }
+                    },
+                    error: function () {
+                        layer.alert("操作请求错误，请您稍后再试",function(){
+                            layer.closeAll();
+                        });
+                    }
+                });
+
+            });
+        }
+        //公有的删除业务附件的方法2
         function _DelFileAndRecord(recordId,fid,url){
             layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
                 layer.close(index);
@@ -172,6 +215,7 @@
                 });
             });
         }
+
         //获取文件类型
         function getType(str){
             if(str.indexOf("ppt") != -1){

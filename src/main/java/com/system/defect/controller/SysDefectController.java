@@ -13,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Api(description = "缺陷记录管理模块")
 @CrossOrigin
 @ControllerAdvice
@@ -29,6 +31,12 @@ public class SysDefectController extends WebController {
     @ResponseBody
     public ApiResponseResult add(SysDefect sysDefect){
         try{
+            if(sysDefect != null && sysDefect.getFileIds() != null){
+                //过滤掉数组arrayString里面的空字符串
+                List<String> noRepeatList = this.removeNullStringArray(sysDefect.getFileIds());
+                //将List<String>转换成String[]
+                sysDefect.setFileIds(noRepeatList.toArray(new String[noRepeatList.size()]));
+            }
             return sysDefectService.add(sysDefect);
         }catch (Exception e){
             e.printStackTrace();
@@ -87,6 +95,45 @@ public class SysDefectController extends WebController {
             e.printStackTrace();
             logger.error("获取缺陷记录列表失败！", e);
             return ApiResponseResult.failure("获取缺陷记录列表失败！");
+        }
+    }
+
+    @ApiOperation(value = "获取附件管理列表", notes = "获取附件管理列表")
+    @RequestMapping(value = "/getFile", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult getFile(Long defectId){
+        try{
+            return sysDefectService.getFile(defectId);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("获取附件管理列表失败！" + e);
+            return ApiResponseResult.failure("获取附件管理列表失败！");
+        }
+    }
+
+    @ApiOperation(value = "附件管理上传文件", notes = "附件管理上传文件")
+    @RequestMapping(value = "/addFile", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult addFile(Long defectId, Long fileId, String fileName){
+        try{
+            return sysDefectService.addFile(defectId, fileId, fileName);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("附件管理上传文件失败！" + e);
+            return ApiResponseResult.failure("附件管理上传文件失败！");
+        }
+    }
+
+    @ApiOperation(value = "附件管理删除文件", notes = "附件管理删除文件")
+    @RequestMapping(value = "/delFile", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult delFile(Long recordId, Long fileId){
+        try{
+            return sysDefectService.delFile(recordId, fileId);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("附件管理删除文件失败！" + e);
+            return ApiResponseResult.failure("附件管理删除文件失败！");
         }
     }
 }

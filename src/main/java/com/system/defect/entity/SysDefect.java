@@ -85,6 +85,13 @@ public class SysDefect extends BaseEntity {
     @Column(length = 1000)
     protected String remark;
 
+    /**
+     * 文件ids
+     */
+    @ApiModelProperty(name = "fileIds", value = "文件ids")
+    @Transient
+    protected String[] fileIds;
+
     public String getModuleName() {
         return moduleName;
     }
@@ -155,5 +162,13 @@ public class SysDefect extends BaseEntity {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String[] getFileIds() {
+        return fileIds;
+    }
+
+    public void setFileIds(String[] fileIds) {
+        this.fileIds = fileIds;
     }
 }
