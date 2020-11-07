@@ -13,139 +13,212 @@
     <link rel="Bookmark" th:href="@{/images/huayu_logo.jpg}" type="image/x-icon" />
     <title>东莞华誉组装MES系统</title>
     <script type="text/javascript" src="/js/jquery-2.1.1.min.js" th:src="@{/js/jquery-2.1.1.min.js}"></script>
-	<script type="text/javascript" src="/js/jquery.serializejson.min.js" th:src="@{/js/jquery.serializejson.min.js}"></script>
+    <script type="text/javascript" src="/js/jquery.serializejson.min.js" th:src="@{/js/jquery.serializejson.min.js}"></script>
     <link rel="stylesheet" href="/layui/css/layui.css" th:href="@{/layui/css/layui.css}"></link>
-    
-     <link rel="stylesheet" href="/layuiadmin/style/admin.css"  th:href="@{/layuiadmin/style/admin.css}"></link>
-    
-    
-     <link href="/css/login.css" th:href="@{/css/login.css}" rel="stylesheet" type="text/css" /> 
-     
-     <link href="/css/layui-icon-extend/iconfont.css" th:href="@{/css/layui-icon-extend/iconfont.css}" rel="stylesheet" type="text/css" />
-    
-	<script src="/layui/layui.js"  th:src="@{/layui/layui.js}"></script>
-	<script src="/js/checkParam.js"  th:src="@{/js/checkParam.js}"></script>
-	<script src="/js/common.js"  th:src="@{/js/common.js}"></script> 
-	
-	<script src="/layui/xmSelects/xm-select.js"  th:src="@{/layui/xmSelects/xm-select.js}"></script>
-	
-	<script src="/layui/tableFilter/tableFilter.js"  th:src="@{/layui/tableFilter/tableFilter.js}"></script>
-	<link href="/layui/tableFilter/tableFilter.css" th:href="@{/layui/tableFilter/tableFilter.css}" rel="stylesheet" type="text/css" />
-	<!-- <script src="/layui/tableSelect/tableSelect.js"  th:src="@{/layui/tableSelect/tableSelect.js}"></script>
-	 -->
-<script src="/js/core.util.js" th:src="@{/js/core.util.js}"></script>
-<script src="/js/dateUtils.js" th:src="@{/js/dateUtils.js}"></script>
-<!-- 		
-	  <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
-  <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
-    
-    <link href="/css/login/demo.css" rel="stylesheet" type="text/css" />
-    
-    <script src="/layuiadmin/layui/layui.js"></script>
-    
-	<script src="/js/checkParam.js"></script>
-	<script src="/js/common.js"></script> -->
-	
-	<!-- <script src="/layuiadmin/layui/layui.js"></script>  -->
+
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css"  th:href="@{/layuiadmin/style/admin.css}"></link>
+
+
+    <link href="/css/login.css" th:href="@{/css/login.css}" rel="stylesheet" type="text/css" />
+
+    <link href="/css/layui-icon-extend/iconfont.css" th:href="@{/css/layui-icon-extend/iconfont.css}" rel="stylesheet" type="text/css" />
+
+    <script src="/layui/layui.js"  th:src="@{/layui/layui.js}"></script>
+    <script src="/js/checkParam.js"  th:src="@{/js/checkParam.js}"></script>
+    <script src="/js/common.js"  th:src="@{/js/common.js}"></script>
+
+    <script src="/layui/xmSelects/xm-select.js"  th:src="@{/layui/xmSelects/xm-select.js}"></script>
+
+    <script src="/layui/tableFilter/tableFilter.js"  th:src="@{/layui/tableFilter/tableFilter.js}"></script>
+    <link href="/layui/tableFilter/tableFilter.css" th:href="@{/layui/tableFilter/tableFilter.css}" rel="stylesheet" type="text/css" />
+    <!-- <script src="/layui/tableSelect/tableSelect.js"  th:src="@{/layui/tableSelect/tableSelect.js}"></script>
+     -->
+    <script src="/js/core.util.js" th:src="@{/js/core.util.js}"></script>
+    <script src="/js/dateUtils.js" th:src="@{/js/dateUtils.js}"></script>
+    <!--
+          <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+      <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+
+        <link href="/css/login/demo.css" rel="stylesheet" type="text/css" />
+
+        <script src="/layuiadmin/layui/layui.js"></script>
+
+        <script src="/js/checkParam.js"></script>
+        <script src="/js/common.js"></script> -->
+
+    <!-- <script src="/layuiadmin/layui/layui.js"></script>  -->
     <script th:inline="javascript">
-    //var context = [[@{/}]];
-    var context ="";
-    var _tableSelectEdite=[];
-   layui.config({
-    base: context+'/layuiadmin/' //静态资源所在路径
-  }).extend({
-    index: 'lib/index' //主入口模块
-  }).use(['index']);  
-   function getNextDateTime(day) {  
+        //var context = [[@{/}]];
+        var context ="";
+        var _tableSelectEdite=[];
+        layui.config({
+            base: context+'/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index']);
+        function getNextDateTime(day) {
 
-	   var dd = new Date();
-		  dd.setDate(dd.getDate() + 0);
+            var dd = new Date();
+            dd.setDate(dd.getDate() + 0);
 
-		  var o = {
-				  "y":dd.getFullYear(),
-				  "MM": dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1, //月份
-				  "d": dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate(), //日
-				  "h": dd.getHours(), //小时
-				  "m": dd.getMinutes(), //分
-				  "s": dd.getSeconds(), //秒
-				  };
-		  return o.y + "-" + o.MM + "-" + o.d + " 00:00:00";
-		};
+            var o = {
+                "y":dd.getFullYear(),
+                "MM": dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1, //月份
+                "d": dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate(), //日
+                "h": dd.getHours(), //小时
+                "m": dd.getMinutes(), //分
+                "s": dd.getSeconds(), //秒
+            };
+            return o.y + "-" + o.MM + "-" + o.d + " 00:00:00";
+        };
 
-		
-	 function getCurDateTime(day) {  
-		  var dd = new Date();
-		  dd.setDate(dd.getDate() + day);
 
-		  var o = {
-				  "y":dd.getFullYear(),
-				  "MM": dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1, //月份
-				  "d": dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate(), //日
-				  "h": dd.getHours(), //小时
-				  "m": dd.getMinutes(), //分
-				  "s": dd.getSeconds(), //秒
-				  };
-		  return o.y + "-" + o.MM + "-" + o.d +" "+o.h+":"+o.m+":"+o.s;
-		};	
-		function getCurDate(day) {  
-			  var dd = new Date();
-			  dd.setDate(dd.getDate() + day);
+        function getCurDateTime(day) {
+            var dd = new Date();
+            dd.setDate(dd.getDate() + day);
 
-			  var o = {
-					  "y":dd.getFullYear(),
-					  "MM": dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1, //月份
-					  "d": dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate(), //日
-					  };
-			  return o.y + "-" + o.MM + "-" + o.d;
-			};
-		
-		//table表的审核状态转换
-		   function changStatus(d){
-			   if(d == 'OK'){
-				   return '<button style="border:none;" class="layui-btn layui-btn-primary layui-btn-xs">OK</button>';
-			   }else if(d == 'NG'){
-				   return '<button class="layui-btn layui-btn-danger layui-btn-xs">NG</button>';
-			   }else{
-				   return d;
-			   }
-		   }
-		
-		   /**
-		   *判断是否是数字
-		   **/
-		   function isRealNum(val){
-		       // isNaN()函数 把空串 空格 以及NUll 按照0来处理 所以先去除，
-		   　　if(val === "" || val ==null){return false;}
-		      if(!isNaN(val)){　　　　
-		   　　//对于空数组和只有一个数值成员的数组或全是数字组成的字符串，isNaN返回false，例如：'123'、[]、[2]、['123'],isNaN返回false,
-		      //所以如果不需要val包含这些特殊情况，则这个判断改写为if(!isNaN(val) && typeof val === 'number' )
-		   　　　 return true; 
-		   　　}else{ 
-		   　　　　return false; 
-		   　　} 
-		   }
-		
-  </script> 
-<style th:inline="text">
-    .bg{
-    padding: 0;margin: 0;height: 100%;
-    background-size: 100%;
-	line-height:23px;
-	margin:0;
-	padding:0;
-	 background:url("[[@{/}]]/images/login_bg.jpg") no-repeat;
-	color: #3b6e81;
-    }
-    .icon-color i{
-        color:#01AAED !important;
-    }
-    .layui-table-header th{
-	/* background-color:#BACEE3; */
-}
-	hr{
-	  margin:0px;
-	}
-</style> 
-   
+            var o = {
+                "y":dd.getFullYear(),
+                "MM": dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1, //月份
+                "d": dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate(), //日
+                "h": dd.getHours(), //小时
+                "m": dd.getMinutes(), //分
+                "s": dd.getSeconds(), //秒
+            };
+            return o.y + "-" + o.MM + "-" + o.d +" "+o.h+":"+o.m+":"+o.s;
+        };
+        function getCurDate(day) {
+            var dd = new Date();
+            dd.setDate(dd.getDate() + day);
+
+            var o = {
+                "y":dd.getFullYear(),
+                "MM": dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1, //月份
+                "d": dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate(), //日
+            };
+            return o.y + "-" + o.MM + "-" + o.d;
+        };
+
+        //table表的审核状态转换
+        function changStatus(d){
+            if(d == 'OK'){
+                return '<button style="border:none;" class="layui-btn layui-btn-primary layui-btn-xs">OK</button>';
+            }else if(d == 'NG'){
+                return '<button class="layui-btn layui-btn-danger layui-btn-xs">NG</button>';
+            }else{
+                return d;
+            }
+        }
+
+        /**
+         *判断是否是数字
+         **/
+        function isRealNum(val){
+            // isNaN()函数 把空串 空格 以及NUll 按照0来处理 所以先去除，
+            if(val === "" || val ==null){return false;}
+            if(!isNaN(val)){
+                //对于空数组和只有一个数值成员的数组或全是数字组成的字符串，isNaN返回false，例如：'123'、[]、[2]、['123'],isNaN返回false,
+                //所以如果不需要val包含这些特殊情况，则这个判断改写为if(!isNaN(val) && typeof val === 'number' )
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        //封装附件列表的样式
+        function getExcFieldBefore(data,rid,url,isDel){
+            //IsDel：是否显示删除按钮
+            var html = ' <div class="exc-field" id="div'+data.id+'"> '+
+                ' <button  type="button" class="layui-btn layui-btn-sm exc-down" > '+
+                ' <a href="'+context+'/file/get?fsFileId='+data.id+'" th:href="@{/file/get?fsFileId='+data.id+'}"><i class="layui-icon">&#xe601;</i></a> '+
+                ' </button> ';
+            if(isDel){
+                html += ' <button onclick="_DelFileAndRecord('+rid+','+data.id+',\''+url+'\')" type="button" class="layui-btn layui-btn-sm layui-btn-danger exc-delete"> '+
+                    '   <i class="layui-icon">&#xe640;</i>'+
+                    '  </button> ';
+            }
+            html += '  <span class="exc-icon exc-icon-'+getType(data.bsContentType)+'"></span> '+
+                '  <div class="exc-info"><span class="exc-fileName" >'+data.bsName+'</span> '+
+                '       <div class="exc-progress"> '+
+                '          <div class="exc-progress-bar"></div> '+
+                '     </div> '+
+                '  </div> '+
+                ' </div>';
+
+            return html
+        }
+        //公有的删除业务附件的方法
+        function _DelFileAndRecord(recordId,fid,url){
+            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                layer.close(index);
+                $.ajax({
+                    type: "POST",
+                    data: { fileId:fid, recordId:recordId },
+                    url: context + url,
+                    success: function (res) {
+                        if (res.result == true) {
+                            $("#div"+fid).remove();
+
+                            layer.msg("删除成功");
+                        } else {
+                            layer.msg("删除失败");
+                        }
+                    },
+                    error: function () {
+                        layer.alert("操作请求错误，请您稍后再试",function(){
+                            layer.closeAll();
+                        });
+                    }
+                });
+            });
+        }
+        //获取文件类型
+        function getType(str){
+            if(str.indexOf("ppt") != -1){
+                return "ppt";
+            }else if(str.indexOf("pdf") != -1){
+                return "pdf";
+            }else if(str.indexOf("xls") != -1){
+                return "xls";
+            }else if(str.indexOf("doc") != -1){
+                return "doc";
+            }else if(str.indexOf("text") != -1){
+                return "txt";
+            }else if(str.indexOf("rar") != -1){
+                return "rar";
+            }else if(str.indexOf("zip") != -1){
+                return "zip";
+            }else if(str.indexOf("image") != -1){
+                return "img";
+            }else if(str.indexOf("dwg") != -1){
+                return "dwg";
+            }else if(str.indexOf("stp") != -1){
+                return "stp";
+            }else{
+                return "stp";
+            }
+        }
+    </script>
+    <style th:inline="text">
+        .bg{
+            padding: 0;margin: 0;height: 100%;
+            background-size: 100%;
+            line-height:23px;
+            margin:0;
+            padding:0;
+            background:url("[[@{/}]]/images/login_bg.jpg") no-repeat;
+            color: #3b6e81;
+        }
+        .icon-color i{
+            color:#01AAED !important;
+        }
+        .layui-table-header th{
+            /* background-color:#BACEE3; */
+        }
+        hr{
+            margin:0px;
+        }
+    </style>
+
 </head>
 </html>

@@ -57,7 +57,7 @@ public class BaseOprService  {
 
 	/**
 	 * 查询记录总数
-	 * 
+	 *
 	 * @param hql
 	 * @param params
 	 * @return
@@ -84,7 +84,7 @@ public class BaseOprService  {
 
 	/**
 	 * 查询记录列表
-	 * 
+	 *
 	 * @param hql
 	 * @param params
 	 * @return
@@ -106,7 +106,7 @@ public class BaseOprService  {
 
 	/**
 	 * 分页查询记录列表
-	 * 
+	 *
 	 * @param hql		hql查询语句
 	 * @param params	绑定变量值
 	 * @param pageable	分页参数
@@ -138,7 +138,7 @@ public class BaseOprService  {
 
 	/**
 	 * 原生sql,查询一条
-	 * 
+	 *
 	 * @param sql
 	 * @param paramMap
 	 * @return
@@ -153,7 +153,7 @@ public class BaseOprService  {
 
 	/**
 	 * 原生sql,查询数据
-	 * 
+	 *
 	 * @param sql
 	 * @param paramMap
 	 * @return
@@ -164,7 +164,7 @@ public class BaseOprService  {
 
 	/**
 	 * 原生sql,查询数据
-	 * 
+	 *
 	 * @param sql		sql查询语句
 	 * @param paramMap	传入参数
 	 * @param cls		查询结果要封装的实体类
@@ -180,7 +180,7 @@ public class BaseOprService  {
 
 	/**
 	 * 原生sql,查询数据
-	 * 
+	 *
 	 * @param sql		sql查询语句
 	 * @param paramMap	传入参数
 	 * @param cls		查询结果要封装的实体类
@@ -192,7 +192,7 @@ public class BaseOprService  {
 
 	/**
 	 * 原生sql,分页查询数据
-	 * 
+	 *
 	 * @param sql		sql查询语句
 	 * @param pageable	分页参数
 	 * @param paramMap	绑定变量参数值
@@ -204,7 +204,7 @@ public class BaseOprService  {
 
 	/**
 	 * 原生sql,分页查询数据
-	 * 
+	 *
 	 * @param sql		sql查询语句
 	 * @param pageable	分页参数
 	 * @param paramMap	绑定变量参数值
@@ -216,7 +216,7 @@ public class BaseOprService  {
 
 	/**
 	 * 原生sql,分页查询数据
-	 * 
+	 *
 	 * @param sql		sql查询语句
 	 * @param pageable	分页参数
 	 * @param paramMap	绑定变量参数值
@@ -243,7 +243,7 @@ public class BaseOprService  {
 
 	/**
 	 * 原生sql,查询记录数
-	 * 
+	 *
 	 * @param sql
 	 * @param paramMap
 	 * @return
@@ -260,7 +260,7 @@ public class BaseOprService  {
 
 	/**
 	 * 调用sql查询返回map对象
-	 * 
+	 *
 	 * @param sql		sql查询语句
 	 * @param pageable	分页参数
 	 * @param params	绑定变量参数值
@@ -272,7 +272,7 @@ public class BaseOprService  {
 
 	/**
 	 * 调用sql查询返回map对象
-	 * 
+	 *
 	 * @param sql		sql查询语句
 	 * @param pageable	分页参数
 	 * @param params	绑定变量参数值
@@ -314,7 +314,7 @@ public class BaseOprService  {
 
 	/**
 	 * 调用sql查询返回map对象
-	 * 
+	 *
 	 * @param sql			sql查询语句
 	 * @param sqlParameter	绑定变量参数值
 	 * @return
@@ -323,10 +323,10 @@ public class BaseOprService  {
 		return this.findBySql(sql, sqlParameter, null);
 	}
 
-	
+
 	/**
 	 * 调用sql查询返回指定对象 使用JPA
-	 * 
+	 *
 	 * @param sql			sql查询语句
 	 * @param sqlParameter	绑定变量参数值
 	 * @param cls		查询结果要封装的实体类
@@ -354,10 +354,10 @@ public class BaseOprService  {
 	    }
 		return result;
 	}
-	
+
 	/**
 	 * 调用sql查询返回指定对象
-	 * 
+	 *
 	 * @param sql			sql查询语句
 	 * @param sqlParameter	绑定变量参数值
 	 * @param cls		查询结果要封装的实体类
