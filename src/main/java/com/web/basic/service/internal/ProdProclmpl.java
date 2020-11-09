@@ -94,7 +94,7 @@ public class ProdProclmpl implements ProdProcService {
 				//20201102-fyx-先删除后在新增
 				prodProcDetailDao.delteProdProcDetailByItemIdAnd(Long.parseLong(it));
 				//--end
-				
+				int j=1;
 				for(String pro:procs){
 					if(!StringUtils.isEmpty(pro)){
 						String[] pros =  pro.split("\\@");
@@ -105,9 +105,11 @@ public class ProdProclmpl implements ProdProcService {
 						pd.setProcId(Long.valueOf(pros[0]));
 						pd.setCreateBy(UserUtil.getSessionUser().getId());
 						pd.setCreateDate(new Date());
-						pd.setProcOrder(process.getProcOrder());
+						//pd.setProcOrder(process.getProcOrder());
+						pd.setProcOrder((j)*10);
 						pd.setJobAttr(Integer.valueOf(pros[1]));
 						lp.add(pd);
+						j++;
 					}
 				}
 				

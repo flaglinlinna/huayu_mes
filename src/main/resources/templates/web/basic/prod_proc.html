@@ -34,6 +34,10 @@
                     <input type="checkbox" name="{{d.itemNo}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
                     {{#  } }}
               </script>
+              <script type="text/html" id="moveBar">
+  <a class="layui-btn layui-btn-xs" lay-event="moveUp"><i class="layui-icon layui-icon-up"></i>上移</a>
+  <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="moveDown"><i class="layui-icon layui-icon-down"></i>下移</a>
+	</script>
 			<script type="text/html" id="add_statusTpl">
             <input type="checkbox" name="jobAttr" value="1" lay-skin="primary" lay-filter="isAddStatusTpl" checked="checked" />
         </script>
@@ -44,7 +48,7 @@
 		</div>
 		<!--添加或编辑工艺流程-->
 		<div id="setClientProc" class="layer_self_wrap"
-			style="width: 700px; display: none;">
+			style="width: 750px; display: none;">
 			<form id="clientProcForm" class="layui-form layui-form-pane"
 				lay-filter="clientProcForm" method="post" action=""
 				style="margin: 20px;">
