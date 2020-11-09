@@ -180,7 +180,8 @@ public class EmpFingerlmpl  implements EmpFingerService {
 			map.put("id", bs.getId());
 			map.put("empCode",bs.getEmp().getEmpCode());//获取关联表的数据-工号
 			map.put("empName",bs.getEmp().getEmpName());//获取关联表的数据-姓名
-			map.put("templateStr", bs.getTemplateStr());
+//			map.put("templateStr", bs.getTemplateStr());
+			map.put("lastOffDate",bs.getLastOffDate());
 			map.put("fingerIdx", bs.getFingerIdx());
 			map.put("lastupdateDate",bs.getLastupdateDate());
 			map.put("createDate", bs.getCreateDate());

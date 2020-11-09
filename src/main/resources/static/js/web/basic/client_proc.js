@@ -362,7 +362,7 @@ function getProcList(id){
 						data:data.data.process,
 						done : function(res, curr, count) {
 							cleanProc();//清空之前的选中
-							if(id != ''){
+							if(id != ''&&id !=undefined){
 								getProcByClient(id)
 							}
 						}

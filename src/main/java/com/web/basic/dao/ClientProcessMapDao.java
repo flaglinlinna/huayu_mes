@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.web.basic.entity.ClientProcessMap;;
+import com.web.basic.entity.ClientProcessMap;
 
 public interface ClientProcessMapDao extends CrudRepository<ClientProcessMap, Long>,JpaSpecificationExecutor<ClientProcessMap>{
 	

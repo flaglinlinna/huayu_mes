@@ -2,19 +2,13 @@ package com.web.produce.entity;
 
 import com.app.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.web.basic.entity.Defective;
-import com.web.basic.entity.Department;
 import com.web.basic.entity.Employee;
-import com.web.basic.entity.Line;
-import com.web.basic.entity.Mtrial;
-import com.web.basic.entity.Process;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -25,9 +19,16 @@ import java.util.Date;
 @DynamicUpdate
 public class EmpFinger extends BaseEntity {
     private static final long serialVersionUID = -5951531333314901264L;
-    public static final String TABLE_NAME = "MES_BASE_EMP_FINGER";
-    
-    
+    public static final String TABLE_NAME = "V_BASE_EMP_FINGER";
+
+	/**
+	 * 最后下发时间
+	 */
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="lastOffDate",value="最后下发时间")
+	protected Date lastOffDate;
     
     /**
      * 员工ID
@@ -103,6 +104,14 @@ public class EmpFinger extends BaseEntity {
 
 	public void setFprivilege(Integer fprivilege) {
 		this.fprivilege = fprivilege;
+	}
+
+	public Date getLastOffDate() {
+		return lastOffDate;
+	}
+
+	public void setLastOffDate(Date lastOffDate) {
+		this.lastOffDate = lastOffDate;
 	}
 
 	@Override
