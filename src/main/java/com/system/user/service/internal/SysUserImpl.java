@@ -451,6 +451,15 @@ public class SysUserImpl implements SysUserService {
         List<Map<String, Object>> list = userRoleMapDao.getRoleIdByUserId(sysUser.getId());
         mapUser.put("userRoles", list);
 
+//        List<SysRole> lr = sysRoleDao.getRoleByUser(su.getId());
+//        List mll = new ArrayList<>();
+//        if(lr.size() > 0){
+//            for(SysRole sr:lr){
+//                mll.add(sr.getRoleName());
+//            }
+//        }
+//        map.put("roles", mll);
+
         //封装数据
         Map<String, Object> map = new HashMap<>();
         map.put("roles", list2);
@@ -601,9 +610,10 @@ public class SysUserImpl implements SysUserService {
 	@Override
 	public List<Map<String, Object>> findByUserCode(String userCode) throws Exception {
 		// TODO Auto-generated method stub
-		String sql = "select s.fcode,s.fname,s.fpassword,s.fcompany,s.ffactory from sys_user s where  upper(s.fcode) ='"
-				+ userCode.toUpperCase() +  "'";
-        List<Map<String, Object>> countList = sysUserDao.findByUserCode(userCode.toUpperCase());//this.findBySql(sql, SQLParameter.newInstance(), null);
+//		String sql = "select s.fcode,s.fname,s.fpassword,s.fcompany,s.ffactory from sys_user s where  upper(s.fcode) ='"
+//				+ userCode.toUpperCase() +  "'";
+       // List<Map<String, Object>> countList = sysUserDao.findByUserCode(userCode.toUpperCase());//this.findBySql(sql, SQLParameter.newInstance(), null);
+		 List<Map<String, Object>> countList = sysUserDao.findByUserCode(userCode);
 		return countList;
        //return sysUserDao.findByDelFlagAndUserCode(0, userCode);
 	}

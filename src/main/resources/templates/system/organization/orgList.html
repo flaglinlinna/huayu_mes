@@ -31,9 +31,11 @@
                 <tr>
                     <td>{{r.orgCode}}</td>
                     <td>{{r.orgName}}</td>
+
                     <td>{{r.flevel==null?'':r.flevel}}</td>
                     <td>{{r.leadBy==null?'':r.leadBy}}</td>
                     <td>{{r.mobile==null?'':r.mobile}}</td>
+
                     <td>{{r.zindex}}</td>
                     <td><a class="layui-btn layui-btn-primary layui-btn-xs" onclick="edit('{{r.id}}',0);">编辑</a>
                         <a class="layui-btn layui-btn-xs" onclick="addPerm('{{r.id}}',1)">添加子节点</a>
@@ -79,7 +81,7 @@
             </div> -->
 
             <div class="layui-form-item">
-                <label class="layui-form-label layui-required">负责人</label>
+                <label class="layui-form-label">负责人</label>
                 <div class="layui-input-inline">
                     <input name="leadBy" id="leadBy" lay-verify="required" placeholder="请输入负责人"
                      autocomplete="off" class="layui-input" type="text"/>
@@ -95,7 +97,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">优先级</label>
                 <div class="layui-input-inline">
-                    <input name="zindex" id="zindex" autocomplete="off" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    <input name="zindex" id="zindex" autocomplete="off" class="layui-input" type="text" 
+                    onkeyup="this.value=this.value.replace(/\D/g,'')" lay-verify="required"
                     	placeholder="请输入优先级"   onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
                 </div>
                 <div class="layui-form-mid layui-word-aux">请填写大于0的整数数字</div>
@@ -103,7 +106,8 @@
              <div class="layui-form-item">
                 <label class="layui-form-label layui-required">在职人数</label>
                 <div class="layui-input-inline">
-                    <input name="empNum" placeholder="请输入在职人数" id="empNum" autocomplete="off" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    <input name="empNum" placeholder="请输入在职人数" id="empNum" autocomplete="off" lay-verify="required"
+                     class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
                            onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
                 </div>
                 <div class="layui-form-mid layui-word-aux">请填写大于0的整数数字</div>

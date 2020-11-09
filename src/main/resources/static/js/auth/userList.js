@@ -94,70 +94,6 @@ $(function() {
         var form = layui.form ,layer = layui.layer
             ,laydate = layui.laydate,tableSelect = layui.tableSelect;
 
-       /* var tableSelect2 = tableSelect.render({
-            elem : '#roleId',
-            searchKey : 'keyword',
-            checkedKey : 'id',
-            searchPlaceholder : '试着搜索',
-            page : false,
-            request : {
-                pageName : 'page' // 页码的参数名称，默认：page
-                ,
-                limitName : 'rows' // 每页数据量的参数名，默认：limit
-            },
-            table : {
-                url:  context +'/sysRole/getRolesByStatus',
-                method : 'get',
-                cols : [ [
-                    { type: 'checkbox' },//多选  radio
-                    , {
-                        field : 'id',
-                        title : 'id',
-                        width : 0,hide:true
-                    }, {
-                        field : 'roleName',
-                        title : '角色名称',
-                        align:'center',
-                        sort: true
-                    }   ] ],
-                page : false,
-                request : {
-                    pageName : 'page' // 页码的参数名称，默认：page
-                    ,
-                    limitName : 'rows' // 每页数据量的参数名，默认：limit
-                },
-                parseData : function(res) {
-                    if(res.result){
-                        // 可进行数据操作
-                        return {
-                            "count" : 0,
-                            "msg" : res.msg,
-                            "data" : res.data,
-                            "code" : res.status
-                            // code值为200表示成功
-                        }
-                    }
-
-                },
-            },
-            done : function(elem, data) {
-                //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
-                var da=data.data;
-                var roleName ="";
-                console.log(da);
-                for(var i = 0;i<da.length;i++){
-                    roleName = roleName+da[i].roleName+",";
-                }
-                console.log(roleName);
-                console.log(roleName.substring(0,roleName.length-1));
-                form.val("userForm", {
-                    "roleId":roleName.substring(0,roleName.length-1),
-                });
-                form.render();// 重新渲染
-
-            }
-        });
-*/
         $("#addUser").click(function(){
         	formSelects.value('roleType', []);
             openUser(null,"开通用户");
@@ -255,31 +191,7 @@ function submitAjax(obj,currentUser){
         }
     });
 }
-//检验是否选择角色
-function checkRole(){
-    //选中的角色
-    // var array = new Array();
-    // var arrayName = new Array();
-    // var roleCheckd=$(".layui-form-checked");
-    // //获取选中的权限id
-    // for(var i=0;i<roleCheckd.length;i++){
-    //     array.push($(roleCheckd.get(i)).prev().val());
-    //     arrayName.push($(roleCheckd.get(i)).prev().attr("title"));
-    // }
-    //校验是否授权
-    // var roleIds = array.join(",");
-    // var roleNames = arrayName.join(",")
 
-    var roleIds = $('#roleId').attr("ts-selected");
-    console.log(roleIds);
-    if(roleIds==null || roleIds==''){
-        layer.alert("请您给该用户添加对应的角色！")
-        return false;
-    }
-    $("#roleIds").val(roleIds);
-    // $("#roleNames").val(roleNames);
-    return true;
-}
 
 //新增编辑弹出框
 function openUser(id,title){
@@ -381,26 +293,7 @@ function getUserAndRoles(obj,id) {
         $.get(context+"/sysUser/getUserAndRoles",{"id":id},function(data){
             if(isLogin(data)){
                 if(data.result==true && data.data.user!=null){
-                    /*var existRole = new Array();
-                    // var existRole='';
-                    if(data.data.user.userRoles !=null ){
-                        $.each(data.data.user.userRoles, function (index, item) {
-                            existRole.push(item.roleId);
-                            // existRole+=item.roleId+',';
-                        });
-                    }
-                    console.log(existRole);
-                    console.log(data.data.roles);
-                    var ids = "";
-                    var roleName="";
-                    for(var i = 0;i<data.data.user.userRoles.length;i++){
-                        ids=ids +data.data.user.userRoles[i].id+",";
-                    }
-                    console.log(ids);
-                    $("#roleId").attr('ts-selected',ids);*/
-                    // ids.substring(0,ids.length-1)
-                    // $("#roleId").val(roleName.substring(0,roleName.length-1));
-                    //$("#roleIds").val("");
+
                     $("#id").val(data.data.user.id==null?'':data.data.user.id);
                     $("#userCode").val(data.data.user.userCode==null?'':data.data.user.userCode);
                     $("#userName").val(data.data.user.userName==null?'':data.data.user.userName);
@@ -497,15 +390,7 @@ function loadAll(){
 
 //清空新增表单数据
 function cleanUser(){
-//    $("#id").val("");
-//    $("roleIds").val("");
-//    $("roleNames").val("");
-//    $("#userCode").val("");
-//    $("#userName").val("");
-//    $("#realName").val("");
-//    $("#mobile").val("");
-//    $("#email").val("");
-//    $("#sex").val("");
+
 	 $("#roleDiv").empty();
 	$('#userForm')[0].reset();
 	layui.form.render();// 必须写

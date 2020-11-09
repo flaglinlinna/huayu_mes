@@ -111,6 +111,23 @@ public class SysRoleController extends WebController {
             return ApiResponseResult.failure("获取角色列表失败！");
         }
     }
+
+    @ApiOperation(value = "导出角色下用户信息", notes = "导出角色下用户信息",hidden = true)
+    @RequestMapping(value = "/exportList", method = RequestMethod.GET)
+    @ResponseBody
+    public void exportList(Long roleId) {
+        String method = "/sysRole/exportList";String methodName ="导出角色下用户信息";
+        try {
+            sysRoleService.exportList(roleId,getResponse());
+            logger.debug("导出角色下用户信息=exportList:");
+            getSysLogService().success(module,method, methodName, "角色id:"+roleId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("导出角色下用户信息！", e);
+            getSysLogService().error(module,method, methodName, "角色id:"+roleId+";"+e.toString());
+        }
+    }
+
     @ApiOperation(value = "获取角色配置列表", notes = "获取角色配置列表")
     @RequestMapping(value = "/getCheckedRoles", method = RequestMethod.GET)
     public ApiResponseResult getCheckedRoles(@RequestParam(value = "userId") String userId) {

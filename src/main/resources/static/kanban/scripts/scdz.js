@@ -284,8 +284,8 @@ function setTable(kanbanData) {
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
 		html += '<tr><td>' + arr.LINER_NAME + '</td><td>' + arr.NUM_EMP_ON
-				+ '</td><td>' + arr.NUM_EMP_PL + '</td><td>' + arr.QTY_DONE
-				+ '</td><td>' + arr.QTY_PLAN + '</td><td>' + arr.RATE_DONE
+				+ '</td><td>' + arr.NUM_EMP_PL + '</td><td>' + arr.QTY_PLAN
+				+ '</td><td>' + arr.QTY_DONE + '</td><td>' + arr.RATE_DONE
 				+ '%</td></tr> ';
 	}
 	$("#tableList").empty();
