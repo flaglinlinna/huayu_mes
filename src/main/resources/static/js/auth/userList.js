@@ -144,12 +144,12 @@ $(function() {
                 //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
                 var da=data.data;
                 var roleName ="";
-                console.log(da);
+                // console.log(da);
                 for(var i = 0;i<da.length;i++){
                     roleName = roleName+da[i].roleName+",";
                 }
-                console.log(roleName);
-                console.log(roleName.substring(0,roleName.length-1));
+                // console.log(roleName);
+                // console.log(roleName.substring(0,roleName.length-1));
                 form.val("userForm", {
                     "roleId":roleName.substring(0,roleName.length-1),
                 });
@@ -276,7 +276,7 @@ function checkRole(){
     // var roleNames = arrayName.join(",")
 
     var roleIds = $('#roleId').attr("ts-selected");
-    console.log(roleIds);
+    // console.log(roleIds);
     if(roleIds==null || roleIds==''){
         layer.alert("请您给该用户添加对应的角色！")
         return false;
@@ -498,7 +498,6 @@ function getUserAndRoles(obj,id) {
                     for(var i = 0;i<data.data.user.userRoles.length;i++){
                         ids=ids +data.data.user.userRoles[i].roleId+",";
                     }
-                    console.log(ids);
                     $("#roleId").attr('ts-selected',ids.substring(0,ids.length-1));
                     // ids.substring(0,ids.length-1)
                     // $("#roleId").val(roleName.substring(0,roleName.length-1));

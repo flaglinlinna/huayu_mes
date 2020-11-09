@@ -82,8 +82,16 @@ public class Employee extends BaseEntity {
 	     @Column
 	     protected Long deptId;
 
-	    /**
-	     * 员工状态1:在职 0:离职
+
+		/**
+		 *  部门名称
+		 */
+		@ApiModelProperty(name="deptId",value="部门ID")
+		@Column(length = 50)
+		protected String deptName;
+
+	/**
+	 * 员工状态1:在职 0:离职
 	     */
 	    @ApiModelProperty(name = "empStatus", value = "状态")
 	    @Column(length = 1)
@@ -149,7 +157,15 @@ public class Employee extends BaseEntity {
 			return empStatus;
 		}
 
-		public void setEmpStatus(Integer empStatus) {
+		public String getDeptName() {
+			return deptName;
+		}
+
+		public void setDeptName(String deptName) {
+			this.deptName = deptName;
+		}
+
+	public void setEmpStatus(Integer empStatus) {
 			this.empStatus = empStatus;
 		}
 
@@ -163,6 +179,7 @@ public class Employee extends BaseEntity {
 		sb.append(",离职日期:").append(this.leaveDate);
 		sb.append(",员工类型:").append(this.empType);
 		sb.append(",部门ID:").append(this.deptId);
+		sb.append(",部门名称:").append(this.deptName);
 		sb.append(",员工状态:").append(this.empStatus==0?"离职":"在职");
 		return sb.toString();
 	}

@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
-import com.web.basic.entity.BarcodeRule;;
+import com.web.basic.entity.BarcodeRule;
 
 public interface BarcodeRuleDao extends CrudRepository<BarcodeRule, Long>,JpaSpecificationExecutor<BarcodeRule>{
 
