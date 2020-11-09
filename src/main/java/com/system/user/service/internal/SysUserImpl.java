@@ -603,9 +603,10 @@ public class SysUserImpl implements SysUserService {
 	@Override
 	public List<Map<String, Object>> findByUserCode(String userCode) throws Exception {
 		// TODO Auto-generated method stub
-		String sql = "select s.fcode,s.fname,s.fpassword,s.fcompany,s.ffactory from sys_user s where  upper(s.fcode) ='"
-				+ userCode.toUpperCase() +  "'";
-        List<Map<String, Object>> countList = sysUserDao.findByUserCode(userCode.toUpperCase());//this.findBySql(sql, SQLParameter.newInstance(), null);
+//		String sql = "select s.fcode,s.fname,s.fpassword,s.fcompany,s.ffactory from sys_user s where  upper(s.fcode) ='"
+//				+ userCode.toUpperCase() +  "'";
+       // List<Map<String, Object>> countList = sysUserDao.findByUserCode(userCode.toUpperCase());//this.findBySql(sql, SQLParameter.newInstance(), null);
+		 List<Map<String, Object>> countList = sysUserDao.findByUserCode(userCode);
 		return countList;
        //return sysUserDao.findByDelFlagAndUserCode(0, userCode);
 	}
