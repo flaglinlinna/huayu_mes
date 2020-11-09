@@ -97,15 +97,15 @@ $(function() {
                 , {
 					field : 'itemNo',
 					title : '物料编码',
-					width : 110
+					width : 150
 				},{
 					field : 'itemName',
 					title : '物料描述',
-					width : 240
+					width : 400
 				}, {
 					field : 'itemUnit',
 					title : '单位',
-					width : 60
+					width : 80
 				} ] ],
 				page : true,
 				request : {
@@ -170,10 +170,10 @@ $(function() {
 				title : '序号',width:80
 			}, */{
 				field : 'procNo',
-				title : '编码'
+				title : '编码', minWidth: 100
 			}, {
 				field : 'procName',
-				title : '名称',
+				title : '名称', minWidth: 200
 			}, {
 				field : 'jobAttr',width:100,
 				title : '过程属性',templet:'#add_statusTpl'
@@ -528,18 +528,19 @@ function openProc(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	layer.open({
+	var index = layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
 		resize : false,
 		shadeClose : true,
-		area : [ '800px','410px'],
+		//area : [ '800px','410px'],
 		content : $('#setClientProc'),
 		end : function() {
 			cleanProc();
 		}
 	});
+	layer.full(index);
 }
 //重新加载表格（搜索）
 function load(obj) {
