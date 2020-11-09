@@ -2,6 +2,7 @@
  * 用户管理
  */
 var pageCurr;
+
 $(function() {
     layui.use(['table','tableSelect'], function(){
         var table = layui.table
@@ -93,7 +94,7 @@ $(function() {
         var form = layui.form ,layer = layui.layer
             ,laydate = layui.laydate,tableSelect = layui.tableSelect;
 
-        var tableSelect2 = tableSelect.render({
+       /* var tableSelect2 = tableSelect.render({
             elem : '#roleId',
             searchKey : 'keyword',
             checkedKey : 'id',
@@ -156,17 +157,12 @@ $(function() {
 
             }
         });
-
+*/
         $("#addUser").click(function(){
+        	formSelects.value('roleType', []);
             openUser(null,"开通用户");
         });
-        // //日期
-        // laydate.render({
-        //     elem: '#createdTimeStart'
-        // });
-        // laydate.render({
-        //     elem: '#createdTimeEnd'
-        // });
+
         //监听搜索框
         form.on('submit(searchSubmit)', function(data){
             //重新加载table
@@ -210,7 +206,7 @@ function setStatusUser(obj,id,name,checked){
 //新增或编辑提交表单
 function formSubmit(obj){
     var currentUser=$("#currentUser").html();
-    if(checkRole()){
+    //if(checkRole()){
         if($("#id").val()==currentUser){
             layer.confirm('更新自己的信息后，需要您重新登录才能生效；您确定要更新么？', {
                 btn: ['确认','返回'] //按钮
@@ -223,7 +219,7 @@ function formSubmit(obj){
         }else{
             submitAjax(obj,currentUser);
         }
-    }
+    //}
 }
 function submitAjax(obj,currentUser){
     var a = $("#roleIds").val();
@@ -374,105 +370,6 @@ function doSetPassAjax(obj,currentUser){
     });
 }
 
-// 新增用户-获取用户信息
-// function addUser(){
-//
-//     // tableSelect=tableSelect1.render({
-//     //     elem : '#roleId',
-//     //     searchKey : 'keyword',
-//     //     checkedKey : 'id',
-//     //     searchPlaceholder : '试着搜索',
-//     //     table : {
-//     //         url:  context +'/sysRole/getRoles',
-//     //         method : 'get',
-//     //         cols : [ [
-//     //             { type: 'radio' },//多选  radio
-//     //             , {
-//     //                 field : 'id',
-//     //                 title : 'id',
-//     //                 width : 0,hide:true
-//     //             }, {
-//     //                 field : 'roleName',
-//     //                 title : '角色名称',
-//     //                 width : 180,sort: true
-//     //             }   ] ],
-//     //         page : false,
-//     //         request : {
-//     //             pageName : 'page' // 页码的参数名称，默认：page
-//     //             ,
-//     //             limitName : 'rows' // 每页数据量的参数名，默认：limit
-//     //         },
-//     //         parseData : function(res) {
-//     //             if(res.result){
-//     //                 // 可进行数据操作
-//     //                 cleanUser();
-//     //                 return {
-//     //                     "count" : 0,
-//     //                     "msg" : res.msg,
-//     //                     "data" : res.data,
-//     //                     "code" : res.status
-//     //                     // code值为200表示成功
-//     //                 }
-//     //             }
-//     //
-//     //         },
-//     //     },
-//     //     done : function(elem, data) {
-//     //         //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
-//     //         var da=data.data;
-//     //         var ids ="";
-//     //         for(var i = 0;i<da.length;i++){
-//     //             ids+da[i]+",";
-//     //         }
-//     //         form.val("itemFrom", {
-//     //             "roleId":ids,
-//     //         });
-//     //         form.render();// 重新渲染
-//     //
-//     //     }
-//     // });
-//
-// //     $.get(context+"/sysRole/getRoles",function(data){
-// //         if(isLogin(data)){
-// //             if(data.result==true && data.data!=null){
-// //             	cleanUser();
-// // //                $("#roleIds").val("");
-// // //                $("#id").val("");
-// // //                $("#version").val("");
-// // //                $("#userCode").val("");
-// // //                $("#userName").val("");
-// // //                $("#mobile").val("");
-// // //                $("#email").val("");
-// // //                $("#sex").val("");
-// // //                //显示角色数据
-// // //                $("#roleDiv").empty();
-// //                 $.each(data.data, function (index, item) {
-// //                     // <input type="checkbox" name="roleId" title="发呆" lay-skin="primary"/>
-// //                     var roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.roleName+" lay-skin='primary'/>");
-// //                     //未选中
-// //                     /*<div class="layui-unselect layui-form-checkbox" lay-skin="primary">
-// //                         <span>发呆</span><i class="layui-icon">&#xe626;</i>
-// //                         </div>*/
-// //                     //选中
-// //                     // <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
-// //                     // <span>写作</span><i class="layui-icon">&#xe627;</i></div>
-// //                     var div=$("<div class='layui-unselect layui-form-checkbox' lay-skin='primary'>" +
-// //                         "<span>"+item.roleName+"</span><i class='layui-icon'>&#xe626;</i>" +
-// //                         "</div>");
-// //                     $("#roleDiv").append(roleInput).append(div);
-// //                 })
-// //                 openUser(null,"开通用户");
-// //                 //重新渲染下form表单 否则复选框无效
-// //                 layui.form.render('checkbox');
-// //             }else{
-// //                 //弹出错误提示
-// //                 layer.alert("获取角色数据有误，请您稍后再试",function () {
-// //                     layer.closeAll();
-// //                 });
-// //             }
-// //         }
-// //     });
-// }
 
 //编辑用户-获取用户信息
 function getUserAndRoles(obj,id) {
@@ -484,7 +381,7 @@ function getUserAndRoles(obj,id) {
         $.get(context+"/sysUser/getUserAndRoles",{"id":id},function(data){
             if(isLogin(data)){
                 if(data.result==true && data.data.user!=null){
-                    var existRole = new Array();
+                    /*var existRole = new Array();
                     // var existRole='';
                     if(data.data.user.userRoles !=null ){
                         $.each(data.data.user.userRoles, function (index, item) {
@@ -500,10 +397,10 @@ function getUserAndRoles(obj,id) {
                         ids=ids +data.data.user.userRoles[i].id+",";
                     }
                     console.log(ids);
-                    $("#roleId").attr('ts-selected',ids);
+                    $("#roleId").attr('ts-selected',ids);*/
                     // ids.substring(0,ids.length-1)
                     // $("#roleId").val(roleName.substring(0,roleName.length-1));
-                    $("#roleIds").val("");
+                    //$("#roleIds").val("");
                     $("#id").val(data.data.user.id==null?'':data.data.user.id);
                     $("#userCode").val(data.data.user.userCode==null?'':data.data.user.userCode);
                     $("#userName").val(data.data.user.userName==null?'':data.data.user.userName);
@@ -512,26 +409,19 @@ function getUserAndRoles(obj,id) {
                     $("#email").val(data.data.user.email==null?'':data.data.user.email);
                     $("#sex").val(data.data.user.sex==null?'':data.data.user.sex);
                     //显示角色数据
-                    // $("#roleDiv").empty();
-                    // $.each(data.data.roles, function (index, item) {
-                    //     var roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.roleName+" lay-skin='primary'/>");
-                    //     var div=$("<div class='layui-unselect layui-form-checkbox' lay-skin='primary'>" +
-                    //         "<span>"+item.userName+"</span><i class='layui-icon'>&#xe626;</i>" +
-                    //         "</div>");
-                    //     if(existRole.length > 0 && existRole.indexOf(item.id)>=0){
-                    //         roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.roleName+" lay-skin='primary' checked='checked'/>");
-                    //         div=$("<div class='layui-unselect layui-form-checkbox  layui-form-checked' lay-skin='primary'>" +
-                    //             "<span>"+item.roleName+"</span><i class='layui-icon'>&#xe627;</i>" +
-                    //             "</div>");
-                    //     }
-                    //     // if(existRole!='' && existRole.indexOf(item.id)>=0){
-                    //     //      roleInput=$("<input type='checkbox' name='roleId' value="+item.id+" title="+item.userName+" lay-skin='primary' checked='checked'/>");
-                    //     //      div=$("<div class='layui-unselect layui-form-checkbox  layui-form-checked' lay-skin='primary'>" +
-                    //     //         "<span>"+item.userName+"</span><i class='layui-icon'>&#xe627;</i>" +
-                    //     //         "</div>");
-                    //     // }
-                    //     $("#roleDiv").append(roleInput).append(div);
-                    // });
+                  //灾害种类多选框赋值
+                   /* var disArray = !unit.disasterType ? null : unit.disasterType.split(",");
+                    if(disArray != null){
+                        formSelects.value('disasterType', disArray);
+                    }*/
+                    var userRoles = data.data.user.userRoles;
+                    var disArray = [];
+                    layui.each(userRoles, function (index, like) {
+                    	disArray.push(like.ID)
+                       });
+                    if(disArray != null){
+                        formSelects.value('roleType', disArray);
+                    }
                     openUser(id,"设置用户");
                     //重新渲染下form表单中的复选框 否则复选框选中效果无效
                     // layui.form.render('checkbox');
@@ -587,7 +477,7 @@ function load(obj){
     tableIns.reload({
         where: {
             userCode:obj.field.codeSearch, userName:obj.field.nameSearch,
-            mobile:obj.field.mobileSearch, bsStatus:obj.field.statusSearch,
+            mobile:obj.field.mobileSearch, status:obj.field.statusSearch,
         }
         , page: {
             curr: pageCurr //从当前页码开始

@@ -169,7 +169,7 @@ public class SysUserController extends WebController{
 	@RequestMapping(value = "/toUserList", method = RequestMethod.GET)
 	public ModelAndView toUserList() throws Exception {
 		ModelAndView mav = new ModelAndView();
-		//mav.addObject("Roles", sysUserService.getListRole().getData());
+		mav.addObject("Roles", sysUserService.getListRole().getData());
 		mav.setViewName("/system/user/userList");// 返回路径
 		return mav;
 	}

@@ -2,6 +2,7 @@
 <html  xmlns:th="http://www.thymeleaf.org"
        xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="layout :: htmlhead" th:with="title='用户管理'"></head>
+<link href="/layuiadmin/layui-formSelects/formSelects-v4.css" th:href="@{/layuiadmin/layui-formSelects/formSelects-v4.css}" rel="stylesheet" type="text/css" />
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <!--头-->
@@ -71,7 +72,7 @@
 
     <!--添加或编辑用户-->
     <div id="setUser" class="layer_self_wrap" style="width:500px;display:none;">
-        <form id="userForm" lay-filter="userForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+        <form id="userForm" lay-filter="userForm" class="layui-form layui-form-pane" method="post" action="" style="margin: 20px;">
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="roleIds" type="hidden" name="roleIds"/>
             <input id="roleNames" type="hidden" name="roleNames"/>
@@ -106,10 +107,10 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label layui-required">邮箱</label>
+                <label class="layui-form-label">邮箱</label>
                 <div class="layui-input-inline">
                     <!--<input id="email" name="email" lay-verify="required | email" autocomplete="off" class="layui-input" type="text"/>-->
-                    <input id="email" name="email"  lay-verify="email"  placeholder="请输入邮箱"
+                    <input id="email" name="email"    placeholder="请输入邮箱"
                     autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
@@ -124,18 +125,16 @@
                     </select>
                 </div>
             </div>
-            <!--<div class="layui-form-item">-->
-                <!--<label class="layui-form-label">密码</label>-->
-                <!--<div class="layui-input-inline">-->
-                    <!--<input id="password" name="password" autocomplete="off" class="layui-input" type="password" placeholder="默认密码：654321" />-->
-                <!--</div>-->
-                <!--<div class="layui-form-mid layui-word-aux">请填写6位以上的密码</div>-->
-            <!--</div>-->
 
             <div class="layui-form-item">
-                <label class="layui-form-label">授予角色</label>
-                <div class="layui-input-inline">
+                <label class="layui-form-label layui-required">授予角色</label>
+                <!-- <div class="layui-input-inline">
                 <input id="roleId" name="roleId" placeholder="请选择" lay-verify="roleId" autocomplete="off" class="layui-input" type="text"/>
+                </div> -->
+                <div class="layui-input-inline" >
+                    <select id="roleType" name="roleIds" required lay-verify="required" xm-select="roleType"
+                            xm-select-skin="primary" xm-select-show-count="2">
+                    </select>
                 </div>
                     <!--<div class="layui-input-block" id="roleDiv">-->
                 <!--</div>-->
@@ -176,13 +175,26 @@
 
     <!--底部-->
     <!--<div th:replace="fragments/footer :: footer"></div>-->
-
+<script type="text/javascript" src="/layuiadmin/layui-formSelects/formSelects-v4.min.js" th:src="@{/layuiadmin/layui-formSelects/formSelects-v4.min.js}"></script>
     <script src="/js/dateUtils.js" th:src="@{/js/dateUtils.js}"></script>
     <script src="/js/auth/userList.js" th:src="@{/js/auth/userList.js}"></script>
     
     <script th:inline="javascript">
-        /* var roles_list=[[${Roles}]];
-        function rolesLike(d){
+    var formSelects = layui.formSelects;
+    formSelects.btns('roleType', ['select', 'remove'], {show: 'name', space: '10px'}); 
+         var roles_list=[[${Roles}]];
+         var str = [];
+         layui.each(roles_list, function (index, like) {
+            var a = {"name": like.roleName, "value": like.id};
+            str.push(a);
+           });
+        // console.log(str)
+         formSelects.data('roleType', 'local', {
+             arr: str
+         });  
+        /*  $('#roleType').append(str);
+         layui.form.render('select'); */
+        /* function rolesLike(d){
         	 return [
         	            '<select name="like" xm-select="like_selects_' + (d.id || (new Date().getTime() + '_' + Math.ceil(Math.random() * 1000000))) + '" xm-select-show-count="2" xm-select-type="1">', // xm-select实际的作用就跟id差不多，所以实际使用中要注意唯一性，
         	            function () {
@@ -196,7 +208,7 @@
         	            }(),
         	            '</select>'
         	          ].join('');
-        } */
+        }  */
     </script>
     
 </div>

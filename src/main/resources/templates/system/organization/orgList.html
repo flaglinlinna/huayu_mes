@@ -31,9 +31,9 @@
                 <tr>
                     <td>{{r.orgCode}}</td>
                     <td>{{r.orgName}}</td>
-                    <td>{{r.flevel}}</td>
-                    <td>{{r.leadBy}}</td>
-                    <td>{{r.mobile}}</td>
+                    <td>{{r.flevel==null?'':r.flevel}}</td>
+                    <td>{{r.leadBy==null?'':r.leadBy}}</td>
+                    <td>{{r.mobile==null?'':r.mobile}}</td>
                     <td>{{r.zindex}}</td>
                     <td><a class="layui-btn layui-btn-primary layui-btn-xs" onclick="edit('{{r.id}}',0);">编辑</a>
                         <a class="layui-btn layui-btn-xs" onclick="addPerm('{{r.id}}',1)">添加子节点</a>

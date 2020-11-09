@@ -26,6 +26,8 @@ public interface SysUserDao extends CrudRepository<SysUser, Long>, JpaSpecificat
 	public int countByDelFlagAndUserCodeAndIdNot(Integer delFlag, String userCode, Long id);
 
     public SysUser findByDelFlagAndUserCode(Integer delFlag, String userCode);
+    
+    public SysUser findByDelFlagAndUserCodeAndStatus(Integer delFlag, String userCode,Integer status);
 
     public SysUser findById(long id);
 
