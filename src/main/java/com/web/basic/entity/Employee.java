@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class Employee extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "MES_BASE_EMPLOYEE";
+	    public static final String TABLE_NAME = "V_BASE_EMPLOYEE";
 	    
 	    /**
 	     * 员工工号
@@ -89,6 +89,13 @@ public class Employee extends BaseEntity {
 		@ApiModelProperty(name="deptId",value="部门ID")
 		@Column(length = 50)
 		protected String deptName;
+
+		/**
+		 *  指纹个数
+		 */
+		@ApiModelProperty(name="fingerNum",value="指纹个数")
+		@Column(length = 50)
+		protected String fingerNum;
 
 	/**
 	 * 员工状态1:在职 0:离职
@@ -168,6 +175,14 @@ public class Employee extends BaseEntity {
 	public void setEmpStatus(Integer empStatus) {
 			this.empStatus = empStatus;
 		}
+
+	public String getFingerNum() {
+		return fingerNum;
+	}
+
+	public void setFingerNum(String fingerNum) {
+		this.fingerNum = fingerNum;
+	}
 
 	@Override
 	public String toString() {

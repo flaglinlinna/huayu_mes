@@ -70,7 +70,13 @@ $(function() {
 				field : 'deptName',
 				title : '部门名称',
 				width:90
-			} , {
+			} ,
+				{
+					field : 'fingerNum',
+					title : '指纹个数',
+					width:70
+				} ,
+				{
 				field : 'lastupdateDate',
 				title : '更新时间',
 				width:150
