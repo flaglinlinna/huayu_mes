@@ -444,6 +444,15 @@ public class SysUserImpl implements SysUserService {
         mapUser.put("status", sysUser.getStatus());
         mapUser.put("userRoles", list);
 
+//        List<SysRole> lr = sysRoleDao.getRoleByUser(su.getId());
+//        List mll = new ArrayList<>();
+//        if(lr.size() > 0){
+//            for(SysRole sr:lr){
+//                mll.add(sr.getRoleName());
+//            }
+//        }
+//        map.put("roles", mll);
+
         //封装数据
         Map<String, Object> map = new HashMap<>();
         map.put("roles", list2);

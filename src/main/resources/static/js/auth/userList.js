@@ -93,7 +93,7 @@ $(function() {
         var form = layui.form ,layer = layui.layer
             ,laydate = layui.laydate,tableSelect = layui.tableSelect;
 
-        var tableSelect2 = tableSelect.render({
+         tableSelect.render({
             elem : '#roleId',
             searchKey : 'keyword',
             checkedKey : 'id',
@@ -107,6 +107,19 @@ $(function() {
             table : {
                 url:  context +'/sysRole/getRolesByStatus',
                 method : 'get',
+                parseData : function(res) {
+                    if(res.result){
+                        // 可进行数据操作
+                        return {
+                            "count" : 0,
+                            "msg" : res.msg,
+                            "data" : res.data,
+                            "code" : res.status
+                            // code值为200表示成功
+                        }
+                    }
+
+                },
                 cols : [ [
                     { type: 'checkbox' },//多选  radio
                     , {
@@ -125,19 +138,7 @@ $(function() {
                     ,
                     limitName : 'rows' // 每页数据量的参数名，默认：limit
                 },
-                parseData : function(res) {
-                    if(res.result){
-                        // 可进行数据操作
-                        return {
-                            "count" : 0,
-                            "msg" : res.msg,
-                            "data" : res.data,
-                            "code" : res.status
-                            // code值为200表示成功
-                        }
-                    }
 
-                },
             },
             done : function(elem, data) {
                 //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
@@ -492,15 +493,13 @@ function getUserAndRoles(obj,id) {
                             // existRole+=item.roleId+',';
                         });
                     }
-                    console.log(existRole);
-                    console.log(data.data.roles);
                     var ids = "";
                     var roleName="";
                     for(var i = 0;i<data.data.user.userRoles.length;i++){
-                        ids=ids +data.data.user.userRoles[i].id+",";
+                        ids=ids +data.data.user.userRoles[i].roleId+",";
                     }
                     console.log(ids);
-                    $("#roleId").attr('ts-selected',ids);
+                    $("#roleId").attr('ts-selected',ids.substring(0,ids.length-1));
                     // ids.substring(0,ids.length-1)
                     // $("#roleId").val(roleName.substring(0,roleName.length-1));
                     $("#roleIds").val("");
