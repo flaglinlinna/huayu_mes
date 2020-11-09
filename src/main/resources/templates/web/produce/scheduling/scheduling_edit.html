@@ -161,7 +161,7 @@
 
     <!--编辑工艺维护-->
     <div id="editDiv1" class="layer_self_wrap" style="width:500px;height:300px;display:none;">
-        <form id="editForm1" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+        <form id="editForm1" class="layui-form layui-form-pane"  lay-filter="editForm1" method="post" action="" style="margin-top: 20px;">
             <input id="processId1" type="hidden" name="id"/>
             <input id="mid1" type="hidden" name="mid"/>
             <div class="layui-form-item">
@@ -180,9 +180,11 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">作业员</label>
                 <div class="layui-input-inline" style="width: 350px;">
-                    <select id="empId1" name="empId" lay-search class="layui-input">
-                        <option value=""></option>
-                    </select>
+                    <!--<select id="empId1" name="empId" lay-search class="layui-input">-->
+                        <!--<option value=""></option>-->
+                    <!--</select>-->
+                    <input id="empId1" name="empId1" lay-filter="empId1" autocomplete="off"
+                           class="layui-input" type="text" />
                 </div>
             </div>
             <div class="layui-form-item">
@@ -207,15 +209,19 @@
 
     <!--编辑工单组件-->
     <div id="editDiv2" class="layer_self_wrap" style="width:500px;height:250px;display:none;">
-        <form id="editForm2" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+        <form id="editForm2" class="layui-form layui-form-pane"  lay-filter="editForm2" method="post" action="" style="margin-top: 20px;">
             <input id="itemId2" type="hidden" name="id"/>
             <input id="mid2" type="hidden" name="mid"/>
+            <input id="empId" type="hidden" name="empId"/>
             <div class="layui-form-item">
                 <label class="layui-form-label">作业员</label>
                 <div class="layui-input-inline" style="width: 350px;">
-                    <select id="empId2" name="empId" lay-search class="layui-input">
-                        <option value=""></option>
-                    </select>
+                    <!--<select id="empId2" name="empId" lay-search class="layui-input">-->
+                        <!--<option value=""></option>-->
+                    <!--</select>-->
+
+                    <input id="empId2" name="empId2"  lay-filter="empId2" autocomplete="off"
+                           class="layui-input" type="text" />
                 </div>
             </div>
             <div class="layui-form-item">

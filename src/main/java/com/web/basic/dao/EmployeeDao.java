@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
-import com.web.basic.entity.Employee;;
+import com.web.basic.entity.Employee;
 
 public interface EmployeeDao extends CrudRepository<Employee, Long>,JpaSpecificationExecutor<Employee>{
 

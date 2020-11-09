@@ -61,8 +61,8 @@ $(function() {
 			},
 				{
 					field : 'lastOffDate',
-					title : '添加时间',
-					width : 145,
+					title : '最后下发时间',
+					width : 170,
 					templet:'<div>{{d.lastOffDate?DateUtils.formatDate(d.lastOffDate):""}}</div>',
 				},
 			/*, {

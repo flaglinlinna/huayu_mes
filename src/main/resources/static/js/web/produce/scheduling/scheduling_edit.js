@@ -4,11 +4,13 @@
 var pageCurr;
 var pageCurr2;
 $(function () {
-    layui.use(['form', 'table', 'laydate', 'upload'], function(){
+    layui.use(['form', 'table', 'laydate', 'upload','tableSelect'], function(){
         var table = layui.table
             ,form = layui.form
             ,laydate = layui.laydate
-            ,upload = layui.upload;
+            ,upload = layui.upload
+            ,tableSelect = layui.tableSelect
+            ,tableSelect2 = layui.tableSelect;
 
         //监听搜索框
         form.on('submit(search)', function(data){
@@ -21,18 +23,130 @@ $(function () {
            // doEdit();
             return false;
         });
-        form.on('select(itemId)', function(data){
-            var itemId = data.value;
-            for(var i = 0; i < itemList.length; i++){
-                if(itemId == itemList[i].id){
-                    $("#itemName").val(itemList[i].itemName);
-                    break;
-                }
-            }
-            return false;
-        });
+        // form.on('select(itemId)', function(data){
+        //     var itemId = data.value;
+        //     for(var i = 0; i < itemList.length; i++){
+        //         if(itemId == itemList[i].id){
+        //             $("#itemName").val(itemList[i].itemName);
+        //             break;
+        //         }
+        //     }
+        //     return false;
+        // });
         laydate.render({
             elem: '#prodDate'
+        });
+
+        tableSelect.render({
+            elem : '#empId1',
+            searchKey : 'keyword',
+            checkedKey : 'id',
+            searchPlaceholder : '员工搜索',
+            table : {
+                url:  context +'/base/employee/getList?empStatus=1',
+                method : 'get',
+                cols : [ [
+                    { type: 'radio' },//多选  radio
+                    , {
+                        field : 'id',
+                        title : 'id',
+                        width : 0,hide:true
+                    }
+                    , {
+                        field : 'empCode',
+                        title : '员工工号',
+                        width : 110
+                    },{
+                        field : 'empName',
+                        title : '员工姓名',
+                        width : 200
+                    } ] ],
+                page : true,
+                request : {
+                    pageName : 'page' // 页码的参数名称，默认：page
+                    ,
+                    limitName : 'rows' // 每页数据量的参数名，默认：limit
+                },
+                parseData : function(res) {
+                    if(res.result){
+                        // 可进行数据操作
+                        return {
+                            "count" : res.data.total,
+                            "msg" : res.msg,
+                            "data" : res.data.rows,
+                            "code" : res.status
+                            // code值为200表示成功
+                        }
+                    }
+
+                },
+            },
+            done : function(elem, data) {
+                //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+                console.log(data);
+                var da=data.data;
+                console.log(da[0])
+                form.val("editForm1", {
+                    "empId1":da[0].empName,
+                });
+                layui.form.render();// 重新渲染
+            }
+        });
+
+        tableSelect2.render({
+            elem : '#empId2',
+            searchKey : 'keyword',
+            checkedKey : 'id',
+            searchPlaceholder : '员工搜索',
+            table : {
+                url:  context +'/base/employee/getList?empStatus=1',
+                method : 'get',
+                cols : [ [
+                    { type: 'radio' },//多选  radio
+                    , {
+                        field : 'id',
+                        title : 'id',
+                        width : 0,hide:true
+                    }
+                    , {
+                        field : 'empCode',
+                        title : '员工工号',
+                        width : 110
+                    },{
+                        field : 'empName',
+                        title : '员工姓名',
+                        width : 200
+                    } ] ],
+                page : true,
+                request : {
+                    pageName : 'page' // 页码的参数名称，默认：page
+                    ,
+                    limitName : 'rows' // 每页数据量的参数名，默认：limit
+                },
+                parseData : function(res) {
+                    if(res.result){
+                        // 可进行数据操作
+                        return {
+                            "count" : res.data.total,
+                            "msg" : res.msg,
+                            "data" : res.data.rows,
+                            "code" : res.status
+                            // code值为200表示成功
+                        }
+                    }
+
+                },
+            },
+            done : function(elem, data) {
+                //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+                console.log(data);
+                var da=data.data;
+                form.val("editForm2", {
+                    "empId2":da[0].empName,
+                });
+                layui.form.render();// 重新渲染
+            }
+
         });
 
         tableIns=table.render({
@@ -257,13 +371,13 @@ function doEdit(){
 
 //获取编辑信息-工艺维护
 function getProcess(obj, id){
-    var optionHtml = '<option value=""></option>';
-    //添加作业员列表
-    for(var i = 0; i < employeeList.length; i++){
-        optionHtml += '<option value="'+employeeList[i].id+'">'+employeeList[i].empName+'</option>';
-    }
-    $("#empId1").html(optionHtml);
-
+    // var optionHtml = '<option value=""></option>';
+    // //添加作业员列表
+    // for(var i = 0; i < employeeList.length; i++){
+    //     optionHtml += '<option value="'+employeeList[i].id+'">'+employeeList[i].empName+'</option>';
+    // }
+    // $("#empId1").html(optionHtml);
+    console.log(obj);
     $("#processId1").val(id);
     $("#mid1").val(obj.mid);
     $("#procOrder1").val(obj.procOrder);
@@ -273,11 +387,13 @@ function getProcess(obj, id){
     }else{
         $("#jobAttr1").prop("checked", false);
     }
-    $("#empId1").val(obj.empId);
+    $("#empId1").val(obj.empName);
+    $("#empId1").attr('ts-selected',obj.empId);
     $("#procNo1").val(obj.procNo);
     $("#procName1").val(obj.procName);
 
     //渲染
+    layui.form.render();
     layui.form.render('select');
     layui.form.render('checkbox');
 
@@ -320,6 +436,7 @@ function doEditProcess(obj){
     if(!obj.jobAttr){
         obj.jobAttr = 0;
     }
+    obj.empId = $('#empId1').attr("ts-selected");
     CoreUtil.sendAjax("/produce/scheduling/editProcess",JSON.stringify(obj),function (res) {
         if (res.result == true) {
             layer.alert("编辑成功",function(){
@@ -423,19 +540,18 @@ function saveProcess(table) {
 
 //获取编辑信息-工单组件
 function getItem(obj, id){
-    var optionHtml = '<option value=""></option>';
+    // var optionHtml = '<option value=""></option>';
     //添加作业员列表
-    for(var i = 0; i < employeeList.length; i++){
-        optionHtml += '<option value="'+employeeList[i].id+'">'+employeeList[i].empName+'</option>';
-    }
-    $("#empId2").html(optionHtml);
-
+    // for(var i = 0; i < employeeList.length; i++){
+    //     optionHtml += '<option value="'+employeeList[i].id+'">'+employeeList[i].empName+'</option>';
+    // }
+    // $("#empId2").html(optionHtml);
     $("#itemId2").val(id);
     $("#mid2").val(obj.mid);
     $("#itemNo2").val(obj.itemNo);
     $("#itemName2").val(obj.mtrial ? obj.mtrial.itemName : "");
     $("#itemQty2").val(obj.itemQty);
-    $("#empId2").val(obj.empId);
+    $("#empId2").val(obj.employee.empName);
 
     //渲染
     layui.form.render('select');
@@ -472,6 +588,9 @@ function cleanItem(){
 }
 //编辑-工单组件
 function doEditItem(){
+    var empId = $('#empId2').attr("ts-selected");
+    console.log(empId);
+    $("#empId").val(empId);
     $.ajax({
         type: "POST",
         data: $("#editForm2").serialize(),
