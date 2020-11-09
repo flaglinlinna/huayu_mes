@@ -13,15 +13,15 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">账号</label>
                 <div class="layui-input-inline">
-                    <input id="codeSearch" name="codeSearch" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="codeSearch" placeholder="请输入账号" name="codeSearch" autocomplete="off" class="layui-input" type="text"/>
                 </div>
                 <label class="layui-form-label">昵称</label>
                 <div class="layui-input-inline">
-                    <input id="nameSearch" name="nameSearch" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="nameSearch" placeholder="请输入昵称" name="nameSearch" autocomplete="off" class="layui-input" type="text"/>
                 </div>
                 <label class="layui-form-label">手机号</label>
                 <div class="layui-input-inline">
-                    <input id="mobileSearch" name="mobileSearch" autocomplete="off" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    <input id="mobileSearch" placeholder="请输入手机号" name="mobileSearch" autocomplete="off" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
                            onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
                 </div>
             </div>
@@ -77,35 +77,40 @@
             <input id="roleNames" type="hidden" name="roleNames"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">账号</label>
+                <label class="layui-form-label layui-required">账号</label>
                 <div class="layui-input-inline">
-                    <input id="userCode" name="userCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="userCode" name="userCode" lay-verify="required" 
+                    placeholder="请输入账号" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">昵称</label>
+                <label class="layui-form-label layui-required">昵称</label>
                 <div class="layui-input-inline">
-                    <input id="userName" name="userName" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="userName" name="userName" lay-verify="required" 
+                    placeholder="请输入昵称" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">真实名称</label>
+                <label class="layui-form-label layui-required">真实名称</label>
                 <div class="layui-input-inline">
-                    <input id="realName" name="realName" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="realName" name="realName" lay-verify="required"
+                    placeholder="请输入真实名称" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">手机号</label>
                 <div class="layui-input-inline">
-                    <input id="mobile" name="mobile" autocomplete="off" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    <input id="mobile" name="mobile" autocomplete="off"  placeholder="请输入手机号"
+                    class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
                            onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">邮箱</label>
+                <label class="layui-form-label layui-required">邮箱</label>
                 <div class="layui-input-inline">
                     <!--<input id="email" name="email" lay-verify="required | email" autocomplete="off" class="layui-input" type="text"/>-->
-                    <input id="email" name="email" lay-verify="email" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="email" name="email"  lay-verify="email"  placeholder="请输入邮箱"
+                    autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -130,7 +135,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">授予角色</label>
                 <div class="layui-input-inline">
-                <input id="roleId" name="roleId" lay-verify="roleId" autocomplete="off" class="layui-input" type="text"/>
+                <input id="roleId" name="roleId" placeholder="请选择" lay-verify="roleId" autocomplete="off" class="layui-input" type="text"/>
                 </div>
                     <!--<div class="layui-input-block" id="roleDiv">-->
                 <!--</div>-->
@@ -149,13 +154,13 @@
         <form id="passwordForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input id="userId" type="hidden" name="userId"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">新密码</label>
+                <label class="layui-form-label layui-required">新密码</label>
                 <div class="layui-input-inline">
                     <input id="password" name="password" lay-verify="required" autocomplete="off" class="layui-input" type="password"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">确认密码</label>
+                <label class="layui-form-label layui-required">确认密码</label>
                 <div class="layui-input-inline">
                     <input id="rePassword" name="rePassword" lay-verify="required" autocomplete="off" class="layui-input" type="password"/>
                 </div>

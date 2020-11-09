@@ -15,7 +15,7 @@
 						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
 						<div class="layui-input-inline">
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
-								class="layui-input" type="text" />
+								placeholder="请输入关键字" class="layui-input" type="text" />
 						</div>
 						<button class="layui-btn layui-btn-sm" lay-submit=""
 							lay-filter="searchSubmit">查询</button>
@@ -46,7 +46,7 @@
 					type="hidden" name="id" />
 				<div class="layui-form-item">
 					<input id="empId" type="hidden" name="empId" /> <label
-						class="layui-form-label">员工工号</label>
+						class="layui-form-label layui-required">员工工号</label>
 					<div class="layui-input-inline" style="width:26%;">
 						<input type="text" name="empCode" placeholder="请选择"
 							autocomplete="off" class="layui-input" readonly="readonly"
@@ -59,7 +59,7 @@
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">制令单</label>
+					<label class="layui-form-label layui-required">制令单</label>
 					<div class="layui-input-inline" style="width:76%;">
 					<input type="text" name="taskNo" placeholder="请选择"
 							autocomplete="off" class="layui-input" readonly="readonly"
@@ -93,34 +93,34 @@
 					</div>
 				</div>						
 				<div class="layui-form-item">
-					<label class="layui-form-label">开始时间</label>
+					<label class="layui-form-label layui-required">开始时间</label>
 					<div class="layui-input-inline" style="width:26%;">
 						<input type="text" class="layui-input" name="timeBegin" 
-							lay-verify="required" id="timeBegin">
+						placeholder="请输入开始时间" lay-verify="required" id="timeBegin">
 					</div>
-					<label class="layui-form-label">结束时间</label>
+					<label class="layui-form-label layui-required">结束时间</label>
 					<div class="layui-input-inline" style="width:26%;">
 						<input type="text" class="layui-input" name="timeEnd" 
-							lay-verify="required" id="timeEnd">
+						placeholder="请选择结束时间"	lay-verify="required" id="timeEnd">
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">时长(分钟)</label>
+					<label class="layui-form-label layui-required">时长(分钟)</label>
 					<div class="layui-input-inline" style="width:26%;">
 						<input class="layui-input" name="duration" disabled
 							style="background: #efefef;"lay-verify="required" id="duration">
 					</div>
-					<label class="layui-form-label">异常原因</label>
+					<label class="layui-form-label layui-required">异常原因</label>
 					<div class="layui-input-inline" style="width:26%;">
 					<input type="text" class="layui-input" name="forReason" 
-					lay-verify="required" id="forReason">
+					lay-verify="required" id="forReason" placeholder="请输入异常原因">
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">异常描述</label>
 					<div class="layui-input-inline" style="width:76%;">
 					<textarea id="description" name="description" lay-verify="required"
-						 class="layui-textarea"></textarea>
+						placeholder="请输入内容" class="layui-textarea"></textarea>
 					</div>
 				</div>
 				<div class="layui-form-item">
