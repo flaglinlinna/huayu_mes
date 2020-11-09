@@ -11,20 +11,20 @@
 
         <form class="layui-form" action="">
             <div class="layui-form-item">
-                <label class="layui-form-label">名称</label>
+                <label class="layui-form-label layui-required">名称</label>
                 <div class="layui-input-block">
                     <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入名称" class="layui-input"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">编号</label>
+                <label class="layui-form-label layui-required">编号</label>
                 <div class="layui-input-block">
                     <input type="text" name="code" lay-verify="required" placeholder="请输入编号，用于权限校验时使用；比如：adduser:添加用户权限" autocomplete="off" class="layui-input"/>
                 </div>
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">权限类型</label>
+                <label class="layui-form-label layui-required">权限类型</label>
                 <div class="layui-input-block">
                     <select name="istype" lay-filter="aihao">
                         <option value="0">菜单</option>
@@ -34,7 +34,7 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">访问路径</label>
+                <label class="layui-form-label layui-required">访问路径</label>
                 <div class="layui-input-block">
                     <input type="text" name="page" lay-verify="required" placeholder="请输入访问菜单路径；权限类型为：“功能”；可不填写" autocomplete="off" class="layui-input"/>
                 </div>
@@ -42,7 +42,7 @@
 
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">优先级</label>
+                    <label class="layui-form-label layui-required">优先级</label>
                     <div class="layui-input-inline">
                         <input type="text" name="zindex" lay-verify="required|phone" autocomplete="off" class="layui-input"/>
                     </div>

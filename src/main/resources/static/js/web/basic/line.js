@@ -169,7 +169,7 @@ $(function() {
 			var param = {
 				"id" : id
 			};
-			CoreUtil.sendAjax("base/line/getLine", JSON.stringify(param),
+			CoreUtil.sendAjax("/base/line/getLine", JSON.stringify(param),
 					function(data) {
 						if (data.result) {
 							form.val("lineForm", {
@@ -297,7 +297,7 @@ function addLine() {
 }
 // 新增线体提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("base/line/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/base/line/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -318,7 +318,7 @@ function addSubmit(obj) {
 
 // 编辑线体提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("base/line/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/base/line/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
