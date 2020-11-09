@@ -11,9 +11,11 @@ import com.system.permission.dao.SysPermissionDao;
 import com.system.permission.entity.SysPermission;
 import com.system.role.dao.RolePermissionMapDao;
 import com.system.role.entity.RolePermissionMap;
+import com.system.user.dao.SysUserDao;
 import com.system.user.dao.UserRoleMapDao;
 import com.system.user.entity.UserRoleMap;
 import com.utils.BaseService;
+import com.utils.ExcelExport;
 import com.utils.SearchFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,8 @@ import com.system.user.entity.SysUser;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 角色
  *
@@ -50,6 +54,8 @@ public class SysRoleImpl implements SysRoleService {
     private RolePermissionMapDao rolePermissionMapDao;
     @Autowired
     private UserRoleMapDao userRoleMapDao;
+    @Autowired
+    private SysUserDao sysUserDao;
     @Autowired
     private SysPermissionDao sysPermissionDao;
 
@@ -422,5 +428,21 @@ public class SysRoleImpl implements SysRoleService {
         sysRoleDao.save(o);
 
         return ApiResponseResult.success("设置成功！").data(o);
+    }
+
+
+    /**
+     * 导出
+     */
+    @Override
+    @Transactional
+    public void exportList(Long roleId, HttpServletResponse response) throws Exception {
+        // 查询条件1
+         List<Map<String,Object>> list = userRoleMapDao.getAllUserByRoleId(roleId);
+//        //创建一个数组用于设置表头
+        String[] arr = new String[]{"账号","手机号","名称","邮箱","性别","注册来源","添加时间"};
+        String[] map_arr = new String[]{"USER_CODE","MOBILE","USER_NAME","EMAIL","SEX","REGISTER_SRC","CREATE_DATE"};
+//        //调用Excel导出工具类
+        ExcelExport.export(response,list,arr,map_arr,"用户信息.xls");//
     }
 }

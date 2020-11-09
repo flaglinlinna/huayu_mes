@@ -25,4 +25,7 @@ public interface UserRoleMapDao extends CrudRepository<UserRoleMap, Long>, JpaSp
     
     @Query(value = "select count(u.id)c from  sys_user u left join  sys_user_role r on r.user_id=u.id  where u.del_flag=0 and u.status=0 and r.role_id=?1 and r.del_flag=0 ", nativeQuery = true)
     public List<Map<String, Object>> getUserByRoleId(Long roleId);
+
+    @Query(value = "select u.* from  sys_user u left join  sys_user_role r on r.user_id=u.id  where u.del_flag=0 and u.status=0 and r.role_id=?1 and r.del_flag=0 ", nativeQuery = true)
+    public List<Map<String, Object>> getAllUserByRoleId(Long roleId);
 }

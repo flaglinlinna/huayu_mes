@@ -67,8 +67,8 @@ $(function() {
 				width:110,
 				sort: true,
 			}, {
-				field : 'deptId',
-				title : '部门ID',
+				field : 'deptName',
+				title : '部门名称',
 				width:90
 			} , {
 				field : 'lastupdateDate',

@@ -171,6 +171,8 @@ public class Employeelmpl implements EmployeeService {
 				Specification<Employee> spec1 = spec.and(BaseService.or(filters1, Employee.class));
 				Page<Employee> page = employeeDao.findAll(spec1, pageRequest);
 
+
+
 				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
