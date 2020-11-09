@@ -52,7 +52,7 @@ public class Backlmpl extends ReportPrcUtils implements BackService {
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, "");
 				cs.setString(2, "");
-				cs.setString(3, "");
+				cs.setString(3, user_id);
 				cs.setString(4, beginTime);
 				cs.setString(5, endTime);
 				cs.setString(6, keyword);

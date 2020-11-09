@@ -74,24 +74,7 @@ $(function() {
 				toolbar : '#optBar'
 			} ] ],
 			done : function(res, curr, count) {
-				// 如果是异步请求数据方式，res即为你接口返回的信息。
-				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-				// console.log(res);
-				// 得到当前页码
-				// console.log(curr);
-				// 得到数据总量
-				// console.log(count);
 				pageCurr = curr;
-				//console.log(res)
-				/*for(var i =0;i<res.data.length;i++){
-						if(res.data[i].jobAttr==0){
-							//这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
-					        res.data[i]["LAY_CHECKED"]='true';
-							//更改css来实现选中的效果
-							//$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
-							$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
-						}		
-				}*/
 				merge(res.data,['itemNo','mtrial.itemName'],[2,3]);
 			}
 		});
@@ -182,18 +165,24 @@ $(function() {
 			, 
 			{field : 'checkColumn',
 				type:"checkbox"
-			},
-			
-			{
+			},/*{
+				field : 'procOrder',
+				title : '序号',width:80
+			}, */{
 				field : 'procNo',
 				title : '编码'
 			}, {
 				field : 'procName',
 				title : '名称',
 			}, {
-				field : 'jobAttr',
+				field : 'jobAttr',width:100,
 				title : '过程属性',templet:'#add_statusTpl'
-			}] ],
+			},{
+	              type: 'toolbar',
+	              title: '操作',
+	              width: 160,align : 'center',
+	              toolbar: '#moveBar'
+	            }] ],
 			data:[]
 		});	
 		
@@ -233,6 +222,46 @@ $(function() {
 				addProc(data.custId)
 			}
 		});
+		table.on('tool(procTable)', function(obj) {
+			var data = obj.data;
+			var tbData = table.cache.procList; //是一个Array
+			if (obj.event === 'moveUp') {
+				// 上移
+				var tr = $(this).parent().parent().parent();
+				if ($(tr).prev().html() == null) {
+			        layer.msg("已经是最顶部了");
+			        return;
+			    }else{
+			        // 未上移前，记录本行和下一行的数据
+			        var tem = tbData[tr.index()];
+			        var tem2 = tbData[tr.prev().index()];
+			 
+			        // 将本身插入到目标tr之前
+			        $(tr).insertBefore($(tr).prev());
+			        // 上移之后，数据交换
+			        tbData[tr.index()] = tem;
+			        tbData[tr.next().index()] = tem2;
+			    }
+
+			} else if (obj.event === 'moveDown') {
+				// 下移
+				var tr = $(this).parent().parent().parent();
+			    if ($(tr).next().html() == null) {
+			        layer.msg("已经是最底部了");
+			        return;
+			    } else{
+			        // 记录本行和下一行的数据
+			        var tem = tbData[tr.index()];
+			        var tem2 = tbData[tr.next().index()];
+			        // 将本身插入到目标tr的后面
+			        $(tr).insertAfter($(tr).next());
+			        // 交换数据
+			        tbData[tr.index()] = tem;
+			        tbData[tr.prev().index()] = tem2;
+			    }
+
+			}
+		});
 		
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
@@ -252,19 +281,6 @@ $(function() {
 			addSubmit(procIdList,data.field.itemId,data.field.num);
 			return false;
 			
-			/*if (data.field.id == null || data.field.id == "") {
-				// 新增
-				var procIdList="";
-				var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
-				return false;
-				for(var i=0;i<cList.length;i++){//获取被选中的行
-					procIdList+=cList[i].id+","//工序的ID序列，用“；”分隔
-				}
-				addSubmit(procIdList,data.field.itemId,data.field.num);
-			} else {
-				//editSubmit(data);//未写
-			}
-			return false;*/
 		});
 		
 		// 设置过程属性
@@ -518,7 +534,7 @@ function openProc(id, title) {
 		fixed : false,
 		resize : false,
 		shadeClose : true,
-		area : [ '750px','410px'],
+		area : [ '800px','410px'],
 		content : $('#setClientProc'),
 		end : function() {
 			cleanProc();
