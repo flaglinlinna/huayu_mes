@@ -51,13 +51,13 @@
             <input id="parentId" type="hidden" name="parentId"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">菜单名称</label>
+                <label class="layui-form-label layui-required">菜单名称</label>
                 <div class="layui-input-inline">
-                    <input name="menuName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input name="menuName" lay-verify="required" placeholder="请输入菜单名称" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item" pane="">
-                <label class="layui-form-label">菜单分类</label>
+                <label class="layui-form-label layui-required">菜单分类</label>
                 <div class="layui-input-block">
                     <input name="istype" value="0" title="菜单" checked="" type="radio"/>
                     <input name="istype" value="1" title="按钮" type="radio"/>
@@ -65,21 +65,21 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">菜单路径</label>
+                <label class="layui-form-label layui-required">菜单路径</label>
                 <div class="layui-input-inline">
-                    <input name="pageUrl" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input name="pageUrl" lay-verify="required" placeholder="请输入菜单路径" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">菜单code</label>
+                <label class="layui-form-label layui-required">菜单code</label>
                 <div class="layui-input-inline">
-                    <input name="menuCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input name="menuCode" lay-verify="required" placeholder="请输入菜单code" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">菜单优先级</label>
+                <label class="layui-form-label layui-required">菜单优先级</label>
                 <div class="layui-input-inline">
-                    <input name="zindex" autocomplete="off" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    <input name="zindex" autocomplete="off" placeholder="请输入菜单优先级" class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
                            onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
                 </div>
                 <div class="layui-form-mid layui-word-aux">请填写大于0的整数数字</div>
@@ -87,7 +87,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">图标样式</label>
                 <div class="layui-input-inline">
-                    <input name="menuIcon"   autocomplete="off" class="layui-input" type="text"/>
+                    <input name="menuIcon"   autocomplete="off" placeholder="请输入图表样式码" class="layui-input" type="text"/>
                 </div>
             </div>
 

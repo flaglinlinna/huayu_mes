@@ -15,7 +15,7 @@
 						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
 						<div class="layui-input-inline">
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
-								class="layui-input" type="text" />
+								placeholder="请输入不良类别编码" class="layui-input" type="text" />
 						</div>
 						
 						<button class="layui-btn layui-btn-sm" lay-submit=""
@@ -46,7 +46,7 @@
 					type="hidden" name="id" />
 				<div class="layui-form-item">
 					<input id="empId" type="hidden" name="empId" /> <label
-						class="layui-form-label">员工工号</label>
+						class="layui-form-label layui-required">员工工号</label>
 					<div class="layui-input-inline" style="width:25%;">
 						<input type="text" name="empCode" placeholder="请选择"
 							autocomplete="off" class="layui-input" readonly="readonly"
@@ -59,7 +59,7 @@
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">制令单</label>
+					<label class="layui-form-label layui-required">制令单</label>
 					<div class="layui-input-inline" style="width:74%;">
 					<input type="text" name="taskNo" placeholder="请选择"
 							autocomplete="off" class="layui-input" readonly="readonly"
@@ -95,7 +95,7 @@
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">卡点类型</label>
+					<label class="layui-form-label layui-required">卡点类型</label>
 					<div class="layui-input-inline">
 					<select id="cardType" name="cardType" lay-verify="required">
 							<option value="">请选择</option>
@@ -105,16 +105,16 @@
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">签卡日期</label>
+					<label class="layui-form-label layui-required">签卡日期</label>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="signDate" readonly="readonly"
+						<input type="text" class="layui-input" placeholder="请选择签卡日期" name="signDate" readonly="readonly"
 							lay-verify="required" id="signDate">
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">签卡时间</label>
+					<label class="layui-form-label layui-required">签卡时间</label>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="signTime" readonly="readonly"
+						<input type="text" class="layui-input" placeholder="请选择签卡时间" name="signTime" readonly="readonly"
 							lay-verify="required" id="signTime">
 					</div>
 				</div>

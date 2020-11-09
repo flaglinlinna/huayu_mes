@@ -13,7 +13,7 @@
 						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
 						<div class="layui-input-inline">
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
-								class="layui-input" type="text" />
+								placeholder="请输入关键字" class="layui-input" type="text" />
 						</div>
 						
 						 <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
@@ -34,6 +34,10 @@
                     <input type="checkbox" name="{{d.itemNo}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
                     {{#  } }}
               </script>
+              <script type="text/html" id="moveBar">
+  <a class="layui-btn layui-btn-xs" lay-event="moveUp"><i class="layui-icon layui-icon-up"></i>上移</a>
+  <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="moveDown"><i class="layui-icon layui-icon-down"></i>下移</a>
+	</script>
 			<script type="text/html" id="add_statusTpl">
             <input type="checkbox" name="jobAttr" value="1" lay-skin="primary" lay-filter="isAddStatusTpl" checked="checked" />
         </script>
@@ -44,7 +48,7 @@
 		</div>
 		<!--添加或编辑工艺流程-->
 		<div id="setClientProc" class="layer_self_wrap"
-			style="width: 700px; display: none;">
+			style="width: 750px; display: none;">
 			<form id="clientProcForm" class="layui-form layui-form-pane"
 				lay-filter="clientProcForm" method="post" action=""
 				style="margin: 20px;">
@@ -54,12 +58,12 @@
 					<input type="hidden" name="itemId" />
 					
 				<div class="layui-form-item">
-				    <label class="layui-form-label">物料编码</label>
+				    <label class="layui-form-label layui-required">物料编码</label>
 					<div class="layui-input-inline">
 						<input type="text" name="num" placeholder="请选择" autocomplete="off"
 							class="layui-input"  readonly="readonly" lay-verify="required" id="num">
 					</div>
-					<label class="layui-form-label">客户</label>
+					<label class="layui-form-label layui-required">客户</label>
 					<div class="layui-input-inline">
 						<select id="pkClient" name="pkClient" lay-filter="pkClient" 
 							lay-search>
