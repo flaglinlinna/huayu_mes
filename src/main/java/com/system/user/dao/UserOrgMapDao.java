@@ -27,6 +27,9 @@ public interface UserOrgMapDao extends CrudRepository<UserOrgMap, Long>, JpaSpec
     
     public List<UserOrgMap> findByDelFlagAndOrgId(Integer delFlag, Long orgId);
     
+    @Query(value = "SELECT O.ORG_ID,L.Org_Name FROM  SYS_USER_ORG O LEFT JOIN  V_SYS_ORG_TREE L ON O.ORG_ID=L.Id WHERE  O.del_flag=0 AND  O.USER_ID=?1 ", nativeQuery = true)
+    public List<Map<String, Object>> queryOrgNameAndIdByUid(Long uid);//获取组织架构
+    
 //    @Query(value = "select count(u.id)c from  sys_user u left join  sys_user_role r on r.user_id=u.id  where u.del_flag=0 and u.status=0 and r.role_id=?1 and r.del_flag=0 ", nativeQuery = true)
 //    public List<Map<String, Object>> getUserByOrgId(Long orgId);
 

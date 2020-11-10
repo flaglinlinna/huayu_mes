@@ -63,7 +63,7 @@ $(function() {
         tableSelect = tableSelect.render({
 			elem : '#orgInfo',
 			searchKey : 'keyword',
-			checkedKey : 'id',
+			checkedKey : 'ID',
 			searchPlaceholder : '试着搜索',
 			table : {
 				url : context + '/sysUser/getOrgList',
@@ -376,6 +376,10 @@ function getUserAndRoles(obj,id) {
                     if(disArray != null){
                         formSelects.value('disasterType', disArray);
                     }*/
+                    $("#orgIds").val(data.data.Org_id==null?'':data.data.Org_id);
+                    $('#orgInfo').val(data.data.Org_name==null?'':data.data.Org_name)
+                    $('#orgInfo').attr("ts-selected",data.data.Org_id==null?'':data.data.Org_id);
+                    
                     var userRoles = data.data.user.userRoles;
                     var disArray = [];
                     layui.each(userRoles, function (index, like) {
