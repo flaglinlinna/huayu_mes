@@ -104,11 +104,11 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 		series : [ {
 			name : '计划产量',
 			type : 'bar',
-			data : series1_data
+			data : series2_data
 		}, {
 			name : '达成产量',
 			type : 'bar',
-			data : series2_data
+			data : series1_data
 		}, {
 			name : '完工率',
 			type : 'line',
