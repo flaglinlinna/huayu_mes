@@ -33,12 +33,12 @@ $(function() {
 				type : 'numbers'
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			,{
-				field : 'custId',
-				title : '客户Id',
-				width:0,
-				hide:true
-			}
+			// ,{
+			// 	field : 'custId',
+			// 	title : '客户Id',
+			// 	width:0,
+			// 	hide:true
+			// }
 			// ,{
 			// 	field : 'custNo',
 			// 	title : '客户编号',
@@ -111,7 +111,7 @@ $(function() {
 							$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
 						}		
 				}
-				merge(res.data,['fdemoName'],[2]);
+				merge(res.data,['fdemoName'],[1]);
 			}
 		});
 		
@@ -154,7 +154,6 @@ $(function() {
 					field : 'checkStatus',
 					title : '过程属性',
 					templet : '#statusTp2',
-					sort: true,
 					width:95,
 					align : 'center'
 					//type:"checkbox"
@@ -223,7 +222,6 @@ $(function() {
 				console.log(cList);
 				for(var i=0;i<cList.length;i++){//获取被选中的行
 					procIdList+=cList[i].id+";"//工序的ID序列，用“；”分隔
-					// jobAttr+=cList[i].checkStatus+";";
 				}
 				console.log(jobAttr);
 				var fdemoName=data.field.fdemoName;
@@ -278,7 +276,6 @@ $(function() {
 
 		// 设置过程属性
 		function setStatus2(obj, id, name, checked) {
-			// var jobAttr = checked ? 0 : 1;
 			console.log(obj);
 			obj.checkStatus = checked ? 1 : 0;
 		}
@@ -305,10 +302,11 @@ function getProcByClient(params){
 					for(var i =0;i<res.data.length;i++){
 						for(var j=0;j<beSelected.length;j++){
 							if(res.data[i].id == beSelected[j].procId){
+								console.log(res.data[i].id);
 								//这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
 						        res.data[i]["LAY_CHECKED"]='true';
 								//更改css来实现选中的效果
-								//$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
+								$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
 								$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
 							}
 							
@@ -395,24 +393,25 @@ function getProcList(id){
 							}
 						}
 					});
-					$("#fdemoName").empty();
-					var c=data.data.client;
+					// $("#fdemoName").empty();
+					// var c=data.data.client;
 					//console.log(c)
-					for (var i = 0; i < c.length; i++) {
-						if(i==0){
-							$("#fdemoName").append("<option value=''>请点击选择</option>");
-						}
-						if(id != ''){
-							if(c[i].id == id){
-								$("#fdemoName").append("<option value=" + c[i].id+ " selected>"+c[i].custName+"</option>");
-							}else{
-								$("#fdemoName").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
-							}
-						}else{
-							$("#fdemoName").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
-						}
-					}			
-					layui.form.render('select');
+					// for (var i = 0; i < c.length; i++) {
+					// 	if(i==0){
+					// 		$("#fdemoName").append("<option value=''>请点击选择</option>");
+					// 	}
+					// 	if(id != ''){
+					// 		if(c[i].id == id){
+					// 			$("#fdemoName").append("<option value=" + c[i].id+ " selected>"+c[i].custName+"</option>");
+					// 		}else{
+					// 			$("#fdemoName").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
+					// 		}
+					// 	}else{
+					// 		$("#fdemoName").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
+					// 	}
+					// }
+					// layui.form.render();
+					// layui.form.render('select');
 				} else {
 					layer.alert(data.msg)
 				}
@@ -457,7 +456,7 @@ function openProc(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	layer.open({
+	var index = layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -469,6 +468,7 @@ function openProc(id, title) {
 			cleanProc();
 		}
 	});
+	layer.full(index);
 }
 //重新加载表格（搜索）
 function load(obj) {

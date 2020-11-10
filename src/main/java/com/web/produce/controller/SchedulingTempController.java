@@ -60,7 +60,7 @@ public class SchedulingTempController extends WebController {
     public ApiResponseResult getHistoryList(String keyword, String startTime, String endTime){
         String method = "/produce/scheduling_temp/getList";String methodName ="获取排产导入临时信息列表";
         try {
-            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            Sort sort = new Sort(Sort.Direction.DESC, "createDate");
             ApiResponseResult result = schedulingTempService.getList(keyword, startTime, endTime, super.getPageRequest(sort));
             logger.debug(methodName+"=getList:");
             getSysLogService().success(module,method, methodName, null);

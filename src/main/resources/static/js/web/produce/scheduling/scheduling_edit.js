@@ -236,7 +236,8 @@ $(function () {
                 {type:'numbers'}
                 ,{field:'itemNo', title:'物料编号', width:150}
                 ,{field:'itemName', title:'物料描述', width:250, templet:'<span>{{d.mtrial ? d.mtrial.itemName : ""}}</span>'}
-                ,{field:'itemQty', title:'用量', width:100}
+                ,{field:'itemQty', title:'组件用量', width:100}
+                ,{field:'itemUnit', title:'组件单位', width:100}
                 ,{field:'empName', title:'作业员', width:100, templet:'<span>{{ d.employee ? d.employee.empName : "" }}</span>'}
                 ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
             ]]
