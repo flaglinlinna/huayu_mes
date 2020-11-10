@@ -88,10 +88,14 @@ $(document).ready(function(){
 				<option value="998">24小时看板</option>
 				<option value="1">白班</option>
 				<option value="2">晚班</option>
-			</select> <span class="chose_tltle">请输入部门：</span> <select class="year_chose"
+			</select> <span class="chose_tltle">请选择部门：</span> <select class="year_chose"
 				id="dep_select">
+			</select>
+			<span class="chose_tltle">请选择组长：</span> <select class="year_chose"
+				id="liner_select">
 
-			</select> <span class="chose_tltle">请选择日期：</span> <input style="width:15%;" type="text"
+			</select> 
+			 <span class="chose_tltle">请选择日期：</span> <input style="width:15%;" type="text"
 				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
 				autocomplete="off" class="chose_text_in ">
 			<!-- <input class="chose_text_in"> -->
@@ -167,6 +171,20 @@ var t = null;
 		</div>
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
+    </script>
+    	<script th:inline="javascript">
+    var context = [[@{/}]];
+    	layui.use([ 'laydate'], function(){
+    		  var layer = layui.layer
+    		  ,laydate = layui.laydate;
+    		  
+    		  //日期
+    		  laydate.render({
+    		    elem: '#date',
+    		    trigger:'click'
+    		   // range: true
+    		  });
+    	});
     </script>
 		<script src="/kanban/scripts/xlpm.js"
 			th:src="@{/kanban/scripts/xlpm.js}"></script>
