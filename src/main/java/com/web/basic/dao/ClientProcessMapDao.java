@@ -14,13 +14,15 @@ public interface ClientProcessMapDao extends CrudRepository<ClientProcessMap, Lo
 	public List<ClientProcessMap> findAll();
 	public List<ClientProcessMap> findByDelFlag(Integer delFlag);
 	public ClientProcessMap findById(long id);
-	public List<ClientProcessMap> findByDelFlagAndCustId(Integer delFlag,Long custId);//查找物料及其工序集合
+	public List<ClientProcessMap> findByDelFlagAndFdemoName(Integer delFlag,String fdemoName);//查找物料及其工序集合
 	//public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
+
+	public  List<ClientProcessMap> findByFdemoName(String fdemoName);
 
   
 	/**
      * 获取已经配置了的客户信息
      */
-    @Query(value = "select distinct map.custId,map.client.custName from ClientProcessMap map  where map.delFlag=0  ")
+    @Query(value = "select  map.fdemoName, map.fdemoName from ClientProcessMap map  where map.delFlag = 0  group by map.fdemoName")
 	public  List<ClientProcessMap> findClient();
 }

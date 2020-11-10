@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
-import com.web.basic.entity.ProdProcDetail;;
+import com.web.basic.entity.ProdProcDetail;
 
 public interface ProdProcDetailDao extends CrudRepository<ProdProcDetail, Long>,JpaSpecificationExecutor<ProdProcDetail>{
 	

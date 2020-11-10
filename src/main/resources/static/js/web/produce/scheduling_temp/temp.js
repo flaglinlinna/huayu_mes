@@ -35,18 +35,19 @@ $(function () {
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
                 // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
                 ,{field:'CHECK_STATUS', title:'校验结果', width:100, templet:'#statusTpl'}
-                ,{field:'ERROR_INFO', title:'错误信息', width:110}
-                ,{field:'TASK_NO', title:'生产指令单', width:120}
+                ,{field:'ENABLED', title:'生效状态', width:80, templet:'#enabledTpl'}
+                ,{field:'ERROR_INFO', title:'错误信息', width:140}
+                ,{field:'PROD_NO', title:'工单号', width:120}
+                ,{field:'TASK_NO', title:'生产指令单', width:100}
                 ,{field:'GROUP_NO', title:'组合', width:70}
-                ,{field:'ENABLED', title:'生效状态', width:100, templet:'#enabledTpl'}
+                ,{field:'DEPT_NAME', title:'部门', width:70}
                 ,{field:'CUST_NAME', title:'客户', width:80}
                 ,{field:'LINER_NAME', title:'组长', width:70}
-                ,{field:'ITEM_NO', title:'物料编码', width:120}
+                ,{field:'ITEM_NO', title:'物料编码', width:150}
                 ,{field:'ITEM_NAME', title:'物料描述', width:150}
                 ,{field:'PROD_DATE', title:'生产日期', width:120}
                 ,{field:'CLASS_NO', title:'班次', width:60}
                 ,{field:'QTY_PLAN', title:'计划数量', width:100}
-                ,{field:'PROD_NO', title:'工单号', width:120}
                 ,{fixed:'right', title:'操作', width:80, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
@@ -114,11 +115,16 @@ $(function () {
             }
             ,done: function(res,index, upload){
                 layer.closeAll('loading'); //关闭loading
+                console.log(res);
+                var ids = "";
+                for(var i = 0;i<res.data.length;i++){
+                    ids += res.data[i].id +",";
+                }
                 if(res.result){
                     $.ajax({
                         type: "POST",
                         data: {},
-                        url: context+"/produce/scheduling_temp/doCheckProc",
+                        url: context+"/produce/scheduling_temp/doCheckProc?ids="+ids,
                         success: function (res) {
                             if (res.result) {
                                 loadAll();//重新加载表格

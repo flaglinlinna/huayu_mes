@@ -176,12 +176,12 @@ public class DevClockController extends WebController{
 	        	Integer bsStatus=Integer.parseInt(params.get("enabled").toString());
 	            ApiResponseResult result = devClockService.doEnabled(id, bsStatus);
 	            logger.debug("设置有效/无效=doJob:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, "设置id:"+id+ (bsStatus==0?"有效":"无效"));
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("设置有效/无效！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, "设置有效/无效失败！"+e.toString());
 	            return ApiResponseResult.failure("设置有效/无效失败！");
 	        }
 	    }

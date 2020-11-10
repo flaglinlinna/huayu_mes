@@ -54,8 +54,8 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 				// 查询2
 				List<SearchFilter> filters1 = new ArrayList<>();
 				if (StringUtils.isNotEmpty(keyword)) {
-					filters1.add(new SearchFilter("client.custNo", SearchFilter.Operator.LIKE, keyword));
-					filters1.add(new SearchFilter("client.custName", SearchFilter.Operator.LIKE, keyword));
+//					filters1.add(new SearchFilter("client.custNo", SearchFilter.Operator.LIKE, keyword));
+					filters1.add(new SearchFilter("fdemoName", SearchFilter.Operator.LIKE, keyword));
 					filters1.add(new SearchFilter("process.procNo", SearchFilter.Operator.LIKE, keyword));
 					filters1.add(new SearchFilter("process.procName", SearchFilter.Operator.LIKE, keyword));
 				}
@@ -66,10 +66,11 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 				List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
 				for(ClientProcessMap bs:page.getContent()){
 					Map<String, Object> map = new HashMap<>();
-					map.put("client_id", bs.getClient().getId());
-					map.put("custNo", bs.getClient().getCustNo());//获取关联表的数据-客户表
-					map.put("custName", bs.getClient().getCustName());//客户名
-					map.put("custId", bs.getClient().getId());
+//					map.put("client_id", bs.getClient().getId());
+//					map.put("custNo", bs.getClient().getCustNo());//获取关联表的数据-客户表
+//					map.put("custName", bs.getClient().getCustName());//客户名
+//					map.put("custId", bs.getClient().getId());
+					map.put("fdemoName",bs.getFdemoName());
 					map.put("procOrder", bs.getProcess().getProcOrder());//工序顺序
 					map.put("procNo", bs.getProcess().getProcNo());//工序
 					map.put("procName", bs.getProcess().getProcName());//工序名
@@ -89,10 +90,10 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 	 * **/
 	@Override
     @Transactional
-    public ApiResponseResult addItem(String procIdList,Long clientId) throws Exception{
+    public ApiResponseResult addItem(String procIdList,String fdemoName) throws Exception{
 
-		if(clientId == null){
-            return ApiResponseResult.failure("物料数据不能为空！");
+		if(fdemoName == null){
+            return ApiResponseResult.failure("模板名称不能为空！");
         }
         //转换
         String[] porcIdArray = procIdList.split(";");
@@ -103,7 +104,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
             }
         }
       //1.删除原工序信息
-        List<ClientProcessMap> listOld = clientProcessMapDao.findByDelFlagAndCustId(0, clientId);
+        List<ClientProcessMap> listOld = clientProcessMapDao.findByFdemoName(fdemoName);
         if(listOld.size() > 0){
             for(ClientProcessMap item : listOld){
             	item.setDelTime(new Date());
@@ -119,9 +120,10 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
             	ClientProcessMap item = new ClientProcessMap();
                 item.setCreateDate(new Date());
                 item.setCreateBy(UserUtil.getSessionUser().getId());
-                item.setCustId(clientId);
+                item.setFdemoName(fdemoName);
+//                item.setCustId(clientId);
                 item.setProcId(procId);
-               // item.setJobAttr(jobAttr);
+//                item.setJobAttr(jobAttr);
                 listNew.add(item);
             }
             clientProcessMapDao.saveAll(listNew);
@@ -155,8 +157,8 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 	/**
      * 客户ID获取原来工序记录
      */
-	public ApiResponseResult getClientItem(Long id) throws Exception{
-		 List<ClientProcessMap> list = clientProcessMapDao.findByDelFlagAndCustId(0, id);
+	public ApiResponseResult getClientItem(String fdemoName) throws Exception{
+		 List<ClientProcessMap> list = clientProcessMapDao.findByDelFlagAndFdemoName(0, fdemoName);
 		return ApiResponseResult.success().data(list);
 	}
 

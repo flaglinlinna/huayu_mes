@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
-import com.web.basic.entity.Line;;
+import com.web.basic.entity.Line;
 
 public interface LineDao extends CrudRepository<Line, Long>,JpaSpecificationExecutor<Line>{
 
