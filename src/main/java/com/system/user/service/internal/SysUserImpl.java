@@ -7,8 +7,10 @@ import com.auth0.jwt.JWT;
 import com.system.role.dao.SysRoleDao;
 import com.system.role.entity.SysRole;
 import com.system.user.dao.SysUserDao;
+import com.system.user.dao.UserOrgMapDao;
 import com.system.user.dao.UserRoleMapDao;
 import com.system.user.entity.SysUser;
+import com.system.user.entity.UserOrgMap;
 import com.system.user.entity.UserRoleMap;
 import com.system.user.service.SysUserService;
 
@@ -48,6 +50,8 @@ public class SysUserImpl implements SysUserService {
     private SysRoleDao sysRoleDao;
     @Autowired
     private UserRoleMapDao userRoleMapDao;
+    @Autowired
+    private UserOrgMapDao userOrgMapDao;
     
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -91,9 +95,23 @@ public class SysUserImpl implements SysUserService {
                         urItem.setRoleId(Long.parseLong(roleId));
                         userRoleMapDao.save(urItem);
                 	}
-                    
                 }
             }
+            //给用户增加组织架构数据(数据权限)
+            if(StringUtils.isNotEmpty(sysUser.getOrgIds())){
+                String[] arrays = sysUser.getOrgIds().split(",");
+                for(String orgId : arrays){
+                	if(StringUtils.isNotEmpty(orgId)){
+                		UserOrgMap uoItem=new UserOrgMap();
+                		uoItem.setCreateDate(new Date());
+                		uoItem.setCreateBy(UserUtil.getSessionUser().getId());
+                		uoItem.setUserId(sysUser.getId());
+                		uoItem.setOrgId(Long.parseLong(orgId));
+                		userOrgMapDao.save(uoItem);
+                	}
+                }
+            }
+            
             return ApiResponseResult.success("新增成功！");
         }else{
             //1.编辑
@@ -120,6 +138,7 @@ public class SysUserImpl implements SysUserService {
             if(list.size() > 0){
                 for(UserRoleMap urItem : list){
                     urItem.setLastupdateDate(new Date());
+                    urItem.setDelTime(new Date());
                     urItem.setDelFlag(1);
                 }
                 userRoleMapDao.saveAll(list);
@@ -137,6 +156,33 @@ public class SysUserImpl implements SysUserService {
                         userRoleMapDao.save(urItem);
                 	}
                     
+                }
+            }
+            
+            //删除原来的组织id
+            List<UserOrgMap> org_list = userOrgMapDao.findByDelFlagAndUserId(0, o.getId());
+            if(org_list.size() > 0){
+                for(UserOrgMap uoItem : org_list){
+                	uoItem.setLastupdateDate(new Date());
+                	uoItem.setLastupdateBy(UserUtil.getSessionUser().getId());
+                	uoItem.setDelBy(UserUtil.getSessionUser().getId());
+                	uoItem.setDelTime(new Date());
+                	uoItem.setDelFlag(1);
+                }
+                userOrgMapDao.saveAll(org_list);
+            }
+            //给用户分配组织
+            if(StringUtils.isNotEmpty(sysUser.getOrgIds())){
+                String[] arrays = sysUser.getOrgIds().split(",");
+                for(String ordId : arrays){
+                	if(StringUtils.isNotEmpty(ordId)){
+                		UserOrgMap uoItem = new UserOrgMap();
+                		uoItem.setCreateDate(new Date());
+                		uoItem.setCreateBy(UserUtil.getSessionUser().getId());
+                		uoItem.setUserId(o.getId());
+                		uoItem.setOrgId(Long.parseLong(ordId));
+                        userOrgMapDao.save(uoItem);
+                	}
                 }
             }
             return ApiResponseResult.success("编辑成功！");
@@ -941,6 +987,12 @@ public class SysUserImpl implements SysUserService {
 	public ApiResponseResult getListRole() throws Exception {
 		// TODO Auto-generated method stub
 		return ApiResponseResult.success("").data(sysRoleDao.findByDelFlagAndStatus(0,0));
+	}
+	
+	@Override
+	public ApiResponseResult getOrgList() throws Exception {
+		// TODO Auto-generated method stub
+		return ApiResponseResult.success("").data(sysUserDao.queryOrgList());
 	}
 	
 }
