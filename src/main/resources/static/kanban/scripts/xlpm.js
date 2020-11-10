@@ -1,5 +1,13 @@
 $(function() {
 	dealData();
+	
+	var kanbanList=kanbanDataList;
+	dealData(kanbanList);
+	getDepList();
+	$("#searchBtn").click(function() {
+		getList();
+	});
+	
 })
 console.log(kanbanDataList);
 function dealData() {
@@ -230,4 +238,26 @@ function setTable(kanbanData) {
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
+}
+function getDepList() {
+	$.ajax({
+		type : "GET",
+		url : context + "kanban/getCjbgDepList",
+		data : {},
+		dataType : "json",
+		success : function(res) {
+			//console.log(res)
+			if (res.result) {
+				$("#dep_select").empty();
+				var html = "<option value=''>请选择部门</option>";
+				for (j = 0, len = res.data.length; j < len; j++) {
+					var arr = res.data[j];
+					html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME
+							+ "</option>";
+				}
+
+				$("#dep_select").append(html);
+			}
+		}
+	});
 }

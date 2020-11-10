@@ -75,10 +75,29 @@ $(document).ready(function(){
 
 <script type="text/javascript" src="../kanban/js/echarts.min.js"></script>
 <body>
-	<div class="canvas" style="opacity: .2">
+	<!--<div class="canvas" style="opacity: .2">
 		<iframe frameborder="0" src="../kanban/js/index.html"
 			style="width: 100%; height: 100%"></iframe>
-	</div>
+	</div>  -->
+	<header class="header left">
+		<div class="total_chose_box">
+			<div style="height: 5px;"></div>
+			<span class="chose_tltle">请选择班次：</span> <select class="year_chose"
+				id="class_select">
+				<option value="999">当日看板</option>
+				<option value="998">24小时看板</option>
+				<option value="1">白班</option>
+				<option value="2">晚班</option>
+			</select> <span class="chose_tltle">请输入部门：</span> <select class="year_chose"
+				id="dep_select">
+
+			</select> <span class="chose_tltle">请选择日期：</span> <input style="width:15%;" type="text"
+				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+				autocomplete="off" class="chose_text_in ">
+			<!-- <input class="chose_text_in"> -->
+			<button class="chose_enter" id="searchBtn">确定</button>
+		</div>
+	</header>
 	<div class="head">
 		<div class="line">
 			<span style="color: #FFFFFF; font-size: 16px;" id="showLine"></span>
