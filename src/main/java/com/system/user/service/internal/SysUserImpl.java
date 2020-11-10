@@ -84,11 +84,14 @@ public class SysUserImpl implements SysUserService {
             if(StringUtils.isNotEmpty(sysUser.getRoleIds())){
                 String[] arrays = sysUser.getRoleIds().split(",");
                 for(String roleId : arrays){
-                    UserRoleMap urItem = new UserRoleMap();
-                    urItem.setCreateDate(new Date());
-                    urItem.setUserId(sysUser.getId());
-                    urItem.setRoleId(Long.parseLong(roleId));
-                    userRoleMapDao.save(urItem);
+                	if(StringUtils.isNotEmpty(roleId)){
+                		UserRoleMap urItem = new UserRoleMap();
+                        urItem.setCreateDate(new Date());
+                        urItem.setUserId(sysUser.getId());
+                        urItem.setRoleId(Long.parseLong(roleId));
+                        userRoleMapDao.save(urItem);
+                	}
+                    
                 }
             }
             return ApiResponseResult.success("新增成功！");
@@ -126,11 +129,14 @@ public class SysUserImpl implements SysUserService {
             if(StringUtils.isNotEmpty(sysUser.getRoleIds())){
                 String[] arrays = sysUser.getRoleIds().split(",");
                 for(String roleId : arrays){
-                    UserRoleMap urItem = new UserRoleMap();
-                    urItem.setCreateDate(new Date());
-                    urItem.setUserId(o.getId());
-                    urItem.setRoleId(Long.parseLong(roleId));
-                    userRoleMapDao.save(urItem);
+                	if(StringUtils.isNotEmpty(roleId)){
+                		UserRoleMap urItem = new UserRoleMap();
+                        urItem.setCreateDate(new Date());
+                        urItem.setUserId(o.getId());
+                        urItem.setRoleId(Long.parseLong(roleId));
+                        userRoleMapDao.save(urItem);
+                	}
+                    
                 }
             }
             return ApiResponseResult.success("编辑成功！");
@@ -426,8 +432,7 @@ public class SysUserImpl implements SysUserService {
         if(sysUser == null){
             return ApiResponseResult.failure("用户不存在！");
         }
-        //获取当前用户关联角色信息
-        List<UserRoleMap> list = userRoleMapDao.findByDelFlagAndUserId(0, id);
+        
 
         //获取所有角色信息
         //List<SysRole> list2 = sysRoleDao.findByDelFlag(0);
@@ -442,7 +447,18 @@ public class SysUserImpl implements SysUserService {
         mapUser.put("email", sysUser.getEmail());
         mapUser.put("sex", sysUser.getSex());
         mapUser.put("status", sysUser.getStatus());
+      //获取当前用户关联角色信息
+        List<Map<String, Object>> list = userRoleMapDao.getRoleIdByUserId(sysUser.getId());
         mapUser.put("userRoles", list);
+
+//        List<SysRole> lr = sysRoleDao.getRoleByUser(su.getId());
+//        List mll = new ArrayList<>();
+//        if(lr.size() > 0){
+//            for(SysRole sr:lr){
+//                mll.add(sr.getRoleName());
+//            }
+//        }
+//        map.put("roles", mll);
 
         //封装数据
         Map<String, Object> map = new HashMap<>();
@@ -594,9 +610,10 @@ public class SysUserImpl implements SysUserService {
 	@Override
 	public List<Map<String, Object>> findByUserCode(String userCode) throws Exception {
 		// TODO Auto-generated method stub
-		String sql = "select s.fcode,s.fname,s.fpassword,s.fcompany,s.ffactory from sys_user s where  upper(s.fcode) ='"
-				+ userCode.toUpperCase() +  "'";
-        List<Map<String, Object>> countList = sysUserDao.findByUserCode(userCode.toUpperCase());//this.findBySql(sql, SQLParameter.newInstance(), null);
+//		String sql = "select s.fcode,s.fname,s.fpassword,s.fcompany,s.ffactory from sys_user s where  upper(s.fcode) ='"
+//				+ userCode.toUpperCase() +  "'";
+       // List<Map<String, Object>> countList = sysUserDao.findByUserCode(userCode.toUpperCase());//this.findBySql(sql, SQLParameter.newInstance(), null);
+		 List<Map<String, Object>> countList = sysUserDao.findByUserCode(userCode);
 		return countList;
        //return sysUserDao.findByDelFlagAndUserCode(0, userCode);
 	}

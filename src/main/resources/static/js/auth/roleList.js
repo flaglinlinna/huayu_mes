@@ -6,6 +6,7 @@
 var pageCurr;
 var tableIns1;
 var table1;
+var roleId;
 $(function() {
     layui.use(['form' ,'table'], function(){
         var table = layui.table
@@ -122,6 +123,7 @@ $(function() {
 
 function showUser(id) {
     console.log(id);
+    roleId = id;
     tableIns1=table1.render({
         elem: '#UserShowList'
         ,url:context+'/sysUser/getListByRoleId?roleId='+id
@@ -186,6 +188,9 @@ function showUser(id) {
     layer.full(index);
 }
 
+function exportUser(){
+    location.href = context + "/sysRole/exportList?roleId="+roleId;
+}
 //设置用户正常/禁用
 function setStatusUser(obj,id,name,checked){
     var isStatus=checked ? 0 : 1;

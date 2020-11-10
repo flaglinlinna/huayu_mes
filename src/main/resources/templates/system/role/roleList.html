@@ -14,11 +14,13 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">角色编号</label>
                 <div class="layui-input-inline">
-                    <input id="codeSearch" name="codeSearch" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="codeSearch" name="codeSearch"  placeholder="请输入角色编号"
+                    autocomplete="off" class="layui-input" type="text"/>
                 </div>
                 <label class="layui-form-label">角色名称</label>
                 <div class="layui-input-inline">
-                    <input id="nameSearch" name="nameSearch" autocomplete="off" class="layui-input" type="text" />
+                    <input id="nameSearch" name="nameSearch" placeholder="请输入角色名称"
+                    autocomplete="off" class="layui-input" type="text" />
                 </div>
                 <label class="layui-form-label">角色状态</label>
                 <div class="layui-input-inline">
@@ -78,7 +80,7 @@
     </div>
 
     <div id="userShow" style="display: none">
-        <button class="layui-btn layui-btn-sm layui-btn-normal" style="margin-left: 20px" id="exportUser">导出</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" style="margin-left: 20px" id="exportUser" onclick="exportUser()">导出</button>
         <table id="UserShowList" lay-filter="UserShowListTable"></table>
     </div>
 
@@ -88,21 +90,21 @@
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">角色编号</label>
+                <label class="layui-form-label layui-required">角色编号</label>
                 <div class="layui-input-inline">
-                    <input id="roleCode" name="roleCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="roleCode" name="roleCode" lay-verify="required" placeholder="请输入角色编号" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">角色名称</label>
+                <label class="layui-form-label layui-required">角色名称</label>
                 <div class="layui-input-inline">
-                    <input id="roleName" name="roleName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="roleName" name="roleName" lay-verify="required" placeholder="请输入角色名称" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">角色描述</label>
+                <label class="layui-form-label layui-required">角色描述</label>
                 <div class="layui-input-inline">
-                    <input id="description" name="description" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="description" name="description" autocomplete="off" placeholder="请输入角色描述" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">

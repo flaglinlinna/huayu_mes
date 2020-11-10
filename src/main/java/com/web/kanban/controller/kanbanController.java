@@ -222,6 +222,26 @@ public class kanbanController extends WebController {
 		}
 	}
 	
+	@ApiOperation(value = "获取效率排名看板信息", notes = "获取效率排名看板信息", hidden = true)
+	@RequestMapping(value = "/getXlpmList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getXlpmList(String class_nos, String dep_id, String sdata ,String liner) {
+		String method = "/kanban/getXlpmList";
+		String methodName = "获取效率排名看板信息";
+		try {
+			ApiResponseResult result = kanbanService.getXlpmList(class_nos, dep_id, sdata,  this.getIpAddr(),liner);
+			logger.debug("获取效率排名看板信息=getXlpmList:" + result);
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取效率排名看板信息失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取效率排名看板信息失败！");
+		}
+	}
+	
+	
 	//-----------------------获取部门信息
 
 	@ApiOperation(value = "获取车间报工看板-部门信息", notes = "获取车间报工看板-部门信息", hidden = true)

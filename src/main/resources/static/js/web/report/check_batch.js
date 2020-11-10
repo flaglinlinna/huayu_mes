@@ -117,7 +117,8 @@ $(function() {
 		});
 		//日期范围
 		  laydate.render({
-		    elem: '#dates'
+		    elem: '#dates',
+		    trigger:'click'
 		    ,range: true
 		  });
 		  tableSelect=tableSelect.render({

@@ -223,25 +223,25 @@ public class SchedulingImpl implements SchedulingService {
             return ApiResponseResult.failure("排产信息不存在！");
         }
         //获取物料信息
-        List<Mtrial> itemList = mtrialDao.findByDelFlagAndCheckStatus(0, 1);
+//        List<Mtrial> itemList = mtrialDao.findByDelFlagAndCheckStatus(0, 1);
         //获取客户信息
         List<Client> clientList = clientDao.findByDelFlag(0);
         //获取线体信息
-        //List<Line> lineList = lineDao.findByDelFlagAndCheckStatus(0, 1);      
+        //List<Line> lineList = lineDao.findByDelFlagAndCheckStatus(0, 1);
         List<Object> lineList = getLineistPrc(UserUtil.getSessionUser().getFactory() + "",
         		UserUtil.getSessionUser().getCompany() + "");
         //获取部门信息
         List<SysOrganization> orgList = organizationDao.findByDelFlag(0);
         //获取人员信息
-        List<Employee> employeeList = employeeDao.findByDelFlagAndEmpStatus(0, 1);
+//        List<Employee> employeeList = employeeDao.findByDelFlagAndEmpStatus(0, 1);
 
         Map<String, Object> map = new HashMap<>();
         map.put("scheduling", o);
-        map.put("itemList", itemList);
+//        map.put("itemList", itemList);
         map.put("clientList", clientList);
         map.put("lineList", lineList);
         map.put("orgList", orgList);
-        map.put("employeeList", employeeList);
+//        map.put("employeeList", employeeList);
 
         return ApiResponseResult.success().data(map);
     }

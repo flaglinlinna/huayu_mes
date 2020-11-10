@@ -5,6 +5,7 @@ import com.app.base.data.ApiResponseResult;
 import com.system.role.entity.SysRole;
 import org.springframework.data.domain.PageRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 public interface SysRoleService {
@@ -44,4 +45,7 @@ public interface SysRoleService {
     public ApiResponseResult doRolePerm(Long roleId, String permIds) throws Exception;
 
     public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;
+
+    //导出角色下用户列表
+    public void exportList(Long roleId, HttpServletResponse response) throws Exception;
 }

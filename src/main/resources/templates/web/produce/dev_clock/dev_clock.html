@@ -14,7 +14,7 @@
 						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
 						<div class="layui-input-inline">
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
-								class="layui-input" type="text" />
+							placeholder="请输入关键字"	class="layui-input" type="text" />
 						</div>
 						<button class="layui-btn layui-btn-sm" lay-submit=""
 							lay-filter="searchSubmit">查询</button>
@@ -55,21 +55,21 @@
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
 					type="hidden" name="id" />
 				<div class="layui-form-item">
-					<label class="layui-form-label">卡机编码</label>
+					<label class="layui-form-label layui-required">卡机编码</label>
 					<div class="layui-input-inline">
-						<input id="devCode" name="devCode" lay-verify="required"
+						<input id="devCode" name="devCode" lay-verify="required" placeholder="请输入卡机编码"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">卡机名称</label>
+					<label class="layui-form-label layui-required">卡机名称</label>
 					<div class="layui-input-inline">
 						<input id="devName" name="devName" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text" />
+						placeholder="请输入卡机名称"	autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">卡机类型</label>
+					<label class="layui-form-label layui-required">卡机类型</label>
 					<div class="layui-input-inline">
 						<select id="devType" name="devType" lay-verify="required">
 							<option value="">请选择</option>
@@ -79,22 +79,22 @@
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">卡机IP</label>
+					<label class="layui-form-label layui-required">卡机IP</label>
 					<div class="layui-input-inline">
-						<input id="devIp" name="devIp" lay-verify="required"
+						<input id="devIp" name="devIp" lay-verify="required" placeholder="请输入卡机IP"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">卡机序列</label>
+					<label class="layui-form-label layui-required">卡机序列</label>
 					<div class="layui-input-inline">
-						<select id="devSeries" name="devSeries">
+						<select id="devSeries" name="devSeries" lay-verify="required" >
 							<option value="中控ICLOCK">中控ICLOCK</option>
 						</select> 
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">线别</label>
+					<label class="layui-form-label layui-required">线别</label>
 					<div class="layui-input-inline">
 						<select id="lineId" name="lineId" lay-verify="required" lay-search>
 						</select>

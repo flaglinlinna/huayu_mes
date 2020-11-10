@@ -34,9 +34,8 @@ public class Backlmpl extends ReportPrcUtils implements BackService {
 	@Override
 	public ApiResponseResult getList(String keyword, String sdate, String edate) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getListPrc(UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getId() + "",
-				UserUtil.getSessionUser().getCompany() + "",
-				sdate, edate,keyword);
+		List<Object> list = getListPrc(UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getCompany() + "",
+				UserUtil.getSessionUser().getId() + "",sdate, edate,keyword);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -52,7 +51,7 @@ public class Backlmpl extends ReportPrcUtils implements BackService {
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, "");
 				cs.setString(2, "");
-				cs.setString(3, "");
+				cs.setString(3, user_id);
 				cs.setString(4, beginTime);
 				cs.setString(5, endTime);
 				cs.setString(6, keyword);

@@ -119,7 +119,7 @@ public class ShiroRealm extends AuthorizingRealm {
         String userName = token.getUsername();
 		// 调用数据层
         //SysUser user = new SysUser();
-        SysUser user = sysUserDao.findByDelFlagAndUserCode(0, userName);
+        SysUser user = sysUserDao.findByDelFlagAndUserCodeAndStatus(0, userName,0);
         SysUser userMD5 = new SysUser();
         try{
             userMD5.setId(user.getId());

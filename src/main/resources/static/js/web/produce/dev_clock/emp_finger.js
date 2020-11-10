@@ -58,7 +58,14 @@ $(function() {
 				title : '添加时间',
 				width : 145,
 				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
-			}/*, {
+			},
+				{
+					field : 'lastOffDate',
+					title : '最后下发时间',
+					width : 170,
+					templet:'<div>{{d.lastOffDate?DateUtils.formatDate(d.lastOffDate):""}}</div>',
+				},
+			/*, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',

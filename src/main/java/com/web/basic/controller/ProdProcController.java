@@ -58,7 +58,8 @@ public class ProdProcController extends WebController{
         	System.out.println(keyword);
             //Sort sort = new Sort(Sort.Direction.DESC, "itemId");
             Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "itemId");
-	       	 Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "process.procOrder");
+            Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "procOrder");
+	       	 //Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "process.procOrder");
 	       	 List<Sort.Order> list = new ArrayList<>();
 	       	 list.add(order1);
 	       	 list.add(order2);

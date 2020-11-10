@@ -13,7 +13,7 @@
 						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
 						<div class="layui-input-inline">
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
-								class="layui-input" type="text" />
+								placeholder="请输入关键字" class="layui-input" type="text" />
 						</div>
 						
 						 <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
@@ -43,20 +43,20 @@
         </script>
 	 </div>
 	 <!--添加或编辑不良类别-->
-    <div id="setDefect" class="layer_self_wrap" style="width:500px;display:none;">
+    <div id="setDefect" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
         <form id="defectForm" class="layui-form layui-form-pane" lay-filter="defectForm" method="post" action="" style="margin-top: 20px;">
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">不良类别编码</label>
+                <label class="layui-form-label layui-required">不良类别编码</label>
                 <div class="layui-input-inline">
-                    <input id="defectTypeCode" name="defectTypeCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="defectTypeCode" name="defectTypeCode" placeholder="请输入不良类别编码" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">不良类别名称</label>
+                <label class="layui-form-label layui-required">不良类别名称</label>
                 <div class="layui-input-inline">
-                    <input id="defectTypeName" name="defectTypeName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="defectTypeName" name="defectTypeName" placeholder="请输入不良类别名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
