@@ -496,20 +496,30 @@ public class SysUserImpl implements SysUserService {
       //获取当前用户关联角色信息
         List<Map<String, Object>> list = userRoleMapDao.getRoleIdByUserId(sysUser.getId());
         mapUser.put("userRoles", list);
-
-//        List<SysRole> lr = sysRoleDao.getRoleByUser(su.getId());
-//        List mll = new ArrayList<>();
-//        if(lr.size() > 0){
-//            for(SysRole sr:lr){
-//                mll.add(sr.getRoleName());
-//            }
-//        }
-//        map.put("roles", mll);
-
+        
+        //fyx-20201110-获取数据权限
+        List<Map<String, Object>> lorg = userOrgMapDao.queryOrgNameAndIdByUid(sysUser.getId());
+        String org_name = "",org_id = "";
+        for(Map<String, Object> map:lorg){
+        	if(map.get("ORG_NAME") != null){
+        		org_name += map.get("ORG_NAME").toString() +",";
+        	}
+        	if(map.get("ORG_NAME") != null){
+        		org_id += map.get("ORG_ID").toString() +",";
+        	}
+        }
+        if(!StringUtils.isEmpty(org_id)){
+        	org_id = org_id.substring(0,org_id.length() - 1);
+        }
+        if(!StringUtils.isEmpty(org_name)){
+        	org_name = org_name.substring(0,org_name.length() - 1);
+        }
         //封装数据
         Map<String, Object> map = new HashMap<>();
         map.put("roles", list2);
         map.put("user", mapUser);
+        map.put("Org_name", org_name);
+        map.put("Org_id", org_id);
 
         return ApiResponseResult.success().data(map);
     }
