@@ -547,12 +547,15 @@ function getItem(obj, id){
     //     optionHtml += '<option value="'+employeeList[i].id+'">'+employeeList[i].empName+'</option>';
     // }
     // $("#empId2").html(optionHtml);
+    console.log(obj);
     $("#itemId2").val(id);
     $("#mid2").val(obj.mid);
     $("#itemNo2").val(obj.itemNo);
     $("#itemName2").val(obj.mtrial ? obj.mtrial.itemName : "");
     $("#itemQty2").val(obj.itemQty);
-    $("#empId2").val(obj.employee.empName);
+    if(obj.employee!=null&&obj.employee!=undefined) {
+        $("#empId2").val(obj.employee.empName);
+    }
 
     //渲染
     layui.form.render('select');
