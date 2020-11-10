@@ -39,14 +39,15 @@ $(function() {
 				width:0,
 				hide:true
 			}
+			// ,{
+			// 	field : 'custNo',
+			// 	title : '客户编号',
+			// 	sort: true,
+			// 	width:100
+			// }
 			,{
-				field : 'custNo',
-				title : '客户编号',
-				sort: true,
-				width:100
-			},{
-				field : 'custName',
-				title : '客户名称',
+				field : 'fdemoName',
+				title : '模板名称',
 				sort: true,
 				width:150
 			}, {
@@ -110,7 +111,7 @@ $(function() {
 							$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
 						}		
 				}
-				merge(res.data,['custNo','custName'],[2,3]);
+				merge(res.data,['fdemoName'],[2]);
 			}
 		});
 		
@@ -118,6 +119,11 @@ $(function() {
 		form.on('checkbox(isStatusTpl)', function(obj) {//修改过程属性
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
+
+		form.on('checkbox(isStatusTp2)', function(obj) {//修改过程属性
+			setStatus2(obj, this.value, this.name, obj.elem.checked);
+		});
+
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
 			// 重新加载table
@@ -143,14 +149,24 @@ $(function() {
 			}, {
 				field : 'procName',
 				title : '名称',
-			}] ],
+			},
+				{
+					field : 'checkStatus',
+					title : '过程属性',
+					templet : '#statusTp2',
+					sort: true,
+					width:95,
+					align : 'center'
+					//type:"checkbox"
+				},
+			] ],
 			data:[]
 		});	
 		
-		form.on('select(pkClient)', function(data){//监听选择事件
-			//var params={"client":$("#pkClient").val()}
-			getProcByClient($("#pkClient").val());
-		})
+		// form.on('select(pkClient)', function(data){//监听选择事件
+		// 	//var params={"client":$("#pkClient").val()}
+		// 	getProcByClient($("#pkClient").val());
+		// })
 		
 		// 监听工具条
 		table.on('tool(listTable)', function(obj) {
@@ -169,7 +185,7 @@ $(function() {
 			} else if (obj.event === 'edit') {
 				// 编辑
 				//getClientProc(data, data.id);//未写
-				addProc(data.custId)
+				addProc(data.fdemoName);
 			}
 		});
 		//头工具栏事件
@@ -202,12 +218,16 @@ $(function() {
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
 				var procIdList="";
+				var jobAttr ="";
 				var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
+				console.log(cList);
 				for(var i=0;i<cList.length;i++){//获取被选中的行
 					procIdList+=cList[i].id+";"//工序的ID序列，用“；”分隔
+					// jobAttr+=cList[i].checkStatus+";";
 				}
-				var client=data.field.pkClient;
-				addSubmit(procIdList,client);
+				console.log(jobAttr);
+				var fdemoName=data.field.fdemoName;
+				addSubmit(procIdList,fdemoName);
 			} else {
 				//editSubmit(data);//未写
 			}
@@ -255,6 +275,13 @@ $(function() {
 						}
 					});
 		}
+
+		// 设置过程属性
+		function setStatus2(obj, id, name, checked) {
+			// var jobAttr = checked ? 0 : 1;
+			console.log(obj);
+			obj.checkStatus = checked ? 1 : 0;
+		}
 	});
 });
 //添加不工艺流程
@@ -267,7 +294,8 @@ function addProc(id) {
 
 //根据客户信息获取工序数据
 function getProcByClient(params){
-	var params={"client":params}
+	$('#fdemoName').val(params);
+	var params={"fdemoName":params}
 	CoreUtil.sendAjax("/base/client_proc/getClientItem", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
@@ -331,7 +359,7 @@ function delClientProc( id) {
 function addSubmit(procIdlist,client) {
 	var params = {
 			"proc":procIdlist,
-			"client" : client
+			"fdemoName" : client
 		};
 
 	CoreUtil.sendAjax("/base/client_proc/addItem", JSON.stringify(params), function(
@@ -367,21 +395,21 @@ function getProcList(id){
 							}
 						}
 					});
-					$("#pkClient").empty();
+					$("#fdemoName").empty();
 					var c=data.data.client;
 					//console.log(c)
 					for (var i = 0; i < c.length; i++) {
 						if(i==0){
-							$("#pkClient").append("<option value=''>请点击选择</option>");
+							$("#fdemoName").append("<option value=''>请点击选择</option>");
 						}
 						if(id != ''){
 							if(c[i].id == id){
-								$("#pkClient").append("<option value=" + c[i].id+ " selected>"+c[i].custName+"</option>");
+								$("#fdemoName").append("<option value=" + c[i].id+ " selected>"+c[i].custName+"</option>");
 							}else{
-								$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
+								$("#fdemoName").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
 							}
 						}else{
-							$("#pkClient").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
+							$("#fdemoName").append("<option value=" + c[i].id+ ">"+c[i].custName+"</option>");
 						}
 					}			
 					layui.form.render('select');

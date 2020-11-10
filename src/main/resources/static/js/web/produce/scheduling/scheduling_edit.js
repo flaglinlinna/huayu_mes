@@ -330,7 +330,7 @@ function getScheduling(){
     $("#taskNo").val(scheduling.taskNo);
     $("#prodNo").val(scheduling.prodNo);
     $("#produceState").val(scheduling.produceState);
-    $("#itemId").val(scheduling.itemId);
+    $("#itemId").val(scheduling.itemNo); //显示编码
     $("#itemName").val(scheduling.itemName);
     $("#groupNo").val(scheduling.groupNo);
     $("#custId").val(scheduling.custId);

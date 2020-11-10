@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='排产导入'"></head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div style="margin: 10px">
+        <!--搜索框-->
+        <form id="formSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">关键字</label>
+                    <div class="layui-input-inline" style="width: 175px;">
+                        <input id="keyword" name="keyword" placeholder="" autocomplete="off" class="layui-input" type="text"/>
+                    </div>
+                    <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="search">查询</button>
+                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+
+                </div>
+            </div>
+        </form>
+
+        <hr class="layui-bg-black"/>
+
+		<div class="layui-btn-container">
+            <!--<button class="layui-btn layui-btn-normal layui-btn-sm" lay-href="/huayu/produce/scheduling/toSchedulingAdd" lay-text="排产新增">添加排产</button>-->
+            <button type="button" class="layui-btn layui-btn-sm" onclick="exportExcel()">导出模板</button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-submit="" id="uploadBtn">导入</button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="checkBtn">校验</button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="effectBtn">生效</button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="delBtn">删除</button>
+		</div>
+
+        <!--列表-->
+        <table id="iList" lay-filter="iTable"></table>
+
+        <script type="text/html" id="statusTpl">
+            {{#  if(d.CHECK_STATUS == 0){ }}
+            <span style="color: green;">校验通过</span>
+            {{#  } else if(d.CHECK_STATUS == 1) { }}
+            <span style="color: red;">校验不通过</span>
+            {{#  } else if(d.CHECK_STATUS == 2) { }}
+            <span style="color: orange;">警告</span>
+            {{#  } else { }}
+            <span></span>
+            {{#  } }}
+        </script>
+
+        <script type="text/html" id="enabledTpl">
+            {{#  if(d.ENABLED == 1){ }}
+            <span style="color: green;">已生效</span>
+            {{#  } else if(d.ENABLED == 0) { }}
+            <span style="color: red;">未生效</span>
+            {{#  } else { }}
+            <span></span>
+            {{#  } }}
+        </script>
+
+        <script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        </script>
+    </div>
+
+    <script th:src="@{/js/web/produce/scheduling_temp/temp.js}" src="/js/web/produce/scheduling_temp/temp.js"></script>
+</div>
+</body>
+</html>

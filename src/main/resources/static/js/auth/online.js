@@ -35,6 +35,7 @@ $(function() {
                 ,{field:'mobile', title:'手机号', width:'15%'}
                 ,{field:'host', title: '登录IP', width:'15%'}
                 ,{field:'startTimestamp', title: '登录时间', width:'18%'}
+                ,{field:'startTimestamp', title: '在线时长', width:'18%',templet: function (d) {return getMinusTime(d)}}
                 ,{field:'lastAccessTime', title: '最后操作时间', width:'18%'}
                 ,{fixed:'right', title:'操作',width:'10%',align:'center', toolbar:'#optBar'}
             ]]
@@ -84,6 +85,18 @@ $(function() {
         });
     });
 });
+
+function getMinusTime(d) {
+    console.log(d);
+    var date3 = new Date() - new Date(d.startTimestamp.replace(/-/g,"/"));
+    console.log(date3);
+    // var days=Math.floor(date3/(60*60*1000))
+    var hours = parseInt((date3 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = parseInt((date3 % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = (date3 % (1000 * 60)) / 1000;
+
+    return hours+":"+minutes+":"+seconds;
+}
 //设置用户是否离职
 function setJobUser(obj,id,nameVersion,checked){
     var name=nameVersion.substring(0,nameVersion.indexOf("_"));

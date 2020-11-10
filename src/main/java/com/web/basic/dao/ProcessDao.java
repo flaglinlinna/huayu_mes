@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
-import com.web.basic.entity.Process;;
+import com.web.basic.entity.Process;
 
 public interface ProcessDao extends CrudRepository<Process, Long>,JpaSpecificationExecutor<Process>{
 

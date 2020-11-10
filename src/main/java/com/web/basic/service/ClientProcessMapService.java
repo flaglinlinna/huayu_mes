@@ -9,11 +9,11 @@ import com.web.basic.entity.ClientProcessMap;
 
 public interface ClientProcessMapService {
 	//public ApiResponseResult add(ClientProcessMap clientProcess) throws Exception;
-	public ApiResponseResult addItem(String procIdList,Long clientId) throws Exception;
+	public ApiResponseResult addItem(String procIdList,String fdemoName) throws Exception;
 	//public ApiResponseResult edit(ClientProcessMap clientProcess) throws Exception;
 
 	// 根据ID获取记录
-	public ApiResponseResult getClientItem(Long id) throws Exception;
+	public ApiResponseResult getClientItem(String fdemoName) throws Exception;
 
 	public ApiResponseResult delete(Long id) throws Exception;
 

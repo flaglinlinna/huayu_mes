@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
-import com.web.basic.entity.Client;;
+import com.web.basic.entity.Client;
 
 public interface ClientDao extends CrudRepository<Client, Long>,JpaSpecificationExecutor<Client>{
 
