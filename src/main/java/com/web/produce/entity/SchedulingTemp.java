@@ -131,6 +131,20 @@ public class SchedulingTemp extends BaseEntity {
     @Column(length = 1)
     protected Integer checkStatus = 0;
 
+    /**
+     * 是否已生效(0:未生效 / 1:已生效)
+     */
+    @ApiModelProperty(name = "enabled", value = "是否已生效(0:未生效 / 1:已生效)")
+    @Column(length = 1)
+    protected Integer enabled = 0;
+
+    /**
+     * 生产制令单
+     */
+    @ApiModelProperty(name = "taskNo", value = "生产制令单")
+    @Column(length = 200)
+    protected String taskNo;
+
     public Integer getGroupNo() {
         return groupNo;
     }
@@ -257,6 +271,22 @@ public class SchedulingTemp extends BaseEntity {
 
     public void setCheckStatus(Integer checkStatus) {
         this.checkStatus = checkStatus;
+    }
+
+    public Integer getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Integer enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getTaskNo() {
+        return taskNo;
+    }
+
+    public void setTaskNo(String taskNo) {
+        this.taskNo = taskNo;
     }
 
     @Override
