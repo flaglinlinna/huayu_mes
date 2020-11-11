@@ -68,6 +68,22 @@ public class DevLog extends BaseEntity {
 	@Column
 	@ApiModelProperty(name="cmdFlag",value="执行标志(0:未执行,1:已执行)")
     protected Integer cmdFlag = 0;
+	
+	/**
+     * 是否执行(执行标识）
+     * 0：否 1：是
+     */
+	@Column
+	@ApiModelProperty(name="cmdFlagFinger1",value="执行标志(0:未执行,1:已执行)")
+    protected Integer cmdFlagFinger1 = 0;
+	
+	/**
+     * 是否执行(执行标识）
+     * 0：否 1：是
+     */
+	@Column
+	@ApiModelProperty(name="cmdFlagFinger2",value="执行标志(0:未执行,1:已执行)")
+    protected Integer cmdFlagFinger2 = 0;
     
     /**
      * 卡机Id
@@ -172,4 +188,22 @@ public class DevLog extends BaseEntity {
 		sb.append(",操作人:").append(this.createUser);
 		return sb.toString();
 	}
+
+	public Integer getCmdFlagFinger1() {
+		return cmdFlagFinger1;
+	}
+
+	public void setCmdFlagFinger1(Integer cmdFlagFinger1) {
+		this.cmdFlagFinger1 = cmdFlagFinger1;
+	}
+
+	public Integer getCmdFlagFinger2() {
+		return cmdFlagFinger2;
+	}
+
+	public void setCmdFlagFinger2(Integer cmdFlagFinger2) {
+		this.cmdFlagFinger2 = cmdFlagFinger2;
+	}
+	
+	
 }

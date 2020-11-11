@@ -103,7 +103,7 @@ $(function() {
 			page : true,
 			height: 'full-220',
 			limit:20,
-			limits: [20,100,500,1000,2000,5000],
+			limits: [20,50,100,500,1000,2000,5000],
 			request : {
 				pageName : 'page',// 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
