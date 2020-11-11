@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +70,8 @@ public class Issuelmpl  implements IssueService {
 	
 	 @Autowired  
 	 private Environment env;
+	 
+	 private static Map<String, List<String>> cmdMap = new HashMap<>();
 
 	/**
 	 * 查询列表
@@ -620,9 +623,8 @@ public class Issuelmpl  implements IssueService {
 	@Override
 	public List<String> getCmdBySn(String sn) {
 		// TODO Auto-generated method stub
-		
-		
-		List<DevLog> ld_del = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹删除");
+		//cmdMap.put(sn,cmdList);
+		/*List<DevLog> ld_del = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹删除");
 		List<String> ls = new ArrayList();
 		for(DevLog dl:ld_del){
 			ls.add("C:"+dl.getId()+":DATA DELETE USERINFO PIN="+dl.getEmp().getEmpCode());
@@ -633,12 +635,7 @@ public class Issuelmpl  implements IssueService {
 			for(DevLog dl:ld_0){
 				
 				ls.add("C:"+dl.getId()+":DATA UPDATE USERINFO PIN="+dl.getEmp().getEmpCode()+"	Name="+dl.getEmp().getEmpName()+"	Pri=0	Passwd=	Grp=0");
-				
-				/*List<EmpFinger> fl = empFingerDao.findByDelFlagAndEmpId(0, dl.getEmpId());
-				for(EmpFinger ef:fl){
-					ls.add("C:"+dl.getId()+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
-				    System.out.println("C:"+dl.getId()+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
-				}*/
+
 			}
 		}else{
 			List<DevLog> ld_1 = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescriptionAndCmdFlagFinger1AndCmdFlagFinger2(0, 1, sn, "指纹下发",0,0);
@@ -671,9 +668,37 @@ public class Issuelmpl  implements IssueService {
 			
 		}
 		
+		return ls;*/
+		List<String> ls = new ArrayList();
+		System.out.println(cmdMap.get(sn));
+		if(cmdMap.get(sn)==null || cmdMap.get(sn).size()==0){
+			List<DevLog> ld = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹下发");
+			List<DevLog> ld_del = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹删除");
+			int i=0;
+			for(DevLog dl:ld){
+				
+				if(i>10){
+					List<String> ls1 = new ArrayList<String>();
+					ls1.add("in");
+					cmdMap.put(sn, ls1);
+					break;
+				}
+				
+				ls.add("C:"+dl.getId()+":DATA UPDATE USERINFO PIN="+dl.getEmp().getEmpCode()+"	Name="+dl.getEmp().getEmpName()+"	Pri=0	Passwd=	Grp=0");
+				
+				List<EmpFinger> fl = empFingerDao.findByDelFlagAndEmpId(0, dl.getEmpId());
+				for(EmpFinger ef:fl){
+					ls.add("C:"+dl.getId()+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
+				    System.out.println("C:"+dl.getId()+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
+				i++;
+				}
+			}
+			for(DevLog dl:ld_del){
+				ls.add("C:"+dl.getId()+":DATA DELETE USERINFO PIN="+dl.getEmp().getEmpCode());
+			}
+			
+        }
 		return ls;
-		
-		
 		/*List<DevLog> ld = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹下发");
 		List<DevLog> ld_del = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹删除");
 		List<String> ls = new ArrayList();
@@ -746,7 +771,7 @@ public class Issuelmpl  implements IssueService {
 				}
 				
 			}
-			
+			cmdMap.get(sn).clear();
 		}
 	}
 

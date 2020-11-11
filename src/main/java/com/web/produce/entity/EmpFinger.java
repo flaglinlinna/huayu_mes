@@ -10,6 +10,9 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 指纹登记
@@ -20,6 +23,8 @@ import java.util.Date;
 public class EmpFinger extends BaseEntity {
     private static final long serialVersionUID = -5951531333314901264L;
     public static final String TABLE_NAME = "V_BASE_EMP_FINGER";
+    
+    
 
 	/**
 	 * 最后下发时间
