@@ -19,20 +19,16 @@ public interface DevLogDao extends CrudRepository<DevLog, Long>,JpaSpecification
     @Query(value ="update DevLog t set t.cmdFlag=1,t.fmemo=?1 where  t.delFlag=0 and t.cmdFlag=0 and t.devCode=?2 and t.id=?3  ")
     public void updateDelFlagBySn( String fmemo,String sn,Long id);
 	
-	@Modifying
+	/*@Modifying
     @Query(value ="update DevLog t set t.cmdFlag=1,t.fmemo=?1,  t.cmdFlagFinger1=1 where  t.delFlag=0 and t.cmdFlag=1   and t.devCode=?2 and t.id=?3  ")
     public void updateDelFlagAndF1BySn( String fmemo,String sn,Long id);
 	
 	@Modifying
     @Query(value ="update DevLog t set t.cmdFlag=1,t.fmemo=?1, t.cmdFlagFinger2=1 where  t.delFlag=0 and t.cmdFlag=1   and t.devCode=?2 and t.id=?3  ")
-    public void updateDelFlagAndF2BySn( String fmemo,String sn,Long id);
+    public void updateDelFlagAndF2BySn( String fmemo,String sn,Long id);*/
 	
 	public List<DevLog> findByDelFlagAndCmdFlagAndDevCodeAndDescription(Integer delFlag,Integer cmd,String sn,String des);
 	
 	public List<DevLog> findByDelFlagAndCmdFlagAndDevCodeAndDescriptionAndCmdFlagFinger1AndCmdFlagFinger2(Integer delFlag,Integer cmd,String sn,String des,Integer f1,Integer f2);
 	
-	@Query(value = " select m.id,m.emp_id,e.EMP_CODE,e.EMP_NAME from MES_DEV_OPER_LOG m left join V_BASE_EMPLOYEE e on e.ID=m.emp_id WHERE M.DEL_FLAG=0 AND M.CMD_FLAG=0 AND M.DEV_CODE=?1 AND M.DESCRIPTION = ?2 AND M.FMEMO ='操作中'",
-		    countQuery = "select count(m.id) from MES_DEV_OPER_LOG m WHERE M.DEL_FLAG=0 AND M.CMD_FLAG=0 AND M.DEV_CODE=?1 AND M.DESCRIPTION = ?2 AND M.FMEMO ='操作中' ",
-		    nativeQuery = true)
-		  Page<Map<String, Object>> findpage(String sn,String des, Pageable pageable);
 }
