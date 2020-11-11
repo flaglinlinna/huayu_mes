@@ -43,10 +43,10 @@ $(function() {
             cols: [[
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-                ,{field:'roleCode', title:'编号',align:'center', width:120}
-                ,{field:'roleName', title:'名称',align:'center', width:120}
-                ,{field:'description', title: '描述',align:'center', minWidth:120}
-                ,{field:'userCount', title: '用户数量',align:'center', width:120,
+                ,{field:'roleCode', title:'编号',align:'center', width:120,sort:true}
+                ,{field:'roleName', title:'名称',align:'center', width:140,sort:true}
+                ,{field:'description', title: '描述',align:'center', minWidth:140,sort:true}
+                ,{field:'userCount', title: '用户数量',align:'center', width:120,sort:true,
                  templet: '<div><a cursor: pointer; onclick="showUser({{d.id}})">{{ d.userCount }}</a></div>'}
                 ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
                 ,{field:'lastupdateDate', title: '更新时间', align:'center',width:150}
@@ -227,7 +227,7 @@ function openRole(id,title){
     if(id==null || id==""){
         $("#id").val("");
     }
-    layer.open({
+    var index=layer.open({
         type:1,
         title: title,
         fixed:false,
@@ -239,6 +239,7 @@ function openRole(id,title){
             cleanRole();
         }
     });
+    layer.full(index);//弹出框全屏
 }
 
 //设置权限弹出框
@@ -246,7 +247,7 @@ function openPerm(id,title){
     if(id==null || id==""){
         $("#roleId").val("");
     }
-    layer.open({
+    var index=layer.open({
         type:1,
         title: title,
         fixed:false,
@@ -258,6 +259,7 @@ function openPerm(id,title){
             // cleanRole();
         }
     });
+    layer.full(index);//弹出框全屏
 }
 
 //添加角色

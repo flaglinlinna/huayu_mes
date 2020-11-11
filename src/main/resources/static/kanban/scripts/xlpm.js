@@ -1,6 +1,7 @@
 $(function() {
 	//dealData();
 	getDepList();
+	getLinerList();
 	var kanbanList=kanbanDataList;
 	dealData(kanbanList);
 	$("#searchBtn").click(function() {
@@ -259,6 +260,28 @@ function getDepList() {
 				}
 
 				$("#dep_select").append(html);
+			}
+		}
+	});
+}
+function getLinerList() {
+	$.ajax({
+		type : "GET",
+		url : context + "kanban/getLiner",
+		data : {},
+		dataType : "json",
+		success : function(res) {
+			console.log(res)
+			if (res.result) {
+				$("#liner_select").empty();
+				var html = "<option value=''>请选择组长</option>";
+				for (j = 0, len = res.data.length; j < len; j++) {
+					var arr = res.data[j];
+					html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
+							+ "</option>";
+				}
+
+				$("#liner_select").append(html);
 			}
 		}
 	});

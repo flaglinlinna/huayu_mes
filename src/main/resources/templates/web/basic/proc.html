@@ -32,12 +32,12 @@
                  <shiro:hasPermission name="proc-add">
                      <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="doAdd" >添加工序</button>
                  </shiro:hasPermission>
-                 <shiro:hasPermission name="proc-deleteAll">
-                     <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="doDelete">批量删除</button>
-                 </shiro:hasPermission>
+                 
              </div>
          </script>
-
+         <!-- <shiro:hasPermission name="proc-deleteAll">
+                     <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="doDelete">批量删除</button>
+                 </shiro:hasPermission> -->
         <!--<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addProc()">添加工序</button>-->
          <table id="listTable" lay-filter="listTable"></table>
 

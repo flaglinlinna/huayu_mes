@@ -81,7 +81,7 @@ function edit(id,type){
                 
                data.data.istype==0?$("input[name='menuType']").val(0).checked:$("input[name='menuType']").val(1).checked;
               
-                layer.open({
+               var index= layer.open({
                     type:1,
                     title: "部门编辑",
                     fixed:false,
@@ -93,6 +93,7 @@ function edit(id,type){
                         location.reload();
                     }
                 });
+               layer.full(index);//弹出框全屏
             }else{
                 layer.alert(data.msg);
             }
@@ -112,7 +113,7 @@ function addPerm(pid,flag){
             $("#type").val(1);
             $("#parentId").val(pid);
         }
-        layer.open({
+        var index =layer.open({
             type:1,
             title: "新增",
             fixed:false,
@@ -124,6 +125,7 @@ function addPerm(pid,flag){
                 location.reload();
             }
         });
+        layer.full(index);//弹出框全屏
     }
 }
 

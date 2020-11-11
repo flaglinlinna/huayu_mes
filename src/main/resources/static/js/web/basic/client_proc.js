@@ -20,6 +20,14 @@ $(function() {
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
+				if(!res.result){
+					return {
+						"count" : 0,
+						"msg" : res.msg,
+						"data" : [],
+						"code" : res.status
+					} 
+				}
 				// 可进行数据操作
 				return {
 					"count" : res.data.total,
@@ -52,7 +60,7 @@ $(function() {
 				width:150
 			}, {
 				field : 'procOrder',
-				title : '工序顺序',
+				title : '工序顺序',"edit":"number","event": "dataCol",
 				sort: true,
 				width:100
 			}, {
@@ -232,6 +240,26 @@ $(function() {
 			return false;
 		});
 		
+		//监听单元格编辑
+		  table.on('edit(listTable)', function(obj){
+		    var value = obj.value //得到修改后的值
+		    ,data = obj.data //得到所在行所有键值
+		    ,field = obj.field; //得到字段
+		   // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+		    var tr = obj.tr;
+	        // 单元格编辑之前的值
+	        var oldtext = $(tr).find("td[data-field='"+obj.field+"'] div").text();
+		    if(field == 'procOrder'){
+		    	//判断是否为数字
+		    	if(isRealNum(value)){
+		    		doProcOrder(data.id,value);
+		    	}else{
+		    		layer.msg('请填写数字!');
+		    		loadAll();
+		    	}
+		    }
+		  });
+		
 		// 设置过程属性
 		function setStatus(obj, id, name, checked) {
 			var jobAttr = checked ? 0 : 1;
@@ -278,6 +306,31 @@ $(function() {
 		function setStatus2(obj, id, name, checked) {
 			console.log(obj);
 			obj.checkStatus = checked ? 1 : 0;
+		}
+		
+		// 设置工序顺序
+		function doProcOrder(id, procOrder) {
+			var param = {
+					"id" : id,
+					"procOrder" : procOrder
+				};
+				CoreUtil.sendAjax("/base/client_proc/doProcOrder", JSON
+						.stringify(param), function(data) {
+					if (data.result) {
+						layer.alert("操作成功", function() {
+							layer.closeAll();
+							loadAll();
+						});
+					} else {
+						layer.alert(data.msg, function() {
+							layer.closeAll();
+						});
+					}
+				}, "POST", false, function(res) {
+					layer.alert("操作请求错误，请您稍后再试", function() {
+						layer.closeAll();
+					});
+				});
 		}
 	});
 });
