@@ -128,8 +128,9 @@ $(function() {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 
-		form.on('checkbox(isStatusTp2)', function(obj) {//修改过程属性
-			setStatus2(obj, this.value, this.name, obj.elem.checked);
+		table.on('checkbox(isStatusTp2)', function(obj) {//修改过程属性
+			console.log(obj);
+			// setStatus2(obj, this.value, this.name, obj.elem.checked);
 		});
 
 		// 监听搜索框

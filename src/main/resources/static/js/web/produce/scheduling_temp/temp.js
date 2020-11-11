@@ -39,7 +39,7 @@ $(function () {
                 ,{field:'ERROR_INFO', title:'错误信息', width:140}
                 ,{field:'PROD_NO', title:'工单号', width:120}
                 ,{field:'TASK_NO', title:'生产制令单', width:100,
-                templet: '<div><a cursor: pointer; onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO }}</a></div>'}
+                templet: '<div><a cursor: pointer; onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO==null?"":d.TASK_NO }}</a></div>'}
                 ,{field:'GROUP_NO', title:'组合', width:70}
                 ,{field:'DEPT_NAME', title:'部门', width:70}
                 ,{field:'CUST_NAME', title:'客户', width:80}

@@ -252,6 +252,95 @@ $(function () {
                 pageCurr2=curr;
             }
         });
+
+        tableIns3=table.render({
+            elem: '#iList3'
+            ,url:context+'/produce/scheduling/getEmpList'
+            ,method: 'get' //默认：get请求
+            ,where:{ mid:id }
+            ,cellMinWidth: 80
+            ,page: true,
+            request: {
+                pageName: 'page' //页码的参数名称，默认：page
+                ,limitName: 'rows' //每页数据量的参数名，默认：limit
+            },
+            parseData: function (res) {
+                // 可进行数据操作
+                return {
+                    "count": res.data.total,
+                    "msg":res.msg,
+                    "data":res.data.rows,
+                    "code": res.status //code值为200表示成功
+                }
+            },
+            cols: [[
+                {type:'numbers'}
+                ,{field:'EMP_CODE', title:'员工工号', width:150}
+                ,{field:'EMP_NAME', title:'员工姓名', width:150,}
+                ,{field:'EMP_TYPE', title:'员工类型', width:150}
+                ,{field:'DEPT_NAME', title:'部门名称', width:100}
+                ,{field:'TIME_BEGIN', title:'上线时间', width:180,}
+                ,{field:'TIME_END', title:'下线时间', width:180,}
+                ,{field:'CREATE_DATE', title:'分配时间', width:180,}
+                // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
+            ]]
+            ,done: function(res, curr, count){
+                //如果是异步请求数据方式，res即为你接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                //console.log(res);
+                //得到当前页码
+                //console.log(curr);
+                //得到数据总量
+                //console.log(count);
+                pageCurr2=curr;
+            }
+        });
+
+        tableIns4=table.render({
+            elem: '#iList4'
+            ,url:context+'/produce/scheduling/getProdOrderList'
+            ,method: 'get' //默认：get请求
+            ,where:{ mid:id }
+            ,cellMinWidth: 80
+            ,page: true,
+            align:'center',
+            request: {
+                pageName: 'page' //页码的参数名称，默认：page
+                ,limitName: 'rows' //每页数据量的参数名，默认：limit
+            },
+            parseData: function (res) {
+                // 可进行数据操作
+                return {
+                    "count": res.data.total,
+                    "msg":res.msg,
+                    "data":res.data.rows,
+                    "code": res.status //code值为200表示成功
+                }
+            },
+            cols: [[
+                {type:'numbers'}
+                ,{field:'FEED_TYPE', title:'投料类型', width:100,align:'center',}
+                ,{field:'ITEM_BARCODE', title:'物料条码', width:180,}
+                ,{field:'ITEM_NAME', title:'物料名称', width:190,}
+                ,{field:'ITEM_NO', title:'物料编码', width:145}
+                ,{field:'ITEM_MODEL', title:'机型', width:80,align:'center',}
+                ,{field:'QUANTITY', title:'投料数量(PCS)', width:120,align:'center',}
+                ,{field:'USER_NAME', title:'操作人', width:100,align:'center',}
+                ,{field:'CREATE_DATE', title:'操作时间', width:160,align:'center',}
+                // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
+            ]]
+            ,done: function(res, curr, count){
+                //如果是异步请求数据方式，res即为你接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                //console.log(res);
+                //得到当前页码
+                //console.log(curr);
+                //得到数据总量
+                //console.log(count);
+                pageCurr2=curr;
+            }
+        });
+
         //监听工具条-工单组件
         table.on('tool(iTable2)', function(obj){
             var data = obj.data;

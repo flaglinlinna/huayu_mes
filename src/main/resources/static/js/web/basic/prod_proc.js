@@ -157,6 +157,7 @@ $(function() {
 		});
 		tableProc=table.render({
 			elem : '#procList',
+			limit: 20,
 			method : 'get' ,// 默认：get请求			
 			cols : [ [ {
 				type : 'numbers'
@@ -384,8 +385,8 @@ function getProcByClient(params){
 								res.data[i]["LAY_CHECKED"]='true';
 		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
 		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
-		                       
-		                        if(beSelected[j].jobAttr==0){   
+
+		                        if(beSelected[j].jobAttr==0){
 									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().addClass('layui-form-checked');
 								}else{
 									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().removeClass('layui-form-checked');

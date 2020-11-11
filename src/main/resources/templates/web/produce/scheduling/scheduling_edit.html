@@ -126,6 +126,8 @@
         <ul class="layui-tab-title">
             <li lay-id="add" class="layui-this">工艺维护</li>
             <li lay-id="list">工单组件</li>
+            <li lay-id="list">上线人员清单</li>
+            <li lay-id="list4">投料清单</li>
         </ul>
         <div class="layui-tab-content" style="height: 100px; display: block">
             <div class="layui-tab-item layui-show">
@@ -155,6 +157,14 @@
                 <script type="text/html" id="optBar2">
                     <a class="layui-btn layui-btn-xs" lay-event="edit2">编辑</a>
                 </script>
+            </div>
+            <div class="layui-tab-item">
+                <!--上线人员清单-->
+                <table id="iList3" lay-filter="iTable3"></table>
+            </div>
+            <div class="layui-tab-item">
+                <!--上线人员清单-->
+                <table id="iList4" lay-filter="iTable4"></table>
             </div>
         </div>
     </div>
