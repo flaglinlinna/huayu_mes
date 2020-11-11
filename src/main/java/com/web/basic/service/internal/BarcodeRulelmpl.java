@@ -200,4 +200,27 @@ public class BarcodeRulelmpl implements BarcodeRuleService {
 		List<Mtrial> list = mtrialDao.findByDelFlagAndCheckStatus(0, 1);
 		return ApiResponseResult.success().data(list);
 	}
+
+
+	/**
+	 * 查询列表
+	 */
+	@Override
+	@Transactional
+	public ApiResponseResult getMtrialList(String keyword, PageRequest pageRequest) throws Exception {
+		// 查询条件1
+		List<SearchFilter> filters = new ArrayList<>();
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		filters.add(new SearchFilter("checkStatus", SearchFilter.Operator.EQ, 1));
+		// 查询2
+		List<SearchFilter> filters1 = new ArrayList<>();
+		if (StringUtils.isNotEmpty(keyword)) {
+			filters1.add(new SearchFilter("itemNo", SearchFilter.Operator.LIKE, keyword));
+		}
+		Specification<Mtrial> spec = Specification.where(BaseService.and(filters, Mtrial.class));
+		Specification<Mtrial> spec1 = spec.and(BaseService.or(filters1, Mtrial.class));
+		Page<Mtrial> page = mtrialDao.findAll(spec1, pageRequest);
+		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+	}
 }

@@ -49,9 +49,12 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">内部物料编码</label>
 					<div class="layui-input-inline">
-						<select id="itemId" name="itemId" lay-filter="itemNo"
-							lay-verify="required" lay-search>
-						</select>
+						<!--<select id="itemId" name="itemId" lay-filter="itemNo"-->
+							<!--lay-verify="required" lay-search>-->
+						<!--</select>-->
+						<input id ="itemId"  name="itemId" lay-filter="itemId"
+							   placeholder="请选择内部物料编码"
+							   autocomplete="off"  class="layui-input" type="text" />
 					</div>
 				</div>
 				<input id="itemNo" type="hidden" name="itemNo" />
