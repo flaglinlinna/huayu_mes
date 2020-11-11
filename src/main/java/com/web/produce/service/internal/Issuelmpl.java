@@ -624,51 +624,6 @@ public class Issuelmpl  implements IssueService {
 	public List<String> getCmdBySn(String sn) {
 		// TODO Auto-generated method stub
 		//cmdMap.put(sn,cmdList);
-		/*List<DevLog> ld_del = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹删除");
-		List<String> ls = new ArrayList();
-		for(DevLog dl:ld_del){
-			ls.add("C:"+dl.getId()+":DATA DELETE USERINFO PIN="+dl.getEmp().getEmpCode());
-		}
-		
-		List<DevLog> ld_0 = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescriptionAndCmdFlagFinger1AndCmdFlagFinger2(0, 0, sn, "指纹下发",0,0);
-		if(ld_0.size()>0){
-			for(DevLog dl:ld_0){
-				
-				ls.add("C:"+dl.getId()+":DATA UPDATE USERINFO PIN="+dl.getEmp().getEmpCode()+"	Name="+dl.getEmp().getEmpName()+"	Pri=0	Passwd=	Grp=0");
-
-			}
-		}else{
-			List<DevLog> ld_1 = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescriptionAndCmdFlagFinger1AndCmdFlagFinger2(0, 1, sn, "指纹下发",0,0);
-			if(ld_1.size()>0){
-				for(DevLog dl:ld_1){
-					
-					//ls.add("C:"+dl.getId()+":DATA UPDATE USERINFO PIN="+dl.getEmp().getEmpCode()+"	Name="+dl.getEmp().getEmpName()+"	Pri=0	Passwd=	Grp=0");
-					
-					//List<EmpFinger> fl = empFingerDao.findByDelFlagAndEmpId(0, dl.getEmpId());
-	            	List<EmpFinger> fl = empFingerDao.findByDelFlagAndEmpIdAndFingerIdx(0, dl.getEmpId(), "0");
-					for(EmpFinger ef:fl){
-						ls.add("C:"+dl.getId()+"_0"+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
-					    System.out.println("C:"+dl.getId()+"_0"+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"		TMP="+ef.getTemplateStr().trim());
-					}
-				}
-			}else{
-				List<DevLog> ld_2 = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescriptionAndCmdFlagFinger1AndCmdFlagFinger2(0, 1, sn, "指纹下发",1,0);
-                for(DevLog dl:ld_2){
-					
-					//ls.add("C:"+dl.getId()+":DATA UPDATE USERINFO PIN="+dl.getEmp().getEmpCode()+"	Name="+dl.getEmp().getEmpName()+"	Pri=0	Passwd=	Grp=0");
-					
-					//List<EmpFinger> fl = empFingerDao.findByDelFlagAndEmpId(0, dl.getEmpId());
-	            	List<EmpFinger> fl = empFingerDao.findByDelFlagAndEmpIdAndFingerIdx(0, dl.getEmpId(), "1");
-					for(EmpFinger ef:fl){
-						ls.add("C:"+dl.getId()+"_1"+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
-					    System.out.println("C:"+dl.getId()+"_1"+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"		TMP="+ef.getTemplateStr().trim());
-					}
-				}
-			}
-			
-		}
-		
-		return ls;*/
 		List<String> ls = new ArrayList();
 		System.out.println(cmdMap.get(sn));
 		if(cmdMap.get(sn)==null || cmdMap.get(sn).size()==0){
@@ -699,45 +654,7 @@ public class Issuelmpl  implements IssueService {
 			
         }
 		return ls;
-		/*List<DevLog> ld = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹下发");
-		List<DevLog> ld_del = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹删除");
-		List<String> ls = new ArrayList();
-		for(DevLog dl:ld){
-			
-			ls.add("C:"+dl.getId()+":DATA UPDATE USERINFO PIN="+dl.getEmp().getEmpCode()+"	Name="+dl.getEmp().getEmpName()+"	Pri=0	Passwd=	Grp=0");
-			
-			List<EmpFinger> fl = empFingerDao.findByDelFlagAndEmpId(0, dl.getEmpId());
-			for(EmpFinger ef:fl){
-				ls.add("C:"+dl.getId()+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
-			    System.out.println("C:"+dl.getId()+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
-			}
-		}
-		for(DevLog dl:ld_del){
-			ls.add("C:"+dl.getId()+":DATA DELETE USERINFO PIN="+dl.getEmp().getEmpCode());
-		}
-		return ls;*/
-		//Sort sort = new Sort(Direction.ASC, "sort");//排序规则   多条件
-		/*Sort sort = new Sort(Sort.Direction.DESC, "id");
-		Pageable pageable = new PageRequest(1, 50, sort);
 
-		Page<Map<String, Object>> ld = devLogDao.findpage(sn, "指纹下发", pageable);
-		Page<Map<String, Object>> ld_del = devLogDao.findpage(sn, "指纹删除", pageable);
-		List<String> ls = new ArrayList();
-		for(Map<String, Object> dl:ld.getContent()){
-			
-			ls.add("C:"+dl.get("ID").toString()+":DATA UPDATE USERINFO PIN="+dl.get("EMP_CODE").toString()+"	Name="+dl.get("EMP_NAME").toString()+"	Pri=0	Passwd=	Grp=0");
-			
-			System.out.print(Long.parseLong(dl.get("EMP_ID").toString()));
-			List<EmpFinger> fl = empFingerDao.findByDelFlagAndEmpId(0, Long.parseLong(dl.get("EMP_ID").toString()));
-			for(EmpFinger ef:fl){
-				ls.add("C:"+dl.get("ID")+":DATA UPDATE FINGERTMP PIN="+dl.get("EMP_CODE").toString()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
-			    System.out.println("C:"+dl.get("ID").toString()+":DATA UPDATE FINGERTMP PIN="+dl.get("EMP_CODE").toString()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
-			}
-		}
-		for(Map<String, Object> dl:ld_del.getContent()){
-			ls.add("C:"+dl.get("ID").toString()+":DATA DELETE USERINFO PIN="+dl.get("EMP_CODE").toString());
-		}
-		return ls;*/
 	}
 
 	@Override
@@ -754,22 +671,10 @@ public class Issuelmpl  implements IssueService {
 					fmemo = "成功";
 				}
 				try{
-					if(id.contains("_")){
-						String[] ids = id.split("_");
-						if(ids[1].endsWith("0")){
-							devLogDao.updateDelFlagAndF1BySn(fmemo,sn,Long.valueOf(ids[0]));
-						}else{
-							devLogDao.updateDelFlagAndF2BySn(fmemo,sn,Long.valueOf(ids[0]));
-						}
-						
-					}else{
-						devLogDao.updateDelFlagBySn(fmemo,sn,Long.valueOf(id));
-					}
-					
+					devLogDao.updateDelFlagBySn(fmemo,sn,Long.valueOf(id));
 				}catch(Exception e){
 					System.out.println(e.toString());
 				}
-				
 			}
 			cmdMap.get(sn).clear();
 		}
