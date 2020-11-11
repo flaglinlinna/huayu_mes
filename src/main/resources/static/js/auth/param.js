@@ -144,7 +144,7 @@ function openSysParam(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	layer.open({
+	var index=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -156,6 +156,7 @@ function openSysParam(id, title) {
 			cleanSysParam();
 		}
 	});
+	layer.full(index);
 }
 
 // 添加系统参数

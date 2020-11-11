@@ -264,7 +264,7 @@ function openCardData(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	layer.open({
+	var index=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -276,6 +276,7 @@ function openCardData(id, title) {
 			cleanCardData();
 		}
 	});
+	layer.full(index);
 }
 //重新加载表格（搜索）
 function load(obj) {

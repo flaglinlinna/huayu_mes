@@ -368,6 +368,7 @@ function getProcByClient(params){
 	CoreUtil.sendAjax("/base/client_proc/getClientItem", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
+			//console.log(data.data)
 			var beSelected=data.data;
 			tableProc.reload({
 				done : function(res, curr, count) {
@@ -383,8 +384,13 @@ function getProcByClient(params){
 								res.data[i]["LAY_CHECKED"]='true';
 		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
 		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+		                       
+		                        if(beSelected[j].jobAttr==0){   
+									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().addClass('layui-form-checked');
+								}else{
+									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+								}
 							}
-							
 						}
 					}
 				}

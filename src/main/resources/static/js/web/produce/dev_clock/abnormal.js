@@ -432,7 +432,7 @@ function openAbnormalHours(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	layer.open({
+	var index=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -444,6 +444,7 @@ function openAbnormalHours(id, title) {
 			cleanAbnormalHours();
 		}
 	});
+	layer.full(index);
 }
 // 重新加载表格（搜索）
 function load(obj) {

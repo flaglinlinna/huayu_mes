@@ -156,7 +156,7 @@ function openEmpFinger(id, title) {
 	}else{
 		$('#templateStr').attr("disabled","disabled");
 	}
-	layer.open({
+	var index=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -168,6 +168,7 @@ function openEmpFinger(id, title) {
 			cleanEmpFinger();
 		}
 	});
+	layer.full(index);
 }
 
 // 添加指纹登记信息

@@ -403,7 +403,7 @@ function getProcess(obj, id){
 }
 //编辑弹出框-工艺维护
 function openProcess(title){
-    layer.open({
+   var index= layer.open({
         type:1,
         title: title,
         fixed:false,
@@ -416,6 +416,7 @@ function openProcess(title){
             loadAll1();
         }
     });
+   layer.full(index);
 }
 //清空编辑框数据-工艺维护
 function cleanProcess(){

@@ -199,7 +199,7 @@ function openDevClock(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	layer.open({
+	 var index=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -211,6 +211,7 @@ function openDevClock(id, title) {
 			cleanDevClock();
 		}
 	});
+	layer.full(index);
 }
 
 // 添加卡机信息
