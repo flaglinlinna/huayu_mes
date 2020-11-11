@@ -186,7 +186,7 @@ public class SchedulingTempImpl extends PrcUtils implements SchedulingTempServic
             }
 
             //删除当前用户关联的临时表原数据
-            schedulingTempDao.updateDelFlagByCreateBy(1, currUser.getId());
+//            schedulingTempDao.updateDelFlagByCreateBy(1, currUser.getId());
             //初始化临时表
             List<SchedulingTemp> tempList = new ArrayList<>();
 
@@ -460,7 +460,7 @@ public class SchedulingTempImpl extends PrcUtils implements SchedulingTempServic
                 String flag = resultList.get(0);
                 if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
                     //2.写入正式表
-                    List<String> resultList2 = super.doSaveSchedulingProc(currUser.getCompany(), currUser.getFactory(), ids, "PRC_IMP_TASK_INFO");
+                    List<String> resultList2 = super.doSaveSchedulingProc(currUser.getCompany(), currUser.getFactory(), ids,currUser.getId().toString(), "PRC_IMP_TASK_INFO_NEW");
                     if(resultList2.size() > 0){
                         String flag2 = resultList2.get(0);
                         if(StringUtils.isNotEmpty(flag2) && StringUtils.equals(flag2, "0")){

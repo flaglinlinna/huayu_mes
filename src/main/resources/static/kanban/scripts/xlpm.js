@@ -1,38 +1,49 @@
 $(function() {
-	dealData();
+	//dealData();
+	getDepList();
+	getLinerList();
+	var kanbanList=kanbanDataList;
+	dealData(kanbanList);
+	$("#searchBtn").click(function() {
+		getList();
+	});
+	
 })
 console.log(kanbanDataList);
-function dealData() {
-	var kanbanData = kanbanDataList.data.List_table;
-	setTable(kanbanData);//表格数据
+function dealData(kanbanList) {
+	if(kanbanList.result){
+		var kanbanData = kanbanList.data.List_table;
+		setTable(kanbanData);//表格数据
+		
+		var kanbanData_t=kanbanList.data.List_line;
+		
+		
+		var done = parseInt(kanbanData_t[0].QTY_DONE);
+		var plan = parseInt(kanbanData_t[0].QTY_PLAN);
+		var doneRate=kanbanData_t[0].RATE_DONE;
+		getChart3(done, plan,doneRate);
+		
+		var hr_abn = kanbanData_t[0].HOUR_ABN==null?0:parseFloat(kanbanData_t[0].HOUR_ABN);
+		var hr_act = kanbanData_t[0].HOUR_ACT==null?0:parseFloat(kanbanData_t[0].HOUR_ACT);
+		var hr_st = kanbanData_t[0].HOUR_ST==null?0:parseFloat(kanbanData_t[0].HOUR_ST);
+		var eff_rate=kanbanData_t[0].RATE_EFFICIENCY==null?"0":kanbanData_t[0].RATE_EFFICIENCY;
+		
+		getChart2(hr_abn, hr_act,hr_st,eff_rate);
+		
+		var liner= kanbanData_t[0].FLINER;//组长
+		var rownum=kanbanData_t[0].FROWNUM==null?"无":kanbanData_t[0].FROWNUM;//排名
+		var onlineEmp= kanbanData_t[0].NUM_EMP_ON==null?"0":kanbanData_t[0].NUM_EMP_ON;//在线人数
+		console.log(liner)
+		
+		$("#liner").text(liner)
+		$("#rownum").text(rownum)
+		$("#onlineEmp").text(onlineEmp)
+	}
 	
-	var kanbanData_t=kanbanDataList.data.List_line;
-	
-	
-	var done = parseInt(kanbanData_t[0].QTY_DONE);
-	var plan = parseInt(kanbanData_t[0].QTY_PLAN);
-	var doneRate=kanbanData_t[0].RATE_DONE;
-	getChart3(done, plan,doneRate);
-	
-	var hr_abn = kanbanData_t[0].HOUR_ABN==null?0:parseFloat(kanbanData_t[0].HOUR_ABN);
-	var hr_act = kanbanData_t[0].HOUR_ACT==null?0:parseFloat(kanbanData_t[0].HOUR_ACT);
-	var hr_st = kanbanData_t[0].HOUR_ST==null?0:parseFloat(kanbanData_t[0].HOUR_ST);
-	var eff_rate=kanbanData_t[0].RATE_EFFICIENCY==null?"0":kanbanData_t[0].RATE_EFFICIENCY;
-	
-	getChart2(hr_abn, hr_act,hr_st,eff_rate);
-	
-	var liner= kanbanData_t[0].FLINER;//组长
-	var rownum=kanbanData_t[0].FROWNUM==null?"无":kanbanData_t[0].FROWNUM;//排名
-	var onlineEmp= kanbanData_t[0].NUM_EMP_ON==null?"0":kanbanData_t[0].NUM_EMP_ON;//在线人数
-	console.log(liner)
-	
-	$("#liner").text(liner)
-	$("#rownum").text(rownum)
-	$("#onlineEmp").text(onlineEmp)
 	/*	
 	$("#showLine").text(
-			"开线数：" + kanbanDataList.data.LINE_NUM_NOW + "     " + "总线体数："
-					+ kanbanDataList.data.LINE_NUM_PLN);
+			"开线数：" + kanbanList.data.LINE_NUM_NOW + "     " + "总线体数："
+					+ kanbanList.data.LINE_NUM_PLN);
 	*/
 	
 	
@@ -230,4 +241,78 @@ function setTable(kanbanData) {
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
+}
+function getDepList() {
+	$.ajax({
+		type : "GET",
+		url : context + "kanban/getCjbgDepList",
+		data : {},
+		dataType : "json",
+		success : function(res) {
+			//console.log(res)
+			if (res.result) {
+				$("#dep_select").empty();
+				var html = "<option value=''>请选择部门</option>";
+				for (j = 0, len = res.data.length; j < len; j++) {
+					var arr = res.data[j];
+					html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME
+							+ "</option>";
+				}
+
+				$("#dep_select").append(html);
+			}
+		}
+	});
+}
+function getLinerList() {
+	$.ajax({
+		type : "GET",
+		url : context + "kanban/getLiner",
+		data : {},
+		dataType : "json",
+		success : function(res) {
+			console.log(res)
+			if (res.result) {
+				$("#liner_select").empty();
+				var html = "<option value=''>请选择组长</option>";
+				for (j = 0, len = res.data.length; j < len; j++) {
+					var arr = res.data[j];
+					html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
+							+ "</option>";
+				}
+
+				$("#liner_select").append(html);
+			}
+		}
+	});
+}
+function getList() {
+	var date = $("#date").val();
+	//var sdata = date.substring(0, date.indexOf(" "))
+//	var edata = date.substring(date.indexOf(" ") + 3, date.length);
+	// console.log(sdata)
+	// console.log(edata)
+	var class_no=$("#class_select").val();
+	var dep_id=$("#dep_select").val();
+	var liner=$("#liner_select").val();
+	var params = {
+		"class_nos" : class_no,
+		"dep_id" : dep_id,
+		"sdata" : date,
+		"liner":liner
+	};
+	$.ajax({
+		type : "GET",
+		url : context + "kanban/getXlpmList",
+		data : params,
+		dataType : "json",
+		success : function(res) {
+			console.log(res)
+			if (res.result) {
+				dealData(res)
+			}
+
+		}
+	});
+
 }

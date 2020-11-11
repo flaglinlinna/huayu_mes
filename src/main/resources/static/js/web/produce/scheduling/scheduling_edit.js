@@ -236,7 +236,8 @@ $(function () {
                 {type:'numbers'}
                 ,{field:'itemNo', title:'物料编号', width:150}
                 ,{field:'itemName', title:'物料描述', width:250, templet:'<span>{{d.mtrial ? d.mtrial.itemName : ""}}</span>'}
-                ,{field:'itemQty', title:'用量', width:100}
+                ,{field:'itemQty', title:'组件用量', width:100}
+                ,{field:'itemUnit', title:'组件单位', width:100}
                 ,{field:'empName', title:'作业员', width:100, templet:'<span>{{ d.employee ? d.employee.empName : "" }}</span>'}
                 ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
             ]]
@@ -546,12 +547,15 @@ function getItem(obj, id){
     //     optionHtml += '<option value="'+employeeList[i].id+'">'+employeeList[i].empName+'</option>';
     // }
     // $("#empId2").html(optionHtml);
+    console.log(obj);
     $("#itemId2").val(id);
     $("#mid2").val(obj.mid);
     $("#itemNo2").val(obj.itemNo);
     $("#itemName2").val(obj.mtrial ? obj.mtrial.itemName : "");
     $("#itemQty2").val(obj.itemQty);
-    $("#empId2").val(obj.employee.empName);
+    if(obj.employee!=null&&obj.employee!=undefined) {
+        $("#empId2").val(obj.employee.empName);
+    }
 
     //渲染
     layui.form.render('select');

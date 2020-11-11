@@ -173,4 +173,24 @@ public class ClientProcessMapController extends WebController{
 	            return ApiResponseResult.failure("设置过程属性失败！");
 	        }
 	    }
+	    
+	    @ApiOperation(value = "修改顺序", notes = "修改顺序", hidden = true)
+	    @RequestMapping(value = "/doProcOrder", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult doProcOrder(@RequestBody Map<String, Object> params) throws Exception{
+	        String method = "base/client_proc/doProcOrder";String methodName ="修改顺序";
+	        try{
+	        	Long id = Long.parseLong(params.get("id").toString()) ;
+	        	String procOrder=params.get("procOrder").toString();
+	            ApiResponseResult result = clientProcessMapService.doProcOrder(id, procOrder);
+	            logger.debug("修改顺序=doProcOrder:");
+	            getSysLogService().success(module,method, methodName, params);
+	            return result;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	            logger.error("修改顺序失败！", e);
+	            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+	            return ApiResponseResult.failure("修改顺序失败！");
+	        }
+	    }
 }

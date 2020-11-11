@@ -20,4 +20,6 @@ public interface BarcodeRuleService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
 	
 	public ApiResponseResult getMtrialList() throws Exception;
+
+	public ApiResponseResult getMtrialList(String keyword, PageRequest pageRequest) throws Exception;
 }

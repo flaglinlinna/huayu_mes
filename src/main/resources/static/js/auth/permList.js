@@ -68,7 +68,7 @@ function edit(id,type){
                 $("textarea[name='description']").text(data.data.description);
                 $("#parentId").val(data.data.parentId);
                 data.data.istype==0?$("input[name='istype']").val(0).checked:$("input[name='istype']").val(1).checked;
-                layer.open({
+                var index=layer.open({
                     type:1,
                     title: "更新权限",
                     fixed:false,
@@ -80,6 +80,7 @@ function edit(id,type){
                         location.reload();
                     }
                 });
+                layer.full(index);//弹出框全屏
             }else{
                 layer.alert(data.msg);
             }
@@ -99,7 +100,7 @@ function addPerm(pid,flag){
             $("#type").val(1);
             $("#parentId").val(pid);
         }
-        layer.open({
+       var index= layer.open({
             type:1,
             title: "添加权限",
             fixed:false,
@@ -111,6 +112,7 @@ function addPerm(pid,flag){
                 location.reload();
             }
         });
+       layer.full(index);//弹出框全屏
     }
 }
 

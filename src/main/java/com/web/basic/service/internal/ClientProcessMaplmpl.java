@@ -28,6 +28,7 @@ import com.web.basic.dao.ProcessDao;
 import com.web.basic.entity.ClientProcessMap;
 import com.web.basic.entity.Client;
 import com.web.basic.entity.Process;
+import com.web.basic.entity.ProdProcDetail;
 import com.web.basic.service.ClientProcessMapService;
 
 /**
@@ -71,7 +72,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 //					map.put("custName", bs.getClient().getCustName());//客户名
 //					map.put("custId", bs.getClient().getId());
 					map.put("fdemoName",bs.getFdemoName());
-					map.put("procOrder", bs.getProcess().getProcOrder());//工序顺序
+					map.put("procOrder", bs.getProcOrder());//工序顺序
 					map.put("procNo", bs.getProcess().getProcNo());//工序
 					map.put("procName", bs.getProcess().getProcName());//工序名
 					map.put("procId", bs.getProcess().getId());//工序ID
@@ -116,15 +117,18 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
       //2.添加新工序信息
         List<ClientProcessMap> listNew = new ArrayList<>();
         if(procList.size() > 0){
+        	Integer procOrder = 10;
             for(Long procId : procList){
             	ClientProcessMap item = new ClientProcessMap();
                 item.setCreateDate(new Date());
                 item.setCreateBy(UserUtil.getSessionUser().getId());
                 item.setFdemoName(fdemoName);
+                item.setProcOrder(procOrder.toString());
 //                item.setCustId(clientId);
                 item.setProcId(procId);
 //                item.setJobAttr(jobAttr);
                 listNew.add(item);
+				procOrder = procOrder+10;
             }
             clientProcessMapDao.saveAll(listNew);
         }
@@ -195,5 +199,28 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 		map.put("process", pList);
 		map.put("client", cList);
 		return ApiResponseResult.success().data(map);
+	}
+	
+	/*
+	 * 修改工序顺序
+	 * */
+	@Override
+	public ApiResponseResult doProcOrder(Long id, String procOrder) throws Exception {
+		// TODO Auto-generated method stub
+		if(id == null){
+            return ApiResponseResult.failure("工序ID不能为空！");
+        }
+        if(procOrder == null){
+            return ApiResponseResult.failure("请填写正确的数字！");
+        }
+        ClientProcessMap o = clientProcessMapDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("工序记录不存在！");
+        }
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setProcOrder(procOrder);
+        clientProcessMapDao.save(o);
+        return ApiResponseResult.success("修改成功！").data(o);
 	}
 }

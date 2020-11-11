@@ -254,7 +254,52 @@ public class PrcKanbanUtils {
 			});
 			return resultList;
 		}
+		/*
+		 * 获取线长
+		 * */
+		public List getLinerPrc(String company,String facoty) throws Exception {
+			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+				@Override
+				public CallableStatement createCallableStatement(Connection con) throws SQLException {
+					String storedProc = "{call  prc_mes_cof_org_chs (?,?,?,?,?,?,?)}";// 调用的sql
+					CallableStatement cs = con.prepareCall(storedProc);
+					cs.setString(1, company);//company
+					cs.setString(2, facoty);//facoty
+					cs.setString(3, "");//组织机构级别 - pi_org_leve
+					cs.setString(4, "组长");//选择数据-pi_condition
+					cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(7, -10);// 输出参数 追溯数据
+					return cs;
+				}
+			}, new CallableStatementCallback() {
+				public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+					List<Object> result = new ArrayList<>();
+					List<Map<String, Object>> l = new ArrayList();
+					cs.execute();
+					result.add(cs.getInt(5));
+					result.add(cs.getString(6));
+					if (cs.getString(5).toString().equals("0")) {
+						// 游标处理
+						ResultSet rs = (ResultSet) cs.getObject(7);
+
+						try {
+							l = fitMap(rs);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						result.add(l);
+					}
+					System.out.println(l);
+					return result;
+				}
+
+			});
+			return resultList;
+		}
 		
+	//-------------------------------------	
 		
 	private List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();

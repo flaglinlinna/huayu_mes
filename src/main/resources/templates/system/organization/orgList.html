@@ -49,7 +49,7 @@
     </div>
 
     <!--添加或编辑权限-->
-    <div id="updatePerm" class="layer_self_wrap" style="width:500px;display:none;">
+    <div id="updatePerm" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
         <form id="permForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input id="type" type="hidden" name="type"/>
             <input id="parentId" type="hidden" name="parentId"/>
@@ -81,7 +81,7 @@
             </div> -->
 
             <div class="layui-form-item">
-                <label class="layui-form-label">负责人</label>
+                <label class="layui-form-label layui-required">负责人</label>
                 <div class="layui-input-inline">
                     <input name="leadBy" id="leadBy" lay-verify="required" placeholder="请输入负责人"
                      autocomplete="off" class="layui-input" type="text"/>

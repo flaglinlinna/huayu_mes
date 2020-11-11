@@ -38,7 +38,8 @@ $(function () {
                 ,{field:'ENABLED', title:'生效状态', width:80, templet:'#enabledTpl'}
                 ,{field:'ERROR_INFO', title:'错误信息', width:140}
                 ,{field:'PROD_NO', title:'工单号', width:120}
-                ,{field:'TASK_NO', title:'生产指令单', width:100}
+                ,{field:'TASK_NO', title:'生产制令单', width:100,
+                templet: '<div><a cursor: pointer; onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO }}</a></div>'}
                 ,{field:'GROUP_NO', title:'组合', width:70}
                 ,{field:'DEPT_NAME', title:'部门', width:70}
                 ,{field:'CUST_NAME', title:'客户', width:80}
@@ -157,6 +158,19 @@ $(function () {
     });
 });
 
+function toSchedulingEdit(d){
+    var a = document.createElement('a');
+    a.setAttribute('lay-href', context + "/produce/scheduling/toSchedulingEdit?id=" + d);
+    a.setAttribute('lay-text', '排产编辑');
+    a.setAttribute('id', 'js_a');
+    if(document.getElementById('js_a')) {//防止反复添加
+        document.body.removeChild(document.getElementById('js_a'));
+    }
+    document.body.appendChild(a);//创建
+    a.click();//点击
+    return false;
+}
+
 //校验
 function doCheckProc(table){
     var tempIds = "";
@@ -174,7 +188,6 @@ function doCheckProc(table){
         data: { "ids":tempIds },
         url: context+"/produce/scheduling_temp/doCheckProc",
         success: function (res) {
-            debuggger;
             if (res.result) {
                 layer.alert("校验成功！",function(index){
                     loadAll();//重新加载表格
