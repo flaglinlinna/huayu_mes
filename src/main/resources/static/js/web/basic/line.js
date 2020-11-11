@@ -62,10 +62,10 @@ $(function() {
 				width : 95,
 				templet : '#statusTpl', sort: true
 			}, {
-				field : 'lastupdateDate',
+				field : 'lastupdateDate',width : 145,
 				title : '更新时间', sort: true
 			}, {
-				field : 'createDate',
+				field : 'createDate',width : 145,
 				title : '添加时间', sort: true
 			}, {
 				fixed : 'right',
@@ -274,7 +274,7 @@ function openLine(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	layer.open({
+	var index=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -286,6 +286,7 @@ function openLine(id, title) {
 			cleanLine();
 		}
 	});
+	layer.full(index);//弹出框全屏
 }
 
 // 添加线体

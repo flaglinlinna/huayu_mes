@@ -34,10 +34,10 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'defectTypeCode',
-				title : '编码'
+				title : '编码',sort:true
 			}, {
 				field : 'defectTypeName',
-				title : '名称'
+				title : '名称',sort:true
 			}, {
 				field : 'checkStatus',
 				title : '状态',
@@ -173,7 +173,7 @@ function openDefect(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	layer.open({
+	var index=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -185,6 +185,7 @@ function openDefect(id, title) {
 			cleanDefect();
 		}
 	});
+	layer.full(index);
 }
 
 // 添加不良类别

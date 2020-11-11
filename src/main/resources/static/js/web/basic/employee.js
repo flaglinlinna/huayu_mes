@@ -45,11 +45,11 @@ $(function() {
 			}, {
 				field : 'empType',
 				title : '员工类型',
-				width:100
+				width:120
 			}, {
 				field : 'empIdNo',
 				title : '身份证',
-				width:150
+				width:170
 			}, {
 				field : 'empStatus',
 				title : '员工状态',
@@ -74,7 +74,7 @@ $(function() {
 				{
 					field : 'fingerNum',
 					title : '指纹个数',
-					width:70
+					width:80
 				} ,
 				{
 				field : 'lastupdateDate',
