@@ -50,10 +50,10 @@ $(function() {
 				width : 95,
 				templet : '#statusTpl'
 			}, {
-				field : 'lastupdateDate',
+				field : 'lastupdateDate',width : 145,
 				title : '更新时间'
 			}, {
-				field : 'createDate',
+				field : 'createDate',width : 145,
 				title : '添加时间',
 			}, {
 				fixed : 'right',
@@ -234,7 +234,7 @@ function openProc(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	layer.open({
+	var index=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -246,6 +246,7 @@ function openProc(id, title) {
 			cleanProc();
 		}
 	});
+	 layer.full(index);
 }
 
 function doDelete(){

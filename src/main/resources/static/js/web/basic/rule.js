@@ -35,19 +35,19 @@ $(function() {
 			, {
 				field : 'itemNo',
 				title : '内部物料编号',
-				width : 140
+				width : 140, sort: true
 
 			}, {
 				field : 'itemName',
-				title : '物料描述',
+				title : '物料描述', sort: true,
 				width : 400
 			}, {
 				field : 'itemNoCus',
 				title : '客户物料编码',
-				width : 130
+				width : 130 ,sort: true
 			}, {
 				field : 'itemNoInside',
-				title : '华勤物料编码',
+				title : '华勤物料编码', sort: true,
 				width : 130
 			}, {
 				field : 'positionBegin',
@@ -64,7 +64,7 @@ $(function() {
 			}, {
 				field : 'barcodeLen',
 				title : '条码长度',
-				width : 80
+				width : 80 ,sort: true
 			}, {
 				field : 'lastupdateDate',
 				title : '更新时间',
@@ -172,7 +172,7 @@ function openBarcodeRule(id, title,item_id) {
 		$("#id").val("");
 	}
 	getMtrial(item_id);
-	layer.open({
+	var index=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -184,6 +184,7 @@ function openBarcodeRule(id, title,item_id) {
 			cleanBarcodeRule();
 		}
 	});
+	layer.full(index);
 }
 
 // 添加校验规则

@@ -51,11 +51,11 @@ $(function() {
 				templet : '#statusTpl'
 			}, {
 				field : 'lastupdateDate',
-				title : '更新时间',
+				title : '更新时间',width : 130,
 				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>'
 			}, {
 				field : 'createDate',
-				title : '添加时间',
+				title : '添加时间',width : 130,
 				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>'
 			}, {
 				fixed : 'right',
@@ -189,7 +189,7 @@ function openDef(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	layer.open({
+	var index=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -201,6 +201,7 @@ function openDef(id, title) {
 			cleanDef();
 		}
 	});
+	layer.full(index);
 }
 
 function merge(res,columsName,columsIndex) {

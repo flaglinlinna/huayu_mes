@@ -48,7 +48,7 @@
 
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">内部物料编码</label>
-					<div class="layui-input-inline">
+					<div class="layui-input-inline" style="width: 320px;">
 						<select id="itemId" name="itemId" lay-filter="itemNo"
 							lay-verify="required" lay-search>
 						</select>
@@ -57,21 +57,21 @@
 				<input id="itemNo" type="hidden" name="itemNo" />
 				<div class="layui-form-item">
 					<label class="layui-form-label">物料描述</label>
-					<div class="layui-input-inline" style="width: 38%;">
+					<div class="layui-input-inline" style="width: 320px;">
 						<textarea disabled id="itemName" name="itemName" placeholder="选择内部物料编码获取物料描述" 
 							lay-verify="required" style="background: #efefef;" class="layui-textarea"></textarea>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">客户物料编码</label>
-					<div class="layui-input-inline">
+					<div class="layui-input-inline" style="width: 320px;">
 						<input id="itemNoCus" name="itemNoCus" lay-verify="itemName" placeholder="请输入客户物料编码" 
 							autocomplete="off"  class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">华勤物料编码</label>
-					<div class="layui-input-inline">
+					<div class="layui-input-inline" style="width: 320px;">
 						<input id="itemNoInside" name="itemNoInside" placeholder="请输入华勤物料编码" 
 							lay-verify="itemNoInside" autocomplete="off" class="layui-input"
 							type="text" />

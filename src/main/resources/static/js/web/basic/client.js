@@ -34,13 +34,16 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'custNo',
-				title : '客户编码'
+				title : '客户编码',
+				sort:true
 			}, {
 				field : 'custNameS',
-				title : '客户简称'
+				title : '客户简称',
+				sort:true
 			}, {
 				field : 'custName',
-				title : '客户全称'
+				title : '客户全称',
+				width : '30%',
 			}, {
 				field : 'lastupdateDate',
 				title : '更新时间'
