@@ -22,6 +22,8 @@ public interface SchedulingService {
 
     public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
 
+    public ApiResponseResult getListByProcedure(String keyword, PageRequest pageRequest) throws Exception;
+
     public ApiResponseResult getSchedulData(Long id) throws Exception;
 
     public ApiResponseResult getExcel(HttpServletResponse response) throws Exception;

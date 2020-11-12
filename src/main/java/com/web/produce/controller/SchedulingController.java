@@ -138,7 +138,7 @@ public class SchedulingController extends WebController {
         String method = "/produce/scheduling/getList";String methodName ="获取排产信息列表";
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
-            ApiResponseResult result = schedulingService.getList(keyword, super.getPageRequest(sort));
+            ApiResponseResult result = schedulingService.getListByProcedure(keyword, super.getPageRequest(sort));
             logger.debug("获取排产信息列表=getList:");
             getSysLogService().success(module,method, methodName, null);
             return result;

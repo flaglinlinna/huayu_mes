@@ -412,6 +412,9 @@ function saveBad(obj) {
 					tableIns.reload({
 						data : data.data
 					});
+					$("#qty").val("");
+					$("#barcode").val("");
+					
 				} else {
 					layer.alert(data.msg);
 				}

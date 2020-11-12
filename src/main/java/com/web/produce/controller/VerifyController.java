@@ -3,6 +3,7 @@ package com.web.produce.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -132,6 +133,24 @@ public class VerifyController extends WebController {
              logger.error("加载在线返工页面默认数据失败！", e);
              getSysLogService().error(module,method, methodName, e.toString());
              return ApiResponseResult.failure("加载在线返工页面默认数据失败！");
+        }
+    }
+    
+    @ApiOperation(value="加载在线返工页面-返工料号", notes="加载在线返工页面-返工料号数据", hidden = true)
+    @RequestMapping(value = "/getReworkItem", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getReworkItem(String keyword) {
+        String method = "/verify/getReworkItem";String methodName ="加载在线返工页面-返工料号数据";
+        try {
+            ApiResponseResult result = verifyService.getReworkItem(keyword,super.getPageRequest());
+            logger.debug("加载在线返工页面-返工料号数据=getReworkItem:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        } catch (Exception e) {
+        	 e.printStackTrace();
+             logger.error("加载在线返工页面-返工料号数据失败！", e);
+             getSysLogService().error(module,method, methodName, e.toString());
+             return ApiResponseResult.failure("加载在线返工页面-返工料号数据失败！");
         }
     }
     

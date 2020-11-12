@@ -204,7 +204,8 @@ $(function() {
 	$('#barcode1').bind('keypress', function(event) {
 		if (event.keyCode == "13") {
 			$('#barcode').val("");
-			document.getElementById("barcode2").focus();
+			$('#barcode2').val("");
+			$('#barcode2').focus();
 		}
 	});
 	$('#barcode2').bind(
@@ -216,6 +217,7 @@ $(function() {
 						if ($('#taskno').val()) {
 							subCode($('#taskno').val(), $('#barcode1').val(),
 									$('#barcode2').val())
+							$('#barcode1').focus();//光标移至条码1位置
 						} else {
 							layer.alert("请选择制令单号!");
 						}
@@ -242,18 +244,23 @@ function subCode(taskNo, barcode1, barcode2) {
 							barcode2:barcode2,
 							result:"校验成功"
 					}
+					$('#barcode1').focus();
 					tabledata.push(dataT);
 					tableIns.reload({
 						data : tabledata
 					});
 					$('#barcode').val("");
 					$('#barcode1').val("");
-					$('#barcode2').val("");		
+					$('#barcode2').val("");
 				} else {
-					layer.alert(data.msg);
+					layer.alert(data.msg,function (index) {
+						layer.close(index);
+						$('#barcode1').focus();
+					});
+
 				}
-				//console.log(tabledata)
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
 			});
+
 }
