@@ -420,7 +420,7 @@ function cleanCardData() {
 //同步卡机信息
 function update() {
 	loadDev('');
-	layer.open({
+	var index=layer.open({
 		type : 1,
 		title : '手动同步卡机数据',
 		fixed : false,
@@ -432,6 +432,7 @@ function update() {
 			loadDev('');
 		}
 	});
+	layer.full(index);
 }
 //重新加载表格-设备（搜索）
 function loadDev(keyword) {
