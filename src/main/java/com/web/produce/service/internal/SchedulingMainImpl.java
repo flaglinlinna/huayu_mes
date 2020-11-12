@@ -53,7 +53,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
             return ApiResponseResult.failure("排产信息不能为空！");
         }
         SysUser currUser = UserUtil.getSessionUser();
-
+        schedulingMain.setIdNo(schedulingMainDao.getBillCode(3));
         schedulingMain.setCreateDate(new Date());
         schedulingMain.setCreateBy(currUser!=null ? currUser.getId() : null);
         schedulingMainDao.save(schedulingMain);
@@ -111,7 +111,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
         }
         Map map = new HashMap();
 //        map.put("total", list.get(2));
-        map.put("rows", list.get(2));
+        map.put("rows", list.get(3));
         return ApiResponseResult.success("").data(map);
 //        return null;
 //        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));

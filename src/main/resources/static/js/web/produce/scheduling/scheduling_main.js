@@ -10,10 +10,16 @@ $(function () {
             ,laydate = layui.laydate
             ,upload = layui.upload;
 
+        laydate.render({
+            elem: '#prodDate',
+            trigger: 'click'
+        });
+
         getDeptSelect();
 
         // 监听提交
         form.on('submit(addSubmit)', function(data) {
+            console.log(data);
             if (data.field.id == null || data.field.id == "") {
                 // 新增
                 addSubmit(data);
@@ -22,6 +28,8 @@ $(function () {
             }
             return false;
         });
+
+
 
         tableIns=table.render({
             elem: '#iList'
@@ -125,17 +133,17 @@ $(function () {
                 doDel(data.id);
             } else if(obj.event === 'edit'){
                 //编辑
-                //window.location = context + "/produce/scheduling/toSchedulingEdit?id=" + data.id;
-                var a = document.createElement('a');
-                a.setAttribute('lay-href', context + "/produce/scheduling/toSchedulingEdit?id=" + data.id);
-                a.setAttribute('lay-text', '排产编辑');
-                a.setAttribute('id', 'js_a');
-                if(document.getElementById('js_a')) {//防止反复添加
-                    document.body.removeChild(document.getElementById('js_a'));
-                }
-                document.body.appendChild(a);//创建
-                a.click();//点击
-                return false;
+                // //window.location = context + "/produce/scheduling/toSchedulingEdit?id=" + data.id;
+                // var a = document.createElement('a');
+                // a.setAttribute('lay-href', context + "/produce/scheduling/toSchedulingEdit?id=" + data.id);
+                // a.setAttribute('lay-text', '排产编辑');
+                // a.setAttribute('id', 'js_a');
+                // if(document.getElementById('js_a')) {//防止反复添加
+                //     document.body.removeChild(document.getElementById('js_a'));
+                // }
+                // document.body.appendChild(a);//创建
+                // a.click();//点击
+                // return false;
             }
         });
 
@@ -162,6 +170,10 @@ $(function () {
                 layer.closeAll();
             });
             return false;
+        });
+
+        form.on('select(deptId)', function(obj){
+            $("#deptName").val($("#deptId").val());
         });
 
         //导入
@@ -214,6 +226,7 @@ $(function () {
 
 // 新增排产导入的提交
 function addSubmit(obj) {
+    console.log(obj.field);
     CoreUtil.sendAjax("/produce/schedulingMain/add", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
@@ -277,8 +290,18 @@ function getDeptSelect() {
         data: {},
         url: context+"/produce/schedulingMain/getDeptSelect",
         success: function (res) {
+            // console.log(res);
+            $("#deptId").empty();
             if (res.result) {
-
+                console.log(res.data.rows);
+                var itemList = res.data.rows;
+                for(var i = 0; i < itemList.length; i++){
+                    if(i==0){
+                        $("#deptId").append("<option value=''>请点击选择</option>");
+                    }
+                    $("#deptId").append( '<option value="'+itemList[i].ID+'">'+itemList[i].ORG_NAME+'</option>');
+                }
+                layui.form.render('select');
             } else {
                 layer.alert(res.msg,function(index){
                 });
@@ -300,7 +323,7 @@ function doDel(id) {
             $.ajax({
                 type: "POST",
                 data: { "id": id },
-                url: context+"/produce/scheduling/delete",
+                url: context+"/produce/schedulingMain/delete",
                 success: function (data) {
                     if (data.result) {
                         layer.alert("删除成功",function(){

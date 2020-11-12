@@ -58,7 +58,7 @@ public class SchedulingMainController extends WebController {
     @ApiOperation(value = "新增", notes = "新增", hidden = true)
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponseResult add(SchedulingMain schedulingMain) {
+    public ApiResponseResult add(@RequestBody SchedulingMain schedulingMain) {
         String method = "/produce/schedulingMain/add";String methodName ="新增";
         try{
             ApiResponseResult result = schedulingMainService.add(schedulingMain);
