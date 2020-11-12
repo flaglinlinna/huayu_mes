@@ -146,7 +146,7 @@ public class BarcodeRuleController extends WebController{
 		    @RequestMapping(value = "/getMtrialList", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult getMtrialList() {
-		        String method = "base/defdetail/getMtrialList";String methodName ="获取物料列表";
+		        String method = "base/rule/getMtrialList";String methodName ="获取物料列表";
 		        try {
 		            ApiResponseResult result = ruleService.getMtrialList();
 		            logger.debug("获取物料列表=getMtrialList:");
@@ -159,5 +159,25 @@ public class BarcodeRuleController extends WebController{
 		            return ApiResponseResult.failure("获取物料列表失败！");
 		        }
 		    }
+
+
+	@ApiOperation(value = "获取物料列表", notes = "获取物料列表", hidden = true)
+	@RequestMapping(value = "/getMtrialListPage", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getMtrialList(String keyword) {
+		String method = "base/rule/getMtrialList";String methodName ="获取物料列表";
+		try {
+			Sort sort = new Sort(Sort.Direction.DESC, "id");
+			ApiResponseResult result = ruleService.getMtrialList(keyword,super.getPageRequest(sort));
+			logger.debug("获取物料列表=getMtrialList:");
+			getSysLogService().success(module,method, methodName, "关键词:"+keyword);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取物料列表失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取物料列表失败！");
+		}
+	}
 
 }

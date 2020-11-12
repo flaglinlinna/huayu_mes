@@ -22,6 +22,9 @@ public interface EmpFingerDao extends CrudRepository<EmpFinger, Long>,JpaSpecifi
 	
 	public List<EmpFinger> findByDelFlagAndEmpId(Integer delFlag, Long empId);
 	
+	
+	public List<EmpFinger> findByDelFlagAndEmpIdAndFingerIdx(Integer delFlag, Long empId,String fg);
+	
 	public EmpFinger findById(long id);
 	
 	public int countByDelFlagAndTemplateStr(Integer delFlag, String templateStr);//查询指纹是否存在

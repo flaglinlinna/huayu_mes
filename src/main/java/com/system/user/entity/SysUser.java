@@ -88,6 +88,13 @@ public class SysUser extends BaseEntity {
      */
     @Transient
     protected String roleIds;
+    
+    /**
+     * 组织架构ID（数据权限）
+     */
+    @Transient
+    protected String orgIds;
+    
 
 	public String getUserCode() {
 		return userCode;
@@ -169,7 +176,11 @@ public class SysUser extends BaseEntity {
 		this.roleIds = roleIds;
 	}
 
-	
+	public String getOrgIds() {
+		return orgIds;
+	}
 
-   
+	public void setOrgIds(String orgIds) {
+		this.orgIds = orgIds;
+	} 
 }

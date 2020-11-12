@@ -349,6 +349,46 @@ public class SchedulingController extends WebController {
         }
     }
 
+    @ApiOperation(value = "获取上线人员列表", notes = "获取上线人员列表", hidden = true)
+    @RequestMapping(value = "/getEmpList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getEmpList(Long mid){
+        String method = "/produce/scheduling/getEmpList";String methodName ="获取上线人员列表";
+        try {
+//            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = schedulingService.getEmpList(mid, super.getPageRequest(Sort.unsorted()));
+            logger.debug("获取上线人员列表=getEmpList:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取上线人员列表！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取上线人员列表！");
+        }
+    }
+
+
+    @ApiOperation(value = "获取生产投料列表", notes = "获取生产投料列表", hidden = true)
+    @RequestMapping(value = "/getProdOrderList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getProdOrderList(Long mid){
+        String method = "/produce/scheduling/getProdOrderList";String methodName ="获取生产投料列表";
+        try {
+//            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = schedulingService.getProdOrderList(mid, super.getPageRequest(Sort.unsorted()));
+            logger.debug("获取生产投料列表=getProdOrderList:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取生产投料列表！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取生产投料列表！");
+        }
+    }
+
+
     @ApiOperation(value = "编辑组件", notes = "编辑组件", hidden = true)
     @RequestMapping(value = "/editItem", method = RequestMethod.POST)
     @ResponseBody

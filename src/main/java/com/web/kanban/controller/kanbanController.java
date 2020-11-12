@@ -241,26 +241,50 @@ public class kanbanController extends WebController {
 		}
 	}
 	
-	
-	//-----------------------获取部门信息
+	/*
+	 * 获取部门信息
+	 * */
 
-	@ApiOperation(value = "获取车间报工看板-部门信息", notes = "获取车间报工看板-部门信息", hidden = true)
+	@ApiOperation(value = "获取部门信息", notes = "获取部门信息", hidden = true)
 	@RequestMapping(value = "/getCjbgDepList", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getCjbgDepList(String class_nos, String dep_id, String sdata, String edata) {
 		String method = "/kanban/getCjbgDepList";
-		String methodName = "获取车间报工看板-部门信息";
+		String methodName = "获取部门信息";
 		try {
 			ApiResponseResult result = kanbanService.getCjbgDepList();
-			logger.debug("获取车间报工看板-部门信息=getCjbgList:" + result);
+			logger.debug("获取部门信息=getCjbgList:" + result);
 			
 			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("获取车间报工看板-部门信息失败！", e);
+			logger.error("获取部门信息失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
-			return ApiResponseResult.failure("获取车间报工看板-部门信息失败！");
+			return ApiResponseResult.failure("获取部门信息失败！");
+		}
+	}
+	
+	/*
+	 * 取线长信息
+	 * */
+	@ApiOperation(value = "获取组长信息", notes = "获取组长信息", hidden = true)
+	@RequestMapping(value = "/getLiner", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getLiner() {
+		String method = "/kanban/getLiner";
+		String methodName = "获取组长信息";
+		try {
+			ApiResponseResult result = kanbanService.getLiner();
+			logger.debug("获取组长信息=getLiner:" + result);
+			
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取组长信息失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取组长失败！");
 		}
 	}
 }

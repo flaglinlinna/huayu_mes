@@ -68,6 +68,7 @@ public class DevLog extends BaseEntity {
 	@Column
 	@ApiModelProperty(name="cmdFlag",value="执行标志(0:未执行,1:已执行)")
     protected Integer cmdFlag = 0;
+
     
     /**
      * 卡机Id
@@ -172,4 +173,6 @@ public class DevLog extends BaseEntity {
 		sb.append(",操作人:").append(this.createUser);
 		return sb.toString();
 	}
+	
+	
 }

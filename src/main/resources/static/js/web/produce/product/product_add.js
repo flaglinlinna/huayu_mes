@@ -61,7 +61,7 @@ $(function() {
 						field : 'TASK_NO',
 						title : '制令单号',sort: true
 					},{
-						field : 'ITEM_BARCODE',
+						field : 'ITEM_NO',
 						title : '物料编号',
 						width : 130,sort: true
 					},{

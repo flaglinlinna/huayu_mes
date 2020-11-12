@@ -64,6 +64,9 @@ public interface SysUserDao extends CrudRepository<SysUser, Long>, JpaSpecificat
     @Query(value = "select m.param_value pv from mes_sys_params m where m.param_code='AppSize' ", nativeQuery = true)
     public List<Map<String, Object>> queryAppSize();
 
+    @Query(value = "SELECT A.ID,A.ORG_PATH,A.Org_Name, A.LEAD_BY FROM V_SYS_ORG_TREE A ", nativeQuery = true)
+    public List<Map<String, Object>> queryOrgList();//获取组织架构
+    
     @Modifying
     @Transactional
 	@Query(value = "update sys_user i set i.fpassword=?2 where i.fcode =?1 ", nativeQuery = true)

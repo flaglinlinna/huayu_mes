@@ -186,7 +186,7 @@ public class SchedulingTempImpl extends PrcUtils implements SchedulingTempServic
             }
 
             //删除当前用户关联的临时表原数据
-            schedulingTempDao.updateDelFlagByCreateBy(1, currUser.getId());
+//            schedulingTempDao.updateDelFlagByCreateBy(1, currUser.getId());
             //初始化临时表
             List<SchedulingTemp> tempList = new ArrayList<>();
 
@@ -218,7 +218,7 @@ public class SchedulingTempImpl extends PrcUtils implements SchedulingTempServic
                 String itemName = "";//物料描述
                 Integer qtyPlan = null;//计划数量
                 String prodDate = null;//生产日期
-                //String deptName = "";//部门名称
+                String deptName = "";//部门名称
                 String linerName = "";//线长名称
                 String classNo = "";//班次
 
@@ -247,39 +247,39 @@ public class SchedulingTempImpl extends PrcUtils implements SchedulingTempServic
                 }catch (Exception e){
                 }
 
-                //部门
-                //try{
-                //    deptName = this.readExcelCell(sheet, le, 5);
-                // }catch (Exception e){
-                // }
+//                部门
+                try{
+                    deptName = this.readExcelCell(sheet, le, 5);
+                 }catch (Exception e){
+                 }
 
                 //班次
                 try{
-                    classNo = this.readExcelCell(sheet, le, 5);
+                    classNo = this.readExcelCell(sheet, le, 6);
                 }catch (Exception e){
                 }
 
                 //工单号
                 try{
-                    prodNo = this.readExcelCell(sheet, le, 6);
+                    prodNo = this.readExcelCell(sheet, le, 7);
                 }catch (Exception e){
                 }
 
                 //物料编码
                 try{
-                    itemNo = this.readExcelCell(sheet, le, 7);
+                    itemNo = this.readExcelCell(sheet, le, 8);
                 }catch (Exception e){
                 }
 
                 //物料描述
                 try{
-                    itemName = this.readExcelCell(sheet, le, 8);
+                    itemName = this.readExcelCell(sheet, le, 9);
                 }catch (Exception e){
                 }
 
                 //计划生产数量
                 try{
-                    String qtyPlanStr = this.readExcelNumberCell(sheet, le, 9);
+                    String qtyPlanStr = this.readExcelNumberCell(sheet, le, 10);
                     qtyPlan = Double.valueOf(qtyPlanStr).intValue();
                 }catch (Exception e){
                 }
@@ -295,7 +295,7 @@ public class SchedulingTempImpl extends PrcUtils implements SchedulingTempServic
                 temp.setItemName(itemName);
                 temp.setQtyPlan(qtyPlan);
                 temp.setProdDate(prodDate);
-                // temp.setDeptName(deptName);
+                 temp.setDeptName(deptName);
                 temp.setLinerName(linerName);
                 temp.setClassNo(classNo);
                 temp.setErrorInfo(errorStr);
@@ -460,7 +460,7 @@ public class SchedulingTempImpl extends PrcUtils implements SchedulingTempServic
                 String flag = resultList.get(0);
                 if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
                     //2.写入正式表
-                    List<String> resultList2 = super.doSaveSchedulingProc(currUser.getCompany(), currUser.getFactory(), ids, "PRC_IMP_TASK_INFO");
+                    List<String> resultList2 = super.doSaveSchedulingProc(currUser.getCompany(), currUser.getFactory(), ids,currUser.getId().toString(), "PRC_IMP_TASK_INFO_NEW");
                     if(resultList2.size() > 0){
                         String flag2 = resultList2.get(0);
                         if(StringUtils.isNotEmpty(flag2) && StringUtils.equals(flag2, "0")){

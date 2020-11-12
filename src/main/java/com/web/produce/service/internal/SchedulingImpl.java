@@ -272,6 +272,7 @@ public class SchedulingImpl implements SchedulingService {
 				result.add(cs.getInt(5));
 				result.add(cs.getString(6));
 				if (cs.getString(5).toString().equals("0")) {
+                    result.add(cs.getString(7));
 					ResultSet rs = (ResultSet) cs.getObject(7);
 					try {
 						l = fitMap(rs);// 游标处理
@@ -1190,6 +1191,112 @@ public class SchedulingImpl implements SchedulingService {
         Page<SchedulingItem> page = schedulingItemDao.findAll(spec1, pageRequest);
 
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
+
+
+    /**
+     * 获取上线人员清单
+     * @param mid
+     * @param mid
+     * @param pageRequest
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getEmpList(Long mid, PageRequest pageRequest) throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        List<Object> list = getEmpListPrc(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"",
+                 mid,"","","", pageRequest.getPageNumber()+1, pageRequest.getPageSize(), "prc_mes_get_PROD_ORDER_EMP");
+        if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        Map map = new HashMap();
+        map.put("total", list.get(2));
+        map.put("rows", list.get(3));
+        return ApiResponseResult.success("").data(map);
+    }
+
+
+    /**
+     * 获取生产投料
+     * @param mid
+     * @param mid
+     * @param pageRequest
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getProdOrderList(Long mid, PageRequest pageRequest) throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        List<Object> list = getEmpListPrc(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"",
+                mid,"","","", pageRequest.getPageNumber()+1, pageRequest.getPageSize(), "prc_mes_get_PROD_ORDER_setup ");
+        if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        Map map = new HashMap();
+        map.put("total", list.get(2));
+        map.put("rows", list.get(3));
+        return ApiResponseResult.success("").data(map);
+    }
+
+
+    //获取上线人员清单 存储过程调用
+    public List getEmpListPrc(String facoty, String company, Long mid, String startTime, String endTime, String keyword,
+                                     int page, int rows, String prc_name) throws Exception{
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  "+prc_name+" (?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setLong(3, mid);
+                cs.setString(4, startTime);
+                cs.setString(5, endTime);
+                cs.setString(6, keyword);
+                cs.setInt(7, rows);
+                cs.setInt(8, page);
+                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 总记录数
+                cs.registerOutParameter(12, -10);// 输出参数 返回数据集合
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(9));
+                result.add(cs.getString(10));
+                if (cs.getString(9).toString().equals("0")) {
+                    result.add(cs.getString(11));
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(12);
+
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+
+                }
+                System.out.println(l);
+                return result;
+            }
+
+        });
+        return resultList;
     }
 
     //编辑组件信息

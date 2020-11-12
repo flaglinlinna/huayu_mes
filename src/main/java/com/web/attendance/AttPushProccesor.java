@@ -52,9 +52,10 @@ public class AttPushProccesor {
         System.out.println(request.getParameter("SN"));
        StringBuffer sb = new StringBuffer("OK");
        //System.out.println(cmdMap);
-       List<String> cmds =  cmdMap.get(SN);
+       List<String> cmds =  new ArrayList<String>();//cmdMap.get(SN);
        
-        if(cmds==null){//等于空说明从来没加载过，如果初始化加载过了，此时应该不为Null 只是size为0
+       // if(cmds==null){//等于空说明从来没加载过，如果初始化加载过了，此时应该不为Null 只是size为0
+       if(cmdMap.get(SN)==null){
             loadCmd(SN);
             cmds = cmdMap.get(SN);
         }
@@ -65,10 +66,15 @@ public class AttPushProccesor {
     	   System.out.println(param);
     	   cmds.add(param);
        }
-       /*String test1 = "C:3:DATA UPDATE USERINFO PIN=514259	Name=张小碎	Pri=0	Passwd=	Grp=0";
-       String cmd_tmp = "C:4:DATA UPDATE FINGERTMP PIN=514259	fid=0	Pri=0	TMP=TctTUzIxAAAEiIwECAUHCc7QAAAoiZEBAABkhLUugIgJAUdkWAA5AFTsegDKAPlkUAA2iclkrAApAZ5kMYgZAVhkZQBwAFjshgBSAedkWQCriAVkPgDEAJlki4ijAGxktACWAdfsgwBrAflkEwC2iJRkmgBrADJkjohaAPlkmgA5ADHsmAAiAcRkmwDWiFlkigA4AXlkOogUAdJktgDxAVHsSAA6AVNkFwD4iDhknQBQAbBkuYhFAVJkOwB/AOXsUABeAVxkkgBmidVkWABxATFkhYhlAGpkfQDhAUTshADMAG9kngAuiUVkVwDOABtkPIjrAFlkbgB3AOjswgDTACJk7AD5iNtkZgBVAe1k0ojjAKFkzwDxAU/skgBnAXlk6gCqiN5VcgB7AblkoYhlAHNkJRZAC1oMk4HG+fb7VY8xh/+gJA+FBGxuTYC0mZWWHIofgFKOGXJ5g24EUHbB+uDyHZnalScP3PfMfzWDNWlHgVp3hIA1YnKAuIDt9lAWQnYv9KqTdA8oAhWP6JNsBpEDuPKOcn/czPzJ4RQLvH7y/NtgtH9sfgnXIH6X+M4ZzPxdBC0O1BJiceOCDZv6Gw4GjRoQpl3+3fxAgBWC1YdBBLoF+YpR4RQ2RHrp4FStTag8mZ17+HPkdx5xaIZVez1/XXuyDe9tofI2BRN1vAIwh3mHhYL7Cep2CZLB97p9vIIyBpPrgYLWhA8Iud3Izq40fYLga6eEmPq1+sLxuIC1HtgGwQDJh3oB4Q6Ui6apdH9Yf4qB7e71PK895TsFij0aTgQAYphiQ4EBhVRtccAEZgCIjF/3NQkAuGFp8GrACwCjYr+QduEIAH9mZ8A6wmBKDACVbnFwBMDFSf7BVwQAnav9K4YBznqG/8MFw8RJwHhkDgDSQYzFBMDAwnBZBsWUpXn8IwMAjKK1wheI1JCXl3x+scP5SV0GAI6mawWGA4ieq/39/jDOAJM4bHx+wWYUxdylFsOSiXFxSrMLBOGw4jPAIyzNAJs5/Cf+MAsAEbOX9Zf/iQUAYXBgxeEKAGW4Xm0GNzqMATbAWv//wQA4S1tKCwB/xSz++nYmMQgAhsku/vl1Kw0Ad81gB2XHd1RHCgCCz6KJxUn+exMAvs9Ww8dKmINiwcL76gkE0dRcwmVUBsVf0t9jwAYAxNfnNcSNATrtVv/ABQ8EWfaww8DEqEbBxvsEAJ77KfrvCQTQ/lNzS8AFxdH7tcBCAwDW//LAAJiXAUyXDRBAAtN0/Pb8/f3+Bf76dAgQgApMdTvFzEAEEIQKRofAEDiTUUwEEDUcklsAmKosVioHEJ0uQkkr/QUQXS6G/8V3EhC4MMyIBsLDTcLEwsDBwQfA+08MEIw1vcE7/fhy9Pr9//zAwxC2sFL+wCAFEH04VLsCEM85Sf7BEEG2UkMFEEo+jPw5nRG8QsxvjAHEqgHDZsAIELGSXsR1/P0wAxBlnTHDlxFeWsbAwvf/MXb8/Pz8//w6/8Sj/////v/8BQMU22FW/VJCANxDBYoAAKIBAkPFAQQCAD7TAAAZgFI=";
-       cmds.add(test1);
-       cmds.add(cmd_tmp);*/
+       String test1 = "C:8802:DATA UPDATE USERINFO PIN=515203	Name=黄婵秀	Pri=0	Passwd=	Grp=0";
+       String cmd_tmp1 = "C:8802:DATA UPDATE FINGERTMP PIN=515203	FID=1	Pri=0	TMP=Ss1TUzIxAAADjo0ECAUHCc7QAAAvj5EBAABRg7MaoI7sAIdkxwARAInqaAAiAW0wLwAnjxhklQCAAExkUY6YAIFkbQC4AIvq1wBsAZcXFgCGjxhGggD9ALxkhY69AIFkoABZAITqzQBEAZFkzAEXjxlF/AA2AV9db45eAVxklgC7ARrqSABSAIZkSQDPjgdktQCtAENk8o4MAZBkgwCfAQfqigBfAXZkvwB4jghkeABvAExkTY52AAhkahFnguFxpwdeB3+HK/dQnUJrNYqJgpMBgg0rBI4Bvnkn+uT38YPVAYKA6IKhhMb/LYbvA+KL9XtjD9N1MXwb/vRyFAOqAFYK4/7N9eb59YrWAX+Bigy3hZ4PHVrj6DzLG6QWFgO984EQcB4CLYSiggKNlo0r/28EPXo4eiV1lZL1qqruZXaNkj9cMIPwg0SDMw1UAQ4BgoBziTUL7v9vAiA4xAI3k/cHAGc3BpBlCY5bOhDBXcEFwMOCAUo/DGLABVNdgwFGRwxWwK7+wc0MAE9TDMAE/2dPNsAQAC1ZxktfTsFRwEUHAOxhAE7+/8DBEQDgbP6wTP5QRf/+xgBK+YfCEQArfsb/WnFUwf9SXwrFc32dwltUwgoA4IgDysFXwgoAJVUAR05XwAQAJZjFSgSOpJ0J/m3AyQAmLgHBS8JDRskAISL1/VZEUwbFu6yH/3ATACKzOFPDycBFL8JDCMWEug3BbXALAIx5APywWE4HAIS+uP94TgQAj8sGwI8GAwnPgGnACwBK0ArXNv9QEgAzFfdJ20f/UFQRAIbf9E5KwDr+wFSkEQPG5/fAwf3/Ov/DT/5GwVoIAGXpivtsCACo7Qb7wDuGAaDug8DABsBYiwGB+4DCd8kAinMBwP8+wMA6/8OLAYH/en4Q1VMXfjzA/v/AOJ7+DY5K//TAO3M7RsKDEVEc7f8+/lf8ihHuIxNDDtVUIn5KwP//NcD6EBPdKO3/Pjgrj8ETnlY16cAzO4P/WIURy0GXkJYHdxOeVD7pTzPAOERJhRHKR5N1wgfCweIEENJIGlnVEFfG5f/A/v08/sFWiRGFWvf+/u4EEwxeXpAPEFat3vzF/P1AN8AL1dZpEMPAksTClsoQXeTfQCP+//6fwQCe3XIawgMQXHwQcQgQ0YSXwAWaq4IR6IWWwMAFgMVMowgQh4rJP/n4zVNCABJDAcQBAxIAhiIAABKAUg==";
+       String cmd_tmp2 = "C:8802:DATA UPDATE FINGERTMP PIN=515203	FID=0	Pri=0	TMP=S7NTUzIxAAAC8PUECAUHCc7QAAAu8ZEBAABPgh0Zp/DcAHhk1gDLAZeU8QD0AJdkIwDA8BJkiwCaAMdkgvBJAeNk6QCKAZ6UrABvAXRkNgB48YxBtwDIAEJkwPAdAYlkfQAOAP2U1QChAI1kWACM8IFkbgCfAKpkjfB8AANk7ACjAZO+2gDgABdkTgDP8Htk8QDXAFdcX/ACAelg1QCLAZeUtQCCAIVkZgB08IBkgABqASRk5wOjAJp7VQ4LAbFwiIOtB0oFXIK8DBuKaYZFAzyX3PW+c0v/aQnkDhzjk5fz4auTYP2oA575WRMSc7MP4wYq9dv3iYRTizVgI36WC08IrIKnjswCDW9HcDZsc3WghsUDIQVs9pAMWIaJgzoESHwc9AP3nYJhfvT/bR92c8cL7fnLBFHRlAVpB4KF3P1zcUgCYgGmb1JPVIunASAtAQFnEz32AZ5sDMBKxgCCgALABQCpeMlRBvCgeYNtAwBUfgIPCgBoh/T/OVz/twcAm4uDwQTBwPUBo44JwDvDAJlgfMB4BgCOXf0tDwkAjp4DRJENAqS460EvPlfMALE0jYh3wg4Al9DmwzH/wEbBBMWCyg1FBgC7ygyA/wzwV8LpOy//OsDCygUAes1wdskA1C6RfIbAgwTF3tzjQw4A7vaWrGeRMYUPEF4B5Dop/LH+RMIPEGPB6f0P/y/9////oQsSJQqawouSb9UAWg7jwP3//v0H/USl/gsQ0xCTBZCVcQQQ2hMa/6wKEjEdjMHCw8IHw0T4EZslAP8ohQUSYyprxGsHEGUsBA8wwQMQmTCuwxLgYyrc//8nOy/9DsFvEBBfPR/Awgz+/v3//jKfCBJ2SeL//Pv/9AcSa0r3/P7+cNUQZaDbXv79//wF/f0PwW8KENRRVsDDMsfE/8LACNWkUPYucwQQ3FPSZQHgnFdrwwMQbnB4MwsQ8HaPVgXBxDPACRCKduc6+vwwWwYQnHz0OP8zokMAC0MBAMULR6I=";
+       
+       //String cmd_tmp3 = "C:6:DATA UPDATE FINGERTMP PIN=365662  FID=2	Size =1044	Valid=1	TMP=Sk1TUzIxAAADDg8ECAUHCc7QAAAvD5EBAAA+gjMZfQ7OADJdhgA8ACVqlACUAIdkXgAWD6ZkygAFAWRk1A6JAB1kXgCiAHBqdwBGAH9knAAlDnpklgDLAORkpQ60AJJkdwDTAS1qdAAiAbNk9AC8Dk9CWwA4AWhkvQ5nAI9kagCgAZFfgQDDAFFOoAACDzNUawCYAK5eog4kARpkiwDvAaZsvwA6AZdbVgBaD5BVoQBDANVkF+1IEooPrvgX9YGPJ/V2H085yIw2CYOBU/1Hie4OCZ3Gj9+b6vaCCcz1Xw4Cc6YH7/9EBRZv7dLZ8vyTSn2fDWJCmH8w/3aFlYfdEjIJ2uc8ETb/uv2yg84cGXmXg1ML5gNm5MThdSM9MiLCtAdFA3+BEudHHAr5GnrcdoKF1Y6s9rYNh32P8VMJowOo4tb97pOWgxqf83XaASApAQEFF54LAXYSDFwJxVIaDVXBQggAX+MAT/HBwQwAw0JVhWnPwFwFAKNCw/79zwcAdEOAbwUJA5VCjHDCcwXFokQe/k8KAHxIxjXDX/4HAHRJeqNxBQ5aZXfBgA3Fu2aeZnh1ZwoApmb+8f/AwD3+BsVcaH/BhBEAInQi//0zOUX//koDxdeIKsAPAJOTj1KAwc/BiP8UAGpTcZKGa8HAwsCROsMADnOX/f4JAFyZFEr+wEcWAOoWosLxwcF4hsN3ScBzGwFqnGmMwkVn/Jx0jRQAHJ0nwDtP/v3ARjtw0ACgvZKPxMHCw7LC/M3Bi5QKADIESWWKwcAOAHzEm8WehW+aFADpt2fB/M/Awv+Dk3WZCANwyFPGwXnBwgCaxB03wP8VAN6+1TD//sEu/j47SloIAZbPJP/BoQsDcNU0i1nDwAUDE2gFNMETEOXJnsPxW4bBxcjBBsPCzMAXEE0Yt4TB/fAo/fz9wPsFwfzxwFUcAOb/ZcBSjsHDwseXwb3EcmHDBhCxTYw4/1YHEdsfk/5PBD4JDofVK8HA/wd8wg0RoSkiwwXVXz4sg1JCABJDxAECDoUA2CwAANdFUQ4=";
+       
+       //cmds.add(test1);
+       //cmds.add(cmd_tmp1);
+       //cmds.add(cmd_tmp2);
        if(cmds!=null&&cmds.size()>0){
            sb.setLength(0);//如果有命令就不返回OK了
           cmds.stream().forEach(cmd->sb.append(cmd).append("\r\n\r\n"));
@@ -76,7 +82,7 @@ public class AttPushProccesor {
        }
        System.out.println("心跳命令为...."+sb);
         try {
-            cmdMap.get(SN).clear();//处理完以后立刻将集合清空，实际开发中应该是在/devicecmd这个请求里完成
+            //cmdMap.get(SN).clear();//处理完以后立刻将集合清空，实际开发中应该是在/devicecmd这个请求里完成
             response.setCharacterEncoding("gbk");
             System.out.println("返回的命令...."+sb.toString());
             response.getWriter().write(sb.toString());

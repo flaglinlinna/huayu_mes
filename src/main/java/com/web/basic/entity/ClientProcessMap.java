@@ -28,17 +28,11 @@ public class ClientProcessMap extends BaseEntity {
 	public static final String TABLE_NAME = "MES_BASE_CUST_PROC";
 
 	/**
-	 * 关联客户表
+	 * 模板名称
 	 */
-	@ApiModelProperty(name = "custId", value = "客户ID")
+	@ApiModelProperty(name = "fdemoName", value = "模板名称")
 	@Column
-	protected Long custId;
-
-	@ApiModelProperty(name = "client", hidden = true, value = "客户ID")
-	@ManyToOne
-	@JoinColumn(name = "custId", insertable = false, updatable = false)
-	@NotFound(action = NotFoundAction.IGNORE)
-	protected Client client;
+	protected String  fdemoName;
 
 	/**
 	 * 关联工序表
@@ -74,21 +68,6 @@ public class ClientProcessMap extends BaseEntity {
     @Column
     protected Integer flag = 0;
 
-	public Long getCustId() {
-		return custId;
-	}
-
-	public void setCustId(Long custId) {
-		this.custId = custId;
-	}
-
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
 
 	public Long getProcId() {
 		return procId;
@@ -130,12 +109,19 @@ public class ClientProcessMap extends BaseEntity {
 		this.flag = flag;
 	}
 
+	public String getFdemoName() {
+		return fdemoName;
+	}
+
+	public void setFdemoName(String fdemoName) {
+		this.fdemoName = fdemoName;
+	}
 
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append("客户ID:").append(this.custId);
 		sb.append(",工序ID:").append(this.procId);
+		sb.append(",模板名称:").append(this.fdemoName);
 		sb.append(",工序顺序:").append(this.procOrder);
 		sb.append(",过程属性:").append(this.jobAttr==0?"是":"否");
 		sb.append(",报工标示:").append(this.flag);

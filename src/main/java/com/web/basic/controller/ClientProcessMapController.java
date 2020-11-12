@@ -102,11 +102,12 @@ public class ClientProcessMapController extends WebController{
 	        String method = "base/client_proc/addItem";String methodName ="新增工艺信息";
 	        try{
 	        	
-	        	long clientId = Long.parseLong(params.get("client").toString());
+//	        	long clientId = Long.parseLong(params.get("client").toString());
+	        	String fdemoName = params.get("fdemoName").toString();
 	        	String procIdList = params.get("proc").toString();
-	            ApiResponseResult result = clientProcessMapService.addItem(procIdList,clientId);
+	            ApiResponseResult result = clientProcessMapService.addItem(procIdList,fdemoName);
 	            logger.debug("新增工艺信息=addItem:");
-	            getSysLogService().success(module,method, methodName, "客户id:"+clientId+";工序id:"+procIdList);
+	            getSysLogService().success(module,method, methodName, "模板名称:"+fdemoName+";工序id:"+procIdList);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
@@ -121,10 +122,10 @@ public class ClientProcessMapController extends WebController{
 	    public ApiResponseResult getClientItem(@RequestBody Map<String, Object> params) {   	
 	        String method = "base/client_proc/getClientItem";String methodName ="获取客户通用工艺信息";
 	        try{	        	
-	        	long Id = Long.parseLong(params.get("client").toString());
-	            ApiResponseResult result = clientProcessMapService.getClientItem(Id);
+	        	String  fdemoName = params.get("fdemoName").toString();
+	            ApiResponseResult result = clientProcessMapService.getClientItem(fdemoName);
 	            logger.debug("获取客户通用工艺信息=getClientItem:");
-	            getSysLogService().success(module,method, methodName, "客户id："+Id);
+	            getSysLogService().success(module,method, methodName, "模板名称："+fdemoName);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
@@ -170,6 +171,26 @@ public class ClientProcessMapController extends WebController{
 	            logger.error("设置过程属性失败！", e);
 	            getSysLogService().error(module,method, methodName, e.toString());
 	            return ApiResponseResult.failure("设置过程属性失败！");
+	        }
+	    }
+	    
+	    @ApiOperation(value = "修改顺序", notes = "修改顺序", hidden = true)
+	    @RequestMapping(value = "/doProcOrder", method = RequestMethod.POST)
+	    @ResponseBody
+	    public ApiResponseResult doProcOrder(@RequestBody Map<String, Object> params) throws Exception{
+	        String method = "base/client_proc/doProcOrder";String methodName ="修改顺序";
+	        try{
+	        	Long id = Long.parseLong(params.get("id").toString()) ;
+	        	String procOrder=params.get("procOrder").toString();
+	            ApiResponseResult result = clientProcessMapService.doProcOrder(id, procOrder);
+	            logger.debug("修改顺序=doProcOrder:");
+	            getSysLogService().success(module,method, methodName, params);
+	            return result;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	            logger.error("修改顺序失败！", e);
+	            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+	            return ApiResponseResult.failure("修改顺序失败！");
 	        }
 	    }
 }

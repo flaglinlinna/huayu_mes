@@ -250,4 +250,22 @@ public class SysUserController extends WebController{
             return ApiResponseResult.failure("设置正常/禁用失败！");
         }
     }
+    
+    @ApiOperation(value = "获取组织架构", notes = "获取组织架构")
+    @RequestMapping(value = "/getOrgList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getOrgList() throws Exception{
+        String method = "/sysUser/getOrgList";String methodName ="获取组织架构";
+        try{
+            ApiResponseResult result = sysUserService.getOrgList();
+            logger.debug("获取组织架构");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("获取组织架构失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取组织架构！");
+        }
+    }
 }

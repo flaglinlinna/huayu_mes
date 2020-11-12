@@ -157,6 +157,7 @@ $(function() {
 		});
 		tableProc=table.render({
 			elem : '#procList',
+			limit: 20,
 			method : 'get' ,// 默认：get请求			
 			cols : [ [ {
 				type : 'numbers'
@@ -186,9 +187,9 @@ $(function() {
 			data:[]
 		});	
 		
-		form.on('select(pkClient)', function(data){//监听选择事件
+		form.on('select(fdemoName)', function(data){//监听选择事件
 			//var params={"client":$("#pkClient").val()}
-			getProcByClient($("#pkClient").val());
+			getProcByClient($("#fdemoName").val());
 		})
 		//监听单元格编辑
 		  table.on('edit(client_procTable)', function(obj){
@@ -364,10 +365,11 @@ function addProc(id) {
 
 //根据客户信息获取工序数据
 function getProcByClient(params){
-	var params={"client":params}
+	var params={"fdemoName":params}
 	CoreUtil.sendAjax("/base/client_proc/getClientItem", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
+			//console.log(data.data)
 			var beSelected=data.data;
 			tableProc.reload({
 				done : function(res, curr, count) {
@@ -383,8 +385,13 @@ function getProcByClient(params){
 								res.data[i]["LAY_CHECKED"]='true';
 		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
 		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+
+		                        if(beSelected[j].jobAttr==0){
+									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().addClass('layui-form-checked');
+								}else{
+									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+								}
 							}
-							
 						}
 					}
 				}
@@ -470,20 +477,20 @@ function getAddList(id){
 							}
 						}
 					});
-					$("#pkClient").empty();
+					$("#fdemoName").empty();
 					var c=data.data.Client;
 					for (var i = 0; i < c.length; i++) {
 						if(i==0){
-							$("#pkClient").append("<option value=''>请点击选择</option>");
+							$("#fdemoName").append("<option value=''>请点击选择</option>");
 						}
 						if(id != ''){
 							if(c[i].id == id){
-								$("#pkClient").append("<option value=" + c[i][0]+ " selected>"+c[i][1]+"</option>");
+								$("#fdemoName").append("<option value=" + c[i][0]+ " selected>"+c[i][1]+"</option>");
 							}else{
-								$("#pkClient").append("<option value=" + c[i][0]+ ">"+c[i][1]+"</option>");
+								$("#fdemoName").append("<option value=" + c[i][0]+ ">"+c[i][1]+"</option>");
 							}
 						}else{
-							$("#pkClient").append("<option value=" + c[i][0]+ ">"+c[i][1]+"</option>");
+							$("#fdemoName").append("<option value=" + c[i][0]+ ">"+c[i][1]+"</option>");
 						}
 					}			
 					layui.form.render('select');

@@ -6,7 +6,8 @@ var pageCurr;
 $(function() {
     layui.use(['table','tableSelect'], function(){
         var table = layui.table
-            ,form = layui.form, formSelects = layui.formSelects;;
+            ,form = layui.form, formSelects = layui.formSelects,
+            tableSelect = layui.tableSelect;
 
         tableIns=table.render({
             elem: '#uesrList'
@@ -36,15 +37,15 @@ $(function() {
             cols: [[
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize: true, sort: true}
-                ,{field:'userCode', title:'账号', width:120}
-                ,{field:'mobile', title:'手机号', width:120}
+                ,{field:'userCode', title:'工号', width:120,sort:true}
+                ,{field:'mobile', title:'手机号', width:120,sort:true}
                 //,{field:'realName', title:'真实名称', width:100}
-                ,{field:'userName', title:'名称', width:100}
+                ,{field:'userName', title:'名称', width:100,sort:true}
                 ,{field:'email', title: '邮箱', width:180}
-                ,{field:'sex', title: '性别', width:60}
+                ,{field:'sex', title: '性别', width:70,sort:true}
                 ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
                 ,{field:'roles', title: '拥有角色', minWidth:150}
-                ,{field:'createDate', title: '添加时间', width:120}
+                ,{field:'createDate', title: '添加时间', width:120,templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>'}
                 ,{fixed:'right', title:'操作',width:200,align:'center', toolbar:'#optBar'}
             ]]
             ,  done: function(res, curr, count){
@@ -58,6 +59,69 @@ $(function() {
                 pageCurr=curr;
             }
         });
+        
+        tableSelect = tableSelect.render({
+			elem : '#orgInfo',
+			searchKey : 'keyword',
+			checkedKey : 'ID',
+			searchPlaceholder : '试着搜索',
+			table : {
+				url : context + '/sysUser/getOrgList',
+				method : 'get',
+				cols : [ [ {
+					type : 'checkbox'
+				},// 多选 radio
+				, {
+					field : 'ID',
+					title : 'id',
+					width : 0,
+					hide : true
+				}, {
+					field : 'ORG_PATH',
+					title : '组织路径',
+					width : 200
+				}, {
+					field : 'ORG_NAME',
+					title : '组织名称',
+					width : 150
+				}, {
+					field : 'LEAD_BY',
+					title : '负责人',
+					width : 100
+				} ] ],
+				parseData : function(res) {
+					//console.log(res)
+					if (res.result) {
+						// 可进行数据操作
+						return {
+							"count" : 0,
+							"msg" : res.msg,
+							"data" : res.data,
+							"code" : res.status
+						// code值为200表示成功
+						}
+					}
+
+				},
+			},
+			done : function(elem, data) {
+				// 选择完后的回调，包含2个返回值
+				// elem:返回之前input对象；data:表格返回的选中的数据 []
+				 var da = data.data;
+				 //console.log(da[0])
+				 var ids = '';var nos = "";
+				 da.forEach(function(element) {
+						ids += element.ID+",";
+						nos += element.ORG_NAME+",";
+					});
+				 console.log(ids)
+				form.val("userForm", {
+					"orgInfo" : nos,
+					"orgIds":ids
+				});
+				form.render();// 重新渲染 
+			}
+		});
 
         //监听在职操作
         form.on('switch(isStatusTpl)', function(obj){
@@ -88,12 +152,17 @@ $(function() {
             doSetPass(data);
             return false;
         });
+        
+        
     });
     //搜索框
     layui.use(['form','laydate','tableSelect'], function(){
         var form = layui.form ,layer = layui.layer
             ,laydate = layui.laydate,tableSelect = layui.tableSelect;
-
+        
+       
+        
+        
         $("#addUser").click(function(){
         	formSelects.value('roleType', []);
             openUser(null,"开通用户");
@@ -198,7 +267,7 @@ function openUser(id,title){
     if(id==null || id==""){
         $("#id").val("");
     }
-    layer.open({
+    var index =layer.open({
         type:1,
         title: title,
         fixed:false,
@@ -210,6 +279,7 @@ function openUser(id,title){
             cleanUser();
         }
     });
+    layer.full(index);//弹出框全屏
 }
 
 //修改密码弹出框
@@ -288,7 +358,7 @@ function getUserAndRoles(obj,id) {
     //如果已经禁用，提醒不可编辑
     if(obj.bsStatus){
         layer.alert("该用户已经禁用，不可进行编辑；</br>  如需编辑，请设置为<font style='font-weight:bold;' color='green'>正常</font>状态。");
-    }else{
+    }else{	
         //回显数据
         $.get(context+"/sysUser/getUserAndRoles",{"id":id},function(data){
             if(isLogin(data)){
@@ -307,6 +377,10 @@ function getUserAndRoles(obj,id) {
                     if(disArray != null){
                         formSelects.value('disasterType', disArray);
                     }*/
+                    $("#orgIds").val(data.data.Org_id==null?'':data.data.Org_id);
+                    $('#orgInfo').val(data.data.Org_name==null?'':data.data.Org_name)
+                    $('#orgInfo').attr("ts-selected",data.data.Org_id==null?'':data.data.Org_id);
+                    
                     var userRoles = data.data.user.userRoles;
                     var disArray = [];
                     layui.each(userRoles, function (index, like) {
@@ -363,6 +437,7 @@ function delUser(obj,id,name) {
         }
     }
 }
+
 
 //重新加载表格（搜索）
 function load(obj){

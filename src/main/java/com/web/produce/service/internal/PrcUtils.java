@@ -643,28 +643,29 @@ public class PrcUtils {
         return resultList;
     }
 
-    //排产导入写入临时表
-    public List doSaveSchedulingProc(String company, String factory, String user_id, String prc_name){
+    //排产导入写入临时表  ？ 正式表
+    public List doSaveSchedulingProc(String company, String factory,String ids, String user_id, String prc_name){
         List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
-                String storedProc = "{call "+prc_name+"(?,?,?,?,?,?)}";// 调用的sql
+                String storedProc = "{call "+prc_name+"(?,?,?,?,?,?,?)}";// 调用的sql
                 CallableStatement cs = con.prepareCall(storedProc);
                 cs.setString(1, company);
                 cs.setString(2, factory);
-                cs.setString(3, user_id);
-                cs.registerOutParameter(4, Types.INTEGER);// 注册输出参数 返回标志
-                cs.registerOutParameter(5, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
-                cs.registerOutParameter(6, -10);// 注册输出参数 返回数据集合
+                cs.setString(3, ids);
+                cs.setString(4, user_id);
+                cs.registerOutParameter(5, Types.INTEGER);// 注册输出参数 返回标志
+                cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                cs.registerOutParameter(7, -10);// 注册输出参数 返回数据集合
                 return cs;
             }
         }, new CallableStatementCallback() {
             public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
                 List<String> result = new ArrayList<String>();
                 cs.execute();
-                result.add(cs.getString(4));
                 result.add(cs.getString(5));
                 result.add(cs.getString(6));
+                result.add(cs.getString(7));
                 return result;
             }
         });

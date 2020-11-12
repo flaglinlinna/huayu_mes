@@ -68,17 +68,18 @@ public class IssueController extends WebController{
 	    @ResponseBody
 	    public ApiResponseResult getList(String keyword,String ptype) {
 	        String method = "produce/issue/getList";String methodName ="获取指纹下发记录列表";
+	        String param ="关键词:"+keyword + ptype=="1"?"指纹下发":"指纹删除";
 	        try {
 	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = issueService.getList(keyword,ptype, super.getPageRequest(sort));
 	            logger.debug("获取指纹下发记录列表=getList:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取指纹下发记录列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,param+";"+ e.toString());
 	            return ApiResponseResult.failure("获取指纹下发记录列表失败！");
 	        }
 	    }
@@ -90,12 +91,12 @@ public class IssueController extends WebController{
 	    public ApiResponseResult add(@RequestBody Map<String, Object> params) {
 	        String method = "produce/issue/add";String methodName ="新增下发记录";
 	        try{
-	        	
 	        	String devList = params.get("devList").toString();
 	        	String empList = params.get("empList").toString();
+	        	String param ="卡机id:"+ devList +";员工id:" +empList;
 	            ApiResponseResult result = issueService.add(devList,empList);
 	            logger.debug("新增下发记录=add:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
@@ -113,12 +114,12 @@ public class IssueController extends WebController{
 	        try{
 	            ApiResponseResult result = issueService.getIssue(id);
 	            logger.debug("根据ID获取下发记录=getIssue:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取下发记录失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, params+";"+e.toString());
 	            return ApiResponseResult.failure("获取下发记录失败！");
 	        }
 	    }
@@ -132,12 +133,12 @@ public class IssueController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = issueService.delete(id);
 	            logger.debug("删除下发记录=delete:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除下发记录失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params+";"+ e.toString());
 	            return ApiResponseResult.failure("删除下发记录失败！");
 	        }
 	    }
@@ -147,16 +148,17 @@ public class IssueController extends WebController{
 	    @ResponseBody
 	    public ApiResponseResult getEmp(String empKeyword) {
 	        String method = "produce/issue/getEmp";String methodName ="获取人员信息列表";
+	        String param = "关键词:"+empKeyword;
 	        try {
 	        	Sort sort = new Sort(Sort.Direction.DESC, "emp_id");
 	            ApiResponseResult result = issueService.getEmp(empKeyword, super.getPageRequest(sort));
 	            logger.debug("获取人员信息列表=getEmp:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取人员信息列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, param+";"+e.toString());
 	            return ApiResponseResult.failure("获取人员信息列表失败！");
 	        }
 	    }
@@ -165,16 +167,17 @@ public class IssueController extends WebController{
 	    @ResponseBody
 	    public ApiResponseResult getDev(String devKeyword) {
 	        String method = "produce/issue/getDev";String methodName ="获取卡机信息列表";
+			String param = "关键词:"+devKeyword;
 	        try {
 	        	Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = issueService.getDev(devKeyword, super.getPageRequest(sort));
 	            logger.debug("获取卡机信息列表=getDev:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取卡机信息列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,param+";"+ e.toString());
 	            return ApiResponseResult.failure("获取卡机信息列表失败！");
 	        }
 	    }
@@ -187,9 +190,10 @@ public class IssueController extends WebController{
 		        try{
 		        	String devList = params.get("devList").toString();
 		        	String empList = params.get("empList").toString();
+					String param ="卡机id:"+ devList +";员工id:" +empList;
 		            ApiResponseResult result = issueService.clear(devList,empList);
 		            logger.debug("删除下发记录=add:");
-		            getSysLogService().success(module,method, methodName, null);
+		            getSysLogService().success(module,method, methodName, param);
 		            return result;
 		        }catch(Exception e){
 		            e.printStackTrace();

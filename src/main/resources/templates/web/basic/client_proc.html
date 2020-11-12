@@ -28,11 +28,12 @@
                <shiro:hasPermission name="clientProcess-add">
                   <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="doAdd" >添加</button>
                </shiro:hasPermission>
-               <shiro:hasPermission name="clientProcess-deleteAll">
-                  <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="doDelete">批量删除</button>
-               </shiro:hasPermission>
+               
            </div>
 	     </script>
+	     <!--<shiro:hasPermission name="clientProcess-deleteAll">
+                  <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="doDelete">批量删除</button>
+               </shiro:hasPermission>  -->
         
 			<!--<button class="layui-btn layui-btn-sm layui-btn-normal"
 				onclick="addProc('')">添加工艺流程</button>-->
@@ -45,6 +46,10 @@
             <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
+
+			<script type="text/html" id="statusTp2">
+				<input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTp2" checked="checked" />
+			</script>
 
 			<script type="text/html" id="optBar">
              <shiro:hasPermission name="clientProcess-edit">
@@ -64,11 +69,13 @@
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
 					type="hidden" name="id" />
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">客户</label>
+					<label class="layui-form-label layui-required">模板名称</label>
 					<div class="layui-input-inline">
-						<select id="pkClient" name="pkClient" lay-filter="pkClient" lay-verify="required"
-							lay-search>
-						</select>
+						<!--<select id="pkClient" name="pkClient" lay-filter="pkClient" lay-verify="required"-->
+							<!--lay-search>-->
+						<!--</select>-->
+						<input id="fdemoName" name="fdemoName" autocomplete="off"
+							   placeholder="请输入模板名称" class="layui-input" type="text" />
 					</div>
 				</div>
 				<table id="procList" lay-filter="procTable" class="layui-table" lay-data="{id: 'procList'}"></table>
