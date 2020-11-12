@@ -4,6 +4,7 @@ import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 
 
+import com.web.produce.entity.SchedulingDet;
 import com.web.produce.entity.SchedulingMain;
 import com.web.produce.entity.SchedulingTemp;
 import com.web.produce.service.SchedulingMainService;
@@ -26,34 +27,31 @@ public class SchedulingMainController extends WebController {
     @Autowired
     private SchedulingMainService schedulingMainService;
 
-    @ApiOperation(value = "排产信息表结构", notes = "排产信息表结构"+SchedulingMain.TABLE_NAME)
-    @RequestMapping(value = "/getScheduling", method = RequestMethod.GET)
+    @ApiOperation(value = "排产信息主表结构", notes = "排产信息主表结构"+SchedulingMain.TABLE_NAME)
+    @RequestMapping(value = "/getSchedulingMain", method = RequestMethod.GET)
     @ResponseBody
-    public SchedulingMain getScheduling(){
+    public SchedulingMain getSchedulingMain(){
         return new SchedulingMain();
     }
 
-    @ApiOperation(value = "排产信息导入临时表结构", notes = "排产信息导入临时表结构"+SchedulingTemp.TABLE_NAME)
-    @RequestMapping(value = "/getSchedulingTemp", method = RequestMethod.GET)
+    @ApiOperation(value = "排产信息从表结构", notes = "排产信息从表结构"+SchedulingDet.TABLE_NAME)
+    @RequestMapping(value = "/getSchedulingDet", method = RequestMethod.GET)
     @ResponseBody
-    public SchedulingTemp getSchedulingTemp(){
-        return new SchedulingTemp();
+    public SchedulingDet getSchedulingDet(){
+        return new SchedulingDet();
     }
 
-
     @ApiOperation(value = "排产信息列表页", notes = "排产信息列表页", hidden = true)
-    @RequestMapping(value = "/toScheduling")
-    public String toScheduling(){
-        return "/web/produce/scheduling/schedulingMain";
+    @RequestMapping(value = "/toSchedulingMain")
+    public String toSchedulingMain(){
+        return "/web/produce/scheduling/scheduling_main";
     }
 
     @ApiOperation(value = "新增页", notes = "新增页", hidden = true)
-    @RequestMapping(value = "/toSchedulingAdd")
-    public String toSchedulingAdd(){
-        return "/web/produce/schedulingMain/scheduling_add";
+    @RequestMapping(value = "/toSchedulingMainAdd")
+    public String toSchedulingMainAdd(){
+        return "/web/produce/scheduling/scheduling_main_add";
     }
-
-
 
     @ApiOperation(value = "新增", notes = "新增", hidden = true)
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -147,5 +145,21 @@ public class SchedulingMainController extends WebController {
         }
     }
 
-
+    @ApiOperation(value = "修改生效状态", notes = "修改生效状态", hidden = true)
+    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doStatus(Long id, Integer status) {
+        String method = "/produce/schedulingMain/doStatus";String methodName ="修改生效状态";
+        try{
+            ApiResponseResult result = schedulingMainService.doStatus(id, status);
+            logger.debug("修改生效状态=doStatus:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("修改生效状态失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("修改生效状态失败！");
+        }
+    }
 }

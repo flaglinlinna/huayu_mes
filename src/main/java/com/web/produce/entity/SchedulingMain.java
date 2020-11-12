@@ -47,28 +47,26 @@ public class SchedulingMain extends BaseEntity {
     protected String className;
 
     /**
-     * 是否启用 0否 1是
+     * 是否生效 0否 1是
      */
-    @ApiModelProperty(name = "fenable", value = "是否启用 0否 1是")
+    @ApiModelProperty(name = "fenable", value = "是否生效 0否 1是")
     @Column(name = "fenable", length = 50)
     protected Integer fenable = 0;
 
-
     /**
-     * 启用人
+     * 生效人
      */
-    @ApiModelProperty(name = "fenableBy", value = "启用人")
+    @ApiModelProperty(name = "fenableBy", value = "生效人")
     @Column(length = 50)
     protected String fenableBy;
 
-
     /**
-     * 启用时间
+     * 生效时间
      */
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-    @ApiModelProperty(name="fenableDate",value="启用时间")
+    @ApiModelProperty(name="fenableDate",value="生效时间")
     protected Date fenableDate;
 
     /**
