@@ -447,7 +447,7 @@ function getUserByLine(lineId) {
 }
 function open() {
 	CoreUtil.sendAjax("/verify/getInfoCreateReturn", "", function(data) {
-		// console.log(data)
+		console.log(data)
 		if (data.result) {
 			/*
 			 * if(data.data.Task){ $("#ptask").empty(); var
@@ -471,8 +471,8 @@ function open() {
 						$("#puser").append("<option value=''>请选择组长</option>");
 					}
 					$("#puser").append(
-							"<option value=" + puser[i].LINER_NAME + ">"
-									+ puser[i].LINER_NAME + "</option>");
+							"<option value=" + puser[i].LEAD_BY + ">"
+									+ puser[i].LEAD_BY + "</option>");
 				}
 				layui.form.render('select');
 			}

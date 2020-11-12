@@ -86,7 +86,7 @@ public class Veritylmpl extends PrcUtils implements VerifyService {
 		SysUser sy = UserUtil.getSessionUser();
 		
 		
-		List<Object> list1 = getTaskNoPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",12,UserUtil.getSessionUser().getId()+"","");
+		List<Object> list1 = getLinerPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"");
 		if (!list1.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list1.get(1).toString());
 		}
