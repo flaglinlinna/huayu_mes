@@ -162,4 +162,23 @@ public class SchedulingMainController extends WebController {
             return ApiResponseResult.failure("修改生效状态失败！");
         }
     }
+
+    @ApiOperation(value = "获取导入指令单从表数据", notes = "获取导入指令单从表数据", hidden = true)
+    @RequestMapping(value = "/getDetList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getDetList(String keyword, Long mid, String startTime, String endTime){
+        String method = "/produce/schedulingMain/getDetList";String methodName ="获取导入指令单从表数据";
+        try {
+            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = schedulingMainService.getDetList(keyword, mid, startTime, endTime, super.getPageRequest(sort));
+            logger.debug("获取导入指令单从表数据=getDetList:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取导入指令单从表数据失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取导入指令单从表数据失败！");
+        }
+    }
 }

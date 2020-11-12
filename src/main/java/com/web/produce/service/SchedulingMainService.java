@@ -24,5 +24,5 @@ public interface SchedulingMainService {
 
     public ApiResponseResult doStatus(Long id, Integer status) throws Exception;
 
-    public ApiResponseResult getDetList(String keyword, String startTime, String endTime, PageRequest pageRequest) throws Exception;
+    public ApiResponseResult getDetList(String keyword, Long mid, String startTime, String endTime, PageRequest pageRequest) throws Exception;
 }

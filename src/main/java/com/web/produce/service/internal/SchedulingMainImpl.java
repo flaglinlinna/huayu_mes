@@ -295,14 +295,14 @@ public class SchedulingMainImpl implements SchedulingMainService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getDetList(String keyword, String startTime, String endTime, PageRequest pageRequest) throws Exception {
+    public ApiResponseResult getDetList(String keyword, Long mid, String startTime, String endTime, PageRequest pageRequest) throws Exception {
         SysUser currUser = UserUtil.getSessionUser();
         if(currUser == null){
             return ApiResponseResult.failure("当前用户已失效，请重新登录！");
         }
 
         List<Object> list = this.getSchedulingDetPrc(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"", UserUtil.getSessionUser().getId()+"",
-                startTime, endTime, keyword, pageRequest.getPageNumber()+1, pageRequest.getPageSize(), "prc_mes_get_prod_order_imp_det");
+                mid+"", startTime, endTime, keyword, pageRequest.getPageNumber()+1, pageRequest.getPageSize(), "prc_mes_get_prod_order_imp_det");
 
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
             return ApiResponseResult.failure(list.get(1).toString());
@@ -314,7 +314,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
     }
 
     //获取导入制令单列表
-    public List getSchedulingDetPrc(String factoty, String company, String user_id, String startTime, String endTime, String keyword,
+    public List getSchedulingDetPrc(String factoty, String company, String user_id, String mid, String startTime, String endTime, String keyword,
                                      int page, int rows, String prc_name) throws Exception{
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
@@ -323,7 +323,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 CallableStatement cs = con.prepareCall(storedProc);
                 cs.setString(1, factoty);
                 cs.setString(2, company);
-                cs.setString(3, user_id);
+                cs.setString(3, mid);
                 cs.setString(4, startTime);
                 cs.setString(5, endTime);
                 cs.setString(6, keyword);
