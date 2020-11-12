@@ -34,9 +34,9 @@ public class Productlmpl extends PrcUtils implements ProductService {
 	}
 	
 	@Override
-	public ApiResponseResult getHXTaskNo(String keyword) throws Exception {
+	public ApiResponseResult getHXTaskNo(String taskNo,String keyword) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getTaskNoPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",5,UserUtil.getSessionUser().getId()+"",keyword);
+		List<Object> list = getHXTaskNoPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",taskNo,keyword);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
