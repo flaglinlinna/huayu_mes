@@ -37,7 +37,7 @@ $(function() {
             cols: [[
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize: true, sort: true}
-                ,{field:'userCode', title:'账号', width:120,sort:true}
+                ,{field:'userCode', title:'工号', width:120,sort:true}
                 ,{field:'mobile', title:'手机号', width:120,sort:true}
                 //,{field:'realName', title:'真实名称', width:100}
                 ,{field:'userName', title:'名称', width:100,sort:true}
