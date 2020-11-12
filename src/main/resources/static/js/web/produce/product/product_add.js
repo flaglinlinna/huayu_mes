@@ -158,10 +158,93 @@ $(function() {
 						form.render();// 重新渲染
 						
 						getDetailByTask(da[0].TASK_NO);
+						
+						tableSelect2=tableSelect1.render({
+							elem : '#num2',
+							searchKey : 'keyword',
+							checkedKey : 'TASK_NO',
+							searchPlaceholder : '试着搜索',
+							table : {
+								url:  context +'/product/getHXTaskNo',
+								where:{
+									taskNo:$('#num').val()
+								},
+								method : 'get',
+								cols : [ [
+								{ type: 'checkbox' },//多选  radio
+								, {
+									field : 'ID',
+									title : 'id',
+									width : 10,hide:true
+								}, {
+									field : 'TASK_NO',
+									title : '制令单号',
+									width : 180,sort: true
+								}, {
+									field : 'ITEM_NO',
+									title : '物料编码',
+									width : 150,sort: true
+								},{
+									field : 'ITEM_NAME',
+									title : '物料描述',
+									width : 240,sort: true
+								}, {
+									field : 'LINER_NAME',
+									title : '组长',
+									width : 100,sort: true
+								},{
+									field : 'QTY_PLAN',
+									title : '数量',sort: true,
+									edit:'text',style:'background: #98FB98;opacity: 0.3',
+									width : 80
+								}] ],
+								page : false,
+								request : {
+									pageName : 'page' // 页码的参数名称，默认：page
+									,
+									limitName : 'rows' // 每页数据量的参数名，默认：limit
+								},
+								parseData : function(res) {
+									if(res.result){
+										// 可进行数据操作
+										return {
+											"count" : 0,
+											"msg" : res.msg,
+											"data" : res.data,
+											"code" : res.status
+										// code值为200表示成功
+										}
+									}
+									
+								},
+							},
+							 done : function(elem1, data1) {
+								//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+								var da=data1.data;
+								console.log(da)
+								//console.log(_tableSelectEdite)
+								var str = "";
+								da.forEach(function(d){
+									_tableSelectEdite.forEach(function(d2){
+										if(d2.id == d.ID){
+											d.QTY_PLAN = d2.value;
+										}
+									})
+									if(d.QTY_PLAN){
+										   str += d.TASK_NO+"@"+d.QTY_PLAN+",";
+									   }else{
+										   layer.alert("请在"+d.TASK_NO+"行输入数量!");
+										   return false;
+									   }
+								});
+								//console.log(str)
+								$('#num2').val(str)
+						}
+						});
 				}
 				});
 				
-				tableSelect2=tableSelect1.render({
+				/*tableSelect2=tableSelect1.render({
 					elem : '#num2',
 					searchKey : 'keyword',
 					checkedKey : 'TASK_NO',
@@ -169,7 +252,7 @@ $(function() {
 					table : {
 						url:  context +'/product/getHXTaskNo',
 						where:{
-							taskNo:"102"
+							taskNo:num
 						},
 						method : 'get',
 						cols : [ [
@@ -221,7 +304,6 @@ $(function() {
 						},
 					},
 					 done : function(elem, data) {
-						 alert($("#num").val())
 						//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
 						var da=data.data;
 						console.log(da)
@@ -243,7 +325,7 @@ $(function() {
 						//console.log(str)
 						$('#num2').val(str)
 				}
-				});
+				});*/
 				
 				// 监听工具条
 				table.on('tool(colTable)', function(obj) {
