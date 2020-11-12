@@ -382,10 +382,6 @@ function delClientProc( id) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '工序吗？', {
-			btn : [ '确认', '返回' ]
-		// 按钮
-		}, function() {
 			CoreUtil.sendAjax("/base/client_proc/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
@@ -403,7 +399,7 @@ function delClientProc( id) {
 							}
 						}
 					});
-		});
+		
 	}
 }
 
