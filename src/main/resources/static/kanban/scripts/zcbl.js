@@ -33,7 +33,7 @@ function setTable(kanbanData){
 function getDepList(){
 	$.ajax({
         type: "GET",
-        url: context+"kanban/getCjbgDepList",
+        url: context+"kanban/getZcblDepList",
         data: {},
         dataType: "json",
         success: function(res){
@@ -43,7 +43,7 @@ function getDepList(){
             	var html = "<option value=''>请选择部门</option>";
             	for(j = 0,len=res.data.length; j < len; j++) {
             		var arr = res.data[j];
-            		html += "<option value='"+arr.ID+"'>"+arr.ORG_NAME+"</option>";
+            		html += "<option value='"+arr.ID+"'>"+arr.LEAD_BY+"</option>";
             	}
             	
            	   $("#dep_select").append(html);

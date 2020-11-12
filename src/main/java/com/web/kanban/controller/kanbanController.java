@@ -266,6 +266,30 @@ public class kanbanController extends WebController {
 	}
 	
 	/*
+	 * 获取部门信息--制程不良
+	 * */
+
+	@ApiOperation(value = "获取部门信息-制程不良", notes = "获取部门信息-制程不良", hidden = true)
+	@RequestMapping(value = "/getZcblDepList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getZcblDepList() {
+		String method = "/kanban/getZcblDepList";
+		String methodName = "获取部门信息-制程不良";
+		try {
+			ApiResponseResult result = kanbanService.getZcblDepList();
+			logger.debug("获取部门信息-制程不良=getZcblDepList:" + result);
+			
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取部门信息-制程不良失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取部门信息-制程不良失败！");
+		}
+	}
+	
+	/*
 	 * 取线长信息
 	 * */
 	@ApiOperation(value = "获取组长信息", notes = "获取组长信息", hidden = true)

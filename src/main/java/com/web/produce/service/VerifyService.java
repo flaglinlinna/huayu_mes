@@ -17,6 +17,8 @@ public interface VerifyService {
 			String hour_type,String class_id,String wdate,String emp_ids) throws Exception;
 	
 	public ApiResponseResult getInfoCreateReturn() throws Exception;
+	
+	public  ApiResponseResult getReworkItem(String keyword,PageRequest pageRequest) throws Exception;
 
 	public ApiResponseResult add(String task_no,String item_no,String liner_name,String qty,String pdate) throws Exception;
 	

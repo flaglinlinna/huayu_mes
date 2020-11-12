@@ -168,7 +168,7 @@ $(function() {
 					table : {
 						url:  context +'/product/getHXTaskNo',
 						where:{
-							taskNo:$("num").val()
+							taskNo:"102"
 						},
 						method : 'get',
 						cols : [ [

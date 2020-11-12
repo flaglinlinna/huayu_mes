@@ -84,11 +84,7 @@ public class Veritylmpl extends PrcUtils implements VerifyService {
 		// TODO Auto-generated method stub
 		Map map = new HashMap();
 		SysUser sy = UserUtil.getSessionUser();
-		List<Object> list = getTaskNoPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",11,UserUtil.getSessionUser().getId()+"","");
-		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
-			return ApiResponseResult.failure(list.get(1).toString());
-		}
-		map.put("Liao", list.get(2));
+		
 		
 		List<Object> list1 = getTaskNoPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",12,UserUtil.getSessionUser().getId()+"","");
 		if (!list1.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
@@ -103,7 +99,24 @@ public class Veritylmpl extends PrcUtils implements VerifyService {
 		map.put("Task", list2.get(2));
 		return ApiResponseResult.success().data(map);
 	}
-
+	
+	/*
+	 * 获取返工料号-【创建在线返工制令单】
+	 * */
+	@Override
+	public ApiResponseResult getReworkItem(String keyword,PageRequest pageRequest) throws Exception {
+		List<Object> list = getReworkItemPrc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"","成品",keyword,pageRequest);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map_liao = new HashMap();
+		map_liao.put("total", list.get(2));
+		map_liao.put("rows", list.get(3));		
+		return ApiResponseResult.success("").data(map_liao);
+		
+	}
+	
 	@Override
 	public ApiResponseResult add(String task_no, String item_no, String liner_name, String qty, String pdate)
 			throws Exception {
