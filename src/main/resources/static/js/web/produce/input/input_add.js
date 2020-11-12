@@ -86,6 +86,7 @@ $(function() {
 						method : 'get',
 						cols : [ [
 						{ type: 'radio' },//多选  radio
+							{type :'numbers'}
 						, {
 							field : 'id',
 							title : 'id',

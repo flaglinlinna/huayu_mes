@@ -204,6 +204,7 @@ $(function() {
 	$('#barcode1').bind('keypress', function(event) {
 		if (event.keyCode == "13") {
 			$('#barcode').val("");
+			$('#barcode2').val("");
 			document.getElementById("barcode2").focus();
 		}
 	});
@@ -242,18 +243,23 @@ function subCode(taskNo, barcode1, barcode2) {
 							barcode2:barcode2,
 							result:"校验成功"
 					}
+					document.getElementById("barcode1").focus();
 					tabledata.push(dataT);
 					tableIns.reload({
 						data : tabledata
 					});
 					$('#barcode').val("");
 					$('#barcode1').val("");
-					$('#barcode2').val("");		
+					$('#barcode2').val("");
 				} else {
-					layer.alert(data.msg);
+					layer.alert(data.msg,function (index) {
+						layer.close(index);
+						document.getElementById("barcode1").focus();
+					});
+
 				}
-				//console.log(tabledata)
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
 			});
+
 }
