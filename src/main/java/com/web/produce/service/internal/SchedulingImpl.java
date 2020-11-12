@@ -205,6 +205,25 @@ public class SchedulingImpl implements SchedulingService {
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
 
+
+    @Override
+    @Transactional
+    public ApiResponseResult getListByProcedure(String keyword, PageRequest pageRequest) throws Exception {
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        List<Object> list = getEmpListPrc(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"",
+                UserUtil.getSessionUser().getId(),"","",keyword, pageRequest.getPageNumber()+1, pageRequest.getPageSize(), "prc_mes_get_PROD_ORDER");
+        if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        Map map = new HashMap();
+        map.put("total", list.get(2));
+        map.put("rows", list.get(3));
+        return ApiResponseResult.success("").data(map);
+    }
+
     /**
      * 根据ID获取排产信息
      * @param id
