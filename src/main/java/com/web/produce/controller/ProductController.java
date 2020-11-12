@@ -56,10 +56,10 @@ public class ProductController extends WebController {
     @ApiOperation(value="获取合箱制令单信息", notes="获取合箱制令单信息", hidden = true)
     @RequestMapping(value = "/getHXTaskNo", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getHXTaskNo(String keyword) {
+    public ApiResponseResult getHXTaskNo(String keyword ,String taskNo) {
         String method = "/product/getHXTaskNo";String methodName ="获取合箱制令单信息";
         try {
-            ApiResponseResult result = productService.getHXTaskNo(keyword);
+            ApiResponseResult result = productService.getHXTaskNo(taskNo,keyword);
             logger.debug("获取合箱制令单信息=getHXTaskNo:");
             getSysLogService().success(module,method, methodName, null);
             return result;

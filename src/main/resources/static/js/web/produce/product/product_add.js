@@ -167,7 +167,9 @@ $(function() {
 					searchPlaceholder : '试着搜索',
 					table : {
 						url:  context +'/product/getHXTaskNo',
-						//url:  context +'base/prodproc/getProdList',
+						where:{
+							taskNo:$("num").val()
+						},
 						method : 'get',
 						cols : [ [
 						{ type: 'checkbox' },//多选  radio
@@ -218,6 +220,7 @@ $(function() {
 						},
 					},
 					 done : function(elem, data) {
+						 alert($("#num").val())
 						//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
 						var da=data.data;
 						console.log(da)

@@ -9,7 +9,7 @@ public interface ProductService {
 
 	public ApiResponseResult getTaskNo(String keyword) throws Exception;
 	
-	public ApiResponseResult getHXTaskNo(String keyword) throws Exception;
+	public ApiResponseResult getHXTaskNo(String taskNo,String keyword) throws Exception;
 	
 	public ApiResponseResult afterNei(String barcode,String task_no) throws Exception;
 	
