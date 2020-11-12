@@ -29,6 +29,6 @@ public interface DevLogDao extends CrudRepository<DevLog, Long>,JpaSpecification
 	
 	public List<DevLog> findByDelFlagAndCmdFlagAndDevCodeAndDescription(Integer delFlag,Integer cmd,String sn,String des);
 	
-	public List<DevLog> findByDelFlagAndCmdFlagAndDevCodeAndDescriptionAndCmdFlagFinger1AndCmdFlagFinger2(Integer delFlag,Integer cmd,String sn,String des,Integer f1,Integer f2);
+	//public List<DevLog> findByDelFlagAndCmdFlagAndDevCodeAndDescriptionAndCmdFlagFinger1AndCmdFlagFinger2(Integer delFlag,Integer cmd,String sn,String des,Integer f1,Integer f2);
 	
 }
