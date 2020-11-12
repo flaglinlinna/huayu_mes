@@ -399,7 +399,7 @@ function open(){
 				}					
 				layui.form.render('select');
 			}
-			varr index=layer.open({
+			var index=layer.open({
 				type : 1,
 				title : '创建在线返工制令单',
 				fixed : false,
