@@ -68,7 +68,7 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	@Override
 	public ApiResponseResult getZcblDepList() throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getZcblDepListPrc("","");
+		List<Object> list = getZcblDepListPrc("","",2);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -101,6 +101,22 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		Map map = new HashMap();
 		map.put("List_table", list.get(2));
 		map.put("List_line", list.get(3));
+		map.put("Sdata", list.get(4));
+		map.put("Edata", list.get(5));
+		
+		return ApiResponseResult.success().data(map);
+	}
+	
+	@Override
+	public ApiResponseResult getDfgList(String class_id,String dep_id, String sdata,
+			String usr_id,String dev_ip) throws Exception{	
+		List<Object> list = getDfgListPrc("","",usr_id,class_id,dep_id,sdata,dev_ip);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("List_table", list.get(2));
+		map.put("List_dept", list.get(3));
 		map.put("Sdata", list.get(4));
 		map.put("Edata", list.get(5));
 		

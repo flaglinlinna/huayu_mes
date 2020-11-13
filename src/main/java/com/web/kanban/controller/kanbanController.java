@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.system.user.entity.SysUser;
 import com.utils.UserUtil;
 import com.web.kanban.service.KanbanService;
 
@@ -160,6 +161,34 @@ public class kanbanController extends WebController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/toDfg", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toDfg() {
+		ModelAndView mav = new ModelAndView();
+		String method = "kanban/toDfg";
+		String methodName = "待返工看板";
+		try {	
+			String usr_id="";
+			SysUser currUser = UserUtil.getSessionUser();
+            if(currUser == null){
+            	usr_id="1";
+            }else{
+            	usr_id=currUser.getId().toString();
+            }
+			ApiResponseResult result = kanbanService.getDfgList("1","5252","2020-11-10",usr_id,"1");//this.getIpAddr()
+			logger.debug("待返工看板=toDfg:" + result);
+			getSysLogService().success(module,method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.addObject("dev_ip", this.getIpAddr());
+			mav.setViewName("/kanban/dfg");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取待返工看板看板异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
 
 	//--------------getList-------------------
 	
@@ -238,6 +267,32 @@ public class kanbanController extends WebController {
 			logger.error("获取效率排名看板信息失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取效率排名看板信息失败！");
+		}
+	}
+	
+	@ApiOperation(value = "获取待返工看板信息", notes = "获取返工看板信息", hidden = true)
+	@RequestMapping(value = "/getDfgList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getDfgList(String class_id,String dep_id, String sdata) {
+		String method = "/kanban/getDfgList";
+		String methodName = "获取返工看板信息";
+		try {
+			String usr_id="";
+			SysUser currUser = UserUtil.getSessionUser();
+            if(currUser == null){
+            	usr_id="1";
+            }else{
+            	usr_id=currUser.getId().toString();
+            }
+			ApiResponseResult result = kanbanService.getDfgList(class_id,dep_id, sdata, usr_id, "1");
+			logger.debug("获取返工看板信息=getDfgList:" + result);
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取返工看板信息失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取返工看板信息失败！");
 		}
 	}
 	
