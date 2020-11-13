@@ -6,5 +6,5 @@ import com.app.base.data.ApiResponseResult;
 
 public interface BackService {
 
-	public ApiResponseResult getList(String keyword,String sdate,String edate) throws Exception;
+	public ApiResponseResult getList(String keyword,String sdate,String edate,PageRequest pageRequest) throws Exception;
 }

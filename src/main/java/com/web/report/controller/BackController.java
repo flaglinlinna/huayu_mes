@@ -2,6 +2,7 @@ package com.web.report.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,8 +46,9 @@ public class BackController extends WebController {
 			String[] date = {"",""};
 			if(StringUtils.isNotEmpty(dates)){
 				date = dates.split(" - ");
-			}	
-			ApiResponseResult result = backService.getList(keyword,date[0],date[1]);
+			}
+			Sort sort = Sort.unsorted();
+			ApiResponseResult result = backService.getList(keyword,date[0],date[1],super.getPageRequest(sort));
 			logger.debug("追溯=getList:");
 			getSysLogService().success(module, method, methodName, param);
 			return result;

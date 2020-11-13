@@ -62,15 +62,18 @@ public class CheckBatchlmpl extends ReportPrcUtils implements CheckBatchService 
 	
 	@Override
 	public ApiResponseResult getCheckBatchReport(String beginTime,
-			String endTime,String deptId,String itemNo) throws Exception {
+			String endTime,String deptId,String itemNo, PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = getCheckBatchReportPrc(UserUtil.getSessionUser().getFactory() + "",
 				UserUtil.getSessionUser().getCompany() + "",UserUtil.getSessionUser().getId() + "",
-				beginTime, endTime,deptId,itemNo);
+				beginTime, endTime,deptId,itemNo,pageRequest);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		return ApiResponseResult.success().data(list.get(2));
+		Map map = new HashMap();
+		map.put("Total", list.get(2));
+		map.put("List", list.get(3));
+		return ApiResponseResult.success().data(map);
 	}
 	
 	/**
@@ -78,11 +81,11 @@ public class CheckBatchlmpl extends ReportPrcUtils implements CheckBatchService 
 	 * 2020-11-07
 	 * */
 	public List getCheckBatchReportPrc(String facoty,String company,String user_id,String beginTime,
-			String endTime,String deptId,String itemNo) throws Exception {
+			String endTime,String deptId,String itemNo, PageRequest pageRequest) throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  prc_mes_rpt_chk_lot(?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  prc_mes_rpt_chk_lot(?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
 				cs.setString(2, company);
@@ -91,9 +94,12 @@ public class CheckBatchlmpl extends ReportPrcUtils implements CheckBatchService 
 				cs.setString(5, endTime);
 				cs.setString(6, deptId);
 				cs.setString(7, itemNo);
-				cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
-				cs.registerOutParameter(10, -10);// 输出参数 追溯数据
+				cs.setInt(8, pageRequest.getPageSize());
+				cs.setInt(9,  pageRequest.getPageNumber()+1);
+				cs.registerOutParameter(10, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(11, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(12, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(13, -10);// 输出参数 追溯数据
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -101,11 +107,12 @@ public class CheckBatchlmpl extends ReportPrcUtils implements CheckBatchService 
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(8));
-				result.add(cs.getString(9));
-				if (cs.getString(8).toString().equals("0")) {
+				result.add(cs.getInt(10));
+				result.add(cs.getString(11));
+				if (cs.getString(10).toString().equals("0")) {
+					result.add(cs.getString(12));
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(10);
+					ResultSet rs = (ResultSet) cs.getObject(13);
 					try {
 						l = fitMap(rs);
 					} catch (Exception e) {

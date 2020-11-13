@@ -5,6 +5,7 @@ $(function(){
 	$("#searchBtn").click(function(){
 		getList();
 	});
+	
 })
 console.log(kanbanDataList);
 function dealData(){	

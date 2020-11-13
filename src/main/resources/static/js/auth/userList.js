@@ -39,9 +39,9 @@ $(function() {
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize: true, sort: true}
                 ,{field:'userCode', title:'账号', width:120,sort:true}
-                ,{field:'userName', title:'工号', width:100,sort:true}
+                ,{field:'userName', title:'姓名', width:100,sort:true}
                 ,{field:'mobile', title:'手机号', width:120,sort:true}
-                ,{field:'realName', title:'真实名称', width:100}
+               // ,{field:'realName', title:'真实名称', width:100}
                 
                 ,{field:'email', title: '邮箱', width:180}
                 ,{field:'sex', title: '性别', width:70,sort:true}

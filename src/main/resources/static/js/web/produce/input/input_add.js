@@ -62,7 +62,14 @@ $(function() {
 								align : 'center',
 								title : '物料描述',
 								sort : true
-							}, {
+							},
+								{
+									field : 'USER_NAME',
+									title : '员工姓名',
+									align:	'center',
+									width : 110,sort: true
+								},
+								{
 								field : 'FEED_TYPE',
 								title : '类型',
 								width : 70,
