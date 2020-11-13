@@ -128,14 +128,23 @@ $(function() {
 
 			{
 				field : 'EMP_CODE',
-				title : '员工工号'
+				title : '员工工号',
+				width:110,
 			}, {
 				field : 'EMP_NAME',
-				title : '员工姓名'
+				title : '员工姓名',
+					width:130,
 			}, {
 				field : 'EMP_TYPE',
-				title : '员工类型'
-			} ] ],
+				title : '员工类型',
+					width:120,
+			},
+				{
+					field : 'DEPT_NAME',
+					title : '部门名称',
+					width:130,
+				},
+			] ],
 			data : []
 		});
 		tableDev = table.render({
@@ -168,16 +177,25 @@ $(function() {
 			{
 				field : 'devCode',
 				title : '卡机编号',
+				width:130,
 			}, {
 				field : 'devName',
 				title : '卡机名称',
+					width:120,
 			}, {
 				field : 'devType',
 				title : '卡机类型',
+					width:90,
 			}, {
+					field : 'lineName',
+					title : '线别名称',
+					width:120,
+					templet: function (d) {return d.line.lineName}
+				},
+				{
 				field : 'devIp',
 				title : '卡机IP',
-				width:120
+				width:110
 			} ] ],
 			data : []
 		});

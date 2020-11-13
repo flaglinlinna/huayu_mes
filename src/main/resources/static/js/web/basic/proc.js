@@ -233,6 +233,11 @@ $(function() {
 function openProc(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
+		$('#procNo').removeAttr("readonly");
+		$('#procNo').removeClass("grey");
+	}else {
+		$('#procNo').addClass("grey");
+		$('#procNo').attr("readonly","readonly");
 	}
 	var index=layer.open({
 		type : 1,

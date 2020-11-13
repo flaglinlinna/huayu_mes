@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='异常类别信息'">
+<head th:include="layout :: htmlhead" th:with="title='异常原因信息'">
 <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
@@ -26,7 +26,7 @@
         </form>
          <hr class="layui-bg-black"/>
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addAbnormal()">添加异常类别</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addAbnormal()">添加异常原因</button>
         <table id="abnormalList" lay-filter="abnormalTable"></table>
 
         <script type="text/html" id="statusTpl">
@@ -48,13 +48,13 @@
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label layui-required">异常类别编码</label>
+                <label class="layui-form-label layui-required">异常编码</label>
                 <div class="layui-input-inline">
                     <input id="abnormalCode" name="abnormalCode" placeholder="请输入异常类别" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label layui-required">异常类别类型</label>
+                <label class="layui-form-label layui-required">异常描述</label>
                 <div class="layui-input-inline">
                     <input id="abnormalType" name="abnormalType" placeholder="请输入异常类型"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>

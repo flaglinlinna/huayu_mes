@@ -37,7 +37,7 @@ $(function() {
 				title : '异常编码',sort:true
 			}, {
 				field : 'abnormalType',
-				title : '异常类型',sort:true
+				title : '异常描述',sort:true
 			},
 			{
 				field : 'lastupdateDate',
@@ -107,7 +107,7 @@ $(function() {
 								"abnormalCode" : data.data.abnormalCode,
 								"abnormalType" : data.data.abnormalType,
 							});
-							openabnormal(id, "编辑异常类别")
+							openabnormal(id, "编辑异常原因")
 						} else {
 							layer.alert(data.msg)
 						}
@@ -140,12 +140,12 @@ function openabnormal(id, title) {
 	layer.full(index);
 }
 
-// 添加异常类别
+// 添加异常原因
 function addAbnormal() {
 	// 清空弹出框数据
 	cleanAbnormal();
 	// 打开弹出框
-	openabnormal(null, "添加异常类别");
+	openabnormal(null, "添加异常原因");
 }
 // 新增异常类别提交
 function addSubmit(obj) {
@@ -189,7 +189,7 @@ function editSubmit(obj) {
 	});
 }
 
-// 删除异常类别
+// 删除异常原因
 function delabnormal(obj, id, name) {
 	if (id != null) {
 		var param = {
