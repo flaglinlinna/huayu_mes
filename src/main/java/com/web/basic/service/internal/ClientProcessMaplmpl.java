@@ -64,7 +64,10 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 				Specification<ClientProcessMap> spec1 = spec.and(BaseService.or(filters1, ClientProcessMap.class));
 				Page<ClientProcessMap> page = clientProcessMapDao.findAll(spec1, pageRequest);
 
-				List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+				
+/*				List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
 				for(ClientProcessMap bs:page.getContent()){
 					Map<String, Object> map = new HashMap<>();
 //					map.put("client_id", bs.getClient().getId());
@@ -84,7 +87,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
 				}
 
 				return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
-						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
 	}
 	/*
 	 * 增加工艺流程
@@ -123,7 +126,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
                 item.setCreateDate(new Date());
                 item.setCreateBy(UserUtil.getSessionUser().getId());
                 item.setFdemoName(fdemoName);
-                item.setProcOrder(procOrder.toString());
+                item.setProcOrder(procOrder);
 //                item.setCustId(clientId);
                 item.setProcId(procId);
 //                item.setJobAttr(jobAttr);
@@ -219,7 +222,7 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
         }
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
-        o.setProcOrder(procOrder);
+        o.setProcOrder(Integer.parseInt(procOrder));
         clientProcessMapDao.save(o);
         return ApiResponseResult.success("修改成功！").data(o);
 	}

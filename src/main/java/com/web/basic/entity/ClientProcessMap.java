@@ -52,7 +52,7 @@ public class ClientProcessMap extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "procOrder", value = "工序顺序")
 	@Column(length = 10)
-	protected String procOrder;	
+	protected Integer procOrder;	
 	
 	/**
      * 过程属性（0：被勾选 / 1：无） 默认被勾选
@@ -85,11 +85,12 @@ public class ClientProcessMap extends BaseEntity {
 		this.process = process;
 	}
 
-	public String getProcOrder() {
+	
+	public Integer getProcOrder() {
 		return procOrder;
 	}
 
-	public void setProcOrder(String procOrder) {
+	public void setProcOrder(Integer procOrder) {
 		this.procOrder = procOrder;
 	}
 

@@ -67,12 +67,11 @@ $(function() {
 				field : 'procNo',
 				title : '工序编号',
 				sort: true,
-				width:100
+				width:100,templet: function (d) {return d.process.procNo}
 			}, {
 				field : 'procName',
 				title : '工序名称',
-				sort: true,
-				width:100
+				sort: true,templet: function (d) {return d.process.procName}
 			}, {
 				field : 'jobAttr',
 				title : '过程属性',

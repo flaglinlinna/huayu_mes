@@ -121,7 +121,7 @@ $(function() {
 		    trigger:'click'
 		    ,range: true
 		  });
-		  tableSelect=tableSelect.render({
+		  /*tableSelect=tableSelect.render({
 				elem : '#num',
 				searchKey : 'keyword',
 				checkedKey : 'id',
@@ -186,7 +186,7 @@ $(function() {
 					});
 					form.render();// 重新渲染
 			}
-			});
+			});*/
 		  
 		  
 		  layui.form.render('select');
