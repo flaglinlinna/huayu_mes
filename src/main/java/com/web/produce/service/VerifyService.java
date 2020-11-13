@@ -20,7 +20,7 @@ public interface VerifyService {
 	
 	public  ApiResponseResult getReworkItem(String keyword,PageRequest pageRequest) throws Exception;
 
-	public ApiResponseResult add(String task_no,String item_no,String liner_name,String qty,String pdate) throws Exception;
+	public ApiResponseResult add(String task_no,String item_no,String liner_name,String qty,String pdate,String deptId,String classId) throws Exception;
 	
 	public ApiResponseResult getHistoryList(String keyword, String hStartTime,String hEndTime,PageRequest pageRequest) throws Exception;
 	
