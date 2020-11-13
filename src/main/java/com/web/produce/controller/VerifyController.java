@@ -164,8 +164,10 @@ public class VerifyController extends WebController {
 		String liner_name = params.get("liner_name").toString();
 		String qty = params.get("qty").toString();
 		String pdate = params.get("pdate").toString();
+        String deptId = params.get("deptId").toString();
+        String classId = params.get("classId").toString();
         try{
-            ApiResponseResult result = verifyService.add(task_no,item_no,liner_name,qty,pdate);
+            ApiResponseResult result = verifyService.add(task_no,item_no,liner_name,qty,pdate,deptId,classId);
             logger.debug("创建返工制令单=add:");
             getSysLogService().success(module,method, methodName, null);
             return result;
