@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @Api(description = "排产信息管理模块")
 @CrossOrigin
@@ -49,8 +51,22 @@ public class SchedulingMainController extends WebController {
 
     @ApiOperation(value = "新增页", notes = "新增页", hidden = true)
     @RequestMapping(value = "/toSchedulingMainAdd")
-    public String toSchedulingMainAdd(){
-        return "/web/produce/scheduling/scheduling_main_add";
+    @ResponseBody
+    public ModelAndView toSchedulingMainAdd(String id){
+        ModelAndView mav = new ModelAndView("/web/produce/scheduling/scheduling_main_add");
+        try{
+            ApiResponseResult result = schedulingMainService.getSchedulingMain(id);
+            mav.addObject("id", id);
+            if(result != null){
+                mav.addObject("mapData", result.getData());
+            }else{
+                mav.addObject("mapData", null);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return mav;
     }
 
     @ApiOperation(value = "新增", notes = "新增", hidden = true)
@@ -163,22 +179,130 @@ public class SchedulingMainController extends WebController {
         }
     }
 
-    @ApiOperation(value = "获取导入指令单从表数据", notes = "获取导入指令单从表数据", hidden = true)
+    @ApiOperation(value = "获取导入制令单从表数据", notes = "获取导入制令单从表数据", hidden = true)
     @RequestMapping(value = "/getDetList", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getDetList(String keyword, Long mid, String startTime, String endTime){
-        String method = "/produce/schedulingMain/getDetList";String methodName ="获取导入指令单从表数据";
+        String method = "/produce/schedulingMain/getDetList";String methodName ="获取导入制令单从表数据";
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingMainService.getDetList(keyword, mid, startTime, endTime, super.getPageRequest(sort));
-            logger.debug("获取导入指令单从表数据=getDetList:");
+            logger.debug("获取导入制令单从表数据=getDetList:");
             getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("获取导入指令单从表数据失败！", e);
+            logger.error("获取导入制令单从表数据失败！", e);
             getSysLogService().error(module,method, methodName, e.toString());
-            return ApiResponseResult.failure("获取导入指令单从表数据失败！");
+            return ApiResponseResult.failure("获取导入制令单从表数据失败！");
+        }
+    }
+
+    @ApiOperation(value = "导入制令单", notes = "导入制令单", hidden = true)
+    @RequestMapping(value = "/doExcel", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doExcel(MultipartFile file, Long mid) throws Exception{
+        String method = "/produce/schedulingMain/doExcel";String methodName ="导入制令单";
+        try{
+            ApiResponseResult result = schedulingMainService.doExcel(file, mid);
+            logger.debug(methodName+"=doExcel:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(methodName+"失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure(methodName+"失败！");
+        }
+    }
+
+    @ApiOperation(value = "导入制令单检验", notes = "导入制令单检验", hidden = true)
+    @RequestMapping(value = "/doCheckProc", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doCheckProc(String ids){
+        String method = "/produce/schedulingMain/doCheckProc";String methodName ="导入制令单检验";
+        try{
+            ApiResponseResult result = schedulingMainService.doCheckProc(ids);
+            logger.debug(methodName+"=doCheckProc:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(methodName+"失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure(methodName+"失败！");
+        }
+    }
+
+    @ApiOperation(value = "删除导入制令单", notes = "删除导入制令单", hidden = true)
+    @RequestMapping(value = "/deleteDet", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult deleteDet(String ids){
+        String method = "/produce/schedulingMain/deleteDet";String methodName ="删除导入制令单";
+        try{
+            ApiResponseResult result = schedulingMainService.deleteDet(ids);
+            logger.debug(methodName+"=deleteDet:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(methodName+"失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure(methodName+"失败！");
+        }
+    }
+
+    @ApiOperation(value = "导入制令单生效", notes = "导入制令单生效", hidden = true)
+    @RequestMapping(value = "/doEffect", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doEffect(String ids){
+        String method = "/produce/schedulingMain/doEffect";String methodName ="导入制令单生效";
+        try{
+            ApiResponseResult result = schedulingMainService.doEffect(ids);
+            logger.debug(methodName+"=doEffect:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(methodName+"失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure(methodName+"失败！");
+        }
+    }
+
+    @ApiOperation(value = "导入编辑", notes = "导入编辑", hidden = true)
+    @RequestMapping(value = "/editDet", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult editDet(@RequestBody SchedulingDet schedulingDet) {
+        String method = "/produce/schedulingMain/editDet";String methodName ="导入编辑";
+        try{
+            ApiResponseResult result = schedulingMainService.editDet(schedulingDet);
+            logger.debug("导入编辑=editDet:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("导入编辑失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("导入编辑失败！");
+        }
+    }
+
+    @ApiOperation(value = "根据ID获取导入数据", notes = "根据ID获取导入数据", hidden = true)
+    @RequestMapping(value = "/getDet", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getDet(String id) throws Exception{
+        String method = "/produce/schedulingMain/getDet";String methodName ="根据ID获取导入数据";
+        try{
+            ApiResponseResult result = schedulingMainService.getDet(id);
+            logger.debug("根据ID获取导入数据=edit:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("根据ID获取导入数据失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("根据ID获取导入数据失败！");
         }
     }
 }

@@ -51,13 +51,13 @@ $(function () {
             cols: [[
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-                ,{field:'idNo', title:'表单号', width:120}
-                ,{field:'deptName', title:'部门名称', width:120}
-                ,{field:'prodDate', title:'生产日期', width:140}
-                ,{field:'className', title:'班次名称', width:140}
-                ,{field:'fenable', title:'是否生效', width:100,align:'center',templet:'#statusTp1'}
-                ,{field:'fenableBy', title:'启用人', widstatusth:140}
-                ,{field:'fenableDate', title:'启用时间', width:140}
+                ,{field:'ID_NO', title:'表单号', width:120}
+                ,{field:'DEPT_NAME', title:'部门名称', width:120}
+                ,{field:'PROD_DATE', title:'生产日期', width:140}
+                ,{field:'CLASS_NAME', title:'班次名称', width:140}
+                ,{field:'FENABLE', title:'是否生效', width:100,align:'center',templet:'#statusTp1'}
+                ,{field:'FENABLE_BY', title:'生效人', widstatusth:140}
+                ,{field:'FENABLE_DATE', title:'生效时间', width:140}
                 ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
@@ -80,17 +80,16 @@ $(function () {
                 doDel(data);
             } else if(obj.event === 'edit'){
                 //编辑
-                // //window.location = context + "/produce/scheduling/toSchedulingEdit?id=" + data.id;
-                // var a = document.createElement('a');
-                // a.setAttribute('lay-href', context + "/produce/scheduling/toSchedulingEdit?id=" + data.id);
-                // a.setAttribute('lay-text', '排产编辑');
-                // a.setAttribute('id', 'js_a');
-                // if(document.getElementById('js_a')) {//防止反复添加
-                //     document.body.removeChild(document.getElementById('js_a'));
-                // }
-                // document.body.appendChild(a);//创建
-                // a.click();//点击
-                // return false;
+                var a = document.createElement('a');
+                a.setAttribute('lay-href', context + "/produce/schedulingMain/toSchedulingMainAdd?id=" + data.ID);
+                a.setAttribute('lay-text', '排产编辑');
+                a.setAttribute('id', 'js_a');
+                if(document.getElementById('js_a')) {//防止反复添加
+                    document.body.removeChild(document.getElementById('js_a'));
+                }
+                document.body.appendChild(a);//创建
+                a.click();//点击
+                return false;
             }
         });
 
@@ -111,26 +110,6 @@ $(function () {
 
     });
 });
-
-// // 新增排产导入的提交
-// function addSubmit(obj) {
-//     console.log(obj.field);
-//     CoreUtil.sendAjax("/produce/schedulingMain/add", JSON.stringify(obj.field),
-//         function(data) {
-//             if (data.result) {
-//                 layer.alert("操作成功", function() {
-//                     layer.closeAll();
-//                     cleanScheduling();
-//                     // 加载页面
-//                     loadAll();
-//                 });
-//             } else {
-//                 layer.alert(data.msg);
-//             }
-//         }, "POST", false, function(res) {
-//             layer.alert(res.msg);
-//         });
-// }
 
 //设置启用/禁用
 function setStatus(obj,id,name,checked){
@@ -198,7 +177,6 @@ function getDeptSelect() {
         data: {},
         url: context+"/produce/schedulingMain/getDeptSelect",
         success: function (res) {
-            // console.log(res);
             $("#deptId").empty();
             if (res.result) {
                 console.log(res.data.rows);
@@ -222,14 +200,14 @@ function getDeptSelect() {
 
 //删除
 function doDel(obj) {
-    if(obj.id!=null){
-        if(obj.fenable != 1){
+    if(obj.ID!=null){
+        if(obj.FENABLE != 1){
             layer.confirm('您确定要删除吗？', {
                 btn: ['确认','返回'] //按钮
             }, function(){
                 $.ajax({
                     type: "POST",
-                    data: { "id": obj.id },
+                    data: { "id": obj.ID },
                     url: context+"/produce/schedulingMain/delete",
                     success: function (data) {
                         if (data.result) {

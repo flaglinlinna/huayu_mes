@@ -130,15 +130,16 @@
         <table id="iList" lay-filter="iTable"></table>
 
         <script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">导入</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
     </div>
 
     <script type="text/html" id="statusTp1">
-        {{#  if(!d.fenable){ }}
-        <input type="checkbox" name="{{d.idNo}}" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="isStatusTpl"/>
+        {{#  if(!d.FENABLE || d.FENABLE != "1"){ }}
+        <input type="checkbox" name="{{d.ID_NO}}" value="{{d.ID}}" lay-skin="switch" lay-text="生效|不生效" lay-filter="isStatusTpl"/>
         {{#  } else { }}
-        <input type="checkbox" name="{{d.idNo}}" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="isStatusTpl" checked="checked" />
+        <input type="checkbox" name="{{d.ID_NO}}" value="{{d.ID}}" lay-skin="switch" lay-text="生效|不生效" lay-filter="isStatusTpl" checked="checked" />
         {{#  } }}
     </script>
 
