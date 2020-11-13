@@ -9,7 +9,7 @@
     <div style="margin: 10px">
         <form id="addForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
             <input type="text" id="id" name="id" hidden="true">
-            <input type="text" id="deptName" name="deptName" class="layui-input">
+            <input type="text" id="deptName" name="deptName" hidden="true">
             <div class="layui-collapse" lay-accordion="">
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">排产信息</h2>
@@ -41,14 +41,16 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">班次名称</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="className" name="className"   class="layui-input">
-
+                                    <!--<input type="text" id="className" name="className"   class="layui-input">-->
+                                    <select id="className" name='className' lay-filter="className">
+                                        <!--<option value=""></option>-->
+                                    </select>
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label">是否生效</label>
                                 <div class="layui-input-inline">
-                                    <input type="checkbox" checked="" id="fenable" name="fenable" lay-skin="switch" lay-filter="switchTest" lay-text="是|否" value="1">
+                                    <input type="checkbox" checked="" id="fenable" disabled name="fenable" lay-skin="switch" lay-filter="switchTest" lay-text="是|否" value="1">
                                     <!--<input type="checkbox" id="fenable" name="fenable" value="1">-->
                                 </div>
                             </div>
