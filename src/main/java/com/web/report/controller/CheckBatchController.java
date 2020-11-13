@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -93,8 +94,8 @@ public class CheckBatchController extends WebController {
 	@RequestMapping(value = "/getCheckBatchReport", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getCheckBatchReport(@RequestParam(value = "dates", required = false) String dates,
-			@RequestParam(value = "deptId", required = false) String deptId,
-			@RequestParam(value = "itemNo", required = false) String itemNo) {
+												 @RequestParam(value = "deptId", required = false) String deptId,
+												 @RequestParam(value = "itemNo", required = false) String itemNo) {
 		String method = "report/batch/getCheckBatchReport";
 		String methodName = "获取获取检验批次报表(FQC)";
 		try {
@@ -102,9 +103,10 @@ public class CheckBatchController extends WebController {
 			String[] date = {"",""};
 			if(StringUtils.isNotEmpty(dates)){
 				date = dates.split(" - ");
-			}	
+			}
+			Sort sort = Sort.unsorted();
 			ApiResponseResult result = checkBatchService.getCheckBatchReport(date[0],date[1],
-					deptId, itemNo);
+					deptId, itemNo,super.getPageRequest(sort));
 			logger.debug("获取获取检验批次报表(FQC)=getCheckBatchReport:");
 			getSysLogService().success(module, method, methodName, null);
 			return result;

@@ -11,5 +11,5 @@ public interface CheckBatchService {
 	public ApiResponseResult getItemList(String keyword, PageRequest pageRequest) throws Exception;
 	
 	public ApiResponseResult getCheckBatchReport(String beginTime,
-			String endTime,String deptId,String itemNo) throws Exception;
+			String endTime,String deptId,String itemNo, PageRequest pageRequest) throws Exception;
 }

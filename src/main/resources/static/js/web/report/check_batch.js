@@ -14,7 +14,7 @@ $(function() {
 			,cellMinWidth : 80,
 			data : [],
 			height: 'full',
-			page : false,
+			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -205,9 +205,13 @@ function getReport(dates,dept,item) {
 				if (data.result) {
 					if (data.result) {
 						tableIns.reload({
-							data : data.data,
+							data : data.data.List,
 							done: function(res1, curr, count){
 								localtableFilterIns.reload();
+							},
+							page : {
+								curr : pageCurr
+								// 从当前页码开始
 							}
 						});
 					} else {

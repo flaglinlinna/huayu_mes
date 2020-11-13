@@ -22,6 +22,8 @@ $(function() {
 									defaultToolbar : [],
 									cellMinWidth : 80,
 									page : true,
+									limit:200,
+									limits:[200,400,600,1000],
 									data : [],
 									request : {
 										pageName : 'page' // 页码的参数名称，默认：page
