@@ -102,7 +102,9 @@ $(function() {
 								url : context + '/verify/getTaskNo',
 								// url: context +'base/prodproc/getProdList',
 								method : 'get',
-								cols : [ [ {
+								cols : [ [
+									{type:'numbers',title:"序号"},
+									{
 									type : 'radio'
 								},// 多选 radio
 								, {

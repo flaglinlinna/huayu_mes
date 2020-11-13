@@ -52,11 +52,19 @@ $(function() {
 					},{
 						field : 'ITEM_NO',
 						title : '物料编号',
+						align:	'center',
 						width : 150,sort: true
 					}, {
 						field : 'ITEM_NAME',
+							align:	'center',
 						title : '物料描述',sort: true
-					}, {
+					},
+						{
+							field : 'FEED_TYPE',
+							title : '类型',
+							width : 90,sort: true
+						},
+						{
 						field : 'QUANTITY',
 						title : '数量',
 						width : 90,sort: true
@@ -85,9 +93,11 @@ $(function() {
 						//url:  context +'base/prodproc/getProdList',
 						method : 'get',
 						cols : [ [
+							{type :'numbers',
+								title : '序号'},
 						{ type: 'radio' },//多选  radio
-							{type :'numbers'}
-						, {
+
+						 {
 							field : 'id',
 							title : 'id',
 							width : 0,hide:true
@@ -107,7 +117,8 @@ $(function() {
 							field : 'LINER_NAME',
 							title : '组长',
 							width : 100
-						},{
+						},
+							{
 							field : 'QTY_PLAN',
 							title : '数量',
 							width : 80

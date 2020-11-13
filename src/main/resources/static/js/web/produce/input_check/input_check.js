@@ -52,11 +52,26 @@ $(function() {
                     },{
                         field : 'ITEM_NO',
                         title : '物料编号',
+                        align:	'center',
                         width : 150,sort: true
                     }, {
                         field : 'ITEM_NAME',
+                        align:	'center',
                         title : '物料描述',sort: true
-                    }, {
+                    },
+                    {
+                        field : 'FEED_TYPE',
+                        title : '类型',
+                        align:	'center',
+                        width : 90,sort: true
+                    },
+                    {
+                        field : 'USER_NAME',
+                        title : '员工姓名',
+                        align:	'center',
+                        width : 110,sort: true
+                    },
+                    {
                         field : 'QUANTITY',
                         title : '数量',
                         width : 90,sort: true

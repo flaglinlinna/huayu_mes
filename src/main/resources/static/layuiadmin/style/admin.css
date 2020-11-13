@@ -32,7 +32,7 @@ html {
 }
 
 .layui-layout-admin .layui-side {
-	width: 220px;
+	width: 168px;
 	top: 0;
 	z-index: 1001
 }
@@ -47,7 +47,7 @@ html {
 	left: 0;
 	top: 0;
 	z-index: 1002;
-	width: 220px;
+	width: 168px;
 	height: 49px;
 	padding: 0 15px;
 	box-sizing: border-box;
@@ -58,7 +58,7 @@ html {
 }
 
 .layadmin-pagetabs,.layui-layout-admin .layui-body,.layui-layout-admin .layui-footer,.layui-layout-admin .layui-layout-left {
-	left: 220px
+	left: 168px
 }
 
 .layadmin-pagetabs {
@@ -277,11 +277,11 @@ html {
 }
 
 .layui-side-menu .layui-side-scroll {
-	width: 240px
+	width: 168px
 }
 
 .layui-side-menu .layui-nav {
-	width: 220px;
+	width: 168px;
 	margin-top: 50px;
 	background: 0 0
 }

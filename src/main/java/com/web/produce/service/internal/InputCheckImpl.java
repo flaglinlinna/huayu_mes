@@ -63,7 +63,7 @@ public class InputCheckImpl extends PrcUtils implements InputCheckService {
 
     @Override
     public ApiResponseResult getDetailByTask(String taskNo) throws Exception {
-        List<Object> list = getDetailByTaskPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",1,UserUtil.getSessionUser().getId()+"",taskNo);
+        List<Object> list = getDetailByTaskPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",4,UserUtil.getSessionUser().getId()+"",taskNo);
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
             return ApiResponseResult.failure(list.get(1).toString());
         }
