@@ -68,11 +68,13 @@
         <div class="layui-tab-content" style="height: 100px; display: block">
             <div class="layui-tab-item layui-show">
                 <!--制令单从表-->
-                <button type="button" class="layui-btn layui-btn-sm" onclick="exportExcel()">导出模板</button>
-                <button type="button" class="layui-btn layui-btn-sm" lay-submit="" id="uploadBtn">导入</button>
-                <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="checkBtn">校验</button>
-                <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="effectBtn">生效</button>
-                <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="delBtn">删除</button>
+                <div id="btnDiv">
+                    <button type="button" class="layui-btn layui-btn-sm" onclick="exportExcel()">导出模板</button>
+                    <button type="button" class="layui-btn layui-btn-sm" lay-submit="" id="uploadBtn">导入</button>
+                    <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="checkBtn">校验</button>
+                    <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="effectBtn">生效</button>
+                    <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="delBtn">删除</button>
+                </div>
 
                 <table id="iList" lay-filter="iTable"></table>
 

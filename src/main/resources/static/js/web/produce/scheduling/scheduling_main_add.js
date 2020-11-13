@@ -111,7 +111,6 @@ $(function () {
             }
             ,done: function(res,index, upload){
                 layer.closeAll('loading'); //关闭loading
-                console.log(res);
                 var ids = "";
                 for(var i = 0;i<res.data.length;i++){
                     ids += res.data[i].id +",";
@@ -207,19 +206,21 @@ function getMainData(){
     //渲染
     layui.form.render('select');
     layui.form.render('checkbox');
+
+    showBtn(schedulingMain.fenable);
 }
 
 //新增排产导入的保存
 function addSubmit(obj) {
-    console.log(obj.field);
-    if(!obj.field.bsStatus){
-        obj.field.bsStatus = 0;
+    if(!obj.field.fenable){
+        obj.field.fenable = 0;
     }
     CoreUtil.sendAjax("/produce/schedulingMain/add", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
                 $("#id").val(data.data.id);
                 $("#idNo").val(data.data.idNo);
+                showBtn(obj.field.fenable);
                 layer.alert("操作成功", function() {
                     layer.closeAll();
                 });
@@ -233,15 +234,15 @@ function addSubmit(obj) {
 
 //编辑排产导入的保存
 function editSubmit(obj) {
-    console.log(obj.field);
-    if(!obj.field.bsStatus){
-        obj.field.bsStatus = 0;
+    if(!obj.field.fenable){
+        obj.field.fenable = 0;
     }
     CoreUtil.sendAjax("/produce/schedulingMain/edit", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
                 $("#id").val(data.data.id);
                 $("#idNo").val(data.data.idNo);
+                showBtn(obj.field.fenable);
                 layer.alert("操作成功", function() {
                     layer.closeAll();
                 });
@@ -438,6 +439,7 @@ function clean(){
     layui.form.render();
 }
 
+//编辑导入数据
 function doEdit(obj){
     debugger;
     var ids = obj.field.id + "";
@@ -475,6 +477,15 @@ function doEdit(obj){
         }, "POST", false, function(res) {
             layer.alert(res.msg);
         });
+}
+
+//是否显示列表上方按钮
+function showBtn(isShow){
+    if(isShow == 1){
+        $("#btnDiv").prop("hidden", true);
+    }else{
+        $("#btnDiv").prop("hidden", false);
+    }
 }
 
 
