@@ -253,6 +253,8 @@ $(function() {
 							}
 						});
 
+						getReasonSelect("");
+
 						// 日期选择器
 						laydate.render({
 							elem : '#timeBegin',
@@ -377,6 +379,7 @@ $(function() {
 															"disabled",
 															"disabled");
 													getTaskInfo(data.data.taskNo);
+													getReasonSelect(data.data.forReason);
 													openAbnormalHours(id,
 															"编辑异常工时信息")
 												} else {
@@ -426,6 +429,34 @@ function addAbnormalHours() {
 	// 打开弹出框
 	$('#empCode').removeAttr("disabled");
 	openAbnormalHours(null, "添加异常工时数据信息");
+}
+
+function getReasonSelect(editReason) {
+	CoreUtil.sendAjax("/base/abnormal/getList", "", function(data) {
+		console.log(data)
+		if (data.result) {
+				$("#forReason").empty();
+				var forReason = data.data.rows;
+				if(editReason!=""){
+					$("#forReason").append(
+						"<option value=" + editReason + ">"
+						+ editReason + "</option>");
+				}
+				for (var i = 0; i < forReason.length; i++) {
+					if(forReason[i].abnormalType!=editReason) {
+						$("#forReason").append(
+							"<option value=" + forReason[i].abnormalType + ">"
+							+ forReason[i].abnormalType + "</option>");
+					}
+				}
+				layui.form.render('select');
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "GET", false, function(res) {
+		layer.alert(res.msg);
+	});
+	return false;
 }
 // 新增编辑弹出框
 function openAbnormalHours(id, title) {
