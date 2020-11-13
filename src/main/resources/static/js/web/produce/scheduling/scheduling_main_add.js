@@ -70,7 +70,7 @@ $(function () {
                 , method: 'get' //默认：get请求
                 , where: {keyword: "", mid: id}
                 , cellMinWidth: 80
-                , page: false,
+                , page: true,
                 request: {
                     pageName: 'page' //页码的参数名称，默认：page
                     , limitName: 'rows' //每页数据量的参数名，默认：limit
