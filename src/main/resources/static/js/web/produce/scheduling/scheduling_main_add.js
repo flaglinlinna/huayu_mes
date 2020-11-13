@@ -52,7 +52,13 @@ $(function () {
             var data = obj.data;
             if(obj.event === 'edit1'){
                 //编辑
-                getData(data,data.ID);
+                if(data.ENABLED == 1){
+                    layer.alert("该导入数据已经生效，无法编辑！",function(index){
+                        layer.close(index);
+                    });
+                }else{
+                    getData(data,data.ID);
+                }
             }
         });
 
@@ -385,7 +391,6 @@ function doDel(table) {
 
 //导入编辑
 function getData(obj,id){
-    debugger;
     $.ajax({
         type: "GET",
         data: { "id":id },
@@ -441,7 +446,6 @@ function clean(){
 
 //编辑导入数据
 function doEdit(obj){
-    debugger;
     var ids = obj.field.id + "";
     CoreUtil.sendAjax("/produce/schedulingMain/editDet", JSON.stringify(obj.field),
         function(data) {
@@ -452,7 +456,6 @@ function doEdit(obj){
                     data: {},
                     url: context+"/produce/schedulingMain/doCheckProc?ids="+ids,
                     success: function (res) {
-                        debugger;
                         if (res.result) {
                             layer.alert("编辑成功", function() {
                                 layer.closeAll();
