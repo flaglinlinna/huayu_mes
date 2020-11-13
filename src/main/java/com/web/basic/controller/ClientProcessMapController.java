@@ -60,8 +60,8 @@ public class ClientProcessMapController extends WebController{
 	        try {
 	        	System.out.println(keyword);
 	            //Sort sort = new Sort(Sort.Direction.DESC, "id");
-	        	 Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "createDate");
-	        	 Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "process.procOrder");
+	        	 Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "fdemoName");
+	        	 Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "procOrder");
 	        	 List<Sort.Order> list = new ArrayList<>();
 	        	 list.add(order1);
 	        	 list.add(order2);

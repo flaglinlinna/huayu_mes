@@ -156,6 +156,20 @@
                     <input  name="qty" lay-verify="required|number" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
+			<div class="layui-form-item">
+			<label class="layui-form-label">部门</label>
+			<div class="layui-input-inline" >
+				<select lay-filter="deptId" id="deptId" name="deptId">
+				</select>
+			</div>
+			</div>
+			<div class="layui-form-item">
+			<label class="layui-form-label">班次</label>
+			<div class="layui-input-inline" >
+				<select lay-filter="pclass2" id="pclass2" name="pclass2">
+				</select>
+			</div>
+			</div>
             <div class="layui-form-item">
                 <div class="layui-input-block" style="margin-left: 10px;">
                     <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="add">创建</button>

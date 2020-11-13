@@ -150,7 +150,7 @@ public class IssueController extends WebController{
 	        String method = "produce/issue/getEmp";String methodName ="获取人员信息列表";
 	        String param = "关键词:"+empKeyword;
 	        try {
-	        	Sort sort = new Sort(Sort.Direction.DESC, "emp_id");
+	        	Sort sort = new Sort(Sort.Direction.DESC, "create_date");
 	            ApiResponseResult result = issueService.getEmp(empKeyword, super.getPageRequest(sort));
 	            logger.debug("获取人员信息列表=getEmp:");
 	            getSysLogService().success(module,method, methodName, param);

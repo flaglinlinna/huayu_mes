@@ -102,7 +102,9 @@ $(function() {
 								url : context + '/verify/getTaskNo',
 								// url: context +'base/prodproc/getProdList',
 								method : 'get',
-								cols : [ [ {
+								cols : [ [
+									{type:'numbers',title:"序号"},
+									{
 									type : 'radio'
 								},// 多选 radio
 								, {
@@ -463,6 +465,29 @@ function open() {
 				 * value=" + pliao[i].ITEM_NO+ ">" + pliao[i].ITEM_NO + "</option>"); }
 				 * layui.form.render('select');			 
 			}*/
+
+			if (data.data.Class) {
+				$("#pclass2").empty();
+				var pclass = data.data.Class;
+				for (var i = 0; i < pclass.length; i++) {
+					$("#pclass2").append(
+						"<option value=" + pclass[i].ID + ">"
+						+ pclass[i].CLASS_NAME + "</option>");
+				}
+				layui.form.render('select');
+			}
+
+			if (data.data.Dept) {
+				$("#deptId").empty();
+				var dept = data.data.Dept;
+				for (var i = 0; i < dept.length; i++) {
+					$("#deptId").append(
+						"<option value=" + dept[i].ID + ">"
+						+ dept[i].LEAD_BY + "</option>");
+				}
+				layui.form.render('select');
+			}
+
 			if (data.data.User) {
 				$("#puser").empty();
 				var puser = data.data.User;
@@ -505,7 +530,9 @@ function add(params) {
 		"item_no" : params.pliao,
 		"liner_name" : params.puser,
 		"qty" : params.qty,
-		"pdate" : params.pdate1
+		"pdate" : params.pdate1,
+		"deptId" : params.deptId,
+		"classId" : params.pclass2
 	};
 	CoreUtil.sendAjax("/verify/add", JSON.stringify(param), function(data) {
 

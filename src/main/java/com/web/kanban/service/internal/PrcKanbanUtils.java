@@ -142,7 +142,7 @@ public class PrcKanbanUtils {
 		}
 		
 		//获取制程不良部门参数
-		public List getZcblDepListPrc(String company,String facoty) throws Exception {
+		public List getZcblDepListPrc(String company,String facoty,int type) throws Exception {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
@@ -150,7 +150,7 @@ public class PrcKanbanUtils {
 					CallableStatement cs = con.prepareCall(storedProc);
 					cs.setString(1, facoty);//facoty
 					cs.setString(2, company);//company
-					cs.setInt(3, 2);//唯一硬件标识/ip
+					cs.setInt(3, type);//唯一硬件标识/ip
 					cs.setString(4, "");//user_id
 					cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
 					cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
@@ -340,6 +340,58 @@ public class PrcKanbanUtils {
 			});
 			return resultList;
 		}
+		
+		// 获取待返工看板信息
+				public List getDfgListPrc(String company,String facoty,String user_id, String class_id,
+						String dep_id, String sdata, String dev_ip) throws Exception {
+					List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+						@Override
+						public CallableStatement createCallableStatement(Connection con) throws SQLException {
+							String storedProc = "{call  PRC_MES_RPT_DFG (?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+							CallableStatement cs = con.prepareCall(storedProc);
+							cs.setString(1, facoty);//facoty
+							cs.setString(2, company);//company
+							cs.setString(3, dev_ip);//唯一硬件标识/ip
+							cs.setString(4, user_id);//user_id
+							cs.setString(5, class_id);//班次ID
+							cs.setString(6, sdata);//日期
+							cs.setString(7, dep_id);//部门ID
+							cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
+							cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
+							cs.registerOutParameter(10, -10);// 输出参数 追溯数据
+							cs.registerOutParameter(11, java.sql.Types.VARCHAR);// 输出参数 返回标识
+							cs.registerOutParameter(12, java.sql.Types.VARCHAR);// 输出参数 返回标识
+							cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回标识
+							return cs;
+						}
+					}, new CallableStatementCallback() {
+						public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+							List<Object> result = new ArrayList<>();
+							List<Map<String, Object>> l = new ArrayList();
+							cs.execute();
+							result.add(cs.getInt(8));
+							result.add(cs.getString(9));
+							if (cs.getString(8).toString().equals("0")) {
+								// 游标处理
+								ResultSet rs = (ResultSet) cs.getObject(10);
+
+								try {
+									l = fitMap(rs);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								result.add(l);
+								result.add(cs.getString(11));
+								result.add(cs.getString(12));
+								result.add(cs.getString(13));
+							}
+							System.out.println(l);
+							return result;
+						}
+					});
+					return resultList;
+				}
 		
 	//-------------------------------------	
 		

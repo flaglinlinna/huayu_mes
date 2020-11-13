@@ -33,20 +33,20 @@ $(function () {
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
                 // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
-                ,{field:'PRODUCE_STATE', title:'生产状态', width:100}
-                ,{field:'PROD_NO', title:'工单号', width:150,event:'rowClick'}
-                ,{field:'GROUP_NO', title:'组合', width:60}
+                ,{field:'PRODUCE_STATE', title:'状态', width:60,align: 'center'}
+                ,{field:'PROD_NO', title:'工单号', width:120,align: 'center'}
+                ,{field:'GROUP_NO', title:'组合', width:55,align: 'center'}
                 // ,{field:'deptName', title:'部门', width:70}
-                ,{field:'CUST_NAME_S', title:'客户', width:70}
-                ,{field:'LINER_NAME', title:'组长', width:70}
-                ,{field:'PROD_DATE', title:'日期', width:100}
+                ,{field:'CUST_NAME_S', title:'客户', width:150,align: 'center'}
+                ,{field:'LINER_NAME', title:'组长', width:70,align: 'center'}
+                ,{field:'PROD_DATE', title:'日期', width:90,align: 'center'}
                // ,{field:'deptName', title:'部门', width:80}
-                ,{field:'CLASS_NO', title:'班次', width:60}
-                ,{field:'QTY_PLAN', title:'计划数量', width:80}
-                ,{field:'TASK_NO', title:'制令单号', width:120}
-                ,{field:'ITEM_NO', title:'物料编码', width:150}
-                ,{field:'ITEM_NAME', title:'物料描述', width:200}
-                ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}
+                ,{field:'CLASS_NO', title:'班次', width:60,align: 'center'}
+                ,{field:'QTY_PLAN', title:'计划数量', width:80,align: 'center'}
+                ,{field:'TASK_NO', title:'制令单号', width:120,align: 'center'}
+                ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center'}
+                ,{field:'ITEM_NAME', title:'物料描述', width:200,align: 'center'}
+                // ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
                 //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -107,6 +107,22 @@ $(function () {
             }
         });
 
+        //监听行单击事件（双击事件为：rowDouble）
+        table.on('rowDouble(iTable)', function(obj){
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            var a = document.createElement('a');
+            a.setAttribute('lay-href', context + "/produce/scheduling/toSchedulingEdit?id=" + obj.data.ID);
+            a.setAttribute('lay-text', '排产编辑');
+            a.setAttribute('id', 'js_a');
+            if(document.getElementById('js_a')) {//防止反复添加
+                document.body.removeChild(document.getElementById('js_a'));
+            }
+            document.body.appendChild(a);//创建
+            a.click();//点击
+            return false;
+
+        });
 
         //监听工具条
         table.on('tool(iTable)', function(obj){
@@ -114,7 +130,7 @@ $(function () {
             if(obj.event === 'del'){
                 //删除
                 doDel(data.id);
-            } else if(obj.event === 'edit'||obj.event =='rowClick'){
+            } else if(obj.event === 'edit'){
                 //编辑
                 //window.location = context + "/produce/scheduling/toSchedulingEdit?id=" + data.id;
                 var a = document.createElement('a');

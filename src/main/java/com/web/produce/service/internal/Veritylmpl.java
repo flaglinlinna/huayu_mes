@@ -84,7 +84,8 @@ public class Veritylmpl extends PrcUtils implements VerifyService {
 		// TODO Auto-generated method stub
 		Map map = new HashMap();
 		SysUser sy = UserUtil.getSessionUser();
-		
+
+		map.put("Class", cardDataDao.queryClass());//班次信息
 		
 		List<Object> list1 = getLinerPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"");
 		if (!list1.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
@@ -97,6 +98,12 @@ public class Veritylmpl extends PrcUtils implements VerifyService {
 			return ApiResponseResult.failure(list1.get(1).toString());
 		}
 		map.put("Task", list2.get(2));
+
+		List<Object> list3 = getDeptPrc(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"",
+				"2","", "prc_mes_cof_org_chs");
+
+		map.put("Dept", list3.get(3));
+
 		return ApiResponseResult.success().data(map);
 	}
 	
@@ -118,11 +125,11 @@ public class Veritylmpl extends PrcUtils implements VerifyService {
 	}
 	
 	@Override
-	public ApiResponseResult add(String task_no, String item_no, String liner_name, String qty, String pdate)
+	public ApiResponseResult add(String task_no, String item_no, String liner_name, String qty, String pdate,String deptId,String classId)
 			throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = getCreateReturnPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
-				task_no,item_no,  liner_name,  Integer.parseInt(qty),  pdate);
+				task_no,item_no,  liner_name,  Integer.parseInt(qty),  pdate,deptId,classId);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

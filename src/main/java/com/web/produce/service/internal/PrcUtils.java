@@ -589,11 +589,11 @@ public class PrcUtils {
     }
 
     //创建在线返工制令单
-    public List getCreateReturnPrc(String company,String facoty,String user_id, String task_no,String item_no,String liner_name,int qty,String pdate) throws Exception {
+    public List getCreateReturnPrc(String company,String facoty,String user_id, String task_no,String item_no,String liner_name,int qty,String pdate,String deptId,String classId) throws Exception {
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
-                String storedProc = "{call  PRC_MES_TASK_OLN_CREATE (?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                String storedProc = "{call  PRC_MES_TASK_OLN_CREATE (?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
                 CallableStatement cs = con.prepareCall(storedProc);
                 cs.setString(1, company);
                 cs.setString(2, facoty);
@@ -603,8 +603,10 @@ public class PrcUtils {
                 cs.setString(6, liner_name);
                 cs.setInt(7, qty);
                 cs.setString(8, pdate);
-                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.setString(9, deptId);
+                cs.setString(10, classId);
+                cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(12, java.sql.Types.VARCHAR);// 输出参数 返回标识
 
                 return cs;
             }
@@ -613,8 +615,8 @@ public class PrcUtils {
                 List<Object> result = new ArrayList<>();
                 List<Map<String, Object>> l = new ArrayList();
                 cs.execute();
-                result.add(cs.getInt(9));
-                result.add(cs.getString(10));
+                result.add(cs.getInt(11));
+                result.add(cs.getString(12));
                 System.out.println(l);
                 return result;
             }
@@ -799,6 +801,52 @@ public class PrcUtils {
             }
         });
 
+        return resultList;
+    }
+
+    //获取部门信息  prc_mes_cof_org_chs
+    public List getDeptPrc(String facoty, String company, String mid, String keyword,
+                              String prc_name) throws Exception{
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  "+prc_name+" (?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setString(3, mid);
+                cs.setString(4, keyword);
+                cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+//                cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 总记录数
+                cs.registerOutParameter(7, -10);// 输出参数 返回数据集合
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(5));
+                result.add(cs.getString(6));
+                if (cs.getString(5).toString().equals("0")) {
+                    result.add(cs.getString(7));
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(7);
+
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+                }
+                System.out.println(l);
+                return result;
+            }
+
+        });
         return resultList;
     }
 }
