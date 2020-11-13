@@ -438,7 +438,7 @@ public class SysUserImpl implements SysUserService {
         	map.put("sex", su.getSex());
         	map.put("status", su.getStatus());
         	map.put("createDate", su.getCreateDate());
-        	
+        	map.put("realName", su.getRealName());
         	List<SysRole> lr = sysRoleDao.getRoleByUser(su.getId());
         	List mll = new ArrayList<>();
         	if(lr.size() > 0){

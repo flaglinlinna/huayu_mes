@@ -67,7 +67,7 @@ $(function() {
                     },
                     {
                         field : 'USER_NAME',
-                        title : '员工姓名',
+                        title : '操作人',
                         align:	'center',
                         width : 110,sort: true
                     },
