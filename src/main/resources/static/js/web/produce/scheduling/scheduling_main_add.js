@@ -234,6 +234,7 @@ function getMainData(){
         $("#deptId").val(schedulingMain.deptId);
         $("#prodDate").val(schedulingMain.prodDate);
         $("#className").val(schedulingMain.className);
+        showBtn(schedulingMain.fenable);
         if (schedulingMain.fenable == 1) {
             $("input[name='fenable']").prop("checked", true);
         } else {
@@ -247,7 +248,7 @@ function getMainData(){
     layui.form.render('select');
     layui.form.render('checkbox');
 
-    showBtn(schedulingMain.fenable);
+
 }
 
 //新增排产导入的保存
