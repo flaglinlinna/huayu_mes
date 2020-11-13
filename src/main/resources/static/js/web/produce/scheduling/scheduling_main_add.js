@@ -52,53 +52,64 @@ $(function () {
             var data = obj.data;
             if(obj.event === 'edit1'){
                 //编辑
-                getData(data,data.ID);
+                if(data.ENABLED == 1){
+                    layer.alert("该导入数据已经生效，无法编辑！",function(index){
+                        layer.close(index);
+                    });
+                }else{
+                    getData(data,data.ID);
+                }
             }
         });
 
-        tableIns=table.render({
-            elem: '#iList'
-            ,url:context+'/produce/schedulingMain/getDetList'
-            ,method: 'get' //默认：get请求
-            ,where:{ keyword:"", mid:id }
-            ,cellMinWidth: 80
-            ,page: false,
-            request: {
-                pageName: 'page' //页码的参数名称，默认：page
-                ,limitName: 'rows' //每页数据量的参数名，默认：limit
-            },
-            parseData: function (res) {
-                // 可进行数据操作
-                return {
-                    "count": res.data.total,
-                    "msg":res.msg,
-                    "data":res.data.rows,
-                    "code": res.status //code值为200表示成功
+
+        if(id!=null&&id!=undefined) {
+            tableIns = table.render({
+                elem: '#iList'
+                , url: context + '/produce/schedulingMain/getDetList'
+                , method: 'get' //默认：get请求
+                , where: {keyword: "", mid: id}
+                , cellMinWidth: 80
+                , page: true,
+                request: {
+                    pageName: 'page' //页码的参数名称，默认：page
+                    , limitName: 'rows' //每页数据量的参数名，默认：limit
+                },
+                parseData: function (res) {
+                    // 可进行数据操作
+                    return {
+                        "count": res.data.total,
+                        "msg": res.msg,
+                        "data": res.data.rows,
+                        "code": res.status //code值为200表示成功
+                    }
+                },
+                cols: [[
+                    {type: 'numbers'}
+                    , {type: 'checkbox'}
+                    // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
+                    // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
+                    , {field: 'CHECK_STATUS', title: '校验结果', width: 100, templet: '#statusTpl'}
+                    , {field: 'ENABLED', title: '生效状态', width: 80, templet: '#enabledTpl'}
+                    , {field: 'ERROR_INFO', title: '错误信息', width: 140}
+                    , {field: 'PROD_NO', title: '工单号', width: 120}
+                    , {
+                        field: 'TASK_NO', title: '生产制令单', width: 100,
+                        templet: '<div><a cursor: pointer; onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO==null?"":d.TASK_NO }}</a></div>'
+                    }
+                    , {field: 'GROUP_NO', title: '组合', width: 70}
+                    , {field: 'CUST_NAME', title: '客户', width: 80}
+                    , {field: 'LINER_NAME', title: '组长', width: 70}
+                    , {field: 'ITEM_NO', title: '物料编码', width: 150}
+                    , {field: 'ITEM_NAME', title: '物料描述', width: 150}
+                    , {field: 'QTY_PLAN', title: '计划数量', width: 100}
+                    , {fixed: 'right', title: '操作', width: 80, align: 'center', toolbar: '#optBar'}
+                ]]
+                , done: function (res, curr, count) {
+                    pageCurr = curr;
                 }
-            },
-            cols: [[
-                {type:'numbers'}
-                ,{type:'checkbox'}
-                // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-                // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
-                ,{field:'CHECK_STATUS', title:'校验结果', width:100, templet:'#statusTpl'}
-                ,{field:'ENABLED', title:'生效状态', width:80, templet:'#enabledTpl'}
-                ,{field:'ERROR_INFO', title:'错误信息', width:140}
-                ,{field:'PROD_NO', title:'工单号', width:120}
-                ,{field:'TASK_NO', title:'生产制令单', width:100,
-                    templet: '<div><a cursor: pointer; onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO==null?"":d.TASK_NO }}</a></div>'}
-                ,{field:'GROUP_NO', title:'组合', width:70}
-                ,{field:'CUST_NAME', title:'客户', width:80}
-                ,{field:'LINER_NAME', title:'组长', width:70}
-                ,{field:'ITEM_NO', title:'物料编码', width:150}
-                ,{field:'ITEM_NAME', title:'物料描述', width:150}
-                ,{field:'QTY_PLAN', title:'计划数量', width:100}
-                ,{fixed:'right', title:'操作', width:80, align:'center', toolbar:'#optBar'}
-            ]]
-            ,done: function(res, curr, count){
-                pageCurr=curr;
-            }
-        });
+            });
+        }
 
         //导入
         upload.render({
@@ -111,7 +122,6 @@ $(function () {
             }
             ,done: function(res,index, upload){
                 layer.closeAll('loading'); //关闭loading
-                console.log(res);
                 var ids = "";
                 for(var i = 0;i<res.data.length;i++){
                     ids += res.data[i].id +",";
@@ -156,21 +166,46 @@ $(function () {
 });
 
 //获取部门下拉数据
-function getDeptSelect() {
+function getDeptSelect(deptId,deptName,className) {
     $.ajax({
         type: "post",
         data: {},
         url: context+"/produce/schedulingMain/getDeptSelect",
         success: function (res) {
             $("#deptId").empty();
+
             if (res.result) {
                 var itemList = res.data.rows;
-                for(var i = 0; i < itemList.length; i++){
-                    if(i==0){
-                        $("#deptId").append("<option value=''>请点击选择</option>");
+                if(deptName!=null&&deptName!=undefined){
+                    $("#deptId").append('<option value="'+ deptId +'">'+deptName+'</option>');
+                    for(var i = 0; i < itemList.length; i++){
+                        if(deptId!=itemList[i].ID){
+                            $("#deptId").append( '<option value="'+itemList[i].ID+'">'+itemList[i].ORG_NAME+'</option>');
+                        }
                     }
-                    $("#deptId").append( '<option value="'+itemList[i].ID+'">'+itemList[i].ORG_NAME+'</option>');
+                }else {
+                    $("#deptId").append("<option value=''>请点击选择</option>");
+                    for(var i = 0; i < itemList.length; i++){
+                        $("#deptId").append( '<option value="'+itemList[i].ID+'">'+itemList[i].ORG_NAME+'</option>');
+                    }
                 }
+                if (res.data.Class) {
+                    $("#className").empty();
+                    var pclass = res.data.Class;
+                    if(className!=null&&className!=undefined){
+                        $("#className").append("<option value=" + className + ">" + className + "</option>");
+                        for (var i = 0; i < pclass.length; i++) {
+                            if (pclass[i].CLASS_NAME != className) {
+                                $("#className").append("<option value=" + pclass[i].CLASS_NAME + ">" + pclass[i].CLASS_NAME + "</option>");
+                            }
+                        }
+                    }else {
+                        for (var i = 0; i < pclass.length; i++) {
+                            $("#className").append("<option value=" + pclass[i].CLASS_NAME + ">" + pclass[i].CLASS_NAME + "</option>");
+                        }
+                    }
+                }
+
                 layui.form.render('select');
             } else {
                 layer.alert(res.msg,function(index){
@@ -191,35 +226,42 @@ function getMainData(){
             $("#deptId").append( '<option value="'+deptList[i].ID+'">'+deptList[i].ORG_NAME+'</option>');
         }
     }
-
-    $("#id").val(id);
-    $("#deptName").val(schedulingMain.deptName);
-    $("#idNo").val(schedulingMain.idNo);
-    $("#deptId").val(schedulingMain.deptId);
-    $("#prodDate").val(schedulingMain.prodDate);
-    $("#className").val(schedulingMain.className);
-    if(schedulingMain.fenable == 1){
-        $("input[name='fenable']").prop("checked", true);
-    }else{
-        $("input[name='fenable']").prop("checked", false);
+    if(id!=null&&id!=undefined) {
+        getDeptSelect(schedulingMain.deptId,schedulingMain.deptName,schedulingMain.className);
+        $("#id").val(id);
+        $("#deptName").val(schedulingMain.deptName);
+        $("#idNo").val(schedulingMain.idNo);
+        $("#deptId").val(schedulingMain.deptId);
+        $("#prodDate").val(schedulingMain.prodDate);
+        $("#className").val(schedulingMain.className);
+        showBtn(schedulingMain.fenable);
+        if (schedulingMain.fenable == 1) {
+            $("input[name='fenable']").prop("checked", true);
+        } else {
+            $("input[name='fenable']").prop("checked", false);
+        }
+    }else {
+        getDeptSelect();
     }
 
     //渲染
     layui.form.render('select');
     layui.form.render('checkbox');
+
+
 }
 
 //新增排产导入的保存
 function addSubmit(obj) {
-    console.log(obj.field);
-    if(!obj.field.bsStatus){
-        obj.field.bsStatus = 0;
+    if(!obj.field.fenable){
+        obj.field.fenable = 0;
     }
     CoreUtil.sendAjax("/produce/schedulingMain/add", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
                 $("#id").val(data.data.id);
                 $("#idNo").val(data.data.idNo);
+                showBtn(obj.field.fenable);
                 layer.alert("操作成功", function() {
                     layer.closeAll();
                 });
@@ -233,15 +275,15 @@ function addSubmit(obj) {
 
 //编辑排产导入的保存
 function editSubmit(obj) {
-    console.log(obj.field);
-    if(!obj.field.bsStatus){
-        obj.field.bsStatus = 0;
+    if(!obj.field.fenable){
+        obj.field.fenable = 0;
     }
     CoreUtil.sendAjax("/produce/schedulingMain/edit", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
                 $("#id").val(data.data.id);
                 $("#idNo").val(data.data.idNo);
+                showBtn(obj.field.fenable);
                 layer.alert("操作成功", function() {
                     layer.closeAll();
                 });
@@ -384,7 +426,6 @@ function doDel(table) {
 
 //导入编辑
 function getData(obj,id){
-    debugger;
     $.ajax({
         type: "GET",
         data: { "id":id },
@@ -438,8 +479,8 @@ function clean(){
     layui.form.render();
 }
 
+//编辑导入数据
 function doEdit(obj){
-    debugger;
     var ids = obj.field.id + "";
     CoreUtil.sendAjax("/produce/schedulingMain/editDet", JSON.stringify(obj.field),
         function(data) {
@@ -450,7 +491,6 @@ function doEdit(obj){
                     data: {},
                     url: context+"/produce/schedulingMain/doCheckProc?ids="+ids,
                     success: function (res) {
-                        debugger;
                         if (res.result) {
                             layer.alert("编辑成功", function() {
                                 layer.closeAll();
@@ -475,6 +515,15 @@ function doEdit(obj){
         }, "POST", false, function(res) {
             layer.alert(res.msg);
         });
+}
+
+//是否显示列表上方按钮
+function showBtn(isShow){
+    if(isShow == 1){
+        $("#btnDiv").prop("hidden", true);
+    }else{
+        $("#btnDiv").prop("hidden", false);
+    }
 }
 
 

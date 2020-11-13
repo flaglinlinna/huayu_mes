@@ -15,7 +15,7 @@ $(function () {
             trigger: 'click'
         });
 
-        getDeptSelect();
+        // getDeptSelect();
 
         // 监听提交
         form.on('submit(addSubmit)', function(data) {

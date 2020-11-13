@@ -90,7 +90,7 @@ public class SchedulingMainController extends WebController {
     @ApiOperation(value = "编辑", notes = "编辑", hidden = true)
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponseResult edit(SchedulingMain schedulingMain) {
+    public ApiResponseResult edit(@RequestBody SchedulingMain schedulingMain) {
         String method = "/produce/schedulingMain/edit";String methodName ="编辑";
         try{
             ApiResponseResult result = schedulingMainService.edit(schedulingMain);

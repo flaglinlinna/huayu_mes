@@ -6,6 +6,7 @@ import com.system.user.entity.SysUser;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
+import com.web.produce.dao.CardDataDao;
 import com.web.produce.dao.SchedulingDetDao;
 import com.web.produce.dao.SchedulingMainDao;
 import com.web.produce.entity.SchedulingDet;
@@ -52,6 +53,8 @@ public class SchedulingMainImpl implements SchedulingMainService {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private SchedulingDetDao schedulingDetDao;
+    @Autowired
+    private CardDataDao cardDataDao;
 
     @Override
     @Transactional
@@ -132,6 +135,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
         Map map = new HashMap();
 //        map.put("total", list.get(2));
         map.put("rows", list.get(3));
+        map.put("Class", cardDataDao.queryClass());//班次信息
         return ApiResponseResult.success("").data(map);
 //        return null;
 //        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
