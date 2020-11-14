@@ -148,11 +148,11 @@
 					<label class="layui-form-label layui-required">数据权限</label>
 					<div class="layui-input-inline" style="width:320px;">
 						<input type="text" name="orgInfo" placeholder="请选择"
-							autocomplete="off" class="layui-input" readonly="readon ly"
+							autocomplete="off" class="layui-input" readonly="readonly"
 							lay-verify="required" id="orgInfo"  value=""  ts-selected="">
 					</div>
 				</div>
-				<input type="hidden" name="orgIds" />
+				<input type="hidden" name="orgIds" id="orgIds" />
 				<div class="layui-form-item" >
 					<label class="layui-form-label layui-required" >授予角色</label>
 					<!-- <div class="layui-input-inline">
@@ -209,9 +209,12 @@
 
 		<!--底部-->
 		<!--<div th:replace="fragments/footer :: footer"></div>-->
-		<script type="text/javascript"
+		<!-- <script type="text/javascript"
 			src="/layuiadmin/layui-formSelects/formSelects-v4.min.js"
-			th:src="@{/layuiadmin/layui-formSelects/formSelects-v4.min.js}"></script>
+			th:src="@{/layuiadmin/layui-formSelects/formSelects-v4.min.js}"></script> -->
+			<script type="text/javascript"
+			src="/layuiadmin/layui-formSelects/formSelects-v4.js"
+			th:src="@{/layuiadmin/layui-formSelects/formSelects-v4.js}"></script>
 		<script src="/js/dateUtils.js" th:src="@{/js/dateUtils.js}"></script>
 		<script src="/js/auth/userList.js" th:src="@{/js/auth/userList.js}"></script>
 

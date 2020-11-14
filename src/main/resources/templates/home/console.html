@@ -11,169 +11,17 @@
 </head> -->
 <head th:include="layout :: htmlhead" th:with="title='东莞华誉组装MES系统'">
 </head>
+
 <body style="background-color:#f2f2f2" >
-<div class="layui-fluid">
-    <div class="layui-row layui-col-space15">
-      <div class="layui-col-md8">    
-        <div class="layui-card">
-          <div class="layui-card-header">
-            最近更新
-            <a lay-href="https://www.layui.com/doc/base/changelog.html" class="layui-a-tips">全部更新</a>
-          </div>
-          <div class="layui-card-body">
-            <div class="layui-row layui-col-space10">
-              <div class="layui-col-xs12 layui-col-sm4">
-                <div class="layuiadmin-card-text">
-                  <div class="layui-text-top">
-                  <!-- <i class="layui-icon layui-icon-water"></i> -->
-                  <a lay-href="https://www.layui.com/doc/modules/flow.html">findProductionPOBoardData</a></div>
-                  <p class="layui-text-center">查询供应商po相关的统计信息</p>
-                  <p class="layui-text-bottom"><a lay-href="https://www.layui.com/doc/modules/flow.html">华为</a><span>3 天前</span></p>
-                </div>
+<div class="layui-col-md12">
+            <div class="layui-card">
+              <div class="layui-card-header" style="text-align:center;"><h1>东莞华誉组装MES系统</h1></div>
+              <div class="layui-card-body" style="text-align: center; ">
+                <img src="/images/logo.png" th:src="@{/images/logo.png}" style="margin: 0 auto;"></img>
+                
               </div>
-              <div class="layui-col-xs12 layui-col-sm4">
-                <div class="layuiadmin-card-text">
-                  <div class="layui-text-top"><i class="layui-icon layui-icon-upload-circle"></i><a lay-href="https://www.layui.com/doc/modules/upload.html">findPoLineList</a></div>
-                  <p class="layui-text-center">查询供应商所属的po单列表</p>
-                  <p class="layui-text-bottom"><a lay-href="https://www.layui.com/doc/modules/upload.html">华为</a><span>3 天前</span></p>
-                </div>
-              </div>
-              <div class="layui-col-xs12 layui-col-sm4">
-                <div class="layuiadmin-card-text">
-                  <div class="layui-text-top"><i class="layui-icon layui-icon-form"></i><a lay-href="https://www.layui.com/doc/modules/form.html#val">createOrUpdateASN</a></div>
-                  <p class="layui-text-center">保存或提交ASN</p>
-                  <p class="layui-text-bottom"><a lay-href="https://www.layui.com/doc/modules/form.html">华为</a><span>7 天前</span></p>
-                </div>
-              </div>
-         <!--      <div class="layui-col-xs12 layui-col-sm4">
-                <div class="layuiadmin-card-text">
-                  <div class="layui-text-top"><i class="layui-icon layui-icon-form"></i><a lay-href="https://www.layui.com/doc/modules/form.html">queryPoList</a></div>
-                  <p class="layui-text-center">PO创建ASN（查询PO列表）</p>
-                  <p class="layui-text-bottom"><a lay-href="https://www.layui.com/doc/modules/form.html">华为</a><span>7 天前</span></p>
-                </div>
-              </div>
-              <div class="layui-col-xs12 layui-col-sm4">
-                <div class="layuiadmin-card-text">
-                  <div class="layui-text-top"><i class="layui-icon layui-icon-form"></i><a lay-href="https://www.layui.com/doc/modules/form.html">queryASNList</a></div>
-                  <p class="layui-text-center">查询asn列表</p>
-                  <p class="layui-text-bottom"><a lay-href="https://www.layui.com/doc/modules/form.html">华为</a><span>7 天前</span></p>
-                </div>
-              </div>
-              <div class="layui-col-xs12 layui-col-sm4">
-                <div class="layuiadmin-card-text">
-                  <div class="layui-text-top"><i class="layui-icon layui-icon-form"></i><a lay-href="https://www.layui.com/doc/modules/form.html">queryTextList</a></div>
-                  <p class="layui-text-center">测试查询小米订单</p>
-                  <p class="layui-text-bottom"><a lay-href="https://www.layui.com/doc/modules/form.html">小米</a><span>7 天前</span></p>
-                </div>
-              </div> -->
             </div>
           </div>
-        </div>
-        <div class="layui-card">
-          <div class="layui-card-header">动态</div>
-          <div class="layui-card-body">
-            <dl class="layuiadmin-card-status">
-              <dd>
-                <div class="layui-status-img"><a href="javascript:;"><img src="/layuiadmin/style/res/logo.png" th:src="@{/layuiadmin/style/res/logo.png}"></a></div>
-                <div>
-                  <p>账号1 调用 <a lay-href="http://fly.layui.com/vipclub/list/layuiadmin/">API接口-获取华为PO订单数据-findPoLineList</a> 成功</p>
-                  <span>几秒前</span>
-                </div>
-              </dd>
-              <dd>
-                <div class="layui-status-img"><a href="javascript:;"><img src="../../layuiadmin/style/res/logo.png" th:src="@{/layuiadmin/style/res/logo.png}"></a></div>
-                <div>
-                  <p>账号2 调用 <a lay-href="http://fly.layui.com/vipclub/list/layuiadmin/">API接口-华为保存或提交ASN-createOrUpdateASN</a> 失败</p>
-                  <span>2天前</span>
-                </div>
-              </dd>
-              <dd>
-                <div class="layui-status-img"><a href="javascript:;"><img src="../../layuiadmin/style/res/logo.png" th:src="@{/layuiadmin/style/res/logo.png}"></a></div>
-                <div>
-                  <p>账号三 调用  <a lay-href="https://www.layui.com/">API接口-华为查询供应商po相关的统计信息-findProductionPOBoardData</a> 成功</p>
-                  <span>7天前</span>
-                </div>
-              </dd>
-            </dl>  
-          </div>
-        </div>     
-      </div>
-      <div class="layui-col-md4">
-        <div class="layui-card">
-          <div class="layui-card-header">便捷导航</div>
-          <div class="layui-card-body">
-            <div class="layuiadmin-card-link">
-              <a href="javascript:;">操作一</a>
-              <a href="javascript:;">操作二</a> 
-              <a href="javascript:;">操作三</a> 
-              <a href="javascript:;">操作四</a> 
-              <a href="javascript:;">操作五</a> 
-              <a href="javascript:;">操作六</a>
-              <button class="layui-btn layui-btn-primary layui-btn-xs">
-                <i class="layui-icon layui-icon-add-1" style="position: relative; top: -1px;"></i>添加
-              </button>
-            </div>        
-          </div>
-        </div>
-        <div class="layui-card">
-          <div class="layui-card-header">执行计划</div>
-          <div class="layui-card-body">
-
-              <table class="layui-table layuiadmin-page-table" lay-skin="line">
-                  <thead>
-                    <tr>
-                      <th>接口名</th>
-                      <th>执行时间</th>
-                      <th>状态</th>
-                      <th>执行次数</th>
-                    </tr> 
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><span class="first">接口1</span></td>
-                      <td><i class="layui-icon layui-icon-log"> 01:30</i></td>
-                      <td><span>结束</span></td>
-                      <td>22 <i class="layui-icon layui-icon-praise"></i></td>
-                    </tr>
-                    <tr>
-                      <td><span class="second">接口2</span></td>
-                      <td><i class="layui-icon layui-icon-log"> 10:40</i></td>
-                      <td><span>等待</span></td>
-                      <td>21 <i class="layui-icon layui-icon-praise"></i></td>
-                    </tr>
-                    <tr>
-                      <td><span class="third">接口3</span></td>
-                      <td><i class="layui-icon layui-icon-log"> 12:40</i></td>
-                      <td><i>等待</i></td>
-                      <td>66 <i class="layui-icon layui-icon-praise"></i></td>
-                    </tr>
-                    <tr>
-                      <td>接口4</td>
-                      <td><i class="layui-icon layui-icon-log"> 21:18</i></td>
-                      <td><i>等待</i></td>
-                      <td>45 <i class="layui-icon layui-icon-praise"></i></td>
-                    </tr>
-                    <tr>
-                      <td>接口5</td>
-                      <td><i class="layui-icon layui-icon-log"> 21:30</i></td>
-                      <td><span>等待</span></td>
-                      <td>21 <i class="layui-icon layui-icon-praise"></i></td>
-                    </tr>
-                    <tr>
-                      <td>接口6</td>
-                      <td><i class="layui-icon layui-icon-log"> 22:18</i></td>
-                      <td><i>等待</i></td>
-                      <td>45 <i class="layui-icon layui-icon-praise"></i></td>
-                    </tr>
-                  </tbody>
-                  </table>
-                  
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
 <!--   <script src="../../layuiadmin/layui/layui.js?t=1"></script>  

@@ -70,7 +70,7 @@ $(function() {
 			table : {
 				url : context + '/sysUser/getOrgList',
 				method : 'get',
-				cols : [ [ {
+				cols : [ [ {field : 'checkColumn',
 					type : 'checkbox'
 				},// 多选 radio
 				, {
@@ -104,9 +104,25 @@ $(function() {
 						}
 					}
 
-				},
+				}, done: function(res, curr, count){
+					if($("#orgIds").val()){
+						var strs = $("#orgIds").val().split(',');
+						for(var i=0;i<res.data.length;i++){
+							for(var j=0;j<strs.length;j++){
+								if(res.data[i].ID == strs[j]){
+									res.data[i]["LAY_CHECKED"]='true';
+			                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+			                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+								}
+							}
+							
+						}
+					}
+					
+	            }
 			},
 			done : function(elem, data) {
+				
 				// 选择完后的回调，包含2个返回值
 				// elem:返回之前input对象；data:表格返回的选中的数据 []
 				 var da = data.data;
@@ -374,7 +390,6 @@ function getUserAndRoles(obj,id) {
                     $("#email").val(data.data.user.email==null?'':data.data.user.email);
                     $("#sex").val(data.data.user.sex==null?'':data.data.user.sex);
                     //显示角色数据
-                  //灾害种类多选框赋值
                    /* var disArray = !unit.disasterType ? null : unit.disasterType.split(",");
                     if(disArray != null){
                         formSelects.value('disasterType', disArray);
