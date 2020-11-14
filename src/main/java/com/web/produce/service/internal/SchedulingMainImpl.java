@@ -111,6 +111,10 @@ public class SchedulingMainImpl implements SchedulingMainService {
         if(o == null){
             return ApiResponseResult.failure("排产信息不存在！");
         }
+        Integer num = schedulingDetDao.countByMidAndDelFlag(id,0);
+        if(num>0){
+            return ApiResponseResult.failure("子表存在记录，不能删除！");
+        }
         SysUser currUser = UserUtil.getSessionUser();
 
         o.setDelTime(new Date());
@@ -635,7 +639,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
             if(resultList.size() > 0){
                 String flag = resultList.get(0);
                 if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
-                    return ApiResponseResult.success("校验成功！");
+                    return ApiResponseResult.success("校验完成，请留意校验结果！");
                 }else{
                     return ApiResponseResult.failure(resultList.get(1));
                 }
