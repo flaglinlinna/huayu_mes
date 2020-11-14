@@ -51,18 +51,6 @@
            <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTp2"/>
         </script>
 
-<script type="text/html" id="statusTp3">
-            {{#  if(!d.checkStatus){ }}
-            <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTp2" checked="checked" />
-            {{#  } else { }}
-            <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTp2"/>
-            {{#  } }}
-        </script>
-        <!--  
-			<script type="text/html" id="statusTp2">
-				<input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTp2"  />
-			</script>-->
-
 			<script type="text/html" id="optBar">
              <shiro:hasPermission name="clientProcess-edit">
              <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
