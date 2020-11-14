@@ -1246,7 +1246,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		div = div.find('.' + NAME);
 
 		var fs = data[dl.attr('xid')];
-		var base = dl.parents('.layui-form-pane')[0] && dl.prev()[0].clientHeight > 38 ? 14 : 10;
+		var base = dl.parents('.layui-form-pane')[0] && dl.prev()[0].clientHeight > 30 ? 14 : 10;
 		if (fs && fs.config.direction == 'up' || up) {
 			up = true;
 			if (fs && fs.config.direction == 'down') {
@@ -1321,10 +1321,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			if (label.is('.layui-form-label') && title.parents('.layui-form-pane')[0]) {
 				height = height > 36 ? height + 4 : height;
 				title.css('height', height + 'px');
-				label.css({
+				/*label.css({
 					height: height + 2 + 'px',
 					lineHeight: height - 18 + 'px'
-				});
+				});*/
 			}
 		}
 

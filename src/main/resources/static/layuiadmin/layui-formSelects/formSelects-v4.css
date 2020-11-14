@@ -1,10 +1,10 @@
-/* formSelects多选css */
+/* formSelects澶氶�塩ss */
 select[xm-select]{display: none !important;}
-.xm-select-parent * {margin: 0;padding: 0;font-family: "Helvetica Neue", Helvetica, "PingFang SC", 微软雅黑, Tahoma, Arial, sans-serif; box-sizing: initial;}
+.xm-select-parent * {margin: 0;padding: 0;font-family: "Helvetica Neue", Helvetica, "PingFang SC", 寰蒋闆呴粦, Tahoma, Arial, sans-serif; box-sizing: initial;}
 .xm-select-parent {text-align: left;}
 .xm-select-parent select {display: none;}
-.xm-select-parent .xm-select-title {position: relative;min-height: 36px;}
-.xm-select-parent .xm-input {cursor: pointer;border-radius: 2px;border-width: 1px;border-style: solid;border-color: #E6E6E6;display: block;width: 100%;box-sizing: border-box;background-color: #FFF;height: 36px;line-height: 1.3;padding-left: 10px;outline: 0}
+.xm-select-parent .xm-select-title {position: relative;min-height: 30px;}
+.xm-select-parent .xm-input {cursor: pointer;border-radius: 2px;border-width: 1px;border-style: solid;border-color: #E6E6E6;display: block;width: 100%;box-sizing: border-box;background-color: #FFF;height: 30px;line-height: 1.3;padding-left: 10px;outline: 0}
 .xm-select-parent .xm-select-sj {display: inline-block;width: 0;height: 0;border-style: dashed;border-color: transparent;overflow: hidden;position: absolute;right: 10px;top: 50%;margin-top: -3px;cursor: pointer;border-width: 6px;border-top-color: #C2C2C2;border-top-style: solid;transition: all .3s;-webkit-transition: all .3s}
 .xm-select-parent .xm-form-selected .xm-select-sj {margin-top: -9px;transform: rotate(180deg)}
 .xm-select-parent .xm-form-select dl {display: none;position: absolute;left: 0;top: 42px;padding: 5px 0;z-index: 999;min-width: 100%;border: 1px solid #d2d2d2;max-height: 300px;overflow-y: auto;background-color: #fff;border-radius: 2px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12);box-sizing: border-box;animation-fill-mode: both;-webkit-animation-name: layui-upbit;animation-name: layui-upbit;-webkit-animation-duration: .3s;animation-duration: .3s;-webkit-animation-fill-mode: both;animation-fill-mode: both}
@@ -17,8 +17,8 @@ select[xm-select]{display: none !important;}
 	to {transform: translate3d(0, 0, 0);opacity: 1}
 }
 .xm-select-parent .xm-form-selected dl {display: block}
-.xm-select-parent .xm-form-select dl dd,.xm-select-parent .xm-form-select dl dt {padding: 0 10px;line-height: 36px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis}
-.xm-select-parent .xm-form-select dl dd {cursor: pointer;height: 36px;}
+.xm-select-parent .xm-form-select dl dd,.xm-select-parent .xm-form-select dl dt {padding: 0 10px;line-height: 30px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis}
+.xm-select-parent .xm-form-select dl dd {cursor: pointer;height: 30px;}
 .xm-select-parent .xm-form-select dl dd:hover {background-color: #f2f2f2}
 .xm-select-parent .xm-form-select dl dt {font-size: 12px;color: #999}
 .layui-select-disabled .xm-dis-disabled {border-color: #eee!important}
@@ -28,7 +28,7 @@ select[xm-select]{display: none !important;}
 .xm-form-checkbox {position: relative;display: block;vertical-align: middle;cursor: pointer;font-size: 0;-webkit-transition: .1s linear;transition: .1s linear;box-sizing: border-box;height: auto!important;line-height: normal!important;border: none!important;margin-right: 0;padding-right: 0;background: 0 0;}
 .xm-form-checkbox > i {color: #FFF; font-size: 16px; width: 16px; height: 16px; position: absolute; top: 9px; border: 1px solid #5FB878; border-radius: 3px; z-index: 2;}
 .xm-form-checkbox:hover > i {border-color: #5FB878;}
-.xm-form-checkbox > span{display: block;position: relative;padding: 0 15px 0 30px;height: 100%;font-size: 14px;border-radius: 2px 0 0 2px;background-color: #d2d2d2;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;background: 0 0;color: #666;line-height: 36px;}
+.xm-form-checkbox > span{display: block;position: relative;padding: 0 15px 0 30px;height: 100%;font-size: 14px;border-radius: 2px 0 0 2px;background-color: #d2d2d2;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;background: 0 0;color: #666;line-height: 30px;}
 
 .xm-select-parent dl{width: 100%;}
 .xm-select-parent dl dd{position: relative;}
@@ -45,7 +45,7 @@ select[xm-select]{display: none !important;}
 .xm-form-select dl dd.xm-dis-disabled span {color: #C2C2C2}
 .xm-form-select dl dd.xm-dis-disabled .xm-icon-yes {border-color: #C2C2C2}
 .xm-select-parent {position: relative;-moz-user-select: none;-ms-user-select: none;-webkit-user-select: none}
-.xm-select-parent .xm-select {line-height: normal;height: auto;padding: 4px 10px 1px 10px;overflow: hidden;min-height: 36px;left: 0;z-index: 99;position: absolute;background: 0 0;padding-right: 20px}
+.xm-select-parent .xm-select {line-height: normal;height: auto;padding: 4px 10px 1px 10px;overflow: hidden;min-height: 30px;left: 0;z-index: 99;position: absolute;background: 0 0;padding-right: 20px}
 .xm-select-parent .xm-select:hover {border-color: #C0C4CC}
 .xm-select-parent .xm-select .xm-select-label {display: inline-block;margin: 0;vertical-align: middle}
 .xm-select-parent .xm-select-title div.xm-select-label>span {position: relative;padding: 2px 5px;background-color: #009688;border-radius: 2px;color: #FFF;display: inline-block;line-height: 18px;height: 18px;margin: 2px 5px 2px 0;cursor: initial;user-select: none;font-size: 14px;padding-right: 25px;-webkit-user-select: none;}
@@ -65,7 +65,7 @@ select[xm-select]{display: none !important;}
 .xm-select-hide {display: none !important;}
 div[xm-hg] .xm-select-label{white-space: nowrap; overflow: hidden; position: absolute; right: 30px; left: 0; padding-left: 10px;}
 
-/* 颜色相关 */
+/* 棰滆壊鐩稿叧 */
 div[xm-select-skin] .xm-select-title div.xm-select-label>span {border: 1px solid #009688}
 div[xm-select-skin] .xm-select-title div.xm-select-label>span i:hover {opacity: .8;filter: alpha(opacity=80);cursor: pointer}
 div[xm-select-skin=default] .xm-select-title div.xm-select-label>span {background-color: #F0F2F5;color: #909399;border: 1px solid #F0F2F5}
@@ -96,7 +96,7 @@ div[xm-select-skin=danger] dl dd.xm-select-this:not(.xm-dis-disabled) i {color: 
 div[xm-select-skin=danger].xm-form-selected .xm-select,div[xm-select-skin=danger].xm-form-selected .xm-select:hover {border-color: #FF5722!important}
 
 
-/* 多选联动  */
+/* 澶氶�夎仈鍔�  */
 .xm-select-parent .layui-form-danger+.xm-select-title .xm-select {border-color: #FF5722 !important;}
 .xm-select-linkage li {padding: 10px 0px;cursor: pointer;}
 .xm-select-linkage li span {padding-left: 20px;padding-right: 30px;display: inline-block;height: 20px;overflow: hidden;text-overflow: ellipsis;}
@@ -129,7 +129,7 @@ div[xm-select-skin='danger'] .xm-select-linkage li.xm-select-this span {border-l
 div[xm-select-skin='danger'] .xm-select-linkage-group li:hover {border-left-color: #FF5722;}
 
 
-/* 快捷操作 */
+/* 蹇嵎鎿嶄綔 */
 .xm-select-tips[style]:hover{background-color: #FFF!important;}
 .xm-select-parent dd > .xm-cz{position: absolute; top: 0px; right: 10px;}
 .xm-select-parent dd > .xm-cz-group{margin-right: 30px; border-right: 2px solid #ddd; height: 16px; margin-top: 10px; line-height: 16px; overflow: hidden;}
@@ -145,14 +145,14 @@ div[xm-select-skin='warm'] dd .xm-cz:hover{color: #FFB800;}
 div[xm-select-skin='danger'] dd .xm-cz:hover{color: #FF5722;}
 
 
-/* 下拉里面的搜索 */
+/* 涓嬫媺閲岄潰鐨勬悳绱� */
 .xm-select-tips .xm-input{border: none; border-bottom: 1px solid #E6E6E6; padding-left: 27px;}
 .xm-select-tips .icon-sousuo{position: absolute;}
 .xm-select-tips.xm-dl-input{display: none;}
 div[xm-select-search-type="1"] .xm-select-tips.xm-dl-input{display: block;}
 div[xm-select-search-type="1"] .xm-select .xm-select-input{display: none !important;}
 
-/* 阿里巴巴矢量图标库 */
+/* 闃块噷宸村反鐭㈤噺鍥炬爣搴� */
 @font-face {font-family: "xm-iconfont";
   src: url('//at.alicdn.com/t/font_792691_qxv28s6g1l9.eot?t=1534240067831'); /* IE9*/
   src: url('//at.alicdn.com/t/font_792691_qxv28s6g1l9.eot?t=1534240067831#iefix') format('embedded-opentype'), /* IE6-IE8 */
