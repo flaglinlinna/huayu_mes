@@ -341,7 +341,68 @@ public class PrcKanbanUtils {
 			return resultList;
 		}
 		
-		// 获取待返工看板信息
+		// 获取产线电子看板
+				public List getCxdzListtPrc(String company,String facoty,String user_id, String class_id,
+						String dep_id, String sdata, String dev_ip,String liner) throws Exception {
+					List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+						@Override
+						public CallableStatement createCallableStatement(Connection con) throws SQLException {
+							String storedProc = "{call  PRC_MES_RPT_CXDZ (?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+							CallableStatement cs = con.prepareCall(storedProc);
+							cs.setString(1, facoty);//facoty
+							cs.setString(2, company);//company
+							cs.setString(3, class_id);//班次ID
+							cs.setString(4, dep_id);//部门ID
+							cs.setString(5, liner);//组长
+							cs.setString(6, sdata);//日期
+							cs.setString(7, dev_ip);//电视IP或mac
+							cs.setString(8, user_id);//部门ID
+							cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+							cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+							cs.registerOutParameter(11, -10);// 输出参数 追溯数据
+							cs.registerOutParameter(12,  -10);// 输出参数 返回标识
+							cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回标识
+							cs.registerOutParameter(14, java.sql.Types.VARCHAR);// 输出参数 返回标识
+							return cs;
+						}
+					}, new CallableStatementCallback() {
+						public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+							List<Object> result = new ArrayList<>();
+							List<Map<String, Object>> l = new ArrayList();
+							List<Map<String, Object>> l2 = new ArrayList();
+							cs.execute();
+							result.add(cs.getInt(9));
+							result.add(cs.getString(10));
+							if (cs.getString(9).toString().equals("0")) {
+								// 游标处理
+								ResultSet rs = (ResultSet) cs.getObject(11);
+								try {
+									l = fitMap(rs);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								result.add(l);
+								
+								ResultSet rs1 = (ResultSet) cs.getObject(12);
+								try {
+									l2 = fitMap(rs1);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								result.add(l2);
+								
+								result.add(cs.getString(13));
+								result.add(cs.getString(14));
+							}
+							return result;
+						}
+					});
+					return resultList;
+				}
+		
+				// 获取待返工看板信息
 				public List getDfgListPrc(String company,String facoty,String user_id, String class_id,
 						String dep_id, String sdata, String dev_ip) throws Exception {
 					List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
@@ -392,7 +453,6 @@ public class PrcKanbanUtils {
 					});
 					return resultList;
 				}
-		
 	//-------------------------------------	
 		
 	private List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
