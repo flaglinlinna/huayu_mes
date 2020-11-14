@@ -12,5 +12,5 @@ public interface AbnormalHoursRService {
 	
 	public ApiResponseResult getEmpCode(String keyword)throws Exception;
 	
-	//public ApiResponseResult getList(String keyword,String sdate,String edate,PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getList(String sdate,String edate,String liner,String empCode,String taskNo,PageRequest pageRequest) throws Exception;
 }
