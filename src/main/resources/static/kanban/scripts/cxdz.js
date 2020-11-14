@@ -39,6 +39,14 @@ function dealData(kanbanList) {
 		$("#rownum").text(rownum)
 		$("#onlineEmp").text(onlineEmp)
 	}
+	
+	/*	
+	$("#showLine").text(
+			"开线数：" + kanbanList.data.LINE_NUM_NOW + "     " + "总线体数："
+					+ kanbanList.data.LINE_NUM_PLN);
+	*/
+	
+	
 }
 
 function getChart2(hr_abn, hr_act,hr_st,eff_rate) {
@@ -49,7 +57,7 @@ function getChart2(hr_abn, hr_act,hr_st,eff_rate) {
 				textStyle : {
 					color : '#FFFFFF' // 图例文字颜色
 				},
-				x : 'right'
+				x : 'left'
 			},
 			color : [ '#993300','#0066FF', '#66CCCC' ],
 			legend : {
@@ -57,7 +65,8 @@ function getChart2(hr_abn, hr_act,hr_st,eff_rate) {
 				textStyle : {
 					color : '#FFFFFF' // 图例文字颜色
 				},
-				x : 'left',
+				orient: 'vertical',
+				x : 'right',
 				y : 'top',
 			},
 			grid : {
@@ -142,7 +151,7 @@ function getChart3(done, plan,doneRate) {
 			textStyle : {
 				color : '#FFFFFF' // 图例文字颜色
 			},
-			x : 'right'
+			x : 'left'
 		},
 		color : [ '#0066FF', '#66CCCC' ],
 		legend : {
@@ -150,8 +159,9 @@ function getChart3(done, plan,doneRate) {
 			textStyle : {
 				color : '#FFFFFF' // 图例文字颜色
 			},
-			x : 'left',
+			x : 'right',
 			y : 'top',
+			orient: 'vertical',
 		},
 		grid : {
 			left : '3%',
@@ -220,11 +230,6 @@ function getChart3(done, plan,doneRate) {
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
 }
-
-function getChart4(){
-	
-}
-
 
 function setTable(kanbanData) {
 	var html = "";
