@@ -111,8 +111,9 @@
 
     <!--导入编辑-->
     <div id="editDiv" class="layer_self_wrap" style="display:none;padding: 10px;">
-        <form id="editForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+        <form id="editForm" class="layui-form layui-form-pane" lay-filter="editForm" method="post" action="" style="margin-top: 20px;">
             <input type="text" id="id2" name="id" hidden="true">
+            <input type="text" id="itemId2" name="itemId"  lay-filter="itemId2" hidden="true">
             <div class="layui-form-item" style="margin-bottom: 0px">
                 <!--<div class="layui-inline">-->
                     <!--<label class="layui-form-label">组合</label>-->
@@ -135,7 +136,8 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">组长</label>
                     <div class="layui-input-inline">
-                        <input type="text" id="linerName2" name="linerName" class="layui-input">
+                        <!--<input type="text" id="linerName2" name="linerName" class="layui-input">-->
+                        <select id="linerName2" name="linerName" lay-filter="linerName2" ></select>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -147,13 +149,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">物料编码</label>
                     <div class="layui-input-inline">
-                        <input type="text" id="itemNo2" name="itemNo" class="layui-input">
+                        <input type="text" id="itemNo2" name="itemNo" readonly lay-filter="itemNo2"  class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">物料描述</label>
                     <div class="layui-input-inline">
-                        <input type="text" id="itemName2" name="itemName" class="layui-input">
+                        <input type="text" id="itemName2" name="itemName"  lay-filter="itemName2" readonly style="background-color: #F2F2F2;" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">

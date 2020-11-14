@@ -10,4 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface SchedulingDetDao extends CrudRepository<SchedulingDet, Long>, JpaSpecificationExecutor<SchedulingDet> {
 
     public SchedulingDet findById(long id);
+
+    public Integer countByMidAndDelFlag(Long mid,Integer delFlag);
 }

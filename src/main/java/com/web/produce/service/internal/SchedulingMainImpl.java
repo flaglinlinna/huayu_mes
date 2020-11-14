@@ -1,10 +1,7 @@
 package com.web.produce.service.internal;
 
 import com.app.base.data.ApiResponseResult;
-import com.app.base.data.DataGrid;
 import com.system.user.entity.SysUser;
-import com.utils.BaseService;
-import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.web.produce.dao.CardDataDao;
 import com.web.produce.dao.SchedulingDetDao;
@@ -23,9 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -111,6 +106,10 @@ public class SchedulingMainImpl implements SchedulingMainService {
         if(o == null){
             return ApiResponseResult.failure("排产信息不存在！");
         }
+        Integer num = schedulingDetDao.countByMidAndDelFlag(id,0);
+        if(num>0){
+            return ApiResponseResult.failure("子表存在记录，不能删除！");
+        }
         SysUser currUser = UserUtil.getSessionUser();
 
         o.setDelTime(new Date());
@@ -140,6 +139,38 @@ public class SchedulingMainImpl implements SchedulingMainService {
 //        return null;
 //        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
+
+    @Override
+    @Transactional
+    public ApiResponseResult getOrgSelect() throws Exception {
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        List<Object> list = getDeptSelect(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"",
+                "","组长", "prc_mes_cof_org_chs");
+        if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        Map map = new HashMap();
+        map.put("rows", list.get(3));
+
+        return ApiResponseResult.success("").data(map);
+  }
+
+    @Override
+    @Transactional
+    public ApiResponseResult getItemSelect(String keyword,PageRequest pageRequest) throws Exception {
+        List<Object> list = getSchedulingItemPrc(UserUtil.getSessionUser().getCompany()+"",
+                UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"","成品",keyword,pageRequest);
+        if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        Map map = new HashMap();
+        map.put("total", list.get(2));
+        map.put("rows", list.get(3));
+        return ApiResponseResult.success("").data(map);
+   }
 
     //获取上线人员清单 存储过程调用
     public List getDeptSelect(String facoty, String company, String mid, String keyword,
@@ -254,6 +285,54 @@ public class SchedulingMainImpl implements SchedulingMainService {
         return ApiResponseResult.success("").data(map);
     }
 
+    //获取物料列表
+    public List getSchedulingItemPrc(String company,String facoty,String user_id, String type,String keyword,PageRequest pageRequst) throws Exception {
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  prc_mes_cof_item_no_chs(?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setString(3, user_id);
+                cs.setString(4, type);
+                cs.setString(5, keyword);
+                cs.setInt(6, pageRequst.getPageSize());//每页指定有多少元素
+                cs.setInt(7, pageRequst.getPageNumber()+1);//获取当前页码
+                cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(10, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(11, -10);// 输出参数 追溯数据
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(8));
+                result.add(cs.getString(9));
+                result.add(cs.getInt(10));
+                if (cs.getString(8).toString().equals("0")) {
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(11);
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+                }
+                System.out.println(l);
+                return result;
+            }
+        });
+        return resultList;
+    }
+
+
+
     //获取排产导入列表
     public List getSchedulingMainPrc(String factoty, String company, String user_id, String startTime, String endTime, String keyword,
                                      int page, int rows, String prc_name) throws Exception{
@@ -352,6 +431,12 @@ public class SchedulingMainImpl implements SchedulingMainService {
     @Transactional
     public ApiResponseResult getDetList(String keyword, Long mid, String startTime, String endTime, PageRequest pageRequest) throws Exception {
         SysUser currUser = UserUtil.getSessionUser();
+        Map map = new HashMap();
+        if(mid == null){
+            map.put("total", 0);
+            map.put("rows", "");
+            return ApiResponseResult.success("").data(map);
+        }
         if(currUser == null){
             return ApiResponseResult.failure("当前用户已失效，请重新登录！");
         }
@@ -362,7 +447,6 @@ public class SchedulingMainImpl implements SchedulingMainService {
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
             return ApiResponseResult.failure(list.get(1).toString());
         }
-        Map map = new HashMap();
         map.put("total", list.get(2));
         map.put("rows", list.get(3));
         return ApiResponseResult.success("").data(map);
@@ -635,7 +719,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
             if(resultList.size() > 0){
                 String flag = resultList.get(0);
                 if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
-                    return ApiResponseResult.success("校验成功！");
+                    return ApiResponseResult.success("校验完成，请留意校验结果！");
                 }else{
                     return ApiResponseResult.failure(resultList.get(1));
                 }

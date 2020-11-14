@@ -189,7 +189,28 @@ public class kanbanController extends WebController {
 		return mav;
 	}
 	
-
+	@RequestMapping(value = "/toCxdz", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCxdz() {
+		ModelAndView mav = new ModelAndView();
+		String method = "kanban/toCxdz";
+		String methodName = "产线电子看板";
+		try {	
+			//ApiResponseResult result = kanbanService.getDfgList("1","5252","2020-11-10",usr_id,"1");//this.getIpAddr()
+			//logger.debug("产线电子看板=toCxdz:" + result);
+			//getSysLogService().success(module,method,methodName,result);
+//			mav.addObject("kanbanDataList", result);
+//			mav.addObject("dev_ip", this.getIpAddr());
+			mav.setViewName("/kanban/cxdz");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取产线电子看板看板异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
+	
 	//--------------getList-------------------
 	
 	@ApiOperation(value = "获取车间报工看板信息", notes = "获取车间报工看板信息", hidden = true)

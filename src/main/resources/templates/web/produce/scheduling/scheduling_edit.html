@@ -177,13 +177,13 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">工序顺序</label>
                 <div class="layui-input-inline" style="width: 350px;">
-                    <input id="procOrder1" name="procOrder" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="procOrder1" name="procOrder"  style="background-color: #F2F2F2;"  readonly autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">过程属性</label>
                 <div class="layui-input-inline" style="width: 350px;">
-                    <input type="checkbox" id="jobAttr1" name="jobAttr" value="1" lay-skin="primary" checked="" />
+                    <input type="checkbox" id="jobAttr1" name="jobAttr" disabled value="1" lay-skin="primary" checked="" />
                     <!--<input id="jobAttr1" name="jobAttr" autocomplete="off" class="layui-input" type="text"/>-->
                 </div>
             </div>
@@ -193,7 +193,7 @@
                     <!--<select id="empId1" name="empId" lay-search class="layui-input">-->
                         <!--<option value=""></option>-->
                     <!--</select>-->
-                    <input id="empId1" name="empId1" lay-filter="empId1" autocomplete="off"
+                    <input id="empId1" name="empId1" lay-filter="empId1" readonly autocomplete="off"
                            class="layui-input" type="text" />
                 </div>
             </div>
@@ -230,7 +230,7 @@
                         <!--<option value=""></option>-->
                     <!--</select>-->
 
-                    <input id="empId2" name="empId2"  lay-filter="empId2" autocomplete="off"
+                    <input id="empId2" name="empId2" readonly lay-filter="empId2" autocomplete="off"
                            class="layui-input" type="text" />
                 </div>
             </div>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='工时异常统计表'"></head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div>
+			<form id="searchFrom" class="layui-form layui-form-pane"
+				lay-filter="searchFrom" method="post" action=""
+				style="margin-top: 5px;margin-left:10px;">
+				<div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+						<!-- <label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+						 <div class="layui-input-inline">
+							<input id="keyword" name="keyword" autocomplete="off"
+								placeholder="请输入关键字" class="layui-input" type="text" />
+						</div>  -->
+
+						<label class="layui-form-label">组长</label>
+						<div class="layui-input-inline">
+							<select lay-filter="liner" name="liner" id="liner" lay-search
+								>
+							</select>
+						</div>
+
+						<label class="layui-form-label">工号</label>
+						<div class="layui-input-inline">
+							<select lay-filter="empCode" name="empCode" id="empCode"
+								lay-search >
+							</select>
+						</div>
+
+						<label class="layui-form-label">检验日期</label>
+						<div class="layui-input-inline">
+							<input type="text"  class="layui-input"
+								name="dates" placeholder="请选择日期范围" id="dates">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">制令单号</label>
+					<div class="layui-input-inline" style="width: 350px;">
+						<input type="text" name="taskno" placeholder="请选择"
+							autocomplete="off" class="layui-input" readonly="readonly"
+							 id="taskno">
+					</div>
+					<button class="layui-btn layui-btn-sm" lay-submit
+							lay-filter="searchSubmit">统计</button>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+				</div>
+			</form>
+			<table id="listTable" lay-filter="listTable"></table>
+		</div>
+		<script th:src="@{/js/web/report/abnormal_r.js}"
+			src="/js/web/report/abnormal_r.js"></script>
+	</div>
+</body>
+</html>

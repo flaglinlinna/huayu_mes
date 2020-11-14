@@ -55,9 +55,10 @@ $(function () {
                 ,{field:'DEPT_NAME', title:'部门名称', width:120}
                 ,{field:'PROD_DATE', title:'生产日期', width:140}
                 ,{field:'CLASS_NAME', title:'班次名称', width:140}
-                ,{field:'FENABLE', title:'是否生效', width:100,align:'center',templet:'#statusTp1'}
-                ,{field:'FENABLE_BY', title:'生效人', widstatusth:140}
-                ,{field:'FENABLE_DATE', title:'生效时间', width:140}
+                ,{field:'FENABLE', title:'是否生效', width:120,align:'center',templet:'#statusTp1'}
+                ,{field:'FENABLE_BY', title:'生效人',width:120, widstatusth:140}
+                ,{field:'FENABLE_DATE', title:'生效时间', width:150}
+                ,{field:'CREATE_DATE', title:'创建时间', width:150}
                 ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
@@ -70,6 +71,21 @@ $(function () {
                 //console.log(count);
                 pageCurr=curr;
             }
+        });
+
+        table.on('rowDouble(iTable)', function(obj){
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            var a = document.createElement('a');
+            a.setAttribute('lay-href', context + "/produce/schedulingMain/toSchedulingMainAdd?id=" + obj.data.ID);
+            a.setAttribute('lay-text', '排产编辑');
+            a.setAttribute('id', 'js_a');
+            if(document.getElementById('js_a')) {//防止反复添加
+                document.body.removeChild(document.getElementById('js_a'));
+            }
+            document.body.appendChild(a);//创建
+            a.click();//点击
+            return false;
         });
 
         //监听工具条

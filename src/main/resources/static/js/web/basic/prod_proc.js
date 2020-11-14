@@ -90,27 +90,25 @@ $(function() {
 				cols : [ [
 				{ type: 'checkbox' },//多选  radio
 				, {
-					field : 'id',
+					field : 'ID',
 					title : 'id',
 					width : 0,hide:true
-				}
-                , {
-					field : 'itemNo',
+				}, {
+					field : 'ITEM_NO',
 					title : '物料编码',
 					width : 150
+				}, {
+					field : 'ITEM_NAME_S',
+					title : '物料简称',
+					width : 150
 				},{
-					field : 'itemName',
+					field : 'ITEM_NAME',
 					title : '物料描述',
 					width : 400
-				}, {
-					field : 'itemUnit',
-					title : '单位',
-					width : 80
 				} ] ],
 				page : true,
 				request : {
-					pageName : 'page' // 页码的参数名称，默认：page
-					,
+					pageName : 'page', // 页码的参数名称，默认：page
 					limitName : 'rows' // 每页数据量的参数名，默认：limit
 				},
 				parseData : function(res) {
@@ -134,8 +132,8 @@ $(function() {
 				//console.log(da[0].num)
 				var ids = '';var nos = "";
 				data.data.forEach(function(element) {
-					ids += element.id+",";
-					nos += element.itemNo+",";
+					ids += element.ID+",";
+					nos += element.ITEM_NO+",";
 				});
 				form.val("clientProcForm", {
 					"itemId":ids,
@@ -272,7 +270,8 @@ $(function() {
 		        if ($(this).is(":checked")) {
 		        	//fyx-202011-02
 		        	var checks = $('tbody tr[data-index="'+i+'"] td[data-field="jobAttr"] input[type="checkbox"]:checked');
-		        	if(checks.length == 1){
+
+		        	if(checks.length > 0){
 		        		procIdList += checkStatus[i].id+"@1,";
 		        	}else{
 		        		procIdList += checkStatus[i].id+"@0,";
@@ -337,16 +336,10 @@ $(function() {
 				};
 				CoreUtil.sendAjax("/base/prodproc/doProcOrder", JSON
 						.stringify(param), function(data) {
-					if (data.result) {
-						layer.alert("操作成功", function() {
-							layer.closeAll();
-							loadAll();
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-						});
-					}
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+					loadAll();
 				}, "POST", false, function(res) {
 					layer.alert("操作请求错误，请您稍后再试", function() {
 						layer.closeAll();
@@ -388,8 +381,10 @@ function getProcByClient(params){
 
 		                        if(beSelected[j].jobAttr==0){
 									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().addClass('layui-form-checked');
+									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').prop('checked', true);
 								}else{
 									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').prop('checked', false);
 								}
 							}
 						}

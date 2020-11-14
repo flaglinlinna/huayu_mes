@@ -6,7 +6,6 @@ import com.app.base.data.ApiResponseResult;
 
 import com.web.produce.entity.SchedulingDet;
 import com.web.produce.entity.SchedulingMain;
-import com.web.produce.entity.SchedulingTemp;
 import com.web.produce.service.SchedulingMainService;
 
 import io.swagger.annotations.Api;
@@ -123,6 +122,46 @@ public class SchedulingMainController extends WebController {
             return ApiResponseResult.failure("部门下拉列表失败！");
         }
     }
+
+
+    @ApiOperation(value = "组长下拉列表", notes = "组长下拉列表", hidden = true)
+    @RequestMapping(value = "/getOrgSelect", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult getOrgSelect() {
+        String method = "/produce/schedulingMain/getOrgSelect";String methodName ="组长下拉列表";
+        try{
+            ApiResponseResult result = schedulingMainService.getOrgSelect();
+            logger.debug("组长下拉列表=edit:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("组长下拉列表失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("组长下拉列表失败！");
+        }
+    }
+
+    @ApiOperation(value = "物料选择列表", notes = "物料选择列表", hidden = true)
+    @RequestMapping(value = "/getItemSelect", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult getItemSelect(String keyword) {
+        String method = "/produce/schedulingMain/getItemSelect";String methodName ="物料选择列表";
+        try{
+            Sort sort = Sort.unsorted();
+            ApiResponseResult result = schedulingMainService.getItemSelect(keyword,super.getPageRequest(sort));
+            logger.debug("物料选择列表=edit:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("物料选择列表失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("物料选择列表失败！");
+        }
+    }
+
+
 
     @ApiOperation(value = "删除", notes = "删除", hidden = true)
     @RequestMapping(value = "/delete", method = RequestMethod.POST)

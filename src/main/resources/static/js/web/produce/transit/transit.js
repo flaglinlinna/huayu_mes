@@ -92,7 +92,7 @@ $(function() {
 						//监听提交
 				    	  form.on('submit(hsearchSubmit)', function(data){
 				    		  hTableIns.reload({
-				    			  url:context+'/produce/check_code/getHistoryList',
+				    			  url:context+'/produce/transit/getHistoryList',
 				                  where:data.field 
 								});
 				    	    return false;
@@ -123,27 +123,42 @@ $(function() {
 							},{
 								field : 'TASK_NO',
 								title : '制定单号',
-								width : 350,sort: true
+								width : 300,sort: true
 							}, {
-								field : 'BARCODE_S_1',
-								title : '条码1',
-								width : 200,sort: true
+								field : 'PROC_NO',
+								title : '工序编码',
+								width : 120,sort: true
 							}, {
-								field : 'BARCODE_S_2',
-								title : '条码2',
-								width : 200,sort: true
-							}, {
-								field : 'CHK_RESULT',
-								title : '校验结果',sort: true
+								field : 'PROC_NAME',
+								title : '工序名称',
+								width : 150,sort: true
+							},  {
+								field : 'LINE_NO',
+								title : '组长',
+								width : 150,sort: true
+							},  {
+								field : 'ITEM_BARCODE',
+								title : '条码',
+								width : 150,sort: true
+							},{
+								field : 'ITEM_NO',
+								title : '物料编码',width : 150,sort: true
+							},{
+								field : 'ITEM_NAME',
+								title : '物料描述',sort: true
+							},  {
+								field : 'INSP_NAME',
+								title : '送检类型',
+								width : 90,sort: true
 							},  {
 								field : 'USER_NAME',
-								title : '操作人',
+								title : '送检人',
 								width : 90,sort: true
 							},  {
 								field : 'CREATE_DATE',
-								title : '操作时间',
-								width : 150,sort: true
-							} ] ],
+								title : '送检时间',
+								width : 120,sort: true
+							}] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}

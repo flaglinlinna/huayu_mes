@@ -19,7 +19,7 @@ public interface ClientProcessMapDao extends CrudRepository<ClientProcessMap, Lo
 
 	public  List<ClientProcessMap> findByFdemoName(String fdemoName);
 
-  
+	public List<ClientProcessMap> findByDelFlagAndFdemoNameAndProcOrder(Integer delFlag,String fdemoName,Integer order);
 	/**
      * 获取已经配置了的客户信息
      */
