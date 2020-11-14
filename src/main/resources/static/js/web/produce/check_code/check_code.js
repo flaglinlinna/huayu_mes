@@ -261,15 +261,17 @@ function subCode(taskNo, barcode1, barcode2) {
 					tableIns.reload({
 						data : tabledata
 					});
+					
 				} else {
 					layer.alert(data.msg, function(index) {
-						if(barcode2==""){
-							$("#barcode").focus();
-						}else{
-							$("#barcode1").focus();
-						}
+						
 						layer.close(index);
 					});
+				}
+				if(barcode2==""){
+					$("#barcode").focus();
+				}else{
+					$("#barcode1").focus();
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
