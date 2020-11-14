@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.security.servlet.ApplicationContextRequestMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
+import com.system.user.entity.SysUser;
+import com.utils.UserUtil;
 import com.web.kanban.KanbanDao;
 import com.web.kanban.service.KanbanService;
 
@@ -129,6 +130,30 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 			return ApiResponseResult.failure(list.get(1).toString());
 		}	
 		return ApiResponseResult.success().data(list.get(2));
+	}
+
+	@Override
+	public ApiResponseResult getCxdzList(String class_id, String dep_id, String sdata, String dev_ip, String liner)
+			throws Exception {
+		// TODO Auto-generated method stub
+		String usr_id = "";
+		SysUser su = UserUtil.getSessionUser();
+		if(su == null){
+			usr_id = "1";
+		}else{
+			usr_id = su.getId()+"";
+		}
+		List<Object> list = getCxdzListtPrc("","",usr_id,class_id,dep_id,sdata,dev_ip,liner);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("List_table", list.get(2));//工单明细
+		map.put("List_line", list.get(3));//产线信息
+		map.put("Sdata", list.get(4));
+		map.put("Edata", list.get(5));
+		
+		return ApiResponseResult.success().data(map);
 	}
 	
 }

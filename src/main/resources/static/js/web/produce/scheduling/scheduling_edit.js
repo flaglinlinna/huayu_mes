@@ -360,14 +360,14 @@ $(function () {
             var data = $(obj.elem);
 			var rowIndex = data.parents('tr').first().attr("data-index");
 			//console.log(rowIndex)
-			if(obj.elem.checked){
-				//res.data[rowIndex]["LAY_CHECKED"]='true';
-                $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
-                $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
-			}else{
-			    $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', false);
-	            $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().removeClass('layui-form-checked');
-			}
+			// if(obj.elem.checked){
+			// 	//res.data[rowIndex]["LAY_CHECKED"]='true';
+            //     $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+            //     $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+			// }else{
+			//     $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', false);
+	        //     $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+			// }
 			
 		});
 		//监听行选择事件---根据顺序（错误），应当获取行号【未修改】

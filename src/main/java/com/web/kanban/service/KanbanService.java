@@ -24,4 +24,7 @@ public interface KanbanService {
 	public ApiResponseResult getXlpmList(String class_id,String dep_id, String sdata, String dev_ip,String liner)throws Exception;
 
 	public ApiResponseResult getDfgList(String class_id,String dep_id, String sdata,String usr_id,String dev_ip)throws Exception;
+	
+	//获取产线电子看板
+	public ApiResponseResult getCxdzList(String class_id,String dep_id, String sdata, String dev_ip,String liner)throws Exception;
 }

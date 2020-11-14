@@ -73,6 +73,21 @@ $(function () {
             }
         });
 
+        table.on('rowDouble(iTable)', function(obj){
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            var a = document.createElement('a');
+            a.setAttribute('lay-href', context + "/produce/schedulingMain/toSchedulingMainAdd?id=" + obj.data.ID);
+            a.setAttribute('lay-text', '排产编辑');
+            a.setAttribute('id', 'js_a');
+            if(document.getElementById('js_a')) {//防止反复添加
+                document.body.removeChild(document.getElementById('js_a'));
+            }
+            document.body.appendChild(a);//创建
+            a.click();//点击
+            return false;
+        });
+
         //监听工具条
         table.on('tool(iTable)', function(obj){
             var data = obj.data;
