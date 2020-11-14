@@ -24,11 +24,11 @@ table, table tr td {
 }
 
 th {
-	font-size: 18px;
+	font-size: 15px;
 }
 
 td {
-	font-size: 20px;
+	font-size: 16px;
 }
 
 .line {
@@ -141,7 +141,7 @@ var t = null;
 		<h2>产线信息</h2>
 		
 		<ul>
-		<li>组长:<span class="span_li" id="liner"></span></li>
+		<li>班次:<span class="span_li" id="classNo"></span></li>
 		<li>排名:<span class="span_li" id="rownum"></span></li>
 		<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
 		</ul>	
@@ -155,14 +155,16 @@ var t = null;
 					style="width: 99%; margin-top: 10px;">
 					<thead>
 						<tr class="blue_bg" style="background: #333399;">
-							<th>排名</th>
-							<th>组长</th>
-							<th>在线人数</th>
-							<th>开线数</th>
+							<th>工单号</th>
+							<th>物料编码</th>
+							<th>排产日期</th>
+							<th>排产班次</th>
+							<th>计划数量</th>
+							<th>完工数量</th>
+							<th>标准产能</th>
+							<th>标准人力</th>
 							<th>标准工时</th>
 							<th>实际工时</th>
-							<th>异常工时</th>
-							<th>效率</th>
 						</tr>
 					</thead>
 					<tbody id="tableList">
@@ -174,6 +176,8 @@ var t = null;
 		</div>
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
+        var deptList=[[${deptList}]];
+        var linerList=[[${linerList}]];
     </script>
     	<script th:inline="javascript">
     var context = [[@{/}]];

@@ -82,14 +82,13 @@ public class kanbanController extends WebController {
 		String method = "/kanban/toCjbg1";
 		String methodName = "车间报工看板";
 		try {	
-			//参数 String class_no, String dep_id, String sdata, String edata,String dev_ip
 			ApiResponseResult result = kanbanService.getCjbgList("999",line,"",this.getIpAddr());
+			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			logger.debug("获取看板=toCjbg1:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
-			mav.addObject("dev_ip", this.getIpAddr());
+			mav.addObject("deptList",deptList);
 			mav.setViewName("/kanban/cjbg1");// 返回路径
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("看板异常！", e);
@@ -106,10 +105,11 @@ public class kanbanController extends WebController {
 		String methodName = "生产电子看板";
 		try {	
 			ApiResponseResult result = kanbanService.getScdzList("999","","",this.getIpAddr());
+			ApiResponseResult deptList = kanbanService.getCjbgDepList();
 			logger.debug("获取生产电子看板=toScdz:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
-			mav.addObject("dev_ip", this.getIpAddr());
+			mav.addObject("deptList", deptList);
 			mav.setViewName("/kanban/scdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,10 +127,11 @@ public class kanbanController extends WebController {
 		String methodName = "制程不良看板";
 		try {	
 			ApiResponseResult result = kanbanService.getZcblList("999",line,"",this.getIpAddr());
+			ApiResponseResult deptList=kanbanService.getZcblDepList();
 			logger.debug("制程不良看板=toZcbl:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
-			mav.addObject("dev_ip", this.getIpAddr());
+			mav.addObject("deptList",deptList);
 			mav.setViewName("/kanban/zcbl");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,10 +149,13 @@ public class kanbanController extends WebController {
 		String methodName = "效率排名看板";
 		try {	
 			ApiResponseResult result = kanbanService.getXlpmList("999",line,"",this.getIpAddr(),liner);
+			ApiResponseResult deptList=kanbanService.getCjbgDepList();
+			ApiResponseResult linerList=kanbanService.getLiner();
 			logger.debug("效率排名看板=toXlpm:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
-			mav.addObject("dev_ip", this.getIpAddr());
+			mav.addObject("deptList", deptList);
+			mav.addObject("linerList", linerList);
 			mav.setViewName("/kanban/xlpm");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -176,10 +180,11 @@ public class kanbanController extends WebController {
             	usr_id=currUser.getId().toString();
             }
 			ApiResponseResult result = kanbanService.getDfgList("1","5252","2020-11-10",usr_id,"1");//this.getIpAddr()
+			ApiResponseResult deptList=kanbanService.getZcblDepList();
 			logger.debug("待返工看板=toDfg:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
-			mav.addObject("dev_ip", this.getIpAddr());
+			mav.addObject("deptList", deptList);
 			mav.setViewName("/kanban/dfg");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -196,11 +201,14 @@ public class kanbanController extends WebController {
 		String method = "kanban/toCxdz";
 		String methodName = "产线电子看板";
 		try {	
-			//ApiResponseResult result = kanbanService.getDfgList("1","5252","2020-11-10",usr_id,"1");//this.getIpAddr()
-			//logger.debug("产线电子看板=toCxdz:" + result);
-			//getSysLogService().success(module,method,methodName,result);
-//			mav.addObject("kanbanDataList", result);
-//			mav.addObject("dev_ip", this.getIpAddr());
+			ApiResponseResult result = kanbanService.getCxdzList("","","2020-11-13",this.getIpAddr(),"");//this.getIpAddr()
+			ApiResponseResult deptList=kanbanService.getCjbgDepList();
+			ApiResponseResult linerList=kanbanService.getLiner();
+			logger.debug("产线电子看板=toCxdz:" + result);
+			getSysLogService().success(module,method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.addObject("deptList", deptList);
+			mav.addObject("linerList", linerList);
 			mav.setViewName("/kanban/cxdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -314,6 +322,27 @@ public class kanbanController extends WebController {
 			logger.error("获取返工看板信息失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取返工看板信息失败！");
+		}
+	}
+	/**
+	 * 获取产线电子看板
+	 * */	
+	@ApiOperation(value = "获取产线电子看板信息", notes = "获取产线电子看板信息", hidden = true)
+	@RequestMapping(value = "/getCxdzList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getCxdzList(String class_nos, String dep_id, String sdata ,String liner) {
+		String method = "/kanban/getCxdzList";
+		String methodName = "获取产线电子看板信息";
+		try {
+			ApiResponseResult result = kanbanService.getCxdzList(class_nos, dep_id, sdata,this.getIpAddr(),liner);
+			logger.debug("获取产线电子看板信息=getCxdzList:" + result);
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取产线电子看板信息失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取产线电子看板信息失败！");
 		}
 	}
 	

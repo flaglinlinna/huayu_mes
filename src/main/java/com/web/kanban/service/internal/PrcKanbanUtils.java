@@ -142,7 +142,7 @@ public class PrcKanbanUtils {
 		}
 		
 		//获取制程不良部门参数
-		public List getZcblDepListPrc(String company,String facoty,int type) throws Exception {
+		public List getZcblDepListPrc(String company,String facoty,int type,String keyword) throws Exception {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
@@ -151,7 +151,7 @@ public class PrcKanbanUtils {
 					cs.setString(1, facoty);//facoty
 					cs.setString(2, company);//company
 					cs.setInt(3, type);//唯一硬件标识/ip
-					cs.setString(4, "");//user_id
+					cs.setString(4, keyword);//user_id
 					cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
 					cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					cs.registerOutParameter(7, -10);// 输出参数 追溯数据
@@ -400,8 +400,7 @@ public class PrcKanbanUtils {
 						}
 					});
 					return resultList;
-				}
-		
+				}	
 				// 获取待返工看板信息
 				public List getDfgListPrc(String company,String facoty,String user_id, String class_id,
 						String dep_id, String sdata, String dev_ip) throws Exception {

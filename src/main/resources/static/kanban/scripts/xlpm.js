@@ -1,7 +1,7 @@
 $(function() {
 	//dealData();
-	getDepList();
-	getLinerList();
+	getDepList(deptList);
+	getLinerList(linerList);
 	var kanbanList=kanbanDataList;
 	dealData(kanbanList);
 	$("#searchBtn").click(function() {
@@ -244,49 +244,77 @@ function setTable(kanbanData) {
 	$("#tableList").empty();
 	$("#tableList").append(html);
 }
-function getDepList() {
-	$.ajax({
-		type : "GET",
-		url : context + "kanban/getCjbgDepList",
-		data : {},
-		dataType : "json",
-		success : function(res) {
-			//console.log(res)
-			if (res.result) {
-				$("#dep_select").empty();
-				var html = "<option value=''>请选择部门</option>";
-				for (j = 0, len = res.data.length; j < len; j++) {
-					var arr = res.data[j];
-					html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME
-							+ "</option>";
-				}
+function getDepList(deptList) {
+	
+	var res=deptList;
+	console.log(res)
+	$("#dep_select").empty();
+	var html = "<option value=''>请选择部门</option>";
+	for (j = 0, len = res.data.length; j < len; j++) {
+		var arr = res.data[j];
+		html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME
+				+ "</option>";
+	}
 
-				$("#dep_select").append(html);
-			}
-		}
-	});
+	$("#dep_select").append(html);
+	
+//	$.ajax({
+//		type : "GET",
+//		url : context + "kanban/getCjbgDepList",
+//		data : {},
+//		dataType : "json",
+//		success : function(res) {
+//			//console.log(res)
+//			if (res.result) {
+//				$("#dep_select").empty();
+//				var html = "<option value=''>请选择部门</option>";
+//				for (j = 0, len = res.data.length; j < len; j++) {
+//					var arr = res.data[j];
+//					html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME
+//							+ "</option>";
+//				}
+//
+//				$("#dep_select").append(html);
+//			}
+//		}
+//	});
 }
-function getLinerList() {
-	$.ajax({
-		type : "GET",
-		url : context + "kanban/getLiner",
-		data : {},
-		dataType : "json",
-		success : function(res) {
-			console.log(res)
-			if (res.result) {
-				$("#liner_select").empty();
-				var html = "<option value=''>请选择组长</option>";
-				for (j = 0, len = res.data.length; j < len; j++) {
-					var arr = res.data[j];
-					html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
-							+ "</option>";
-				}
+function getLinerList(linerList) {
+	
+	var res=linerList;
+	
+	$("#liner_select").empty();
+	var html = "<option value=''>请选择组长</option>";
+	for (j = 0, len = res.data.length; j < len; j++) {
+		var arr = res.data[j];
+		html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
+				+ "</option>";
+	}
 
-				$("#liner_select").append(html);
-			}
-		}
-	});
+	$("#liner_select").append(html);
+	
+	
+	
+//	$.ajax({
+//		type : "GET",
+//		url : context + "kanban/getLiner",
+//		data : {},
+//		dataType : "json",
+//		success : function(res) {
+//			console.log(res)
+//			if (res.result) {
+//				$("#liner_select").empty();
+//				var html = "<option value=''>请选择组长</option>";
+//				for (j = 0, len = res.data.length; j < len; j++) {
+//					var arr = res.data[j];
+//					html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
+//							+ "</option>";
+//				}
+//
+//				$("#liner_select").append(html);
+//			}
+//		}
+//	});
 }
 function getList() {
 	var date = $("#date").val();

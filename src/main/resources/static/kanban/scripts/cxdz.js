@@ -1,7 +1,7 @@
 $(function() {
 	//dealData();
-	getDepList();
-	getLinerList();
+	getDepList(deptList);
+	getLinerList(linerList);
 	var kanbanList=kanbanDataList;
 	dealData(kanbanList);
 	$("#searchBtn").click(function() {
@@ -26,16 +26,15 @@ function dealData(kanbanList) {
 		var hr_abn = kanbanData_t[0].HOUR_ABN==null?0:parseFloat(kanbanData_t[0].HOUR_ABN);
 		var hr_act = kanbanData_t[0].HOUR_ACT==null?0:parseFloat(kanbanData_t[0].HOUR_ACT);
 		var hr_st = kanbanData_t[0].HOUR_ST==null?0:parseFloat(kanbanData_t[0].HOUR_ST);
-		var eff_rate=kanbanData_t[0].RATE_EFFICIENCY==null?"0":kanbanData_t[0].RATE_EFFICIENCY;
+		var eff_rate=kanbanData_t[0].RATE_EFFICIENCY==null?"0":kanbanData_t[0].RATE_EFF;
 		
 		getChart2(hr_abn, hr_act,hr_st,eff_rate);
 		
-		var liner= kanbanData_t[0].FLINER;//组长
+		var classNo= kanbanData_t[0].CLASS_NO;//
 		var rownum=kanbanData_t[0].FROWNUM==null?"无":kanbanData_t[0].FROWNUM;//排名
 		var onlineEmp= kanbanData_t[0].NUM_EMP_ON==null?"0":kanbanData_t[0].NUM_EMP_ON;//在线人数
-		console.log(liner)
 		
-		$("#liner").text(liner)
+		$("#classNo").text(classNo)
 		$("#rownum").text(rownum)
 		$("#onlineEmp").text(onlineEmp)
 	}
@@ -235,58 +234,82 @@ function setTable(kanbanData) {
 	var html = "";
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
-		html += '<tr><td>' + arr.FROWNUM + '</td><td>' + arr.LINER_NAME
-				+ '</td><td>' + arr.NUM_EMP_ON + '</td><td>' + arr.NUM_LINE_ON
+		html += '<tr><td>' + arr.TASK_NO + '</td><td>' + arr.ITEM_NAME
+				+ '</td><td>' + arr.PROD_DATE + '</td><td>' + arr.CLASS_NO
+				+ '</td><td>' + arr.QTY_PLAN + '</td><td>' + arr.QTY_DONE
+				+ '</td><td>' + arr.MANPOWER + '</td><td>' + arr.CAPACITY
 				+ '</td><td>' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT
-				+ '</td><td>' + arr.HOUR_ABN + '</td><td>' + arr.RATE_EFFICIENCY
 				+ '%</td></tr> ';
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
 }
-function getDepList() {
-	$.ajax({
-		type : "GET",
-		url : context + "kanban/getCjbgDepList",
-		data : {},
-		dataType : "json",
-		success : function(res) {
-			//console.log(res)
-			if (res.result) {
-				$("#dep_select").empty();
-				var html = "<option value=''>请选择部门</option>";
-				for (j = 0, len = res.data.length; j < len; j++) {
-					var arr = res.data[j];
-					html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME
-							+ "</option>";
-				}
-
-				$("#dep_select").append(html);
-			}
-		}
-	});
+function getDepList(deptList) {
+	var res=deptList
+	$("#dep_select").empty();
+	var html = "<option value=''>请选择部门</option>";
+	for (j = 0, len = res.data.length; j < len; j++) {
+		var arr = res.data[j];
+		html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME
+				+ "</option>";
+	}
+	$("#dep_select").append(html);
+	
+	
+//	$.ajax({
+//		type : "GET",
+//		url : context + "kanban/getCjbgDepList",
+//		data : {},
+//		dataType : "json",
+//		success : function(res) {
+//			//console.log(res)
+//			if (res.result) {
+//				$("#dep_select").empty();
+//				var html = "<option value=''>请选择部门</option>";
+//				for (j = 0, len = res.data.length; j < len; j++) {
+//					var arr = res.data[j];
+//					html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME
+//							+ "</option>";
+//				}
+//
+//				$("#dep_select").append(html);
+//			}
+//		}
+//	});
 }
-function getLinerList() {
-	$.ajax({
-		type : "GET",
-		url : context + "kanban/getLiner",
-		data : {},
-		dataType : "json",
-		success : function(res) {
-			console.log(res)
-			if (res.result) {
-				$("#liner_select").empty();
-				var html = "<option value=''>请选择组长</option>";
-				for (j = 0, len = res.data.length; j < len; j++) {
-					var arr = res.data[j];
-					html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
-							+ "</option>";
-				}
+function getLinerList(linerList) {
+	
+	var res=linerList;
+	$("#liner_select").empty();
+	var html = "<option value=''>请选择组长</option>";
+	for (j = 0, len = res.data.length; j < len; j++) {
+		var arr = res.data[j];
+		html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
+				+ "</option>";
+	}
 
-				$("#liner_select").append(html);
-			}
-		}
-	});
+	$("#liner_select").append(html);
+	
+//	$.ajax({
+//		type : "GET",
+//		url : context + "kanban/getLiner",
+//		data : {},
+//		dataType : "json",
+//		success : function(res) {
+//			console.log(res)
+//			if (res.result) {
+//				$("#liner_select").empty();
+//				var html = "<option value=''>请选择组长</option>";
+//				for (j = 0, len = res.data.length; j < len; j++) {
+//					var arr = res.data[j];
+//					html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
+//							+ "</option>";
+//				}
+//
+//				$("#liner_select").append(html);
+//			}
+//		}
+//	});
 }
 function getList() {
 	var date = $("#date").val();
@@ -305,7 +328,7 @@ function getList() {
 	};
 	$.ajax({
 		type : "GET",
-		url : context + "kanban/getXlpmList",
+		url : context + "kanban/getCxdzList",
 		data : params,
 		dataType : "json",
 		success : function(res) {
