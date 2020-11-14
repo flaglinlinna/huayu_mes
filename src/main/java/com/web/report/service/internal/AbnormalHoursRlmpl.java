@@ -100,8 +100,8 @@ public class AbnormalHoursRlmpl extends ReportPrcUtils implements AbnormalHoursR
 				cs.setString(4, beginTime);
 				cs.setString(5, endTime);
 				cs.setString(6, liner);
-				cs.setString(7, empCode);
-				cs.setString(8, taskNo);
+				cs.setString(7, taskNo);
+				cs.setString(8, empCode);
 				cs.setInt(9, pageRequest.getPageSize());
 				cs.setInt(10, pageRequest.getPageNumber()+1);
 				cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 返回标识
