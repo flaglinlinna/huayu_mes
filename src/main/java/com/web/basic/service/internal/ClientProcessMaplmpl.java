@@ -100,11 +100,11 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
             return ApiResponseResult.failure("模板名称不能为空！");
         }
         //转换
-        String[] porcIdArray = procIdList.split(";");
-        List<Long> procList = new ArrayList<Long>();
+        String[] porcIdArray = procIdList.split(",");
+        List<String> procList = new ArrayList<String>();
         for(int i = 0; i < porcIdArray.length; i++){
             if(StringUtils.isNotEmpty(porcIdArray[i])) {
-            	procList.add(Long.parseLong(porcIdArray[i]));
+            	procList.add(porcIdArray[i]);
             }
         }
       //1.删除原工序信息
@@ -121,15 +121,15 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
         List<ClientProcessMap> listNew = new ArrayList<>();
         if(procList.size() > 0){
         	Integer procOrder = 10;
-            for(Long procId : procList){
+            for(String proc : procList){
+            	String[] procs = proc.split("@");
             	ClientProcessMap item = new ClientProcessMap();
                 item.setCreateDate(new Date());
                 item.setCreateBy(UserUtil.getSessionUser().getId());
                 item.setFdemoName(fdemoName);
                 item.setProcOrder(procOrder);
-//                item.setCustId(clientId);
-                item.setProcId(procId);
-//                item.setJobAttr(jobAttr);
+                item.setProcId(Long.valueOf(procs[0]));
+                item.setJobAttr(Integer.valueOf(procs[1]));
                 listNew.add(item);
 				procOrder = procOrder+10;
             }
@@ -220,6 +220,12 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
         if(o == null){
             return ApiResponseResult.failure("工序记录不存在！");
         }
+        //20201114-fyx-判断序号已存在
+        List<ClientProcessMap> lcp = clientProcessMapDao.findByDelFlagAndFdemoNameAndProcOrder(0, o.getFdemoName(), Integer.parseInt(procOrder));
+        if(lcp.size()>0){
+        	 return ApiResponseResult.failure("工序序号重复,请重新填写！");
+        }
+        //--end
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setProcOrder(Integer.parseInt(procOrder));
