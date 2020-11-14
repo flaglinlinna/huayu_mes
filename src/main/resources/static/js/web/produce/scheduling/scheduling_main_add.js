@@ -128,7 +128,11 @@ $(function () {
                 , url: context + '/produce/schedulingMain/getDetList'
                 , method: 'get' //默认：get请求
                 , where: {keyword: "",mid: function(){
+                    if(id==null){
+                        return 0;
+                    }else {
                         return id;
+                    }
                     }}
                 , cellMinWidth: 80
                 , page: true,

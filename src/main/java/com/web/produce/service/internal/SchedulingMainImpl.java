@@ -432,7 +432,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
     public ApiResponseResult getDetList(String keyword, Long mid, String startTime, String endTime, PageRequest pageRequest) throws Exception {
         SysUser currUser = UserUtil.getSessionUser();
         Map map = new HashMap();
-        if(mid == null){
+        if(mid == 0){
             map.put("total", 0);
             map.put("rows", "");
             return ApiResponseResult.success("").data(map);

@@ -422,6 +422,7 @@ function getScheduling(){
     $("#produceState").val(scheduling.produceState);
     $("#itemId").val(scheduling.itemNo); //显示编码
     $("#itemName").val(scheduling.itemName);
+    $("#custName").val(scheduling.custNameS);
     $("#groupNo").val(scheduling.groupNo);
     $("#custId").val(scheduling.custId);
     $("#linerName").val(scheduling.linerName);
