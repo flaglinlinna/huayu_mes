@@ -165,7 +165,7 @@ public class Employeelmpl implements EmployeeService {
 					filters1.add(new SearchFilter("empType", SearchFilter.Operator.LIKE, keyword));
 				}
 				if (StringUtils.isNotEmpty(empStatus)) {
-					filters1.add(new SearchFilter("empStatus", SearchFilter.Operator.EQ, empStatus));
+					filters.add(new SearchFilter("empStatus", SearchFilter.Operator.EQ, empStatus));
 				}
 				Specification<Employee> spec = Specification.where(BaseService.and(filters, Employee.class));
 				Specification<Employee> spec1 = spec.and(BaseService.or(filters1, Employee.class));

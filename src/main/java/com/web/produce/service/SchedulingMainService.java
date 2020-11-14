@@ -24,6 +24,11 @@ public interface SchedulingMainService {
 
     public ApiResponseResult getDeptSelect() throws Exception;
 
+    //获取组长下拉框
+    public ApiResponseResult getOrgSelect() throws Exception;
+
+    public ApiResponseResult getItemSelect(String keyword,PageRequest pageRequest) throws Exception;
+
     public ApiResponseResult getSchedulingMain(String id) throws Exception;
 
     public ApiResponseResult doStatus(Long id, Integer status) throws Exception;
