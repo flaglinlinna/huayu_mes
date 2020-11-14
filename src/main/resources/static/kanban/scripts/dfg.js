@@ -41,27 +41,6 @@ function getDepList(deptList){
 	}
 
 	$("#dep_select").append(html);
-	
-	
-//	$.ajax({
-//        type: "GET",
-//        url: context+"kanban/getZcblDepList",
-//        data: {},
-//        dataType: "json",
-//        success: function(res){
-//            //console.log(res)
-//            if(res.result){
-//            	$("#dep_select").empty();
-//            	var html = "<option value=''>请选择部门</option>";
-//            	for(j = 0,len=res.data.length; j < len; j++) {
-//            		var arr = res.data[j];
-//            		html += "<option value='"+arr.ID+"'>"+arr.LEAD_BY+"</option>";
-//            	}
-//            	
-//           	   $("#dep_select").append(html);
-//            }
-//         }
-//    });
 }
 function getList(){
 	var class_no=$("#class_select").val();

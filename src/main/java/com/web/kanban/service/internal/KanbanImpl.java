@@ -41,7 +41,7 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	public ApiResponseResult getCjbgDepList() throws Exception {
 		// TODO Auto-generated method stub
 		//return ApiResponseResult.success().data(kanbanDao.getDepList());
-		List<Object> list = getZcblDepListPrc("","",0,"电子看板");
+		List<Object> list = getOrgListPrc("","","","电子看板");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -74,7 +74,7 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	@Override
 	public ApiResponseResult getZcblDepList() throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getZcblDepListPrc("","",2,"");
+		List<Object> list = getOrgListPrc("","","2","");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -130,7 +130,7 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	}
 	
 	public ApiResponseResult getLiner ()throws Exception{
-		List<Object> list = getLinerPrc("","");
+		List<Object> list = getOrgListPrc("","","","组长");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}	

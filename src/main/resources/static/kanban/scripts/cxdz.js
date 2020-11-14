@@ -38,14 +38,6 @@ function dealData(kanbanList) {
 		$("#rownum").text(rownum)
 		$("#onlineEmp").text(onlineEmp)
 	}
-	
-	/*	
-	$("#showLine").text(
-			"开线数：" + kanbanList.data.LINE_NUM_NOW + "     " + "总线体数："
-					+ kanbanList.data.LINE_NUM_PLN);
-	*/
-	
-	
 }
 
 function getChart2(hr_abn, hr_act,hr_st,eff_rate) {
@@ -254,28 +246,6 @@ function getDepList(deptList) {
 				+ "</option>";
 	}
 	$("#dep_select").append(html);
-	
-	
-//	$.ajax({
-//		type : "GET",
-//		url : context + "kanban/getCjbgDepList",
-//		data : {},
-//		dataType : "json",
-//		success : function(res) {
-//			//console.log(res)
-//			if (res.result) {
-//				$("#dep_select").empty();
-//				var html = "<option value=''>请选择部门</option>";
-//				for (j = 0, len = res.data.length; j < len; j++) {
-//					var arr = res.data[j];
-//					html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME
-//							+ "</option>";
-//				}
-//
-//				$("#dep_select").append(html);
-//			}
-//		}
-//	});
 }
 function getLinerList(linerList) {
 	
@@ -289,27 +259,6 @@ function getLinerList(linerList) {
 	}
 
 	$("#liner_select").append(html);
-	
-//	$.ajax({
-//		type : "GET",
-//		url : context + "kanban/getLiner",
-//		data : {},
-//		dataType : "json",
-//		success : function(res) {
-//			console.log(res)
-//			if (res.result) {
-//				$("#liner_select").empty();
-//				var html = "<option value=''>请选择组长</option>";
-//				for (j = 0, len = res.data.length; j < len; j++) {
-//					var arr = res.data[j];
-//					html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
-//							+ "</option>";
-//				}
-//
-//				$("#liner_select").append(html);
-//			}
-//		}
-//	});
 }
 function getList() {
 	var date = $("#date").val();

@@ -63,6 +63,8 @@ public class kanbanController extends WebController {
 		mav.setViewName("/kanban/index");// 返回路径
 		return mav;
 	}
+	
+	//不带参数的默认获取
 
 	@RequestMapping(value = "/toCjbg", method = RequestMethod.GET)
 	@ResponseBody
@@ -240,7 +242,7 @@ public class kanbanController extends WebController {
 		}
 	}
 	
-	
+	//带参数的二次获取
 
 	@ApiOperation(value = "获取制程不良看板信息", notes = "获取制程不良看板信息", hidden = true)
 	@RequestMapping(value = "/getZcblList", method = RequestMethod.GET)
@@ -343,77 +345,6 @@ public class kanbanController extends WebController {
 			logger.error("获取产线电子看板信息失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取产线电子看板信息失败！");
-		}
-	}
-	
-	/*
-	 * 获取部门信息
-	 * */
-
-	@ApiOperation(value = "获取部门信息", notes = "获取部门信息", hidden = true)
-	@RequestMapping(value = "/getCjbgDepList", method = RequestMethod.GET)
-	@ResponseBody
-	public ApiResponseResult getCjbgDepList(String class_nos, String dep_id, String sdata, String edata) {
-		String method = "/kanban/getCjbgDepList";
-		String methodName = "获取部门信息";
-		try {
-			ApiResponseResult result = kanbanService.getCjbgDepList();
-			logger.debug("获取部门信息=getCjbgList:" + result);
-			
-			getSysLogService().success(module,method, methodName, null);
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("获取部门信息失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
-			return ApiResponseResult.failure("获取部门信息失败！");
-		}
-	}
-	
-	/*
-	 * 获取部门信息--制程不良
-	 * */
-
-	@ApiOperation(value = "获取部门信息-制程不良", notes = "获取部门信息-制程不良", hidden = true)
-	@RequestMapping(value = "/getZcblDepList", method = RequestMethod.GET)
-	@ResponseBody
-	public ApiResponseResult getZcblDepList() {
-		String method = "/kanban/getZcblDepList";
-		String methodName = "获取部门信息-制程不良";
-		try {
-			ApiResponseResult result = kanbanService.getZcblDepList();
-			logger.debug("获取部门信息-制程不良=getZcblDepList:" + result);
-			
-			getSysLogService().success(module,method, methodName, null);
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("获取部门信息-制程不良失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
-			return ApiResponseResult.failure("获取部门信息-制程不良失败！");
-		}
-	}
-	
-	/*
-	 * 取线长信息
-	 * */
-	@ApiOperation(value = "获取组长信息", notes = "获取组长信息", hidden = true)
-	@RequestMapping(value = "/getLiner", method = RequestMethod.GET)
-	@ResponseBody
-	public ApiResponseResult getLiner() {
-		String method = "/kanban/getLiner";
-		String methodName = "获取组长信息";
-		try {
-			ApiResponseResult result = kanbanService.getLiner();
-			logger.debug("获取组长信息=getLiner:" + result);
-			
-			getSysLogService().success(module,method, methodName, null);
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("获取组长信息失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
-			return ApiResponseResult.failure("获取组长失败！");
 		}
 	}
 }
