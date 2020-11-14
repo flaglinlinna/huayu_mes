@@ -165,7 +165,20 @@ $(function () {
     });
 });
 
-//获取部门下拉数据
+function toSchedulingEdit(d){
+    var a = document.createElement('a');
+    a.setAttribute('lay-href', context + "/produce/scheduling/toSchedulingEdit?id=" + d);
+    a.setAttribute('lay-text', '排产编辑');
+    a.setAttribute('id', 'js_a');
+    if(document.getElementById('js_a')) {//防止反复添加
+        document.body.removeChild(document.getElementById('js_a'));
+    }
+    document.body.appendChild(a);//创建
+    a.click();//点击
+    return false;
+}
+
+//获取部门下拉数据  新增班次下拉选择
 function getDeptSelect(deptId,deptName,className) {
     $.ajax({
         type: "post",
@@ -177,6 +190,7 @@ function getDeptSelect(deptId,deptName,className) {
             if (res.result) {
                 var itemList = res.data.rows;
                 if(deptName!=null&&deptName!=undefined){
+                    //编辑情况下的默认选择
                     $("#deptId").append('<option value="'+ deptId +'">'+deptName+'</option>');
                     for(var i = 0; i < itemList.length; i++){
                         if(deptId!=itemList[i].ID){
@@ -241,6 +255,7 @@ function getMainData(){
             $("input[name='fenable']").prop("checked", false);
         }
     }else {
+        $("input[name='fenable']").prop("checked", false);
         getDeptSelect();
     }
 
@@ -256,10 +271,12 @@ function addSubmit(obj) {
     if(!obj.field.fenable){
         obj.field.fenable = 0;
     }
+    console.log(obj);
     CoreUtil.sendAjax("/produce/schedulingMain/add", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
                 $("#id").val(data.data.id);
+                id =  data.data.id;
                 $("#idNo").val(data.data.idNo);
                 showBtn(obj.field.fenable);
                 layer.alert("操作成功", function() {
@@ -278,6 +295,7 @@ function editSubmit(obj) {
     if(!obj.field.fenable){
         obj.field.fenable = 0;
     }
+    console.log(obj);
     CoreUtil.sendAjax("/produce/schedulingMain/edit", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
