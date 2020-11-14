@@ -1,6 +1,7 @@
 package com.web.produce.service.internal;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,10 +68,10 @@ public class Issuelmpl  implements IssueService {
 
 	@Autowired
 	DevLogDao devLogDao;
-	
-	 @Autowired  
+
+	 @Autowired
 	 private Environment env;
-	 
+
 	 private static Map<String, List<String>> cmdMap = new HashMap<>();
 
 	/**
@@ -213,7 +214,7 @@ public class Issuelmpl  implements IssueService {
 		}
 		return ApiResponseResult.success("下发记录添加成功！"+msg);
 	}
-	
+
 	/**
 	 * 新增下发记录（会覆盖原有记录）
 	 */
@@ -547,7 +548,7 @@ public class Issuelmpl  implements IssueService {
 		}
 		return ApiResponseResult.success("删除记录操作成功！"+msg);
 	}
-	
+
 	public ApiResponseResult clear_bak(String dev, String emp) throws Exception {
 		// TODO Auto-generated method stub
 		if (dev == null || emp == null) {
@@ -631,16 +632,16 @@ public class Issuelmpl  implements IssueService {
 			List<DevLog> ld_del = devLogDao.findByDelFlagAndCmdFlagAndDevCodeAndDescription(0, 0, sn, "指纹删除");
 			int i=0;
 			for(DevLog dl:ld){
-				
+
 				if(i>10){
 					List<String> ls1 = new ArrayList<String>();
 					ls1.add("in");
 					cmdMap.put(sn, ls1);
 					break;
 				}
-				
+
 				ls.add("C:"+dl.getId()+":DATA UPDATE USERINFO PIN="+dl.getEmp().getEmpCode()+"	Name="+dl.getEmp().getEmpName()+"	Pri=0	Passwd=	Grp=0");
-				
+
 				List<EmpFinger> fl = empFingerDao.findByDelFlagAndEmpId(0, dl.getEmpId());
 				for(EmpFinger ef:fl){
 					ls.add("C:"+dl.getId()+":DATA UPDATE FINGERTMP PIN="+dl.getEmp().getEmpCode()+"	FID="+ef.getFingerIdx()+"	Pri=0	TMP="+ef.getTemplateStr().trim());
@@ -651,7 +652,7 @@ public class Issuelmpl  implements IssueService {
 			for(DevLog dl:ld_del){
 				ls.add("C:"+dl.getId()+":DATA DELETE USERINFO PIN="+dl.getEmp().getEmpCode());
 			}
-			
+
         }
 		return ls;
 
@@ -714,10 +715,83 @@ public class Issuelmpl  implements IssueService {
 					}
 				}
 			}
-			
-			
 		}
-		
 	}
+
+    /**
+     * 判断卡机是否在线并更新在线信息
+     * @param onList
+     * @param offList
+     * @throws Exception
+     */
+    @Override
+    public boolean updateIsOnLine(List<String> onList, List<String> offList, Date dateNow){
+        try{
+            //1.在线
+            if(onList != null && onList.size() > 0){
+                for(String sn : onList){
+                    if(StringUtils.isNotEmpty(sn)){
+                        //获取卡机信息
+                        List<DevClock> list = devClockDao.findByDelFlagAndDevCode(0, sn);
+                        //如果卡机存在，则修改为在线
+                        if(list.size() > 0 && list.get(0) != null){
+                            DevClock o = list.get(0);
+                            o.setIsOnline(0);//0：在线/1：离线
+                            o.setLastupdateDate(new Date());
+                            devClockDao.save(o);
+                        }
+                    }
+                }
+            }
+
+            //2.离线
+            if(offList != null && offList.size() > 0){
+                for(String sn : offList){
+                    if(StringUtils.isNotEmpty(sn)){
+                        //获取卡机信息
+                        List<DevClock> list = devClockDao.findByDelFlagAndDevCode(0, sn);
+                        //如果卡机存在，则修改为离线
+                        if(list.size() > 0 && list.get(0) != null){
+                            DevClock o = list.get(0);
+                            o.setIsOnline(1);//0：在线/1：离线
+                            o.setLastupdateDate(new Date());
+                            devClockDao.save(o);
+                        }
+                    }
+                }
+            }
+
+            //3.长时间离线（如果更新时间超过30分钟，则视为离线）
+            //获取在线的卡机信息
+            List<DevClock> list = devClockDao.findByDelFlagAndIsOnline(0, 0);
+            for(DevClock o : list){
+                if(o != null){
+                    Date dateOld = o.getLastupdateDate();
+                    //计算相差分钟数，如果相差超过30分钟，则修改为离线
+                    long sub = this.getMinutes(dateNow, dateOld);
+                    if(sub > 30){
+                        o.setIsOnline(1);//0：在线/1：离线
+                        o.setLastupdateDate(new Date());
+                        devClockDao.save(o);
+                    }
+                }
+            }
+
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+    //计算相差分钟数
+    public long getMinutes(Date start, Date end) {
+	    try{
+            long startTime = start.getTime();
+            long endTime = end.getTime();
+            long diff=(startTime - endTime)/1000/60;
+            return diff;
+        }catch (Exception e){
+        }
+        return 0;
+    }
 
 }
