@@ -189,6 +189,12 @@ public class ProdProclmpl implements ProdProcService {
         if(o == null){
             return ApiResponseResult.failure("工序记录不存在！");
         }
+        //20201114-fyx-判断顺序是否存在
+        List<ProdProcDetail> lpd = prodProcDetailDao.findByDelFlagAndItemIdAndProcOrder(0, o.getItemId(), procOrder);
+        if(lpd.size()>0){
+        	 return ApiResponseResult.failure("工序序号重复,请重新填写！");
+        }
+        //---end
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setProcOrder(procOrder);

@@ -272,7 +272,8 @@ $(function() {
 		        if ($(this).is(":checked")) {
 		        	//fyx-202011-02
 		        	var checks = $('tbody tr[data-index="'+i+'"] td[data-field="jobAttr"] input[type="checkbox"]:checked');
-		        	if(checks.length == 1){
+
+		        	if(checks.length > 0){
 		        		procIdList += checkStatus[i].id+"@1,";
 		        	}else{
 		        		procIdList += checkStatus[i].id+"@0,";
@@ -337,16 +338,10 @@ $(function() {
 				};
 				CoreUtil.sendAjax("/base/prodproc/doProcOrder", JSON
 						.stringify(param), function(data) {
-					if (data.result) {
-						layer.alert("操作成功", function() {
-							layer.closeAll();
-							loadAll();
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-						});
-					}
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+					loadAll();
 				}, "POST", false, function(res) {
 					layer.alert("操作请求错误，请您稍后再试", function() {
 						layer.closeAll();
@@ -388,8 +383,10 @@ function getProcByClient(params){
 
 		                        if(beSelected[j].jobAttr==0){
 									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().addClass('layui-form-checked');
+									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').prop('checked', true);
 								}else{
 									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').prop('checked', false);
 								}
 							}
 						}
