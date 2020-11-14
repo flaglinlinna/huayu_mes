@@ -212,7 +212,7 @@ public class SchedulingItem extends BaseEntity {
         sb.append(",员工id:").append(this.empId);
         sb.append(",员工编号:").append(this.empCode);
         sb.append(",良率:").append(this.fokRate);
-        sb.append("\n]");
+        sb.append(";");
         return sb.toString();
     }
 }

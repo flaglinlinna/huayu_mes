@@ -24,7 +24,6 @@ import com.web.produce.service.SchedulingService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
@@ -44,9 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -70,8 +67,8 @@ public class SchedulingImpl implements SchedulingService {
     private SchedulingDao schedulingDao;
     @Autowired
     private SchedulingTempDao schedulingTempDao;
-    @Autowired
-    private DepartmentDao departmentDao;
+//    @Autowired
+//    private DepartmentDao departmentDao;
     @Autowired
     private MtrialDao mtrialDao;
     @Autowired
@@ -84,8 +81,8 @@ public class SchedulingImpl implements SchedulingService {
     private SchedulingItemDao schedulingItemDao;
     @Autowired
     private ClientDao clientDao;
-    @Autowired
-    private LineDao lineDao;
+//    @Autowired
+//    private LineDao lineDao;
     @Autowired
     private OrganizationDao organizationDao;
     @Autowired
@@ -1269,7 +1266,7 @@ public class SchedulingImpl implements SchedulingService {
 
     //获取上线人员清单 存储过程调用
     public List getEmpListPrc(String facoty, String company, Long mid, String startTime, String endTime, String keyword,
-                                     int page, int rows, String prc_name) throws Exception{
+                              int page, int rows, String prc_name) throws Exception{
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
@@ -1343,5 +1340,99 @@ public class SchedulingImpl implements SchedulingService {
         schedulingItemDao.save(o);
 
         return ApiResponseResult.success("编辑成功！");
+    }
+
+    /**
+     * 获取制令单产出送检从表
+     * @param mid
+     * @param mid
+     * @param pageRequest
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getProdOrderOutList(Long mid, PageRequest pageRequest) throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        List<Object> list = getProdOrderPrc(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"",
+                UserUtil.getSessionUser().getId()+"",mid,"", "prc_mes_prod_order_out");
+        if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        Map map = new HashMap();
+        map.put("rows", list.get(3));
+        return ApiResponseResult.success("").data(map);
+    }
+
+    /**
+     * 获取品质检验列表
+     * @param mid
+     * @param mid
+     * @param pageRequest
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getProdOrderQcList(Long mid, PageRequest pageRequest) throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        List<Object> list = getProdOrderPrc(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"",
+                UserUtil.getSessionUser().getId()+"",mid,"", "prc_mes_prod_order_qc");
+        if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        Map map = new HashMap();
+        map.put("rows", list.get(3));
+        return ApiResponseResult.success("").data(map);
+    }
+
+    //获取上线人员清单 存储过程调用
+    public List getProdOrderPrc(String facoty, String company,String user_id, Long mid, String keyword,String prc_name) throws Exception{
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  "+prc_name+" (?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setString(3, user_id);
+                cs.setLong(4, mid);
+                cs.setString(5, keyword);
+                cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(8, -10);// 输出参数 返回数据集合
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(6));
+                result.add(cs.getString(7));
+                if (cs.getString(6).toString().equals("0")) {
+                    result.add(cs.getString(7));
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(8);
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+                }
+                System.out.println(l);
+                return result;
+            }
+
+        });
+        return resultList;
     }
 }

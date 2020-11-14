@@ -333,6 +333,7 @@ public class Scheduling extends BaseEntity {
         sb.append(",班次:").append(this.classNo);
         sb.append(",状态:").append(this.checkStatus);
         sb.append(",生产状态:").append(this.produceState);
+        sb.append(";");
         return sb.toString();
     }
 }

@@ -77,12 +77,12 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.getMain(id);
 	            logger.debug("根据ID获取上线人员记录=getMain:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, "id:"+id);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取上线人员记录失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, "id:"+id+e.toString());
 	            return ApiResponseResult.failure("获取上线人员记录失败！");
 	        }
 	    }
@@ -96,12 +96,12 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.getMainInfo(id);
 	            logger.debug("根据ID获取上线人员记录信息=getMainInfo:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, "id:"+id);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取上线人员记录信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, "id:"+id+e.toString());
 	            return ApiResponseResult.failure("获取上线人员记录信息失败！");
 	        }
 	    }
@@ -132,12 +132,12 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.editMain(onlineStaff);
 	            logger.debug("修改上线人员主表=editMain:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, onlineStaff.toString());
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("修改上线人员主表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, onlineStaff.toString()+e.toString());
 	            return ApiResponseResult.failure("修改上线人员主表失败！");
 	        }
 	    }
@@ -148,14 +148,16 @@ public class OnlineStaffController extends WebController{
 	    public ApiResponseResult deleteVice(@RequestBody Map<String, Object> params){
 	        String method = "produce/online/deleteVice";String methodName ="删除副表记录";
 	        try{
+
 	        	String taskNo=params.get("taskNo")==null?"":params.get("taskNo").toString();
 	        	String devId=params.get("devId")==null?"":params.get("devId").toString();
 	        	String empId=params.get("empId")==null?"":params.get("empId").toString();
 	        	String viceId=params.get("viceId")==null?"":params.get("viceId").toString();
 	        	String beginTime=params.get("beginTime")==null?"":params.get("beginTime").toString();
+				String logInfo = "指令单号:"+taskNo+";设备ID:"+devId+";员工ID"+empId+";从表id"+devId+";上线时间"+beginTime;
 	            ApiResponseResult result = onlineStaffService.deleteVice(taskNo,devId, empId,viceId,beginTime);
 	            logger.debug("删除副表记录=deleteVice:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, logInfo);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
@@ -174,12 +176,12 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.deleteMain(id);
 	            logger.debug("删除上线人员记录信息=deleteMain:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, "id:"+id);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("删除上线人员记录信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,"id:"+id+ e.toString());
 	            return ApiResponseResult.failure("获取上线人员记录信息失败！");
 	        }
 	    }

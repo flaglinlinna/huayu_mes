@@ -57,5 +57,11 @@ public interface SchedulingService {
     //获取生产投料
     public ApiResponseResult getProdOrderList(Long mid, PageRequest pageRequest) throws Exception;
 
+    //获取产出送检
+    public ApiResponseResult getProdOrderOutList(Long mid, PageRequest pageRequest) throws Exception;
+
+    //获取品质检验列表
+    public ApiResponseResult getProdOrderQcList(Long mid, PageRequest pageRequest) throws Exception;
+
     public ApiResponseResult editItem(SchedulingItem schedulingItem) throws Exception;
 }

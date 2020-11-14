@@ -60,52 +60,52 @@ $(function () {
             }
         });
 
-        tableIns2=table.render({
-            elem: '#iList2'
-            ,url:context+'/produce/scheduling/getTempList'
-            ,method: 'get' //默认：get请求
-            ,cellMinWidth: 80
-            ,page: true,
-            request: {
-                pageName: 'page' //页码的参数名称，默认：page
-                ,limitName: 'rows' //每页数据量的参数名，默认：limit
-            },
-            parseData: function (res) {
-                // 可进行数据操作
-                return {
-                    "count": res.data.total,
-                    "msg":res.msg,
-                    "data":res.data.rows,
-                    "code": res.status //code值为200表示成功
-                }
-            },
-            cols: [[
-                {type:'numbers'}
-                ,{field:'checkStatus', title:'状态', width:100, templet:'#statusTpl'}
-                ,{field:'errorInfo', title:'错误信息', width:110}
-                ,{field:'groupNo', title:'组合', width:70}
-                ,{field:'custName', title:'客户', width:70}
-                ,{field:'linerName', title:'组长', width:70}
-                ,{field:'prodDate', title:'日期', width:100}
-               // ,{field:'deptName', title:'组装部', width:80}
-                ,{field:'classNo', title:'班次', width:60}
-                ,{field:'prodNo', title:'工单号', width:120}
-                ,{field:'itemNo', title:'物料编码', width:120}
-                ,{field:'itemName', title:'物料描述', width:200}
-                ,{field:'qtyPlan', title:'计划生产数量', width:110}
-                //,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
-            ]]
-            ,done: function(res, curr, count){
-                //如果是异步请求数据方式，res即为你接口返回的信息。
-                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-                //console.log(res);
-                //得到当前页码
-                //console.log(curr);
-                //得到数据总量
-                //console.log(count);
-                pageCurr2=curr;
-            }
-        });
+        // tableIns2=table.render({
+        //     elem: '#iList2'
+        //     ,url:context+'/produce/scheduling/getTempList'
+        //     ,method: 'get' //默认：get请求
+        //     ,cellMinWidth: 80
+        //     ,page: true,
+        //     request: {
+        //         pageName: 'page' //页码的参数名称，默认：page
+        //         ,limitName: 'rows' //每页数据量的参数名，默认：limit
+        //     },
+        //     parseData: function (res) {
+        //         // 可进行数据操作
+        //         return {
+        //             "count": res.data.total,
+        //             "msg":res.msg,
+        //             "data":res.data.rows,
+        //             "code": res.status //code值为200表示成功
+        //         }
+        //     },
+        //     cols: [[
+        //         {type:'numbers'}
+        //         ,{field:'checkStatus', title:'状态', width:100, templet:'#statusTpl'}
+        //         ,{field:'errorInfo', title:'错误信息', width:110}
+        //         ,{field:'groupNo', title:'组合', width:70}
+        //         ,{field:'custName', title:'客户', width:70}
+        //         ,{field:'linerName', title:'组长', width:70}
+        //         ,{field:'prodDate', title:'日期', width:100}
+        //        // ,{field:'deptName', title:'组装部', width:80}
+        //         ,{field:'classNo', title:'班次', width:60}
+        //         ,{field:'prodNo', title:'工单号', width:120}
+        //         ,{field:'itemNo', title:'物料编码', width:120}
+        //         ,{field:'itemName', title:'物料描述', width:200}
+        //         ,{field:'qtyPlan', title:'计划生产数量', width:110}
+        //         //,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
+        //     ]]
+        //     ,done: function(res, curr, count){
+        //         //如果是异步请求数据方式，res即为你接口返回的信息。
+        //         //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+        //         //console.log(res);
+        //         //得到当前页码
+        //         //console.log(curr);
+        //         //得到数据总量
+        //         //console.log(count);
+        //         pageCurr2=curr;
+        //     }
+        // });
 
         //监听行单击事件（双击事件为：rowDouble）
         table.on('rowDouble(iTable)', function(obj){

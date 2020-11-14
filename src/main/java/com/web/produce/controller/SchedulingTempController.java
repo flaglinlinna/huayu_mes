@@ -44,12 +44,12 @@ public class SchedulingTempController extends WebController {
         try{
             ApiResponseResult result = schedulingTempService.delete(ids);
             logger.debug(methodName+"=delete:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, ids);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error(methodName+"失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,ids+ e.toString());
             return ApiResponseResult.failure(methodName+"失败！");
         }
     }
@@ -99,12 +99,12 @@ public class SchedulingTempController extends WebController {
         try{
             ApiResponseResult result = schedulingTempService.doCheckProc(ids);
             logger.debug(methodName+"=doCheckProc:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, ids);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error(methodName+"失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, ids+e.toString());
             return ApiResponseResult.failure(methodName+"失败！");
         }
     }
@@ -117,12 +117,12 @@ public class SchedulingTempController extends WebController {
         try{
             ApiResponseResult result = schedulingTempService.doEffect(ids);
             logger.debug(methodName+"=doEffect:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, ids);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error(methodName+"失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, ids+e.toString());
             return ApiResponseResult.failure(methodName+"失败！");
         }
     }

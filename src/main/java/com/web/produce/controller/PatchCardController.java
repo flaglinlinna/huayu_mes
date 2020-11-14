@@ -59,12 +59,12 @@ public class PatchCardController extends WebController {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = patchCardService.getList(keyword, super.getPageRequest(sort));
 			logger.debug("获取补卡 数据列表=getList:");
-			getSysLogService().success(module,method, methodName, null);
+			getSysLogService().success(module,method, methodName, "关键字:"+keyword);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取补卡 数据列表失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName,"关键字:"+keyword+ e.toString());
 			return ApiResponseResult.failure("获取补卡 数据列表失败！");
 		}
 	}

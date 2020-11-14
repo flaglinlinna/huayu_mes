@@ -85,12 +85,12 @@ public class SchedulingController extends WebController {
         try{
             ApiResponseResult result = schedulingService.add(scheduling);
             logger.debug("新增=add:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, scheduling.toString());
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("新增失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, scheduling.toString()+e.toString());
             return ApiResponseResult.failure("新增失败！");
         }
     }
@@ -103,12 +103,12 @@ public class SchedulingController extends WebController {
         try{
             ApiResponseResult result = schedulingService.edit(scheduling);
             logger.debug("编辑=edit:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, scheduling.toString());
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("编辑失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, scheduling.toString()+e.toString());
             return ApiResponseResult.failure("编辑失败！");
         }
     }
@@ -121,12 +121,12 @@ public class SchedulingController extends WebController {
         try{
             ApiResponseResult result = schedulingService.delete(id);
             logger.debug("删除=delete:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, id);
             return result;
         }catch(Exception e){
             e.printStackTrace();
             logger.error("删除失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, id+";"+e.toString());
             return ApiResponseResult.failure("删除失败！");
         }
     }
@@ -140,12 +140,12 @@ public class SchedulingController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingService.getListByProcedure(keyword, super.getPageRequest(sort));
             logger.debug("获取排产信息列表=getList:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取排产信息列表失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,"关键字:"+keyword+ e.toString());
             return ApiResponseResult.failure("获取排产信息列表失败！");
         }
     }
@@ -284,12 +284,12 @@ public class SchedulingController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingService.getProcessList(keyword, mid, super.getPageRequest(sort));
             logger.debug("获取工艺列表=getProcessLst:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, "主表id:"+mid);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取工艺列表失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, "主表id:"+mid+e.toString());
             return ApiResponseResult.failure("获取工艺列表失败！");
         }
     }
@@ -302,12 +302,12 @@ public class SchedulingController extends WebController {
         try{
             ApiResponseResult result = schedulingService.editProcess(schedulingProcess);
             logger.debug("编辑工艺=editProcess:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, schedulingProcess.toString());
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("编辑工艺失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, schedulingProcess.toString()+e.toString());
             return ApiResponseResult.failure("编辑工艺失败！");
         }
     }
@@ -320,12 +320,12 @@ public class SchedulingController extends WebController {
         try{
             ApiResponseResult result = schedulingService.saveProcessProc(mid, processIds);
             logger.debug("保存工艺=saveProcess:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, "主表id:"+mid+"从表id:"+processIds);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("保存工艺失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, "主表id:"+mid+"从表id:"+processIds+e.toString());
             return ApiResponseResult.failure("保存工艺失败！");
         }
     }
@@ -358,12 +358,12 @@ public class SchedulingController extends WebController {
 //            Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingService.getEmpList(mid, super.getPageRequest(Sort.unsorted()));
             logger.debug("获取上线人员列表=getEmpList:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, "主表id:"+mid);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取上线人员列表！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, "主表id:"+mid+";"+e.toString());
             return ApiResponseResult.failure("获取上线人员列表！");
         }
     }
@@ -378,13 +378,49 @@ public class SchedulingController extends WebController {
 //            Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingService.getProdOrderList(mid, super.getPageRequest(Sort.unsorted()));
             logger.debug("获取生产投料列表=getProdOrderList:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, "主表id:"+mid);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取生产投料列表！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, "主表id:"+mid+e.toString());
             return ApiResponseResult.failure("获取生产投料列表！");
+        }
+    }
+
+    @ApiOperation(value = "获取产出送检列表", notes = "获取产出送检列表", hidden = true)
+    @RequestMapping(value = "/getProdOrderOutList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getProdOrderOutList(Long mid){
+        String method = "/produce/scheduling/getProdOrderOutList";String methodName ="获取产出送检列表";
+        try {
+            ApiResponseResult result = schedulingService.getProdOrderOutList(mid, super.getPageRequest(Sort.unsorted()));
+            logger.debug("获取产出送检列表=getProdOrderOutList:");
+            getSysLogService().success(module,method, methodName, "主表id:"+mid);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取产出送检列表！", e);
+            getSysLogService().error(module,method, methodName, "主表id:"+mid+e.toString());
+            return ApiResponseResult.failure("获取产出送检列表！");
+        }
+    }
+
+    @ApiOperation(value = "获取品质检验列表", notes = "获取品质检验列表", hidden = true)
+    @RequestMapping(value = "/getProdOrderQcList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getProdOrderQcList(Long mid){
+        String method = "/produce/scheduling/getProdOrderQcList";String methodName ="获取品质检验列表";
+        try {
+            ApiResponseResult result = schedulingService.getProdOrderQcList(mid, super.getPageRequest(Sort.unsorted()));
+            logger.debug("获取品质检验列表=getProdOrderQcList:");
+            getSysLogService().success(module,method, methodName, "主表id:"+mid);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取品质检验列表！", e);
+            getSysLogService().error(module,method, methodName, "主表id:"+mid+e.toString());
+            return ApiResponseResult.failure("获取品质检验列表！");
         }
     }
 
@@ -397,12 +433,12 @@ public class SchedulingController extends WebController {
         try {
             ApiResponseResult result = schedulingService.editItem(schedulingItem);
             logger.debug("编辑组件=editItem:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, schedulingItem.toString());
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("编辑组件失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName, schedulingItem.toString()+e.toString());
             return ApiResponseResult.failure("编辑组件失败！");
         }
     }

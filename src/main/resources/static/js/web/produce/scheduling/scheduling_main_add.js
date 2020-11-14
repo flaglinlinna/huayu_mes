@@ -455,7 +455,7 @@ function doCheckProc(table){
         url: context+"/produce/schedulingMain/doCheckProc",
         success: function (res) {
             if (res.result) {
-                layer.alert("校验成功！",function(index){
+                layer.alert("校验完成！,请留意校验信息",function(index){
                     loadAll();//重新加载表格
                     layer.close(index);
                 });
@@ -491,11 +491,12 @@ function doEffect(table){
         success: function (res) {
             if (res.result) {
                 layer.alert("生效成功！",function(index){
-                    loadAll();//重新加载表格
                     layer.close(index);
+                    loadAll();//重新加载表格
                 });
             } else {
                 layer.alert(res.msg,function(index){
+                    loadAll();
                     layer.close(index);
                 });
             }

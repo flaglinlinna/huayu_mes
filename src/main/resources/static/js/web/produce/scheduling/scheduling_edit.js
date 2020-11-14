@@ -174,10 +174,10 @@ $(function () {
                 ,{type:"checkbox", field:'checkColumn'}
                 ,{field:'procOrder', title:'工序顺序', width:100, sort:true}
                 ,{field:'procNo', title:'工序编号', width:100}
-                ,{field:'procName', title:'工序名称', width:150}
+                ,{field:'procName', title:'工序名称', width:250}
                 ,{field:'jobAttr', title:'过程属性', width:100, templet:'#statusTpl'}
                 ,{field:'empName', title:'作业人员', width:150}
-                ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar'}
+                ,{fixed:'right', title:'操作',width:150, align:'center', toolbar:'#optBar'}
                 //,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){
@@ -235,11 +235,11 @@ $(function () {
             cols: [[
                 {type:'numbers'}
                 ,{field:'itemNo', title:'物料编号', width:150}
-                ,{field:'itemName', title:'物料描述', width:250, templet:'<span>{{d.mtrial ? d.mtrial.itemName : ""}}</span>'}
+                ,{field:'itemName', title:'物料描述',width:450, templet:'<span>{{d.mtrial ? d.mtrial.itemName : ""}}</span>'}
                 ,{field:'itemQty', title:'组件用量', width:100}
                 ,{field:'itemUnit', title:'组件单位', width:100}
                 ,{field:'empName', title:'作业员', width:100, templet:'<span>{{ d.employee ? d.employee.empName : "" }}</span>'}
-                ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
+                ,{fixed:'right', title:'操作',width:150, align:'center', toolbar:'#optBar2'}
             ]]
             ,done: function(res, curr, count){
                 //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -340,6 +340,105 @@ $(function () {
                 pageCurr2=curr;
             }
         });
+
+        tableIns5=table.render({
+            elem: '#iList5'
+            ,url:context+'/produce/scheduling/getProdOrderOutList'
+            ,method: 'get' //默认：get请求
+            ,where:{ mid:id }
+            ,cellMinWidth: 80,
+            limit:50,
+            // ,page: true,
+            align:'center',
+            request: {
+                pageName: 'page' //页码的参数名称，默认：page
+                ,limitName: 'rows' //每页数据量的参数名，默认：limit
+            },
+            parseData: function (res) {
+                // 可进行数据操作
+                return {
+                    "count": res.data.total,
+                    "msg":res.msg,
+                    "data":res.data.rows,
+                    "code": res.status //code值为200表示成功
+                }
+            },
+            cols: [[
+                {type:'numbers'}
+                ,{field:'PROC_ORDER', title:'工序顺序', width:100,align:'center',}
+                ,{field:'PROC_NAME', title:'工序名称', width:180,}
+                ,{field:'SCAN_TYPE', title:'产出类型', width:190,}
+                ,{field:'ITEM_BARCODE', title:'产品条码', width:145}
+                ,{field:'ITEM_NO', title:'产品编码', width:80,align:'center',}
+                ,{field:'QUANTITY', title:'产出/送检数', width:120,align:'center',}
+                ,{field:'USER_NAME', title:'操作人', width:100,align:'center',}
+                ,{field:'CREATE_DATE', title:'操作时间', width:160,align:'center',}
+                ,{field:'ITEM_NAME', title:'产品名称', width:160,align:'center',}
+                // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
+            ]]
+            ,done: function(res, curr, count){
+                //如果是异步请求数据方式，res即为你接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                //console.log(res);
+                //得到当前页码
+                //console.log(curr);
+                //得到数据总量
+                //console.log(count);
+                pageCurr2=curr;
+            }
+        });
+
+        tableIns6=table.render({
+            elem: '#iList6'
+            ,url:context+'/produce/scheduling/getProdOrderQcList'
+            ,method: 'get' //默认：get请求
+            ,where:{ mid:id }
+            ,cellMinWidth: 80,
+            limit:50,
+            // ,page: true,
+            align:'center',
+            request: {
+                pageName: 'page' //页码的参数名称，默认：page
+                ,limitName: 'rows' //每页数据量的参数名，默认：limit
+            },
+            parseData: function (res) {
+                // 可进行数据操作
+                return {
+                    "count": res.data.total,
+                    "msg":res.msg,
+                    "data":res.data.rows,
+                    "code": res.status //code值为200表示成功
+                }
+            },
+            cols: [[
+                {type:'numbers'}
+                ,{field:'PROC_ORDER', title:'工序顺序', width:100,align:'center',}
+                ,{field:'PROC_NAME', title:'工序名称', width:180,}
+                ,{field:'LOT_NO', title:'虚拟批次', width:190,}
+                ,{field:'ITEM_BARCODE', title:'产品条码', width:145}
+                ,{field:'ITEM_NO', title:'产品编码', width:80,align:'center',}
+                ,{field:'QUANTITY', title:'检验数', width:120,align:'center',}
+                ,{field:'SAMPLE_QTY', title:'产品条码', width:145}
+                ,{field:'QTY_PROC', title:'抽检总数', width:80,align:'center',}
+                ,{field:'QTY_DONE', title:'检验总数', width:120,align:'center',}
+                ,{field:'USER_NAME', title:'抽检合格数', width:100,align:'center',}
+                ,{field:'CREATE_DATE', title:'操作时间', width:160,align:'center',}
+                ,{field:'ITEM_NAME', title:'产品名称', width:160,align:'center',}
+                // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
+            ]]
+            ,done: function(res, curr, count){
+                //如果是异步请求数据方式，res即为你接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                //console.log(res);
+                //得到当前页码
+                //console.log(curr);
+                //得到数据总量
+                //console.log(count);
+                pageCurr2=curr;
+            }
+        });
+
+
 
         //监听工具条-工单组件
         table.on('tool(iTable2)', function(obj){
