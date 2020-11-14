@@ -41,9 +41,9 @@ var getMenus=function(data){
     		'  <dd data-name="console" class="layui-this"> '+
     		'     <a lay-href="/console">控制台</a>'+
     		'   </dd> '+
-    		'  <dd data-name="console1" > '+
+    		/*'  <dd data-name="console1" > '+
     		'     <a lay-href="'+context+'/console/toConsole1">控制台1</a> '+
-    		'   </dd> '+
+    		'   </dd> '+*/
     		' </dl> '+
     		' </li> '+
     		' 	</ul>');
