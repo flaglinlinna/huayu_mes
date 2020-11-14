@@ -90,27 +90,25 @@ $(function() {
 				cols : [ [
 				{ type: 'checkbox' },//多选  radio
 				, {
-					field : 'id',
+					field : 'ID',
 					title : 'id',
 					width : 0,hide:true
-				}
-                , {
-					field : 'itemNo',
+				}, {
+					field : 'ITEM_NO',
 					title : '物料编码',
 					width : 150
+				}, {
+					field : 'ITEM_NAME_S',
+					title : '物料简称',
+					width : 150
 				},{
-					field : 'itemName',
+					field : 'ITEM_NAME',
 					title : '物料描述',
 					width : 400
-				}, {
-					field : 'itemUnit',
-					title : '单位',
-					width : 80
 				} ] ],
 				page : true,
 				request : {
-					pageName : 'page' // 页码的参数名称，默认：page
-					,
+					pageName : 'page', // 页码的参数名称，默认：page
 					limitName : 'rows' // 每页数据量的参数名，默认：limit
 				},
 				parseData : function(res) {
@@ -134,8 +132,8 @@ $(function() {
 				//console.log(da[0].num)
 				var ids = '';var nos = "";
 				data.data.forEach(function(element) {
-					ids += element.id+",";
-					nos += element.itemNo+",";
+					ids += element.ID+",";
+					nos += element.ITEM_NO+",";
 				});
 				form.val("clientProcForm", {
 					"itemId":ids,
