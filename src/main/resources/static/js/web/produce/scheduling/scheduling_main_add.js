@@ -8,8 +8,65 @@ $(function () {
             ,form = layui.form
             ,laydate = layui.laydate
             ,upload = layui.upload
-            ,tableSelect = layui.tableSelect
-            ,tableSelect2 = layui.tableSelect;
+            ,tableSelect = layui.tableSelect;
+
+        tableSelect.render({
+            elem : '#itemNo2',
+            searchKey : 'keyword',
+            checkedKey : 'ID',
+            searchPlaceholder : '物料搜索',
+            table : {
+                url:  context +'/produce/schedulingMain/getItemSelect',
+                method : 'post',
+                cols : [ [
+                    { type: 'radio' },//多选  checkbox
+                    , {
+                        field : 'ID',
+                        title : 'ID',
+                        width : 0,hide:true
+                    }
+                    , {
+                        field : 'ITEM_NO',
+                        title : '物料编号',
+                        align:'center',
+                        width : 150
+                    },{
+                        field : 'ITEM_NAME',
+                        title : '物料描述',
+                        align:'center',
+                        // width : 200
+                    } ] ],
+                page : true,
+                request : {
+                    pageName : 'page' // 页码的参数名称，默认：page
+                    ,
+                    limitName : 'rows' // 每页数据量的参数名，默认：limit
+                },
+                parseData : function(res) {
+                    if(res.result){
+                        // 可进行数据操作
+                        return {
+                            "count" : res.data.total,
+                            "msg" : res.msg,
+                            "data" : res.data.rows,
+                            "code" : res.status
+                            // code值为200表示成功
+                        }
+                    }
+
+                },
+            },
+            done : function(elem, data) {
+                //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+                var da=data.data;
+                form.val("editForm", {
+                    "itemId":da[0].ID,
+                    "itemNo":da[0].ITEM_NO,
+                    "itemName":da[0].ITEM_NAME,
+                });
+                layui.form.render();// 重新渲染
+            }
+        });
 
         // 监听提交
         form.on('submit(addSubmit)', function(data) {
@@ -47,6 +104,9 @@ $(function () {
         form.on('submit(editSubmit)', function(data){
             doEdit(data);
         });
+
+
+
         //监听工具条
         table.on('tool(iTable)', function(obj){
             var data = obj.data;
@@ -57,18 +117,19 @@ $(function () {
                         layer.close(index);
                     });
                 }else{
+                    getOrgSelect(data.LINER_NAME);
                     getData(data,data.ID);
                 }
             }
         });
 
-
-        if(id!=null&&id!=undefined) {
-            tableIns = table.render({
+        tableIns = table.render({
                 elem: '#iList'
                 , url: context + '/produce/schedulingMain/getDetList'
                 , method: 'get' //默认：get请求
-                , where: {keyword: "", mid: id}
+                , where: {keyword: "",mid: function(){
+                        return id;
+                    }}
                 , cellMinWidth: 80
                 , page: true,
                 request: {
@@ -109,14 +170,21 @@ $(function () {
                     pageCurr = curr;
                 }
             });
-        }
+
+
+        getMainData();//获取数据
 
         //导入
         upload.render({
             elem: '#uploadBtn'
             ,url: context + '/produce/schedulingMain/doExcel'
             ,accept: 'file' //普通文件
-            ,data: { mid:id }
+            // ,data: { mid: id }
+            ,data: {
+                mid: function(){
+                    return $('#id').val();
+                }
+            }
             ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
                 layer.load(); //上传loading
             }
@@ -161,7 +229,7 @@ $(function () {
         });
 
         //getDeptSelect();//获取部门下拉数据
-        getMainData();//获取数据
+
     });
 });
 
@@ -176,6 +244,42 @@ function toSchedulingEdit(d){
     document.body.appendChild(a);//创建
     a.click();//点击
     return false;
+}
+
+function getOrgSelect(orgName) {
+    console.log(orgName);
+    $.ajax({
+        type: "post",
+        data: {},
+        url: context+"/produce/schedulingMain/getOrgSelect",
+        success: function (res) {
+            $("#linerName2").empty();
+            if (res.result) {
+                var OrgList = res.data.rows;
+                console.log(OrgList);
+                if(orgName!=null&&orgName!=undefined){
+                    //编辑情况下的默认选择
+                    $("#linerName2").append('<option value="'+ orgName +'">'+orgName+'</option>');
+                    for(var i = 0; i < OrgList.length; i++){
+                        if(orgName!=OrgList[i].LEAD_BY){
+                            $("#linerName2").append( '<option value="'+OrgList[i].LEAD_BY+'">'+OrgList[i].LEAD_BY+'</option>');
+                        }
+                    }
+                }else {
+                    $("#linerName2").append("<option value=''>请点击选择</option>");
+                    for(var i = 0; i < OrgList.length; i++){
+                        $("#linerName2").append( '<option value="'+OrgList[i].LEAD_BY+'">'+OrgList[i].LEAD_BY+'</option>');
+                    }
+                }
+                layui.form.render('select');
+            } else {
+                layer.alert(res.msg,function(index){
+                });
+            }
+        },
+        error: function () {
+        }
+    });
 }
 
 //获取部门下拉数据  新增班次下拉选择
