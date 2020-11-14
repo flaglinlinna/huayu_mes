@@ -139,4 +139,18 @@ public class SchedulingMain extends BaseEntity {
     public void setIdNo(String idNo) {
         this.idNo = idNo;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append("生效时间:").append(this.prodDate);
+        sb.append(",部门名称:").append(this.deptName);
+        sb.append(",部门id:").append(this.deptId);
+        sb.append(",班次:").append(this.className);
+        sb.append(",是否生效:").append(this.fenable==0?"否":"是");
+        sb.append(",生效人:").append(this.fenableBy);
+        sb.append(",生效时间:").append(this.fenableDate);
+        sb.append(",工单号:").append(this.idNo);
+        return sb.toString();
+    }
 }
