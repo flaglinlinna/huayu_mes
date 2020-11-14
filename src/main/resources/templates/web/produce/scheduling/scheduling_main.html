@@ -137,9 +137,9 @@
 
     <script type="text/html" id="statusTp1">
         {{#  if(!d.FENABLE || d.FENABLE != "1"){ }}
-        <input type="checkbox" name="{{d.ID_NO}}" value="{{d.ID}}" lay-skin="switch" lay-text="生效|不生效" lay-filter="isStatusTpl"/>
+        <input type="checkbox" name="{{d.ID_NO}}" value="{{d.ID}}" lay-skin="switch" lay-text="已生效|未生效" lay-filter="isStatusTpl"/>
         {{#  } else { }}
-        <input type="checkbox" name="{{d.ID_NO}}" value="{{d.ID}}" lay-skin="switch" lay-text="生效|不生效" lay-filter="isStatusTpl" checked="checked" />
+        <input type="checkbox" name="{{d.ID_NO}}" value="{{d.ID}}" lay-skin="switch" lay-text="已生效|未生效" lay-filter="isStatusTpl" checked="checked" />
         {{#  } }}
     </script>
 

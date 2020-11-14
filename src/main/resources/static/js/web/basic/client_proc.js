@@ -40,19 +40,6 @@ $(function() {
 			cols : [ [ {
 				type : 'numbers'
 			}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			// ,{
-			// 	field : 'custId',
-			// 	title : '客户Id',
-			// 	width:0,
-			// 	hide:true
-			// }
-			// ,{
-			// 	field : 'custNo',
-			// 	title : '客户编号',
-			// 	sort: true,
-			// 	width:100
-			// }
 			,{
 				field : 'fdemoName',
 				title : '模板名称',
@@ -100,13 +87,6 @@ $(function() {
 				width:130,
 			} ] ],
 			done : function(res, curr, count) {
-				// 如果是异步请求数据方式，res即为你接口返回的信息。
-				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-				// console.log(res);
-				// 得到当前页码
-				// console.log(curr);
-				// 得到数据总量
-				// console.log(count);
 				pageCurr = curr;
 				//console.log(res)
 				for(var i =0;i<res.data.length;i++){
@@ -126,11 +106,25 @@ $(function() {
 		form.on('checkbox(isStatusTpl)', function(obj) {//修改过程属性
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
+		
+		// 监听勾选过程属性操作
+		form.on('checkbox(isStatusTp2)', function(obj) {
+			 //当前元素
+            var data = $(obj.elem);
+			var rowIndex = data.parents('tr').first().attr("data-index");
 
-		table.on('checkbox(isStatusTp2)', function(obj) {//修改过程属性
-			console.log(obj);
-			// setStatus2(obj, this.value, this.name, obj.elem.checked);
+			if(obj.elem.checked){
+				//res.data[rowIndex]["LAY_CHECKED"]='true';
+                $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+                $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+			}else{
+			    $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', false);
+	            $('tbody tr[data-index="'+rowIndex+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+			}
+			
 		});
+		
+		
 
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
@@ -144,10 +138,10 @@ $(function() {
 			cols : [ [ {
 				type : 'numbers'
 			}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
+			 ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, 
 			{
-				type:"checkbox"
+				type:"checkbox", field:'checkColumn'
 			},
 			
 			{
@@ -170,11 +164,26 @@ $(function() {
 			data:[]
 		});	
 		
-		// form.on('select(pkClient)', function(data){//监听选择事件
-		// 	//var params={"client":$("#pkClient").val()}
-		// 	getProcByClient($("#pkClient").val());
-		// })
-		
+		table.on('checkbox(procList)', function(obj){
+			   //console.log(obj.checked); //当前是否选中状态
+			   //console.log(obj.data); //选中行的相关数据
+			   //console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+			   //console.log(table.checkStatus('table-organization').data); // 获取表格中选中行的数据
+			if(obj.type=='all'){
+				if(!obj.checked){
+					$('.layui-table-body input[type="checkbox"]').prop('checked', false);
+		            $('.layui-table-body input[type="checkbox"]').next().removeClass('layui-form-checked');
+				}
+			}else{
+				var tr = obj.tr.selector
+				   if(!obj.checked){
+					   $(tr+' td[data-field="checkStatus"] input[type="checkbox"]').prop('checked', false);
+			            $(tr+' td[data-field="checkStatus"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+				   }
+			}
+			
+		});
+
 		// 监听工具条
 		table.on('tool(listTable)', function(obj) {
 			var data = obj.data;
@@ -224,16 +233,24 @@ $(function() {
 		form.on('submit(addSubmit)', function(data) {			
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
+				var checkStatus = table.cache.procList;
 				var procIdList="";
-				var jobAttr ="";
-				var cList=table.checkStatus('procList').data;//被选中行的数据  id 对应的值
-				console.log(cList);
-				for(var i=0;i<cList.length;i++){//获取被选中的行
-					procIdList+=cList[i].id+";"//工序的ID序列，用“；”分隔
-				}
-				console.log(jobAttr);
+				$('#clientProcForm tbody tr td[data-field="checkColumn"] input[type="checkbox"]').each(function(i){
+			        if ($(this).is(":checked")) {
+			        	//fyx-20201114
+			        	var checks = $('tbody tr[data-index="'+i+'"] td[data-field="checkStatus"] input[type="checkbox"]:checked');
+
+			        	if(checks.length > 0){
+			        		procIdList += checkStatus[i].id+"@1,";
+			        	}else{
+			        		procIdList += checkStatus[i].id+"@0,";
+			        	}
+					}
+			    });
+				//alert(procIdList)
 				var fdemoName=data.field.fdemoName;
 				addSubmit(procIdList,fdemoName);
+
 			} else {
 				//editSubmit(data);//未写
 			}
@@ -316,16 +333,10 @@ $(function() {
 				};
 				CoreUtil.sendAjax("/base/client_proc/doProcOrder", JSON
 						.stringify(param), function(data) {
-					if (data.result) {
-						layer.alert("操作成功", function() {
-							layer.closeAll();
-							loadAll();
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-						});
-					}
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+					loadAll();
 				}, "POST", false, function(res) {
 					layer.alert("操作请求错误，请您稍后再试", function() {
 						layer.closeAll();
@@ -355,12 +366,16 @@ function getProcByClient(params){
 					for(var i =0;i<res.data.length;i++){
 						for(var j=0;j<beSelected.length;j++){
 							if(res.data[i].id == beSelected[j].procId){
-								console.log(res.data[i].id);
 								//这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
 						        res.data[i]["LAY_CHECKED"]='true';
 								//更改css来实现选中的效果
-								$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
-								$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
+						        $('#clientProcForm tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+                                $('#clientProcForm tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+								//20201114-fyx-选中过程属性
+								if(beSelected[j].jobAttr == '1'){
+									$('#clientProcForm tbody tr[data-index="'+i+'"] td[data-field="checkStatus"] input[type="checkbox"]').prop('checked', true);
+	                                $('#clientProcForm tbody tr[data-index="'+i+'"] td[data-field="checkStatus"] input[type="checkbox"]').next().addClass('layui-form-checked');
+								}
 							}
 							
 						}

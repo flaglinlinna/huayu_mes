@@ -332,7 +332,7 @@ function openFileView(id,title){
     if(id==null || id==""){
         $("#defectId").val("");
     }
-    layer.open({
+    var index = layer.open({
         type:1,
         title: title,
         fixed:false,
@@ -343,6 +343,7 @@ function openFileView(id,title){
         end:function(){
         }
     });
+    layer.full(index);//弹出框全屏
 }
 //附件管理
 function fileView(id){

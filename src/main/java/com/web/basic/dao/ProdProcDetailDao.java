@@ -13,7 +13,8 @@ public interface ProdProcDetailDao extends CrudRepository<ProdProcDetail, Long>,
 	public List<ProdProcDetail> findAll();
 	//public List<ProdProcDetai> findByDelFlag(Integer delFlag);
 	public ProdProcDetail findById(long id);
-	//public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
+	
+	public List<ProdProcDetail> findByDelFlagAndItemIdAndProcOrder(Integer delFlag,Long itemId,Integer order);
 	
 	@Modifying
     @Query("update ProdProcDetail t set t.delFlag=1 where t.itemId=?1 and t.delFlag=0")
