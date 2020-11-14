@@ -67,36 +67,47 @@ public class AbnormalHoursRlmpl extends ReportPrcUtils implements AbnormalHoursR
 		return ApiResponseResult.success().data(list.get(2));
 	}
 	
-	
-	/*
-	
+	/**
+	 * 获取数据
+	 * 2020-11-14
+	 * */
 	@Override
-	public ApiResponseResult getList(String keyword, String sdate, String edate) throws Exception {
+	public ApiResponseResult getList(String sdate,String edate,
+			String Liner,String empCode,String taskNo,PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = getListPrc(UserUtil.getSessionUser().getFactory() + "",
-				UserUtil.getSessionUser().getCompany() + "",
-				sdate, edate,keyword);
+				UserUtil.getSessionUser().getCompany() + "",UserUtil.getSessionUser().getId()+"",
+				sdate, edate,Liner,empCode,taskNo,pageRequest);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		return ApiResponseResult.success().data(list.get(2));
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
 	}
 
-	private List getListPrc(String facoty,String company,String beginTime,
-			String endTime,String keyword) throws Exception {
+	private List getListPrc(String facoty,String company,String user_id ,String  beginTime,
+			String endTime,String liner,String empCode,String taskNo,PageRequest pageRequest) throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  PRC_MES_RPT_EFI_EL_DET(?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  prc_mes_att_abnormal_calc(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
-				cs.setString(2, company);;
-				cs.setString(3, beginTime);
-				cs.setString(4, endTime);
-				cs.setString(5, keyword);
-				cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
-				cs.registerOutParameter(8, -10);// 输出参数 追溯数据
+				cs.setString(2, company);
+				cs.setString(3, user_id);
+				cs.setString(4, beginTime);
+				cs.setString(5, endTime);
+				cs.setString(6, liner);
+				cs.setString(7, taskNo);
+				cs.setString(8, empCode);
+				cs.setInt(9, pageRequest.getPageSize());
+				cs.setInt(10, pageRequest.getPageNumber()+1);
+				cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(12, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(14, -10);// 输出参数 追溯数据
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -104,11 +115,12 @@ public class AbnormalHoursRlmpl extends ReportPrcUtils implements AbnormalHoursR
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(6));
-				result.add(cs.getString(7));
-				if (cs.getString(6).toString().equals("0")) {
+				result.add(cs.getInt(12));
+				result.add(cs.getString(13));
+				if (cs.getString(11).toString().equals("0")) {
+					result.add(cs.getInt(11));
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(8);
+					ResultSet rs = (ResultSet) cs.getObject(14);
 					try {
 						l = fitMap(rs);
 					} catch (Exception e) {
@@ -123,7 +135,4 @@ public class AbnormalHoursRlmpl extends ReportPrcUtils implements AbnormalHoursR
 		});
 		return resultList;
 	}
-*/
-	
-	
 }

@@ -1,11 +1,14 @@
 package com.web.report.controller;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -89,22 +92,26 @@ public class AbnormalHoursRController extends WebController {
 	        }
 	    }
 	
-	/*
+	
 	@ApiOperation(value = "工时异常统计表", notes = "工时异常统计表", hidden = true)
-	@RequestMapping(value = "/getList", method = RequestMethod.GET)
+	@RequestMapping(value = "/getList", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult getList(String keyword,String dates) {
-		String method = "report/line_effic/getList";
-		String methodName = "工时异常统计表";String param = "关键字:"+keyword+",日期:"+dates;
+	public ApiResponseResult getList(@RequestBody Map<String, Object> params) {
+		String method = "report/abnormal_r/getList";
+		
+		String sdate=params.get("sdate").toString();
+		String edate=params.get("edate").toString();
+		String empCode=params.get("empCode").toString();
+		String liner=params.get("liner").toString();
+		String taskno=params.get("taskno").toString();
+		
+		String methodName = "工时异常统计表";
 		try {
-			String[] date = {"",""};
-			if(StringUtils.isNotEmpty(dates)){
-				date = dates.split(" - ");
-			}
 			Sort sort = Sort.unsorted();
-			ApiResponseResult result = abnormalHoursRService.getList(keyword,date[0],date[1],super.getPageRequest(sort));
+			ApiResponseResult result = abnormalHoursRService.getList(sdate,edate,liner,empCode,taskno
+					,super.getPageRequest(sort));
 			logger.debug("追溯=getList:");
-			getSysLogService().success(module, method, methodName, param);
+			getSysLogService().success(module, method, methodName, "");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,5 +119,5 @@ public class AbnormalHoursRController extends WebController {
 			getSysLogService().error(module, method, methodName, e.toString());
 			return ApiResponseResult.failure(methodName+"失败！"+e.toString());
 		}
-	}*/
+	}
 }
