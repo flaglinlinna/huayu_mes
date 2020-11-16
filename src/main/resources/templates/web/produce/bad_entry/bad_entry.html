@@ -44,6 +44,7 @@
 						<form id="itemFrom" class="layui-form layui-form-pane"
 							lay-filter="itemFrom" method="post" action="">
 							<div class="layui-form-item">
+							<div class="layui-inline">
 								<label class="layui-form-label layui-required">制令单号</label>
 								<div class="layui-input-inline" style="width: 330px;">
 									<input type="text" name="taskno" placeholder="请选择"
@@ -62,6 +63,7 @@
 										style="background: #efefef;" class="layui-input" disabled
 										type="text" />
 								</div>
+								</div>
 							</div>
 							<div class="layui-form-item">
 								<label class="layui-form-label">产品描述</label>
@@ -71,7 +73,8 @@
 										type="text" />
 								</div>
 							</div>
-							<div class="layui-form-item">			
+							<div class="layui-form-item">	
+							<div class="layui-inline">		
 							<label class="layui-form-label layui-required">不良代码</label>
 							<div class="layui-input-inline" style="width: 190px;">
 									<input type="text" placeholder="请输入或选择不良代码" name="inputCode" id="inputCode" class="layui-input" style="position:absolute;z-index:2;width:80%;" lay-verify="required"  autocomplete="off">
@@ -83,7 +86,8 @@
 								<div class="layui-input-inline">
 									<input id="defName" name="defName" autocomplete="off"
 											style="background: #efefef;" class="layui-input"  disabled type="text" />
-								</div> 						
+								</div> 	
+								</div>					
 							</div>
 							<div class="layui-form-item">
 								<div class="layui-word-aux" style="margin: 5px;">请输入或者扫描条码后回车</div>
