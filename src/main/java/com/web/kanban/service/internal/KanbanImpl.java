@@ -179,9 +179,6 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		map.put("List_result1", list.get(2));
 		map.put("List_result2", list.get(3));
 		
-		return ApiResponseResult.success().data(map);
-		
-	}
-	
-	
+		return ApiResponseResult.success().data(map);		
+	}	
 }

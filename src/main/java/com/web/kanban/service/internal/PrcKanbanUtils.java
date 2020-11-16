@@ -416,16 +416,16 @@ public class PrcKanbanUtils {
 					List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 						@Override
 						public CallableStatement createCallableStatement(Connection con) throws SQLException {
-							String storedProc = "{call PRC_MES_RPT_CXSC(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+							String storedProc = "{call PRC_MES_RPT_CXSC(?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 							CallableStatement cs = con.prepareCall(storedProc);
 							cs.setString(1, company);//-公司
 							cs.setString(2, facoty);//工厂
 							cs.setString(3, taskNo);// 班次
 							cs.setString(4, deptId);//--部门ID*
 							cs.setString(5, liner);//-组长*
-							cs.setString(6, dev_ip);//日期*
-							cs.setString(7, usr_id);//电视IP或mac*
-							cs.setString(8, interval);//用户id
+							cs.setString(6, dev_ip);//电视IP或mac*
+							cs.setString(7, usr_id);//用户id*
+							cs.setString(8, interval);//时间间隔*
 							cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
 							cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
 							cs.registerOutParameter(11, -10);// 输出参数 追溯数据

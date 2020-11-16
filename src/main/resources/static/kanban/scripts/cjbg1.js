@@ -39,9 +39,9 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			}
 		},
 		grid : {
-			x : 50,// 左边距
+			x : 70,// 左边距
 			y : 20,// 上边距
-			x2 : 50,// 右边距
+			x2 : 60,// 右边距
 			y2 : 50,// 下边距
 			borderWidth : 10
 		},
@@ -50,7 +50,7 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			y : 'bottom',
 			data : [ '标准工时', '实际工时', '生产效率' ],
 			textStyle : {
-				fontSize : 18,// 字体大小
+				fontSize : 12,// 字体大小
 				color : '#ffffff'// 字体颜色
 			},
 		},
@@ -75,7 +75,7 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				show : false
 			},
 			axisLabel : {
-				formatter : '{value} 小时',
+				formatter : '{value}小时',
 				textStyle : {
 					color : '#ffffff'
 				}
@@ -86,7 +86,7 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				show : false
 			},
 			axisLabel : {
-				formatter : '{value} %',
+				formatter : '{value}%',
 				textStyle : {
 					color : '#ffffff'
 				}
@@ -115,7 +115,8 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			data : series3_data,
 			label : {
 				show : true,
-				position : 'top'
+				position : 'top',
+				formatter: '{c}%'
 			},
 		} ]
 	};

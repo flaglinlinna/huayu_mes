@@ -34,7 +34,7 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'errCode',
-				title : '异常编码',sort:true
+				title : '异常代码',sort:true
 			}, {
 				field : 'errName',
 				title : '异常类型',sort:true

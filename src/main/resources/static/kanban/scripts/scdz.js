@@ -60,7 +60,7 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			y : 'bottom',
 			data : [ '计划产量', '达成产量', '完工率' ],
 			textStyle : {
-				fontSize : 17,// 字体大小
+				fontSize : 12,// 字体大小
 				color : '#ffffff'// 字体颜色
 			},
 		},
@@ -86,7 +86,8 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			axisLabel : {
 				formatter : '{value} ',
 				textStyle : {
-					color : '#ffffff'
+					color : '#ffffff',
+					fontSize : 10,// 字体大小
 				}
 			},
 		}, {
@@ -97,23 +98,37 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			axisLabel : {
 				formatter : '{value} %',
 				textStyle : {
-					color : '#ffffff'
+					color : '#ffffff',
+					fontSize : 10,// 字体大小
 				}
 			}
 		} ],
 		series : [ {
 			name : '计划产量',
 			type : 'bar',
-			data : series2_data
+			data : series2_data,
+			label : {
+				show : true,
+				position : 'top'
+			},
 		}, {
 			name : '达成产量',
 			type : 'bar',
-			data : series1_data
+			data : series1_data,
+			label : {
+				show : true,
+				position : 'top'
+			},
 		}, {
 			name : '完工率',
 			type : 'line',
 			yAxisIndex : 1,
-			data : series3_data
+			data : series3_data,
+			label : {
+				show : true,
+				position : 'top',
+				formatter: '{c}%'
+			},
 		} ]
 	};
 	// 创建echarts对象在哪个节点上
@@ -123,13 +138,15 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 }
 
 function getChart2(emp_plan, emp_now, emp_off) {
-	option = {
+	/*option = {
 		title : {
 			text : '应到人数：' + emp_plan,
 			textStyle : {
-				color : '#FFFFFF' // 图例文字颜色
+				color : '#FFFFFF', // 图例文字颜色
+				//fontSize:'28px'
 			},
-			x : 'right'
+			x : 'left',
+			y : 'bottom',
 		},
 		tooltip : {
 			trigger : 'item',
@@ -187,7 +204,77 @@ function getChart2(emp_plan, emp_now, emp_off) {
 				}
 			}
 		} ]
-	};
+	};*/
+	// 指定图表的配置项和数据
+    var option = {
+        
+        color:['#6699FF', '#66FFCC'],
+        title:{
+            text:emp_plan,
+            left:"center",
+            top:"50%",
+            textStyle:{
+                color:"#ffffff",
+                fontSize:36,
+                align:"center"
+            }
+        },
+        graphic:{
+            type:"text",
+            left:"center",
+            top:"40%",
+            style:{
+                text:"应到人数",
+                textAlign:"center",
+                fill:"#ffffff",
+                fontSize:20,
+                fontWeight:700
+            }
+        },
+        series: [
+            {
+                name: '出勤',
+                type: 'pie',
+                radius: ['60%', '70%'],
+                avoidLabelOverlap: false,
+                label : {
+    				formatter : '{hr|}\n  {b|{b}：}{c} ',
+    				// backgroundColor: '#eee',
+    				borderColor : '#aaa',
+    				borderWidth : 1,
+    				borderRadius : 4,
+    				rich : {
+    					a : {
+    						color : '#999',
+    						lineHeight : 20,
+    						align : 'center'
+    					},
+    					hr : {
+    						borderColor : '#000066',
+    						width : '90%',
+    						borderWidth : 0.5,
+    						height : 0
+    					},
+    					b : {
+    						fontSize : 13,
+    						lineHeight : 30
+    					},
+    					per : {
+    						color : '#eee',
+    						backgroundColor : '#334455',
+    						padding : [ 2, 3 ],
+    						borderRadius : 2
+    					}
+    				}
+    			},
+                data: [
+                    { value: emp_off, name: '缺勤人数' },
+                    { value: emp_now, name: '在线人数' },
+                   
+                ]
+            }
+        ]
+    };
 
 	// 创建echarts对象在哪个节点上
 	var myCharts1 = echarts.init(document.getElementById('echart2'));
@@ -200,16 +287,19 @@ function getChart3(done, plan, doneRate) {
 			text : '完工率:' + doneRate + '%',
 			textStyle : {
 				color : '#FFFFFF' ,// 图例文字颜色
-				fontSize:'14px'
+				
 			},
-			x : 'right'
+			left:'15px',
 		},
 		color : [ '#0066FF', '#66CCCC' ],
 		legend : {
 			data : [ '计划产量', '完工产量' ],
 			textStyle : {
 				color : '#FFFFFF' // 图例文字颜色
-			}
+			},
+			orient: 'vertical',
+			x : 'right',
+			y : 'top',
 		},
 		grid : {
 			left : '3%',

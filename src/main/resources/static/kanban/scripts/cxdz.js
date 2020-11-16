@@ -261,18 +261,18 @@ function getLinerList(linerList) {
 	$("#liner_select").append(html);
 }
 function getList() {
-	var date = $("#date").val();
+	//var date = $("#date").val();
 	//var sdata = date.substring(0, date.indexOf(" "))
 //	var edata = date.substring(date.indexOf(" ") + 3, date.length);
 	// console.log(sdata)
 	// console.log(edata)
 	var class_no=$("#class_select").val();
-	var dep_id=$("#dep_select").val();
+	//var dep_id=$("#dep_select").val();
 	var liner=$("#liner_select").val();
 	var params = {
 		"class_nos" : class_no,
-		"dep_id" : dep_id,
-		"sdata" : date,
+		"dep_id" : "",
+		"sdata" : "",
 		"liner":liner
 	};
 	$.ajax({

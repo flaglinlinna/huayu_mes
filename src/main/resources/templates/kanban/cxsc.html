@@ -2,12 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>生产电子看板</title>
+<title>产线生产看板</title>
 <script type="text/javascript" src="../kanban/js/jquery.js"></script>
 <link rel="stylesheet" href="../kanban/css/comon0.css">
 <link rel="stylesheet" href="../layui/css/layui.css"
 	th:href="@{/layui/css/layui.css}"></link>
 <script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
+
 </head>
 <style>
 th, td {
@@ -36,6 +37,30 @@ td {
 	top: 0;
 	line-height: .75rem;
 }
+
+h2 {
+	text-align: center;
+	margin-top: 8px;
+	color: #ffffff;
+	font-size: 20px;
+}
+
+ul {
+	list-style: none;
+	margin-left: 10px;
+}
+
+li {
+	line-height: 40px;
+	color: #ffffff;
+	font-size: 14px;
+}
+
+.span_li {
+	margin-left: 10px;
+	color: #ffffff;
+	font-size: 14px;
+}
 </style>
 <script>
 	$(window).load(function(){  
@@ -59,22 +84,13 @@ $(document).ready(function(){
 	<!--<div class="canvas" style="opacity: .2">
 		<iframe frameborder="0" src="../kanban/js/index.html"
 			style="width: 100%; height: 100%"></iframe>
-	</div>-->
+	</div>  -->
 	<header class="header left">
 		<div class="total_chose_box">
 			<div style="height: 5px;"></div>
-			<span class="chose_tltle">请选择班次：</span> <select class="year_chose"
-				id="class_select">
-				<option value="999">当日看板</option>
-				<option value="998">24小时看板</option>
-				<option value="1">白班</option>
-				<option value="2">晚班</option>
-			</select> <span class="chose_tltle">请输入部门：</span> <select class="year_chose"
-				id="dep_select">
-
-			</select> <span class="chose_tltle">请选择日期：</span> <input type="text"
-				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
-				autocomplete="off" class="chose_text_in ">
+			 <span class="chose_tltle">请选择组长：</span> <select class="year_chose"
+				id="liner_select">
+			</select> 
 			<!-- <input class="chose_text_in"> -->
 			<button class="chose_enter" id="searchBtn">确定</button>
 		</div>
@@ -83,7 +99,7 @@ $(document).ready(function(){
 		<div class="line">
 			<span style="color: #FFFFFF; font-size: 16px;" id="showLine"></span>
 		</div>
-		<h1>组装二部报工看板</h1>
+		<h1>产线生产看板</h1>
 		<div class="weather">
 			<!--<img src="picture/weather.png"><span>多云转小雨</span>-->
 			<span id="showTime"></span>
@@ -109,11 +125,32 @@ var t = null;
 </script>
 	</div>
 	<div class="mainbox">
-		<div class="boxall" style="height: 230px">
-			<div id="echart2" style="width: 33%; height: 220px; float: left;"></div>
-			<div id="echart1" style="width: 39%; height: 220px; float: left;"></div>
-			<div id="echart3" style="width: 27%; height: 220px; float: left;"></div>
-			<div class="boxfoot"></div>
+		<div class="boxall" style="height: 180px">
+			<div id="echart1"
+				style="width: 25%; height: 180px; float: left; color: #ffffff;">
+				<ul>
+					<li>生产线:<span class="span_li" id="line"></span></li>
+					<li>组长:<span class="span_li" id="liner"></span></li>
+					<li>在线人数:<span class="span_li" id="empOnline"></span></li>
+					<li>制令单:<span class="span_li" id="taskNo"></span></li>
+				</ul>
+			</div>
+			<div id="echart2" style="width: 20%; height: 180px; float: left;">
+				<ul>
+					<li>标准产能:<span class="span_li" id="capacity"></span></li>
+					<li>计划数:<span class="span_li" id="planQty"></span></li>
+					<li>投入数:<span class="span_li" id="inputQty"></span></li>
+					<li>完成数:<span class="span_li" id="doneQty"></span></li>
+				</ul>
+			</div>
+			<div id="echart4" style="width: 30%; height: 180px; float: left;">
+				<ul>
+					<li>产品编码:<span class="span_li" id="itemNo"></span></li>
+					<li>产品名称:<span class="span_li" id="itemName"></span></li>
+				</ul>
+			</div>
+			<div id="echart3" style="width: 25%; height: 180px; float: left;margin-top: 5px;"></div>
+<div class="boxfoot"></div>
 		</div>
 		<div class="boxall">
 			<div class="data_table">
@@ -121,12 +158,11 @@ var t = null;
 					style="width: 99%; margin-top: 10px;">
 					<thead>
 						<tr class="blue_bg" style="background: #333399;">
-							<th>线长</th>
-							<th>在线人数</th>
-							<th>计划人数</th>
-							<th>计划产量</th>
-							<th>达成产量</th>
-							<th>完工率</th>
+							<th>时间段</th>
+							<th>投入数量</th>
+							<th>完工数量</th>
+							<th>良品数</th>
+							<th>不良品数</th>
 						</tr>
 					</thead>
 					<tbody id="tableList">
@@ -139,8 +175,9 @@ var t = null;
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
         var deptList=[[${deptList}]];
+        var linerList=[[${linerList}]];
     </script>
-    <script th:inline="javascript">
+		<script th:inline="javascript">
     var context = [[@{/}]];
     	layui.use([ 'laydate'], function(){
     		  var layer = layui.layer
@@ -148,12 +185,14 @@ var t = null;
     		  
     		  //日期
     		  laydate.render({
-    		    elem: '#date'
+    		    elem: '#date',
+    		    trigger:'click'
+    		   // range: true
     		  });
     	});
     </script>
-		<script src="/kanban/scripts/scdz.js"
-			th:src="@{/kanban/scripts/scdz.js}"></script>
+		<script src="/kanban/scripts/cxsc.js"
+			th:src="@{/kanban/scripts/cxsc.js}"></script>
 
 	</div>
 </body>

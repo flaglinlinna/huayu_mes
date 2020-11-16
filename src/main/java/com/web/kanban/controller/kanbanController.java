@@ -214,7 +214,31 @@ public class kanbanController extends WebController {
 			mav.setViewName("/kanban/cxdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("获取产线电子看板看板异常！", e);
+			logger.error("获取产线电子看板异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/toCxsc", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCxsc() {
+		ModelAndView mav = new ModelAndView();
+		String method = "kanban/toCxsc";
+		String methodName = "产线生产看板";
+		try {	
+			ApiResponseResult result = kanbanService.getCxscList("","","周红星",this.getIpAddr(),"2");//this.getIpAddr()
+			ApiResponseResult deptList=kanbanService.getCjbgDepList();
+			ApiResponseResult linerList=kanbanService.getLiner();
+			logger.debug("产线生产看板=toCxsc:" + result);
+			getSysLogService().success(module,method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.addObject("deptList", deptList);
+			mav.addObject("linerList", linerList);
+			mav.setViewName("/kanban/Cxsc");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取产线生产看板异常！", e);
 			getSysLogService().error(module,method,methodName,e.toString());
 		}
 		return mav;
@@ -345,6 +369,27 @@ public class kanbanController extends WebController {
 			logger.error("获取产线电子看板信息失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取产线电子看板信息失败！");
+		}
+	}
+	/**
+	 * 获取产线生产看板
+	 * */	
+	@ApiOperation(value = "获取产线生产看板信息", notes = "获取产线生产看板信息", hidden = true)
+	@RequestMapping(value = "/getCxscList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getCxscList(String taskNo,String deptId,String liner,String interval) {
+		String method = "/kanban/getCxscList";
+		String methodName = "获取产线生产看板信息";
+		try {
+			ApiResponseResult result = kanbanService.getCxscList(taskNo, deptId, liner,this.getIpAddr(),interval);
+			logger.debug("获取产线生产看板信息=getCxscList:" + result);
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取产线生产看板信息失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取产线生产看板信息失败！");
 		}
 	}
 }
