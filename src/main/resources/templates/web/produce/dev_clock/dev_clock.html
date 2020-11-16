@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="layout :: htmlhead" th:with="title='卡机信息'">
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
-	<div class="layui-layout layui-layout-admin">
-		<div style="margin: 10px">
-			<form id="devSearch" class="layui-form layui-form-pane" method="post"
-				action="" style="margin-top: 20px;">
-				<div class="layui-form-item" style="margin-bottom: 0px">
-					<div class="layui-inline">
-						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
-						<div class="layui-input-inline">
-							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
-							placeholder="请输入关键字"	class="layui-input" type="text" />
-						</div>
-						<button class="layui-btn layui-btn-sm" lay-submit=""
-							lay-filter="searchSubmit">查询</button>
-						<button type="reset"
-							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
-							<i class="layui-icon">&#xe669;</i>重置
-						</button>
-						
-					</div>
-				</div>
-			</form>
-			<hr class="layui-bg-black" />
+<div class="layui-layout layui-layout-admin">
+    <div style="margin: 10px">
+        <form id="devSearch" class="layui-form layui-form-pane" method="post"
+              action="" style="margin-top: 20px;">
+            <div class="layui-form-item" style="margin-bottom: 0px">
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+                    <div class="layui-input-inline">
+                        <input id="keywordSearch" name="keywordSearch" autocomplete="off"
+                               placeholder="请输入关键字"	class="layui-input" type="text" />
+                    </div>
+                    <button class="layui-btn layui-btn-sm" lay-submit=""
+                            lay-filter="searchSubmit">查询</button>
+                    <button type="reset"
+                            class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+                        <i class="layui-icon">&#xe669;</i>重置
+                    </button>
 
-			<button class="layui-btn layui-btn-sm layui-btn-normal"
-				onclick="addDevClock()">添加卡机信息</button>
-			<button class="layui-btn layui-btn-sm" onclick="exportDevClock()">导出Excel</button>
-			<table id="devList" lay-filter="devTable"></table>
-			<script type="text/html" id="statusTpl">
+                </div>
+            </div>
+        </form>
+        <hr class="layui-bg-black" />
+
+        <button class="layui-btn layui-btn-sm layui-btn-normal"
+                onclick="addDevClock()">添加卡机信息</button>
+        <button class="layui-btn layui-btn-sm" onclick="exportDevClock()">导出Excel</button>
+        <table id="devList" lay-filter="devTable"></table>
+        <script type="text/html" id="statusTpl">
             {{#  if(d.enabled){ }}
             <input type="checkbox" name="{{d.devName}}" value="{{d.id}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
@@ -40,81 +40,89 @@
             {{#  } }}
         </script>
 
+        <script type="text/html" id="statusTp2">
+            {{#  if(d.isOnline == 0){ }}
+            <span style="color: green">在线</span>
+            {{#  } else { }}
+            <span style="color: red">离线</span>
+            {{#  } }}
+        </script>
 
-			<script type="text/html" id="optBar">
+
+        <script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
-		</div>
-		<!--添加或编辑卡机信息-->
-		<div id="setDevClock" class="layer_self_wrap"
-			style="width: 500px; display: none;">
-			<form id="devForm" class="layui-form layui-form-pane"
-				lay-filter="devForm" method="post" action=""
-				style="margin: 20px;">
-				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
-					type="hidden" name="id" />
-				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">卡机编码</label>
-					<div class="layui-input-inline">
-						<input id="devCode" name="devCode" lay-verify="required" placeholder="请输入卡机编码"
-							autocomplete="off" class="layui-input" type="text" />
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">卡机名称</label>
-					<div class="layui-input-inline">
-						<input id="devName" name="devName" lay-verify="required"
-						placeholder="请输入卡机名称"	autocomplete="off" class="layui-input" type="text" />
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">卡机类型</label>
-					<div class="layui-input-inline">
-						<select id="devType" name="devType" lay-verify="required">
-							<option value="">请选择</option>
-							<option value="上线机">上线机</option>
-							<option value="下线机">下线机</option>
-						</select>
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">卡机IP</label>
-					<div class="layui-input-inline">
-						<input id="devIp" name="devIp" lay-verify="required" placeholder="请输入卡机IP"
-							autocomplete="off" class="layui-input" type="text" />
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">卡机序列</label>
-					<div class="layui-input-inline">
-						<select id="devSeries" name="devSeries" lay-verify="required" >
-							<option value="中控ICLOCK">中控ICLOCK</option>
-						</select> 
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">线别</label>
-					<div class="layui-input-inline">
-						<select id="lineId" name="lineId" lay-verify="required" lay-search>
-						</select>
-					</div>
-				</div>
+    </div>
+    <!--添加或编辑卡机信息-->
+    <div id="setDevClock" class="layer_self_wrap"
+         style="width: 500px; display: none;">
+        <form id="devForm" class="layui-form layui-form-pane"
+              lay-filter="devForm" method="post" action=""
+              style="margin: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
+                                                                       type="hidden" name="id" />
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">卡机编码</label>
+                <div class="layui-input-inline">
+                    <input id="devCode" name="devCode" lay-verify="required" placeholder="请输入卡机编码"
+                           autocomplete="off" class="layui-input" type="text" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">卡机名称</label>
+                <div class="layui-input-inline">
+                    <input id="devName" name="devName" lay-verify="required"
+                           placeholder="请输入卡机名称"	autocomplete="off" class="layui-input" type="text" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">卡机类型</label>
+                <div class="layui-input-inline">
+                    <select id="devType" name="devType" lay-verify="required">
+                        <option value="">请选择</option>
+                        <option value="上线机">上线机</option>
+                        <option value="下线机">下线机</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">卡机IP</label>
+                <div class="layui-input-inline">
+                    <input id="devIp" name="devIp" lay-verify="required" placeholder="请输入卡机IP"
+                           autocomplete="off" class="layui-input" type="text" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">卡机序列</label>
+                <div class="layui-input-inline">
+                    <select id="devSeries" name="devSeries" lay-verify="required" >
+                        <option value="中控ICLOCK">中控ICLOCK</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">线别</label>
+                <div class="layui-input-inline">
+                    <select id="lineId" name="lineId" lay-verify="required" lay-search>
+                    </select>
+                </div>
+            </div>
 
-				<div class="layui-form-item">
-					<div class="layui-input-block" style="margin-left: 10px;">
-					<!-- <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
-							lay-filter="testLink">连接测试</button> -->
-						<button class="layui-btn layui-btn-sm" lay-submit=""
-							lay-filter="addSubmit">提交</button>
-						<button type="reset"
-							class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
-					</div>
-				</div>
-			</form>
-		</div>
-		<script th:src="@{/js/web/produce/dev_clock/dev_clock.js}"
-			src="/js/web/produce/dev_clock/dev_clock.js"></script>
-	</div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <!-- <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
+                            lay-filter="testLink">连接测试</button> -->
+                    <button class="layui-btn layui-btn-sm" lay-submit=""
+                            lay-filter="addSubmit">提交</button>
+                    <button type="reset"
+                            class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script th:src="@{/js/web/produce/dev_clock/dev_clock.js}"
+            src="/js/web/produce/dev_clock/dev_clock.js"></script>
+</div>
 </body>
 </html>

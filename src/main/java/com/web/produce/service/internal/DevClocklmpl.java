@@ -152,7 +152,7 @@ public class DevClocklmpl implements DevClockService {
 
 	/**
 	 * 根据ID获取
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -226,6 +226,7 @@ public class DevClocklmpl implements DevClockService {
 			map.put("enabled", bs.getEnabled());
 			map.put("lastupdateDate", bs.getLastupdateDate());
 			map.put("createDate", bs.getCreateDate());
+            map.put("isOnline", bs.getIsOnline());
 			list.add(map);
 		}
 
