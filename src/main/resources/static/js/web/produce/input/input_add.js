@@ -328,6 +328,9 @@ function addPut(obj) {
 			tableIns.reload({
 				data : data.data.List
 			});
+			 $('#barcode').val('');
+	            $('#item_code').val('');
+	            $('#addqty').val('');
 		} else {
 			layer.alert(data.msg);
 		}

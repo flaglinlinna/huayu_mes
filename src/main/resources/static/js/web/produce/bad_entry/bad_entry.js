@@ -300,6 +300,7 @@ $(function() {
 					checkBarCode($('#taskno').val(), $('#barcode').val());
 					return false;
 				} else {
+					$('#taskno').val('');
 					layer.alert("请选择制令单号!");
 				}
 			} else {
@@ -386,6 +387,7 @@ function checkBarCode(taskNo, barcode) {
 					$("#qty").val(q[0].qty);
 				} else {
 					layer.alert(data.msg);
+					$('#taskno').val('');
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
