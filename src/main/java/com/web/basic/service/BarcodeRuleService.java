@@ -15,7 +15,7 @@ public interface BarcodeRuleService {
 	// 根据ID获取
 	public ApiResponseResult getBarcodeRule(Long id) throws Exception;
 
-	public ApiResponseResult delete(Long id) throws Exception;
+	public ApiResponseResult delete(String ids) throws Exception;
 
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
 	

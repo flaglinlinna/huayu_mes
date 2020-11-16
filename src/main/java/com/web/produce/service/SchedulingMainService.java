@@ -18,6 +18,8 @@ public interface SchedulingMainService {
 
     public ApiResponseResult edit(SchedulingMain scheduling) throws Exception;
 
+    public ApiResponseResult get(Long id) throws Exception;
+
     public ApiResponseResult delete(Long id) throws Exception;
 
     public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;

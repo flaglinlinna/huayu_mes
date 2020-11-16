@@ -40,9 +40,11 @@ $(function () {
                 ,{field:'CUST_NAME_S', title:'客户', width:150,align: 'center'}
                 ,{field:'LINER_NAME', title:'组长', width:70,align: 'center'}
                 ,{field:'PROD_DATE', title:'日期', width:90,align: 'center'}
-               // ,{field:'deptName', title:'部门', width:80}
+               ,{field:'DEPT_NAME', title:'部门名称', width:80}
                 ,{field:'CLASS_NO', title:'班次', width:60,align: 'center'}
                 ,{field:'QTY_PLAN', title:'计划数量', width:80,align: 'center'}
+                ,{field:'QTY_DONE', title:'完工数', width:80,align: 'center'}
+                ,{field:'RATE_DONE', title:'完工率', width:80,align: 'center'}
                 ,{field:'TASK_NO', title:'制令单号', width:120,align: 'center'}
                 ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center'}
                 ,{field:'ITEM_NAME', title:'物料描述', width:200,align: 'center'}

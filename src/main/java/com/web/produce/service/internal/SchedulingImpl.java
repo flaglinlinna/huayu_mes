@@ -1087,6 +1087,31 @@ public class SchedulingImpl implements SchedulingService {
         return ApiResponseResult.success().data(DataGrid.create(mapList, mapList.size(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
 
+
+    /**
+     * 获取生产制令单从表-工艺 存储过程调用
+     * @param keyword
+     * @param mid 指令单号
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getProcessListByProc(String keyword, String mid) throws Exception {
+        SysUser currUser = UserUtil.getSessionUser();
+        if (currUser == null) {
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        List<Object> list = getProdOrderPrc(UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getCompany() + "",
+                UserUtil.getSessionUser().getId() + "", mid, "", "prc_mes_prod_order_proc");
+            if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        Map map = new HashMap();
+        map.put("rows", list.get(3));
+        return ApiResponseResult.success("").data(map);
+    }
+
     //编辑工艺信息
     @Override
     @Transactional
@@ -1174,6 +1199,68 @@ public class SchedulingImpl implements SchedulingService {
         }
 
         return ApiResponseResult.success("保存失败！");
+    }
+
+
+    /**
+     * 保存工艺
+     * @param mid
+     * @param fname
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult saveProc(Long mid, String fname) throws Exception {
+        if (mid == null) {
+            return ApiResponseResult.failure("排产ID不能为空！");
+        }
+        SysUser currUser = UserUtil.getSessionUser();
+        if (currUser == null && currUser.getId() == null) {
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        //调用保存存储过程
+        Long userId = currUser.getId();
+        String company = currUser.getCompany();
+        String factory = currUser.getFactory();
+        if (userId != null) {
+            List<Object> resultList = (List<Object>) jdbcTemplate.execute(new CallableStatementCreator() {
+                @Override
+                public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                    String storedProc = "{call prc_mes_prod_proc_CRT(?,?,?,?,?,?,?,?)}";// 调用的sql
+                    CallableStatement cs = con.prepareCall(storedProc);
+                    cs.setString(1, company);
+                    cs.setString(2, factory);
+                    cs.setLong(3, mid);
+                    cs.setString(4, fname);
+                    cs.setString(5, userId.toString());
+                    cs.registerOutParameter(6, Types.INTEGER);// 注册输出参数 返回标志
+                    cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(8, -10);
+                    return cs;
+                }
+            }, new CallableStatementCallback() {
+                public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                    List<Object> result = new ArrayList<>();
+                    List<Map<String, Object>> l = new ArrayList();
+                    cs.execute();
+                    result.add(cs.getInt(6));
+                    result.add(cs.getString(7));
+                    System.out.println(l);
+                    return result;
+                }
+            });
+            if (resultList.size() > 0) {
+                String num = resultList.get(0).toString();
+                if (("0").equals(num)) {
+                    return ApiResponseResult.success("保存成功！");
+                } else {
+                    return ApiResponseResult.failure(resultList.get(1).toString());
+                }
+            }
+            return ApiResponseResult.success("保存成功！");
+        }
+        return ApiResponseResult.success("保存成功！");
     }
 
     /**
@@ -1352,7 +1439,7 @@ public class SchedulingImpl implements SchedulingService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getProdOrderOutList(Long mid, PageRequest pageRequest) throws Exception{
+    public ApiResponseResult getProdOrderOutList(String mid, PageRequest pageRequest) throws Exception{
         SysUser currUser = UserUtil.getSessionUser();
         if(currUser == null){
             return ApiResponseResult.failure("当前用户已失效，请重新登录！");
@@ -1377,7 +1464,7 @@ public class SchedulingImpl implements SchedulingService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getProdOrderQcList(Long mid, PageRequest pageRequest) throws Exception{
+    public ApiResponseResult getProdOrderQcList(String mid, PageRequest pageRequest) throws Exception{
         SysUser currUser = UserUtil.getSessionUser();
         if(currUser == null){
             return ApiResponseResult.failure("当前用户已失效，请重新登录！");
@@ -1392,8 +1479,87 @@ public class SchedulingImpl implements SchedulingService {
         return ApiResponseResult.success("").data(map);
     }
 
+
+    /**
+     * 获取异常检验列表
+     * @param mid
+     * @param mid
+     * @param pageRequest
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getProdOrderErrList(String mid, PageRequest pageRequest) throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+        List<Object> list = getProdOrderErrPrc(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"",
+                currUser.getId(),mid, "",pageRequest.getPageNumber()+1, pageRequest.getPageSize(),"prc_mes_get_prod_order_err");
+        if (!list.get(1).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        Map map = new HashMap();
+        map.put("count", list.get(0));
+        map.put("rows", list.get(3));
+        return ApiResponseResult.success("").data(map);
+    }
+
     //获取上线人员清单 存储过程调用
-    public List getProdOrderPrc(String facoty, String company,String user_id, Long mid, String keyword,String prc_name) throws Exception{
+    public List getProdOrderErrPrc(String facoty, String company, Long userId,String mid, String keyword,
+                              int page, int rows, String prc_name) throws Exception{
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  "+prc_name+" (?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setLong(3, userId);
+                cs.setString(4, mid);
+                cs.setString(5,keyword);
+                cs.setInt(6, rows);
+                cs.setInt(7, page);
+                cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 总记录数
+                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回信息
+                cs.registerOutParameter(11, -10);// 输出参数 返回数据集合
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(8));
+                result.add(cs.getInt(9));
+                if (cs.getString(9).toString().equals("0")) {
+                    result.add(cs.getString(10));
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(11);
+
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+
+                }
+                System.out.println(l);
+                return result;
+            }
+
+        });
+        return resultList;
+    }
+
+
+
+    //获取上线人员清单 存储过程调用
+    public List getProdOrderPrc(String facoty, String company,String user_id, String mid, String keyword,String prc_name) throws Exception{
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
@@ -1402,7 +1568,7 @@ public class SchedulingImpl implements SchedulingService {
                 cs.setString(1, facoty);
                 cs.setString(2, company);
                 cs.setString(3, user_id);
-                cs.setLong(4, mid);
+                cs.setString(4, mid);
                 cs.setString(5, keyword);
                 cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
                 cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识

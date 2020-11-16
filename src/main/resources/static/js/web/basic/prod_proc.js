@@ -153,6 +153,7 @@ $(function() {
 			load(data);
 			return false;
 		});
+
 		tableProc=table.render({
 			elem : '#procList',
 			limit: 20,

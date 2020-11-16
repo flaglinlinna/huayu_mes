@@ -98,6 +98,16 @@ public class SchedulingMainImpl implements SchedulingMainService {
 
     @Override
     @Transactional
+    public ApiResponseResult get(Long id) throws Exception {
+        SchedulingMain o = schedulingMainDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("排产信息不存在！");
+        }
+        return ApiResponseResult.success("编辑成功！").data(o);
+    }
+
+    @Override
+    @Transactional
     public ApiResponseResult delete(Long id) throws Exception {
         if(id == null){
             return ApiResponseResult.failure("排产信息ID不能为空！");

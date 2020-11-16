@@ -61,6 +61,9 @@ $(function() {
 			}
 		});
 
+
+
+
 		tableIns = table.render({
 			elem : '#ruleList',
 			url : context + '/base/rule/getList',
@@ -68,6 +71,8 @@ $(function() {
 			,
 			cellMinWidth : 80,
 			page : true,
+			toolbar: '#toolbar', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+			height: 'full',
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -85,9 +90,10 @@ $(function() {
 			},
 			cols : [ [ {
 				type : 'numbers'
-			}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
+			},
+				{type:'checkbox'}
+				// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
+				, {
 				field : 'itemNo',
 				title : '内部物料编号',
 				width : 140, sort: true
@@ -131,7 +137,7 @@ $(function() {
 				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
 				width : 150
 			}, {
-				fixed : 'right',
+				// fixed : 'right',
 				title : '操作',
 				align : 'center',
 				toolbar : '#optBar',
@@ -162,6 +168,32 @@ $(function() {
 		// 	itemName=itemName.slice(itemName.indexOf("=")+1);
 		// 	$("#itemName").val(itemName);
 		// });
+
+		//头工具栏事件
+		table.on('toolbar(ruleTable)', function(obj){
+			var checkStatus = table.checkStatus(obj.config.id);
+			switch(obj.event){
+				case 'doAdd':
+					addBarcodeRule();
+					break;
+				case 'doDelete':
+					var data = checkStatus.data;
+					console.log(data)
+					if(data.length == 0){
+						layer.msg("请先勾选数据!");
+					}else{
+						var id="";
+						for(var i = 0; i < data.length; i++) {
+							id += data[i].id+",";
+							console.log(data[i])
+						}
+						delBarcodeRule("", id, "选中的");
+					}
+					break;
+			};
+		});
+
+
 		// 监听工具条
 		table.on('tool(ruleTable)', function(obj) {
 			var data = obj.data;
@@ -174,6 +206,11 @@ $(function() {
 				getBarcodeRule(data, data.id);
 			}
 		});
+
+		table.on('rowDouble(ruleTable)', function(obj){
+			getBarcodeRule(obj.data, obj.data.id);
+		});
+
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
 			if (data.field.id == null || data.field.id == "") {

@@ -97,6 +97,11 @@ $(function() {
 			'done': function(filters){}
 		})
 
+		//监听行双击查看事件
+		table.on('rowDouble(listTable)', function(obj){
+			getProc(obj.data, obj.data.id);
+		});
+
 		//头工具栏事件
 		table.on('toolbar(listTable)', function(obj){
 			var checkStatus = table.checkStatus(obj.config.id);

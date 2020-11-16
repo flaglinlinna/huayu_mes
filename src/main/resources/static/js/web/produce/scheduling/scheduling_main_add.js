@@ -154,19 +154,19 @@ $(function () {
                     , {type: 'checkbox'}
                     // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
                     // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
-                    , {field: 'CHECK_STATUS', title: '校验结果', width: 100, templet: '#statusTpl'}
+                    , {field: 'CHECK_STATUS', title: '校验结果', width: 90, templet: '#statusTpl'}
                     , {field: 'ENABLED', title: '生效状态', width: 80, templet: '#enabledTpl'}
                     , {field: 'ERROR_INFO', title: '错误信息', width: 140}
                     , {field: 'PROD_NO', title: '工单号', width: 120}
                     , {
-                        field: 'TASK_NO', title: '生产制令单', width: 100,
-                        templet: '<div><a cursor: pointer; onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO==null?"":d.TASK_NO }}</a></div>'
+                        field: 'TASK_NO', title: '生产制令单', width: 120,
+                        templet: '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO==null?"":d.TASK_NO }}</a></div>'
                     }
                     , {field: 'GROUP_NO', title: '组合', width: 70}
                     , {field: 'CUST_NAME', title: '客户', width: 80}
                     , {field: 'LINER_NAME', title: '组长', width: 70}
                     , {field: 'ITEM_NO', title: '物料编码', width: 150}
-                    , {field: 'ITEM_NAME', title: '物料描述', width: 150}
+                    , {field: 'ITEM_NAME', title: '物料描述', width: 140}
                     , {field: 'QTY_PLAN', title: '计划数量', width: 100}
                     , {fixed: 'right', title: '操作', width: 80, align: 'center', toolbar: '#optBar'}
                 ]]
@@ -206,7 +206,8 @@ $(function () {
                         success: function (res) {
                             if (res.result) {
                                 loadAll();//重新加载表格
-                                layer.alert("导入成功！",function(index){
+                                layer.alert("导入完成,请留意校验信息！",function(index){
+                                    freshFenable(id);
                                     layer.close(index);
                                 });
                             } else {
@@ -250,8 +251,30 @@ function toSchedulingEdit(d){
     return false;
 }
 
+function freshFenable(id) {
+    $.ajax({
+        type: "post",
+        data: {id: id},
+        url: context+"/produce/schedulingMain/getSchedulingMain?id:"+id,
+        success: function (res) {
+            if (res.result) {
+                if(res.data.fenable ==1){
+                    $("input[name='fenable']").prop("checked", true);
+                    showBtn(1);
+                    $('#edit1').attr("disable","disable");
+                }
+                layui.form.render('checkbox');
+            } else {
+                layer.alert(res.msg,function(index){
+                });
+            }
+        },
+        error: function () {
+        }
+    });
+}
+
 function getOrgSelect(orgName) {
-    console.log(orgName);
     $.ajax({
         type: "post",
         data: {},
@@ -359,6 +382,7 @@ function getMainData(){
         showBtn(schedulingMain.fenable);
         if (schedulingMain.fenable == 1) {
             $("input[name='fenable']").prop("checked", true);
+            $('#edit1').attr("disable","disable");
         } else {
             $("input[name='fenable']").prop("checked", false);
         }
@@ -454,6 +478,7 @@ function doCheckProc(table){
         data: { "ids":tempIds },
         url: context+"/produce/schedulingMain/doCheckProc",
         success: function (res) {
+            freshFenable(id);
             if (res.result) {
                 layer.alert("校验完成！,请留意校验信息",function(index){
                     loadAll();//重新加载表格
@@ -489,6 +514,7 @@ function doEffect(table){
         data: { "ids":tempIds },
         url: context+"/produce/schedulingMain/doEffect",
         success: function (res) {
+            freshFenable(id);
             if (res.result) {
                 layer.alert("生效成功！",function(index){
                     layer.close(index);

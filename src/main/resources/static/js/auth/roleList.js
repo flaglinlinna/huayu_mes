@@ -47,7 +47,7 @@ $(function() {
                 ,{field:'roleName', title:'名称',align:'center', width:140,sort:true}
                 ,{field:'description', title: '描述',align:'center', minWidth:140,sort:true}
                 ,{field:'userCount', title: '用户数量',align:'center', width:120,sort:true,
-                 templet: '<div><a cursor: pointer; onclick="showUser({{d.id}})">{{ d.userCount }}</a></div>'}
+                 templet: '<div><a  style="text-decoration:underline;color:blue;cursor: pointer;"; onclick="showUser({{d.id}})">{{ d.userCount }}</a></div>'}
                 ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
                 ,{field:'lastupdateDate', title: '更新时间', align:'center',width:150}
                 ,{field:'createDate', title: '添加时间',align:'center', width:150}

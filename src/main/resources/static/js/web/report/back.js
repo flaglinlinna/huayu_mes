@@ -45,10 +45,10 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			 {
 				field : 'LINER_NAME',
-				title : '组长',width : 120, sort: true,
+				title : '组长',width : 80, sort: true,
 			}, {
 				field : 'TASK_NO',
-				title : '制令单',width : 140, sort: true
+				title : '制令单',width : 160, sort: true
 			},
 			{
 				field : 'PROC_NAME',
@@ -58,61 +58,66 @@ $(function() {
 				title : '班次', sort: true
 			}
 			, {
-				field : 'USER_NAME',
-				title : '操作人',
-				width : 100, sort: true
-			}, {
-				field : 'CREATE_DATE',
-				title : '操作时间',width : 120, sort: true
-			}, {
 				field : 'ITEM_BARCODE',
-				title : '条码', width : 100,sort: true
+				title : '条码', width : 160,sort: true
 			}, {
 				field : 'ITEM_NO',
-				title : '物料编码', width : 100,sort: true
-			}, {
-				field : 'ITEM_NAME',
-				title : '物料名称',width : 120, sort: true
+				title : '物料编码', width : 160,sort: true
 			}, {
 				field : 'ITEM_MODEL',
 				title : '机型',width : 100, sort: true
 			}, {
 				field : 'QUANTITY',
-				title : '数量(PCS)', width : 120,sort: true
+				title : '投料/产出/送检/检验数(PCS)', width : 200,sort: true
 			}, {
 				field : 'SAMPLE_QTY',
-				title : '投料/产出/抽检总数(PCS)',width : 200, sort: true
+				title : '抽检总数(PCS)',width : 120, sort: true
 			}, {
 				field : 'QTY_PROC',
-				title : '加工数/检验总数(PCS)',width : 200, sort: true
+				title : '产出/中转送检/检验总数(PCS)',width : 220, sort: true
 			}, {
 				field : 'QTY_DONE',
-				title : '完工数/抽检合格数(PCS)',width : 200, sort: true
+				title : '抽检合格数(PCS)',width : 120, sort: true
 			}, {
+					field : 'CHK_RESULT',
+					title : '检验结果',width : 120, sort: true
+				},
+				{
 				field : 'DEFECT_NUM',
 				title : '抽检不良数(PCS)',width : 120, sort: true
 			}, {
-				field : 'CHK_RESULT',
-				title : '检验结果',width : 120, sort: true
-			}, {
+					field : 'ITEM_NAME',
+					title : '物料名称',width : 150, sort: true
+				},
+				{
+					field : 'SCAN_TYPE',
+					title : '扫描类型',width : 120, sort: true
+				}, {
+					field : 'TASK_SCAN_TYPE',
+					title : '主/副制令单',width : 120, sort: true
+				}, {
+					field : 'TASK_NO_M',
+					title : '主制令单',width : 120, sort: true
+				},
+				{
 				field : 'ORG_NAME',
 				title : '部门名称',width : 120, sort: true
-			}, {
-				field : 'DEFECT_NAME',
-				title : '不良内容',width : 120, sort: true
-			}, {
-				field : 'QTY',
-				title : '数量',width : 120, sort: true
-			}, {
-				field : 'SCAN_TYPE',
-				title : '扫描类型',width : 120, sort: true
-			}, {
-				field : 'TASK_SCAN_TYPE',
-				title : '主/副制令单',width : 120, sort: true
-			}, {
-				field : 'TASK_NO_M',
-				title : '主制令单',width : 120, sort: true
-			}] ],
+			},{
+					field : 'USER_NAME',
+					title : '操作人',
+					width : 100, sort: true
+				}, {
+					field : 'CREATE_DATE',
+					title : '操作时间',width : 150, sort: true
+				}
+				// 	{
+			// 	field : 'DEFECT_NAME',
+			// 	title : '不良内容',width : 120, sort: true
+			// }, {
+			// 	field : 'QTY',
+			// 	title : '数量',width : 120, sort: true
+			// },
+				] ],
 			done : function(res, curr, count) {
 				//
 				pageCurr = curr;
@@ -177,6 +182,7 @@ function getReport(params) {
 							done: function(res1, curr, count){
 								localtableFilterIns.reload();
 							},
+
 							page : {
 								curr : pageCurr
 								// 从当前页码开始

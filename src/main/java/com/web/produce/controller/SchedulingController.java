@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
+import java.util.Map;
 
 @Api(description = "排产信息管理模块")
 @CrossOrigin
@@ -128,6 +129,26 @@ public class SchedulingController extends WebController {
             logger.error("删除失败！", e);
             getSysLogService().error(module,method, methodName, id+";"+e.toString());
             return ApiResponseResult.failure("删除失败！");
+        }
+    }
+
+    @ApiOperation(value = "保存更新的工艺", notes = "保存更新的工艺", hidden = true)
+    @RequestMapping(value = "/saveProc", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult saveProc(@RequestBody Map<String, Object> params) {
+        String method = "/produce/scheduling/saveProc";String methodName ="保存更新的工艺";
+        try{
+            Long mid = Long.parseLong(params.get("mid").toString());
+            String fname = params.get("fname").toString();
+            ApiResponseResult result = schedulingService.saveProc(mid,fname);
+            logger.debug("保存更新的工艺=saveProc:");
+            getSysLogService().success(module,method, methodName, mid);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("保存失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("保存失败！");
         }
     }
 
@@ -278,11 +299,11 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "获取工艺列表", notes = "获取工艺列表", hidden = true)
     @RequestMapping(value = "/getProcessList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getProcessList(String keyword, Long mid){
+    public ApiResponseResult getProcessList(String keyword, String mid){
         String method = "/produce/scheduling/getProcessList";String methodName ="获取工艺列表";
         try {
-            Sort sort = new Sort(Sort.Direction.DESC, "id");
-            ApiResponseResult result = schedulingService.getProcessList(keyword, mid, super.getPageRequest(sort));
+//            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = schedulingService.getProcessListByProc(keyword, mid);
             logger.debug("获取工艺列表=getProcessLst:");
             getSysLogService().success(module,method, methodName, "主表id:"+mid);
             return result;
@@ -391,7 +412,7 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "获取产出送检列表", notes = "获取产出送检列表", hidden = true)
     @RequestMapping(value = "/getProdOrderOutList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getProdOrderOutList(Long mid){
+    public ApiResponseResult getProdOrderOutList(String mid){
         String method = "/produce/scheduling/getProdOrderOutList";String methodName ="获取产出送检列表";
         try {
             ApiResponseResult result = schedulingService.getProdOrderOutList(mid, super.getPageRequest(Sort.unsorted()));
@@ -409,7 +430,7 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "获取品质检验列表", notes = "获取品质检验列表", hidden = true)
     @RequestMapping(value = "/getProdOrderQcList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getProdOrderQcList(Long mid){
+    public ApiResponseResult getProdOrderQcList(String mid){
         String method = "/produce/scheduling/getProdOrderQcList";String methodName ="获取品质检验列表";
         try {
             ApiResponseResult result = schedulingService.getProdOrderQcList(mid, super.getPageRequest(Sort.unsorted()));
@@ -421,6 +442,24 @@ public class SchedulingController extends WebController {
             logger.error("获取品质检验列表！", e);
             getSysLogService().error(module,method, methodName, "主表id:"+mid+e.toString());
             return ApiResponseResult.failure("获取品质检验列表！");
+        }
+    }
+
+    @ApiOperation(value = "获取异常检验列表", notes = "获取异常检验列表", hidden = true)
+    @RequestMapping(value = "/getProdOrderErrList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getProdOrderErrList(String mid){
+        String method = "/produce/scheduling/getProdOrderErrList";String methodName ="获取异常检验列表";
+        try {
+            ApiResponseResult result = schedulingService.getProdOrderErrList(mid, super.getPageRequest(Sort.unsorted()));
+            logger.debug("获取异常检验列表=getProdOrderQcList:");
+            getSysLogService().success(module,method, methodName, "主表id:"+mid);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取异常检验列表失败！", e);
+            getSysLogService().error(module,method, methodName, "主表id:"+mid+e.toString());
+            return ApiResponseResult.failure("获取异常检验列表！");
         }
     }
 

@@ -68,6 +68,21 @@ public class SchedulingMainController extends WebController {
         return mav;
     }
 
+
+    @ApiOperation(value = "获得详情", notes = "获得详情", hidden = true)
+    @RequestMapping(value = "/getSchedulingMain")
+    @ResponseBody
+    public ApiResponseResult getSchedulingMain(Long id){
+        try{
+            ApiResponseResult result = schedulingMainService.get(id);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            return ApiResponseResult.failure("查询失败！");
+        }
+    }
+
+
     @ApiOperation(value = "新增", notes = "新增", hidden = true)
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
