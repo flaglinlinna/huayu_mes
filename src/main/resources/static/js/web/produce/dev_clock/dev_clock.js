@@ -55,18 +55,23 @@ $(function() {
 			}, {
 				field : 'devType',
 				title : '卡机类型',
-				width : 120,
+				width : 100,
 			}, {
 				field : 'enabled',
 				title : '是否有效',
 				width : 95,
 				templet : '#statusTpl'
 			}, {
-				field : 'lastupdateDate',
-				title : '更新时间',
-				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
-				width : 150,
+				field : 'isOnline',
+				title : '在线状态',
+				templet:'#statusTp2',
+				width : 80,
 			}, {
+			    field : 'lastupdateDate',
+                title : '更新时间',
+                templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
+                width : 150,
+            }, {
 				field : 'createDate',
 				title : '添加时间',
 				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
@@ -155,7 +160,7 @@ $(function() {
 			// setStatus(obj, this.value, this.name, obj.elem.checked);
 			var isStatus = checked ? 1 : 0;
 			var deaprtisStatus = checked ?  "有效":"无效";
-			
+
 			layer.confirm(
 					'您确定要把卡机设备：' + name + '设置为' + deaprtisStatus + '状态吗？', {
 						btn1 : function(index) {
@@ -189,7 +194,7 @@ $(function() {
 						}
 					})
 		}
-		
+
 	});
 
 });
@@ -243,7 +248,7 @@ function getLineList(id){
 					if(line[i].id==id){
 						$("#lineId").val(line[i].id);
 					}
-				}					
+				}
 				layui.form.render('select');
 
 				} else {
