@@ -849,4 +849,46 @@ public class PrcUtils {
         });
         return resultList;
     }
+    
+  //生产异常-获取异常原因
+    public List getErrorInfoPrc(String facoty, String company, String uid) throws Exception{
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  prc_mes_base_prod_err_chs(?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setString(3, uid);
+                cs.registerOutParameter(4, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(5, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(6, -10);// 输出参数 返回数据集合
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(4));
+                result.add(cs.getString(5));
+                if (cs.getString(4).toString().equals("0")) {
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(6);
+
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+                }
+                System.out.println(l);
+                return result;
+            }
+
+        });
+        return resultList;
+    }
 }
