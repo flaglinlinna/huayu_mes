@@ -289,6 +289,7 @@ function getInfoBarcode(barcode) {
 			$("input[name='addqty']").val(data.data[0].QTY);
 		} else {
 			layer.alert(data.msg);
+			$('#barcode').val('');
 		}
 	}, "GET", false, function(res) {
 		layer.alert(res.msg);
