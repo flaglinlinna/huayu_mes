@@ -527,6 +527,7 @@ function getDetailByTask(taskNo){
 				});*/
 			}else{
 				layer.alert(data.msg);
+				$("#wbarcode").val("");
 			}
 		}, "GET", false, function(res) {
 			layer.alert(res.msg);

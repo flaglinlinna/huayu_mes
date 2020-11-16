@@ -182,7 +182,7 @@ $(function() {
 
             // 监听
             form.on('submit(confirmSubmit)', function(data) {
-                console.log(data.field)
+                //console.log(data.field)
                 addPut(data.field)
             });
 
@@ -269,6 +269,7 @@ function getInfoBarcode(barcode){
             $( "input[name='addqty']").val(data.data[0].QTY);
         }else{
             layer.alert(data.msg);
+            $('#barcode').val('');
         }
     }, "GET", false, function(res) {
         layer.alert(res.msg);
@@ -283,6 +284,9 @@ function getDetailByTask(taskNo){
             tableIns.reload({
                 data:data.data
             });
+            $('#barcode').val('');
+            $('#item_code').val('');
+            $('#addqty').val('');
         }else{
             layer.alert(data.msg);
         }
@@ -300,6 +304,7 @@ function addPut(obj){
             tableIns.reload({
                 data:data.data.List
             });
+            
         }else{
             layer.alert(data.msg);
         }
