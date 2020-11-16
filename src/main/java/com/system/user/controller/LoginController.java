@@ -339,4 +339,5 @@ public class LoginController extends WebController{
 		String result = 8 + new String(temp);
 		return result;
 	}
+
 }
