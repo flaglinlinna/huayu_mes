@@ -161,4 +161,27 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		return ApiResponseResult.success().data(map);
 	}
 	
+	@Override
+	public ApiResponseResult getCxscList(String taskNo,String deptId,String liner,
+			String dev_ip,String interval)throws Exception{
+		String usr_id = "";
+		SysUser su = UserUtil.getSessionUser();
+		if(su == null){
+			usr_id = "1";
+		}else{
+			usr_id = su.getId()+"";
+		}
+		List<Object> list = getCxscList("","",taskNo,deptId,liner,dev_ip,usr_id,interval);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("List_result1", list.get(2));
+		map.put("List_result2", list.get(3));
+		
+		return ApiResponseResult.success().data(map);
+		
+	}
+	
+	
 }
