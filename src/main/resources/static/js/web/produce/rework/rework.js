@@ -14,6 +14,8 @@ $(function() {
 							where : {},
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
+							height:'full-80'//固定表头&full-查询框高度
+								,even:true,//条纹样式
 							page : false,
 							data : [],
 							request : {
@@ -70,6 +72,8 @@ $(function() {
 							where : {},
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
+							height:'full-80'//固定表头&full-查询框高度
+								,even:true,//条纹样式
 							page : false,
 							data : [],
 							request : {

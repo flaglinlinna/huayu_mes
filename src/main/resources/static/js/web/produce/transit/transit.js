@@ -15,7 +15,8 @@ $(function() {
 							elem : '#colTable',
 							// ,url:context+'/interfaces/getRequestList'
 							where : {},
-							height: 'full-210',
+							height: 'full-210'
+								,even:true,//条纹样式
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
 							page : true,
@@ -104,7 +105,8 @@ $(function() {
 							defaultToolbar : [],
 							page : true,
 							data : [],
-							height: 'full-210',
+							height: 'full-210'
+								,even:true,//条纹样式
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
