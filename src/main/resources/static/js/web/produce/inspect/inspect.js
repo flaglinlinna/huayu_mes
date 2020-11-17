@@ -25,7 +25,7 @@ $(function() {
 							defaultToolbar : [],
 							page : true,
 							data : [],
-							height: 'full-150'
+							height: 'full-170'
 								,even:true,//条纹样式
 							even:true,//条纹样式
 							request : {

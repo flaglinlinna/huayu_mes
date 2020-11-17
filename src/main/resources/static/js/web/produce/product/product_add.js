@@ -20,7 +20,7 @@ $(function() {
 					,
 					defaultToolbar : [],
 					cellMinWidth : 80,
-					height:'full-80'//固定表头&full-查询框高度
+					height:'full-380'//固定表头&full-查询框高度
 					,even:true,//条纹样式
 					page : false,
 					data : [],
@@ -88,6 +88,7 @@ $(function() {
 						url:  context +'/product/getTaskNo',
 						//url:  context +'base/prodproc/getProdList',
 						method : 'get',
+						width:800,
 						cols : [ [
 						{ type: 'radio' },//多选  radio
 							{type :'numbers'},
@@ -98,7 +99,7 @@ $(function() {
 						}, {
 							field : 'TASK_NO',
 							title : '制令单号',
-							width : 180,sort: true
+							width : 150,sort: true
 						}, {
 							field : 'ITEM_NO',
 							title : '物料编码',
@@ -110,7 +111,7 @@ $(function() {
 						}, {
 							field : 'LINER_NAME',
 							title : '组长',
-							width : 100,sort: true
+							width : 80,sort: true
 						},{
 							field : 'QTY_PLAN',
 							title : '制单数量',

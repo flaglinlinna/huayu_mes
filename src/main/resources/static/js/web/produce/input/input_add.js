@@ -21,7 +21,7 @@ $(function() {
 							,
 							defaultToolbar : [],
 							cellMinWidth : 80,
-							height:'full-80'//固定表头&full-查询框高度
+							height:'full-375'//固定表头&full-查询框高度
 								,even:true,//条纹样式
 							page : false,
 							data : [],
@@ -51,13 +51,13 @@ $(function() {
 							}, {
 								field : 'ITEM_BARCODE',
 								title : '条码',
-								width : 160,
+								width : 150,
 								sort : true
 							}, {
 								field : 'ITEM_NO',
 								title : '物料编号',
 								align : 'center',
-								width : 150,
+								width : 140,
 								sort : true
 							}, {
 								field : 'ITEM_NAME',
@@ -69,7 +69,7 @@ $(function() {
 									field : 'USER_NAME',
 									title : '员工姓名',
 									align:	'center',
-									width : 110,sort: true
+									width : 90,sort: true
 								},
 								{
 								field : 'FEED_TYPE',
@@ -111,6 +111,7 @@ $(function() {
 								url : context + '/input/getTaskNo',
 								// url: context +'base/prodproc/getProdList',
 								method : 'get',
+								width:800,
 								cols : [ [ {
 									type : 'numbers',
 									title : '序号'
@@ -126,7 +127,7 @@ $(function() {
 								}, {
 									field : 'TASK_NO',
 									title : '制令单号',
-									width : 180,
+									width : 150,
 									sort : true
 								}, {
 									field : 'ITEM_NO',

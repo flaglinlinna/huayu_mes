@@ -21,7 +21,7 @@ $(function() {
 									,
 									defaultToolbar : [],
 									cellMinWidth : 80,
-									height:'full-80'//固定表头&full-查询框高度
+									height:'full-295'//固定表头&full-查询框高度
 									,even:true,//条纹样式
 									page : true,
 									limit:200,
@@ -106,10 +106,12 @@ $(function() {
 								url : context + '/verify/getTaskNo',
 								// url: context +'base/prodproc/getProdList',
 								method : 'get',
+								width : 800,
 								cols : [ [
 									{type:'numbers',title:"序号"},
 									{
-									type : 'radio'
+									type : 'radio',
+									
 								},// 多选 radio
 								, {
 									field : 'id',
@@ -119,27 +121,27 @@ $(function() {
 								}, {
 									field : 'TASK_NO',
 									title : '制令单号',
-									cellMinWidth : 100,
+									width : 150,
 									sort : true
 								}, {
 									field : 'ITEM_NO',
 									title : '物料编码',
-									width : 150,
+									width : 140,
 									sort : true
 								}, {
 									field : 'LINER_NAME',
 									title : '组长',
-									width : 100,
+									width : 70,
 									sort : true
 								}, {
 									field : 'PROD_DATE',
 									title : '计划日期',
-									width : 150,
+									width : 130,
 									sort : true
 								}, {
 									field : 'ITEM_NAME',
 									title : '物料描述',
-									width : 240,
+									width : 120,
 									sort : true
 								}, {
 									field : 'CUST_NAME_S',
