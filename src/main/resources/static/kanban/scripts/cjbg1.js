@@ -173,7 +173,9 @@ function getList() {
 			console.log(res)
 			if (res.result) {
 				dealData(res)
-			}
+			}else{
+           	 alert(res.msg);
+            }
 
 		}
 	});
