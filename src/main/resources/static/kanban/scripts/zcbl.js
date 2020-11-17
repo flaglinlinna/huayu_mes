@@ -61,7 +61,7 @@ function getList(){
          success: function(res){
              console.log(res)
              if(res.result){
-            	 var datalist=res.data;
+            	 var datalist=res.data.List;
             	 setTable(datalist);
              }else{
             	 alert(res.msg);
