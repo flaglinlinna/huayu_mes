@@ -39,9 +39,10 @@ td {
 	line-height: .75rem;
 }
 h2{text-align:center;
-margin-top: 8px;
+margin-top: 2px;
  color:#ffffff;
-font-size:20px;
+font-size:18px;
+font-weight:bold;
 }
 h1{
 font-weight:bold;
@@ -49,19 +50,20 @@ font-weight:bold;
 ul {
     list-style: none;
     margin-left: 20px;
-    margin-top: 20px;
+    margin-top: 2px;
 }
 
 li {
-    line-height: 40px;
+    line-height: 30px;
     color:#ffffff;
     font-size:16px;
 }
 .span_li{
- margin-left: 15px;
+ margin-left: 13px;
     color:#ffffff;
     font-size:16px;
 }
+
 </style>
 <script>
 	$(window).load(function(){  
@@ -141,7 +143,7 @@ var t = null;
 	</div>
 	<div class="mainbox">
 		<div class="boxall" style="height: 230px">
-		<div id="echart1" style="width: 29%; height: 220px; float: left;color:#ffffff;">
+		<div id="echart1" style="width: 26%; height: 220px; float: left;color:#ffffff;">
 	
 		<h2>产线信息</h2>
 		
@@ -149,10 +151,13 @@ var t = null;
 		<li>组长:<span class="span_li" id="liner"></span></li>
 		<li>排名:<span class="span_li" id="rownum"></span></li>
 		<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
+		<li>打卡总数:<span class="span_li" id="card_all"></span></li>
+		<li>已分配数:<span class="span_li" id="card_ass"></span></li>
+		<li>未分配数:<span class="span_li" id="card_unass"></span></li>
 		</ul>	
 		</div>
-			<div id="echart2" style="width: 35%; height: 220px; float: left;"></div>			
-			<div id="echart3" style="width: 35%; height: 220px; float: left;"></div>
+			<div id="echart2" style="width: 37%; height: 220px; float: left;"></div>			
+			<div id="echart3" style="width: 37%; height: 220px; float: left;"></div>
 			<div class="boxfoot"></div>
 		</div>
 		<div class="boxall">
