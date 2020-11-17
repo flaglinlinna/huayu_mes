@@ -1,7 +1,9 @@
 package com.web.kanban.controller;
 
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -181,7 +183,9 @@ public class kanbanController extends WebController {
             }else{
             	usr_id=currUser.getId().toString();
             }
-			ApiResponseResult result = kanbanService.getDfgList("1","5252","2020-11-10",usr_id,"1");//this.getIpAddr()
+			Date date = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			ApiResponseResult result = kanbanService.getDfgList("1","5253",formatter.format(date),usr_id,"1");//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getZcblDepList();
 			logger.debug("待返工看板=toDfg:" + result);
 			getSysLogService().success(module,method,methodName,result);

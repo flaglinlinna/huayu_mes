@@ -215,11 +215,32 @@ public class Abnormalproductlmpl extends PrcUtils implements AbnormalProductServ
 		if (abnormalProduct == null) {
 			return ApiResponseResult.failure("生产异常不能为空！");
 		}
+		List<AbnormalProduct> list = abnormalProductDao.findByTaskNoOrderByIdDesc(abnormalProduct.getTaskNo());
+		if(list.size()>0){
+			//找出上一条数据
+			AbnormalProduct abnormalProduct1 = list.get(0);
+			if(abnormalProduct1.getFtype().equals(abnormalProduct1.getFtype())){
+				if("解除".equals(abnormalProduct1.getFtype())) {
+					return ApiResponseResult.success("异常类型未开始，请先新建异常！");
+				}else {
+					return ApiResponseResult.success("异常类型未解除，请先解除异常！");
+				}
+			}
+			if("开始".equals(abnormalProduct1.getFtype())) {
+				//新增解除情况
+				abnormalProduct1.setFtimeLong(abnormalProduct.getFtimeLong());
+				abnormalProduct1.setFtime(abnormalProduct.getFtime());
+				abnormalProductDao.save(abnormalProduct1);
+			}
+		}else{
+			if(abnormalProduct.getFtype()=="解除") {
+				return ApiResponseResult.success("异常类型暂未开始，请先新建异常！");
+			}
+		}
 		abnormalProduct.setCreateDate(new Date());
 		abnormalProduct.setCreateBy(UserUtil.getSessionUser().getId());
 		abnormalProduct.setDelFlag(0);
 		abnormalProductDao.save(abnormalProduct);
-
 		return ApiResponseResult.success("生产异常记录添加成功！").data(abnormalProduct);
 	}
 
