@@ -6,7 +6,7 @@ $(function() {
 			getList();
 		});
 })
-//console.log(kanbanDataList);
+console.log(kanbanDataList);
 function dealData(kanbanList) {
 	console.log(kanbanList)
 	if(kanbanList.data!=null){
@@ -64,7 +64,7 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				color : '#ffffff'// 字体颜色
 			},
 		},
-		color : [ '#66FFCC', '#6699FF', '#9966FF' ],
+		color : [  '#6699FF', '#66FFCC','#9966FF' ],
 		xAxis : [ {
 			type : 'category',
 			data : xAxis_data,
@@ -106,7 +106,7 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 		series : [ {
 			name : '计划产量',
 			type : 'bar',
-			data : series2_data,
+			data : series1_data,
 			label : {
 				show : true,
 				position : 'top'
@@ -114,7 +114,7 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 		}, {
 			name : '达成产量',
 			type : 'bar',
-			data : series1_data,
+			data : series2_data,
 			label : {
 				show : true,
 				position : 'top'
