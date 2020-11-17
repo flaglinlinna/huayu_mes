@@ -16,6 +16,8 @@ $(function () {
             ,method: 'get' //默认：get请求
             ,cellMinWidth: 80
             ,page: true,
+            height:'full-80'//固定表头&full-查询框高度
+            ,even:true,//条纹样式
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit
@@ -115,7 +117,7 @@ $(function () {
             obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
             var a = document.createElement('a');
             var  url = "/produce/scheduling/toSchedulingEdit?id=" + obj.data.ID+"&qty="+obj.data.QTY_DONE+"&rate="+obj.data.RATE_DONE;
-            // console.log(url);
+            console.log(url);
             a.setAttribute('lay-href', context + url);
             a.setAttribute('lay-text', '排产编辑');
             a.setAttribute('id', 'js_a');

@@ -16,7 +16,7 @@ $(function() {
 							defaultToolbar : [],
 							page : true,
 							url : context + '/abnormalProduct/getList',
-							height:'full-80'//固定表头&full-查询框高度
+							height:'full-100'//固定表头&full-查询框高度
 							,even:true,//条纹样式
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page

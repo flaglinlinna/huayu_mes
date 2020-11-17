@@ -16,7 +16,7 @@ $(function() {
 							where : {},
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
-							height:'full-80'//固定表头&full-查询框高度
+							height:'full-390'//固定表头&full-查询框高度
 							,even:true,//条纹样式
 							page : true,
 							data : [],
@@ -390,7 +390,7 @@ function checkBarCode(taskNo, barcode) {
 					$("#qty").val(q[0].qty);
 				} else {
 					layer.alert(data.msg);
-					$('#taskno').val('');
+					$('#barcode').val('');
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
@@ -419,9 +419,14 @@ function saveBad(obj) {
 					});
 					$("#qty").val("");
 					$("#barcode").val("");
-					
+					$("#barcode").focus();
 				} else {
-					layer.alert(data.msg);
+					layer.alert(data.msg,function () {
+						$("#qty").val("");
+						$("#barcode").val("");
+						$("#barcode").focus();
+						layer.closeAll();
+					});
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);

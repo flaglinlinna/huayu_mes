@@ -12,7 +12,7 @@ $(function() {
 			method : 'get' // 默认：get请求
 			, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 			,cellMinWidth : 80,
-			height:'full-80'//固定表头&full-查询框高度
+			height:'full-110'//固定表头&full-查询框高度
 				,even:true,//条纹样式
 			data : [],
 			//height: 'full',
@@ -156,6 +156,31 @@ $(function() {
 			],
 			'done': function(filters){}
 		})
+
+
+		//监听行单击事件（双击事件为：rowDouble）
+		table.on('rowDouble(listTable)', function(obj){
+			//标注选中样式
+			// console.log(obj.data);
+			var frate = 0;
+			if(obj.data.FRATE!=null){
+				frate = obj.data.FRATE;
+			}
+			obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+			var a = document.createElement('a');
+			var  url = "/produce/scheduling/toSchedulingEdit?id=" + obj.data.TASK_ID+"&qty="+obj.data.QUANTITY+"&rate="+frate;
+			console.log(url);
+			a.setAttribute('lay-href', context + url);
+			a.setAttribute('lay-text', '排产编辑');
+			a.setAttribute('id', 'js_a');
+			if(document.getElementById('js_a')) {//防止反复添加
+				document.body.removeChild(document.getElementById('js_a'));
+			}
+			document.body.appendChild(a);//创建
+			a.click();//点击
+			return false;
+
+		});
 
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {

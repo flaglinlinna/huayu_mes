@@ -20,7 +20,7 @@ $(function() {
 					,
 					defaultToolbar : [],
 					cellMinWidth : 80,
-					height:'full-80'//固定表头&full-查询框高度
+					height:'full-380'//固定表头&full-查询框高度
 					,even:true,//条纹样式
 					page : false,
 					data : [],
@@ -88,6 +88,7 @@ $(function() {
 						url:  context +'/product/getTaskNo',
 						//url:  context +'base/prodproc/getProdList',
 						method : 'get',
+						width:800,
 						cols : [ [
 						{ type: 'radio' },//多选  radio
 							{type :'numbers'},
@@ -98,7 +99,7 @@ $(function() {
 						}, {
 							field : 'TASK_NO',
 							title : '制令单号',
-							width : 180,sort: true
+							width : 150,sort: true
 						}, {
 							field : 'ITEM_NO',
 							title : '物料编码',
@@ -110,7 +111,7 @@ $(function() {
 						}, {
 							field : 'LINER_NAME',
 							title : '组长',
-							width : 100,sort: true
+							width : 80,sort: true
 						},{
 							field : 'QTY_PLAN',
 							title : '制单数量',
@@ -456,7 +457,10 @@ $(function() {
         		return false;
         	}
         	if(!$('#nbarcode').val()){
-        		layer.alert("请先扫描内箱条码!");
+        		layer.alert("请先扫描内箱条码!",function () {
+					$('#nbarcode').focus();
+					layer.closeAll();
+				});
         		return false;
         	}
         	if($('#wbarcode').val()){
@@ -487,10 +491,15 @@ function getDetailByTask(taskNo){
 		CoreUtil.sendAjax("/product/afterNei", params, function(data) {
 			
 			if (data.result) {
-				 $("#wbarcode").get(0).focus();
+				 $("#wbarcode").val("");
+				 $("#wbarcode").focus();
 			}else{
-				layer.alert(data.msg);
-				$('#nbarcode').val('');
+				layer.alert(data.msg,function () {
+					$('#nbarcode').val('');
+					$('#nbarcode').focus();
+					layer.closeAll();
+				});
+				// $('#nbarcode').val('');
 			}
 		}, "GET", false, function(res) {
 			layer.alert(res.msg);
@@ -529,8 +538,13 @@ function getDetailByTask(taskNo){
 					data:tabledata
 				});*/
 			}else{
-				layer.alert(data.msg);
-				$("#wbarcode").val("");
+				layer.alert(data.msg,function () {
+					$("#wbarcode").val("");
+					$("#nbarcode").val("");
+					$("#nbarcode").focus();
+					layer.closeAll();
+				});
+				// $("#wbarcode").val("");
 			}
 		}, "GET", false, function(res) {
 			layer.alert(res.msg);

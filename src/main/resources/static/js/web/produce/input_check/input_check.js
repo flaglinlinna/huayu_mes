@@ -20,7 +20,7 @@ $(function() {
                 ,
                 defaultToolbar : [],
                 cellMinWidth : 80,
-                height:'full-80'//固定表头&full-查询框高度
+                height:'full-375'//固定表头&full-查询框高度
 					,even:true,//条纹样式
                 page : false,
                 data : [],
@@ -101,6 +101,7 @@ $(function() {
                     url:  context +'/inputCheck/getTaskNo',
                     //url:  context +'base/prodproc/getProdList',
                     method : 'get',
+                    width:800,
                     cols : [ [
                         { type: 'radio' },//多选  radio
                         , {
@@ -110,7 +111,7 @@ $(function() {
                         }, {
                             field : 'TASK_NO',
                             title : '制令单号',
-                            width : 180,sort: true
+                            width : 150,sort: true
                         }, {
                             field : 'ITEM_NO',
                             title : '物料编码',
@@ -122,7 +123,7 @@ $(function() {
                         }, {
                             field : 'LINER_NAME',
                             title : '组长',
-                            width : 100
+                            width : 80
                         },{
                             field : 'QTY_PLAN',
                             title : '数量',
@@ -258,7 +259,10 @@ $(function() {
             if($('#barcode').val()){
                 getInfoBarcode($('#barcode').val())
             }else{
-                layer.alert("请先扫描条码!");
+                layer.alert("请先扫描条码!",function () {
+                    $('#barcode').focus();
+                    layer.closeAll();
+                });
             }
         }
     });
@@ -271,8 +275,12 @@ function getInfoBarcode(barcode){
             $( "input[name='item_code']").val(data.data[0].ITEM_NO);
             $( "input[name='addqty']").val(data.data[0].QTY);
         }else{
-            layer.alert(data.msg);
-            $('#barcode').val('');
+            layer.alert(data.msg,function () {
+                $('#barcode').val('');
+                $('#barcode').focus();
+                layer.closeAll();
+            });
+            // $('#barcode').val('');
         }
     }, "GET", false, function(res) {
         layer.alert(res.msg);
@@ -301,15 +309,17 @@ function getDetailByTask(taskNo){
 function addPut(obj){
     var params={"barcode":obj.barcode,"task_no":obj.num,"item_no":obj.item_code,"qty":obj.addqty};
     CoreUtil.sendAjax("/inputCheck/addPut", params, function(data) {
-        console.log(data)
         if (data.result) {
             $("#inqty").val(data.data.Qty);
             tableIns.reload({
                 data:data.data.List
             });
-            
+            $('#barcode').focus();
         }else{
-            layer.alert(data.msg);
+            layer.alert(data.msg,function () {
+                $('#barcode').focus();
+                layer.closeAll();
+            });
         }
         $( "input[name='barcode']").val('');
         $( "input[name='item_code']").val('');

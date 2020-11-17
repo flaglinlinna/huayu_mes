@@ -20,7 +20,7 @@ $(function() {
 							// ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
 							,
 							defaultToolbar : [],
-							height:'full-80'//固定表头&full-查询框高度
+							height:'full-380'//固定表头&full-查询框高度
 							,even:true,//条纹样式
 							page : false,
 							data : [],
@@ -76,6 +76,7 @@ $(function() {
 										url : context
 												+ '/produce/check_code/getTaskNo',
 										method : 'get',
+										
 										cols : [ [ {
 											type : 'radio'
 										},// 多选 radio
@@ -267,7 +268,11 @@ function subCode(taskNo, barcode1, barcode2) {
 					
 				} else {
 					layer.alert(data.msg, function(index) {
-						
+						if(barcode2==""){
+							$("#barcode").focus();
+						}else{
+							$("#barcode1").focus();
+						}
 						layer.close(index);
 					});
 				}

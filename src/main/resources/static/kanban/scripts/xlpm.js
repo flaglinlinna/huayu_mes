@@ -4,7 +4,7 @@ $(function() {
 	getLinerList(linerList);
 	var kanbanList=kanbanDataList;
 	dealData(kanbanList);
-	$("#searchBtn").click(function() {
+	$("#searchBtn").click(function(e) {
 		getList();
 	});
 	
@@ -33,11 +33,18 @@ function dealData(kanbanList) {
 		var liner= kanbanData_t[0].FLINER;//组长
 		var rownum=kanbanData_t[0].FROWNUM==null?"无":kanbanData_t[0].FROWNUM;//排名
 		var onlineEmp= kanbanData_t[0].NUM_EMP_ON==null?"0":kanbanData_t[0].NUM_EMP_ON;//在线人数
-		console.log(liner)
+		//console.log(liner)
+		var card_all= kanbanData_t[0].NUM_CARD_ALL==null?"0":kanbanData_t[0].NUM_CARD_ALL;//组长
+		var card_ass=kanbanData_t[0].NUM_CARD_ASS==null?"0":kanbanData_t[0].NUM_CARD_ASS;//排名
+		var card_unass= kanbanData_t[0].NUM_CARD_UNASS==null?"0":kanbanData_t[0].NUM_CARD_UNASS;//在线人数
 		
 		$("#liner").text(liner)
 		$("#rownum").text(rownum)
 		$("#onlineEmp").text(onlineEmp)
+		
+		$("#card_all").text(card_all)
+		$("#card_ass").text(card_ass)
+		$("#card_unass").text(card_unass)
 	}
 	
 	/*	
@@ -58,6 +65,7 @@ function getChart2(hr_abn, hr_act,hr_st,eff_rate) {
 					color : '#FFFFFF' // 图例文字颜色
 				},
 				left:'15px',
+				top:'5px'
 			},
 			color : [ '#993300','#0066FF', '#66CCCC' ],
 			legend : {
@@ -152,6 +160,7 @@ function getChart3(done, plan,doneRate) {
 				color : '#FFFFFF' // 图例文字颜色
 			},
 			left:'15px',
+			top:'5px'
 		},
 		color : [ '#0066FF', '#66CCCC' ],
 		legend : {
@@ -247,7 +256,7 @@ function setTable(kanbanData) {
 function getDepList(deptList) {
 	
 	var res=deptList;
-	console.log(res)
+	//console.log(res)
 	$("#dep_select").empty();
 	var html = "<option value=''>请选择部门</option>";
 	for (j = 0, len = res.data.length; j < len; j++) {

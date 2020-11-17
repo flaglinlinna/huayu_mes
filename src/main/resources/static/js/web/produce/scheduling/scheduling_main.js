@@ -35,6 +35,8 @@ $(function () {
             ,method: 'get' //默认：get请求
             ,cellMinWidth: 80
             ,page: true,
+            height:'full-80'//固定表头&full-查询框高度
+            ,even:true,//条纹样式
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit
