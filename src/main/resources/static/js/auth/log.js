@@ -13,6 +13,7 @@ $(function() {
             ,method: 'get' //默认：get请求
             ,cellMinWidth: 80
             ,page: true,limit:20,
+            height: 'full-80',//full-查询框高度
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit
@@ -39,14 +40,8 @@ $(function() {
             ,  done: function(res, curr, count){
             	$("[data-field='id']").css('display','none');
             	$("[data-field='type']").css('display','none');
-                //如果是异步请求数据方式，res即为你接口返回的信息。
-                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-                //console.log(res);
-                //得到当前页码
-                //console.log(curr);
-                //得到数据总量
-                //console.log(count);
                 pageCurr=curr;
+
             }
         });
 
