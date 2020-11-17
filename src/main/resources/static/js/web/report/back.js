@@ -157,6 +157,31 @@ $(function() {
 			'done': function(filters){}
 		})
 
+
+		//监听行单击事件（双击事件为：rowDouble）
+		table.on('rowDouble(listTable)', function(obj){
+			//标注选中样式
+			// console.log(obj.data);
+			var frate = 0;
+			if(obj.data.FRATE!=null){
+				frate = obj.data.FRATE;
+			}
+			obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+			var a = document.createElement('a');
+			var  url = "/produce/scheduling/toSchedulingEdit?id=" + obj.data.TASK_ID+"&qty="+obj.data.QUANTITY+"&rate="+frate;
+			console.log(url);
+			a.setAttribute('lay-href', context + url);
+			a.setAttribute('lay-text', '排产编辑');
+			a.setAttribute('id', 'js_a');
+			if(document.getElementById('js_a')) {//防止反复添加
+				document.body.removeChild(document.getElementById('js_a'));
+			}
+			document.body.appendChild(a);//创建
+			a.click();//点击
+			return false;
+
+		});
+
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
 			// 重新加载table

@@ -277,7 +277,10 @@ $(function() {
 			if ($('#barcode').val()) {
 				getInfoBarcode($('#barcode').val())
 			} else {
-				layer.alert("请先扫描条码!");
+				layer.alert("请先扫描条码!",function () {
+					$('#barcode').focus();
+					layer.closeAll();
+				});
 			}
 		}
 	});
@@ -292,8 +295,12 @@ function getInfoBarcode(barcode) {
 			$("input[name='item_code']").val(data.data[0].ITEM_NO);
 			$("input[name='addqty']").val(data.data[0].QTY);
 		} else {
-			layer.alert(data.msg);
-			$('#barcode').val('');
+			layer.alert(data.msg,function () {
+				$('#barcode').val('');
+				$('#barcode').focus();
+				layer.closeAll();
+			});
+			// $('#barcode').val('');
 		}
 	}, "GET", false, function(res) {
 		layer.alert(res.msg);
@@ -326,7 +333,6 @@ function addPut(obj) {
 		"qty" : obj.addqty
 	};
 	CoreUtil.sendAjax("/input/addPut", params, function(data) {
-		//console.log(data)
 		if (data.result) {
 			$("#inqty").val(data.data.Qty);
 			tableIns.reload({
@@ -335,8 +341,12 @@ function addPut(obj) {
 			 $('#barcode').val('');
 	            $('#item_code').val('');
 	            $('#addqty').val('');
+			$('#barcode').focus();
 		} else {
-			layer.alert(data.msg);
+			layer.alert(data.msg,function () {
+				$('#barcode').focus();
+				layer.closeAll();
+			});
 		}
 		$("input[name='barcode']").val('');
 		$("input[name='item_code']").val('');

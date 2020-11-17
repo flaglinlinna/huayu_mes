@@ -542,10 +542,13 @@ function add(params) {
 		"classId" : params.pclass2
 	};
 	CoreUtil.sendAjax("/verify/add", JSON.stringify(param), function(data) {
-
-		layer.alert(data.msg, function() {
-			layer.closeAll();
-		});
+		if(data.result){
+			layer.alert(data.msg, function() {
+				layer.closeAll();
+			});
+		}else {
+			layer.alert(data.msg);
+		}
 	}, "POST", false, function(res) {
 		layer.alert(res.msg);
 	});

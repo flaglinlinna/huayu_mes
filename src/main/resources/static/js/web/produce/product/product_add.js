@@ -457,7 +457,10 @@ $(function() {
         		return false;
         	}
         	if(!$('#nbarcode').val()){
-        		layer.alert("请先扫描内箱条码!");
+        		layer.alert("请先扫描内箱条码!",function () {
+					$('#nbarcode').focus();
+					layer.closeAll();
+				});
         		return false;
         	}
         	if($('#wbarcode').val()){
@@ -488,10 +491,15 @@ function getDetailByTask(taskNo){
 		CoreUtil.sendAjax("/product/afterNei", params, function(data) {
 			
 			if (data.result) {
-				 $("#wbarcode").get(0).focus();
+				 $("#wbarcode").val("");
+				 $("#wbarcode").focus();
 			}else{
-				layer.alert(data.msg);
-				$('#nbarcode').val('');
+				layer.alert(data.msg,function () {
+					$('#nbarcode').val('');
+					$('#nbarcode').focus();
+					layer.closeAll();
+				});
+				// $('#nbarcode').val('');
 			}
 		}, "GET", false, function(res) {
 			layer.alert(res.msg);
@@ -530,8 +538,13 @@ function getDetailByTask(taskNo){
 					data:tabledata
 				});*/
 			}else{
-				layer.alert(data.msg);
-				$("#wbarcode").val("");
+				layer.alert(data.msg,function () {
+					$("#wbarcode").val("");
+					$("#nbarcode").val("");
+					$("#nbarcode").focus();
+					layer.closeAll();
+				});
+				// $("#wbarcode").val("");
 			}
 		}, "GET", false, function(res) {
 			layer.alert(res.msg);

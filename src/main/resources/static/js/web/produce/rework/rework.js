@@ -222,10 +222,13 @@ $(function() {
 							if (data.value == "0") {
 								$('#sTaskno').val("");
 								$('#sTaskno').attr("disabled", "disabled");
+								$('#sTaskno').addClass("grey");
 							} else {
 								$('#sTaskno').val("");
+								$('#sTaskno').removeClass("grey");
 								$('#sTaskno').removeAttr("disabled");
 							}
+							layui.form.render('input');
 						})
 						// 日期选择器
 						laydate.render({

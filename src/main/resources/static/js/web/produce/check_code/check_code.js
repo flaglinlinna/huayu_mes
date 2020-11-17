@@ -268,7 +268,11 @@ function subCode(taskNo, barcode1, barcode2) {
 					
 				} else {
 					layer.alert(data.msg, function(index) {
-						
+						if(barcode2==""){
+							$("#barcode").focus();
+						}else{
+							$("#barcode1").focus();
+						}
 						layer.close(index);
 					});
 				}
