@@ -48,7 +48,7 @@
 										style="background: #efefef;" class="layui-input" disabled type="text" />
 								</div>
 								<label class="layui-form-label">客户简称</label>
-								<div class="layui-input-inline">
+								<div class="layui-input-inline" style="width:180px;">
 									<input  name="cus" autocomplete="off"
 										style="background: #efefef;" class="layui-input" disabled type="text" />
 								</div>
@@ -75,15 +75,18 @@
 										<select lay-filter="pline" id="pline" name="pline" lay-verify="required">
 									      </select>
 									</div>
-									<label class="layui-form-label layui-required">班次</label>
+									
+								</div>
+							</div>
+							
+							<div class="layui-form-item">
+								<div class="layui-inline">
+								<label class="layui-form-label layui-required">班次</label>
 									<div class="layui-input-inline" >
 										<select lay-filter="pclass" id="pclass" name="pclass" lay-verify="required">
 									      </select>
 									</div>
-								</div>
-							</div>
-							<div class="layui-form-item">
-								<div class="layui-inline">
+									
 								    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
 										lay-filter="update">采集打卡数据</button>
 									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="addBtn"  >创建在线返工制令单</button>
