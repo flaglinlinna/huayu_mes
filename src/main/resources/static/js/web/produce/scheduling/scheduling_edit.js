@@ -183,7 +183,7 @@ $(function () {
                 ,{field:'PROC_NO', title:'工序编号', width:100}
                 ,{field:'PROC_NAME', title:'工序名称', width:250}
                 ,{field:'JOB_ATTR', title:'过程属性', width:100, templet:'#statusTpl'}
-                ,{field:'EMP_NAME', title:'作业人员', width:150}
+                // ,{field:'EMP_NAME', title:'作业人员', width:150}
                 ,{field:'QTY_IN', title:'投入数', width:150}
                 ,{field:'QTY_OUT', title:'产出数', width:150}
                 // ,{fixed:'right', title:'操作',width:150, align:'center', toolbar:'#optBar'}
@@ -545,6 +545,28 @@ $(function () {
             return false;
         });
 
+
+        // 监听异常原因的提交
+            form.on('submit(addSubmit7)', function(obj) {
+            console.log(obj.field);
+            // CoreUtil.sendAjax("/produce/scheduling/saveProc", JSON.stringify(obj.field), function(
+            //     data) {
+            //     if (data.result) {
+            //         loadAll1();
+            //         layer.alert("操作成功", function() {
+            //             layer.closeAll();
+            //             // 加载页面
+            //         });
+            //     } else {
+            //         layer.alert(data.msg, function() {
+            //             layer.closeAll();
+            //         });
+            //     }
+            // }, "POST", false, function(res) {
+            //     layer.alert(res.msg);
+            // });
+            // return false;
+        });
 
 
         tableProc=table.render({
@@ -1015,6 +1037,47 @@ function doEditItem(){
         }
     });
 }
+
+// 添加异常原因
+function addProdErr() {
+    // 清空弹出框数据
+    getProdErr();
+    // 打开弹出框
+    openProdErr(null, "添加异常原因");
+}
+
+function getProdErr() {
+    $('#taskNo7').val(scheduling.taskNo);
+    $('#itemName7').val(scheduling.itemName);
+    $('#itemNo').val(scheduling.itemNo);
+    $('#custNameS').val(scheduling.custNameS);
+    $('#linerName7').val(scheduling.linerName);
+    layui.form.render();
+}
+
+// 清空新增表单数据
+function cleanProdErr() {
+    $('#cardForm')[0].reset();
+    layui.form.render();// 必须写
+}
+
+// 新增编辑弹出框
+function openProdErr(id, title) {
+    var index=layer.open({
+        type : 1,
+        title : title,
+        fixed : false,
+        resize : false,
+        shadeClose : true,
+        area : [ '550px' ],
+        content : $('#setAbnormalHours'),
+        end : function() {
+            cleanProdErr();
+        }
+    });
+    layer.full(index);
+}
+
 
 //重新加载表格-工艺维护（全部）
 function loadAll1(){
