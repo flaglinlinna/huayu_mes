@@ -721,6 +721,8 @@ function getScheduling(){
 */
 	console.log(scheduling)
     $("#id").val(id);
+    $("#qytDone").val(qty);
+    $("#rateDone").val(rate);
     $("#taskNo").val(scheduling.taskNo);
     $("#prodNo").val(scheduling.prodNo);
     $("#produceState").val(scheduling.produceState);

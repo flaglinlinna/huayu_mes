@@ -339,6 +339,8 @@
 
     <script th:inline="javascript">
         var id = [[${id}]];
+        var qty = [[${qty}]];
+        var rate = [[${rate}]];
         var mapData = [[${mapData}]];
         var scheduling = mapData ? mapData.scheduling : null;
         var itemList = mapData ? mapData.itemList : null;
