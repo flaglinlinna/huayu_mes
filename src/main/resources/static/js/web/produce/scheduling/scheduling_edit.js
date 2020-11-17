@@ -363,7 +363,7 @@ $(function () {
                 ,{field:'ITEM_BARCODE', title:'物料条码', width:180,}
                 ,{field:'ITEM_NAME', title:'物料名称', width:190,}
                 ,{field:'ITEM_NO', title:'物料编码', width:145}
-                ,{field:'ITEM_MODEL', title:'机型', width:80,align:'center',}
+                // ,{field:'ITEM_MODEL', title:'机型', width:80,align:'center',}
                 ,{field:'QUANTITY', title:'投料数量(PCS)', width:120,align:'center',}
                 ,{field:'USER_NAME', title:'操作人', width:100,align:'center',}
                 ,{field:'CREATE_DATE', title:'操作时间', width:160,align:'center',}
@@ -583,7 +583,7 @@ $(function () {
                                 layer.closeAll();
                                 // cleanAbnormalHours();
                                 // 加载页面
-                                loadAll();
+                                loadAll7();
                             });
                         } else {
                             layer.alert(data.msg);
@@ -1136,6 +1136,15 @@ function openProdErr(id, title) {
 function loadAll1(){
     //重新加载table
     tableIns.reload({
+        page: {
+            curr: pageCurr //从当前页码开始
+        }
+    });
+}
+
+function loadAll7(){
+    //重新加载table
+    tableIns7.reload({
         page: {
             curr: pageCurr //从当前页码开始
         }

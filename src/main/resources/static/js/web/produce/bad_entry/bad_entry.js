@@ -390,7 +390,7 @@ function checkBarCode(taskNo, barcode) {
 					$("#qty").val(q[0].qty);
 				} else {
 					layer.alert(data.msg);
-					$('#taskno').val('');
+					$('#barcode').val('');
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
@@ -419,7 +419,7 @@ function saveBad(obj) {
 					});
 					$("#qty").val("");
 					$("#barcode").val("");
-					
+					$("#barcode").focus();
 				} else {
 					layer.alert(data.msg,function () {
 						$("#qty").val("");

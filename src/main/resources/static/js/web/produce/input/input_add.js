@@ -276,7 +276,10 @@ $(function() {
 			if ($('#barcode').val()) {
 				getInfoBarcode($('#barcode').val())
 			} else {
-				layer.alert("请先扫描条码!");
+				layer.alert("请先扫描条码!",function () {
+					$('#barcode').focus();
+					layer.closeAll();
+				});
 			}
 		}
 	});
@@ -291,8 +294,12 @@ function getInfoBarcode(barcode) {
 			$("input[name='item_code']").val(data.data[0].ITEM_NO);
 			$("input[name='addqty']").val(data.data[0].QTY);
 		} else {
-			layer.alert(data.msg);
-			$('#barcode').val('');
+			layer.alert(data.msg,function () {
+				$('#barcode').val('');
+				$('#barcode').focus();
+				layer.closeAll();
+			});
+			// $('#barcode').val('');
 		}
 	}, "GET", false, function(res) {
 		layer.alert(res.msg);

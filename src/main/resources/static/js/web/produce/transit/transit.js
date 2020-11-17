@@ -262,20 +262,19 @@ function checkBarcode(proc, barcode) {
 	CoreUtil.sendAjax("/produce/transit/checkBarcode", JSON.stringify(params),
 			function(data) {
 				console.log(data)
-				if (data.result) {
 					if (data.result) {
-						
 						console.log(proc + "|" + in_type + "|" + barcode);
 						saveData(proc,in_type,barcode);
 						tableIns.reload({
 							data : data.data
 						});
 					} else {
-						layer.alert(data.msg);
+						layer.alert(data.msg,function () {
+							$('#barcode').val('');
+							$('#barcode').focus();
+							layer.closeAll();
+						});
 					}
-				} else {
-					layer.alert(data.msg);
-				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
 			});
