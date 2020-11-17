@@ -261,7 +261,7 @@ function freshFenable(id) {
                 if(res.data.fenable ==1){
                     $("input[name='fenable']").prop("checked", true);
                     showBtn(1);
-                    $('#edit1').attr("disable","disable");
+                    $('#edit1').attr("disabled","disabled");
                 }
                 layui.form.render('checkbox');
             } else {
@@ -382,7 +382,8 @@ function getMainData(){
         showBtn(schedulingMain.fenable);
         if (schedulingMain.fenable == 1) {
             $("input[name='fenable']").prop("checked", true);
-            $('#edit1').attr("disable","disable");
+            console.log(schedulingMain.fenable);
+            $("#edit1").attr("disabled",true);
         } else {
             $("input[name='fenable']").prop("checked", false);
         }
