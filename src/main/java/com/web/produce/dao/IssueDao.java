@@ -25,7 +25,7 @@ public interface IssueDao extends CrudRepository<Issue, Long>,JpaSpecificationEx
 		    countQuery = "select count(distinct f.emp_id id) from MES_BASE_EMP_FINGER f left join MES_BASE_EMPLOYEE a on a.id = f.emp_id and a.del_flag=0 where f.del_flag=0 and INSTR((a.emp_code || a.emp_name || a.emp_type), ?1) > 0",
 		    nativeQuery = true)
 		  Page<Map<String, Object>> findByKeyword(String keyword, Pageable pageable);
-	@Query(value = " select distinct f.emp_id id,a.emp_code,a.emp_name,a.emp_type,f.create_date,a.DEPT_NAME from MES_BASE_EMP_FINGER f left join MES_BASE_EMPLOYEE a on a.id = f.emp_id and a.del_flag=0 where f.del_flag=0  ",
+	@Query(value = " select distinct f.emp_id id,a.emp_code,a.emp_name,a.emp_type, max(f.create_date) create_date,a.DEPT_NAME from MES_BASE_EMP_FINGER f left join MES_BASE_EMPLOYEE a on a.id = f.emp_id and a.del_flag=0 where f.del_flag=0 group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME order by  max(f.create_date) ",
 		    countQuery = "select count(distinct f.emp_id ) from MES_BASE_EMP_FINGER f left join MES_BASE_EMPLOYEE a on a.id = f.emp_id and a.del_flag=0 where f.del_flag=0 ",
 		    nativeQuery = true)
 		  Page<Map<String, Object>> findpage(String keyword, Pageable pageable);

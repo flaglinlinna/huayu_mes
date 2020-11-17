@@ -38,9 +38,27 @@ public class BaseSql {
 		// query.setResultTransformer(null==cls? Transformers.ALIAS_TO_ENTITY_MAP :
 		// Transformers.aliasToBean(cls));
 		List<T> list = query.list();
+		List<Map<String, Object>> maplist = (List<Map<String, Object>>) list;
+
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Object[]> createSQLQuery(String sql, Map<String, Object> paramMap) {
+		Session session = getEntityManager().unwrap(Session.class);
+		SQLQuery query = session.createSQLQuery(sql);
+
+
+		if (paramMap != null && paramMap.size() > 0) {
+			for (String key : paramMap.keySet()) {
+				query.setParameter(key, paramMap.get(key));
+			}
+		}
+		// query.setResultTransformer(null==cls? Transformers.ALIAS_TO_ENTITY_MAP :
+		// Transformers.aliasToBean(cls));
+		List<Object[]> list = query.list();
+		return list;
+	}
 	
 
 }
