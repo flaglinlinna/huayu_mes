@@ -13,8 +13,9 @@ $(function() {
 			,
 			cellMinWidth : 80,
 			toolbar: '#toolbar', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-			height: 'full',
-			page : true,
+			height: 'full-80'
+			,even:true//条纹样式
+			,page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
