@@ -17,11 +17,11 @@ $(function() {
 			data : [],
 			//height: 'full',
 			page : true,
-			/*request : {
+			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
-			},*/
+			},
 			parseData : function(res) {
 				if(!res.result){
 					return {
