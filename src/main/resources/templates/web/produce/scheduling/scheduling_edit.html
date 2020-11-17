@@ -241,6 +241,7 @@
             </div>
             <div class="layui-tab-item">
                 <!--生产异常-->
+                <button class="layui-btn layui-btn-sm" onclick="addProdErr()" >新增异常信息</button>
                 <table id="iList7" lay-filter="iTable5"></table>
             </div>
         </div>
@@ -332,6 +333,93 @@
             <div class="layui-form-item">
                 <div class="layui-input-block" style="margin-left: 10px;">
                     <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="editSubmit2">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!--添加或编辑异常工时信息-->
+    <div id="setAbnormalHours" class="layer_self_wrap"
+         style="width: 750px; display: none; margin: 20px;">
+        <form id="cardForm" class="layui-form layui-form-pane"
+              lay-filter="cardForm" method="post" action=""
+              style="margin-top: 20px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">异常类型</label>
+                <div class="layui-input-inline" style="width:26%;">
+                    <select lay-verify="required" name="ftype" lay-filter="ftype" placeholder="请选择异常类型">
+                        <option value="开始">开始</option>
+                        <option value="解除">解除</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">制令单</label>
+                <div class="layui-input-inline" style="width:76%;">
+                    <input type="text" name="taskNo" placeholder="请选择"
+                           autocomplete="off" class="layui-input" readonly="readonly"
+                           lay-verify="required" disabled  style="background: #efefef;" id="taskNo7">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">物料描述</label>
+                <div class="layui-input-inline" style="width:76%;">
+                    <input type="text" class="layui-input" name="itemName" disabled
+                           style="background: #efefef;" id="itemName7">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">物料编号</label>
+                <div class="layui-input-inline" style="width:76%;">
+                    <input type="text" class="layui-input" name="itemNo" disabled
+                           style="background: #efefef;" id="itemNo">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户简称</label>
+                <div class="layui-input-inline" style="width:30%;">
+                    <input type="text" class="layui-input" name="custNameS" disabled
+                           style="background: #efefef;" id="custNameS">
+                </div>
+                <label class="layui-form-label">线长</label>
+                <div class="layui-input-inline" style="width:30%;">
+                    <input type="text" class="layui-input" name="linerName" disabled
+                           style="background: #efefef;" id="linerName7">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">登记时间</label>
+                <div class="layui-input-inline" style="width:30%;">
+                    <input type="text" class="layui-input" name="ftime"
+                           placeholder="请输入开始时间" lay-verify="required" id="ftime">
+                </div>
+                <label id="time_label" style="display:none;" class="layui-form-label layui-required">时长(分钟)</label>
+                <div id="time_div" class="layui-input-inline" style="width:30%;display:none;">
+                    <input class="layui-input" name="ftimeLong" lay-verify="" id="ftimeLong">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">异常原因</label>
+                <div class="layui-input-inline" style="width:30%;">
+                    <!--<input type="text" class="layui-input" name="forReason" -->
+                    <!--lay-verify="required" id="forReason" placeholder="请输入异常原因">-->
+                    <select id="forReason" lay-verify="required" name="forReason" lay-filter="forReason" placeholder="请选择异常原因"></select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">异常描述</label>
+                <div class="layui-input-inline" style="width:76%;">
+					<textarea id="description" name="description" lay-verify=""
+                              placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button class="layui-btn layui-btn-sm" lay-submit=""
+                            lay-filter="addSubmit7">提交</button>
+                    <button type="reset"
+                            class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
                 </div>
             </div>
         </form>
