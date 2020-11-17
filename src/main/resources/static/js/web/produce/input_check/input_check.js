@@ -301,15 +301,17 @@ function getDetailByTask(taskNo){
 function addPut(obj){
     var params={"barcode":obj.barcode,"task_no":obj.num,"item_no":obj.item_code,"qty":obj.addqty};
     CoreUtil.sendAjax("/inputCheck/addPut", params, function(data) {
-        console.log(data)
         if (data.result) {
             $("#inqty").val(data.data.Qty);
             tableIns.reload({
                 data:data.data.List
             });
-            
+            $('#barcode').focus();
         }else{
-            layer.alert(data.msg);
+            layer.alert(data.msg,function () {
+                $('#barcode').focus();
+                layer.closeAll();
+            });
         }
         $( "input[name='barcode']").val('');
         $( "input[name='item_code']").val('');

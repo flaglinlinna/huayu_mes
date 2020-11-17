@@ -421,7 +421,12 @@ function saveBad(obj) {
 					$("#barcode").val("");
 					
 				} else {
-					layer.alert(data.msg);
+					layer.alert(data.msg,function () {
+						$("#qty").val("");
+						$("#barcode").val("");
+						$("#barcode").focus();
+						layer.closeAll();
+					});
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);

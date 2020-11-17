@@ -325,7 +325,6 @@ function addPut(obj) {
 		"qty" : obj.addqty
 	};
 	CoreUtil.sendAjax("/input/addPut", params, function(data) {
-		//console.log(data)
 		if (data.result) {
 			$("#inqty").val(data.data.Qty);
 			tableIns.reload({
@@ -334,8 +333,12 @@ function addPut(obj) {
 			 $('#barcode').val('');
 	            $('#item_code').val('');
 	            $('#addqty').val('');
+			$('#barcode').focus();
 		} else {
-			layer.alert(data.msg);
+			layer.alert(data.msg,function () {
+				$('#barcode').focus();
+				layer.closeAll();
+			});
 		}
 		$("input[name='barcode']").val('');
 		$("input[name='item_code']").val('');
