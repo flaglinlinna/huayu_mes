@@ -44,7 +44,7 @@ function dealData(kanbanList) {
 		$("#doneQty").text(doneQty);
 
 		var doneRate = parseFloat(doneQty) / parseFloat(planQty);
-		console.log(doneRate * 100)
+		//console.log(doneRate * 100)
 		getChart3(doneRate * 100);
 	}
 }
@@ -126,7 +126,7 @@ function setTable(kanbanData) {
 		var arr = kanbanData[j];
 		html += '<tr><td>' + arr.FTIME + '</td><td>' + arr.QTY_NPT
 				+ '</td><td>' + arr.QTY_DONE + '</td><td>' + arr.QTY_OK
-				+ '</td><td>' + arr.QTY_NG + '%</td></tr> ';
+				+ '</td><td>' + arr.QTY_NG + '</td><td>' + arr.RATE_OK + '%</td></tr> ';
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);

@@ -203,7 +203,7 @@ public class kanbanController extends WebController {
 		String method = "kanban/toCxdz";
 		String methodName = "产线电子看板";
 		try {	
-			ApiResponseResult result = kanbanService.getCxdzList("","","2020-11-13",this.getIpAddr(),"");//this.getIpAddr()
+			ApiResponseResult result = kanbanService.getCxdzList("","","",this.getIpAddr(),"");//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
 			logger.debug("产线电子看板=toCxdz:" + result);

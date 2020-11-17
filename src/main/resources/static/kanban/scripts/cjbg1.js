@@ -1,7 +1,7 @@
 $(function() {
 	var kanbanList=kanbanDataList;
 	dealData(kanbanList);
-	getDepList(deptList);
+	//getDepList(deptList);
 	$("#searchBtn").click(function() {
 		getList();
 	});
@@ -158,10 +158,10 @@ function getList() {
 	// console.log(sdata)
 	// console.log(edata)
 	var class_no=$("#class_select").val();
-	var dep_id=$("#dep_select").val();
+	//var dep_id=$("#dep_select").val();
 	var params = {
 		"class_nos" : class_no,
-		"dep_id" : dep_id,
+		"dep_id" : "",
 		"sdata" : date
 	};
 	$.ajax({

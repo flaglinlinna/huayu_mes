@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>产线电子看板（拉头）</title>
+<title>产线电子看板</title>
 <script type="text/javascript" src="../kanban/js/jquery.js"></script>
 <link rel="stylesheet" href="../kanban/css/comon0.css">
 <link rel="stylesheet" href="../layui/css/layui.css"
@@ -63,6 +63,8 @@ li {
     color:#ffffff;
     font-size:16px;
 }
+
+
 </style>
 <script>
 	$(window).load(function(){  
@@ -109,7 +111,7 @@ $(document).ready(function(){
 				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
 				autocomplete="off" class="chose_text_in "> -->
 			<!-- <input class="chose_text_in"> -->
-			<button class="chose_enter" id="searchBtn">确定</button>
+			<button class="chose_enter"  id="searchBtn">确定</button>
 		</div>
 	</header>
 	<div class="head">
@@ -149,7 +151,7 @@ var t = null;
 		
 		<ul>
 		<li>班次:<span class="span_li" id="classNo"></span></li>
-		<li>排名:<span class="span_li" id="rownum"></span></li>
+		<!--  <li>排名:<span class="span_li" id="rownum"></span></li>-->
 		<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
 		</ul>	
 		</div>
