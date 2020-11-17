@@ -1,6 +1,6 @@
 $(function() {
 	var kanbanList=kanbanDataList
-	getDepList(deptList)
+	//getDepList(deptList)
 	dealData(kanbanList);
 		$("#searchBtn").click(function(){
 			getList();
@@ -303,7 +303,7 @@ function getChart3(done, plan, doneRate) {
 		},
 		grid : {
 			left : '3%',
-			right : '4%',
+			//right : '4%',
 			bottom : '3%',
 			containLabel : true
 		},
@@ -396,11 +396,11 @@ function getDepList(deptList){
 }
 function getList(){
 	var class_no=$("#class_select").val();
-	var dep_id=$("#dep_select").val();
+	//var dep_id=$("#dep_select").val();
 	var date=$("#date").val();
 	var params = {
 			"class_nos":class_no,
-			"dep_id":dep_id,
+			"dep_id":"",
 			"sdata":date
 		};
 	$.ajax({

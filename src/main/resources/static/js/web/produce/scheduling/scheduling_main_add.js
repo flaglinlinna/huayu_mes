@@ -382,8 +382,9 @@ function getMainData(){
         showBtn(schedulingMain.fenable);
         if (schedulingMain.fenable == 1) {
             $("input[name='fenable']").prop("checked", true);
-            console.log(schedulingMain.fenable);
-            $("#edit1").attr("disabled",true);
+            $('#addSubmit').prop("disabled","disabled");
+            $('#addSubmit').addClass("layui-btn-disabled");
+            // $('#editButton').attr("disabled","disabled");
         } else {
             $("input[name='fenable']").prop("checked", false);
         }

@@ -13,6 +13,34 @@ $(function () {
             ,tableSelect2 = layui.tableSelect;
 
 
+        laydate.render({
+            elem : '#ftime',
+            trigger : 'click',
+            type : 'datetime', // 默认，可不填
+            done : function(value, date, endDate) {
+            }
+        });
+
+        form.on('select(ftype)', function(data) {
+            if(data.value == '解除'){
+                $("#time_label").show();//显示div
+                $("#time_div").show();
+                $("#reason_label").hide();
+                $("#reason_div").hide();
+                $("#ftimeLong").attr("lay-verify","required");
+            }else{
+                $("#time_label").hide();//显示div
+                $("#time_div").hide();
+                $("#reason_label").show();
+                $("#reason_div").show();
+                $("#ftimeLong").attr("lay-verify","");
+            }
+            form.render('select');//select是固定写法 不是选择器
+            return false;
+        });
+
+
+
         getScheduling();
 
         //监听搜索框
@@ -433,17 +461,17 @@ $(function () {
             cols: [[
                 {type:'numbers'}
                 ,{field:'PROC_ORDER', title:'工序顺序', width:100,align:'center',}
-                ,{field:'PROC_NAME', title:'工序名称', width:180,}
-                ,{field:'LOT_NO', title:'虚拟批次', width:190,}
-                ,{field:'ITEM_BARCODE', title:'产品条码', width:145}
-                ,{field:'ITEM_NO', title:'产品编码', width:80,align:'center',}
-                ,{field:'QUANTITY', title:'检验数', width:120,align:'center',}
-                ,{field:'SAMPLE_QTY', title:'产品条码', width:145}
-                ,{field:'QTY_PROC', title:'抽检总数', width:80,align:'center',}
-                ,{field:'QTY_DONE', title:'检验总数', width:120,align:'center',}
-                ,{field:'USER_NAME', title:'抽检合格数', width:100,align:'center',}
-                ,{field:'CREATE_DATE', title:'操作时间', width:160,align:'center',}
+                ,{field:'PROC_NAME', title:'工序名称', width:100,}
+                ,{field:'LOT_NO', title:'虚拟批次', width:100,}
+                ,{field:'ITEM_BARCODE', title:'产品条码', width:175}
                 ,{field:'ITEM_NAME', title:'产品名称', width:160,align:'center',}
+                ,{field:'ITEM_NO', title:'产品编码', width:150,align:'center',}
+                ,{field:'QUANTITY', title:'检验数', width:80,align:'center',}
+                ,{field:'QTY_PROC', title:'检验总数', width:80,align:'center',}
+                ,{field:'SAMPLE_QTY', title:'抽检总数', width:120,align:'center',}
+                ,{field:'QTY_DONE', title:'抽检合格数', width:120,align:'center',}
+                ,{field:'USER_NAME', title:'抽检人', width:100,align:'center',}
+                ,{field:'CREATE_DATE', title:'操作时间', width:160,align:'center',}
                 // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
             ]]
             ,done: function(res, curr, count){
@@ -495,7 +523,6 @@ $(function () {
                 ,{field:'DESCRIPTION', title:'异常描述', width:145}
                 ,{field:'FOR_REASON', title:'异常原因', width:80,align:'center',}
                 ,{field:'FTIME_LONG', title:'异常时长', width:120,align:'center',}
-                ,{field:'USER_NAME', title:'抽检合格数', width:100,align:'center',}
                 ,{field:'CREATE_DATE', title:'创建时间', width:160,align:'center',}
                 ,{field:'RELEASE_TIME', title:'解除时间', width:160,align:'center',}
                 // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
@@ -548,25 +575,24 @@ $(function () {
 
         // 监听异常原因的提交
             form.on('submit(addSubmit7)', function(obj) {
-            console.log(obj.field);
-            // CoreUtil.sendAjax("/produce/scheduling/saveProc", JSON.stringify(obj.field), function(
-            //     data) {
-            //     if (data.result) {
-            //         loadAll1();
-            //         layer.alert("操作成功", function() {
-            //             layer.closeAll();
-            //             // 加载页面
-            //         });
-            //     } else {
-            //         layer.alert(data.msg, function() {
-            //             layer.closeAll();
-            //         });
-            //     }
-            // }, "POST", false, function(res) {
-            //     layer.alert(res.msg);
-            // });
-            // return false;
-        });
+                 // console.log(obj.field);
+                CoreUtil.sendAjax("/abnormalProduct/add", JSON.stringify(obj.field),
+                    function(data) {
+                        if (data.result) {
+                            layer.alert("操作成功", function() {
+                                layer.closeAll();
+                                // cleanAbnormalHours();
+                                // 加载页面
+                                loadAll();
+                            });
+                        } else {
+                            layer.alert(data.msg);
+                        }
+                    }, "POST", false, function(res) {
+                        layer.alert(res.msg);
+                    });
+                return false;
+            });
 
 
         tableProc=table.render({
@@ -640,6 +666,32 @@ $(function () {
 
     });
 });
+
+function getReasonSelect(editReason) {
+    CoreUtil.sendAjax("/abnormalProduct/getErrorInfo", "", function(data) {
+        if (data.result) {
+            $("#forReason").empty();
+            var forReason = data.data;
+            for (var i = 0; i < forReason.length; i++) {
+                if(forReason[i].abnormalType ==editReason) {
+                    $("#forReason").append(
+                        "<option value=" + forReason[i].ID + "  selected='selected'>"
+                        + forReason[i].ERR_NAME + "</option>");
+                }else{
+                    $("#forReason").append(
+                        "<option value=" + forReason[i].ID + ">"
+                        + forReason[i].ERR_NAME + "</option>");
+                }
+            }
+            layui.form.render('select');
+        } else {
+            layer.alert(data.msg);
+        }
+    }, "GET", false, function(res) {
+        layer.alert(res.msg);
+    });
+    return false;
+}
 
 //根据客户信息获取工序数据
 function getProcByClient(params){
@@ -1042,6 +1094,7 @@ function doEditItem(){
 function addProdErr() {
     // 清空弹出框数据
     getProdErr();
+    getReasonSelect("");
     // 打开弹出框
     openProdErr(null, "添加异常原因");
 }

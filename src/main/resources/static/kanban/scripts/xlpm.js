@@ -1,6 +1,6 @@
 $(function() {
 	//dealData();
-	getDepList(deptList);
+	//getDepList(deptList);
 	getLinerList(linerList);
 	var kanbanList=kanbanDataList;
 	dealData(kanbanList);
@@ -57,7 +57,7 @@ function getChart2(hr_abn, hr_act,hr_st,eff_rate) {
 				textStyle : {
 					color : '#FFFFFF' // 图例文字颜色
 				},
-				x : 'left'
+				left:'15px',
 			},
 			color : [ '#993300','#0066FF', '#66CCCC' ],
 			legend : {
@@ -151,7 +151,7 @@ function getChart3(done, plan,doneRate) {
 			textStyle : {
 				color : '#FFFFFF' // 图例文字颜色
 			},
-			x : 'left'
+			left:'15px',
 		},
 		color : [ '#0066FF', '#66CCCC' ],
 		legend : {
@@ -279,11 +279,11 @@ function getList() {
 	// console.log(sdata)
 	// console.log(edata)
 	var class_no=$("#class_select").val();
-	var dep_id=$("#dep_select").val();
+	//var dep_id=$("#dep_select").val();
 	var liner=$("#liner_select").val();
 	var params = {
 		"class_nos" : class_no,
-		"dep_id" : dep_id,
+		"dep_id" : "",
 		"sdata" : date,
 		"liner":liner
 	};
