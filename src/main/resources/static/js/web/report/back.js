@@ -33,9 +33,9 @@ $(function() {
 				}
 				// 可进行数据操作
 				return {
-					"count" : res.data.total,
+					"count" : res.data.Total,
 					"msg" : res.msg,
-					"data" : res.data.rows,
+					"data" : res.data.List,
 					"code" : res.status
 				// code值为200表示成功
 				}
@@ -174,30 +174,13 @@ $(function() {
 
 });
 function getReport(params) {	
-	CoreUtil.sendAjax("/report/back/getList", params,
-			function(data) {
-				//console.log(data)
-				if (data.result) {
-					if (data.result) {
-						tableIns.reload({
-							data : data.data.List,
-							done: function(res1, curr, count){
-								localtableFilterIns.reload();
-							},
+	tableIns.reload({
+	     url:context+'/report/back/getList',
+         where:params,
+	     done: function(res1, curr, count){
+               pageCurr=curr;
+           }
+	}) 
 
-							page : {
-								curr : pageCurr
-								// 从当前页码开始
-							}
-						});
-					} else {
-						layer.alert(data.msg);
-					}
-				} else {
-					layer.alert(data.msg);
-				}
-			}, "GET", false, function(res) {
-				layer.alert(res.msg);
-			});
 }
 
