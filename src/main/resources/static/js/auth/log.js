@@ -14,6 +14,7 @@ $(function() {
             ,cellMinWidth: 80
             ,page: true,limit:20,
             height: 'full-80',//full-查询框高度
+            even: true,//条纹样式
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit
