@@ -137,7 +137,7 @@ $(function() {
 		  laydate.render({
 		    elem: '#dates',
 		    trigger:'click'
-		    ,range: true
+		    //,range: true
 		  });
 
 	});

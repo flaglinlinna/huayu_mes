@@ -38,14 +38,14 @@ public class LineEfficlmpl extends ReportPrcUtils implements LineEfficService {
 		// TODO Auto-generated method stub
 		List<Object> list = getListPrc(UserUtil.getSessionUser().getFactory() + "",
 				UserUtil.getSessionUser().getCompany() + "",
-				sdate, edate,keyword);
+				UserUtil.getSessionUser().getId()+"", edate,keyword);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
 		return ApiResponseResult.success().data(list.get(2));
 	}
 
-	private List getListPrc(String facoty,String company,String beginTime,
+	private List getListPrc(String facoty,String company,String user_id,
 			String endTime,String keyword) throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
@@ -54,7 +54,7 @@ public class LineEfficlmpl extends ReportPrcUtils implements LineEfficService {
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
 				cs.setString(2, company);;
-				cs.setString(3, beginTime);
+				cs.setString(3, user_id);
 				cs.setString(4, endTime);
 				cs.setString(5, keyword);
 				cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
