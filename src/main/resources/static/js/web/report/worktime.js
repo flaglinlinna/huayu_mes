@@ -19,7 +19,7 @@ $(function() {
 							//height : 'full-180',// 固定表头&full-查询框高度
 							even : true,// 条纹样式
 							data : [],
-							height : 'full',
+							height : 'full-60',
 							page : true,
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
@@ -128,116 +128,50 @@ $(function() {
 							cellMinWidth : 80,
 							even : true,// 条纹样式
 							data : [],
-							height : 'full',
+							height : 'full-60',
 							page : false,
-							request : {
-								pageName : 'page', // 页码的参数名称，默认：page
-								limitName : 'rows' // 每页数据量的参数名，默认：limit
-							},
-							parseData : function(res) {
-								console.log(res)
-								if (!res.result) {
-									return {
-										"count" : 0,
-										"msg" : res.msg,
-										"data" : [],
-										"code" : res.status
-									}
-								}
-								// 可进行数据操作
-								return {
-									"count" : res.data.total,
-									"msg" : res.msg,
-									"data" : res.data.rows,
-									"code" : res.status
-								// code值为200表示成功
-								}
-							},
 							cols : [ [ {
 								type : 'numbers'
 							},
 							{
 								field : 'ISERROR',
 								title : '是否异常',
-								width : 80,
+								width : 100,sort : true,
 								templet:'#statusTpl'	
 							}, {
-								field : 'ATT_DATE',
-								title : '日期',
+								field : 'TASK_NO',
+								title : '制令单',width : 200,
 								sort : true
-							}, {
-								field : 'EMP_CODE',
-								title : '工号',
-								width : 80,
-							}, {
-								field : 'EMP_NAME',
-								title : '姓名',
-								width : 80,
-							}, {
-								field : 'DEPT_ID',
-								title : '部门',
-								width : 80,
-							}, {
-								field : 'CLASS_ID',
-								title : '班次',
-								width : 70,
-								templet:function (d){	
-				                	if(d.CLASS_ID=="1"){
-				                		return "白班"
-				                	}else if(d.CLASS_ID=="2"){
-				                		return "晚班"
-				                	}else{
-				                		return "其他"
-				                	}
-				                }
 							}, {
 								field : 'ACT_HOURS',
 								title : '正班时数',
-								width : 80,
+								width : 100,sort : true
 							}, {
 								field : 'OVERTIME_COMM',
 								title : '平时加班',
-								width : 80,
-							},{
+								width : 100,sort : true
+							}, {
 								field : 'OVERTIME_HOLIDAY',
 								title : '假日加班',
-								width : 80,
-							},{
+								width : 100,sort : true
+							}, {
 								field : 'OVERTIME_YEAR',
 								title : '法定加班',
-								width : 80,
-							},{
-								field : 'OVERTIME_YEAR',
-								title : '法定加班',
-								width : 80,
-							},{
-								field : 'OVERTIME_YEAR',
-								title : '法定加班',
-								width : 80,
+								width : 100,sort : true
+							}, {
+								field : 'TIME_BEGIN',
+								title : '上线时间',
+								width : 150,sort : true
+							}, {
+								field : 'TIME_END',
+								title : '下线时间',
+								width : 150,sort : true
 							} ] ],
 							done : function(res, curr, count) {
 								//
 								pageCurr = curr;
 							}
 						});
-						
-						// localtableFilterIns = tableFilter.render({
-						// 'elem' : '#listTable',
-						// //'parent' : '#doc-content',
-						// 'mode' : 'local',//本地过滤
-						// 'filters' : [
-						// {field: 'ITEM_NO', type:'input'},
-						// {field: 'LINER_NAME', type:'input'},
-						// {field: 'QTY_PLAN', type:'input'},
-						// {field: 'QTY_DONE', type:'input'},
-						// {field: 'QTY_PROC', type:'input'},
-						// {field: 'CAPACITY', type:'input'},
-						// {field: 'MANPOWER', type:'input'},
-						// {field: 'HOUR_SDD', type:'input'},
-						// {field: 'QTY_EMP', type:'input'},
-						// ],
-						// 'done': function(filters){}
-						// });
 
 						getEmpCode();
 
@@ -298,42 +232,22 @@ function openData(title) {
 }
 
 function getReport(params) {
-	CoreUtil.sendAjax("/report/worktime/getList", JSON.stringify(params),
-			function(data) {
-				console.log(data)
-				if (data.result) {
-					if (data.result) {
-						tableIns.reload({
-							data : data.data.rows,
-							done : function(res1, curr, count) {
-
-								// //localtableFilterIns.reload();
-							}
-						});
-					} else {
-						layer.alert(data.msg);
-					}
-				} else {
-					layer.alert(data.msg);
-				}
-			}, "POST", false, function(res) {
-				layer.alert(res.msg);
-			});
+	tableIns.reload({
+	     url:context+'/report/worktime/getList',
+        where:params,
+	     done: function(res1, curr, count){
+              pageCurr=curr;
+          }
+	}) 
 }
 
 function getDetail(param){
 	CoreUtil.sendAjax("/report/worktime/getListDetail", JSON.stringify(param),
 			function(data) {
-				console.log(data)
 				if (data.result) {
 					if (data.result) {
-						console.log(data)
 						tableIns1.reload({
-							data : data.data.rows,
-							done : function(res1, curr, count) {
-
-								// //localtableFilterIns.reload();
-							}
+							data : data.data
 						});
 						openData("查看明细")
 					} else {

@@ -58,15 +58,11 @@ public class WorkTimeController extends WebController {
 	    }
 	
 	@ApiOperation(value = "工时统计表", notes = "工时统计表", hidden = true)
-	@RequestMapping(value = "/getList", method = RequestMethod.POST)
+	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getList(@RequestBody Map<String, Object> params) {
+	public ApiResponseResult getList(String sdate,String edate,String empCode,String line_id) {
 		String method = "report/worktime/getList";
-		
-		String sdate=params.get("sdate").toString();
-		String edate=params.get("edate").toString();
-		String empCode=params.get("empCode").toString();
-		String line_id=params.get("line_id").toString();
+
 		String methodName = "获取工时统计表";
 		try {
 			Sort sort = Sort.unsorted();
