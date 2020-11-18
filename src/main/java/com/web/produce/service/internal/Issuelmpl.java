@@ -341,7 +341,7 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getEmp(String keyword, PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getEmp(String keyword,String create_time,String dept_name, PageRequest pageRequest) throws Exception {
 
 		/*// 排序方式
         Sort sort = pageRequest.getSort();  // 记住一定要是实体类的属性，而不能是数据库的字段
@@ -365,31 +365,15 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 			hql += "  and INSTR((a.emp_code || a.emp_code || a.emp_name || a.emp_type ),  '"
 					+ keyword + "') > 0 ";
 		}
-		//linerName,linerCode,lineName--模糊搜索类型
-/*		if (StringUtils.isNotEmpty(lineNo)) {
-			hql += " and a.line_No like '%"+lineNo+"%'";
+		if(StringUtils.isNotEmpty(create_time)){
+			String[] dates = create_time.split(" - ");
+			hql += " and to_char(f.create_date,'yyyy-MM-dd') >= '"+dates[0]+"'";
+			hql += " and to_char(f.create_date,'yyyy-MM-dd') <= '"+dates[1]+"'";
 		}
-		if (StringUtils.isNotEmpty(linerName)) {
-			hql += " and a.liner_Name like '%"+linerName+"%'";
+		if (StringUtils.isNotEmpty(dept_name)) {
+			hql += " and a.DEPT_NAME like '%"+dept_name+"%'";
 		}
-		if (StringUtils.isNotEmpty(linerCode)) {
-			hql += " and a.liner_Code like '%"+linerCode+"%'";
-		}
-		if (StringUtils.isNotEmpty(lineName)) {
-			hql += " and a.line_Name like '%"+lineName+"%'";
-		}
-		//createDate,lastupdateDate--日期类型
-		if(StringUtils.isNotEmpty(createDate)){
-			String[] dates = createDate.split(" - ");
-			hql += " and to_char(a.create_Date,'yyyy-MM-dd') >= '"+dates[0]+"'";
-			hql += " and to_char(a.create_Date,'yyyy-MM-dd') <= '"+dates[1]+"'";
-		}
-		if(StringUtils.isNotEmpty(lastupdateDate)){
-			String[] dates = lastupdateDate.split(" - ");
-			hql += " and to_char(a.lastupdate_Date,'yyyy-MM-dd') >= '"+dates[0]+"'";
-			hql += " and to_char(a.lastupdate_Date,'yyyy-MM-dd') <= '"+dates[1]+"'";
-		}
-*/
+
 		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME order by  max(f.create_date) ";
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
@@ -403,7 +387,8 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 		long count = createSQLQuery(hql, param, null).size();
 		
 		List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
-
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//注意月份是MM
+       
 		for (int i=0;i<list.size();i++) {
 			Object[] object=(Object[]) list.get(i);	
 			Map<String, Object> map1 = new HashMap<>();
@@ -411,8 +396,9 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 			map1.put("EMP_CODE", object[1]);
 			map1.put("EMP_NAME", object[2]);
 			map1.put("EMP_TYPE", object[3]);
-			map1.put("CREATE_TIME", object[4]);
-			map1.put("DEPT_NAME", object[5]);
+			 Date date = simpleDateFormat.parse(object[4].toString());
+			map1.put("create_time", simpleDateFormat.format(date));
+			map1.put("dept_name", object[5]);
 			list_new.add(map1);
 		}
 		/*for (Map<String, Object> map : list) {
