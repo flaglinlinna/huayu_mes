@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='人数差异统计表'"></head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div>
+			<form id="searchFrom" class="layui-form layui-form-pane"
+				lay-filter="searchFrom" method="post" action=""
+				style="margin-top: 5px; margin-left: 10px;">
+				<div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+						<label class="layui-form-label">工号</label>
+						<div class="layui-input-inline">
+							<select lay-filter="empCode" name="empCode" id="empCode"
+								lay-search>
+							</select>
+						</div>
+						<label class="layui-form-label">检验日期</label>
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input" name="dates"
+								placeholder="请选择日期范围" id="dates">
+						</div>
+						<button class="layui-btn layui-btn-sm" lay-submit
+							lay-filter="searchSubmit">统计</button>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+					</div>
+				</div>
+			</form>
+			<table id="listTable" lay-filter="listTable"></table>
+		</div>
+		<script th:src="@{/js/web/report/differ.js}"
+			src="/js/web/report/differ.js"></script>
+	</div>
+</body>
+</html>
