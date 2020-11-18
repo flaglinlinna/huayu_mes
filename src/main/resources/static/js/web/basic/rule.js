@@ -160,7 +160,21 @@ $(function() {
 			  intValue: [
 			   /^\+?[1-9][0-9]*$/
 			    ,'此项数据应大于0且不含小数点'
-			  ] 
+			  ] ,
+				chkString:function(value){
+			  	if(($("#positionBegin").val()==null)){
+					return "请先输入开始位置";
+				}
+				if(($("#positionEnd").val()==null)){
+					return "请先输入结束位置";
+				}
+			  	var chklength = value.length;
+				var position = $("#positionEnd").val()-$("#positionBegin").val()+1;
+				if(chklength!=position){
+					return "验证数据长度应为:"+position;
+				}
+				},
+
 			});  
 		// form.on('select(itemNo)', function(obj){
 		// 	var text=obj.elem[obj.elem.selectedIndex].text;

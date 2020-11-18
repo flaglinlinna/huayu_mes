@@ -69,7 +69,7 @@ $(function() {
 									field : 'USER_NAME',
 									title : '员工姓名',
 									align:	'center',
-									width : 90,sort: true
+									width : 100,sort: true
 								},
 								{
 								field : 'FEED_TYPE',

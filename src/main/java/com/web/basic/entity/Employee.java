@@ -84,11 +84,18 @@ public class Employee extends BaseEntity {
 
 
 		/**
-		 *  部门名称
+		 *  一级部门名称
 		 */
-		@ApiModelProperty(name="deptId",value="部门ID")
+		@ApiModelProperty(name="deptId",value="一级部门名称")
 		@Column(length = 50)
 		protected String deptName;
+
+		/**
+		 *  二级部门名称
+		 */
+		@ApiModelProperty(name="deptName1",value="二级部门名称")
+		@Column(length = 50)
+		protected String deptName1;
 
 		/**
 		 *  指纹个数
@@ -168,7 +175,15 @@ public class Employee extends BaseEntity {
 			return deptName;
 		}
 
-		public void setDeptName(String deptName) {
+		public String getDeptName1() {
+			return deptName1;
+		}
+
+		public void setDeptName1(String deptName1) {
+			this.deptName1 = deptName1;
+		}
+
+	public void setDeptName(String deptName) {
 			this.deptName = deptName;
 		}
 

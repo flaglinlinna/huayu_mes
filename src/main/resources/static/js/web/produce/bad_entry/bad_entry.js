@@ -253,8 +253,8 @@ $(function() {
 								width : 170
 							}, {
 								field : 'TASK_NO',
-								title : '制定单号',
-								width : 350
+								title : '制令单号',
+								width : 250
 							}, {
 								field : 'CLASS_NO',
 								title : '班次',

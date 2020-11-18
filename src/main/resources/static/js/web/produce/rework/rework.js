@@ -51,7 +51,7 @@ $(function() {
 								width : 170,sort: true
 							}, {
 								field : 'TASK_NO',
-								title : '制定单号',
+								title : '制令单号',
 								width : 350,sort: true
 							}, {
 								field : 'FMEMO',
@@ -109,7 +109,7 @@ $(function() {
 								width : 170,sort: true
 							}, {
 								field : 'TASK_NO',
-								title : '制定单号',
+								title : '制令单号',
 								width : 350,sort: true
 							}, {
 								field : 'FMEMO',
