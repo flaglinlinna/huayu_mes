@@ -375,11 +375,11 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "获取上线人员列表", notes = "获取上线人员列表", hidden = true)
     @RequestMapping(value = "/getEmpList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getEmpList(Long mid){
+    public ApiResponseResult getEmpList(Long mid,String keyword){
         String method = "/produce/scheduling/getEmpList";String methodName ="获取上线人员列表";
         try {
 //            Sort sort = new Sort(Sort.Direction.DESC, "id");
-            ApiResponseResult result = schedulingService.getEmpList(mid, super.getPageRequest(Sort.unsorted()));
+            ApiResponseResult result = schedulingService.getEmpList(mid,keyword, super.getPageRequest(Sort.unsorted()));
             logger.debug("获取上线人员列表=getEmpList:");
             getSysLogService().success(module,method, methodName, "主表id:"+mid);
             return result;

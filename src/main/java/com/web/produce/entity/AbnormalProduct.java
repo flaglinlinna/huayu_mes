@@ -45,6 +45,13 @@ public class AbnormalProduct extends BaseEntity{
     @ApiModelProperty(name="ftime",value="登记时间")
     @Column(length = 50)
     protected String ftime;
+
+	/**
+	 * 解除时间
+	 */
+	@ApiModelProperty(name="releaseTime",value="解除时间")
+	@Column(length = 50)
+	protected String releaseTime;
     
     
     /**
@@ -184,8 +191,13 @@ public class AbnormalProduct extends BaseEntity{
 		this.ftype = ftype;
 	}
 
+	public String getReleaseTime() {
+		return releaseTime;
+	}
 
-
+	public void setReleaseTime(String releaseTime) {
+		this.releaseTime = releaseTime;
+	}
 
 	@Override
 	public String toString() {

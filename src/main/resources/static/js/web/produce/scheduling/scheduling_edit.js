@@ -130,24 +130,32 @@ $(function () {
             checkedKey : 'id',
             searchPlaceholder : '员工搜索',
             table : {
-                url:  context +'/base/employee/getList?empStatus=1',
+                url:  context +'/produce/scheduling/getEmpList',
                 method : 'get',
+                where:{ mid:id },
                 cols : [ [
                     { type: 'radio' },//多选  radio
                     , {
-                        field : 'id',
+                        field : 'ID',
                         title : 'id',
                         width : 0,hide:true
                     }
                     , {
-                        field : 'empCode',
+                        field : 'EMP_CODE',
                         title : '员工工号',
                         width : 110
                     },{
-                        field : 'empName',
+                        field : 'EMP_NAME',
                         title : '员工姓名',
-                        width : 200
-                    } ] ],
+                        width : 200,
+                        align:'center'
+                    },
+                    {
+                        field : 'DEPT_NAME',
+                        title : '部门',
+                        width : 120
+                    }
+                    ] ],
                 page : true,
                 request : {
                     pageName : 'page' // 页码的参数名称，默认：page
@@ -514,7 +522,7 @@ $(function () {
             },
             cols: [[
                 {type:'numbers'}
-                ,{field:'FTYPE', title:'登记类型', width:100,align:'center',}
+                // ,{field:'FTYPE', title:'登记类型', width:100,align:'center',}
                 ,{field:'ITEM_NO', title:'物料编码', width:180,}
                 ,{field:'ITEM_NAME', title:'物料名称', width:190,}
                 ,{field:'CUST_NAME', title:'客户名称', width:145}
@@ -793,7 +801,7 @@ function getScheduling(){
     }
     $("#deptId").html(optionHtml4);
 */
-	console.log(scheduling)
+	// console.log(scheduling)
     $("#id").val(id);
     $("#qytDone").val(qty);
     $("#rateDone").val(rate);
