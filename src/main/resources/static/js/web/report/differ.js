@@ -18,8 +18,8 @@ $(function() {
 							toolbar : '#toolbar' // 开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 							,
 							cellMinWidth : 80,
-							height : 'full-180'// 固定表头&full-查询框高度
-							,
+							//height : 'full-180',// 固定表头&full-查询框高度
+							
 							even : true,// 条纹样式
 							data : [],
 							height : 'full',
@@ -57,6 +57,7 @@ $(function() {
 								field : 'ISERROR',
 								title : '是否异常',
 								width : 80,
+								templet:'#statusTpl'
 							}, {
 								field : 'WORK_DATE',
 								title : '日期',

@@ -78,7 +78,7 @@ public class AbnormalHoursRController extends WebController {
 	    @RequestMapping(value = "/getEmpCode", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getEmpCode(String keyword) {
-	        String method = "report/abnormal_r/getLiner";String methodName ="获取员工信息";
+	        String method = "report/abnormal_r/getEmpCode";String methodName ="获取员工信息";
 	        try {
 	            ApiResponseResult result = abnormalHoursRService.getEmpCode(keyword);
 	            logger.debug("获取员工信息=getEmpCode:");

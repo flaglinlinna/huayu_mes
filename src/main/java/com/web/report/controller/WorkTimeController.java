@@ -15,27 +15,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
-import com.web.report.service.MesHrDifferService;
+import com.web.report.service.WorkTimeService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(description = "人数差异统计表")
+@Api(description = "工时统计表")
 @CrossOrigin
 @ControllerAdvice
 @Controller
-@RequestMapping(value = "report/differ")
-public class MesHrDifferController extends WebController {
+@RequestMapping(value = "report/worktime")
+public class WorkTimeController extends WebController {
 
-	private String module = "人数差异统计表";
+	private String module = "工时统计表";
 
 	@Autowired
-	private MesHrDifferService mesHrDifferService;
+	private WorkTimeService workTimeService;
 
-	@ApiOperation(value = "人数差异统计表", notes = "人数差异统计表", hidden = true)
-	@RequestMapping(value = "/toMesHrDiffer")
+	@ApiOperation(value = "工时统计表", notes = "工时统计表", hidden = true)
+	@RequestMapping(value = "/toWorkTime")
 	public String toLineEffic() {
-		return "/web/report/differ";
+		return "/web/report/worktime";
 	}
 	
 	
@@ -43,9 +43,9 @@ public class MesHrDifferController extends WebController {
 	    @RequestMapping(value = "/getEmpCode", method = RequestMethod.GET)
 	    @ResponseBody
 	    public ApiResponseResult getEmpCode(String keyword) {
-	        String method = "report/differ/getEmpCode";String methodName ="获取员工信息";
+	        String method = "report/worktime/getEmpCode";String methodName ="获取员工信息";
 	        try {
-	            ApiResponseResult result = mesHrDifferService.getEmpCode(keyword);
+	            ApiResponseResult result = workTimeService.getEmpCode(keyword);
 	            logger.debug("获取员工信息=getEmpCode:");
 	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 	            return result;
@@ -57,22 +57,42 @@ public class MesHrDifferController extends WebController {
 	        }
 	    }
 	
-	
-	@ApiOperation(value = "人数差异统计表", notes = "人数差异统计表", hidden = true)
+	@ApiOperation(value = "工时统计表", notes = "工时统计表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult getList(@RequestBody Map<String, Object> params) {
-		String method = "report/differ/getList";
+		String method = "report/worktime/getList";
 		
 		String sdate=params.get("sdate").toString();
 		String edate=params.get("edate").toString();
-		String empCode=params.get("empCode").toString();		
-		String methodName = "获取人数差异统计表";
+		String empCode=params.get("empCode").toString();
+		String line_id=params.get("line_id").toString();
+		String methodName = "获取工时统计表";
 		try {
 			Sort sort = Sort.unsorted();
-			ApiResponseResult result = mesHrDifferService.getList(sdate,edate,empCode
+			ApiResponseResult result = workTimeService.getList(sdate,edate,line_id,empCode
 					,super.getPageRequest(sort));
-			logger.debug("人数差异统计表=getList:");
+			logger.debug("工时统计表=getList:");
+			getSysLogService().success(module, method, methodName, "");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+			getSysLogService().error(module, method, methodName, e.toString());
+			return ApiResponseResult.failure(methodName+"失败！"+e.toString());
+		}
+	}
+	
+	@ApiOperation(value = "工时统计表-明细", notes = "工时统计表-明细", hidden = true)
+	@RequestMapping(value = "/getListDetail", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getListDetail(@RequestBody Map<String, Object> param) {
+		String method = "report/worktime/getListDetail";
+		String list_id=param.get("list_id").toString();
+		String methodName = "工时统计表-明细";
+		try {
+			ApiResponseResult result = workTimeService.getListDetail(list_id);
+			logger.debug("工时统计表-明细=getListDetail:");
 			getSysLogService().success(module, method, methodName, "");
 			return result;
 		} catch (Exception e) {

@@ -16,7 +16,7 @@
 								lay-search>
 							</select>
 						</div>
-						<label class="layui-form-label">检验日期</label>
+						<label class="layui-form-label">日期</label>
 						<div class="layui-input-inline">
 							<input type="text" class="layui-input" name="dates"
 								placeholder="请选择日期范围" id="dates">
@@ -31,6 +31,15 @@
 				</div>
 			</form>
 			<table id="listTable" lay-filter="listTable"></table>
+			<script type="text/html" id="statusTpl">
+            {{#  if(d.ISERROR == 0){ }}
+            <span style="color: green;">正常</span>
+            {{#  } else if(d.ISERROR == 1) { }}
+            <span style="color: red;">异过</span>
+            {{#  } else { }}
+            <span></span>
+            {{#  } }}
+        </script>
 		</div>
 		<script th:src="@{/js/web/report/differ.js}"
 			src="/js/web/report/differ.js"></script>

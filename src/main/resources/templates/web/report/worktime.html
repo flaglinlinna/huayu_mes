@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='工时异常统计表'"></head>
+<head th:include="layout :: htmlhead" th:with="title='工时统计表'"></head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div>
@@ -10,34 +10,11 @@
 				style="margin-top: 5px; margin-left: 10px;">
 				<div class="layui-form-item" style="margin-bottom: 0px">
 					<div class="layui-inline">
-						<!-- <label class="layui-form-label" style="width: 150px;">关键字查询:</label>
-						 <div class="layui-input-inline">
-							<input id="keyword" name="keyword" autocomplete="off"
-								placeholder="请输入关键字" class="layui-input" type="text" />
-						</div>  -->
-
-						<label class="layui-form-label">组长</label>
-						<div class="layui-input-inline">
-							<select lay-filter="liner" name="liner" id="liner" lay-search>
-							</select>
-						</div>
-
 						<label class="layui-form-label">工号</label>
 						<div class="layui-input-inline">
 							<select lay-filter="empCode" name="empCode" id="empCode"
 								lay-search>
 							</select>
-						</div>
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<div class="layui-inline">
-
-						<label class="layui-form-label">制令单号</label>
-						<div class="layui-input-inline">
-							<input type="text" name="taskno" placeholder="请选择"
-								autocomplete="off" class="layui-input" readonly="readonly"
-								id="taskno">
 						</div>
 						<label class="layui-form-label">日期</label>
 						<div class="layui-input-inline">
@@ -51,13 +28,34 @@
 							<i class="layui-icon">&#xe669;</i>重置
 						</button>
 					</div>
-
 				</div>
 			</form>
 			<table id="listTable" lay-filter="listTable"></table>
+			<script type="text/html" id="statusTpl">
+            {{#  if(d.ISERROR == 0){ }}
+            <span style="color: green;">正常</span>
+            {{#  } else if(d.ISERROR == 1) { }}
+            <span style="color: red;">异过</span>
+            {{#  } else { }}
+            <span></span>
+            {{#  } }}
+        </script>
+         <script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs" lay-event="detail">详细</a>
+        </script>
 		</div>
-		<script th:src="@{/js/web/report/abnormal_r.js}"
-			src="/js/web/report/abnormal_r.js"></script>
+		<!--同步卡机信息-->
+		<div id="getData" class="layer_self_wrap"
+			style=" display: none;margin:0px;">
+			<form id="dataFrom" class="layui-form layui-form-pane"
+				lay-filter="dataFrom" method="post" action=""
+				style="margin: 20px;">
+				
+				<table id="dataTable" lay-filter="dataTable"></table>
+			</form>
+		</div>
+		<script th:src="@{/js/web/report/worktime.js}"
+			src="/js/web/report/worktime.js"></script>
 	</div>
 </body>
 </html>
