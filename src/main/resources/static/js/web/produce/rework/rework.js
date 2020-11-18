@@ -52,7 +52,7 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 350,sort: true
+								width : 200,sort: true
 							}, {
 								field : 'FMEMO',
 								title : '备注',
@@ -110,7 +110,7 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 350,sort: true
+								width : 200,sort: true
 							}, {
 								field : 'FMEMO',
 								title : '备注',
@@ -291,6 +291,7 @@ function reworkCode() {
 					});
 					layer.alert("扫描条码返工成功！");
 				} else {
+					playMusic();
 					layer.alert(data.msg);
 				}
 			}, "POST", false, function(res) {

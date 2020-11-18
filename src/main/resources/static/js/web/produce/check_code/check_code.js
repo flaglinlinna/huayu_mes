@@ -45,17 +45,17 @@ $(function() {
 							}, {
 								field : 'taskNo',
 								title : '制令单号',
-								width : 350,
+								width : 200,
 								sort : true
 							}, {
 								field : 'barcode1',
 								title : '条码1',
-								width : 200,
+								width : 240,
 								sort : true
 							}, {
 								field : 'barcode2',
 								title : '条码2',
-								width : 200,
+								width : 240,
 								sort : true
 							}, {
 								field : 'result',
@@ -267,6 +267,7 @@ function subCode(taskNo, barcode1, barcode2) {
 					});
 					
 				} else {
+					playMusic();
 					layer.alert(data.msg, function(index) {
 						if(barcode2==""){
 							$("#barcode").focus();

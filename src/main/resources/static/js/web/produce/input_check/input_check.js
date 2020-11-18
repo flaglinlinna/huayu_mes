@@ -224,7 +224,7 @@ $(function() {
                 },{
                     field : 'TASK_NO',
                     title : '制令单号',
-                    width : 340,sort: true
+                    width : 200,sort: true
                 }, {
                     field : 'ITEM_BARCODE',
                     title : '物料条码',
@@ -245,7 +245,12 @@ $(function() {
                     field : 'USER_NAME',
                     title : '上料人姓名',
                     width : 100
-                } ] ],
+                }, {
+                    field : 'CREATE_DATE',
+                    title : '上料时间',
+                    width : 150
+                },
+                ] ],
                 done : function(res, curr, count) {
                     pageCurr = curr;
                 }
@@ -275,6 +280,7 @@ function getInfoBarcode(barcode){
             $( "input[name='item_code']").val(data.data[0].ITEM_NO);
             $( "input[name='addqty']").val(data.data[0].QTY);
         }else{
+            playMusic();
             layer.alert(data.msg,function () {
                 $('#barcode').val('');
                 $('#barcode').focus();
@@ -316,6 +322,7 @@ function addPut(obj){
             });
             $('#barcode').focus();
         }else{
+            playMusic();
             layer.alert(data.msg,function () {
                 $('#barcode').focus();
                 layer.closeAll();

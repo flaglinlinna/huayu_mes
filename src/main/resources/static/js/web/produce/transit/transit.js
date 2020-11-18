@@ -125,8 +125,24 @@ $(function() {
 							},{
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 230,sort: true
-							}, {
+								width : 200,sort: true
+							},
+								{
+									field : 'ITEM_BARCODE',
+									title : '条码',
+									width : 200,sort: true
+								},{
+									field : 'ITEM_NO',
+									title : '物料编码',width : 150,sort: true
+								},
+								{
+									field : 'ITEM_NAME',
+									title : '物料描述',
+									width : 150,
+									sort: true
+								},
+
+								{
 								field : 'PROC_NO',
 								title : '工序编码',
 								width : 120,sort: true
@@ -138,19 +154,9 @@ $(function() {
 								field : 'LINE_NO',
 								title : '组长',
 								width : 100,sort: true
-							},  {
-								field : 'ITEM_BARCODE',
-								title : '条码',
-								width : 150,sort: true
-							},{
-								field : 'ITEM_NO',
-								title : '物料编码',width : 150,sort: true
-							},{
-								field : 'ITEM_NAME',
-								title : '物料描述',
-								width : 150,
-								sort: true
-							},  {
+							},
+
+								{
 								field : 'INSP_NAME',
 								title : '送检类型',
 								width : 100,sort: true
@@ -271,6 +277,7 @@ function checkBarcode(proc, barcode) {
 							data : data.data
 						});
 					} else {
+						playMusic();
 						layer.alert(data.msg,function () {
 							$('#barcode').val('');
 							$('#barcode').focus();

@@ -390,15 +390,15 @@ $(function() {
 					},{
 						field : 'TASK_NO',
 						title : '制令单号',
-						width : 330,sort: true
+						width : 200,sort: true
 					}, {
 						field : 'LINE_NO',
-						title : '组装名',
+						title : '组长',
 						width : 80,sort: true
 					}, {
 						field : 'ITEM_BARCODE',
 						title : '产品条码',
-						width : 150,sort: true
+						width : 200,sort: true
 					}, {
 						field : 'ITEM_NO',
 						title : '产品编码',
@@ -496,6 +496,7 @@ function getDetailByTask(taskNo){
 				 $("#wbarcode").val("");
 				 $("#wbarcode").focus();
 			}else{
+			    playMusic();
 				layer.alert(data.msg,function () {
 					$('#nbarcode').val('');
 					$('#nbarcode').focus();
@@ -540,6 +541,7 @@ function getDetailByTask(taskNo){
 					data:tabledata
 				});*/
 			}else{
+			    playMusic();
 				layer.alert(data.msg,function () {
 					$("#wbarcode").val("");
 					$("#nbarcode").val("");

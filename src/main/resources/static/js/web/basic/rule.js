@@ -171,7 +171,7 @@ $(function() {
 			  	var chklength = value.length;
 				var position = $("#positionEnd").val()-$("#positionBegin").val()+1;
 				if(chklength!=position){
-					return "验证数据长度应为:"+position;
+					return "验证数据长度应为:"+position+"位";
 				}
 				},
 

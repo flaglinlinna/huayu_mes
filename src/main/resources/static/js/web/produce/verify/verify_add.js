@@ -334,28 +334,39 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 350,
+								width : 200,
 								sort : true
 							}, {
 								field : 'LINE_NAME',
 								title : '线体',
-								width : 200,
+								width : 160,
 								sort : true
-							}, {
-								field : 'DEV_IP',
-								title : '卡机IP',
-								width : 200,
-								sort : true
-							}, {
+							},
+							// 	{
+							// 	field : 'DEV_IP',
+							// 	title : '卡机IP',
+							// 	width : 150,
+							// 	sort : true
+							// },
+								{
 								field : 'EMP_NAME',
 								title : '员工姓名',
+								width : 150,
 								sort : true
-							}, {
+							},
+								{
 								field : 'CREATE_DATE',
 								title : '上线时间',
 								width : 150,
 								sort : true
-							} ] ],
+							},
+								{
+									field : 'CREATE_DATE1',
+									title : '分配时间',
+									width : 150,
+									sort : true
+								},
+							] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}
@@ -428,11 +439,18 @@ function save(params, emp_ids) {
 		"emp_ids" : emp_ids
 	};
 	CoreUtil.sendAjax("/verify/save", JSON.stringify(param), function(data) {
+		if(data.result){
+			layer.alert(data.msg, function() {
+				getUserByLine(params.pline);
+				layer.closeAll();
+			});
+		}else {
+			playMusic();
+			layer.alert(data.msg, function() {
+				layer.closeAll();
+			});
+		}
 
-		layer.alert(data.msg, function() {
-			getUserByLine(params.pline);
-			layer.closeAll();
-		});
 	}, "POST", false, function(res) {
 		layer.alert(res.msg);
 	});

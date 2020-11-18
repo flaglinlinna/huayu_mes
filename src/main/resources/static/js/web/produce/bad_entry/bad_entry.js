@@ -254,7 +254,7 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 250
+								width : 200
 							}, {
 								field : 'CLASS_NO',
 								title : '班次',
@@ -389,6 +389,7 @@ function checkBarCode(taskNo, barcode) {
 					var q = data.data;
 					$("#qty").val(q[0].qty);
 				} else {
+					playMusic();
 					layer.alert(data.msg);
 					$('#barcode').val('');
 				}
@@ -421,6 +422,7 @@ function saveBad(obj) {
 					$("#barcode").val("");
 					$("#barcode").focus();
 				} else {
+					playMusic();
 					layer.alert(data.msg,function () {
 						$("#qty").val("");
 						$("#barcode").val("");

@@ -46,11 +46,11 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 320,sort: true
+								width : 200,sort: true
 							},{
 								field : 'ITEM_BARCODE',
 								title : '物料条码',
-								width : 150,sort: true
+								width : 200,sort: true
 							}, {
 								field : 'ITEM_NO',
 								title : '物料编码',
@@ -65,16 +65,16 @@ $(function() {
 								width : 150,sort: true
 							}, {
 								field : 'SAMPLE_QTY',
-								title : '抽检总量(PCS)',
-								width : 170,sort: true
+								title : '抽检总量',
+								width : 110,sort: true
 							}, {
 								field : 'QTY_DONE',
-								title : '合格数量(PCS)',
-								width : 180,sort: true
+								title : '合格数量',
+								width : 110,sort: true
 							}, {
 								field : 'DEFECT_NUM',
-								title : '不良数量(PCS)',
-								width : 180,sort: true
+								title : '不良数量',
+								width : 110,sort: true
 							}, {
 								field : 'CHK_RESULT',
 								title : '检验结果',
