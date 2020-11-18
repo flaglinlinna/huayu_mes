@@ -47,9 +47,6 @@ $(function() {
 							cols : [ [ {
 								type : 'numbers'
 							},
-							// ,{type:'checkbox'}
-							// ,{field:'id', title:'ID', width:80,
-							// unresize:true, sort:true}
 							{
 								field : 'ISERROR',
 								title : '是否异常',
@@ -251,6 +248,7 @@ function getDetail(param){
 						});
 						openData("查看明细")
 					} else {
+						playMusic();
 						layer.alert(data.msg);
 					}
 				} else {
