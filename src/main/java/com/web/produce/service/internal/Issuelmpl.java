@@ -374,11 +374,8 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 			hql += " and a.DEPT_NAME like '%"+dept_name+"%'";
 		}
 
-<<<<<<< HEAD
-		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME order by  max(f.create_date) desc ";
-=======
-		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME,a.DEPT_NAME1 order by  max(f.create_date) ";
->>>>>>> c1979f011f426dfd86f1fe98b9e615144cfe37e5
+		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME,a.DEPT_NAME1 order by  max(f.create_date) desc ";
+
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
