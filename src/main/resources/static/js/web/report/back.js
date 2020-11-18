@@ -162,16 +162,13 @@ $(function() {
 		table.on('rowDouble(listTable)', function(obj){
 			//标注选中样式
 			// console.log(obj.data);
-			var frate = 0;
-			if(obj.data.FRATE!=null){
-				frate = obj.data.FRATE;
-			}
+			var frate = obj.data.FRATE+"25"; // %转义
 			obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
 			var a = document.createElement('a');
-			var  url = "/produce/scheduling/toSchedulingEdit?id=" + obj.data.TASK_ID+"&qty="+obj.data.QUANTITY+"&rate="+frate;
-			console.log(url);
+			var  url = "/produce/scheduling/toSchedulingEdit?id=" + obj.data.TASK_ID+"&qty="+obj.data.QTY_OUT+"&rate="+frate;
+			// console.log(url);
 			a.setAttribute('lay-href', context + url);
-			a.setAttribute('lay-text', '排产编辑');
+			a.setAttribute('lay-text', '排产信息查看');
 			a.setAttribute('id', 'js_a');
 			if(document.getElementById('js_a')) {//防止反复添加
 				document.body.removeChild(document.getElementById('js_a'));
