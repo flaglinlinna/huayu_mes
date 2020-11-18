@@ -16,7 +16,7 @@ $(function () {
             ,method: 'get' //默认：get请求
             ,cellMinWidth: 80
             ,page: true,
-            height:'full-80'//固定表头&full-查询框高度
+            height:'full-130'//固定表头&full-查询框高度
             ,even:true,//条纹样式
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
@@ -36,7 +36,9 @@ $(function () {
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
                 // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
                 ,{field:'PRODUCE_STATE', title:'状态', width:60,align: 'center'}
-                ,{field:'PROD_NO', title:'工单号', width:120,align: 'center'}
+                ,{field:'TASK_NO', title:'制令单号', width:145,align: 'center'}
+                ,{field:'PROD_NO', title:'工单号', width:130,align: 'center'}
+                ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center'}
                 ,{field:'GROUP_NO', title:'组合', width:55,align: 'center'}
                 // ,{field:'deptName', title:'部门', width:70}
                 ,{field:'CUST_NAME_S', title:'客户', width:150,align: 'center'}
@@ -47,8 +49,6 @@ $(function () {
                 ,{field:'QTY_PLAN', title:'计划数量', width:80,align: 'center'}
                 ,{field:'QTY_DONE', title:'完工数', width:80,align: 'center'}
                 ,{field:'RATE_DONE', title:'完工率', width:80,align: 'center'}
-                ,{field:'TASK_NO', title:'制令单号', width:120,align: 'center'}
-                ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center'}
                 ,{field:'ITEM_NAME', title:'物料描述', width:200,align: 'center'}
                 // ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}
             ]]

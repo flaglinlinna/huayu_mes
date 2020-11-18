@@ -1838,7 +1838,7 @@ a cite {
 
 .layui-btn-container .layui-btn {
 	margin-right: 10px;
-	margin-bottom: 10px
+	margin-bottom: 0px
 }
 
 .layui-btn-container .layui-btn+.layui-btn {
