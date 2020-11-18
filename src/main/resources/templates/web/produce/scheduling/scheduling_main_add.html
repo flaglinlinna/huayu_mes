@@ -103,7 +103,11 @@
                 </script>
 
                 <script type="text/html" id="optBar">
-                    <button type="button" class="layui-btn layui-btn-xs" id="editButton" lay-event="edit1">编辑</button>
+                    {{#  if(schedulingMain.fenable== 1){ }}
+                    <button type="button" class="layui-btn-disabled layui-btn-xs"  disabled lay-event="edit1">编辑</button>
+                    {{#  } else { }}
+                    <button type="button" class="layui-btn layui-btn-xs"  lay-event="edit1">编辑</button>
+                    {{#  } }}
                 </script>
             </div>
         </div>
