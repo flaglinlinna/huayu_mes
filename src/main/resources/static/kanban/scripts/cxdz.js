@@ -26,7 +26,7 @@ function dealData(kanbanList) {
 					: parseFloat(kanbanData_t[0].HOUR_ACT);
 			var hr_st = kanbanData_t[0].HOUR_ST == null ? 0
 					: parseFloat(kanbanData_t[0].HOUR_ST);
-			var eff_rate = kanbanData_t[0].RATE_EFFICIENCY == null ? "0"
+			var eff_rate = kanbanData_t[0].RATE_EFF == null ? "0"
 					: kanbanData_t[0].RATE_EFF;
 
 			getChart2(hr_abn, hr_act, hr_st, eff_rate);
@@ -36,10 +36,19 @@ function dealData(kanbanList) {
 			// rownum=kanbanData_t[0].FROWNUM==null?"无":kanbanData_t[0].FROWNUM;//排名
 			var onlineEmp = kanbanData_t[0].NUM_EMP_ON == null ? "0"
 					: kanbanData_t[0].NUM_EMP_ON;// 在线人数
-
+			var cardAll = kanbanData_t[0].NUM_CARD_ALL == null ? "0"
+					: kanbanData_t[0].NUM_CARD_ALL;// 总打卡数
+			var cardAss = kanbanData_t[0].NUM_CARD_ASS == null ? "0"
+					: kanbanData_t[0].NUM_CARD_ASS;// 已分配数
+			var cardUnass = kanbanData_t[0].NUM_CARD_UNASS == null ? "0"
+					: kanbanData_t[0].NUM_CARD_UNASS;// 未分配数
+			
 			$("#classNo").text(classNo)
 			// $("#rownum").text(rownum)
 			$("#onlineEmp").text(onlineEmp)
+			$("#cardAll").text(cardAll)
+			$("#cardAss").text(cardAss)
+			$("#cardUnass").text(cardUnass)
 		}
 		if (kanbanData.length>0) {
 			setTable(kanbanData);// 表格数据
@@ -55,7 +64,8 @@ function getChart2(hr_abn, hr_act, hr_st, eff_rate) {
 			textStyle : {
 				color : '#FFFFFF' // 图例文字颜色
 			},
-			x : 'left'
+			left:'15px',
+			top:'5px'
 		},
 		color : [ '#993300', '#0066FF', '#66CCCC' ],
 		legend : {
@@ -149,7 +159,8 @@ function getChart3(done, plan, doneRate) {
 			textStyle : {
 				color : '#FFFFFF' // 图例文字颜色
 			},
-			x : 'left'
+			left:'15px',
+			top:'5px'
 		},
 		color : [ '#0066FF', '#66CCCC' ],
 		legend : {
@@ -163,7 +174,7 @@ function getChart3(done, plan, doneRate) {
 		},
 		grid : {
 			left : '3%',
-			right : '4%',
+			//right : '4%',
 			bottom : '3%',
 			containLabel : true
 		},
@@ -238,7 +249,8 @@ function setTable(kanbanData) {
 				+ '</td><td>' + arr.QTY_PLAN + '</td><td>' + arr.QTY_DONE
 				+ '</td><td>' + arr.MANPOWER + '</td><td>' + arr.CAPACITY
 				+ '</td><td>' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT
-				+ '%</td></tr> ';
+				+ '</td><td>' + arr.HOUR_ABN + '</td><td>' + arr.RATE_DONE
+				+ '%</td><td>' + arr.RATE_EFF + '%</td></tr> ';
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
@@ -267,7 +279,7 @@ function getLinerList(linerList) {
 	$("#liner_select").append(html);
 }
 function getList() {
-	// var date = $("#date").val();
+	 var date = $("#date").val();
 	// var sdata = date.substring(0, date.indexOf(" "))
 	// var edata = date.substring(date.indexOf(" ") + 3, date.length);
 	// console.log(sdata)
@@ -278,7 +290,7 @@ function getList() {
 	var params = {
 		"class_nos" : class_no,
 		"dep_id" : "",
-		"sdata" : "",
+		"sdata" : date,
 		"liner" : liner
 	};
 	$.ajax({

@@ -43,18 +43,19 @@ font-weight:bold;
 	line-height: .75rem;
 }
 h2{text-align:center;
-margin-top: 8px;
+margin-top: 5px;
  color:#ffffff;
-font-size:20px;
+font-size:18px;
+font-weight:bold;
 }
 ul {
     list-style: none;
     margin-left: 20px;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 li {
-    line-height: 40px;
+    line-height: 35px;
     color:#ffffff;
     font-size:16px;
 }
@@ -106,10 +107,10 @@ $(document).ready(function(){
 				id="liner_select">
 
 			</select> 
-			<!-- 
+			
 			 <span class="chose_tltle">请选择日期：</span> <input style="width:15%;" type="text"
 				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
-				autocomplete="off" class="chose_text_in "> -->
+				autocomplete="off" class="chose_text_in "> 
 			<!-- <input class="chose_text_in"> -->
 			<button class="chose_enter"  id="searchBtn">确定</button>
 		</div>
@@ -145,7 +146,7 @@ var t = null;
 	</div>
 	<div class="mainbox">
 		<div class="boxall" style="height: 230px">
-		<div id="echart1" style="width: 29%; height: 220px; float: left;color:#ffffff;">
+		<div id="echart1" style="width: 20%; height: 220px; float: left;color:#ffffff;">
 	
 		<h2>产线信息</h2>
 		
@@ -153,10 +154,13 @@ var t = null;
 		<li>班次:<span class="span_li" id="classNo"></span></li>
 		<!--  <li>排名:<span class="span_li" id="rownum"></span></li>-->
 		<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
+		<li>打卡总数:<span class="span_li" id="cardAll"></span></li>
+		<li>已分配数:<span class="span_li" id="cardAss"></span></li>
+		<li>未分配数:<span class="span_li" id="cardUnass"></span></li>
 		</ul>	
 		</div>
-			<div id="echart2" style="width: 35%; height: 220px; float: left;"></div>			
-			<div id="echart3" style="width: 35%; height: 220px; float: left;"></div>
+			<div id="echart2" style="width: 40%; height: 220px; float: left;"></div>			
+			<div id="echart3" style="width: 40%; height: 220px; float: left;"></div>
 			<div class="boxfoot"></div>
 		</div>
 		<div class="boxall">
@@ -175,6 +179,9 @@ var t = null;
 							<th>标准人力</th>
 							<th>标准工时</th>
 							<th>实际工时</th>
+							<th>异常工时</th>
+							<th>完工率</th>
+							<th>效率</th>
 						</tr>
 					</thead>
 					<tbody id="tableList">
