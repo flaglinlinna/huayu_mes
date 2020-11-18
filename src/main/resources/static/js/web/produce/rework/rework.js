@@ -143,8 +143,22 @@ $(function() {
 									hide : true
 								}, {
 									field : 'TASK_NO',
-									title : '制令单号',sort: true
-								} ] ],
+									title : '制令单号',sort: true,
+										width:150,
+										align:'center'
+								},
+									{
+										field : 'ITEM_NO',
+										width:160,
+										title : '物料编号',sort: true,align:'center'
+									},
+									{
+										field : 'ITEM_NAME',
+										width:170,
+										title : '物料名称',sort: true,align:'center'
+									},
+
+								] ],
 								parseData : function(res) {
 									// console.log(res)
 									if (res.result) {
@@ -164,7 +178,9 @@ $(function() {
 								// console.log(data)
 								var da = data.data;
 								form.val("scanFrom", {
-									"sTaskno" : da[0].TASK_NO
+									"sTaskno" : da[0].TASK_NO,
+									"itemNo":da[0].ITEM_NO,
+									"itemName":da[0].ITEM_NAME,
 								});
 								form.render();// 重新渲染
 							}

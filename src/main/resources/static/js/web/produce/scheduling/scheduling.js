@@ -117,7 +117,7 @@ $(function () {
             obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
             var a = document.createElement('a');
             var  url = "/produce/scheduling/toSchedulingEdit?id=" + obj.data.ID+"&qty="+obj.data.QTY_DONE+"&rate="+obj.data.RATE_DONE;
-            console.log(url);
+            // console.log(url);
             a.setAttribute('lay-href', context + url);
             a.setAttribute('lay-text', '排产编辑');
             a.setAttribute('id', 'js_a');

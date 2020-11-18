@@ -29,13 +29,13 @@
         
 			<hr class="layui-bg-black" />
 			
-			<table id="issueList" lay-filter="issueTable"></table>
+			<table id="issueList" lay-filter="issueList"></table>
 			<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 		</div>
 		<!--添加或编辑卡机信息-->
-		<div id="setIssue" class="layer_self_wrap"
+		<div id="setIssue" class="layer_self_wrap" lay-filter="setIssue"
 			style="width: 99%; display: none; margin: 2px;">
 			<div class="layui-row">
 				<div class="layui-col-xs6">
@@ -103,7 +103,7 @@
 							</div>
 						</div>
 					</form>
-						<table id="empList" lay-filter="empTable" style="margin-top: -5px;"></table>
+						<table id="empList" lay-filter="empList" style="margin-top: -5px;"></table>
 					</div>
 				</div>
 			

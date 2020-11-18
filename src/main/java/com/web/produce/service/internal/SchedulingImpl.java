@@ -1307,13 +1307,13 @@ public class SchedulingImpl implements SchedulingService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getEmpList(Long mid, PageRequest pageRequest) throws Exception{
+    public ApiResponseResult getEmpList(Long mid, String keyword,PageRequest pageRequest) throws Exception{
         SysUser currUser = UserUtil.getSessionUser();
         if(currUser == null){
             return ApiResponseResult.failure("当前用户已失效，请重新登录！");
         }
         List<Object> list = getEmpListPrc(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"",
-                 mid,"","","", pageRequest.getPageNumber()+1, pageRequest.getPageSize(), "prc_mes_get_PROD_ORDER_EMP");
+                 mid,"","",keyword==null?"":keyword, pageRequest.getPageNumber()+1, pageRequest.getPageSize(), "prc_mes_get_PROD_ORDER_EMP");
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
             return ApiResponseResult.failure(list.get(1).toString());
         }
