@@ -133,7 +133,7 @@ function setTable(kanbanData) {
 		html += '<tr><td>' + arr.LINER_NAME + '</td><td>' + arr.HOUR_ST
 				+ '</td><td>' + arr.HOUR_ACT + '</td><td>' + arr.HOUR_ABN
 				+ '</td><td>' + arr.NUM_EMP_ON + '</td><td>'
-				+ arr.EFFICIENCY_RATE + '</td></tr> ';
+				+ arr.EFFICIENCY_RATE + '%</td></tr> ';
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
