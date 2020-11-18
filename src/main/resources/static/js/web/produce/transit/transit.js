@@ -124,8 +124,8 @@ $(function() {
 								type : 'numbers'
 							},{
 								field : 'TASK_NO',
-								title : '制定单号',
-								width : 300,sort: true
+								title : '制令单号',
+								width : 230,sort: true
 							}, {
 								field : 'PROC_NO',
 								title : '工序编码',
@@ -137,7 +137,7 @@ $(function() {
 							},  {
 								field : 'LINE_NO',
 								title : '组长',
-								width : 150,sort: true
+								width : 100,sort: true
 							},  {
 								field : 'ITEM_BARCODE',
 								title : '条码',
@@ -147,11 +147,13 @@ $(function() {
 								title : '物料编码',width : 150,sort: true
 							},{
 								field : 'ITEM_NAME',
-								title : '物料描述',sort: true
+								title : '物料描述',
+								width : 150,
+								sort: true
 							},  {
 								field : 'INSP_NAME',
 								title : '送检类型',
-								width : 90,sort: true
+								width : 100,sort: true
 							},  {
 								field : 'USER_NAME',
 								title : '送检人',

@@ -371,6 +371,10 @@ function getMainData(){
             $("#deptId").append( '<option value="'+deptList[i].ID+'">'+deptList[i].ORG_NAME+'</option>');
         }
     }
+    if(id==null||id==undefined){
+        $('#uploadBtn').prop("disabled","disabled");
+        $('#uploadBtn').addClass("layui-btn-disabled");
+    }
     if(id!=null&&id!=undefined) {
         getDeptSelect(schedulingMain.deptId,schedulingMain.deptName,schedulingMain.className);
         $("#id").val(id);
@@ -412,6 +416,8 @@ function addSubmit(obj) {
                 id =  data.data.id;
                 $("#idNo").val(data.data.idNo);
                 showBtn(obj.field.fenable);
+                $('#uploadBtn').prop("disabled",false);
+                $('#uploadBtn').removeClass("layui-btn-disabled");
                 layer.alert("操作成功", function() {
                     layer.closeAll();
                 });

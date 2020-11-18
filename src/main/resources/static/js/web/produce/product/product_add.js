@@ -61,7 +61,9 @@ $(function() {
 						width : 90,sort: true
 					},{
 						field : 'TASK_NO',
-						title : '制令单号',sort: true
+						title : '制令单号',
+							width : 250,
+							sort: true
 					},{
 						field : 'ITEM_NO',
 						title : '物料编号',
@@ -69,11 +71,11 @@ $(function() {
 					},{
 						field : 'CREATE_BY',
 						title : '操作人',sort: true,
-						width : 80
+						width : 100
 					},{
 						field : 'CREATE_DATE',
 						title : '操作时间',
-						width : 100,sort: true
+						width : 120,sort: true
 					}] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;
@@ -387,7 +389,7 @@ $(function() {
 						type : 'numbers'
 					},{
 						field : 'TASK_NO',
-						title : '制定单号',
+						title : '制令单号',
 						width : 330,sort: true
 					}, {
 						field : 'LINE_NO',

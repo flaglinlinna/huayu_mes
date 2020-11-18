@@ -354,7 +354,7 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 		}
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
-		String hql = "select distinct f.emp_id id,a.emp_code,a.emp_name,a.emp_type, max(f.create_date) create_date,a.DEPT_NAME from MES_BASE_EMP_FINGER f left join MES_BASE_EMPLOYEE a on a.id = f.emp_id and a.del_flag=0 where f.del_flag=0   ";
+		String hql = "select distinct f.emp_id id,a.emp_code,a.emp_name,a.emp_type, max(f.create_date) create_date,a.DEPT_NAME,a.DEPT_NAME1 from MES_BASE_EMP_FINGER f left join MES_BASE_EMPLOYEE a on a.id = f.emp_id and a.del_flag=0 where f.del_flag=0   ";
 		
 		//SQLParameter<Parameter> params = SQLParameter.newInstance(Parameter.class);
 		//params.add(Parameter.build("bsIsDel", 0));// 删除标识
@@ -374,7 +374,11 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 			hql += " and a.DEPT_NAME like '%"+dept_name+"%'";
 		}
 
+<<<<<<< HEAD
 		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME order by  max(f.create_date) desc ";
+=======
+		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME,a.DEPT_NAME1 order by  max(f.create_date) ";
+>>>>>>> c1979f011f426dfd86f1fe98b9e615144cfe37e5
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
@@ -398,7 +402,11 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 			map1.put("EMP_TYPE", object[3]);
 			 Date date = simpleDateFormat.parse(object[4].toString());
 			map1.put("create_time", simpleDateFormat.format(date));
-			map1.put("dept_name", object[5]);
+			if(object[6]==null||("").equals(object[6])){
+				map1.put("dept_name", object[5]);
+			}else {
+				map1.put("dept_name", object[6]);
+			}
 			list_new.add(map1);
 		}
 		/*for (Map<String, Object> map : list) {

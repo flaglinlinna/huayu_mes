@@ -102,15 +102,15 @@ $(function() {
 			{
 				field : 'EMP_CODE',
 				title : '员工工号',
-				width:110,
+				width:80,
 			}, {
 				field : 'EMP_NAME',
 				title : '员工姓名',
-					width:130,
+					width:100,
 			}, {
 				field : 'EMP_TYPE',
 				title : '员工类型',
-					width:120,
+					width:110,
 			},{
 					field : 'dept_name',
 					title : '部门名称',

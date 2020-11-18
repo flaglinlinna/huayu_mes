@@ -37,18 +37,18 @@ $(function () {
                 // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
                 ,{field:'PRODUCE_STATE', title:'状态', width:60,align: 'center'}
                 ,{field:'TASK_NO', title:'制令单号', width:145,align: 'center'}
-                ,{field:'PROD_NO', title:'工单号', width:130,align: 'center'}
                 ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center'}
-                ,{field:'GROUP_NO', title:'组合', width:55,align: 'center'}
-                // ,{field:'deptName', title:'部门', width:70}
-                ,{field:'CUST_NAME_S', title:'客户', width:150,align: 'center'}
                 ,{field:'LINER_NAME', title:'组长', width:70,align: 'center'}
                 ,{field:'PROD_DATE', title:'日期', width:90,align: 'center'}
-               ,{field:'DEPT_NAME', title:'部门名称', width:80}
                 ,{field:'CLASS_NO', title:'班次', width:60,align: 'center'}
                 ,{field:'QTY_PLAN', title:'计划数量', width:80,align: 'center'}
                 ,{field:'QTY_DONE', title:'完工数', width:80,align: 'center'}
                 ,{field:'RATE_DONE', title:'完工率', width:80,align: 'center'}
+                // ,{field:'deptName', title:'部门', width:70}
+               ,{field:'DEPT_NAME', title:'部门名称', width:80}
+                ,{field:'PROD_NO', title:'工单号', width:130,align: 'center'}
+                ,{field:'GROUP_NO', title:'组合', width:55,align: 'center'}
+                ,{field:'CUST_NAME_S', title:'客户', width:150,align: 'center'}
                 ,{field:'ITEM_NAME', title:'物料描述', width:200,align: 'center'}
                 // ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}
             ]]

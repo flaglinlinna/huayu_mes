@@ -70,9 +70,15 @@ $(function() {
 				sort: true,
 			}, {
 				field : 'deptName',
-				title : '部门名称',
+				title : '一级部门',
 				width:90
 			} ,
+				{
+					field : 'deptName1',
+					title : '二级部门',
+					width:90
+				} ,
+
 				{
 					field : 'fingerNum',
 					title : '指纹个数',

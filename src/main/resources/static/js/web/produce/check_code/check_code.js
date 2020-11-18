@@ -44,7 +44,7 @@ $(function() {
 								type : 'numbers'
 							}, {
 								field : 'taskNo',
-								title : '制定单号',
+								title : '制令单号',
 								width : 350,
 								sort : true
 							}, {
@@ -168,7 +168,7 @@ $(function() {
 								type : 'numbers'
 							}, {
 								field : 'TASK_NO',
-								title : '制定单号',
+								title : '制令单号',
 								width : 350
 							}, {
 								field : 'BARCODE_S_1',
