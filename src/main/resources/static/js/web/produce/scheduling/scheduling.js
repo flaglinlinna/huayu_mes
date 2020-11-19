@@ -32,7 +32,8 @@ $(function () {
                 }
             },
             cols: [[
-                {type:'numbers'}
+                {type:'numbers'},
+                {type:'checkbox',width:50,align:'center'},
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
                 // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
                 ,{field:'PRODUCE_STATE', title:'状态', width:60,align: 'center'}
@@ -257,12 +258,55 @@ function doDel(id) {
     }
 }
 
+function changeSubmit() {
+    var checkdata = layui.table.checkStatus("iList").data;
+    var ids = "";
+    var statues =""; //旧状态
+    for(var i = 0;i<checkdata.length;i++){
+        ids = ids+ checkdata[i].TASK_NO+',';
+        statues = statues+ checkdata[i].TASK_NO+'-'+checkdata[i].PRODUCE_STATE+','
+    }
+    var param = {
+        "taskNos" : ids,
+        "statue":$('#changeSelect').val(),
+        "statues":statues,
+    };
+    CoreUtil.sendAjax("/produce/scheduling/changeStatue", JSON.stringify(param),
+        function(data) {
+            if (data.result) {
+                layer.alert("更改成功",function () {
+                    loadAll();
+                    layer.closeAll();
+                })
+            } else {
+                layer.alert(data.msg)
+            }
+        }, "POST", false, function(res) {
+            layer.alert("操作请求错误，请您稍后再试");
+        });
+
+}
+
 //导出
 function exportExcel(){
     //导出模板
     //location.href = context + "/produce/scheduling/getExcel";
 	location.href = "../../excelFile/排产导入模板.xlsx";//从文件夹内直接提取
     return false;
+}
+
+function openChange() {
+    var index = layer.open({
+        type:1,
+        title: "修改制令单状态",
+        // fixed:false,
+        // resize :false,
+        shadeClose: false,//是否点击遮罩关闭
+        area: ['400px','300px'],
+        content:$('#changeStateDiv'),
+        end:function(){
+        }
+    });
 }
 
 //导入弹出框

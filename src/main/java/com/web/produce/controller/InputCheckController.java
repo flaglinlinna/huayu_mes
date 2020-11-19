@@ -47,10 +47,10 @@ public class InputCheckController extends WebController {
     @ApiOperation(value="根据指令单获取物料编号和数量", notes="根据指令单获取物料编号和数量", hidden = true)
     @RequestMapping(value = "/getInfoBarcode", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getInfoBarcode(String barcode) {
+    public ApiResponseResult getInfoBarcode(String barcode,String taskNo) {
         String method = "/inputCheck/getInfoBarcode";String methodName ="获取指令单信息";
         try {
-            ApiResponseResult result = inputCheckService.getInfoBarcode(barcode);
+            ApiResponseResult result = inputCheckService.getInfoBarcode(barcode,taskNo);
             logger.debug("根据指令单获取物料编号和数量=getTaskNo:");
             getSysLogService().success(module,method, methodName, "制令单号"+barcode);
             return result;

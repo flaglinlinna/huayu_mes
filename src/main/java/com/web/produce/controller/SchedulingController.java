@@ -27,7 +27,7 @@ import java.util.Map;
 @RequestMapping(value = "produce/scheduling")
 public class SchedulingController extends WebController {
 
-    private String module = "排产信息";
+    private String module = "制令单查询";
     @Autowired
     private SchedulingService schedulingService;
 
@@ -222,6 +222,27 @@ public class SchedulingController extends WebController {
             logger.error("检验失败！", e);
             getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("检验失败！");
+        }
+    }
+
+    @ApiOperation(value = "更改状态", notes = "更改状态", hidden = true)
+    @RequestMapping(value = "/changeStatue", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult changeStatue(@RequestBody Map<String, Object> param){
+        String taskNos = param.get("taskNos").toString();
+        String statue = param.get("statue").toString();
+        String statues = param.get("statues").toString();
+        String method = "/produce/scheduling/changeStatue";String methodName ="更改状态";
+        try{
+            ApiResponseResult result = schedulingService.changeStatue(taskNos,statue);
+            logger.debug("更改状态=changeStatue:");
+            getSysLogService().success(module,method, methodName, "制令单号:"+statues+";修改状态:"+statue);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("更改状态失败！", e);
+            getSysLogService().error(module,method, methodName, "制令单号:"+statues+";修改状态:"+statue+";"+e.toString());
+            return ApiResponseResult.failure("更改状态失败！");
         }
     }
 
