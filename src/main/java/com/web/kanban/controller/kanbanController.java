@@ -88,10 +88,12 @@ public class kanbanController extends WebController {
 		try {	
 			ApiResponseResult result = kanbanService.getCjbgList("999",line,"",this.getIpAddr());
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("获取看板=toCjbg1:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList",deptList);
+			mav.addObject("interval",interval);
 			mav.setViewName("/kanban/cjbg1");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -110,10 +112,12 @@ public class kanbanController extends WebController {
 		try {	
 			ApiResponseResult result = kanbanService.getScdzList("999","","",this.getIpAddr());
 			ApiResponseResult deptList = kanbanService.getCjbgDepList();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("获取生产电子看板=toScdz:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
+			mav.addObject("interval",interval);
 			mav.setViewName("/kanban/scdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -132,10 +136,12 @@ public class kanbanController extends WebController {
 		try {	
 			ApiResponseResult result = kanbanService.getZcblList("999",line,"",this.getIpAddr());
 			ApiResponseResult deptList=kanbanService.getZcblDepList();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("制程不良看板=toZcbl:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList",deptList);
+			mav.addObject("interval",interval);
 			mav.setViewName("/kanban/zcbl");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -155,11 +161,13 @@ public class kanbanController extends WebController {
 			ApiResponseResult result = kanbanService.getXlpmList("999",line,"",this.getIpAddr(),liner);
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("效率排名看板=toXlpm:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
 			mav.addObject("linerList", linerList);
+			mav.addObject("interval",interval);
 			mav.setViewName("/kanban/xlpm");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -187,10 +195,12 @@ public class kanbanController extends WebController {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			ApiResponseResult result = kanbanService.getDfgList("1","5253",formatter.format(date),usr_id,"1");//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getZcblDepList();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("待返工看板=toDfg:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
+			mav.addObject("interval",interval);
 			mav.setViewName("/kanban/dfg");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -233,14 +243,16 @@ public class kanbanController extends WebController {
 		String method = "kanban/toCxsc";
 		String methodName = "产线生产看板";
 		try {	
-			ApiResponseResult result = kanbanService.getCxscList("","","周红星",this.getIpAddr(),"2");//this.getIpAddr()
+			ApiResponseResult result = kanbanService.getCxscList("","","",this.getIpAddr(),"1");//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("产线生产看板=toCxsc:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
 			mav.addObject("linerList", linerList);
+			mav.addObject("interval",interval);
 			mav.setViewName("/kanban/Cxsc");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
