@@ -1,20 +1,29 @@
 $(function() {
-	// dealData();
 	getDepList(deptList);
 	getLinerList(linerList);
 	var kanbanList = kanbanDataList;
+	var intervaldata = interval.data;
+	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间
 	dealData(kanbanList);
+	//var interval_do = setInterval(dealData(kanbanList), intervaldata * 1000); // 启动,执行默认方法
 	$("#searchBtn").click(function() {
 		getList();
+		
+			//clearInterval(interval_do);// 停止上个循环
+		
+			//interval_do = setInterval(getList, intervaldata * 1000); // 重新新循环
+		
 	});
 
 })
 console.log(kanbanDataList);
+
 function dealData(kanbanList) {
+	console.log("do_this")
 	if (kanbanList.result) {
 		var kanbanData_t = kanbanList.data.List_line;
 		var kanbanData = kanbanList.data.List_table;
-		if (kanbanData_t.length>0) {
+		if (kanbanData_t.length > 0) {
 			var done = parseInt(kanbanData_t[0].QTY_DONE);
 			var plan = parseInt(kanbanData_t[0].QTY_PLAN);
 			var doneRate = kanbanData_t[0].RATE_DONE;
@@ -42,7 +51,7 @@ function dealData(kanbanList) {
 					: kanbanData_t[0].NUM_CARD_ASS;// 已分配数
 			var cardUnass = kanbanData_t[0].NUM_CARD_UNASS == null ? "0"
 					: kanbanData_t[0].NUM_CARD_UNASS;// 未分配数
-			
+
 			$("#classNo").text(classNo)
 			// $("#rownum").text(rownum)
 			$("#onlineEmp").text(onlineEmp)
@@ -50,7 +59,7 @@ function dealData(kanbanList) {
 			$("#cardAss").text(cardAss)
 			$("#cardUnass").text(cardUnass)
 		}
-		if (kanbanData.length>0) {
+		if (kanbanData.length > 0) {
 			setTable(kanbanData);// 表格数据
 		}
 	}
@@ -64,8 +73,8 @@ function getChart2(hr_abn, hr_act, hr_st, eff_rate) {
 			textStyle : {
 				color : '#FFFFFF' // 图例文字颜色
 			},
-			left:'15px',
-			top:'5px'
+			left : '15px',
+			top : '5px'
 		},
 		color : [ '#993300', '#0066FF', '#66CCCC' ],
 		legend : {
@@ -79,7 +88,7 @@ function getChart2(hr_abn, hr_act, hr_st, eff_rate) {
 		},
 		grid : {
 			left : '3%',
-			//right : '4%',
+			// right : '4%',
 			bottom : '3%',
 			containLabel : true
 		},
@@ -159,8 +168,8 @@ function getChart3(done, plan, doneRate) {
 			textStyle : {
 				color : '#FFFFFF' // 图例文字颜色
 			},
-			left:'15px',
-			top:'5px'
+			left : '15px',
+			top : '5px'
 		},
 		color : [ '#0066FF', '#66CCCC' ],
 		legend : {
@@ -174,7 +183,7 @@ function getChart3(done, plan, doneRate) {
 		},
 		grid : {
 			left : '3%',
-			//right : '4%',
+			// right : '4%',
 			bottom : '3%',
 			containLabel : true
 		},
@@ -279,7 +288,7 @@ function getLinerList(linerList) {
 	$("#liner_select").append(html);
 }
 function getList() {
-	 var date = $("#date").val();
+	var date = $("#date").val();
 	// var sdata = date.substring(0, date.indexOf(" "))
 	// var edata = date.substring(date.indexOf(" ") + 3, date.length);
 	// console.log(sdata)

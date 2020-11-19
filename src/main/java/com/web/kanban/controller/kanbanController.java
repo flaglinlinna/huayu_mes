@@ -210,11 +210,13 @@ public class kanbanController extends WebController {
 			ApiResponseResult result = kanbanService.getCxdzList("","","",this.getIpAddr(),"");//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("产线电子看板=toCxdz:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
 			mav.addObject("linerList", linerList);
+			mav.addObject("interval",interval);
 			mav.setViewName("/kanban/cxdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -4,6 +4,7 @@ $(function() {
 	//getDepList(deptList);
 	$("#searchBtn").click(function() {
 		getList();
+		
 	});
 })
 
@@ -70,7 +71,6 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 		} ],
 		yAxis : [ {
 			type : 'value',
-			interval : 100,
 			splitLine : {
 				show : false
 			},

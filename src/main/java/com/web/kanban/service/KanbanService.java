@@ -38,4 +38,8 @@ public interface KanbanService {
 	
 	//获取产线生产看板
 	public ApiResponseResult getCxscList(String taskNo,String deptId,String liner,String dev_ip,String interval)throws Exception;
+
+	//获取刷新间隔时间
+	public ApiResponseResult getIntervalTime()throws Exception;
+	
 }
