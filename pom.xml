@@ -214,6 +214,7 @@
             <version>3.9</version>
         </dependency>
 
+
         <!-- 汉字转换拼音 -->
         <!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
         <dependency>
@@ -222,6 +223,12 @@
             <version>2.5.0</version>
         </dependency>
 
+<!-- io流 -->
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.4</version>
+		</dependency>
 
         <!--添加本地的jacob.jar包-->
 		<dependency>
@@ -229,9 +236,16 @@
 			<artifactId>jacob</artifactId>
 			<version>1.19</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/src/main/resources/jacob.jar</systemPath>
+			<systemPath>${basedir}/src/main/resources/lib/jacob.jar</systemPath>
 		</dependency>
-
+		<!-- <dependency>
+			<groupId>com.ZKFingerReader</groupId>
+			<artifactId>ZKFingerReader</artifactId>
+			<version>5.0.0.29</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/ZKFingerReader.jar</systemPath>
+		</dependency>
+ -->
 
 	</dependencies>
 

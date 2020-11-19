@@ -84,6 +84,7 @@ public class ShiroConfig {
 //
 //		// 配置不会被拦截的链接 从上向下顺序判断
 		filterChainDefinitionMap.put("/login", "anon");
+		filterChainDefinitionMap.put("/queryAppVersion", "anon");
 		filterChainDefinitionMap.put("/css/*", "anon");
 		filterChainDefinitionMap.put("/css/*/*", "anon");
 		filterChainDefinitionMap.put("/js/*", "anon");

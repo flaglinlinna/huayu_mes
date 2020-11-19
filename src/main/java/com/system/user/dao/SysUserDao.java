@@ -1,6 +1,7 @@
 package com.system.user.dao;
 
 import com.system.user.entity.SysUser;
+import com.web.basic.entity.AppVersion;
 
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,9 @@ public interface SysUserDao extends CrudRepository<SysUser, Long>, JpaSpecificat
     @Query(value = "select s.ID,s.USER_CODE,s.USER_NAME,s.PASSWORD,s.COMPANY,s.FACTORY from sys_user s where  s.USER_CODE =?1 and DEL_FLAG='0' and STATUS='0'", nativeQuery = true)
     public List<Map<String, Object>> findByUserCode(String usercode);
 
-    @Query(value = "select m.param_value pv from mes_sys_params m where m.param_code='AppVersion' ", nativeQuery = true)
+    /*@Query(value = "select m.param_value pv from mes_sys_params m where m.param_code='AppVersion' ", nativeQuery = true)
+    public List<Map<String, Object>> queryAppVersion();*/
+    @Query(value = "select a.version_no,a.version_url  from (select m.*, row_number() over (order by m.version_no desc) as rnum from "+AppVersion.TABLE_NAME+" m where m.del_flag=0)a  where rnum = 1 ", nativeQuery = true)
     public List<Map<String, Object>> queryAppVersion();
 
     @Query(value = "select m.param_value pv from mes_sys_params m where m.param_code='AppUrl' ", nativeQuery = true)

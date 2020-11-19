@@ -869,7 +869,12 @@ public class SysUserImpl implements SysUserService {
 		// TODO Auto-generated method stub 
 		Map m = new HashMap();
 		 List<Map<String, Object>> l = sysUserDao.queryAppVersion();
-		 if(l.size() > 0){
+		 if(l.size() == 0){
+			 return ApiResponseResult.success().data(null);
+		 }else{
+			 return ApiResponseResult.success().data(l.get(0));
+		 }
+		/* if(l.size() > 0){
 			 m.put("Version", l.get(0).get("PV"));
 		 }else{
 			 return ApiResponseResult.failure("未设置更新版本");
@@ -889,7 +894,7 @@ public class SysUserImpl implements SysUserService {
 			 m.put("Size", 0);
 		 }
 		
-		return ApiResponseResult.success().data(m);
+		return ApiResponseResult.success().data(m);*/
 	}
 
 

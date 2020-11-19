@@ -12,6 +12,7 @@ import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.system.file.entity.FsFile;
 import com.system.file.service.FileService;
+import com.web.basic.service.AppService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,6 +30,9 @@ import io.swagger.annotations.ApiOperation;
 public class FileController extends WebController {
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	 private AppService appService;
 
 	@ApiOperation(value="上传文件", notes="上传文件")
 	@ApiImplicitParams({
@@ -86,4 +90,19 @@ public class FileController extends WebController {
             return ApiResponseResult.failure(e.getMessage());
         }
     }
+    
+    @ApiOperation(value="上传文件", notes="上传文件")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "file", value = "附件", dataType = "MultipartFile", paramType="query",defaultValue=""),
+	})
+	@RequestMapping(value = "/uploadAppFile", method = RequestMethod.POST)
+	public ApiResponseResult uploadAppFile(MultipartFile file) {
+		try {
+			return appService.upload(file);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			e.printStackTrace();
+			return ApiResponseResult.failure(e.getMessage());
+		}
+	}
 }
