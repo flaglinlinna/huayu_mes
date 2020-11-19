@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "14015763",
+      "name": "-_PDA",
+      "font_class": "-_PDA",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "17815808",
+      "name": "看板",
+      "font_class": "kanban",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
       "icon_id": "6865383",
       "name": "报工统计",
       "font_class": "baogongtongji-",

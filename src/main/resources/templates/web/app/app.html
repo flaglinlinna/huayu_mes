@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='APP版本'"></head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+	 <div >
+	 <form id="lineSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 5px;">
+           <div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+						<div class="layui-input-inline">
+							<input id="keywordSearch" name="keywordSearch" placeholder="请输入关键字" autocomplete="off"
+								class="layui-input" type="text" />
+						</div>
+						
+						 <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
+					<button type="reset" class="layui-btn layui-btn-primary layui-btn-sm"
+							title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+					</div>
+				</div>
+        </form>
+         <hr class="layui-bg-black"/>
+         <script type="text/html" id="toolbar">
+           <div class="layui-btn-container layui-inline">
+               <shiro:hasPermission name="line-add">
+                  <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="doAdd" >添加</button>
+               </shiro:hasPermission>
+               <shiro:hasPermission name="line-deleteAll">
+                  <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="doDelete">批量删除</button>
+               </shiro:hasPermission>
+           </div>
+	     </script>
+
+        <table id="listTable" lay-filter="listTable"></table>
+
+        <script type="text/html" id="optBar">
+            <shiro:hasPermission name="line-delete">
+             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </shiro:hasPermission>
+        </script>
+	 </div>
+	 <!--添加或编辑-->
+    <div id="setLine" class="layer_self_wrap" style="width:700px;display:none;">
+        <form id="lineForm" class="layui-form layui-form-pane" lay-filter="lineForm" method="post" action="" style="margin: 20px;">
+			 <input id="id" type="hidden" name="id"/>
+			 <input id="versionUrl" type="hidden" name="versionUrl" lay-verify="required"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">版本号</label>
+                <div class="layui-input-inline">
+                    <input id="versionNo" name="versionNo" lay-verify="required" placeholder="请输入版本号" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <!-- <div  class="layui-form-item" >
+                <label class="layui-form-label">附件上传</label>
+                <div class="layui-input-inline" >
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload">
+                        <i class="layui-icon layui-icon-upload-circle"></i>上传
+                    </button>
+                    <div style="float:right;"class="layui-form-mid layui-word-aux">只允许上传APK文件</div>
+                </div>
+                
+            </div>
+            <div  class="layui-form-item">
+                <label class="layui-form-label">附件列表</label>
+                <div class="layui-input-inline" style="width:300px;">
+                    <div class="exc-area" id="filelist" style="width:300px;">
+                        </div>
+                </div>
+            </div> -->
+            <div class="layui-upload">
+			  <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload">选择文件</button> 
+			  <div class="layui-upload-list">
+			    <table class="layui-table">
+			      <thead>
+			        <tr><th>文件名</th>
+			        <th>大小</th>
+			        <th>状态</th>
+			         <th>操作</th>
+			      </tr></thead>
+			      <tbody id="demoList"></tbody>
+			    </table>
+			  </div>
+			</div> 
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script th:src="@{/js/web/app/app.js}" src="/js/web/app/app.js"></script>
+	</div>
+</body>
+</html>
