@@ -262,7 +262,7 @@ $(function() {
         if(event.keyCode == "13") {
             //alert('你输入的内容为：' + $('#barcode').val());
             if($('#barcode').val()){
-                getInfoBarcode($('#barcode').val())
+                getInfoBarcode($('#barcode').val(),$('#num').val())
             }else{
                 layer.alert("请先扫描条码!",function () {
                     $('#barcode').focus();
@@ -273,8 +273,11 @@ $(function() {
     });
 });
 
-function getInfoBarcode(barcode){
-    var params={"barcode":barcode}
+function getInfoBarcode(barcode,taskNo){
+    var params = {
+        "barcode" : barcode,
+        "taskNo":taskNo
+    }
     CoreUtil.sendAjax("/inputCheck/getInfoBarcode", params, function(data) {
         if (data.result) {
             $( "input[name='item_code']").val(data.data[0].ITEM_NO);
@@ -283,6 +286,8 @@ function getInfoBarcode(barcode){
             playMusic();
             layer.alert(data.msg,function () {
                 $('#barcode').val('');
+                $('#item_code').val('');
+                $('#addqty').val('');
                 $('#barcode').focus();
                 layer.closeAll();
             });

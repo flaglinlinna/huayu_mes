@@ -39,8 +39,9 @@ $(function() {
 						//code值为200表示成功
 						}
 					},
-					cols : [ [ {
-						type : 'radio',
+					cols : [ [
+						{
+						type : 'numbers',
 						width : 50
 					},
 					{

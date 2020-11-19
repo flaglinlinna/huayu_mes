@@ -64,11 +64,11 @@ public class InputController extends WebController {
     @ApiOperation(value="根据指令单获取物料编号和数量", notes="根据指令单获取物料编号和数量", hidden = true)
     @RequestMapping(value = "/getInfoBarcode", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getInfoBarcode(String barcode) {
+    public ApiResponseResult getInfoBarcode(String barcode,String taskNo) {
         String method = "/input/getInfoBarcode";String methodName ="获取指令单信息";
         String param ="指令单:"+ barcode;
         try {
-            ApiResponseResult result = inputService.getInfoBarcode(barcode);
+            ApiResponseResult result = inputService.getInfoBarcode(barcode,taskNo);
             logger.debug("根据指令单获取物料编号和数量=getTaskNo:");
             getSysLogService().success(module,method, methodName, param);
             return result;

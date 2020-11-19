@@ -1,20 +1,47 @@
+var action = false;
+var interval_do = null;// 定时器
 $(function() {
 	getDepList(deptList);
 	getLinerList(linerList);
 	var kanbanList = kanbanDataList;
+
+	var intervaldata = interval.data;
+	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间
+
 	dealData(kanbanList);
+	interval_do = setInterval(getList, intervaldata * 1000); // 启动,执行默认参数
+
 	$("#searchBtn").click(function() {
+
+		if (interval_do != null) {// 判断计时器是否为空-关闭
+			clearInterval(interval_do);
+			interval_do = null;
+		}
 		getList();
+		if (action) {// action 为 fasle 不调用定时器
+			interval_do = setInterval(getList, intervaldata * 1000); // 重新新循环-启动
+		}
 	});
 })
+
 console.log(kanbanDataList);
 function dealData(kanbanList) {
-	if (kanbanList.result) {
-		var kanbanData = kanbanList.data.List_result2;
-		setTable(kanbanData);// 表格数据
 
-		var kanbanData_t = kanbanList.data.List_result1;
-		// console.log(kanbanData_t)
+	if (!kanbanList.result) {// 报错时的初始化
+		toClean();
+		$("#tableList").empty();
+		return false;
+	}
+	var kanbanData = kanbanList.data.List_result2;
+	var kanbanData_t = kanbanList.data.List_result1;
+
+	if (kanbanData.length > 0) {
+		setTable(kanbanData);// 表格数据
+	} else {
+		$("#tableList").empty();
+	}
+
+	if (kanbanData_t.length > 0) {
 		var liner = kanbanData_t[0].LINER_NAME;
 		var line = kanbanData_t[0].FLINE_NAME;
 		var taskNo = kanbanData_t[0].TASK_NO;
@@ -44,9 +71,24 @@ function dealData(kanbanList) {
 		$("#doneQty").text(doneQty);
 
 		var doneRate = parseFloat(doneQty) / parseFloat(planQty);
-		//console.log(doneRate * 100)
 		getChart3(doneRate * 100);
+
+	} else {
+		toClean();
 	}
+}
+function toClean() {
+	getChart3(0)
+	$("#liner").text("");
+	$("#line").text("");
+	$("#taskNo").text("");
+	$("#empOnline").text("");
+	$("#capacity").text("");
+	$("#itemNo").text("");
+	$("#itemName").text("");
+	$("#planQty").text("");
+	$("#inputQty").text("");
+	$("#doneQty").text("");
 }
 
 function getChart3(doneRate) {
@@ -126,7 +168,8 @@ function setTable(kanbanData) {
 		var arr = kanbanData[j];
 		html += '<tr><td>' + arr.FTIME + '</td><td>' + arr.QTY_NPT
 				+ '</td><td>' + arr.QTY_DONE + '</td><td>' + arr.QTY_OK
-				+ '</td><td>' + arr.QTY_NG + '</td><td>' + arr.RATE_OK + '%</td></tr> ';
+				+ '</td><td>' + arr.QTY_NG + '</td><td>' + arr.RATE_OK
+				+ '%</td></tr> ';
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
@@ -141,7 +184,6 @@ function getDepList(deptList) {
 		var arr = res.data[j];
 		html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME + "</option>";
 	}
-
 	$("#dep_select").append(html);
 }
 function getLinerList(linerList) {
@@ -152,14 +194,20 @@ function getLinerList(linerList) {
 	var html = "<option value=''>请选择组长</option>";
 	for (j = 0, len = res.data.length; j < len; j++) {
 		var arr = res.data[j];
-		html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
-				+ "</option>";
+		if (j == 0) {
+			html += "<option value='" + arr.LEAD_BY + "' selected>"
+					+ arr.LEAD_BY + "</option>";
+		} else {
+			html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
+					+ "</option>";
+		}
+
 	}
 
 	$("#liner_select").append(html);
 }
 function getList() {
-	var taskNo = $("#taskNo").val();
+	var taskNo = $("#taskNo").text();
 	var deptId = "";
 	var liner = $("#liner_select").val();
 	var interval = "2";
@@ -177,8 +225,11 @@ function getList() {
 		success : function(res) {
 			console.log(res)
 			if (res.result) {
+				action = true;
 				dealData(res)
 			} else {
+				action = false;
+				clearInterval(interval_do);// 错误-关闭定时器
 				alert(res.msg)
 			}
 		}

@@ -1,71 +1,101 @@
+var action=false;
+var interval_do=null;//定时器
 $(function() {
-	// dealData();
 	getDepList(deptList);
 	getLinerList(linerList);
+	
 	var kanbanList = kanbanDataList;
+	
+	var intervaldata = interval.data;
+	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间
+	
 	dealData(kanbanList);
-	$("#searchBtn").click(function() {
-		getList();
+	interval_do = setInterval(getList,intervaldata * 1000); // 启动,执行默认方法
+	
+	$("#searchBtn").click(function() {//**需要点击来个两次才可以置action状态
+		if(interval_do!=null){//判断计时器是否为空-关闭
+			clearInterval(interval_do);
+			interval_do=null;
+		}
+		getList()
+		if(action){//action 为 fasle 不调用定时器
+			interval_do = setInterval(getList, intervaldata * 1000); // 重新新循环-启动
+		}
 	});
-
 })
 console.log(kanbanDataList);
+
 function dealData(kanbanList) {
-	if (kanbanList.result) {
-		var kanbanData_t = kanbanList.data.List_line;
-		var kanbanData = kanbanList.data.List_table;
-		if (kanbanData_t.length>0) {
-			var done = parseInt(kanbanData_t[0].QTY_DONE);
-			var plan = parseInt(kanbanData_t[0].QTY_PLAN);
-			var doneRate = kanbanData_t[0].RATE_DONE;
-			getChart3(done, plan, doneRate);
-
-			var hr_abn = kanbanData_t[0].HOUR_ABN == null ? 0
-					: parseFloat(kanbanData_t[0].HOUR_ABN);
-			var hr_act = kanbanData_t[0].HOUR_ACT == null ? 0
-					: parseFloat(kanbanData_t[0].HOUR_ACT);
-			var hr_st = kanbanData_t[0].HOUR_ST == null ? 0
-					: parseFloat(kanbanData_t[0].HOUR_ST);
-			var eff_rate = kanbanData_t[0].RATE_EFF == null ? "0"
-					: kanbanData_t[0].RATE_EFF;
-
-			getChart2(hr_abn, hr_act, hr_st, eff_rate);
-
-			var classNo = kanbanData_t[0].CLASS_NO;//
-			// var
-			// rownum=kanbanData_t[0].FROWNUM==null?"无":kanbanData_t[0].FROWNUM;//排名
-			var onlineEmp = kanbanData_t[0].NUM_EMP_ON == null ? "0"
-					: kanbanData_t[0].NUM_EMP_ON;// 在线人数
-			var cardAll = kanbanData_t[0].NUM_CARD_ALL == null ? "0"
-					: kanbanData_t[0].NUM_CARD_ALL;// 总打卡数
-			var cardAss = kanbanData_t[0].NUM_CARD_ASS == null ? "0"
-					: kanbanData_t[0].NUM_CARD_ASS;// 已分配数
-			var cardUnass = kanbanData_t[0].NUM_CARD_UNASS == null ? "0"
-					: kanbanData_t[0].NUM_CARD_UNASS;// 未分配数
-			
-			$("#classNo").text(classNo)
-			// $("#rownum").text(rownum)
-			$("#onlineEmp").text(onlineEmp)
-			$("#cardAll").text(cardAll)
-			$("#cardAss").text(cardAss)
-			$("#cardUnass").text(cardUnass)
-		}
-		if (kanbanData.length>0) {
-			setTable(kanbanData);// 表格数据
-		}
+	
+	if(!kanbanList.result){//报错时的初始化
+		toClean();
+		$("#tableList").empty();
+		return false;
 	}
+	var kanbanData_t = kanbanList.data.List_line;
+	var kanbanData = kanbanList.data.List_table;
+	if (kanbanData_t.length > 0) {
+		var done = parseInt(kanbanData_t[0].QTY_DONE);
+		var plan = parseInt(kanbanData_t[0].QTY_PLAN);
+		var doneRate = kanbanData_t[0].RATE_DONE;
+		getChart3(done, plan, doneRate);
+
+		var hr_abn = kanbanData_t[0].HOUR_ABN == null ? 0
+				: parseFloat(kanbanData_t[0].HOUR_ABN);
+		var hr_act = kanbanData_t[0].HOUR_ACT == null ? 0
+				: parseFloat(kanbanData_t[0].HOUR_ACT);
+		var hr_st = kanbanData_t[0].HOUR_ST == null ? 0
+				: parseFloat(kanbanData_t[0].HOUR_ST);
+		var eff_rate = kanbanData_t[0].RATE_EFF == null ? "0"
+				: kanbanData_t[0].RATE_EFF;
+
+		getChart2(hr_abn, hr_act, hr_st, eff_rate);
+
+		var classNo = kanbanData_t[0].CLASS_NO;
+		var onlineEmp = kanbanData_t[0].NUM_EMP_ON == null ? "0"
+				: kanbanData_t[0].NUM_EMP_ON;// 在线人数
+		var cardAll = kanbanData_t[0].NUM_CARD_ALL == null ? "0"
+				: kanbanData_t[0].NUM_CARD_ALL;// 总打卡数
+		var cardAss = kanbanData_t[0].NUM_CARD_ASS == null ? "0"
+				: kanbanData_t[0].NUM_CARD_ASS;// 已分配数
+		var cardUnass = kanbanData_t[0].NUM_CARD_UNASS == null ? "0"
+				: kanbanData_t[0].NUM_CARD_UNASS;// 未分配数
+
+		$("#classNo").text(classNo)
+		$("#onlineEmp").text(onlineEmp)
+		$("#cardAll").text(cardAll)
+		$("#cardAss").text(cardAss)
+		$("#cardUnass").text(cardUnass)
+	} else {
+		toClean();
+	}
+	if (kanbanData.length > 0) {
+		setTable(kanbanData);// 表格数据
+	}else{
+		$("#tableList").empty();
+	}
+	//无数据时要初始化
+}
+
+function toClean(){
+	getChart2(0, 0, 0, 0)
+	getChart3(0, 0, 0)
+	$("#classNo").text("")
+	$("#onlineEmp").text("")
+	$("#cardAll").text("")
+	$("#cardAss").text("")
+	$("#cardUnass").text("")
 }
 
 function getChart2(hr_abn, hr_act, hr_st, eff_rate) {
-
 	option = {
 		title : {
 			text : '效率:' + eff_rate + '%',
 			textStyle : {
 				color : '#FFFFFF' // 图例文字颜色
 			},
-			left:'15px',
-			top:'5px'
+			left : '15px',
+			top : '5px'
 		},
 		color : [ '#993300', '#0066FF', '#66CCCC' ],
 		legend : {
@@ -79,7 +109,7 @@ function getChart2(hr_abn, hr_act, hr_st, eff_rate) {
 		},
 		grid : {
 			left : '3%',
-			//right : '4%',
+			// right : '4%',
 			bottom : '3%',
 			containLabel : true
 		},
@@ -159,8 +189,8 @@ function getChart3(done, plan, doneRate) {
 			textStyle : {
 				color : '#FFFFFF' // 图例文字颜色
 			},
-			left:'15px',
-			top:'5px'
+			left : '15px',
+			top : '5px'
 		},
 		color : [ '#0066FF', '#66CCCC' ],
 		legend : {
@@ -174,7 +204,7 @@ function getChart3(done, plan, doneRate) {
 		},
 		grid : {
 			left : '3%',
-			//right : '4%',
+			// right : '4%',
 			bottom : '3%',
 			containLabel : true
 		},
@@ -272,14 +302,19 @@ function getLinerList(linerList) {
 	var html = "<option value=''>请选择组长</option>";
 	for (j = 0, len = res.data.length; j < len; j++) {
 		var arr = res.data[j];
-		html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
-				+ "</option>";
+		if(j==0){
+			html += "<option value='" + arr.LEAD_BY + "' selected>" + arr.LEAD_BY
+			+ "</option>";
+		}else{
+			html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY
+			+ "</option>";
+		}
 	}
 
 	$("#liner_select").append(html);
 }
 function getList() {
-	 var date = $("#date").val();
+	var date = $("#date").val();
 	// var sdata = date.substring(0, date.indexOf(" "))
 	// var edata = date.substring(date.indexOf(" ") + 3, date.length);
 	// console.log(sdata)
@@ -301,11 +336,14 @@ function getList() {
 		success : function(res) {
 			console.log(res)
 			if (res.result) {
+				action=true;
 				dealData(res)
 			} else {
+				action=false;
+				clearInterval(interval_do);//错误-关闭定时器
 				alert(res.msg);
 			}
+			//console.log("GET:"+action)
 		}
 	});
-
 }

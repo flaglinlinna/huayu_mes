@@ -43,9 +43,9 @@ public class Inputlmpl extends PrcUtils implements InputService {
 	}
 
 	@Override
-	public ApiResponseResult getInfoBarcode(String barcode) throws Exception {
+	public ApiResponseResult getInfoBarcode(String barcode,String taskNo) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getInfoBarcodePrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",barcode,"PRC_BATCH_CHECK_BARCODE");
+		List<Object> list = getInfoBarcodePrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",taskNo,barcode,"PRC_BATCH_CHECK_BARCODE");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

@@ -2022,7 +2022,7 @@ a cite {
 .layui-form-item {
 	font: 12px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
 	/* margin-bottom: 15px; */
-	margin-bottom: 5px;
+	margin-bottom: 0px;
 	clear: both;
 	*zoom: 1
 }
@@ -2058,7 +2058,7 @@ a cite {
 }
 
 .layui-form-item .layui-inline {
-	margin-bottom: 5px;
+	margin-bottom: 0px;
 	margin-right: 10px
 }
 

@@ -30,8 +30,8 @@ public class InputCheckImpl extends PrcUtils implements InputCheckService {
     }
 
     @Override
-    public ApiResponseResult getInfoBarcode(String barcode) throws Exception {
-        List<Object> list = getInfoBarcodePrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",barcode,"PRC_BATCH_CHECK_BARCODE");
+    public ApiResponseResult getInfoBarcode(String barcode,String taskNo) throws Exception {
+        List<Object> list = getInfoBarcodePrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",taskNo,barcode,"PRC_BATCH_CHECK_BARCODE");
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
             return ApiResponseResult.failure(list.get(1).toString());
         }

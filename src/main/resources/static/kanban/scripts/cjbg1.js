@@ -4,6 +4,7 @@ $(function() {
 	//getDepList(deptList);
 	$("#searchBtn").click(function() {
 		getList();
+		
 	});
 })
 
@@ -54,7 +55,8 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				color : '#ffffff'// 字体颜色
 			},
 		},
-		color : [ '#66FFCC', '#6699FF', '#9966FF' ],
+		//color : [ '#66FFCC', '#6699FF', '#9966FF' ],
+		color : [ '#CCCCFF', '#FFCC99', '#99FFCC' ],
 		xAxis : [ {
 			type : 'category',
 			data : xAxis_data,
@@ -70,7 +72,6 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 		} ],
 		yAxis : [ {
 			type : 'value',
-			interval : 100,
 			splitLine : {
 				show : false
 			},
