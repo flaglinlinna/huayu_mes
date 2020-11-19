@@ -1,4 +1,4 @@
-var action = false;
+var action = true;
 var interval_do = null;// 定时器
 $(function() {
 	getDepList(deptList);
@@ -55,7 +55,9 @@ function dealData(kanbanList) {
 		var inputQty = kanbanData_t[0].QTY_NPT == null ? 0
 				: kanbanData_t[0].QTY_NPT;
 		var doneQty = kanbanData_t[0].QTY_DONE == null ? 0
-				: kanbanData_t[0].QTY_DONE;
+				: kanbanData_t[0].QTY_DONE; 
+		var doneRate =  kanbanData_t[0].RATE_DONE == null ? 0
+				: kanbanData_t[0].RATE_DONE;
 
 		$("#liner").text(liner);
 		$("#line").text(line);
@@ -69,9 +71,8 @@ function dealData(kanbanList) {
 		;
 		$("#inputQty").text(inputQty);
 		$("#doneQty").text(doneQty);
-
-		var doneRate = parseFloat(doneQty) / parseFloat(planQty);
-		getChart3(doneRate * 100);
+		
+		getChart3(doneRate);
 
 	} else {
 		toClean();

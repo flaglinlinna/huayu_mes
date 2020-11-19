@@ -1,3 +1,4 @@
+var MyMarhq = null;//表格滚动定时器
 $(function() {
 	var kanbanList=kanbanDataList;
 	dealData(kanbanList);
@@ -131,13 +132,57 @@ function setTable(kanbanData) {
 	var html = "";
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
+//		if(j==kanbanData.length-1){
+//			html += '<tr style="position:relative;"><td>' + arr.LINER_NAME + '</td><td>' + arr.HOUR_ST
+//			+ '</td><td>' + arr.HOUR_ACT + '</td><td>' + arr.HOUR_ABN
+//			+ '</td><td>' + arr.NUM_EMP_ON + '</td><td>'
+//			+ arr.EFFICIENCY_RATE + '%</td></tr> ';
+//			break;
+//		}
 		html += '<tr><td>' + arr.LINER_NAME + '</td><td>' + arr.HOUR_ST
 				+ '</td><td>' + arr.HOUR_ACT + '</td><td>' + arr.HOUR_ABN
 				+ '</td><td>' + arr.NUM_EMP_ON + '</td><td>'
 				+ arr.EFFICIENCY_RATE + '%</td></tr> ';
 	}
+	
+	
 	$("#tableList").empty();
+	$("#tableList1").empty();
 	$("#tableList").append(html);
+	$("#tableList1").append(html);
+	
+	
+	
+	if(MyMarhq!=null){//判断计时器是否为空-关闭
+		clearInterval(MyMarhq);
+		MyMarhq=null;
+	}
+	//clearInterval(MyMarhq);
+	var item = $('.tbl-body tbody tr').length
+	console.log(item)
+
+
+	if(item> 4){
+	    $('.tbl-body tbody').html($('.tbl-body tbody').html()+$('.tbl-body tbody').html());
+	    $('.tbl-body').css('top', '0');
+	    var tblTop = 0;
+	    var speedhq = 60; // 数值越大越慢
+	    var outerHeight = $('.tbl-body tbody').find("tr").outerHeight();
+	    function Marqueehq(){
+	        if(tblTop <= -outerHeight*item){
+	            tblTop = 0;
+	        } else {
+	            tblTop -= 1;
+	        }
+	        $('.tbl-body').css('top', tblTop+'px');
+	    }
+
+	    MyMarhq = setInterval(Marqueehq,speedhq);
+	}else{
+		$('.tbl-body').css('top', '0');//内容少时不滚动
+	}
+	
+	
 }
 function getDepList(deptList) {
 	var res=deptList;

@@ -1,5 +1,5 @@
-var action=false;
-var interval_do=null;//定时器
+var action=true;
+var interval_do=null;//页面定时器
 $(function() {
 	getDepList(deptList);
 	getLinerList(linerList);
@@ -26,7 +26,7 @@ $(function() {
 console.log(kanbanDataList);
 
 function dealData(kanbanList) {
-	
+	console.log(kanbanList)
 	if(!kanbanList.result){//报错时的初始化
 		toClean();
 		$("#tableList").empty();
