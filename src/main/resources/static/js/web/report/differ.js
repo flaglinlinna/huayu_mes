@@ -23,7 +23,9 @@ $(function() {
 							even : true,// 条纹样式
 							data : [],
 							height : 'full',
-							page : false,
+							page : true,
+							limit:50,
+							limits:[50,100,200,500,1000,5000],
 							request : {
 								pageName : 'page' // 页码的参数名称，默认：page
 								,
@@ -61,7 +63,7 @@ $(function() {
 							}, {
 								field : 'WORK_DATE',
 								title : '日期',
-								width : 130,
+								width : 110,
 								sort : true
 							}, {
 								field : 'EMP_CODE',
@@ -210,27 +212,34 @@ $(function() {
 
 });
 function getReport(params) {
-	CoreUtil.sendAjax("/report/differ/getList", JSON.stringify(params),
-			function(data) {
-				console.log(data)
-				if (data.result) {
-					if (data.result) {
-						tableIns.reload({
-							data : data.data.rows,
-							done : function(res1, curr, count) {
-
-								// //localtableFilterIns.reload();
-							}
-						});
-					} else {
-						layer.alert(data.msg);
-					}
-				} else {
-					layer.alert(data.msg);
-				}
-			}, "POST", false, function(res) {
-				layer.alert(res.msg);
-			});
+	tableIns.reload({
+		url:context+'/report/differ/getList',
+		where:params,
+		done: function(res1, curr, count){
+			pageCurr=curr;
+		}
+	})
+	// CoreUtil.sendAjax("/report/differ/getList", JSON.stringify(params),
+	// 		function(data) {
+	// 			console.log(data)
+	// 			if (data.result) {
+	// 				if (data.result) {
+	// 					tableIns.reload({
+	// 						data : data.data.rows,
+	// 						done : function(res1, curr, count) {
+	//
+	// 							// //localtableFilterIns.reload();
+	// 						}
+	// 					});
+	// 				} else {
+	// 					layer.alert(data.msg);
+	// 				}
+	// 			} else {
+	// 				layer.alert(data.msg);
+	// 			}
+	// 		}, "POST", false, function(res) {
+	// 			layer.alert(res.msg);
+	// 		});
 }
 
 function getEmpCode() {

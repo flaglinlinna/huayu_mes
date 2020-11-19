@@ -61,10 +61,21 @@ $(function() {
 				field : 'TASK_NO',
 				title : '制令单号',
 				 sort: true
+					, width : 200
 			}, {
 				field : 'WOEK_DATE',
-				title : '工作日期',width : 120, sort: true
-			}] ],
+				title : '工作日期',width : 140, sort: true
+			},
+				{
+					field : 'TIME_BEGIN',
+					title : '上线时间',width : 160, sort: true
+				},
+				{
+					field : 'TIME_END',
+					title : '下线时间',width : 160, sort: true
+				},
+
+			] ],
 			done : function(res, curr, count) {
 				//
 				pageCurr = curr;

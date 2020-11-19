@@ -14,7 +14,7 @@ $(function () {
             elem: '#iList'
             ,url:context+'/produce/scheduling/getList'
             ,method: 'get' //默认：get请求
-            ,cellMinWidth: 80
+            // ,cellMinWidth: 80
             ,page: true,
             height:'full-130'//固定表头&full-查询框高度
             ,even:true,//条纹样式
@@ -32,8 +32,8 @@ $(function () {
                 }
             },
             cols: [[
-                {type:'numbers'},
-                {type:'checkbox',width:50,align:'center'},
+                {type:'numbers' ,width:60},
+                {type:'checkbox' ,width:60},
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
                 // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
                 ,{field:'PRODUCE_STATE', title:'状态', width:60,align: 'center'}

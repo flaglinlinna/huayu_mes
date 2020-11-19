@@ -34,6 +34,15 @@
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 		</div>
+
+		<script type="text/html" id="statusTp2">
+			{{#  if(d.isOnline == 0){ }}
+			<span style="color: green">在线</span>
+			{{#  } else { }}
+			<span style="color: red">离线</span>
+			{{#  } }}
+		</script>
+
 		<!--添加或编辑卡机信息-->
 		<div id="setIssue" class="layer_self_wrap" lay-filter="setIssue"
 			style="width: 99%; display: none; margin: 2px;">

@@ -185,7 +185,14 @@ $(function() {
 				field : 'devType',
 				title : '卡机类型',
 					width:90,
-			}, {
+			},
+				{
+					field : 'isOnline',
+					title : '在线状态',
+					templet:'#statusTp2',
+					width : 80,
+				},
+				{
 					field : 'lineName',
 					title : '线别名称',
 					width:120,

@@ -971,6 +971,15 @@ public class SchedulingImpl implements SchedulingService {
         return ApiResponseResult.failure("保存失败！");
     }
 
+    public String getUploadDay(Integer type) throws Exception{
+        if(type==1){
+            return  schedulingDao.getAfDay();
+        }else if (type==2){
+            return  schedulingDao.getBfDay();
+        }
+        return null;
+    }
+
     //调用保存数据存储过程
     public List<String> doSaveProc(SysUser currUser) {
         Long userId = currUser.getId();

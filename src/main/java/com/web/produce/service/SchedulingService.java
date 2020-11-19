@@ -40,6 +40,8 @@ public interface SchedulingService {
 
     public ApiResponseResult confirmTemp() throws Exception;
 
+    public String getUploadDay(Integer type) throws Exception;
+
     //提取工序存储过程
     public ApiResponseResult getProcessProc() throws Exception;
 

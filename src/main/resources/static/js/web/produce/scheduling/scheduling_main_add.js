@@ -178,6 +178,8 @@ $(function () {
 
         getMainData();//获取数据
 
+
+
         //导入
         upload.render({
             elem: '#uploadBtn'
@@ -191,6 +193,8 @@ $(function () {
             }
             ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
                 layer.load(); //上传loading
+                console.log(afDay);
+                console.log(bfDay);
             }
             ,done: function(res,index, upload){
                 layer.closeAll('loading'); //关闭loading
@@ -408,7 +412,6 @@ function addSubmit(obj) {
     if(!obj.field.fenable){
         obj.field.fenable = 0;
     }
-    console.log(obj);
     CoreUtil.sendAjax("/produce/schedulingMain/add", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
@@ -434,7 +437,13 @@ function editSubmit(obj) {
     if(!obj.field.fenable){
         obj.field.fenable = 0;
     }
-    console.log(obj);
+    var sdate = new Date(obj.field.prodDate.replace(/-/g, "/"));
+    var now = new Date();
+    var days = now.getTime() - sdate.getTime();
+    var day = parseInt(days / (1000 * 60 * 60 * 24));
+    if(day>afDay||bfDay<day){
+        layer.alert("排产日期已过期/未到期");
+    }
     CoreUtil.sendAjax("/produce/schedulingMain/edit", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {

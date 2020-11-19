@@ -59,14 +59,17 @@ public class MesHrDifferController extends WebController {
 	
 	
 	@ApiOperation(value = "人数差异统计表", notes = "人数差异统计表", hidden = true)
-	@RequestMapping(value = "/getList", method = RequestMethod.POST)
+	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getList(@RequestBody Map<String, Object> params) {
+	public ApiResponseResult getList(
+			String sdate, String edate,String  empCode
+//			@RequestBody Map<String, Object> params
+	) {
 		String method = "report/differ/getList";
 		
-		String sdate=params.get("sdate").toString();
-		String edate=params.get("edate").toString();
-		String empCode=params.get("empCode").toString();		
+//		String sdate=params.get("sdate").toString();
+//		String edate=params.get("edate").toString();
+//		String empCode=params.get("empCode").toString();
 		String methodName = "获取人数差异统计表";
 		try {
 			Sort sort = Sort.unsorted();
