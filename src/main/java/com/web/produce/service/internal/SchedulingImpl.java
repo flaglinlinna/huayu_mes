@@ -836,6 +836,60 @@ public class SchedulingImpl implements SchedulingService {
     }
 
     /**
+     * 调用更改状态存储过程
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult changeStatue(String taskNos,String statue) throws Exception{
+        SysUser currUser = UserUtil.getSessionUser();
+        if(currUser == null && currUser.getId() == null){
+            return ApiResponseResult.failure("当前用户已失效，请重新登录！");
+        }
+
+        Long userId = currUser.getId();
+        if(userId != null){
+            List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
+                @Override
+                public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                    String storedProc = "{call prc_mes_change_task_status(?,?,?,?,?,?,?,?)}";// 调用的sql
+                    CallableStatement cs = con.prepareCall(storedProc);
+                    cs.setString(1, currUser.getCompany());
+                    cs.setString(2, currUser.getFactory());
+                    cs.setString(3, userId.toString());
+                    cs.setString(4, taskNos);
+                    cs.setString(5, statue);
+                    cs.registerOutParameter(6,Types.INTEGER);// 注册输出参数 返回标志
+                    cs.registerOutParameter(7,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(8,-10);// 注册输出参数 返回数据集合
+                    return cs;
+                }
+            }, new CallableStatementCallback() {
+                public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                    List<String> result = new ArrayList<String>();
+                    cs.execute();
+                    result.add(cs.getString(6));
+                    result.add(cs.getString(7));
+                    result.add(cs.getString(8));
+                    return result;
+                }
+            });
+
+            if(resultList.size() > 0){
+                String flag = resultList.get(0);
+                if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
+                    return ApiResponseResult.success("修改成功！");
+                }else{
+                    return ApiResponseResult.failure(resultList.get(1));
+                }
+            }
+        }
+        return ApiResponseResult.failure("修改失败！");
+    }
+
+
+    /**
      * 获取临时表数据
      * @param pageRequest
      * @return

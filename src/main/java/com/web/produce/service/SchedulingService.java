@@ -32,6 +32,8 @@ public interface SchedulingService {
 
     public ApiResponseResult doCheckProc() throws Exception;
 
+    public ApiResponseResult changeStatue(String taskNos,String statue) throws Exception;
+
     public ApiResponseResult getTempList(PageRequest pageRequest) throws Exception;
 
     public ApiResponseResult deleteTempAll() throws Exception;
