@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -114,26 +115,29 @@ public class Reworklmpl extends PrcUtils implements ReworkService {
 	}
 	
 	@Override
-	public ApiResponseResult search(String startTime,String endTime,
-			String taskNo,String barcode) throws Exception {
+	public ApiResponseResult search(String startTime, String endTime,
+									String taskNo, String barcode, PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = searchPrc(UserUtil.getSessionUser().getCompany() + "",
 				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "",
-				startTime, endTime, taskNo,barcode);
+				startTime, endTime, taskNo,barcode,pageRequest.getPageNumber()+1,pageRequest.getPageSize());
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		return ApiResponseResult.success().data(list.get(2));
+		HashMap<String,Object> dataMap = new HashMap<>();
+		dataMap.put("count",list.get(2));
+		dataMap.put("data",list.get(3));
+		return ApiResponseResult.success().data(dataMap);
 	}
 	
 	// 执行查询
 		public List searchPrc(String company, String facoty, String user_id,
-				String startTime,String endTime,String taskNo,String barcode)
+				String startTime,String endTime,String taskNo,String barcode,Integer page,Integer sizes)
 				throws Exception {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
-					String storedProc = "{call  prc_mes_BARCODE_RETURN_chs(?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+					String storedProc = "{call  prc_mes_BARCODE_RETURN_chs(?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 					CallableStatement cs = con.prepareCall(storedProc);
 					cs.setString(1, facoty);
 					cs.setString(2, company);
@@ -142,9 +146,12 @@ public class Reworklmpl extends PrcUtils implements ReworkService {
 					cs.setString(5, endTime);
 					cs.setString(6, taskNo);
 					cs.setString(7, barcode);
-					cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
-					cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
-					cs.registerOutParameter(10, -10);// 输出参数 追溯数据
+					cs.setInt(8, sizes);
+					cs.setInt(9, page);
+					cs.registerOutParameter(10, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(11, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(12, java.sql.Types.INTEGER);// 输出参数 返回总数
+					cs.registerOutParameter(13, -10);// 输出参数 追溯数据
 					return cs;
 				}
 			}, new CallableStatementCallback() {
@@ -152,11 +159,12 @@ public class Reworklmpl extends PrcUtils implements ReworkService {
 					List<Object> result = new ArrayList<>();
 					List<Map<String, Object>> l = new ArrayList();
 					cs.execute();
-					result.add(cs.getInt(8));
-					result.add(cs.getString(9));
-					if (cs.getString(8).toString().equals("0")) {
+					result.add(cs.getInt(10));
+					result.add(cs.getString(11));
+					result.add(cs.getInt(12));
+					if (cs.getString(10).toString().equals("0")) {
 						// 游标处理
-						ResultSet rs = (ResultSet) cs.getObject(10);
+						ResultSet rs = (ResultSet) cs.getObject(13);
 
 						try {
 							l = fitMap(rs);

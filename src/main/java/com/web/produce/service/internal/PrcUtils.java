@@ -190,18 +190,19 @@ public class PrcUtils {
     }
     
     // 输入条码执行过程带出数量
-    public List getInfoBarcodePrc(String company,String facoty,String barcode,String prc_name) throws Exception {
+    public List getInfoBarcodePrc(String company,String facoty,String taskNo,String barcode,String prc_name) throws Exception {
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
-                String storedProc = "{call " + prc_name + "(?,?,?,?,?,?)}";// 调用的sql
+                String storedProc = "{call " + prc_name + "(?,?,?,?,?,?,?)}";// 调用的sql
                 CallableStatement cs = con.prepareCall(storedProc);
                 cs.setString(1, company);
                 cs.setString(2, facoty);
-                cs.setString(3, barcode);
-                cs.registerOutParameter(4, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(5, java.sql.Types.VARCHAR);// 输出参数 返回标识
-                cs.registerOutParameter(6, -10);// 输出参数 追溯数据
+                cs.setString(3, taskNo);
+                cs.setString(4, barcode);
+                cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(7, -10);// 输出参数 追溯数据
                 return cs;
             }
         }, new CallableStatementCallback() {
@@ -209,11 +210,11 @@ public class PrcUtils {
                 List<Object> result = new ArrayList<>();
                 List<Map<String, Object>> l = new ArrayList();
                 cs.execute();
-                result.add(cs.getInt(4));
-                result.add(cs.getString(5));
-                if (cs.getString(4).toString().equals("0")) {
+                result.add(cs.getInt(5));
+                result.add(cs.getString(6));
+                if (cs.getString(5).toString().equals("0")) {
                     // 游标处理
-                    ResultSet rs = (ResultSet) cs.getObject(6);
+                    ResultSet rs = (ResultSet) cs.getObject(7);
 
                     try {
                         l = fitMap(rs);

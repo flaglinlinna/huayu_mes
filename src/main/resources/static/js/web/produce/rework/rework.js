@@ -74,7 +74,7 @@ $(function() {
 							defaultToolbar : [],
 							height:'full-80'//固定表头&full-查询框高度
 								,even:true,//条纹样式
-							page : false,
+							page : true,
 							data : [],
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
@@ -82,9 +82,9 @@ $(function() {
 							},
 							parseData : function(res) {// 可进行数据操作
 								return {
-									"count" : res.data.total,
+									"count" : res.data.count,
 									"msg" : res.msg,
-									"data" : res.data.rows,
+									"data" : res.data.data,
 									"code" : res.status
 								// code值为200表示成功
 								}
@@ -305,17 +305,26 @@ function search(obj) {
 		"taskNo" : obj.hTaskno,
 		"barcode" : obj.hBarcode
 	};
+	hTableIns.reload({
+		url:context+'/produce/rework/search',
+		method:'POST',
+		contentType: 'application/json; charset=UTF-8',
+		where:params,
+		done: function(res1, curr, count){
+			pageCurr=curr;
+		}
+	})
 
-	CoreUtil.sendAjax("/produce/rework/search", JSON.stringify(params),
-			function(data) {
-				console.log(data)
-				if (data.result) {
-					hTableIns.reload({
-						data : data.data
-					});
-					//layer.alert("查询成功");
-				} else {
-					layer.alert(data.msg);
-				}
-			})
+	// CoreUtil.sendAjax("/produce/rework/search", JSON.stringify(params),
+	// 		function(data) {
+	// 			console.log(data)
+	// 			if (data.result) {
+	// 				hTableIns.reload({
+	// 					data : data.data
+	// 				});
+	// 				//layer.alert("查询成功");
+	// 			} else {
+	// 				layer.alert(data.msg);
+	// 			}
+	// 		})
 }
