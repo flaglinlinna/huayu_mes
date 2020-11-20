@@ -35,7 +35,7 @@ var CoreUtil = (function () {
                if(XMLHttpRequest.status==404){
                     top.window.location.href= context+"/index/404";
                 }else{
-                    layer.msg("服务器好像出了点问题！请稍后试试");
+                    layer.msg("网络异常！请稍后试试");
                 }
             }
         });
