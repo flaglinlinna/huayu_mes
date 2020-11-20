@@ -102,16 +102,17 @@ public class QualInspectlmpl extends PrcUtils implements QualInspectService {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  prc_mes_qc_insp_bar_chk(?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  prc_mes_qc_insp_bar_chk(?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, factory);
 				cs.setString(2, company);
 				cs.setString(3, user_id);
 				cs.setString(4, proc);
 				cs.setString(5, barcode);
-				cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
-				cs.registerOutParameter(8, -10);// 输出参数 追溯数据
+				cs.setString(6, "");
+				cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(8, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(9, -10);// 输出参数 追溯数据
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -119,11 +120,11 @@ public class QualInspectlmpl extends PrcUtils implements QualInspectService {
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(6));
-				result.add(cs.getString(7));
-				if (cs.getString(6).toString().equals("0")) {
+				result.add(cs.getInt(7));
+				result.add(cs.getString(8));
+				if (cs.getString(7).toString().equals("0")) {
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(8);
+					ResultSet rs = (ResultSet) cs.getObject(9);
 
 					try {
 						l = fitMap(rs);
