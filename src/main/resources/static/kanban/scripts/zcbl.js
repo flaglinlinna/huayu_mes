@@ -9,8 +9,11 @@ $(function(){
 console.log(kanbanDataList);
 function dealData(){	
 	if(kanbanDataList.data!=null){
+		var title=kanbanDataList.data.DeptName==null?"":kanbanDataList.data.DeptName
+ 				$("#title").text(title+"•制程不良看板");
+		
 		var kanbanData=kanbanDataList.data.List;
-		console.log(kanbanData)
+		
 		setTable(kanbanData);
 	}
 }
@@ -26,13 +29,11 @@ function setTable(kanbanData){
 		 +arr.KJ2_SJ+'</td><td>'+arr.KJ2_OK+'</td><td>'+arr.KJ2_NG+'</td><td>'+arr.KJ2_RATE
 		 +'</td></tr>';
     }
-	console.log(html)
 	 $("#tableList").empty();
 	 $("#tableList").append(html);	
 }
 function getDepList(deptList){
 	var res=deptList;
-	console.log(res)
 	$("#dep_select").empty();
 	var html = "<option value=''>请选择部门</option>";
 	for (j = 0, len = res.data.length; j < len; j++) {
@@ -46,7 +47,7 @@ function getDepList(deptList){
 }
 function getList(){
 	var class_no=$("#class_select").val();
-	var dep_id=$("#dep_select").val();
+	//var dep_id=$("#dep_select").val();
 	var date=$("#date").val();
 	var params = {
 			"class_nos":class_no,
@@ -61,6 +62,9 @@ function getList(){
          success: function(res){
              console.log(res)
              if(res.result){
+            	 var title=res.data.DeptName==null?"":res.data.DeptName
+         				$("#title").text(title+"•制程不良看板");
+            	 
             	 var datalist=res.data.List;
             	 setTable(datalist);
              }else{

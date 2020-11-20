@@ -36,19 +36,32 @@ li {
 		</div>
 
 		<ul>
-			<li><a href="/kanban/toCjbg1" target="_blank"
+			<li><a href="/kanban/toCjbg1" target="_blank" 
 				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">车间报工看板</a>
-
 			</li>
-			<li><a href="/kanban/toScdz" target="_blank"
+			<li><a href="/kanban/toScdz" target="_blank" 
 				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">生产电子看板</a>
-
 			</li>
-			<li><a href="/kanban/toZcbl" target="_blank"
+			<li><a href="/kanban/toZcbl" target="_blank" 
 				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">制程不良看板</a>
 			</li>
+			
+			<li><a href="/kanban/toXlpm" target="_blank" 
+				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">效率排名看板</a>
+
+			</li>
+			<li><a href="/kanban/toDfg" target="_blank" 
+				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">待返工看板</a>
+			</li>
+			<li><a href="/kanban/toCxsc" target="_blank" 
+				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">产线生产看板</a>
+			</li>	
+			<li><a href="/kanban/toCxdz" target="_blank" 
+				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">产线电子看板</a>
+			</li>
+			
 		</ul> 
-		<button id="cjbg1">车间报工</button>
+		
 
 
 		<!--  	<div data-role="controlgroup"  >
@@ -66,10 +79,7 @@ li {
 
 	<script th:inline="javascript">
 	var context = [[@{/}]];
-	
-	$("#cjbg1").click(function{
-		console.log("123")
-	})
+
 	</script>
 </body>
 </html>

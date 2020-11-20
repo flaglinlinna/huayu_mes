@@ -233,7 +233,8 @@ $(function() {
 							done : function(elem, data) {
 								var da = data.data;
 								form.val("createForm", {
-									"pliao" : da[0].ITEM_NO
+									"pliao" : da[0].ITEM_NO,
+									"itemName":da[0].ITEM_NAME,
 								});
 								form.render();// 重新渲染
 							}
@@ -286,6 +287,20 @@ $(function() {
 						// 线体选中
 						form.on('select(pline)', function(data) {
 							getUserByLine(data.value);
+						});
+
+						$('#barcode').bind('keypress', function(event) {
+							if (event.keyCode == "13") {
+								// alert('你输入的内容为：' + $('#barcode').val());
+								if ($('#barcode').val()) {
+									getInfoBarcode($('#barcode').val())
+								} else {
+									layer.alert("请先扫描条码!",function () {
+										$('#barcode').focus();
+										layer.closeAll();
+									});
+								}
+							}
 						});
 
 						getInfoAdd();
@@ -575,4 +590,29 @@ function add(params) {
 function cleanForm() {
 	$('#createForm')[0].reset();
 	layui.form.render();// 必须写
+}
+
+function getInfoBarcode(barcode) {
+	// console.log(taskNo);
+	var params = {
+		"barcode" : barcode
+	}
+	CoreUtil.sendAjax("/verify/getInfoBarcode", params, function(data) {
+		if (data.result) {
+			$("input[name='pliao']").val(data.data[0].ITEM_NO);
+			$("input[name='itemName']").val(data.data[0].ITEM_NAME);
+		} else {
+			playMusic();
+			layer.alert(data.msg,function (index) {
+				$('#barcode').val('');
+				$('#pliao').val('');
+				$('#itemName').val('');
+				$('#barcode').focus();
+				layer.close(index);
+			});
+			// $('#barcode').val('');
+		}
+	}, "GET", false, function(res) {
+		layer.alert(res.msg);
+	});
 }

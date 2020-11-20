@@ -7,12 +7,14 @@ $(function(){
 	});
 	
 })
-console.log(kanbanDataList);
+//console.log(kanbanDataList);
 function dealData(){	
 	if(kanbanDataList.data!=null){
+		var title=kanbanDataList.data.List_dept==null?"":kanbanDataList.data.List_dept
+				$("#title").text(title+"•制程不良看板");
 		var kanbanData=kanbanDataList.data.List_table;
-		//console.log(kanbanData)
-		setTable(kanbanData);
+		console.log(kanbanData)
+		setTable(kanbanData); 
 	}
 }
 
@@ -44,11 +46,11 @@ function getDepList(deptList){
 }
 function getList(){
 	var class_no=$("#class_select").val();
-	var dep_id=$("#dep_select").val();
+	//var dep_id=$("#dep_select").val();
 	var date=$("#date").val();
 	var params = {
 			"class_nos":class_no,
-			"dep_id":dep_id,
+			"dep_id":"5253",
 			"sdata":date
 		};
 	$.ajax({
@@ -57,7 +59,7 @@ function getList(){
          data: params,
          dataType: "json",
          success: function(res){
-             console.log(res)
+            // console.log(res)
              if(res.result){
             	 var datalist=res.data.List_table;
             	 console.log(datalist)

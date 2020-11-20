@@ -15,6 +15,9 @@ function dealData(kanbanList) {
 		var kanbanData = kanbanList.data.List_table;
 		setTable(kanbanData);//表格数据
 		
+		var title=kanbanList.data.title==null?"":kanbanList.data.Title
+				$("#title").text(title+"•效率排名看板");
+		
 		var kanbanData_t=kanbanList.data.List_line;
 		
 		
