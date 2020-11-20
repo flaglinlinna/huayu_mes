@@ -232,6 +232,50 @@ public class PrcUtils {
         return resultList;
     }
 
+    // 创建在线返工制令单 输入条码带出返工料号和名称
+    public List getItemByBarcodePrc(String company,String facoty,String userId,Integer type,String barcode,String prc_name) throws Exception {
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call " + prc_name + "(?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, company);
+                cs.setString(2, facoty);
+                cs.setString(3, userId);
+                cs.setInt(4, type);
+                cs.setString(5, barcode);
+                cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(8, -10);// 输出参数 追溯数据
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(6));
+                result.add(cs.getString(7));
+                if (cs.getString(6).toString().equals("0")) {
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(8);
+
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+                }
+                System.out.println(l);
+                return result;
+            }
+
+        });
+        return resultList;
+    }
+
     // 确定投入
     public List addPutPrc(String company,String facoty,String barcode,String task_no,String item_no,String qty,String user_code,
                           String feedType,String prc_name) throws Exception {

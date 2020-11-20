@@ -81,7 +81,6 @@ $(function () {
         laydate.render({
             elem: '#prodDate'
         });
-        //
         form.on('select(deptId)', function(obj){
             $("#deptName").val(obj.elem[obj.elem.selectedIndex].text);
         });
@@ -412,6 +411,22 @@ function addSubmit(obj) {
     if(!obj.field.fenable){
         obj.field.fenable = 0;
     }
+    var sdate = new Date(obj.field.prodDate.replace(/-/g, "/"));
+    var now = new Date();
+    var bfdays =sdate.getTime()- now.getTime();
+    var day = parseInt(bfdays / (1000 * 60 * 60 * 24));
+    if(day>0){
+        if(day>bfDay){
+            layer.alert("排产日期未到期");
+            return false;
+        }
+    }else if(day<0){
+        day = -day;
+        if(day>afDay){
+            layer.alert("排产日期已过期");
+            return false;
+        }
+    }
     CoreUtil.sendAjax("/produce/schedulingMain/add", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
@@ -439,10 +454,19 @@ function editSubmit(obj) {
     }
     var sdate = new Date(obj.field.prodDate.replace(/-/g, "/"));
     var now = new Date();
-    var days = now.getTime() - sdate.getTime();
-    var day = parseInt(days / (1000 * 60 * 60 * 24));
-    if(day>afDay||bfDay<day){
-        layer.alert("排产日期已过期/未到期");
+    var bfdays =sdate.getTime()- now.getTime();
+    var day = parseInt(bfdays / (1000 * 60 * 60 * 24));
+    if(day>0){
+        if(day>bfDay){
+            layer.alert("排产日期未到期");
+            return false;
+        }
+    }else if(day<0){
+        day = -day;
+        if(day>afDay){
+            layer.alert("排产日期已过期");
+            return false;
+        }
     }
     CoreUtil.sendAjax("/produce/schedulingMain/edit", JSON.stringify(obj.field),
         function(data) {

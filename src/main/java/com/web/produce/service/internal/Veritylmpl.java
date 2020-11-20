@@ -152,5 +152,16 @@ public class Veritylmpl extends PrcUtils implements VerifyService {
 		return ApiResponseResult.success("").data(map);
 	}
 
+	@Override
+	public ApiResponseResult getInfoBarcode(String barcode) throws Exception {
+		// TODO Auto-generated method stub
+		List<Object> list = getItemByBarcodePrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",1,barcode,"prc_mes_barcode_info_get");
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success().data(list.get(2));
+	}
+
+
 	
 }
