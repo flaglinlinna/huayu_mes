@@ -134,7 +134,7 @@ public class kanbanController extends WebController {
 		String method = "kanban/toZcbl";
 		String methodName = "制程不良看板";
 		try {	
-			ApiResponseResult result = kanbanService.getZcblList("999",line,"",this.getIpAddr());
+			ApiResponseResult result = kanbanService.getZcblList("999","5253","",this.getIpAddr());
 			ApiResponseResult deptList=kanbanService.getZcblDepList();
 			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("制程不良看板=toZcbl:" + result);

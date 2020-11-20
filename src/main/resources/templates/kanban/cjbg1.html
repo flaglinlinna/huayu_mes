@@ -21,15 +21,6 @@ th, td {
 table, table tr td {
 	border: 2px solid #333399;
 	border-collapse: collapse;
-}
-
-th {
-	font-size: 16px;
-	font-weight: normal;
-}
-
-td {
-	font-size: 16px;
 }*/
 .tablebox {
 	height: 200px;
@@ -141,7 +132,7 @@ $(document).ready(function(){
 		<div class="line">
 			<span style="color: #FFFFFF; font-size: 16px;" id="showLine"></span>
 		</div>
-		<h1>组装二部效率看板</h1>
+		<h1 id="title">组装二部效率看板</h1>
 		<div class="weather">
 			<!--<img src="picture/weather.png"><span>多云转小雨</span>-->
 			<span id="showTime"></span>
@@ -192,7 +183,6 @@ var t = null;
 				</table>
 			</div>-->
 			<div class="tablebox">
-
 				<div class="tbl-header">
 					<table>
 						<thead>
@@ -228,12 +218,12 @@ var t = null;
 				</div>
 			</div>
 
-
 			<div class="boxfoot"></div>
 		</div>
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
         var deptList=[[${deptList}]];
+        var interval=[[${interval}]];
     </script>
 		<script th:inline="javascript">
     var context = [[@{/}]];
