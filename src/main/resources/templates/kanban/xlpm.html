@@ -11,6 +11,7 @@
 
 </head>
 <style>
+/*
 th, td {
 	text-align: center;
 	vertical-align: middle;
@@ -22,10 +23,53 @@ table, table tr td {
 	border: 2px solid #333399;
 	border-collapse: collapse;
 }
+*/
+.tablebox {
+	height: 200px;
+	overflow: hidden;
+	position: relative;
+	margin: 10px auto;
+}
+
+.tbl-header {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
+
+.tbl-body {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+.tablebox table {
+	width: 100%;
+}
+
+.tablebox table th, .tablebox table td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+.tablebox table tr th {
+	background: #333399;
+	cursor: pointer;
+}
 
 th {
 	font-size: 16px;
-	font-weight:normal;
+	font-weight: normal;
 }
 
 td {
@@ -38,32 +82,36 @@ td {
 	top: 0;
 	line-height: .75rem;
 }
-h2{text-align:center;
-margin-top: 2px;
- color:#ffffff;
-font-size:18px;
-font-weight:bold;
+
+h2 {
+	text-align: center;
+	margin-top: 2px;
+	color: #ffffff;
+	font-size: 18px;
+	font-weight: bold;
 }
-h1{
-font-weight:bold;
+
+h1 {
+	font-weight: bold;
 }
+
 ul {
-    list-style: none;
-    margin-left: 20px;
-    margin-top: 2px;
+	list-style: none;
+	margin-left: 20px;
+	margin-top: 2px;
 }
 
 li {
-    line-height: 30px;
-    color:#ffffff;
-    font-size:16px;
-}
-.span_li{
- margin-left: 13px;
-    color:#ffffff;
-    font-size:16px;
+	line-height: 30px;
+	color: #ffffff;
+	font-size: 16px;
 }
 
+.span_li {
+	margin-left: 13px;
+	color: #ffffff;
+	font-size: 16px;
+}
 </style>
 <script>
 	$(window).load(function(){  
@@ -97,15 +145,14 @@ $(document).ready(function(){
 				<option value="998">24小时看板</option>
 				<option value="1">白班</option>
 				<option value="2">晚班</option>
-			</select> 
+			</select>
 			<!-- <span class="chose_tltle">请选择部门：</span> <select class="year_chose"
 				id="dep_select">
 			</select> -->
 			<span class="chose_tltle">请选择组长：</span> <select class="year_chose"
 				id="liner_select">
 
-			</select> 
-			 <span class="chose_tltle">请选择日期：</span> <input type="text"
+			</select> <span class="chose_tltle">请选择日期：</span> <input type="text"
 				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
 				autocomplete="off" class="chose_text_in ">
 			<!-- <input class="chose_text_in"> -->
@@ -143,25 +190,26 @@ var t = null;
 	</div>
 	<div class="mainbox">
 		<div class="boxall" style="height: 230px">
-		<div id="echart1" style="width: 26%; height: 220px; float: left;color:#ffffff;">
-	
-		<h2>产线信息</h2>
-		
-		<ul>
-		<li>组长:<span class="span_li" id="liner"></span></li>
-		<li>排名:<span class="span_li" id="rownum"></span></li>
-		<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
-		<li>打卡总数:<span class="span_li" id="card_all"></span></li>
-		<li>已分配数:<span class="span_li" id="card_ass"></span></li>
-		<li>未分配数:<span class="span_li" id="card_unass"></span></li>
-		</ul>	
-		</div>
-			<div id="echart2" style="width: 37%; height: 220px; float: left;"></div>			
+			<div id="echart1"
+				style="width: 26%; height: 220px; float: left; color: #ffffff;">
+
+				<h2>产线信息</h2>
+
+				<ul>
+					<li>组长:<span class="span_li" id="liner"></span></li>
+					<li>排名:<span class="span_li" id="rownum"></span></li>
+					<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
+					<li>打卡总数:<span class="span_li" id="card_all"></span></li>
+					<li>已分配数:<span class="span_li" id="card_ass"></span></li>
+					<li>未分配数:<span class="span_li" id="card_unass"></span></li>
+				</ul>
+			</div>
+			<div id="echart2" style="width: 37%; height: 220px; float: left;"></div>
 			<div id="echart3" style="width: 37%; height: 220px; float: left;"></div>
 			<div class="boxfoot"></div>
 		</div>
 		<div class="boxall">
-			<div class="data_table">
+			<!--<div class="data_table">
 				<table id="table" class="table table-bordered"
 					style="width: 99%; margin-top: 10px;">
 					<thead>
@@ -180,15 +228,57 @@ var t = null;
 
 					</tbody>
 				</table>
+			</div>-->
+
+			<div class="tablebox">
+				<div class="tbl-header">
+					<table>
+						<thead>
+							<tr>
+								<th>排名</th>
+								<th>组长</th>
+								<th>在线人数</th>
+								<th>开线数</th>
+								<th>标准工时</th>
+								<th>实际工时</th>
+								<th>异常工时</th>
+								<th>效率</th>
+							</tr>
+						</thead>
+						<tbody style="opacity: 0;" id="tableList1"></tbody>
+					</table>
+				</div>
+
+				<div class="tbl-body">
+					<table>
+						<thead>
+							<tr>
+								<th>排名</th>
+								<th>组长</th>
+								<th>在线人数</th>
+								<th>开线数</th>
+								<th>标准工时</th>
+								<th>实际工时</th>
+								<th>异常工时</th>
+								<th>效率</th>
+							</tr>
+						</thead>
+						<tbody id="tableList">
+
+						</tbody>
+					</table>
+				</div>
 			</div>
+
 			<div class="boxfoot"></div>
 		</div>
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
         var deptList=[[${deptList}]];
         var linerList=[[${linerList}]];
+        var interval=[[${interval}]];
     </script>
-    	<script th:inline="javascript">
+		<script th:inline="javascript">
     var context = [[@{/}]];
     	layui.use([ 'laydate'], function(){
     		  var layer = layui.layer

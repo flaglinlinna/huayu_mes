@@ -10,6 +10,7 @@
 <script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
 </head>
 <style>
+/*
 th, td {
 	text-align: center;
 	vertical-align: middle;
@@ -32,6 +33,60 @@ th {
 td {
 	font-size: 16px;
 }
+*/
+.tablebox {
+	height:  200px;
+	overflow: hidden;
+	position: relative;
+	margin: 10px auto;
+}
+
+.tbl-header {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
+
+.tbl-body {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+.tablebox table {
+	width: 100%;
+}
+
+.tablebox table th, .tablebox table td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+.tablebox table tr th {
+	background: #333399;
+	cursor: pointer;
+}
+
+th {
+	font-size: 18px;
+	border: 2px solid #333399;
+	border-collapse: collapse;
+	font-weight: normal;
+}
+
+td {
+	font-size: 16px;
+}
 
 .line {
 	position: absolute;
@@ -40,10 +95,9 @@ td {
 	line-height: .75rem;
 }
 
-h1{
-font-weight:bold;
+h1 {
+	font-weight: bold;
 }
-
 </style>
 <script>
 	$(window).load(function(){  
@@ -77,9 +131,9 @@ $(document).ready(function(){
 				<option value="1">白班</option>
 				<option value="2">晚班</option>
 			</select>
-			 <!-- <span class="chose_tltle">请输入部门：</span> <select class="year_chose"
+			<!-- <span class="chose_tltle">请输入部门：</span> <select class="year_chose"
 				id="dep_select"></select> -->
-				 <span class="chose_tltle">请选择日期：</span> <input type="text"
+			<span class="chose_tltle">请选择日期：</span> <input type="text"
 				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
 				autocomplete="off" class="chose_text_in ">
 			<!-- <input class="chose_text_in"> -->
@@ -116,6 +170,7 @@ var t = null;
 	</div>
 	<div class="mainbox">
 		<div class="boxall">
+			<!-- 
 			<div class="data_table">
 				<table id="table" class="table table-bordered"
 					style="width: 99%; margin-top: 10px;">
@@ -135,12 +190,55 @@ var t = null;
 
 					</tbody>
 				</table>
+			</div> -->
+
+			<div class="tablebox">
+				<div class="tbl-header">
+					<table>
+						<thead>
+							<tr>
+								<th>检验日期</th>
+								<th>检验工序</th>
+								<th>责任部门</th>
+								<th>组长</th>
+								<th>不良原因</th>
+								<th>完工数（PCS）</th>
+								<th>不良数（PCS）</th>
+								<th>待返工（PCS）</th>
+							</tr>
+						</thead>
+						<tbody style="opacity: 0;" id="tableList1"></tbody>
+					</table>
+				</div>
+
+				<div class="tbl-body">
+					<table>
+						<thead>
+							<tr>
+								<th>检验日期</th>
+								<th>检验工序</th>
+								<th>责任部门</th>
+								<th>组长</th>
+								<th>不良原因</th>
+								<th>完工数（PCS）</th>
+								<th>不良数（PCS）</th>
+								<th>待返工（PCS）</th>
+							</tr>
+						</thead>
+						<tbody id="tableList">
+
+						</tbody>
+					</table>
+				</div>
 			</div>
+
+
 			<div class="boxfoot"></div>
 		</div>
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
         var deptList=[[${deptList}]];
+        var interval=[[${interval}]];
     </script>
 		<script th:inline="javascript">
     var context = [[@{/}]];
