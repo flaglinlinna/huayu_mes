@@ -103,7 +103,7 @@ public class PrcKanbanUtils {
 					cs.registerOutParameter(18, java.sql.Types.INTEGER);// 输出参数 返回标识
 					cs.registerOutParameter(19, java.sql.Types.INTEGER);// 输出参数 返回标识
 					cs.registerOutParameter(20, java.sql.Types.INTEGER);// 输出参数 返回标识
-					cs.registerOutParameter(21, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(21, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					return cs;
 				}
 			}, new CallableStatementCallback() {
