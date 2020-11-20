@@ -45,7 +45,7 @@ $(function() {
 											{
 												field : 'taskNo',
 												title : '制令单号',
-												width : 375
+												width : 200
 											},
 											{
 												field : 'classId',

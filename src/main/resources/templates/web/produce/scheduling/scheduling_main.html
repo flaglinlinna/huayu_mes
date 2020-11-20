@@ -116,14 +116,17 @@
         </form>
 
         <hr class="layui-bg-black"/>
-
+        <script type="text/html" id="toolbar">
 		<div class="layui-btn-container">
-            <!--<button class="layui-btn layui-btn-normal layui-btn-sm" lay-href="/huayu/produce/scheduling/toSchedulingAdd" lay-text="排产新增">添加排产</button>-->
+            <!-- <button class="layui-btn layui-btn-normal layui-btn-sm" lay-href="/huayu/produce/scheduling/toSchedulingAdd" lay-text="排产新增">添加排产</button>-->
             <!--<button type="button" class="layui-btn layui-btn-sm" onclick="exportExcel()">导出模板</button>-->
+            <shiro:hasPermission name="schedulingMain-add">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="doAdd()">新增排产</button>
+            </shiro:hasPermission>
             <!--<button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="importBtn">导入</button>-->
             <!--<button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="processBtn">提取工序</button>-->
 		</div>
+        </script>
 
 
         <!--列表-->
@@ -131,7 +134,9 @@
 
         <script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">导入</a>
+            <shiro:hasPermission name="schedulingMain-del">
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </shiro:hasPermission>
         </script>
     </div>
 
