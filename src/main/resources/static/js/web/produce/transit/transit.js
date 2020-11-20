@@ -225,7 +225,7 @@ function getProc(keyword) {
 						"<option value=" + da[i].PROC_NO + ">"
 								+ da[i].PROC_NAME + "</option>");
 			}
-			layui.form.render('select');
+			//layui.form.render('select');
 		} else {
 			layer.alert(data.msg);
 		}
@@ -266,6 +266,7 @@ function checkBarcode(proc, barcode) {
 	var params = {
 		"proc" : proc,
 		"barcode" : barcode,
+		"ptype":in_type
 	}
 	CoreUtil.sendAjax("/produce/transit/checkBarcode", JSON.stringify(params),
 			function(data) {
