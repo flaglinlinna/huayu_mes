@@ -212,10 +212,20 @@ public class FtpClientImpl implements FtpClientService {
             return true;
         }
         String pathname = "";
-        for (String dir : dirs) {
-            pathname = pathname + File.separator + dir;
-            if (ftp.makeDirectory(pathname)) {
-                logger.debug("create ftp directory with {}", pathname);
+        if(("linux").equals(this.env.getProperty("envi"))){
+            for (String dir : dirs) {
+                pathname = pathname + dir+ "/" ;
+                if (ftp.makeDirectory(pathname)) {
+                    logger.debug("create ftp directory with {}", pathname);
+                }
+            }
+            path = path.substring(1);
+        }else {
+            for (String dir : dirs) {
+                pathname = pathname + File.separator + dir;
+                if (ftp.makeDirectory(pathname)) {
+                    logger.debug("create ftp directory with {}", pathname);
+                }
             }
         }
 
