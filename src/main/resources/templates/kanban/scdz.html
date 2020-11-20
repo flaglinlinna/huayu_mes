@@ -10,6 +10,7 @@
 <script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
 </head>
 <style>
+/*
 th, td {
 	text-align: center;
 	vertical-align: middle;
@@ -29,10 +30,61 @@ th {
 
 td {
 	font-size: 16px;
+}*/
+.tablebox {
+	height: 200px;
+	overflow: hidden;
+	position: relative;
+	margin: 10px auto;
 }
 
-h1{
-font-weight:bold;
+.tbl-header {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
+
+.tbl-body {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+.tablebox table {
+	width: 100%;
+}
+
+.tablebox table th, .tablebox table td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+.tablebox table tr th {
+	background: #333399;
+	cursor: pointer;
+}
+
+th {
+	font-size: 16px;
+	font-weight: normal;
+}
+
+td {
+	font-size: 16px;
+}
+
+h1 {
+	font-weight: bold;
 }
 
 .line {
@@ -74,10 +126,10 @@ $(document).ready(function(){
 				<option value="998">24小时看板</option>
 				<option value="1">白班</option>
 				<option value="2">晚班</option>
-			</select> 
+			</select>
 			<!--<span class="chose_tltle">请输入部门：</span> <select class="year_chose"
 				id="dep_select"></select>   -->
-				<span class="chose_tltle">请选择日期：</span> <input type="text"
+			<span class="chose_tltle">请选择日期：</span> <input type="text"
 				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
 				autocomplete="off" class="chose_text_in ">
 			<!-- <input class="chose_text_in"> -->
@@ -88,7 +140,8 @@ $(document).ready(function(){
 		<div class="line">
 			<span style="color: #FFFFFF; font-size: 16px;" id="showLine"></span>
 		</div>
-		<h1>组装二部报工看板</h1>
+		
+		<h1 id="title">组装二部报工看板</h1>
 		<div class="weather">
 			<!--<img src="picture/weather.png"><span>多云转小雨</span>-->
 			<span id="showTime"></span>
@@ -121,7 +174,7 @@ var t = null;
 			<div class="boxfoot"></div>
 		</div>
 		<div class="boxall">
-			<div class="data_table">
+			<!-- <div class="data_table">
 				<table id="table" class="table table-bordered"
 					style="width: 99%; margin-top: 10px;">
 					<thead>
@@ -138,14 +191,52 @@ var t = null;
 
 					</tbody>
 				</table>
+			</div> -->
+
+			<div class="tablebox">
+				<div class="tbl-header">
+					<table>
+						<thead>
+							<tr>
+								<th>线长</th>
+								<th>在线人数</th>
+								<th>计划人数</th>
+								<th>计划产量</th>
+								<th>达成产量</th>
+								<th>完工率</th>
+							</tr>
+						</thead>
+						<tbody style="opacity: 0;" id="tableList1"></tbody>
+					</table>
+				</div>
+
+				<div class="tbl-body">
+					<table>
+						<thead>
+							<tr>
+								<th>线长</th>
+								<th>在线人数</th>
+								<th>计划人数</th>
+								<th>计划产量</th>
+								<th>达成产量</th>
+								<th>完工率</th>
+							</tr>
+						</thead>
+						<tbody id="tableList">
+
+						</tbody>
+					</table>
+				</div>
 			</div>
+
 			<div class="boxfoot"></div>
 		</div>
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
         var deptList=[[${deptList}]];
+        var interval=[[${interval}]];
     </script>
-    <script th:inline="javascript">
+		<script th:inline="javascript">
     var context = [[@{/}]];
     	layui.use([ 'laydate'], function(){
     		  var layer = layui.layer

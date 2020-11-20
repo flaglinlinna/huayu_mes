@@ -11,6 +11,7 @@
 
 </head>
 <style>
+/*
 th, td {
 	text-align: center;
 	vertical-align: middle;
@@ -30,6 +31,57 @@ th {
 
 td {
 	font-size: 16px;
+}*/
+.tablebox {
+	height: 200px;
+	overflow: hidden;
+	position: relative;
+	margin: 10px auto;
+}
+
+.tbl-header {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
+
+.tbl-body {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+.tablebox table {
+	width: 100%;
+}
+
+.tablebox table th, .tablebox table td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+.tablebox table tr th {
+	background: #333399;
+	cursor: pointer;
+}
+
+th {
+	font-size: 16px;
+	font-weight: normal;
+}
+
+td {
+	font-size: 16px;
 }
 
 .line {
@@ -45,8 +97,9 @@ h2 {
 	color: #ffffff;
 	font-size: 20px;
 }
-h1{
-font-weight:bold;
+
+h1 {
+	font-weight: bold;
 }
 
 ul {
@@ -92,9 +145,9 @@ $(document).ready(function(){
 	<header class="header left">
 		<div class="total_chose_box">
 			<div style="height: 5px;"></div>
-			 <span class="chose_tltle">请选择组长：</span> <select class="year_chose"
+			<span class="chose_tltle">请选择组长：</span> <select class="year_chose"
 				id="liner_select">
-			</select> 
+			</select>
 			<!-- <input class="chose_text_in"> -->
 			<button class="chose_enter" id="searchBtn">确定</button>
 		</div>
@@ -103,7 +156,7 @@ $(document).ready(function(){
 		<div class="line">
 			<span style="color: #FFFFFF; font-size: 16px;" id="showLine"></span>
 		</div>
-		<h1>产线生产看板</h1>
+		<h1 id="title">产线生产看板</h1>
 		<div class="weather">
 			<!--<img src="picture/weather.png"><span>多云转小雨</span>-->
 			<span id="showTime"></span>
@@ -153,11 +206,12 @@ var t = null;
 					<li>产品名称:<span class="span_li" id="itemName"></span></li>
 				</ul>
 			</div>
-			<div id="echart3" style="width: 25%; height: 180px; float: left;margin-top: 5px;"></div>
-<div class="boxfoot"></div>
+			<div id="echart3"
+				style="width: 25%; height: 180px; float: left; margin-top: 5px;"></div>
+			<div class="boxfoot"></div>
 		</div>
 		<div class="boxall">
-			<div class="data_table">
+			<!-- <div class="data_table">
 				<table id="table" class="table table-bordered"
 					style="width: 99%; margin-top: 10px;">
 					<thead>
@@ -174,7 +228,43 @@ var t = null;
 
 					</tbody>
 				</table>
+			</div>-->
+			<div class="tablebox">
+				<div class="tbl-header">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 30%;">时间段</th>
+								<th>投入数量</th>
+								<th>完工数量</th>
+								<th>良品数</th>
+								<th>不良品数</th>
+								<th>良品率</th>
+							</tr>
+						</thead>
+						<tbody style="opacity: 0;" id="tableList1"></tbody>
+					</table>
+				</div>
+
+				<div class="tbl-body">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 30%;">时间段</th>
+								<th>投入数量</th>
+								<th>完工数量</th>
+								<th>良品数</th>
+								<th>不良品数</th>
+								<th>良品率</th>
+							</tr>
+						</thead>
+						<tbody id="tableList">
+
+						</tbody>
+					</table>
+				</div>
 			</div>
+
 			<div class="boxfoot"></div>
 		</div>
 		<script th:inline="javascript">

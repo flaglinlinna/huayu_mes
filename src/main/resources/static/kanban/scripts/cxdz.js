@@ -1,5 +1,6 @@
-var action=true;
-var interval_do=null;//页面定时器
+var action=true;//请求结果，fasle 不执行定时器
+var interval_do=null;//页面刷新定时器
+var MyMarhq = null;// 表格滚动定时器
 $(function() {
 	getDepList(deptList);
 	getLinerList(linerList);
@@ -12,7 +13,7 @@ $(function() {
 	dealData(kanbanList);
 	interval_do = setInterval(getList,intervaldata * 1000); // 启动,执行默认方法
 	
-	$("#searchBtn").click(function() {//**需要点击来个两次才可以置action状态
+	$("#searchBtn").click(function() {
 		if(interval_do!=null){//判断计时器是否为空-关闭
 			clearInterval(interval_do);
 			interval_do=null;
@@ -23,7 +24,7 @@ $(function() {
 		}
 	});
 })
-console.log(kanbanDataList);
+//console.log(kanbanDataList);
 
 function dealData(kanbanList) {
 	console.log(kanbanList)
@@ -32,6 +33,10 @@ function dealData(kanbanList) {
 		$("#tableList").empty();
 		return false;
 	}
+	
+	var title=kanbanList.data.title==null?"":kanbanList.data.Title
+			$("#title").text(title+"•产线电子看板");
+	
 	var kanbanData_t = kanbanList.data.List_line;
 	var kanbanData = kanbanList.data.List_table;
 	if (kanbanData_t.length > 0) {
@@ -284,6 +289,38 @@ function setTable(kanbanData) {
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
+	$("#tableList1").empty();//不加此数据表头会歪
+	$("#tableList1").append(html);//不加此数据表头会歪
+	
+	if (MyMarhq != null) {// 判断计时器是否为空-关闭
+		clearInterval(MyMarhq);
+		MyMarhq = null;
+	}
+	// clearInterval(MyMarhq);
+	var item = $('.tbl-body tbody tr').length
+	console.log(item)
+
+	if (item > 4) {
+		$('.tbl-body tbody').html(
+				$('.tbl-body tbody').html() + $('.tbl-body tbody').html());
+		$('.tbl-body').css('top', '0');
+		var tblTop = 0;
+		var speedhq = 60; // 数值越大越慢
+		var outerHeight = $('.tbl-body tbody').find("tr").outerHeight();
+		function Marqueehq() {
+			if (tblTop <= -outerHeight * item) {
+				tblTop = 0;
+			} else {
+				tblTop -= 1;
+			}
+			$('.tbl-body').css('top', tblTop + 'px');
+		}
+
+		MyMarhq = setInterval(Marqueehq, speedhq);
+	} else {
+		$('.tbl-body').css('top', '0');// 内容少时不滚动
+	}
+	
 }
 function getDepList(deptList) {
 	var res = deptList
@@ -334,7 +371,7 @@ function getList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			console.log(res)
+			//console.log(res)
 			if (res.result) {
 				action=true;
 				dealData(res)
