@@ -62,7 +62,7 @@ public class kanbanController extends WebController {
 		String methodName = "看板demo";
 		ModelAndView mav = new ModelAndView();
 		// mav.addObject("pname", p);
-		mav.setViewName("/kanban/index");// 返回路径
+		mav.setViewName("/kanban/index1");// 返回路径
 		return mav;
 	}
 	
@@ -75,18 +75,18 @@ public class kanbanController extends WebController {
 		String methodName = "车间报工看板";
 		ModelAndView mav = new ModelAndView();
 		// mav.addObject("pname", p);
-		mav.setViewName("/kanban/cjbg");// 返回路径
+		mav.setViewName("/kanban/index1");// 返回路径
 		return mav;
 	}
 
 	@RequestMapping(value = "/toCjbg1", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toCjbg1(String line) {
+	public ModelAndView toCjbg1(String type) {
 		ModelAndView mav = new ModelAndView();
 		String method = "/kanban/toCjbg1";
 		String methodName = "车间报工看板";
 		try {	
-			ApiResponseResult result = kanbanService.getCjbgList("999",line,"",this.getIpAddr());
+			ApiResponseResult result = kanbanService.getCjbgList("999","","",this.getIpAddr());
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("获取看板=toCjbg1:" + result);
@@ -253,7 +253,7 @@ public class kanbanController extends WebController {
 			mav.addObject("deptList", deptList);
 			mav.addObject("linerList", linerList);
 			mav.addObject("interval",interval);
-			mav.setViewName("/kanban/Cxsc");// 返回路径
+			mav.setViewName("/kanban/cxsc");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取产线生产看板异常！", e);

@@ -46,11 +46,11 @@ function getDepList(deptList){
 }
 function getList(){
 	var class_no=$("#class_select").val();
-	var dep_id=$("#dep_select").val();
+	//var dep_id=$("#dep_select").val();
 	var date=$("#date").val();
 	var params = {
 			"class_nos":class_no,
-			"dep_id":dep_id,
+			"dep_id":"5253",
 			"sdata":date
 		};
 	$.ajax({

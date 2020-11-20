@@ -14,7 +14,7 @@ $(function() {
 			,cellMinWidth : 80,
             even:true,//条纹样式
 			data : [],
-			height: 'full-110',
+			height: 'full-70',
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
