@@ -72,6 +72,29 @@ public class TransitController extends WebController {
              return ApiResponseResult.failure("获取送检类型列表失败！");
         }
     }
+
+	@ApiOperation(value = "PDA-扫描条码", notes = "PDA-扫描条码", hidden = true)
+	@RequestMapping(value = "/checkBarcodePda", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult checkBarcodePda(@RequestParam(value = "company") String company,
+			@RequestParam(value = "factory") String factory,
+			@RequestParam(value = "user_id") String user_id,
+			@RequestParam(value = "proc") String proc,@RequestParam(value = "ptype") String ptype,
+			@RequestParam(value = "barcode") String barcode) {
+		String method = "produce/inspect/scanBarcode";
+		String methodName = "PDA-扫描条码";
+		try {
+			ApiResponseResult result = transitService.checkBarcode(proc,ptype, barcode);
+			logger.debug("PDA-扫描条码=scanBarcode:");
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("PDA-扫描条码失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("PDA-扫描条码失败！");
+		}
+	}
 	
 	@ApiOperation(value="检查箱号条码", notes="检查箱号条码", hidden = true)
     @RequestMapping(value = "/checkBarcode", method = RequestMethod.POST)
@@ -80,8 +103,9 @@ public class TransitController extends WebController {
         String method = "produce/transit/checkBarcode";String methodName ="检查箱号条码";
         try {
         	String proc = params.get("proc") == null?"":params.get("proc").toString();
+        	String ptype = params.get("ptype") == null?"":params.get("ptype").toString();
         	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
-            ApiResponseResult result = transitService.checkBarcode(proc,barcode);
+            ApiResponseResult result = transitService.checkBarcode(proc,ptype,barcode);
             logger.debug("检查箱号条码信息=checkBarcode:");
             getSysLogService().success(module,method, methodName, null);
             return result;
@@ -113,6 +137,28 @@ public class TransitController extends WebController {
              return ApiResponseResult.failure("保存送检数据失败！");
         }
     }
+	@ApiOperation(value = "PDA-送检数据", notes = "PDA-送检数据", hidden = true)
+	@RequestMapping(value = "/saveDataPda", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult saveDataPda(@RequestParam(value = "company") String company,
+			@RequestParam(value = "factory") String factory,
+			@RequestParam(value = "user_id") String user_id,
+			@RequestParam(value = "proc") String proc,@RequestParam(value = "ptype") String ptype,
+			@RequestParam(value = "barcode") String barcode) {
+		String method = "produce/transit/saveDataPda";
+		String methodName = "PDA-送检数据";
+		try {
+			ApiResponseResult result = transitService.saveData(proc,ptype, barcode);
+			logger.debug(methodName+"=saveDataPda:");
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
 	
 	@ApiOperation(value = "获取历史列表", notes = "获取历史列表")
     @RequestMapping(value = "/getHistoryList", method = RequestMethod.GET)

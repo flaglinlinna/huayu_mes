@@ -34,8 +34,9 @@ $(function () {
             ,url:context+'/produce/schedulingMain/getList'
             ,method: 'get' //默认：get请求
             ,cellMinWidth: 80
-            ,page: true,
-            height:'full-130'//固定表头&full-查询框高度
+            ,page: true
+            , toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,height:'full-130'//固定表头&full-查询框高度
             ,even:true,//条纹样式
             request: {
                 pageName: 'page' //页码的参数名称，默认：page

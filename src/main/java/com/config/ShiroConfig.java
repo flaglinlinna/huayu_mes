@@ -116,6 +116,8 @@ public class ShiroConfig {
 		
 
 		filterChainDefinitionMap.put("/produce/inspect/*", "anon");//品质检查-PDA
+		
+		filterChainDefinitionMap.put("/produce/transit/*", "anon");//中转送检-PDA
 
 		filterChainDefinitionMap.put("/user/sendMsg", "anon");
 		filterChainDefinitionMap.put("/user/login", "anon");
