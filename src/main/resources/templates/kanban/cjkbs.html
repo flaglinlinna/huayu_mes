@@ -48,8 +48,11 @@ body {
 			frameborder="0"> </iframe>
 
 		<script th:inline="javascript">
+		    var rotation=[[${rotation}]];
+		    var rotationdata = rotation.data;
+		    rotationdata = rotationdata[0].R;// 获取系统设置的刷新间隔时间
 			var interval_kb = null;// iframe切换定时器
-			interval_kb = setInterval(switchPage, 20 * 1000); // 启动,执行默认方法
+			interval_kb = setInterval(switchPage, rotationdata * 1000);  // 启动,执行默认方法
 			function switchPage() {
 				var src = $(window.parent.document).find("#page").attr("src"); 
 				if(src=="toCjbg1"){

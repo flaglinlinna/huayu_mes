@@ -234,6 +234,12 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		return ApiResponseResult.success().data(kanbanDao.getIntervalTime());
 	}
 	
-
-
+	/**
+	 * 获取看板轮播间隔的时间
+	 *2020-11-21
+	 * **/
+	@Override
+	public ApiResponseResult getRotationTime()throws Exception{
+		return ApiResponseResult.success().data(kanbanDao.getRotationTime());
+	}
 }

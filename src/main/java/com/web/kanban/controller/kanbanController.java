@@ -70,13 +70,38 @@ public class kanbanController extends WebController {
 	@RequestMapping(value = "/toCjkbs", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView toCjkbs() {
+		ModelAndView mav = new ModelAndView();
 		String method = "/kanban/toCjkbs";
 		String methodName = "车间看板【车间报工+生产电子】";
-		ModelAndView mav = new ModelAndView();
-		// mav.addObject("pname", p);
-		mav.setViewName("/kanban/cjkbs");// 返回路径
+		try {	
+			ApiResponseResult rotation =kanbanService.getRotationTime();
+			mav.addObject("rotation",rotation);
+			mav.setViewName("/kanban/cjkbs");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("车间看板【车间报工+生产电子】异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
 		return mav;
 	}
+
+		@RequestMapping(value = "/toLtkbs", method = RequestMethod.GET)
+		@ResponseBody
+		public ModelAndView toLtkbs() {
+			ModelAndView mav = new ModelAndView();
+			String method = "/kanban/toLtkbs";
+			String methodName = "获取拉头看板";
+			try {	
+				ApiResponseResult rotation =kanbanService.getRotationTime();
+				mav.addObject("rotation",rotation);
+				mav.setViewName("/kanban/ltkbs");// 返回路径
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("获取拉头看板异常！", e);
+				getSysLogService().error(module,method,methodName,e.toString());
+			}
+			return mav;
+		}
 	
 	//不带参数的默认获取
 
