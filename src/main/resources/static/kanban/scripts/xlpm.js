@@ -33,7 +33,7 @@ function dealData(kanbanList) {
 		var kanbanData_t = kanbanList.data.List_line;
 		var kanbanData = kanbanList.data.List_table;
 
-		var title = kanbanList.data.title == null ? "" : kanbanList.data.Title
+		var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
 		$("#title").text(title + "•效率排名看板");
 
 		if (kanbanData.length > 0) {
@@ -346,7 +346,7 @@ function getLinerList(linerList) {
 	var html = "<option value=''>请选择组长</option>";
 	for (j = 0, len = res.data.length; j < len; j++) {
 		var arr = res.data[j];
-		if(j==0){
+		if(arr.LEAD_BY==nowLiner){
 			html += "<option value='" + arr.LEAD_BY + "' selected>" + arr.LEAD_BY
 			+ "</option>";		
 		}else{

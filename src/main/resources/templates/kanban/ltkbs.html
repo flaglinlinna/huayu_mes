@@ -44,27 +44,30 @@ body {
 <script type="text/javascript" src="../kanban/js/echarts.min.js"></script>
 <body>
 	<div class="mainbox">
-		<iframe src="toXlpm" id="page" style="width: 100%; height: 100%;"
+		<iframe src="" id="page" style="width: 100%; height: 100%;"
 			frameborder="0"> </iframe>
 
 		<script th:inline="javascript">
 		    var liner=[[${liner}]];
+		    $("#page").attr({
+				"src" : "toXlpm?liner="+liner //设置默认页
+			});
 		    var rotation=[[${rotation}]];
 		    var rotationdata = rotation.data;
 		    rotationdata = rotationdata[0].R;// 获取系统设置的刷新间隔时间
 			var interval_kb = null;// iframe切换定时器
-			interval_kb = setInterval(switchPage, rotationdata * 1000);  // 启动,执行默认方法
-			function switchPage() {
+			interval_kb = setInterval(switchPage, 5 * 1000);  // 启动
+			function switchPage() {//切换列表
 				var src = $(window.parent.document).find("#page").attr("src"); 
-				if(src=="toXlpm"){
+				if(src=="toXlpm?liner="+liner){
 					$("#page").attr({
 						"src" : "toCxdz?liner="+liner
 					});
-				}else if(src=="toCxdz") {
+				}else if(src=="toCxdz?liner="+liner) {
 					$("#page").attr({
 						"src" : "toCxsc?liner="+liner
 					});
-				}else if(src=="toCxsc"){
+				}else if(src=="toCxsc?liner="+liner){
 					$("#page").attr({
 						"src" : "toXlpm?liner="+liner
 					});

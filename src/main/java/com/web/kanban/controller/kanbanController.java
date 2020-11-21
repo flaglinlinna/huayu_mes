@@ -296,7 +296,9 @@ public class kanbanController extends WebController {
 		String method = "kanban/toCxdz";
 		String methodName = "产线电子看板";
 		try {	
-			ApiResponseResult result = kanbanService.getCxdzList("","","",this.getIpAddr(),liner);//this.getIpAddr()
+			Date date = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			ApiResponseResult result = kanbanService.getCxdzList("","",formatter.format(date),this.getIpAddr(),liner);//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
 			ApiResponseResult interval =kanbanService.getIntervalTime();
