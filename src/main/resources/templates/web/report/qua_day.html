@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='品质检验日报表'"></head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div>
+			<form id="searchFrom" class="layui-form layui-form-pane" lay-filter="searchFrom"
+				method="post" action="" style="margin-top: 5px;">
+				<div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+						<!-- <label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+						 <div class="layui-input-inline">
+							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
+								class="layui-input" type="text" />
+						</div>  -->
+							<label class="layui-form-label ">检验日期</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" name="dates"
+									placeholder="请选择日期范围" id="dates">
+							</div>
+							<label class="layui-form-label">部门信息</label>
+				            <div class="layui-input-inline">
+					            <select name="depart" id="depart"  style="border-color:#D2D2D2!important;">
+					                 <option value="">--请选择--</option>
+					              </select>
+				            </div>
+				            <!-- <label class="layui-form-label layui-required">物料</label>
+								<div class="layui-input-inline" >
+									<input type="text" name="num" placeholder="请选择" autocomplete="off"
+										class="layui-input"  readonly="readonly"  id="num">
+								</div> -->
+							<!-- <label class="layui-form-label">结束日期</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" name="endDate"
+									id="endDate">
+							</div> -->
+						
+						
+						<button class="layui-btn layui-btn-sm" lay-submit
+							lay-filter="searchSubmit">查询</button>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+					</div>
+				</div>
+			</form>
+			<table id="listTable" lay-filter="listTable"></table>
+		</div>
+		<div id="getData" class="layer_self_wrap"
+			style=" display: none;margin:0px;">
+			<form id="dataFrom" class="layui-form layui-form-pane"
+				lay-filter="dataFrom" method="post" action=""
+				style="margin: 20px;">
+				
+				<table id="dataTable" lay-filter="dataTable"></table>
+			</form>
+		</div>
+		<script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs" lay-event="detail">详细</a>
+        </script>
+		<script th:src="@{/js/web/report/qua_day.js}"
+			src="/js/web/report/qua_day.js"></script>
+			<script th:inline="javascript">
+		        var departList=[[${Depart}]];
+		        var depart_select = document.getElementById("depart");
+		        if(departList.result){
+		        	var data = departList.data;
+		        	for (var i = 0; i < data.length; i++) {
+		        		$('#depart').append("<option value="+data[i].ID+">"+data[i].LEAD_BY+"</option>");// 下拉菜单里添加元素
+		        	}
+		        }
+		    </script>
+	</div>
+</body>
+</html>
