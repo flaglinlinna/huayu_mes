@@ -231,7 +231,7 @@ function setTable(kanbanData) {
 			MyMarhq = null;
 		}
 		MyMarhq = setInterval(Marqueehq, speedhq);
-		console.log(MyMarhq)
+		
 	})
 
 }

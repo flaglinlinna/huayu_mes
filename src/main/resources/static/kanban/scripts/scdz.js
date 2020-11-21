@@ -30,9 +30,9 @@ function dealData(kanbanList) {
 	console.log(kanbanList)
 	if (kanbanList.data != null) {
 		var kanbanData = kanbanList.data.List;
-		var title=kanbanList.data.Title==null?"":kanbanList.data.Title
-				$("#title").text(title+"•生产电子看板");
-		
+		var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
+		$("#title").text(title + "•生产电子看板");
+
 		if (kanbanData.length > 0) {
 			var xAxis = [];
 			var series1 = [];
@@ -359,16 +359,17 @@ function setTable(kanbanData) {
 	var html = "";
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
-		html += '<tr><td>' + arr.LINER_NAME + '</td><td>' + arr.NUM_EMP_ON
-				+ '</td><td>' + arr.NUM_EMP_PL + '</td><td>' + arr.QTY_PLAN
-				+ '</td><td>' + arr.QTY_DONE + '</td><td>' + arr.RATE_DONE
-				+ '%</td></tr> ';
+		html += '<tr><td><a href="toScdzDetail?liner=' + arr.LINER_NAME
+				+ '" target="_blank">' + arr.LINER_NAME + '</a></td><td>'
+				+ arr.NUM_EMP_ON + '</td><td>' + arr.NUM_EMP_PL + '</td><td>'
+				+ arr.QTY_PLAN + '</td><td>' + arr.QTY_DONE + '</td><td>'
+				+ arr.RATE_DONE + '%</td></tr> ';
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
-	$("#tableList1").empty();//不加此数据表头会歪
-	$("#tableList1").append(html);//不加此数据表头会歪
-	
+	$("#tableList1").empty();// 不加此数据表头会歪
+	$("#tableList1").append(html);// 不加此数据表头会歪
+
 	if (MyMarhq != null) {// 判断计时器是否为空-关闭
 		clearInterval(MyMarhq);
 		MyMarhq = null;
@@ -397,6 +398,34 @@ function setTable(kanbanData) {
 	} else {
 		$('.tbl-body').css('top', '0');// 内容少时不滚动
 	}
+	
+	// 鼠标移上去取消事件
+	$(".tbl-body tbody").hover(function() {
+		if (MyMarhq != null) {// 判断计时器是否为空-关闭
+			clearInterval(MyMarhq);
+			MyMarhq = null;
+		}
+	}, function() {
+		if (MyMarhq != null) {// 判断计时器是否为空-关闭
+			clearInterval(MyMarhq);
+			MyMarhq = null;
+		}
+		MyMarhq = setInterval(Marqueehq, speedhq);
+	})
+	
+	$(".tbl-header tbody").hover(function() {
+		if (MyMarhq != null) {// 判断计时器是否为空-关闭
+			clearInterval(MyMarhq);
+			MyMarhq = null;
+		}
+	}, function() {
+		if (MyMarhq != null) {// 判断计时器是否为空-关闭
+			clearInterval(MyMarhq);
+			MyMarhq = null;
+		}
+		MyMarhq = setInterval(Marqueehq, speedhq);
+	})
+	
 }
 function getDepList(deptList) {
 	var res = deptList;
@@ -425,13 +454,13 @@ function getList() {
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			//console.log(res)
+			// console.log(res)
 			if (res.result) {
-				action=true;
+				action = true;
 				dealData(res)
 			} else {
-				action=false;
-				clearInterval(interval_do);//错误-关闭定时器
+				action = false;
+				clearInterval(interval_do);// 错误-关闭定时器
 				alert(res.msg);
 			}
 		}

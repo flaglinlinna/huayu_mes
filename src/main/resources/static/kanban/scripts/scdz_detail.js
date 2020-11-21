@@ -19,7 +19,6 @@ function dealData(kanbanList) {
 	if (kanbanData.length > 0) {
 		setTable(kanbanData);
 	} else {
-
 		$("#tableList").empty();
 	}
 }
@@ -27,21 +26,16 @@ function dealData(kanbanList) {
 
 function setTable(kanbanData) {
 	var html = "";
+	console.log(kanbanData)
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
 		html += '<tr>'+
+		        '<td>' + arr.LINER_NAME + '</td>'+
+		        '<td>' + arr.NUM_EMP_PL+ '</td>'+
 		        '<td>' + arr.TASK_NO + '</td>'+
-		        '<td>' + arr.MANPOWER+ '</td>'+
-		        '<td>' + arr.CAPACITY + '</td>'+
-		        '<td>' + arr.QTY_DONE+ '</td>'+
-		        '<td>' + arr.HOUR_ST + '</td>'+
-		        '<td>' + arr.DATA_TYP + '</td>'+
-				'<td>' + arr.LINER_NAME + '</td>'+
-				'<td>' + arr.LINE_NAME + '</td>'+
-				'<td>' + arr.EMP_NAME + '</td>'+
-				'<td>' + arr.TIME_BG + '</td>'+
-				'<td>' + arr.TIME_END + '</td>'+
-				'<td>'+ arr.HOUR_ACT + '</td></tr> ';
+		        '<td>' + arr.QTY_PLAN+ '</td>'+
+				'<td>' + arr.QTY_DONE + '</td>'+
+				'<td>'+ arr.EMP_NAME + '</td></tr> ';
 	}
 
 	$("#tableList").empty();
@@ -86,7 +80,7 @@ function getDetailList(liner) {
 	};
 	$.ajax({
 		type : "GET",
-		url : context + "/kanban/getCjbgDetailList",
+		url : context + "/kanban/getScdzDetailList",
 		data : params,
 		dataType : "json",
 		success : function(res) {

@@ -205,6 +205,27 @@ public class kanbanController extends WebController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/toScdzDetail", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toScdzDetail(String liner) {
+		ModelAndView mav = new ModelAndView();
+		String method = "/kanban/toScdzDetail";
+		String methodName = "生产电子看板数据穿透";
+		try {
+			ApiResponseResult result = kanbanService.getScdzDetailList(liner, "",this.getIpAddr());
+			logger.debug(methodName+"=toScdzDetail:" + result);
+			getSysLogService().success(module,method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.addObject("liner", liner);
+			mav.setViewName("/kanban/scdz_detail");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
 	@RequestMapping(value = "/toZcbl", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView toZcbl(String line) {
@@ -296,9 +317,7 @@ public class kanbanController extends WebController {
 		String method = "kanban/toCxdz";
 		String methodName = "产线电子看板";
 		try {	
-			Date date = new Date();
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			ApiResponseResult result = kanbanService.getCxdzList("","",formatter.format(date),this.getIpAddr(),liner);//this.getIpAddr()
+			ApiResponseResult result = kanbanService.getCxdzList("","","",this.getIpAddr(),liner);//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
 			ApiResponseResult interval =kanbanService.getIntervalTime();

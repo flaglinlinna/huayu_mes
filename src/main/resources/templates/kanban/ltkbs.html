@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>车间看板</title>
+<title>拉头看板</title>
 <script type="text/javascript" src="../kanban/js/jquery.js"></script>
 <link rel="stylesheet" href="../kanban/css/comon0.css">
 <link rel="stylesheet" href="../layui/css/layui.css"
@@ -56,7 +56,7 @@ body {
 		    var rotationdata = rotation.data;
 		    rotationdata = rotationdata[0].R;// 获取系统设置的刷新间隔时间
 			var interval_kb = null;// iframe切换定时器
-			interval_kb = setInterval(switchPage, 5 * 1000);  // 启动
+			interval_kb = setInterval(switchPage, rotationdata * 1000);  // 启动
 			function switchPage() {//切换列表
 				var src = $(window.parent.document).find("#page").attr("src"); 
 				if(src=="toXlpm?liner="+liner){
