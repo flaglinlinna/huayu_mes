@@ -48,6 +48,7 @@ body {
 			frameborder="0"> </iframe>
 
 		<script th:inline="javascript">
+		    var liner=[[${liner}]];
 		    var rotation=[[${rotation}]];
 		    var rotationdata = rotation.data;
 		    rotationdata = rotationdata[0].R;// 获取系统设置的刷新间隔时间
@@ -57,15 +58,15 @@ body {
 				var src = $(window.parent.document).find("#page").attr("src"); 
 				if(src=="toXlpm"){
 					$("#page").attr({
-						"src" : "toCxdz"
+						"src" : "toCxdz?liner="+liner
 					});
 				}else if(src=="toCxdz") {
 					$("#page").attr({
-						"src" : "toCxsc"
+						"src" : "toCxsc?liner="+liner
 					});
 				}else if(src=="toCxsc"){
 					$("#page").attr({
-						"src" : "toXlpm"
+						"src" : "toXlpm?liner="+liner
 					});
 				}
 			}

@@ -16,6 +16,10 @@ $(function() {
 			clearInterval(interval_do);
 			interval_do = null;
 		}
+		if (MyMarhq != null) {// 判断计时器是否为空-关闭
+			clearInterval(MyMarhq);
+			MyMarhq = null;
+		}
 		getList()
 		if (action) {// action 为 fasle 不调用定时器
 			interval_do = setInterval(getList, intervaldata * 1000); // 重新新循环-启动
@@ -62,7 +66,7 @@ function setTable(kanbanData) {
 	var item = $('.tbl-body tbody tr').length
 	console.log(item)
 
-	if (item > 4) {
+	if (item > 10) {
 		$('.tbl-body tbody').html(
 				$('.tbl-body tbody').html() + $('.tbl-body tbody').html());
 		$('.tbl-body').css('top', '0');
@@ -102,7 +106,7 @@ function getList() {
 	var date = $("#date").val();
 	var params = {
 		"class_nos" : class_no,
-		"dep_id" : "5253",
+		"dep_id" : "",
 		"sdata" : date
 	};
 	$.ajax({

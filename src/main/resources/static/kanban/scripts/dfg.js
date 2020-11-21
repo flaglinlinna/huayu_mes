@@ -29,7 +29,7 @@ function dealData(kanbanList) {
 	if (kanbanList.data != null) {
 		var title = kanbanList.data.List_dept == null ? ""
 				: kanbanList.data.List_dept
-		$("#title").text(title + "•制程不良看板");
+		$("#title").text(title + "•待返工看板");
 		var kanbanData = kanbanList.data.List_table;
 		setTable(kanbanData);
 	}
@@ -98,8 +98,8 @@ function getList() {
 	// var dep_id=$("#dep_select").val();
 	var date = $("#date").val();
 	var params = {
-		"class_nos" : class_no,
-		"dep_id" : "5253",
+		"class_id" : class_no,
+		"dep_id" : "",
 		"sdata" : date
 	};
 	$.ajax({
