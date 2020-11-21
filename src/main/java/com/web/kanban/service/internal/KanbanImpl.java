@@ -37,6 +37,23 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		map.put("Title", list.get(6));//开线数
 		return ApiResponseResult.success().data(map);
 	}
+	@Override
+	public ApiResponseResult getCjbgDetailList(String liner, String dev_ip) throws Exception {
+		// TODO Auto-generated method stub
+		String usr_id = "1";
+		SysUser su = UserUtil.getSessionUser();
+		if(su != null){
+			usr_id = su.getId()+"";
+		}
+		if(liner.equals("总体")){
+			liner = "";
+		}
+		List<Object> list = getCjbgDetailListPrc(usr_id,liner, dev_ip);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success().data(list.get(2));
+	}
 
 	@Override
 	public ApiResponseResult getCjbgDepList() throws Exception {
@@ -71,6 +88,20 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		map.put("PO_NUM_EMP_OFF", list.get(12));
 		map.put("Title", list.get(13));
 		return ApiResponseResult.success().data(map);
+	}
+	@Override
+	public ApiResponseResult getScdzDetailList(String liner, String dep_id, String dev_ip) throws Exception {
+		// TODO Auto-generated method stub
+		String user_id = "1";
+		SysUser su = UserUtil.getSessionUser();
+		if(su != null){
+			user_id = su.getId()+"";
+		}
+		List<Object> list = getScdzDetailListPrc( user_id, liner,dep_id, dev_ip);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success().data(list.get(2));
 	}
 	
 	@Override
@@ -202,4 +233,7 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	public ApiResponseResult getIntervalTime()throws Exception{
 		return ApiResponseResult.success().data(kanbanDao.getIntervalTime());
 	}
+	
+
+
 }

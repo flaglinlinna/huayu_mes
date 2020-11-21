@@ -5,23 +5,13 @@ var MyMarhq = null;// 表格滚动定时器
 $(function() {
 	// getDepList(deptList);//获取部门下来菜单
 	var kanbanList = kanbanDataList;
-
-	var intervaldata = interval.data;
-	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间
-
 	dealData(kanbanList);
-	interval_do = setInterval(getList, intervaldata * 1000); // 启动,执行默认方法
 
-	$("#searchBtn").click(function() {
-		if (interval_do != null) {// 判断计时器是否为空-关闭
-			clearInterval(interval_do);
-			interval_do = null;
-		}
-		getList()
-		if (action) {// action 为 fasle 不调用定时器
-			interval_do = setInterval(getList, intervaldata * 1000); // 重新新循环-启动
-		}
-	});
+	/*var intervaldata = interval.data;
+	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间
+	interval_do = setInterval(getList, intervaldata * 1000); // 启动,执行默认方法
+*/
+
 })
 
 function dealData(kanbanList) {
@@ -47,7 +37,6 @@ function dealData(kanbanList) {
 			series3.push(kanbanData[i].EFFICIENCY_RATE);// 生产效率
 		}
 		$("#showLine").text("总开线数：" + kanbanList.data.LineNum);
-		chartDiv(xAxis, series1, series2, series3);
 		setTable(kanbanData);
 	} else {
 		toClean();
@@ -55,109 +44,6 @@ function dealData(kanbanList) {
 	}
 }
 
-function toClean() {
-	$("#showLine").text("总开线数：0");
-	chartDiv([], 0, 0, 0);
-}
-
-function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
-	option = {
-		tooltip : {
-			trigger : 'axis',
-			axisPointer : {
-				type : 'cross',
-				crossStyle : {
-					color : '#999'
-				}
-			}
-		},
-		grid : {
-			x : 70,// 左边距
-			y : 20,// 上边距
-			x2 : 60,// 右边距
-			y2 : 50,// 下边距
-			borderWidth : 10
-		},
-		legend : {
-			x : 'center',
-			y : 'bottom',
-			data : [ '标准工时', '实际工时', '生产效率' ],
-			textStyle : {
-				fontSize : 12,// 字体大小
-				color : '#ffffff'// 字体颜色
-			},
-		},
-		// color : [ '#66FFCC', '#6699FF', '#9966FF' ],
-		color : [ '#CCCCFF', '#FFCC99', '#99FFCC' ],
-		xAxis : [ {
-			type : 'category',
-			data : xAxis_data,
-			axisPointer : {
-				type : 'shadow'
-			},
-			axisLabel : {
-				show : true,
-				textStyle : {
-					color : '#ffffff'
-				}
-			}
-		} ],
-		yAxis : [ {
-			type : 'value',
-			splitLine : {
-				show : false
-			},
-			axisLabel : {
-				formatter : '{value}小时',
-				textStyle : {
-					color : '#ffffff'
-				}
-			},
-		}, {
-			type : 'value',
-			splitLine : {
-				show : false
-			},
-			axisLabel : {
-				formatter : '{value}%',
-				textStyle : {
-					color : '#ffffff'
-				}
-			}
-		} ],
-		series : [ {
-			name : '标准工时',
-			type : 'bar',
-			data : series1_data,
-			label : {
-				show : true,
-				position : 'top'
-			},
-		}, {
-			name : '实际工时',
-			type : 'bar',
-			data : series2_data,
-			label : {
-				show : true,
-				position : 'top'
-			},
-		}, {
-			name : '生产效率',
-			type : 'line',
-			yAxisIndex : 1,
-			data : series3_data,
-			label : {
-				show : true,
-				position : 'top',
-				formatter : '{c}%'
-			},
-		} ]
-	};
-	// 创建echarts对象在哪个节点上
-	var myCharts1 = echarts.init(document.getElementById('echart1'));
-	// 将选项对象赋值给echarts对象。
-	myCharts1.setOption(option, true);
-}
 
 function setTable(kanbanData) {
 	var html = "";
@@ -171,7 +57,7 @@ function setTable(kanbanData) {
 		// + arr.EFFICIENCY_RATE + '%</td></tr> ';
 		// break;
 		// }
-		html += '<tr><td><a href="toCjbgDetail?liner='+arr.LINER_NAME+'" target="_blank">' + arr.LINER_NAME + '</a></td><td>' + arr.HOUR_ST
+		html += '<tr><td><a href="toCjbgDetail?liner=+'+arr.LINER_NAME+'" target="_blank">' + arr.LINER_NAME + '</a></td><td>' + arr.HOUR_ST
 				+ '</td><td>' + arr.HOUR_ACT + '</td><td>' + arr.HOUR_ABN
 				+ '</td><td>' + arr.NUM_EMP_ON + '</td><td>'
 				+ arr.EFFICIENCY_RATE + '%</td></tr> ';
