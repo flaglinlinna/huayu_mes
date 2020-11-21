@@ -48,7 +48,8 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		if(liner.equals("总体")){
 			liner = "";
 		}
-		List<Object> list = getCjbgDetailListPrc(usr_id,liner, dev_ip);
+		//List<Object> list = getCjbgDetailListPrc(usr_id,liner, dev_ip);
+		List<Object> list = getCjbgDetailListPrc(usr_id,liner, "1");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

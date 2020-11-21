@@ -250,18 +250,3 @@ function getList() {
 		}
 	});
 }
-function getDetailList(liner) {
-	alert(liner)
-	var params = {
-		"liner" : liner
-	};
-	$.ajax({
-		type : "GET",
-		url : context + "/kanban/getCjbgDetailList",
-		data : params,
-		dataType : "json",
-		success : function(res) {
-			console.log(res)
-		}
-	});
-}

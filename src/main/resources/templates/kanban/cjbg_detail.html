@@ -142,7 +142,7 @@ var t = null;
 </script>
 	</div>
 	<div class="mainbox" >
-		<div class="boxall">
+		<div class="boxall" style="height:70%">
 			<div class="tablebox">
 				<div class="tbl-header">
 					<table>
@@ -195,6 +195,7 @@ var t = null;
 		</div>
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
+        var liner=[[${liner}]];$("#title").text(liner+"•效率看板");
         var context = [[@{/}]];
     </script>
 		<script src="/kanban/scripts/cjbg_detail.js"
