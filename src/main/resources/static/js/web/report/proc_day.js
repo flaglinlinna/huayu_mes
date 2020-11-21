@@ -134,31 +134,34 @@ $(function() {
 				},
 				cols : [ [  {
 					type : 'numbers'
-				}, {
+				},  {
 					field : 'FDATE',
-					title : '检验日期',width : 130,sort: true,
+					title : '检验日期',width : 120,sort: true,
 				}, {
 					field : 'PROC_NAME',
-					title : '工序名称',width : 120, sort: true
+					title : '工序名称',width : 110, sort: true
 				},{
 					field : 'ITEM_NO',
 					title : '产品编码',width : 180, sort: true
 				},{
-					field : 'QTY_OK',
-					title : '合格数', width : 130, sort: true
+					field : 'QTY_DZC',
+					title : '待转出数', width : 110, sort: true
 				}, {
-					field : 'LOT_OK',
-					title : '合格批次',width : 130,  sort: true
+					field : 'LOT_DZC',
+					title : '待转出批次',width : 110,  sort: true
 				},{
-					field : 'QTY_NG',
-					title : '不合格数',width : 130,sort: true
+					field : 'QTY_JYZ',
+					title : '检验中数',width : 110,sort: true
 				}, {
-					field : 'LOT_NG',
-					title : '不合格批次',
-					width : 130, sort: true
+					field : 'LOT_JYZ',
+					title : '检验中批次',
+					width : 110, sort: true
 				},{
-					field : 'QTY_SJ',
-					title : '送检数', width : 130,sort: true
+					field : 'QTY_YJY',
+					title : '已检验数', width : 110,sort: true
+				},{
+					field : 'LOT_YJY',
+					title : '已检验批次', width : 110,sort: true
 				} ] ],
 				done : function(res, curr, count) {
 					//
