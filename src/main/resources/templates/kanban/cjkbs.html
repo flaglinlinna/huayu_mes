@@ -1,0 +1,68 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>车间看板</title>
+<script type="text/javascript" src="../kanban/js/jquery.js"></script>
+<link rel="stylesheet" href="../kanban/css/comon0.css">
+<link rel="stylesheet" href="../layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}"></link>
+<script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
+</head>
+<style>
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+}
+
+.mainbox {
+	height: 100%;
+}
+</style>
+<script>
+	$(window).load(function() {
+		$(".loading").fadeOut()
+	})
+
+	/****/
+	$(document).ready(function() {
+		var whei = $(window).width()
+		$("html").css({
+			fontSize : whei / 20
+		})
+		$(window).resize(function() {
+			var whei = $(window).width()
+			$("html").css({
+				fontSize : whei / 20
+			})
+		});
+	});
+</script>
+<script type="text/javascript" src="../kanban/js/echarts.min.js"></script>
+<body>
+	<div class="mainbox">
+		<iframe src="toCjbg1" id="page" style="width: 100%; height: 100%;"
+			frameborder="0"> </iframe>
+
+		<script th:inline="javascript">
+			var interval_kb = null;// iframe切换定时器
+			interval_kb = setInterval(switchPage, 20 * 1000); // 启动,执行默认方法
+			function switchPage() {
+				var src = $(window.parent.document).find("#page").attr("src"); 
+				if(src=="toCjbg1"){
+					$("#page").attr({
+						"src" : "toScdz"
+					});
+				}else {
+					$("#page").attr({
+						"src" : "toCjbg1"
+					});
+				}
+			}
+		</script>
+	</div>
+</body>
+</html>

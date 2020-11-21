@@ -66,6 +66,18 @@ public class kanbanController extends WebController {
 		return mav;
 	}
 	
+	//（复数看板）轮播页面
+	@RequestMapping(value = "/toCjkbs", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCjkbs() {
+		String method = "/kanban/toCjkbs";
+		String methodName = "车间看板【车间报工+生产电子】";
+		ModelAndView mav = new ModelAndView();
+		// mav.addObject("pname", p);
+		mav.setViewName("/kanban/cjkbs");// 返回路径
+		return mav;
+	}
+	
 	//不带参数的默认获取
 
 	@RequestMapping(value = "/toCjbg", method = RequestMethod.GET)

@@ -67,7 +67,7 @@ function setTable(kanbanData) {
 				$('.tbl-body tbody').html() + $('.tbl-body tbody').html());
 		$('.tbl-body').css('top', '0');
 		var tblTop = 0;
-		var speedhq = 60; // 数值越大越慢
+		var speedhq = 50; // 数值越大越慢
 		var outerHeight = $('.tbl-body tbody').find("tr").outerHeight();
 		function Marqueehq() {
 			if (tblTop <= -outerHeight * item) {
