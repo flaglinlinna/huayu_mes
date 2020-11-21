@@ -46,4 +46,7 @@ public interface KanbanService {
 	//获取刷新间隔时间
 	public ApiResponseResult getIntervalTime()throws Exception;
 	
+	//获取轮播间隔
+	public ApiResponseResult getRotationTime()throws Exception;
+	
 }
