@@ -74,6 +74,47 @@ public class PrcKanbanUtils {
 		});
 		return resultList;
 	}
+	//获取车间报工看板数据穿透信息
+	public List getCjbgDetailListPrc(String user_id, String liner, String dev_ip) throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  PRC_MES_RPT_CJBG_DET (?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, dev_ip);//
+				cs.setString(2, user_id);//
+				cs.setString(3, liner);//
+				cs.registerOutParameter(4, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(5, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(6, -10);// 输出参数 追溯数据
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				List<Map<String, Object>> l = new ArrayList();
+				cs.execute();
+				result.add(cs.getInt(4));
+				result.add(cs.getString(5));
+				if (cs.getString(4).toString().equals("0")) {
+					// 游标处理
+					ResultSet rs = (ResultSet) cs.getObject(6);
+
+					try {
+						l = fitMap(rs);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(l);
+				}
+				System.out.println(l);
+				return result;
+			}
+
+		});
+		return resultList;
+	}
 	
 	// 获取生产电子看板信息
 		public List getScdzListPrc(String company,String facoty,String user_id, String class_id,
@@ -136,6 +177,50 @@ public class PrcKanbanUtils {
 						result.add(cs.getString(19));
 						result.add(cs.getString(20));
 						result.add(cs.getString(21));
+					}
+					System.out.println(l);
+					return result;
+				}
+
+			});
+			return resultList;
+		}
+		
+		public List getScdzDetailListPrc(String user_id, String liner,
+				String dep_id,  String dev_ip) throws Exception {
+			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+				@Override
+				public CallableStatement createCallableStatement(Connection con) throws SQLException {
+					String storedProc = "{call  PRC_MES_RPT_SCDZ (?,?,?,?,?,?,?,?)}";// 调用的sql
+					CallableStatement cs = con.prepareCall(storedProc);
+					cs.setString(1, dev_ip);
+					cs.setString(2, user_id);
+					cs.setString(3, liner);
+					cs.setString(4, dep_id);//dep_id
+					cs.setString(5, "");//
+					cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(8, -10);// 输出参数 追溯数据
+					return cs;
+				}
+			}, new CallableStatementCallback() {
+				public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+					List<Object> result = new ArrayList<>();
+					List<Map<String, Object>> l = new ArrayList();
+					cs.execute();
+					result.add(cs.getInt(6));
+					result.add(cs.getString(7));
+					if (cs.getString(6).toString().equals("0")) {
+						// 游标处理
+						ResultSet rs = (ResultSet) cs.getObject(8);
+
+						try {
+							l = fitMap(rs);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						result.add(l);
 					}
 					System.out.println(l);
 					return result;

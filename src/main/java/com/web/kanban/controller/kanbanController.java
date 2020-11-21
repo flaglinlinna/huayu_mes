@@ -103,6 +103,27 @@ public class kanbanController extends WebController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/toCjbgDetail", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCjbgDetail(String liner) {
+		ModelAndView mav = new ModelAndView();
+		String method = "/kanban/toCjbgDetail";
+		String methodName = "车间报工看板数据穿透";
+		try {
+			ApiResponseResult result = kanbanService.getCjbgDetailList(liner, this.getIpAddr());
+			logger.debug(methodName+"=toCjbgDetail:" + result);
+			getSysLogService().success(module,method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.addObject("liner", liner);
+			mav.setViewName("/kanban/cjbg_detail");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
 	@RequestMapping(value = "/toScdz", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView toScdz(String line) {
@@ -283,6 +304,24 @@ public class kanbanController extends WebController {
 			return ApiResponseResult.failure("获取车间报工看板信息失败！");
 		}
 	}
+	@ApiOperation(value = "获取车间报工看板数据穿透信息", notes = "获取车间报工看板数据穿透信息", hidden = true)
+	@RequestMapping(value = "/getCjbgDetailList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getCjbgDetailList(String liner) {
+		String method = "/kanban/getCjbgDetailList";
+		String methodName = "获取车间报工看板数据穿透信息";
+		try {
+			ApiResponseResult result = kanbanService.getCjbgDetailList(liner, this.getIpAddr());
+			logger.debug(methodName+"getCjbgDetailList:" + result);
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
 	
 	//带参数的二次获取
 
@@ -321,6 +360,24 @@ public class kanbanController extends WebController {
 			logger.error("获取生产电子看板信息失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取生产电子看板信息失败！");
+		}
+	}
+	@ApiOperation(value = "获取生产电子看板数据穿透信息", notes = "获取生产电子看板数据穿透信息", hidden = true)
+	@RequestMapping(value = "/getScdzDetailList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getScdzDetailList(String liner, String dep_id) {
+		String method = "/kanban/getScdzDetailList";
+		String methodName = "获取生产电子看板数据穿透信息";
+		try {
+			ApiResponseResult result = kanbanService.getScdzDetailList(liner, dep_id,   this.getIpAddr());
+			logger.debug(methodName+"=getScdzDetailList:" + result);
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
 		}
 	}
 	

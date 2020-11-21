@@ -12,6 +12,8 @@ public interface KanbanService {
 	//获取车间看板
 	public ApiResponseResult getCjbgList(String class_no,String dep_id,String sdata,String dev_ip)throws Exception;
 	
+	public ApiResponseResult getCjbgDetailList(String liner,String dev_ip)throws Exception;
+	
 	//获取部门1
 	public ApiResponseResult getCjbgDepList()throws Exception;
 	
@@ -20,6 +22,8 @@ public interface KanbanService {
 	
 	//获取生产电子看板
 	public ApiResponseResult getScdzList(String class_no,String dep_id,String sdata,String dev_ip)throws Exception;
+	
+	public ApiResponseResult getScdzDetailList(String liner,String dep_id,String dev_ip)throws Exception;
 	
 	//获取部门2
 	public ApiResponseResult getZcblDepList()throws Exception;
