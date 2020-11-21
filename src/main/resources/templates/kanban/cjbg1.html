@@ -112,7 +112,7 @@ $(document).ready(function(){
 		<iframe frameborder="0" src="../kanban/js/index.html"
 			style="width: 100%; height: 100%"></iframe>
 	</div> -->
-	<header class="header left">
+	<header class="header left" id="inSearch">
 		<div class="total_chose_box">
 			<div style="height: 5px;"></div>
 			<span class="chose_tltle">请选择班次：</span> <select class="year_chose"
@@ -228,6 +228,7 @@ var t = null;
         var kanbanDataList=[[${kanbanDataList}]];
         var deptList=[[${deptList}]];
         var interval=[[${interval}]];
+        var inType=[[${inType}]];
     </script>
 		<script th:inline="javascript">
     var context = [[@{/}]];
@@ -241,6 +242,9 @@ var t = null;
     		   // range: true
     		  });
     	});
+    	if(inType=="apk"){
+    		$("#inSearch").hide();
+    	}
     </script>
 		<script src="/kanban/scripts/cjbg1.js"
 			th:src="@{/kanban/scripts/cjbg1.js}"></script>

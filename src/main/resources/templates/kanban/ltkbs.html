@@ -49,29 +49,32 @@ body {
 
 		<script th:inline="javascript">
 		    var liner=[[${liner}]];
+		    var inType=[[${inType}]];
 		    $("#page").attr({
-				"src" : "toXlpm?liner="+liner //设置默认页
+				"src" : "toXlpm?liner="+liner+"&inType=apk" //设置默认页
 			});
 		    var rotation=[[${rotation}]];
 		    var rotationdata = rotation.data;
 		    rotationdata = rotationdata[0].R;// 获取系统设置的刷新间隔时间
 			var interval_kb = null;// iframe切换定时器
-			interval_kb = setInterval(switchPage, rotationdata * 1000);  // 启动
+			interval_kb = setInterval(switchPage,rotationdata * 1000);  // 启动
 			function switchPage() {//切换列表
 				var src = $(window.parent.document).find("#page").attr("src"); 
-				if(src=="toXlpm?liner="+liner){
-					$("#page").attr({
-						"src" : "toCxdz?liner="+liner
-					});
-				}else if(src=="toCxdz?liner="+liner) {
-					$("#page").attr({
-						"src" : "toCxsc?liner="+liner
-					});
-				}else if(src=="toCxsc?liner="+liner){
-					$("#page").attr({
-						"src" : "toXlpm?liner="+liner
-					});
-				}
+
+					if(src=="toXlpm?liner="+liner+"&inType=apk"){
+						$("#page").attr({
+							"src" : "toCxdz?liner="+liner+"&inType=apk"
+						});
+					}else if(src=="toCxdz?liner="+liner+"&inType=apk") {
+						$("#page").attr({
+							"src" : "toCxsc?liner="+liner+"&inType=apk"
+						});
+					}else if(src=="toCxsc?liner="+liner+"&inType=apk"){
+						$("#page").attr({
+							"src" : "toXlpm?liner="+liner+"&inType=apk"
+						});
+					}
+					
 			}
 		</script>
 	</div>

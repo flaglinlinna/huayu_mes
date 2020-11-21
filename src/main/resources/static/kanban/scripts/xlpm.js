@@ -43,9 +43,9 @@ function dealData(kanbanList) {
 		}
 
 		if (kanbanData.length > 0) {
-			var done = parseInt(kanbanData_t[0].QTY_DONE);
-			var plan = parseInt(kanbanData_t[0].QTY_PLAN);
-			var doneRate = kanbanData_t[0].RATE_DONE;
+			var done = kanbanData_t[0].QTY_DONE==null?0:parseInt(kanbanData_t[0].QTY_DONE);
+			var plan = kanbanData_t[0].QTY_PLAN==null?0:parseInt(kanbanData_t[0].QTY_PLAN);
+			var doneRate = kanbanData_t[0].RATE_DONE==null?0:kanbanData_t[0].RATE_DONE;
 			getChart3(done, plan, doneRate);
 
 			var hr_abn = kanbanData_t[0].HOUR_ABN == null ? 0
