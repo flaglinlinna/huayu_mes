@@ -33,7 +33,7 @@ function dealData(kanbanList) {
 		$("#tableList").empty();
 		return false;
 	}
-	var title=kanbanList.data.title==null?"":kanbanList.data.Title
+	var title=kanbanList.data.Title==null?"":kanbanList.data.Title
 			$("#title").text(title+"•产线生产看板");
 	var kanbanData = kanbanList.data.List_result2;
 	var kanbanData_t = kanbanList.data.List_result1;

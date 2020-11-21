@@ -12,6 +12,8 @@ $(function() {
 	dealData(kanbanList);
 	interval_do = setInterval(getList, intervaldata * 1000); // 启动,执行默认方法
 
+	
+	
 	$("#searchBtn").click(function() {
 		if (interval_do != null) {// 判断计时器是否为空-关闭
 			clearInterval(interval_do);
@@ -31,9 +33,9 @@ function dealData(kanbanList) {
 		$("#tableList").empty();
 		return false;
 	}
-	var title=kanbanList.data.Title==null?"":kanbanList.data.Title
-	$("#title").text(title+"•效率看板");
-	
+	var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
+	$("#title").text(title + "•效率看板");
+
 	var kanbanData = kanbanList.data.List;
 	if (kanbanData.length > 0) {
 		var xAxis = [];
@@ -163,24 +165,17 @@ function setTable(kanbanData) {
 	var html = "";
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
-		// if(j==kanbanData.length-1){
-		// html += '<tr style="position:relative;"><td>' + arr.LINER_NAME +
-		// '</td><td>' + arr.HOUR_ST
-		// + '</td><td>' + arr.HOUR_ACT + '</td><td>' + arr.HOUR_ABN
-		// + '</td><td>' + arr.NUM_EMP_ON + '</td><td>'
-		// + arr.EFFICIENCY_RATE + '%</td></tr> ';
-		// break;
-		// }
-		html += '<tr><td><a href="toCjbgDetail?liner='+arr.LINER_NAME+'" target="_blank">' + arr.LINER_NAME + '</a></td><td>' + arr.HOUR_ST
-				+ '</td><td>' + arr.HOUR_ACT + '</td><td>' + arr.HOUR_ABN
-				+ '</td><td>' + arr.NUM_EMP_ON + '</td><td>'
+		html += '<tr><td><a href="toCjbgDetail?liner=' + arr.LINER_NAME
+				+ '" target="_blank">' + arr.LINER_NAME + '</a></td><td>'
+				+ arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT + '</td><td>'
+				+ arr.HOUR_ABN + '</td><td>' + arr.NUM_EMP_ON + '</td><td>'
 				+ arr.EFFICIENCY_RATE + '%</td></tr> ';
 	}
 
 	$("#tableList").empty();
 	$("#tableList").append(html);
-	$("#tableList1").empty();//不加此数据表头会歪
-	$("#tableList1").append(html);//不加此数据表头会歪
+	//$("#tableList1").empty();// 不加此数据表头会歪
+	//$("#tableList1").append(html);// 不加此数据表头会歪
 
 	if (MyMarhq != null) {// 判断计时器是否为空-关闭
 		clearInterval(MyMarhq);
@@ -210,6 +205,34 @@ function setTable(kanbanData) {
 	} else {
 		$('.tbl-body').css('top', '0');// 内容少时不滚动
 	}
+	
+	// 鼠标移上去取消事件
+	$(".tbl-body tbody").hover(function() {
+		if (MyMarhq != null) {// 判断计时器是否为空-关闭
+			clearInterval(MyMarhq);
+			MyMarhq = null;
+		}
+	}, function() {
+		if (MyMarhq != null) {// 判断计时器是否为空-关闭
+			clearInterval(MyMarhq);
+			MyMarhq = null;
+		}
+		MyMarhq = setInterval(Marqueehq, speedhq);
+	})
+	
+	$(".tbl-header tbody").hover(function() {
+		if (MyMarhq != null) {// 判断计时器是否为空-关闭
+			clearInterval(MyMarhq);
+			MyMarhq = null;
+		}
+	}, function() {
+		if (MyMarhq != null) {// 判断计时器是否为空-关闭
+			clearInterval(MyMarhq);
+			MyMarhq = null;
+		}
+		MyMarhq = setInterval(Marqueehq, speedhq);
+		console.log(MyMarhq)
+	})
 
 }
 function getDepList(deptList) {

@@ -34,7 +34,7 @@ function dealData(kanbanList) {
 		return false;
 	}
 	
-	var title=kanbanList.data.title==null?"":kanbanList.data.Title
+	var title=kanbanList.data.Title==null?"":kanbanList.data.Title
 			$("#title").text(title+"•产线电子看板");
 	
 	var kanbanData_t = kanbanList.data.List_line;

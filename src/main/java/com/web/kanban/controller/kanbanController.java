@@ -87,13 +87,14 @@ public class kanbanController extends WebController {
 
 		@RequestMapping(value = "/toLtkbs", method = RequestMethod.GET)
 		@ResponseBody
-		public ModelAndView toLtkbs() {
+		public ModelAndView toLtkbs(String liner) {
 			ModelAndView mav = new ModelAndView();
 			String method = "/kanban/toLtkbs";
 			String methodName = "获取拉头看板";
 			try {	
 				ApiResponseResult rotation =kanbanService.getRotationTime();
 				mav.addObject("rotation",rotation);
+				mav.addObject("liner",liner);
 				mav.setViewName("/kanban/ltkbs");// 返回路径
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -103,6 +104,25 @@ public class kanbanController extends WebController {
 			return mav;
 		}
 	
+		@RequestMapping(value = "/toSetLiner", method = RequestMethod.GET)
+		@ResponseBody
+		public ModelAndView toSetLiner() {
+			ModelAndView mav = new ModelAndView();
+			String method = "/kanban/toSetLiner";
+			String methodName = "获取组长数据-拉头看板";
+			try {	
+				ApiResponseResult linerList=kanbanService.getLiner();
+				mav.addObject("linerList",linerList);
+				mav.setViewName("/kanban/setliner");// 返回路径
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("获取组长数据-拉头看板异常！", e);
+				getSysLogService().error(module,method,methodName,e.toString());
+			}
+			return mav;
+		}
+		
+		
 	//不带参数的默认获取
 
 	@RequestMapping(value = "/toCjbg", method = RequestMethod.GET)
@@ -163,7 +183,7 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toScdz", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toScdz(String line) {
+	public ModelAndView toScdz() {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toScdz";
 		String methodName = "生产电子看板";
@@ -192,7 +212,7 @@ public class kanbanController extends WebController {
 		String method = "kanban/toZcbl";
 		String methodName = "制程不良看板";
 		try {	
-			ApiResponseResult result = kanbanService.getZcblList("999","5253","",this.getIpAddr());
+			ApiResponseResult result = kanbanService.getZcblList("999","","",this.getIpAddr());
 			ApiResponseResult deptList=kanbanService.getZcblDepList();
 			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("制程不良看板=toZcbl:" + result);
@@ -211,12 +231,12 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toXlpm", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toXlpm(String line,String liner) {
+	public ModelAndView toXlpm(String liner) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toXlpm";
 		String methodName = "效率排名看板";
 		try {	
-			ApiResponseResult result = kanbanService.getXlpmList("999",line,"",this.getIpAddr(),liner);
+			ApiResponseResult result = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner);
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
 			ApiResponseResult interval =kanbanService.getIntervalTime();
@@ -225,6 +245,7 @@ public class kanbanController extends WebController {
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
 			mav.addObject("linerList", linerList);
+			mav.addObject("nowLiner", liner);
 			mav.addObject("interval",interval);
 			mav.setViewName("/kanban/xlpm");// 返回路径
 		} catch (Exception e) {
@@ -251,7 +272,7 @@ public class kanbanController extends WebController {
             }
 			Date date = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			ApiResponseResult result = kanbanService.getDfgList("1","5253",formatter.format(date),usr_id,"1");//this.getIpAddr()
+			ApiResponseResult result = kanbanService.getDfgList("1","",formatter.format(date),usr_id,"1");//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getZcblDepList();
 			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("待返工看板=toDfg:" + result);
@@ -270,12 +291,12 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toCxdz", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toCxdz() {
+	public ModelAndView toCxdz(String liner) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toCxdz";
 		String methodName = "产线电子看板";
 		try {	
-			ApiResponseResult result = kanbanService.getCxdzList("","","",this.getIpAddr(),"");//this.getIpAddr()
+			ApiResponseResult result = kanbanService.getCxdzList("","","",this.getIpAddr(),liner);//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
 			ApiResponseResult interval =kanbanService.getIntervalTime();
@@ -285,6 +306,7 @@ public class kanbanController extends WebController {
 			mav.addObject("deptList", deptList);
 			mav.addObject("linerList", linerList);
 			mav.addObject("interval",interval);
+			mav.addObject("nowLiner", liner);
 			mav.setViewName("/kanban/cxdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -296,12 +318,12 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toCxsc", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toCxsc() {
+	public ModelAndView toCxsc(String liner) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toCxsc";
 		String methodName = "产线生产看板";
 		try {	
-			ApiResponseResult result = kanbanService.getCxscList("","","",this.getIpAddr(),"1");//this.getIpAddr()
+			ApiResponseResult result = kanbanService.getCxscList("","",liner,this.getIpAddr(),"1");//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
 			ApiResponseResult interval =kanbanService.getIntervalTime();
@@ -311,6 +333,7 @@ public class kanbanController extends WebController {
 			mav.addObject("deptList", deptList);
 			mav.addObject("linerList", linerList);
 			mav.addObject("interval",interval);
+			mav.addObject("nowLiner", liner);
 			mav.setViewName("/kanban/cxsc");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -365,11 +388,11 @@ public class kanbanController extends WebController {
 	@ApiOperation(value = "获取制程不良看板信息", notes = "获取制程不良看板信息", hidden = true)
 	@RequestMapping(value = "/getZcblList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getZcblList(String class_no, String dep_id, String sdata) {
+	public ApiResponseResult getZcblList(String class_nos, String dep_id, String sdata) {
 		String method = "/kanban/getZcblList";
 		String methodName = "获取制程不良看板信息";
 		try {
-			ApiResponseResult result = kanbanService.getZcblList(class_no, dep_id, sdata, this.getIpAddr());
+			ApiResponseResult result = kanbanService.getZcblList(class_nos, dep_id, sdata, this.getIpAddr());
 			logger.debug("获取制程不良看板信息=getZcblList:" + result);
 			getSysLogService().success(module,method, methodName, null);
 			return result;

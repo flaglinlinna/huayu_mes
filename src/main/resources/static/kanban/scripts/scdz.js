@@ -30,7 +30,7 @@ function dealData(kanbanList) {
 	console.log(kanbanList)
 	if (kanbanList.data != null) {
 		var kanbanData = kanbanList.data.List;
-		var title=kanbanList.data.title==null?"":kanbanList.data.Title
+		var title=kanbanList.data.Title==null?"":kanbanList.data.Title
 				$("#title").text(title+"•生产电子看板");
 		
 		if (kanbanData.length > 0) {

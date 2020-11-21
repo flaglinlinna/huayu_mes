@@ -49,15 +49,22 @@ function setTable(kanbanData) {
 	$("#tableList1").empty();//不加此数据表头会歪
 	$("#tableList1").append(html);//不加此数据表头会歪
 
+	if (MyMarhq != null) {// 判断计时器是否为空-关闭
+		clearInterval(MyMarhq);
+		MyMarhq = null;
+	}
+	
 	var item = $('.tbl-body tbody tr').length
+	console.log(item)
 
-	if (item > 4) {
+	if (item > 10) {
 		$('.tbl-body tbody').html(
 				$('.tbl-body tbody').html() + $('.tbl-body tbody').html());
 		$('.tbl-body').css('top', '0');
 		var tblTop = 0;
-		var speedhq = 60; // 数值越大越慢
+		var speedhq = 80; // 数值越大越慢
 		var outerHeight = $('.tbl-body tbody').find("tr").outerHeight();
+		console.log(speedhq)
 		function Marqueehq() {
 			if (tblTop <= -outerHeight * item) {
 				tblTop = 0;
@@ -66,7 +73,7 @@ function setTable(kanbanData) {
 			}
 			$('.tbl-body').css('top', tblTop + 'px');
 		}
-
+		MyMarhq = setInterval(Marqueehq, speedhq);
 	} else {
 		$('.tbl-body').css('top', '0');// 内容少时不滚动
 	}
