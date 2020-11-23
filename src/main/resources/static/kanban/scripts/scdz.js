@@ -61,14 +61,14 @@ function dealData(kanbanList) {
 		var doneRate = kanbanList.data.PRD_RATE_DONE;
 		getChart3(done, plan, doneRate);
 
-		$("#showLine").text(
-				"开线数：" + kanbanList.data.LINE_NUM_NOW + "     " + "总线体数："
-						+ kanbanList.data.LINE_NUM_PLN);
+		$("#showLine").text("开线数：" + kanbanList.data.LINE_NUM_NOW);
+		$("#showLine1").text("总线体数：" + kanbanList.data.LINE_NUM_PLN);
 
 	} else {
 		getChart2(0, 0, 0)
 		getChart3(0, 0, 0);
-		$("#showLine").text("开线数：0          总线体数：0");
+		$("#showLine").text("开线数：0");
+		$("#showLine1").text("总线体数：0");
 	}
 }
 
@@ -194,14 +194,17 @@ function getChart2(emp_plan, emp_now, emp_off) {
 
 		color : [ '#6699FF', '#66FFCC' ],
 		title : {
-			text : emp_plan,
+			text : emp_plan + "\n" + "￣￣",// 手动增加下划线
+			link : 'toScdzDetail?liner=&fieldword=PO_EMP_NUM_PLN',// 主标题文本超链接,默认值true
+			target : 'blank',// 指定窗口打开主标题超链接，'self' | 'blank'，不指定为'blank'
 			left : "center",
 			top : "50%",
 			textStyle : {
 				color : "#ffffff",
 				fontSize : 36,
 				align : "center"
-			}
+			},
+
 		},
 		graphic : {
 			type : "text",
@@ -255,7 +258,8 @@ function getChart2(emp_plan, emp_now, emp_off) {
 				name : '缺勤人数'
 			}, {
 				value : emp_now,
-				name : '在线人数'
+				name : '在线人数',
+				url : "toScdzDetail?liner=&fieldword=PO_EMP_NUM_NOW"
 			},
 
 			]
@@ -266,6 +270,11 @@ function getChart2(emp_plan, emp_now, emp_off) {
 	var myCharts1 = echarts.init(document.getElementById('echart2'));
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
+
+	// 饼图点击跳转到指定页面
+	myCharts1.on('click', function(param) {
+		window.open(param.data.url);
+	});
 }
 function getChart3(done, plan, doneRate) {
 	option = {
@@ -273,7 +282,6 @@ function getChart3(done, plan, doneRate) {
 			text : '完工率:' + doneRate + '%',
 			textStyle : {
 				color : '#FFFFFF',// 图例文字颜色
-
 			},
 			left : '15px',
 		},
@@ -348,7 +356,6 @@ function getChart3(done, plan, doneRate) {
 			},
 		} ]
 	};
-
 	// 创建echarts对象在哪个节点上
 	var myCharts1 = echarts.init(document.getElementById('echart3'));
 	// 将选项对象赋值给echarts对象。
@@ -360,9 +367,14 @@ function setTable(kanbanData) {
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
 		html += '<tr><td><a href="toScdzDetail?liner=' + arr.LINER_NAME
-				+ '" target="_blank">' + arr.LINER_NAME + '</a></td><td>'
-				+ arr.NUM_EMP_ON + '</td><td>' + arr.NUM_EMP_PL + '</td><td>'
-				+ arr.QTY_PLAN + '</td><td>' + arr.QTY_DONE + '</td><td>'
+				+ '&fieldword=PO_RESULT' + '" target="_blank">'
+				+ arr.LINER_NAME + '</a></td><td>' + arr.NUM_EMP_ON
+				+ '</td><td>' + arr.NUM_EMP_PL
+				+ '</td><td><a href="toScdzDetail?liner=' + arr.LINER_NAME
+				+ '&fieldword=PO_PRD_NUM_PLN' + '" target="_blank">'
+				+ arr.QTY_PLAN + '</a></td><td><a href="toScdzDetail?liner='
+				+ arr.LINER_NAME + '&fieldword=PO_PRD_NUM_DONE'
+				+ '" target="_blank">' + arr.QTY_DONE + '</a></td><td>'
 				+ arr.RATE_DONE + '%</td></tr> ';
 	}
 	$("#tableList").empty();
@@ -398,7 +410,7 @@ function setTable(kanbanData) {
 	} else {
 		$('.tbl-body').css('top', '0');// 内容少时不滚动
 	}
-	
+
 	// 鼠标移上去取消事件
 	$(".tbl-body tbody").hover(function() {
 		if (MyMarhq != null) {// 判断计时器是否为空-关闭
@@ -412,7 +424,7 @@ function setTable(kanbanData) {
 		}
 		MyMarhq = setInterval(Marqueehq, speedhq);
 	})
-	
+
 	$(".tbl-header tbody").hover(function() {
 		if (MyMarhq != null) {// 判断计时器是否为空-关闭
 			clearInterval(MyMarhq);
@@ -425,7 +437,7 @@ function setTable(kanbanData) {
 		}
 		MyMarhq = setInterval(Marqueehq, speedhq);
 	})
-	
+
 }
 function getDepList(deptList) {
 	var res = deptList;

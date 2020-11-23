@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>效率看板</title>
+<title>详细数据看板</title>
 <script type="text/javascript" src="../kanban/js/jquery.js"></script>
 <link rel="stylesheet" href="../kanban/css/comon0.css">
 <link rel="stylesheet" href="../layui/css/layui.css"
@@ -92,24 +92,6 @@ $(document).ready(function(){
 	</script>
 <script type="text/javascript" src="../kanban/js/echarts.min.js"></script>
 <body>
-	<!-- <header class="header left">
-		<div class="total_chose_box">
-			<div style="height: 5px;"></div>
-			<span class="chose_tltle">请选择班次：</span> <select class="year_chose"
-				id="class_select">
-				<option value="999">当日看板</option>
-				<option value="998">24小时看板</option>
-				<option value="1">白班</option>
-				<option value="2">晚班</option>
-			</select>
-			<span class="chose_tltle">请输入部门：</span> <select class="year_chose"
-				id="dep_select"></select>
-			<span class="chose_tltle">请选择日期：</span> <input style="width: 15%;"
-				type="text" name="date" id="date" lay-verify="date"
-				placeholder="yyyy-MM-dd" autocomplete="off" class="chose_text_in ">
-			<input class="chose_text_in">
-			<button class="chose_enter" id="searchBtn">确定</button>
-		</div>
 	</header> -->
 	<div class="head">
 
@@ -147,13 +129,25 @@ var t = null;
 				<div class="tbl-header">
 					<table>
 						<thead>
-							<tr>
+							<tr id="result_list1">
 								<th>组长</th>
 								<th>应到人数</th>
 								<th>制令单</th>
 								<th>目标产量</th>
 								<th>完工产量</th>
 								<th>员工</th>							
+							</tr>
+							<tr id="type1">
+								<th>负责人</th>
+								<th>员工数</th>					
+							</tr>
+							<tr id="type2">
+								<th>组长</th>
+								<th>在线人数</th>
+								<th>应到人数</th>	
+								<th>计划产量</th>
+								<th>达成产量</th>
+								<th>达成率</th>				
 							</tr>
 						</thead>
 						<tbody style="opacity: 0;" id="tableList1"></tbody>
@@ -163,13 +157,25 @@ var t = null;
 				<div class="tbl-body">
 					<table>
 						<thead>
-							<tr>
+							<tr id="result_list">
 								<th>组长</th>
 								<th>应到人数</th>
 								<th>制令单</th>
 								<th>目标产量</th>
 								<th>完工产量</th>
 								<th>员工</th>	
+							</tr>
+							<tr id="type1_1">
+								<th>负责人</th>
+								<th>员工数</th>					
+							</tr>
+							<tr id="type2_1">
+								<th>组长</th>
+								<th>在线人数</th>
+								<th>应到人数</th>	
+								<th>计划产量</th>
+								<th>达成产量</th>
+								<th>达成率</th>					
 							</tr>
 						</thead>
 						<tbody id="tableList">
@@ -183,11 +189,40 @@ var t = null;
 		</div>
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
-        var liner=[[${liner}]];$("#title").text(liner+"•效率看板");
+        var liner=[[${liner}]];
+        var fieldword=[[${fieldword}]];
         var context = [[@{/}]];
+        if(fieldword=="PO_RESULT"){//表格点击
+        	$("#title").text(liner+"•效率看板");
+        	$("#result_list1").show();
+        	$("#result_list").show();
+        	$("#type1").hide();
+        	$("#type1_1").hide();
+        	$("#type2").hide();
+        	$("#type2_1").hide();
+        
+        }else if(fieldword=="PO_LINE_NUM_PLN"||fieldword=="PO_EMP_NUM_PLN"){//总线体数、应到人数
+        	$("#title").text("数据看板");
+        	$("#result_list1").hide();
+        	$("#result_list").hide();
+        	$("#type1").show();
+        	$("#type1_1").show();
+        	$("#type2").hide();
+        	$("#type2_1").hide();
+        	
+        }else if(fieldword=="PO_LINE_NUM_NOW"||fieldword=="PO_EMP_NUM_NOW"
+        		||fieldword=="PO_PRD_NUM_PLN"||fieldword=="PO_PRD_NUM_DONE"){//开线数，在线人数，计划产量，完工产量
+        	$("#title").text(liner+"•数据看板");
+        	$("#result_list1").hide();
+        	$("#result_list").hide();
+        	$("#type1").hide();
+        	$("#type1_1").hide();
+        	$("#type2").show();
+        	$("#type2_1").show();	
+        }
     </script>
-		<script src="/kanban/scripts/cjbg_detail.js"
-			th:src="@{/kanban/scripts/cjbg_detail.js}"></script>
+		<script src="/kanban/scripts/scdz_detail.js"
+			th:src="@{/kanban/scripts/scdz_detail.js}"></script>
 	</div>
 </body>
 </html>

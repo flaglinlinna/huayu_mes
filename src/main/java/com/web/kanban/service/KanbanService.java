@@ -23,7 +23,7 @@ public interface KanbanService {
 	//获取生产电子看板
 	public ApiResponseResult getScdzList(String class_no,String dep_id,String sdata,String dev_ip)throws Exception;
 	
-	public ApiResponseResult getScdzDetailList(String liner,String dep_id,String dev_ip)throws Exception;
+	public ApiResponseResult getScdzDetailList(String liner,String dep_id,String dev_ip,String fieldword)throws Exception;
 	
 	//获取部门2
 	public ApiResponseResult getZcblDepList()throws Exception;

@@ -53,9 +53,9 @@ td {
 	left: 0;
 }
 
-a{
-color: #FFFFFF;
-text-decoration:underline;
+a {
+	color: #FFFFFF;
+	text-decoration: underline;
 }
 
 table, table tr td {
@@ -143,9 +143,12 @@ $(document).ready(function(){
 	</header>
 	<div class="head">
 		<div class="line">
-			<span style="color: #FFFFFF; font-size: 16px;" id="showLine"></span>
+			<a href="toScdzDetail?liner=&fieldword=PO_LINE_NUM_NOW" target="_blank"> <span
+				style="color: #FFFFFF; font-size: 16px;" id="showLine"></span></a> <a
+				href="toScdzDetail?liner=&fieldword=PO_LINE_NUM_PLN" target="_blank"> <span
+				style="color: #FFFFFF; font-size: 16px;" id="showLine1"></span></a>
 		</div>
-		
+
 		<h1 id="title">组装二部报工看板</h1>
 		<div class="weather">
 			<!--<img src="picture/weather.png"><span>多云转小雨</span>-->
@@ -179,30 +182,11 @@ var t = null;
 			<div class="boxfoot"></div>
 		</div>
 		<div class="boxall">
-			<!-- <div class="data_table">
-				<table id="table" class="table table-bordered"
-					style="width: 99%; margin-top: 10px;">
-					<thead>
-						<tr class="blue_bg" style="background: #333399;">
-							<th>线长</th>
-							<th>在线人数</th>
-							<th>计划人数</th>
-							<th>计划产量</th>
-							<th>达成产量</th>
-							<th>完工率</th>
-						</tr>
-					</thead>
-					<tbody id="tableList">
-
-					</tbody>
-				</table>
-			</div> -->
-
 			<div class="tablebox">
 				<div class="tbl-header">
 					<table>
 						<thead>
-							<tr>
+							<tr id="">
 								<th>线长</th>
 								<th>在线人数</th>
 								<th>计划人数</th>

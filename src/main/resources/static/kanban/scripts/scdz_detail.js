@@ -26,18 +26,37 @@ function dealData(kanbanList) {
 
 function setTable(kanbanData) {
 	var html = "";
-	console.log(kanbanData)
-	for (var j = 0; j < kanbanData.length; j++) {
+	//console.log(kanbanData)
+	//在此判断数据格式
+	if(fieldword=="PO_RESULT"){
+		for (var j = 0; j < kanbanData.length; j++) {
+			var arr = kanbanData[j];
+			html += '<tr>'+
+			        '<td>' + arr.LINER_NAME + '</td>'+
+			        '<td>' + arr.NUM_EMP_PL+ '</td>'+
+			        '<td>' + arr.TASK_NO + '</td>'+
+			        '<td>' + arr.QTY_PLAN+ '</td>'+
+					'<td>' + arr.QTY_DONE + '</td>'+
+					'<td>'+ arr.EMP_NAME + '</td></tr> ';
+		}
+	}else if(fieldword=="PO_LINE_NUM_PLN"||fieldword=="PO_EMP_NUM_PLN"){
+		for (var j = 0; j < kanbanData.length; j++) {
+			var arr = kanbanData[j];
+			html += '<tr>'+
+	        '<td>' + arr.LEAD_BY + '</td>'+
+			'<td>'+ arr.EMP_NUM + '</td></tr> ';
+		}	
+	}else if(fieldword=="PO_LINE_NUM_NOW"||fieldword=="PO_EMP_NUM_NOW"
+		||fieldword=="PO_PRD_NUM_PLN"||fieldword=="PO_PRD_NUM_DONE"){
 		var arr = kanbanData[j];
 		html += '<tr>'+
 		        '<td>' + arr.LINER_NAME + '</td>'+
-		        '<td>' + arr.NUM_EMP_PL+ '</td>'+
-		        '<td>' + arr.TASK_NO + '</td>'+
+		        '<td>' + arr.NUM_EMP_ON+ '</td>'+
+		        '<td>' + arr.NUM_EMP_PL + '</td>'+
 		        '<td>' + arr.QTY_PLAN+ '</td>'+
 				'<td>' + arr.QTY_DONE + '</td>'+
-				'<td>'+ arr.EMP_NAME + '</td></tr> ';
+				'<td>'+ arr.RATE_DONE + '</td></tr> ';
 	}
-
 	$("#tableList").empty();
 	$("#tableList").append(html);
 	$("#tableList1").empty();//不加此数据表头会歪
@@ -76,7 +95,8 @@ function setTable(kanbanData) {
 
 function getDetailList(liner) {
 	var params = {
-		"liner" : liner
+		"liner" : liner,
+		"fieldword":fieldword
 	};
 	$.ajax({
 		type : "GET",

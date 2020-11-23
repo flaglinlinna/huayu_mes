@@ -213,16 +213,17 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toScdzDetail", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toScdzDetail(String liner) {
+	public ModelAndView toScdzDetail(String liner,String fieldword) {//数据穿透sjct1
 		ModelAndView mav = new ModelAndView();
 		String method = "/kanban/toScdzDetail";
 		String methodName = "生产电子看板数据穿透";
 		try {
-			ApiResponseResult result = kanbanService.getScdzDetailList(liner, "",this.getIpAddr());
+			ApiResponseResult result = kanbanService.getScdzDetailList(liner, "",this.getIpAddr(),fieldword);
 			logger.debug(methodName+"=toScdzDetail:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("liner", liner);
+			mav.addObject("fieldword", fieldword);
 			mav.setViewName("/kanban/scdz_detail");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -457,11 +458,11 @@ public class kanbanController extends WebController {
 	@ApiOperation(value = "获取生产电子看板数据穿透信息", notes = "获取生产电子看板数据穿透信息", hidden = true)
 	@RequestMapping(value = "/getScdzDetailList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getScdzDetailList(String liner, String dep_id) {
+	public ApiResponseResult getScdzDetailList(String liner, String dep_id,String fieldword) {//sjct2 数据穿透
 		String method = "/kanban/getScdzDetailList";
 		String methodName = "获取生产电子看板数据穿透信息";
 		try {
-			ApiResponseResult result = kanbanService.getScdzDetailList(liner, dep_id,   this.getIpAddr());
+			ApiResponseResult result = kanbanService.getScdzDetailList(liner, dep_id,this.getIpAddr(),fieldword);
 			logger.debug(methodName+"=getScdzDetailList:" + result);
 			getSysLogService().success(module,method, methodName, null);
 			return result;

@@ -91,14 +91,15 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		return ApiResponseResult.success().data(map);
 	}
 	@Override
-	public ApiResponseResult getScdzDetailList(String liner, String dep_id, String dev_ip) throws Exception {
+	public ApiResponseResult getScdzDetailList(String liner, String dep_id, 
+			String dev_ip,String fieldword) throws Exception {
 		// TODO Auto-generated method stub
 		String user_id = "1";
 		SysUser su = UserUtil.getSessionUser();
 		if(su != null){
 			user_id = su.getId()+"";
 		}
-		List<Object> list = getScdzDetailListPrc( user_id, liner,dep_id, dev_ip);
+		List<Object> list = getScdzDetailListPrc( user_id, liner,dep_id, dev_ip,fieldword);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
