@@ -200,6 +200,7 @@ public class Processlmpl extends BaseSql implements ProcessService {
                 hql += " and a.check_Status =1 ";
             }
         }
+        hql += " order by a.proc_Order ";
         int pn = pageRequest.getPageNumber() + 1;
         String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
                 + pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"

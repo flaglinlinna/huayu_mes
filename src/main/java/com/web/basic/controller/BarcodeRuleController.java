@@ -129,8 +129,9 @@ public class BarcodeRuleController extends WebController{
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
 	        String method = "base/rule/delete";String methodName ="删除小码校验规则信息";
 	        try{
-	        	long id = Long.parseLong(params.get("id").toString()) ;
-	            ApiResponseResult result = ruleService.delete(id);
+//	        	long id = Long.parseLong(params.get("id").toString()) ;
+				String ids = params.get("id").toString() ;
+	            ApiResponseResult result = ruleService.delete(ids);
 	            logger.debug("删除小码校验规则信息=delete:");
 	            getSysLogService().success(module,method, methodName, params);
 	            return result;

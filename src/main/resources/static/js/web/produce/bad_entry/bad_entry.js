@@ -16,6 +16,8 @@ $(function() {
 							where : {},
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
+							height:'full-390'//固定表头&full-查询框高度
+							,even:true,//条纹样式
 							page : true,
 							data : [],
 							request : {
@@ -223,7 +225,8 @@ $(function() {
 							defaultToolbar : [],
 							page : true,
 							data : [],
-							height: 'full-210',
+							height:'full-80'//固定表头&full-查询框高度
+							,even:true,//条纹样式
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -250,8 +253,8 @@ $(function() {
 								width : 170
 							}, {
 								field : 'TASK_NO',
-								title : '制定单号',
-								width : 350
+								title : '制令单号',
+								width : 200
 							}, {
 								field : 'CLASS_NO',
 								title : '班次',
@@ -300,6 +303,7 @@ $(function() {
 					checkBarCode($('#taskno').val(), $('#barcode').val());
 					return false;
 				} else {
+					$('#taskno').val('');
 					layer.alert("请选择制令单号!");
 				}
 			} else {
@@ -385,7 +389,9 @@ function checkBarCode(taskNo, barcode) {
 					var q = data.data;
 					$("#qty").val(q[0].qty);
 				} else {
+					playMusic();
 					layer.alert(data.msg);
+					$('#barcode').val('');
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
@@ -414,9 +420,15 @@ function saveBad(obj) {
 					});
 					$("#qty").val("");
 					$("#barcode").val("");
-					
+					$("#barcode").focus();
 				} else {
-					layer.alert(data.msg);
+					playMusic();
+					layer.alert(data.msg,function () {
+						$("#qty").val("");
+						$("#barcode").val("");
+						$("#barcode").focus();
+						layer.closeAll();
+					});
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);

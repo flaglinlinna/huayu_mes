@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
+import java.util.Map;
 
 @Api(description = "排产信息管理模块")
 @CrossOrigin
@@ -26,7 +27,7 @@ import java.util.Date;
 @RequestMapping(value = "produce/scheduling")
 public class SchedulingController extends WebController {
 
-    private String module = "排产信息";
+    private String module = "制令单查询";
     @Autowired
     private SchedulingService schedulingService;
 
@@ -60,11 +61,13 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "编辑页", notes = "编辑页", hidden = true)
     @RequestMapping(value = "/toSchedulingEdit", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView toSchedulingEdit(Long id){
+    public ModelAndView toSchedulingEdit(Long id,String qty,String rate){
         ModelAndView mav = new ModelAndView("/web/produce/scheduling/scheduling_edit");
         try{
             ApiResponseResult result = schedulingService.getSchedulData(id);
             mav.addObject("id", id);
+            mav.addObject("qty", qty);
+            mav.addObject("rate", rate);
             if(result != null){
                 mav.addObject("mapData", result.getData());
             }else{
@@ -128,6 +131,26 @@ public class SchedulingController extends WebController {
             logger.error("删除失败！", e);
             getSysLogService().error(module,method, methodName, id+";"+e.toString());
             return ApiResponseResult.failure("删除失败！");
+        }
+    }
+
+    @ApiOperation(value = "保存更新的工艺", notes = "保存更新的工艺", hidden = true)
+    @RequestMapping(value = "/saveProc", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult saveProc(@RequestBody Map<String, Object> params) {
+        String method = "/produce/scheduling/saveProc";String methodName ="保存更新的工艺";
+        try{
+            Long mid = Long.parseLong(params.get("mid").toString());
+            String fname = params.get("fname").toString();
+            ApiResponseResult result = schedulingService.saveProc(mid,fname);
+            logger.debug("保存更新的工艺=saveProc:");
+            getSysLogService().success(module,method, methodName, mid);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("保存失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("保存失败！");
         }
     }
 
@@ -199,6 +222,27 @@ public class SchedulingController extends WebController {
             logger.error("检验失败！", e);
             getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("检验失败！");
+        }
+    }
+
+    @ApiOperation(value = "更改状态", notes = "更改状态", hidden = true)
+    @RequestMapping(value = "/changeStatue", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult changeStatue(@RequestBody Map<String, Object> param){
+        String taskNos = param.get("taskNos").toString();
+        String statue = param.get("statue").toString();
+        String statues = param.get("statues").toString();
+        String method = "/produce/scheduling/changeStatue";String methodName ="更改状态";
+        try{
+            ApiResponseResult result = schedulingService.changeStatue(taskNos,statue);
+            logger.debug("更改状态=changeStatue:");
+            getSysLogService().success(module,method, methodName, "制令单号:"+statues+";修改状态:"+statue);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("更改状态失败！", e);
+            getSysLogService().error(module,method, methodName, "制令单号:"+statues+";修改状态:"+statue+";"+e.toString());
+            return ApiResponseResult.failure("更改状态失败！");
         }
     }
 
@@ -278,11 +322,11 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "获取工艺列表", notes = "获取工艺列表", hidden = true)
     @RequestMapping(value = "/getProcessList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getProcessList(String keyword, Long mid){
+    public ApiResponseResult getProcessList(String keyword, String mid){
         String method = "/produce/scheduling/getProcessList";String methodName ="获取工艺列表";
         try {
-            Sort sort = new Sort(Sort.Direction.DESC, "id");
-            ApiResponseResult result = schedulingService.getProcessList(keyword, mid, super.getPageRequest(sort));
+//            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = schedulingService.getProcessListByProc(keyword, mid);
             logger.debug("获取工艺列表=getProcessLst:");
             getSysLogService().success(module,method, methodName, "主表id:"+mid);
             return result;
@@ -352,11 +396,11 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "获取上线人员列表", notes = "获取上线人员列表", hidden = true)
     @RequestMapping(value = "/getEmpList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getEmpList(Long mid){
+    public ApiResponseResult getEmpList(Long mid,String keyword){
         String method = "/produce/scheduling/getEmpList";String methodName ="获取上线人员列表";
         try {
 //            Sort sort = new Sort(Sort.Direction.DESC, "id");
-            ApiResponseResult result = schedulingService.getEmpList(mid, super.getPageRequest(Sort.unsorted()));
+            ApiResponseResult result = schedulingService.getEmpList(mid,keyword, super.getPageRequest(Sort.unsorted()));
             logger.debug("获取上线人员列表=getEmpList:");
             getSysLogService().success(module,method, methodName, "主表id:"+mid);
             return result;
@@ -391,7 +435,7 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "获取产出送检列表", notes = "获取产出送检列表", hidden = true)
     @RequestMapping(value = "/getProdOrderOutList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getProdOrderOutList(Long mid){
+    public ApiResponseResult getProdOrderOutList(String mid){
         String method = "/produce/scheduling/getProdOrderOutList";String methodName ="获取产出送检列表";
         try {
             ApiResponseResult result = schedulingService.getProdOrderOutList(mid, super.getPageRequest(Sort.unsorted()));
@@ -409,7 +453,7 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "获取品质检验列表", notes = "获取品质检验列表", hidden = true)
     @RequestMapping(value = "/getProdOrderQcList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getProdOrderQcList(Long mid){
+    public ApiResponseResult getProdOrderQcList(String mid){
         String method = "/produce/scheduling/getProdOrderQcList";String methodName ="获取品质检验列表";
         try {
             ApiResponseResult result = schedulingService.getProdOrderQcList(mid, super.getPageRequest(Sort.unsorted()));
@@ -421,6 +465,24 @@ public class SchedulingController extends WebController {
             logger.error("获取品质检验列表！", e);
             getSysLogService().error(module,method, methodName, "主表id:"+mid+e.toString());
             return ApiResponseResult.failure("获取品质检验列表！");
+        }
+    }
+
+    @ApiOperation(value = "获取异常检验列表", notes = "获取异常检验列表", hidden = true)
+    @RequestMapping(value = "/getProdOrderErrList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getProdOrderErrList(String mid){
+        String method = "/produce/scheduling/getProdOrderErrList";String methodName ="获取异常检验列表";
+        try {
+            ApiResponseResult result = schedulingService.getProdOrderErrList(mid, super.getPageRequest(Sort.unsorted()));
+            logger.debug("获取异常检验列表=getProdOrderQcList:");
+            getSysLogService().success(module,method, methodName, "主表id:"+mid);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取异常检验列表失败！", e);
+            getSysLogService().error(module,method, methodName, "主表id:"+mid+e.toString());
+            return ApiResponseResult.failure("获取异常检验列表！");
         }
     }
 

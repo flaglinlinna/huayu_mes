@@ -135,6 +135,25 @@ public class VerifyController extends WebController {
              return ApiResponseResult.failure("加载在线返工页面默认数据失败！");
         }
     }
+
+    @ApiOperation(value="根据条码查询条码信息查询返工料号和物料", notes="根据条码查询条码信息查询返工料号和物料", hidden = true)
+    @RequestMapping(value = "/getInfoBarcode", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getInfoBarcode(String barcode) {
+        String method = "/verify/getInfoBarcode";String methodName ="根据条码查询条码信息查询返工料号和物料";
+        String param ="条码:"+ barcode;
+        try {
+            ApiResponseResult result = verifyService.getInfoBarcode(barcode);
+            logger.debug("根据条码查询条码信息查询返工料号和物料=getInfoBarcode:");
+            getSysLogService().success(module,method, methodName, param);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("根据条码查询条码信息查询返工料号和物料失败！", e);
+            getSysLogService().error(module,method, methodName,param+";"+ e.toString());
+            return ApiResponseResult.failure("根据条码查询条码信息查询返工料号和物料失败！");
+        }
+    }
     
     @ApiOperation(value="加载在线返工页面-返工料号", notes="加载在线返工页面-返工料号数据", hidden = true)
     @RequestMapping(value = "/getReworkItem", method = RequestMethod.GET)

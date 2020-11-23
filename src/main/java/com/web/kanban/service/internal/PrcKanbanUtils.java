@@ -25,7 +25,7 @@ public class PrcKanbanUtils {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  prc_mes_rpt_cjbg (?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  prc_mes_rpt_cjbg (?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, company);//company
 				cs.setString(2, facoty);//facoty
@@ -40,6 +40,7 @@ public class PrcKanbanUtils {
 				cs.registerOutParameter(11, java.sql.Types.VARCHAR);// 输出参数 返回标识
 				cs.registerOutParameter(12, java.sql.Types.VARCHAR);// 输出参数 返回标识
 				cs.registerOutParameter(13, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(14, java.sql.Types.VARCHAR);// 输出参数 返回标识
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -64,6 +65,48 @@ public class PrcKanbanUtils {
 					result.add(cs.getString(11));
 					result.add(cs.getString(12));
 					result.add(cs.getString(13));
+					result.add(cs.getString(14));
+				}
+				System.out.println(l);
+				return result;
+			}
+
+		});
+		return resultList;
+	}
+	//获取车间报工看板数据穿透信息
+	public List getCjbgDetailListPrc(String user_id, String liner, String dev_ip) throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  PRC_MES_RPT_CJBG_DET (?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, dev_ip);//
+				cs.setString(2, user_id);//
+				cs.setString(3, liner);//
+				cs.registerOutParameter(4, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(5, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(6, -10);// 输出参数 追溯数据
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				List<Map<String, Object>> l = new ArrayList();
+				cs.execute();
+				result.add(cs.getInt(4));
+				result.add(cs.getString(5));
+				if (cs.getString(4).toString().equals("0")) {
+					// 游标处理
+					ResultSet rs = (ResultSet) cs.getObject(6);
+
+					try {
+						l = fitMap(rs);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(l);
 				}
 				System.out.println(l);
 				return result;
@@ -79,7 +122,7 @@ public class PrcKanbanUtils {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
-					String storedProc = "{call  PRC_MES_RPT_SCDZ (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+					String storedProc = "{call  PRC_MES_RPT_SCDZ (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 					CallableStatement cs = con.prepareCall(storedProc);
 					cs.setString(1, company);//company
 					cs.setString(2, facoty);//facoty
@@ -101,6 +144,7 @@ public class PrcKanbanUtils {
 					cs.registerOutParameter(18, java.sql.Types.INTEGER);// 输出参数 返回标识
 					cs.registerOutParameter(19, java.sql.Types.INTEGER);// 输出参数 返回标识
 					cs.registerOutParameter(20, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(21, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					return cs;
 				}
 			}, new CallableStatementCallback() {
@@ -132,6 +176,51 @@ public class PrcKanbanUtils {
 						result.add(cs.getString(18));
 						result.add(cs.getString(19));
 						result.add(cs.getString(20));
+						result.add(cs.getString(21));
+					}
+					System.out.println(l);
+					return result;
+				}
+
+			});
+			return resultList;
+		}
+		
+		public List getScdzDetailListPrc(String user_id, String liner,
+				String dep_id,  String dev_ip) throws Exception {
+			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+				@Override
+				public CallableStatement createCallableStatement(Connection con) throws SQLException {
+					String storedProc = "{call  PRC_MES_RPT_SCDZ_DET(?,?,?,?,?,?,?,?)}";// 调用的sql
+					CallableStatement cs = con.prepareCall(storedProc);
+					cs.setString(1, dev_ip);
+					cs.setString(2, user_id);
+					cs.setString(3, liner);
+					cs.setString(4, dep_id);//dep_id
+					cs.setString(5, "PO_RESULT");//
+					cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(8, -10);// 输出参数 追溯数据
+					return cs;
+				}
+			}, new CallableStatementCallback() {
+				public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+					List<Object> result = new ArrayList<>();
+					List<Map<String, Object>> l = new ArrayList();
+					cs.execute();
+					result.add(cs.getInt(6));
+					result.add(cs.getString(7));
+					if (cs.getString(6).toString().equals("0")) {
+						// 游标处理
+						ResultSet rs = (ResultSet) cs.getObject(8);
+
+						try {
+							l = fitMap(rs);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						result.add(l);
 					}
 					System.out.println(l);
 					return result;
@@ -200,7 +289,7 @@ public class PrcKanbanUtils {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
-					String storedProc = "{call  PRC_MES_RPT_XLPM(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+					String storedProc = "{call  PRC_MES_RPT_XLPM(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 					CallableStatement cs = con.prepareCall(storedProc);
 					cs.setString(1, company);//-公司
 					cs.setString(2, facoty);//工厂
@@ -216,6 +305,7 @@ public class PrcKanbanUtils {
 					cs.registerOutParameter(12, -10);// 输出参数 追溯数据
 					cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					cs.registerOutParameter(14, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(15, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					return cs;
 				}
 			}, new CallableStatementCallback() {
@@ -247,6 +337,7 @@ public class PrcKanbanUtils {
 						result.add(l_2);
 						result.add(cs.getString(13));
 						result.add(cs.getString(14));
+						result.add(cs.getString(15));
 					}
 					System.out.println(l);
 					return result;
@@ -305,7 +396,7 @@ public class PrcKanbanUtils {
 					List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 						@Override
 						public CallableStatement createCallableStatement(Connection con) throws SQLException {
-							String storedProc = "{call  PRC_MES_RPT_CXDZ (?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+							String storedProc = "{call  PRC_MES_RPT_CXDZ (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 							CallableStatement cs = con.prepareCall(storedProc);
 							cs.setString(1, facoty);//facoty
 							cs.setString(2, company);//company
@@ -321,6 +412,7 @@ public class PrcKanbanUtils {
 							cs.registerOutParameter(12,  -10);// 输出参数 返回标识
 							cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回标识
 							cs.registerOutParameter(14, java.sql.Types.VARCHAR);// 输出参数 返回标识
+							cs.registerOutParameter(15, java.sql.Types.VARCHAR);// 输出参数 返回标识
 							return cs;
 						}
 					}, new CallableStatementCallback() {
@@ -353,6 +445,7 @@ public class PrcKanbanUtils {
 								
 								result.add(cs.getString(13));
 								result.add(cs.getString(14));
+								result.add(cs.getString(15));
 							}
 							return result;
 						}
@@ -416,20 +509,21 @@ public class PrcKanbanUtils {
 					List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 						@Override
 						public CallableStatement createCallableStatement(Connection con) throws SQLException {
-							String storedProc = "{call PRC_MES_RPT_CXSC(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+							String storedProc = "{call PRC_MES_RPT_CXSC(?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 							CallableStatement cs = con.prepareCall(storedProc);
 							cs.setString(1, company);//-公司
 							cs.setString(2, facoty);//工厂
 							cs.setString(3, taskNo);// 班次
 							cs.setString(4, deptId);//--部门ID*
 							cs.setString(5, liner);//-组长*
-							cs.setString(6, dev_ip);//日期*
-							cs.setString(7, usr_id);//电视IP或mac*
-							cs.setString(8, interval);//用户id
+							cs.setString(6, dev_ip);//电视IP或mac*
+							cs.setString(7, usr_id);//用户id*
+							cs.setString(8, interval);//时间间隔*
 							cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
 							cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
 							cs.registerOutParameter(11, -10);// 输出参数 追溯数据
 							cs.registerOutParameter(12, -10);// 输出参数 追溯数据
+							cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 
 							return cs;
 						}
 					}, new CallableStatementCallback() {
@@ -459,6 +553,7 @@ public class PrcKanbanUtils {
 									e.printStackTrace();
 								}
 								result.add(l_2);
+								result.add(cs.getString(13));
 							}
 							System.out.println(l);
 							return result;

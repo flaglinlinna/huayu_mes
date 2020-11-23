@@ -1,7 +1,9 @@
 package com.web.kanban.controller;
 
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,10 +62,71 @@ public class kanbanController extends WebController {
 		String methodName = "看板demo";
 		ModelAndView mav = new ModelAndView();
 		// mav.addObject("pname", p);
-		mav.setViewName("/kanban/index");// 返回路径
+		mav.setViewName("/kanban/index1");// 返回路径
 		return mav;
 	}
 	
+	//（复数看板）轮播页面
+	@RequestMapping(value = "/toCjkbs", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCjkbs(String inType) {
+		ModelAndView mav = new ModelAndView();
+		String method = "/kanban/toCjkbs";
+		String methodName = "车间看板【车间报工+生产电子】";
+		try {	
+			ApiResponseResult rotation =kanbanService.getRotationTime();
+			mav.addObject("rotation",rotation);
+			mav.addObject("inType",inType);
+			mav.setViewName("/kanban/cjkbs");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("车间看板【车间报工+生产电子】异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
+		return mav;
+	}
+
+		@RequestMapping(value = "/toLtkbs", method = RequestMethod.GET)
+		@ResponseBody
+		public ModelAndView toLtkbs(String liner,String inType) {
+			ModelAndView mav = new ModelAndView();
+			String method = "/kanban/toLtkbs";
+			String methodName = "获取拉头看板";
+			try {	
+				ApiResponseResult rotation =kanbanService.getRotationTime();
+				mav.addObject("rotation",rotation);
+				mav.addObject("liner",liner);
+				mav.addObject("inType",inType);
+				mav.setViewName("/kanban/ltkbs");// 返回路径
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("获取拉头看板异常！", e);
+				getSysLogService().error(module,method,methodName,e.toString());
+			}
+			return mav;
+		}
+	
+		@RequestMapping(value = "/toSetLiner", method = RequestMethod.GET)
+		@ResponseBody
+		public ModelAndView toSetLiner(String inType,String pageType) {
+			ModelAndView mav = new ModelAndView();
+			String method = "/kanban/toSetLiner";
+			String methodName = "获取组长数据-拉头看板";
+			try {	
+				ApiResponseResult linerList=kanbanService.getLiner();
+				mav.addObject("linerList",linerList);
+				mav.addObject("inType",inType);
+				mav.addObject("pageType",pageType);
+				mav.setViewName("/kanban/setliner");// 返回路径
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("获取组长数据-拉头看板异常！", e);
+				getSysLogService().error(module,method,methodName,e.toString());
+			}
+			return mav;
+		}
+		
+		
 	//不带参数的默认获取
 
 	@RequestMapping(value = "/toCjbg", method = RequestMethod.GET)
@@ -73,23 +136,26 @@ public class kanbanController extends WebController {
 		String methodName = "车间报工看板";
 		ModelAndView mav = new ModelAndView();
 		// mav.addObject("pname", p);
-		mav.setViewName("/kanban/cjbg");// 返回路径
+		mav.setViewName("/kanban/index1");// 返回路径
 		return mav;
 	}
 
 	@RequestMapping(value = "/toCjbg1", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toCjbg1(String line) {
+	public ModelAndView toCjbg1(String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "/kanban/toCjbg1";
 		String methodName = "车间报工看板";
 		try {	
-			ApiResponseResult result = kanbanService.getCjbgList("999",line,"",this.getIpAddr());
+			ApiResponseResult result = kanbanService.getCjbgList("999","","",this.getIpAddr());
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("获取看板=toCjbg1:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList",deptList);
+			mav.addObject("interval",interval);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/cjbg1");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -99,19 +165,43 @@ public class kanbanController extends WebController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/toCjbgDetail", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCjbgDetail(String liner) {
+		ModelAndView mav = new ModelAndView();
+		String method = "/kanban/toCjbgDetail";
+		String methodName = "车间报工看板数据穿透";
+		try {
+			ApiResponseResult result = kanbanService.getCjbgDetailList(liner, this.getIpAddr());
+			logger.debug(methodName+"=toCjbgDetail:" + result);
+			getSysLogService().success(module,method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.addObject("liner", liner);
+			mav.setViewName("/kanban/cjbg_detail");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
 	@RequestMapping(value = "/toScdz", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toScdz(String line) {
+	public ModelAndView toScdz(String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toScdz";
 		String methodName = "生产电子看板";
 		try {	
 			ApiResponseResult result = kanbanService.getScdzList("999","","",this.getIpAddr());
 			ApiResponseResult deptList = kanbanService.getCjbgDepList();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("获取生产电子看板=toScdz:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
+			mav.addObject("interval",interval);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/scdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -121,19 +211,43 @@ public class kanbanController extends WebController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/toScdzDetail", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toScdzDetail(String liner) {
+		ModelAndView mav = new ModelAndView();
+		String method = "/kanban/toScdzDetail";
+		String methodName = "生产电子看板数据穿透";
+		try {
+			ApiResponseResult result = kanbanService.getScdzDetailList(liner, "",this.getIpAddr());
+			logger.debug(methodName+"=toScdzDetail:" + result);
+			getSysLogService().success(module,method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.addObject("liner", liner);
+			mav.setViewName("/kanban/scdz_detail");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
 	@RequestMapping(value = "/toZcbl", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toZcbl(String line) {
+	public ModelAndView toZcbl(String line,String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toZcbl";
 		String methodName = "制程不良看板";
 		try {	
-			ApiResponseResult result = kanbanService.getZcblList("999",line,"",this.getIpAddr());
+			ApiResponseResult result = kanbanService.getZcblList("999","","",this.getIpAddr());
 			ApiResponseResult deptList=kanbanService.getZcblDepList();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("制程不良看板=toZcbl:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList",deptList);
+			mav.addObject("interval",interval);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/zcbl");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -145,19 +259,23 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toXlpm", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toXlpm(String line,String liner) {
+	public ModelAndView toXlpm(String liner,String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toXlpm";
 		String methodName = "效率排名看板";
 		try {	
-			ApiResponseResult result = kanbanService.getXlpmList("999",line,"",this.getIpAddr(),liner);
+			ApiResponseResult result = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner);
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("效率排名看板=toXlpm:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
 			mav.addObject("linerList", linerList);
+			mav.addObject("nowLiner", liner);
+			mav.addObject("interval",interval);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/xlpm");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,7 +287,7 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toDfg", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toDfg() {
+	public ModelAndView toDfg(String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toDfg";
 		String methodName = "待返工看板";
@@ -181,12 +299,17 @@ public class kanbanController extends WebController {
             }else{
             	usr_id=currUser.getId().toString();
             }
-			ApiResponseResult result = kanbanService.getDfgList("1","5252","2020-11-10",usr_id,"1");//this.getIpAddr()
+			Date date = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			ApiResponseResult result = kanbanService.getDfgList("1","",formatter.format(date),usr_id,"1");//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getZcblDepList();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("待返工看板=toDfg:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
+			mav.addObject("interval",interval);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/dfg");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -198,23 +321,55 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toCxdz", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toCxdz() {
+	public ModelAndView toCxdz(String liner,String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toCxdz";
 		String methodName = "产线电子看板";
 		try {	
-			ApiResponseResult result = kanbanService.getCxdzList("","","2020-11-13",this.getIpAddr(),"");//this.getIpAddr()
+			ApiResponseResult result = kanbanService.getCxdzList("","","",this.getIpAddr(),liner);//this.getIpAddr()
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
 			logger.debug("产线电子看板=toCxdz:" + result);
 			getSysLogService().success(module,method,methodName,result);
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
 			mav.addObject("linerList", linerList);
+			mav.addObject("interval",interval);
+			mav.addObject("nowLiner", liner);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/cxdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("获取产线电子看板看板异常！", e);
+			logger.error("获取产线电子看板异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/toCxsc", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCxsc(String liner,String inType) {
+		ModelAndView mav = new ModelAndView();
+		String method = "kanban/toCxsc";
+		String methodName = "产线生产看板";
+		try {	
+			ApiResponseResult result = kanbanService.getCxscList("","",liner,this.getIpAddr(),"1");//this.getIpAddr()
+			ApiResponseResult deptList=kanbanService.getCjbgDepList();
+			ApiResponseResult linerList=kanbanService.getLiner();
+			ApiResponseResult interval =kanbanService.getIntervalTime();
+			logger.debug("产线生产看板=toCxsc:" + result);
+			getSysLogService().success(module,method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.addObject("deptList", deptList);
+			mav.addObject("linerList", linerList);
+			mav.addObject("interval",interval);
+			mav.addObject("nowLiner", liner);
+			mav.addObject("inType",inType);
+			mav.setViewName("/kanban/cxsc");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取产线生产看板异常！", e);
 			getSysLogService().error(module,method,methodName,e.toString());
 		}
 		return mav;
@@ -241,17 +396,35 @@ public class kanbanController extends WebController {
 			return ApiResponseResult.failure("获取车间报工看板信息失败！");
 		}
 	}
+	@ApiOperation(value = "获取车间报工看板数据穿透信息", notes = "获取车间报工看板数据穿透信息", hidden = true)
+	@RequestMapping(value = "/getCjbgDetailList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getCjbgDetailList(String liner) {
+		String method = "/kanban/getCjbgDetailList";
+		String methodName = "获取车间报工看板数据穿透信息";
+		try {
+			ApiResponseResult result = kanbanService.getCjbgDetailList(liner, this.getIpAddr());
+			logger.debug(methodName+"getCjbgDetailList:" + result);
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
 	
 	//带参数的二次获取
 
 	@ApiOperation(value = "获取制程不良看板信息", notes = "获取制程不良看板信息", hidden = true)
 	@RequestMapping(value = "/getZcblList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getZcblList(String class_no, String dep_id, String sdata) {
+	public ApiResponseResult getZcblList(String class_nos, String dep_id, String sdata) {
 		String method = "/kanban/getZcblList";
 		String methodName = "获取制程不良看板信息";
 		try {
-			ApiResponseResult result = kanbanService.getZcblList(class_no, dep_id, sdata, this.getIpAddr());
+			ApiResponseResult result = kanbanService.getZcblList(class_nos, dep_id, sdata, this.getIpAddr());
 			logger.debug("获取制程不良看板信息=getZcblList:" + result);
 			getSysLogService().success(module,method, methodName, null);
 			return result;
@@ -279,6 +452,24 @@ public class kanbanController extends WebController {
 			logger.error("获取生产电子看板信息失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取生产电子看板信息失败！");
+		}
+	}
+	@ApiOperation(value = "获取生产电子看板数据穿透信息", notes = "获取生产电子看板数据穿透信息", hidden = true)
+	@RequestMapping(value = "/getScdzDetailList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getScdzDetailList(String liner, String dep_id) {
+		String method = "/kanban/getScdzDetailList";
+		String methodName = "获取生产电子看板数据穿透信息";
+		try {
+			ApiResponseResult result = kanbanService.getScdzDetailList(liner, dep_id,   this.getIpAddr());
+			logger.debug(methodName+"=getScdzDetailList:" + result);
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
 		}
 	}
 	
@@ -345,6 +536,27 @@ public class kanbanController extends WebController {
 			logger.error("获取产线电子看板信息失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取产线电子看板信息失败！");
+		}
+	}
+	/**
+	 * 获取产线生产看板
+	 * */	
+	@ApiOperation(value = "获取产线生产看板信息", notes = "获取产线生产看板信息", hidden = true)
+	@RequestMapping(value = "/getCxscList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getCxscList(String taskNo,String deptId,String liner,String interval) {
+		String method = "/kanban/getCxscList";
+		String methodName = "获取产线生产看板信息";
+		try {
+			ApiResponseResult result = kanbanService.getCxscList(taskNo, deptId, liner,this.getIpAddr(),interval);
+			logger.debug("获取产线生产看板信息=getCxscList:" + result);
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取产线生产看板信息失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取产线生产看板信息失败！");
 		}
 	}
 }

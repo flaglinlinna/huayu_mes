@@ -15,7 +15,8 @@ $(function() {
 							elem : '#colTable',
 							// ,url:context+'/interfaces/getRequestList'
 							where : {},
-							height: 'full-210',
+							height: 'full-245'
+								,even:true,//条纹样式
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
 							page : true,
@@ -104,7 +105,8 @@ $(function() {
 							defaultToolbar : [],
 							page : true,
 							data : [],
-							height: 'full-210',
+							height: 'full-210'
+								,even:true,//条纹样式
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -122,9 +124,25 @@ $(function() {
 								type : 'numbers'
 							},{
 								field : 'TASK_NO',
-								title : '制定单号',
-								width : 300,sort: true
-							}, {
+								title : '制令单号',
+								width : 200,sort: true
+							},
+								{
+									field : 'ITEM_BARCODE',
+									title : '条码',
+									width : 200,sort: true
+								},{
+									field : 'ITEM_NO',
+									title : '物料编码',width : 150,sort: true
+								},
+								{
+									field : 'ITEM_NAME',
+									title : '物料描述',
+									width : 150,
+									sort: true
+								},
+
+								{
 								field : 'PROC_NO',
 								title : '工序编码',
 								width : 120,sort: true
@@ -135,21 +153,13 @@ $(function() {
 							},  {
 								field : 'LINE_NO',
 								title : '组长',
-								width : 150,sort: true
-							},  {
-								field : 'ITEM_BARCODE',
-								title : '条码',
-								width : 150,sort: true
-							},{
-								field : 'ITEM_NO',
-								title : '物料编码',width : 150,sort: true
-							},{
-								field : 'ITEM_NAME',
-								title : '物料描述',sort: true
-							},  {
+								width : 100,sort: true
+							},
+
+								{
 								field : 'INSP_NAME',
 								title : '送检类型',
-								width : 90,sort: true
+								width : 100,sort: true
 							},  {
 								field : 'USER_NAME',
 								title : '送检人',
@@ -215,7 +225,7 @@ function getProc(keyword) {
 						"<option value=" + da[i].PROC_NO + ">"
 								+ da[i].PROC_NAME + "</option>");
 			}
-			layui.form.render('select');
+			//layui.form.render('select');
 		} else {
 			layer.alert(data.msg);
 		}
@@ -256,24 +266,25 @@ function checkBarcode(proc, barcode) {
 	var params = {
 		"proc" : proc,
 		"barcode" : barcode,
+		"ptype":in_type
 	}
 	CoreUtil.sendAjax("/produce/transit/checkBarcode", JSON.stringify(params),
 			function(data) {
 				console.log(data)
-				if (data.result) {
 					if (data.result) {
-						
 						console.log(proc + "|" + in_type + "|" + barcode);
 						saveData(proc,in_type,barcode);
 						tableIns.reload({
 							data : data.data
 						});
 					} else {
-						layer.alert(data.msg);
+						playMusic();
+						layer.alert(data.msg,function () {
+							$('#barcode').val('');
+							$('#barcode').focus();
+							layer.closeAll();
+						});
 					}
-				} else {
-					layer.alert(data.msg);
-				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
 			});

@@ -1,0 +1,300 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>产线生产看板</title>
+<script type="text/javascript" src="../kanban/js/jquery.js"></script>
+<link rel="stylesheet" href="../kanban/css/comon0.css">
+<link rel="stylesheet" href="../layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}"></link>
+<script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
+
+</head>
+<style>
+/*
+th, td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+th {
+	font-size: 16px;
+	font-weight:normal;
+}
+
+td {
+	font-size: 16px;
+}*/
+.tablebox {
+	height: 200px;
+	overflow: hidden;
+	position: relative;
+	margin: 10px auto;
+}
+
+.tbl-header {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
+
+.tbl-body {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+.tablebox table {
+	width: 100%;
+}
+
+.tablebox table th, .tablebox table td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+.tablebox table tr th {
+	background: #333399;
+	cursor: pointer;
+}
+
+th {
+	font-size: 16px;
+	font-weight: normal;
+}
+
+td {
+	font-size: 16px;
+}
+
+.line {
+	position: absolute;
+	left: .3rem;
+	top: 0;
+	line-height: .75rem;
+}
+
+h2 {
+	text-align: center;
+	margin-top: 8px;
+	color: #ffffff;
+	font-size: 20px;
+}
+
+h1 {
+	font-weight: bold;
+}
+
+ul {
+	list-style: none;
+	margin-left: 10px;
+}
+
+li {
+	line-height: 40px;
+	color: #ffffff;
+	font-size: 14px;
+}
+
+.span_li {
+	margin-left: 10px;
+	color: #ffffff;
+	font-size: 14px;
+}
+</style>
+<script>
+	$(window).load(function(){  
+             $(".loading").fadeOut()
+            })  
+			
+/****/
+$(document).ready(function(){
+	var whei=$(window).width()
+	$("html").css({fontSize:whei/20})
+	$(window).resize(function(){
+		var whei=$(window).width()
+	 $("html").css({fontSize:whei/20})
+});
+	
+	});
+	</script>
+
+<script type="text/javascript" src="../kanban/js/echarts.min.js"></script>
+<body>
+	<!--<div class="canvas" style="opacity: .2">
+		<iframe frameborder="0" src="../kanban/js/index.html"
+			style="width: 100%; height: 100%"></iframe>
+	</div>  -->
+	<header class="header left" id="inSearch">
+		<div class="total_chose_box">
+			<div style="height: 5px;"></div>
+			<span class="chose_tltle">请选择组长：</span> <select class="year_chose"
+				id="liner_select">
+			</select>
+			<!-- <input class="chose_text_in"> -->
+			<button class="chose_enter" id="searchBtn">确定</button>
+		</div>
+	</header>
+	<div class="head">
+		<div class="line">
+			<span style="color: #FFFFFF; font-size: 16px;" id="showLine"></span>
+		</div>
+		<h1 id="title">产线生产看板</h1>
+		<div class="weather">
+			<!--<img src="picture/weather.png"><span>多云转小雨</span>-->
+			<span id="showTime"></span>
+		</div>
+
+		<script>
+var t = null;
+    t = setTimeout(time,1000);//開始运行
+    function time()
+    {
+       clearTimeout(t);//清除定时器
+       dt = new Date();
+		var y=dt.getFullYear();
+		var mt=dt.getMonth()+1;
+		var day=dt.getDate();
+       var h=dt.getHours();//获取时
+       var m=dt.getMinutes();//获取分
+       var s=dt.getSeconds();//获取秒
+       document.getElementById("showTime").innerHTML = y+"年"+mt+"月"+day+"日  "+h+"时"+m+"分"+s+"秒";
+       t = setTimeout(time,1000); //设定定时器，循环运行     
+    } 
+
+</script>
+	</div>
+	<div class="mainbox">
+		<div class="boxall" style="height: 180px">
+			<div id="echart1"
+				style="width: 25%; height: 180px; float: left; color: #ffffff;">
+				<ul>
+					<li>生产线:<span class="span_li" id="line"></span></li>
+					<li>组长:<span class="span_li" id="liner"></span></li>
+					<li>在线人数:<span class="span_li" id="empOnline"></span></li>
+					<li>制令单:<span class="span_li" id="taskNo"></span></li>
+				</ul>
+			</div>
+			<div id="echart2" style="width: 20%; height: 180px; float: left;">
+				<ul>
+					<li>标准产能:<span class="span_li" id="capacity"></span></li>
+					<li>计划数:<span class="span_li" id="planQty"></span></li>
+					<li>投入数:<span class="span_li" id="inputQty"></span></li>
+					<li>完成数:<span class="span_li" id="doneQty"></span></li>
+				</ul>
+			</div>
+			<div id="echart4" style="width: 30%; height: 180px; float: left;">
+				<ul>
+					<li>产品编码:<span class="span_li" id="itemNo"></span></li>
+					<li>产品名称:<span class="span_li" id="itemName"></span></li>
+				</ul>
+			</div>
+			<div id="echart3"
+				style="width: 25%; height: 180px; float: left; margin-top: 5px;"></div>
+			<div class="boxfoot"></div>
+		</div>
+		<div class="boxall">
+			<!-- <div class="data_table">
+				<table id="table" class="table table-bordered"
+					style="width: 99%; margin-top: 10px;">
+					<thead>
+						<tr class="blue_bg" style="background: #333399;">
+							<th style="width:30%;">时间段</th>
+							<th>投入数量</th>
+							<th>完工数量</th>
+							<th>良品数</th>
+							<th>不良品数</th>
+							<th>良品率</th>
+						</tr>
+					</thead>
+					<tbody id="tableList">
+
+					</tbody>
+				</table>
+			</div>-->
+			<div class="tablebox">
+				<div class="tbl-header">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 30%;">时间段</th>
+								<th>投入数量</th>
+								<th>完工数量</th>
+								<th>良品数</th>
+								<th>不良品数</th>
+								<th>良品率</th>
+							</tr>
+						</thead>
+						<tbody style="opacity: 0;" id="tableList1"></tbody>
+					</table>
+				</div>
+
+				<div class="tbl-body">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 30%;">时间段</th>
+								<th>投入数量</th>
+								<th>完工数量</th>
+								<th>良品数</th>
+								<th>不良品数</th>
+								<th>良品率</th>
+							</tr>
+						</thead>
+						<tbody id="tableList">
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="boxfoot"></div>
+		</div>
+		<script th:inline="javascript">
+        var kanbanDataList=[[${kanbanDataList}]];
+        var deptList=[[${deptList}]];
+        var linerList=[[${linerList}]];
+        var interval=[[${interval}]];
+        var nowLiner=[[${nowLiner}]];
+        var inType=[[${inType}]];
+    </script>
+		<script th:inline="javascript">
+    var context = [[@{/}]];
+    	layui.use([ 'laydate'], function(){
+    		  var layer = layui.layer
+    		  ,laydate = layui.laydate;
+    		  
+    		  //日期
+    		  laydate.render({
+    		    elem: '#date',
+    		    trigger:'click'
+    		   // range: true
+    		  });
+    	});
+    	if(inType=="apk"){
+    		$("#inSearch").hide();
+    	}
+    </script>
+		<script src="/kanban/scripts/cxsc.js"
+			th:src="@{/kanban/scripts/cxsc.js}"></script>
+
+	</div>
+</body>
+</html>

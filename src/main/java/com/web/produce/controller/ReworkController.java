@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -103,7 +104,8 @@ public class ReworkController extends WebController {
 	        	String endTime = params.get("endTime") == null?"":params.get("endTime").toString();
 	        	String taskNo = params.get("taskNo") == null?"":params.get("taskNo").toString();
 	        	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
-	            ApiResponseResult result = reworkService.search(startTime,endTime,taskNo,barcode);
+	        	Sort sort =  Sort.unsorted();
+	            ApiResponseResult result = reworkService.search(startTime,endTime,taskNo,barcode,super.getPageRequest(sort));
 	            logger.debug("查询返工=search:");
 	            getSysLogService().success(module,method, methodName, null);
 	            return result;

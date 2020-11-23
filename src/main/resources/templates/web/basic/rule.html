@@ -28,13 +28,31 @@
 			</form>
 			<hr class="layui-bg-black" />
 
-			<button class="layui-btn layui-btn-sm layui-btn-normal"
-				onclick="addBarcodeRule()">添加校验规则</button>
+			<!--<shiro:hasPermission name="rule-add">-->
+			<!--<button class="layui-btn layui-btn-sm layui-btn-normal"-->
+				<!--onclick="addBarcodeRule()">添加校验规则</button>-->
+			<!--</shiro:hasPermission>-->
+
+			<script type="text/html" id="toolbar">
+				<div class="layui-btn-container layui-inline">
+					<shiro:hasPermission name="rule-add">
+						<button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="doAdd" >添加校验规则</button>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="rule-delete">
+						<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="doDelete">批量删除</a>
+					</shiro:hasPermission>
+				</div>
+			</script>
+
 			<table id="ruleList" lay-filter="ruleTable"></table>
 
 			<script type="text/html" id="optBar">
+				<shiro:hasPermission name="rule-edite">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+				</shiro:hasPermission>
+				<shiro:hasPermission name="rule-del">
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+				</shiro:hasPermission>
         </script>
 		</div>
 		<!--添加或编辑校验规则-->
@@ -97,7 +115,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">验证数据</label>
 					<div class="layui-input-inline" style="width: 320px;">
-						<input id="chkString" name="chkString" lay-verify="required" placeholder="请输入验证数据" 
+						<input id="chkString" name="chkString" lay-verify="required|chkString"  placeholder="请输入验证数据"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
@@ -110,8 +128,10 @@
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 0px;">
+						<shiro:hasPermission name="rule-edite">
 						<button class="layui-btn layui-btn-sm" lay-submit=""
 							lay-filter="addSubmit">提交</button>
+							</shiro:hasPermission>
 						<button type="reset"
 							class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
 					</div>

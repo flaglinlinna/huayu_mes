@@ -56,6 +56,9 @@
         }).extend({
             index: 'lib/index' //主入口模块
         }).use(['index']);
+        
+        
+        
         function getNextDateTime(day) {
 
             var dd = new Date();
@@ -242,6 +245,17 @@
                 return "stp";
             }
         }
+        function playMusic() {
+        	// alert('123')
+            var audioEle = document.getElementById("audio");
+        	// alert(audioEle)
+            audioEle.load();
+            if (audioEle.paused){ /*如果已经暂停*/
+                audioEle.play();   //播放
+            }else {
+                audioEle.pause();  //暂停
+            }
+        }
     </script>
     <style th:inline="text">
         .bg{
@@ -262,7 +276,10 @@
         hr{
             margin:0px;
         }
+        
     </style>
-
 </head>
+<!-- <body>
+<audio id="audio" src="/audio/12404.mp3"></audio>
+</body> -->
 </html>

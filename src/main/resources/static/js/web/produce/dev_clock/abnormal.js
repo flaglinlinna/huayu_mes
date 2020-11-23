@@ -15,6 +15,8 @@ $(function() {
 									method : 'get' // 默认：get请求
 									,
 									cellMinWidth : 80,
+									height:'full-110'//固定表头&full-查询框高度
+									,even:true,//条纹样式
 									page : true,
 									request : {
 										pageName : 'page' // 页码的参数名称，默认：page
@@ -437,18 +439,18 @@ function getReasonSelect(editReason) {
 		if (data.result) {
 				$("#forReason").empty();
 				var forReason = data.data.rows;
-				if(editReason!=""){
-					$("#forReason").append(
-						"<option value=" + editReason + ">"
-						+ editReason + "</option>");
-				}
 				for (var i = 0; i < forReason.length; i++) {
-					if(forReason[i].abnormalType!=editReason) {
+					if(forReason[i].abnormalType ==editReason) {
 						$("#forReason").append(
-							"<option value=" + forReason[i].abnormalType + ">"
-							+ forReason[i].abnormalType + "</option>");
+							"<option value=" + forReason[i].ID + "  selected='selected'>"
+							+ forReason[i].ERR_NAME + "</option>");
+					}else{
+						$("#forReason").append(
+								"<option value=" + forReason[i].ID + ">"
+								+ forReason[i].ERR_NAME + "</option>");
 					}
 				}
+
 				layui.form.render('select');
 		} else {
 			layer.alert(data.msg);

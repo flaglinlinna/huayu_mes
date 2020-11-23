@@ -21,6 +21,8 @@ $(function() {
 									,
 									defaultToolbar : [],
 									cellMinWidth : 80,
+									height:'full-295'//固定表头&full-查询框高度
+									,even:true,//条纹样式
 									page : true,
 									limit:200,
 									limits:[200,400,600,1000],
@@ -104,10 +106,12 @@ $(function() {
 								url : context + '/verify/getTaskNo',
 								// url: context +'base/prodproc/getProdList',
 								method : 'get',
+								width : 800,
 								cols : [ [
 									{type:'numbers',title:"序号"},
 									{
-									type : 'radio'
+									type : 'radio',
+									
 								},// 多选 radio
 								, {
 									field : 'id',
@@ -117,27 +121,27 @@ $(function() {
 								}, {
 									field : 'TASK_NO',
 									title : '制令单号',
-									cellMinWidth : 100,
+									width : 150,
 									sort : true
 								}, {
 									field : 'ITEM_NO',
 									title : '物料编码',
-									width : 150,
+									width : 140,
 									sort : true
 								}, {
 									field : 'LINER_NAME',
 									title : '组长',
-									width : 100,
+									width : 70,
 									sort : true
 								}, {
 									field : 'PROD_DATE',
 									title : '计划日期',
-									width : 150,
+									width : 130,
 									sort : true
 								}, {
 									field : 'ITEM_NAME',
 									title : '物料描述',
-									width : 240,
+									width : 120,
 									sort : true
 								}, {
 									field : 'CUST_NAME_S',
@@ -229,7 +233,8 @@ $(function() {
 							done : function(elem, data) {
 								var da = data.data;
 								form.val("createForm", {
-									"pliao" : da[0].ITEM_NO
+									"pliao" : da[0].ITEM_NO,
+									"itemName":da[0].ITEM_NAME,
 								});
 								form.render();// 重新渲染
 							}
@@ -284,6 +289,20 @@ $(function() {
 							getUserByLine(data.value);
 						});
 
+						$('#barcode').bind('keypress', function(event) {
+							if (event.keyCode == "13") {
+								// alert('你输入的内容为：' + $('#barcode').val());
+								if ($('#barcode').val()) {
+									getInfoBarcode($('#barcode').val())
+								} else {
+									layer.alert("请先扫描条码!",function () {
+										$('#barcode').focus();
+										layer.closeAll();
+									});
+								}
+							}
+						});
+
 						getInfoAdd();
 
 						$(document).on('click', '#addBtn', function() {
@@ -310,7 +329,8 @@ $(function() {
 							defaultToolbar : [],
 							page : true,
 							data : [],
-							height : 'full-210',
+							height:'full-80'//固定表头&full-查询框高度
+								,even:true,//条纹样式
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -328,29 +348,40 @@ $(function() {
 								type : 'numbers'
 							}, {
 								field : 'TASK_NO',
-								title : '制定单号',
-								width : 350,
+								title : '制令单号',
+								width : 200,
 								sort : true
 							}, {
 								field : 'LINE_NAME',
 								title : '线体',
-								width : 200,
+								width : 160,
 								sort : true
-							}, {
-								field : 'DEV_IP',
-								title : '卡机IP',
-								width : 200,
-								sort : true
-							}, {
+							},
+							// 	{
+							// 	field : 'DEV_IP',
+							// 	title : '卡机IP',
+							// 	width : 150,
+							// 	sort : true
+							// },
+								{
 								field : 'EMP_NAME',
 								title : '员工姓名',
+								width : 150,
 								sort : true
-							}, {
+							},
+								{
 								field : 'CREATE_DATE',
 								title : '上线时间',
 								width : 150,
 								sort : true
-							} ] ],
+							},
+								{
+									field : 'CREATE_DATE1',
+									title : '分配时间',
+									width : 150,
+									sort : true
+								},
+							] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}
@@ -423,11 +454,18 @@ function save(params, emp_ids) {
 		"emp_ids" : emp_ids
 	};
 	CoreUtil.sendAjax("/verify/save", JSON.stringify(param), function(data) {
+		if(data.result){
+			layer.alert(data.msg, function() {
+				getUserByLine(params.pline);
+				layer.closeAll();
+			});
+		}else {
+			playMusic();
+			layer.alert(data.msg, function() {
+				layer.closeAll();
+			});
+		}
 
-		layer.alert(data.msg, function() {
-			getUserByLine(params.pline);
-			layer.closeAll();
-		});
 	}, "POST", false, function(res) {
 		layer.alert(res.msg);
 	});
@@ -537,10 +575,13 @@ function add(params) {
 		"classId" : params.pclass2
 	};
 	CoreUtil.sendAjax("/verify/add", JSON.stringify(param), function(data) {
-
-		layer.alert(data.msg, function() {
-			layer.closeAll();
-		});
+		if(data.result){
+			layer.alert(data.msg, function() {
+				layer.closeAll();
+			});
+		}else {
+			layer.alert(data.msg);
+		}
 	}, "POST", false, function(res) {
 		layer.alert(res.msg);
 	});
@@ -549,4 +590,29 @@ function add(params) {
 function cleanForm() {
 	$('#createForm')[0].reset();
 	layui.form.render();// 必须写
+}
+
+function getInfoBarcode(barcode) {
+	// console.log(taskNo);
+	var params = {
+		"barcode" : barcode
+	}
+	CoreUtil.sendAjax("/verify/getInfoBarcode", params, function(data) {
+		if (data.result) {
+			$("input[name='pliao']").val(data.data[0].ITEM_NO);
+			$("input[name='itemName']").val(data.data[0].ITEM_NAME);
+		} else {
+			playMusic();
+			layer.alert(data.msg,function (index) {
+				$('#barcode').val('');
+				$('#pliao').val('');
+				$('#itemName').val('');
+				$('#barcode').focus();
+				layer.close(index);
+			});
+			// $('#barcode').val('');
+		}
+	}, "GET", false, function(res) {
+		layer.alert(res.msg);
+	});
 }

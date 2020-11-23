@@ -21,6 +21,8 @@ $(function() {
 							,
 							defaultToolbar : [],
 							cellMinWidth : 80,
+							height:'full-375'//固定表头&full-查询框高度
+								,even:true,//条纹样式
 							page : false,
 							data : [],
 							request : {
@@ -49,13 +51,13 @@ $(function() {
 							}, {
 								field : 'ITEM_BARCODE',
 								title : '条码',
-								width : 160,
+								width : 150,
 								sort : true
 							}, {
 								field : 'ITEM_NO',
 								title : '物料编号',
 								align : 'center',
-								width : 150,
+								width : 140,
 								sort : true
 							}, {
 								field : 'ITEM_NAME',
@@ -67,7 +69,7 @@ $(function() {
 									field : 'USER_NAME',
 									title : '员工姓名',
 									align:	'center',
-									width : 110,sort: true
+									width : 100,sort: true
 								},
 								{
 								field : 'FEED_TYPE',
@@ -109,6 +111,7 @@ $(function() {
 								url : context + '/input/getTaskNo',
 								// url: context +'base/prodproc/getProdList',
 								method : 'get',
+								width:800,
 								cols : [ [ {
 									type : 'numbers',
 									title : '序号'
@@ -124,7 +127,7 @@ $(function() {
 								}, {
 									field : 'TASK_NO',
 									title : '制令单号',
-									width : 180,
+									width : 150,
 									sort : true
 								}, {
 									field : 'ITEM_NO',
@@ -219,7 +222,8 @@ $(function() {
 							defaultToolbar : [],
 							page : true,
 							data : [],
-							height : 'full-210',
+							height : 'full-210'
+								,even:true,//条纹样式
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -238,12 +242,12 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 340,
+								width : 200,
 								sort : true
 							}, {
 								field : 'ITEM_BARCODE',
 								title : '物料条码',
-								width : 150
+								width : 180
 							}, {
 								field : 'ITEM_NO',
 								title : '物料料号',
@@ -260,7 +264,13 @@ $(function() {
 								field : 'USER_NAME',
 								title : '上料人姓名',
 								width : 100
-							} ] ],
+							},
+								{
+									field : 'CREATE_DATE',
+									title : '上料时间',
+									width : 150
+								},
+							] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}
@@ -271,24 +281,37 @@ $(function() {
 		if (event.keyCode == "13") {
 			// alert('你输入的内容为：' + $('#barcode').val());
 			if ($('#barcode').val()) {
-				getInfoBarcode($('#barcode').val())
+				getInfoBarcode($('#barcode').val(),$('#num').val())
 			} else {
-				layer.alert("请先扫描条码!");
+				layer.alert("请先扫描条码!",function () {
+					$('#barcode').focus();
+					layer.closeAll();
+				});
 			}
 		}
 	});
 });
 
-function getInfoBarcode(barcode) {
+function getInfoBarcode(barcode,taskNo) {
+	// console.log(taskNo);
 	var params = {
-		"barcode" : barcode
+		"barcode" : barcode,
+		"taskNo":taskNo
 	}
 	CoreUtil.sendAjax("/input/getInfoBarcode", params, function(data) {
 		if (data.result) {
 			$("input[name='item_code']").val(data.data[0].ITEM_NO);
 			$("input[name='addqty']").val(data.data[0].QTY);
 		} else {
-			layer.alert(data.msg);
+			playMusic();
+			layer.alert(data.msg,function () {
+				$('#barcode').val('');
+				$('#item_code').val('');
+				$('#addqty').val('');
+				$('#barcode').focus();
+				layer.closeAll();
+			});
+			// $('#barcode').val('');
 		}
 	}, "GET", false, function(res) {
 		layer.alert(res.msg);
@@ -321,14 +344,21 @@ function addPut(obj) {
 		"qty" : obj.addqty
 	};
 	CoreUtil.sendAjax("/input/addPut", params, function(data) {
-		//console.log(data)
 		if (data.result) {
 			$("#inqty").val(data.data.Qty);
 			tableIns.reload({
 				data : data.data.List
 			});
+			 $('#barcode').val('');
+	            $('#item_code').val('');
+	            $('#addqty').val('');
+			$('#barcode').focus();
 		} else {
-			layer.alert(data.msg);
+			playMusic();
+			layer.alert(data.msg,function () {
+				$('#barcode').focus();
+				layer.closeAll();
+			});
 		}
 		$("input[name='barcode']").val('');
 		$("input[name='item_code']").val('');

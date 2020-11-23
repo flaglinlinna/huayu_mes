@@ -8,6 +8,7 @@ import com.web.produce.entity.SchedulingDet;
 import com.web.produce.entity.SchedulingMain;
 import com.web.produce.service.SchedulingMainService;
 
+import com.web.produce.service.SchedulingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class SchedulingMainController extends WebController {
     private String module = "排产信息 主";
     @Autowired
     private SchedulingMainService schedulingMainService;
+    @Autowired
+    private SchedulingService schedulingService;
 
     @ApiOperation(value = "排产信息主表结构", notes = "排产信息主表结构"+SchedulingMain.TABLE_NAME)
     @RequestMapping(value = "/getSchedulingMain", method = RequestMethod.GET)
@@ -55,6 +58,8 @@ public class SchedulingMainController extends WebController {
         ModelAndView mav = new ModelAndView("/web/produce/scheduling/scheduling_main_add");
         try{
             ApiResponseResult result = schedulingMainService.getSchedulingMain(id);
+            mav.addObject("bfDay", schedulingService.getUploadDay(2));
+            mav.addObject("afDay", schedulingService.getUploadDay(1));
             mav.addObject("id", id);
             if(result != null){
                 mav.addObject("mapData", result.getData());
@@ -67,6 +72,21 @@ public class SchedulingMainController extends WebController {
 
         return mav;
     }
+
+
+    @ApiOperation(value = "获得详情", notes = "获得详情", hidden = true)
+    @RequestMapping(value = "/getSchedulingMain")
+    @ResponseBody
+    public ApiResponseResult getSchedulingMain(Long id){
+        try{
+            ApiResponseResult result = schedulingMainService.get(id);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            return ApiResponseResult.failure("查询失败！");
+        }
+    }
+
 
     @ApiOperation(value = "新增", notes = "新增", hidden = true)
     @RequestMapping(value = "/add", method = RequestMethod.POST)

@@ -5,9 +5,9 @@ import com.web.basic.entity.Abnormal;
 import org.springframework.data.domain.PageRequest;
 
 public interface AbnormalService {
-	public ApiResponseResult add(Abnormal defective) throws Exception;
+	public ApiResponseResult add(Abnormal abnormal) throws Exception;
 
-	public ApiResponseResult edit(Abnormal defective) throws Exception;
+	public ApiResponseResult edit(Abnormal abnormal) throws Exception;
 
 	public ApiResponseResult delete(Long id) throws Exception;
 

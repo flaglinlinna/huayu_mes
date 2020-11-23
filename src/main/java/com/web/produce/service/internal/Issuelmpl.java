@@ -25,12 +25,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
+import com.utils.BaseSql;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.attendance.ZkemSDKUtils;
 import com.web.basic.dao.EmployeeDao;
 import com.web.basic.entity.Employee;
+import com.web.basic.entity.Line;
 import com.web.produce.dao.CardDataDao;
 import com.web.produce.dao.DevClockDao;
 import com.web.produce.dao.DevLogDao;
@@ -49,7 +51,7 @@ import com.web.produce.service.IssueService;
  */
 @Service(value = "IssueService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class Issuelmpl  implements IssueService {
+public class Issuelmpl extends BaseSql  implements IssueService {
 
 	@Autowired
 	IssueDao issueDao;
@@ -339,23 +341,9 @@ public class Issuelmpl  implements IssueService {
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getEmp(String empKeyword, PageRequest pageRequest) throws Exception {
-		/*List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-		filters.add(new SearchFilter("empStatus", SearchFilter.Operator.EQ, BasicStateEnum.TRUE.intValue()));
-		// 查询2
-		List<SearchFilter> filters1 = new ArrayList<>();
-		if (StringUtils.isNotEmpty(empKeyword)) {
-			filters1.add(new SearchFilter("empName", SearchFilter.Operator.LIKE, empKeyword));
-			filters1.add(new SearchFilter("empCode", SearchFilter.Operator.LIKE, empKeyword));
-			filters1.add(new SearchFilter("empType", SearchFilter.Operator.LIKE, empKeyword));
-		}
-		Specification<Employee> spec = Specification.where(BaseService.and(filters, Employee.class));
-		Specification<Employee> spec1 = spec.and(BaseService.or(filters1, Employee.class));
-		Page<Employee> page = employeeDao.findAll(spec1, pageRequest);
-		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
-		// 排序方式
+	public ApiResponseResult getEmp(String keyword,String create_time,String dept_name, PageRequest pageRequest) throws Exception {
+
+		/*// 排序方式
         Sort sort = pageRequest.getSort();  // 记住一定要是实体类的属性，而不能是数据库的字段
         Pageable pageable = new PageRequest(pageRequest.getPageNumber() , pageRequest.getPageSize(), sort); // （当前页， 每页记录数， 排序方式）
 		Page<Map<String, Object>> page = null;
@@ -365,7 +353,72 @@ public class Issuelmpl  implements IssueService {
 			page =issueDao.findpage(empKeyword, pageable);
 		}
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
+		String hql = "select distinct f.emp_id id,a.emp_code,a.emp_name,a.emp_type, max(f.create_date) create_date,a.DEPT_NAME,a.DEPT_NAME1 from MES_BASE_EMP_FINGER f left join MES_BASE_EMPLOYEE a on a.id = f.emp_id and a.del_flag=0 where f.del_flag=0   ";
+		
+		//SQLParameter<Parameter> params = SQLParameter.newInstance(Parameter.class);
+		//params.add(Parameter.build("bsIsDel", 0));// 删除标识
+		
+		if (StringUtils.isNotEmpty(keyword)) {
+			//hql += "and ( CONCAT(a.line_No,a.line_Name,a.liner_Code,a.liner_Name) like '%:keyword%') ";
+			//params.add(Parameter.build("keyword", keyword));
+			hql += "  and INSTR((a.emp_code || a.emp_code || a.emp_name || a.emp_type ),  '"
+					+ keyword + "') > 0 ";
+		}
+		if(StringUtils.isNotEmpty(create_time)){
+			String[] dates = create_time.split(" - ");
+			hql += " and to_char(f.create_date,'yyyy-MM-dd') >= '"+dates[0]+"'";
+			hql += " and to_char(f.create_date,'yyyy-MM-dd') <= '"+dates[1]+"'";
+		}
+		if (StringUtils.isNotEmpty(dept_name)) {
+			hql += " and a.DEPT_NAME like '%"+dept_name+"%'";
+		}
+
+		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME,a.DEPT_NAME1 order by  max(f.create_date) desc ";
+
+		int pn = pageRequest.getPageNumber() + 1;
+		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
+				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
+				+ pageRequest.getPageSize() + " ";
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		//List<Map<String, Object>> list = super.findBySql(sql, param);
+		List<Object[]>  list = createSQLQuery(sql, param);
+		long count = createSQLQuery(hql, param, null).size();
+		
+		List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//注意月份是MM
+       
+		for (int i=0;i<list.size();i++) {
+			Object[] object=(Object[]) list.get(i);	
+			Map<String, Object> map1 = new HashMap<>();
+			map1.put("ID", object[0]);
+			map1.put("EMP_CODE", object[1]);
+			map1.put("EMP_NAME", object[2]);
+			map1.put("EMP_TYPE", object[3]);
+			 Date date = simpleDateFormat.parse(object[4].toString());
+			map1.put("create_time", simpleDateFormat.format(date));
+			if(object[6]==null||("").equals(object[6])){
+				map1.put("dept_name", object[5]);
+			}else {
+				map1.put("dept_name", object[6]);
+			}
+			list_new.add(map1);
+		}
+		/*for (Map<String, Object> map : list) {
+			Map<String, Object> map1 = new HashMap<>();
+			map1.put("ID", map.get(0).toString());
+			map1.put("EMP_CODE", map.get(1).toString());
+			map1.put("EMP_NAME", map.get(2).toString());
+			map1.put("EMP_TYPE", map.get(3).toString());
+			map1.put("CREATE_TIME", map.get(4).toString());
+			map1.put("DEPT_NAME", map.get(5).toString());
+			list_new.add(map1);
+		}*/
+		
+		return ApiResponseResult.success().data(DataGrid.create(list_new, (int) count,
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
 
 	}
 

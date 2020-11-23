@@ -84,6 +84,7 @@ public class ShiroConfig {
 //
 //		// 配置不会被拦截的链接 从上向下顺序判断
 		filterChainDefinitionMap.put("/login", "anon");
+		filterChainDefinitionMap.put("/queryAppVersion", "anon");
 		filterChainDefinitionMap.put("/css/*", "anon");
 		filterChainDefinitionMap.put("/css/*/*", "anon");
 		filterChainDefinitionMap.put("/js/*", "anon");
@@ -115,6 +116,8 @@ public class ShiroConfig {
 		
 
 		filterChainDefinitionMap.put("/produce/inspect/*", "anon");//品质检查-PDA
+		
+		filterChainDefinitionMap.put("/produce/transit/*", "anon");//中转送检-PDA
 
 		filterChainDefinitionMap.put("/user/sendMsg", "anon");
 		filterChainDefinitionMap.put("/user/login", "anon");
@@ -357,5 +360,7 @@ public class ShiroConfig {
 		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());
 		return authorizationAttributeSourceAdvisor;
 	}
+	
+	
 
 }

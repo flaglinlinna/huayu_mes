@@ -13,6 +13,8 @@ $(function() {
 			,
 			width:1400,//设置表格宽度
 			cellMinWidth : 80,
+			height: 'full-80'
+			,even:true,//条纹样式
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page

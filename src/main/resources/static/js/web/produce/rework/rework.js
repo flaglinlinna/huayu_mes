@@ -14,6 +14,8 @@ $(function() {
 							where : {},
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
+							height:'full-300'//固定表头&full-查询框高度
+								,even:true,//条纹样式
 							page : false,
 							data : [],
 							request : {
@@ -49,8 +51,8 @@ $(function() {
 								width : 170,sort: true
 							}, {
 								field : 'TASK_NO',
-								title : '制定单号',
-								width : 350,sort: true
+								title : '制令单号',
+								width : 200,sort: true
 							}, {
 								field : 'FMEMO',
 								title : '备注',
@@ -70,7 +72,9 @@ $(function() {
 							where : {},
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
-							page : false,
+							height:'full-80'//固定表头&full-查询框高度
+								,even:true,//条纹样式
+							page : true,
 							data : [],
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
@@ -78,9 +82,9 @@ $(function() {
 							},
 							parseData : function(res) {// 可进行数据操作
 								return {
-									"count" : res.data.total,
+									"count" : res.data.count,
 									"msg" : res.msg,
-									"data" : res.data.rows,
+									"data" : res.data.data,
 									"code" : res.status
 								// code值为200表示成功
 								}
@@ -105,8 +109,8 @@ $(function() {
 								width : 170,sort: true
 							}, {
 								field : 'TASK_NO',
-								title : '制定单号',
-								width : 350,sort: true
+								title : '制令单号',
+								width : 200,sort: true
 							}, {
 								field : 'FMEMO',
 								title : '备注',
@@ -139,8 +143,22 @@ $(function() {
 									hide : true
 								}, {
 									field : 'TASK_NO',
-									title : '制令单号',sort: true
-								} ] ],
+									title : '制令单号',sort: true,
+										width:150,
+										align:'center'
+								},
+									{
+										field : 'ITEM_NO',
+										width:160,
+										title : '物料编号',sort: true,align:'center'
+									},
+									{
+										field : 'ITEM_NAME',
+										width:170,
+										title : '物料名称',sort: true,align:'center'
+									},
+
+								] ],
 								parseData : function(res) {
 									// console.log(res)
 									if (res.result) {
@@ -160,7 +178,9 @@ $(function() {
 								// console.log(data)
 								var da = data.data;
 								form.val("scanFrom", {
-									"sTaskno" : da[0].TASK_NO
+									"sTaskno" : da[0].TASK_NO,
+									"itemNo":da[0].ITEM_NO,
+									"itemName":da[0].ITEM_NAME,
 								});
 								form.render();// 重新渲染
 							}
@@ -218,10 +238,13 @@ $(function() {
 							if (data.value == "0") {
 								$('#sTaskno').val("");
 								$('#sTaskno').attr("disabled", "disabled");
+								$('#sTaskno').addClass("grey");
 							} else {
 								$('#sTaskno').val("");
+								$('#sTaskno').removeClass("grey");
 								$('#sTaskno').removeAttr("disabled");
 							}
+							layui.form.render('input');
 						})
 						// 日期选择器
 						laydate.render({
@@ -268,6 +291,7 @@ function reworkCode() {
 					});
 					layer.alert("扫描条码返工成功！");
 				} else {
+					playMusic();
 					layer.alert(data.msg);
 				}
 			}, "POST", false, function(res) {
@@ -281,17 +305,26 @@ function search(obj) {
 		"taskNo" : obj.hTaskno,
 		"barcode" : obj.hBarcode
 	};
+	hTableIns.reload({
+		url:context+'/produce/rework/search',
+		method:'POST',
+		contentType: 'application/json; charset=UTF-8',
+		where:params,
+		done: function(res1, curr, count){
+			pageCurr=curr;
+		}
+	})
 
-	CoreUtil.sendAjax("/produce/rework/search", JSON.stringify(params),
-			function(data) {
-				console.log(data)
-				if (data.result) {
-					hTableIns.reload({
-						data : data.data
-					});
-					//layer.alert("查询成功");
-				} else {
-					layer.alert(data.msg);
-				}
-			})
+	// CoreUtil.sendAjax("/produce/rework/search", JSON.stringify(params),
+	// 		function(data) {
+	// 			console.log(data)
+	// 			if (data.result) {
+	// 				hTableIns.reload({
+	// 					data : data.data
+	// 				});
+	// 				//layer.alert("查询成功");
+	// 			} else {
+	// 				layer.alert(data.msg);
+	// 			}
+	// 		})
 }

@@ -12,6 +12,8 @@ $(function() {
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
+			height: 'full-110'
+			,even:true,//条纹样式
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -153,6 +155,7 @@ $(function() {
 			load(data);
 			return false;
 		});
+
 		tableProc=table.render({
 			elem : '#procList',
 			limit: 20,

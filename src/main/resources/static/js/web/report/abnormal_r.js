@@ -12,6 +12,8 @@ $(function() {
 			method : 'get' // 默认：get请求
 			, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 			,cellMinWidth : 80,
+			height:'full-180'//固定表头&full-查询框高度
+				,even:true,//条纹样式
 			data : [],
 			height: 'full',
 			page : false,
@@ -59,10 +61,21 @@ $(function() {
 				field : 'TASK_NO',
 				title : '制令单号',
 				 sort: true
+					, width : 200
 			}, {
 				field : 'WOEK_DATE',
-				title : '工作日期',width : 120, sort: true
-			}] ],
+				title : '工作日期',width : 140, sort: true
+			},
+				{
+					field : 'TIME_BEGIN',
+					title : '上线时间',width : 160, sort: true
+				},
+				{
+					field : 'TIME_END',
+					title : '下线时间',width : 160, sort: true
+				},
+
+			] ],
 			done : function(res, curr, count) {
 				//
 				pageCurr = curr;

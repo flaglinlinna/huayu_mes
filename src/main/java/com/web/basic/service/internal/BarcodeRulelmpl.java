@@ -135,18 +135,22 @@ public class BarcodeRulelmpl implements BarcodeRuleService {
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult delete(Long id) throws Exception {
-		if (id == null) {
-			return ApiResponseResult.failure("校验规则ID不能为空！");
+	public ApiResponseResult delete(String ids) throws Exception {
+		if(StringUtils.isEmpty(ids)){
+			return ApiResponseResult.failure("线体ID不能为空！");
 		}
-		BarcodeRule o = barcodeRuleDao.findById((long) id);
-		if (o == null) {
-			return ApiResponseResult.failure("校验规则不存在！");
+		String[] id_s = ids.split(",");
+		List<BarcodeRule> ll = new ArrayList<>();
+		for(String id:id_s){
+			BarcodeRule o  = barcodeRuleDao.findById(Long.parseLong(id));
+			if(o != null){
+				o.setDelTime(new Date());
+				o.setDelFlag(1);
+				o.setDelBy(UserUtil.getSessionUser().getId());
+				ll.add(o);
+			}
 		}
-		o.setDelTime(new Date());
-		o.setDelFlag(1);
-		o.setDelBy(UserUtil.getSessionUser().getId());
-		barcodeRuleDao.save(o);
+		barcodeRuleDao.saveAll(ll);
 		return ApiResponseResult.success("删除成功！");
 	}
 

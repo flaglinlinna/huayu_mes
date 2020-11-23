@@ -13,8 +13,9 @@ $(function() {
 			,
 			cellMinWidth : 80,
 			toolbar: '#toolbar', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-			height: 'full',
-			page : true,
+			height: 'full-80'
+			,even:true//条纹样式
+			,page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -96,6 +97,11 @@ $(function() {
 			],
 			'done': function(filters){}
 		})
+
+		//监听行双击查看事件
+		table.on('rowDouble(listTable)', function(obj){
+			getProc(obj.data, obj.data.id);
+		});
 
 		//头工具栏事件
 		table.on('toolbar(listTable)', function(obj){

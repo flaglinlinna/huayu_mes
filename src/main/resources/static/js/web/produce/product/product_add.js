@@ -20,6 +20,8 @@ $(function() {
 					,
 					defaultToolbar : [],
 					cellMinWidth : 80,
+					height:'full-380'//固定表头&full-查询框高度
+					,even:true,//条纹样式
 					page : false,
 					data : [],
 					request : {
@@ -37,8 +39,9 @@ $(function() {
 						//code值为200表示成功
 						}
 					},
-					cols : [ [ {
-						type : 'radio',
+					cols : [ [
+						{
+						type : 'numbers',
 						width : 50
 					},
 					{
@@ -59,7 +62,9 @@ $(function() {
 						width : 90,sort: true
 					},{
 						field : 'TASK_NO',
-						title : '制令单号',sort: true
+						title : '制令单号',
+							width : 250,
+							sort: true
 					},{
 						field : 'ITEM_NO',
 						title : '物料编号',
@@ -67,11 +72,11 @@ $(function() {
 					},{
 						field : 'CREATE_BY',
 						title : '操作人',sort: true,
-						width : 80
+						width : 100
 					},{
 						field : 'CREATE_DATE',
 						title : '操作时间',
-						width : 100,sort: true
+						width : 120,sort: true
 					}] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;
@@ -86,6 +91,7 @@ $(function() {
 						url:  context +'/product/getTaskNo',
 						//url:  context +'base/prodproc/getProdList',
 						method : 'get',
+						width:800,
 						cols : [ [
 						{ type: 'radio' },//多选  radio
 							{type :'numbers'},
@@ -96,7 +102,7 @@ $(function() {
 						}, {
 							field : 'TASK_NO',
 							title : '制令单号',
-							width : 180,sort: true
+							width : 150,sort: true
 						}, {
 							field : 'ITEM_NO',
 							title : '物料编码',
@@ -108,7 +114,7 @@ $(function() {
 						}, {
 							field : 'LINER_NAME',
 							title : '组长',
-							width : 100,sort: true
+							width : 80,sort: true
 						},{
 							field : 'QTY_PLAN',
 							title : '制单数量',
@@ -365,7 +371,8 @@ $(function() {
 					defaultToolbar : [],
 					page : true,
 					data : [],
-					height: 'full-210',
+					height: 'full-210'
+						,even:true,//条纹样式
 					request : {
 						pageName : 'page', // 页码的参数名称，默认：page
 						limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -383,16 +390,16 @@ $(function() {
 						type : 'numbers'
 					},{
 						field : 'TASK_NO',
-						title : '制定单号',
-						width : 330,sort: true
+						title : '制令单号',
+						width : 200,sort: true
 					}, {
 						field : 'LINE_NO',
-						title : '组装名',
+						title : '组长',
 						width : 80,sort: true
 					}, {
 						field : 'ITEM_BARCODE',
 						title : '产品条码',
-						width : 150,sort: true
+						width : 200,sort: true
 					}, {
 						field : 'ITEM_NO',
 						title : '产品编码',
@@ -453,7 +460,10 @@ $(function() {
         		return false;
         	}
         	if(!$('#nbarcode').val()){
-        		layer.alert("请先扫描内箱条码!");
+        		layer.alert("请先扫描内箱条码!",function () {
+					$('#nbarcode').focus();
+					layer.closeAll();
+				});
         		return false;
         	}
         	if($('#wbarcode').val()){
@@ -484,10 +494,16 @@ function getDetailByTask(taskNo){
 		CoreUtil.sendAjax("/product/afterNei", params, function(data) {
 			
 			if (data.result) {
-				 $("#wbarcode").get(0).focus();
+				 $("#wbarcode").val("");
+				 $("#wbarcode").focus();
 			}else{
-				layer.alert(data.msg);
-				$('#nbarcode').val('');
+			    playMusic();
+				layer.alert(data.msg,function () {
+					$('#nbarcode').val('');
+					$('#nbarcode').focus();
+					layer.closeAll();
+				});
+				// $('#nbarcode').val('');
 			}
 		}, "GET", false, function(res) {
 			layer.alert(res.msg);
@@ -526,7 +542,14 @@ function getDetailByTask(taskNo){
 					data:tabledata
 				});*/
 			}else{
-				layer.alert(data.msg);
+			    playMusic();
+				layer.alert(data.msg,function () {
+					$("#wbarcode").val("");
+					$("#nbarcode").val("");
+					$("#nbarcode").focus();
+					layer.closeAll();
+				});
+				// $("#wbarcode").val("");
 			}
 		}, "GET", false, function(res) {
 			layer.alert(res.msg);

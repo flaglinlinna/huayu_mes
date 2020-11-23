@@ -8,7 +8,7 @@
 <div class="layui-layout layui-layout-admin">
     <div style="margin: 10px">
         <form id="devSearch" class="layui-form layui-form-pane" method="post"
-              action="" style="margin-top: 20px;">
+              action="" style="margin-top: 5px;">
             <div class="layui-form-item" style="margin-bottom: 0px">
                 <div class="layui-inline">
                     <label class="layui-form-label" style="width: 150px;">关键字查询:</label>
@@ -30,7 +30,7 @@
 
         <button class="layui-btn layui-btn-sm layui-btn-normal"
                 onclick="addDevClock()">添加卡机信息</button>
-        <button class="layui-btn layui-btn-sm" onclick="exportDevClock()">导出Excel</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="exportDevClock()">导出Excel</button>
         <table id="devList" lay-filter="devTable"></table>
         <script type="text/html" id="statusTpl">
             {{#  if(d.enabled){ }}

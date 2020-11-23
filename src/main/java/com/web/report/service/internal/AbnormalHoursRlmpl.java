@@ -117,7 +117,7 @@ public class AbnormalHoursRlmpl extends ReportPrcUtils implements AbnormalHoursR
 				cs.execute();
 				result.add(cs.getInt(12));
 				result.add(cs.getString(13));
-				if (cs.getString(11).toString().equals("0")) {
+				if (cs.getString(12).toString().equals("0")) {
 					result.add(cs.getInt(11));
 					// 游标处理
 					ResultSet rs = (ResultSet) cs.getObject(14);

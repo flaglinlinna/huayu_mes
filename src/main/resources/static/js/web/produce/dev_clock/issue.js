@@ -1,10 +1,10 @@
 /**
  * 指纹下发/删除管理
  */
-var pageCurr;
+var pageCurr,tableEmp,localtableFilterIns;
 $(function() {
-	layui.use([ 'form', 'table' ], function() {
-		var table = layui.table, form = layui.form;
+	layui.use([ 'form', 'table','tableFilter'  ], function() {
+		var table = layui.table, form = layui.form,tableFilter = layui.tableFilter;
 
 		tableIns = table.render({
 			elem : '#issueList',
@@ -12,6 +12,8 @@ $(function() {
 			method : 'get' // 默认：get请求
 			,
 			//cellMinWidth : 80,
+			height:'full-80'//固定表头&full-查询框高度
+			,even:true,//条纹样式
 			where:{ptype:ptype},
 			page : true,
 			request : {
@@ -64,42 +66,14 @@ $(function() {
 				title : '操作人',
 				templet: function (d) {return d.createUser.userCode}
 			}] ],
-			/*cols : [ [ {
-				type : 'numbers'
-			}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
-				field : 'devCode',
-				title : '卡机序号',
-			}, {
-				field : 'devName',
-				title : '卡机名称',
-			}, {
-				field : 'devType',
-				title : '卡机类型',
-			}, {
-				field : 'empCode',
-				title : '员工工号'
-			}, {
-				field : 'empName',
-				title : '员工姓名'
-			}, {
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar',
-				width : 100
-			} ] ],*/
 			done : function(res, curr, count) {
-				//console.log(res)
 				pageCurr = curr;
-				/*merge(res.data, [ 'devCode', 'devName', 'devType' ],
-						[ 1, 2, 3 ]);*/
 			}
 		});
 		tableEmp = table.render({
 			elem : '#empList',
 			method : 'post',// 默认：get请求
+			url : context + '/produce/issue/getEmp',
 			page : true,
 			height: 'full-220',
 			limit:20,
@@ -121,7 +95,6 @@ $(function() {
 			cols : [ [ {
 				type : 'numbers'
 			}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				type : "checkbox"
 			},
@@ -129,24 +102,50 @@ $(function() {
 			{
 				field : 'EMP_CODE',
 				title : '员工工号',
-				width:110,
+				width:80,
 			}, {
 				field : 'EMP_NAME',
 				title : '员工姓名',
-					width:130,
+					width:100,
 			}, {
 				field : 'EMP_TYPE',
 				title : '员工类型',
-					width:120,
-			},
-				{
-					field : 'DEPT_NAME',
+					width:110,
+			},{
+					field : 'dept_name',
 					title : '部门名称',
 					width:130,
-				},
+				},{
+					field : 'create_time',
+					title : '指纹录入时间',
+					width:160,
+				}
 			] ],
-			data : []
+			done : function(res, curr, count) {
+				localtableFilterIns.reload();
+				pageCurr = curr;
+				if(ptype == '1'){
+					for(j = 0,len=res.data.length; j < len; j++) {
+						res.data[j]["LAY_CHECKED"]='true';
+				        //下面三句是通过更改css来实现选中的效果
+				        var index= res.data[j]['LAY_TABLE_INDEX'];
+				        var td = $('#empList').next().find("tr[data-index='"+index+"'] div.layui-form-checkbox");           
+				         td.click();
+					}
+			    }
+			}
 		});
+		localtableFilterIns = tableFilter.render({
+			'elem' : '#empList',
+			'parent' : '#setIssue',
+			'mode' : 'api',//服务端过滤
+			'filters' : [
+				{field: 'dept_name', type:'checkbox'},
+				{field: 'create_time', type:'date'},
+			],
+			'done': function(filters){}
+		})
+		
 		tableDev = table.render({
 			elem : '#devList',
 			method : 'post',// 
@@ -186,7 +185,14 @@ $(function() {
 				field : 'devType',
 				title : '卡机类型',
 					width:90,
-			}, {
+			},
+				{
+					field : 'isOnline',
+					title : '在线状态',
+					templet:'#statusTp2',
+					width : 80,
+				},
+				{
 					field : 'lineName',
 					title : '线别名称',
 					width:120,
@@ -289,8 +295,7 @@ function openIssue( title) {
 function addIssue(title) {
 	// 清空弹出框数据
 	cleanIssue();
-	//getEmp();//
-	//getDev();//表格后续操作
+
 	// 打开弹出框
 	if(ptype == '1'){
 		openIssue("添加指纹下发信息");
@@ -299,86 +304,7 @@ function addIssue(title) {
     }
 	return false;
 }
-// 获取员工信息
-function getEmp() {
-	CoreUtil.sendAjax("/produce/issue/getEmp", "", function(data) {
-		if (data.result) {
-			// var beSelected=data.data;
-			// console.log(data.data.rows)
-			tableEmp.reload({
-				data : data.data.rows,
-				done : function(res, curr, count) {
-					pageCurr = curr;
-					console.log(ptype)
-					if(ptype == '1'){
-						console.log(res.data.rows)
-						for(j = 0,len=res.data.rows.length; j < len; j++) {
-							res.data[j]["LAY_CHECKED"]='true';
-					        //下面三句是通过更改css来实现选中的效果
-					        var index= res.data[j]['LAY_TABLE_INDEX'];
-					        $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
-					        $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
-						}
-				    }
-				}
-			})
-		} else {
-			layer.alert(data.msg)
-		}
-		// console.log(data)
-	}, "POST", false, function(res) {
-		layer.alert("操作请求错误，请您稍后再试");
-	});
-}
-// 获取卡机信息
-function getDev() {
-	CoreUtil.sendAjax("/produce/issue/getDev", "", function(data) {
-		if (data.result) {
-			tableDev.reload({
-				data : data.data.rows,
-				done : function(res, curr, count) {
-					// cleanIssue();//清空之前的选中
 
-				}
-			})
-		} else {
-			layer.alert(data.msg)
-		}
-		// console.log(data)
-	}, "POST", false, function(res) {
-		layer.alert("操作请求错误，请您稍后再试");
-	});
-}
-function merge(res, columsName, columsIndex) {
-	var data = res;
-	var mergeIndex = 0;// 定位需要添加合并属性的行数
-	var mark = 1; // 这里涉及到简单的运算，mark是计算每次需要合并的格子数
-	// var columsName = ['itemCode'];//需要合并的列名称
-	// var columsIndex = [3];//需要合并的列索引值
-
-	for (var k = 0; k < columsName.length; k++) { // 这里循环所有要合并的列
-		var trArr = $(".layui-table-body>.layui-table").find("tr");// 所有行
-		for (var i = 1; i < data.length; i++) { // 这里循环表格当前的数据
-			var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);// 获取当前行的当前列
-			var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);// 获取相同列的第一列
-
-			if (data[i][columsName[k]] === data[i - 1][columsName[k]]) { // 后一行的值与前一行的值做比较，相同就需要合并
-				mark += 1;
-				tdPreArr.each(function() {// 相同列的第一列增加rowspan属性
-					$(this).attr("rowspan", mark);
-				});
-				tdCurArr.each(function() {// 当前行隐藏
-					$(this).css("display", "none");
-				});
-			} else {
-				mergeIndex = i;
-				mark = 1;// 一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
-			}
-		}
-		mergeIndex = 0;
-		mark = 1;
-	}
-}
 
 // 新增指纹下发信息提交
 function addSubmit(devList, empList) {
@@ -392,8 +318,7 @@ function addSubmit(devList, empList) {
 	if(ptype == '1'){
 		url = "/produce/issue/add"
 	}
-	console.log(ptype)
-	console.log(url)
+
 	CoreUtil.sendAjax(url, JSON.stringify(params), function(
 			data) {
 		if (data.result) {
@@ -458,9 +383,8 @@ function loadDev(obj) {
 // 重新加载表格-员工（搜索）
 function loadEmp(obj) {
 	// 重新加载table
-	console.log(obj)
 	tableEmp.reload({
-		url : context + '/produce/issue/getEmp',
+		//url : context + '/produce/issue/getEmp',
 		where : {
 			empKeyword : obj.field.empKeyword
 		},
@@ -495,7 +419,7 @@ function cleanIssue() {
 		}
 	});
 	$('#empSearch')[0].reset();
-	tableEmp.reload({
+	/*tableEmp.reload({
 		url : context + '/produce/issue/getEmp',
 		where : {
 			empKeyword : ""
@@ -510,15 +434,12 @@ function cleanIssue() {
 					res.data[j]["LAY_CHECKED"]='true';
 			        //下面三句是通过更改css来实现选中的效果
 			        var index= res.data[j]['LAY_TABLE_INDEX'];
-			        /* $(' tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
-			        $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
-			        */
 			        var td = $('#empList').next().find("tr[data-index='"+index+"'] div.layui-form-checkbox");           
 			         td.click();
 				}
 		    }
 		}
-	});
+	});*/
 	$('#issueForm')[0].reset();
 	layui.form.render();// 必须写
 }

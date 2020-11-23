@@ -179,6 +179,10 @@ public class FtpClientImpl implements FtpClientService {
             ftp.enterLocalPassiveMode();
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            if(("linux").equals(this.env.getProperty("envi"))){
+                //去掉前缀 / 改为相对路径
+                path = path.substring(1);
+            }
             boolean flag = ftp.retrieveFile(new String((path + "/" + fileName).getBytes("gbk"), "iso-8859-1"), (OutputStream) bos);
 
             logger.info("ftp.retrieveFile success");
@@ -212,10 +216,20 @@ public class FtpClientImpl implements FtpClientService {
             return true;
         }
         String pathname = "";
-        for (String dir : dirs) {
-            pathname = pathname + File.separator + dir;
-            if (ftp.makeDirectory(pathname)) {
-                logger.debug("create ftp directory with {}", pathname);
+        if(("linux").equals(this.env.getProperty("envi"))){
+            for (String dir : dirs) {
+                pathname = pathname + dir+ "/" ;
+                if (ftp.makeDirectory(pathname)) {
+                    logger.debug("create ftp directory with {}", pathname);
+                }
+            }
+            path = path.substring(1);
+        }else {
+            for (String dir : dirs) {
+                pathname = pathname + File.separator + dir;
+                if (ftp.makeDirectory(pathname)) {
+                    logger.debug("create ftp directory with {}", pathname);
+                }
             }
         }
 

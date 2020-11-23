@@ -20,6 +20,8 @@ $(function() {
             ,url:context+'/sysRole/getList'
             ,method: 'get' //默认：get请求
             ,cellMinWidth: 80
+            ,height:'full-160'//固定表头&full-查询框高度
+            ,even:true//条纹样式
             ,page: true,
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
@@ -47,7 +49,7 @@ $(function() {
                 ,{field:'roleName', title:'名称',align:'center', width:140,sort:true}
                 ,{field:'description', title: '描述',align:'center', minWidth:140,sort:true}
                 ,{field:'userCount', title: '用户数量',align:'center', width:120,sort:true,
-                 templet: '<div><a cursor: pointer; onclick="showUser({{d.id}})">{{ d.userCount }}</a></div>'}
+                 templet: '<div><a  style="text-decoration:underline;color:blue;cursor: pointer;"; onclick="showUser({{d.id}})">{{ d.userCount }}</a></div>'}
                 ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
                 ,{field:'lastupdateDate', title: '更新时间', align:'center',width:150}
                 ,{field:'createDate', title: '添加时间',align:'center', width:150}

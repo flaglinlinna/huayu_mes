@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='检验批次报表(FQC)'"></head>
+<head th:include="layout :: htmlhead" th:with="title='各线每日生产报表'"></head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div>
@@ -52,11 +52,9 @@
 			src="/js/web/report/check_batch.js"></script>
 			<script th:inline="javascript">
 		        var departList=[[${Depart}]];
-		        console.log(departList)
 		        var depart_select = document.getElementById("depart");
 		        if(departList.result){
 		        	var data = departList.data;
-		        	console.log(data.length)
 		        	for (var i = 0; i < data.length; i++) {
 		        		$('#depart').append("<option value="+data[i].ID+">"+data[i].LEAD_BY+"</option>");// 下拉菜单里添加元素
 		        	}

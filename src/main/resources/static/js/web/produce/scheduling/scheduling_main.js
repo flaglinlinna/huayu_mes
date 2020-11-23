@@ -34,7 +34,10 @@ $(function () {
             ,url:context+'/produce/schedulingMain/getList'
             ,method: 'get' //默认：get请求
             ,cellMinWidth: 80
-            ,page: true,
+            ,page: true
+            , toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,height:'full-130'//固定表头&full-查询框高度
+            ,even:true,//条纹样式
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit
@@ -78,7 +81,7 @@ $(function () {
             obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
             var a = document.createElement('a');
             a.setAttribute('lay-href', context + "/produce/schedulingMain/toSchedulingMainAdd?id=" + obj.data.ID);
-            a.setAttribute('lay-text', '排产编辑');
+            a.setAttribute('lay-text', '排产导入编辑');
             a.setAttribute('id', 'js_a');
             if(document.getElementById('js_a')) {//防止反复添加
                 document.body.removeChild(document.getElementById('js_a'));

@@ -10,7 +10,7 @@ public interface InputCheckService {
 
     public ApiResponseResult getTaskNo(String keyword) throws Exception;
 
-    public ApiResponseResult getInfoBarcode(String barcode) throws Exception;
+    public ApiResponseResult getInfoBarcode(String barcode,String taskNo) throws Exception;
 
     public ApiResponseResult addPut(String barcode, String task_no, String item_no, String qty) throws Exception;
 

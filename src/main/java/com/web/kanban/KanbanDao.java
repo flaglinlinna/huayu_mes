@@ -17,4 +17,12 @@ public interface KanbanDao extends CrudRepository<SysRole, Long>, JpaSpecificati
 
 	@Query(value = "SELECT A.Org_Name,A.ORG_PATH,A.LEAD_BY,A.Id FROM V_SYS_ORG_TREE A", nativeQuery = true)
     public List<Map<String, Object>> getDepList();
+	
+	//获取刷新单个间隔时间
+	@Query(value = "SELECT f_get_parameter_val('MES_KB_TIME') A FROM DUAL", nativeQuery = true)
+    public List<Map<String, Object>> getIntervalTime();
+	
+	//获取执行轮播-跳转到下一页面的时间
+	@Query(value = "SELECT f_get_parameter_val('MES_KB_TIME_CAROUSEL') R FROM DUAL", nativeQuery = true)
+	public List<Map<String, Object>> getRotationTime();
 }

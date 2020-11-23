@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
+import com.system.user.entity.SysUser;
 import com.utils.UserUtil;
 import com.web.produce.service.TransitService;
 
@@ -37,12 +38,18 @@ public class Transitlmpl  extends PrcUtils implements TransitService{
 	@Override
 	public ApiResponseResult getProc(String keyword) throws Exception {	
 		// TODO Auto-generated method stub
-				List<Object> list = getProcPrc(UserUtil.getSessionUser().getCompany() + "",
-						UserUtil.getSessionUser().getFactory() + "",1,keyword);
-				if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
-					return ApiResponseResult.failure(list.get(1).toString());
-				}
-				return ApiResponseResult.success().data(list.get(2));
+		SysUser user = UserUtil.getSessionUser();
+		String facoty="",company="", user_id="1";
+		if(user != null){
+			facoty=user.getFactory();
+			company=user.getCompany();
+			user_id=user.getId()+"";
+		}
+		List<Object> list = getProcPrc(company,facoty + "",1,keyword);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success().data(list.get(2));
 	}
 	
 	public List getProcPrc(String company,String facoty,int type,String keyword)throws Exception {
@@ -89,12 +96,18 @@ public class Transitlmpl  extends PrcUtils implements TransitService{
 	@Override
 	public ApiResponseResult getType(String keyword) throws Exception {	
 		// TODO Auto-generated method stub
-				List<Object> list = getTypePrc(UserUtil.getSessionUser().getCompany() + "",
-						UserUtil.getSessionUser().getFactory() + "",keyword);
-				if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
-					return ApiResponseResult.failure(list.get(1).toString());
-				}
-				return ApiResponseResult.success().data(list.get(2));
+		SysUser user = UserUtil.getSessionUser();
+		String facoty="",company="", user_id="1";
+		if(user != null){
+			facoty=user.getFactory();
+			company=user.getCompany();
+			user_id=user.getId()+"";
+		}
+		List<Object> list = getTypePrc(company,facoty,keyword);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success().data(list.get(2));
 	}
 	
 	public List getTypePrc(String company,String facoty,String keyword)throws Exception {
@@ -138,32 +151,39 @@ public class Transitlmpl  extends PrcUtils implements TransitService{
 	}
 	
 	@Override
-	public ApiResponseResult checkBarcode(String proc,String barcode) throws Exception {	
+	public ApiResponseResult checkBarcode(String proc,String ptype,String barcode) throws Exception {	
 		// TODO Auto-generated method stub
-				List<Object> list = checkBarcodePrc(UserUtil.getSessionUser().getCompany() + "",
-						UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getId()+"",
-						proc,barcode);
-				if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
-					return ApiResponseResult.failure(list.get(1).toString());
-				}
-				return ApiResponseResult.success().data(list.get(2));
+		SysUser user = UserUtil.getSessionUser();
+		String facoty="",company="", user_id="1";
+		if(user != null){
+			facoty=user.getFactory();
+			company=user.getCompany();
+			user_id=user.getId()+"";
+		}
+		List<Object> list = checkBarcodePrc(company,facoty,user_id,
+				proc,ptype,barcode);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success().data(list.get(2));
 	}
 	
 	public List checkBarcodePrc(String company,String facoty,String user_id,
-			String proc,String barcode)throws Exception {
+			String proc,String ptype,String barcode)throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  prc_mes_qc_insp_bar_chk(?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  prc_mes_qc_insp_bar_chk(?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
 				cs.setString(2, company);
 				cs.setString(3, user_id);
 				cs.setString(4, proc);
 				cs.setString(5, barcode);
-				cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
-				cs.registerOutParameter(8, -10);// 输出参数 追溯数据
+				cs.setString(6, ptype);
+				cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(8, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(9, -10);// 输出参数 追溯数据
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -171,11 +191,11 @@ public class Transitlmpl  extends PrcUtils implements TransitService{
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(6));
-				result.add(cs.getString(7));
-				if (cs.getString(6).toString().equals("0")) {
+				result.add(cs.getInt(7));
+				result.add(cs.getString(8));
+				if (cs.getString(7).toString().equals("0")) {
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(8);
+					ResultSet rs = (ResultSet) cs.getObject(9);
 
 					try {
 						l = fitMap(rs);
@@ -194,8 +214,14 @@ public class Transitlmpl  extends PrcUtils implements TransitService{
 	
 	public ApiResponseResult saveData(String proc,String type,String barcode)throws Exception{
 		// TODO Auto-generated method stub
-		List<Object> list = saveDataPrc(UserUtil.getSessionUser().getCompany() + "",
-				UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getId()+"",
+		SysUser user = UserUtil.getSessionUser();
+		String facoty="",company="", user_id="1";
+		if(user != null){
+			facoty=user.getFactory();
+			company=user.getCompany();
+			user_id=user.getId()+"";
+		}
+		List<Object> list = saveDataPrc(company,facoty,user_id,
 				proc,type,barcode);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());

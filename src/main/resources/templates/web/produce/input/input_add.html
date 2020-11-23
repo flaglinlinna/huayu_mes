@@ -24,6 +24,7 @@
 }
 </style>
 <body class="layui-layout-body">
+<div th:replace="audio/fragment/audio :: audio"></div>
 	<div class="layui-layout layui-layout-admin">
 		<!--头-->
 		<!--<div th:replace="fragments/head :: header"></div>-->
@@ -34,92 +35,108 @@
 			</ul>
 			<div class="layui-tab-content">
 				<div class="layui-tab-item layui-show">
-				
 
-		<div style="margin: 10px">
-			<div class="layui-collapse" lay-accordion="">
-				<div class="layui-colla-item">
-					<h2 class="layui-colla-title">填写信息</h2>
-					<div class="layui-colla-content layui-show">
-						<form id="itemFrom" class="layui-form layui-form-pane" lay-filter="itemFrom"
-							method="post" action="">
-							<div class="layui-form-item">
-								<label class="layui-form-label layui-required">制令单号</label>
-								<div class="layui-input-inline" style="width: 310px;">
-									<input type="text" name="num" placeholder="请选择" autocomplete="off"
-										class="layui-input"  readonly="readonly" lay-verify="required" id="num">
-								</div>
-								<label class="layui-form-label">物料编码</label>
-								<div class="layui-input-inline" >
-									<input id="mtrcode" name="mtrcode" autocomplete="off"
-										style="background: #efefef;" class="layui-input" disabled type="text" />
-								</div>
-								<label class="layui-form-label">制单数量</label>
-								<div class="layui-input-inline" style="width: 100px;">
-									<input id="qty" name="qty" autocomplete="off"
-										style="background: #efefef;" class="layui-input" disabled type="text" />
-								</div>
-							</div>
 
-							<div class="layui-form-item">
-								<div class="layui-inline">
-									<label class="layui-form-label">物料描述</label>
-									<div class="layui-input-inline" style="width: 430px;">
-										<input id="mtrdescr" name="mtrdescr" autocomplete="off"
-											style="background: #efefef;" class="layui-input" disabled type="text" />
-									</div>
-									<label class="layui-form-label">组长</label>
-									<div class="layui-input-inline" style="width: 70px;">
-										<input id="linecode" name="linecode" autocomplete="off"
-											style="background: #efefef;" class="layui-input" disabled type="text" />
-									</div>
-									<label class="layui-form-label">投入数量</label>
-									<div class="layui-input-inline" style="width: 100px;">
-										<input id="inqty" name="inqty" autocomplete="off"
-										 style="background: #efefef;"class="layui-input" disabled type="text" />
-									</div>
+					<div style="margin: 10px">
+						<div class="layui-collapse" lay-accordion="">
+							<div class="layui-colla-item">
+								<h2 class="layui-colla-title">填写信息</h2>
+								<div class="layui-colla-content layui-show">
+									<form id="itemFrom" class="layui-form layui-form-pane"
+										lay-filter="itemFrom" method="post" action="">
+										<div class="layui-form-item">
+											<label class="layui-form-label layui-required">制令单号</label>
+											<div class="layui-input-inline" style="width: 160px;">
+												<input type="text" name="num" placeholder="请选择"
+													autocomplete="off" class="layui-input" readonly="readonly"
+													lay-verify="required" id="num">
+											</div>
+											<label class="layui-form-label">物料编码</label>
+											<div class="layui-input-inline" style="width: 150px;">
+												<input id="mtrcode" name="mtrcode" autocomplete="off"
+													style="background: #efefef;" class="layui-input" disabled
+													type="text" />
+											</div>
+											<label class="layui-form-label">组长</label>
+											<div class="layui-input-inline" style="width: 70px;">
+												<input id="linecode" name="linecode" autocomplete="off"
+													style="background: #efefef;" class="layui-input" disabled
+													type="text" />
+											</div>
+										</div>
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label class="layui-form-label">物料描述</label>
+												<div class="layui-input-inline" style="width: 620px;">
+													<input id="mtrdescr" name="mtrdescr" autocomplete="off"
+														style="background: #efefef;" class="layui-input" disabled
+														type="text" />
+												</div>
+											</div>
+										</div>
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label class="layui-form-label">制单数量</label>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input id="qty" name="qty" autocomplete="off"
+														style="background: #efefef;" class="layui-input" disabled
+														type="text" />
+												</div>
+												<label class="layui-form-label">投入数量</label>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input id="inqty" name="inqty" autocomplete="off"
+														style="background: #efefef;" class="layui-input" disabled
+														type="text" />
+												</div>
+											</div>
+										</div>
+										<hr />
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label class="layui-form-label layui-required">条码</label>
+												<div class="layui-input-inline">
+													<input id="barcode" name="barcode" autocomplete="off"
+														placeholder="请添加条码" class="layui-input" type="text" />
+												</div>
+												<label class="layui-form-label layui-required">物料编号</label>
+												<div class="layui-input-inline">
+													<input id="item_code" name="item_code" autocomplete="off"
+														placeholder="请添加物料编号" lay-verify="required"
+														class="layui-input" type="text" />
+												</div>
+											</div>
+										</div>
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label class="layui-form-label layui-required">数量</label>
+												<div class="layui-input-inline" style="width: 110px;">
+													<input id="addqty" name="addqty" autocomplete="off"
+														placeholder="请添加数量" lay-verify="required"
+														class="layui-input" type="text" />
+												</div>
+												<button type="button" class="layui-btn layui-btn-sm layui-btn-normal"
+													lay-submit="" lay-filter="confirmSubmit">确认投入</button>
+												<button type="reset"
+													class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+													重置</button>
+											</div>
+										</div>
+
+									</form>
 								</div>
 							</div>
-							<hr />
-							<div class="layui-form-item">
-								<div class="layui-inline">
-									<label class="layui-form-label layui-required">条码</label>
-									<div class="layui-input-inline">
-										<input  id="barcode" name="barcode" autocomplete="off"
-											 placeholder="请添加条码" class="layui-input" type="text" />
-									</div>
-									<label class="layui-form-label layui-required">物料编号</label>
-									<div class="layui-input-inline">
-										<input  name="item_code" autocomplete="off" placeholder="请添加物料编号"
-										lay-verify="required"	class="layui-input" type="text" />
-									</div>
-									<label class="layui-form-label layui-required">数量</label>
-									<div class="layui-input-inline" style="width:110px;">
-										<input name="addqty" autocomplete="off" placeholder="请添加数量"
-										lay-verify="required"	class="layui-input" type="text" />
-									</div>
-									<button type="button" class="layui-btn layui-btn-sm" lay-submit=""
-										lay-filter="confirmSubmit">确认投入</button>
-									<button type="reset"
-										class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
-										重置
-									</button>
-								</div>
-							</div>
-						</form>
+						</div>
+						<fieldset class="layui-elem-field layui-field-title">
+							<legend style="font-size: 14px;">投入列表</legend>
+						</fieldset>
+						<table id="colTable" lay-filter="colTable"
+							style="margin-top: -20px;"></table>
 					</div>
 				</div>
-			</div>
-			<fieldset class="layui-elem-field layui-field-title">
-				<legend style="font-size:14px;">投入列表</legend>
-			</fieldset>
-			<table id="colTable" lay-filter="colTable" style="margin-top: -20px;"></table>
-			</div>
-			</div>
 				<div class="layui-tab-item">
 					<div style="margin: 5px">
-					<!--查询面板-->
-        <div th:replace="web/fragment/search_history :: searcher"></div> 
+						<!--查询面板-->
+						<div th:replace="web/fragment/search_history :: searcher"></div>
 						<fieldset class="layui-elem-field layui-field-title">
 							<legend style="font-size: 14px;">条码列表</legend>
 						</fieldset>
@@ -129,12 +146,13 @@
 				</div>
 			</div>
 		</div>
-		
-			<script type="text/html" id="optBar">
+
+		<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 
-		<script th:src="@{/js/web/produce/input/input_add.js}" src="/js/web/produce/input/input_add.js"></script>
+		<script th:src="@{/js/web/produce/input/input_add.js}"
+			src="/js/web/produce/input/input_add.js"></script>
 	</div>
 </body>
 </html>

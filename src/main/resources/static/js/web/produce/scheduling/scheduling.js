@@ -14,8 +14,11 @@ $(function () {
             elem: '#iList'
             ,url:context+'/produce/scheduling/getList'
             ,method: 'get' //默认：get请求
-            ,cellMinWidth: 80
-            ,page: true,
+            // ,cellMinWidth: 80
+            ,page: true
+            , toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,height:'full-130'//固定表头&full-查询框高度
+            ,even:true,//条纹样式
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit
@@ -30,21 +33,24 @@ $(function () {
                 }
             },
             cols: [[
-                {type:'numbers'}
+                {type:'numbers' ,width:60},
+                {type:'checkbox' ,width:60},
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
                 // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
                 ,{field:'PRODUCE_STATE', title:'状态', width:60,align: 'center'}
-                ,{field:'PROD_NO', title:'工单号', width:120,align: 'center'}
-                ,{field:'GROUP_NO', title:'组合', width:55,align: 'center'}
-                // ,{field:'deptName', title:'部门', width:70}
-                ,{field:'CUST_NAME_S', title:'客户', width:150,align: 'center'}
+                ,{field:'TASK_NO', title:'制令单号', width:145,align: 'center'}
+                ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center'}
                 ,{field:'LINER_NAME', title:'组长', width:70,align: 'center'}
                 ,{field:'PROD_DATE', title:'日期', width:90,align: 'center'}
-               // ,{field:'deptName', title:'部门', width:80}
                 ,{field:'CLASS_NO', title:'班次', width:60,align: 'center'}
                 ,{field:'QTY_PLAN', title:'计划数量', width:80,align: 'center'}
-                ,{field:'TASK_NO', title:'制令单号', width:120,align: 'center'}
-                ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center'}
+                ,{field:'QTY_DONE', title:'完工数', width:80,align: 'center'}
+                ,{field:'RATE_DONE', title:'完工率', width:80,align: 'center'}
+                // ,{field:'deptName', title:'部门', width:70}
+               ,{field:'DEPT_NAME', title:'部门名称', width:80}
+                ,{field:'PROD_NO', title:'工单号', width:130,align: 'center'}
+                ,{field:'GROUP_NO', title:'组合', width:55,align: 'center'}
+                ,{field:'CUST_NAME_S', title:'客户', width:150,align: 'center'}
                 ,{field:'ITEM_NAME', title:'物料描述', width:200,align: 'center'}
                 // ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}
             ]]
@@ -112,7 +118,9 @@ $(function () {
             //标注选中样式
             obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
             var a = document.createElement('a');
-            a.setAttribute('lay-href', context + "/produce/scheduling/toSchedulingEdit?id=" + obj.data.ID);
+            var  url = "/produce/scheduling/toSchedulingEdit?id=" + obj.data.ID+"&qty="+obj.data.QTY_DONE+"&rate="+obj.data.RATE_DONE;
+            // console.log(url);
+            a.setAttribute('lay-href', context + url);
             a.setAttribute('lay-text', '排产编辑');
             a.setAttribute('id', 'js_a');
             if(document.getElementById('js_a')) {//防止反复添加
@@ -251,12 +259,55 @@ function doDel(id) {
     }
 }
 
+function changeSubmit() {
+    var checkdata = layui.table.checkStatus("iList").data;
+    var ids = "";
+    var statues =""; //旧状态
+    for(var i = 0;i<checkdata.length;i++){
+        ids = ids+ checkdata[i].TASK_NO+',';
+        statues = statues+ checkdata[i].TASK_NO+'-'+checkdata[i].PRODUCE_STATE+','
+    }
+    var param = {
+        "taskNos" : ids,
+        "statue":$('#changeSelect').val(),
+        "statues":statues,
+    };
+    CoreUtil.sendAjax("/produce/scheduling/changeStatue", JSON.stringify(param),
+        function(data) {
+            if (data.result) {
+                layer.alert("更改成功",function () {
+                    loadAll();
+                    layer.closeAll();
+                })
+            } else {
+                layer.alert(data.msg)
+            }
+        }, "POST", false, function(res) {
+            layer.alert("操作请求错误，请您稍后再试");
+        });
+
+}
+
 //导出
 function exportExcel(){
     //导出模板
     //location.href = context + "/produce/scheduling/getExcel";
 	location.href = "../../excelFile/排产导入模板.xlsx";//从文件夹内直接提取
     return false;
+}
+
+function openChange() {
+    var index = layer.open({
+        type:1,
+        title: "修改制令单状态",
+        // fixed:false,
+        // resize :false,
+        shadeClose: false,//是否点击遮罩关闭
+        area: ['400px','300px'],
+        content:$('#changeStateDiv'),
+        end:function(){
+        }
+    });
 }
 
 //导入弹出框

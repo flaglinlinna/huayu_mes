@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>组长列表</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link href="../kanban/jquery.mobile-1.4.5.min.css"
+	th:href="@{/kanban/jquery.mobile-1.4.5.min.css}" rel="stylesheet">
+<script src="../kanban/jquery-1.10.2.min.js"
+	th:src="@{/kanban/jquery-1.10.2.min.js}"></script>
+<script src="../kanban/jquery.mobile-1.4.5.min.js"
+	th:src="@{/kanban/jquery.mobile-1.4.5.min.js}"></script>
+<style>
+ul {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+li {
+	line-height: 40px;
+	color: #ffffff;
+}
+</style>
+</head>
+<body>
+	<div class="div-boder">
+		<h2 style="height: 30px; margin: 1px" align="center">数字化工厂信息中心</h2>
+	</div>
+	<div data-role="page" id="firstPage">
+		<div data-role="header" data-theme="b">
+			<h1>组长列表</h1>
+		</div>
+
+		<div data-role="controlgroup">
+			<div class="ui-controlgroup-controls " id="list">
+				<!-- <a href="/report/kanban01.html?line=XK019" data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button">看板1</a> -->
+			</div>
+		</div>
+
+
+
+		<div data-role="footer" data-theme="b" data-position="fixed">
+			<h4>&copy;朋乐信息</h4>
+		</div>
+	</div>
+
+	<script th:inline="javascript">
+	var res=[[${linerList}]];
+	var pageType=[[${pageType}]];//跟据页面类型变更指向
+	console.log(pageType)
+	if(pageType=="xlpm"){
+		res.data.forEach(function(element) {
+	       	var html = '<a href=/kanban/toXlpm?liner='+element.LEAD_BY+'&inType=apk'+
+	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
+	       			element.LEAD_BY+'</a>'
+	       	$("#list").append(html)	
+	       	 }); 
+	}else if(pageType=="cxdz"){
+		res.data.forEach(function(element) {
+	       	var html = '<a href=/kanban/toCxdz?liner='+element.LEAD_BY+'&inType=apk'+
+	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
+	       			element.LEAD_BY+'</a>'
+	       	$("#list").append(html)	
+	       	 }); 
+	}else if(pageType=="cxsc"){
+		res.data.forEach(function(element) {
+	       	var html = '<a href=/kanban/toCxsc?liner='+element.LEAD_BY+'&inType=apk'+
+	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
+	       			element.LEAD_BY+'</a>'
+	       	$("#list").append(html)	
+	       	 }); 
+	}else{
+		res.data.forEach(function(element) {
+	       	var html = '<a href=/kanban/toLtkbs?liner='+element.LEAD_BY+'&inType=apk'+
+	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
+	       			element.LEAD_BY+'</a>'
+	       	$("#list").append(html)	
+	       	 }); 
+	}
+	
+	
+		
+			
+	
+	</script>
+</body>
+</html>

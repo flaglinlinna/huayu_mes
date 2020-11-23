@@ -24,6 +24,7 @@
 }
 </style>
 <body class="layui-layout-body">
+<div th:replace="audio/fragment/audio :: audio"></div>
 	<div class="layui-layout layui-layout-admin">
 		<!--头-->
 		<!--<div th:replace="fragments/head :: header"></div>-->
@@ -58,6 +59,8 @@
 
 									</select>
 								</div>
+								</div>
+								<div class="layui-form-item">
 								<label class="layui-form-label layui-required">条码</label>
 								<div class="layui-input-inline">
 									<input id="barcode" name="barcode" autocomplete="off"

@@ -12,6 +12,8 @@ $(function() {
 			method : 'get' // 默认：get请求
 			, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 			,cellMinWidth : 80,
+			height:'full-110'//固定表头&full-查询框高度
+				,even:true,//条纹样式
 			data : [],
 			height: 'full',
 			page : true,
@@ -31,9 +33,9 @@ $(function() {
 				}
 				// 可进行数据操作
 				return {
-					"count" : res.data.total,
+					"count" : res.data.Total,
 					"msg" : res.msg,
-					"data" : res.data.rows,
+					"data" : res.data.List,
 					"code" : res.status
 				// code值为200表示成功
 				}
@@ -41,27 +43,38 @@ $(function() {
 			cols : [ [ {
 				type : 'numbers'
 			},
-			{type:'checkbox'}
+			// {type:'checkbox'},
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
+			 {
 				field : 'CREATE_DATE',
-				title : '检查时间',width : 120, sort: true,
+				title : '检查日期',width : 110, sort: true,
 			}, {
 				field : 'CUST_NAME_S',
-				title : '客户', sort: true
+				title : '客户',width : 110, sort: true
 			},
 			{
 				field : 'ITEM_MODEL',
 				title : '机型', sort: true
 			}, {
 				field : 'PROC_NAME',
-				title : '名称', sort: true
-			}
+				title : '工序名称', sort: true
+			},
+				{
+					field : 'ITEM_NAME_S',
+					title : '物料简称'
+				,width : 120,
+				sort: true
+				}
 			, {
-				field : '',
+				field : 'COLOUR',
 				title : '颜色',
-				width : 95, sort: true
-			}, {
+				width : 75, sort: true
+			},
+				{
+					field : 'LOT_NO',
+					title : '虚拟批次', width : 90,sort: true
+				},
+				{
 				field : 'QTY_PROC',
 				title : '批次数量',width : 100, sort: true
 			}, {
@@ -71,21 +84,19 @@ $(function() {
 				field : 'DEFECT_NUM',
 				title : '不良数', width : 100,sort: true
 			}, {
-				field : '',
+				field : 'NG_RATE',
 				title : '不良率(%)',width : 120, sort: true
 			}, {
-				field : '',
-				title : '不良原因',width : 100, sort: true
+				field : 'DEFECT_NAME',
+				title : '不良原因',width : 140, sort: true
 			}, {
 				field : 'USER_NAME',
-				title : '作业员', width : 100,sort: true
+				title : '检验员', width : 100,sort: true
 			}, {
-				field : 'LINE_NO',
-				title : '责任科/班长',width : 120, sort: true
-			}, {
-				field : '',
-				title : 'FQC', sort: true
-			}] ],
+				field : 'LINER_NAME',
+				title : '组长',width : 120, sort: true
+			},
+			] ],
 			done : function(res, curr, count) {
 				//localtableFilterIns.reload();
 				pageCurr = curr;
@@ -98,13 +109,18 @@ $(function() {
 			'filters' : [
 				{field: 'CREATE_DATE', type:'date'},
 				{field: 'CUST_NAME_S', type:'input'},
+				{field: 'ITEM_NAME_S', type:'input'},
 				{field: 'ITEM_MODEL', type:'input'},
 				{field: 'PROC_NAME', type:'input'},
+				{field: 'NG_RATE', type:'input'},
+				{field: 'COLOUR', type:'input'},
+				{field: 'LOT_NO', type:'input'},
 				{field: 'QTY_PROC', type:'input'},
 				{field: 'SAMPLE_QTY', type:'input'},
 				{field: 'DEFECT_NUM', type:'input'},
+				{field: 'DEFECT_NAME', type:'input'},
 				{field: 'USER_NAME', type:'input'},
-				{field: 'LINE_NO', type:'input'},
+				{field: 'LINER_NAME', type:'input'},
 			],
 			'done': function(filters){}
 		})
@@ -199,29 +215,36 @@ function getReport(dates,dept,item) {
 		"deptId" : dept,
 		"itemNo" : item,
 	}
-	CoreUtil.sendAjax("/report/batch/getCheckBatchReport", JSON.stringify(params),
-			function(data) {
-				console.log(data)
-				if (data.result) {
-					if (data.result) {
-						tableIns.reload({
-							data : data.data.List,
-							done: function(res1, curr, count){
-								localtableFilterIns.reload();
-							},
-							page : {
-								curr : pageCurr
-								// 从当前页码开始
-							}
-						});
-					} else {
-						layer.alert(data.msg);
-					}
-				} else {
-					layer.alert(data.msg);
-				}
-			}, "GET", false, function(res) {
-				layer.alert(res.msg);
-			});
+	// CoreUtil.sendAjax("/report/batch/getCheckBatchReport", JSON.stringify(params),
+	// 		function(data) {
+	// 			console.log(data)
+	// 			if (data.result) {
+	// 				if (data.result) {
+	// 					tableIns.reload({
+	// 						data : data.data.List,
+	// 						done: function(res1, curr, count){
+	// 							localtableFilterIns.reload();
+	// 						},
+	// 						page : {
+	// 							curr : pageCurr
+	// 							// 从当前页码开始
+	// 						}
+	// 					});
+	// 				} else {
+	// 					layer.alert(data.msg);
+	// 				}
+	// 			} else {
+	// 				layer.alert(data.msg);
+	// 			}
+	// 		}, "GET", false, function(res) {
+	// 			layer.alert(res.msg);
+	// 		});
+	tableIns.reload({
+		url:context+'/report/batch/getCheckBatchReport',
+		where:params,
+		done: function(res1, curr, count){
+			pageCurr=curr;
+		}
+	})
 }
 

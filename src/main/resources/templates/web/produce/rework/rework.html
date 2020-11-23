@@ -24,6 +24,7 @@
 }
 </style>
 <body class="layui-layout-body">
+<div th:replace="audio/fragment/audio :: audio"></div>
 	<div class="layui-layout layui-layout-admin">
 		<!--头-->
 		<!--<div th:replace="fragments/head :: header"></div>-->
@@ -57,6 +58,22 @@
 													lay-verify="required" id="sTaskno">
 											</div>
 										</div>
+
+										<div class="layui-form-item">
+											<label class="layui-form-label layui-required">物料编码</label>
+											<div class="layui-input-inline">
+												<input type="text" name="itemNo"
+													   autocomplete="off" class="layui-input grey" readonly="readonly"
+													   lay-verify="required" id="itemNo">
+											</div>
+											<label class="layui-form-label layui-required">物料名称</label>
+											<div class="layui-input-inline" style="width: 320px;">
+												<input type="text" name="itemName"
+													   autocomplete="off" class="layui-input grey" readonly="readonly"
+													   lay-verify="required" id="itemName">
+											</div>
+										</div>
+
 										<div class="layui-form-item">
 											<label class="layui-form-label layui-required">外箱号条码</label>
 											<div class="layui-input-inline" style="width: 250px;">
@@ -138,5 +155,11 @@
 		<script th:src="@{/js/web/produce/rework/rework.js}"
 			src="/js/web/produce/rework/rework.js"></script>
 	</div>
+
+	<style type="text/css">
+		.grey {
+			background-color:#F2F2F2;
+		}
+	</style>
 </body>
 </html>

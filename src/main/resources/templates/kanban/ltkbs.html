@@ -1,0 +1,82 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>拉头看板</title>
+<script type="text/javascript" src="../kanban/js/jquery.js"></script>
+<link rel="stylesheet" href="../kanban/css/comon0.css">
+<link rel="stylesheet" href="../layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}"></link>
+<script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
+</head>
+<style>
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+}
+
+.mainbox {
+	height: 100%;
+}
+</style>
+<script>
+	$(window).load(function() {
+		$(".loading").fadeOut()
+	})
+
+	/****/
+	$(document).ready(function() {
+		var whei = $(window).width()
+		$("html").css({
+			fontSize : whei / 20
+		})
+		$(window).resize(function() {
+			var whei = $(window).width()
+			$("html").css({
+				fontSize : whei / 20
+			})
+		});
+	});
+</script>
+<script type="text/javascript" src="../kanban/js/echarts.min.js"></script>
+<body>
+	<div class="mainbox">
+		<iframe src="" id="page" style="width: 100%; height: 100%;"
+			frameborder="0"> </iframe>
+
+		<script th:inline="javascript">
+		    var liner=[[${liner}]];
+		    var inType=[[${inType}]];
+		    $("#page").attr({
+				"src" : "toXlpm?liner="+liner+"&inType=apk" //设置默认页
+			});
+		    var rotation=[[${rotation}]];
+		    var rotationdata = rotation.data;
+		    rotationdata = rotationdata[0].R;// 获取系统设置的刷新间隔时间
+			var interval_kb = null;// iframe切换定时器
+			interval_kb = setInterval(switchPage,rotationdata * 1000);  // 启动
+			function switchPage() {//切换列表
+				var src = $(window.parent.document).find("#page").attr("src"); 
+
+					if(src=="toXlpm?liner="+liner+"&inType=apk"){
+						$("#page").attr({
+							"src" : "toCxdz?liner="+liner+"&inType=apk"
+						});
+					}else if(src=="toCxdz?liner="+liner+"&inType=apk") {
+						$("#page").attr({
+							"src" : "toCxsc?liner="+liner+"&inType=apk"
+						});
+					}else if(src=="toCxsc?liner="+liner+"&inType=apk"){
+						$("#page").attr({
+							"src" : "toXlpm?liner="+liner+"&inType=apk"
+						});
+					}
+					
+			}
+		</script>
+	</div>
+</body>
+</html>

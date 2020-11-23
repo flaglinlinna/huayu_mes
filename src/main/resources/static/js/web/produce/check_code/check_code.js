@@ -20,6 +20,8 @@ $(function() {
 							// ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
 							,
 							defaultToolbar : [],
+							height:'full-380'//固定表头&full-查询框高度
+							,even:true,//条纹样式
 							page : false,
 							data : [],
 							request : {
@@ -42,18 +44,18 @@ $(function() {
 								type : 'numbers'
 							}, {
 								field : 'taskNo',
-								title : '制定单号',
-								width : 350,
+								title : '制令单号',
+								width : 200,
 								sort : true
 							}, {
 								field : 'barcode1',
 								title : '条码1',
-								width : 200,
+								width : 240,
 								sort : true
 							}, {
 								field : 'barcode2',
 								title : '条码2',
-								width : 200,
+								width : 240,
 								sort : true
 							}, {
 								field : 'result',
@@ -74,6 +76,7 @@ $(function() {
 										url : context
 												+ '/produce/check_code/getTaskNo',
 										method : 'get',
+										
 										cols : [ [ {
 											type : 'radio'
 										},// 多选 radio
@@ -146,7 +149,8 @@ $(function() {
 							defaultToolbar : [],
 							page : true,
 							data : [],
-							height : 'full-210',
+							height:'full-80'//固定表头&full-查询框高度
+							,even:true,//条纹样式
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -164,7 +168,7 @@ $(function() {
 								type : 'numbers'
 							}, {
 								field : 'TASK_NO',
-								title : '制定单号',
+								title : '制令单号',
 								width : 350
 							}, {
 								field : 'BARCODE_S_1',
@@ -263,8 +267,13 @@ function subCode(taskNo, barcode1, barcode2) {
 					});
 					
 				} else {
+					playMusic();
 					layer.alert(data.msg, function(index) {
-						
+						if(barcode2==""){
+							$("#barcode").focus();
+						}else{
+							$("#barcode1").focus();
+						}
 						layer.close(index);
 					});
 				}

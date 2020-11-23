@@ -185,4 +185,5 @@ public class SysLogImpl implements SysLogService {
 			return ApiResponseResult.failure();
 		}
 	}
+
 }

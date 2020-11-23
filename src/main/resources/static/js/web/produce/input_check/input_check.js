@@ -20,6 +20,8 @@ $(function() {
                 ,
                 defaultToolbar : [],
                 cellMinWidth : 80,
+                height:'full-375'//固定表头&full-查询框高度
+					,even:true,//条纹样式
                 page : false,
                 data : [],
                 request : {
@@ -99,6 +101,7 @@ $(function() {
                     url:  context +'/inputCheck/getTaskNo',
                     //url:  context +'base/prodproc/getProdList',
                     method : 'get',
+                    width:800,
                     cols : [ [
                         { type: 'radio' },//多选  radio
                         , {
@@ -108,7 +111,7 @@ $(function() {
                         }, {
                             field : 'TASK_NO',
                             title : '制令单号',
-                            width : 180,sort: true
+                            width : 150,sort: true
                         }, {
                             field : 'ITEM_NO',
                             title : '物料编码',
@@ -120,7 +123,7 @@ $(function() {
                         }, {
                             field : 'LINER_NAME',
                             title : '组长',
-                            width : 100
+                            width : 80
                         },{
                             field : 'QTY_PLAN',
                             title : '数量',
@@ -182,7 +185,7 @@ $(function() {
 
             // 监听
             form.on('submit(confirmSubmit)', function(data) {
-                console.log(data.field)
+                //console.log(data.field)
                 addPut(data.field)
             });
 
@@ -201,7 +204,8 @@ $(function() {
                 defaultToolbar : [],
                 page : true,
                 data : [],
-                height: 'full-210',
+                height:'full-80'//固定表头&full-查询框高度
+					,even:true,//条纹样式
                 request : {
                     pageName : 'page', // 页码的参数名称，默认：page
                     limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -220,7 +224,7 @@ $(function() {
                 },{
                     field : 'TASK_NO',
                     title : '制令单号',
-                    width : 340,sort: true
+                    width : 200,sort: true
                 }, {
                     field : 'ITEM_BARCODE',
                     title : '物料条码',
@@ -241,7 +245,12 @@ $(function() {
                     field : 'USER_NAME',
                     title : '上料人姓名',
                     width : 100
-                } ] ],
+                }, {
+                    field : 'CREATE_DATE',
+                    title : '上料时间',
+                    width : 150
+                },
+                ] ],
                 done : function(res, curr, count) {
                     pageCurr = curr;
                 }
@@ -253,22 +262,36 @@ $(function() {
         if(event.keyCode == "13") {
             //alert('你输入的内容为：' + $('#barcode').val());
             if($('#barcode').val()){
-                getInfoBarcode($('#barcode').val())
+                getInfoBarcode($('#barcode').val(),$('#num').val())
             }else{
-                layer.alert("请先扫描条码!");
+                layer.alert("请先扫描条码!",function () {
+                    $('#barcode').focus();
+                    layer.closeAll();
+                });
             }
         }
     });
 });
 
-function getInfoBarcode(barcode){
-    var params={"barcode":barcode}
+function getInfoBarcode(barcode,taskNo){
+    var params = {
+        "barcode" : barcode,
+        "taskNo":taskNo
+    }
     CoreUtil.sendAjax("/inputCheck/getInfoBarcode", params, function(data) {
         if (data.result) {
             $( "input[name='item_code']").val(data.data[0].ITEM_NO);
             $( "input[name='addqty']").val(data.data[0].QTY);
         }else{
-            layer.alert(data.msg);
+            playMusic();
+            layer.alert(data.msg,function () {
+                $('#barcode').val('');
+                $('#item_code').val('');
+                $('#addqty').val('');
+                $('#barcode').focus();
+                layer.closeAll();
+            });
+            // $('#barcode').val('');
         }
     }, "GET", false, function(res) {
         layer.alert(res.msg);
@@ -283,6 +306,9 @@ function getDetailByTask(taskNo){
             tableIns.reload({
                 data:data.data
             });
+            $('#barcode').val('');
+            $('#item_code').val('');
+            $('#addqty').val('');
         }else{
             layer.alert(data.msg);
         }
@@ -294,14 +320,18 @@ function getDetailByTask(taskNo){
 function addPut(obj){
     var params={"barcode":obj.barcode,"task_no":obj.num,"item_no":obj.item_code,"qty":obj.addqty};
     CoreUtil.sendAjax("/inputCheck/addPut", params, function(data) {
-        console.log(data)
         if (data.result) {
             $("#inqty").val(data.data.Qty);
             tableIns.reload({
                 data:data.data.List
             });
+            $('#barcode').focus();
         }else{
-            layer.alert(data.msg);
+            playMusic();
+            layer.alert(data.msg,function () {
+                $('#barcode').focus();
+                layer.closeAll();
+            });
         }
         $( "input[name='barcode']").val('');
         $( "input[name='item_code']").val('');

@@ -81,7 +81,6 @@ $(function () {
         laydate.render({
             elem: '#prodDate'
         });
-        //
         form.on('select(deptId)', function(obj){
             $("#deptName").val(obj.elem[obj.elem.selectedIndex].text);
         });
@@ -154,16 +153,16 @@ $(function () {
                     , {type: 'checkbox'}
                     // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
                     // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
-                    , {field: 'CHECK_STATUS', title: '校验结果', width: 100, templet: '#statusTpl'}
+                    , {field: 'CHECK_STATUS', title: '校验结果', width: 90, templet: '#statusTpl'}
                     , {field: 'ENABLED', title: '生效状态', width: 80, templet: '#enabledTpl'}
-                    , {field: 'ERROR_INFO', title: '错误信息', width: 140}
-                    , {field: 'PROD_NO', title: '工单号', width: 120}
+                    , {field: 'ERROR_INFO', title: '错误信息', width: 160}
+                    , {field: 'PROD_NO', title: '工单号', width: 130}
                     , {
-                        field: 'TASK_NO', title: '生产制令单', width: 100,
-                        templet: '<div><a cursor: pointer; onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO==null?"":d.TASK_NO }}</a></div>'
+                        field: 'TASK_NO', title: '生产制令单', width: 150,
+                        templet: '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO==null?"":d.TASK_NO }}</a></div>'
                     }
                     , {field: 'GROUP_NO', title: '组合', width: 70}
-                    , {field: 'CUST_NAME', title: '客户', width: 80}
+                    , {field: 'CUST_NAME', title: '客户', width: 120}
                     , {field: 'LINER_NAME', title: '组长', width: 70}
                     , {field: 'ITEM_NO', title: '物料编码', width: 150}
                     , {field: 'ITEM_NAME', title: '物料描述', width: 150}
@@ -178,6 +177,8 @@ $(function () {
 
         getMainData();//获取数据
 
+
+
         //导入
         upload.render({
             elem: '#uploadBtn'
@@ -191,6 +192,8 @@ $(function () {
             }
             ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
                 layer.load(); //上传loading
+                console.log(afDay);
+                console.log(bfDay);
             }
             ,done: function(res,index, upload){
                 layer.closeAll('loading'); //关闭loading
@@ -206,7 +209,8 @@ $(function () {
                         success: function (res) {
                             if (res.result) {
                                 loadAll();//重新加载表格
-                                layer.alert("导入成功！",function(index){
+                                layer.alert("导入完成,请留意校验信息！",function(index){
+                                    freshFenable(id);
                                     layer.close(index);
                                 });
                             } else {
@@ -250,8 +254,30 @@ function toSchedulingEdit(d){
     return false;
 }
 
+function freshFenable(id) {
+    $.ajax({
+        type: "post",
+        data: {id: id},
+        url: context+"/produce/schedulingMain/getSchedulingMain?id:"+id,
+        success: function (res) {
+            if (res.result) {
+                if(res.data.fenable ==1){
+                    $("input[name='fenable']").prop("checked", true);
+                    showBtn(1);
+                    $('#edit1').attr("disabled","disabled");
+                }
+                layui.form.render('checkbox');
+            } else {
+                layer.alert(res.msg,function(index){
+                });
+            }
+        },
+        error: function () {
+        }
+    });
+}
+
 function getOrgSelect(orgName) {
-    console.log(orgName);
     $.ajax({
         type: "post",
         data: {},
@@ -348,6 +374,10 @@ function getMainData(){
             $("#deptId").append( '<option value="'+deptList[i].ID+'">'+deptList[i].ORG_NAME+'</option>');
         }
     }
+    if(id==null||id==undefined){
+        $('#uploadBtn').prop("disabled","disabled");
+        $('#uploadBtn').addClass("layui-btn-disabled");
+    }
     if(id!=null&&id!=undefined) {
         getDeptSelect(schedulingMain.deptId,schedulingMain.deptName,schedulingMain.className);
         $("#id").val(id);
@@ -359,6 +389,8 @@ function getMainData(){
         showBtn(schedulingMain.fenable);
         if (schedulingMain.fenable == 1) {
             $("input[name='fenable']").prop("checked", true);
+            $('#addSubmit').prop("disabled","disabled");
+            $('#addSubmit').addClass("layui-btn-disabled");
         } else {
             $("input[name='fenable']").prop("checked", false);
         }
@@ -379,7 +411,22 @@ function addSubmit(obj) {
     if(!obj.field.fenable){
         obj.field.fenable = 0;
     }
-    console.log(obj);
+    var sdate = new Date(obj.field.prodDate.replace(/-/g, "/"));
+    var now = new Date();
+    var bfdays =sdate.getTime()- now.getTime();
+    var day = parseInt(bfdays / (1000 * 60 * 60 * 24));
+    if(day>0){
+        if(day>bfDay){
+            layer.alert("排产日期未到期");
+            return false;
+        }
+    }else if(day<0){
+        day = -day;
+        if(day>afDay){
+            layer.alert("排产日期已过期");
+            return false;
+        }
+    }
     CoreUtil.sendAjax("/produce/schedulingMain/add", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
@@ -387,6 +434,8 @@ function addSubmit(obj) {
                 id =  data.data.id;
                 $("#idNo").val(data.data.idNo);
                 showBtn(obj.field.fenable);
+                $('#uploadBtn').prop("disabled",false);
+                $('#uploadBtn').removeClass("layui-btn-disabled");
                 layer.alert("操作成功", function() {
                     layer.closeAll();
                 });
@@ -403,7 +452,22 @@ function editSubmit(obj) {
     if(!obj.field.fenable){
         obj.field.fenable = 0;
     }
-    console.log(obj);
+    var sdate = new Date(obj.field.prodDate.replace(/-/g, "/"));
+    var now = new Date();
+    var bfdays =sdate.getTime()- now.getTime();
+    var day = parseInt(bfdays / (1000 * 60 * 60 * 24));
+    if(day>0){
+        if(day>bfDay){
+            layer.alert("排产日期未到期");
+            return false;
+        }
+    }else if(day<0){
+        day = -day;
+        if(day>afDay){
+            layer.alert("排产日期已过期");
+            return false;
+        }
+    }
     CoreUtil.sendAjax("/produce/schedulingMain/edit", JSON.stringify(obj.field),
         function(data) {
             if (data.result) {
@@ -454,6 +518,7 @@ function doCheckProc(table){
         data: { "ids":tempIds },
         url: context+"/produce/schedulingMain/doCheckProc",
         success: function (res) {
+            freshFenable(id);
             if (res.result) {
                 layer.alert("校验完成！,请留意校验信息",function(index){
                     loadAll();//重新加载表格
@@ -489,6 +554,7 @@ function doEffect(table){
         data: { "ids":tempIds },
         url: context+"/produce/schedulingMain/doEffect",
         success: function (res) {
+            freshFenable(id);
             if (res.result) {
                 layer.alert("生效成功！",function(index){
                     layer.close(index);

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>产线电子看板（拉头）</title>
+<title>产线电子看板</title>
 <script type="text/javascript" src="../kanban/js/jquery.js"></script>
 <link rel="stylesheet" href="../kanban/css/comon0.css">
 <link rel="stylesheet" href="../layui/css/layui.css"
@@ -11,7 +11,7 @@
 
 </head>
 <style>
-th, td {
+/*th, td {
 	text-align: center;
 	vertical-align: middle;
 	padding: 4px;
@@ -22,13 +22,61 @@ table, table tr td {
 	border: 2px solid #333399;
 	border-collapse: collapse;
 }
+*/
+.tablebox {
+	height: 200px;
+	overflow: hidden;
+	position: relative;
+	margin: 10px auto;
+}
+
+.tbl-header {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
+
+.tbl-body {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+.tablebox table {
+	width: 100%;
+}
+
+.tablebox table th, .tablebox table td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+.tablebox table tr th {
+	background: #333399;
+	cursor: pointer;
+}
 
 th {
-	font-size: 15px;
+	font-size: 16px;
+	font-weight: normal;
 }
 
 td {
 	font-size: 16px;
+}
+
+h1 {
+	font-weight: bold;
 }
 
 .line {
@@ -37,26 +85,31 @@ td {
 	top: 0;
 	line-height: .75rem;
 }
-h2{text-align:center;
-margin-top: 8px;
- color:#ffffff;
-font-size:20px;
+
+h2 {
+	text-align: center;
+	margin-top: 5px;
+	color: #ffffff;
+	font-size: 18px;
+	font-weight: bold;
 }
+
 ul {
-    list-style: none;
-    margin-left: 20px;
-    margin-top: 20px;
+	list-style: none;
+	margin-left: 20px;
+	margin-top: 15px;
 }
 
 li {
-    line-height: 40px;
-    color:#ffffff;
-    font-size:16px;
+	line-height: 35px;
+	color: #ffffff;
+	font-size: 16px;
 }
-.span_li{
- margin-left: 15px;
-    color:#ffffff;
-    font-size:16px;
+
+.span_li {
+	margin-left: 15px;
+	color: #ffffff;
+	font-size: 16px;
 }
 </style>
 <script>
@@ -82,7 +135,7 @@ $(document).ready(function(){
 		<iframe frameborder="0" src="../kanban/js/index.html"
 			style="width: 100%; height: 100%"></iframe>
 	</div>  -->
-	<header class="header left">
+	<header class="header left" id="inSearch">
 		<div class="total_chose_box">
 			<div style="height: 5px;"></div>
 			<span class="chose_tltle">请选择班次：</span> <select class="year_chose"
@@ -91,16 +144,16 @@ $(document).ready(function(){
 				<option value="998">24小时看板</option>
 				<option value="1">白班</option>
 				<option value="2">晚班</option>
-			</select> <span class="chose_tltle">请选择部门：</span> <select class="year_chose"
-				id="dep_select">
 			</select>
+			<!--  <span class="chose_tltle">请选择部门：</span> <select class="year_chose"
+				id="dep_select">
+			</select>-->
 			<span class="chose_tltle">请选择组长：</span> <select class="year_chose"
 				id="liner_select">
 
-			</select> 
-			 <span class="chose_tltle">请选择日期：</span> <input style="width:15%;" type="text"
-				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
-				autocomplete="off" class="chose_text_in ">
+			</select> <span class="chose_tltle">请选择日期：</span> <input style="width: 15%;"
+				type="text" name="date" id="date" lay-verify="date"
+				placeholder="yyyy-MM-dd" autocomplete="off" class="chose_text_in ">
 			<!-- <input class="chose_text_in"> -->
 			<button class="chose_enter" id="searchBtn">确定</button>
 		</div>
@@ -109,7 +162,7 @@ $(document).ready(function(){
 		<div class="line">
 			<span style="color: #FFFFFF; font-size: 16px;" id="showLine"></span>
 		</div>
-		<h1>产线电子看板(拉头)</h1>
+		<h1 id="title">产线电子看板</h1>
 		<div class="weather">
 			<!--<img src="picture/weather.png"><span>多云转小雨</span>-->
 			<span id="showTime"></span>
@@ -136,50 +189,89 @@ var t = null;
 	</div>
 	<div class="mainbox">
 		<div class="boxall" style="height: 230px">
-		<div id="echart1" style="width: 29%; height: 220px; float: left;color:#ffffff;">
-	
-		<h2>产线信息</h2>
-		
-		<ul>
-		<li>班次:<span class="span_li" id="classNo"></span></li>
-		<li>排名:<span class="span_li" id="rownum"></span></li>
-		<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
-		</ul>	
-		</div>
-			<div id="echart2" style="width: 35%; height: 220px; float: left;"></div>			
-			<div id="echart3" style="width: 35%; height: 220px; float: left;"></div>
-		</div>
-		<div class="boxall">
-			<div class="data_table">
-				<table id="table" class="table table-bordered"
-					style="width: 99%; margin-top: 10px;">
-					<thead>
-						<tr class="blue_bg" style="background: #333399;">
-							<th>工单号</th>
-							<th>物料编码</th>
-							<th>排产日期</th>
-							<th>排产班次</th>
-							<th>计划数量</th>
-							<th>完工数量</th>
-							<th>标准产能</th>
-							<th>标准人力</th>
-							<th>标准工时</th>
-							<th>实际工时</th>
-						</tr>
-					</thead>
-					<tbody id="tableList">
+			<div id="echart1"
+				style="width: 20%; height: 220px; float: left; color: #ffffff;">
 
-					</tbody>
-				</table>
+				<h2>产线信息</h2>
+
+				<ul>
+					<li>班次:<span class="span_li" id="classNo"></span></li>
+					<!--  <li>排名:<span class="span_li" id="rownum"></span></li>-->
+					<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
+					<li>打卡总数:<span class="span_li" id="cardAll"></span></li>
+					<li>已分配数:<span class="span_li" id="cardAss"></span></li>
+					<li>未分配数:<span class="span_li" id="cardUnass"></span></li>
+				</ul>
 			</div>
+			<div id="echart2" style="width: 40%; height: 220px; float: left;"></div>
+			<div id="echart3" style="width: 40%; height: 220px; float: left;"></div>
+			<div class="boxfoot"></div>
+		</div>
+
+		<div class="boxall">
+			<div class="tablebox">
+				<div class="tbl-header">
+					<table>
+						<thead>
+							<tr>
+								<th>工单号</th>
+								<th>物料编码</th>
+								<th>排产日期</th>
+								<th>排产班次</th>
+								<th>计划数量</th>
+								<th>完工数量</th>
+								<th>标准产能</th>
+								<th>标准人力</th>
+								<th>标准工时</th>
+								<th>实际工时</th>
+								<th>异常工时</th>
+								<th>完工率</th>
+								<th>效率</th>
+							</tr>
+						</thead>
+						<tbody style="opacity: 0;" id="tableList1"></tbody>
+					</table>
+				</div>
+
+				<div class="tbl-body">
+					<table>
+						<thead>
+							<tr>
+								<th>工单号</th>
+								<th>物料编码</th>
+								<th>排产日期</th>
+								<th>排产班次</th>
+								<th>计划数量</th>
+								<th>完工数量</th>
+								<th>标准产能</th>
+								<th>标准人力</th>
+								<th>标准工时</th>
+								<th>实际工时</th>
+								<th>异常工时</th>
+								<th>完工率</th>
+								<th>效率</th>
+							</tr>
+						</thead>
+						<tbody id="tableList">
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+
 			<div class="boxfoot"></div>
 		</div>
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
         var deptList=[[${deptList}]];
         var linerList=[[${linerList}]];
+        var interval=[[${interval}]];
+        var nowLiner=[[${nowLiner}]];
+        var inType=[[${inType}]];
+        console.log(inType)
     </script>
-    	<script th:inline="javascript">
+		<script th:inline="javascript">
     var context = [[@{/}]];
     	layui.use([ 'laydate'], function(){
     		  var layer = layui.layer
@@ -192,6 +284,9 @@ var t = null;
     		   // range: true
     		  });
     	});
+    	if(inType=="apk"){
+    		$("#inSearch").hide();
+    	}
     </script>
 		<script src="/kanban/scripts/cxdz.js"
 			th:src="@{/kanban/scripts/cxdz.js}"></script>
