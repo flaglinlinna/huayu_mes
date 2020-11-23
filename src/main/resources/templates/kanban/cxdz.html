@@ -135,7 +135,7 @@ $(document).ready(function(){
 		<iframe frameborder="0" src="../kanban/js/index.html"
 			style="width: 100%; height: 100%"></iframe>
 	</div>  -->
-	<header class="header left">
+	<header class="header left" id="inSearch">
 		<div class="total_chose_box">
 			<div style="height: 5px;"></div>
 			<span class="chose_tltle">请选择班次：</span> <select class="year_chose"
@@ -209,31 +209,6 @@ var t = null;
 		</div>
 
 		<div class="boxall">
-			<!--<div class="data_table">
-				<table id="table" class="table table-bordered"
-					style="width: 99%; margin-top: 10px;">
-					<thead>
-						<tr class="blue_bg" style="background: #333399;">
-							<th>工单号</th>
-							<th>物料编码</th>
-							<th>排产日期</th>
-							<th>排产班次</th>
-							<th>计划数量</th>
-							<th>完工数量</th>
-							<th>标准产能</th>
-							<th>标准人力</th>
-							<th>标准工时</th>
-							<th>实际工时</th>
-							<th>异常工时</th>
-							<th>完工率</th>
-							<th>效率</th>
-						</tr>
-					</thead>
-					<tbody id="tableList">
-					</tbody>
-				</table>
-			</div>-->
-
 			<div class="tablebox">
 				<div class="tbl-header">
 					<table>
@@ -292,6 +267,9 @@ var t = null;
         var deptList=[[${deptList}]];
         var linerList=[[${linerList}]];
         var interval=[[${interval}]];
+        var nowLiner=[[${nowLiner}]];
+        var inType=[[${inType}]];
+        console.log(inType)
     </script>
 		<script th:inline="javascript">
     var context = [[@{/}]];
@@ -306,6 +284,9 @@ var t = null;
     		   // range: true
     		  });
     	});
+    	if(inType=="apk"){
+    		$("#inSearch").hide();
+    	}
     </script>
 		<script src="/kanban/scripts/cxdz.js"
 			th:src="@{/kanban/scripts/cxdz.js}"></script>

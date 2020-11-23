@@ -69,13 +69,14 @@ public class kanbanController extends WebController {
 	//（复数看板）轮播页面
 	@RequestMapping(value = "/toCjkbs", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toCjkbs() {
+	public ModelAndView toCjkbs(String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "/kanban/toCjkbs";
 		String methodName = "车间看板【车间报工+生产电子】";
 		try {	
 			ApiResponseResult rotation =kanbanService.getRotationTime();
 			mav.addObject("rotation",rotation);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/cjkbs");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,7 +88,7 @@ public class kanbanController extends WebController {
 
 		@RequestMapping(value = "/toLtkbs", method = RequestMethod.GET)
 		@ResponseBody
-		public ModelAndView toLtkbs(String liner) {
+		public ModelAndView toLtkbs(String liner,String inType) {
 			ModelAndView mav = new ModelAndView();
 			String method = "/kanban/toLtkbs";
 			String methodName = "获取拉头看板";
@@ -95,6 +96,7 @@ public class kanbanController extends WebController {
 				ApiResponseResult rotation =kanbanService.getRotationTime();
 				mav.addObject("rotation",rotation);
 				mav.addObject("liner",liner);
+				mav.addObject("inType",inType);
 				mav.setViewName("/kanban/ltkbs");// 返回路径
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -106,13 +108,15 @@ public class kanbanController extends WebController {
 	
 		@RequestMapping(value = "/toSetLiner", method = RequestMethod.GET)
 		@ResponseBody
-		public ModelAndView toSetLiner() {
+		public ModelAndView toSetLiner(String inType,String pageType) {
 			ModelAndView mav = new ModelAndView();
 			String method = "/kanban/toSetLiner";
 			String methodName = "获取组长数据-拉头看板";
 			try {	
 				ApiResponseResult linerList=kanbanService.getLiner();
 				mav.addObject("linerList",linerList);
+				mav.addObject("inType",inType);
+				mav.addObject("pageType",pageType);
 				mav.setViewName("/kanban/setliner");// 返回路径
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -138,7 +142,7 @@ public class kanbanController extends WebController {
 
 	@RequestMapping(value = "/toCjbg1", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toCjbg1(String type) {
+	public ModelAndView toCjbg1(String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "/kanban/toCjbg1";
 		String methodName = "车间报工看板";
@@ -151,6 +155,7 @@ public class kanbanController extends WebController {
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList",deptList);
 			mav.addObject("interval",interval);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/cjbg1");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -183,7 +188,7 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toScdz", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toScdz() {
+	public ModelAndView toScdz(String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toScdz";
 		String methodName = "生产电子看板";
@@ -196,6 +201,7 @@ public class kanbanController extends WebController {
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
 			mav.addObject("interval",interval);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/scdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -205,9 +211,30 @@ public class kanbanController extends WebController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/toScdzDetail", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toScdzDetail(String liner) {
+		ModelAndView mav = new ModelAndView();
+		String method = "/kanban/toScdzDetail";
+		String methodName = "生产电子看板数据穿透";
+		try {
+			ApiResponseResult result = kanbanService.getScdzDetailList(liner, "",this.getIpAddr());
+			logger.debug(methodName+"=toScdzDetail:" + result);
+			getSysLogService().success(module,method,methodName,result);
+			mav.addObject("kanbanDataList", result);
+			mav.addObject("liner", liner);
+			mav.setViewName("/kanban/scdz_detail");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"异常！", e);
+			getSysLogService().error(module,method,methodName,e.toString());
+		}
+		return mav;
+	}
+	
 	@RequestMapping(value = "/toZcbl", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toZcbl(String line) {
+	public ModelAndView toZcbl(String line,String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toZcbl";
 		String methodName = "制程不良看板";
@@ -220,6 +247,7 @@ public class kanbanController extends WebController {
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList",deptList);
 			mav.addObject("interval",interval);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/zcbl");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -231,7 +259,7 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toXlpm", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toXlpm(String liner) {
+	public ModelAndView toXlpm(String liner,String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toXlpm";
 		String methodName = "效率排名看板";
@@ -247,6 +275,7 @@ public class kanbanController extends WebController {
 			mav.addObject("linerList", linerList);
 			mav.addObject("nowLiner", liner);
 			mav.addObject("interval",interval);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/xlpm");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -258,7 +287,7 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toDfg", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toDfg() {
+	public ModelAndView toDfg(String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toDfg";
 		String methodName = "待返工看板";
@@ -280,6 +309,7 @@ public class kanbanController extends WebController {
 			mav.addObject("kanbanDataList", result);
 			mav.addObject("deptList", deptList);
 			mav.addObject("interval",interval);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/dfg");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -291,7 +321,7 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toCxdz", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toCxdz(String liner) {
+	public ModelAndView toCxdz(String liner,String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toCxdz";
 		String methodName = "产线电子看板";
@@ -307,6 +337,7 @@ public class kanbanController extends WebController {
 			mav.addObject("linerList", linerList);
 			mav.addObject("interval",interval);
 			mav.addObject("nowLiner", liner);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/cxdz");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -318,7 +349,7 @@ public class kanbanController extends WebController {
 	
 	@RequestMapping(value = "/toCxsc", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toCxsc(String liner) {
+	public ModelAndView toCxsc(String liner,String inType) {
 		ModelAndView mav = new ModelAndView();
 		String method = "kanban/toCxsc";
 		String methodName = "产线生产看板";
@@ -334,6 +365,7 @@ public class kanbanController extends WebController {
 			mav.addObject("linerList", linerList);
 			mav.addObject("interval",interval);
 			mav.addObject("nowLiner", liner);
+			mav.addObject("inType",inType);
 			mav.setViewName("/kanban/cxsc");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

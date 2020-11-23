@@ -33,7 +33,7 @@ function dealData(kanbanList) {
 		var kanbanData_t = kanbanList.data.List_line;
 		var kanbanData = kanbanList.data.List_table;
 
-		var title = kanbanList.data.title == null ? "" : kanbanList.data.Title
+		var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
 		$("#title").text(title + "•效率排名看板");
 
 		if (kanbanData.length > 0) {
@@ -43,9 +43,9 @@ function dealData(kanbanList) {
 		}
 
 		if (kanbanData.length > 0) {
-			var done = parseInt(kanbanData_t[0].QTY_DONE);
-			var plan = parseInt(kanbanData_t[0].QTY_PLAN);
-			var doneRate = kanbanData_t[0].RATE_DONE;
+			var done = kanbanData_t[0].QTY_DONE==null?0:parseInt(kanbanData_t[0].QTY_DONE);
+			var plan = kanbanData_t[0].QTY_PLAN==null?0:parseInt(kanbanData_t[0].QTY_PLAN);
+			var doneRate = kanbanData_t[0].RATE_DONE==null?0:kanbanData_t[0].RATE_DONE;
 			getChart3(done, plan, doneRate);
 
 			var hr_abn = kanbanData_t[0].HOUR_ABN == null ? 0
@@ -346,7 +346,7 @@ function getLinerList(linerList) {
 	var html = "<option value=''>请选择组长</option>";
 	for (j = 0, len = res.data.length; j < len; j++) {
 		var arr = res.data[j];
-		if(j==0){
+		if(arr.LEAD_BY==nowLiner){
 			html += "<option value='" + arr.LEAD_BY + "' selected>" + arr.LEAD_BY
 			+ "</option>";		
 		}else{

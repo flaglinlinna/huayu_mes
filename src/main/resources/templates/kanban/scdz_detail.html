@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>车间看板</title>
+<title>效率看板</title>
 <script type="text/javascript" src="../kanban/js/jquery.js"></script>
 <link rel="stylesheet" href="../kanban/css/comon0.css">
 <link rel="stylesheet" href="../layui/css/layui.css"
@@ -10,21 +10,9 @@
 <script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
 </head>
 <style>
-/*
-th, td {
-	text-align: center;
-	vertical-align: middle;
-	padding: 4px;
-	color: #FFFFFF;
-}
-
-table, table tr td {
-	border: 2px solid #333399;
-	border-collapse: collapse;
-}*/
 
 .tablebox {
-	height: 200px;
+	height: 450px;
 	overflow: hidden;
 	position: relative;
 	margin: 10px auto;
@@ -74,10 +62,7 @@ th {
 td {
 	font-size: 16px;
 }
-a{
-color: #FFFFFF;
-text-decoration:underline;
-}
+
 
 .line {
 	position: absolute;
@@ -106,13 +91,8 @@ $(document).ready(function(){
 	});
 	</script>
 <script type="text/javascript" src="../kanban/js/echarts.min.js"></script>
-<!--  <script language="JavaScript" src="../kanban/js/js.js"></script>-->
 <body>
-	<!-- <div class="canvas" style="opacity: .2">
-		<iframe frameborder="0" src="../kanban/js/index.html"
-			style="width: 100%; height: 100%"></iframe>
-	</div> -->
-	<header class="header left" id="inSearch">
+	<!-- <header class="header left">
 		<div class="total_chose_box">
 			<div style="height: 5px;"></div>
 			<span class="chose_tltle">请选择班次：</span> <select class="year_chose"
@@ -122,15 +102,15 @@ $(document).ready(function(){
 				<option value="1">白班</option>
 				<option value="2">晚班</option>
 			</select>
-			<!-- <span class="chose_tltle">请输入部门：</span> <select class="year_chose"
-				id="dep_select"></select> -->
+			<span class="chose_tltle">请输入部门：</span> <select class="year_chose"
+				id="dep_select"></select>
 			<span class="chose_tltle">请选择日期：</span> <input style="width: 15%;"
 				type="text" name="date" id="date" lay-verify="date"
 				placeholder="yyyy-MM-dd" autocomplete="off" class="chose_text_in ">
-			<!-- <input class="chose_text_in"> -->
+			<input class="chose_text_in">
 			<button class="chose_enter" id="searchBtn">确定</button>
 		</div>
-	</header>
+	</header> -->
 	<div class="head">
 
 		<div class="line">
@@ -161,42 +141,19 @@ var t = null;
 
 </script>
 	</div>
-	<div class="mainbox">
-		<div class="boxall" style="height: 230px">
-			<div class="allnav" id="echart1" style="width: 100%; height: 220px;"></div>
-			<div class="boxfoot"></div>
-		</div>
-		<div class="boxall">
-			<!-- <div class="data_table">
-				<table id="table" class="table table-bordered"
-					style="width: 99%; margin-top: 10px;">
-					<thead>
-						<tr class="blue_bg" style="background: #333399;">
-							<th>线长</th>
-							<th>标准工时</th>
-							<th>实际工时</th>
-							<th>异常工时</th>
-							<th>在线人数</th>
-							<th>生产效率</th>
-						</tr>
-					</thead>
-					<tbody id="tableList">
-						<tr>
-						</tr>
-					</tbody>
-				</table>
-			</div>-->
+	<div class="mainbox" >
+		<div class="boxall" style="height:70%">
 			<div class="tablebox">
 				<div class="tbl-header">
 					<table>
 						<thead>
 							<tr>
-								<th>线长</th>
-								<th>标准工时</th>
-								<th>实际工时</th>
-								<th>异常工时</th>
-								<th>在线人数</th>
-								<th>生产效率</th>
+								<th>组长</th>
+								<th>应到人数</th>
+								<th>制令单</th>
+								<th>目标产量</th>
+								<th>完工产量</th>
+								<th>员工</th>							
 							</tr>
 						</thead>
 						<tbody style="opacity: 0;" id="tableList1"></tbody>
@@ -207,12 +164,12 @@ var t = null;
 					<table>
 						<thead>
 							<tr>
-								<th>线长</th>
-								<th>标准工时</th>
-								<th>实际工时</th>
-								<th>异常工时</th>
-								<th>在线人数</th>
-								<th>生产效率</th>
+								<th>组长</th>
+								<th>应到人数</th>
+								<th>制令单</th>
+								<th>目标产量</th>
+								<th>完工产量</th>
+								<th>员工</th>	
 							</tr>
 						</thead>
 						<tbody id="tableList">
@@ -226,31 +183,11 @@ var t = null;
 		</div>
 		<script th:inline="javascript">
         var kanbanDataList=[[${kanbanDataList}]];
-        var deptList=[[${deptList}]];
-        var interval=[[${interval}]];
-        var inType=[[${inType}]];
+        var liner=[[${liner}]];$("#title").text(liner+"•效率看板");
+        var context = [[@{/}]];
     </script>
-		<script th:inline="javascript">
-    var context = [[@{/}]];
-    	layui.use([ 'laydate'], function(){
-    		  var layer = layui.layer
-    		  ,laydate = layui.laydate;
-    		  
-    		  //日期
-    		  laydate.render({
-    		    elem: '#date',
-    		   // range: true
-    		  });
-    	});
-    	if(inType=="apk"){
-    		$("#inSearch").hide();
-    	}
-    </script>
-		<script src="/kanban/scripts/cjbg1.js"
-			th:src="@{/kanban/scripts/cjbg1.js}"></script>
-	<script>
-	
-	</script>
+		<script src="/kanban/scripts/cjbg_detail.js"
+			th:src="@{/kanban/scripts/cjbg_detail.js}"></script>
 	</div>
 </body>
 </html>

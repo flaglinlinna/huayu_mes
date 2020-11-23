@@ -34,13 +34,13 @@ li {
 		<div data-role="header" data-theme="b">
 			<h1>组长列表</h1>
 		</div>
-		
-		<div data-role="controlgroup"  >
-				<div class="ui-controlgroup-controls " id="list">
-					<!-- <a href="/report/kanban01.html?line=XK019" data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button">看板1</a> -->
-				</div>
+
+		<div data-role="controlgroup">
+			<div class="ui-controlgroup-controls " id="list">
+				<!-- <a href="/report/kanban01.html?line=XK019" data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button">看板1</a> -->
 			</div>
-		
+		</div>
+
 
 
 		<div data-role="footer" data-theme="b" data-position="fixed">
@@ -50,14 +50,40 @@ li {
 
 	<script th:inline="javascript">
 	var res=[[${linerList}]];
-	console.log(res);
+	var pageType=[[${pageType}]];//跟据页面类型变更指向
+	console.log(pageType)
+	if(pageType=="xlpm"){
 		res.data.forEach(function(element) {
-       	console.log(element);
-       	var html = '<a href=/kanban/toLtkbs?liner='+element.LEAD_BY+
-       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
-       			element.LEAD_BY+'</a>'
-       	$("#list").append(html)	
-       	 }); 
+	       	var html = '<a href=/kanban/toXlpm?liner='+element.LEAD_BY+'&inType=apk'+
+	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
+	       			element.LEAD_BY+'</a>'
+	       	$("#list").append(html)	
+	       	 }); 
+	}else if(pageType=="cxdz"){
+		res.data.forEach(function(element) {
+	       	var html = '<a href=/kanban/toCxdz?liner='+element.LEAD_BY+'&inType=apk'+
+	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
+	       			element.LEAD_BY+'</a>'
+	       	$("#list").append(html)	
+	       	 }); 
+	}else if(pageType=="cxsc"){
+		res.data.forEach(function(element) {
+	       	var html = '<a href=/kanban/toCxsc?liner='+element.LEAD_BY+'&inType=apk'+
+	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
+	       			element.LEAD_BY+'</a>'
+	       	$("#list").append(html)	
+	       	 }); 
+	}else{
+		res.data.forEach(function(element) {
+	       	var html = '<a href=/kanban/toLtkbs?liner='+element.LEAD_BY+'&inType=apk'+
+	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
+	       			element.LEAD_BY+'</a>'
+	       	$("#list").append(html)	
+	       	 }); 
+	}
+	
+	
+		
 			
 	
 	</script>

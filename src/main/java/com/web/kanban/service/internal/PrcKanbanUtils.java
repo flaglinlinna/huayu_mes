@@ -191,13 +191,13 @@ public class PrcKanbanUtils {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
-					String storedProc = "{call  PRC_MES_RPT_SCDZ (?,?,?,?,?,?,?,?)}";// 调用的sql
+					String storedProc = "{call  PRC_MES_RPT_SCDZ_DET(?,?,?,?,?,?,?,?)}";// 调用的sql
 					CallableStatement cs = con.prepareCall(storedProc);
 					cs.setString(1, dev_ip);
 					cs.setString(2, user_id);
 					cs.setString(3, liner);
 					cs.setString(4, dep_id);//dep_id
-					cs.setString(5, "");//
+					cs.setString(5, "PO_RESULT");//
 					cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
 					cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					cs.registerOutParameter(8, -10);// 输出参数 追溯数据

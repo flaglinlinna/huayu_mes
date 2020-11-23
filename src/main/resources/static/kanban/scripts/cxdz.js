@@ -339,7 +339,7 @@ function getLinerList(linerList) {
 	var html = "<option value=''>请选择组长</option>";
 	for (j = 0, len = res.data.length; j < len; j++) {
 		var arr = res.data[j];
-		if(j==0){
+		if(arr.LEAD_BY==nowLiner){
 			html += "<option value='" + arr.LEAD_BY + "' selected>" + arr.LEAD_BY
 			+ "</option>";
 		}else{
@@ -354,8 +354,6 @@ function getList() {
 	var date = $("#date").val();
 	// var sdata = date.substring(0, date.indexOf(" "))
 	// var edata = date.substring(date.indexOf(" ") + 3, date.length);
-	// console.log(sdata)
-	// console.log(edata)
 	var class_no = $("#class_select").val();
 	// var dep_id=$("#dep_select").val();
 	var liner = $("#liner_select").val();
@@ -380,7 +378,6 @@ function getList() {
 				clearInterval(interval_do);//错误-关闭定时器
 				alert(res.msg);
 			}
-			//console.log("GET:"+action)
 		}
 	});
 }
