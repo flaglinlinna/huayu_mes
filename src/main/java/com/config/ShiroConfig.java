@@ -103,20 +103,20 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/treegrid/*/*", "anon");
 		filterChainDefinitionMap.put("/fragments/*", "anon");
 		filterChainDefinitionMap.put("/layout", "anon");
-		
+
 		filterChainDefinitionMap.put("/kanban/*", "anon");
 		filterChainDefinitionMap.put("/kanban/*/**", "anon");
 		filterChainDefinitionMap.put("/kanban/*/*/**", "anon");
 		filterChainDefinitionMap.put("/kanban/*/*/*/**", "anon");
 		filterChainDefinitionMap.put("/kanban/*/*/*/*/**", "anon");
-		
-		
+
+
 		filterChainDefinitionMap.put("/iclock/*", "anon");
 		filterChainDefinitionMap.put("/iclock/*/**", "anon");
-		
+
 
 		filterChainDefinitionMap.put("/produce/inspect/*", "anon");//品质检查-PDA
-		
+
 		filterChainDefinitionMap.put("/produce/transit/*", "anon");//中转送检-PDA
 
 		filterChainDefinitionMap.put("/user/sendMsg", "anon");
@@ -192,7 +192,7 @@ public class ShiroConfig {
 	 * 单例的cache防止热部署重启失败
 	 * @return EhCacheManager
 	 */
-	@Bean 
+	@Bean
 	public EhCacheManager ehCacheManager() {
 		logger.debug(
 				"=====shiro整合ehcache缓存：ShiroConfiguration.getEhCacheManager()");
@@ -200,9 +200,9 @@ public class ShiroConfig {
 		CacheManager cacheManager = CacheManager.getCacheManager("shiro");
 		  if(cacheManager == null){
 		  try {
-				  
+
 				  cacheManager = CacheManager.create(ResourceUtils.getInputStreamForPath("classpath:config/ehcache.xml"));
-				
+
 			  } catch (CacheException | IOException e) {
 					e.printStackTrace();
 			  }
@@ -251,15 +251,15 @@ public class ShiroConfig {
 		hashedCredentialsMatcher.setHashIterations(1);// 散列的次数，比如散列两次，相当于 // md5(md5(""));
 		return hashedCredentialsMatcher;
 	}
-	
+
 	/**
-	 * @描述：ShiroDialect，为了在thymeleaf里使用shiro的标签的bean 
+	 * @描述：ShiroDialect，为了在thymeleaf里使用shiro的标签的bean
 	 * @创建人：wyait
 	 * @创建时间：2017年12月21日 下午1:52:59
 	 * @return
 	 */
-	@Bean  
-    public ShiroDialect shiroDialect(){  
+	@Bean
+    public ShiroDialect shiroDialect(){
 		return new ShiroDialect();
     }
 
@@ -290,6 +290,7 @@ public class ShiroConfig {
 		//sessionManager.setCacheManager(ehCacheManager());
 		sessionManager.setSessionDAO(enterCacheSessionDAO());
 		sessionManager.setSessionIdCookie(sessionIdCookie());
+		//sessionManager.setGlobalSessionTimeout(1000 * 60);//会话过期时间，单位：毫秒(在无操作时开始计时)
 		return sessionManager;
 	}
 
@@ -360,7 +361,7 @@ public class ShiroConfig {
 		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());
 		return authorizationAttributeSourceAdvisor;
 	}
-	
-	
+
+
 
 }
