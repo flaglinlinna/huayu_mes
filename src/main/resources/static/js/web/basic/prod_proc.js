@@ -365,10 +365,14 @@ function getProcByClient(params){
 	CoreUtil.sendAjax("/base/client_proc/getClientItem", JSON.stringify(params), function(
 			data) {
 		if (data.result) {
-			//console.log(data.data)
+			//console.log(data.data)		
 			var beSelected=data.data;
 			tableProc.reload({
 				done : function(res, curr, count) {
+					for(var q=0;q<res.data.length;q++){//更改css来实现未选中的效果 增加-2020-11-23
+	                      $('tbody tr[data-index="'+q+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('false', true);
+	                      $('tbody tr[data-index="'+q+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().removeClass('layui-form-checked');          
+					}
 					for(var i =0;i<res.data.length;i++){
 						for(var j=0;j<beSelected.length;j++){
 							if(res.data[i].id == beSelected[j].procId){
@@ -378,7 +382,7 @@ function getProcByClient(params){
 								//$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
 								$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');*/
 								
-								res.data[i]["LAY_CHECKED"]='true';
+								//res.data[i]["LAY_CHECKED"]='true';//delect -2020-11-23
 		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
 		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
 

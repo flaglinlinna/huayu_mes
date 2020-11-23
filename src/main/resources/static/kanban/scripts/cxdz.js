@@ -86,10 +86,10 @@ function toClean(){
 	getChart2(0, 0, 0, 0)
 	getChart3(0, 0, 0)
 	$("#classNo").text("")
-	$("#onlineEmp").text("")
-	$("#cardAll").text("")
-	$("#cardAss").text("")
-	$("#cardUnass").text("")
+	$("#onlineEmp").text("0")
+	$("#cardAll").text("0")
+	$("#cardAss").text("0")
+	$("#cardUnass").text("0")
 }
 
 function getChart2(hr_abn, hr_act, hr_st, eff_rate) {

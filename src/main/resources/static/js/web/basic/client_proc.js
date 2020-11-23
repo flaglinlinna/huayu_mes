@@ -56,11 +56,21 @@ $(function() {
 				field : 'procNo',
 				title : '工序编号',
 				sort: true,
-				width:100,templet: function (d) {return d.process.procNo}
+				width:100,templet: function (d) {
+					var re="";
+					if(d.process!=null){
+						re=d.process.procNo==null?"":d.process.procNo;
+					}
+					return re;}
 			}, {
 				field : 'procName',
 				title : '工序名称',
-				sort: true,templet: function (d) {return d.process.procName}
+				sort: true,templet: function (d) {
+					var re="";
+					if(d.process!=null){
+						re=d.process.procName==null?"":d.process.procName;
+					}
+					return re;}
 			},{
 				field : 'jobAttr',
 				title : '过程属性',
