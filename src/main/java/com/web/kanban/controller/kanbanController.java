@@ -549,7 +549,7 @@ public class kanbanController extends WebController {
 		String method = "/kanban/getCxscList";
 		String methodName = "获取产线生产看板信息";
 		try {
-			ApiResponseResult result = kanbanService.getCxscList(taskNo, deptId, liner,this.getIpAddr(),interval);
+			ApiResponseResult result = kanbanService.getCxscList(taskNo, deptId, liner,this.getIpAddr(),"1");
 			logger.debug("获取产线生产看板信息=getCxscList:" + result);
 			getSysLogService().success(module,method, methodName, null);
 			return result;

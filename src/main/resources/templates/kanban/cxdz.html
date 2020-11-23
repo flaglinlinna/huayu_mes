@@ -97,11 +97,11 @@ h2 {
 ul {
 	list-style: none;
 	margin-left: 20px;
-	margin-top: 15px;
+	margin-top: 10px;
 }
 
 li {
-	line-height: 35px;
+	line-height: 30px;
 	color: #ffffff;
 	font-size: 16px;
 }
@@ -196,7 +196,7 @@ var t = null;
 
 				<ul>
 					<li>班次:<span class="span_li" id="classNo"></span></li>
-					<!--  <li>排名:<span class="span_li" id="rownum"></span></li>-->
+					<li>组长:<span class="span_li" id="nowLiner"></span></li>
 					<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
 					<li>打卡总数:<span class="span_li" id="cardAll"></span></li>
 					<li>已分配数:<span class="span_li" id="cardAss"></span></li>
@@ -284,6 +284,7 @@ var t = null;
     		   // range: true
     		  });
     	});
+    	$("#nowLiner").text(nowLiner);
     	if(inType=="apk"){
     		$("#inSearch").hide();
     	}

@@ -245,7 +245,7 @@ function getList() {
 	var taskNo = $("#taskNo").text();
 	var deptId = "";
 	var liner = $("#liner_select").val();
-	var interval = "2";
+	var interval = "1";
 	var params = {
 		"taskNo" : taskNo,
 		"deptId" : deptId,
