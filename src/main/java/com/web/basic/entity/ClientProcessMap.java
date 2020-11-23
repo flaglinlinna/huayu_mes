@@ -55,11 +55,11 @@ public class ClientProcessMap extends BaseEntity {
 	protected Integer procOrder;	
 	
 	/**
-     * 过程属性（0：被勾选 / 1：无） 默认被勾选
+     * 过程属性（1：被勾选 / 0：无） 默认被勾选
      */
-    @ApiModelProperty(name = "jobAttr", value = "过程属性（0：被勾选 / 1：无）")
+    @ApiModelProperty(name = "jobAttr", value = "过程属性（1：被勾选 / 0：无）")
     @Column
-    protected Integer jobAttr = 0;
+    protected Integer jobAttr = 1;
     
     /**
      * 报工标示

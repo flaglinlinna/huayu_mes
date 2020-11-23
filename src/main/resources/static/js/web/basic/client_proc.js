@@ -61,7 +61,7 @@ $(function() {
 				field : 'procName',
 				title : '工序名称',
 				sort: true,templet: function (d) {return d.process.procName}
-			}, {
+			},{
 				field : 'jobAttr',
 				title : '过程属性',
 				templet : '#statusTpl',
@@ -91,7 +91,7 @@ $(function() {
 			done : function(res, curr, count) {
 				pageCurr = curr;
 				//console.log(res)
-				for(var i =0;i<res.data.length;i++){
+				/*for(var i =0;i<res.data.length;i++){
 						if(res.data[i].jobAttr==0){
 							//这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
 					        res.data[i]["LAY_CHECKED"]='true';
@@ -99,7 +99,7 @@ $(function() {
 							//$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
 							$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');
 						}		
-				}
+				}*/
 				merge(res.data,['fdemoName'],[1]);
 			}
 		});
