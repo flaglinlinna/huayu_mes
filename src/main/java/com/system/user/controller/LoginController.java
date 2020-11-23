@@ -98,8 +98,16 @@ public class LoginController extends WebController{
                 // 所以这一步在调用login(token)方法时,它会走到MyRealm.doGetAuthenticationInfo()方法中,具体验证方式详见此方法
                 logger.debug("用户登录，用户验证开始！user=" + username);
                 subject.login(token);
+                //subject.getSession().setTimeout(6000);
+              //20201121-fyx-设置session的时间
+    			/*List<Map<String, Object>> lm = sysUserService.queryTimeOut();
+    			if(lm.size() >= 0){
+    				String time = lm.get(0).get("A").toString();
+    				long ti = Long.valueOf(time)*6000;//转成毫秒
+    				subject.getSession().setTimeout(ti);
+    			}*/
                 logger.info("用户登录，用户验证通过！user=" + username);
-                getSysLogService().success(module,method,methodName,params);
+               // getSysLogService().login(module,methodName,params);
             } catch (UnknownAccountException uae) {
                 logger.error("用户登录，用户验证未通过：未知用户！user=" + username, uae);
                 getSysLogService().error(module,method,methodName,"用户不存在!"+params);

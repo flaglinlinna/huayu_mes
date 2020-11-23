@@ -1009,5 +1009,11 @@ public class SysUserImpl implements SysUserService {
 		// TODO Auto-generated method stub
 		return ApiResponseResult.success("").data(sysUserDao.queryOrgList());
 	}
+
+	@Override
+	public List<Map<String, Object>> queryTimeOut() {
+		// TODO Auto-generated method stub
+		return sysUserDao.queryTimeOut();
+	}
 	
 }

@@ -5,16 +5,21 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import com.system.user.dao.SysUserDao;
 /*import com.wyait.manage.entity.ResponseResult;
 import com.wyait.manage.pojo.User;
 import com.wyait.manage.utils.IStatusMessage;
 import com.wyait.manage.utils.ShiroFilterUtils;*/
 import com.system.user.entity.SysUser;
+import com.system.user.service.SysUserService;
+
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.session.Session;
@@ -25,6 +30,9 @@ import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.entity.ResponseResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +48,9 @@ import com.utils.ShiroFilterUtils;
  * @创建时间：2018年4月24日 下午5:18:29
  * @version：
  */
+
 public class KickoutSessionFilter extends AccessControlFilter {
+
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(KickoutSessionFilter.class);
@@ -118,8 +128,10 @@ public class KickoutSessionFilter extends AccessControlFilter {
 		}
 		
 		Session session = subject.getSession();
+		System.out.println(session.getTimeout());
 		logger.debug("==session时间设置：" + String.valueOf(session.getTimeout())
 				+ "===========");
+		
 		try {
 			// 当前用户
 			//User user = (User) subject.getPrincipal();

@@ -74,19 +74,10 @@ public interface SysUserDao extends CrudRepository<SysUser, Long>, JpaSpecificat
     @Transactional
 	@Query(value = "update sys_user i set i.fpassword=?2 where i.fcode =?1 ", nativeQuery = true)
 	public void updatePwsByUserCode(String usercode,String pwd);
-    /**
-     *  User.pluslIO自定义存储过程的名字
-     * @param arg
-     * @return
-     */
-/*    @Procedure(name = "User.plusl")
-    String entityAnnotatedCustomNamedProcedurePluslIO(@Param("C_USER_NO") String c_User_No,@Param("c_MachType") String c_MachType);*/
-    @Procedure(name = "User.plusl")
-    Integer entityAnnotatedCustomNamedProcedurePluslIO(@Param("arg") String arg);
-
-
-    @Procedure(name="test")
-    int createPolicy(@Param("a")int a);
+    
+    
+    @Query(value = "SELECT f_get_parameter_val('USER_OUT_TIME')A FROM DUAL ", nativeQuery = true)
+    public List<Map<String, Object>> queryTimeOut();//用户退出时间(分钟)
 
 
 }

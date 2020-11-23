@@ -42,6 +42,7 @@ public interface SysUserService {
     public ApiResponseResult getListRole() throws Exception;
     
 
+    public List<Map<String, Object>> queryTimeOut() ;
     
 //手持
     public ApiResponseResult changePassword(String loginName, String oldPassword, String password, String rePassword) throws Exception;

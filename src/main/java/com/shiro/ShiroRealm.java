@@ -1,6 +1,7 @@
 package com.shiro;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -14,6 +15,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -25,8 +27,6 @@ import com.system.permission.dao.SysPermissionDao;
 import com.system.permission.entity.SysPermission;
 import com.system.role.dao.SysRoleDao;
 import com.system.role.entity.SysRole;
-
-
 import com.system.user.dao.SysUserDao;
 import com.system.user.entity.SysUser;
 
@@ -98,6 +98,8 @@ public class ShiroRealm extends AuthorizingRealm {
 					}
 				}
 			//}
+				
+				
 			return authorizationInfo;
 		}
 
@@ -139,6 +141,17 @@ public class ShiroRealm extends AuthorizingRealm {
 			// 用户不存在
 			return null;
 		} else {
+			/*Subject subject = SecurityUtils.getSubject();
+			Session session = subject.getSession();
+			//20201121-fyx-设置session的时间
+			List<Map<String, Object>> lm = sysUserDao.queryTimeOut();
+			if(lm.size() == 0){
+				String time = lm.get(0).get("A").toString();
+				long ti = Long.valueOf(time)*6000;//转成毫秒
+				session.setTimeout(ti);
+			}*/
+			//session.setTimeout(1*6000);
+			//-end
 			// 密码存在
 			// 第一个参数 ，登陆后，需要在session保存数据
 			// 第二个参数，查询到密码(加密规则要和自定义的HashedCredentialsMatcher中的HashAlgorithmName散列算法一致)
