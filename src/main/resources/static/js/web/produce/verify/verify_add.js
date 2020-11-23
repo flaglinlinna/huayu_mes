@@ -370,13 +370,19 @@ $(function() {
 								sort : true
 							},
 								{
-								field : 'CREATE_DATE',
+								field : 'TIME_BEGIN',
 								title : '上线时间',
 								width : 150,
 								sort : true
 							},
 								{
-									field : 'CREATE_DATE1',
+									field : 'TIME_END',
+									title : '下线时间',
+									width : 150,
+									sort : true
+								},
+								{
+									field : 'CREATE_DATE',
 									title : '分配时间',
 									width : 150,
 									sort : true

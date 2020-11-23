@@ -91,7 +91,7 @@ public class Inputlmpl extends PrcUtils implements InputService {
 	public ApiResponseResult getHistoryList(String keyword, String hStartTime, String hEndTime, PageRequest pageRequest)
 			throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getHistoryPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+		List<Object> list = getInputHistoryPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"","主料",UserUtil.getSessionUser().getId()+"",
 				hStartTime,hEndTime,keyword,
 				pageRequest.getPageNumber()+1,pageRequest.getPageSize(),"prc_BATCH_SETUP_INFO_DETAIL");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标

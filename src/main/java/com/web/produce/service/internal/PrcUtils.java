@@ -690,6 +690,59 @@ public class PrcUtils {
         return list;
     }
 
+    //生产投料、投料检验的历史查询
+    public List getInputHistoryPrc(String company,String facoty,String feedType,String user_id,
+                              String hStartTime,String hEndTime,String keyword,
+                              int page,int rows,String prc_name) throws Exception {
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  "+prc_name+" (?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, company);
+                cs.setString(2, facoty);
+                cs.setString(3, feedType);
+                cs.setString(4, hStartTime);
+                cs.setString(5, hEndTime);
+                cs.setString(6, keyword);
+                cs.setInt(7, rows);
+                cs.setInt(8, page);
+                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(11, java.sql.Types.INTEGER);// 总记录数
+                cs.registerOutParameter(12, -10);// 输出参数 追溯数据
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(9));
+                result.add(cs.getString(10));
+                if (cs.getString(9).toString().equals("0")) {
+                    result.add(cs.getString(11));
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(12);
+
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+
+                }
+                System.out.println(l);
+                return result;
+            }
+
+        });
+        return resultList;
+    }
+
+
     //创建在线返工制令单
     public List getHistoryPrc(String company,String facoty,String user_id,
                               String hStartTime,String hEndTime,String keyword,
