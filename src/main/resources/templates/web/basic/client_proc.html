@@ -39,14 +39,13 @@
 				onclick="addProc('')">添加工艺流程</button>-->
 			<table id="listTable" lay-filter="listTable"></table>
 
-			<script type="text/html" id="statusTpl">
-
-            {{# if(d.jobAttr=='1'){}}
-                    <input type="checkbox" name="{{d.procNo}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
+            <script type="text/html" id="statusTpl">
+                    {{# if(d.jobAttr==1){ }}
+                    <input type="checkbox" name="{{d.process.procNo}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTpl" checked="checked" />
                     {{#  } else { }}
-                    <input type="checkbox" name="{{d.procNo}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
+                    <input type="checkbox" name="{{d.process.procNo}}" value="{{d.id}}" lay-skin="primary"  lay-filter="isStatusTpl"/>
                     {{#  } }}
-        </script>
+              </script>
         <script type="text/html" id="statusTp2">
            <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="primary" lay-filter="isStatusTp2"/>
         </script>
