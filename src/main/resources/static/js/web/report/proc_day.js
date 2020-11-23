@@ -57,11 +57,13 @@ $(function() {
 			},{
 				field : 'QTY_JYZ',
 				title : '检验中数',width : 130,sort: true
-			}, {
-				field : 'LOT_JYZ',
-				title : '检验中批次',
-				width : 130, sort: true
-			},{
+			},
+			// 	{
+			// 	field : 'LOT_JYZ',
+			// 	title : '检验中批次',
+			// 	width : 130, sort: true
+			// },
+				{
 				field : 'QTY_YJY',
 				title : '已检验数', width : 130,sort: true
 			},{
