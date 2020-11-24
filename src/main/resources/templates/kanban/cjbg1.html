@@ -24,7 +24,7 @@ table, table tr td {
 }*/
 
 .tablebox {
-	height: 200px;
+	height: 225px;
 	overflow: hidden;
 	position: relative;
 	margin: 10px auto;
@@ -37,6 +37,14 @@ table, table tr td {
 	left: 0;
 	z-index: 999;
 }
+.tbl-bottom {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: 999;
+	background: #333399;
+}
 
 .tbl-body {
 	width: 100%;
@@ -48,6 +56,8 @@ table, table tr td {
 table, table tr td {
 	border: 2px solid #333399;
 	border-collapse: collapse;
+	table-layout: fixed;/*处理表格无法对齐的问题*/
+	
 }
 
 .tablebox table {
@@ -166,7 +176,7 @@ var t = null;
 			<div class="allnav" id="echart1" style="width: 100%; height: 220px;"></div>
 			<div class="boxfoot"></div>
 		</div>
-		<div class="boxall">
+		<div class="boxall" style="padding-bottom:6px;">
 			<!-- <div class="data_table">
 				<table id="table" class="table table-bordered"
 					style="width: 99%; margin-top: 10px;">
@@ -216,6 +226,14 @@ var t = null;
 							</tr>
 						</thead>
 						<tbody id="tableList">
+
+						</tbody>
+					</table>
+				</div>
+				<div class="tbl-bottom">
+					<table>
+					
+						<tbody id="sumList">
 
 						</tbody>
 					</table>

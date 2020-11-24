@@ -163,19 +163,32 @@ function chartDiv(xAxis_data, series1_data, series2_data, series3_data) {
 
 function setTable(kanbanData) {
 	var html = "";
+	var sum_html = "";
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
-		html += '<tr><td><a href="toCjbgDetail?liner=' + arr.LINER_NAME
-				+ '" target="_blank">' + arr.LINER_NAME + '</a></td><td>'
-				+ arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT + '</td><td>'
-				+ arr.HOUR_ABN + '</td><td>' + arr.NUM_EMP_ON + '</td><td>'
-				+ arr.EFFICIENCY_RATE + '%</td></tr> ';
+		if(arr.LINER_NAME=="总体"){
+			sum_html += '<tr><td><a href="toCjbgDetail?liner=' + arr.LINER_NAME
+			+ '" target="_blank">' + arr.LINER_NAME + '</a></td><td>'
+			+ arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT + '</td><td>'
+			+ arr.HOUR_ABN + '</td><td>' + arr.NUM_EMP_ON + '</td><td>'
+			+ arr.EFFICIENCY_RATE + '%</td></tr> ';
+		}else{
+			html += '<tr><td><a href="toCjbgDetail?liner=' + arr.LINER_NAME
+			+ '" target="_blank">' + arr.LINER_NAME + '</a></td><td>'
+			+ arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT + '</td><td>'
+			+ arr.HOUR_ABN + '</td><td>' + arr.NUM_EMP_ON + '</td><td>'
+			+ arr.EFFICIENCY_RATE + '%</td></tr> ';
+		}
 	}
 
 	$("#tableList").empty();
 	$("#tableList").append(html);
 	//$("#tableList1").empty();// 不加此数据表头会歪
 	//$("#tableList1").append(html);// 不加此数据表头会歪
+	
+	$("#sumList").empty();// 
+	$("#sumList").append(sum_html);// 
+	
 
 	if (MyMarhq != null) {// 判断计时器是否为空-关闭
 		clearInterval(MyMarhq);
