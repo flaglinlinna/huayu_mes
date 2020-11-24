@@ -50,7 +50,7 @@ public class SysPermissionController extends WebController {
 		try {
 			List<SysPermission> permList = sysPermissionService.permList();
 			logger.debug("权限列表查询=permList:" + permList);
-			getSysLogService().success(module,method,methodName,permList);
+//			getSysLogService().success(module,method,methodName,permList);
 			mav.addObject("permList", permList);
 			mav.addObject("msg", "ok");
 		} catch (Exception e) {
@@ -75,7 +75,7 @@ public class SysPermissionController extends WebController {
 		getSysLogService().debug(method,methodName);
 		try {
 			ApiResponseResult api = sysPermissionService.getPermission(id);
-			getSysLogService().success(module,method,methodName,"权限实体");
+//			getSysLogService().success(module,method,methodName,"权限实体");
 			return api;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -115,12 +115,12 @@ public class SysPermissionController extends WebController {
 		String method = "/sysPermission/add";String methodName ="添加权限";
 		try {
 			ApiResponseResult api = sysPermissionService.savePerm(permission);
-        	getSysLogService().success(module,method,methodName,"权限实体");
+        	getSysLogService().success(module,method,methodName,permission.toString());
             return api;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("设置权限异常！", e);
-			getSysLogService().error(module,method,methodName,e.toString());
+			getSysLogService().error(module,method,methodName,permission.toString()+e.toString());
 			return ApiResponseResult.failure("设置权限异常，请联系管理员");
 		}
 		//return "设置权限出错，请您稍后再试";

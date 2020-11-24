@@ -133,7 +133,7 @@ public class SchedulingMainController extends WebController {
         try{
             ApiResponseResult result = schedulingMainService.getDeptSelect();
             logger.debug("部门下拉列表=edit:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch(Exception e){
             e.printStackTrace();
@@ -152,7 +152,7 @@ public class SchedulingMainController extends WebController {
         try{
             ApiResponseResult result = schedulingMainService.getOrgSelect();
             logger.debug("组长下拉列表=edit:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch(Exception e){
             e.printStackTrace();
@@ -171,7 +171,7 @@ public class SchedulingMainController extends WebController {
             Sort sort = Sort.unsorted();
             ApiResponseResult result = schedulingMainService.getItemSelect(keyword,super.getPageRequest(sort));
             logger.debug("物料选择列表=edit:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch(Exception e){
             e.printStackTrace();
@@ -210,7 +210,7 @@ public class SchedulingMainController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingMainService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取排产信息列表主=getList:");
-            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
+//            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -247,7 +247,7 @@ public class SchedulingMainController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingMainService.getDetList(keyword, mid, startTime, endTime, super.getPageRequest(sort));
             logger.debug("获取导入制令单从表数据=getDetList:");
-            getSysLogService().success(module,method, methodName, "主表id:"+mid);
+//            getSysLogService().success(module,method, methodName, "主表id:"+mid);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -337,7 +337,7 @@ public class SchedulingMainController extends WebController {
         try{
             ApiResponseResult result = schedulingMainService.editDet(schedulingDet);
             logger.debug("导入编辑=editDet:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, schedulingDet.toString());
             return result;
         }catch(Exception e){
             e.printStackTrace();
@@ -355,7 +355,7 @@ public class SchedulingMainController extends WebController {
         try{
             ApiResponseResult result = schedulingMainService.getDet(id);
             logger.debug("根据ID获取导入数据=edit:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch(Exception e){
             e.printStackTrace();

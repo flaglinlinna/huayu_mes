@@ -47,12 +47,12 @@ public class VerifyController extends WebController {
         try {
             ApiResponseResult result = verifyService.getTaskNo(keyword);
             logger.debug("获取指令单信息=getTaskNo:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("获取指令单信息失败！", e);
-             getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
              return ApiResponseResult.failure("获取指令单信息失败！");
         }
     }
@@ -65,7 +65,7 @@ public class VerifyController extends WebController {
         try {
             ApiResponseResult result = verifyService.getInfoAdd();
             logger.debug("加载页面默认数据=getInfoAdd:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -83,7 +83,7 @@ public class VerifyController extends WebController {
         try {      	
             ApiResponseResult result = verifyService.getUserByLine(lineId,super.getPageRequest());
             logger.debug("根据产线id获取未分配人员=afterNei:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -108,12 +108,12 @@ public class VerifyController extends WebController {
         try{
             ApiResponseResult result = verifyService.save(task_no,line_id,hour_type,class_id,wdate,emp_ids);
             logger.debug("上线确认=save:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, params);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("上线确认失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,params+ e.toString());
             return ApiResponseResult.failure("上线确认失败！"+e.toString());
         }
     }
@@ -126,7 +126,7 @@ public class VerifyController extends WebController {
         try {
             ApiResponseResult result = verifyService.getInfoCreateReturn();
             logger.debug("加载在线返工页面默认数据=getInfoCreateReturn:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -145,7 +145,7 @@ public class VerifyController extends WebController {
         try {
             ApiResponseResult result = verifyService.getInfoBarcode(barcode);
             logger.debug("根据条码查询条码信息查询返工料号和物料=getInfoBarcode:");
-            getSysLogService().success(module,method, methodName, param);
+//            getSysLogService().success(module,method, methodName, param);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,12 +163,12 @@ public class VerifyController extends WebController {
         try {
             ApiResponseResult result = verifyService.getReworkItem(keyword,super.getPageRequest());
             logger.debug("加载在线返工页面-返工料号数据=getReworkItem:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("加载在线返工页面-返工料号数据失败！", e);
-             getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
              return ApiResponseResult.failure("加载在线返工页面-返工料号数据失败！");
         }
     }
@@ -188,12 +188,12 @@ public class VerifyController extends WebController {
         try{
             ApiResponseResult result = verifyService.add(task_no,item_no,liner_name,qty,pdate,deptId,classId);
             logger.debug("创建返工制令单=add:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, params);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("创建返工制令单失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,params+ e.toString());
             return ApiResponseResult.failure("创建返工制令单失败！");
         }
     }
@@ -210,7 +210,7 @@ public class VerifyController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result =verifyService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
             logger.debug(methodName+"=getList:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

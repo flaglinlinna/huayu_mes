@@ -45,12 +45,12 @@ public class CheckCodeController extends WebController {
 	        try {
 	            ApiResponseResult result = checkCodeService.getTaskNo(keyword);
 	            logger.debug("获取指令单信息=getTaskNo:");
-	            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
+//	            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("获取指令单信息失败！", e);
-	             getSysLogService().error(module,method, methodName,"关键字:"+keyword+";"+ e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	             return ApiResponseResult.failure("获取指令单信息失败！");
 	        }
 	    }
@@ -87,7 +87,7 @@ public class CheckCodeController extends WebController {
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result =checkCodeService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
 	            logger.debug(methodName+"=getList:");
-	            getSysLogService().success(module,method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();

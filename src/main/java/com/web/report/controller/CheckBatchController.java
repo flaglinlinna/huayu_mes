@@ -60,12 +60,12 @@ public class CheckBatchController extends WebController {
 		try {
 			ApiResponseResult result = checkBatchService.getDeptInfo(keyword);
 			logger.debug("获取部门信息=getDeptInfo:");
-			getSysLogService().success(module, method, methodName, null);
+//			getSysLogService().success(module, method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取部门信息失败！", e);
-			getSysLogService().error(module, method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 			return ApiResponseResult.failure("获取部门信息失败！");
 		}
 	}
@@ -80,12 +80,12 @@ public class CheckBatchController extends WebController {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = checkBatchService.getItemList(keyword, super.getPageRequest(sort));
 			logger.debug("获取物料信息=getItemList:");
-			getSysLogService().success(module, method, methodName, null);
+//			getSysLogService().success(module, method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取物料信息失败！", e);
-			getSysLogService().error(module, method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 			return ApiResponseResult.failure("获取物料信息失败！");
 		}
 	}

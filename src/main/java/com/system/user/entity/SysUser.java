@@ -182,5 +182,23 @@ public class SysUser extends BaseEntity {
 
 	public void setOrgIds(String orgIds) {
 		this.orgIds = orgIds;
-	} 
+	}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("用户账号:").append(this.userCode);
+		sb.append(",用户名称:").append(this.userName);
+		sb.append(",真实姓名:").append(this.realName);
+//		sb.append(",password:").append(this.password);
+//		sb.append(",status:").append(this.status);
+		sb.append(",性别:").append(this.sex);
+		sb.append(",邮箱:").append(this.email);
+		sb.append(",电话号码:").append(this.mobile);
+//		sb.append(",registerSrc:").append(this.registerSrc);
+//		sb.append(",roleIds:").append(this.roleIds);
+//		sb.append(",orgIds:").append(this.orgIds);
+		sb.append(";");
+		return sb.toString();
+	}
 }

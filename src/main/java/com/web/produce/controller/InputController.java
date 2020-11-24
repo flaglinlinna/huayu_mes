@@ -51,7 +51,7 @@ public class InputController extends WebController {
         try {
             ApiResponseResult result = inputService.getTaskNo(keyword);
             logger.debug("获取指令单信息=getTaskNo:");
-            getSysLogService().success(module,method, methodName, param);
+//            getSysLogService().success(module,method, methodName, param);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -70,7 +70,7 @@ public class InputController extends WebController {
         try {
             ApiResponseResult result = inputService.getInfoBarcode(barcode,taskNo);
             logger.debug("根据指令单获取物料编号和数量=getTaskNo:");
-            getSysLogService().success(module,method, methodName, param);
+//            getSysLogService().success(module,method, methodName, param);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -89,7 +89,7 @@ public class InputController extends WebController {
         try {
             ApiResponseResult result = inputService.addPut(barcode,task_no,item_no,qty);
             logger.debug("确认投入=addPut:");
-            getSysLogService().success(module,method, methodName, param);
+//            getSysLogService().success(module,method, methodName, param);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -128,7 +128,7 @@ public class InputController extends WebController {
         try {
             ApiResponseResult result = inputService.getDetailByTask(taskNo);
             logger.debug("根据指令单获取扫描信息=getDetailByTask:");
-            getSysLogService().success(module,method, methodName, "params");
+//            getSysLogService().success(module,method, methodName, "params");
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -151,7 +151,7 @@ public class InputController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result =inputService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
             logger.debug(methodName+"=getList:");
-            getSysLogService().success(module,method, methodName, param);
+//            getSysLogService().success(module,method, methodName, param);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

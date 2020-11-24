@@ -74,7 +74,7 @@ public class IssueController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = issueService.getList(keyword,ptype, super.getPageRequest(sort));
 	            logger.debug("获取指纹下发记录列表=getList:");
-	            getSysLogService().success(module,method, methodName, param);
+//	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -114,7 +114,7 @@ public class IssueController extends WebController{
 	        try{
 	            ApiResponseResult result = issueService.getIssue(id);
 	            logger.debug("根据ID获取下发记录=getIssue:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
@@ -153,7 +153,7 @@ public class IssueController extends WebController{
 	        	Sort sort = new Sort(Sort.Direction.DESC, "create_date");
 	            ApiResponseResult result = issueService.getEmp(empKeyword,create_time,dept_name, super.getPageRequest(sort));
 	            logger.debug("获取人员信息列表=getEmp:");
-	            getSysLogService().success(module,method, methodName, param);
+//	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -172,7 +172,7 @@ public class IssueController extends WebController{
 	        	Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = issueService.getDev(devKeyword, super.getPageRequest(sort));
 	            logger.debug("获取卡机信息列表=getDev:");
-	            getSysLogService().success(module,method, methodName, param);
+//	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();

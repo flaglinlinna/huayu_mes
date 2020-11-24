@@ -55,12 +55,12 @@ public class LineDayController extends WebController {
 		try {
 			ApiResponseResult result = lineDayService.getDeptInfo(keyword);
 			logger.debug("获取部门信息=getDeptInfo:");
-			getSysLogService().success(module, method, methodName, null);
+//			getSysLogService().success(module, method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取部门信息失败！", e);
-			getSysLogService().error(module, method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 			return ApiResponseResult.failure("获取部门信息失败！");
 		}
 	}
@@ -75,12 +75,12 @@ public class LineDayController extends WebController {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = lineDayService.getItemList(keyword, super.getPageRequest(sort));
 			logger.debug("获取物料信息=getItemList:");
-			getSysLogService().success(module, method, methodName, null);
+//			getSysLogService().success(module, method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取物料信息失败！", e);
-			getSysLogService().error(module, method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 			return ApiResponseResult.failure("获取物料信息失败！");
 		}
 	}
@@ -93,6 +93,7 @@ public class LineDayController extends WebController {
 												 @RequestParam(value = "itemNo", required = false) String itemNo) {
 		String method = "report/line_day/getList";
 		String methodName = "各线每日生产报表";
+		String param = "日期:"+dates +";部门Id:" +deptId +";制令单："+itemNo;
 		try {
 			
 			String[] date = {"",""};
@@ -103,12 +104,12 @@ public class LineDayController extends WebController {
 			ApiResponseResult result = lineDayService.getList(date[0],date[1],
 					deptId, itemNo,this.getIpAddr(),super.getPageRequest(sort));
 			logger.debug(methodName+"=getList:");
-			getSysLogService().success(module, method, methodName, null);
+//			getSysLogService().success(module, method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(methodName+"失败！", e);
-			getSysLogService().error(module, method, methodName, e.toString());
+			getSysLogService().error(module, method, methodName,param+ e.toString());
 			return ApiResponseResult.failure(methodName+"失败！");
 		}
 	}

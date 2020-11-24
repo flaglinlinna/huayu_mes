@@ -50,12 +50,12 @@ public class BackController extends WebController {
 			Sort sort = Sort.unsorted();
 			ApiResponseResult result = backService.getList(keyword,date[0],date[1],super.getPageRequest(sort));
 			logger.debug("追溯=getList:");
-			getSysLogService().success(module, method, methodName, param);
+//			getSysLogService().success(module, method, methodName, param);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(methodName+"失败！", e);
-			getSysLogService().error(module, method, methodName, e.toString());
+			getSysLogService().error(module, method, methodName,param+ e.toString());
 			return ApiResponseResult.failure(methodName+"失败！"+e.toString());
 		}
 	}

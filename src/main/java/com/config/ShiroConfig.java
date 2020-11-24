@@ -110,6 +110,9 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/kanban/*/*/*/**", "anon");
 		filterChainDefinitionMap.put("/kanban/*/*/*/*/**", "anon");
 
+		filterChainDefinitionMap.put("/produce/check_code/*", "anon"); //小码校验
+
+
 
 		filterChainDefinitionMap.put("/iclock/*", "anon");
 		filterChainDefinitionMap.put("/iclock/*/**", "anon");

@@ -47,12 +47,13 @@ public class WorkTimeController extends WebController {
 	        try {
 	            ApiResponseResult result = workTimeService.getEmpCode(keyword);
 	            logger.debug("获取员工信息=getEmpCode:");
-	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
+//	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("获取员工信息失败！", e);
-	             getSysLogService().error(module,method, methodName,"关键字:"+keyword+";"+e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+//	             getSysLogService().error(module,method, methodName,"关键字:"+keyword+";"+e.toString());
 	             return ApiResponseResult.failure("获取员工信息失败！");
 	        }
 	    }
@@ -62,19 +63,19 @@ public class WorkTimeController extends WebController {
 	@ResponseBody
 	public ApiResponseResult getList(String sdate,String edate,String empCode,String line_id) {
 		String method = "report/worktime/getList";
-
+		String param = "开始日期:"+sdate +"结束日期："+edate +"员工编号:"+empCode +"线别id："+ line_id;
 		String methodName = "获取工时统计表";
 		try {
 			Sort sort = Sort.unsorted();
 			ApiResponseResult result = workTimeService.getList(sdate,edate,line_id,empCode
 					,super.getPageRequest(sort));
 			logger.debug("工时统计表=getList:");
-			getSysLogService().success(module, method, methodName, "");
+//			getSysLogService().success(module, method, methodName, "");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(methodName+"失败！", e);
-			getSysLogService().error(module, method, methodName, e.toString());
+			getSysLogService().error(module, method, methodName,param+ e.toString());
 			return ApiResponseResult.failure(methodName+"失败！"+e.toString());
 		}
 	}
@@ -89,12 +90,12 @@ public class WorkTimeController extends WebController {
 		try {
 			ApiResponseResult result = workTimeService.getListDetail(list_id);
 			logger.debug("工时统计表-明细=getListDetail:");
-			getSysLogService().success(module, method, methodName, "");
+//			getSysLogService().success(module, method, methodName, "");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(methodName+"失败！", e);
-			getSysLogService().error(module, method, methodName, e.toString());
+			getSysLogService().error(module, method, methodName,param+ e.toString());
 			return ApiResponseResult.failure(methodName+"失败！"+e.toString());
 		}
 	}

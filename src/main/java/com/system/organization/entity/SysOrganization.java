@@ -176,5 +176,21 @@ public class SysOrganization extends BaseEntity{
 	public void setEmpNum(Integer empNum) {
 		this.empNum = empNum;
 	}
-	
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("组织编号:").append(this.orgCode);
+		sb.append(",组织名称:").append(this.orgName);
+		sb.append(",父Id:").append(this.parentId);
+//		sb.append(",flevel:").append(this.flevel);
+//		sb.append(",zindex:").append(this.zindex);
+		sb.append(",在职人数:").append(this.empNum);
+		sb.append(",负责人:").append(this.leadBy);
+		sb.append(",联系电话:").append(this.mobile);
+		sb.append(",描述:").append(this.description);
+//		sb.append(",menuType:").append(this.menuType);
+		sb.append(";");
+		return sb.toString();
+	}
 }

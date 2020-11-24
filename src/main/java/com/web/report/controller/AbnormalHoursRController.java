@@ -46,7 +46,7 @@ public class AbnormalHoursRController extends WebController {
 	        try {
 	            ApiResponseResult result = abnormalHoursRService.getTaskNo(keyword);
 	            logger.debug("获取指令单信息=getTaskNo:");
-	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
+//	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();

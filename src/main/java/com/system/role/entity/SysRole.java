@@ -81,4 +81,14 @@ public class SysRole extends BaseEntity {
 		this.status = status;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("角色编号:").append(this.roleCode);
+		sb.append(",角色名称:").append(this.roleName);
+		sb.append(",角色描述:").append(this.description);
+		sb.append(",状态:").append(this.status==0?"正常":"禁用");
+		sb.append(";");
+		return sb.toString();
+	}
 }

@@ -60,12 +60,12 @@ public class DevClockController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = devClockService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取卡机信息列表=getList:");
-	            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
+//	            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取卡机信息列表失败！", e);
-	            getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取卡机信息列表失败！");
 	        }
 	    }
@@ -85,7 +85,7 @@ public class DevClockController extends WebController{
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("导出卡机信息！", e);
-			getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 //			return ApiResponseResult.failure("导出卡机信息！");
 		}
 	}
@@ -135,7 +135,7 @@ public class DevClockController extends WebController{
 	        try{
 	            ApiResponseResult result = devClockService.getDevClock(id);
 	            logger.debug("根据ID获取卡机信息=getDevClock:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
@@ -194,7 +194,7 @@ public class DevClockController extends WebController{
 	        try {
 	            ApiResponseResult result = devClockService.getLineList();
 	            logger.debug("获取线体信息列表=getLineList:");
-	            getSysLogService().success(module,method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();

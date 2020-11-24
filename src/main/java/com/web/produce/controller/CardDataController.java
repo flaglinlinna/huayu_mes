@@ -55,16 +55,16 @@ public class CardDataController extends WebController{
 	    public ApiResponseResult getList(String keyword) {
 	        String method = "produce/card_data/getList";String methodName ="获取卡点原始数据列表";
 	        try {
-	        	System.out.println(keyword);
+//	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = cardDataService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取卡点原始数据列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取卡点原始数据列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取卡点原始数据列表失败！");
 	        }
 	    }
@@ -96,7 +96,7 @@ public class CardDataController extends WebController{
 	        try{
 	            ApiResponseResult result = cardDataService.getCardData(id);
 	            logger.debug("根据ID获取卡点数据记录=getCardData:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
@@ -133,7 +133,7 @@ public class CardDataController extends WebController{
 	        try {
 	            ApiResponseResult result = cardDataService.getEmp();
 	            logger.debug("获取人员信息列表=getEmp:");
-	            getSysLogService().success(module,method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -150,7 +150,7 @@ public class CardDataController extends WebController{
 	        try {
 	            ApiResponseResult result = cardDataService.getDev();
 	            logger.debug("获取卡机信息列表=getDev:");
-	            getSysLogService().success(module,method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();

@@ -257,4 +257,27 @@ public class SchedulingDet extends BaseEntity {
     public void setTaskId(Long taskId) {
         this.taskId = taskId;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append("主表ID:").append(this.mid);
+        sb.append(",组合:").append(this.groupNo);
+        sb.append(",客户名称:").append(this.custName);
+        sb.append(",客户id:").append(this.custId);
+        sb.append(",客户编号:").append(this.custNo);
+        sb.append(",工单号:").append(this.prodNo);
+        sb.append(",计划数量:").append(this.qtyPlan);
+        sb.append(",组长名称:").append(this.linerName);
+        sb.append(",物料名称:").append(this.itemName);
+        sb.append(",物料编号:").append(this.itemNo);
+        sb.append(",物料ID:").append(this.itemId);
+        sb.append(",校验状态:").append(this.checkStatus);
+        sb.append(",错误信息:").append(this.errorInfo);
+        sb.append(",是否生效:").append(this.enabled);
+        sb.append(",制令单号:").append(this.taskNo);
+        sb.append(",制令单ID:").append(this.taskId);
+        sb.append(";");
+        return sb.toString();
+    }
 }

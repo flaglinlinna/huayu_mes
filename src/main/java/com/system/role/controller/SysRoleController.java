@@ -39,7 +39,7 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.add(sysRole);
             logger.debug("新增角色=add:");
-            getSysLogService().success(module,method, methodName, sysRole);
+            getSysLogService().success(module,method, methodName, sysRole.toString());
             return result;
         }catch(Exception e){
             e.printStackTrace();
@@ -75,7 +75,7 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.delete(id);
             logger.debug("删除角色=delete:");
-            getSysLogService().success(module,method, methodName, id);
+            getSysLogService().success(module,method, methodName, "id:"+id);
             return result;
         }catch(Exception e){
             e.printStackTrace();
@@ -100,8 +100,8 @@ public class SysRoleController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = sysRoleService.getList(keyword, roleCode,roleName, createdTimeStart, createdTimeEnd, status, super.getPageRequest(sort));
             logger.debug("获取角色列表=getList:");
-            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";角色编码:"+roleCode+";角色名称"+roleName+
-                            ";时间大于:"+createdTimeStart+";时间小于"+createdTimeEnd+";状态"+status);
+//            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";角色编码:"+roleCode+";角色名称"+roleName+
+//                            ";时间大于:"+createdTimeStart+";时间小于"+createdTimeEnd+";状态"+status);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -186,7 +186,7 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.getRole(id);
             logger.debug("根据ID获取角色=getRole:");
-            getSysLogService().success(module,method, methodName, id);
+//            getSysLogService().success(module,method, methodName, id);
             return result;
         }catch (Exception e){
             e.printStackTrace();
@@ -204,7 +204,7 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.getRoles();
             logger.debug("获取所有角色=getRoles:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
@@ -222,7 +222,7 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.getRolesByStatus();
             logger.debug("获取所有有效角色=getRoles:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
@@ -241,7 +241,7 @@ public class SysRoleController extends WebController {
         try{
             ApiResponseResult result = sysRoleService.getRolePerm(id);
             logger.debug("根据角色ID获取权限信息=getRolePerm:");
-            getSysLogService().success(module,method, methodName, "id:"+id);
+//            getSysLogService().success(module,method, methodName, "id:"+id);
             return result;
         }catch (Exception e){
             e.printStackTrace();

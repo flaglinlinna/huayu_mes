@@ -42,13 +42,14 @@ public class OnlineController extends WebController {
     public ApiResponseResult getlist(String keyword){
     	
     	String method = "/online/getlist";String methodName ="获取在线用户列表";
-		getSysLogService().debug(method,methodName);
+//		getSysLogService().debug(method,methodName);
 		
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             return onlineService.getlist(keyword, super.getPageRequest(sort));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
             return ApiResponseResult.failure("获取日志列表失败！");
         }
     }

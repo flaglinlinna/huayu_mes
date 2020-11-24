@@ -58,7 +58,7 @@ public class OnlineStaffController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = onlineStaffService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取上线人员列表=getList:");
-	            getSysLogService().success(module,method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -77,7 +77,7 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.getMain(id);
 	            logger.debug("根据ID获取上线人员记录=getMain:");
-	            getSysLogService().success(module,method, methodName, "id:"+id);
+//	            getSysLogService().success(module,method, methodName, "id:"+id);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
@@ -96,7 +96,7 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.getMainInfo(id);
 	            logger.debug("根据ID获取上线人员记录信息=getMainInfo:");
-	            getSysLogService().success(module,method, methodName, "id:"+id);
+//	            getSysLogService().success(module,method, methodName, "id:"+id);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
@@ -114,7 +114,7 @@ public class OnlineStaffController extends WebController{
 	        try{
 	            ApiResponseResult result = onlineStaffService.getClassList();
 	            logger.debug("获取班次信息=getClassList:");
-	            getSysLogService().success(module,method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();

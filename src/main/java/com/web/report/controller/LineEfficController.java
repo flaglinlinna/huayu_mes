@@ -48,12 +48,12 @@ public class LineEfficController extends WebController {
 			}	*/
 			ApiResponseResult result = lineEfficService.getList(keyword,"",dates);
 			logger.debug("获取获取检验批次报表(FQC)=getCheckBatchReport:");
-			getSysLogService().success(module, method, methodName, param);
+//			getSysLogService().success(module, method, methodName, param);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(methodName+"失败！", e);
-			getSysLogService().error(module, method, methodName, e.toString());
+			getSysLogService().error(module, method, methodName, param+e.toString());
 			return ApiResponseResult.failure(methodName+"失败！"+e.toString());
 		}
 	}

@@ -163,12 +163,12 @@ public class SchedulingController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingService.getListByProcedure(keyword, super.getPageRequest(sort));
             logger.debug("获取排产信息列表=getList:");
-            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
+//            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取排产信息列表失败！", e);
-            getSysLogService().error(module,method, methodName,"关键字:"+keyword+ e.toString());
+            getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
             return ApiResponseResult.failure("获取排产信息列表失败！");
         }
     }

@@ -84,7 +84,7 @@ public class OrganizationController extends WebController {
 		getSysLogService().debug(method,methodName);
 		try {
 			ApiResponseResult api = organizationService.getPermission(id);
-			getSysLogService().success(module,method,methodName,params);
+//			getSysLogService().success(module,method,methodName,params);
 			return api;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -126,12 +126,12 @@ public class OrganizationController extends WebController {
 				+ JSON.toJSONString(permission);
 		try {
 			ApiResponseResult api = organizationService.savePerm(permission);
-        	getSysLogService().success(module,method,methodName,param);
+        	getSysLogService().success(module,method,methodName,permission.toString());
             return api;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("设置组织列表记录异常！", e);
-			getSysLogService().error(module,method,methodName,param+";"+e.toString());
+			getSysLogService().error(module,method,methodName,permission.toString()+";"+e.toString());
 			return ApiResponseResult.failure("设置组织列表记录异常，请联系管理员");
 		}
 		//return "设置组织列表记录出错，请您稍后再试";

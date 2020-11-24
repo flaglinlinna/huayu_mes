@@ -45,7 +45,7 @@ public class TransitController extends WebController {
         try {
             ApiResponseResult result = transitService.getProc(keyword);
             logger.debug("获取送验节点列表=getProc:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -63,7 +63,7 @@ public class TransitController extends WebController {
         try {
             ApiResponseResult result = transitService.getType(keyword);
             logger.debug("获取送检类型列表=getType:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -86,7 +86,7 @@ public class TransitController extends WebController {
 		try {
 			ApiResponseResult result = transitService.checkBarcode(proc,ptype, barcode);
 			logger.debug("PDA-扫描条码=scanBarcode:");
-			getSysLogService().success(module,method, methodName, null);
+//			getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,7 +107,7 @@ public class TransitController extends WebController {
         	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
             ApiResponseResult result = transitService.checkBarcode(proc,ptype,barcode);
             logger.debug("检查箱号条码信息=checkBarcode:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -128,12 +128,12 @@ public class TransitController extends WebController {
         	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
             ApiResponseResult result = transitService.saveData(proc,type,barcode);
             logger.debug("保存送检数据信息=saveData:");
-            getSysLogService().success(module,method, methodName, null);
+            getSysLogService().success(module,method, methodName, params);
             return result;
         } catch (Exception e) {
         	 e.printStackTrace();
              logger.error("保存送检数据失败！", e);
-             getSysLogService().error(module,method, methodName, e.toString());
+             getSysLogService().error(module,method, methodName,params+";"+ e.toString());
              return ApiResponseResult.failure("保存送检数据失败！");
         }
     }
@@ -150,12 +150,12 @@ public class TransitController extends WebController {
 		try {
 			ApiResponseResult result = transitService.saveData(proc,ptype, barcode);
 			logger.debug(methodName+"=saveDataPda:");
-			getSysLogService().success(module,method, methodName, null);
+			getSysLogService().success(module,method, methodName, barcode);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(methodName+"失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName, barcode+";"+e.toString());
 			return ApiResponseResult.failure(methodName+"失败！");
 		}
 	}
@@ -172,7 +172,7 @@ public class TransitController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result =transitService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
             logger.debug(methodName+"=getList:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

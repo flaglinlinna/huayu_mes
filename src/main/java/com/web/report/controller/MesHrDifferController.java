@@ -47,12 +47,12 @@ public class MesHrDifferController extends WebController {
 	        try {
 	            ApiResponseResult result = mesHrDifferService.getEmpCode(keyword);
 	            logger.debug("获取员工信息=getEmpCode:");
-	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
+//	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("获取员工信息失败！", e);
-	             getSysLogService().error(module,method, methodName,"关键字:"+keyword+";"+e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	             return ApiResponseResult.failure("获取员工信息失败！");
 	        }
 	    }

@@ -44,7 +44,7 @@ public class ReworkController extends WebController {
 	        try {
 	            ApiResponseResult result = reworkService.getTaskNo(keyword);
 	            logger.debug("获取指令单信息=getTaskNo:");
-	            getSysLogService().success(module,method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
@@ -62,7 +62,7 @@ public class ReworkController extends WebController {
 	        try {
 	            ApiResponseResult result = reworkService.getReworkTaskNo(keyword);
 	            logger.debug("获取返工指令单信息=getReworkTaskNo:");
-	            getSysLogService().success(module,method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
@@ -77,19 +77,20 @@ public class ReworkController extends WebController {
 	    @ResponseBody
 	    public ApiResponseResult subCode(@RequestBody Map<String, Object> params) {
 	        String method = "produce/rework/subCode";String methodName ="在线返工";
+		  String taskNo = params.get("taskNo").toString();
+		  String type = params.get("type") == null?"":params.get("type").toString();
+		  String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
+		  String memo = params.get("memo") == null?"":params.get("memo").toString();
+		  String param = "制令单号:"+barcode +";条码:"+barcode +";类型："+ type;
 	        try {
-	        	String taskNo = params.get("taskNo").toString();
-	        	String type = params.get("type") == null?"":params.get("type").toString();
-	        	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
-	        	String memo = params.get("memo") == null?"":params.get("memo").toString();
 	            ApiResponseResult result = reworkService.subCode(taskNo,type,barcode,memo);
 	            logger.debug("在线返工=subCode:");
-	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("在线返工失败！", e);
-	             getSysLogService().error(module,method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName, param+";"+e.toString());
 	             return ApiResponseResult.failure("在线返工失败！");
 	        }
 	    }
@@ -107,12 +108,12 @@ public class ReworkController extends WebController {
 	        	Sort sort =  Sort.unsorted();
 	            ApiResponseResult result = reworkService.search(startTime,endTime,taskNo,barcode,super.getPageRequest(sort));
 	            logger.debug("查询返工=search:");
-	            getSysLogService().success(module,method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("查询返工失败！", e);
-	             getSysLogService().error(module,method, methodName, e.toString());
+	             getSysLogService().error(module,method, methodName,params+";"+ e.toString());
 	             return ApiResponseResult.failure("查询返工失败！");
 	        }
 	    }

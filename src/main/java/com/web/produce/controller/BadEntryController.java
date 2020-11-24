@@ -48,12 +48,12 @@ public class BadEntryController extends WebController {
 	        try {
 	            ApiResponseResult result = badEntryService.getTaskNo(keyword);
 	            logger.debug("获取指令单信息=getTaskNo:");
-	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
+//	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("获取指令单信息失败！", e);
-	             getSysLogService().error(module,method, methodName,"关键字:"+keyword+";"+e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	             return ApiResponseResult.failure("获取指令单信息失败！");
 	        }
 	    }
@@ -67,7 +67,7 @@ public class BadEntryController extends WebController {
 	        	String keyword = params.get("keyword") == null?"":params.get("keyword").toString();
 	            ApiResponseResult result = badEntryService.getBadInfo(keyword);
 	            logger.debug("获取不良信息信息=getBadInfo:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
@@ -87,7 +87,7 @@ public class BadEntryController extends WebController {
 	        	String barcode = params.get("barcode") == null?"":params.get("barcode").toString();
 	            ApiResponseResult result = badEntryService.checkBarCode(taskNo,barcode);
 	            logger.debug("条码扫描=checkBarCode:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
@@ -148,7 +148,7 @@ public class BadEntryController extends WebController {
 	        try {
 	            ApiResponseResult result = badEntryService.getDetailByTask(taskNo);
 	            logger.debug("根据指令单获取扫描信息=getDetailByTask:");
-	            getSysLogService().success(module,method, methodName, "指令单号:"+taskNo);
+//	            getSysLogService().success(module,method, methodName, "指令单号:"+taskNo);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
@@ -170,7 +170,7 @@ public class BadEntryController extends WebController {
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result =badEntryService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
 	            logger.debug(methodName+"=getList:");
-	            getSysLogService().success(module,method, methodName, null);
+//	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();

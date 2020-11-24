@@ -141,4 +141,19 @@ public class SysPermission extends BaseEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("菜单编号:").append(this.menuCode);
+		sb.append(",菜单名称:").append(this.menuName);
+		sb.append(",菜单图标:").append(this.menuIcon);
+		sb.append(",菜单url:").append(this.pageUrl);
+		sb.append(",父ID:").append(this.parentId);
+		sb.append(",zindex:").append(this.zindex);
+		sb.append(",类别:").append(this.istype==0?"菜单":"按钮");
+		sb.append(",描述:").append(this.description);
+		sb.append(";");
+		return sb.toString();
+	}
 }

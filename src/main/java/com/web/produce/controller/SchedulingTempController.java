@@ -63,7 +63,7 @@ public class SchedulingTempController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "createDate");
             ApiResponseResult result = schedulingTempService.getList(keyword, startTime, endTime, super.getPageRequest(sort));
             logger.debug(methodName+"=getList:");
-            getSysLogService().success(module,method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

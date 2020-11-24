@@ -50,12 +50,12 @@ public class AbnormalProductController extends WebController {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = abnormalHoursService.getList(keyword, super.getPageRequest(sort));
 			logger.debug(methodName+"=getList:");
-			getSysLogService().success(module,method, methodName, keyword);
+//			getSysLogService().success(module,method, methodName, keyword);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(methodName+"失败！", e);
-			getSysLogService().error(module,method, methodName, keyword+";"+e.toString());
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 			return ApiResponseResult.failure(methodName+"失败！");
 		}
 	}
@@ -127,7 +127,7 @@ public class AbnormalProductController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.getErrorInfo();
 			logger.debug(methodName+"=getEmpInfo:");
-			getSysLogService().success(module,method, methodName,"");
+//			getSysLogService().success(module,method, methodName,"");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -146,12 +146,12 @@ public class AbnormalProductController extends WebController {
 		try {
 			ApiResponseResult result = abnormalHoursService.getTaskNo(keyword);
 			logger.debug("获取指令单信息=getTaskNo:");
-			getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
+//			getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取指令单信息失败！", e);
-			getSysLogService().error(module,method, methodName,"关键字:"+keyword+";"+ e.toString());
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 			return ApiResponseResult.failure("获取指令单信息失败！");
 		}
 	}
@@ -166,7 +166,7 @@ public class AbnormalProductController extends WebController {
 			String taskNo = params.get("taskNo") == null?"":params.get("taskNo").toString();
 			ApiResponseResult result = abnormalHoursService.getTaskNoInfo(taskNo);
 			logger.debug("获取指令单详细信息=getTaskNoInfo:");
-			getSysLogService().success(module,method, methodName, params);
+//			getSysLogService().success(module,method, methodName, params);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
