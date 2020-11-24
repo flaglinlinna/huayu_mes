@@ -26,7 +26,7 @@ import com.web.basic.service.ClientProcessMapService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(description = "客户通用工艺维护模块")
+@Api(description = "通用工艺维护模块")
 @CrossOrigin
 @ControllerAdvice
 //@RestController
@@ -34,7 +34,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "base/client_proc")
 public class ClientProcessMapController extends WebController{
 
-	private String module = "客户通用工艺维护模块";
+	private String module = "通用工艺维护模块";
 
 	 @Autowired
 	 private ClientProcessMapService clientProcessMapService;
@@ -58,7 +58,7 @@ public class ClientProcessMapController extends WebController{
 	    public ApiResponseResult getList(String keyword) {
 	        String method = "base/client_proc/getList";String methodName ="获取客户通用工艺维护列表";
 	        try {
-	        	System.out.println(keyword);
+//	        	System.out.println(keyword);
 	            //Sort sort = new Sort(Sort.Direction.DESC, "id");
 	        	 Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "fdemoName");
 	        	 Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "procOrder");
@@ -68,12 +68,12 @@ public class ClientProcessMapController extends WebController{
 	        	 Sort sort = new Sort(list);
 	            ApiResponseResult result = clientProcessMapService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取客户通用工艺维护列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取客户通用工艺维护列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取客户通用工艺维护列表失败！");
 	        }
 	    }
@@ -100,11 +100,12 @@ public class ClientProcessMapController extends WebController{
 	    @ResponseBody
 	    public ApiResponseResult addItem(@RequestBody Map<String, Object> params) {   	
 	        String method = "base/client_proc/addItem";String methodName ="新增工艺信息";
+			String fdemoName = params.get("fdemoName").toString();
+			String procIdList = params.get("proc").toString();
 	        try{
-	        	
 //	        	long clientId = Long.parseLong(params.get("client").toString());
-	        	String fdemoName = params.get("fdemoName").toString();
-	        	String procIdList = params.get("proc").toString();
+//	        	String fdemoName = params.get("fdemoName").toString();
+//	        	String procIdList = params.get("proc").toString();
 	            ApiResponseResult result = clientProcessMapService.addItem(procIdList,fdemoName);
 	            logger.debug("新增工艺信息=addItem:");
 	            getSysLogService().success(module,method, methodName, "模板名称:"+fdemoName+";工序id:"+procIdList);
@@ -112,7 +113,7 @@ public class ClientProcessMapController extends WebController{
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("工艺信息新增失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, "模板名称:"+fdemoName+";工序id:"+procIdList+";"+e.toString());
 	            return ApiResponseResult.failure("工艺信息新增失败！");
 	        }
 	    }
@@ -121,16 +122,16 @@ public class ClientProcessMapController extends WebController{
 	    @ResponseBody
 	    public ApiResponseResult getClientItem(@RequestBody Map<String, Object> params) {   	
 	        String method = "base/client_proc/getClientItem";String methodName ="获取客户通用工艺信息";
-	        try{	        	
-	        	String  fdemoName = params.get("fdemoName").toString();
+			String  fdemoName = params.get("fdemoName").toString();
+	        try{
 	            ApiResponseResult result = clientProcessMapService.getClientItem(fdemoName);
 	            logger.debug("获取客户通用工艺信息=getClientItem:");
-	            getSysLogService().success(module,method, methodName, "模板名称："+fdemoName);
+//	            getSysLogService().success(module,method, methodName, "模板名称："+fdemoName);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("获取客户通用工艺失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,"模板名称："+fdemoName+";"+e.toString());
 	            return ApiResponseResult.failure("获取客户通用工艺失败！");
 	        }
 	    }
@@ -149,7 +150,7 @@ public class ClientProcessMapController extends WebController{
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除工序信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params + e.toString());
 	            return ApiResponseResult.failure("删除客户信息失败！");
 	        }
 	    }
@@ -159,17 +160,18 @@ public class ClientProcessMapController extends WebController{
 	    @ResponseBody
 	    public ApiResponseResult doJobAttr(@RequestBody Map<String, Object> params) throws Exception{
 	        String method = "base/client_proc/doJobAttr";String methodName ="设置过程属性";
+			long id = Long.parseLong(params.get("id").toString()) ;
+			Integer jobAttr=Integer.parseInt(params.get("jobAttr").toString());
+
 	        try{
-	        	long id = Long.parseLong(params.get("id").toString()) ;
-	        	Integer jobAttr=Integer.parseInt(params.get("jobAttr").toString());
 	            ApiResponseResult result = clientProcessMapService.doJobAttr(id, jobAttr);
 	            logger.debug("设置过程属性=doJobAttr:");
-	            getSysLogService().success(module,method, methodName, "id:"+id+";属性"+jobAttr);
+	            getSysLogService().success(module,method, methodName, "id:"+id+";过程属性："+(jobAttr.equals(0)?"否":"是"));
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("设置过程属性失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, "id:"+id+";过程属性："+(jobAttr.equals(0)?"否":"是")+";"+e.toString());
 	            return ApiResponseResult.failure("设置过程属性失败！");
 	        }
 	    }
@@ -179,9 +181,10 @@ public class ClientProcessMapController extends WebController{
 	    @ResponseBody
 	    public ApiResponseResult doProcOrder(@RequestBody Map<String, Object> params) throws Exception{
 	        String method = "base/client_proc/doProcOrder";String methodName ="修改顺序";
+			Long id = Long.parseLong(params.get("id").toString()) ;
+			String procOrder=params.get("procOrder").toString();
 	        try{
-	        	Long id = Long.parseLong(params.get("id").toString()) ;
-	        	String procOrder=params.get("procOrder").toString();
+
 	            ApiResponseResult result = clientProcessMapService.doProcOrder(id, procOrder);
 	            logger.debug("修改顺序=doProcOrder:");
 	            getSysLogService().success(module,method, methodName, params);

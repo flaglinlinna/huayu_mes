@@ -60,12 +60,12 @@ public class DepartmentController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = departmentService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取部门列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取部门列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取部门列表失败！");
 	        }
 	    }

@@ -58,12 +58,12 @@ public class SysParamController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.ASC, "id");
 	            ApiResponseResult result = paramService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取系统参数信息列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取系统参数信息列表失败！", e);
-	            getSysLogService().error(module,method, methodName, keyword+";"+e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取系统参数信息列表失败！");
 	        }
 	    }
@@ -113,7 +113,7 @@ public class SysParamController extends WebController{
 	        try{
 	            ApiResponseResult result = paramService.getSysParam(id);
 	            logger.debug("根据ID获取系统参数信息=getSysParam:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();

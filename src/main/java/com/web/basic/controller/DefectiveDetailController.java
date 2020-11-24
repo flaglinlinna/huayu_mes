@@ -59,12 +59,13 @@ public class DefectiveDetailController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "Defective.id");
 	            ApiResponseResult result = defectiveDetailService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取不良内容列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取不良内容列表失败！", e);
-	            getSysLogService().error(module,method, methodName, keyword +";"+e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+//	            getSysLogService().error(module,method, methodName, keyword +";"+e.toString());
 	            return ApiResponseResult.failure("获取不良内容列表失败！");
 	        }
 	    }
@@ -114,7 +115,7 @@ public class DefectiveDetailController extends WebController{
 	        try{
 	            ApiResponseResult result = defectiveDetailService.getDefectiveDetail(id);
 	            logger.debug("根据ID获取不良内容=getDefectiveDetail:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
@@ -167,9 +168,9 @@ public class DefectiveDetailController extends WebController{
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{
 			 //Long id, Integer deStatus
 		        String method = "base/defdetail/doStatus";String methodName ="设置正常/禁用";
+			 long id = Long.parseLong(params.get("id").toString()) ;
+			 Integer bsStatus=Integer.parseInt(params.get("checkStatus").toString());
 		        try{
-		        	long id = Long.parseLong(params.get("id").toString()) ;
-		        	Integer bsStatus=Integer.parseInt(params.get("checkStatus").toString());
 		            ApiResponseResult result = defectiveDetailService.doStatus(id, bsStatus);
 		            logger.debug("设置正常/禁用=doJob:");
 		            getSysLogService().success(module,method, methodName, params);

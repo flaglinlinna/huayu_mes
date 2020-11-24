@@ -45,16 +45,15 @@ public class AbnormalController extends WebController{
 	    public ApiResponseResult getList(String keyword) {
 	        String method = "base/abnormal/getList";String methodName ="获取异常类别列表";
 	        try {
-	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = abnormalService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取异常类别列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取异常类别列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取异常类别列表失败！");
 	        }
 	    }
@@ -104,12 +103,12 @@ public class AbnormalController extends WebController{
 	        try{
 	            ApiResponseResult result = abnormalService.getAbnormal(id);
 	            logger.debug("根据ID获取异常类别=getAbnormal:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取异常类别失败！", e);
-	            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+	            getSysLogService().error(module,method, methodName, "ID:"+params+";"+e.toString());
 	            return ApiResponseResult.failure("获取异常类别失败！");
 	        }
 	    }
@@ -123,12 +122,12 @@ public class AbnormalController extends WebController{
 	        	long id = Long.parseLong(params.get("id").toString()) ;
 	            ApiResponseResult result = abnormalService.delete(id);
 	            logger.debug("删除异常类别=delete:");
-	            getSysLogService().success(module,method, methodName, params);
+	            getSysLogService().success(module,method, methodName, "ID:"+params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除异常类别失败！", e);
-	            getSysLogService().error(module,method, methodName,params+";"+ e.toString());
+	            getSysLogService().error(module,method, methodName,"ID:"+params+";"+ e.toString());
 	            return ApiResponseResult.failure("删除异常类别失败！");
 	        }
 	    }

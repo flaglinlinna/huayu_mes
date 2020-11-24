@@ -58,12 +58,12 @@ public class MtrialController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.ASC, "itemNo");
 	            ApiResponseResult result = mtrialService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取物料信息列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取物料信息列表失败！", e);
-	            getSysLogService().error(module,method, methodName,keyword+";"+ e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取物料信息列表失败！");
 	        }
 	    }
@@ -113,7 +113,7 @@ public class MtrialController extends WebController{
 	        try{
 	            ApiResponseResult result = mtrialService.getMtrial(id);
 	            logger.debug("根据ID获取物料=getMtrial:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();

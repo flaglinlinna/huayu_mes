@@ -44,7 +44,7 @@ $(function() {
 				type : 'numbers'
 			}, {
 				field : 'FDATE',
-				title : '检验日期',sort: true,
+				title : '检验日期',width : 150,sort: true,
 			}, {
 				field : 'PROC_NAME',
 				title : '工序名称',width : 130, sort: true

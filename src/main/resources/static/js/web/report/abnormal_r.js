@@ -15,8 +15,8 @@ $(function() {
 			height:'full-180'//固定表头&full-查询框高度
 				,even:true,//条纹样式
 			data : [],
-			height: 'full',
-			page : false,
+			// height: 'full',
+			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -47,11 +47,11 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			 {
 				field : 'EMP_CODE',
-				title : '工号',width : 140, sort: true
+				title : '工号',width : 100, sort: true
 			},
 			 {
 				field : 'EMP_NAME',
-				title : '员工姓名',width : 130,
+				title : '员工姓名',width : 100,
 				sort: true
 			}, {
 				field : 'LINER_NAME',
@@ -61,19 +61,28 @@ $(function() {
 				field : 'TASK_NO',
 				title : '制令单号',
 				 sort: true
-					, width : 200
+					, width : 170
 			}, {
-				field : 'WOEK_DATE',
+				field : 'WORK_DATE',
 				title : '工作日期',width : 140, sort: true
 			},
 				{
 					field : 'TIME_BEGIN',
-					title : '上线时间',width : 160, sort: true
+					title : '上线时间',width : 150, sort: true
 				},
 				{
 					field : 'TIME_END',
-					title : '下线时间',width : 160, sort: true
+					title : '下线时间',width : 150, sort: true
 				},
+				{
+					field : 'ITEM_NO',
+					title : '物料编号',width : 140, sort: true
+				},
+				{
+					field : 'ITEM_NAME',
+					title : '物料名称',width : 140, sort: true
+				},
+
 
 			] ],
 			done : function(res, curr, count) {
@@ -183,29 +192,41 @@ $(function() {
 	});
 
 });
-function getReport(params) {	
-	CoreUtil.sendAjax("/report/abnormal_r/getList", JSON.stringify(params),
-			function(data) {
-				console.log(data)
-				if (data.result) {
-					if (data.result) {
-						tableIns.reload({
-							data : data.data.rows,
-							done: function(res1, curr, count){
-								
-								////localtableFilterIns.reload();
-							}
-						});
-					} else {
-						layer.alert(data.msg);
-					}
-				} else {
-					layer.alert(data.msg);
-				}
-			}, "POST", false, function(res) {
-				layer.alert(res.msg);
-			});
+
+function getReport(params) {
+	tableIns.reload({
+		url:context+'/report/abnormal_r/getList',
+		where:params,
+		done: function(res1, curr, count){
+			pageCurr=curr;
+		}
+	})
+
 }
+
+// function getReport(params) {
+// 	CoreUtil.sendAjax("/report/abnormal_r/getList", JSON.stringify(params),
+// 			function(data) {
+// 				console.log(data)
+// 				if (data.result) {
+// 					if (data.result) {
+// 						tableIns.reload({
+// 							data : data.data.rows,
+// 							done: function(res1, curr, count){
+//
+// 								////localtableFilterIns.reload();
+// 							}
+// 						});
+// 					} else {
+// 						layer.alert(data.msg);
+// 					}
+// 				} else {
+// 					layer.alert(data.msg);
+// 				}
+// 			}, "POST", false, function(res) {
+// 				layer.alert(res.msg);
+// 			});
+// }
 
 function getLiner(){
 	CoreUtil.sendAjax("/report/abnormal_r/getLiner", "",

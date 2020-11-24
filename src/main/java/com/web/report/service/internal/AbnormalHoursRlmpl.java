@@ -60,7 +60,7 @@ public class AbnormalHoursRlmpl extends ReportPrcUtils implements AbnormalHoursR
 	public ApiResponseResult getLiner(String keyword) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = getDeptInfoPrc(UserUtil.getSessionUser().getFactory() + "",
-				UserUtil.getSessionUser().getCompany() + "","2", keyword);
+				UserUtil.getSessionUser().getCompany() + "","", "组长");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

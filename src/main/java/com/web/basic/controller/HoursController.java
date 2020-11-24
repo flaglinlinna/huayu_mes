@@ -1,6 +1,6 @@
 package com.web.basic.controller;
 
-import java.util.Date;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
-import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.Hours;
 import com.web.basic.service.HoursService;
 
@@ -58,12 +57,12 @@ public class HoursController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = hoursService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取工时信息列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取工时信息列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取工时信息列表失败！");
 	        }
 	    }
@@ -118,7 +117,7 @@ public class HoursController extends WebController{
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取工时信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,"ID:"+id+";"+ e.toString());
 	            return ApiResponseResult.failure("获取工时信息失败！");
 	        }
 	    }
@@ -137,7 +136,7 @@ public class HoursController extends WebController{
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除工时信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params+";"+ e.toString());
 	            return ApiResponseResult.failure("删除工时信息失败！");
 	        }
 	    }

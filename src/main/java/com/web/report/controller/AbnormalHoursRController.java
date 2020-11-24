@@ -64,7 +64,7 @@ public class AbnormalHoursRController extends WebController {
 	        try {
 	            ApiResponseResult result = abnormalHoursRService.getLiner(keyword);
 	            logger.debug("获取组长信息=getLiner:");
-	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
+//	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
@@ -82,7 +82,7 @@ public class AbnormalHoursRController extends WebController {
 	        try {
 	            ApiResponseResult result = abnormalHoursRService.getEmpCode(keyword);
 	            logger.debug("获取员工信息=getEmpCode:");
-	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
+//	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
@@ -94,16 +94,16 @@ public class AbnormalHoursRController extends WebController {
 	
 	
 	@ApiOperation(value = "工时异常统计表", notes = "工时异常统计表", hidden = true)
-	@RequestMapping(value = "/getList", method = RequestMethod.POST)
+	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getList(@RequestBody Map<String, Object> params) {
+	public ApiResponseResult getList(String sdate,String edate,String empCode,String liner,String taskno) {
 		String method = "report/abnormal_r/getList";
-		
-		String sdate=params.get("sdate").toString();
-		String edate=params.get("edate").toString();
-		String empCode=params.get("empCode").toString();
-		String liner=params.get("liner").toString();
-		String taskno=params.get("taskno").toString();
+//		@RequestBody Map<String, Object> params
+//		String sdate=params.get("sdate").toString();
+//		String edate=params.get("edate").toString();
+//		String empCode=params.get("empCode").toString();
+//		String liner=params.get("liner").toString();
+//		String taskno=params.get("taskno").toString();
 		
 		String methodName = "工时异常统计表";
 		try {
@@ -111,7 +111,7 @@ public class AbnormalHoursRController extends WebController {
 			ApiResponseResult result = abnormalHoursRService.getList(sdate,edate,liner,empCode,taskno
 					,super.getPageRequest(sort));
 			logger.debug("追溯=getList:");
-			getSysLogService().success(module, method, methodName, "");
+//			getSysLogService().success(module, method, methodName, "");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();

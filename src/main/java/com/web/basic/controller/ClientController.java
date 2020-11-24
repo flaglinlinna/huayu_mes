@@ -55,16 +55,16 @@ public class ClientController extends WebController{
 	    public ApiResponseResult getList(String keyword) {
 	        String method = "base/client/getList";String methodName ="获取客户信息列表";
 	        try {
-	        	System.out.println(keyword);
+//	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.ASC, "custNo");
 	            ApiResponseResult result = clientService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取客户信息列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取客户信息列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取客户信息列表失败！");
 	        }
 	    }
@@ -119,7 +119,7 @@ public class ClientController extends WebController{
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取客户信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,"ID:"+id+ e.toString());
 	            return ApiResponseResult.failure("获取客户信息失败！");
 	        }
 	    }
@@ -138,7 +138,7 @@ public class ClientController extends WebController{
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除客户信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,params+";"+ e.toString());
 	            return ApiResponseResult.failure("删除客户信息失败！");
 	        }
 	    }

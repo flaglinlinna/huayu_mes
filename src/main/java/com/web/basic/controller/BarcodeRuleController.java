@@ -53,16 +53,16 @@ public class BarcodeRuleController extends WebController{
 	    public ApiResponseResult getList(String keyword) {
 	        String method = "base/rule/getList";String methodName ="获取小码校验规则信息列表";
 	        try {
-	        	System.out.println(keyword);
+//	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "itemNo");
 	            ApiResponseResult result = ruleService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取小码校验规则信息列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取小码校验规则信息列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取小码校验规则信息列表失败！");
 	        }
 	    }
@@ -100,7 +100,7 @@ public class BarcodeRuleController extends WebController{
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("编辑小码校验规则信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, rule.toString()+ e.toString());
 	            return ApiResponseResult.failure("编辑小码校验规则信息失败！");
 	        }
 	    }
@@ -118,7 +118,7 @@ public class BarcodeRuleController extends WebController{
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("根据ID获取小码校验规则信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName,"ID："+id+";"+ e.toString());
 	            return ApiResponseResult.failure("获取小码校验规则信息失败！");
 	        }
 	    }
@@ -133,12 +133,12 @@ public class BarcodeRuleController extends WebController{
 				String ids = params.get("id").toString() ;
 	            ApiResponseResult result = ruleService.delete(ids);
 	            logger.debug("删除小码校验规则信息=delete:");
-	            getSysLogService().success(module,method, methodName, params);
+	            getSysLogService().success(module,method, methodName, "ID："+ids);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
 	            logger.error("删除小码校验规则信息失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+	            getSysLogService().error(module,method, methodName, "ID："+params+";"+e.toString());
 	            return ApiResponseResult.failure("删除小码校验规则信息失败！");
 	        }
 	    }
@@ -171,12 +171,12 @@ public class BarcodeRuleController extends WebController{
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = ruleService.getMtrialList(keyword,super.getPageRequest(sort));
 			logger.debug("获取物料列表=getMtrialList:");
-			getSysLogService().success(module,method, methodName, "关键词:"+keyword);
+//			getSysLogService().success(module,method, methodName, "关键词:"+keyword);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取物料列表失败！", e);
-			getSysLogService().error(module,method, methodName, e.toString());
+			getSysLogService().error(module,method, methodName,"关键词:"+keyword+";"+ e.toString());
 			return ApiResponseResult.failure("获取物料列表失败！");
 		}
 	}
