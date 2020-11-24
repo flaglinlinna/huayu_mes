@@ -285,11 +285,19 @@ function setTable(kanbanData) {
 	var html = "";
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
-		html += '<tr><td>' + arr.FROWNUM + '</td><td>' + arr.LINER_NAME
-				+ '</td><td>' + arr.NUM_EMP_ON + '</td><td>' + arr.NUM_LINE_ON
-				+ '</td><td>' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT
-				+ '</td><td>' + arr.HOUR_ABN + '</td><td>'
-				+ arr.RATE_EFFICIENCY + '%</td></tr> ';
+		if(arr.FROWNUM==kanbanData.length){
+			html += '<tr style="background: #FF0033;"><td>' + arr.FROWNUM + '</td><td>' + arr.LINER_NAME
+			+ '</td><td>' + arr.NUM_EMP_ON + '</td><td>' + arr.NUM_LINE_ON
+			+ '</td><td>' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT
+			+ '</td><td>' + arr.HOUR_ABN + '</td><td>'
+			+ arr.RATE_EFFICIENCY + '%</td></tr> ';			
+		}else{
+			html += '<tr><td>' + arr.FROWNUM + '</td><td>' + arr.LINER_NAME
+			+ '</td><td>' + arr.NUM_EMP_ON + '</td><td>' + arr.NUM_LINE_ON
+			+ '</td><td>' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT
+			+ '</td><td>' + arr.HOUR_ABN + '</td><td>'
+			+ arr.RATE_EFFICIENCY + '%</td></tr> ';
+		}	
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);

@@ -1,5 +1,5 @@
 /**
- * 检验批次报表(FQC)
+ * 各线每日生产报表
  */
 var pageCurr;var localtableFilterIns;
 $(function() {

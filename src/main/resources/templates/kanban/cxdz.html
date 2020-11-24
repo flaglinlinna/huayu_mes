@@ -284,7 +284,10 @@ var t = null;
     		   // range: true
     		  });
     	});
-    	$("#nowLiner").text(nowLiner);
+    	if(nowLiner!=null){
+    		$("#nowLiner").text(nowLiner);
+    	}
+    	
     	if(inType=="apk"){
     		$("#inSearch").hide();
     	}

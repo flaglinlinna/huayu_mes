@@ -357,6 +357,7 @@ function getList() {
 	var class_no = $("#class_select").val();
 	// var dep_id=$("#dep_select").val();
 	var liner = $("#liner_select").val();
+	$("#nowLiner").text(liner);
 	var params = {
 		"class_nos" : class_no,
 		"dep_id" : "",
