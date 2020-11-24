@@ -65,7 +65,12 @@ $(function() {
 			}, {
 				field : 'ITEM_NO',
 				title : '物料编码', width : 160,sort: true
-			}, {
+			},
+				{
+					field : 'FEED_TYPE',
+					title : '投料类型', width : 120,sort: true
+				},
+				{
 				field : 'ITEM_MODEL',
 				title : '机型',width : 100, sort: true
 			}, {

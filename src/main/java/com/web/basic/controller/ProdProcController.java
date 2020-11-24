@@ -66,7 +66,7 @@ public class ProdProcController extends WebController{
 	       	 Sort sort = new Sort(list);
             ApiResponseResult result = procProdService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取工艺流程列表=getList:");
-            getSysLogService().success(module,method, methodName, keyword);
+//            getSysLogService().success(module,method, methodName, keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,7 +106,7 @@ public class ProdProcController extends WebController{
         	Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = procProdService.getProdList(keyword, super.getPageRequest(sort));
             logger.debug("获取产品列表=getProdList:");
-            getSysLogService().success(module,method, methodName, keyword);
+//            getSysLogService().success(module,method, methodName, keyword);
             return result;
         }catch (Exception e){
             e.printStackTrace();
@@ -140,10 +140,10 @@ public class ProdProcController extends WebController{
     @ResponseBody
     public ApiResponseResult add(@RequestBody Map<String, Object> params) {   	
         String method = "base/prodproc/add";String methodName ="新增";
+        String proc = params.get("proc").toString();
+        String itemIds = params.get("itemIds").toString();
+        String itemNos = params.get("itemNos").toString();
         try{
-        	String proc = params.get("proc").toString();
-        	String itemIds = params.get("itemIds").toString();
-        	String itemNos = params.get("itemNos").toString();
             ApiResponseResult result = procProdService.add(proc,itemIds,itemNos);
             logger.debug("新增=add:");
             getSysLogService().success(module,method, methodName,
@@ -152,7 +152,7 @@ public class ProdProcController extends WebController{
         }catch(Exception e){
             e.printStackTrace();
             logger.error("新增失败！", e);
-            getSysLogService().error(module,method, methodName, e.toString());
+            getSysLogService().error(module,method, methodName,"物料id:"+itemIds+";物料编码:"+itemNos+";工序Id:"+proc+";"+ e.toString());
             return ApiResponseResult.failure("新增失败！");
         }
     }
@@ -181,17 +181,17 @@ public class ProdProcController extends WebController{
     @ResponseBody
     public ApiResponseResult doJobAttr(@RequestBody Map<String, Object> params) throws Exception{
         String method = "base/prodproc/doJobAttr";String methodName ="设置过程属性";
+        Long id = Long.parseLong(params.get("id").toString()) ;
+        Integer jobAttr=Integer.parseInt(params.get("jobAttr").toString());
         try{
-        	Long id = Long.parseLong(params.get("id").toString()) ;
-        	Integer jobAttr=Integer.parseInt(params.get("jobAttr").toString());
             ApiResponseResult result = procProdService.doJobAttr(id, jobAttr);
             logger.debug("设置过程属性=doJobAttr:");
-            getSysLogService().success(module,method, methodName, params);
+            getSysLogService().success(module,method, methodName, "id:"+id+";过程属性"+(jobAttr.equals(0)?"否":"是"));
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("设置过程属性失败！", e);
-            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            getSysLogService().error(module,method, methodName, "id:"+id+";过程属性"+(jobAttr.equals(0)?"否":"是")+";"+e.toString());
             return ApiResponseResult.failure("设置过程属性失败！");
         }
     }

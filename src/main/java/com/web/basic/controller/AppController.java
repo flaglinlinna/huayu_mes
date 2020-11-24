@@ -48,11 +48,11 @@ public class AppController extends WebController{
 	        String method = "app/getList";String methodName ="获取APP版本更新列表";
 	        String param = "关键字:"+keyword;
 	        try {
-	        	System.out.println(param);
+//	        	System.out.println(param);
 	            Sort sort = new Sort(Sort.Direction.DESC, "createDate");
 	            ApiResponseResult result = appService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug(methodName+"=getList:");
-	            getSysLogService().success(module,method, methodName, param);
+//	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -63,59 +63,59 @@ public class AppController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增线体", notes = "新增线体", hidden = true)
+	    @ApiOperation(value = "新增app版本", notes = "新增app版本", hidden = true)
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody AppVersion app) {
-	        String method = "base/line/add";String methodName ="新增线体";
+	        String method = "base/line/add";String methodName ="新增app版本";
 	        try{
 	            ApiResponseResult result = appService.add(app);
-	            logger.debug("新增线体=add:");
+	            logger.debug("新增app版本=add:");
 	            getSysLogService().success(module,method, methodName, app.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            logger.error("线体新增失败！", e);
+	            logger.error("app版本新增失败！", e);
 	            getSysLogService().error(module,method, methodName, app.toString()+","+e.toString());
-	            return ApiResponseResult.failure("线体新增失败！");
+	            return ApiResponseResult.failure("app版本新增失败！");
 	        }
 	    }
 	    
-	    @ApiOperation(value = "编辑线体", notes = "编辑线体", hidden = true)
+	    @ApiOperation(value = "编辑app版本", notes = "编辑app版本", hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody AppVersion app){
-	        String method = "base/line/edit";String methodName ="编辑线体";
+	        String method = "base/line/edit";String methodName ="编辑app版本";
 	        try{
 	            ApiResponseResult result = appService.edit(app);
-	            logger.debug("编辑线体=edit:");
+	            logger.debug("编辑app版本=edit:");
 	            getSysLogService().success(module,method, methodName, app.toString());
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            logger.error("编辑线体失败！", e);
+	            logger.error("编辑app版本失败！", e);
 	            getSysLogService().error(module,method, methodName, app.toString()+","+e.toString());
-	            return ApiResponseResult.failure("编辑线体失败！");
+	            return ApiResponseResult.failure("编辑app版本失败！");
 	        }
 	    }
 
 		
-		@ApiOperation(value = "删除线体", notes = "删除线体", hidden = true)
+		@ApiOperation(value = "删除app版本", notes = "删除app版本", hidden = true)
 	    @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
-	        String method = "base/line/delete";String methodName ="删除线体";
+	        String method = "base/line/delete";String methodName ="删除app版本";
 	        try{
 	        	String ids = params.get("id").toString() ;
 	            ApiResponseResult result = appService.delete(ids);
-	            logger.debug("删除线体=delete:");
+	            logger.debug("删除app版本=delete:");
 	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            logger.error("删除线体失败！", e);
+	            logger.error("删除app版本失败！", e);
 	            getSysLogService().error(module,method, methodName, params+","+e.toString());
-	            return ApiResponseResult.failure("删除线体失败！");
+	            return ApiResponseResult.failure("删除app版本失败！");
 	        }
 	    }
 		

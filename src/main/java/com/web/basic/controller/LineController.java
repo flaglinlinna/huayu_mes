@@ -55,7 +55,7 @@ public class LineController extends WebController{
 	            ApiResponseResult result = lineService.getList(keyword, lineNo, linerName, lastupdateDate,
 	    	    		 checkStatus, createDate, linerCode, lineName, super.getPageRequest(sort));
 	            logger.debug("获取线体列表=getList:");
-	            getSysLogService().success(module,method, methodName, param);
+//	            getSysLogService().success(module,method, methodName, param);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -111,7 +111,7 @@ public class LineController extends WebController{
 	        try{
 	            ApiResponseResult result = lineService.getLine(id);
 	            logger.debug("根据ID获取线体=getLine:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();

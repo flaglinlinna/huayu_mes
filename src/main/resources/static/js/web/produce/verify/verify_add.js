@@ -177,7 +177,8 @@ $(function() {
 									"num" : da[0].TASK_NO,
 									"mtrcode" : da[0].ITEM_NO,
 									// "mtrdescr" : da[0].ITEM_NAME,
-									"cus" : da[0].CUST_NAME_S
+									"cus" : da[0].CUST_NAME_S,
+									"linerName":da[0].LINER_NAME
 								});
 								form.render();// 重新渲染
 
@@ -349,12 +350,12 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 200,
+								width : 160,
 								sort : true
 							}, {
 								field : 'LINE_NAME',
 								title : '线体',
-								width : 160,
+								width : 120,
 								sort : true
 							},
 							// 	{
@@ -366,7 +367,7 @@ $(function() {
 								{
 								field : 'EMP_NAME',
 								title : '员工姓名',
-								width : 150,
+								width : 110,
 								sort : true
 							},
 								{
@@ -378,12 +379,30 @@ $(function() {
 								{
 									field : 'TIME_END',
 									title : '下线时间',
-									width : 150,
+									width : 145,
 									sort : true
 								},
 								{
 									field : 'CREATE_DATE',
 									title : '分配时间',
+									width : 150,
+									sort : true
+								},
+								{
+									field : 'PROD_DATE',
+									title : '生产日期',
+									width : 150,
+									sort : true
+								},
+								{
+									field : 'LINER_NAME',
+									title : '组长',
+									width : 90,
+									sort : true
+								},
+								{
+									field : 'ITEM_NO',
+									title : '物料编号',
 									width : 150,
 									sort : true
 								},

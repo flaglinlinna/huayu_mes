@@ -60,7 +60,7 @@ public class ProcessController extends WebController{
 	            ApiResponseResult result = processService.getList(keyword,procNo,procName,procOrder,checkStatus,
 						createDate,lastupdateDate,super.getPageRequest(sort));
 	            logger.debug("获取工序列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -115,7 +115,7 @@ public class ProcessController extends WebController{
 	        try{
 	            ApiResponseResult result = processService.getProcess(id);
 	            logger.debug("根据ID获取工序=getProcess:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();

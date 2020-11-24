@@ -57,17 +57,16 @@ public class EmployeeController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.ASC, "empCode");
 	            ApiResponseResult result = employeeService.getList(keyword,empStatus, super.getPageRequest(sort));
 	            logger.debug("获取员工信息列表=getList:");
-	            if(StringUtils.isNotEmpty(empStatus)){
-					empStatus = empStatus=="0"?"离职":"在职";
-				}else {
-	            	empStatus = "所有";
-				}
-	            getSysLogService().success(module,method, methodName, "关键词:"+keyword+";"+empStatus);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取员工信息列表失败！", e);
-	            getSysLogService().error(module,method, methodName, e.toString());
+				if(StringUtils.isNotEmpty(empStatus)){
+					empStatus = empStatus=="0"?"离职":"在职";
+				}else {
+					empStatus = "所有";
+				}
+	            getSysLogService().error(module,method, methodName, "关键词:"+keyword+";"+empStatus+";"+e.toString());
 	            return ApiResponseResult.failure("获取员工信息列表失败！");
 	        }
 	    }
@@ -117,7 +116,7 @@ public class EmployeeController extends WebController{
 	        try{
 	            ApiResponseResult result = employeeService.getEmployee(id);
 	            logger.debug("根据ID获取员工信息=getEmployee:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
@@ -174,7 +173,7 @@ public class EmployeeController extends WebController{
 	        try{
 	            ApiResponseResult result = employeeService.getUpdateData();
 	            logger.debug("同步员工信息 getUpdateData:");
-//	            getSysLogService().success(module,method, methodName, null);
+	            getSysLogService().success(module,method, methodName, null);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();

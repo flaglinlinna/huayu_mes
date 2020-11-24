@@ -58,12 +58,12 @@ public class WorkCenterController extends WebController{
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
 	            ApiResponseResult result = workCenterService.getList(keyword, super.getPageRequest(sort));
 	            logger.debug("获取工作中心列表=getList:");
-	            getSysLogService().success(module,method, methodName, keyword);
+//	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            logger.error("获取工作中心列表失败！", e);
-	            getSysLogService().error(module,method, methodName, keyword+";"+e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 	            return ApiResponseResult.failure("获取工作中心列表失败！");
 	        }
 	    }
@@ -113,7 +113,7 @@ public class WorkCenterController extends WebController{
 	        try{
 	            ApiResponseResult result = workCenterService.getWorkCenter(id);
 	            logger.debug("根据ID获取工作中心=getWorkCenter:");
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
