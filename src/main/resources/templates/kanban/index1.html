@@ -19,51 +19,53 @@ ul {
 	margin: 0px;
 	padding: 0px;
 }
-
-li {
-	line-height: 40px;
-	color: #ffffff;
+.ui-page-theme-a .ui-btn, html .ui-bar-a .ui-btn, html .ui-body-a .ui-btn, html body .ui-group-theme-a .ui-btn, html head+body .ui-btn.ui-btn-a, .ui-page-theme-a .ui-btn:visited, html .ui-bar-a .ui-btn:visited, html .ui-body-a .ui-btn:visited, html body .ui-group-theme-a .ui-btn:visited, html head+body .ui-btn.ui-btn-a:visited {
+    background-color: #242D3D;
+    border-color: #344058;
+    color: #ffffff;
+    text-shadow: none;
 }
+
 </style>
 </head>
 <body>
 	<div class="div-boder">
 		<h2 style="height: 30px; margin: 1px" align="center">数字化工厂信息中心</h2>
 	</div>
-	<div data-role="page" id="firstPage">
+	<div data-role="page" id="firstPage" style="background-color: #344058;">
 		<div data-role="header" data-theme="b">
 			<h1>看板目录</h1>
 		</div>
 
 		<ul>
 			<li><a href="/kanban/toCjbg1?inType=apk" target="_blank" 
-				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">车间报工看板</a>
+				class="ui-btn ui-shadow">车间报工看板</a>
 			</li>
 			<li><a href="/kanban/toScdz?inType=apk" target="_blank" 
-				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">生产电子看板</a>
+				class="ui-btn ui-shadow">生产电子看板</a>
 			</li>
 			<li><a href="/kanban/toZcbl?inType=apk" target="_blank" 
-				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">制程不良看板</a>
+				class="ui-btn ui-shadow">制程不良看板</a>
 			</li>
 			
 			<li><a href="/kanban/toSetLiner?inType=apk&pageType=xlpm" target="_blank" 
-				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">效率排名看板</a>
+				class="ui-btn ui-shadow">效率排名看板</a>
 
 			</li>
 			<li><a href="/kanban/toDfg?inType=apk" target="_blank" 
-				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">待返工看板</a>
+				class="ui-btn ui-shadow">待返工看板</a>
 			</li>
 			<li><a href="/kanban/toSetLiner?inType=apk&pageType=cxsc" target="_blank" 
-				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">产线生产看板</a>
+				class="ui-btn ui-shadow">产线生产看板</a>
 			</li>	
 			<li><a href="/kanban/toSetLiner?inType=apk&pageType=cxdz" target="_blank" 
-				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">产线电子看板</a>
+				class="ui-btn ui-shadow">产线电子看板</a>
 			</li>
 			<li><a href="/kanban/toCjkbs?inType=apk" target="_blank" 
-				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">车间看板(轮播)</a>
+				class="ui-btn ui-shadow">车间看板(轮播)</a>
 			</li>
 			<li><a href="/kanban/toSetLiner?inType=apk&pageType=ltkb" target="_blank" 
-				class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child">拉头看板(轮播)</a>
+				class="ui-btn ui-shadow">拉头看板(轮播)</a>
 			</li>
 			
 		</ul> 

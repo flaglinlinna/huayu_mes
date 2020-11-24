@@ -1,5 +1,5 @@
 /**
- * 工时统计表（hr）
+ * 工时统计表（Mes）
  */
 var pageCurr;
 var localtableFilterIns;
@@ -8,7 +8,7 @@ $(function() {
 			.use(
 					[ 'form', 'table', 'tableFilter', 'laydate', 'tableSelect' ],
 					function() {
-						var table = layui.table, form = layui.form, tableFilter = layui.tableFilter, laydate = layui.laydate;
+						var table = layui.table, form = layui.form, tableFilter = layui.tableFilter, laydate = layui.laydate, tableSelect = layui.tableSelect;
 
 						tableIns = table.render({
 							elem : '#listTable',
@@ -28,7 +28,7 @@ $(function() {
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
 							},
 							parseData : function(res) {
-								console.log(res)
+							//	console.log(res)
 								if (!res.result) {
 									return {
 										"count" : 0,
@@ -50,12 +50,7 @@ $(function() {
 								type : 'numbers'
 							},
 							{
-								field : 'ISERROR',
-								title : '是否异常',
-								width : 80,
-								templet:'#statusTpl'	
-							}, {
-								field : 'ATT_DATE',
+								field : 'WORK_DATE',
 								title : '日期',
 								sort : true,
 									width : 110,
@@ -68,22 +63,13 @@ $(function() {
 								title : '姓名',
 								width : 80,
 							}, {
-								field : 'DEPT_ID',
-								title : '部门',
-								width : 80,
+								field : 'ITEM_NO',
+								title : '物料',
+								width : 130,
 							}, {
-								field : 'CLASS_ID',
-								title : '班次',
+								field : 'LINER_ID',
+								title : '组长',
 								width : 70,
-								templet:function (d){	
-				                	if(d.CLASS_ID=="1"){
-				                		return "白班"
-				                	}else if(d.CLASS_ID=="2"){
-				                		return "晚班"
-				                	}else{
-				                		return "其他"
-				                	}
-				                }
 							}, {
 								field : 'ACT_HOURS',
 								title : '正班时数',
@@ -129,16 +115,36 @@ $(function() {
 							even : true,// 条纹样式
 							data : [],
 							height : 'full-60',
-							page : false,
+							page : true,
+							limit:50,
+							limits:[50,100,200,500,1000,5000],
+							request : {
+								pageName : 'page', // 页码的参数名称，默认：page
+								limitName : 'rows' // 每页数据量的参数名，默认：limit
+							},
+							parseData : function(res) {
+							//	console.log(res)
+								if (!res.result) {
+									return {
+										"count" : 0,
+										"msg" : res.msg,
+										"data" : [],
+										"code" : res.status
+									}
+								}
+								// 可进行数据操作
+								return {
+									"count" : res.data.total,
+									"msg" : res.msg,
+									"data" : res.data.rows,
+									"code" : res.status
+								// code值为200表示成功
+								}
+							},
 							cols : [ [ {
 								type : 'numbers'
 							},
-							{
-								field : 'ISERROR',
-								title : '是否异常',
-								width : 100,sort : true,
-								templet:'#statusTpl'	
-							}, {
+							 {
 								field : 'TASK_NO',
 								title : '制令单',width : 200,
 								sort : true
@@ -172,8 +178,78 @@ $(function() {
 								pageCurr = curr;
 							}
 						});
-
-						getEmpCode();
+						
+						tableSelect=tableSelect.render({
+							elem : '#num',
+							searchKey : 'keyword',
+							checkedKey : 'id',
+							searchPlaceholder : '试着搜索',
+							table : {
+								url:  context +'/report/worktime_m/getItemList',
+								method : 'get',
+								cols : [ [
+								{type : 'radio'}//多选  radio
+								, {
+									field : 'id',
+									title : 'id',
+									width : 0,hide:true
+								}, {
+									field : 'ITEM_NO',
+									title : '物料编码',
+									width : 150
+								},{
+									field : 'ITEM_NAME',
+									title : '物料描述',
+									width : 240
+								}, {
+									field : 'ITEM_NAME_S',
+									title : '物料简称',
+									width : 100
+								},{
+									field : 'ITEM_MODEL',
+									title : '物料类别',
+									width : 80
+								}] ],
+								page : true,
+								request : {
+									pageName : 'page' // 页码的参数名称，默认：page
+									,
+									limitName : 'rows' // 每页数据量的参数名，默认：limit
+								},
+								parseData : function(res) {
+									console.log(res)
+									if(res.result){
+										return {
+											"count" :res.data.total,
+											"msg" : res.msg,
+											"data" : res.data.rows,
+											"code" : res.status
+										}
+									}
+									return {
+										"count" :0,
+										"msg" : res.msg,
+										"data" : [],
+										"code" : res.status
+									}
+									
+								},
+							},
+							done : function(elem, data) {
+								//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+								var da=data.data;
+								
+								form.val("searchFrom", {
+									"num" : da[0].ITEM_NO
+								});
+								/*form.val("searchFrom", {
+									"num":da[0].ITEM_NO
+								});*/
+								form.render();// 重新渲染
+						}
+						});
+						getLinerList();
+						
 
 						// 监听搜索框
 						form.on('submit(searchSubmit)', function(data) {
@@ -186,8 +262,8 @@ $(function() {
 							var params = {
 								"sdate" : sdata,
 								"edate" : edata,
-								"line_id" : "",
-								"empCode" : data.field.empCode,
+								"itemCode" : data.field.num,
+								"liner_id" : data.field.liner_id,
 							};
 							// console.log(params)
 							getReport(params)
@@ -211,7 +287,6 @@ $(function() {
 							trigger : 'click',
 							range : true
 						});
-
 					});
 
 });
@@ -233,17 +308,19 @@ function openData(title) {
 
 function getReport(params) {
 	tableIns.reload({
-	     url:context+'/report/worktime/getList',
+	     url:context+'/report/worktime_m/getList',
         where:params,
 	     done: function(res1, curr, count){
+	    	 console.log(res1)
               pageCurr=curr;
           }
 	}) 
 }
 
 function getDetail(param){
-	CoreUtil.sendAjax("/report/worktime/getListDetail", JSON.stringify(param),
+	CoreUtil.sendAjax("/report/worktime_m/getListDetail", JSON.stringify(param),
 			function(data) {
+		 console.log(data)
 				if (data.result) {
 					if (data.result) {
 						tableIns1.reload({
@@ -263,23 +340,22 @@ function getDetail(param){
 }
 
 
-function getEmpCode() {
-	CoreUtil.sendAjax("/report/worktime/getEmpCode", "",
+function getLinerList() {
+	CoreUtil.sendAjax("/report/worktime_m/getLinerList", "",
 			function(data) {
-				// console.log(data)
+				//console.log(data)
 				if (data.result) {
 					if (data.result) {
-						$("#empCode").empty();
+						$("#liner_id").empty();
 						var list = data.data;
 						for (var i = 0; i < list.length; i++) {
 							if (i == 0) {
-								$("#empCode").append(
+								$("#liner_id").append(
 										"<option value=''>请点击选择</option>");
 							}
-							$("#empCode").append(
-									"<option value=" + list[i].EMP_CODE + ">"
-											+ list[i].EMP_CODE + "——"
-											+ list[i].EMP_NAME + "</option>");
+							$("#liner_id").append(
+									"<option value=" + list[i].ID + ">"
+											+ list[i].LEAD_BY + "</option>");
 						}
 						layui.form.render('select');
 					} else {
