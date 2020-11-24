@@ -289,8 +289,8 @@ function setTable(kanbanData) {
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
-	$("#tableList1").empty();//不加此数据表头会歪
-	$("#tableList1").append(html);//不加此数据表头会歪
+	//$("#tableList1").empty();//不加此数据表头会歪
+	//$("#tableList1").append(html);//不加此数据表头会歪
 	
 	if (MyMarhq != null) {// 判断计时器是否为空-关闭
 		clearInterval(MyMarhq);
