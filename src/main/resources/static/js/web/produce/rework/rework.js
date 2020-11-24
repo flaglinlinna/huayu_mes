@@ -286,6 +286,7 @@ function reworkCode() {
 			function(data) {
 				// console.log(data)
 				if (data.result) {
+					playSaoMiaoMusic();
 					sTableIns.reload({
 						data : data.data
 					});

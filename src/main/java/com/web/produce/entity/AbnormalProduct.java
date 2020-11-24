@@ -105,7 +105,7 @@ public class AbnormalProduct extends BaseEntity{
      */  
     @ApiModelProperty(name = "ftimeLong", value = "工时时长")
     @Column
-    protected Integer ftimeLong=0;
+    protected Float ftimeLong=0f;
     
     /**
      * 异常类型
@@ -162,31 +162,15 @@ public class AbnormalProduct extends BaseEntity{
 	public void setLineId(Long lineId) {
 		LineId = lineId;
 	}
-
-
-
-
-	public Integer getFtimeLong() {
+	public Float getFtimeLong() {
 		return ftimeLong;
 	}
-
-
-
-
-	public void setFtimeLong(Integer ftimeLong) {
+	public void setFtimeLong(Float ftimeLong) {
 		this.ftimeLong = ftimeLong;
 	}
-
-
-
-
 	public String getFtype() {
 		return ftype;
 	}
-
-
-
-
 	public void setFtype(String ftype) {
 		this.ftype = ftype;
 	}

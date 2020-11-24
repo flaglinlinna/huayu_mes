@@ -494,6 +494,7 @@ function getDetailByTask(taskNo){
 		CoreUtil.sendAjax("/product/afterNei", params, function(data) {
 			
 			if (data.result) {
+				playSaoMiaoMusic();
 				 $("#wbarcode").val("");
 				 $("#wbarcode").focus();
 			}else{
@@ -516,6 +517,7 @@ function getDetailByTask(taskNo){
 		CoreUtil.sendAjax("/product/afterWai", params, function(data) {
 			console.log(data)
 			if (data.result) {
+				playSaoMiaoMusic();
 				$('#inqty').val(data.data.Qty);
 				$('#rate').val(data.data.Rate);
 				tableIns.reload({

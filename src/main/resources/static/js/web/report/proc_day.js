@@ -15,7 +15,7 @@ $(function() {
 			height:'full-110'//固定表头&full-查询框高度
 				,even:true,//条纹样式
 			data : [],
-			height: 'full',
+			// height: 'full',
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -44,18 +44,18 @@ $(function() {
 				type : 'numbers'
 			}, {
 				field : 'FDATE',
-				title : '检验日期',width : 150,sort: true,
+				title : '日期',width : 150,sort: true,
 			}, {
 				field : 'PROC_NAME',
 				title : '工序名称',width : 130, sort: true
 			},{
-				field : 'QTY_DZC',
-				title : '待转出数', width : 130, sort: true
+				field : 'QTY_SJ',
+				title : '送检数', width : 130, sort: true
 			}, {
-				field : 'LOT_DZC',
-				title : '待转出批次',width : 130,  sort: true
+				field : 'QTY_ZC',
+				title : '转出数',width : 130,  sort: true
 			},{
-				field : 'QTY_JYZ',
+				field : 'QTY_JY',
 				title : '检验中数',width : 130,sort: true
 			},
 			// 	{
@@ -64,10 +64,10 @@ $(function() {
 			// 	width : 130, sort: true
 			// },
 				{
-				field : 'QTY_YJY',
+				field : 'QTY_YJ',
 				title : '已检验数', width : 130,sort: true
 			},{
-				field : 'LOT_YJY',
+				field : 'LOT_YJ',
 				title : '已检验批次', width : 130,sort: true
 			}, {
 				fixed : 'right',

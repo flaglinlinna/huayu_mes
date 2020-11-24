@@ -272,6 +272,7 @@ function checkBarcode(proc, barcode) {
 			function(data) {
 				console.log(data)
 					if (data.result) {
+						playSaoMiaoMusic();
 						console.log(proc + "|" + in_type + "|" + barcode);
 						saveData(proc,in_type,barcode);
 						tableIns.reload({
