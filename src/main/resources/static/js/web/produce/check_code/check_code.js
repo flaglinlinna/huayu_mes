@@ -254,6 +254,7 @@ function subCode(taskNo, barcode1, barcode2) {
 			function(data) {
 				//console.log(data)
 				if (data.result) {
+					playSaoMiaoMusic();
 					var dataT = {
 						taskNo : taskNo,
 						barcode1 : barcode1,

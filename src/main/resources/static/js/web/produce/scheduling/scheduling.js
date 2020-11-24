@@ -45,7 +45,7 @@ $(function () {
                 ,{field:'CLASS_NO', title:'班次', width:60,align: 'center'}
                 ,{field:'QTY_PLAN', title:'计划数量', width:80,align: 'center'}
                 ,{field:'QTY_DONE', title:'完工数', width:80,align: 'center'}
-                ,{field:'RATE_DONE', title:'完工率', width:80,align: 'center'}
+                ,{field:'RATE_DONE', title:'完工率(%)', width:100,align: 'center'}
                 // ,{field:'deptName', title:'部门', width:70}
                ,{field:'DEPT_NAME', title:'部门名称', width:80}
                 ,{field:'PROD_NO', title:'工单号', width:130,align: 'center'}

@@ -386,6 +386,7 @@ function checkBarCode(taskNo, barcode) {
 			function(data) {
 				// console.log(data)
 				if (data.result) {
+					playSaoMiaoMusic();
 					var q = data.data;
 					$("#qty").val(q[0].qty);
 				} else {

@@ -256,6 +256,17 @@
                 audioEle.pause();  //暂停
             }
         }
+        function playSaoMiaoMusic() {
+            // alert('123')
+            var audioEle = document.getElementById("saomiao");
+            // alert(audioEle)
+            audioEle.load();
+            if (audioEle.paused){ /*如果已经暂停*/
+                audioEle.play();   //播放
+            }else {
+                audioEle.pause();  //暂停
+            }
+        }
     </script>
     <style th:inline="text">
         .bg{

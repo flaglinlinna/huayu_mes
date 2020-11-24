@@ -128,7 +128,7 @@ $(function () {
         tableSelect2.render({
             elem : '#empId2',
             searchKey : 'keyword',
-            checkedKey : 'id',
+            checkedKey : 'EMP_ID',
             searchPlaceholder : '员工搜索',
             table : {
                 url:  context +'/produce/scheduling/getEmpList',
@@ -137,8 +137,8 @@ $(function () {
                 cols : [ [
                     { type: 'radio' },//多选  radio
                     , {
-                        field : 'ID',
-                        title : 'id',
+                        field : 'EMP_ID',
+                        title : 'EMP_ID',
                         width : 0,hide:true
                     }
                     , {
@@ -182,7 +182,7 @@ $(function () {
                 console.log(data);
                 var da=data.data;
                 form.val("editForm2", {
-                    "empId2":da[0].empName,
+                    "empId2":da[0].EMP_NAME,
                 });
                 layui.form.render();// 重新渲染
             }
@@ -243,7 +243,7 @@ $(function () {
                     }
                 });
             }else if(tableId =='list2'){
-                table.render({
+                tableIns2 = table.render({
                     elem: '#iList2'
                     ,url:context+'/produce/scheduling/getItemList'
                     ,method: 'get' //默认：get请求
@@ -266,13 +266,13 @@ $(function () {
                     cols: [[
                         {type:'numbers'}
                         ,{field:'itemNo', title:'物料编号', width:150}
-                        ,{field:'itemName', title:'物料描述',width:450, templet:'<span>{{d.mtrial ? d.mtrial.itemName : ""}}</span>'}
+                        ,{field:'itemName', title:'物料描述',width:400, templet:'<span>{{d.mtrial ? d.mtrial.itemName : ""}}</span>'}
                         ,{field:'itemQty', title:'组件用量', width:100}
                         ,{field:'itemUnit', title:'组件单位', width:100}
                         ,{field:'itemQtyPr', title:'单位用量', width:100}
-                        ,{field:'fokRate', title:'良率', width:100}
-                        ,{field:'empName', title:'作业员', width:100, templet:'<span>{{ d.employee ? d.employee.empName : "" }}</span>'}
-                        ,{fixed:'right', title:'操作',width:150, align:'center', toolbar:'#optBar2'}
+                        ,{field:'fokRate', title:'良率', width:80}
+                        ,{field:'empName', title:'作业员', width:90, templet:'<span>{{ d.employee ? d.employee.empName : "" }}</span>'}
+                        ,{fixed:'right', title:'操作',width:90, align:'center', toolbar:'#optBar2'}
                     ]]
                     ,done: function(res, curr, count){
                         //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -480,7 +480,7 @@ $(function () {
                     }
                 });
             }else if(tableId =='list7'){
-                table.render({
+                tableIns7 = table.render({
                     elem: '#iList7'
                     ,url:context+'/produce/scheduling/getProdOrderErrList'
                     ,method: 'get' //默认：get请求

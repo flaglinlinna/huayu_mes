@@ -280,6 +280,7 @@ function getInfoBarcode(barcode,taskNo){
     }
     CoreUtil.sendAjax("/inputCheck/getInfoBarcode", params, function(data) {
         if (data.result) {
+            playSaoMiaoMusic();
             $( "input[name='item_code']").val(data.data[0].ITEM_NO);
             $( "input[name='addqty']").val(data.data[0].QTY);
         }else{
