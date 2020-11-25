@@ -43,14 +43,19 @@ $(function() {
 			},
 			cols : [
 				[
-					{ rowspan: 1, title: '基本信息',align:'center',colspan: 5},
+					{ rowspan: 1, title: '基本信息',align:'center',colspan: 6},
 					{ rowspan: 1, title: '人力及工时状况',align:'center',colspan: 9},
 					{ rowspan: 1, title: '投入产出',align:'center', colspan: 6},
 					{ rowspan: 1, title: '品质良率',align:'center', colspan: 4}
 				],
 				[ {
 				type : 'numbers'
-			}, {
+			},
+					{
+						field : 'PROD_DATE',
+						title : '产出时间', width : 150,sort: true
+					},
+					{
 
 				field : 'ITEM_NO',
 				title : '物料编码',width : 150,sort: true,totalRowText:"合计"
@@ -148,10 +153,6 @@ $(function() {
 					// 	field : 'PROD_DATE',
 					// 	title : '分析原因', width : 150,sort: true
 					// },
-				{
-					field : 'PROD_DATE',
-					title : '产出时间', width : 150,sort: true
-				},
 
 			] ],
 			done : function(res, curr, count) {

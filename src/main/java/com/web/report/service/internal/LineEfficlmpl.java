@@ -38,28 +38,29 @@ public class LineEfficlmpl extends ReportPrcUtils implements LineEfficService {
 		// TODO Auto-generated method stub
 		List<Object> list = getListPrc(UserUtil.getSessionUser().getFactory() + "",
 				UserUtil.getSessionUser().getCompany() + "",
-				UserUtil.getSessionUser().getId()+"", edate,keyword);
+				UserUtil.getSessionUser().getId()+"",sdate, edate,keyword);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
 		return ApiResponseResult.success().data(list.get(2));
 	}
 
-	private List getListPrc(String facoty,String company,String user_id,
+	private List getListPrc(String facoty,String company,String user_id,String startTime,
 			String endTime,String keyword) throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  PRC_MES_RPT_EFI_EL_DET(?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  PRC_MES_RPT_EFI_EL_DET(?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
-				cs.setString(2, company);;
+				cs.setString(2, company);
 				cs.setString(3, user_id);
-				cs.setString(4, endTime);
-				cs.setString(5, keyword);
-				cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
-				cs.registerOutParameter(8, -10);// 输出参数 追溯数据
+				cs.setString(4, startTime);
+				cs.setString(5, endTime);
+				cs.setString(6, keyword);
+				cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(8, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(9, -10);// 输出参数 追溯数据
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -67,11 +68,11 @@ public class LineEfficlmpl extends ReportPrcUtils implements LineEfficService {
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(6));
-				result.add(cs.getString(7));
-				if (cs.getString(6).toString().equals("0")) {
+				result.add(cs.getInt(7));
+				result.add(cs.getString(8));
+				if (cs.getString(7).toString().equals("0")) {
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(8);
+					ResultSet rs = (ResultSet) cs.getObject(9);
 					try {
 						l = fitMap(rs);
 					} catch (Exception e) {

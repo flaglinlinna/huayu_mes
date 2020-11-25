@@ -133,11 +133,11 @@ $(function() {
 			return false;
 		});
 		//日期范围
-		  laydate.render({
-		    elem: '#dates',
-		    trigger:'click'
-		    //,range: true
-		  });
+		laydate.render({
+			elem: '#dates',
+			trigger:'click'
+			,range: true
+		});
 
 	});
 
