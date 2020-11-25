@@ -65,6 +65,34 @@ public class kanbanController extends WebController {
 		mav.setViewName("/kanban/index1");// 返回路径
 		return mav;
 	}
+	//复合看板（多个看板部分数据组装拼接合成
+		@RequestMapping(value = "/toCjdzkb", method = RequestMethod.GET)
+		@ResponseBody
+		public ModelAndView toCjdzkb(String inType) {
+			ModelAndView mav = new ModelAndView();
+			String method = "/kanban/toCjdzkb";
+			String methodName = "车间电子看板";
+			try {	
+				ApiResponseResult deptList = kanbanService.getCjbgDepList();
+				ApiResponseResult interval =kanbanService.getIntervalTime();
+				ApiResponseResult cjbg_data = kanbanService.getCjbgList("999","","",this.getIpAddr());
+				ApiResponseResult scdz_data = kanbanService.getScdzList("999","","",this.getIpAddr());
+				mav.addObject("cjbg_data",cjbg_data);//车间看板数据
+				mav.addObject("scdz_data",scdz_data);//生产电子数据
+				mav.addObject("deptList",deptList);//部门列表
+				mav.addObject("interval",interval);//刷新间隔
+				mav.addObject("inType",inType);//显示类型
+				mav.setViewName("/kanban/cjdzkb");// 返回路径
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("车间电子看板异常！", e);
+				getSysLogService().error(module,method,methodName,e.toString());
+			}
+			return mav;
+		}
+	
+	
+	
 	
 	//（复数看板）轮播页面
 	@RequestMapping(value = "/toCjkbs", method = RequestMethod.GET)
@@ -558,6 +586,31 @@ public class kanbanController extends WebController {
 			logger.error("获取产线生产看板信息失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取产线生产看板信息失败！");
+		}
+	}
+	//复合看板（多个看板部分数据组装拼接合成
+	
+	/**
+	 * 获取看板数据
+	 * */	
+	@ApiOperation(value = "获取车间电子看板数据", notes = "获取车间电子看板数据", hidden = true)
+	@RequestMapping(value = "/toCjdzkbList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult toCjdzkbList(String class_nos, String dep_id, String sdata) {
+		String method = "/kanban/toCjdzkbList";
+		String methodName = "获取车间电子看板数据";
+		try {
+			ApiResponseResult cjbg_data = kanbanService.getCjbgList(class_nos,dep_id,sdata,this.getIpAddr());
+			ApiResponseResult scdz_data = kanbanService.getScdzList(class_nos,dep_id,sdata,this.getIpAddr());
+			Map map = new HashMap();
+			map.put("cjbg_data", cjbg_data);
+			map.put("scdz_data", scdz_data);
+			return ApiResponseResult.success().data(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取车间电子看板数据失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取车间电子看板数据失败！");
 		}
 	}
 }

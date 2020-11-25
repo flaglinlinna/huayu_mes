@@ -1,0 +1,290 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>生产电子看板</title>
+<script type="text/javascript" src="../kanban/js/jquery.js"></script>
+<link rel="stylesheet" href="../kanban/css/comon0.css">
+<link rel="stylesheet" href="../layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}"></link>
+<script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
+</head>
+<style>
+/*
+th, td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+th {
+	font-size: 16px;
+	font-weight:normal;
+}
+
+td {
+	font-size: 16px;
+}*/
+.tablebox {
+	height: 200px;
+	overflow: hidden;
+	position: relative;
+	margin: 10px auto;
+}
+
+.tbl-header {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
+
+.tbl-body {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+a {
+	color: #FFFFFF;
+}
+
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+.tablebox table {
+	width: 100%;
+}
+
+.tablebox table th, .tablebox table td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+.tablebox table tr th {
+	background: #333399;
+	cursor: pointer;
+}
+
+th {
+	font-size: 16px;
+	font-weight: normal;
+}
+
+td {
+	font-size: 16px;
+}
+
+h1 {
+	font-weight: bold;
+}
+
+.line {
+	position: absolute;
+	left: .3rem;
+	top: 0;
+	line-height: .75rem;
+}
+
+.boxall {
+	padding-bottom: 4px;
+}
+
+.bigword_div {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.bigword_ul {
+	list-style: none;
+	/*margin-left: 10px;
+	margin-top: 35px;*/
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0 auto;
+}
+
+.bigword_li {
+	color: #ffffff;
+	font-size: 50px;
+	letter-spacing: 40px;
+	margin: 0 auto;
+}
+
+.small_ul {
+	list-style: none;
+	margin-left: 15px;
+	margin-top: 35px;
+}
+
+.small_li {
+	line-height: 60px;
+	color: #ffffff;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.span_li {
+	margin-left: 15px;
+	color: #ffffff;
+}
+</style>
+<script>
+	$(window).load(function(){  
+             $(".loading").fadeOut()
+            })  
+			
+/****/
+$(document).ready(function(){
+	var whei=$(window).width()
+	$("html").css({fontSize:whei/20})
+	$(window).resize(function(){
+		var whei=$(window).width()
+	 $("html").css({fontSize:whei/20})
+});
+	
+	});
+	</script>
+
+<script type="text/javascript" src="../kanban/js/echarts.min.js"></script>
+<body>
+	<header class="header left" id="inSearch">
+		<div class="total_chose_box">
+			<div style="height: 5px;"></div>
+			<span class="chose_tltle">请选择班次：</span> <select class="year_chose"
+				id="class_select">
+				<option value="999">当日看板</option>
+				<option value="998">24小时看板</option>
+				<option value="1">白班</option>
+				<option value="2">晚班</option>
+			</select>
+			<!--<span class="chose_tltle">请输入部门：</span> <select class="year_chose"
+				id="dep_select"></select>   -->
+			<span class="chose_tltle">请选择日期：</span> <input type="text"
+				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+				autocomplete="off" class="chose_text_in ">
+			<!-- <input class="chose_text_in"> -->
+			<button class="chose_enter" id="searchBtn">确定</button>
+		</div>
+	</header>
+	<div class="head">
+		<div class="line">
+			<a href="toScdzDetail?liner=&fieldword=PO_LINE_NUM_NOW"
+				target="_blank"> <span style="color: #FFFFFF; font-size: 20px;"
+				id="showLine"></span></a> <a
+				href="toScdzDetail?liner=&fieldword=PO_LINE_NUM_PLN" target="_blank">
+				<span style="color: #FFFFFF; font-size: 20px;" id="showLine1"></span>
+			</a>
+		</div>
+
+		<h1 id="title">组装二部报工看板</h1>
+		<div class="weather">
+			<!--<img src="picture/weather.png"><span>多云转小雨</span>-->
+			<span id="showTime"></span>
+		</div>
+
+		<script>
+var t = null;
+    t = setTimeout(time,1000);//開始运行
+    function time()
+    {
+       clearTimeout(t);//清除定时器
+       dt = new Date();
+		var y=dt.getFullYear();
+		var mt=dt.getMonth()+1;
+		var day=dt.getDate();
+       var h=dt.getHours();//获取时
+       var m=dt.getMinutes();//获取分
+       var s=dt.getSeconds();//获取秒
+       document.getElementById("showTime").innerHTML = y+"年"+mt+"月"+day+"日  "+h+"时"+m+"分"+s+"秒";
+       t = setTimeout(time,1000); //设定定时器，循环运行     
+    } 
+
+</script>
+	</div>
+	<div class="mainbox">
+		<div class="boxall" style="height: 240px">
+			<div id="echart2" style="width: 36%; height: 240px; float: left;"></div>
+			<div id="sentences" class="bigword_div" style="width: 33%; height: 240px; float: left;">
+				<ul class="bigword_ul">
+					<li class="bigword_li">提高生产效率打造卓越品质</li>
+				</ul>
+
+			</div>
+			<div id="echart_0" style="width: 15%; height: 240px; float: left;">
+				<ul class="small_ul">
+					<li style="color:#6699FF;" class="small_li">计划产量:<span class="span_li" style="color:#6699FF;"
+						id="plan"></span></li>
+					<li style="color:#66FFCC;" class="small_li">完工产量:<span class="span_li" style="color:#66FFCC;"
+						id="done"></span></li>
+					<li style="color:#9966FF;" class="small_li">完工率:<span class="span_li" style="color:#9966FF;"
+						id="done_rate"></span></li>
+				</ul>
+			</div>
+			<div id="echart_1"
+				style="width: 15%; height: 240px; float: left; color: #ffffff;">
+				<ul class="small_ul">
+					<li style="color:#CCCCFF;" class="small_li">标准工时:<span class="span_li"  style="color:#CCCCFF;"
+						id="stdtime"></span></li>
+					<li style="color:#FFCC99;" class="small_li">实际工时:<span class="span_li"  style="color:#FFCC99;"
+						id="facttime"></span></li>
+					<li style="color:#99FFCC;" class="small_li" >生产效率:<span class="span_li"  style="color:#99FFCC;"
+						id="prd_eff"></span></li>
+				</ul>
+			</div>
+			<div class="boxfoot"></div>
+		</div>
+		<div class="boxall">
+			<div class="allnav" id="echart_cjbg"
+				style="width: 100%; height: 260px;"></div>
+
+			<div class="boxfoot"></div>
+		</div>
+		<div class="boxall">
+			<div class="allnav" id="echart_scdz"
+				style="width: 100%; height: 260px;"></div>
+
+			<div class="boxfoot"></div>
+		</div>
+		<script th:inline="javascript">
+        var cjbg_data=[[${cjbg_data}]];
+        var scdz_data=[[${scdz_data}]];
+        var deptList=[[${deptList}]];
+        var interval=[[${interval}]];
+        var inType=[[${inType}]];
+    </script>
+		<script th:inline="javascript">
+    var context = [[@{/}]];
+    	layui.use([ 'laydate'], function(){
+    		  var layer = layui.layer
+    		  ,laydate = layui.laydate;
+    		  
+    		  //日期
+    		  laydate.render({
+    		    elem: '#date'
+    		  });
+    	});
+    	if(inType=="apk"){
+    		$("#inSearch").hide();
+    	}
+    </script>
+		<script src="/kanban/scripts/cjdzkb.js"
+			th:src="@{/kanban/scripts/cjdzkb.js}"></script>
+
+	</div>
+</body>
+</html>

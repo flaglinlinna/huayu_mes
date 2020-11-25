@@ -53,23 +53,15 @@ $(function() {
 								field : 'WORK_DATE',
 								title : '日期',
 								sort : true,
-									width : 110,
+								
 							}, {
-								field : 'EMP_CODE',
-								title : '工号',
+								field : 'LINER_NAME',
+								title : '组长',
 								width : 80,
-							}, {
-								field : 'EMP_NAME',
-								title : '姓名',
-								width : 80,
-							}, {
+							},{
 								field : 'ITEM_NO',
 								title : '物料',
 								width : 150,
-							}, {
-								field : 'LINER_ID',
-								title : '组长',
-								width : 70,
 							}, {
 								field : 'ACT_HOURS',
 								title : '正班时数',
