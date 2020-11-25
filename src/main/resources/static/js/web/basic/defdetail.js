@@ -12,6 +12,7 @@ $(function() {
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
+			toolbar: '#toolbar',
 			height:'full-110'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,

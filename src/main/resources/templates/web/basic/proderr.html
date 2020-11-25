@@ -24,15 +24,27 @@
 					</div>
 				</div>
         </form>
-         <hr class="layui-bg-black"/>
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addProdErr()">添加异常原因</button>
+         <hr class="layui-bg-black"/>
+         <script type="text/html" id="toolbar">
+             <div class="layui-btn-container layui-inline">
+                 <shiro:hasPermission name="proderr-add">
+                     <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addProdErr()">添加异常原因</button>
+                 </shiro:hasPermission>
+             </div>
+         </script>
+
+
         <table id="prodErrList" lay-filter="prodErrTable"></table>
 
-        <script type="text/html" id="optBar">
-            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        </script>
+         <script type="text/html" id="optBar">
+             <shiro:hasPermission name="proderr-edit">
+                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+             </shiro:hasPermission>
+             <shiro:hasPermission name="proderr-del">
+                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+             </shiro:hasPermission>
+         </script>
 	 </div>
 	 <!--添加或编辑异常类别-->
     <div id="setProdErr" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">

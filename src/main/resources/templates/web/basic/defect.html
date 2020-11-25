@@ -25,8 +25,14 @@
 				</div>
         </form>
          <hr class="layui-bg-black"/>
+         <script type="text/html" id="toolbar">
+             <div class="layui-btn-container layui-inline">
+                 <shiro:hasPermission name="defect-add">
+                     <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addDefect()">添加不良类别</button>
+                 </shiro:hasPermission>
+             </div>
+         </script>
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addDefect()">添加不良类别</button>
         <table id="defectList" lay-filter="defectTable"></table>
 
         <script type="text/html" id="statusTpl">
@@ -37,10 +43,15 @@
             {{#  } }}
         </script>
 
-        <script type="text/html" id="optBar">
-            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        </script>
+         <script type="text/html" id="optBar">
+             <shiro:hasPermission name="defect-edit">
+                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+             </shiro:hasPermission>
+             <shiro:hasPermission name="defect-del">
+                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+             </shiro:hasPermission>
+         </script>
+
 	 </div>
 	 <!--添加或编辑不良类别-->
     <div id="setDefect" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
