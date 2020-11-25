@@ -91,6 +91,34 @@ public class kanbanController extends WebController {
 			return mav;
 		}
 		
+		@RequestMapping(value = "/toZzdzkb", method = RequestMethod.GET)
+		@ResponseBody
+		public ModelAndView toZzdzkb(String inType,String liner) {
+			ModelAndView mav = new ModelAndView();
+			String method = "/kanban/toZzdzkb";
+			String methodName = "组长详细电子看板";
+			try {	
+				ApiResponseResult deptList = kanbanService.getCjbgDepList();
+				ApiResponseResult interval =kanbanService.getIntervalTime();
+				ApiResponseResult linerList=kanbanService.getLiner();
+				ApiResponseResult xlpm_data = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner);
+				ApiResponseResult cxdz_data = kanbanService.getCxdzList("","","",this.getIpAddr(),liner);
+				ApiResponseResult cxsc_data = kanbanService.getCxscList("","",liner,this.getIpAddr(),"1");
+				mav.addObject("xlpm_data",xlpm_data);//效率排名看板数据
+				mav.addObject("cxdz_data",cxdz_data);//产线电子看板数据
+				mav.addObject("cxsc_data",cxsc_data);//产线生产数据
+				mav.addObject("linerList",linerList);//组长列表
+				mav.addObject("deptList",deptList);//部门列表
+				mav.addObject("interval",interval);//刷新间隔
+				mav.addObject("inType",inType);//显示类型
+				mav.setViewName("/kanban/zzdzkb");// 返回路径
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("获取组长详细电子看板异常！", e);
+				getSysLogService().error(module,method,methodName,e.toString());
+			}
+			return mav;
+		}
 	
 	//（复数看板）轮播页面
 	@RequestMapping(value = "/toCjkbs", method = RequestMethod.GET)
@@ -609,6 +637,28 @@ public class kanbanController extends WebController {
 			logger.error("获取车间电子看板数据失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取车间电子看板数据失败！");
+		}
+	}
+	@ApiOperation(value = "组长详细电子看板数据", notes = "组长详细电子看板数据", hidden = true)
+	@RequestMapping(value = "/toZzdzkbList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult toZzdzkbList(String class_nos,String taskNo,String deptId,String liner,String sdata,String dep_id) {
+		String method = "/kanban/toZzdzkbList"; 
+		String methodName = "获取组长详细电子看板数据";
+		try {
+			ApiResponseResult xlpm_data = kanbanService.getXlpmList(class_nos, dep_id, sdata,  this.getIpAddr(),liner);
+			ApiResponseResult cxdz_data = kanbanService.getCxdzList(class_nos, dep_id, sdata,this.getIpAddr(),liner);
+			ApiResponseResult cxsc_data = kanbanService.getCxscList(taskNo, deptId, liner,this.getIpAddr(),"1");
+			Map map = new HashMap();
+			map.put("xlpm_data", xlpm_data);
+			map.put("cxdz_data", cxdz_data);
+			map.put("cxsc_data", cxsc_data);
+			return ApiResponseResult.success().data(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取组长详细电子看板数据失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取组长详细电子看板数据失败！");
 		}
 	}
 }
