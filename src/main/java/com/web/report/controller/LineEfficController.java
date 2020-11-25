@@ -42,11 +42,11 @@ public class LineEfficController extends WebController {
 		String method = "report/line_effic/getList";
 		String methodName = "获取各线效率明细报表";String param = "关键字:"+keyword+",日期:"+dates;
 		try {
-			/*String[] date = {"",""};
+			String[] date = {"",""};
 			if(StringUtils.isNotEmpty(dates)){
 				date = dates.split(" - ");
-			}	*/
-			ApiResponseResult result = lineEfficService.getList(keyword,"",dates);
+			}
+			ApiResponseResult result = lineEfficService.getList(keyword,date[0],date[1]);
 			logger.debug("获取获取检验批次报表(FQC)=getCheckBatchReport:");
 //			getSysLogService().success(module, method, methodName, param);
 			return result;
