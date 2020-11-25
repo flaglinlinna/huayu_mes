@@ -22,6 +22,7 @@ $(function() {
 							height : 'full-60',
 							page : true,
 							limit:50,
+							totalRow :true,
 							limits:[50,100,200,500,1000,5000],
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
@@ -54,6 +55,7 @@ $(function() {
 								title : '日期',
 								sort : true,
 									width : 110,
+								totalRowText:"合计"
 							}, {
 								field : 'EMP_CODE',
 								title : '工号',
@@ -73,28 +75,30 @@ $(function() {
 							}, {
 								field : 'ACT_HOURS',
 								title : '正班时数',
-								width : 80,
+								width : 80,totalRow: true
 							}, {
 								field : 'OVERTIME_COMM',
 								title : '平时加班',
-								width : 80,
+								width : 80,totalRow: true
 							},{
 								field : 'OVERTIME_HOLIDAY',
 								title : '假日加班',
-								width : 80,
+								width : 80,totalRow: true
 							},{
 								field : 'OVERTIME_YEAR',
 								title : '法定加班',
-								width : 80,
-							},{
-								field : 'OVERTIME_YEAR',
-								title : '法定加班',
-								width : 80,
-							},{
-								field : 'OVERTIME_YEAR',
-								title : '法定加班',
-								width : 80,
-							}, {
+								width : 80,totalRow: true
+							},
+							// 	{
+							// 	field : 'OVERTIME_YEAR',
+							// 	title : '法定加班',
+							// 	width : 80,totalRow: true
+							// },{
+							// 	field : 'OVERTIME_YEAR',
+							// 	title : '法定加班',
+							// 	width : 80,
+							// },
+								{
 								fixed : 'right',
 								title : '操作',
 								align : 'center',

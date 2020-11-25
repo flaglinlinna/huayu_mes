@@ -15,6 +15,7 @@ $(function() {
 			height:'full-110'//固定表头&full-查询框高度
 				,even:true,//条纹样式
 			data : [],
+			totalRow :true,
 			// height: 'full',
 			page : true,
 			request : {
@@ -44,19 +45,19 @@ $(function() {
 				type : 'numbers'
 			}, {
 				field : 'FDATE',
-				title : '日期',width : 150,sort: true,
+				title : '日期',width : 150,sort: true,totalRowText:"合计"
 			}, {
 				field : 'PROC_NAME',
 				title : '工序名称',width : 130, sort: true
 			},{
 				field : 'QTY_SJ',
-				title : '送检数', width : 130, sort: true
+				title : '送检数', width : 130, sort: true,totalRow: true
 			}, {
 				field : 'QTY_ZC',
-				title : '转出数',width : 130,  sort: true
+				title : '转出数',width : 130,  sort: true,totalRow: true
 			},{
 				field : 'QTY_JY',
-				title : '检验中数',width : 130,sort: true
+				title : '检验中数',width : 130,sort: true,totalRow: true
 			},
 			// 	{
 			// 	field : 'LOT_JYZ',
@@ -65,10 +66,10 @@ $(function() {
 			// },
 				{
 				field : 'QTY_YJ',
-				title : '已检验数', width : 130,sort: true
+				title : '已检验数', width : 130,sort: true,totalRow: true
 			},{
 				field : 'LOT_YJ',
-				title : '已检验批次', width : 130,sort: true
+				title : '已检验批次', width : 130,sort: true,totalRow: true
 			}, {
 				fixed : 'right',
 				title : '操作',

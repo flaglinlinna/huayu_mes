@@ -15,6 +15,7 @@ $(function() {
 			height:'full-80',//固定表头&full-查询框高度
 				even:true,//条纹样式
 			data : [],
+			totalRow :true,
 			//height: 'full',
 			page : false,
 			/*request : {
@@ -45,7 +46,7 @@ $(function() {
 			},
 				{
 					field : 'DEPT_NAME',
-					title : '部门', width : 100,sort: true
+					title : '部门', width : 100,sort: true,totalRowText:"合计"
 				},
 				{
 					field : 'TASK_NO',
@@ -73,32 +74,32 @@ $(function() {
 			},
 				{
 				field : 'QTY_PLAN',
-				title : '计划数量', width : 90
+				title : '计划数量', width : 100,totalRow: true
 			},
 				 {
 				field : 'QTY_LAST',
-				title : '工单余量',width : 90
+				title : '工单余量',width : 100,totalRow: true
 			},{
 				field : 'QTY_DONE',
-				title : '完工数量', width : 90
+				title : '完工数量', width : 90,totalRow: true
 			},{
 				field : 'EMP_NUM',
-				title : '应勤人数',width : 90
+				title : '应勤人数',width : 90,totalRow: true
 			}, {
 				field : 'EMP_ACT',
-				title : '出勤人数', width : 90
+				title : '出勤人数', width : 90,totalRow: true
 			}, {
 				field : 'EMP_ST',
-				title : '标准人力', width : 90
+				title : '标准人力', width : 90,totalRow: true
 			}, {
 				field : 'CAP_ST',
-				title : '标准产能',width : 90
+				title : '标准产能',width : 90,totalRow: true
 			}, {
 				field : 'HOUR_ST',
-				title : '标准工时',width : 90
+				title : '标准工时',width : 90,totalRow: true
 			}, {
 				field : 'HOUR_ACT',
-				title : '实际工时',width : 90
+				title : '实际工时',width : 90,totalRow: true
 			},{
 				field : 'PROD_NO',
 				title : '工单号',width : 120
