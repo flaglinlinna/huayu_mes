@@ -40,9 +40,9 @@ function setTable(kanbanData) {
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
 		html += '<tr><td>' + arr.CHK_DATE + '</td><td>' + arr.PROC_NAME
+				+ '</td><td>' + arr.ITEM_NO + '</td><td>' + arr.ITEM_MODEL
 				+ '</td><td>' + arr.DEPT_NAME + '</td><td>' + arr.LINER_NAME
-				+ '</td><td>' + arr.DEFECT_NAME + '</td><td>' + arr.QTY_PROC
-				+ '</td><td>' + arr.DEFECT_NUM + '</td><td>' + arr.SAMPLE_QTY
+				+ '</td><td>' + arr.DEFECT_NAME + '</td><td>' + arr.FQTY
 				+ '</td></tr>';
 	}
 	// console.log(html)

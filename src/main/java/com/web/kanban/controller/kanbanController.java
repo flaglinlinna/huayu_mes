@@ -90,9 +90,7 @@ public class kanbanController extends WebController {
 			}
 			return mav;
 		}
-	
-	
-	
+		
 	
 	//（复数看板）轮播页面
 	@RequestMapping(value = "/toCjkbs", method = RequestMethod.GET)
