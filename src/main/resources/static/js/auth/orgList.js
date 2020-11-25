@@ -17,6 +17,7 @@ $(function() {
             elem: 'permTable',
             view: 'view',
             data: { rows: permList },
+            order: 'zindex',
             parentid: 'parentId',
             singleSelect: false
         });
