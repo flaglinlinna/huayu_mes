@@ -17,6 +17,7 @@ $(function() {
 			data : [],
 			// height: 'full',
 			page : true,
+			totalRow :true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -40,14 +41,15 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
+			cols : [
+				[
+					{
 				type : 'numbers'
 			},
-			// {type:'checkbox'},
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
+
 			 {
 				field : 'CREATE_DATE',
-				title : '检查日期',width : 110, sort: true,
+				title : '检查日期',width : 110, sort: true,totalRowText:"合计"
 			}, {
 				field : 'CUST_NAME_S',
 				title : '客户',width : 110, sort: true
@@ -76,13 +78,13 @@ $(function() {
 				},
 				{
 				field : 'QTY_PROC',
-				title : '批次数量',width : 100, sort: true
+				title : '批次数量',width : 100, sort: true,totalRow: true
 			}, {
 				field : 'SAMPLE_QTY',
-				title : '抽检数量', width : 100,sort: true
+				title : '抽检数量', width : 100,sort: true,totalRow: true
 			}, {
 				field : 'DEFECT_NUM',
-				title : '不良数', width : 100,sort: true
+				title : '不良数', width : 100,sort: true,totalRow: true
 			}, {
 				field : 'NG_RATE',
 				title : '不良率(%)',width : 120, sort: true

@@ -42,49 +42,79 @@ $(function() {
 			},*/
 			cols : [ [ {
 				type : 'numbers'
-			}, {
-				field : 'CUST_NAME',
-				title : '客户',width : 110, sort: true
+			},
+				{
+					field : 'DEPT_NAME',
+					title : '部门', width : 100,sort: true
+				},
+				{
+					field : 'TASK_NO',
+					title : '制令单号', width : 150,sort: true
+				},
+				{
+					field : 'LINER_NAME',
+					title : '组长',width : 80, sort: true
+				},
+				{
+					field : 'ITEM_NO',
+					title : '物料编码',width : 140,sort: true
+				},
+				{
+					field : 'PROD_DATE',
+					title : '生产日期',width : 150,sort: true
+				},
+				{
+					field : 'CLASS_NO',
+					title : '班次',width : 80,sort: true
+				},
+				{
+				field : 'PRODUCE_STATE',
+				title : '生产状态',width : 90
+			},
+				{
+				field : 'QTY_PLAN',
+				title : '计划数量', width : 90
+			},
+				 {
+				field : 'QTY_LAST',
+				title : '工单余量',width : 90
 			},{
-				field : 'LINER_NAME',
-				title : '组长',width : 80, sort: true
-			}, {
-				field : 'PROD_NO',
-				title : '工单号', width : 120,sort: true
+				field : 'QTY_DONE',
+				title : '完工数量', width : 90
 			},{
-				field : 'ITEM_NO',
-				title : '物料编码',width : 140,sort: true
+				field : 'EMP_NUM',
+				title : '应勤人数',width : 90
 			}, {
-				field : 'ITEM_NAME',
-				title : '物料全称',width : 200, sort: true
-			},{
-				field : '',
-				title : '加工工艺', width : 100
-			},{
-				field : '',
-				title : '工单残',width : 100
+				field : 'EMP_ACT',
+				title : '出勤人数', width : 90
 			}, {
-				field : '',
-				title : '计划生产数量', width : 100,sort: true
+				field : 'EMP_ST',
+				title : '标准人力', width : 90
 			}, {
-				field : '',
-				title : '用人量', width : 100,sort: true
+				field : 'CAP_ST',
+				title : '标准产能',width : 90
 			}, {
-				field : '',
-				title : '产能',width : 90, sort: true
-			}, {
-				field : '',
-				title : '预计工时(H/人)',width : 140, sort: true
-			}, {
-				field : '',
-				title : '实际生产数量', width : 100,sort: true
+				field : 'HOUR_ST',
+				title : '标准工时',width : 90
 			}, {
 				field : 'HOUR_ACT',
-				title : '实际生产工时',width : 120, sort: true
+				title : '实际工时',width : 90
 			},{
-				field : '',
-				title : '备注',width : 120, sort: true
-			}
+				field : 'PROD_NO',
+				title : '工单号',width : 120
+			},
+				{
+					field : 'GROUP_NO',
+					title : '组合',width : 80
+				},
+				{
+					field : 'CUST_NAME',
+					title : '客户名称',width : 120
+				},
+				{
+					field : 'ITEM_NAME',
+					title : '物料全称',width : 150
+				}
 			] ],
 			done : function(res, curr, count) {
 				//localtableFilterIns.reload();

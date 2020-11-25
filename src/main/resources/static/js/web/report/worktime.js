@@ -67,11 +67,19 @@ $(function() {
 								field : 'EMP_NAME',
 								title : '姓名',
 								width : 80,
-							}, {
-								field : 'DEPT_ID',
-								title : '部门',
-								width : 80,
-							}, {
+							},
+								{
+								field : 'DEPT_NAME',
+								title : '一级部门',
+								width : 90,
+							},
+								{
+									field : 'DEPT_NAME1',
+									title : '二级部门',
+									width : 80,
+								},
+
+								{
 								field : 'CLASS_ID',
 								title : '班次',
 								width : 70,
