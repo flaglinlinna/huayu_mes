@@ -15,8 +15,9 @@ $(function() {
 			height:'full-110'//固定表头&full-查询框高度
 				,even:true,//条纹样式
 			data : [],
-			height: 'full',
+			// height: 'full',
 			page : true,
+			totalRow :true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -45,25 +46,26 @@ $(function() {
 			}, {
 				field : 'FDATE',
 				title : '检验日期',width : 150,sort: true,
+				totalRowText:"合计"
 			}, {
 				field : 'PROC_NAME',
 				title : '工序名称',width : 130, sort: true
 			},{
 				field : 'QTY_OK',
-				title : '合格数', width : 130, sort: true
+				title : '合格数', width : 130, sort: true,totalRow: true
 			}, {
 				field : 'LOT_OK',
-				title : '合格批次',width : 130,  sort: true
+				title : '合格批次',width : 130,  sort: true,totalRow: true
 			},{
 				field : 'QTY_NG',
-				title : '不合格数',width : 130,sort: true
+				title : '不合格数',width : 130,sort: true,totalRow: true
 			}, {
 				field : 'LOT_NG',
 				title : '不合格批次',
-				width : 130, sort: true
+				width : 130, sort: true,totalRow: true
 			},{
 				field : 'QTY_SJ',
-				title : '送检数', width : 130,sort: true
+				title : '送检数', width : 130,sort: true,totalRow: true
 			}, {
 				fixed : 'right',
 				title : '操作',

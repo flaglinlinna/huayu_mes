@@ -23,7 +23,7 @@
                     <th>负责人</th>
                     <th>联系电话</th>
                     <th>在职人数</th>
-                    <!--<th>优先级</th>-->
+                    <th>优先级</th>
                     <th style="width:140px;">操作</th>
                 </tr>
                 </thead>
@@ -37,7 +37,7 @@
                     <td>{{r.leadBy==null?'':r.leadBy}}</td>
                     <td>{{r.mobile==null?'':r.mobile}}</td>
                     <td>{{r.empNum==null?'':r.empNum}}</td>
-                    <!--<td>{{r.zindex}}</td>-->
+                    <td>{{r.zindex}}</td>
                     <td><a class="layui-btn layui-btn-primary layui-btn-xs" onclick="edit('{{r.id}}',0);">编辑</a>
                         <a class="layui-btn layui-btn-xs" onclick="addPerm('{{r.id}}',1)">添加子节点</a>
                         <a class="layui-btn layui-btn-danger layui-btn-xs" onclick="del('{{r.id}}','{{r.orgName}}')">删除</a>

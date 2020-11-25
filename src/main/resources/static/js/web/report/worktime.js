@@ -21,6 +21,7 @@ $(function() {
 							data : [],
 							height : 'full-60',
 							page : true,
+							totalRow :true,
 							limit:50,
 							limits:[50,100,200,500,1000,5000],
 							request : {
@@ -53,7 +54,8 @@ $(function() {
 								field : 'ISERROR',
 								title : '是否异常',
 								width : 80,
-								templet:'#statusTpl'	
+								templet:'#statusTpl'
+								,totalRowText:"合计"
 							}, {
 								field : 'ATT_DATE',
 								title : '日期',
@@ -67,11 +69,19 @@ $(function() {
 								field : 'EMP_NAME',
 								title : '姓名',
 								width : 80,
-							}, {
-								field : 'DEPT_ID',
-								title : '部门',
-								width : 80,
-							}, {
+							},
+								{
+								field : 'DEPT_NAME',
+								title : '一级部门',
+								width : 90,
+							},
+								{
+									field : 'DEPT_NAME1',
+									title : '二级部门',
+									width : 80,
+								},
+
+								{
 								field : 'CLASS_ID',
 								title : '班次',
 								width : 70,
@@ -88,27 +98,30 @@ $(function() {
 								field : 'ACT_HOURS',
 								title : '正班时数',
 								width : 80,
+								totalRow: true
 							}, {
 								field : 'OVERTIME_COMM',
 								title : '平时加班',
-								width : 80,
+								width : 80,totalRow: true
 							},{
 								field : 'OVERTIME_HOLIDAY',
 								title : '假日加班',
-								width : 80,
+								width : 80,totalRow: true
 							},{
 								field : 'OVERTIME_YEAR',
 								title : '法定加班',
-								width : 80,
-							},{
-								field : 'OVERTIME_YEAR',
-								title : '法定加班',
-								width : 80,
-							},{
-								field : 'OVERTIME_YEAR',
-								title : '法定加班',
-								width : 80,
-							}, {
+								width : 80,totalRow: true
+							},
+							// 	{
+							// 	field : 'OVERTIME_YEAR',
+							// 	title : '法定加班',
+							// 	width : 80,
+							// },{
+							// 	field : 'OVERTIME_YEAR',
+							// 	title : '法定加班',
+							// 	width : 80,
+							// },
+								{
 								fixed : 'right',
 								title : '操作',
 								align : 'center',

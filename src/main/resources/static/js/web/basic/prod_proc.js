@@ -10,7 +10,7 @@ $(function() {
 			elem : '#client_procList',
 			url : context + '/base/prodproc/getList',
 			method : 'get' // 默认：get请求
-			,
+			, toolbar: '#toolbar',
 			cellMinWidth : 80,
 			height: 'full-110'
 			,even:true,//条纹样式

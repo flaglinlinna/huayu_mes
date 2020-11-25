@@ -16,6 +16,7 @@ $(function() {
 				,even:true,//条纹样式
 			data : [],
 			//height: 'full',
+			totalRow :true,
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -47,7 +48,7 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			 {
 				field : 'LINER_NAME',
-				title : '组长',width : 80, sort: true,
+				title : '组长',width : 80, sort: true,totalRowText:"合计"
 			}, {
 				field : 'TASK_NO',
 				title : '制令单',width : 160, sort: true
@@ -75,23 +76,23 @@ $(function() {
 				title : '机型',width : 100, sort: true
 			}, {
 				field : 'QUANTITY',
-				title : '投料/产出/送检/检验数(PCS)', width : 200,sort: true
+				title : '投料/产出/送检/检验数(PCS)', width : 200,sort: true,totalRow: true
 			}, {
 				field : 'SAMPLE_QTY',
-				title : '抽检总数(PCS)',width : 120, sort: true
+				title : '抽检总数(PCS)',width : 120, sort: true,totalRow: true
 			}, {
 				field : 'QTY_PROC',
-				title : '产出/中转送检/检验总数(PCS)',width : 220, sort: true
+				title : '产出/中转送检/检验总数(PCS)',width : 220, sort: true,totalRow: true
 			}, {
 				field : 'QTY_DONE',
-				title : '抽检合格数(PCS)',width : 120, sort: true
+				title : '抽检合格数(PCS)',width : 120, sort: true,totalRow: true
 			}, {
 					field : 'CHK_RESULT',
 					title : '检验结果',width : 120, sort: true
 				},
 				{
 				field : 'DEFECT_NUM',
-				title : '抽检不良数(PCS)',width : 120, sort: true
+				title : '抽检不良数(PCS)',width : 120, sort: true,totalRow: true
 			}, {
 					field : 'ITEM_NAME',
 					title : '物料名称',width : 150, sort: true
@@ -207,7 +208,8 @@ function getReport(params) {
 	     done: function(res1, curr, count){
                pageCurr=curr;
            }
-	}) 
+	})
+	localtableFilterIns.reload();
 
 }
 

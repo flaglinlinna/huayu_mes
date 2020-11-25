@@ -24,8 +24,18 @@
 					</div>
 				</div>
         </form>
-			<button class="layui-btn layui-btn-sm layui-btn-normal"
-				onclick="addProc('')">新增产品工艺</button>
+			<hr class="layui-bg-black"/>
+			<script type="text/html" id="toolbar">
+				<div class="layui-btn-container layui-inline">
+					<shiro:hasPermission name="prodProc-add">
+						<button class="layui-btn layui-btn-sm layui-btn-normal"
+								onclick="addProc('')">新增产品工艺</button>
+					</shiro:hasPermission>
+				</div>
+			</script>
+
+			<!--<button class="layui-btn layui-btn-sm layui-btn-normal"-->
+				<!--onclick="addProc('')">新增产品工艺</button>-->
 			<table id="client_procList" lay-filter="client_procTable"></table>
               <script type="text/html" id="statusTpl">
                     {{# if(d.jobAttr==1){ }}
@@ -35,16 +45,18 @@
                     {{#  } }}
               </script>
               <script type="text/html" id="moveBar">
-  <a class="layui-btn layui-btn-xs" lay-event="moveUp"><i class="layui-icon layui-icon-up"></i>上移</a>
-  <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="moveDown"><i class="layui-icon layui-icon-down"></i>下移</a>
-	</script>
+  	<a class="layui-btn layui-btn-xs" lay-event="moveUp"><i class="layui-icon layui-icon-up"></i>上移</a>
+  	<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="moveDown"><i class="layui-icon layui-icon-down"></i>下移</a>
+				</script>
 			<script type="text/html" id="add_statusTpl">
             <input type="checkbox" name="jobAttr" value="1" lay-skin="primary" lay-filter="isAddStatusTpl"  />
         </script>
 
 			<script type="text/html" id="optBar">
+				<shiro:hasPermission name="prodProc-del">
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        </script>
+				</shiro:hasPermission>
+       		 </script>
 		</div>
 		<!--添加或编辑工艺流程-->
 		<div id="setClientProc" class="layer_self_wrap"
