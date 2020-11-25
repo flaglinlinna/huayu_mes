@@ -65,7 +65,7 @@ $(function() {
 							}, {
 								field : 'ITEM_NO',
 								title : '物料',
-								width : 130,
+								width : 150,
 							}, {
 								field : 'LINER_ID',
 								title : '组长',
@@ -123,7 +123,7 @@ $(function() {
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
 							},
 							parseData : function(res) {
-							//	console.log(res)
+								console.log(res)
 								if (!res.result) {
 									return {
 										"count" : 0,
@@ -143,11 +143,16 @@ $(function() {
 							},
 							cols : [ [ {
 								type : 'numbers'
-							},
-							 {
+							}, {
 								field : 'TASK_NO',
-								title : '制令单',width : 200,
+								title : '制令单',width : 150,
 								sort : true
+							},{
+								field : 'EMP_NAME',
+								title : '姓名',width : 90,sort : true
+							},{
+								field : 'EMP_CODE',
+								title : '工号',width : 80,sort : true
 							}, {
 								field : 'ACT_HOURS',
 								title : '正班时数',
@@ -311,7 +316,7 @@ function getReport(params) {
 	     url:context+'/report/worktime_m/getList',
         where:params,
 	     done: function(res1, curr, count){
-	    	 console.log(res1)
+	    	// console.log(res1)
               pageCurr=curr;
           }
 	}) 
@@ -320,11 +325,15 @@ function getReport(params) {
 function getDetail(param){
 	CoreUtil.sendAjax("/report/worktime_m/getListDetail", JSON.stringify(param),
 			function(data) {
-		 console.log(data)
+		 console.log(data.data)
 				if (data.result) {
 					if (data.result) {
 						tableIns1.reload({
-							data : data.data
+							data : data.data.rows,
+							done: function(res1, curr, count){
+						    	  //console.log(res1)
+					              pageCurr=curr;
+					          }
 						});
 						openData("查看明细")
 					} else {
