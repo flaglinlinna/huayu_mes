@@ -2,9 +2,11 @@
  * 员工信息管理
  */
 var pageCurr;
+var employeeId;
+var employeeName;
 $(function() {
-	layui.use([ 'form', 'table' ,'laydate'], function() {
-		var table = layui.table, form = layui.form,laydate = layui.laydate;
+	layui.use([ 'form', 'table' ,'laydate','upload'], function() {
+		var table = layui.table, form = layui.form,laydate = layui.laydate,upload = layui.upload;
 		layui.form.render('select');
 		tableIns = table.render({
 			elem : '#employeeList',
@@ -92,12 +94,14 @@ $(function() {
 				field : 'createDate',
 				title : '添加时间',
 				width:150
-			}/*, {
+			}
+			, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
 				toolbar : '#optBar'
-			}*/ ] ],
+			}
+			] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
@@ -109,6 +113,46 @@ $(function() {
 				pageCurr = curr;
 			}
 		});
+
+		var uploadInst = upload.render({
+			elem: '#upload2'
+			,url: context + "/base/employee/uploadImg" //改成您自己的上传接口
+			,before: function(obj){
+				//预读本地文件示例，不支持ie8
+				this.data = {
+					employeeId: function(){
+							return  employeeId;
+						},
+					employeeName:function(){
+						return  employeeName;
+					},
+				},
+				obj.preview(function(index, file, result){
+					$('#demo1').attr('src', result); //图片链接（base64）
+				});
+			}
+			,done: function(res){
+				//如果上传失败
+				if(res.code > 0){
+					return layer.msg('上传失败');
+				}else {
+					layer.msg('上传成功',function (index) {
+						layer.close(index);
+					});
+				}
+				//上传成功
+			}
+			,error: function(){
+				//演示失败状态，并实现重传
+				var demoText = $('#demoText');
+				demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+				demoText.find('.demo-reload').on('click', function(){
+					uploadInst.upload();
+				});
+			}
+		});
+
+
 		form.on('switch(isStatusTpl)', function(obj) {//修改员工状态
 			//console.log(obj, this.value, this.name, obj.elem.checked);
 			//setStatus(obj, this.value, this.name, obj.elem.checked);//此功能取消
@@ -122,6 +166,8 @@ $(function() {
 			} else if (obj.event === 'edit') {
 				// 编辑
 				getEmployee(data, data.id);
+			} else  if(obj.event === 'uploadImg'){
+				uploadImg(data.id,data.empName)
 			}
 		});
 		// 监听提交
@@ -235,6 +281,24 @@ $(function() {
 	});
 
 });
+
+function uploadImg(id,title) {
+	employeeId = id,
+	employeeName = title;
+	var index = layer.open({
+		type : 1,
+		title : "上传"+title+"的图片",
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#fileDiv'),
+		end : function() {
+			// cleanEmployee();
+		}
+	});
+	layer.full(index);
+}
 
 // 新增编辑弹出框
 function openEmployee(id, title) {

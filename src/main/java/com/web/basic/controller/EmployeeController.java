@@ -2,6 +2,9 @@ package com.web.basic.controller;
 
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
+import com.system.file.entity.FsFile;
+import com.system.file.service.FileService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -20,6 +23,7 @@ import com.web.basic.service.EmployeeService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.multipart.MultipartFile;
 
 @Api(description = "员工信息模块")
 @CrossOrigin
@@ -33,6 +37,9 @@ public class EmployeeController extends WebController{
 
 	 @Autowired
 	 private EmployeeService employeeService;
+
+	@Autowired
+	private FileService fileService;
 	 
 	 @ApiOperation(value = "员工基础信息表结构", notes = "员工基础信息表结构"+Employee.TABLE_NAME)
 	    @RequestMapping(value = "/getEmployee", method = RequestMethod.GET)
@@ -164,7 +171,8 @@ public class EmployeeController extends WebController{
 	            return ApiResponseResult.failure("设置在职/离职失败！");
 	        }
 	    }
-		
+
+
 		@ApiOperation(value = "同步员工信息", notes = "同步员工信息", hidden = true)
 	    @RequestMapping(value = "/getUpdateData", method = RequestMethod.POST)
 	    @ResponseBody
@@ -182,5 +190,27 @@ public class EmployeeController extends WebController{
 	            return ApiResponseResult.failure("同步员工信息失败！");
 	        }
 	    }
+
+	@ApiOperation(value = "员工图片上传", notes = "员工图片上传", hidden = true)
+	@RequestMapping(value = "/uploadImg", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult uploadImg(Integer employeeId, String employeeName, MultipartFile file) throws Exception{
+		String method = "base/employee/uploadImg";String methodName ="员工图片上传";
+		try{
+			FsFile fsFile = new FsFile();
+			ApiResponseResult url =  fileService.upload(fsFile, file);
+			fsFile = (FsFile)url.getData();
+			String imgUrl = fsFile.getBsFilePath()+ fsFile.getBsFileName();
+			ApiResponseResult result = employeeService.updateImgUrl(employeeId,employeeName,imgUrl);
+			logger.debug("员工图片上传 uploadImg:");
+//			getSysLogService().success(module,method, methodName, null);
+			return result;
+		}catch (Exception e){
+			e.printStackTrace();
+			logger.error("员工图片上传失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("员工图片上传失败！");
+		}
+	}
 
 }

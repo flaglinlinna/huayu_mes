@@ -172,16 +172,17 @@ public class OnlineStaffController extends WebController{
 	    @ResponseBody
 	    public ApiResponseResult deleteMain(@RequestBody Map<String, Object> params){
 	        String method = "produce/online/deleteMain";String methodName ="删除上线人员记录信息";
-	        long id = Long.parseLong(params.get("id").toString()) ;
+//	        long id = Long.parseLong(params.get("id").toString()) ;
+			String ids = params.get("id").toString() ;
 	        try{
-	            ApiResponseResult result = onlineStaffService.deleteMain(id);
+	            ApiResponseResult result = onlineStaffService.deleteMain(ids);
 	            logger.debug("删除上线人员记录信息=deleteMain:");
-	            getSysLogService().success(module,method, methodName, "id:"+id);
+	            getSysLogService().success(module,method, methodName, "id:"+ids);
 	            return result;
 	        }catch (Exception e){
 	            e.printStackTrace();
 	            logger.error("删除上线人员记录信息失败！", e);
-	            getSysLogService().error(module,method, methodName,"id:"+id+ e.toString());
+	            getSysLogService().error(module,method, methodName,"id:"+ids+ e.toString());
 	            return ApiResponseResult.failure("获取上线人员记录信息失败！");
 	        }
 	    }

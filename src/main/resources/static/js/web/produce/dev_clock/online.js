@@ -18,6 +18,7 @@ $(function() {
 									cellMinWidth : 80,
 									height:'full-80'//固定表头&full-查询框高度
 									,even:true,//条纹样式
+									toolbar: '#toolbar', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 									page : true,
 									request : {
 										pageName : 'page',// 页码的参数名称，默认：page
@@ -37,11 +38,12 @@ $(function() {
 									cols : [ [
 											{
 												type : 'numbers'
-											}
+											},
+										{type:'checkbox' },
 											// ,{field:'id', title:'ID',
 											// width:80, unresize:true,
 											// sort:true}
-											,
+
 											{
 												field : 'taskNo',
 												title : '制令单号',
@@ -122,7 +124,9 @@ $(function() {
 							},
 							cols : [ [ {
 								type : 'numbers'
-							}, {
+							},
+								// {type:'checkbox' },
+								{
 								field : 'EMP_CODE',
 								title : '员工工号',
 								width : 195
@@ -156,12 +160,34 @@ $(function() {
 						  elem: '#workDate',
 						  type: 'date' //默认，可不填
 						});
+
+						//头工具栏事件
+						table.on('toolbar(onlineTable)', function(obj){
+							var checkStatus = table.checkStatus(obj.config.id);
+							switch(obj.event){
+								case 'doDelete':
+									var data = checkStatus.data;
+									console.log(data)
+									if(data.length == 0){
+										layer.msg("请先勾选数据!");
+									}else{
+										var id="";
+										for(var i = 0; i < data.length; i++) {
+											id += data[i].id+",";
+											console.log(data[i])
+										}
+										//批量删除
+										delOnlineAll(id);
+									}
+									break;
+							};
+						});
+
 						
 						// 监听工具条
 						table.on('tool(onlineTable)', function(obj) {
 							var data = obj.data;
 							if (obj.event === 'del') {
-								
 								// 删除
 								 delOnlineStaff(data, data.id, data.taskNo);
 							} else if (obj.event === 'edit') {
@@ -176,7 +202,6 @@ $(function() {
 								// 删除
 								 delVice(data,  data.EMP_NAME);
 								//console.log(data)
-							
 							}
 						});
 
@@ -361,6 +386,59 @@ function delVice(obj,  name) {
 							}
 						}
 					});
+		});
+	}
+}
+//批量删除主表信息
+function delOnlineAll(id){
+	if (id != null) {
+		var param = {
+			"id":id
+		};
+		layer.confirm('您确定要删除选中的记录吗？', {
+			btn : [ '确认', '返回' ]
+			// 按钮
+		}, function() {
+			CoreUtil.sendAjax("/produce/online/deleteMain",
+				JSON.stringify(param), function(data) {
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("删除成功！", function() {
+								layer.closeAll();
+								loadAll()
+							});
+						} else {
+							layer.alert(data);
+						}
+					}
+				});
+		});
+	}
+}
+function delOnlineStaff(obj, id, name){
+	if (id != null) {
+		var param = {
+			"id":id
+		};
+		layer.confirm('您确定要删除制令单 ' + name + ' 的记录吗？', {
+			btn : [ '确认', '返回' ]
+			// 按钮
+		}, function() {
+			CoreUtil.sendAjax("/produce/online/deleteMain",
+				JSON.stringify(param), function(data) {
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("删除成功！", function() {
+								layer.closeAll();
+								loadAll()
+							});
+						} else {
+							layer.alert(data);
+						}
+					}
+				});
 		});
 	}
 }
