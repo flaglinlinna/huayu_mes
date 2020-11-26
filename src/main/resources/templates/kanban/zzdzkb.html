@@ -1,0 +1,421 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>组长详细电子看板</title>
+<script type="text/javascript" src="../kanban/js/jquery.js"></script>
+<link rel="stylesheet" href="../kanban/css/comon0.css">
+<link rel="stylesheet" href="../layui/css/layui.css"
+	th:href="@{/layui/css/layui.css}"></link>
+<script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
+
+</head>
+<style>
+.tablebox-cxdz {
+	height: 130px;
+	overflow: hidden;
+	position: relative;
+	margin: 10px auto;
+}
+
+.tbl-header-cxdz {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
+
+.tbl-body-cxdz {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.tablebox-cxdz table {
+	width: 100%;
+}
+
+.tablebox-cxdz table th, .tablebox-cxdz table td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+.tablebox-cxdz table tr th {
+	background: #333399;
+	cursor: pointer;
+}
+
+/*****cxsc*******/
+.tablebox {
+	height: 340px;
+	overflow: hidden;
+	position: relative;
+	margin: 10px auto;
+}
+
+.tbl-header {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
+
+.tbl-body {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.tablebox table {
+	width: 100%;
+}
+
+.tablebox table th, .tablebox table td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px;
+	color: #FFFFFF;
+}
+
+.tablebox table tr th {
+	background: #333399;
+	cursor: pointer;
+}
+
+/*****cxsc******/
+table, table tr td {
+	border: 2px solid #333399;
+	border-collapse: collapse;
+}
+
+th {
+	font-size: 22px;
+	font-weight: normal;
+}
+
+td {
+	font-size: 22px;
+}
+
+.boxall_table{
+    padding: .1rem .2rem .1rem .15rem;
+}
+.line {
+	position: absolute;
+	left: .3rem;
+	top: 0;
+	line-height: .75rem;
+}
+
+h2 {
+	text-align: center;
+	margin-top: 2px;
+	color: #ffffff;
+	font-size: 26px;
+	font-weight: bold;
+}
+
+h1 {
+	font-weight: bold;
+}
+
+ul {
+	list-style: none;
+	margin-top: 2px;
+}
+
+li {
+	line-height: 35px;
+	color: #ffffff;
+	font-size: 22px;
+}
+
+.list_ul {
+	margin-left: 20px;
+}
+
+.span_li {
+	margin-left: 10px;
+	color: #ffffff;
+	font-size: 22px;
+}
+/*显示排名数字样式*/
+.num_h1 {
+	text-align: center;
+	margin: 0 auto;
+	color: #ffffff;
+	font-size: 130px;
+}
+/*照片栏样式*/
+.pic_div {
+	width: 33%;
+	float: left;
+}
+ .redword
+   {
+    color: #FF0033;
+     }
+</style>
+<script>
+	$(window).load(function(){  
+             $(".loading").fadeOut()
+            })  
+			
+/****/
+$(document).ready(function(){
+	var whei=$(window).width()
+	$("html").css({fontSize:whei/20})
+	$(window).resize(function(){
+		var whei=$(window).width()
+	 $("html").css({fontSize:whei/20})
+});
+	
+	});
+	</script>
+
+<script type="text/javascript" src="../kanban/js/echarts.min.js"></script>
+<body>
+	<header class="header left" id="inSearch">
+		<div class="total_chose_box">
+			<div style="height: 5px;"></div>
+			<span class="chose_tltle">请选择班次：</span> <select class="year_chose"
+				id="class_select">
+				<option value="999">当日看板</option>
+				<option value="998">24小时看板</option>
+				<option value="1">白班</option>
+				<option value="2">晚班</option>
+			</select>
+			<!-- <span class="chose_tltle">请选择部门：</span> <select class="year_chose"
+				id="dep_select">
+			</select> -->
+			<span class="chose_tltle">请选择组长：</span> <select class="year_chose"
+				id="liner_select">
+
+			</select> <span class="chose_tltle">请选择日期：</span> <input type="text"
+				name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+				autocomplete="off" class="chose_text_in ">
+			<!-- <input class="chose_text_in"> -->
+			<button class="chose_enter" id="searchBtn">确定</button>
+		</div>
+	</header>
+	<div class="head">
+		<div class="line">
+			<span style="color: #FFFFFF; font-size: 16px;" id="showLine"></span>
+		</div>
+		<h1 id="title">产线效率排名</h1>
+		<div class="weather">
+			<span id="showTime"></span>
+		</div>
+
+		<script>
+var t = null;
+    t = setTimeout(time,1000);//開始运行
+    function time()
+    {
+       clearTimeout(t);//清除定时器
+       dt = new Date();
+		var y=dt.getFullYear();
+		var mt=dt.getMonth()+1;
+		var day=dt.getDate();
+       var h=dt.getHours();//获取时
+       var m=dt.getMinutes();//获取分
+       var s=dt.getSeconds();//获取秒
+       document.getElementById("showTime").innerHTML = y+"年"+mt+"月"+day+"日  "+h+"时"+m+"分"+s+"秒";
+       t = setTimeout(time,1000); //设定定时器，循环运行     
+    } 
+
+</script>
+	</div>
+	<div class="mainbox">
+		<div class="boxall" style="height: 230px">
+			<div id="echart1"
+				style="width: 20%; height: 220px; float: left; color: #ffffff; padding: 5px;">
+				<div style="width: 50%; height: 220px; float: left; color: #ffffff;">
+					<h2>产线信息</h2>
+					<ul class="list_ul">
+						<li>组长:<span class="span_li" id="liner"></span></li>
+						<!-- <li>排名:<span class="span_li" id="rownum"></span></li> -->
+						<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
+						<li>打卡总数:<span class="span_li" id="card_all"></span></li>
+						<li>已分配数:<span class="span_li" id="card_ass"></span></li>
+						<li>未分配数:<span class="span_li" id="card_unass"></span></li>
+					</ul>
+				</div>
+				<div style="width: 50%; height: 220px; float: left; color: #ffffff;">
+					<h2>排名</h2>
+					<div
+						style="display: flex; flex-direction: column; justify-content: center;">
+						<h1 class="num_h1" id="rownum"></h1>
+					</div>
+				</div>
+			</div>
+			<div id="picture" style="width: 39%; height: 220px; float: left;">
+				<div class="pic_div">
+					<div style="margin-top: 5%;" align="center">
+						<img src="../images/portrait.png" id="img1"  style="width: 55%;">
+					</div>
+					<div align="center">
+						<ul>
+							<li><span id="name1"></span>姓名：</li>
+							<li><span id="job1"></span>职务：</li>
+						</ul>
+					</div>
+				</div>
+				<div class="pic_div">
+					<div style="margin-top: 5%;" align="center">
+						<img src="../images/portrait.png"  id="img2" style="width: 55%;">
+					</div>
+					<div align="center">
+						<ul>
+							<li><span id="name2"></span>姓名：</li>
+							<li><span id="job2"></span>职务：</li>
+						</ul>
+					</div>
+				</div>
+				<div class="pic_div">
+					<div style="margin-top: 5%;" align="center">
+						<img src="../images/portrait.png" id="img3" style="width: 55%;">
+					</div>
+					<div align="center">
+						<ul>
+							<li><span id="name3"></span>姓名：</li>
+							<li><span id="job3"></span>职务：</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="echart2" style="width: 21%; height: 220px; float: left;"></div>
+			<div id="echart3" style="width: 20%; height: 220px; float: left;"></div>
+			<div class="boxfoot"></div>
+		</div>
+		<div class="boxall boxall_table">
+			<div class="tablebox-cxdz">
+				<div class="tbl-header-cxdz">
+					<table>
+						<thead>
+							<tr>
+								<th>工单号</th>
+								<th>物料编码</th>
+								<th>排产日期</th>
+								<th>排产班次</th>
+								<th>计划数量</th>
+								<th>完工数量</th>
+								<th>标准人力</th>
+								<th>标准产能</th>
+								<th>标准工时</th>
+								<th>实际工时</th>
+								<th>异常工时</th>
+								<th>完工率</th>
+								<th>效率</th>
+							</tr>
+						</thead>
+						<tbody style="opacity: 0;" id="tableCxdzList1"></tbody>
+					</table>
+				</div>
+
+				<div class="tbl-body-cxdz">
+					<table>
+						<thead>
+							<tr>
+								<th>工单号</th>
+								<th>物料编码</th>
+								<th>排产日期</th>
+								<th>排产班次</th>
+								<th>计划数量</th>
+								<th>完工数量</th>
+								<th>标准产能</th>
+								<th>标准人力</th>
+								<th>标准工时</th>
+								<th>实际工时</th>
+								<th>异常工时</th>
+								<th>完工率</th>
+								<th>效率</th>
+							</tr>
+						</thead>
+						<tbody id="tableCxdzList">
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="boxfoot"></div>
+		</div>
+		<div class="boxall boxall_table">
+			<div class="tablebox">
+				<div class="tbl-header">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 30%;">时间段</th>
+								<th>投入数量</th>
+								<th>完工数量</th>
+								<th>良品数</th>
+								<th>不良品数</th>
+								<th>良品率</th>
+							</tr>
+						</thead>
+						<tbody style="opacity: 0;" id="tableCxscList1"></tbody>
+					</table>
+				</div>
+
+				<div class="tbl-body">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 30%;">时间段</th>
+								<th>投入数量</th>
+								<th>完工数量</th>
+								<th>良品数</th>
+								<th>不良品数</th>
+								<th>良品率</th>
+							</tr>
+						</thead>
+						<tbody id="tableCxscList">
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="boxfoot"></div>
+		</div>
+		<script th:inline="javascript">
+        var xlpm_data=[[${xlpm_data}]];
+        var cxdz_data=[[${cxdz_data}]];
+        var cxsc_data=[[${cxsc_data}]];
+        
+        var deptList=[[${deptList}]];
+        var linerList=[[${linerList}]];
+        var interval=[[${interval}]];
+        var rotation=[[${rotation}]];
+        var nowLiner=[[${nowLiner}]];
+        var inType=[[${inType}]];
+    </script>
+		<script th:inline="javascript">
+    var context = [[@{/}]];
+    	layui.use([ 'laydate'], function(){
+    		  var layer = layui.layer
+    		  ,laydate = layui.laydate;
+    		  
+    		  //日期
+    		  laydate.render({
+    		    elem: '#date',
+    		    trigger:'click'
+    		   // range: true
+    		  });
+    	});
+    	if(inType=="apk"){
+    	 $("#inSearch").hide();
+    	}
+    </script>
+		<script src="/kanban/scripts/zzdzkb.js"
+			th:src="@{/kanban/scripts/zzdzkb.js}"></script>
+
+	</div>
+</body>
+</html>

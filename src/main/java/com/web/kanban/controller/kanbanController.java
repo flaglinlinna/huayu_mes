@@ -103,13 +103,17 @@ public class kanbanController extends WebController {
 				ApiResponseResult linerList=kanbanService.getLiner();
 				ApiResponseResult xlpm_data = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner);
 				ApiResponseResult cxdz_data = kanbanService.getCxdzList("","","",this.getIpAddr(),liner);
+				//制令单切换单独获取
 				ApiResponseResult cxsc_data = kanbanService.getCxscList("","",liner,this.getIpAddr(),"1");
+				ApiResponseResult rotation =kanbanService.getRotationTime();
 				mav.addObject("xlpm_data",xlpm_data);//效率排名看板数据
 				mav.addObject("cxdz_data",cxdz_data);//产线电子看板数据
 				mav.addObject("cxsc_data",cxsc_data);//产线生产数据
 				mav.addObject("linerList",linerList);//组长列表
+				mav.addObject("nowLiner",liner);//当前被选择的组长
 				mav.addObject("deptList",deptList);//部门列表
-				mav.addObject("interval",interval);//刷新间隔
+				mav.addObject("rotation",rotation);//整体页面刷新间隔
+				mav.addObject("interval",interval);//制令单刷新间隔
 				mav.addObject("inType",inType);//显示类型
 				mav.setViewName("/kanban/zzdzkb");// 返回路径
 			} catch (Exception e) {
@@ -648,11 +652,12 @@ public class kanbanController extends WebController {
 		try {
 			ApiResponseResult xlpm_data = kanbanService.getXlpmList(class_nos, dep_id, sdata,  this.getIpAddr(),liner);
 			ApiResponseResult cxdz_data = kanbanService.getCxdzList(class_nos, dep_id, sdata,this.getIpAddr(),liner);
-			ApiResponseResult cxsc_data = kanbanService.getCxscList(taskNo, deptId, liner,this.getIpAddr(),"1");
+			//制令单切换他处获取
+			//ApiResponseResult cxsc_data = kanbanService.getCxscList(taskNo, deptId, liner,this.getIpAddr(),"1");
 			Map map = new HashMap();
 			map.put("xlpm_data", xlpm_data);
 			map.put("cxdz_data", cxdz_data);
-			map.put("cxsc_data", cxsc_data);
+			//map.put("cxsc_data", cxsc_data);
 			return ApiResponseResult.success().data(map);
 		} catch (Exception e) {
 			e.printStackTrace();

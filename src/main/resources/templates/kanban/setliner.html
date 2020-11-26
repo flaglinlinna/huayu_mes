@@ -40,9 +40,6 @@ li {
 				<!-- <a href="/report/kanban01.html?line=XK019" data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button">看板1</a> -->
 			</div>
 		</div>
-
-
-
 		<div data-role="footer" data-theme="b" data-position="fixed">
 			<h4>&copy;朋乐信息</h4>
 		</div>
@@ -69,6 +66,13 @@ li {
 	}else if(pageType=="cxsc"){
 		res.data.forEach(function(element) {
 	       	var html = '<a href=/kanban/toCxsc?liner='+element.LEAD_BY+'&inType=apk'+
+	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
+	       			element.LEAD_BY+'</a>'
+	       	$("#list").append(html)	
+	       	 }); 
+	}else if(pageType=="zzdzkb"){
+		res.data.forEach(function(element) {
+	       	var html = '<a href=/kanban/toZzdzkb?liner='+element.LEAD_BY+'&inType=apk'+
 	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
 	       			element.LEAD_BY+'</a>'
 	       	$("#list").append(html)	
