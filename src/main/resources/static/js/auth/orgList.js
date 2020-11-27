@@ -25,8 +25,8 @@ $(function() {
 
     });
     //操作
-    layui.use('form', function(){
-        var form = layui.form;
+    layui.use([ 'form', 'table','tableSelect' ], function(){
+        var form = layui.form,table = layui.table,tableSelect = layui.tableSelect;
         //监听提交
         form.on('submit(permSubmit)', function(data){
             //校验 TODO
@@ -50,6 +50,64 @@ $(function() {
             return false;
         });
         form.render();
+        
+        tableSelect = tableSelect.render({// 返工扫描-制令单
+			elem : '#leadBy',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '试着搜索',
+			table : {
+				url:  context +'/base/linerImg/getEmpCode',
+				method : 'get',
+				cols : [ [
+					{ type: 'radio' },
+					, {
+						field : 'ID',
+						title : 'id',
+						width : 0,hide:true
+					}, {
+						field : 'EMP_NAME',
+						title : '员工姓名',
+						width : 150
+					}, {
+						field : 'DEPT_NAME',
+						title : '部门名称',
+						width : 150
+					},
+					{
+						field : 'EMP_CODE',
+						title : '员工编号',
+						width : 150
+					},
+				] ],
+				page : true,
+				request : {
+					pageName : 'page', // 页码的参数名称，默认：page
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+				parseData : function(res) {
+					if(res.result){
+						// 可进行数据操作
+						return {
+							"count" : res.data.Total,
+							"msg" : res.msg,
+							"data" : res.data.Rows,
+							"code" : res.status
+							// code值为200表示成功
+						}
+					}
+
+				},
+			},
+			done : function(elem, data) {
+				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+				form.val("permForm", {
+					"leadById":data.data[0].ID,
+					"leadBy":data.data[0].EMP_NAME
+				});
+				form.render();// 重新渲染
+			}
+		});
     });
 
 });
@@ -59,17 +117,8 @@ function edit(id,type){
         $("#type").val(type);
         $("#id").val(id);
         $.get(context+"/sysOrg/getPerm",{"id":id},function(data) {
-             console.log(data);
             if(data.result){
-            	/*
-                $("input[name='orgName']").val(data.data.orgName);
-                $("input[name='orgCode']").val(data.data.orgCode);
-                $("input[name='pageUrl']").val(data.data.pageUrl);
-                $("input[name='zindex']").val(data.data.zindex);
-                $("textarea[name='description']").text(data.data.description);
-                $("#parentId").val(data.data.parentId);*/
-            	
-            	
+            	console.log(data)
             	$("#orgName").val(data.data.orgName);
                 $("#orgCode").val(data.data.orgCode);
                 $("#leadBy").val(data.data.leadBy);
@@ -79,6 +128,7 @@ function edit(id,type){
                 $("#empNum").val(data.data.empNum);
                 $("#description").val(data.data.description);
                 $("#parentId").val(data.data.parentId);
+                $("#leadById").val(data.data.leadById);
                 
                data.data.istype==0?$("input[name='menuType']").val(0).checked:$("input[name='menuType']").val(1).checked;
               
@@ -88,7 +138,7 @@ function edit(id,type){
                     fixed:false,
                     resize :false,
                     shadeClose: true,
-                    area: ['500px', '500px'],
+                    area: ['650px', '500px'],
                     content:$('#updatePerm'),
                     end:function(){
                         location.reload();

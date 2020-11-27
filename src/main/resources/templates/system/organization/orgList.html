@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='组织管理'"></head>
+<head th:include="layout :: htmlhead" th:with="title='组织管理'">
+<style type="text/css">
+.org-form-label{
+width:140px !important;
+z-index:100;
+} 
+ 
+</style>
+</head>
+
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <!--头-->
@@ -50,20 +59,20 @@
     </div>
 
     <!--添加或编辑权限-->
-    <div id="updatePerm" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
-        <form id="permForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+    <div id="updatePerm" class="layer_self_wrap " style="width:750px;display:none;margin-left: 10px;">
+        <form id="permForm" lay-filter="permForm"  class=" layui-form layui-form-pane org-from" method="post" action="" style="margin-top: 20px;">
             <input id="type" type="hidden" name="type"/>
             <input id="parentId" type="hidden" name="parentId"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label layui-required">组织编码</label>
-                <div class="layui-input-inline">
+                <label class="layui-form-label layui-required " style="width:140px;">组织编码</label>
+                <div class="layui-input-inline " style="width:400px;">
                     <input name="orgCode" id="orgCode" placeholder="请输入组织编码" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label layui-required">组织名称</label>
-                <div class="layui-input-inline">
+                <label class="layui-form-label layui-required " style="width:140px;">组织名称</label>
+                <div class="layui-input-inline  " style="width:400px;">
                     <input name="orgName" id="orgName" placeholder="请输入组织名称" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
@@ -82,22 +91,25 @@
             </div> -->
 
             <div class="layui-form-item">
-                <label class="layui-form-label layui-required">负责人</label>
-                <div class="layui-input-inline">
-                    <input name="leadBy" id="leadBy" lay-verify="required" placeholder="请输入负责人"
-                     autocomplete="off" class="layui-input" type="text"/>
+                <label class="layui-form-label layui-required" style="width:140px;">负责人</label>
+                <div class="layui-input-inline  " style="width:400px;">
+                <input id="leadById" type="hidden" name="leadById"/>
+                    <!-- <input name="leadBy" id="leadBy" lay-verify="required" placeholder="请输入负责人"
+                     autocomplete="off" class="layui-input" type="text"/> -->
+                     <input type="text" name="leadBy" id="leadBy" placeholder="请选择"
+								autocomplete="off" class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">负责人联系方式</label>
-                <div class="layui-input-inline">
+                <label class="layui-form-label  " style="width:140px;">负责人联系方式</label>
+                <div class="layui-input-inline  " style="width:400px;">
                     <input name="mobile" id="mobile" lautocomplete="off" placeholder="请输入负责人联系方式"
                      class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label layui-required">优先级</label>
-                <div class="layui-input-inline">
+                <label class="layui-form-label layui-required " style="width:140px;">优先级</label>
+                <div class="layui-input-inline  " style="width:400px;">
                     <input name="zindex" id="zindex" autocomplete="off" class="layui-input" type="text" 
                     onkeyup="this.value=this.value.replace(/\D/g,'')" lay-verify="required"
                     	placeholder="请输入优先级"   onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
@@ -105,8 +117,8 @@
                 <div class="layui-form-mid layui-word-aux">请填写大于0的整数数字</div>
             </div>
              <div class="layui-form-item">
-                <label class="layui-form-label layui-required">在职人数</label>
-                <div class="layui-input-inline">
+                <label class="layui-form-label layui-required " style="width:140px;">在职人数</label>
+                <div class="layui-input-inline  " style="width:400px;">
                     <input name="empNum" placeholder="请输入在职人数" id="empNum" autocomplete="off" lay-verify="required"
                      class="layui-input" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
                            onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
@@ -114,10 +126,10 @@
                 <div class="layui-form-mid layui-word-aux">请填写大于0的整数数字</div>
             </div>
 
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">描述</label>
-                <div class="layui-input-block">
-                    <textarea name="description" id="description" placeholder="请输入内容" class="layui-textarea"></textarea>
+            <div class="layui-form-item">
+                <label class="layui-form-label " style="width:140px;">描述</label>
+                <div class="layui-input-inline  " style="width:400px;" >
+                    <textarea name="description" id="description" placeholder="请输入内容" class="layui-textarea org-form-inline"></textarea>
                 </div>
             </div>
             <div class="layui-form-item">
