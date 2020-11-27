@@ -8,8 +8,9 @@
             grid.id = option.id || 'id';
             grid.parentid = option.parentid || 'parentid';
             grid.root = option.root || 0;
-            grid.order = option.order || grid.id;
-            grid.asc = option.asc || 'asc';
+            //grid.order = option.order || grid.id;
+            //grid.order = option.order || grid.parentid || grid.zindex;//排序字段
+            //grid.asc = option.asc || 'asc';
             grid.loadRow = option.loadRow;  //懒加载
 
             //grid.onCollapse = option.onCollapse;

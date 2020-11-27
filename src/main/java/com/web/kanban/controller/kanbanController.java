@@ -43,6 +43,18 @@ public class kanbanController extends WebController {
 
 	@Autowired
 	private KanbanService kanbanService;
+	
+	@RequestMapping(value = "/toText", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toText() {
+		String method = "/kanban/toText";
+		String methodName = "看板text";
+		ModelAndView mav = new ModelAndView();
+		// mav.addObject("pname", p);
+		mav.setViewName("/kanban/text");// 返回路径
+		return mav;
+	}
+	
 
 	@RequestMapping(value = "/toDemo", method = RequestMethod.GET)
 	@ResponseBody

@@ -18,6 +18,7 @@ import com.system.permission.entity.SysPermission;
  */
 public interface SysPermissionDao extends CrudRepository<SysPermission, Long>, JpaSpecificationExecutor<SysPermission> {
 
+	
 	public List<SysPermission> findByDelFlag(Integer delFlag);
 
 	public List<SysPermission> findByDelFlagAndParentId(Integer delFlag,long pid);
@@ -49,5 +50,8 @@ public interface SysPermissionDao extends CrudRepository<SysPermission, Long>, J
     
     @Query(value = "select t from SysPermission t left join RolePermissionMap m on m.permitId = t.id where m.roleId =:roleId and t.istype=1 and t.delFlag = 0 and m.delFlag = 0")
    	public List<SysPermission> findPermsByRoleIdAndBtn(@Param("roleId") Long roleId);
+    
+    @Query(value = "select t from SysPermission t where  t.delFlag=0 order by t.parentId,t.zindex ")
+   	public List<SysPermission> findOrderByZindex();
     
 }

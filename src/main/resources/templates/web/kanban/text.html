@@ -1,0 +1,179 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>看板demo</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <!-- <link rel="stylesheet" href="../layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="../layuiadmin/style/admin.css" media="all"> -->
+  <script src="../js/login/jquery.min.js"></script>  
+  <script src="../layuiadmin/lib/extend/echarts.js"></script>
+</head>
+<style >
+	body{
+	text-align: center;
+	color:#000;
+	margin-top:5px;
+	}
+	
+    .div_border{
+    border:1px solid #696969;
+    border-bottom:none;
+    overflow: auto;
+    white-space: nowrap;
+    white-space: nowrap;
+    white-spance: nowrap;
+    }
+   .table {
+             border: 1px solid #696969;
+                 border-top: none;
+                 text-align: center;
+                 width:100%;
+                 border-collapse:collapse;
+         }
+         .table td,
+         .table th {
+             border: 1px solid #696969;
+             padding: 0;
+             background-repeat: repeat-x;
+             height: 30px;
+         }
+.table tr {
+height: 30px;
+    border-top: 1px solid #0e94ea;
+    /* background: rgba(14, 148, 234, 0.1); */
+}
+
+.table thead tr {
+    background: rgba(14, 148, 234, 0.4);
+}
+
+.table tr.bg-color {
+    background: rgba(14, 148, 234, 0.2);
+}
+h1{margin:0;}
+h2{margin:0;color:#696969}
+h3{margin:0;}
+.tip-title{
+    width: 100%;
+    height: 48px;
+    color:#ffffff;
+    overflow: hidden;
+    box-sizing: border-box;
+    border-bottom: 1px solid #052025;
+}
+.container {
+width:1348px;
+height: 220px;
+border:1px solid #696969;
+
+overflow: auto;
+white-space: nowrap;
+
+ scrollbar-width: none; /* firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  overflow-x: hidden;
+  overflow-y: hidden;
+  
+}
+.lable {
+width: 300px;height: 260px;
+display: inline-block;
+
+}
+
+.lable_tile{
+height:30px;
+line-height:30px;
+ background: rgba(14, 148, 234, 0.4)
+}
+li {list-style-type:none;}
+ul{padding-left:5px;}
+</style> 
+<body>
+ <div>
+    <a href="hd://D:\hd.reg">
+        执行可执行文件
+    </a>
+</div>
+  
+  <script type="text/javascript">
+
+     function getChart(){
+    	 option = {
+    			    tooltip: {
+    			        trigger: 'axis',
+    			        axisPointer: {
+    			            type: 'cross',
+    			            crossStyle: {
+    			                color: '#999'
+    			            }
+    			        }
+    			    },
+    			    legend: {
+    			        data: ['蒸发量', '降水量', '平均温度']
+    			    },
+    			    xAxis: [
+    			        {
+    			            type: 'category',
+    			            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    			            axisPointer: {
+    			                type: 'shadow'
+    			            }
+    			        }
+    			    ],
+    			    yAxis: [
+    			        {
+    			            type: 'value',
+    			            name: '水量',
+    			            min: 0,
+    			            max: 250,
+    			            interval: 50,
+    			            axisLabel: {
+    			                formatter: '{value} ml'
+    			            }
+    			        },
+    			        {
+    			            type: 'value',
+    			            name: '温度',
+    			            min: 0,
+    			            max: 25,
+    			            interval: 5,
+    			            axisLabel: {
+    			                formatter: '{value} °C'
+    			            }
+    			        }
+    			    ],
+    			    series: [
+    			        {
+    			            name: '蒸发量',
+    			            type: 'bar',
+    			            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+    			        },
+    			        {
+    			            name: '降水量',
+    			            type: 'bar',
+    			            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+    			        },
+    			        {
+    			            name: '平均温度',
+    			            type: 'line',
+    			            yAxisIndex: 1,
+    			            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+    			        }
+    			    ]
+    			};
+     } 
+     //创建echarts对象在哪个节点上
+     var myCharts1 = echarts.init(document.getElementById('chartDiv'));
+	   //将选项对象赋值给echarts对象。
+	  myCharts1.setOption(option,true);
+  </script>
+
+</body>
+</html>
+

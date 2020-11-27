@@ -35,7 +35,9 @@ public class SysPermissionImpl implements SysPermissionService {
 		/*Iterable<SysPermission> geted = sysPermissionDao.findAll();
 		List<SysPermission> list =  Lists.newArrayList(geted);
 		return list;*/
-		return sysPermissionDao.findByDelFlag(0);
+		//return sysPermissionDao.findByDelFlag(0);
+		
+		return sysPermissionDao.findOrderByZindex();
 	}
 
 	@Override
