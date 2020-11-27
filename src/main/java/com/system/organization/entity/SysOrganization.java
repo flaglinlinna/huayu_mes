@@ -72,6 +72,12 @@ public class SysOrganization extends BaseEntity{
     @ApiModelProperty(name = "leadBy", value = "负责人")
     @Column(length = 30)
     protected String leadBy;
+    
+    /**
+     * 负责人Id
+     */
+    @ApiModelProperty(name = "leadById", value = "负责人")
+    protected Long leadById;
 
 
     /**
@@ -176,6 +182,15 @@ public class SysOrganization extends BaseEntity{
 	public void setEmpNum(Integer empNum) {
 		this.empNum = empNum;
 	}
+	
+
+	public Long getLeadById() {
+		return leadById;
+	}
+
+	public void setLeadById(Long leadById) {
+		this.leadById = leadById;
+	}
 
 	@Override
 	public String toString() {
@@ -193,4 +208,5 @@ public class SysOrganization extends BaseEntity{
 		sb.append(";");
 		return sb.toString();
 	}
+	
 }

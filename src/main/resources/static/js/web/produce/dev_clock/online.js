@@ -1,7 +1,7 @@
 /**
  * 上线人员信息管理
  */
-var pageCurr;
+var pageCurr,tableEmp;
 var set_main_id;
 $(function() {
 	layui
@@ -125,7 +125,7 @@ $(function() {
 							cols : [ [ {
 								type : 'numbers'
 							},
-								// {type:'checkbox' },
+								 {type:'checkbox' },
 								{
 								field : 'EMP_CODE',
 								title : '员工工号',
@@ -167,14 +167,13 @@ $(function() {
 							switch(obj.event){
 								case 'doDelete':
 									var data = checkStatus.data;
-									console.log(data)
+									//console.log(data)
 									if(data.length == 0){
 										layer.msg("请先勾选数据!");
 									}else{
 										var id="";
 										for(var i = 0; i < data.length; i++) {
 											id += data[i].id+",";
-											console.log(data[i])
 										}
 										//批量删除
 										delOnlineAll(id);
@@ -200,8 +199,17 @@ $(function() {
 							var data = obj.data;
 							if (obj.event === 'del') {
 								// 删除
-								 delVice(data,  data.EMP_NAME);
-								//console.log(data)
+								 //delVice(data,  data.EMP_NAME);
+								 var param = {
+											"taskNo":data.TASK_NO ,
+											"viceId":data.ID
+										};
+										layer.confirm('您确定要删除上线人员 ' + data.EMP_NAME + ' 吗？', {
+											btn : [ '确认', '返回' ]
+										// 按钮
+										}, function() {
+											delVice(param);
+										});
 							}
 						});
 
@@ -282,6 +290,28 @@ $(function() {
 												layer.alert("操作请求错误，请您稍后再试");
 											});
 						}
+						
+						$(document).on('click','#del_all_btn',function(){
+							var checkStatus = table.checkStatus('empList').data;   
+							if(checkStatus.length == 0){
+								layer.msg("请先勾选数据!");
+							}else{
+								var id="";
+								for(var i = 0; i < checkStatus.length; i++) {
+									id += checkStatus[i].ID+",";
+								}
+								 var param = {
+									"taskNo":checkStatus[0].TASK_NO ,
+									"viceId":id
+								};
+								layer.confirm('您确定要批量删除上线人员吗？', {
+									btn : [ '确认', '返回' ]
+								// 按钮
+								}, function() {
+									delVice(param);
+								});
+							}
+						});
 					});
 });
 // 新增编辑弹出框
@@ -361,8 +391,8 @@ function editMain(obj){
 }
 
 //删除副表
-function delVice(obj,  name) {
-	if (id != null) {
+function delVice(param) {
+/*	if (id != null) {
 		var param = {
 			"taskNo":obj.TASK_NO ,
 			"devId":obj.DEV_ID ,
@@ -388,6 +418,20 @@ function delVice(obj,  name) {
 					});
 		});
 	}
+	*/
+	CoreUtil.sendAjax("/produce/online/deleteVice",
+			JSON.stringify(param), function(data) {
+				if (isLogin(data)) {
+					if (data.result == true) {
+						// 回调弹框
+						layer.alert("删除成功！");
+						getMainInfo(set_main_id)
+					} else {
+						layer.alert(data.msg);
+					}
+				}
+			});
+ 
 }
 //批量删除主表信息
 function delOnlineAll(id){
@@ -484,4 +528,8 @@ function loadAll() {
 function cleanOnlineStaff() {
 	$('#onlineForm')[0].reset();
 	layui.form.render();// 必须写
+}
+//
+function delAllEdite(){
+	
 }

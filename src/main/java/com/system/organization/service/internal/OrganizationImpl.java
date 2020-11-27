@@ -82,6 +82,7 @@ public class OrganizationImpl implements OrganizationService {
 			s.setZindex(perm.getZindex());
 			s.setDescription(perm.getDescription());
 			s.setLastupdateDate(new Date());
+			s.setLeadById(perm.getParentId());
 			organizationDao.save(s);
 		}
 		

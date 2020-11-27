@@ -141,10 +141,10 @@ public class OnlineStafflmpl implements OnlineStaffService {
 	 * ***/
 	
 	@Override
-	public ApiResponseResult deleteVice(String taskNo,String devId,String empId,String viceId,String beginTime) throws Exception {
+	public ApiResponseResult deleteVice(String taskNo,String viceId) throws Exception {
 		List<Object> list = deleteVicePrc(UserUtil.getSessionUser().getCompany() + "",
 				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "",
-				taskNo,devId,empId,viceId,beginTime);
+				taskNo,"","",viceId,"");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

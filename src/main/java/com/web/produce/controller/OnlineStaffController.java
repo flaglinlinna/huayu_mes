@@ -150,12 +150,12 @@ public class OnlineStaffController extends WebController{
 	        try{
 
 	        	String taskNo=params.get("taskNo")==null?"":params.get("taskNo").toString();
-	        	String devId=params.get("devId")==null?"":params.get("devId").toString();
-	        	String empId=params.get("empId")==null?"":params.get("empId").toString();
+	        	//String devId=params.get("devId")==null?"":params.get("devId").toString();
+	        	//String empId=params.get("empId")==null?"":params.get("empId").toString();
 	        	String viceId=params.get("viceId")==null?"":params.get("viceId").toString();
-	        	String beginTime=params.get("beginTime")==null?"":params.get("beginTime").toString();
-				String logInfo = "指令单号:"+taskNo+";设备ID:"+devId+";员工ID"+empId+";从表id"+devId+";上线时间"+beginTime;
-	            ApiResponseResult result = onlineStaffService.deleteVice(taskNo,devId, empId,viceId,beginTime);
+	        	//String beginTime=params.get("beginTime")==null?"":params.get("beginTime").toString();
+				String logInfo = "指令单号:"+taskNo+";从表id"+viceId;
+	            ApiResponseResult result = onlineStaffService.deleteVice(taskNo,viceId);
 	            logger.debug("删除副表记录=deleteVice:");
 	            getSysLogService().success(module,method, methodName, logInfo);
 	            return result;

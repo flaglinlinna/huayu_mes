@@ -231,11 +231,11 @@ public class ReportPrcUtils {
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(8));
-				result.add(cs.getString(9));
+				result.add(cs.getInt(9));
+				result.add(cs.getString(10));
 				if (cs.getString(9).toString().equals("0")) {
 					// 游标处理
-					result.add(cs.getString(10));
+					result.add(cs.getString(8));
 					ResultSet rs = (ResultSet) cs.getObject(11);
 
 					try {
