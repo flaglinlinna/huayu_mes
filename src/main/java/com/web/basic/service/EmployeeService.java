@@ -23,7 +23,7 @@ public interface EmployeeService {
 
 	public ApiResponseResult getUpdateData() throws Exception;//同步数据
 
-	public ApiResponseResult updateImgUrl(Integer ID,String name,String url) throws Exception;//同步数据
+	public ApiResponseResult updateImgUrl(Integer ID,String url) throws Exception;//同步数据
 
 
 }

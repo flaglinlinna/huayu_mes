@@ -110,6 +110,11 @@ public class Employee extends BaseEntity {
 	    @ApiModelProperty(name = "empStatus", value = "状态")
 	    @Column(length = 1)
 	    protected Integer empStatus = 1;
+	    
+	    
+	    @ApiModelProperty(name="empImg",value="照片路径")
+		@Column(length = 200)
+		protected String empImg;
 
 		public String getEmpCode() {
 			return empCode;
@@ -197,6 +202,15 @@ public class Employee extends BaseEntity {
 
 	public void setFingerNum(String fingerNum) {
 		this.fingerNum = fingerNum;
+	}
+	
+
+	public String getEmpImg() {
+		return empImg;
+	}
+
+	public void setEmpImg(String empImg) {
+		this.empImg = empImg;
 	}
 
 	@Override

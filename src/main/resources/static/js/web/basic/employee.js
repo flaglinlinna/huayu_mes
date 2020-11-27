@@ -4,6 +4,7 @@
 var pageCurr;
 var employeeId;
 var employeeName;
+var employeeCode;
 $(function() {
 	layui.use([ 'form', 'table' ,'laydate','upload'], function() {
 		var table = layui.table, form = layui.form,laydate = layui.laydate,upload = layui.upload;
@@ -123,8 +124,8 @@ $(function() {
 					employeeId: function(){
 							return  employeeId;
 						},
-					employeeName:function(){
-						return  employeeName;
+					employeeCode:function(){
+						return  employeeCode;
 					},
 				},
 				obj.preview(function(index, file, result){
@@ -134,11 +135,15 @@ $(function() {
 			,done: function(res){
 				//如果上传失败
 				if(res.code > 0){
-					return layer.msg('上传失败');
-				}else {
-					layer.msg('上传成功',function (index) {
-						layer.close(index);
+					var demoText = $('#demoText');
+					demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+					demoText.find('.demo-reload').on('click', function(){
+						uploadInst.upload();
 					});
+				}else {
+					var demoText = $('#demoText');
+					demoText.html('<span style="color: #FF5722;">上传成功</span>');
+					
 				}
 				//上传成功
 			}
@@ -167,6 +172,18 @@ $(function() {
 				// 编辑
 				getEmployee(data, data.id);
 			} else  if(obj.event === 'uploadImg'){
+				console.log(data)
+				employeeCode = data.empCode;
+				var demoText = $('#demoText');
+				if(data.empImg){
+					//已经上传
+					$('#demo1').attr('src',  context + "/base/employee/viewByUrl?empImg="+data.empImg);
+					demoText.html('<a id="del_file_btn" class="layui-btn layui-btn-xs layui-btn-danger">删除</a>');
+				}else{
+					$('#demo1').attr('src', "");
+					demoText.html('<span style="color: #FF5722;">请上传照片</span>');
+				}
+				
 				uploadImg(data.id,data.empName)
 			}
 		});
@@ -209,6 +226,9 @@ $(function() {
 			}*/
 		});
 		
+		$(document).on('click','#del_file_btn',function(){
+			alert(employeeId)
+		});
 		
 		// 编辑员工信息
 		function getEmployee(obj, id) {
@@ -236,48 +256,6 @@ $(function() {
 				layer.alert("操作请求错误，请您稍后再试");
 			});
 		}
-		// 设置员工状态
-		/*function setStatus(obj, id, name, checked) {
-			var empStatus = checked ? 1 : 0;
-			var deaprtisStatus = checked ? "在职" : "离职";
-			// 正常/禁用
-			layer.confirm('您确定要把员工：' + name + '状态设置为' + deaprtisStatus + '状态吗？',
-					{
-						btn1 : function(index) {
-							var param = {
-								"id" : id,
-								"empStatus" : empStatus
-							};
-							CoreUtil.sendAjax("/base/employee/doStatus", JSON
-									.stringify(param), function(data) {
-								if (data.result) {
-									layer.alert("操作成功", function() {
-										layer.closeAll();
-										loadAll();
-									});
-								} else {
-									layer.alert(data.msg, function() {
-										layer.closeAll();
-									});
-								}
-							}, "POST", false, function(res) {
-								layer.alert("操作请求错误，请您稍后再试", function() {
-									layer.closeAll();
-								});
-							});
-						},
-						btn2 : function() {
-							obj.elem.checked = empStatus;
-							form.render();
-							layer.closeAll();
-						},
-						cancel : function() {
-							obj.elem.checked = empStatus;
-							form.render();
-							layer.closeAll();
-						}
-					});
-		}*/
 	});
 
 });
@@ -298,6 +276,7 @@ function uploadImg(id,title) {
 		}
 	});
 	layer.full(index);
+	
 }
 
 // 新增编辑弹出框

@@ -56,24 +56,15 @@
 
 
 		<div id="fileDiv" class="layer_self_wrap" style="display:none;">
-			<form id="fileForm" class="layui-form" method="post" action="" style="margin-top: 10px;">
-				<!--<input id="employeeId" type="hidden" name="employeeId"/>-->
-				<!--<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload2" style="margin-left:15px;">-->
-					<!--<i class="layui-icon layui-icon-upload-circle"></i>上传-->
-				<!--</button>-->
-				<!--<div class="layui-form-item"><div class="layui-card-header">图片</div>-->
-					<!--<div style="position:relative;padding:10px 30px;width:90%">-->
-						<!--<div class="exc-area" id="filelist2">-->
-						<!--</div>-->
-					<!--</div>-->
-				<!--</div>-->
+			<form id="fileForm" lay-filter="fileForm" class="layui-form" method="post" action="" style="margin-top: 10px;margin-left: 20px;">
+
 				<div class="layui-upload">
-					<button type="button" class="layui-btn" id="upload2">上传图片</button>
+					<button type="button" class="layui-btn layui-btn-sm" id="upload2">上传图片</button>
 					<div class="layui-upload-list">
 						<img class="layui-upload-img" id="demo1">
 						<p id="demoText"></p>
 					</div>
-				</div>
+				</div>  
 			</form>
 		</div>
 

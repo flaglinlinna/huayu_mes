@@ -1,6 +1,7 @@
 package com.system.file.controller;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -87,6 +88,24 @@ public class FileController extends WebController {
 	public void view(@RequestParam(value = "fsFileId", required = true) Long fsFileId) {
 		try {
 			fileService.onlineView(fsFileId, getResponse());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	@ApiOperation(value="图片在线预览", notes="图片在线预览")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "fsFileId", value = "文件ID", required = true, dataType = "Long", paramType="query",defaultValue=""),
+	})
+	@RequestMapping(value = "/viewByUrl", method = RequestMethod.GET)
+	public void viewByUrl(@RequestParam(value = "url", required = true) String url) {
+		try {
+			if(!StringUtils.isEmpty(url)){
+				String [] sz=url.split("/");
+				String fileName = sz[sz.length-1];
+				fileService.viewByUrl("/url", fileName, getResponse());
+			}
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

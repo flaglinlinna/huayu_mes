@@ -5332,7 +5332,11 @@ body .layui-util-face .layui-layer-content {
         top:5px;
         left:15px;
     }
-   
+.layui-upload-img{
+	width:100px;
+	height:100px;
+	margin:0 10px 10px 0;
+} 
     
     
 

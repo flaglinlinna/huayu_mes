@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.druid.util.StringUtils;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.service.FtpClientService;
 import com.system.file.dao.FsFileDao;
@@ -174,4 +175,71 @@ public class FileImpl  implements FileService {
         fsFileDao.save(fsFile);
         return ApiResponseResult.success("文件删除成功！");
     }
+    
+    public ApiResponseResult uploadByNameAndUrl(String file_name,String url,FsFile fsFile, MultipartFile file) throws Exception {
+        if(null==file || file.isEmpty()) {
+            return ApiResponseResult.failure("上传文件不能为空");
+        }
+        String qmsPath = "/"+url;//env.getProperty("fs.qms.path");
+
+        String path = qmsPath + "/";
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateFileName = file_name;//df.format(new Date()) + "_" + new Random().nextInt(1000);
+
+        try {
+            fsFile.setBsFileSize(file.getSize());
+            if(null==fsFile.getBsContentType()) {
+                fsFile.setBsContentType(file.getContentType());
+            }
+            if(null==file.getOriginalFilename()) {
+                fsFile.setBsFileType("Unknown");
+                return ApiResponseResult.failure("无法识别该文件类型！");
+            }
+
+            String originalFiletype = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
+            fsFile.setBsFileType(originalFiletype);
+
+//            String originalFilename = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf("."));
+            fsFile.setBsName(file.getOriginalFilename());
+            fsFile.setBsFileName(dateFileName + originalFiletype);
+            fsFile.setBsFilePath(path);
+            ApiResponseResult result = ftpClientService.uploadFile(path, dateFileName+fsFile.getBsFileType(), new ByteArrayInputStream(file.getBytes()));
+            if(result.isResult()) {
+                fsFile.setCreateDate(new Date());
+                fsFileDao.save(fsFile);
+                return ApiResponseResult.success("文件上传成功！").data(fsFile);
+            }
+        } catch (IOException e) {
+            logger.error("upload file exception", e);
+        }
+        return ApiResponseResult.failure("上传文件发生异常");
+    }
+
+	@Override
+	public ApiResponseResult viewByUrl(String url,String file_Name, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+        if(StringUtils.isEmpty(url)) {
+            return ApiResponseResult.failure("文件不存在或已被删除");
+        }
+
+        ApiResponseResult result = ftpClientService.download(url, file_Name);
+        try {
+            String fileName = URLEncoder.encode(file_Name, "UTF-8");  //文件名称
+            response.setContentType("image/png");
+            response.addHeader("Content-Disposition", "inline;filename=" + fileName );
+            //response.addHeader("Content-Length", "" + fsFile.getBsFileSize());
+//            if(".png".equals(extName)){
+//                response.setContentType("image/png");
+//            }
+            OutputStream os = response.getOutputStream();
+            byte[] bytes = (byte[]) result.getData();
+            os.write(bytes);
+            os.flush();
+            os.close();
+        } catch (IOException e) {
+            logger.error("download file exception", e);
+        }
+        return null;
+	}
 }

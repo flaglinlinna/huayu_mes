@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.base.control.WebController;
@@ -22,6 +23,8 @@ import com.web.basic.entity.Employee;
 import com.web.basic.service.EmployeeService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -194,14 +197,14 @@ public class EmployeeController extends WebController{
 	@ApiOperation(value = "员工图片上传", notes = "员工图片上传", hidden = true)
 	@RequestMapping(value = "/uploadImg", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult uploadImg(Integer employeeId, String employeeName, MultipartFile file) throws Exception{
+	public ApiResponseResult uploadImg(Integer employeeId, String employeeCode, MultipartFile file) throws Exception{
 		String method = "base/employee/uploadImg";String methodName ="员工图片上传";
 		try{
 			FsFile fsFile = new FsFile();
-			ApiResponseResult url =  fileService.upload(fsFile, file);
+			ApiResponseResult url =  fileService.uploadByNameAndUrl(employeeCode,"user",fsFile, file);
 			fsFile = (FsFile)url.getData();
-			String imgUrl = fsFile.getBsFilePath()+ fsFile.getBsFileName();
-			ApiResponseResult result = employeeService.updateImgUrl(employeeId,employeeName,imgUrl);
+			String imgUrl =  fsFile.getBsFileName();
+			ApiResponseResult result = employeeService.updateImgUrl(employeeId,imgUrl);
 			logger.debug("员工图片上传 uploadImg:");
 //			getSysLogService().success(module,method, methodName, null);
 			return result;
@@ -212,5 +215,25 @@ public class EmployeeController extends WebController{
 			return ApiResponseResult.failure("员工图片上传失败！");
 		}
 	}
+	
+	@ApiOperation(value="图片在线预览", notes="图片在线预览")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "fsFileId", value = "文件ID", required = true, dataType = "Long", paramType="query",defaultValue=""),
+	})
+	@RequestMapping(value = "/viewByUrl", method = RequestMethod.GET)
+	public void viewByUrl(@RequestParam(value = "empImg", required = true) String empImg) {
+		try {
+			if(!StringUtils.isEmpty(empImg)){
+				/*String [] sz=url.split("/");
+				String fileName = sz[sz.length-1];*/
+				fileService.viewByUrl("/user", empImg, getResponse());
+			}
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	
 
 }
