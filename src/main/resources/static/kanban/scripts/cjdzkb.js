@@ -122,16 +122,16 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			x : 80,// 左边距
 			y : 60,// 上边距
 			x2 : 80,// 右边距
-			y2 : 55,// 下边距
+			y2 : 60,// 下边距
 			borderWidth : 10
 		},
 		legend : {
 			//orient: 'vertical',
 	        x:'center',      //可设定图例在左、右、居中
-	        y:'top',   
+	        top:15,   
 			data : [ '计划产量', '达成产量', '完工率' ],
 			textStyle : {
-				fontSize : 20,// 字体大小
+				fontSize : 22,// 字体大小
 				color : '#ffffff'// 字体颜色
 			},
 		},
@@ -146,7 +146,7 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				show : true,
 				textStyle : {
 					color : '#ffffff',
-					fontSize:20,
+					fontSize:22,
 				}
 			},axisLine : {
 				lineStyle : {
@@ -158,7 +158,7 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			type : 'value',
 			name:'(个)',
 			nameTextStyle:{
-				 fontSize :20
+				 fontSize :22
 			 },
 			splitLine : {
 				show : false
@@ -167,7 +167,7 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				//formatter : '{value} ',
 				textStyle : {
 					color : '#ffffff',
-					fontSize : 20,// 字体大小
+					fontSize : 22,// 字体大小
 				}
 			},axisLine : {
 				lineStyle : {
@@ -178,9 +178,9 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			type : 'value',
 			name:'(%)',
 			nameTextStyle:{
-				 fontSize :20
+				 fontSize :22
 			 },
-			fontSize : 20,// 字体大小
+			fontSize : 22,// 字体大小
 			splitLine : {
 				show : false
 			},
@@ -188,7 +188,7 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				//formatter : '{value} %',
 				textStyle : {
 					color : '#ffffff',
-					fontSize : 20,// 字体大小
+					fontSize : 22,// 字体大小
 				}
 			},axisLine : {
 				lineStyle : {
@@ -204,7 +204,7 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				show : true,
 				position : 'top',
 				textStyle : {
-					fontSize : 20,// 字体大小
+					fontSize : 22,// 字体大小
 				}
 			},
 		}, {
@@ -215,7 +215,7 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				show : true,
 				position : 'top',
 				textStyle : {
-					fontSize : 20,// 字体大小
+					fontSize : 22,// 字体大小
 				}
 			},
 		}, {
@@ -228,7 +228,7 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				position : 'top',
 				formatter : '{c}%',
 				textStyle : {
-					fontSize : 20,// 字体大小
+					fontSize : 22,// 字体大小
 				}
 			},
 		} ]
@@ -251,7 +251,7 @@ function getChart2(emp_plan, emp_now, emp_off) {
 			top : "50%",
 			textStyle : {
 				color : "#ffffff",
-				fontSize : 36,
+				fontSize : 52,
 				align : "center"
 			},
 		},
@@ -263,20 +263,21 @@ function getChart2(emp_plan, emp_now, emp_off) {
 				text : "应到人数",
 				textAlign : "center",
 				fill : "#ffffff",
-				fontSize : 20,
+				fontSize : 36,
 				fontWeight : 700
 			}
 		},
 		series : [ {
 			name : '出勤',
 			type : 'pie',
-			radius : [ '60%', '70%' ],
+			radius : [ '60%', '75%' ],
 			avoidLabelOverlap : false,
 			label : {
 				formatter : '{hr|}\n  {b|{b}：}{c} ',
-				borderColor : '#aaa',
-				borderWidth : 1,
-				borderRadius : 4,
+				fontSize : 26,
+				//borderColor : '#aaa',
+				//borderWidth : 1,
+				//borderRadius : 4,
 				rich : {
 					a : {
 						color : '#999',
@@ -286,11 +287,11 @@ function getChart2(emp_plan, emp_now, emp_off) {
 					hr : {
 						borderColor : '#000066',
 						width : '90%',
-						borderWidth : 0.5,
+						//borderWidth : 0.5,
 						height : 0
 					},
 					b : {
-						fontSize : 16,
+						fontSize : 26,
 						lineHeight : 30
 					},
 					per : {
@@ -338,16 +339,16 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			x : 80,// 左边距
 			y : 60,// 上边距
 			x2 : 80,// 右边距
-			y2 : 55,// 下边距
+			y2 : 60,// 下边距
 			borderWidth : 10
 		},
 		legend : {
 			//orient: 'vertical',
 	        x:'center',      //可设定图例在左、右、居中
-	        y:'top',   
+	        top:15,   
 			data : [ '标准工时', '实际工时', '生产效率' ],
 			textStyle : {
-				fontSize : 20,// 字体大小
+				fontSize : 22,// 字体大小
 				color : '#ffffff'// 字体颜色
 			},
 		},
@@ -363,7 +364,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				show : true,
 				textStyle : {
 					color : '#ffffff',
-					fontSize:20
+					fontSize:22
 				}
 			},
 			axisLine : {
@@ -376,7 +377,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			type : 'value',
 			name:'(小时)',
 			nameTextStyle:{
-				 fontSize :20
+				 fontSize :22
 			 },
 			splitLine : {
 				show : false
@@ -385,7 +386,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				formatter : '{value}',
 				textStyle : {
 					color : '#ffffff',
-					fontSize:20
+					fontSize:22
 				}
 			},axisLine : {
 				lineStyle : {
@@ -396,7 +397,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			type : 'value',
 			name:'(%)',
 			nameTextStyle:{
-				 fontSize :20
+				 fontSize :22
 			 },
 			splitLine : {
 				show : false
@@ -405,7 +406,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				formatter : '{value}',
 				textStyle : {
 					color : '#ffffff',
-					fontSize:20
+					fontSize:22
 				}
 			},axisLine : {
 				lineStyle : {
@@ -421,7 +422,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				show : true,
 				position : 'top',
 				textStyle : {
-					fontSize : 20,// 字体大小
+					fontSize : 22,// 字体大小
 				}
 			},
 		}, {
@@ -432,7 +433,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				show : true,
 				position : 'top',
 				textStyle : {
-					fontSize : 20,// 字体大小
+					fontSize : 22,// 字体大小
 				}
 			},
 		}, {
@@ -446,7 +447,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				position : 'top',
 				formatter : '{c}%',
 				textStyle : {
-					fontSize : 20,// 字体大小
+					fontSize : 22,// 字体大小
 				}
 			},
 		} ]

@@ -632,7 +632,113 @@ public class PrcUtils {
         });
         return resultList;
     }
-
+    //在线人员调整-获取待调整人员清单
+    public List getEmpByTaskNoPrc(String company,String facoty,String user_id,
+    		String taskNo, String workDate, PageRequest pageRequest)throws Exception{
+    	List resultList=(List)jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  PRC_MES_TASK_NO_EMP (?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setString(3, user_id);
+                cs.setString(4, taskNo);
+                cs.setString(5, workDate);
+                cs.setInt(6, pageRequest.getPageSize());
+                cs.setInt(7, pageRequest.getPageSize()+1);
+                cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(11, -10);// 
+				return cs;
+			}
+		},new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs)throws SQLException,DataAccessException{
+				List<Object> result = new ArrayList<>();
+				List<Map<String, Object>> l = new ArrayList();
+				cs.execute();
+				result.add(cs.getInt(9));
+				result.add(cs.getString(10));
+				if (cs.getString(9).toString().equals("0")) {
+					result.add(cs.getString(8));
+					// 游标处理
+					ResultSet rs = (ResultSet) cs.getObject(11);
+					try {
+						l = fitMap(rs);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(l);
+				}
+				return result;
+			}
+		});
+    	return resultList;
+    }
+    //人员调整-执行操作
+    public List doTaskNoSwitchPrc(String facoty,String company,String user_id,
+    		String lastTaskNo, String lastLineId, String lastHourType, 
+			String lastClassId,String lastWorkDate, String lastDateEnd, String lastTimeEnd,
+			String newTaskNo, String newLineId,String newHourType, String newClassId,
+			String newWorkDate, String newTimeBegin, String empList,PageRequest pageRequest)throws Exception{
+    	List resultList=(List)jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  PRC_MES_TASK_NO_CHANGE (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setString(3, user_id);
+                cs.setString(4, lastTaskNo);
+                cs.setString(5, lastLineId);
+                cs.setString(6, lastHourType);
+                cs.setString(7, lastClassId);
+                cs.setString(8, lastWorkDate);
+                cs.setString(9, lastDateEnd);
+                cs.setString(10, lastTimeEnd);
+                cs.setString(11, newTaskNo);
+                cs.setString(12, newLineId);
+                cs.setString(13, newHourType);
+                cs.setString(14, newClassId);
+                cs.setString(15, newWorkDate);
+                cs.setString(16, newTimeBegin);
+                cs.setString(17, empList);          
+                cs.setInt(18, pageRequest.getPageSize());
+                cs.setInt(19, pageRequest.getPageSize()+1);
+                cs.registerOutParameter(20, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(21, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(22, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(23, -10);// 
+				return cs;
+			}
+		},new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs)throws SQLException,DataAccessException{
+				List<Object> result = new ArrayList<>();
+				List<Map<String, Object>> l = new ArrayList();
+				cs.execute();
+				result.add(cs.getInt(21));
+				result.add(cs.getString(22));
+				if (cs.getString(21).toString().equals("0")) {
+					result.add(cs.getString(20));
+					// 游标处理
+					ResultSet rs = (ResultSet) cs.getObject(23);
+					try {
+						l = fitMap(rs);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(l);
+				}
+				return result;
+			}
+		});
+    	return resultList;
+    }
+    
+    
     //创建在线返工制令单
     public List getCreateReturnPrc(String company,String facoty,String user_id, String task_no,String item_no,String liner_name,int qty,String pdate,String deptId,String classId) throws Exception {
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
