@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='不良录入'"></head>
+<style th:inline="text">
+.layui-form-label {
+	text-align: right;
+}
+
+.layui-form-switch {
+	margin-top: 0px;
+}
+
+.layui-form-radio {
+	margin: 0px 10px 0 0;
+}
+
+.long-item .layui-form-label {
+	width: 160px;
+}
+
+.long-item .layui-input-block {
+	margin-left: 160px;
+}
+</style>
+<body class="layui-layout-body">
+<div th:replace="audio/fragment/audio :: audio"></div>
+<div th:replace="audio/fragment/saomiao :: saomiao"></div>
+	<div class="layui-layout layui-layout-admin">
+		<!--头-->
+		<!--<div th:replace="fragments/head :: header"></div>-->
+
+<div class="layui-tab layui-tab-card">
+			<ul class="layui-tab-title">
+				<li class="layui-this">在线不良录入</li>
+				<!-- <li>历史查询</li> -->
+			</ul>
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+				
+		<div style="margin: 5px">
+			<div class="layui-collapse" lay-accordion="">
+				<div class="layui-colla-item">
+					<h2 class="layui-colla-title">填写信息</h2>
+					<div class="layui-colla-content layui-show">
+						<form id="itemFrom" class="layui-form layui-form-pane"
+							lay-filter="itemFrom" method="post" action="">
+							<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label layui-required">原制令单号</label>
+								<div class="layui-input-inline" style="width: 200px;">
+									<input type="text" name="last_taskno" placeholder="请选择"
+										autocomplete="off" class="layui-input" readonly="readonly"
+										lay-verify="required" id="last_taskno">
+								</div>
+								<label class="layui-form-label">物料编码</label>
+								<div class="layui-input-inline" style="width: 140px;">
+									<input id="last_itemcode" name="last_itemcode" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>	
+								<label class="layui-form-label">组长</label>
+								<div class="layui-input-inline" style="width: 80px;">
+									<input id="last_liner" name="last_liner" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>				
+								</div>
+							</div>
+							<div class="layui-form-item">	
+								<label class="layui-form-label">客户简称</label>
+								<div class="layui-input-inline" style="width: 150px;">
+									<input id="last_customer" name="last_customer" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>
+								<label class="layui-form-label">生产日期</label>
+								<div class="layui-input-inline">
+									<input id="last_workDate" name="last_workDate" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>
+							</div>
+							<hr />
+							<div class="layui-form-item">	
+								<label class="layui-form-label layui-required">新制令单号</label>
+								<div class="layui-input-inline" style="width: 200px;">
+									<input type="text" name="new_taskno" placeholder="请选择"
+										autocomplete="off" class="layui-input" readonly="readonly"
+										lay-verify="required" id="new_taskno">
+								</div>
+								<label class="layui-form-label">物料编码</label>
+								<div class="layui-input-inline" style="width: 140px;">
+									<input id="new_itemcode" name="new_itemcode" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>	
+								<label class="layui-form-label">组长</label>
+								<div class="layui-input-inline" style="width: 80px;">
+									<input id="new_liner" name="new_liner" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>				
+								</div>		
+							</div>
+							<div class="layui-form-item">	
+								<label class="layui-form-label">客户简称</label>
+								<div class="layui-input-inline" style="width: 150px;">
+									<input id="last_customer" name="last_customer" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>
+								<label class="layui-form-label">生产日期</label>
+								<div class="layui-input-inline">
+									<input id="last_workDate" name="last_workDate" autocomplete="off"
+										style="background: #efefef;" class="layui-input" disabled
+										type="text" />
+								</div>
+							</div>
+							
+							
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									
+									
+									<!-- <shiro:hasPermission name="bad_entry:save">
+									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
+										lay-filter="saveDef">保存不良</button>
+									</shiro:hasPermission>-->
+									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
+										lay-filter="saveDef">保存不良</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title">
+				<legend style="font-size: 14px;">历史列表</legend>
+			</fieldset>
+			<table id="colTable" lay-filter="colTable" style="margin-top: -20px;"></table>
+			<script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+		</div>
+		
+		</div>
+				<div class="layui-tab-item">
+					<div style="margin: 5px">
+					<!--查询面板-->
+        <div th:replace="web/fragment/search_history :: searcher"></div> 
+						<fieldset class="layui-elem-field layui-field-title">
+							<legend style="font-size: 14px;">条码列表</legend>
+						</fieldset>
+						<table id="hcolTable" lay-filter="hcolTable"
+							style="margin-top: -20px;"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:src="@{/js/web/produce/bad_entry/switch_staff.js}"
+			src="/js/web/produce/bad_entry/switch_staff.js"></script>
+	</div>
+</body>
+</html>

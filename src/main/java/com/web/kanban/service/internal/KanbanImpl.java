@@ -70,8 +70,12 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	@Override
 	public ApiResponseResult getScdzList(String class_no, String dep_id, String sdata,  String dev_ip)
 			throws Exception {
-		// TODO Auto-generated method stub
-		List<Object> list = getScdzListPrc("","","",class_no,  dep_id,  sdata,  dev_ip);
+		String user_id = "1";
+		SysUser su = UserUtil.getSessionUser();
+		if(su != null){
+			user_id = su.getId()+"";
+		}
+		List<Object> list = getScdzListPrc("","",user_id,class_no,  dep_id,  sdata,  dev_ip);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

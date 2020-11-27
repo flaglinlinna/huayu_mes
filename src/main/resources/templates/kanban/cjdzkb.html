@@ -10,82 +10,11 @@
 <script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
 </head>
 <style>
-/*
-th, td {
-	text-align: center;
-	vertical-align: middle;
-	padding: 4px;
-	color: #FFFFFF;
-}
-
-table, table tr td {
-	border: 2px solid #333399;
-	border-collapse: collapse;
-}
-
-th {
-	font-size: 16px;
-	font-weight:normal;
-}
-
-td {
-	font-size: 16px;
-}*/
-.tablebox {
-	height: 200px;
-	overflow: hidden;
-	position: relative;
-	margin: 10px auto;
-}
-
-.tbl-header {
-	width: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 999;
-}
-
-.tbl-body {
-	width: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-}
 
 a {
 	color: #FFFFFF;
 }
 
-table, table tr td {
-	border: 2px solid #333399;
-	border-collapse: collapse;
-}
-
-.tablebox table {
-	width: 100%;
-}
-
-.tablebox table th, .tablebox table td {
-	text-align: center;
-	vertical-align: middle;
-	padding: 4px;
-	color: #FFFFFF;
-}
-
-.tablebox table tr th {
-	background: #333399;
-	cursor: pointer;
-}
-
-th {
-	font-size: 16px;
-	font-weight: normal;
-}
-
-td {
-	font-size: 16px;
-}
 
 h1 {
 	font-weight: bold;
@@ -120,26 +49,25 @@ h1 {
 
 .bigword_li {
 	color: #ffffff;
-	font-size: 50px;
-	letter-spacing: 40px;
+	font-size: 55px;
+	letter-spacing: 45px;
 	margin: 0 auto;
 }
 
 .small_ul {
 	list-style: none;
-	margin-left: 15px;
-	margin-top: 35px;
+	margin-top: 45px;
 }
 
 .small_li {
-	line-height: 60px;
+	line-height: 80px;
 	color: #ffffff;
-	font-size: 28px;
+	font-size: 32px;
 	font-weight: bold;
 }
 
 .span_li {
-	margin-left: 15px;
+	margin-left: 10px;
 	color: #ffffff;
 }
 </style>
@@ -184,17 +112,16 @@ $(document).ready(function(){
 	<div class="head">
 		<div class="line">
 			<a href="toScdzDetail?liner=&fieldword=PO_LINE_NUM_NOW"
-				target="_blank"> <span style="color: #FFFFFF; font-size: 20px;"
+				target="_blank"> <span style="color: #FFFFFF; font-size: 24px;margin-right:20px;" 
 				id="showLine"></span></a> <a
 				href="toScdzDetail?liner=&fieldword=PO_LINE_NUM_PLN" target="_blank">
-				<span style="color: #FFFFFF; font-size: 20px;" id="showLine1"></span>
+				<span style="color: #FFFFFF; font-size: 24px;" id="showLine1"></span>
 			</a>
 		</div>
 
 		<h1 id="title">组装二部报工看板</h1>
 		<div class="weather">
-			<!--<img src="picture/weather.png"><span>多云转小雨</span>-->
-			<span id="showTime"></span>
+			<span style="font-size: 24px;" id="showTime"></span>
 		</div>
 
 		<script>
@@ -217,16 +144,16 @@ var t = null;
 </script>
 	</div>
 	<div class="mainbox">
-		<div class="boxall" style="height: 240px">
-			<div id="echart2" style="width: 36%; height: 240px; float: left;"></div>
+		<div class="boxall" style="height: 350px">
+			<div id="echart2" style="width: 36%; height: 350px; float: left;"></div>
 			<div id="sentences" class="bigword_div"
-				style="width: 33%; height: 240px; float: left;">
+				style="width: 33%; height: 350px; float: left;">
 				<ul class="bigword_ul">
 					<li class="bigword_li">提高生产效率打造卓越品质</li>
 				</ul>
 
 			</div>
-			<div id="echart_0" style="width: 15%; height: 240px; float: left;">
+			<div id="echart_0" style="width: 15%; height: 350px; float: left;">
 				<ul class="small_ul">
 					<li style="color: #6699FF;" class="small_li">计划产量:<span
 						class="span_li" style="color: #6699FF;" id="plan"></span></li>
@@ -237,7 +164,7 @@ var t = null;
 				</ul>
 			</div>
 			<div id="echart_1"
-				style="width: 15%; height: 240px; float: left; color: #ffffff;">
+				style="width: 15%; height: 350px; float: left; color: #ffffff;">
 				<ul class="small_ul">
 					<li style="color: #CCCCFF;" class="small_li">标准工时:<span
 						class="span_li" style="color: #CCCCFF;" id="stdtime"></span></li>
@@ -250,11 +177,11 @@ var t = null;
 			<div class="boxfoot"></div>
 		</div>
 		<div class="boxall">
-			<div style="height: 520px;">
+			<div style="height: 585px;">
 				<div class="allnav" id="echart_cjbg"
-					style="width: 50%; height: 500px; float: left;"></div>
+					style="width: 50%; height: 580px; float: left;"></div>
 				<div class="allnav" id="echart_scdz"
-					style="width: 50%; height: 500px; float: left;"></div>
+					style="width: 50%; height: 580px; float: left;"></div>
 			</div>
 			<div class="boxfoot"></div>
 		</div>
