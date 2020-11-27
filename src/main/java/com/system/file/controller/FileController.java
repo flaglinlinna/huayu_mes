@@ -50,6 +50,22 @@ public class FileController extends WebController {
 		}
 	}
 
+	@ApiOperation(value="上传图片", notes="上传图片")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "file", value = "图片", dataType = "MultipartFile", paramType="query",defaultValue=""),
+	})
+	@RequestMapping(value = "/uploadImg", method = RequestMethod.POST)
+	public ApiResponseResult uploadImg(MultipartFile file) {
+		try {
+			FsFile fsFile = new FsFile();
+			return fileService.upload(fsFile, file);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			e.printStackTrace();
+			return ApiResponseResult.failure(e.getMessage());
+		}
+	}
+
 	@ApiOperation(value="下载文件", notes="下载文件")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "fsFileId", value = "文件ID", required = true, dataType = "Long", paramType="query",defaultValue=""),

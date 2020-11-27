@@ -188,17 +188,17 @@ public class OnlineStafflmpl implements OnlineStaffService {
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult deleteMain(Long id) throws Exception {
+	public ApiResponseResult deleteMain(String ids) throws Exception {
 		List<Object> list = deleteMainPrc(UserUtil.getSessionUser().getCompany() + "",
 				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "",
-				id);
+				ids);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
 		return ApiResponseResult.success().data(list.get(2));
 	}
 	
-	public List deleteMainPrc(String company, String facoty, String user_id,Long  main_id)
+	public List deleteMainPrc(String company, String facoty, String user_id,String  ids)
 			throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
@@ -208,7 +208,7 @@ public class OnlineStafflmpl implements OnlineStaffService {
 				cs.setString(1, company);
 				cs.setString(2, facoty);
 				cs.setString(3, user_id);
-				cs.setLong(4, main_id);
+				cs.setString(4, ids);
 				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
 				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
 				cs.registerOutParameter(7, -10);// 输出参数 追溯数据

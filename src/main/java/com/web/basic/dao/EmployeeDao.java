@@ -1,6 +1,9 @@
 package com.web.basic.dao;
 
+import com.web.basic.entity.TodoInfo;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
@@ -19,4 +22,9 @@ public interface EmployeeDao extends CrudRepository<Employee, Long>,JpaSpecifica
 	public Employee findById(long id);
 	
 	public int countByDelFlagAndEmpCode(Integer delFlag, String empCode);//查询是否存在
+
+	@Modifying
+	@Query(value = "update MES_BASE_EMPLOYEE t set t.EMP_IMG = ?2 where t.ID= ?1", nativeQuery = true)
+	public int updateUrl(Integer id,String url);
+
 }

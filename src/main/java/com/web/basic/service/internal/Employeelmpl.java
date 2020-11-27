@@ -237,4 +237,13 @@ public class Employeelmpl implements EmployeeService {
 		});
 		return resultList;
 	}
+
+    @Override
+    public ApiResponseResult updateImgUrl(Integer id, String name,String url) throws Exception {
+        Integer flag =  employeeDao.updateUrl(id,url);
+        if(flag==1){
+            return ApiResponseResult.success();
+        }
+        return ApiResponseResult.failure("更新失败");
+    }
 }

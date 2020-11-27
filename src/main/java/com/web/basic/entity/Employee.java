@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class Employee extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
-	    public static final String TABLE_NAME = "V_BASE_EMPLOYEE";
+	 public static final String TABLE_NAME = "V_BASE_EMPLOYEE";
 	    
 	    /**
 	     * 员工工号

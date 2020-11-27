@@ -49,12 +49,12 @@ $(function() {
 					title : '部门', width : 100,sort: true,totalRowText:"合计"
 				},
 				{
-					field : 'TASK_NO',
-					title : '制令单号', width : 150,sort: true
-				},
-				{
 					field : 'LINER_NAME',
 					title : '组长',width : 80, sort: true
+				},
+				{
+					field : 'TASK_NO',
+					title : '制令单号', width : 150,sort: true
 				},
 				{
 					field : 'ITEM_NO',
@@ -62,7 +62,12 @@ $(function() {
 				},
 				{
 					field : 'PROD_DATE',
-					title : '生产日期',width : 150,sort: true
+					title : '生产日期',width : 120,sort: true,
+					templet:function (d) {
+						if(d.PROD_DATE!=null){
+							return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
+						}
+					}
 				},
 				{
 					field : 'CLASS_NO',
@@ -250,7 +255,7 @@ function getReport(dates,dept,item) {
 	 						limit: data.data.length, //显示的数量
 	 						done: function(res1, curr, count){
 	 							localtableFilterIns.reload();
-	 							merge(data.data,['LINER_NAME','PROD_NO'],[2,3]);
+	 							// merge(data.data,['LINER_NAME'],[2]);
 	 						}
 	 					});
 	 				} else {

@@ -11,7 +11,7 @@ public interface OnlineStaffService {
 	
 	public ApiResponseResult deleteVice(String taskNo,String devId,String empId,String viceId,String beginTime)throws Exception;//删除从表数据
 	
-	public ApiResponseResult deleteMain(Long id)throws Exception;//删除主表数据
+	public ApiResponseResult deleteMain(String ids)throws Exception;//删除主表数据
 	
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest)throws Exception;
 	
