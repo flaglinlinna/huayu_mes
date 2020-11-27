@@ -27,6 +27,17 @@ $(function(){
                 });
             }
         });
+        
+        //获取系统参数
+        $.get(context+"/sysParam/getValueByCodeList?keyword=SYSTEM_TITLE",function(data){
+            if(data.result){
+                //console.log(data.data);
+            	if(data.data[0].paramValue){
+            		$('#title_span').html(data.data[0].paramValue)
+            	}
+            	
+            }
+        });
     });
 })
 var getMenus=function(data){
@@ -158,3 +169,4 @@ function updateUsePwd(){
         content:$('#useDetail')
     });
 }
+//20201127-fyx-获取环境

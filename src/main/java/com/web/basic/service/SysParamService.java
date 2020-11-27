@@ -18,4 +18,6 @@ public interface SysParamService {
 	public ApiResponseResult delete(Long id) throws Exception;
 
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
+	
+	public ApiResponseResult getValueByCodeList(String keyword) throws Exception;
 }

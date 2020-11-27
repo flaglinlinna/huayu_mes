@@ -162,6 +162,11 @@ public class SysParamlmpl implements SysParamService {
 				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
+	@Override
+	public ApiResponseResult getValueByCodeList(String paramCode) throws Exception {
+		// TODO Auto-generated method stub
+		return ApiResponseResult.success().data(sysParamDao.findByDelFlagAndParamCode(0, paramCode));
+	}
 
 
 }

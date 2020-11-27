@@ -141,5 +141,21 @@ public class SysParamController extends WebController{
 	            return ApiResponseResult.failure("删除系统参数信息失败！");
 	        }
 	    }
+		
+		
+		@ApiOperation(value = "获取系统参数信息", notes = "获取系统参数信息",hidden = true)
+	    @RequestMapping(value = "/getValueByCodeList", method = RequestMethod.GET)
+	    @ResponseBody
+	    public ApiResponseResult getValueByCodeList(String keyword) {
+	        String method = "sysParam/getValueByCodeList";String methodName ="获取系统参数信息";
+	        try {
+	            ApiResponseResult result = paramService.getValueByCodeList(keyword);
+	            return result;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            logger.error("获取系统参数信息列表失败！", e);
+	            return ApiResponseResult.failure(methodName+"失败！");
+	        }
+	    }
 
 }

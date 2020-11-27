@@ -54,11 +54,16 @@
                   </ul> -->
 
             <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right" style="margin-top:-8px;">
-<li class="layui-nav-item layui-hide-xs" lay-unselect="">
-        <a href="javascript:;" layadmin-event="fullscreen">
-          <i class="layui-icon layui-icon-screen-full"></i>
-        </a>
-      </li>
+			      <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+			        <a href="javascript:;" >
+			          <span style="color:red;" id="title_span">开发机</span>
+			        </a>
+			      </li>
+			      <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+			        <a href="javascript:;" layadmin-event="fullscreen">
+			          <i class="layui-icon layui-icon-screen-full"></i>
+			        </a>
+			      </li>
                 <li class="layui-nav-item" lay-unselect style="margin-right:35px;">
                     <a href="javascript:;">
                         <img src="/img/touxiang.png" th:src="@{/images/touxiang.png}" class="layui-nav-img">
