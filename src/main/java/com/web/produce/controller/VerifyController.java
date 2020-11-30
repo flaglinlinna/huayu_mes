@@ -38,7 +38,12 @@ public class VerifyController extends WebController {
         return "/web/produce/verify/verify_add";
     }
 
-    
+    @ApiOperation(value = "上线添加页", notes = "上线添加页", hidden = true)
+    @RequestMapping(value = "/toVerifyForm")
+    public String toProductForm(){
+        return "/web/produce/verify/verify_form";
+    }
+
     @ApiOperation(value="获取指令单信息", notes="获取指令单信息", hidden = true)
     @RequestMapping(value = "/getTaskNo", method = RequestMethod.GET)
     @ResponseBody
