@@ -290,10 +290,18 @@ function reworkCode() {
 					sTableIns.reload({
 						data : data.data
 					});
-					layer.alert("扫描条码返工成功！");
+					layer.alert("扫描条码返工成功！",function (index) {
+						$('#sBarcode').val("");
+						$('#sBarcode').focus();
+						layer.close(index);
+					});
 				} else {
 					playMusic();
-					layer.alert(data.msg);
+					layer.alert(data.msg,function (index) {
+						$('#sBarcode').val("");
+						$('#sBarcode').focus();
+						layer.close(index);
+					});
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);

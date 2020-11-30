@@ -37,16 +37,20 @@
         <table id="listTable" lay-filter="listTable"></table>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(d.enabled){ }}
-            <input type="checkbox" name="{{d.lineName}}" value="{{d.id}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(d.ENABLED==1){ }}
+            <input type="checkbox" name="{{d.NAME_LINER}}" value="{{d.ID}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.lineName}}" value="{{d.id}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.NAME_LINER}}" value="{{d.ID}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 
         <script type="text/html" id="optBar">
             <shiro:hasPermission name="linerImg-edite">
-             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                {{#  if(d.ENABLED==1){ }}
+                <button type="button" class=" layui-btn layui-btn-disabled  layui-btn-xs">编辑</button>
+                {{#  } else { }}
+                <button type="button" class="layui-btn layui-btn-xs" lay-event="edit">编辑</button>
+                {{#  } }}
             </shiro:hasPermission>
             <shiro:hasPermission name="linerImg-delete">
              <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -56,13 +60,14 @@
 	 <!--添加或编辑线体-->
     <div id="setLine" class="layer_self_wrap" style="display:none;">
         <form id="lineForm" class="layui-form layui-form-pane" lay-filter="lineForm" method="post" action="" style="margin: 20px;">
-				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id" type="hidden" name="id"/>
+				<input id="pageNum" type="hidden" name="pageNum" />
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">组长</label>
                 <div class="layui-input-inline">
                     <input id="orgName" name="orgName" lay-verify="required" placeholder="请选择组长" autocomplete="off" class="layui-input" type="text"/>
                     <input id="orgIdLiner" name="orgIdLiner"  type="hidden"/>
                     <input id="empIdLiner" name="empIdLiner"  type="hidden"/>
+                    <input id="id" type="hidden" name="id"/>
                 </div>
                 <!--<label class="layui-form-label">部门</label>-->
                 <!--<div class="layui-input-inline">-->
