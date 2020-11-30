@@ -143,28 +143,30 @@ $(function() {
 				}, {
 					field : 'PROC_NAME',
 					title : '工序名称',width : 110, sort: true
-				},{
+				},
+					{
+						field : 'ITEM_NAME_S',
+						title : '物料简称',width : 110, sort: true
+					},
+					{
 					field : 'ITEM_NO',
 					title : '产品编码',width : 180, sort: true
-				},{
-					field : 'QTY_DZC',
-					title : '待转出数', width : 110, sort: true
+				},
+					{
+					field : 'QTY_SJ',
+					title : '送检数', width : 110, sort: true
 				}, {
-					field : 'LOT_DZC',
-					title : '待转出批次',width : 110,  sort: true
+					field : 'QTY_ZC',
+					title : '转出',width : 110,  sort: true
 				},{
-					field : 'QTY_JYZ',
+					field : 'QTY_JY',
 					title : '检验中数',width : 110,sort: true
 				}, {
-					field : 'LOT_JYZ',
-					title : '检验中批次',
-					width : 110, sort: true
-				},{
-					field : 'QTY_YJY',
+					field : 'QTY_YJ',
 					title : '已检验数', width : 110,sort: true
 				},{
-					field : 'LOT_YJY',
-					title : '已检验批次', width : 110,sort: true
+					field : 'LOT_YJ',
+					title : '已检批次', width : 110,sort: true
 				} ] ],
 				done : function(res, curr, count) {
 					//

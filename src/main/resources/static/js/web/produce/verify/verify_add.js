@@ -305,9 +305,11 @@ $(function() {
 						});
 
 						getInfoAdd();
-
+						if(openType==1){
+							open(1);
+						}
 						$(document).on('click', '#addBtn', function() {
-							open();
+							open(0);
 						});
 
 						form.on('submit(add)', function(data) {
@@ -512,7 +514,7 @@ function getUserByLine(lineId) {
 	 * "GET", false, function(res) { layer.alert(res.msg); });
 	 */
 }
-function open() {
+function open(openType) {
 	CoreUtil.sendAjax("/verify/getInfoCreateReturn", "", function(data) {
 		console.log(data)
 		if (data.result) {
@@ -566,19 +568,21 @@ function open() {
 				}
 				layui.form.render('select');
 			}
-			var index = layer.open({
-				type : 1,
-				title : '创建在线返工制令单',
-				fixed : false,
-				resize : false,
-				shadeClose : true,
-				area : [ '650px' ],
-				content : $('#createDiv'),
-				end : function() {
-					cleanForm();
-				}
-			});
-			layer.full(index);
+			if(openType!=1) {
+				var index = layer.open({
+					type: 1,
+					title: '创建在线返工制令单',
+					fixed: false,
+					resize: false,
+					shadeClose: true,
+					area: ['650px'],
+					content: $('#createDiv'),
+					end: function () {
+						cleanForm();
+					}
+				});
+				layer.full(index);
+			}
 		} else {
 			layer.alert(data.msg);
 		}

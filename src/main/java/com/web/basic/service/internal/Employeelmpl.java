@@ -149,6 +149,24 @@ public class Employeelmpl implements EmployeeService {
     }
 
     /**
+     * 删除员工
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult deleteImg(Long id) throws Exception{
+        if(id == null){
+            return ApiResponseResult.failure("员工ID不能为空！");
+        }
+        Employee o  = employeeDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("员工不存在！");
+        }
+
+        employeeDao.deleteImgUrl(id);
+        return ApiResponseResult.success("删除成功！");
+    }
+
+    /**
      * 查询列表
      */
 	@Override

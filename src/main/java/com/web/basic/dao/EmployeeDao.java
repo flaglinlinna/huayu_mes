@@ -27,4 +27,8 @@ public interface EmployeeDao extends CrudRepository<Employee, Long>,JpaSpecifica
 	@Query(value = "update MES_BASE_EMPLOYEE t set t.EMP_IMG = ?2 where t.ID= ?1", nativeQuery = true)
 	public int updateUrl(Integer id,String url);
 
+	@Modifying
+	@Query(value = "update MES_BASE_EMPLOYEE t set t.EMP_IMG = null where t.ID= ?1", nativeQuery = true)
+	public int deleteImgUrl(Long id);
+
 }
