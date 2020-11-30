@@ -15,6 +15,10 @@ $(function() {
 
 function dealData(kanbanList) {
 	console.log(kanbanList)
+	if(!kanbanList.result){
+		alert(kanbanList.msg)
+		return false;
+	}
 	var kanbanData = kanbanList.data;
 	if (kanbanData.length > 0) {
 		setTable(kanbanData);
