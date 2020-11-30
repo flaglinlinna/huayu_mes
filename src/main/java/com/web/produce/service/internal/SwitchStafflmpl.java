@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import com.web.produce.service.SwitchStaffService;
 @Transactional(propagation = Propagation.REQUIRED)
 public class SwitchStafflmpl extends PrcUtils implements SwitchStaffService {
 
+	@Autowired
 	ClassTypeDao classTypeDao;
 	
 	//获取制令单
@@ -44,7 +46,7 @@ public class SwitchStafflmpl extends PrcUtils implements SwitchStaffService {
 		// TODO Auto-generated method stub
 				List<Object> list = getEmpByTaskNoPrc(UserUtil.getSessionUser().getCompany() + "",
 						UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getId() + "",
-						 taskNo,  workDate,  pageRequest);
+						 taskNo,  workDate, pageRequest.getPageSize(), pageRequest.getPageNumber());
 				if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 					return ApiResponseResult.failure(list.get(1).toString());
 				}
@@ -65,6 +67,7 @@ public class SwitchStafflmpl extends PrcUtils implements SwitchStaffService {
 	}
 	//获取班次信息
 	@Override
+	
 	public ApiResponseResult getClassType() throws Exception{
 		List<ClassType> list = classTypeDao.findByDelFlag(0);
 		return ApiResponseResult.success().data(list);

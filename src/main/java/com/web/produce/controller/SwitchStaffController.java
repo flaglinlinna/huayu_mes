@@ -59,14 +59,14 @@ public class SwitchStaffController extends WebController {
 	}
 	
 	@ApiOperation(value = "获取待调整人员列表", notes = "获取待调整人员列表", hidden = true)
-	@RequestMapping(value = "/getTaskNoEmp", method = RequestMethod.POST)
+	@RequestMapping(value = "/getTaskNoEmp", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getTaskNoEmp(@RequestBody Map<String, Object> params) {
+	public ApiResponseResult getTaskNoEmp(String taskNo, String workDate) {
 		String method = "/switch_staff/getTaskNoEmp";
 		String methodName = "获取待调整人员列表";
 		try {		
-			String taskNo = params.get("taskNo") == null?"":params.get("taskNo").toString();
-			String workDate = params.get("workDate") == null?"":params.get("workDate").toString();
+			//String taskNo = params.get("taskNo") == null?"":params.get("taskNo").toString();
+			//String workDate = params.get("workDate") == null?"":params.get("workDate").toString();
 			Sort sort =  Sort.unsorted();
 			ApiResponseResult result = switchStaffService.getTaskNoEmp(taskNo,workDate,super.getPageRequest(sort));
 			logger.debug("获取待调整人员列表=getTaskNoEmp:");
@@ -75,7 +75,7 @@ public class SwitchStaffController extends WebController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取待调整人员列表失败！", e);
-			getSysLogService().error(module,method, methodName,params+";"+ e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取待调整人员列表失败！");
 		}
 	}

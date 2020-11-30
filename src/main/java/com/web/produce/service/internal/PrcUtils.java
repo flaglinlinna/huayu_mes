@@ -634,7 +634,7 @@ public class PrcUtils {
     }
     //在线人员调整-获取待调整人员清单
     public List getEmpByTaskNoPrc(String company,String facoty,String user_id,
-    		String taskNo, String workDate, PageRequest pageRequest)throws Exception{
+    		String taskNo, String workDate,int size, int pageNumber)throws Exception{
     	List resultList=(List)jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
@@ -645,8 +645,8 @@ public class PrcUtils {
                 cs.setString(3, user_id);
                 cs.setString(4, taskNo);
                 cs.setString(5, workDate);
-                cs.setInt(6, pageRequest.getPageSize());
-                cs.setInt(7, pageRequest.getPageSize()+1);
+                cs.setInt(6, size);
+                cs.setInt(7, pageNumber+1);
                 cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
                 cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
                 cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
