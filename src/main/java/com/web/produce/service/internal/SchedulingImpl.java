@@ -1480,13 +1480,14 @@ public class SchedulingImpl implements SchedulingService {
 
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(currUser!=null ? currUser.getId() : null);
-        o.setEmpId(schedulingItem.getEmpId());
-        if(schedulingItem.getEmpId() != null){
-            Employee employee = employeeDao.findById((long) schedulingItem.getEmpId());
-            if(employee != null){
-                o.setEmpCode(employee.getEmpCode());
-            }
-        }
+        o.setEmpIds(schedulingItem.getEmpIds());
+        o.setEmpNames(schedulingItem.getEmpNames());
+//        if(schedulingItem.getEmpIds() != null){
+//            Employee employee = employeeDao.findById((long) schedulingItem.getEmpId());
+//            if(employee != null){
+//                o.setEmpCode(employee.getEmpCode());
+//            }
+//        }
         schedulingItemDao.save(o);
 
         return ApiResponseResult.success("编辑成功！");

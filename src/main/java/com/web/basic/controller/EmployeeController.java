@@ -154,6 +154,26 @@ public class EmployeeController extends WebController{
 	            return ApiResponseResult.failure("删除员工信息失败！");
 	        }
 	    }
+
+	@ApiOperation(value = "删除员工照片", notes = "删除员工照片",hidden = true)
+	@RequestMapping(value = "/deleteImg", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult deleteImg(@RequestBody Map<String, Object> params){
+		String method = "base/employee/deleteImg";String methodName ="删除员工照片";
+		try{
+			long id = Long.parseLong(params.get("id").toString()) ;
+			ApiResponseResult result = employeeService.deleteImg(id);
+			logger.debug("删除员工照片=deleteImg:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("删除员工照片失败！", e);
+			getSysLogService().error(module,method, methodName,params+";"+ e.toString());
+			return ApiResponseResult.failure("删除员工照片失败！");
+		}
+	}
+
 		@ApiOperation(value = "设置在职/离职", notes = "设置在职/离职", hidden = true)
 	    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 	    @ResponseBody

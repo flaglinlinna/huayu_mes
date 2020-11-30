@@ -135,7 +135,7 @@ $(function () {
                 method : 'get',
                 where:{ mid:id },
                 cols : [ [
-                    { type: 'radio' },//多选  radio
+                    { type: 'checkbox' },//多选  radio
                     , {
                         field : 'EMP_ID',
                         title : 'EMP_ID',
@@ -181,8 +181,15 @@ $(function () {
                 //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
                 console.log(data);
                 var da=data.data;
+                var names = "";
+                data.data.forEach(function(element) {
+                    names += element.EMP_NAME+",";
+                });
+                if(names !=""){
+                    names = names.substring(0,names.length-1);
+                }
                 form.val("editForm2", {
-                    "empId2":da[0].EMP_NAME,
+                    "empId2":names,
                 });
                 layui.form.render();// 重新渲染
             }
@@ -271,7 +278,7 @@ $(function () {
                         ,{field:'itemUnit', title:'组件单位', width:100}
                         ,{field:'itemQtyPr', title:'单位用量', width:100}
                         ,{field:'fokRate', title:'良率', width:80}
-                        ,{field:'empName', title:'作业员', width:90, templet:'<span>{{ d.employee ? d.employee.empName : "" }}</span>'}
+                        ,{field:'empNames', title:'作业员', width:90}
                         ,{fixed:'right', title:'操作',width:90, align:'center', toolbar:'#optBar2'}
                     ]]
                     ,done: function(res, curr, count){
@@ -1079,21 +1086,17 @@ function saveProcess(table) {
 
 //获取编辑信息-工单组件
 function getItem(obj, id){
-    // var optionHtml = '<option value=""></option>';
-    //添加作业员列表
-    // for(var i = 0; i < employeeList.length; i++){
-    //     optionHtml += '<option value="'+employeeList[i].id+'">'+employeeList[i].empName+'</option>';
-    // }
-    // $("#empId2").html(optionHtml);
-    console.log(obj);
+
     $("#itemId2").val(id);
     $("#mid2").val(obj.mid);
     $("#itemNo2").val(obj.itemNo);
     $("#itemName2").val(obj.mtrial ? obj.mtrial.itemName : "");
     $("#itemQty2").val(obj.itemQty);
-    if(obj.employee!=null&&obj.employee!=undefined) {
-        $("#empId2").val(obj.employee.empName);
-    }
+    $("#empId2").val(obj.empNames);
+    $("#empId2").attr('ts-selected',obj.empIds);
+    // if(obj.employee!=null&&obj.employee!=undefined) {
+    //     $("#empId2").val(obj.employee.empName);
+    // }
 
     //渲染
     layui.form.render('select');
@@ -1132,7 +1135,8 @@ function cleanItem(){
 function doEditItem(){
     var empId = $('#empId2').attr("ts-selected");
     console.log(empId);
-    $("#empId").val(empId);
+    $("#empIds").val(empId);
+    $("#empNames").val($('#empId2').val());
     $.ajax({
         type: "POST",
         data: $("#editForm2").serialize(),

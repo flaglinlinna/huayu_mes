@@ -16,6 +16,8 @@ public interface EmployeeService {
 	public ApiResponseResult getEmployee(Long id) throws Exception;
 
 	public ApiResponseResult delete(Long id) throws Exception;
+
+	public ApiResponseResult deleteImg(Long id) throws Exception;
 	
 	public ApiResponseResult doStatus(Long id, Integer empStatus) throws Exception;// 状态改变
 

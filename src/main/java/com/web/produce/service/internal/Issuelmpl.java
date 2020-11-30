@@ -371,7 +371,7 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 			hql += " and to_char(f.create_date,'yyyy-MM-dd') <= '"+dates[1]+"'";
 		}
 		if (StringUtils.isNotEmpty(dept_name)) {
-			hql += " and a.DEPT_NAME like '%"+dept_name+"%'";
+			hql += " and a.DEPT_NAME like '%"+dept_name+"%' or a.DEPT_NAME1 like '%"+dept_name+"%' ";
 		}
 
 		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME,a.DEPT_NAME1 order by  max(f.create_date) desc ";
@@ -451,7 +451,7 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 	 * 下发指纹
 	 * fyx
 	 * @param devIp
-	 * @param empFinger
+	 * @param empFingers
 	 * @return
 	 */
 	private boolean doIssuedByUser(String devIp,List<EmpFinger> empFingers){
@@ -479,7 +479,7 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 	 * 删除指纹
 	 * fyx
 	 * @param devIp
-	 * @param empFinger
+	 * @param empFingers
 	 * @return
 	 */
 	private boolean deleteTmpByUser(String devIp,Long dev_id,List<EmpFinger> empFingers){

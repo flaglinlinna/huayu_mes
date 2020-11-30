@@ -77,24 +77,32 @@ public class SchedulingItem extends BaseEntity {
     protected BigDecimal itemQtyPr;
 
     /**
-     * 员工ID
+     * 员工ID 逗号拼接
      */
-    @ApiModelProperty(name = "empId", value = "员工ID")
+    @ApiModelProperty(name = "empIds", value = "员工ID")
     @Column
-    protected Long empId;
-
-    @ApiModelProperty(name = "employee", hidden = true, value = "员工")
-    @ManyToOne
-    @JoinColumn(name = "empId", insertable = false, updatable = false)
-    @NotFound(action = NotFoundAction.IGNORE)
-    protected Employee employee;
+    protected String empIds;
 
     /**
-     * 员工工号
+     * 员工姓名
      */
-    @ApiModelProperty(name = "empCode", value = "员工工号")
-    @Column(length = 50)
-    protected String empCode;
+    @ApiModelProperty(name = "empNames", value = "员工姓名")
+    @Column
+    protected String empNames;
+
+
+//    @ApiModelProperty(name = "employee", hidden = true, value = "员工")
+//    @ManyToOne
+//    @JoinColumn(name = "empId", insertable = false, updatable = false)
+//    @NotFound(action = NotFoundAction.IGNORE)
+//    protected Employee employee;
+
+//    /**
+//     * 员工工号
+//     */
+//    @ApiModelProperty(name = "empCode", value = "员工工号")
+//    @Column(length = 50)
+//    protected String empCode;
 
     /**
      * 良率
@@ -167,28 +175,21 @@ public class SchedulingItem extends BaseEntity {
         this.itemQtyPr = itemQtyPr;
     }
 
-    public Long getEmpId() {
-        return empId;
+
+    public String getEmpIds() {
+        return empIds;
     }
 
-    public void setEmpId(Long empId) {
-        this.empId = empId;
+    public void setEmpIds(String empIds) {
+        this.empIds = empIds;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public String getEmpNames() {
+        return empNames;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public String getEmpCode() {
-        return empCode;
-    }
-
-    public void setEmpCode(String empCode) {
-        this.empCode = empCode;
+    public void setEmpNames(String empNames) {
+        this.empNames = empNames;
     }
 
     public BigDecimal getFokRate() {
@@ -209,8 +210,8 @@ public class SchedulingItem extends BaseEntity {
         sb.append(",组件数量:").append(this.itemQty);
         sb.append(",组件单位:").append(this.itemUnit);
         sb.append(",单位用量:").append(this.itemQtyPr);
-        sb.append(",员工id:").append(this.empId);
-        sb.append(",员工编号:").append(this.empCode);
+        sb.append(",员工id:").append(this.empIds);
+        sb.append(",员工姓名:").append(this.empNames);
         sb.append(",良率:").append(this.fokRate);
         sb.append(";");
         return sb.toString();

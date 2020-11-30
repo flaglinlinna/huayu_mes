@@ -80,7 +80,7 @@ public class LinerImg extends BaseEntity {
     protected String empIdLiner;
 
     /**
-     * 是否有效
+     * 是否有效 0无效1有效
      */
     @ApiModelProperty(name = "enabled", value = "是否有效")
     @Column(length = 1)

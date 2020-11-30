@@ -78,20 +78,9 @@ public class LinerImglmpl extends ReportPrcUtils implements LinerImgService {
         if(linerImg == null){
             return ApiResponseResult.failure("组长铁三角不能为空！");
         }
-//        if(StringUtils.isEmpty(linerImg.get())){
-//            return ApiResponseResult.failure("线体编号不能为空！");
-//        }
-//        if(StringUtils.isEmpty(linerImg.getLineName())){
-//            return ApiResponseResult.failure("线体名称不能为空！");
-//        }
-//        int count = lineDao.countByDelFlagAndLineNo(0, line.getLineNo());
-//        if(count > 0){
-//            return ApiResponseResult.failure("该线体已存在，请填写其他线体编号！");
-//        }
         linerImg.setCreateDate(new Date());
         linerImg.setCreateBy(UserUtil.getSessionUser().getId());
         linerImgDao.save(linerImg);
-
         return ApiResponseResult.success("线体添加成功！").data(linerImg);
     }
     /**
@@ -100,36 +89,17 @@ public class LinerImglmpl extends ReportPrcUtils implements LinerImgService {
     @Override
     @Transactional
     public ApiResponseResult edit(LinerImg linerImg) throws Exception {
-//        if(line == null){
-//            return ApiResponseResult.failure("线体不能为空！");
-//        }
-//        if(line.getId() == null){
-//            return ApiResponseResult.failure("线体ID不能为空！");
-//        }
-//        if(StringUtils.isEmpty(line.getLineNo())){
-//            return ApiResponseResult.failure("线体编号不能为空！");
-//        }
-//        if(StringUtils.isEmpty(line.getLineName())){
-//            return ApiResponseResult.failure("线体名称不能为空！");
-//        }
         LinerImg o = linerImgDao.findById((long) linerImg.getId());
         if(o == null){
             return ApiResponseResult.failure("该线体不存在！");
         }
-        //判断线体编号是否有变化，有则修改；没有则不修改
-//        if(o.getLineNo().equals(line.getLineNo())){
-//        }else{
-//            int count = lineDao.countByDelFlagAndLineNo(0, line.getLineNo());
-//            if(count > 0){
-//                return ApiResponseResult.failure("线体编号已存在，请填写其他线体编号！");
-//            }
-//            o.setLineNo(line.getLineNo().trim());
-//        }
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
-//        o.setLineName(line.getLineName());
-//        o.setLinerCode(line.getLinerCode());
-//        o.setLinerName(line.getLinerName());
+        o.setEmpIdLiner(linerImg.getEmpIdLiner());
+        o.setEmpIdPe(linerImg.getEmpIdPe());
+        o.setEmpIdQc(linerImg.getEmpIdQc());
+        o.setLineId(linerImg.getLineId());
+        o.setOrgIdLiner(linerImg.getOrgIdLiner());
         linerImgDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}
@@ -204,9 +174,12 @@ public class LinerImglmpl extends ReportPrcUtils implements LinerImgService {
                 UserUtil.getSessionUser().getCompany() + "",
                 beginTime, endTime,keyword,pageRequest.getPageSize(),pageRequest.getPageNumber()+1);
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
-            return ApiResponseResult.failure(list.get(1).toString());
+            return ApiResponseResult.failure(list.get(2).toString());
         }
-        return ApiResponseResult.success().data(list.get(2));
+        Map map = new HashMap();
+        map.put("Total",list.get(2));
+        map.put("Rows",list.get(3));
+        return ApiResponseResult.success().data(map);
 
     }
 

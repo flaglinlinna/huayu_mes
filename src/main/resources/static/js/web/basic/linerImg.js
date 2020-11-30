@@ -32,9 +32,9 @@ $(function() {
 				}
 				// 可进行数据操作
 				return {
-					"count" : res.data.total,
+					"count" : res.data.Total,
 					"msg" : res.msg,
-					"data" : res.data.rows,
+					"data" : res.data.Rows,
 					"code" : res.status
 				// code值为200表示成功
 				}
@@ -43,38 +43,36 @@ $(function() {
 				type : 'numbers'
 			},
 			{type:'checkbox'}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
+			// ,{field:'ID', title:'ID', width:80,  hidde unresize:true, sort:true}
 			,
 			{
-				field : 'lineId',
-				title : '生产线', sort: true,filter: true
+				field : 'NAME_PE',
+				title : '工程员名称', sort: true,filter: true
 			},
 				{
-					field : 'empIdLiner',
-					title : '组长员工ID', sort: true,filter: true
+					field : 'NAME_QC',
+					title : 'QC名称', sort: true,filter: true
 				},
 
 				{
-				field : 'empIdQc',
-				title : 'QC员工ID', sort: true
-			},
-			{
-				field : 'empIdPe',
-				title : '工程员ID', sort: true
-			}, {
-				field : 'linerName',
+				field : 'NAME_LINER',
 				title : '线长姓名', sort: true
-			}
+			},
+				{
+					field : 'LINE_NAME',
+					title : '生产线', sort: true
+				}
+
 			, {
-				field : 'checkStatus',
+				field : 'ENABLED',
 				title : '状态',
 				width : 95,
 				templet : '#statusTpl', sort: true
 			}, {
-				field : 'lastupdateDate',width : 145,
+				field : 'LASTUPDATE_DATE',width : 145,
 				title : '更新时间', sort: true
 			}, {
-				field : 'createDate',width : 145,
+				field : 'CREATE_DATE',width : 145,
 				title : '添加时间', sort: true
 			}, {
 				fixed : 'right',
@@ -225,9 +223,9 @@ $(function() {
 					if(res.result){
 						// 可进行数据操作
 						return {
-							"count" : res.data.total,
+							"count" : res.data.Total,
 							"msg" : res.msg,
-							"data" : res.data,
+							"data" : res.data.Rows,
 							"code" : res.status
 							// code值为200表示成功
 						}
@@ -302,9 +300,9 @@ $(function() {
 					if(res.result){
 						// 可进行数据操作
 						return {
-							"count" : res.data.total,
+							"count" : res.data.Total,
 							"msg" : res.msg,
-							"data" : res.data,
+							"data" : res.data.Rows,
 							"code" : res.status
 							// code值为200表示成功
 						}
@@ -339,7 +337,7 @@ $(function() {
 		        }else{
 		        	var id="";
 		        	for(var i = 0; i < data.length; i++) {
-		        		id += data[i].id+",";
+		        		id += data[i].ID+",";
 		        		console.log(data[i])
 		        	}
 		        	delLine(id);
@@ -364,21 +362,23 @@ $(function() {
 		// 监听工具条
 		table.on('tool(listTable)', function(obj) {
 			var data = obj.data;
+			console.log(data);
 			if (obj.event === 'del') {
 				// 删除
-				layer.confirm('您确定要删除' + data.lineNo + '组长铁三角吗？', {
+				layer.confirm('您确定要删除这条记录吗？', {
 					btn : [ '确认', '返回' ]
 				// 按钮
 				}, function() {
-					delLine(data.id);
+					delLine(data.ID);
 				});
 			} else if (obj.event === 'edit') {
 				// 编辑
-				getLine(data, data.id);
+				getLine(data, data.ID);
 			}
 		});
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
+			console.log(data);
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
 				addSubmit(data);
@@ -397,17 +397,17 @@ $(function() {
 		function getLine(obj, id) {
 			console.log(obj);
 			form.val("lineForm", {
-				"id" : obj.field.orgName,
-				"orgIdLiner" : obj.field.orgIdLiner,
-				"empIdLiner" : obj.field.empIdLiner,
-				"deptName" : obj.field.deptName,
-				"empIdQcName" : obj.field.empIdQcName,
-				"empIdQc" : obj.field.empIdQc,
-				"imgQc" : obj.field.imgQc,
-				"empIdPeName" : obj.field.empIdPeName,
-				"empIdPe" : obj.field.empIdPe,
-				"imgPe" : obj.field.imgPe,
-				"lineId" : obj.field.lineId,
+				"id" : obj.ID,
+				"orgIdLiner" : obj.ORG_ID_LINER,
+				"empIdLiner" : obj.EMP_ID_LINER,
+				"orgName" : obj.NAME_LINER,
+				"empIdQcName" : obj.NAME_QC,
+				"empIdQc" : obj.EMP_ID_QC,
+				"imgQc" : obj.IMG_QC,
+				"empIdPeName" : obj.NAME_PE,
+				"empIdPe" : obj.EMP_ID_PE,
+				"imgPe" : obj.IMG_PE,
+				"lineId" : obj.LINE_ID,
 			});
 			openLine(id, "编辑组长铁三角")
 
@@ -416,7 +416,7 @@ $(function() {
 		// 设置正常/禁用
 		function setStatus(obj, id, name, checked) {
 			var isStatus = checked ? 1 : 0;
-			var deaprtisStatus = checked ? "无效":"有效";
+			var deaprtisStatus = checked ? "有效":"无效";
 			// 正常/禁用
 			layer.confirm('您确定要把组长铁三角：' + name + '设置为' + deaprtisStatus + '状态吗？',
 					{
@@ -485,38 +485,6 @@ function getLineSelect(name) {
 	});
 }
 
-// 设置用户正常/禁用
-function setStatus(obj, id, name, checked) {
-	var isStatus = checked ? 0 : 1;
-	var deaprtisStatus = checked ? "正常" : "禁用";
-	// 正常/禁用
-	layer.confirm('您确定要把组长铁三角：' + name + '设置为' + deaprtisStatus + '状态吗？', {
-		btn : [ '确认', '返回' ]
-	// 按钮
-	}, function() {
-		var param = {
-			"id" : id,
-			"checkStatus" : isStatus
-		};
-		CoreUtil.sendAjax("/base/line/doStatus", JSON.stringify(param),
-				function(data) {
-					if (data.result) {
-						layer.alert("操作成功", function() {
-							layer.closeAll();
-							loadAll();
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-						});
-					}
-				}, "POST", false, function(res) {
-					layer.alert("操作请求错误，请您稍后再试", function() {
-						layer.closeAll();
-					});
-				});
-	});
-}
 
 // 新增编辑弹出框
 function openLine(id, title) {

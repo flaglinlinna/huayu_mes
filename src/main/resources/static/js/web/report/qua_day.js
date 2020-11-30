@@ -142,7 +142,12 @@ $(function() {
 				},{
 					field : 'ITEM_NO',
 					title : '产品编码',width : 180, sort: true
-				},{
+				},
+					{
+						field : 'ITEM_NAME_S',
+						title : '物料简称',width : 110, sort: true
+					},
+					{
 					field : 'QTY_OK',
 					title : '合格数', width : 130, sort: true
 				}, {

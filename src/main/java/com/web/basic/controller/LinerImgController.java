@@ -28,7 +28,7 @@ public class LinerImgController extends WebController{
 	 private LinerImgService linerImgService;
 	 
 	 	@ApiOperation(value = "组长铁三角列表页", notes = "组长铁三角列表页", hidden = true)
-	    @RequestMapping(value = "/toLinerImg")
+			@RequestMapping(value = "/toLinerImg")
 	    public String toLine(){
 	        return "/web/basic/linerImg";
 	    }
@@ -149,24 +149,24 @@ public class LinerImgController extends WebController{
 	        }
 	    }
 		
-		 @ApiOperation(value = "设置正常/禁用", notes = "设置正常/禁用", hidden = true)
+		 @ApiOperation(value = "设置有效/无效", notes = "设置有效/无效", hidden = true)
 		    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 		    @ResponseBody
 		    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{
 			 //Long id, Integer deStatus
-		        String method = "base/linerImg/doStatus";String methodName ="设置正常/禁用";
+		        String method = "base/linerImg/doStatus";String methodName ="设置有效/无效";
 		        try{
 		        	long id = Long.parseLong(params.get("id").toString()) ;
 		        	Integer bsStatus=Integer.parseInt(params.get("checkStatus").toString());
 		            ApiResponseResult result = linerImgService.doStatus(id, bsStatus);
-		            logger.debug("设置正常/禁用=doJob:");
+		            logger.debug("设置有效/无效=doStatus:");
 		            getSysLogService().success(module,method, methodName, params);
 		            return result;
 		        }catch (Exception e){
 		            e.printStackTrace();
-		            logger.error("设置正常/禁用失败！", e);
+		            logger.error("设置有效/无效失败！", e);
 		            getSysLogService().error(module,method, methodName, params+";"+e.toString());
-		            return ApiResponseResult.failure("设置正常/禁用失败！");
+		            return ApiResponseResult.failure("设置有效/无效失败！");
 		        }
 		    }
 

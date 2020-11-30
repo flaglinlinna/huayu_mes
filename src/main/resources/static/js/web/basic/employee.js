@@ -227,8 +227,39 @@ $(function() {
 		});
 		
 		$(document).on('click','#del_file_btn',function(){
-			alert(employeeId)
+			deleteImg(employeeId);
 		});
+
+		function deleteImg(id) {
+			//清空数据库图片字段
+			if (id != null) {
+				var param = {
+					"id" : id
+				};
+				layer.confirm('您确定要删除' + employeeName + '的照片吗？', {
+					btn : [ '确认', '返回' ]
+					// 按钮
+				}, function() {
+					CoreUtil.sendAjax("/base/employee/deleteImg", JSON.stringify(param),
+						function(data) {
+							if (isLogin(data)) {
+								if (data.result == true) {
+									// 回调弹框
+									layer.alert("删除成功！", function(index) {
+										layer.closeAll();
+										// 加载load方法
+										// loadAll();
+									});
+								} else {
+									layer.alert(data, function(index) {
+										layer.closeAll();
+									});
+								}
+							}
+						});
+				});
+			}
+		}
 		
 		// 编辑员工信息
 		function getEmployee(obj, id) {
