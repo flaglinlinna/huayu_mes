@@ -37,7 +37,6 @@ $(function() {
 					"msg" : res.msg,
 					"data" : res.data.rows,
 					"code" : res.status
-				// code值为200表示成功
 				}
 			},
 			cols : [ [ {
@@ -164,12 +163,9 @@ $(function() {
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
 			// 重新加载table
-			console.log(data.field)
 			var date=data.field.dates;
 			var sdata = date.substring(0, date.indexOf(" "))
 			var edata = date.substring(date.indexOf(" ") + 3, date.length);
-			console.log(sdata)
-			console.log(edata)
 			
 			var params = {
 					"sdate" : sdata,
@@ -178,7 +174,7 @@ $(function() {
 					"liner" : data.field.liner,
 					"taskno" : data.field.taskno
 				};
-			console.log(params)
+			//console.log(params)
 			getReport(params)
 			return false;
 		});
@@ -198,6 +194,7 @@ function getReport(params) {
 		url:context+'/report/abnormal_r/getList',
 		where:params,
 		done: function(res1, curr, count){
+			console.log(res1)
 			pageCurr=curr;
 		}
 	})

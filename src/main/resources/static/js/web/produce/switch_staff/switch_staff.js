@@ -163,7 +163,7 @@ $(function() {
 								sort : true
 							} ] ],
 							done : function(res, curr, count) {
-								// console.log(res)
+								
 								pageCurr = curr;
 							}
 						});
@@ -409,6 +409,7 @@ $(function() {
 			url : context + '/produce/switch_staff/getTaskNoEmp',
 			where : params,
 			done : function(res1, curr, count) {
+				 console.log(res1)
 				pageCurr = curr;
 			}
 		})

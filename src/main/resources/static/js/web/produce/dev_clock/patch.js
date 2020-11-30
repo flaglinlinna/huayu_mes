@@ -130,7 +130,6 @@ $(function() {
 						// code值为200表示成功
 						}
 					}
-
 				},
 			},
 			done : function(elem, data) {
@@ -159,9 +158,17 @@ $(function() {
 					type : 'radio'
 				},// 多选 radio
 				{
+					field : 'LINER_NAME',
+					title : '组长',
+					width:90
+				},{
+					field : 'ITEM_NO',
+					title : '物料编码',
+					width:140
+				},{
 					field : 'TASK_NO',
 					title : '制令单号',
-					width:300
+					width:160
 				},{
 					field : 'CLASS_NAME',
 					title : '班次',
@@ -178,7 +185,11 @@ $(function() {
 				}, {
 					field : 'LINE_NAME',
 					title : '线体',
-					width:120
+					width:100
+				},{
+					field : 'ITEM_NAME',
+					title : '物料描述',
+					width:200
 				}] ],
 				parseData : function(res) {
 					console.log(res)
