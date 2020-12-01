@@ -12,4 +12,6 @@ public interface LinerImgDao extends CrudRepository<LinerImg, Long>,JpaSpecifica
 	public List<LinerImg> findByDelFlag(Integer delFlag);
 	public LinerImg findById(long id);
 
+	Integer countByLineIdAndEmpIdLinerAndEnabledAndDelFlag(String lineId,String empId,Integer enabled,Integer delFlag);
+
 }

@@ -304,6 +304,7 @@ function uploadImg(id,title) {
 		content : $('#fileDiv'),
 		end : function() {
 			// cleanEmployee();
+			loadAll();
 		}
 	});
 	layer.full(index);

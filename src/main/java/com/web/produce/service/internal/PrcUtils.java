@@ -841,6 +841,56 @@ public class PrcUtils {
     }
 
 
+    //来料不良历史查询
+    public List getMaterialHistoryPrc(String company,String facoty, String hStartTime,String hEndTime,
+                                      String keyword, int page,int rows,String prc_name) throws Exception {
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  "+prc_name+" (?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, company);
+                cs.setString(2, facoty);
+                cs.setString(3, hStartTime);
+                cs.setString(4, hEndTime);
+                cs.setString(5, keyword);
+                cs.setInt(6, rows);
+                cs.setInt(7, page);
+                cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(10, java.sql.Types.INTEGER);// 总记录数
+                cs.registerOutParameter(11, -10);// 输出参数 追溯数据
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(8));
+                result.add(cs.getString(9));
+                if (cs.getString(8).toString().equals("0")) {
+                    result.add(cs.getString(10));
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(11);
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+
+                }
+                System.out.println(l);
+                return result;
+            }
+
+        });
+        return resultList;
+    }
+
+
     //创建在线返工制令单
     public List getHistoryPrc(String company,String facoty,String user_id,
                               String hStartTime,String hEndTime,String keyword,
@@ -1029,6 +1079,130 @@ public class PrcUtils {
                     result.add(cs.getString(7));
                     // 游标处理
                     ResultSet rs = (ResultSet) cs.getObject(7);
+
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+                }
+                System.out.println(l);
+                return result;
+            }
+
+        });
+        return resultList;
+    }
+
+//    prc_mes_material_ng_save
+        public List saveMaterialPrc(String company, String factory,String userId,String itemNo,Integer deptId,
+                                 Integer venderId,String prodDate,String lotNo,String defectCode,String defectQty)
+                throws Exception {
+            List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+                @Override
+                public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                    String storedProc = "{call  prc_mes_material_ng_save(?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                    CallableStatement cs = con.prepareCall(storedProc);
+                    cs.setString(1, factory);
+                    cs.setString(2, company);
+                    cs.setString(3, userId);
+                    cs.setString(4, itemNo);
+                    cs.setInt(5, deptId);
+                    cs.setInt(6, venderId);
+                    cs.setString(7, prodDate);
+                    cs.setString(8, lotNo);
+                    cs.setString(9, defectCode);
+                    cs.setString(10, defectQty);
+                    cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 返回标识
+                    cs.registerOutParameter(12, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                    return cs;
+                }
+            }, new CallableStatementCallback() {
+                public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                    List<Object> result = new ArrayList<>();
+                    List<Map<String, Object>> l = new ArrayList();
+                    cs.execute();
+                    result.add(cs.getInt(11));
+                    result.add(cs.getString(12));
+                    return result;
+                }
+            });
+            return resultList;
+        }
+
+    //获取不良内容下拉列表
+    public List getBadSelectPrc(String company, String factory,String keyword)
+            throws Exception {
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  prc_mes_cof_defect_det_chs(?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, factory);
+                cs.setString(2, company);
+                cs.setString(3, keyword);
+                cs.registerOutParameter(4, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(5, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(6, -10);// 输出参数 追溯数据
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(4));
+                result.add(cs.getString(5));
+                if (cs.getString(4).toString().equals("0")) {
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(6);
+
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+                }
+                return result;
+            }
+        });
+        return resultList;
+    }
+
+    //供应商选择
+    public List getSupplierPrc(String facoty, String company,Integer type,String keyword,PageRequest pageRequest) throws Exception{
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  prc_mes_cof_vender_chs(?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setInt(3, type);
+                cs.setString(4, keyword);
+                cs.setInt(5, pageRequest.getPageSize());
+                cs.setInt(6,pageRequest.getPageNumber()+1);
+                cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(8, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 总记录
+                cs.registerOutParameter(10, -10);// 输出参数 返回数据集合
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(7));
+                result.add(cs.getString(8));
+                if (cs.getString(7).toString().equals("0")) {
+                    result.add(cs.getInt(9));
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(10);
 
                     try {
                         l = fitMap(rs);

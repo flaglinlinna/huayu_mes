@@ -44,11 +44,12 @@ public class QualInspectController extends WebController {
 	@ResponseBody
 	public ApiResponseResult getProcList(@RequestParam(value = "company") String company,
 			@RequestParam(value = "factory") String factory,
+			@RequestParam(value = "userId") String userId,
 			@RequestParam(value = "keyword") String keyword) {
 		String method = "produce/inspect/getProcList";
 		String methodName = "PDA-获取检验节点列表";
 		try {
-			ApiResponseResult result = inspectService.getProcList(company, factory, keyword);
+			ApiResponseResult result = inspectService.getProcList(company, factory,userId, keyword);
 			logger.debug("PDA-获取检验节点列表=getProcList:");
 //			getSysLogService().success(module,method, methodName, null);
 			return result;

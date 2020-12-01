@@ -47,22 +47,54 @@ $(function() {
 			,
 			{
 				field : 'NAME_PE',
-				title : '工程员名称', sort: true,filter: true
+				title : '工程员名称', sort: true,
 			},
 				{
-					field : 'NAME_QC',
-					title : 'QC名称', sort: true,filter: true
+					field : 'IMG_FLAG_PE',
+					title : '工程员照片', sort: true,
+					templet: function (d) {
+						if(d.IMG_FLAG_PE==0){
+							return '无'
+						}else {
+							return '有'
+						}
+					}
 				},
 
 				{
-				field : 'NAME_LINER',
-				title : '线长姓名', sort: true
-			},
+					field : 'NAME_QC',
+					title : 'QC名称', sort: true,
+				},
+				{
+					field : 'IMG_FLAG_QC',
+					title : 'QC照片', sort: true,
+					templet: function (d) {
+						if(d.IMG_FLAG_QC==0){
+							return '无'
+						}else {
+							return '有'
+						}
+					}
+				},
 				{
 					field : 'LINE_NAME',
 					title : '生产线', sort: true
+				},
+				{
+					field : 'NAME_LINER',
+					title : '组长姓名', sort: true
+				},
+				{
+					field : 'IMG_FLAG_LINER',
+					title : '组长照片', sort: true,
+					templet: function (d) {
+						if(d.IMG_FLAG_LINER==0){
+							return '无'
+						}else {
+							return '有'
+						}
+					}
 				}
-
 			, {
 				field : 'ENABLED',
 				title : '状态',
@@ -77,6 +109,7 @@ $(function() {
 			}, {
 				fixed : 'right',
 				title : '操作',
+					width : 120,
 				align : 'center',
 				toolbar : '#optBar'
 			} ] ],

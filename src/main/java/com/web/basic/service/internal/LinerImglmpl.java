@@ -78,6 +78,10 @@ public class LinerImglmpl extends ReportPrcUtils implements LinerImgService {
         if(linerImg == null){
             return ApiResponseResult.failure("组长铁三角不能为空！");
         }
+        if((linerImgDao.countByLineIdAndEmpIdLinerAndEnabledAndDelFlag(linerImg.getLineId(),
+                linerImg.getEmpIdLiner(),linerImg.getEnabled(),0))>0){
+            return ApiResponseResult.failure("组长/产线只能唯一");
+        }
         linerImg.setCreateDate(new Date());
         linerImg.setCreateBy(UserUtil.getSessionUser().getId());
         linerImgDao.save(linerImg);
@@ -91,7 +95,14 @@ public class LinerImglmpl extends ReportPrcUtils implements LinerImgService {
     public ApiResponseResult edit(LinerImg linerImg) throws Exception {
         LinerImg o = linerImgDao.findById((long) linerImg.getId());
         if(o == null){
-            return ApiResponseResult.failure("该线体不存在！");
+            return ApiResponseResult.failure("该组长铁三角不存在！");
+        }
+        //如果产线或组长修改了
+        if(!o.getEmpIdLiner().equals(linerImg.getEmpIdLiner())||!o.getLineId().equals(linerImg.getLineId())) {
+            if ((linerImgDao.countByLineIdAndEmpIdLinerAndEnabledAndDelFlag(linerImg.getLineId(),
+                    linerImg.getEmpIdLiner(), linerImg.getEnabled(), 0)) > 0) {
+                return ApiResponseResult.failure("组长/产线只能唯一");
+            }
         }
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
