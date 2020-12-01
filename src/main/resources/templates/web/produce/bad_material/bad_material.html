@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='来料不良录入'"></head>
+<style th:inline="text">
+.layui-form-label {
+	text-align: right;
+}
+
+.layui-form-switch {
+	margin-top: 0px;
+}
+
+.layui-form-radio {
+	margin: 0px 10px 0 0;
+}
+
+.long-item .layui-form-label {
+	width: 160px;
+}
+
+.long-item .layui-input-block {
+	margin-left: 160px;
+}
+</style>
+<body class="layui-layout-body">
+<div th:replace="audio/fragment/audio :: audio"></div>
+<div th:replace="audio/fragment/saomiao :: saomiao"></div>
+	<div class="layui-layout layui-layout-admin">
+		<!--头-->
+		<!--<div th:replace="fragments/head :: header"></div>-->
+		<div class="layui-tab layui-tab-card">
+			<ul class="layui-tab-title">
+				<li class="layui-this">来料不良录入</li>
+				<li>历史查询</li>
+			</ul>
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+					<div style="margin: 10px">
+						<div class="layui-collapse" lay-accordion="">
+							<div class="layui-colla-item">
+								<div class="layui-colla-content layui-show">
+									<form id="itemFrom" class="layui-form layui-form-pane"
+										lay-filter="itemFrom" method="post" action="">
+
+										<div class="layui-form-item">
+											<label class="layui-form-label">条码</label>
+											<div class="layui-input-inline" style="width: 150px;">
+												<input class="layui-input" lay-filter="barcode" id="barcode" name="barcode">
+											</div>
+										</div>
+
+										<div class="layui-form-item">
+										<label class="layui-form-label layui-required ">物料编码</label>
+										<div class="layui-input-inline" style="width: 150px;">
+											<input id="itemNo" name="itemNo" autocomplete="off"
+												    class="layui-input"
+												   type="text" />
+										</div>
+										</div>
+
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label class="layui-form-label">物料描述</label>
+												<div class="layui-input-inline" style="width: 150px;">
+													<input id="mtrdescr" name="mtrdescr" autocomplete="off"
+														   style="background: #efefef;" class="layui-input" disabled
+														   type="text" />
+												</div>
+											</div>
+										</div>
+
+										<div class="layui-form-item">
+											<label class="layui-form-label layui-required">来料部门</label>
+											<div class="layui-input-inline" style="width: 150px;">
+												<select  name="org" placeholder="请选择"
+													lay-verify="required" id="org">
+												</select>
+										</div>
+
+											<div class="layui-form-item">
+												<label class="layui-form-label ">供应商名称</label>
+												<div class="layui-input-inline" style="width: 150px;">
+													<input type="text" name="supplier" placeholder="请选择"
+														   autocomplete="off" class="layui-input"
+														   lay-verify="required" id="supplier">
+												</div>
+
+											<div class="layui-form-item">
+											<label class="layui-form-label">生产日期</label>
+												<div class="layui-input-inline" style="width: 150px;">
+													<input id="procDate" name="procDate" autocomplete="off"
+														class="layui-input"
+														type="text" />
+												</div>
+											</div>
+
+												<div class="layui-form-item">
+													<label class="layui-form-label">物料批次</label>
+													<div class="layui-input-inline" style="width: 150px;">
+														<input id="lotNo" name="lotNo" autocomplete="off"
+															   class="layui-input"
+															   type="text" />
+													</div>
+												</div>
+
+
+										<div class="layui-form-item">
+											<label class="layui-form-label layui-required">不良内容</label>
+											<div class="layui-input-inline" style="width: 150px;">
+												<select id="defect" name="defect" autocomplete="off"
+													  type="text" >
+												</select>
+											</div>
+										</div>
+												<div class="layui-form-item">
+												<label class="layui-form-label layui-required">不良数量</label>
+												<div class="layui-input-inline" style="width: 150px;">
+													<input id="inqty" name="inqty" autocomplete="off"
+														 class="layui-input" type="text" />
+												</div>
+										</div>
+
+
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<button type="button" class="layui-btn layui-btn-sm layui-btn-normal"
+													lay-submit="" lay-filter="confirmSubmit">保存数据</button>
+												<button type="reset"
+													class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+													重置</button>
+											</div>
+										</div>
+											</div>
+										</div>
+
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-tab-item">
+					<div style="margin: 5px">
+						<!--查询面板-->
+						<div th:replace="web/fragment/search_history :: searcher"></div>
+						<fieldset class="layui-elem-field layui-field-title">
+							<legend style="font-size: 14px;">条码列表</legend>
+						</fieldset>
+						<table id="hcolTable" lay-filter="hcolTable"
+							style="margin-top: -20px;"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/html" id="optBar">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+		<script th:src="@{/js/web/produce/bad_material/bad_material.js}"
+			src="/js/web/produce/bad_material/bad_material.js"></script>
+	</div>
+</body>
+</html>

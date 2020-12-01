@@ -95,7 +95,7 @@
 									
 								    <!--<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""-->
 										<!--lay-filter="update">采集打卡数据</button>-->
-									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="addBtn"  >创建在线返工制令单</button>
+									<!--<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="addBtn"  >创建在线返工制令单</button>-->
 									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
 										lay-filter="save">确认</button>		
 								</div>
@@ -195,7 +195,9 @@
             </div>
         </form>
     </div>
-    
+	<script th:inline="javascript">
+		var openType = 0 ; //菜单栏点击进入建在线返工单
+	</script>
 		<script th:src="@{/js/web/produce/verify/verify_add.js}" src="/js/web/produce/verify/verify_add.js"></script>
 	</div>
 <style type="text/css">

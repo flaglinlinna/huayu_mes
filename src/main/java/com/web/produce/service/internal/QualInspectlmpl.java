@@ -35,30 +35,31 @@ public class QualInspectlmpl extends PrcUtils implements QualInspectService {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public ApiResponseResult getProcList(String company,String factory,String keyword) throws Exception {
+	public ApiResponseResult getProcList(String company,String factory,String userId,String keyword) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = getProcListPrc(company,factory,2, keyword);
+		List<Object> list = getProcListPrc(company,factory,userId,2, keyword);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
 		return ApiResponseResult.success().data(list.get(2));
 	}
 	
-	public List getProcListPrc(String company, String factory, int type,
+	public List getProcListPrc(String company, String factory,String userId, int type,
 			String keyword)
 			throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  prc_mes_cof_proc_chs(?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  prc_mes_cof_proc_chs(?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, factory);
 				cs.setString(2, company);
-				cs.setInt(3, type);
-				cs.setString(4, keyword);
-				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
-				cs.registerOutParameter(7, -10);// 输出参数 追溯数据
+				cs.setString(3, userId);
+				cs.setInt(4, type);
+				cs.setString(5, keyword);
+				cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(8, -10);// 输出参数 追溯数据
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -66,11 +67,11 @@ public class QualInspectlmpl extends PrcUtils implements QualInspectService {
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(5));
-				result.add(cs.getString(6));
-				if (cs.getString(5).toString().equals("0")) {
+				result.add(cs.getInt(6));
+				result.add(cs.getString(7));
+				if (cs.getString(6).toString().equals("0")) {
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(7);
+					ResultSet rs = (ResultSet) cs.getObject(8);
 
 					try {
 						l = fitMap(rs);

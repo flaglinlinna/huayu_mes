@@ -24,6 +24,8 @@ public interface OrganizationDao extends CrudRepository<SysOrganization, Long>, 
 
 	public SysOrganization findByIdAndDelFlag(long id,Integer delFlag);
 
+	public Integer countByLeadBy(String leadBy);
+
 //	@Query(value = "select "+
 //				   "  p.id, p.bs_name,p.parent_id pId, p.zindex, p.istype, p.bs_code, p.icon, p.page_url "+
 //				   " from permission p "+
