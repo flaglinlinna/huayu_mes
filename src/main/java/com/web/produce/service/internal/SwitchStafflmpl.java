@@ -28,7 +28,7 @@ public class SwitchStafflmpl extends PrcUtils implements SwitchStaffService {
 	@Autowired
 	ClassTypeDao classTypeDao;
 	
-	//获取制令单
+	//获取旧制令单
 	@Override
 	public ApiResponseResult getTaskNo(String keyword) throws Exception {
 		// TODO Auto-generated method stub
@@ -40,13 +40,25 @@ public class SwitchStafflmpl extends PrcUtils implements SwitchStaffService {
 		return ApiResponseResult.success().data(list.get(2));
 	}
 	
+	//获取新制令单
+		@Override
+		public ApiResponseResult getNewTaskNo(String keyword) throws Exception {
+			// TODO Auto-generated method stub
+			List<Object> list = getTaskNoPrc(UserUtil.getSessionUser().getCompany() + "",
+					UserUtil.getSessionUser().getFactory() + "", 7, UserUtil.getSessionUser().getId() + "", keyword);
+			if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+				return ApiResponseResult.failure(list.get(1).toString());
+			}
+			return ApiResponseResult.success().data(list.get(2));
+		}
+	
 	// 获取待调整人员
 	@Override
-	public ApiResponseResult getTaskNoEmp(String taskNo, String workDate, PageRequest pageRequest) throws Exception{
+	public ApiResponseResult getTaskNoEmp(String aff_id, PageRequest pageRequest) throws Exception{
 		// TODO Auto-generated method stub
 				List<Object> list = getEmpByTaskNoPrc(UserUtil.getSessionUser().getCompany() + "",
 						UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getId() + "",
-						 taskNo,  workDate, pageRequest.getPageSize(), pageRequest.getPageNumber());
+						aff_id, pageRequest.getPageSize(), pageRequest.getPageNumber());
 				if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 					return ApiResponseResult.failure(list.get(1).toString());
 				}
@@ -74,16 +86,14 @@ public class SwitchStafflmpl extends PrcUtils implements SwitchStaffService {
 	}
 	//执行人员调整
 	@Override
-	public ApiResponseResult doSwitch(String lastTaskNo, String lastLineId, String lastHourType, 
-			String lastClassId,String lastWorkDate, String lastDateEnd, String lastTimeEnd,
+	public ApiResponseResult doSwitch(String lastTaskNo_id,String lastDatetimeEnd,
 			String newTaskNo, String newLineId,String newHourType, String newClassId,
-			String newWorkDate, String newTimeBegin, String empList,PageRequest pageRequest) throws Exception{
+			String newDatetimeBegin, String empList,PageRequest pageRequest) throws Exception{
 		
 		List<Object> list = doTaskNoSwitchPrc(UserUtil.getSessionUser().getFactory() + "",
 				UserUtil.getSessionUser().getCompany() + "",UserUtil.getSessionUser().getId() + "",
-				lastTaskNo,lastLineId,lastHourType,lastClassId,lastWorkDate,lastDateEnd,
-				lastTimeEnd,newTaskNo,newLineId,newHourType,newClassId,newWorkDate,
-				newTimeBegin,empList,pageRequest);
+				lastTaskNo_id,lastDatetimeEnd,newTaskNo,newLineId,newHourType,newClassId,
+				newDatetimeBegin,empList,pageRequest);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

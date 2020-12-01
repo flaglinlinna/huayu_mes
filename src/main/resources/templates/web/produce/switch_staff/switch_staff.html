@@ -42,7 +42,7 @@
 						<button class="layui-btn layui-btn-sm layui-btn-normal"
 							onclick="add()">在线人员调整</button>
 						<fieldset class="layui-elem-field layui-field-title">
-							<legend style="font-size: 14px;"></legend>
+							<legend style="font-size: 14px;">原制令单调整后人员列表</legend>
 						</fieldset>
 						<table id="colTable" lay-filter="colTable"
 							style="margin-top: -20px;"></table>
@@ -53,74 +53,41 @@
 		<!--添加或编辑物料-->
 		<div id="setTask" class="layer_self_wrap"
 			style="width: 800px; display: none; margin-left: 10px;">
-			<form id="itemFrom" class="layui-form layui-form-pane"
-				lay-filter="itemFrom" method="post" action="">
+			<form id="itemForm" class="layui-form layui-form-pane"
+				lay-filter="itemForm" method="post" action="">
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">原制令单号</label>
-						<div class="layui-input-inline" style="width: 180px;">
+						<div class="layui-input-inline" >
 							<input type="text" name="lastTaskNo" placeholder="请选择"
 								autocomplete="off" class="layui-input" readonly="readonly"
 								lay-verify="required" id="lastTaskNo">
 						</div>
-						<label class="layui-form-label">物料编码</label>
-						<div class="layui-input-inline" style="width: 160px;">
-							<input id="last_itemcode" name="last_itemcode" autocomplete="off"
-								style="background: #efefef;" class="layui-input" disabled
-								type="text" />
-						</div>
-						<label class="layui-form-label">组长</label>
-						<div class="layui-input-inline" style="width: 90px;">
-							<input id="last_liner" name="last_liner" autocomplete="off"
-								style="background: #efefef;" class="layui-input" disabled
-								type="text" />
+						<label class="layui-form-label layui-required">下线时间</label>
+						<div class="layui-input-inline" style="width: 130px;">
+							<input id="lastDateEnd" name="lastDateEnd" lay-verify="required"
+								autocomplete="off" class="layui-input" type="text" />
 						</div>
 					</div>
+					<input id="AFF_ID" type="hidden" name="AFF_ID" />
 				</div>
-				<input id="lastClassId" type="hidden" name="lastClassId" /> <input
-					id="lastLineId" type="hidden" name="lastLineId" />
-
-				<div class="layui-form-item">
-					<label class="layui-form-label">客户简称</label>
-					<div class="layui-input-inline" style="width: 180px;">
-						<input id="last_customer" name="last_customer" autocomplete="off"
-							style="background: #efefef;" class="layui-input" disabled
-							type="text" />
-					</div>
-					<label class="layui-form-label">工时类型</label>
-					<div class="layui-input-inline" style="width: 120px;">
-						<input id="lastHourType" name="lastHourType" autocomplete="off"
-							style="background: #efefef;" class="layui-input" disabled
-							type="text" />
-					</div>
-					<label class="layui-form-label">生产日期</label>
-					<div class="layui-input-inline" style="width: 130px;">
-						<input id="lastWorkDate" name="lastWorkDate" autocomplete="off"
-							style="background: #efefef;" class="layui-input" disabled
-							type="text" />
-					</div>
-					<label class="layui-form-label layui-required">下线时间</label>
-					<div class="layui-input-inline" style="width: 130px;">
-						<input id="lastDateEnd" name="lastDateEnd" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text" />
-					</div>
-				</div>
+				
 				<hr />
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">新制令单号</label>
-					<div class="layui-input-inline" style="width: 180px;">
+					<div class="layui-input-inline">
 						<input type="text" name="newTaskNo" placeholder="请选择"
 							autocomplete="off" class="layui-input" readonly="readonly"
 							lay-verify="required" id="newTaskNo">
 					</div>
 					<label class="layui-form-label">物料编码</label>
-					<div class="layui-input-inline" style="width: 160px;">
+					<div class="layui-input-inline" style="width: 130px;">
 						<input id="new_itemcode" name="new_itemcode" autocomplete="off"
 							style="background: #efefef;" class="layui-input" disabled
 							type="text" />
 					</div>
 					<label class="layui-form-label">组长</label>
-					<div class="layui-input-inline" style="width: 90px;">
+					<div class="layui-input-inline" style="width: 95px;">
 						<input id="new_liner" name="new_liner" autocomplete="off"
 							style="background: #efefef;" class="layui-input" disabled
 							type="text" />
@@ -130,14 +97,14 @@
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label">客户简称</label>
-						<div class="layui-input-inline" style="width: 180px;">
+						<div class="layui-input-inline" >
 							<input id="new_customer" name="new_customer" autocomplete="off"
 								style="background: #efefef;" class="layui-input" disabled
 								type="text" />
 						</div>
 
 						<label class="layui-form-label layui-required">工时类型</label>
-						<div class="layui-input-inline" style="width: 120px;">
+						<div class="layui-input-inline" style="width: 130px;">
 							<select id="newHourType" lay-filter="newHourType"
 								name="newHourType" autocomplete="off" lay-verify="required"
 								class="layui-select" lay-search>
@@ -148,11 +115,12 @@
 								<option value="法定加班">法定加班</option>
 							</select>
 						</div>
-						<label class="layui-form-label">生产日期</label>
-						<div class="layui-input-inline" style="width: 130px;">
-							<input id="newWorkDate" name="newWorkDate" autocomplete="off"
-								style="background: #efefef;" class="layui-input" disabled
-								type="text" />
+						<label class="layui-form-label layui-required">班次</label>
+						<div class="layui-input-inline" style="width: 95px;">
+							<select id="newClassId" lay-filter="newClassId" name="newClassId"
+								autocomplete="off" lay-verify="required" class="layui-select"
+								lay-search>
+							</select>
 						</div>
 					</div>
 				</div>
@@ -160,22 +128,16 @@
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">线体</label>
-						<div class="layui-input-inline" style="width: 160px;">
+						<div class="layui-input-inline" >
 							<select id="newLineId" lay-filter="newLineId" name="newLineId"
 								autocomplete="off" lay-verify="required" class="layui-select"
 								lay-search>
 							</select>
 						</div>
-						<label class="layui-form-label layui-required">班次</label>
-						<div class="layui-input-inline" style="width: 85px;">
-							<select id="newClassId" lay-filter="newClassId" name="newClassId"
-								autocomplete="off" lay-verify="required" class="layui-select"
-								lay-search>
-							</select>
-						</div>
+						
 
 						<label class="layui-form-label layui-required">上线时间</label>
-						<div class="layui-input-inline" style="width: 120px;">
+						<div class="layui-input-inline" style="width: 130px;">
 							<input id="newTimeBegin" name="newTimeBegin"
 								lay-verify="required" autocomplete="off" class="layui-input"
 								type="text" />

@@ -38,12 +38,12 @@ public class SwitchStaffController extends WebController {
 		return "/web/produce/switch_staff/switch_staff";
 	}
 
-	@ApiOperation(value = "获取指令单信息", notes = "获取指令单信息", hidden = true)
+	@ApiOperation(value = "获取原指令单信息", notes = "获取原指令单信息", hidden = true)
 	@RequestMapping(value = "/getTaskNo", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getTaskNo(String keyword) {
 		String method = "/switch_staff/getTaskNo";
-		String methodName = "获取指令单信息";
+		String methodName = "获取原指令单信息";
 		try {
 			ApiResponseResult result = switchStaffService.getTaskNo(keyword);
 			logger.debug("获取指令单信息=getTaskNo:");
@@ -51,24 +51,44 @@ public class SwitchStaffController extends WebController {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("获取指令单信息失败！", e);
+			logger.error("获取原指令单信息失败！", e);
 			getSysLogService().error(module, method, methodName,
 					"关键字" + keyword == null ? ";" : keyword + ";" + e.toString());
-			return ApiResponseResult.failure("获取指令单信息失败！");
+			return ApiResponseResult.failure("获取原指令单信息失败！");
+		}
+	}
+	
+	@ApiOperation(value = "获取新指令单信息", notes = "获取新指令单信息", hidden = true)
+	@RequestMapping(value = "/getNewTaskNo", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getNewTaskNo(String keyword) {
+		String method = "/switch_staff/getNewTaskNo";
+		String methodName = "获取新指令单信息";
+		try {
+			ApiResponseResult result = switchStaffService.getNewTaskNo(keyword);
+			logger.debug("获取新指令单信息=getNewTaskNo:");
+			// getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取新指令单信息失败！", e);
+			getSysLogService().error(module, method, methodName,
+					"关键字" + keyword == null ? ";" : keyword + ";" + e.toString());
+			return ApiResponseResult.failure("获取新指令单信息失败！");
 		}
 	}
 	
 	@ApiOperation(value = "获取待调整人员列表", notes = "获取待调整人员列表", hidden = true)
 	@RequestMapping(value = "/getTaskNoEmp", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getTaskNoEmp(String taskNo, String workDate) {
+	public ApiResponseResult getTaskNoEmp(String aff_id) {
 		String method = "/switch_staff/getTaskNoEmp";
 		String methodName = "获取待调整人员列表";
 		try {		
 			//String taskNo = params.get("taskNo") == null?"":params.get("taskNo").toString();
 			//String workDate = params.get("workDate") == null?"":params.get("workDate").toString();
 			Sort sort =  Sort.unsorted();
-			ApiResponseResult result = switchStaffService.getTaskNoEmp(taskNo,workDate,super.getPageRequest(sort));
+			ApiResponseResult result = switchStaffService.getTaskNoEmp(aff_id,super.getPageRequest(sort));
 			logger.debug("获取待调整人员列表=getTaskNoEmp:");
 			// getSysLogService().success(module,method, methodName, null);
 			return result;
@@ -120,38 +140,24 @@ public class SwitchStaffController extends WebController {
 	}
 	
 	@ApiOperation(value = "执行人员调整", notes = "执行人员调整", hidden = true)
-	@RequestMapping(value = "/doSwitch", method = RequestMethod.POST)
+	@RequestMapping(value = "/doSwitch", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult doSwitch(@RequestBody Map<String, Object> params) {
+	public ApiResponseResult doSwitch(String lastTaskNo_id,String lastDatetimeEnd,
+			String newTaskNo, String newLineId,String newHourType, String newClassId,
+			String newDatetimeBegin, String empList) {
 		String method = "/switch_staff/doSwitch";
 		String methodName = "执行人员调整";
 		try {		
-			String lastTaskNo = params.get("lastTaskNo") == null?"":params.get("lastTaskNo").toString();
-			String lastLineId = params.get("lastLineId") == null?"":params.get("lastLineId").toString();
-			String lastHourType = params.get("lastHourType") == null?"":params.get("lastHourType").toString();
-			String lastClassId = params.get("lastClassId") == null?"":params.get("lastClassId").toString();
-			String lastWorkDate = params.get("lastWorkDate") == null?"":params.get("lastWorkDate").toString();
-			String lastDateEnd = params.get("lastDateEnd") == null?"":params.get("lastDateEnd").toString();
-			String lastTimeEnd = params.get("lastTimeEnd") == null?"":params.get("lastTimeEnd").toString();
-			String newTaskNo = params.get("newTaskNo") == null?"":params.get("newTaskNo").toString();
-			String newLineId = params.get("newLineId") == null?"":params.get("newLineId").toString();
-			String newHourType = params.get("newHourType") == null?"":params.get("newHourType").toString();
-			String newClassId = params.get("newClassId") == null?"":params.get("newClassId").toString();
-			String newWorkDate = params.get("newWorkDate") == null?"":params.get("newWorkDate").toString();
-			String newTimeBegin = params.get("newTimeBegin") == null?"":params.get("newTimeBegin").toString();
-			String empList = params.get("empList") == null?"":params.get("empList").toString();
 			Sort sort =  Sort.unsorted();
-			ApiResponseResult result = switchStaffService.doSwitch(lastTaskNo, lastLineId, 
-					lastHourType, lastClassId,lastWorkDate, lastDateEnd, lastTimeEnd,
-					newTaskNo, newLineId,newHourType, newClassId,newWorkDate, newTimeBegin, 
-					empList,super.getPageRequest(sort));
+			ApiResponseResult result = switchStaffService.doSwitch(lastTaskNo_id,lastDatetimeEnd,
+					newTaskNo, newLineId,newHourType, newClassId,newDatetimeBegin, empList,super.getPageRequest(sort));
 			logger.debug("执行人员调整=doSwitch:");
 			// getSysLogService().success(module,method, methodName, null);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("执行人员调整失败！", e);
-			getSysLogService().error(module,method, methodName,params+";"+ e.toString());
+			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("执行人员调整失败！");
 		}
 	}

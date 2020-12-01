@@ -634,23 +634,22 @@ public class PrcUtils {
     }
     //在线人员调整-获取待调整人员清单
     public List getEmpByTaskNoPrc(String company,String facoty,String user_id,
-    		String taskNo, String workDate,int size, int pageNumber)throws Exception{
+    		String aff_id,int size, int pageNumber)throws Exception{
     	List resultList=(List)jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  PRC_MES_TASK_NO_EMP (?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  PRC_MES_TASK_NO_EMP (?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
                 cs.setString(2, company);
                 cs.setString(3, user_id);
-                cs.setString(4, taskNo);
-                cs.setString(5, workDate);
-                cs.setInt(6, size);
-                cs.setInt(7, pageNumber+1);
+                cs.setString(4, aff_id);
+                cs.setInt(5, size);
+                cs.setInt(6, pageNumber+1);
+                cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
                 cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
-                cs.registerOutParameter(11, -10);// 
+                cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(10, -10);// 
 				return cs;
 			}
 		},new CallableStatementCallback() {
@@ -658,12 +657,12 @@ public class PrcUtils {
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(9));
-				result.add(cs.getString(10));
-				if (cs.getString(9).toString().equals("0")) {
-					result.add(cs.getString(8));
+				result.add(cs.getInt(8));
+				result.add(cs.getString(9));
+				if (cs.getString(8).toString().equals("0")) {
+					result.add(cs.getString(7));
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(11);
+					ResultSet rs = (ResultSet) cs.getObject(10);
 					try {
 						l = fitMap(rs);
 					} catch (Exception e) {
@@ -679,10 +678,9 @@ public class PrcUtils {
     }
     //人员调整-执行操作
     public List doTaskNoSwitchPrc(String facoty,String company,String user_id,
-    		String lastTaskNo, String lastLineId, String lastHourType, 
-			String lastClassId,String lastWorkDate, String lastDateEnd, String lastTimeEnd,
+    		String lastTaskNo_id,String lastDatetimeEnd,
 			String newTaskNo, String newLineId,String newHourType, String newClassId,
-			String newWorkDate, String newTimeBegin, String empList,PageRequest pageRequest)throws Exception{
+			String newDatetimeBegin, String empList,PageRequest pageRequest)throws Exception{
     	List resultList=(List)jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
@@ -691,26 +689,20 @@ public class PrcUtils {
 				cs.setString(1, facoty);
                 cs.setString(2, company);
                 cs.setString(3, user_id);
-                cs.setString(4, lastTaskNo);
-                cs.setString(5, lastLineId);
-                cs.setString(6, lastHourType);
-                cs.setString(7, lastClassId);
-                cs.setString(8, lastWorkDate);
-                cs.setString(9, lastDateEnd);
-                cs.setString(10, lastTimeEnd);
-                cs.setString(11, newTaskNo);
-                cs.setString(12, newLineId);
-                cs.setString(13, newHourType);
-                cs.setString(14, newClassId);
-                cs.setString(15, newWorkDate);
-                cs.setString(16, newTimeBegin);
-                cs.setString(17, empList);          
-                cs.setInt(18, pageRequest.getPageSize());
-                cs.setInt(19, pageRequest.getPageSize()+1);
-                cs.registerOutParameter(20, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(21, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(22, java.sql.Types.VARCHAR);// 输出参数 返回标识
-                cs.registerOutParameter(23, -10);// 
+                cs.setString(4, lastTaskNo_id);
+                cs.setString(5, lastDatetimeEnd);
+                cs.setString(6, newTaskNo);
+                cs.setString(7, newLineId);
+                cs.setString(8, newHourType);
+                cs.setString(9, newClassId);
+                cs.setString(10, newDatetimeBegin);
+                cs.setString(11, empList);          
+                cs.setInt(12, pageRequest.getPageSize());
+                cs.setInt(13, pageRequest.getPageNumber()+1);
+                cs.registerOutParameter(14, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(15, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(16, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(17, -10);// 
 				return cs;
 			}
 		},new CallableStatementCallback() {
@@ -718,12 +710,12 @@ public class PrcUtils {
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(21));
-				result.add(cs.getString(22));
-				if (cs.getString(21).toString().equals("0")) {
-					result.add(cs.getString(20));
+				result.add(cs.getInt(15));
+				result.add(cs.getString(16));
+				if (cs.getString(15).toString().equals("0")) {
+					result.add(cs.getString(14));
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(23);
+					ResultSet rs = (ResultSet) cs.getObject(17);
 					try {
 						l = fitMap(rs);
 					} catch (Exception e) {

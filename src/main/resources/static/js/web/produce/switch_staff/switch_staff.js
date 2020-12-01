@@ -22,6 +22,8 @@ $(function() {
 							,
 							even : true,// 条纹样式
 							page : true,
+							limit : 50,
+							limits : [ 50, 100, 200, 500, 1000, 5000 ],
 							data : [],
 							request : {
 								pageName : 'page' // 页码的参数名称，默认：page
@@ -29,6 +31,15 @@ $(function() {
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
 							},
 							parseData : function(res) {
+								//console.log(res)
+								if (!res.result) {
+									return {
+										"count" : 0,
+										"msg" : res.msg,
+										"data" : [],
+										"code" : res.status
+									}
+								}
 								// 可进行数据操作
 								return {
 									"count" : res.data.total,
@@ -41,57 +52,29 @@ $(function() {
 							cols : [ [ {
 								type : 'numbers'
 							}, {
-								field : 'id',
-								title : 'id',
-								width : 0,
-								hide : true
-							}, {
-								field : 'BOARD_BARCODE',
-								title : '条码',
-								width : 210,
-								sort : true
-							}, {
-								field : 'DEFECT_NUM',
-								title : '数量',
-								width : 70,
-								sort : true
-							}, {
-								field : 'TASK_NO',
-								title : '制令单',
-								width : 330,
-								sort : true
-							}, {
-								field : 'BOARD_ITEM',
-								title : '物料编码',
-								width : 150,
-								sort : true
-							}, {
-								field : 'DEFECT_TYPE_NAME',
-								title : '不良类型',
+								field : 'EMP_ID',
+								title : 'ID',
 								width : 100,
 								sort : true
 							}, {
-								field : 'DEFECT_CODE',
-								title : '不良代码',
+								field : 'EMP_CODE',
+								title : '工号',
 								width : 100,
 								sort : true
 							}, {
-								field : 'DEFECT_NAME',
-								title : '不良现象',
-								width : 180,
+								field : 'EMP_NAME',
+								title : '姓名',
+								width : 100,
 								sort : true
 							}, {
-								field : 'CREATE_DATE',
-								title : '创建时间',
-								width : 160,
-								sort : true
+								field : 'TIME_BEGIN',
+								title : '上线时间',
+								width : 200
 							}, {
-								fixed : 'right',
-								title : '操作',
-								align : 'center',
-								toolbar : '#optBar',
-								width : 90
-							} ] ],
+								field : 'TIME_END',
+								title : '下线时间',
+								width : 200
+							}] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}
@@ -163,7 +146,6 @@ $(function() {
 								sort : true
 							} ] ],
 							done : function(res, curr, count) {
-								
 								pageCurr = curr;
 							}
 						});
@@ -251,18 +233,12 @@ $(function() {
 								// elem:返回之前input对象；data:表格返回的选中的数据 []
 								var da = data.data;
 								// console.log(da[0].num)
-								form.val("itemFrom", {
+								form.val("itemForm", {
 									"lastTaskNo" : da[0].TASK_NO,
-									"last_itemcode" : da[0].ITEM_NO,
-									"last_liner" : da[0].LINER_NAME,
-									"last_customer" : da[0].CUST_NAME_S,
-									"lastWorkDate" : da[0].WORK_DATE,
-									"lastHourType" : da[0].HOUR_TYPE,
-									"lastLineId" : da[0].LINE_ID,
-									"lastClassId" : da[0].CLASS_ID,
+									"AFF_ID":da[0].AFF_ID
 								});
 								form.render();// 重新渲染
-								getEmpList(da[0].TASK_NO, da[0].WORK_DATE);
+								getEmpList(da[0].AFF_ID);
 							}
 						});
 						sTableSelect = tableSelect.render({
@@ -272,7 +248,7 @@ $(function() {
 							searchPlaceholder : '试着搜索',
 							table : {
 								url : context
-										+ '/produce/switch_staff/getTaskNo',
+										+ '/produce/switch_staff/getNewTaskNo',
 								method : 'get',
 								cols : [ [ {
 									type : 'radio'
@@ -282,6 +258,10 @@ $(function() {
 									title : 'id',
 									width : 0,
 									hide : true
+								},  {
+									field : 'LINER_NAME',
+									title : '组长',
+									width : 75
 								}, {
 									field : 'TASK_NO',
 									title : '制令单号',
@@ -294,19 +274,11 @@ $(function() {
 									field : 'ITEM_NO',
 									title : '物料编码',
 									width : 140
-								}, {
-									field : 'LINER_NAME',
-									title : '组长',
-									width : 75
-								}, {
+								},{
 									field : 'CUST_NAME_S',
 									title : '客户',
 									width : 100
-								}, {
-									field : 'WORK_DATE',
-									title : '生产时间',
-									width : 150
-								} ] ],
+								}] ],
 								parseData : function(res) {
 									// console.log(res)
 									if (res.result) {
@@ -326,12 +298,12 @@ $(function() {
 								// elem:返回之前input对象；data:表格返回的选中的数据 []
 								var da = data.data;
 								// console.log(da[0].num)
-								form.val("itemFrom", {
+								form.val("itemForm", {
 									"newTaskNo" : da[0].TASK_NO,
 									"new_itemcode" : da[0].ITEM_NO,
 									"new_liner" : da[0].LINER_NAME,
 									"new_customer" : da[0].CUST_NAME_S,
-									"newWorkDate" : da[0].WORK_DATE,
+									
 								});
 								form.render();// 重新渲染
 							}
@@ -343,7 +315,7 @@ $(function() {
 						});
 						laydate.render({
 							elem : '#newTimeBegin',
-							type : 'time', // 默认，可不填
+							type : 'datetime', // 默认，可不填
 							trigger : 'click' // 采用click弹出
 						});
 					});
@@ -399,17 +371,16 @@ $(function() {
 			layer.alert(res.msg);
 		});
 	}
-	function getEmpList(taskNo, workDate) {
+	function getEmpList(aff_id) {
 		var params = {
-			"taskNo" : taskNo,
-			"workDate" : workDate
+			"aff_id" : aff_id
 		}
 
 		empTableIns.reload({
 			url : context + '/produce/switch_staff/getTaskNoEmp',
 			where : params,
 			done : function(res1, curr, count) {
-				 console.log(res1)
+				console.log(res1)
 				pageCurr = curr;
 			}
 		})
@@ -418,7 +389,7 @@ $(function() {
 
 function add() {
 	// 清空弹出框数据
-	// clean();
+	 //clean();
 	// 打开弹出框
 	open();
 }
@@ -433,7 +404,7 @@ function open() {
 		area : [ '550px' ],
 		content : $('#setTask'),
 		end : function() {
-			// clean();
+			 clean();
 		}
 	});
 	layer.full(index);
@@ -441,45 +412,61 @@ function open() {
 
 function saveData(obj, empIdList) {
 	// console.log(obj)
-	var t = obj.lastDateEnd
-	var obj_date = t.substring(0, t.indexOf(" "))
-	var obj_time = t.substring(t.indexOf(" ") + 1, t.length)
+
+	
 	var params = {
-		"lastTaskNo" : obj.lastTaskNo,
-		"lastLineId" : obj.lastLineId,
-		"lastHourType" : obj.lastHourType,
-		"lastClassId" : obj.lastClassId,
-		"lastWorkDate" : obj.lastWorkDate,
-		"lastDateEnd" : obj_date,
-		"lastTimeEnd" : obj_time,
+		"lastTaskNo_id" : obj.AFF_ID,
+		"lastDatetimeEnd" : obj.lastDateEnd,
 		"newTaskNo" : obj.newTaskNo,
 		"newLineId" : obj.newLineId,
 		"newHourType" : obj.newHourType,
 		"newClassId" : obj.newClassId,
-		"newWorkDate" : obj.newWorkDate,
 		"newTimeBegin" : obj.newTimeBegin,
 		"empList" : empIdList
 	}
-	console.log(params)
-
+	//console.log(params)
+		tableIns.reload({
+			url : context + '/produce/switch_staff/doSwitch',
+			where : params,
+			done : function(res1, curr, count) {
+				 
+				//console.log(res1)
+				if(res1.code=="1"){
+					layer.alert(res1.msg)
+				}else{
+					layer.closeAll();
+					//clean();
+				}
+				pageCurr = curr;
+			}
+		})
+	
+	/*
 	CoreUtil.sendAjax("/produce/switch_staff/doSwitch", JSON.stringify(params),
 			function(data) { 
 		 console.log(data)
 				if (data.result) {
-					//tableIns.reload({
-					//	data : data.data
-					//});
-					
+					tableIns.reload({
+						data : data.data.rows
+					});
 				} else {
-					layer.alert(res.msg);
+					layer.alert(data.msg);
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
-			});
-
+			});*/
 }
 
 function clean() {
+	//console.log($('#itemForm')[0])
 	$('#itemForm')[0].reset();
+	empTableIns.reload({
+		url : '',//url置空重置数据表
+		where : '',
+		done : function(res1, curr, count) {
+			//console.log(curr)
+			pageCurr = curr;
+		}
+	})
 	layui.form.render();// 必须写
 }
