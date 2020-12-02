@@ -69,7 +69,7 @@ public class OrganizationImpl implements OrganizationService {
 		// TODO Auto-generated method stub
 		if(perm.getId() == null){
 			//新增
-			if(organizationDao.countByLeadBy(perm.getLeadBy())>0){
+			if(organizationDao.countByLeadByAndDelFlag(perm.getLeadBy(),0)>0){
 				return ApiResponseResult.failure("负责人已存在，请重新选择负责人");
 			}
 			organizationDao.save(perm);
@@ -78,7 +78,7 @@ public class OrganizationImpl implements OrganizationService {
 			SysOrganization s = organizationDao.findByIdAndDelFlag(perm.getId(), 0);
 			//如果负责人更改，判断是否存在
 			if(!s.getLeadBy().equals(perm.getLeadBy())){
-				if(organizationDao.countByLeadBy(perm.getLeadBy())>0){
+				if(organizationDao.countByLeadByAndDelFlag(perm.getLeadBy(),0)>0){
 					return ApiResponseResult.failure("负责人已存在，请重新选择负责人");
 				}
 			}

@@ -4,7 +4,8 @@
 var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table','tableSelect' ], function() {
-		var table = layui.table, form = layui.form,tableSelect = layui.tableSelect;
+		var table = layui.table, form = layui.form,tableSelect1 = layui.tableSelect,
+			tableSelect = layui.tableSelect;
 
 		tableSelect=tableSelect.render({
 			elem : '#itemId',
@@ -28,18 +29,22 @@ $(function() {
 				cols : [ [
 					{ type: 'radio' },//单选  radio
 					{
-						field : 'id',
+						field : 'ID',
 						title : 'id',
 						width : 0,hide:true
 					},
 					{
-						field : 'itemNo',
+						field : 'ITEM_NO',
 						title : '物料编码'
 					},
 					{
-						field : 'itemName',
+						field : 'ITEM_NAME',
 						title : '物料名称'
-					}
+					},
+					{
+						field : 'ITEM_MODEL',
+						title : '机型'
+					},
 				] ],
 				page : true,
 				request : {
@@ -53,16 +58,103 @@ $(function() {
 				var da=data.data;
 				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
 				form.val("ruleForm", {
-					"itemNo":da[0].itemNo,
-					"itemId":da[0].itemNo,
-					"itemName":da[0].itemName,
+					"itemNo":da[0].ITEM_NO,
+					"itemId":da[0].ITEM_NO,
+					"itemModel":da[0].ITEM_MODEL,
+					"itemName":da[0].ITEM_NAME,
 				});
 				form.render();// 重新渲染
 			}
 		});
 
+		tableSelect1=tableSelect1.render({
+			elem : '#custName',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '客户信息搜索',
+			table : {
+				url : context + '/base/rule/getCustomerList',
+				method : 'post',
+				parseData : function(res) {
+					// 可进行数据操作
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+				cols : [ [
+					{ type: 'radio' },//单选  radio
+					{
+						field : 'ID',
+						title : 'id',
+						width : 0,hide:true
+					},
+					{
+						field : 'CUST_NAME_S',
+						title : '客户简称'
+					},
+					{
+						field : 'CUST_NAME',
+						title : '客户名称'
+					},
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
 
+			},
+			done : function(elem, data) {
+				var da=data.data;
+				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+				form.val("ruleForm", {
+					"custName":da[0].CUST_NAME,
+					"custId":da[0].ID,
+				});
+				form.render();// 重新渲染
+			}
+		});
 
+		//下拉框
+		getBarList();
+
+		//监听四个选择框
+		form.on('select(getFsample)', function(data){
+			if($('#fixValue').val()&&$('#fyear').val()
+				&&$('#fmonth').val()&&$('#fday').val()
+				&&$('#serialNum').val()&&$('#serialLen').val()) {
+
+				var param = {
+					"fixValue" : $('#fixValue').val(),
+					"fyear" :$('#fyear').val(),
+					"fmonth":$('#fmonth').val(),
+					"fday":$('#fday').val(),
+					"serialNum":$('#serialNum').val(),
+					"serialLen":$('#serialLen').val(),
+				};
+
+				CoreUtil.sendAjax("/base/rule/getFsampleByForm", JSON.stringify(param),
+					function(data) {
+						if (data.result) {
+							layer.alert("操作成功", function() {
+								$('#fsample').val(data.data);
+							});
+						} else {
+							layer.alert(data.msg, function() {
+								layer.closeAll();
+							});
+						}
+					}, "POST", false, function(res) {
+						layer.alert(res.msg);
+					});
+
+			}
+		});
 
 		tableIns = table.render({
 			elem : '#ruleList',
@@ -96,49 +188,66 @@ $(function() {
 				{type:'checkbox'}
 				// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 				, {
-				field : 'itemNo',
-				title : '内部物料编号',
+				field : 'ITEM_NO',
+				title : '物料编号',
 				width : 140, sort: true
-
-			}, {
-				field : 'itemName',
+				},
+				{
+					field : 'CUST_NAME',
+					title : '客户名称',
+					width : 140,
+				},
+				{
+				field : 'ITEM_NAME',
 				title : '物料描述', sort: true,
-				width : 400
-			}, {
-				field : 'itemNoCus',
+				width : 240
+			},
+				{
+				field : 'ITEM_NO_CUS',
 				title : '客户物料编码',
 				width : 130 ,sort: true
-			}, {
-				field : 'itemNoInside',
-				title : '华勤物料编码', sort: true,
-				width : 130
-			}, {
-				field : 'positionBegin',
-				title : '开始位置',
+			},
+				{
+				field : 'FIX_VALUE',
+				title : '固定值',
 				width : 80
 			}, {
-				field : 'positionEnd',
-				title : '结束位置',
+				field : 'FYEAR',
+				title : '年',
 				width : 80
 			}, {
-				field : 'chkString',
-				title : '验证数据',
-				width : 170
+				field : 'FMONTH',
+				title : '月',
+				width : 80
 			}, {
-				field : 'barcodeLen',
-				title : '条码长度',
+				field : 'FDAY',
+				title : '日',
 				width : 80 ,sort: true
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间',
-				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
-				width : 150
-			}, {
-				field : 'createDate',
+			},
+			// 	{
+			// 	field : 'lastupdateDate',
+			// 	title : '更新时间',
+			// 	templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
+			// 	width : 150
+			// },
+				{
+				field : 'CREATE_DATE',
 				title : '添加时间',
-				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
+				templet:'<div>{{d.CREATE_DATE?DateUtils.formatDate(d.CREATE_DATE):""}}</div>',
 				width : 150
-			}, {
+			},
+				{
+					field : 'SERIAL_NUM',
+					title : '流水号',
+					width : 100 ,sort: true
+				},
+				{
+					field : 'SERIAL_LEN',
+					title : '流水号位数',
+					width : 120 ,sort: true
+				},
+				// SERIAL_NUM 流水号
+				{
 				// fixed : 'right',
 				title : '操作',
 				align : 'center',
@@ -184,6 +293,7 @@ $(function() {
 		// 	itemName=itemName.slice(itemName.indexOf("=")+1);
 		// 	$("#itemName").val(itemName);
 		// });
+
 
 		//头工具栏事件
 		table.on('toolbar(ruleTable)', function(obj){
@@ -245,36 +355,94 @@ $(function() {
 		});
 		// 编辑校验规则
 		function getBarcodeRule(obj, id) {
-			var param = {
-				"id" : id
-			};
-			CoreUtil.sendAjax("/base/rule/getBarcodeRule",
-					JSON.stringify(param), function(data) {
-						if (data.result) {
-							form.val("ruleForm", {
-								"id" : data.data.id,
-								"itemId":data.data.itemNo,
-								"itemNo" : data.data.itemNo,
-								"itemName" : data.data.mtrial.itemName,
-								"itemNoCus" : data.data.itemNoCus,
-								"itemNoInside" : data.data.itemNoInside,
-								"positionBegin" : data.data.positionBegin,
-								"positionEnd" : data.data.positionEnd,
-								"chkString" : data.data.chkString,
-								"barcodeLen" : data.data.barcodeLen,
-							});
-							var item_id=data.data.itemId;
-							$('#itemId').attr('ts-selected',data.data.itemId);
-							openBarcodeRule(id, "编辑校验规则",item_id)
-						} else {
-							layer.alert(data.msg)
-						}
-					}, "POST", false, function(res) {
-						layer.alert("操作请求错误，请您稍后再试");
-					});
+			console.log(obj);
+			form.val("ruleForm", {
+				"id" : obj.ID,
+				"itemId":obj.ITEM_NO,
+				"itemNo" : obj.ITEM_NO,
+				"fmemo":obj.FMEMO,
+				"custId":obj.CUST_ID,
+				"itemName" : obj.ITEM_NAME,
+				"itemModel":obj.ITEM_MODEL,
+				"itemNoCus" : obj.ITEM_NO_CUS,
+				"fyear" :obj.FYEAR,
+				"fmonth" : obj.FMONTH,
+				"fday" : obj.FDAY,
+				"serialNum":obj.SERIAL_NUM,
+				"serialLen":obj.SERIAL_LEN,
+				"fixValue" : obj.FIX_VALUE,
+				"fsample" :obj.FSAMPLE,
+				"custName":obj.CUST_NAME,
+			});
+			openBarcodeRule(id, "编辑校验规则",obj.ID)
 		}
 	});
 });
+//年、月、日、流水号 下拉框
+function getBarList() {
+	CoreUtil.sendAjax("/base/rule/getBarList",
+		JSON.stringify(""), function(data) {
+			if (data.result) {
+				if (data.data.fyear) {
+					$("#fyear").empty();
+					var fyear = data.data.fyear;
+					$("#fyear").append(
+						"<option value=" + "" + ">"
+						+ "请选择年" + "</option>");
+					for (var i = 0; i < fyear.length; i++) {
+						$("#fyear").append(
+							"<option value=" + fyear[i].FCODE + ">"
+							+ fyear[i].FNAME + "</option>");
+					}
+					layui.form.render('select');
+				}
+				if (data.data.fmonth) {
+					$("#fmonth").empty();
+					var fmonth = data.data.fmonth;
+					$("#fmonth").append(
+						"<option value=" + "" + ">"
+						+ "请选择月" + "</option>");
+					for (var i = 0; i < fmonth.length; i++) {
+						$("#fmonth").append(
+							"<option value=" + fmonth[i].FCODE + ">"
+							+ fmonth[i].FNAME + "</option>");
+					}
+					layui.form.render('select');
+				}
+				if (data.data.fday) {
+					$("#fday").empty();
+					var fday = data.data.fday;
+					$("#fday").append(
+						"<option value=" + "" + ">"
+						+ "请选择日" + "</option>");
+					for (var i = 0; i < fday.length; i++) {
+						$("#fday").append(
+							"<option value=" + fday[i].FCODE + ">"
+							+ fday[i].FNAME + "</option>");
+					}
+					layui.form.render('select');
+				}
+				if (data.data.fserialNum) {
+					$("#serialNum").empty();
+					var fserialNum = data.data.fserialNum;
+					$("#serialNum").append(
+						"<option value=" + "" + ">"
+						+ "请选择年" + "</option>");
+					for (var i = 0; i < fserialNum.length; i++) {
+						$("#serialNum").append(
+							"<option value=" + fserialNum[i].FCODE + ">"
+							+ fserialNum[i].FNAME + "</option>");
+					}
+					layui.form.render('select');
+				}
+
+			} else {
+				layer.alert(data.msg)
+			}
+		}, "POST", false, function(res) {
+			layer.alert("操作请求错误，请您稍后再试");
+		});
+}
 
 // 新增编辑弹出框
 function openBarcodeRule(id, title,item_id) {
@@ -311,6 +479,7 @@ function addSubmit(obj) {
 	// str=str.slice(0,str.indexOf("="));
 	obj.field.itemId=str;
 	//console.log(obj)
+	console.log(obj);
 	CoreUtil.sendAjax("/base/rule/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
@@ -335,8 +504,8 @@ function editSubmit(obj) {
 	// var str=obj.field.itemId
 	// str=str.slice(0,str.indexOf("="));
 	// obj.field.itemId=str;
-	var str= $('#itemId').attr('ts-selected');
-	obj.field.itemId=str;
+	// var str= $('#itemId').attr('ts-selected');
+	// obj.field.itemId=str;
 	CoreUtil.sendAjax("/base/rule/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {

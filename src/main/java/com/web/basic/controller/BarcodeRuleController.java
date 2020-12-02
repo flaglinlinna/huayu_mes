@@ -54,8 +54,8 @@ public class BarcodeRuleController extends WebController{
 	        String method = "base/rule/getList";String methodName ="获取小码校验规则信息列表";
 	        try {
 //	        	System.out.println(keyword);
-	            Sort sort = new Sort(Sort.Direction.DESC, "itemNo");
-	            ApiResponseResult result = ruleService.getList(keyword, super.getPageRequest(sort));
+	            Sort sort =  Sort.unsorted();
+	            ApiResponseResult result = ruleService.getListByPrc(keyword, super.getPageRequest(sort));
 	            logger.debug("获取小码校验规则信息列表=getList:");
 //	            getSysLogService().success(module,method, methodName, keyword);
 	            return result;
@@ -162,14 +162,70 @@ public class BarcodeRuleController extends WebController{
 		    }
 
 
+	@ApiOperation(value = "获取客户列表", notes = "获取客户列表", hidden = true)
+	@RequestMapping(value = "/getCustomerList", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getCustomerList(String keyword) {
+		String method = "base/rule/getCustomerList";String methodName ="获取客户列表";
+		try {
+			Sort sort = Sort.unsorted();
+			ApiResponseResult result = ruleService.getCustomer(keyword,super.getPageRequest(sort));
+			logger.debug("获取客户列表=getCustomerList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取客户列表失败！", e);
+			getSysLogService().error(module,method, methodName,"关键词:"+keyword+";"+ e.toString());
+			return ApiResponseResult.failure("获取客户列表失败！");
+		}
+	}
+
+	@ApiOperation(value = "获取年月日下拉列表", notes = "获取年月日下拉列表", hidden = true)
+	@RequestMapping(value = "/getBarList", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getBarList(String type) {
+		String method = "base/rule/getBarList";String methodName ="获取年月日下拉列表";
+		try {
+			Sort sort = Sort.unsorted();
+			ApiResponseResult result = ruleService.getBarList(type,super.getPageRequest(sort));
+			logger.debug("获取年月日下拉列表=getBarList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取年月日下拉列表失败！", e);
+			getSysLogService().error(module,method, methodName,"关键词:"+type+";"+ e.toString());
+			return ApiResponseResult.failure("获取年月日下拉列表失败！");
+		}
+	}
+
+	@ApiOperation(value = "获取条码样例", notes = "获取条码样例", hidden = true)
+	@RequestMapping(value = "/getFsampleByForm", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getFsampleByForm(String fixValue,String fyear,String fmonth,String fday,
+											  String serialNum,String serialLen) {
+		String method = "base/rule/getFsampleByForm";String methodName ="获取条码样例";
+		try {
+			ApiResponseResult result = ruleService.getFsampleByForm(fixValue,fyear,fmonth,fday,serialNum,serialLen);
+			logger.debug("获取条码样例=getFsampleByForm:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取条码样例失败！", e);
+			getSysLogService().error(module,method, methodName,e.toString());
+			return ApiResponseResult.failure("获取条码样例失败！");
+		}
+	}
+
 	@ApiOperation(value = "获取物料列表", notes = "获取物料列表", hidden = true)
 	@RequestMapping(value = "/getMtrialListPage", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult getMtrialList(String keyword) {
 		String method = "base/rule/getMtrialList";String methodName ="获取物料列表";
 		try {
-			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = ruleService.getMtrialList(keyword,super.getPageRequest(sort));
+//			Sort sort = new Sort(Sort.Direction.DESC, "id");
+//			ApiResponseResult result = ruleService.getMtrialList(keyword,super.getPageRequest(sort));
+			Sort sort = Sort.unsorted();
+			ApiResponseResult result = ruleService.getMtrial(keyword,super.getPageRequest(sort));
 			logger.debug("获取物料列表=getMtrialList:");
 //			getSysLogService().success(module,method, methodName, "关键词:"+keyword);
 			return result;

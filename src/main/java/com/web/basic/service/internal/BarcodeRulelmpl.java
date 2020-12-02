@@ -1,12 +1,12 @@
 package com.web.basic.service.internal;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.web.produce.service.internal.PrcUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,21 +23,98 @@ import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.MtrialDao;
-import com.web.basic.dao.MtrialDao;
 import com.web.basic.dao.BarcodeRuleDao;
 import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.BarcodeRule;
-import com.web.basic.entity.Process;
 import com.web.basic.service.BarcodeRuleService;
 
 @Service(value = "barcodeRuleService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class BarcodeRulelmpl implements BarcodeRuleService {
+public class BarcodeRulelmpl extends PrcUtils implements BarcodeRuleService {
 	@Autowired
 	private BarcodeRuleDao barcodeRuleDao;
 
 	@Autowired
 	private MtrialDao mtrialDao;
+
+	@Override
+	public ApiResponseResult getMtrial(String keyword,PageRequest pageRequest) throws Exception{
+		List<Object> list = getReworkItemPrc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"","原材料半成品",keyword,pageRequest);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
+	}
+
+	//getCustomerProc
+	public ApiResponseResult getCustomer(String keyword,PageRequest pageRequest) throws Exception{
+		List<Object> list = getCustomerProc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				"客户",keyword,pageRequest,"prc_mes_cof_customer_chs");
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
+	}
+
+	//prc_mes_cof_bar_s_list
+	@Override
+	public ApiResponseResult getBarList(String type,PageRequest pageRequest) throws Exception{
+		List<Object> list1 = getBarListPrc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				"年","",pageRequest,"prc_mes_cof_bar_s_list");
+		if (!list1.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list1.get(1).toString());
+		}
+		List<Object> list2 = getBarListPrc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				"月","",pageRequest,"prc_mes_cof_bar_s_list");
+		if (!list2.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list2.get(1).toString());
+		}
+		List<Object> list3 = getBarListPrc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				"日","",pageRequest,"prc_mes_cof_bar_s_list");
+		if (!list3.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list3.get(1).toString());
+		}
+		List<Object> list4 = getBarListPrc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				"流水号","",pageRequest,"prc_mes_cof_bar_s_list");
+		if (!list4.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list4.get(1).toString());
+		}
+		Map<String,Object> map =  new HashMap<>();
+		map.put("fyear",list1.get(3));
+		map.put("fmonth",list2.get(3));
+		map.put("fday",list3.get(3));
+		map.put("fserialNum",list4.get(3));
+		return ApiResponseResult.success().data(map);
+//		return ApiResponseResult.success().data(list.get(2).toString());
+	}
+
+
+	@Override
+	public ApiResponseResult getFsampleByForm(String fixValue, String fyear , String fmonth,String fday,
+											  String serialNum, String serialLen) throws Exception{
+		List<Object> list = getFsamplePrc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				fixValue,fyear,fmonth,fday,serialNum,serialLen,"prc_mes_cof_bar_s_join");
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success("").data(list.get(2));
+
+	}
+//	getFsampleString
+
 
 	/**
 	 * 新增校验规则
@@ -85,24 +162,20 @@ public class BarcodeRulelmpl implements BarcodeRuleService {
 		if (o == null) {
 			return ApiResponseResult.failure("该校验规则不存在！");
 		}
-		// 判断校验规则编码是否有变化，有则修改；没有则不修改
-		// if(o.getDefectCode().equals(barcodeRule.getDefectCode())){
-		// }else{
-		// int count = barcodeRuleDao.countByDelFlagAndDefectCode(0,
-		// barcodeRule.getDefectCode());
-		// if(count > 0){
-		// return ApiResponseResult.failure("校验规则编码已存在，请填写其他校验规则编码！");
-		// }
-		// o.setDefectCode(barcodeRule.getDefectCode().trim());
-		// }
+	
 		o.setItemId(barcodeRule.getItemId());
 		o.setItemNo(barcodeRule.getItemNo());
 		o.setItemNoCus(barcodeRule.getItemNoCus());
-		o.setItemNoInside(barcodeRule.getItemNoInside());
-		o.setPositionBegin(barcodeRule.getPositionBegin());
-		o.setPositionEnd(barcodeRule.getPositionEnd());
-		o.setChkString(barcodeRule.getChkString());
-		o.setBarcodeLen(barcodeRule.getBarcodeLen());
+		o.setCustId(barcodeRule.getCustId());
+		o.setFday(barcodeRule.getFday());
+		o.setFmonth(barcodeRule.getFmonth());
+		o.setFday(barcodeRule.getFday());
+		o.setFixValue(barcodeRule.getFixValue());
+		o.setFsample(barcodeRule.getFsample());
+		o.setSerialNum(barcodeRule.getSerialNum());
+		o.setSerialLen(barcodeRule.getSerialLen());
+		o.setFmemo(barcodeRule.getFmemo());
+
 		
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
@@ -159,6 +232,25 @@ public class BarcodeRulelmpl implements BarcodeRuleService {
 	 */
 	@Override
 	@Transactional
+	public ApiResponseResult getListByPrc(String keyword, PageRequest pageRequest) throws Exception {
+		// 查询条件1
+		List<Object> list1 = getBarListPrc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				"列表",keyword,pageRequest,"prc_mes_cof_bar_s_list");
+		if (!list1.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list1.get(1).toString());
+		}
+		Map<String,Object> map =  new HashMap<>();
+		map.put("total",list1.get(2));
+		map.put("rows",list1.get(3));
+		return ApiResponseResult.success().data(map);
+	}
+
+	/**
+	 * 查询列表
+	 */
+	@Override
+	@Transactional
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
@@ -179,14 +271,16 @@ public class BarcodeRulelmpl implements BarcodeRuleService {
 		for (BarcodeRule bs : page.getContent()) {
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", bs.getId());
-			map.put("itemNo",bs.getMtrial().getItemNo());//获取关联表的数据
-			map.put("itemName", bs.getMtrial().getItemName());
+			if(bs.getMtrial()!=null) {
+				map.put("itemNo", bs.getMtrial().getItemNo());//获取关联表的数据
+				map.put("itemName", bs.getMtrial().getItemName());
+			}
 			map.put("itemNoCus", bs.getItemNoCus());
-			map.put("itemNoInside", bs.getItemNoInside());
-			map.put("positionBegin", bs.getPositionBegin());
-			map.put("positionEnd", bs.getPositionEnd());
-			map.put("chkString", bs.getChkString());
-			map.put("barcodeLen", bs.getBarcodeLen());
+//			map.put("itemNoInside", bs.getItemNoInside());
+//			map.put("positionBegin", bs.getPositionBegin());
+//			map.put("positionEnd", bs.getPositionEnd());
+//			map.put("chkString", bs.getChkString());
+//			map.put("barcodeLen", bs.getBarcodeLen());
 			map.put("lastupdateDate", bs.getLastupdateDate());
 			map.put("createDate", bs.getCreateDate());
 			list.add(map);

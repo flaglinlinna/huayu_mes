@@ -65,7 +65,7 @@
 					type="hidden" name="id" />
 
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">内部物料编码</label>
+					<label class="layui-form-label layui-required">物料编码</label>
 					<div class="layui-input-inline" style="width: 320px;">
 						<!--<select id="itemId" name="itemId" lay-filter="itemNo"-->
 							<!--lay-verify="required" lay-search>-->
@@ -77,55 +77,104 @@
 				</div>
 				<input id="itemNo" type="hidden" name="itemNo" />
 				<div class="layui-form-item">
-					<label class="layui-form-label">物料描述</label>
+					<label class="layui-form-label">机型</label>
 					<div class="layui-input-inline" style="width: 320px;">
-						<textarea disabled id="itemName" name="itemName" placeholder="选择内部物料编码获取物料描述" 
-							lay-verify="required" style="background: #efefef;" class="layui-textarea"></textarea>
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">客户物料编码</label>
-					<div class="layui-input-inline" style="width: 320px;">
-						<input id="itemNoCus" name="itemNoCus" lay-verify="itemName" placeholder="请输入客户物料编码" 
-							autocomplete="off"  class="layui-input" type="text" />
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">华勤物料编码</label>
-					<div class="layui-input-inline" style="width: 320px;">
-						<input id="itemNoInside" name="itemNoInside" placeholder="请输入华勤物料编码" 
-							lay-verify="itemNoInside" autocomplete="off" class="layui-input"
-							type="text" />
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">开始位置</label>
-					<div class="layui-input-inline" style="width: 100px;">
-						<input id="positionBegin" name="positionBegin" placeholder="请输入开始位置" 
-							lay-verify="required|intValue" autocomplete="off" class="layui-input"
-							type="text" />
-					</div>
-					<label class="layui-form-label layui-required">结束位置</label>
-					<div class="layui-input-inline" style="width: 100px;">
-						<input id="positionEnd" name="positionEnd" lay-verify="required|intValue"
-						 placeholder="请输入结束位置" 	autocomplete="off" class="layui-input" type="text" />
+						<input disabled id="itemModel" name="itemModel" placeholder="选择物料编码获取机型"
+								  style="background: #efefef;" class="layui-input" type="text"/>
 					</div>
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">验证数据</label>
+					<label class="layui-form-label">物料描述</label>
 					<div class="layui-input-inline" style="width: 320px;">
-						<input id="chkString" name="chkString" lay-verify="required|chkString"  placeholder="请输入验证数据"
-							autocomplete="off" class="layui-input" type="text" />
+						<textarea disabled id="itemName" name="itemName" placeholder="选择内部物料编码获取物料描述" 
+							 style="background: #efefef;" class="layui-textarea"></textarea>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">客户名称</label>
+					<div class="layui-input-inline" style="width: 320px;">
+						<input id="custName" name="custName"  placeholder="请输入客户名称"
+							   autocomplete="off"  class="layui-input" type="text" />
+					</div>
+				</div>
+				<input id="custId" type="hidden" name="custId" />
+
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">客户物料编码</label>
+					<div class="layui-input-inline" style="width: 320px;">
+						<input id="itemNoCus" name="itemNoCus"  placeholder="请输入终端客户物料编码"
+							   autocomplete="off"  class="layui-input" type="text" />
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">规格描述</label>
+					<div class="layui-input-inline" style="width: 320px;">
+						<input id="fmemo" name="fmemo" placeholder="请输入规格描述"
+							 autocomplete="off" class="layui-input"
+							type="text" />
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">固定值</label>
+					<div class="layui-input-inline" style="width: 320px;">
+						<input id="fixValue" name="fixValue" placeholder="请输入固定值"
+							   autocomplete="off" class="layui-input"
+							   type="text" />
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">年份</label>
+					<div class="layui-input-inline" style="width: 320px;">
+						<select id="fyear" name="fyear" lay-filter="getFsample" placeholder="请选择年份">
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">月份</label>
+					<div class="layui-input-inline" style="width: 320px;">
+						<select id="fmonth" name="fmonth" lay-filter="getFsample" placeholder="请选择月份">
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">日</label>
+					<div class="layui-input-inline" style="width: 320px;">
+						<select id="fday" name="fday" lay-filter="getFsample" placeholder="请选择日">
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">流水号</label>
+					<div class="layui-input-inline" style="width: 320px;">
+						<select id="serialNum" name="serialNum"  lay-filter="getFsample" placeholder="请输入流水号">
+						</select>
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">条码长度</label>
-					<div class="layui-input-inline">
-						<input id="barcodeLen" name="barcodeLen" lay-verify="required|intValue"
-							placeholder="请输入条码长度"  autocomplete="off" class="layui-input" type="text" />
+					<label class="layui-form-label layui-required">流水号位数</label>
+					<div class="layui-input-inline" style="width: 320px;">
+						<input id="serialLen" name="serialLen"
+						 placeholder="请输入流水号位数" 	autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">条码规则样例</label>
+					<div class="layui-input-inline" style="width: 320px;">
+						<input id="fsample" name="fsample"  disabled="disabled" style="background: #efefef;"
+							   autocomplete="off" class="layui-input" type="text" />
+					</div>
+				</div>
+
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 0px;">
 						<shiro:hasPermission name="rule-edite">
