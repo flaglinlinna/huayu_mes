@@ -86,7 +86,7 @@ $(function() {
 							where : {},
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
-							height : 'full-290'// 固定表头&full-查询框高度
+							height : 'full-220'// 固定表头&full-查询框高度
 							,
 							even : true,// 条纹样式
 							page : true,
@@ -161,7 +161,7 @@ $(function() {
 							var da = checkStatus.data;// console.log(checkStatus.data)
 														// //获取选中行的数据
 							for (var i = 0; i < checkStatus.data.length; i++) {
-								empIdList += da[i].EMP_ID + ','
+								empIdList += da[i].AFF_DET_ID + ','
 							}
 							empIdList = empIdList.substring(0,
 									empIdList.length - 1)
@@ -380,7 +380,7 @@ $(function() {
 			url : context + '/produce/switch_staff/getTaskNoEmp',
 			where : params,
 			done : function(res1, curr, count) {
-				console.log(res1)
+				//console.log(res1)
 				pageCurr = curr;
 			}
 		})
@@ -411,7 +411,7 @@ function open() {
 }
 
 function saveData(obj, empIdList) {
-	// console.log(obj)
+	 console.log(obj)
 
 	
 	var params = {
@@ -421,7 +421,7 @@ function saveData(obj, empIdList) {
 		"newLineId" : obj.newLineId,
 		"newHourType" : obj.newHourType,
 		"newClassId" : obj.newClassId,
-		"newTimeBegin" : obj.newTimeBegin,
+		"newDatetimeBegin" : obj.newTimeBegin,
 		"empList" : empIdList
 	}
 	//console.log(params)
@@ -434,8 +434,12 @@ function saveData(obj, empIdList) {
 				if(res1.code=="1"){
 					layer.alert(res1.msg)
 				}else{
-					layer.closeAll();
-					//clean();
+					layer.alert("调整成功",function(){
+						layer.closeAll();
+						//clean();
+					})
+					
+					
 				}
 				pageCurr = curr;
 			}
