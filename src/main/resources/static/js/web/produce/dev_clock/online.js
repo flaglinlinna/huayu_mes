@@ -47,7 +47,7 @@ $(function() {
 											{
 												field : 'taskNo',
 												title : '制令单号',
-												width : 200
+												width : 160
 											},
 											{
 												field : 'classId',
@@ -77,7 +77,7 @@ $(function() {
 											{
 												field : 'lineName',
 												title : '线体',
-												width : 130
+												width : 100
 											},
 											{
 												field : 'lastupdateDate',
@@ -129,28 +129,30 @@ $(function() {
 								{
 								field : 'EMP_CODE',
 								title : '员工工号',
-								width : 195
+								width : 100
 							}, {
 								field : 'EMP_NAME',
 								title : '员工姓名',
-								width : 195
-							}, {
-								field : 'DEV_IP',
-								title : '设备IP',
-								width : 150
-							}, {
+								width : 100
+							},
+							// 	{
+							// 	field : 'DEV_IP',
+							// 	title : '设备IP',
+							// 	width : 130
+							// },
+								{
 								field : 'TIME_BEGIN',
 								title : '上线时间',
-								width : 200
+								width : 180
 							}, {
 								field : 'TIME_END',
 								title : '下线时间',
-								width : 200
+								width : 180
 							}, {
 								title : '操作',
 								align : 'center',
 								toolbar : '#optBar1',
-								width : 200
+								width : 120
 							} ] ],
 							data : []
 						});

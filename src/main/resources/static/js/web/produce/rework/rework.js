@@ -131,6 +131,7 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
+								width: 800,
 								url : context + '/produce/rework/getTaskNo',
 								method : 'get',
 								cols : [ [ {
@@ -141,21 +142,38 @@ $(function() {
 									title : 'id',
 									width : 0,
 									hide : true
-								}, {
-									field : 'TASK_NO',
-									title : '制令单号',sort: true,
-										width:150,
-										align:'center'
 								},
 									{
+										field : 'LINER_NAME',
+										title : '组长',sort: true,
+										width:70,
+										align:'center'
+									},
+									{
+										field : 'PROD_DATE',
+										title : '计划日期',
+										width : 100,
+										templet:function (d) {
+											if(d.PROD_DATE!=null){
+												return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
+											}
+										}
+									},
+									{
 										field : 'ITEM_NO',
-										width:160,
+										width:150,
 										title : '物料编号',sort: true,align:'center'
 									},
 									{
 										field : 'ITEM_NAME',
-										width:170,
-										title : '物料名称',sort: true,align:'center'
+										width:220,
+										title : '物料描述',sort: true,align:'center'
+									},
+									{
+										field : 'TASK_NO',
+										title : '制令单号',sort: true,
+										width:150,
+										align:'center'
 									},
 
 								] ],

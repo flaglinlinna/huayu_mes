@@ -87,49 +87,64 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
-								url : context + '/abnormalProduct/getTaskNo',
+								width: 800,
+								url : context + '/produce/abnormal/getTaskNo',
 								method : 'get',
 								cols : [ [ {
 									type : 'radio'
 								},// 多选 radio
-								{
-									field : 'TASK_NO',
-									title : '制令单号',
-									width : 280
-								}, {
-									field : 'CUST_NAME_S',
-									title : '客户简称',
-									width : 180
-								}, {
-									field : 'ITEM_NAME',
-									title : '物料描述',
-									width : 200
-								}, {
-									field : 'ITEM_NO',
-									title : '物料编号',
-									width : 150
-								}, {
-									field : 'LINER_NAME',
-									title : '线长',
-									width : 100
-								} ] ],
-								parseData : function(res) {	
+									{
+										field : 'LINER_NAME',
+										title : '组长',
+										width : 70
+									},
+									{
+										field : 'PROD_DATE',
+										title : '计划日期',
+										width : 100,
+										templet:function (d) {
+											if(d.PROD_DATE!=null){
+												return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
+											}
+										}
+									},
+									{
+										field : 'ITEM_NO',
+										title : '物料编号',
+										width : 150
+									},
+									{
+										field : 'ITEM_NAME',
+										title : '物料描述',
+										width : 220
+									},
+									{
+										field : 'TASK_NO',
+										title : '制令单号',
+										width : 160
+									}, {
+										field : 'CUST_NAME_S',
+										title : '客户简称',
+										width : 80
+									},
+								] ],
+								parseData : function(res) {
 									if (res.result) {
 										if(res.status == 1){
-								              return {
-								                     "code": res.status,//code值为200表示成功
-								                       "count": 0,
-								                       "msg":res.msg,
-								                       "data":[]
-								                   }
-								             }
+											return {
+												"code": res.status,//code值为200表示成功
+												"count": 0,
+												"msg":res.msg,
+												"data":[]
+											}
+										}
 										// 可进行数据操作
 										return {
 											"count" : 0,
 											"msg" : res.msg,
 											"data" : res.data,
 											"code" : res.status
-										// code值为200表示成功
+											// code值为200表示成功
 										}
 									}
 

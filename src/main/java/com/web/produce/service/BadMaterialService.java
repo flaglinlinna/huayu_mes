@@ -24,7 +24,7 @@ public interface BadMaterialService {
 
     public ApiResponseResult getInfoBarcode(String barcode, String taskNo) throws Exception;
 
-    public ApiResponseResult saveMaterial(String itemNo,Integer deptId, Integer venderId,String prodDate,
+    public ApiResponseResult saveMaterial(String itemNo,Integer deptId, Integer venderId,String barcode,String prodDate,
                                           String lotNo,String defectCode,String defectQty) throws Exception;
 
 

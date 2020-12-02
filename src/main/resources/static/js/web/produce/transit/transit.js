@@ -125,12 +125,12 @@ $(function() {
 							},{
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 200,sort: true
+								width : 160,sort: true
 							},
 								{
 									field : 'ITEM_BARCODE',
 									title : '条码',
-									width : 200,sort: true
+									width : 170,sort: true
 								},{
 									field : 'ITEM_NO',
 									title : '物料编码',width : 150,sort: true
@@ -138,22 +138,22 @@ $(function() {
 								{
 									field : 'ITEM_NAME',
 									title : '物料描述',
-									width : 150,
+									width : 180,
 									sort: true
 								},
 
 								{
 								field : 'PROC_NO',
 								title : '工序编码',
-								width : 120,sort: true
+								width : 100,sort: true
 							}, {
 								field : 'PROC_NAME',
 								title : '工序名称',
-								width : 150,sort: true
+								width : 130,sort: true
 							},  {
 								field : 'LINE_NO',
 								title : '组长',
-								width : 100,sort: true
+								width : 70,sort: true
 							},
 
 								{
@@ -167,7 +167,7 @@ $(function() {
 							},  {
 								field : 'CREATE_DATE',
 								title : '送检时间',
-								width : 120,sort: true
+								width : 150,sort: true
 							}] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;

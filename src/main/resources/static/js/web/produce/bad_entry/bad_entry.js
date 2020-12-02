@@ -93,6 +93,7 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
+								width:750,
 								url : context + '/produce/bad_entry/getTaskNo',
 								method : 'get',
 								cols : [ [ {
@@ -103,23 +104,37 @@ $(function() {
 									title : 'id',
 									width : 0,
 									hide : true
-								}, {
+								},
+									{
+										field : 'LINER_NAME',
+										title : '组长',
+										width : 70
+									},
+									{
+										field : 'PROD_DATE',
+										title : '计划日期',
+										width : 100,
+										templet:function (d) {
+											if(d.PROD_DATE!=null){
+												return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
+											}
+										}
+									},
+									{
+										field : 'ITEM_NO',
+										title : '物料编码',
+										width : 150
+									},
+									{
+										field : 'ITEM_NAME',
+										title : '物料描述',
+										width : 250
+									},
+									{
 									field : 'TASK_NO',
 									title : '制令单号',
 									width : 180
-								}, {
-									field : 'ITEM_NAME',
-									title : '物料描述',
-									width : 250
-								}, {
-									field : 'ITEM_NO',
-									title : '物料编码',
-									width : 150
-								}, {
-									field : 'LINER_NAME',
-									title : '组长',
-									width : 100
-								} ] ],
+								},  ] ],
 								parseData : function(res) {
 									// console.log(res)
 									if (res.result) {
@@ -246,15 +261,15 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '物料条码',
-								width : 150
+								width : 220
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
-								width : 170
+								width : 150
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 200
+								width : 160
 							}, {
 								field : 'CLASS_NO',
 								title : '班次',

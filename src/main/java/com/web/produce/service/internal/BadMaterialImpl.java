@@ -87,14 +87,14 @@ public class BadMaterialImpl extends PrcUtils implements BadMaterialService {
     }
 
     @Override
-    public ApiResponseResult saveMaterial(String itemNo,Integer deptId, Integer venderId,String prodDate,
+    public ApiResponseResult saveMaterial(String itemNo,Integer deptId, Integer venderId,String barcode,String prodDate,
                                     String lotNo,String defectCode,String defectQty) throws Exception {
         List<Object> list = saveMaterialPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",
-                UserUtil.getSessionUser().getId()+"", itemNo, deptId, venderId,prodDate, lotNo,defectCode,defectQty);
+                UserUtil.getSessionUser().getId()+"", barcode,itemNo, deptId, venderId,prodDate, lotNo,defectCode,defectQty);
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
             return ApiResponseResult.failure(list.get(1).toString());
         }
-        return ApiResponseResult.success();
+        return ApiResponseResult.success().data(list.get(2));
     }
 
     @Override

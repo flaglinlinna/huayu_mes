@@ -101,12 +101,12 @@ public class BadMaterialController extends WebController {
     @ApiOperation(value="确认投入", notes="确认投入", hidden = true)
     @RequestMapping(value = "/saveMaterial", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult  saveMaterial(String itemNo,Integer deptId, Integer venderId,String prodDate,
+    public ApiResponseResult  saveMaterial(String itemNo,Integer deptId, Integer venderId,String barcode,String prodDate,
                                            String lotNo,String defectCode,String defectQty){
         String method = "/badMaterial/addPut";String methodName ="确认投入";
 //        String param = "条码:"+ barcode +";生产指令号"+task_no+";物料编码:"+item_no+";数量"+qty;
         try {
-            ApiResponseResult result = badMaterialService.saveMaterial(itemNo,deptId,venderId,prodDate,lotNo,defectCode,defectQty);
+            ApiResponseResult result = badMaterialService.saveMaterial(itemNo,deptId,venderId,barcode,prodDate,lotNo,defectCode,defectQty);
             logger.debug("确认投入=addPut:");
             getSysLogService().success(module,method, methodName, "");
             return result;

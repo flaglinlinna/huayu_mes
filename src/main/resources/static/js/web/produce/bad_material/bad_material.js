@@ -46,55 +46,48 @@ $(function() {
                         //code值为200表示成功
                     }
                 },
-                cols : [ [ {
-                    type : 'radio',
-                    width : 50
-                },{
-                    field : 'id',
-                    title : 'id',
-                    width : 0,hide:true
-                },
+                cols : [ [
                     {
-                        field : 'ITEM_BARCODE',
-                        title : '条码',
-                        width : 120,sort: true
-                    },{
-                        field : 'ITEM_NO',
-                        title : '物料编号',
-                        align:	'center',
-                        width : 150,sort: true
-                    }, {
-                        field : 'ITEM_NAME',
-                        align:	'center',
-                        title : '物料描述',sort: true
-                    },
-                    {
-                        field : 'FEED_TYPE',
-                        title : '类型',
-                        align:	'center',
-                        width : 90,sort: true
-                    },
-                    {
-                        field : 'USER_NAME',
-                        title : '操作人',
-                        align:	'center',
-                        width : 110,sort: true
-                    },
-                    {
-                        field : 'QUANTITY',
-                        title : '数量',
-                        width : 90,sort: true
-                    },{
-                        field : 'CREATE_DATE',
-                        title : '创建时间',
-                        width : 150,sort: true
+                        type : 'numbers'
                     },  {
-                        fixed : 'right',
-                        title : '操作',
-                        align : 'center',
-                        toolbar : '#optBar',
-                        width : 80
-                    } ] ],
+                        field : 'ITEM_NO',
+                        title : '物料料号',
+                        width : 140
+                    },
+                    {
+                        field : 'ITEM_NAME',
+                        title : '物料名称',
+                        width : 230
+                    } ,
+                    {
+                        field : 'DEFECT_NAME',
+                        title : '不良内容',
+                        width : 120
+                    },
+                    {
+                        field : 'DEFECT_DET_QTY',
+                        title : '不良数量',
+                        width : 100
+                    }, {
+                        field : 'USER_NAME',
+                        title : '录入人姓名',
+                        width : 100
+                    }, {
+                        field : 'CREATE_DATE',
+                        title : '录入时间',
+                        width : 150
+                    },
+                    {
+                        field : 'DEPT_NAME',
+                        title : '来料部门',
+                        width : 120,sort: true
+                    },
+                    {
+                        field : 'VENDER_NAME',
+                        title : '供应商名称',
+                        width : 200
+                    } ,
+                ] ],
                 done : function(res, curr, count) {
                     pageCurr = curr;
                 }
@@ -271,35 +264,28 @@ $(function() {
                         // code值为200表示成功
                     }
                 },
-                cols : [ [ {
+                cols : [ [
+                    {
                     type : 'numbers'
-                },{
-                    field : 'DEPT_NAME',
-                    title : '来料部门',
-                    width : 200,sort: true
                 },  {
                     field : 'ITEM_NO',
                     title : '物料料号',
-                    width : 150
-                }, {
-                        field : 'VENDER_NAME',
-                        title : '供应商名称',
-                        width : 200
-                    } ,
+                    width : 140
+                },
                     {
                     field : 'ITEM_NAME',
                     title : '物料名称',
-                    width : 200
+                    width : 230
                 } ,
                     {
                         field : 'DEFECT_NAME',
                         title : '不良内容',
-                        width : 150
+                        width : 120
                     },
                     {
                     field : 'DEFECT_DET_QTY',
                     title : '不良数量',
-                    width : 120
+                    width : 100
                 }, {
                     field : 'USER_NAME',
                     title : '录入人姓名',
@@ -309,6 +295,16 @@ $(function() {
                     title : '录入时间',
                     width : 150
                 },
+                    {
+                        field : 'DEPT_NAME',
+                        title : '来料部门',
+                        width : 120,sort: true
+                    },
+                    {
+                        field : 'VENDER_NAME',
+                        title : '供应商名称',
+                        width : 200
+                    } ,
                 ] ],
                 done : function(res, curr, count) {
                     pageCurr = curr;
@@ -430,6 +426,7 @@ function addPut(obj){
     console.log(obj);
     var supplierId = $('#supplier').attr('ts-selected');
     var params={
+        "barcode":obj.barcode,
         "itemNo":obj.itemNo,
         "lotNo":obj.lotNo,
         "defectQty":obj.inqty,
@@ -440,7 +437,10 @@ function addPut(obj){
     };
     CoreUtil.sendAjax("/produce/badMaterial/saveMaterial", params, function(data) {
         if (data.result) {
-            layer.alert("保存成功！");
+            // layer.alert("保存成功！");
+            tableIns.reload({
+                data:data.data
+            });
         }else{
             // playMusic();
             layer.alert(data.msg,function () {

@@ -49,12 +49,12 @@ $(function() {
 									}, {
 										field : 'EMP_CODE',
 										title : '工号',
-										width : 130,
+										width : 100,
 										sort : true
 									}, {
 										field : 'EMP_NAME',
 										title : '姓名',
-										width : 130,
+										width : 100,
 										sort : true
 									}, {
 										field : 'TIME_BEGIN',
@@ -118,32 +118,42 @@ $(function() {
 									title : 'id',
 									width : 0,
 									hide : true
-								}, {
-									field : 'TASK_NO',
-									title : '制令单号',
-									width : 150,
-									sort : true
-								}, {
+								},
+									{
+										field : 'LINER_NAME',
+										title : '组长',
+										width : 70,
+										sort : true
+									},
+									{
+										field : 'PROD_DATE',
+										title : '计划日期',
+										width : 100,
+										sort : true,
+										templet:function (d) {
+											if(d.PROD_DATE!=null){
+												return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
+											}
+										}
+									},
+									 {
 									field : 'ITEM_NO',
 									title : '物料编码',
 									width : 140,
 									sort : true
-								}, {
-									field : 'LINER_NAME',
-									title : '组长',
-									width : 70,
-									sort : true
-								}, {
-									field : 'PROD_DATE',
-									title : '计划日期',
-									width : 130,
-									sort : true
-								}, {
+								},  {
 									field : 'ITEM_NAME',
 									title : '物料描述',
-									width : 120,
+									width : 260,
 									sort : true
-								}, {
+								},
+									{
+										field : 'TASK_NO',
+										title : '制令单号',
+										width : 150,
+										sort : true
+									},
+									{
 									field : 'CUST_NAME_S',
 									title : '客户简称',
 									width : 100,
@@ -208,15 +218,17 @@ $(function() {
 									width : 150,
 									sort : true
 								}, {
-									field : 'ITEM_NAME_S',
-									title : '物料简称',
-									width : 110,
-									sort : true
-								}, {
 									field : 'ITEM_NAME',
 									title : '物料描述',
 									width : 400
-								} ] ],
+								},
+									{
+										field : 'ITEM_NAME_S',
+										title : '物料简称',
+										width : 110,
+										sort : true
+									},
+								] ],
 								parseData : function(res) {
 									//console.log(res)
 									if (res.result) {
@@ -354,10 +366,23 @@ $(function() {
 								title : '制令单号',
 								width : 160,
 								sort : true
-							}, {
+							},
+								{
+									field : 'ITEM_NO',
+									title : '物料编号',
+									width : 150,
+									sort : true
+								},
+								{
+									field : 'LINER_NAME',
+									title : '组长',
+									width : 90,
+									sort : true
+								},
+								{
 								field : 'LINE_NAME',
 								title : '线体',
-								width : 120,
+								width : 90,
 								sort : true
 							},
 							// 	{
@@ -393,18 +418,6 @@ $(function() {
 								{
 									field : 'PROD_DATE',
 									title : '生产日期',
-									width : 150,
-									sort : true
-								},
-								{
-									field : 'LINER_NAME',
-									title : '组长',
-									width : 90,
-									sort : true
-								},
-								{
-									field : 'ITEM_NO',
-									title : '物料编号',
 									width : 150,
 									sort : true
 								},

@@ -193,32 +193,47 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
+								width: 800,
 								url : context + '/produce/abnormal/getTaskNo',
 								method : 'get',
 								cols : [ [ {
 									type : 'radio'
 								},// 多选 radio
-								{
-									field : 'TASK_NO',
-									title : '制令单号',
-									width : 400
-								}, {
-									field : 'CUST_NAME_S',
-									title : '客户简称',
-									width : 80
-								}, {
+									{
+										field : 'LINER_NAME',
+										title : '组长',
+										width : 70
+									},
+									{
+										field : 'PROD_DATE',
+										title : '计划日期',
+										width : 100,
+										templet:function (d) {
+											if(d.PROD_DATE!=null){
+												return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
+											}
+										}
+									},
+									{
+										field : 'ITEM_NO',
+										title : '物料编号',
+										width : 150
+									},
+									 {
 									field : 'ITEM_NAME',
 									title : '物料描述',
-									width : 200
-								}, {
-									field : 'ITEM_NO',
-									title : '物料编号',
-									width : 150
-								}, {
-									field : 'LINER_NAME',
-									title : '线长',
-									width : 100
-								} ] ],
+									width : 220
+										},
+									{
+										field : 'TASK_NO',
+										title : '制令单号',
+										width : 160
+									}, {
+										field : 'CUST_NAME_S',
+										title : '客户简称',
+										width : 80
+									},
+								] ],
 								parseData : function(res) {	
 									if (res.result) {
 										if(res.status == 1){
@@ -442,12 +457,12 @@ function getReasonSelect(editReason) {
 				for (var i = 0; i < forReason.length; i++) {
 					if(forReason[i].abnormalType ==editReason) {
 						$("#forReason").append(
-							"<option value=" + forReason[i].ID + "  selected='selected'>"
-							+ forReason[i].ERR_NAME + "</option>");
+							"<option value=" + forReason[i].id + "  selected='selected'>"
+							+ forReason[i].abnormalType + "</option>");
 					}else{
 						$("#forReason").append(
-								"<option value=" + forReason[i].ID + ">"
-								+ forReason[i].ERR_NAME + "</option>");
+								"<option value=" + forReason[i].id + ">"
+								+ forReason[i].abnormalType + "</option>");
 					}
 				}
 

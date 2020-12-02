@@ -46,23 +46,29 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 200,sort: true
-							},{
+								width : 160,sort: true
+							},
+								{
+									field : 'LINE_NO',
+									title : '组长',
+									width : 70,sort: true
+								},
+								{
 								field : 'ITEM_BARCODE',
 								title : '物料条码',
-								width : 200,sort: true
+								width : 170,sort: true
 							}, {
 								field : 'ITEM_NO',
 								title : '物料编码',
-								width : 170,sort: true
+								width : 150,sort: true
 							}, , {
 								field : 'ITEM_NAME',
 								title : '物料描述',
-								width : 170,sort: true
+								width : 180,sort: true
 							},{
 								field : 'PROC_NAME',
 								title : '工序名称',
-								width : 150,sort: true
+								width : 100,sort: true
 							}, {
 								field : 'SAMPLE_QTY',
 								title : '抽检总量',
@@ -82,16 +88,12 @@ $(function() {
 							}, {
 								field : 'ORG_NAME',
 								title : '责任部门',
-								width : 80,sort: true
+								width : 100,sort: true
 							}, {
 								field : 'DEFECT_DET_LIST',
 								title : '不良内容',
-								width : 80,sort: true
-							},  {
-								field : 'LINE_NO',
-								title : '组长',
-								width : 90,sort: true
-							}] ],
+								width : 100,sort: true
+							}, ] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}

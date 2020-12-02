@@ -66,13 +66,14 @@ $(function() {
 								pageCurr = curr;
 							}
 						});
-						tableSelect = tableSelect
-								.render({
+
+						tableSelect = tableSelect.render({
 									elem : '#taskno',
 									searchKey : 'keyword',
 									checkedKey : 'id',
 									searchPlaceholder : '试着搜索',
 									table : {
+										width:750,
 										url : context
 												+ '/produce/check_code/getTaskNo',
 										method : 'get',
@@ -85,24 +86,50 @@ $(function() {
 											title : 'id',
 											width : 0,
 											hide : true
-										}, {
-											field : 'TASK_NO',
-											title : '制令单号',
-											width : 180,
-											sort : true
-										}, {
+										},
+											{
+												field : 'LINER_NAME',
+												title : '组长',
+												width : 70
+											},
+											{
+												field : 'PROD_DATE',
+												title : '计划日期',
+												width : 100,
+												templet:function (d) {
+													if(d.PROD_DATE!=null){
+														return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
+													}
+												}
+											},
+											 {
 											field : 'ITEM_NO',
 											title : '物料编码',
 											width : 150
-										}, {
-											field : 'LINER_NAME',
-											title : '组长',
-											width : 100
-										}, {
+										},
+											{
+												field : 'ITEM_NAME',
+												title : '物料描述',
+												width : 240
+											},
+											{
 											field : 'CUST_NAME_S',
 											title : '客户(简称)',
 											width : 100
-										} ] ],
+										},
+											{
+												field : 'TASK_NO',
+												title : '制令单号',
+												width : 180,
+												sort : true
+											},
+										] ],
+										page : false,
+										request : {
+											pageName : 'page' // 页码的参数名称，默认：page
+											,
+											limitName : 'rows' // 每页数据量的参数名，默认：limit
+										},
 										parseData : function(res) {
 											// console.log(res)
 											if (res.result) {
@@ -169,18 +196,19 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 350
+								width : 150
 							}, {
 								field : 'BARCODE_S_1',
 								title : '条码1',
-								width : 200
+								width : 220
 							}, {
 								field : 'BARCODE_S_2',
 								title : '条码2',
-								width : 200
+								width : 220
 							}, {
 								field : 'CHK_RESULT',
-								title : '校验结果'
+								title : '校验结果',
+								width : 100
 							}, {
 								field : 'USER_NAME',
 								title : '操作人',
