@@ -196,15 +196,15 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 150
+								width : 175
 							}, {
 								field : 'BARCODE_S_1',
 								title : '条码1',
-								width : 220
+								width : 240
 							}, {
 								field : 'BARCODE_S_2',
 								title : '条码2',
-								width : 220
+								width : 240
 							}, {
 								field : 'CHK_RESULT',
 								title : '校验结果',

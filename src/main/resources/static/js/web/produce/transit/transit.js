@@ -46,7 +46,7 @@ $(function() {
 							}, {
 								field : 'ITEM_BARCODE',
 								title : '箱号条码',
-								width : 150,sort: true
+								width : 175,sort: true
 							}, {
 								field : 'PROD_DATE',
 								title : '生产日期',
@@ -125,12 +125,12 @@ $(function() {
 							},{
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 160,sort: true
+								width : 175,sort: true
 							},
 								{
 									field : 'ITEM_BARCODE',
 									title : '条码',
-									width : 170,sort: true
+									width : 175,sort: true
 								},{
 									field : 'ITEM_NO',
 									title : '物料编码',width : 150,sort: true

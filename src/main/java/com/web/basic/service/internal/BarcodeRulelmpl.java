@@ -162,7 +162,7 @@ public class BarcodeRulelmpl extends PrcUtils implements BarcodeRuleService {
 		if (o == null) {
 			return ApiResponseResult.failure("该校验规则不存在！");
 		}
-	
+
 		o.setItemId(barcodeRule.getItemId());
 		o.setItemNo(barcodeRule.getItemNo());
 		o.setItemNoCus(barcodeRule.getItemNoCus());
@@ -175,6 +175,7 @@ public class BarcodeRulelmpl extends PrcUtils implements BarcodeRuleService {
 		o.setSerialNum(barcodeRule.getSerialNum());
 		o.setSerialLen(barcodeRule.getSerialLen());
 		o.setFmemo(barcodeRule.getFmemo());
+		o.setFsample(barcodeRule.getFsample());
 
 		
 		o.setLastupdateDate(new Date());

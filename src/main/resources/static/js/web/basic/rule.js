@@ -120,40 +120,20 @@ $(function() {
 			}
 		});
 
-		//下拉框
+		//下拉框初始化
 		getBarList();
 
+        $("#fixValue").blur(function(){
+            getFsample();
+        });
+
+        $("#serialLen").blur(function(){
+            getFsample();
+        });
+
 		//监听四个选择框
-		form.on('select(getFsample)', function(data){
-			if($('#fixValue').val()&&$('#fyear').val()
-				&&$('#fmonth').val()&&$('#fday').val()
-				&&$('#serialNum').val()&&$('#serialLen').val()) {
-
-				var param = {
-					"fixValue" : $('#fixValue').val(),
-					"fyear" :$('#fyear').val(),
-					"fmonth":$('#fmonth').val(),
-					"fday":$('#fday').val(),
-					"serialNum":$('#serialNum').val(),
-					"serialLen":$('#serialLen').val(),
-				};
-
-				CoreUtil.sendAjax("/base/rule/getFsampleByForm", JSON.stringify(param),
-					function(data) {
-						if (data.result) {
-							layer.alert("操作成功", function() {
-								$('#fsample').val(data.data);
-							});
-						} else {
-							layer.alert(data.msg, function() {
-								layer.closeAll();
-							});
-						}
-					}, "POST", false, function(res) {
-						layer.alert(res.msg);
-					});
-
-			}
+		form.on('select(getFsample)', function(){
+            getFsample();
 		});
 
 		tableIns = table.render({
@@ -378,6 +358,40 @@ $(function() {
 		}
 	});
 });
+
+function getFsample() {
+    if($('#fixValue').val()&&$('#fyear').val()
+        &&$('#fmonth').val()&&$('#fday').val()
+        &&$('#serialNum').val()&&$('#serialLen').val()) {
+
+        var param = {
+            "fixValue" : $('#fixValue').val(),
+            "fyear" :$('#fyear').val(),
+            "fmonth":$('#fmonth').val(),
+            "fday":$('#fday').val(),
+            "serialNum":$('#serialNum').val(),
+            "serialLen":$('#serialLen').val(),
+        };
+
+        CoreUtil.sendAjax("/base/rule/getFsampleByForm", JSON.stringify(param),
+            function(data) {
+                if (data.result) {
+                    $('#fsample').val(data.data);
+                    // layer.alert("操作成功", function() {
+                    // 	$('#fsample').val(data.data);
+                    // });
+                } else {
+                    layer.alert(data.msg, function(index) {
+                        layer.close(index);
+                    });
+                }
+            }, "POST", false, function(res) {
+                layer.alert(res.msg);
+            });
+
+    }
+}
+
 //年、月、日、流水号 下拉框
 function getBarList() {
 	CoreUtil.sendAjax("/base/rule/getBarList",

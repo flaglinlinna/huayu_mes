@@ -50,7 +50,7 @@ $(function() {
                     {
                         field : 'ITEM_BARCODE',
                         title : '条码',
-                        width : 140,sort: true
+                        width : 175,sort: true
                     },{
                         field : 'ITEM_NO',
                         title : '物料编号',
@@ -145,7 +145,7 @@ $(function() {
                         {
                             field : 'TASK_NO',
                             title : '制令单号',
-                            width : 150,sort: true
+                            width : 175,sort: true
                         },] ],
                     page : false,
                     request : {
@@ -238,15 +238,15 @@ $(function() {
                 },{
                     field : 'TASK_NO',
                     title : '制令单号',
-                    width : 160,sort: true
+                    width : 175,sort: true
                 }, {
                     field : 'ITEM_BARCODE',
                     title : '物料条码',
-                    width : 150
+                    width : 175
                 }, {
                     field : 'ITEM_NO',
                     title : '物料料号',
-                    width : 150
+                    width : 175
                 }, {
                     field : 'ITEM_NAME',
                     title : '物料名称',

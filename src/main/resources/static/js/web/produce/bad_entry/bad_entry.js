@@ -45,7 +45,7 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '条码',
-								width : 210,
+								width : 220,
 								sort: true
 							}, {
 								field : 'DEFECT_NUM',
@@ -55,7 +55,7 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单',
-								width : 330,sort: true
+								width : 200,sort: true
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
@@ -265,11 +265,11 @@ $(function() {
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
-								width : 150
+								width : 175
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 160
+								width : 175
 							}, {
 								field : 'CLASS_NO',
 								title : '班次',

@@ -168,7 +168,7 @@ $(function() {
 				},{
 					field : 'TASK_NO',
 					title : '制令单号',
-					width:160
+					width:175
 				},{
 					field : 'CLASS_NAME',
 					title : '班次',

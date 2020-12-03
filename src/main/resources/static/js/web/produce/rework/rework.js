@@ -36,7 +36,7 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '条码',
-								width : 150,sort: true
+								width : 175,sort: true
 							}, {
 								field : 'FTYPE',
 								title : '类型',
@@ -94,7 +94,7 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '条码',
-								width : 150,sort: true
+								width : 175,sort: true
 							}, {
 								field : 'FTYPE',
 								title : '类型',

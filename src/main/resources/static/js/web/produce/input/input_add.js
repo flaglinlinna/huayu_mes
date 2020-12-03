@@ -44,14 +44,14 @@ $(function() {
 								type : 'radio',
 								width : 50
 							}, {
-								field : 'id',
+								field : 'ID',
 								title : 'id',
 								width : 0,
 								hide : true
 							}, {
 								field : 'ITEM_BARCODE',
 								title : '条码',
-								width : 160,
+								width : 175,
 								sort : true
 							}, {
 								field : 'ITEM_NO',
@@ -161,7 +161,7 @@ $(function() {
 									{
 										field : 'TASK_NO',
 										title : '制令单号',
-										width : 150,
+										width : 170,
 										sort : true
 									},
 								] ],
@@ -257,12 +257,12 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 160,
+								width : 175,
 								sort : true
 							}, {
 								field : 'ITEM_BARCODE',
 								title : '物料条码',
-								width : 180
+								width : 195
 							}, {
 								field : 'ITEM_NO',
 								title : '物料料号',
