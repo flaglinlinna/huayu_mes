@@ -46,7 +46,7 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 160,sort: true
+								width : 175,sort: true
 							},
 								{
 									field : 'LINE_NO',
@@ -56,7 +56,7 @@ $(function() {
 								{
 								field : 'ITEM_BARCODE',
 								title : '物料条码',
-								width : 170,sort: true
+								width : 175,sort: true
 							}, {
 								field : 'ITEM_NO',
 								title : '物料编码',

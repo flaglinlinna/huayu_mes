@@ -5,12 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSON;
 import com.app.base.control.WebController;
@@ -201,9 +196,14 @@ public class BarcodeRuleController extends WebController{
 	@ApiOperation(value = "获取条码样例", notes = "获取条码样例", hidden = true)
 	@RequestMapping(value = "/getFsampleByForm", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult getFsampleByForm(String fixValue,String fyear,String fmonth,String fday,
-											  String serialNum,String serialLen) {
+	public ApiResponseResult getFsampleByForm(@RequestBody Map<String, Object> param) {
 		String method = "base/rule/getFsampleByForm";String methodName ="获取条码样例";
+		String fixValue = param.get("fixValue").toString() ;
+		String fyear = param.get("fyear").toString() ;
+		String fmonth = param.get("fmonth").toString() ;
+		String fday = param.get("fday").toString() ;
+		String serialNum = param.get("serialNum").toString() ;
+		String serialLen = param.get("serialLen").toString() ;
 		try {
 			ApiResponseResult result = ruleService.getFsampleByForm(fixValue,fyear,fmonth,fday,serialNum,serialLen);
 			logger.debug("获取条码样例=getFsampleByForm:");
