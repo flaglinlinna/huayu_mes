@@ -45,13 +45,25 @@ $(function() {
 })
 
 function dealXlpmData(kanbanList) {
+	
 	console.log(kanbanList)
 	if (kanbanList.result) {
 		var kanbanData_t = kanbanList.data.List_line;
 		var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
-		$("#title").text(title + "•"+nowLiner+"线电子看板");
-
+		$("#title").text(title + "•"+nowLiner+"线电子看板");		
+		
 		if (kanbanData_t.length > 0) {
+			//图片路径
+			$("#name1").text(kanbanData_t[0].NAM_PE);//
+			$("#img1").attr('src',"../base/employee/viewByUrl?empImg="+kanbanData_t[0].IMG_PE);
+			
+			$("#name2").text(kanbanData_t[0].NAM_QC);//
+			$("#img2").attr('src',"../base/employee/viewByUrl?empImg="+kanbanData_t[0].IMG_QC);
+			
+			$("#name3").text(kanbanData_t[0].NAME_LINER);//
+			$("#img3").attr('src',"../base/employee/viewByUrl?empImg="+kanbanData_t[0].IMG_LINER);
+			//$("#name1").attr('src',"../downImages/"+kanbanData_t[0].IMG_PE+".png");
+			
 			var done = kanbanData_t[0].QTY_DONE==null?0:parseInt(kanbanData_t[0].QTY_DONE);
 			var plan = kanbanData_t[0].QTY_PLAN==null?0:parseInt(kanbanData_t[0].QTY_PLAN);
 			var doneRate = kanbanData_t[0].RATE_DONE==null?0:kanbanData_t[0].RATE_DONE;
@@ -387,7 +399,7 @@ function setCxscTable(kanbanData){
 				+ '</td><td>' + arr.QTY_NG + '</td><td>' + arr.RATE_OK
 				+ '%</td></tr> ';
 		if(j==kanbanData.length-1){
-			html+='<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+			html+='<tr height=25></tr>'
 		}
 	}
 	$("#tableCxscList").empty();
