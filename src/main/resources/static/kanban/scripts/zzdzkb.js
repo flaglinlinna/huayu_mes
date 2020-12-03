@@ -1,8 +1,8 @@
 var action = true;// 请求结果，fasle 不执行定时器
 var interval_do = null;// 页面刷新定时器
 
-var action_task = true;// 请求结果，fasle 不执行定时器
-var interval_do_task = null;// 制令单刷新定时器
+//var action_task = true;// 请求结果，fasle 不执行定时器 2020-12-03废除制令单刷新
+//var interval_do_task = null;// 制令单刷新定时器
 
 var MyMarhq_cxdz = null;// 表格滚动定时器1
 var MyMarhq = null;// 表格滚动定时器2
@@ -21,7 +21,7 @@ $(function() {
 	dealXlpmData(xlpm_data);
 	dealCxdzData(cxdz_data);
 	dealCxscData(cxsc_data);
-	interval_do_task = setInterval(getTaskNoList, intervaldata * 1000); // 启动-制令单切换
+	//interval_do_task = setInterval(getTaskNoList, intervaldata * 1000); // 启动-制令单切换
 	interval_do = setInterval(getList, rotationdata * 1000); // 启动,执行默认方法
 
 	$("#searchBtn").click(function(e) {
@@ -29,17 +29,17 @@ $(function() {
 			clearInterval(interval_do);
 			interval_do = null;
 		}
-		if (interval_do_task != null) {// 判断计时器是否为空-关闭
-			clearInterval(interval_do_task);
-			interval_do_task = null;
-		}
+		//if (interval_do_task != null) {// 判断计时器是否为空-关闭
+		//	clearInterval(interval_do_task);
+		//	interval_do_task = null;
+		//}
 		getList();		
 		if (action) {// action 为 fasle 不调用定时器
 			interval_do = setInterval(getList, rotationdata * 1000); // 重新新循环-启动
 		}
-		if(action_task){
-			interval_do_task = setInterval(getTaskNoList, intervaldata * 1000); // 重新新循环-启动
-		}
+		//if(action_task){//2020-12-03废除
+		//	interval_do_task = setInterval(getTaskNoList, intervaldata * 1000); // 重新新循环-启动
+		//}
 	});
 
 })
@@ -129,10 +129,10 @@ function dealCxscData(kanbanList){
 		$("#tableCxscList").empty();
 		return false;
 	}
-	var kanbanData_t = kanbanList.data.List_result1;
-	taskNo = kanbanData_t[0].TASK_NO;
+	//var kanbanData_t = kanbanList.data.List_result1;
+	//taskNo = kanbanData_t[0].TASK_NO;
 	
-	var kanbanData = kanbanList.data.List_result2;
+	var kanbanData = kanbanList.data.List_result;
 	if (kanbanData.length > 0) {
 		setCxscTable(kanbanData);// 表格数据
 	} else {
@@ -466,7 +466,7 @@ function getLinerList(linerList) {
 }
 //刷新制令单
 function getTaskNoList() {
-	var task = taskNo;
+	var task = "";
 	var deptId = "";
 	var liner = nowLiner;
 	var interval = "1";
@@ -478,17 +478,17 @@ function getTaskNoList() {
 	};
 	$.ajax({
 		type : "GET",
-		url : context + "kanban/getCxscList",
+		url : context + "kanban/getCxscList2",
 		data : params,
 		dataType : "json",
 		success : function(res) {
 			//console.log(res)
 			if (res.result) {
-				action_task = true;
+				//action_task = true;
 				dealCxscData(res);
 			} else {
-				action = false;
-				clearInterval(interval_do_task);// 错误-关闭定时器
+				//action = false;
+				//clearInterval(interval_do_task);// 错误-关闭定时器
 				alert(res.msg)
 			}
 		}
@@ -520,6 +520,7 @@ function getList() {
 				action = true;
 				dealXlpmData(data.xlpm_data);
 				dealCxdzData(data.cxdz_data);
+				getTaskNoList();
 			} else {
 				action = false;
 				clearInterval(interval_do);// 错误-关闭定时器

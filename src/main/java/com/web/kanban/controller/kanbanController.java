@@ -116,7 +116,7 @@ public class kanbanController extends WebController {
 				ApiResponseResult xlpm_data = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner);
 				ApiResponseResult cxdz_data = kanbanService.getCxdzList("","","",this.getIpAddr(),liner);
 				//制令单切换单独获取
-				ApiResponseResult cxsc_data = kanbanService.getCxscList("","",liner,this.getIpAddr(),"1");
+				ApiResponseResult cxsc_data = kanbanService.getCxscList2("","",liner,this.getIpAddr(),"1");
 				ApiResponseResult rotation =kanbanService.getRotationTime();
 				mav.addObject("xlpm_data",xlpm_data);//效率排名看板数据
 				mav.addObject("cxdz_data",cxdz_data);//产线电子看板数据
@@ -628,6 +628,24 @@ public class kanbanController extends WebController {
 			logger.error("获取产线生产看板信息失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("获取产线生产看板信息失败！");
+		}
+	}
+	@ApiOperation(value = "获取组长详细看板时间段信息", notes = "获取组长详细看板时间段信息", hidden = true)
+	@RequestMapping(value = "/getCxscList2", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getCxscList2(String taskNo,String deptId,String liner,String interval) {
+		String method = "/kanban/getCxscList2";
+		String methodName = "获取组长详细看板时间段信息";
+		try {
+			ApiResponseResult result = kanbanService.getCxscList2(taskNo, deptId, liner,this.getIpAddr(),"1");
+			logger.debug("获取组长详细看板时间段信息=getCxscList2:" + result);
+//			getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取组长详细看板时间段信息失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("获取组长详细看板时间段信息失败！");
 		}
 	}
 	//复合看板（多个看板部分数据组装拼接合成

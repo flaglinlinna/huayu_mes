@@ -561,7 +561,54 @@ public class PrcKanbanUtils {
 					});
 					return resultList;
 				}
-	
+	//获取所有制令单的时间段
+				public List getCxscList2(String company,String facoty,String taskNo, String deptId,
+						String liner,String dev_ip,String usr_id, String interval) throws Exception {
+					List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+						@Override
+						public CallableStatement createCallableStatement(Connection con) throws SQLException {
+							String storedProc = "{call PRC_MES_RPT_CXSC_2 (?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+							CallableStatement cs = con.prepareCall(storedProc);
+							cs.setString(1, company);//-公司
+							cs.setString(2, facoty);//工厂
+							cs.setString(3, taskNo);// 班次
+							cs.setString(4, deptId);//--部门ID*
+							cs.setString(5, liner);//-组长*
+							cs.setString(6, dev_ip);//电视IP或mac*
+							cs.setString(7, usr_id);//用户id*
+							cs.setString(8, interval);//时间间隔*
+							cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+							cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+							cs.registerOutParameter(11, -10);// 输出参数 追溯数据
+							cs.registerOutParameter(12, java.sql.Types.VARCHAR);// 
+							return cs;
+						}
+					}, new CallableStatementCallback() {
+						public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+							List<Object> result = new ArrayList<>();
+							List<Map<String, Object>> l = new ArrayList();
+							List<Map<String, Object>> l_2 = new ArrayList();
+							cs.execute();
+							result.add(cs.getInt(9));
+							result.add(cs.getString(10));
+							if (cs.getString(9).toString().equals("0")) {
+								// 游标处理
+								ResultSet rs = (ResultSet) cs.getObject(11);
+								try {
+									l = fitMap(rs);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								result.add(l);
+								result.add(cs.getString(12));
+							}
+							System.out.println(l);
+							return result;
+						}
+					});
+					return resultList;
+				}		
 	//-------------------------------------	
 		
 	private List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
