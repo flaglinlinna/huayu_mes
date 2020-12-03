@@ -45,22 +45,28 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'empCode',
-				title : '员工工号'
+				title : '员工工号',
+					width : 100,
 			},{
 				field : 'empName',
-				title : '员工姓名'
+				title : '员工姓名',
+					width : 100,
 			},{
 				field : 'devType',
 				title : '卡机类型',
+					width : 100,
 			}, {
 				field : 'devIp',
 				title : '卡机IP',
+					width : 100,
 			}, {
 				field : 'cardDate',
 				title : '打卡日期',
+					width : 120,
 			}, {
 				field : 'cardTime',
 				title : '打卡时间',
+					width : 120,
 			}, {
 				field : 'fstatus',
 				title : '卡点状态',
@@ -69,6 +75,7 @@ $(function() {
 			}, {
 				field : 'fmemo',
 				title : '备注',
+					width : 120,
 			} /*, {
 				fixed : 'right',
 				title : '操作',

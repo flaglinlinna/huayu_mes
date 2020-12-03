@@ -94,31 +94,30 @@ $(function() {
 			},
 			cols : [ [ {
 				type : 'numbers'
-			}
-			, {
+			}, {
 				type : "checkbox"
 			},
-
 			{
 				field : 'EMP_CODE',
 				title : '员工工号',
-				width:80,
+				width:80
 			}, {
 				field : 'EMP_NAME',
 				title : '员工姓名',
-					width:100,
+					width:90
 			}, {
-				field : 'EMP_TYPE',
-				title : '员工类型',
-					width:110,
-			},{
 					field : 'dept_name',
 					title : '部门名称',
-					width:130,
+					width:110
 				},{
 					field : 'create_time',
 					title : '指纹录入时间',
-					width:160,
+					width:160
+				},
+				{
+					field : 'EMP_TYPE',
+					title : '员工类型',
+					width:110
 				}
 			] ],
 			done : function(res, curr, count) {

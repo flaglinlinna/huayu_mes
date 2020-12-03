@@ -99,7 +99,6 @@ $(function() {
 												title : '物料编号',
 												width : 150
 											},
-											,
 											{
 												field : 'ITEM_NAME',
 												title : '物料描述',

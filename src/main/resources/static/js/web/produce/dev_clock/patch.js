@@ -99,6 +99,7 @@ $(function() {
 			searchKey : 'keyword',
 			checkedKey : 'id',
 			searchPlaceholder : '试着搜索',
+			page:true,
 			table : {
 				url : context
 						+ '/produce/patch/getEmpInfo',
@@ -123,11 +124,11 @@ $(function() {
 					if (res.result) {
 						// 可进行数据操作
 						return {
-							"count" : 0,
+							"count" : res.data.total,
 							"msg" : res.msg,
-							"data" : res.data,
+							"data" : res.data.rows,
 							"code" : res.status
-						// code值为200表示成功
+							// code值为200表示成功
 						}
 					}
 				},
@@ -160,12 +161,25 @@ $(function() {
 				{
 					field : 'LINER_NAME',
 					title : '组长',
-					width:90
-				},{
+					width:70
+				},
+					{
+						field : 'WORK_DATE',
+						title : '生产时间',
+						templet:'<div>{{d.WORK_DATE.substring(0,d.WORK_DATE.indexOf(" "))}}</div>',
+						width:100
+					},
+					{
 					field : 'ITEM_NO',
 					title : '物料编码',
 					width:140
-				},{
+				},
+					{
+						field : 'ITEM_NAME',
+						title : '物料描述',
+						width:200
+					},
+					{
 					field : 'TASK_NO',
 					title : '制令单号',
 					width:175
@@ -177,20 +191,11 @@ $(function() {
 					field : 'HOUR_TYPE',
 					title : '工时类型',
 					width:80
-				}, {
-					field : 'WORK_DATE',
-					title : '生产时间',
-					templet:'<div>{{d.WORK_DATE.substring(0,d.WORK_DATE.indexOf(" "))}}</div>',
-					width:100
-				}, {
+				},  {
 					field : 'LINE_NAME',
 					title : '线体',
 					width:100
-				},{
-					field : 'ITEM_NAME',
-					title : '物料描述',
-					width:200
-				}] ],
+				},] ],
 				parseData : function(res) {
 					console.log(res)
 					if (res.result) {

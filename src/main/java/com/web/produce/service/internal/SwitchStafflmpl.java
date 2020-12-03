@@ -27,6 +27,21 @@ public class SwitchStafflmpl extends PrcUtils implements SwitchStaffService {
 
 	@Autowired
 	ClassTypeDao classTypeDao;
+
+	@Override
+	public ApiResponseResult getList(String beginTime, String endTime, String keyword,PageRequest pageRequest) throws Exception{
+		List<Object> list = getEmpChangePrc(UserUtil.getSessionUser().getCompany() + "",
+				UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getId() + "",
+				beginTime,endTime,keyword, pageRequest);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
+
+	}
 	
 	//获取旧制令单
 	@Override

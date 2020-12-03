@@ -148,6 +148,55 @@ public class PrcUtils {
         });
         return resultList;
     }
+
+
+    public List getEmpChangePrc(String company,String facoty,String user_id, String beginDate,
+                               String endDate,String keyword,PageRequest pageRequst) throws Exception {
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  PRC_MES_GET_TASK_NO_EMP_CHANGE(?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setString(3, user_id);
+                cs.setString(4, beginDate);
+                cs.setString(5, endDate);
+                cs.setString(6, keyword);
+                cs.setInt(7, pageRequst.getPageSize());//每页指定有多少元素
+                cs.setInt(8, pageRequst.getPageNumber()+1);//获取当前页码
+                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(12, -10);// 输出参数 追溯数据
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(9));
+                result.add(cs.getString(10));
+                result.add(cs.getInt(11));
+                if (cs.getString(9).toString().equals("0")) {
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(12);
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+                }
+                System.out.println(l);
+                return result;
+            }
+        });
+        return resultList;
+    }
+
     // 创建在线返工制令单-获取组长数据
     public List getLinerPrc(String company,String facoty) throws Exception {
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {

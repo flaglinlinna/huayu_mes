@@ -199,12 +199,14 @@ $(function() {
 						// 监听工具条
 						table.on('tool(empTable)', function(obj) {
 							var data = obj.data;
+
 							if (obj.event === 'del') {
 								// 删除
 								 //delVice(data,  data.EMP_NAME);
 								 var param = {
 											"taskNo":data.TASK_NO ,
-											"viceId":data.ID
+											"viceId":data.ID,
+									 		"devId":data.DEV_ID,
 										};
 										layer.confirm('您确定要删除上线人员 ' + data.EMP_NAME + ' 吗？', {
 											btn : [ '确认', '返回' ]
@@ -304,7 +306,8 @@ $(function() {
 								}
 								 var param = {
 									"taskNo":checkStatus[0].TASK_NO ,
-									"viceId":id
+									"viceId":id,
+									 "devId":checkStatus[0].DEV_ID
 								};
 								layer.confirm('您确定要批量删除上线人员吗？', {
 									btn : [ '确认', '返回' ]

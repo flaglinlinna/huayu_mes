@@ -51,30 +51,83 @@ $(function() {
 							},
 							cols : [ [ {
 								type : 'numbers'
-							}, {
-								field : 'EMP_ID',
-								title : 'ID',
-								width : 100,
+							},
+
+								// A.TASK_NO TASK_NO_ON, --新制令单
+								// A.SIGN_DATE || ' ' || A.SIGN_TIME TIME_ON,--上线时间
+								// C.LINE_NAME LINE_nam_ON,--上线线体
+								// E.LINER_NAME LINER_ON,--上线组长
+								// a.hour_type hour_type_on,--上线工时类型
+								// G.Class_Name class_on,--上线班次
+								// B.TASK_NO TASK_NO_OFF,--原制令单
+								// B.SIGN_DATE || ' ' || B.SIGN_TIME TIME_OFF,--下线时间
+								// d.line_name line_nam_off,--下线线体
+								// f.LINER_NAME LINER_off,--下线组长
+								// b.hour_type hour_type_off,--下线工时类型
+								// H.Class_Name class_OFF--下线班次
+								{
+								field : 'TASK_NO_ON',
+								title : '新制令单',
+								width : 150,
 								sort : true
-							}, {
-								field : 'EMP_CODE',
-								title : '工号',
-								width : 100,
-								sort : true
-							}, {
-								field : 'EMP_NAME',
-								title : '姓名',
-								width : 100,
-								sort : true
-							}, {
-								field : 'TIME_BEGIN',
+							},
+								{
+									field : 'TASK_NO_OFF',
+									title : '原制令单',
+									width : 150
+								},
+								{
+								field : 'TIME_ON',
 								title : '上线时间',
-								width : 200
-							}, {
-								field : 'TIME_END',
-								title : '下线时间',
-								width : 200
-							}] ],
+								width : 150,
+								sort : true
+							},
+								{
+									field : 'TIME_OFF',
+									title : '下线时间',
+									width :150
+								},
+								{
+								field : 'LINE_NAM_ON',
+								title : '上线线体',
+								width : 100
+							},
+								{
+									field : 'LINE_NAM_OFF',
+									title : '下线线体',
+									width : 100
+								},
+								{
+								field : 'LINER_ON',
+								title : '上线组长',
+								width : 100
+							},
+								{
+									field : 'LINER_OFF',
+									title : '下线组长',
+									width : 100
+								},
+								{
+								field : 'HOUR_TYPE_ON',
+								title : '上线工时类型',
+								width : 120
+							},
+								{
+									field : 'HOUR_TYPE_OFF',
+									title : '下线工时类型',
+									width : 120
+								},
+								{
+									field : 'CLASS_ON',
+									title : '上线班次',
+									width : 80
+								},
+								{
+									field : 'CLASS_OFF',
+									title : '下线班次',
+									width : 80
+								}
+							] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}
@@ -171,6 +224,13 @@ $(function() {
 							saveData(data.field, empIdList);
 
 						});
+
+						form.on('submit(searchSubmit)', function(data) {
+							// 重新加载table
+							getList( data.field.dates,data.field.keyword)
+							return false;
+						});
+
 
 						tableSelect1 = tableSelect.render({
 							elem : '#lastTaskNo',
@@ -409,6 +469,22 @@ function open() {
 	});
 	layer.full(index);
 }
+
+function getList(dates,keyword) {
+	var params = {
+		"dates" : dates,
+		"keyword" : keyword,
+	}
+	tableIns.reload({
+		url:context+'/produce/switch_staff/getList',
+		where:params,
+		done: function(res1, curr, count){
+			pageCurr=curr;
+		}
+	})
+	// localtableFilterIns.reload();
+}
+
 
 function saveData(obj, empIdList) {
 	 console.log(obj)

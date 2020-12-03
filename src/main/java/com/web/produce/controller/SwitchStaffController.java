@@ -2,6 +2,7 @@ package com.web.produce.controller;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,6 +37,32 @@ public class SwitchStaffController extends WebController {
 	@RequestMapping(value = "/toSwitchStaff")
 	public String toSwitchStaff() {
 		return "/web/produce/switch_staff/switch_staff";
+	}
+
+	@ApiOperation(value = "获取在线人员列表信息", notes = "获取在线人员列表信息", hidden = true)
+	@RequestMapping(value = "/getList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getList(@RequestParam(value = "dates", required = false) String dates,
+										@RequestParam(value = "keyword", required = false) String keyword) {
+		String method = "/switch_staff/getList";
+		String methodName = "获取在线人员列表信息";
+		try {
+			String[] date = {"",""};
+			if(StringUtils.isNotEmpty(dates)){
+				date = dates.split(" - ");
+			}
+			Sort sort = Sort.unsorted();
+			ApiResponseResult result = switchStaffService.getList(date[0],date[1],keyword,super.getPageRequest(sort));
+			logger.debug("获取在线人员列表信息=getTaskNo:");
+			// getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取在线人员列表信息失败！", e);
+			getSysLogService().error(module, method, methodName,
+					"关键字" + keyword == null ? ";" : keyword + ";" + e.toString());
+			return ApiResponseResult.failure("获取在线人员列表信息失败！");
+		}
 	}
 
 	@ApiOperation(value = "获取原指令单信息", notes = "获取原指令单信息", hidden = true)

@@ -154,7 +154,8 @@ public class PatchCardController extends WebController {
 		String method = "produce/patch/getEmpInfo";
 		String methodName = "获取员工数据";
 		try {
-			ApiResponseResult result = patchCardService.getEmpInfo(keyword);
+			Sort sort = Sort.unsorted();
+			ApiResponseResult result = patchCardService.getEmpInfo(keyword,super.getPageRequest(sort));
 			logger.debug("获取员工数据=getEmpInfo:");
 //			getSysLogService().success(module,method, methodName, null);
 			return result;

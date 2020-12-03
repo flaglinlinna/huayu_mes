@@ -36,16 +36,16 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'empCode',
-				title : '员工工号', sort: true
-				//width : 100,
+				title : '员工工号', sort: true,
+				width : 100,
 			}, {
 				field : 'empName',
-				title : '员工姓名',sort: true
-				//width : 100,
+				title : '员工姓名',sort: true,
+				width : 100,
 			}, {
 				field : 'fingerIdx',
-				title : '手指序号',sort: true
-				//width : 80,
+				title : '手指序号',sort: true,
+				width : 80,
 			},/*  {
 				field : 'templateStr',
 				title : '指纹模板',
@@ -58,13 +58,13 @@ $(function() {
 			},*/ {
 				field : 'createDate',
 				title : '添加时间',sort: true,
-				//width : 145,
+				width : 170,
 				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
 			},
 				{
 					field : 'lastOffDate',
 					title : '最后下发时间',sort: true,
-					//width : 170,
+					width : 170,
 					templet:'<div>{{d.lastOffDate?DateUtils.formatDate(d.lastOffDate):""}}</div>',
 				},
 			/*, {

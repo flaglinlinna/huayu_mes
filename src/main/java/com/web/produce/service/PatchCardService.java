@@ -17,7 +17,7 @@ public interface PatchCardService {
 	
 	public ApiResponseResult delete(Long id)throws Exception;
 	
-	public ApiResponseResult getEmpInfo(String keyword)throws Exception;
+	public ApiResponseResult getEmpInfo(String keyword,PageRequest pageRequest)throws Exception;
 	
 	public ApiResponseResult getTaskNo(String keyword)throws Exception;
 }

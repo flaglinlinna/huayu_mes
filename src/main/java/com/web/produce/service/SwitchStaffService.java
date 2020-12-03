@@ -7,6 +7,8 @@ import com.web.produce.entity.OnlineStaff;
 
 public interface SwitchStaffService {
 
+	public ApiResponseResult getList(String beginTime, String endTime, String keyword,PageRequest pageRequest) throws Exception;
+
 	public ApiResponseResult getTaskNo(String keyword) throws Exception;// 获取旧制令单
 	
 	public ApiResponseResult getNewTaskNo(String keyword) throws Exception;// 获取新制令单

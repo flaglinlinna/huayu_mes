@@ -157,26 +157,26 @@ public class OnlineStafflmpl implements OnlineStaffService {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  PRC_MES_COF_AFFIRM_EMP_DEL(?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  PRC_MES_COF_AFFIRM_EMP_DEL(?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, company);
 				cs.setString(2, facoty);
 				cs.setString(3, user_id);
-				cs.setString(4, taskNo);
-				cs.setString(5, devId);
-				cs.setString(6, empId);
-				cs.setString(7,viceId);
-				cs.setString(8,beginTime);
-				cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+//				cs.setString(4, taskNo);
+//				cs.setString(5, devId);
+//				cs.setString(6, empId);
+				cs.setString(4,viceId);
+//				cs.setString(6,beginTime);
+				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
 				return cs;
 			}
 		}, new CallableStatementCallback() {
 			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
 				List<Object> result = new ArrayList<>();
 				cs.execute();
-				result.add(cs.getInt(9));
-				result.add(cs.getString(10));
+				result.add(cs.getInt(5));
+				result.add(cs.getString(6));
 				return result;
 			}
 		});

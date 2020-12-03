@@ -64,29 +64,79 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 	/**
 	 * 获取员工信息
 	 */
-	public ApiResponseResult getEmpInfo(String keyword) throws Exception {
-		List<Object> list = getEmpInfoPrc(UserUtil.getSessionUser().getCompany() + "",
-				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "", keyword);
+	public ApiResponseResult getEmpInfo(String keyword,PageRequest pageRequest) throws Exception {
+		List<Object> list = getEmpPrc(UserUtil.getSessionUser().getCompany() + "",
+				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "",
+				keyword,pageRequest.getPageNumber()+1,pageRequest.getPageSize());
 		if (!list.get(0).toString().equals("0")) {
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		return ApiResponseResult.success().data(list.get(2));
+		Map<String,Object> map = new HashMap<>();
+		map.put("total",list.get(2));
+		map.put("rows",list.get(3));
+		return ApiResponseResult.success().data(map);
 	}
 
 	// 获取指令单
-	public List getEmpInfoPrc(String company, String facoty, String user_id, String keyword) throws Exception {
+//	public List getEmpInfoPrc(String company, String facoty, String user_id, String keyword) throws Exception {
+//		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+//			@Override
+//			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+//				String storedProc = "{call  prc_mes_cof_emp_chs(?,?,?,?,?,?,?)}";// 调用的sql
+//				CallableStatement cs = con.prepareCall(storedProc);
+//				cs.setString(1, facoty);
+//				cs.setString(2, company);
+//				cs.setString(3, user_id);
+//				cs.setString(4, keyword);
+//				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
+//				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+//				cs.registerOutParameter(7, -10);// 输出参数 追溯数据
+//				return cs;
+//			}
+//		}, new CallableStatementCallback() {
+//			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+//				List<Object> result = new ArrayList<>();
+//				List<Map<String, Object>> l = new ArrayList();
+//				cs.execute();
+//				result.add(cs.getInt(5));
+//				result.add(cs.getString(6));
+//				if (cs.getString(5).toString().equals("0")) {
+//					// 游标处理
+//					ResultSet rs = (ResultSet) cs.getObject(7);
+//
+//					try {
+//						l = fitMap(rs);
+//					} catch (Exception e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					result.add(l);
+//				}
+//				System.out.println(l);
+//				return result;
+//			}
+//
+//		});
+//		return resultList;
+//	}
+
+	public List getEmpPrc(String company,String facoty,String user_id, String keyword,Integer page,Integer limit) throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  prc_mes_cof_emp_chs(?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  prc_mes_cof_emp_chs_PG (?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
-				cs.setString(1, facoty);
-				cs.setString(2, company);
+				cs.setString(1, company);
+				cs.setString(2, facoty);
 				cs.setString(3, user_id);
-				cs.setString(4, keyword);
-				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
-				cs.registerOutParameter(7, -10);// 输出参数 追溯数据
+				cs.setString(4, "");
+				cs.setString(5, keyword);
+				cs.setInt(6, limit);
+				cs.setInt(7, page);
+				cs.registerOutParameter(8, java.sql.Types.INTEGER);// 总记录数
+				cs.registerOutParameter(9, java.sql.Types.INTEGER); //返回标识
+				cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(11, -10);// 输出参数 追溯数据
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -94,11 +144,12 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(5));
-				result.add(cs.getString(6));
-				if (cs.getString(5).toString().equals("0")) {
+				result.add(cs.getInt(9));
+				result.add(cs.getString(10));
+				if (cs.getString(9).toString().equals("0")) {
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(7);
+					result.add(cs.getString(8));
+					ResultSet rs = (ResultSet) cs.getObject(11);
 
 					try {
 						l = fitMap(rs);
@@ -111,7 +162,6 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 				System.out.println(l);
 				return result;
 			}
-
 		});
 		return resultList;
 	}
