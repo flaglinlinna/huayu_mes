@@ -144,9 +144,9 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 			text : '效率:' + eff_rate + '%',
 			textStyle : {
 				color : '#FFFFFF' ,// 图例文字颜色
-				fontSize : 32,// 字体大小
+				fontSize : 20,// 字体大小
 			},
-			left : '15px',
+			left : '5px',
 			top : '5px'
 		},
 		color : [ '#993300', '#0066FF', '#66CCCC' ],
@@ -154,14 +154,14 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 			data : [ '异常工时', '标准工时', '实际工时' ],
 			textStyle : {
 				color : '#FFFFFF', // 图例文字颜色
-				fontSize : 20,// 字体大小
+				fontSize : 13,// 字体大小
 			},
 			orient : 'vertical',
 			x : 'right',
 			y : 'top',
 		},
 		grid : {
-			//left : '3%',
+			left : '3%',
 			//right : '4%',
 			bottom : '3%',
 			containLabel : true
@@ -179,7 +179,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 				show : true,
 				textStyle : {
 					color : '#ffffff',
-					fontSize : 20,// 字体大小
+					fontSize : 13,// 字体大小
 				}
 			},
 			axisLine : {
@@ -201,7 +201,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 				show : true,
 				textStyle : { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
 					color : '#FFFFFF',
-					fontSize : 20,// 字体大小
+					fontSize : 13,// 字体大小
 				}
 			},
 		},
@@ -212,7 +212,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 			label : {
 				show : true,
 				position : 'insideLeft',
-				fontSize : 20,// 字体大小
+				fontSize : 13,// 字体大小
 				color : '#FFFFFF',
 			},
 		}, {
@@ -222,7 +222,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 			label : {
 				show : true,
 				position : 'insideLeft',
-				fontSize : 20,// 字体大小
+				fontSize : 13,// 字体大小
 				color : '#FFFFFF',
 			},
 		}, {
@@ -232,7 +232,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 			label : {
 				show : true,
 				position : 'insideLeft',
-				fontSize : 20,// 字体大小
+				fontSize : 13,// 字体大小
 				color : '#FFFFFF',
 			},
 		} ]
@@ -246,9 +246,9 @@ function getChartXlpm3(done, plan, doneRate) {
 			text : '完工率:' + doneRate + '%',
 			textStyle : {
 				color : '#FFFFFF', // 图例文字颜色
-				fontSize : 32,// 字体大小
+				fontSize : 20,// 字体大小
 			},
-			left : '15px',
+			left : '5px',
 			top : '5px'
 		},
 		color : [ '#0066FF', '#66CCCC' ],
@@ -256,7 +256,7 @@ function getChartXlpm3(done, plan, doneRate) {
 			data : [ '计划产量', '完工产量' ],
 			textStyle : {
 				color : '#FFFFFF', // 图例文字颜色
-				fontSize : 20,// 字体大小
+				fontSize : 13,// 字体大小
 			},
 			x : 'right',
 			y : 'top',
@@ -281,7 +281,7 @@ function getChartXlpm3(done, plan, doneRate) {
 				show : true,
 				textStyle : {
 					color : '#ffffff',
-					fontSize : 20,// 字体大小
+					fontSize : 13,// 字体大小
 				}
 			},
 			axisLine : {
@@ -303,7 +303,7 @@ function getChartXlpm3(done, plan, doneRate) {
 				show : true,
 				textStyle : { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
 					color : '#FFFFFF',
-					fontSize : 20,// 字体大小
+					fontSize : 13,// 字体大小
 				}
 			},
 		},
@@ -315,7 +315,7 @@ function getChartXlpm3(done, plan, doneRate) {
 				show : true,
 				position : 'insideLeft',
 				color : '#FFFFFF',
-				fontSize : 20,// 字体大小
+				fontSize : 13,// 字体大小
 			},
 		}, {
 			name : '计划产量',
@@ -325,7 +325,7 @@ function getChartXlpm3(done, plan, doneRate) {
 				show : true,
 				position : 'insideLeft',
 				color : '#FFFFFF',
-				fontSize : 20,// 字体大小
+				fontSize : 13,// 字体大小
 			},
 		} ]
 	};
@@ -357,7 +357,7 @@ function setCxdzTable(kanbanData) {
 	// clearInterval(MyMarhq);
 	var item = $('.tbl-body-cxdz tbody tr').length
 	//console.log(item)
-	if (item > 3) {
+	if (item > 2) {
 		$('.tbl-body-cxdz tbody').html(
 				$('.tbl-body-cxdz tbody').html() + $('.tbl-body-cxdz tbody').html());
 		$('.tbl-body-cxdz').css('top', '0');
@@ -386,6 +386,9 @@ function setCxscTable(kanbanData){
 				+ '</td><td>' + arr.QTY_DONE + '</td><td>' + arr.QTY_OK
 				+ '</td><td>' + arr.QTY_NG + '</td><td>' + arr.RATE_OK
 				+ '%</td></tr> ';
+		if(j==kanbanData.length-1){
+			html+='<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+		}
 	}
 	$("#tableCxscList").empty();
 	$("#tableCxscList").append(html);
@@ -400,7 +403,7 @@ function setCxscTable(kanbanData){
 	var item = $('.tbl-body tbody tr').length
 	console.log(item)
 
-	if (item > 8) {
+	if (item > 5) {
 		$('.tbl-body tbody').html(
 				$('.tbl-body tbody').html() + $('.tbl-body tbody').html());
 		$('.tbl-body').css('top', '0');
