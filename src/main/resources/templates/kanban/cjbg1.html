@@ -10,24 +10,12 @@
 <script src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
 </head>
 <style>
-/*
-th, td {
-	text-align: center;
-	vertical-align: middle;
-	padding: 4px;
-	color: #FFFFFF;
-}
-
-table, table tr td {
-	border: 2px solid #333399;
-	border-collapse: collapse;
-}*/
-
 .tablebox {
 	height: 225px;
 	overflow: hidden;
 	position: relative;
 	margin: 10px auto;
+	background-color: rgba(6,26,103,1);/*20201204新增*/
 }
 
 .tbl-header {
@@ -54,7 +42,7 @@ table, table tr td {
 }
 
 table, table tr td {
-	border: 2px solid #333399;
+	/*border: 2px solid #333399;2020-1204废除*/
 	border-collapse: collapse;
 	table-layout: fixed;/*处理表格无法对齐的问题*/
 	
@@ -74,6 +62,14 @@ table, table tr td {
 .tablebox table tr th {
 	background: #333399;
 	cursor: pointer;
+}
+
+.tablebox table tr td {/*20201204新增*/
+    background-color: transparent;
+}
+
+.tbl-body tr:nth-child(even) td,.tbl-body1 tr:nth-child(even) td {/*20201204新增*/
+    background-color: rgba(31, 31, 156, .5);
 }
 
 th {
