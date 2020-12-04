@@ -79,6 +79,7 @@ public class OnlineStafflmpl implements OnlineStaffService {
 			map.put("classId", bs.getClassId());
 			map.put("workDate", bs.getWorkDate());
 			map.put("lineName", bs.getLine().getLineName());
+			map.put("linerName", bs.getLine().getLinerName());
 			map.put("lastupdateDate", bs.getLastupdateDate());
 			map.put("createDate", bs.getCreateDate());
 			list.add(map);

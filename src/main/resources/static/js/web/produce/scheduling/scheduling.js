@@ -36,7 +36,7 @@ $(function () {
                 {type:'numbers' ,align: 'center'},
                 {type:'checkbox' ,width:60,align: 'center'}
                 ,{field:'PRODUCE_STATE', title:'状态', width:60,align: 'center'}
-                ,{field:'TASK_NO', title:'制令单号', width:145,align: 'center'}
+                ,{field:'TASK_NO', title:'制令单号', width:170,align: 'center'}
                 ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center'}
                 ,{field:'LINER_NAME', title:'组长', width:70,align: 'center'}
                 ,{field:'PROD_DATE', title:'日期',templet:function (d) {

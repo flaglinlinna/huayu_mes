@@ -50,6 +50,11 @@ $(function() {
 												width : 175
 											},
 											{
+												field : 'linerName',
+												title : '组长',
+												width : 75
+											},
+											{
 												field : 'classId',
 												title : '班次',
 												width : 80,
@@ -135,6 +140,11 @@ $(function() {
 								title : '员工姓名',
 								width : 100
 							},
+								{
+									field : 'LINER_NAME',
+									title : '组长',
+									width : 75
+								},
 							// 	{
 							// 	field : 'DEV_IP',
 							// 	title : '设备IP',

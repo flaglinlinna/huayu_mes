@@ -47,11 +47,11 @@ $(function() {
 			,
 			{
 				field : 'NAME_PE',
-				title : '工程员名称', sort: true,
+				title : '工程员名称',
 			},
 				{
 					field : 'IMG_FLAG_PE',
-					title : '工程员照片', sort: true,
+					title : '工程员照片',
 					templet: function (d) {
 						if(d.IMG_FLAG_PE==0){
 							return '无'
@@ -63,11 +63,11 @@ $(function() {
 
 				{
 					field : 'NAME_QC',
-					title : 'QC名称', sort: true,
+					title : 'QC名称',
 				},
 				{
 					field : 'IMG_FLAG_QC',
-					title : 'QC照片', sort: true,
+					title : 'QC照片',
 					templet: function (d) {
 						if(d.IMG_FLAG_QC==0){
 							return '无'
@@ -78,15 +78,15 @@ $(function() {
 				},
 				{
 					field : 'LINE_NAME',
-					title : '生产线', sort: true
+					title : '生产线',
 				},
 				{
 					field : 'NAME_LINER',
-					title : '组长姓名', sort: true
+					title : '组长姓名',
 				},
 				{
 					field : 'IMG_FLAG_LINER',
-					title : '组长照片', sort: true,
+					title : '组长照片',
 					templet: function (d) {
 						if(d.IMG_FLAG_LINER==0){
 							return '无'
@@ -99,7 +99,7 @@ $(function() {
 				field : 'ENABLED',
 				title : '状态',
 				width : 95,
-				templet : '#statusTpl', sort: true
+				templet : '#statusTpl',
 			}, {
 				field : 'LASTUPDATE_DATE',width : 145,
 				title : '更新时间', sort: true
@@ -109,7 +109,7 @@ $(function() {
 			}, {
 				fixed : 'right',
 				title : '操作',
-					width : 120,
+				width : 120,
 				align : 'center',
 				toolbar : '#optBar'
 			} ] ],
