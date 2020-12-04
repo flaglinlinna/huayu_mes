@@ -251,7 +251,7 @@ function getChart2(emp_plan, emp_now, emp_off) {
 			top : "50%",
 			textStyle : {
 				color : "#ffffff",
-				fontSize : 52,
+				fontSize : 50,
 				align : "center"
 			},
 		},
@@ -263,14 +263,15 @@ function getChart2(emp_plan, emp_now, emp_off) {
 				text : "应到人数",
 				textAlign : "center",
 				fill : "#ffffff",
-				fontSize : 36,
+				fontSize : 34,
 				fontWeight : 700
 			}
 		},
 		series : [ {
 			name : '出勤',
 			type : 'pie',
-			radius : [ '60%', '75%' ],
+			radius : [ '55%', '70%' ],
+			center: ['50%', '50%'],
 			avoidLabelOverlap : false,
 			label : {
 				formatter : '{hr|}\n  {b|{b}：}{c} ',
@@ -340,7 +341,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			y : 60,// 上边距
 			x2 : 80,// 右边距
 			y2 : 60,// 下边距
-			borderWidth : 10
+			borderWidth : 1
 		},
 		legend : {
 			//orient: 'vertical',
