@@ -45,7 +45,7 @@ $(function() {
 			}, {
 				field : 'fingerIdx',
 				title : '手指序号',sort: true,
-				width : 80,
+				width : 100,
 			},/*  {
 				field : 'templateStr',
 				title : '指纹模板',

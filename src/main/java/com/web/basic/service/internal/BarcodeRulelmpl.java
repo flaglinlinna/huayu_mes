@@ -40,7 +40,7 @@ public class BarcodeRulelmpl extends PrcUtils implements BarcodeRuleService {
 	@Override
 	public ApiResponseResult getMtrial(String keyword,PageRequest pageRequest) throws Exception{
 		List<Object> list = getReworkItemPrc(UserUtil.getSessionUser().getCompany()+"",
-				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"","原材料半成品",keyword,pageRequest);
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"","成品",keyword,pageRequest);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

@@ -114,10 +114,11 @@ $(function() {
 					hide : true
 				}, {
 					field : 'EMP_CODE',
-					title : '工号'
+					title : '工号',
+						width:100
 				}, {
 					field : 'EMP_NAME',
-					title : '姓名'
+					title : '姓名',width:120
 				} ] ],
 				parseData : function(res) {
 					//console.log(res)
@@ -172,7 +173,7 @@ $(function() {
 					{
 					field : 'ITEM_NO',
 					title : '物料编码',
-					width:140
+					width:170
 				},
 					{
 						field : 'ITEM_NAME',

@@ -58,8 +58,13 @@ $(function() {
 			}, {
 				field : 'devIp',
 				title : '卡机IP',
+					width : 120,
+			},  {
+					field : 'lineName',
+					title : '线体名称',
 					width : 100,
-			}, {
+				},
+				{
 				field : 'cardDate',
 				title : '打卡日期',
 					width : 120,

@@ -260,7 +260,7 @@ $(function() {
 								}, {
 									field : 'ITEM_NO',
 									title : '物料编码',
-									width : 140
+									width : 170
 								}, {
 									field : 'LINER_NAME',
 									title : '组长',
@@ -333,7 +333,7 @@ $(function() {
 								}, {
 									field : 'ITEM_NO',
 									title : '物料编码',
-									width : 140
+									width : 170
 								},{
 									field : 'CUST_NAME_S',
 									title : '客户',

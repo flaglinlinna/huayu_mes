@@ -38,24 +38,35 @@ $(function() {
 			, {
 				field : 'description',
 				title : '类型',
+					width:90,
 			}, {
 				field : 'devIp',
-				title : '卡机IP'
+				title : '卡机IP',
+					width:120,
 			}, {
 				field : 'devName',
 				title : '卡机名字',
+					width:110,
 				templet: function (d) {return d.devClock.devName}
 			}, {
+					field : 'lineName',
+					title : '线体名称',
+					width:100,
+					templet: function (d) {return d.devClock.line.lineName}
+				},
+				{
 				field : 'empCode',
 				title : '员工工号',
+					width:100,
 				templet: function (d) {return d.emp.empCode}
 			} , {
 				field : 'empName',
 				title : '员工姓名',
-				width:120,
+				width:100,
 				templet: function (d) {return d.emp.empName}
 			},{
 				field : 'fmemo',
+					width:100,
 				title : '操作结果'
 			},{
 				field : 'createDate',
@@ -64,6 +75,7 @@ $(function() {
 			},{
 				field : 'userCode',
 				title : '操作人',
+					width:100,
 				templet: function (d) {return d.createUser.userCode}
 			}] ],
 			done : function(res, curr, count) {
@@ -93,9 +105,11 @@ $(function() {
 				}
 			},
 			cols : [ [ {
-				type : 'numbers'
+				type : 'numbers',
+				width:40
 			}, {
-				type : "checkbox"
+				type : 'checkbox',
+				width:40
 			},
 			{
 				field : 'EMP_CODE',
@@ -118,7 +132,7 @@ $(function() {
 					field : 'EMP_TYPE',
 					title : '员工类型',
 					width:110
-				}
+				},
 			] ],
 			done : function(res, curr, count) {
 				localtableFilterIns.reload();
@@ -140,7 +154,7 @@ $(function() {
 			'mode' : 'api',//服务端过滤
 			'filters' : [
 				{field: 'dept_name', type:'checkbox'},
-				{field: 'create_time', type:'date'},
+				{field: 'create_time', type:'date'}
 			],
 			'done': function(filters){}
 		})

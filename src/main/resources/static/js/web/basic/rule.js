@@ -306,10 +306,10 @@ $(function() {
 			console.log(obj)
 			if (obj.event === 'del') {
 				// 删除
-				delBarcodeRule(data, data.id, data.itemNo);
+				delBarcodeRule(data, data.ID, data.ITEM_NO);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				getBarcodeRule(data, data.id);
+				getBarcodeRule(data, data.ID);
 			}
 		});
 
@@ -319,6 +319,7 @@ $(function() {
 
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
+		console.log(data);
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
 				addSubmit(data);
@@ -520,6 +521,9 @@ function editSubmit(obj) {
 	// obj.field.itemId=str;
 	// var str= $('#itemId').attr('ts-selected');
 	// obj.field.itemId=str;
+	var str= $('#itemId').attr('ts-selected');
+	// str=str.slice(0,str.indexOf("="));
+	obj.field.itemId=str;
 	CoreUtil.sendAjax("/base/rule/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
@@ -545,7 +549,7 @@ function delBarcodeRule(obj, id, name) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '校验规则吗？', {
+		layer.confirm('您确定要删除物料为' + name + '的校验规则吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
