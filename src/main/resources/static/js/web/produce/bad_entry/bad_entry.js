@@ -59,7 +59,7 @@ $(function() {
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
-								width : 150,sort: true
+								width : 170,sort: true
 							}, {
 								field : 'DEFECT_TYPE_NAME',
 								title : '不良类型',
@@ -123,7 +123,7 @@ $(function() {
 									{
 										field : 'ITEM_NO',
 										title : '物料编码',
-										width : 150
+										width : 170
 									},
 									{
 										field : 'ITEM_NAME',

@@ -102,9 +102,12 @@ public class CardDatalmpl implements CardDataService {
 			map.put("empName",bs.getEmployee().getEmpName());//获取关联表的数据-姓名
 			map.put("devType", bs.getDevClock().getDevType());
 			map.put("devIp",bs.getDevClock().getDevIp());//获取关联表的数据-卡机IP
+			if(bs.getDevClock().getLine()!=null){
+				map.put("lineName",bs.getDevClock().getLine().getLineName());
+			}
 			map.put("cardDate", bs.getCardDate());
 			map.put("cardTime", bs.getCardTime());
-			map.put("fstatus", bs.getFstatus());;
+			map.put("fstatus", bs.getFstatus());
 			map.put("fmemo", bs.getFmemo());
 			list.add(map);
 		}
@@ -227,7 +230,7 @@ public class CardDatalmpl implements CardDataService {
 	
 	/**
 	 * 根据卡机获取卡机上的考勤记录
-	 * @param DevClock
+	 * @param devClock
 	 * @throws Exception 
 	 */
 	private ApiResponseResult saveCardData(DevClock devClock) throws Exception{
@@ -287,7 +290,7 @@ public class CardDatalmpl implements CardDataService {
 	
 	/**
 	 * 根据卡机删除卡机上的所有考勤记录
-	 * @param DevClock
+	 * @param devClock
 	 * @param time(YYYY-MM-DD hh:mm:ss )
 	 */
 	public ApiResponseResult delCardData(DevClock devClock,String time){

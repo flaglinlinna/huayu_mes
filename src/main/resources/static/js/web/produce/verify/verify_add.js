@@ -139,7 +139,7 @@ $(function() {
 									 {
 									field : 'ITEM_NO',
 									title : '物料编码',
-									width : 140,
+									width : 170,
 									sort : true
 								},  {
 									field : 'ITEM_NAME',

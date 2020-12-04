@@ -133,7 +133,7 @@ $(function() {
 									width : 175,sort: true
 								},{
 									field : 'ITEM_NO',
-									title : '物料编码',width : 150,sort: true
+									title : '物料编码',width : 170,sort: true
 								},
 								{
 									field : 'ITEM_NAME',
