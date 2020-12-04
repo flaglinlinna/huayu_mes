@@ -349,7 +349,7 @@ function setCxdzTable(kanbanData) {
 	var html = "";
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
-		html += '<tr><td>' + arr.TASK_NO + '</td><td>' + arr.ITEM_NAME
+		html += '<tr><td>' + arr.TASK_NO + '</td><td>' + arr.ITEM_NAME+ '</td><td>' + arr.ITEM_NAME1
 				+ '</td><td>' + arr.PROD_DATE + '</td><td>' + arr.CLASS_NO
 				+ '</td><td>' + arr.QTY_PLAN + '</td><td>' + arr.QTY_DONE
 				+ '</td><td>' + arr.MANPOWER + '</td><td>' + arr.CAPACITY
@@ -415,7 +415,7 @@ function setCxscTable(kanbanData){
 	var item = $('.tbl-body tbody tr').length
 	console.log(item)
 
-	if (item > 5) {
+	if (item > 7) {
 		$('.tbl-body tbody').html(
 				$('.tbl-body tbody').html() + $('.tbl-body tbody').html());
 		$('.tbl-body').css('top', '0');

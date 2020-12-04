@@ -12,10 +12,11 @@
 </head>
 <style>
 .tablebox-cxdz {
-	height: 80px;
+	height: 70px;
 	overflow: hidden;
 	position: relative;
 	margin: 5px auto;
+	background-color: rgba(6, 26, 103, 1); /*20201204新增*/
 }
 
 .tbl-header-cxdz {
@@ -58,12 +59,22 @@
 	font-size: 10px;
 }
 
+.tablebox-cxdz table tr td { /*20201204新增*/
+	background-color: transparent;
+}
+
+.tablebox-cxdz tr:nth-child(even) td, .tbl-body1 tr:nth-child(even) td {
+	/*20201204新增*/
+	background-color: rgba(31, 31, 156, .5);
+}
+
 /*****cxsc*******/
 .tablebox {
-	height: 175px;
+	height: 185px;
 	overflow: hidden;
 	position: relative;
 	margin: 5px auto;
+	background-color: rgba(6, 26, 103, 1); /*20201204新增*/
 }
 
 .tbl-header {
@@ -97,9 +108,18 @@
 	cursor: pointer;
 }
 
+.tablebox table tr td { /*20201204新增*/
+	background-color: transparent;
+}
+
+.tbl-body tr:nth-child(even) td, .tbl-body1 tr:nth-child(even) td {
+	/*20201204新增*/
+	background-color: rgba(31, 31, 156, .5);
+}
+
 /*****cxsc******/
 table, table tr td {
-	border: 2px solid #333399;
+	/*border: 2px solid #333399;2020-1204废除*/
 	border-collapse: collapse;
 }
 
@@ -248,7 +268,10 @@ var t = null;
        var s=dt.getSeconds();//获取秒
        document.getElementById("showTime").innerHTML = y+"年"+mt+"月"+day+"日  "+h+"时"+m+"分"+s+"秒";
        t = setTimeout(time,1000); //设定定时器，循环运行     
-    } 
+    }
+   // function getServerDate(){//获取服务器时间
+    //    return new Date($.ajax({async: false}).getResponseHeader("Date"));
+    //}
 
 </script>
 	</div>
@@ -320,6 +343,7 @@ var t = null;
 							<tr>
 								<th>工单号</th>
 								<th>物料编码</th>
+								<th>物料描述</th>
 								<th>排产日期</th>
 								<th>排产班次</th>
 								<th>计划数量</th>
@@ -343,6 +367,7 @@ var t = null;
 							<tr>
 								<th>工单号</th>
 								<th>物料编码</th>
+								<th>物料描述</th>
 								<th>排产日期</th>
 								<th>排产班次</th>
 								<th>计划数量</th>
