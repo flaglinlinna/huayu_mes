@@ -188,19 +188,24 @@ $(function() {
 				width : 130 ,sort: true
 			},
 				{
+					field : 'FSAMPLE',
+					title : '条码样例',
+					width : 120 ,sort: true
+				},
+				{
 				field : 'FIX_VALUE',
 				title : '固定值',
 				width : 80
 			}, {
-				field : 'FYEAR',
+				field : 'YEAR_NAME',
 				title : '年',
 				width : 80
 			}, {
-				field : 'FMONTH',
+				field : 'MONTH_NAME',
 				title : '月',
 				width : 80
 			}, {
-				field : 'FDAY',
+				field : 'DAY_NAME',
 				title : '日',
 				width : 80 ,sort: true
 			},
@@ -217,7 +222,7 @@ $(function() {
 				width : 150
 			},
 				{
-					field : 'SERIAL_NUM',
+					field : 'SERIAL_NAME',
 					title : '流水号',
 					width : 100 ,sort: true
 				},
