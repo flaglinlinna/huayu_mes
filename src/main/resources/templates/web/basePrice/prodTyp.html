@@ -28,7 +28,7 @@
         <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addProdTyp()">添加产品类型</button>
         <table id="prodTypList" lay-filter="prodTypTable"></table>
         <script type="text/html" id="statusTpl">
-            {{#  if(d.checkStatus){ }}
+            {{#  if(d.enabled){ }}
             <input type="checkbox" name="{{d.productType}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
             <input type="checkbox" name="{{d.productType}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>

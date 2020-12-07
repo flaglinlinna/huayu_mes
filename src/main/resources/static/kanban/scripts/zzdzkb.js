@@ -54,15 +54,23 @@ function dealXlpmData(kanbanList) {
 		
 		if (kanbanData_t.length > 0) {
 			//图片路径
-			$("#name1").text(kanbanData_t[0].NAM_PE);//
-			$("#img1").attr('src',"../base/employee/viewByUrl?empImg="+kanbanData_t[0].IMG_PE);
+			$("#name1").text(kanbanData_t[0].NAM_PE);
+			if(kanbanData_t[0].IMG_PE!=null){
+				$("#img1").attr('src',"../base/employee/viewByUrl?empImg="+kanbanData_t[0].IMG_PE);
+			}
+			$("#job1").text(kanbanData_t[0].POS_PE);
 			
-			$("#name2").text(kanbanData_t[0].NAM_QC);//
-			$("#img2").attr('src',"../base/employee/viewByUrl?empImg="+kanbanData_t[0].IMG_QC);
+			$("#name2").text(kanbanData_t[0].NAM_QC);
+			if(kanbanData_t[0].IMG_QC!=null){
+				$("#img2").attr('src',"../base/employee/viewByUrl?empImg="+kanbanData_t[0].IMG_QC);
+			}
+			$("#job2").text(kanbanData_t[0].POS_QC);
 			
-			$("#name3").text(kanbanData_t[0].NAME_LINER);//
-			$("#img3").attr('src',"../base/employee/viewByUrl?empImg="+kanbanData_t[0].IMG_LINER);
-			//$("#name1").attr('src',"../downImages/"+kanbanData_t[0].IMG_PE+".png");
+			$("#name3").text(kanbanData_t[0].NAME_LINER);
+			if(kanbanData_t[0].IMG_LINER!=null){
+				$("#img3").attr('src',"../base/employee/viewByUrl?empImg="+kanbanData_t[0].IMG_LINER);
+			}
+			$("#job3").text(kanbanData_t[0].POS_LINER);
 			
 			var done = kanbanData_t[0].QTY_DONE==null?0:parseInt(kanbanData_t[0].QTY_DONE);
 			var plan = kanbanData_t[0].QTY_PLAN==null?0:parseInt(kanbanData_t[0].QTY_PLAN);

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='检验批数及退货报表'"></head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div>
+			<form id="searchFrom" class="layui-form layui-form-pane" lay-filter="searchFrom"
+				method="post" action="" style="margin-top: 5px;">
+				<div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+							<label class="layui-form-label layui-required">检验月份</label>
+							<div class="layui-input-inline">
+								<input type="text" lay-verify="required" class="layui-input" name="dates"
+									placeholder="请选择月份" id="dates">
+							</div>
+							<label class="layui-form-label layui-required">部门信息</label>
+				            <div class="layui-input-inline">
+					            <select name="depart" id="depart" lay-verify="required" style="border-color:#D2D2D2!important;">
+					                <!-- <option value="157"></option> -->
+					              </select>
+				            </div>
+						<button class="layui-btn layui-btn-sm" lay-submit
+							lay-filter="searchSubmit">查询</button>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+					</div>
+				</div>
+			</form>
+			<table id="listTable" lay-filter="listTable"></table>
+		</div>
+		<script th:src="@{/js/web/report/check_return.js}"
+			src="/js/web/report/check_return.js"></script>
+			<script th:inline="javascript">
+		        var departList=[[${depart}]];
+		        var depart_select = document.getElementById("depart");
+		        if(departList.result){
+		        	var data = departList.data;
+		        	for (var i = 0; i < data.length; i++) {
+		        		$('#depart').append("<option value="+data[i].ID+">"+data[i].LEAD_BY+"</option>");// 下拉菜单里添加元素
+		        	}
+		        }
+		    </script>
+	</div>
+</body>
+</html>

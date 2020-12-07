@@ -34,7 +34,7 @@ $(function() {
 				field : 'productType',
 				title : '工序名称',
 			},{
-				field : 'checkStatus',
+				field : 'enabled',
 				title : '有效状态',
 				templet : '#statusTpl',
 				width:95

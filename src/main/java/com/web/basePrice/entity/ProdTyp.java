@@ -33,7 +33,7 @@ public class ProdTyp extends BaseEntity {
 	     */
 	    @ApiModelProperty(name = "enabled", value = "是否有效 1(有效)/0（无效）")
 	    @Column(length = 10)
-	    protected int enabled = 1;
+	    protected Integer enabled = 1;
 
 		public String getProductType() {
 			return productType;

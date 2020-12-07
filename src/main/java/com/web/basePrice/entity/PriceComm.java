@@ -4,9 +4,13 @@ import com.app.base.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -48,6 +52,12 @@ public class PriceComm extends BaseEntity {
 		@ApiModelProperty(name = "unitId", value = "单位id")
 		@Column(length = 30)
 		protected String unitId;
+		
+		@ApiModelProperty(name = "unit", hidden = true, value = "单位ID")
+		@ManyToOne
+		@JoinColumn(name = "unitId", insertable = false, updatable = false)
+		@NotFound(action = NotFoundAction.IGNORE)
+		protected Unit unit;
 
 		/**
 		 * 备选供应商
@@ -110,4 +120,13 @@ public class PriceComm extends BaseEntity {
 		public void setEnabled(int enabled) {
 			this.enabled = enabled;
 		}
+
+		public Unit getUnit() {
+			return unit;
+		}
+
+		public void setUnit(Unit unit) {
+			this.unit = unit;
+		}
+		
 }
