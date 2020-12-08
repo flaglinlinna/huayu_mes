@@ -21,6 +21,7 @@ import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.PriceCommDao;
+import com.web.basePrice.dao.UnitDao;
 import com.web.basePrice.entity.PriceComm;
 import com.web.basePrice.entity.Unit;
 import com.web.basePrice.service.PriceCommService;
@@ -38,6 +39,9 @@ public class PriceCommImpl implements PriceCommService {
 
 	@Autowired
 	private SysUserDao sysUserDao;
+	
+	@Autowired
+	private UnitDao unitDao;
 
 	/**
 	 * 新增物料通用价格信息维护
@@ -165,7 +169,11 @@ public class PriceCommImpl implements PriceCommService {
 			map.put("itemName", priceComm.getItemName());
 			map.put("rangePrice", priceComm.getRangePrice());
 			map.put("priceUn", priceComm.getPriceUn());
-			map.put("unit", priceComm.getUnit().getUnitName());
+			if(priceComm.getUnit()!=null){
+				map.put("unit", priceComm.getUnit().getUnitName());
+				map.put("unitId", priceComm.getUnit().getId());
+			}
+			
 			map.put("alternativeSuppliers", priceComm.getAlternativeSuppliers());
 			map.put("enabled", priceComm.getEnabled());
 			map.put("createBy", sysUserDao.findById((long) priceComm.getCreateBy()).getUserName());
@@ -179,4 +187,14 @@ public class PriceCommImpl implements PriceCommService {
 		return ApiResponseResult.success().data(DataGrid.create(mapList, (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
+	
+	/**
+	 * 获取单位数据【下拉框】
+	 * */
+	 public ApiResponseResult getUnitList()throws Exception{
+		 List<Unit> list=unitDao.findByDelFlag(0);
+		 return ApiResponseResult.success().data(list);
+		 
+	 }
+
 }

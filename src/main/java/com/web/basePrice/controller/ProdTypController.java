@@ -41,7 +41,7 @@ public class ProdTypController extends WebController{
     @ApiOperation(value = "产品类型维护列表页", notes = "产品类型维护列表页", hidden = true)
     @RequestMapping(value = "/toProdTyp")
     public String toProdTyp(){
-        return "/web/basePrice/prodTyp";
+        return "/web/basePrice/prod_typ";
     }
 
     @ApiOperation(value = "获取产品类型维护列表", notes = "获取产品类型维护列表",hidden = true)

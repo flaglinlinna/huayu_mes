@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='工作中心维护'">
+<head th:include="layout :: htmlhead" th:with="title='产品类型维护'">
 <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 	 <div style="margin: 10px">
-	 <form id="WorkCenterSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 5px;">
+	 <form id="ProdTypSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 5px;">
            <div class="layui-form-item" style="margin-bottom: 0px">
 					<div class="layui-inline">
 						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
@@ -25,13 +25,13 @@
         </form>
          <hr class="layui-bg-black"/>
 
-        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addWorkCenter()">添加工作中心信息</button>
-        <table id="workCenterList" lay-filter="workCenterTable"></table>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addProdTyp()">添加产品类型</button>
+        <table id="prodTypList" lay-filter="prodTypTable"></table>
         <script type="text/html" id="statusTpl">
-            {{#  if(d.checkStatus){ }}
-            <input type="checkbox" name="{{d.workcenterName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(d.enabled){ }}
+            <input type="checkbox" name="{{d.productType}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.workcenterName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.productType}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
         <script type="text/html" id="optBar">
@@ -39,21 +39,15 @@
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 	 </div>
-	 <!--添加或编辑工作中心维护-->
-    <div id="setWorkCenter" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
-        <form id="workCenterForm" class="layui-form layui-form-pane" lay-filter="workCenterForm" method="post" action="" style="margin-top: 20px;">
+	 <!--添加或编辑工序维护-->
+    <div id="setProdTyp" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
+        <form id="prodTypForm" class="layui-form layui-form-pane" lay-filter="prodTypForm" method="post" action="" style="margin-top: 20px;">
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">工作中心编号</label>
+                <label class="layui-form-label layui-required">产品类型</label>
                 <div class="layui-input-inline">
-                    <input id="workcenterCode" name="workcenterCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">工作中心名称</label>
-                <div class="layui-input-inline">
-                    <input id="workcenterName" name="workcenterName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="productType" name="productType" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -64,7 +58,7 @@
             </div>
         </form>
     </div>
-    <script th:src="@{/js/web/basePrice/workCenter.js}" src="/js/web/basePrice/workCenter.js"></script>
+    <script th:src="@{/js/web/basePrice/prod_typ.js}" src="/js/web/basePrice/prod_typ.js"></script>
 	</div>
 </body>
 </html>

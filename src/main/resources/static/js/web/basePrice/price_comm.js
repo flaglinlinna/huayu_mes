@@ -1,6 +1,5 @@
 /**
- * 物料通用价格维护管理
- * 方法调用未测试-2020-12-07
+ * 物料通用价格维护管理 方法调用未测试-2020-12-07
  */
 var pageCurr;
 $(function() {
@@ -31,36 +30,49 @@ $(function() {
 			},
 			cols : [ [ {
 				type : 'numbers'
-			},{
-				field : 'productType',
-				title : '工序名称',
-			},{
+			}, {
 				field : 'enabled',
 				title : '有效状态',
 				templet : '#statusTpl',
-				width:95
-			},
-
-			{
+				width : 95
+			}, {
+				field : 'itemName',
+				title : '物料名称名称',
+				width : 150
+			},  {
+				field : 'rangePrice',
+				title : '价格档位',
+			}, {
+				field : 'priceUn',
+				title : '单价',
+			}, {
+				field : 'unit',
+				title : '单位',
+			},{
+				field : 'alternativeSuppliers',
+				title : '备选供应商',
+			},{
 				field : 'createBy',
 				title : '创建人',
-				width:80
+				width : 80
 			}, {
 				field : 'createDate',
 				title : '创建时间',
+				width : 150
 			}, {
 				field : 'lastupdateBy',
 				title : '更新人',
-				width:80
+				width : 80
 			}, {
 				field : 'lastupdateDate',
 				title : '更新时间',
+				width : 150
 			}, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
 				toolbar : '#optBar',
-				width:120
+				width : 120
 			} ] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
@@ -105,13 +117,19 @@ $(function() {
 			load(data);
 			return false;
 		});
-		// 编辑工序维护
-		function getData(obj) {	
-			form.val("setForm", {
-						"id" : obj.id,
-						"productType" : obj.productType,
-					});
-					openData(obj.id, "编辑工序信息")
+		// 编辑价格维护
+		function getData(obj) {
+			
+			form.val("itemForm", {
+				"id" : obj.id,
+				"itemName" : obj.itemName,
+				"rangePrice" : obj.rangePrice,
+				"priceUn" : obj.priceUn,
+				"alternativeSuppliers" : obj.alternativeSuppliers,
+			});
+			getUnitList(obj.unitId);
+			
+			openData(obj.id, "编辑价格信息")
 		}
 
 		// 设置正常/禁用
@@ -119,8 +137,8 @@ $(function() {
 			var isStatus = checked ? 1 : 0;
 			var deaprtisStatus = checked ? "正常" : "禁用";
 			// 正常/禁用
-			layer.confirm(
-					'您确定要把工序：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+			layer.confirm('您确定要把物料：' + name + '设置为' + deaprtisStatus + '状态吗？',
+					{
 						btn1 : function(index) {
 							var params = {
 								"id" : id,
@@ -164,6 +182,7 @@ $(function() {
 
 // 新增编辑弹出框
 function openData(id, title) {
+	
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -173,7 +192,7 @@ function openData(id, title) {
 		fixed : false,
 		resize : false,
 		shadeClose : true,
-		area : [ '550px' ],
+
 		content : $('#setForm'),
 		end : function() {
 			cleanData();
@@ -182,14 +201,15 @@ function openData(id, title) {
 	layer.full(index);
 }
 
-// 新增工序维护
-function addData() {
+// 新增价格维护
+function add() {
 	// 清空弹出框数据
 	cleanData();
 	// 打开弹出框
-	openData(null, "添加工序信息");
+	getUnitList("");
+	openData(null, "添加价格信息");
 }
-// 新增工序维护的提交
+// 新增价格维护的提交
 function addSubmit(obj) {
 	CoreUtil.sendAjax("/basePrice/priceComm/add", JSON.stringify(obj.field),
 			function(data) {
@@ -210,7 +230,33 @@ function addSubmit(obj) {
 			});
 }
 
-// 编辑工序维护的提交
+function getUnitList(id) {
+	CoreUtil.sendAjax("/basePrice/priceComm/getUnitList", "", function(data) {
+		if (data.result) {
+			$("#unitId").empty();
+			var list = data.data;
+			for (var i = 0; i < list.length; i++) {
+				if (i == 0) {
+					$("#unitId").append("<option value=''>请选择</option>")
+				}
+				$("#unitId").append(
+						"<option value=" + list[i].id + ">" + list[i].unitCode
+								+ "——" + list[i].unitName + "</option>")
+				if(id==list[i].id){
+					$("#unitId").val(list[i].id);
+				}
+			}
+			
+			layui.form.render('select');
+		} else {
+			layer.alert(res.msg);
+		}
+	}, "GET", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
+// 编辑价格维护的提交
 function editSubmit(obj) {
 	CoreUtil.sendAjax("/basePrice/priceComm/edit", JSON.stringify(obj.field),
 			function(data) {
@@ -231,13 +277,13 @@ function editSubmit(obj) {
 			});
 }
 
-// 删除工序维护
+// 删除价格维护
 function delData(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除该名称为:' + name + ' 的工序信息吗？', {
+		layer.confirm('您确定要删除该名称为:' + name + ' 的价格信息吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
@@ -289,6 +335,6 @@ function loadAll() {
 
 // 清空新增表单数据
 function cleanData() {
-	$('#setForm')[0].reset();
+	$('#itemForm')[0].reset();
 	layui.form.render();// 必须写
 }

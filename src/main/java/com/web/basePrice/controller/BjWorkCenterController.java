@@ -41,7 +41,7 @@ public class BjWorkCenterController extends WebController{
     @ApiOperation(value = "工作中心维护列表页", notes = "工作中心维护列表页", hidden = true)
     @RequestMapping(value = "/toWorkCenter")
     public String toWorkCenter(){
-        return "/web/basePrice/workCenter";
+        return "/web/basePrice/work_center";
     }
 
     @ApiOperation(value = "获取工作中心维护列表", notes = "获取工作中心维护列表",hidden = true)
