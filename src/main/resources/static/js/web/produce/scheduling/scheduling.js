@@ -24,6 +24,7 @@ $(function () {
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit
             },
             parseData: function (res) {
+            	console.log(res)
                 // 可进行数据操作
                 return {
                     "count": res.data.total,
@@ -48,6 +49,7 @@ $(function () {
                 ,{field:'CLASS_NO', title:'班次', width:60,align: 'center'}
                 ,{field:'QTY_PLAN', title:'计划数量', width:80,align: 'center'}
                 ,{field:'QTY_DONE', title:'完工数', width:80,align: 'center'}
+                ,{field:'QUANTITY', title:'投料总数', width:80,align: 'center'}//2020-12-08新增
                 ,{field:'RATE_DONE', title:'完工率(%)', width:100,align: 'center'}
                 // ,{field:'deptName', title:'部门', width:70}
                ,{field:'DEPT_NAME', title:'部门名称', width:80,align: 'center'}
@@ -121,7 +123,7 @@ $(function () {
             //标注选中样式
             obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
             var a = document.createElement('a');
-            var  url = "/produce/scheduling/toSchedulingEdit?id=" + obj.data.ID+"&qty="+obj.data.QTY_DONE+"&rate="+obj.data.RATE_DONE;
+            var  url = "/produce/scheduling/toSchedulingEdit?id=" + obj.data.ID+"&qty="+obj.data.QTY_DONE+"&rate="+obj.data.RATE_DONE+"&input="+obj.data.QUANTITY;
             // console.log(url);
             a.setAttribute('lay-href', context + url);
             a.setAttribute('lay-text', '排产编辑');

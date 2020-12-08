@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='物料通用价格'">
+<head th:include="layout :: htmlhead" th:with="title='人工制费维护'">
 <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
@@ -28,13 +28,13 @@
 			<hr class="layui-bg-black" />
 
 			<button class="layui-btn layui-btn-sm layui-btn-normal"
-				onclick="add()">添加产品类型</button>
+				onclick="add()">添加人工制费信息</button>
 			<table id="colsList" lay-filter="colsTable"></table>
 			<script type="text/html" id="statusTpl">
             {{#  if(d.enabled){ }}
-            <input type="checkbox" name="{{d.itemName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.itemName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.procName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 			<script type="text/html" id="optBar">
@@ -42,7 +42,7 @@
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 		</div>
-		<!--添加或编辑价格维护-->
+		<!--添加或编辑人工制费维护-->
 		<div id="setForm" class="layer_self_wrap"
 			style="width: 500px; display: none; margin-left: 10px;">
 			<form id="itemForm" class="layui-form layui-form-pane"
@@ -51,39 +51,41 @@
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
 					type="hidden" name="id" />
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">物料名称</label>
+					<label class="layui-form-label layui-required">工作中心ID</label>
 					<div class="layui-input-inline">
-						<input id="itemName" name="itemName" lay-verify="required"
+						<input id="workcenterId" name="workcenterId" lay-verify="required"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">价格档位</label>
+					<label class="layui-form-label layui-required">工序</label>
 					<div class="layui-input-inline">
-						<input id="rangePrice" name="rangePrice" lay-verify="required"
+						<input id="procName" name="procName" lay-verify="required"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">单价</label>
+					<label class="layui-form-label layui-required">机台类型</label>
 					<div class="layui-input-inline">
-						<input id="priceUn" name="priceUn" lay-verify="required"
+						<input id="mhType" name="mhType" lay-verify="required"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">单位</label>
+					<label class="layui-form-label layui-required">人工费率</label>
 					<div class="layui-input-inline">
-					<select  id="unitId" name="unitId" lay-verify="required"></select>
+						<input id="feeLh" name="feeLh" lay-verify="required"
+							autocomplete="off" class="layui-input" type="text" />
 					</div>
+					<div class="layui-word-aux" style="line-height: 20px;">（元/小时）</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label ">备选供应商</label>
+					<label class="layui-form-label layui-required">制费费率</label>
 					<div class="layui-input-inline">
-						<input id="alternativeSuppliers" name="alternativeSuppliers"
-							 autocomplete="off" class="layui-input"
-							type="text" />
+						<input id="feeMh" name="feeMh" lay-verify="required"
+							autocomplete="off" class="layui-input" type="text" />
 					</div>
+					<div class="layui-word-aux" style="line-height: 20px;">（元/小时）</div>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 10px;">
@@ -95,8 +97,8 @@
 				</div>
 			</form>
 		</div>
-		<script th:src="@{/js/web/basePrice/price_comm.js}"
-			src="/js/web/basePrice/price_comm.js"></script>
+		<script th:src="@{/js/web/basePrice/base_fee.js}"
+			src="/js/web/basePrice/base_fee.js"></script>
 	</div>
 </body>
 </html>

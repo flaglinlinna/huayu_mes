@@ -1,12 +1,20 @@
 package com.web.basePrice.entity;
 
 import com.app.base.entity.BaseEntity;
+import com.web.basic.entity.WorkCenter;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -27,13 +35,19 @@ public class BaseFee extends BaseEntity {
 	    @ApiModelProperty(name = "workcenterId", value = "工作中心Id")
 	    @Column(length = 20)
 	    protected Long workcenterId;
-
+	    
+	    @ApiModelProperty(name="workCenter",hidden=true,value="工作中心id")
+	    @ManyToOne
+	    @JoinColumn(name="workcenterId",insertable=false,updatable=false)
+	    @NotFound(action=NotFoundAction.IGNORE)
+	    protected BjWorkCenter workCenter;
+	    
 		/**
 		 * 是否有效
 		 */
 		@ApiModelProperty(name = "enabled", value = "是否有效")
 		@Column(length = 10)
-		protected int enabled = 1;
+		protected Integer enabled = 1;
 
 	    /**
 	     * 工序名称
@@ -72,11 +86,11 @@ public class BaseFee extends BaseEntity {
 			this.workcenterId = workcenterId;
 		}
 
-		public int getEnabled() {
+		public Integer getEnabled() {
 			return enabled;
 		}
 
-		public void setEnabled(int enabled) {
+		public void setEnabled(Integer enabled) {
 			this.enabled = enabled;
 		}
 
@@ -111,4 +125,13 @@ public class BaseFee extends BaseEntity {
 		public void setFeeMh(String feeMh) {
 			this.feeMh = feeMh;
 		}
+
+		public BjWorkCenter getWorkCenter() {
+			return workCenter;
+		}
+
+		public void setWorkCenter(BjWorkCenter workCenter) {
+			this.workCenter = workCenter;
+		}
+		
 }

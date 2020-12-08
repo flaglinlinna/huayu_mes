@@ -95,7 +95,12 @@ public class PriceCommImpl implements PriceCommService {
 		}
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
-		o.setEnabled(priceComm.getEnabled());
+		//o.setEnabled(priceComm.getEnabled());
+		o.setItemName(priceComm.getItemName());
+	    o.setRangePrice(priceComm.getRangePrice());
+	    o.setPriceUn(priceComm.getPriceUn());
+	    o.setUnitId(priceComm.getUnitId());
+	    o.setAlternativeSuppliers(priceComm.getAlternativeSuppliers());
 		priceCommDao.save(o);
 		return ApiResponseResult.success("编辑成功！");
 	}

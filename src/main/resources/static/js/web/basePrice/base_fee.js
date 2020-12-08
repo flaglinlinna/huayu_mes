@@ -1,5 +1,5 @@
 /**
- * 物料通用价格维护管理
+ * 人工制费维护管理
  */
 var pageCurr;
 $(function() {
@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#colsList',
-			url : context + '/basePrice/priceComm/getList',
+			url : context + '/basePrice/baseFee/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -36,21 +36,21 @@ $(function() {
 				templet : '#statusTpl',
 				width : 95
 			}, {
-				field : 'itemName',
-				title : '物料名称名称',
-				width : 150
+				field : 'workcenterId',
+				title : '工作中心ID',
+				width : 90
 			},  {
-				field : 'rangePrice',
-				title : '价格档位',
+				field : 'procName',
+				title : '工序',
 			}, {
-				field : 'priceUn',
-				title : '单价',
+				field : 'mhType',
+				title : '机台类型',
 			}, {
-				field : 'unit',
-				title : '单位',
+				field : 'feeLh',
+				title : '人工费率（元/小时）',
 			},{
-				field : 'alternativeSuppliers',
-				title : '备选供应商',
+				field : 'feeMh',
+				title : '制费费率（元/小时）',
 			},{
 				field : 'createBy',
 				title : '创建人',
@@ -95,7 +95,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delData(data, data.id, data.itemName);
+				delData(data, data.id, data.procName);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				getData(data);
@@ -122,12 +122,12 @@ $(function() {
 			
 			form.val("itemForm", {
 				"id" : obj.id,
-				"itemName" : obj.itemName,
-				"rangePrice" : obj.rangePrice,
-				"priceUn" : obj.priceUn,
-				"alternativeSuppliers" : obj.alternativeSuppliers,
+				"workcenterId" : obj.workcenterId,
+				"procName" : obj.procName,
+				"mhType" : obj.mhType,
+				"feeLh" : obj.feeLh,
+				"feeMh" : obj.feeMh
 			});
-			getUnitList(obj.unitId);
 			
 			openData(obj.id, "编辑价格信息")
 		}
@@ -137,14 +137,14 @@ $(function() {
 			var isStatus = checked ? 1 : 0;
 			var deaprtisStatus = checked ? "正常" : "禁用";
 			// 正常/禁用
-			layer.confirm('您确定要把物料：' + name + '设置为' + deaprtisStatus + '状态吗？',
+			layer.confirm('您确定要把工序：' + name + '设置为' + deaprtisStatus + '状态吗？',
 					{
 						btn1 : function(index) {
 							var params = {
 								"id" : id,
 								"checkStatus" : isStatus
 							};
-							CoreUtil.sendAjax("/basePrice/priceComm/doStatus",
+							CoreUtil.sendAjax("/basePrice/baseFee/doStatus",
 									JSON.stringify(params), function(data) {
 										if (data.result) {
 											layer.alert("操作成功", function() {
@@ -206,12 +206,11 @@ function add() {
 	// 清空弹出框数据
 	cleanData();
 	// 打开弹出框
-	getUnitList("");
 	openData(null, "添加价格信息");
 }
 // 新增价格维护的提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("/basePrice/priceComm/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/basePrice/baseFee/add", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -230,35 +229,11 @@ function addSubmit(obj) {
 			});
 }
 
-function getUnitList(id) {
-	CoreUtil.sendAjax("/basePrice/priceComm/getUnitList", "", function(data) {
-		if (data.result) {
-			$("#unitId").empty();
-			var list = data.data;
-			for (var i = 0; i < list.length; i++) {
-				if (i == 0) {
-					$("#unitId").append("<option value=''>请选择</option>")
-				}
-				$("#unitId").append(
-						"<option value=" + list[i].id + ">" + list[i].unitCode
-								+ "——" + list[i].unitName + "</option>")
-				if(id==list[i].id){
-					$("#unitId").val(list[i].id);
-				}
-			}
-			
-			layui.form.render('select');
-		} else {
-			layer.alert(res.msg);
-		}
-	}, "GET", false, function(res) {
-		layer.alert(res.msg);
-	});
-}
+
 
 // 编辑价格维护的提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("/basePrice/priceComm/edit", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/basePrice/baseFee/edit", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {
@@ -287,7 +262,7 @@ function delData(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("/basePrice/priceComm/delete", JSON
+			CoreUtil.sendAjax("/basePrice/baseFee/delete", JSON
 					.stringify(param), function(data) {
 				if (isLogin(data)) {
 					if (data.result == true) {

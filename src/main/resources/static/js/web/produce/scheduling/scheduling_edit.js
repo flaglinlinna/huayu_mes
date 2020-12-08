@@ -350,6 +350,7 @@ $(function () {
                         ,limitName: 'rows' //每页数据量的参数名，默认：limit
                     },
                     parseData: function (res) {
+                    	//console.log(res)
                         // 可进行数据操作
                         return {
                             "count": res.data.total,
@@ -867,10 +868,11 @@ function getScheduling(){
     }
     $("#deptId").html(optionHtml4);
 */
-	// console.log(scheduling)
+	console.log(scheduling)
     $("#id").val(id);
     $("#qytDone").val(qty);
     $("#rateDone").val(rate);
+    $("#inputSum").val(input);//2020-12-08新增
     $("#taskNo").val(scheduling.taskNo);
     $("#prodNo").val(scheduling.prodNo);
     $("#produceState").val(scheduling.produceState);
@@ -881,7 +883,7 @@ function getScheduling(){
     $("#custId").val(scheduling.custId);
     $("#linerName").val(scheduling.linerName);
     $("#prodDate").val(scheduling.prodDate);
-    $("#deptId").val(scheduling.deptId);
+    $("#deptId").val(scheduling.deptName);//2020-12-08 scheduling.deptId->scheduling.deptName
     $("#classNo").val(scheduling.classNo);
     $("#qtyPlan").val(scheduling.qtyPlan);
 

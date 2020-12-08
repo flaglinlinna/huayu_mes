@@ -61,13 +61,14 @@ public class SchedulingController extends WebController {
     @ApiOperation(value = "编辑页", notes = "编辑页", hidden = true)
     @RequestMapping(value = "/toSchedulingEdit", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView toSchedulingEdit(Long id,String qty,String rate){
+    public ModelAndView toSchedulingEdit(Long id,String qty,String rate,String input){
         ModelAndView mav = new ModelAndView("/web/produce/scheduling/scheduling_edit");
         try{
             ApiResponseResult result = schedulingService.getSchedulData(id);
             mav.addObject("id", id);
             mav.addObject("qty", qty);
             mav.addObject("rate", rate);
+            mav.addObject("input", input);//2020-12-08新增
             if(result != null){
                 mav.addObject("mapData", result.getData());
             }else{

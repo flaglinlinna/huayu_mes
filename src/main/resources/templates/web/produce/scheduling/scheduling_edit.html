@@ -125,6 +125,12 @@
                                     <input type="text" id="rateDone" name="rateDone" autocomplete="off" readonly style="background-color: #F2F2F2;" class="layui-input">
                                 </div>
                             </div>
+                             <div class="layui-inline">
+                                <label class="layui-form-label">投料总数</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="inputSum" name="inputSum" autocomplete="off" readonly style="background-color: #F2F2F2;" class="layui-input">
+                                </div>
+                            </div>
                         </div>
 
                         <!-- <div class="layui-form-item" style="margin-bottom: 0px;text-align: center;">
@@ -431,6 +437,7 @@
         var id = [[${id}]];
         var qty = [[${qty}]];
         var rate = [[${rate}]];
+        var input = [[${input}]];//2020-12-08新增
         var mapData = [[${mapData}]];
         var scheduling = mapData ? mapData.scheduling : null;
         var itemList = mapData ? mapData.itemList : null;
