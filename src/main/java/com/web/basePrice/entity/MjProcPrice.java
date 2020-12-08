@@ -40,7 +40,7 @@ public class MjProcPrice extends BaseEntity {
 		 */
 		@ApiModelProperty(name = "enabled", value = "是否有效")
 		@Column(length = 10)
-		protected int enabled = 1;
+		protected Integer enabled = 1;
 
 		public String getProcName() {
 			return procName;
@@ -58,11 +58,11 @@ public class MjProcPrice extends BaseEntity {
 			this.fPrice = fPrice;
 		}
 
-		public int getEnabled() {
+		public Integer getEnabled() {
 			return enabled;
 		}
 
-		public void setEnabled(int enabled) {
+		public void setEnabled(Integer enabled) {
 			this.enabled = enabled;
 		}
 }
