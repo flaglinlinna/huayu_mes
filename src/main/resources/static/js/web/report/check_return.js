@@ -64,131 +64,131 @@ $(function() {
 								width : 110
 							}, {
 								field : 'F1',
-								title : 'F1',
+								title : '1号',
 								width : 80
 							}, {
 								field : 'F2',
-								title : 'F2',
+								title : '2号',
 								width : 80
 							}, {
 								field : 'F3',
-								title : 'F3',
+								title : '3号',
 								width : 80
 							}, {
 								field : 'F4',
-								title : 'F4',
+								title : '4号',
 								width : 80
 							}, {
 								field : 'F5',
-								title : 'F5',
+								title : '5号',
 								width : 80
 							}, {
 								field : 'F6',
-								title : 'F6',
+								title : '6号',
 								width : 80
 							}, {
 								field : 'F7',
-								title : 'F7',
+								title : '7号',
 								width : 80
 							}, {
 								field : 'F8',
-								title : 'F8',
+								title : '8号',
 								width : 80
 							}, {
 								field : 'F9',
-								title : 'F9',
+								title : '9号',
 								width : 80
 							}, {
 								field : 'F10',
-								title : 'F10',
+								title : '10号',
 								width : 80
 							}, {
 								field : 'F11',
-								title : 'F11',
+								title : '11号',
 								width : 80
 							}, {
 								field : 'F12',
-								title : 'F12',
+								title : '12号',
 								width : 80
 							}, {
 								field : 'F13',
-								title : 'F13',
+								title : '13号',
 								width : 80
 							}, {
 								field : 'F14',
-								title : 'F14',
+								title : '14号',
 								width : 80
 							}, {
 								field : 'F15',
-								title : 'F15',
+								title : '15号',
 								width : 80
 							}, {
 								field : 'F16',
-								title : 'F16',
+								title : '16号',
 								width : 80
 							}, {
 								field : 'F17',
-								title : 'F17',
+								title : '17号',
 								width : 80
 							}, {
 								field : 'F18',
-								title : 'F18',
+								title : '18号',
 								width : 80
 							}, {
 								field : 'F19',
-								title : 'F19',
+								title : '19号',
 								width : 80
 							}, {
 								field : 'F20',
-								title : 'F20',
+								title : '20号',
 								width : 80
 							},{
 								field : 'F21',
-								title : 'F21',
+								title : '21号',
 								width : 80
 							}, {
 								field : 'F22',
-								title : 'F22',
+								title : '22号',
 								width : 80
 							}, {
 								field : 'F23',
-								title : 'F23',
+								title : '23号',
 								width : 80
 							}, {
 								field : 'F24',
-								title : 'F24',
+								title : '24号',
 								width : 80
 							}, {
 								field : 'F25',
-								title : 'F25',
+								title : '25号',
 								width : 80
 							}, {
 								field : 'F26',
-								title : 'F26',
+								title : '26号',
 								width : 80
 							}, {
 								field : 'F27',
-								title : 'F27',
+								title : '27号',
 								width : 80
 							}, {
 								field : 'F28',
-								title : 'F28',
+								title : '28号',
 								width : 80
 							}, {
 								field : 'F29',
-								title : 'F29',
+								title : '29号',
 								width : 80
 							}, {
 								field : 'F30',
-								title : 'F30',
+								title : '30号',
 								width : 80
 							},{
 								field : 'F31',
-								title : 'F31',
+								title : '31号',
 								width : 80
 							}, {
 								field : 'FSUM',
-								title : 'FSUM',
+								title : '合计',
 								width : 80
 							} ] ],
 							done : function(res, curr, count) {

@@ -32,7 +32,7 @@ import com.web.basic.entity.Mtrial;
  */
 @Service(value = "ProcService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class ProcImpl implements ProcService {
+public class ProcImpl extends BasePriceUtils implements ProcService {
 	@Autowired
 	private ProcDao procDao;
 
@@ -98,6 +98,7 @@ public class ProcImpl implements ProcService {
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		o.setProcName(proc.getProcName());
+		o.setWorkcenterId(proc.getWorkcenterId());
 		o.setCheckStatus(proc.getCheckStatus());
 		procDao.save(o);
 		return ApiResponseResult.success("编辑成功！");
@@ -191,6 +192,7 @@ public class ProcImpl implements ProcService {
 			map.put("procNo", proc.getProcNo());
 			map.put("procName", proc.getProcName());
 			if(proc.getBjWorkCenter()!=null){
+				map.put("workCenterId", proc.getBjWorkCenter().getId());
 				map.put("workCenter", proc.getBjWorkCenter().getWorkcenterName());
 			}
 			map.put("checkStatus", proc.getCheckStatus());
@@ -204,5 +206,18 @@ public class ProcImpl implements ProcService {
 		}
 		return ApiResponseResult.success().data(DataGrid.create(mapList, (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+	}
+	
+	@Override
+	public ApiResponseResult getWorkCenterList(String type, String condition,PageRequest pageRequest)throws Exception{
+				List<Object> list = getBJWorkCenterPrc(UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getCompany() + "",
+						UserUtil.getSessionUser().getId() + "",type,condition,pageRequest);
+				if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+					return ApiResponseResult.failure(list.get(1).toString());
+				}
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("Total", list.get(2));
+				map.put("List", list.get(3));
+				return ApiResponseResult.success().data(map);
 	}
 }

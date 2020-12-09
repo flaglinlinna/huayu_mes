@@ -22,5 +22,7 @@ public interface ProcService {
   public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
   
   public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;// 状态改变
+  
+  public ApiResponseResult getWorkCenterList(String type,String condition,PageRequest pageRequest)throws Exception;//工作中心
 
 }

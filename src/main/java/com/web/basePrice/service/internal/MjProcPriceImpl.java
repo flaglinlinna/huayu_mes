@@ -32,7 +32,7 @@ import com.web.basic.entity.Mtrial;
  */
 @Service(value = "MjProcPriceService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class MjProcPriceImpl implements MjProcPriceService {
+public class MjProcPriceImpl extends BasePriceUtils implements MjProcPriceService {
 	@Autowired
 	private MjProcPriceDao mjProcPriceDao;
 
@@ -166,5 +166,18 @@ public class MjProcPriceImpl implements MjProcPriceService {
 		}
 		return ApiResponseResult.success().data(DataGrid.create(mapList, (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+	}
+	
+	@Override
+	public ApiResponseResult getProcList(String type, String condition,PageRequest pageRequest)throws Exception{
+				List<Object> list = getBJProcPrc(UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getCompany() + "",
+						UserUtil.getSessionUser().getId() + "",type,condition,pageRequest);
+				if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+					return ApiResponseResult.failure(list.get(1).toString());
+				}
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("Total", list.get(2));
+				map.put("List", list.get(3));
+				return ApiResponseResult.success().data(map);
 	}
 }

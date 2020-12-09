@@ -19,5 +19,7 @@ public interface MjProcPriceService {
   public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
   
   public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;// 状态改变
+  
+  public ApiResponseResult getProcList(String type,String condition,PageRequest pageRequest)throws Exception;//工序
 
 }

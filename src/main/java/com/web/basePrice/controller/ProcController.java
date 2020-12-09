@@ -158,4 +158,24 @@ public class ProcController extends WebController{
             return ApiResponseResult.failure("设置正常/禁用失败！");
         }
     }
+    
+    @ApiOperation(value = "获取工作中心信息", notes = "获取工作中心信息", hidden = true)
+    @RequestMapping(value = "/getWorkCenterList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getWorkCenterList(String keyword) throws Exception{
+	 //Long id, Integer deStatus
+        String method = "basePrice/proc/getWorkCenterList";String methodName ="获取工作中心信息";
+        try{
+        	Sort sort = Sort.unsorted();
+            ApiResponseResult result = procService.getWorkCenterList("01", keyword,super.getPageRequest(sort));
+            logger.debug("获取工作中心信息=getWorkCenterList:");
+            getSysLogService().success(module,method, methodName, keyword);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("获取工作中心信息失败！", e);
+            getSysLogService().error(module,method, methodName, keyword+";"+e.toString());
+            return ApiResponseResult.failure("获取工作中心信息失败！");
+        }
+    }
 }
