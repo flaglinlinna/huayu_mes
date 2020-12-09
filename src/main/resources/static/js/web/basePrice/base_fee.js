@@ -3,186 +3,412 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table' ], function() {
-		var table = layui.table, form = layui.form;
+	layui.use([ 'form', 'table', 'tableSelect' ],
+			function() {
+				var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
+						tableIns = table.render({
+							elem : '#colsList',
+							url : context + '/basePrice/baseFee/getList',
+							method : 'get' // 默认：get请求
+							,
+							cellMinWidth : 80,
+							page : true,
+							request : {
+								pageName : 'page' // 页码的参数名称，默认：page
+								,
+								limitName : 'rows' // 每页数据量的参数名，默认：limit
+							},
+							parseData : function(res) {
+								// 可进行数据操作
+								return {
+									"count" : res.data.total,
+									"msg" : res.msg,
+									"data" : res.data.rows,
+									"code" : res.status
+								// code值为200表示成功
+								}
+							},
+							cols : [ [ {
+								type : 'numbers'
+							}, {
+								field : 'enabled',
+								title : '有效状态',
+								templet : '#statusTpl',
+								width : 95
+							}, {
+								field : 'workcenter',
+								title : '工作中心',
+								width : 100
+							}, {
+								field : 'procName',
+								title : '工序',
+								width : 100
+							}, {
+								field : 'mhType',
+								title : '机台类型',
+								width : 100
+							}, {
+								field : 'feeLh',
+								title : '人工费率（元/小时）',
+								width : 150
+							}, {
+								field : 'feeMh',
+								title : '制费费率（元/小时）',
+								width : 150
+							}, {
+								field : 'createBy',
+								title : '创建人',
+								width : 80
+							}, {
+								field : 'createDate',
+								title : '创建时间',
+								width : 150
+							}, {
+								field : 'lastupdateBy',
+								title : '更新人',
+								width : 80
+							}, {
+								field : 'lastupdateDate',
+								title : '更新时间',
+								width : 150
+							}, {
+								fixed : 'right',
+								title : '操作',
+								align : 'center',
+								toolbar : '#optBar',
+								width : 120
+							} ] ],
+							done : function(res, curr, count) {
+								pageCurr = curr;
+							}
+						});
+						// 工序列表
+						procTableSelect = tableSelect.render({
+							elem : '#procName',
+							searchKey : 'keyword',
+							checkedKey : 'id',
+							searchPlaceholder : '试着搜索',
+							table : {
+								// width : 220,
+								url : context
+										+ '/basePrice/baseFee/getProcList',
+								method : 'get',
 
-		tableIns = table.render({
-			elem : '#colsList',
-			url : context + '/basePrice/baseFee/getList',
-			method : 'get' // 默认：get请求
-			,
-			cellMinWidth : 80,
-			page : true,
-			request : {
-				pageName : 'page' // 页码的参数名称，默认：page
-				,
-				limitName : 'rows' // 每页数据量的参数名，默认：limit
-			},
-			parseData : function(res) {
-				// 可进行数据操作
-				return {
-					"count" : res.data.total,
-					"msg" : res.msg,
-					"data" : res.data.rows,
-					"code" : res.status
-				// code值为200表示成功
-				}
-			},
-			cols : [ [ {
-				type : 'numbers'
-			}, {
-				field : 'enabled',
-				title : '有效状态',
-				templet : '#statusTpl',
-				width : 95
-			}, {
-				field : 'workcenterId',
-				title : '工作中心ID',
-				width : 90
-			},  {
-				field : 'procName',
-				title : '工序',
-			}, {
-				field : 'mhType',
-				title : '机台类型',
-			}, {
-				field : 'feeLh',
-				title : '人工费率（元/小时）',
-			},{
-				field : 'feeMh',
-				title : '制费费率（元/小时）',
-			},{
-				field : 'createBy',
-				title : '创建人',
-				width : 80
-			}, {
-				field : 'createDate',
-				title : '创建时间',
-				width : 150
-			}, {
-				field : 'lastupdateBy',
-				title : '更新人',
-				width : 80
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间',
-				width : 150
-			}, {
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar',
-				width : 120
-			} ] ],
-			done : function(res, curr, count) {
-				// 如果是异步请求数据方式，res即为你接口返回的信息。
-				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-				// console.log(res);
-				// 得到当前页码
-				// console.log(curr);
-				// 得到数据总量
-				// console.log(count);
-				pageCurr = curr;
-			}
-		});
-		// 切换状态操作
-		form.on('switch(isStatusTpl)', function(obj) {
-			doStatus(obj, this.value, this.name, obj.elem.checked);
-		});
+								cols : [ [ {
+									type : 'radio'
+								},// 多选 radio
+								, {
+									field : 'id',
+									title : 'id',
+									width : 0,
+									hide : true
+								}, {
+									field : 'PROC_NAME',
+									title : '工序'
+								},
 
-		// 监听工具条
-		table.on('tool(colsTable)', function(obj) {
-			var data = obj.data;
-			if (obj.event === 'del') {
-				// 删除
-				delData(data, data.id, data.procName);
-			} else if (obj.event === 'edit') {
-				// 编辑
-				getData(data);
-			}
-		});
-		// 监听提交
-		form.on('submit(addSubmit)', function(data) {
-			if (data.field.id == null || data.field.id == "") {
-				// 新增
-				addSubmit(data);
-			} else {
-				editSubmit(data);
-			}
-			return false;
-		});
-		// 监听搜索框
-		form.on('submit(searchSubmit)', function(data) {
-			// 重新加载table
-			load(data);
-			return false;
-		});
-		// 编辑价格维护
-		function getData(obj) {
-			
-			form.val("itemForm", {
-				"id" : obj.id,
-				"workcenterId" : obj.workcenterId,
-				"procName" : obj.procName,
-				"mhType" : obj.mhType,
-				"feeLh" : obj.feeLh,
-				"feeMh" : obj.feeMh
-			});
-			
-			openData(obj.id, "编辑价格信息")
-		}
+								{
+									field : 'WORKCENTER_NAME',
+									title : '工作中心'
+								}
 
-		// 设置正常/禁用
-		function doStatus(obj, id, name, checked) {
-			var isStatus = checked ? 1 : 0;
-			var deaprtisStatus = checked ? "正常" : "禁用";
-			// 正常/禁用
-			layer.confirm('您确定要把工序：' + name + '设置为' + deaprtisStatus + '状态吗？',
-					{
-						btn1 : function(index) {
-							var params = {
-								"id" : id,
-								"checkStatus" : isStatus
-							};
-							CoreUtil.sendAjax("/basePrice/baseFee/doStatus",
-									JSON.stringify(params), function(data) {
-										if (data.result) {
-											layer.alert("操作成功", function() {
-												layer.closeAll();
-												loadAll();
-											});
-										} else {
-											layer.alert(data.msg, function() {
-												layer.closeAll();
-											});
+								] ],
+								page : true,
+								request : {
+									pageName : 'page' // 页码的参数名称，默认：page
+									,
+									limitName : 'rows' // 每页数据量的参数名，默认：limit
+								},
+								parseData : function(res) {
+									console.log(res)
+									if (!res.result) {
+										// 可进行数据操作
+										return {
+											"count" : 0,
+											"msg" : res.msg,
+											"data" : [],
+											"code" : res.status
+										// code值为200表示成功
 										}
-									}, "POST", false, function(res) {
-										layer.alert("操作请求错误，请您稍后再试",
-												function() {
-													layer.closeAll();
-												});
-									});
-						},
-						btn2 : function() {
-							obj.elem.checked = !isStatus;
-							form.render();
-							layer.closeAll();
-						},
-						cancel : function() {
-							obj.elem.checked = !isStatus;
-							form.render();
-							layer.closeAll();
+									}
+									return {
+										"count" : res.data.Total,
+										"msg" : res.msg,
+										"data" : res.data.List,
+										"code" : res.status
+									// code值为200表示成功
+									}
+								},
+							},
+							done : function(elem, data) {
+								// 选择完后的回调，包含2个返回值
+								// elem:返回之前input对象；data:表格返回的选中的数据 []
+								var da = data.data;
+								form.val("itemForm", {
+									"procName" : da[0].PROC_NAME,
+									"procId" : da[0].ID,
+									"workcenterId" : da[0].WORKCENTER_ID,
+									"workcenterName" : da[0].WORKCENTER_NAME
+								});
+								form.render();// 重新渲染
+							}
+						});
+						// 工作中心列表
+						cTableSelect = tableSelect.render({
+							elem : '#workcenterName',
+							searchKey : 'keyword',
+							checkedKey : 'id',
+							searchPlaceholder : '试着搜索',
+							table : {
+								// width : 220,
+								url : context
+										+ '/basePrice/baseFee/getWorkCenterList',
+								method : 'get',
+
+								cols : [ [ {
+									type : 'radio'
+								},// 多选 radio
+								, {
+									field : 'ID',
+									title : 'ID',
+									width : 0,
+									hide : true
+								},
+
+								{
+									field : 'WORKCENTER_CODE',
+									title : '工作中心编码',
+
+								},
+
+								{
+									field : 'WORKCENTER_NAME',
+									title : '工作中心',
+								}
+
+								] ],
+								page : true,
+								request : {
+									pageName : 'page' // 页码的参数名称，默认：page
+									,
+									limitName : 'rows' // 每页数据量的参数名，默认：limit
+								},
+								parseData : function(res) {
+									if (!res.result) {
+										// 可进行数据操作
+										return {
+											"count" : 0,
+											"msg" : res.msg,
+											"data" : [],
+											"code" : res.status
+										// code值为200表示成功
+										}
+									}
+									return {
+										"count" : res.data.Total,
+										"msg" : res.msg,
+										"data" : res.data.List,
+										"code" : res.status
+									// code值为200表示成功
+									}
+								},
+							},
+							done : function(elem, data) {
+								// 选择完后的回调，包含2个返回值
+								// elem:返回之前input对象；data:表格返回的选中的数据 []
+								var da = data.data;
+								form.val("itemForm", {
+									"workcenterId" : da[0].ID,
+									"workcenterName" : da[0].WORKCENTER_NAME,
+								});
+								form.render();// 重新渲染
+							}
+						});
+						// 机台类型列表
+						typeTableSelect = tableSelect.render({
+							elem : '#mhType',
+							searchKey : 'keyword',
+							checkedKey : 'id',
+							searchPlaceholder : '试着搜索',
+							table : {
+								// width : 220,
+								url : context
+										+ '/basePrice/baseFee/getType',
+								method : 'get',
+
+								cols : [ [ {
+									type : 'radio'
+								},// 多选 radio
+								, {
+									field : 'ID',
+									title : 'ID',
+									width : 0,
+									hide : true
+								},
+
+								{
+									field : 'SUB_CODE',
+									title : '参数编码',
+
+								},
+
+								{
+									field : 'SUB_NAME',
+									title : '参数名称',
+								}
+
+								] ],
+								page : true,
+								request : {
+									pageName : 'page' // 页码的参数名称，默认：page
+									,
+									limitName : 'rows' // 每页数据量的参数名，默认：limit
+								},
+								parseData : function(res) {
+									if (!res.result) {
+										// 可进行数据操作
+										return {
+											"count" : 0,
+											"msg" : res.msg,
+											"data" : [],
+											"code" : res.status
+										// code值为200表示成功
+										}
+									}
+									return {
+										"count" : res.data.Total,
+										"msg" : res.msg,
+										"data" : res.data.List,
+										"code" : res.status
+									// code值为200表示成功
+									}
+								},
+							},
+							done : function(elem, data) {
+								// 选择完后的回调，包含2个返回值
+								// elem:返回之前input对象；data:表格返回的选中的数据 []
+								var da = data.data;
+								form.val("itemForm", {
+									"mhType" : da[0].SUB_NAME,
+								});
+								form.render();// 重新渲染
+							}
+						});
+						// 切换状态操作
+						form.on('switch(isStatusTpl)', function(obj) {
+							doStatus(obj, this.value, this.name,
+									obj.elem.checked);
+						});
+
+						// 监听工具条
+						table.on('tool(colsTable)', function(obj) {
+							var data = obj.data;
+							if (obj.event === 'del') {
+								// 删除
+								delData(data, data.id, data.procName);
+							} else if (obj.event === 'edit') {
+								// 编辑
+								getData(data);
+							}
+						});
+						// 监听提交
+						form.on('submit(addSubmit)', function(obj) {					
+								var params = {
+										"input1" : obj.field.procId,
+										"input2" : obj.field.workcenterId,
+									};
+								CoreUtil.sendAjax("/basePrice/baseFee/doCheckInfo",JSON.stringify(params),
+								function(data) {
+											if (data.result) {										
+												if (obj.field.id == null || obj.field.id == "") {
+													// 新增
+													addSubmit(obj);
+												} else {
+													editSubmit(obj);
+												}								
+											} else {									
+												layer.alert(data.msg);						
+											}
+										},"POST",false,function(res) {		
+											layer.alert("操作请求错误，请您稍后再试");
+											return false;
+										 });
+										
+							return false;
+						});
+						// 监听搜索框
+						form.on('submit(searchSubmit)', function(data) {
+							// 重新加载table
+							load(data);
+							return false;
+						});
+						// 编辑价格维护
+						function getData(obj) {
+
+							form.val("itemForm", {
+								"id" : obj.id,
+								"workcenterId" : obj.workcenterId,
+								"workcenterName" : obj.workcenter,
+								"procName" : obj.procName,
+								"procId" : obj.procId,
+								"mhType" : obj.mhType,
+								"feeLh" : obj.feeLh,
+								"feeMh" : obj.feeMh
+							});
+
+							openData(obj.id, "编辑价格信息")
 						}
-					});
-		}
 
+						// 设置正常/禁用
+						function doStatus(obj, id, name, checked) {
+							var isStatus = checked ? 1 : 0;
+							var deaprtisStatus = checked ? "正常" : "禁用";
+							// 正常/禁用
+							layer.confirm('您确定要把工序：' + name + '设置为'+ deaprtisStatus + '状态吗？',
+										{
+										btn1 : function(index) {
+											var params = {
+													"id" : id,
+													"checkStatus" : isStatus
+												};
+											CoreUtil.sendAjax("/basePrice/baseFee/doStatus",JSON.stringify(params),
+												function(data) {
+													if (data.result) {
+														layer.alert("操作成功",function() {
+																	layer.closeAll();
+																	loadAll();
+															});
+													} else {
+														layer.alert(data.msg,function() {
+																layer.closeAll();
+															});
+													}
+												},"POST",false,function(res) {
+													layer.alert("操作请求错误，请您稍后再试",function() {
+																layer.closeAll();
+													});
+												 });
+												},
+												btn2 : function() {
+													obj.elem.checked = !isStatus;
+													form.render();
+													layer.closeAll();
+												},
+												cancel : function() {
+													obj.elem.checked = !isStatus;
+													form.render();
+													layer.closeAll();
+												}
+											});
+						}
+						
+		
 	});
-
 });
 
 // 新增编辑弹出框
 function openData(id, title) {
-	
+
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
@@ -228,8 +454,6 @@ function addSubmit(obj) {
 				layer.alert(res.msg);
 			});
 }
-
-
 
 // 编辑价格维护的提交
 function editSubmit(obj) {

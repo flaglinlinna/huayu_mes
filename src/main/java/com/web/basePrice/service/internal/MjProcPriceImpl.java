@@ -143,6 +143,7 @@ public class MjProcPriceImpl extends BasePriceUtils implements MjProcPriceServic
 		List<SearchFilter> filters1 = new ArrayList<>();
 		if (StringUtils.isNotEmpty(keyword)) {
 			filters1.add(new SearchFilter("procName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("fPrice", SearchFilter.Operator.LIKE, keyword));
 		}
 		Specification<MjProcPrice> spec = Specification.where(BaseService.and(filters, MjProcPrice.class));
 		Specification<MjProcPrice> spec1 = spec.and(BaseService.or(filters1, MjProcPrice.class));

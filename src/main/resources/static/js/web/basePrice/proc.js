@@ -105,13 +105,13 @@ $(function() {
 				{
 					field : 'WORKCENTER_CODE',
 					title : '工作中心编码',
-					width : 150
+					
 				},
 
 				{
 					field : 'WORKCENTER_NAME',
 					title : '工作中心',
-					width : 150
+					
 				}
 
 				] ],

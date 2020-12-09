@@ -136,8 +136,8 @@ $(function() {
 										// 选择完后的回调，包含2个返回值
 										// elem:返回之前input对象；data:表格返回的选中的数据 []
 										var da = data.data;
-										console.log(da[0].num)
-										form.val("itemFrom", {
+										console.log(da[0])
+										form.val("itemForm", {
 											"procName" : da[0].PROC_NAME,
 										});
 										form.render();// 重新渲染

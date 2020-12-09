@@ -48,6 +48,13 @@ public class BaseFee extends BaseEntity {
 		@ApiModelProperty(name = "enabled", value = "是否有效")
 		@Column(length = 10)
 		protected Integer enabled = 1;
+		
+		/**
+	     * 工序Id
+	     */
+	    @ApiModelProperty(name = "procId", value = "工序Id")
+	    @Column(length = 20)
+	    protected Long procId;
 
 	    /**
 	     * 工序名称
@@ -132,6 +139,14 @@ public class BaseFee extends BaseEntity {
 
 		public void setWorkCenter(BjWorkCenter workCenter) {
 			this.workCenter = workCenter;
+		}
+
+		public Long getProcId() {
+			return procId;
+		}
+
+		public void setProcId(Long procId) {
+			this.procId = procId;
 		}
 		
 }

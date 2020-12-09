@@ -54,9 +54,6 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		if (StringUtils.isEmpty(baseFee.getWorkcenterId().toString())) {
 			return ApiResponseResult.failure("工作中心不能为空！");
 		}
-		if (StringUtils.isEmpty(baseFee.getProcName())) {
-			return ApiResponseResult.failure("工序不能为空！");
-		}
 		if (StringUtils.isEmpty(baseFee.getFeeLh())) {
 			return ApiResponseResult.failure("人工费率不能为空！");
 		}
@@ -81,9 +78,6 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		if (StringUtils.isEmpty(baseFee.getWorkcenterId().toString())) {
 			return ApiResponseResult.failure("工作中心不能为空！");
 		}
-		if (StringUtils.isEmpty(baseFee.getProcName())) {
-			return ApiResponseResult.failure("工序不能为空！");
-		}
 		if (StringUtils.isEmpty(baseFee.getFeeLh())) {
 			return ApiResponseResult.failure("人工费率不能为空！");
 		}
@@ -98,6 +92,7 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		//o.setEnabled(baseFee.getEnabled());
 		o.setWorkcenterId(baseFee.getWorkcenterId());
+		o.setProcId(baseFee.getProcId());
 	    o.setProcName(baseFee.getProcName());
 	    o.setMhType(baseFee.getMhType());
 	    o.setFeeLh(baseFee.getFeeLh());
@@ -172,9 +167,10 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", baseFee.getId());
 			map.put("workcenterId", baseFee.getWorkcenterId());
-			//map.put("workcenter", baseFee.getWorkCenter().getWorkcenterName());
+			map.put("workcenter", baseFee.getWorkCenter().getWorkcenterName());
 			map.put("enabled", baseFee.getEnabled());
 			map.put("procName", baseFee.getProcName());
+			map.put("procId", baseFee.getProcId());
 			map.put("mhType", baseFee.getMhType());
 			
 			map.put("feeLh", baseFee.getFeeLh());
@@ -216,5 +212,29 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		map.put("Total", list.get(2));
 		map.put("List", list.get(3));
 		return ApiResponseResult.success().data(map);
+	}
+	
+	@Override
+	public ApiResponseResult getWorkCenterList(String type, String condition,PageRequest pageRequest)throws Exception{
+				List<Object> list = getBJWorkCenterPrc(UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getCompany() + "",
+						UserUtil.getSessionUser().getId() + "",type,condition,pageRequest);
+				if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+					return ApiResponseResult.failure(list.get(1).toString());
+				}
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("Total", list.get(2));
+				map.put("List", list.get(3));
+				return ApiResponseResult.success().data(map);
+	}
+	
+	@Override
+	public ApiResponseResult doCheckInfo(String type,String input1,String input2,
+			String input3,String input4)throws Exception{
+				List<Object> list = chkCenterAndProcPrc(UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getCompany() + "",
+						UserUtil.getSessionUser().getId() + "",type,input1,input2,input3,input4);
+				if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+					return ApiResponseResult.failure(list.get(1).toString());
+				}
+				return ApiResponseResult.success();
 	}
 }

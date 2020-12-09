@@ -141,46 +141,83 @@ public class BaseFeeController extends WebController{
     }
     
     @ApiOperation(value = "获取工序信息", notes = "获取工序信息", hidden = true)
-    @RequestMapping(value = "/getProcList", method = RequestMethod.POST)
+    @RequestMapping(value = "/getProcList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getProcList(@RequestBody Map<String, Object> params) throws Exception{
+    public ApiResponseResult getProcList(String keyword) throws Exception{
 	 //Long id, Integer deStatus
         String method = "basePrice/baseFee/getProcList";String methodName ="获取工序信息";
         try{
-        	String type  = params.get("type").toString() ;
-        	String condition  = params.get("condition").toString() ;
         	Sort sort = Sort.unsorted();
-            ApiResponseResult result = baseFeeService.getProcList(type, condition,super.getPageRequest(sort));
+        	ApiResponseResult result = baseFeeService.getProcList("01", keyword,super.getPageRequest(sort));
             logger.debug("获取工序信息=getProcList:");
-            getSysLogService().success(module,method, methodName, params);
+            getSysLogService().success(module,method, methodName, keyword);
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("获取工序信息失败！", e);
-            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            getSysLogService().error(module,method, methodName, keyword+";"+e.toString());
             return ApiResponseResult.failure("获取工序信息失败！");
         }
     }
     
     @ApiOperation(value = "获取机台类型信息", notes = "获取机台类型信息", hidden = true)
-    @RequestMapping(value = "/getType", method = RequestMethod.POST)
+    @RequestMapping(value = "/getType", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getType(@RequestBody Map<String, Object> params) throws Exception{
+    public ApiResponseResult getType() throws Exception{
 	 //Long id, Integer deStatus
         String method = "basePrice/baseFee/getType";String methodName ="获取机台类型信息";
         try{
-        	String keyword  = params.get("keyword").toString() ;
         	Sort sort = Sort.unsorted();
-            ApiResponseResult result = baseFeeService.getType(keyword,super.getPageRequest(sort));
+            ApiResponseResult result = baseFeeService.getType("BJ_BASE_MACHINE_TYPE",super.getPageRequest(sort));
             logger.debug("获取机台类型信息=getType:");
-            getSysLogService().success(module,method, methodName, params);
+            getSysLogService().success(module,method, methodName,"BJ_BASE_MACHINE_TYPE");
             return result;
         }catch (Exception e){
             e.printStackTrace();
             logger.error("获取机台类型信息失败！", e);
-            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            getSysLogService().error(module,method, methodName, "BJ_BASE_MACHINE_TYPE;"+e.toString());
             return ApiResponseResult.failure("获取机台类型信息失败！");
         }
     }
     
+    @ApiOperation(value = "获取工作中心信息", notes = "获取工作中心信息", hidden = true)
+    @RequestMapping(value = "/getWorkCenterList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getWorkCenterList(String keyword) throws Exception{
+	 //Long id, Integer deStatus
+        String method = "basePrice/baseFee/getWorkCenterList";String methodName ="获取工作中心信息";
+        try{
+        	Sort sort = Sort.unsorted();
+            ApiResponseResult result = baseFeeService.getWorkCenterList("01", keyword,super.getPageRequest(sort));
+            logger.debug("获取工作中心信息=getWorkCenterList:");
+            getSysLogService().success(module,method, methodName, keyword);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("获取工作中心信息失败！", e);
+            getSysLogService().error(module,method, methodName, keyword+";"+e.toString());
+            return ApiResponseResult.failure("获取工作中心信息失败！");
+        }
+    }
+    
+    @ApiOperation(value = "检验工序与工作中心", notes = "检验工序与工作中心", hidden = true)
+    @RequestMapping(value = "/doCheckInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doCheckInfo(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "basePrice/baseFee/doCheckInfo";
+        String methodName ="检验工序与工作中心";
+        try{
+        	String  input1 = params.get("input1")==null?"":params.get("input1").toString();
+        	String  input2 = params.get("input2")==null?"":params.get("input2").toString();
+        	ApiResponseResult result = baseFeeService.doCheckInfo("01",input1,input2,"","");
+            logger.debug("检验工序与工作中心=doCheckInfo:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("检验工序与工作中心失败！", e);
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            return ApiResponseResult.failure("检验工序与工作中心失败！");
+        }
+    }
 }

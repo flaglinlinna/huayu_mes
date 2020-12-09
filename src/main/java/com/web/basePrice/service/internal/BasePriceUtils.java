@@ -165,10 +165,44 @@ public class BasePriceUtils {
 		return resultList;
 	}
 	
+	/**
+	 * 校验工作中心&工序信息
+	 * */
+	public List chkCenterAndProcPrc(String facoty,String company,String user_id, String type,
+			String input1,String input2,String input3,String input4) throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  PRC_BJ_CHECK_BASE_RELATION (?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, facoty);
+				cs.setString(2, company);
+				cs.setString(3, user_id);
+				cs.setString(4, type);
+				cs.setString(5, input1);
+				cs.setString(6, input2);
+				cs.setString(7, input3);
+				cs.setString(8, input4);
+				cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				cs.execute();
+				result.add(cs.getInt(9));
+				result.add(cs.getString(10));
+				return result;
+			}
+		});
+		return resultList;
+	}
+	
 		
 	//-------------------------------------	
 		
-	private List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
+	public List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();
 		if (null != rs) {
 			Map<String, Object> map;

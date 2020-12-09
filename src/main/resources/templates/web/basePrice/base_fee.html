@@ -51,24 +51,27 @@
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
 					type="hidden" name="id" />
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">工作中心ID</label>
+					<label class="layui-form-label">工序</label>
 					<div class="layui-input-inline">
-						<input id="workcenterId" name="workcenterId" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text" />
+						<input id="procName" name="procName" autocomplete="off" readonly="readonly"
+							class="layui-input" type="text" />
 					</div>
 				</div>
+				<input id="procId" type="hidden" name="procId" />
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">工序</label>
+					<label class="layui-form-label layui-required">工作中心</label>
 					<div class="layui-input-inline">
-						<input id="procName" name="procName" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text" />
+						<input id="workcenterName" name="workcenterName" readonly="readonly"
+							lay-verify="required" autocomplete="off" class="layui-input"
+							type="text" />
 					</div>
 				</div>
+				<input id="workcenterId" type="hidden" name="workcenterId" />
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">机台类型</label>
+					<label class="layui-form-label">机台类型</label>
 					<div class="layui-input-inline">
-						<input id="mhType" name="mhType" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text" />
+						<input id="mhType" name="mhType" autocomplete="off"
+							class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
