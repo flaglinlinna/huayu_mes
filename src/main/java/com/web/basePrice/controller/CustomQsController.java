@@ -60,11 +60,11 @@ public class CustomQsController extends WebController{
     @ApiOperation(value = "获取客户品质标准类别", notes = "获取客户品质标准类别",hidden = true)
     @RequestMapping(value = "/getQsType", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getQsType() {
+    public ApiResponseResult getQsType(String keyword) {
         String method = "basePrice/profitProd/getQsType";String methodName ="获取客户品质标准类别";
         try {
             Sort sort = Sort.unsorted();
-            ApiResponseResult result = customQsService.getQsType(super.getPageRequest(sort));
+            ApiResponseResult result = customQsService.getQsType(keyword,super.getPageRequest(sort));
             logger.debug("获取客户品质标准类别=getQsType:");
             return result;
         } catch (Exception e) {

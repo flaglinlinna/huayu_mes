@@ -56,6 +56,24 @@ public class ProfitProdController extends WebController{
         }
     }
 
+    @ApiOperation(value = "获取产品类型搜素框", notes = "获取产品类型搜素框",hidden = true)
+    @RequestMapping(value = "/getProdTypeList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getProdTypeList(String keyword) {
+        String method = "basePrice/profitProd/getProdTypeList";String methodName ="获取产品类型搜素框";
+        try {
+            Sort sort = Sort.unsorted();
+            ApiResponseResult result = profitProdService.getProdTypeList(keyword, super.getPageRequest(sort));
+            logger.debug("获取产品类型搜素框=getProdTypeList:");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取产品类型搜素框失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取产品类型搜素框失败！");
+        }
+    }
+
     @ApiOperation(value = "新增产品利润率信息", notes = "新增产品利润率信息",hidden = true)
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody

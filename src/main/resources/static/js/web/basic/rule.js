@@ -492,6 +492,12 @@ function addBarcodeRule() {
 	// 打开弹出框
 	openBarcodeRule(null, "添加校验规则",null);
 }
+
+function  addFixValue() {
+	getFsample();
+	$('#fixValue').val('');
+}
+
 // 新增校验规则提交
 function addSubmit(obj) {
 	// var str=obj.field.itemId

@@ -15,7 +15,7 @@ public interface CustomQsService {
 
   public ApiResponseResult delFile(Long id) throws Exception;
 
-  public ApiResponseResult getQsType(PageRequest pageRequest) throws Exception;
+  public ApiResponseResult getQsType(String keyword,PageRequest pageRequest) throws Exception;
 
   public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
   

@@ -20,6 +20,6 @@ public interface ProfitProdService {
   
   public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;// 状态改变
   
-//  public ApiResponseResult getUnitList()throws Exception;
+  public ApiResponseResult getProdTypeList(String condition,PageRequest pageRequest)throws Exception;
 
 }

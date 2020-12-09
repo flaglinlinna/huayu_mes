@@ -198,6 +198,53 @@ public class BasePriceUtils {
 		});
 		return resultList;
 	}
+
+	//获取报价产品类型
+	public List getBJProdType(String facoty,String company,String user_id, String type,
+							 String condition, PageRequest pageRequest) throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  PRC_BJ_GET_BASE_PROD_TYPE (?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, facoty);
+				cs.setString(2, company);
+				cs.setString(3, user_id);
+				cs.setString(4, type);
+				cs.setString(5, condition);
+				cs.setInt(6, pageRequest.getPageSize());
+				cs.setInt(7, pageRequest.getPageNumber()+1);
+				cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(10, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(11, -10);// 输出参数 追溯数据
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				List<Map<String, Object>> l = new ArrayList();
+				cs.execute();
+				result.add(cs.getInt(8));
+				result.add(cs.getString(9));
+				if (cs.getString(8).toString().equals("0")) {
+					result.add(cs.getString(10));
+					// 游标处理
+					ResultSet rs = (ResultSet) cs.getObject(11);
+					try {
+						l = fitMap(rs);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(l);
+				}
+				System.out.println(l);
+				return result;
+			}
+		});
+		return resultList;
+	}
 	
 		
 	//-------------------------------------	

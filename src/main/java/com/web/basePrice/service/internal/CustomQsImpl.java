@@ -78,10 +78,10 @@ public class CustomQsImpl extends  BasePriceUtils implements CustomQsService {
 	//获取品质标准类型 搜索框
 	@Override
 	@Transactional
-	public ApiResponseResult getQsType(PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getQsType(String keyword,PageRequest pageRequest) throws Exception {
 		List<Object> list =getSystemSubParamPrc(UserUtil.getSessionUser().getCompany()+"",
 				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
-				"BJ_BASE_QA_TYPE",pageRequest);
+				keyword,pageRequest);
 		Map map = new HashMap();
 		map.put("total", list.get(2));
 		map.put("rows", list.get(3));

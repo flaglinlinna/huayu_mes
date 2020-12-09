@@ -224,6 +224,7 @@ $(function() {
 				 "lineId":da[0].LINE_ID,
 				 "className":da[0].CLASS_NAME,
 				 "classId":da[0].CLASS_ID,
+				  "signDate":wd
 				 });
 				 form.render();// 重新渲染
 			}

@@ -3,8 +3,68 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table' ], function() {
-		var table = layui.table, form = layui.form;
+	layui.use([ 'form', 'table' ,'tableSelect'], function() {
+		var table = layui.table, form = layui.form,tableSelect = layui.tableSelect;
+
+		tableSelect = tableSelect.render({
+			elem : '#productType',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '试着搜索',
+			table : {
+				url : context + '/basePrice/profitProd/getProdTypeList',
+				method : 'get',
+				// width:800,
+				cols : [ [ {
+					type : 'numbers',
+					title : '序号'
+				}, {
+					type : 'radio'
+				},
+					{
+						field : 'ID',
+						title : 'id',
+						width : 0,
+						hide : true
+					},
+					{
+						field : 'PRODUCT_TYPE',
+						title : '类型',
+						width : 120
+					},
+					{
+						field : 'FMEMO',
+						title : '备注',
+						width : 120
+					},
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+				parseData : function(res) {
+					if (res.result) {
+						// 可进行数据操作
+						return {
+							"count" : res.data.total,
+							"msg" : res.msg,
+							"data" : res.data.rows,
+							"code" : res.status
+							// code值为200表示成功
+						}
+					}
+				},
+			},
+			done : function(elem, data) {
+				var da = data.data;
+				form.val("itemForm", {
+					"productType" : da[0].PRODUCT_TYPE,
+				});
+				form.render();// 重新渲染
+			}
+		});
 
 		tableIns = table.render({
 			elem : '#colsList',

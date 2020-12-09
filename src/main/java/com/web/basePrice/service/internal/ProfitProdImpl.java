@@ -25,7 +25,7 @@ import java.util.*;
 
 @Service(value = "ProfitProdService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class ProfitProdImpl implements ProfitProdService {
+public class ProfitProdImpl extends BasePriceUtils implements ProfitProdService {
 	@Autowired
 	private ProfitProdDao profitProdDao;
 
@@ -127,6 +127,20 @@ public class ProfitProdImpl implements ProfitProdService {
 		o.setEnabled(enabled);
 		profitProdDao.save(o);
 		return ApiResponseResult.success("设置成功！").data(o);
+	}
+
+
+	@Override
+	public ApiResponseResult getProdTypeList(String condition,PageRequest pageRequest)throws Exception{
+		List<Object> list = getBJProdType(UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getCompany() + "",
+				UserUtil.getSessionUser().getId() + "","01",condition,pageRequest);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success().data(map);
 	}
 
 	/**
