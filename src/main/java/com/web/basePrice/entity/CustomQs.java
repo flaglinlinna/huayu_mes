@@ -56,6 +56,13 @@ public class CustomQs extends BaseEntity {
 		@Column(length = 200)
 		protected String fftp;
 
+		/**
+		 * 附件id
+		 */
+		@ApiModelProperty(name = "fileId", value = "附件id")
+		@Column(length = 200)
+		protected String fileId;
+
 		public String getCustName() {
 			return custName;
 		}
@@ -94,5 +101,13 @@ public class CustomQs extends BaseEntity {
 
 		public void setFftp(String fftp) {
 			this.fftp = fftp;
+		}
+
+		public String getFileId() {
+			return fileId;
+		}
+
+		public void setFileId(String fileId) {
+			this.fileId = fileId;
 		}
 }

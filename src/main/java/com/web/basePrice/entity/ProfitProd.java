@@ -46,7 +46,7 @@ public class ProfitProd extends BaseEntity {
 		/**
 		 * 是否有效
 		 */
-		@ApiModelProperty(name = "unitName", value = "单位名称")
+		@ApiModelProperty(name = "enabled", value = "是否有效")
 		@Column(length = 10)
 		protected int enabled = 1;
 
