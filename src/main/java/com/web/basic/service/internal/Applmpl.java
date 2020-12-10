@@ -88,7 +88,7 @@ public class Applmpl extends BaseSql  implements AppService {
         }else{
             int count = appDao.countByDelFlagAndVersionNo(0, app.getVersionNo());
             if(count > 0){
-                return ApiResponseResult.failure("线体编号已存在，请填写其他线体编号！");
+                return ApiResponseResult.failure("APP版本号已存在，请填写其他APP版本号！");
             }
             o.setVersionNo(app.getVersionNo().trim());
         }
@@ -106,7 +106,7 @@ public class Applmpl extends BaseSql  implements AppService {
     @Transactional
     public ApiResponseResult delete(String ids) throws Exception{
         if(StringUtils.isEmpty(ids)){
-            return ApiResponseResult.failure("线体ID不能为空！");
+            return ApiResponseResult.failure("ID不能为空！");
         }
         String[] id_s = ids.split(",");
         List<AppVersion> ll = new ArrayList<AppVersion>();

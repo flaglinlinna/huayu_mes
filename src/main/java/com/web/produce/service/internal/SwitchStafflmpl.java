@@ -103,12 +103,12 @@ public class SwitchStafflmpl extends PrcUtils implements SwitchStaffService {
 	@Override
 	public ApiResponseResult doSwitch(String lastTaskNo_id,String lastDatetimeEnd,
 			String newTaskNo, String newLineId,String newHourType, String newClassId,
-			String newDatetimeBegin, String empList,PageRequest pageRequest) throws Exception{
+			String newDatetimeBegin, String empList,String switchType,PageRequest pageRequest) throws Exception{
 		
 		List<Object> list = doTaskNoSwitchPrc(UserUtil.getSessionUser().getFactory() + "",
 				UserUtil.getSessionUser().getCompany() + "",UserUtil.getSessionUser().getId() + "",
 				lastTaskNo_id,lastDatetimeEnd,newTaskNo,newLineId,newHourType,newClassId,
-				newDatetimeBegin,empList,pageRequest);
+				newDatetimeBegin,empList,switchType,pageRequest);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

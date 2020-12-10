@@ -46,7 +46,7 @@ public class Abnormallmpl implements AbnormalService {
         }
         int count = abnormalDao.countByDelFlagAndAbnormalCode(0, abnormal.getAbnormalCode());
         if(count > 0){
-            return ApiResponseResult.failure("该不良类别编号已存在，请填写其他不良类别编码！");
+            return ApiResponseResult.failure("该异常类别编号已存在，请填写其他异常类别编码！");
         }
         abnormal.setCreateDate(new Date());
         abnormal.setCreateBy(UserUtil.getSessionUser().getId());

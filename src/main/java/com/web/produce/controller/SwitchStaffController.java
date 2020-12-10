@@ -171,13 +171,13 @@ public class SwitchStaffController extends WebController {
 	@ResponseBody
 	public ApiResponseResult doSwitch(String lastTaskNo_id,String lastDatetimeEnd,
 			String newTaskNo, String newLineId,String newHourType, String newClassId,
-			String newDatetimeBegin, String empList) {
+			String newDatetimeBegin, String empList,String switchType) {
 		String method = "/switch_staff/doSwitch";
 		String methodName = "执行人员调整";
 		try {		
 			Sort sort =  Sort.unsorted();
 			ApiResponseResult result = switchStaffService.doSwitch(lastTaskNo_id,lastDatetimeEnd,
-					newTaskNo, newLineId,newHourType, newClassId,newDatetimeBegin, empList,super.getPageRequest(sort));
+					newTaskNo, newLineId,newHourType, newClassId,newDatetimeBegin, empList,switchType,super.getPageRequest(sort));
 			logger.debug("执行人员调整=doSwitch:");
 			// getSysLogService().success(module,method, methodName, null);
 			return result;

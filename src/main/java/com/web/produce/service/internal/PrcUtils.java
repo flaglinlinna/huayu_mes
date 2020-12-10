@@ -866,11 +866,11 @@ public class PrcUtils {
     public List doTaskNoSwitchPrc(String facoty,String company,String user_id,
     		String lastTaskNo_id,String lastDatetimeEnd,
 			String newTaskNo, String newLineId,String newHourType, String newClassId,
-			String newDatetimeBegin, String empList,PageRequest pageRequest)throws Exception{
+			String newDatetimeBegin, String empList,String switchType,PageRequest pageRequest)throws Exception{
     	List resultList=(List)jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  PRC_MES_TASK_NO_CHANGE (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  PRC_MES_TASK_NO_CHANGE (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
                 cs.setString(2, company);
@@ -882,13 +882,14 @@ public class PrcUtils {
                 cs.setString(8, newHourType);
                 cs.setString(9, newClassId);
                 cs.setString(10, newDatetimeBegin);
-                cs.setString(11, empList);          
-                cs.setInt(12, pageRequest.getPageSize());
-                cs.setInt(13, pageRequest.getPageNumber()+1);
-                cs.registerOutParameter(14, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.setString(11, empList);       
+                cs.setString(12, switchType); 
+                cs.setInt(13, pageRequest.getPageSize());
+                cs.setInt(14, pageRequest.getPageNumber()+1);
                 cs.registerOutParameter(15, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(16, java.sql.Types.VARCHAR);// 输出参数 返回标识
-                cs.registerOutParameter(17, -10);// 
+                cs.registerOutParameter(16, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(17, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(18, -10);// 
 				return cs;
 			}
 		},new CallableStatementCallback() {

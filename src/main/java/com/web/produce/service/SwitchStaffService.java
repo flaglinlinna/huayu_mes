@@ -21,6 +21,6 @@ public interface SwitchStaffService {
 
 	public ApiResponseResult doSwitch(String lastTaskNo_id,String lastDatetimeEnd,
 			String newTaskNo, String newLineId,String newHourType, String newClassId,
-			String newDatetimeBegin, String empList,PageRequest pageRequest) throws Exception;
+			String newDatetimeBegin, String empList,String switchType,PageRequest pageRequest) throws Exception;
 
 }

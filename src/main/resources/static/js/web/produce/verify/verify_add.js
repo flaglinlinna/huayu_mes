@@ -256,8 +256,9 @@ $(function() {
 						laydate.render({
 							elem : '#on_date',
 							trigger : 'click'// 呼出事件改成click
-							,
-							value : getCurDate(0)
+							,type: 'datetime',
+							value:new Date()
+							//value : getCurDate(0)
 						});
 
 						laydate.render({
