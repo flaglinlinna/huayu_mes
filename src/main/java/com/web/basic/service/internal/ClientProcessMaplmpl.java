@@ -96,9 +96,16 @@ public class ClientProcessMaplmpl implements ClientProcessMapService{
     @Transactional
     public ApiResponseResult addItem(String procIdList,String fdemoName) throws Exception{
 
-		if(fdemoName == null){
+		if(fdemoName == null||fdemoName==""){
             return ApiResponseResult.failure("模板名称不能为空！");
         }
+		if(procIdList == null||procIdList==""){
+            return ApiResponseResult.failure("至少增加一道工序！");
+        }
+//		int count = clientProcessMapDao.countByDelFlagAndFdemoName(0,fdemoName);
+//        if(count > 0){
+//            return ApiResponseResult.failure("该模板名称已存在，请填写其他模板名称！");
+//        }
         //转换
         String[] porcIdArray = procIdList.split(",");
         List<String> procList = new ArrayList<String>();

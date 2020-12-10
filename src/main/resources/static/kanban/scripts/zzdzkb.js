@@ -164,7 +164,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 			text : '效率:' + eff_rate + '%',
 			textStyle : {
 				color : '#FFFFFF' ,// 图例文字颜色
-				fontSize : 20,// 字体大小
+				fontSize : 18,// 字体大小
 			},
 			left : '5px',
 			top : '5px'
@@ -266,7 +266,7 @@ function getChartXlpm3(done, plan, doneRate) {
 			text : '完工率:' + doneRate + '%',
 			textStyle : {
 				color : '#FFFFFF', // 图例文字颜色
-				fontSize : 20,// 字体大小
+				fontSize : 18,// 字体大小
 			},
 			left : '5px',
 			top : '5px'

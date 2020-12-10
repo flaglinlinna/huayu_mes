@@ -16,6 +16,7 @@ public interface ClientProcessMapDao extends CrudRepository<ClientProcessMap, Lo
 	public ClientProcessMap findById(long id);
 	public List<ClientProcessMap> findByDelFlagAndFdemoName(Integer delFlag,String fdemoName);//查找物料及其工序集合
 	//public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询deCode是否存在
+	public int countByDelFlagAndFdemoName(Integer delFlag, String fdemoName);//查询fdemoName是否已经存在
 
 	public  List<ClientProcessMap> findByFdemoName(String fdemoName);
 

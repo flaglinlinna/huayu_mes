@@ -199,10 +199,11 @@ $(function() {
 		// 监听工具条
 		table.on('tool(listTable)', function(obj) {
 			var data = obj.data;
+			console.log(data)
 			if (obj.event === 'del') {
 				// 删除
 				
-				layer.confirm('您确定要删除' + data.procName + '工序信息吗？', {
+				layer.confirm('您确定要删除' + data.process.procName + '工序信息吗？', {
 					btn : [ '确认', '返回' ]
 				// 按钮
 				}, function() {
