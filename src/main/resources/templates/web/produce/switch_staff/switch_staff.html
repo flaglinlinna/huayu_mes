@@ -32,40 +32,41 @@
 
 		<div class="layui-tab layui-tab-card">
 			<!--<ul class="layui-tab-title">-->
-				<!--<li class="layui-this">在线人员调整</li>-->
-				<!--&lt;!&ndash; <li>历史查询</li> &ndash;&gt;-->
+			<!--<li class="layui-this">在线人员调整</li>-->
+			<!--&lt;!&ndash; <li>历史查询</li> &ndash;&gt;-->
 			<!--</ul>-->
 			<div class="layui-tab-content">
 				<div class="layui-tab-item layui-show">
 
 					<div style="margin: 5px">
-						<form id="searchFrom" class="layui-form layui-form-pane" lay-filter="searchFrom"
-							  method="post" action="" style="margin-top: 5px;">
+						<form id="searchFrom" class="layui-form layui-form-pane"
+							lay-filter="searchFrom" method="post" action=""
+							style="margin-top: 5px;">
 							<div class="layui-form-item" style="margin-bottom: 0px">
 								<div class="layui-inline">
 
 									<label class="layui-form-label ">日期</label>
 									<div class="layui-input-inline">
-										<input type="text" class="layui-input"  name="dates"
-											   placeholder="请选择日期范围" id="dates">
+										<input type="text" class="layui-input" name="dates"
+											placeholder="请选择日期范围" id="dates">
 									</div>
 									<label class="layui-form-label">关键字:</label>
 									<div class="layui-input-inline">
-										<input name="keyword" id="keyword" placeholder="请输入查询关键字" autocomplete="off" class="layui-input"  >
+										<input name="keyword" id="keyword" placeholder="请输入查询关键字"
+											autocomplete="off" class="layui-input">
 									</div>
 
 
 									<button class="layui-btn layui-btn-sm" lay-submit
-											lay-filter="searchSubmit">查询</button>
+										lay-filter="searchSubmit">查询</button>
 									<button type="reset"
-											class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+										class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
 										<i class="layui-icon">&#xe669;</i>重置
 									</button>
 								</div>
 							</div>
 						</form>
-						<fieldset class="layui-elem-field layui-field-title">
-						</fieldset>
+						<fieldset class="layui-elem-field layui-field-title"></fieldset>
 						<button class="layui-btn layui-btn-sm layui-btn-normal"
 							onclick="add()">在线人员调整</button>
 						<fieldset class="layui-elem-field layui-field-title">
@@ -84,8 +85,15 @@
 				lay-filter="itemForm" method="post" action="">
 				<div class="layui-form-item">
 					<div class="layui-inline">
+						<input type="radio" name="switchType" lay-filter="switchType"
+							value="转单" title="转单" checked> <input type="radio"
+							name="switchType" lay-filter="switchType" value="下线" title="下线">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
 						<label class="layui-form-label layui-required">原制令单号</label>
-						<div class="layui-input-inline" >
+						<div class="layui-input-inline">
 							<input type="text" name="lastTaskNo" placeholder="请选择"
 								autocomplete="off" class="layui-input" readonly="readonly"
 								lay-verify="required" id="lastTaskNo">
@@ -98,14 +106,14 @@
 					</div>
 					<input id="AFF_ID" type="hidden" name="AFF_ID" />
 				</div>
-				
 				<hr />
+				<div id="switchTask">
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">新制令单号</label>
 					<div class="layui-input-inline">
 						<input type="text" name="newTaskNo" placeholder="请选择"
 							autocomplete="off" class="layui-input" readonly="readonly"
-							lay-verify="required" id="newTaskNo">
+							 id="newTaskNo">
 					</div>
 					<label class="layui-form-label">物料编码</label>
 					<div class="layui-input-inline" style="width: 130px;">
@@ -120,20 +128,18 @@
 							type="text" />
 					</div>
 				</div>
-
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label">客户简称</label>
-						<div class="layui-input-inline" >
+						<div class="layui-input-inline">
 							<input id="new_customer" name="new_customer" autocomplete="off"
 								style="background: #efefef;" class="layui-input" disabled
 								type="text" />
 						</div>
-
 						<label class="layui-form-label layui-required">工时类型</label>
 						<div class="layui-input-inline" style="width: 130px;">
 							<select id="newHourType" lay-filter="newHourType"
-								name="newHourType" autocomplete="off" lay-verify="required"
+								name="newHourType" autocomplete="off"
 								class="layui-select" lay-search>
 								<option value="">请选择</option>
 								<option value="正常班">正常班</option>
@@ -145,30 +151,33 @@
 						<label class="layui-form-label layui-required">班次</label>
 						<div class="layui-input-inline" style="width: 95px;">
 							<select id="newClassId" lay-filter="newClassId" name="newClassId"
-								autocomplete="off" lay-verify="required" class="layui-select"
+								autocomplete="off" class="layui-select"
 								lay-search>
 							</select>
 						</div>
 					</div>
 				</div>
-
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">线体</label>
-						<div class="layui-input-inline" >
+						<div class="layui-input-inline">
 							<select id="newLineId" lay-filter="newLineId" name="newLineId"
-								autocomplete="off" lay-verify="required" class="layui-select"
+								autocomplete="off" class="layui-select"
 								lay-search>
 							</select>
 						</div>
-						
 
 						<label class="layui-form-label layui-required">上线时间</label>
 						<div class="layui-input-inline" style="width: 130px;">
 							<input id="newTimeBegin" name="newTimeBegin"
-								lay-verify="required" autocomplete="off" class="layui-input"
+								 autocomplete="off" class="layui-input"
 								type="text" />
 						</div>
+					</div>
+				</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
 						<!-- <shiro:hasPermission name="bad_entry:save">
 									<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
 										lay-filter="saveData">保存不良</button>
@@ -178,14 +187,6 @@
 							lay-filter="saveData">保存</button>
 					</div>
 				</div>
-
-				<div class="layui-form-item">
-					<div class="layui-inline"></div>
-				</div>
-
-
-
-
 			</form>
 			<fieldset class="layui-elem-field layui-field-title">
 				<legend style="font-size: 14px;">人员列表</legend>

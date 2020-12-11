@@ -897,12 +897,12 @@ public class PrcUtils {
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(15));
-				result.add(cs.getString(16));
+				result.add(cs.getInt(16));
+				result.add(cs.getString(17));
 				if (cs.getString(15).toString().equals("0")) {
-					result.add(cs.getString(14));
+					result.add(cs.getString(15));
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(17);
+					ResultSet rs = (ResultSet) cs.getObject(18);
 					try {
 						l = fitMap(rs);
 					} catch (Exception e) {
