@@ -25,7 +25,7 @@ $(function() {
 										limitName : 'rows', // 每页数据量的参数名，默认：limit
 									},
 									parseData : function(res) {
-										//console.log(res)
+										console.log(res)
 										// 可进行数据操作
 										return {
 											"count" : res.data.total,
@@ -52,7 +52,11 @@ $(function() {
 											{
 												field : 'linerName',
 												title : '组长',
-												width : 75
+												width : 75,
+												templet:function (d){	
+								                	var list=d.linerName;
+								                	return list[0].LINER_NAME;
+								                }
 											},
 											{
 												field : 'classId',

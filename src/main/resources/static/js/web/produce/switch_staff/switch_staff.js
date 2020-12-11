@@ -31,7 +31,7 @@ $(function() {
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
 							},
 							parseData : function(res) {
-								// console.log(res)
+								 console.log(res)
 								if (!res.result) {
 									return {
 										"count" : 0,
@@ -369,6 +369,12 @@ $(function() {
 						});
 						// 日期选择器
 						laydate.render({
+							elem : '#dates',
+							range: true,
+							trigger : 'click'
+						});
+						// 日期选择器
+						laydate.render({
 							elem : '#lastDateEnd',
 							type : 'datetime', // 默认，可不填
 						});
@@ -430,21 +436,23 @@ $(function() {
 			layer.alert(res.msg);
 		});
 	}
-	function getEmpList(aff_id) {
-		var params = {
-			"aff_id" : aff_id
-		}
-
-		empTableIns.reload({
-			url : context + '/produce/switch_staff/getTaskNoEmp',
-			where : params,
-			done : function(res1, curr, count) {
-				// console.log(res1)
-				pageCurr = curr;
-			}
-		})
-	}
+	
 });
+
+function getEmpList(aff_id) {
+	var params = {
+		"aff_id" : aff_id
+	}
+
+	empTableIns.reload({
+		url : context + '/produce/switch_staff/getTaskNoEmp',
+		where : params,
+		done : function(res1, curr, count) {
+			// console.log(res1)
+			pageCurr = curr;
+		}
+	})
+}
 
 function add() {
 	// 清空弹出框数据
@@ -512,15 +520,12 @@ function saveData(obj, empIdList) {
 		where : params,
 		done : function(res1, curr, count) {
 
-			// console.log(res1)
+			console.log(res1)
 			if (res1.code == "1") {
 				layer.alert(res1.msg)
-			} else {
-				layer.alert("调整成功", function() {
-					layer.closeAll();
-					// clean();
-				})
-
+			} else {			
+				layer.alert("调整成功")
+				getEmpList(obj.AFF_ID)
 			}
 			pageCurr = curr;
 		}

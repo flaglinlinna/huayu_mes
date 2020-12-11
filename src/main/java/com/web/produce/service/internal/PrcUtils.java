@@ -899,7 +899,7 @@ public class PrcUtils {
 				cs.execute();
 				result.add(cs.getInt(16));
 				result.add(cs.getString(17));
-				if (cs.getString(15).toString().equals("0")) {
+				if (cs.getString(16).toString().equals("0")) {
 					result.add(cs.getString(15));
 					// 游标处理
 					ResultSet rs = (ResultSet) cs.getObject(18);
