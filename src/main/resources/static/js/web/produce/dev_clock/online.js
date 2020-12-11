@@ -145,11 +145,7 @@ $(function() {
 									title : '组长',
 									width : 75
 								},
-							// 	{
-							// 	field : 'DEV_IP',
-							// 	title : '设备IP',
-							// 	width : 130
-							// },
+							 	
 								{
 								field : 'TIME_BEGIN',
 								title : '上线时间',
@@ -158,7 +154,11 @@ $(function() {
 								field : 'TIME_END',
 								title : '下线时间',
 								width : 180
-							}, {
+							},{
+							 	field : 'TIME_BEGIN_HD',
+							 	title : '统一上线时间',
+							 	width : 180
+							 }, {
 								title : '操作',
 								align : 'center',
 								toolbar : '#optBar1',
