@@ -22,6 +22,8 @@ public interface BarcodeRuleService {
 	public ApiResponseResult getFsampleByForm(String fixValue, String fyear , String fmonth,String fday,String serialNum,
 											  String serialLen) throws Exception;
 
+	public ApiResponseResult addByProc(BarcodeRule barcodeRule) throws Exception;
+
 	// 根据ID获取
 	public ApiResponseResult getBarcodeRule(Long id) throws Exception;
 

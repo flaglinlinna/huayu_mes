@@ -2,6 +2,12 @@
  * 校验规则管理
  */
 var pageCurr;
+var frule = "";
+var fyearFlag = 0;
+var fmonthFlag = 0;
+var fdayFlag = 0;
+var fserialNumFlag = 0;
+var fserialLenFlag = 0;
 $(function() {
 	layui.use([ 'form', 'table','tableSelect' ], function() {
 		var table = layui.table, form = layui.form,tableSelect1 = layui.tableSelect,
@@ -10,7 +16,7 @@ $(function() {
 		tableSelect=tableSelect.render({
 			elem : '#itemId',
 			searchKey : 'keyword',
-			checkedKey : 'id',
+			checkedKey : 'ID',
 			searchPlaceholder : '内部编码搜索',
 			table : {
 				url : context + '/base/rule/getMtrialListPage',
@@ -123,18 +129,9 @@ $(function() {
 		//下拉框初始化
 		getBarList();
 
-        $("#fixValue").blur(function(){
-            getFsample();
-        });
-
-        $("#serialLen").blur(function(){
-            getFsample();
-        });
-
-		//监听四个选择框
-		form.on('select(getFsample)', function(){
-            getFsample();
-		});
+        // $("#fixValue").blur(function(){
+        //     getFsample();
+        // });
 
 		tableIns = table.render({
 			elem : '#ruleList',
@@ -270,14 +267,7 @@ $(function() {
 				},
 
 			});  
-		// form.on('select(itemNo)', function(obj){
-		// 	var text=obj.elem[obj.elem.selectedIndex].text;
-		// 	$("#itemNo").val(text);
-		// 	var itemName=obj.value;
-		// 	console.log(itemName)
-		// 	itemName=itemName.slice(itemName.indexOf("=")+1);
-		// 	$("#itemName").val(itemName);
-		// });
+
 
 
 		//头工具栏事件
@@ -362,40 +352,115 @@ $(function() {
 			});
 			openBarcodeRule(id, "编辑校验规则",obj.ID)
 		}
+
+		//流水号位数 输入框
+		$("#serialLen").blur(function(){
+			if(fserialLenFlag==0) {
+				var fruleArr = frule.split("+");
+				fserialLenFlag = fruleArr.length;
+				fruleArr[fserialLenFlag] = "位数("+ $('#serialLen').val() +")";
+				frule = fruleArr.join("+");
+			}
+			else {
+					var fruleArr = frule.split("+");
+					fruleArr[fserialLenFlag] = "位数("+ $('#serialLen').val() +")";
+					frule = fruleArr.join("+");
+				}
+				showFsample();
+		});
+
+		//监听年选择框
+		form.on('select(yearFsample)', function(){
+			if(fyearFlag ==0){
+				var fruleArr = frule.split("+");
+				fyearFlag = fruleArr.length;
+				fruleArr[fyearFlag] = "年("+$('select[name="fyear"] option:selected').text()+")";
+				frule = fruleArr.join("+");
+			}else {
+				var fruleArr = frule.split("+");
+				fruleArr[fyearFlag] = "年("+$('select[name="fyear"] option:selected').text()+")";
+				frule = fruleArr.join("+");
+			}
+			showFsample();
+		});
+
+		form.on('select(monthFsample)', function(){
+			if(fmonthFlag ==0){
+				var fruleArr = frule.split("+");
+				fmonthFlag = fruleArr.length;
+				fruleArr[fmonthFlag] = "月("+$('select[name="fmonth"] option:selected').text()+")";
+				frule = fruleArr.join("+");
+			}else {
+				var fruleArr = frule.split("+");
+				fruleArr[fmonthFlag] = "月("+$('select[name="fmonth"] option:selected').text()+")";
+				frule = fruleArr.join("+");
+			}
+			showFsample();
+		});
+
+		form.on('select(dayFsample)', function(){
+			if(fdayFlag ==0){
+				var fruleArr = frule.split("+");
+				fdayFlag = fruleArr.length;
+				fruleArr[fdayFlag] = "日("+$('select[name="fday"] option:selected').text()+")";
+				frule = fruleArr.join("+");
+			}else {
+				var fruleArr = frule.split("+");
+				fruleArr[fdayFlag] = "日("+$('select[name="fday"] option:selected').text()+")";
+				frule = fruleArr.join("+");
+			}
+			showFsample();
+		});
+
+		form.on('select(serialNumFsample)', function(){
+			if(fserialNumFlag ==0){
+				var fruleArr = frule.split("+");
+				fserialNumFlag = fruleArr.length;
+				fruleArr[fserialNumFlag] = "流水号("+$('select[name="serialNum"] option:selected').text()+")";
+				frule = fruleArr.join("+");
+			}else {
+				var fruleArr = frule.split("+");
+				fruleArr[fserialNumFlag] = "流水号("+$('select[name="serialNum"] option:selected').text()+")";
+				frule = fruleArr.join("+");
+			}
+			showFsample();
+		});
 	});
 });
 
+	function showFsample() {
+		if(frule.substr(0,1)=="+"){
+			frule = frule.substr(1);
+		}
+		$('#fsample').val(frule);
+	}
+
+// 固定值添加按钮
 function getFsample() {
-    if($('#fixValue').val()&&$('#fyear').val()
-        &&$('#fmonth').val()&&$('#fday').val()
-        &&$('#serialNum').val()&&$('#serialLen').val()) {
+	if($('#fyear').val()&&fyearFlag!=0){
+		$('#fyear').attr("disabled","disabled");
+	}
+	if($('#fmonth').val()&&fmonthFlag!=0){
+		$('#fmonth').attr("disabled","disabled");
+	}
+	if($('#fday').val()&&fdayFlag!=0){
+		$('#fday').attr("disabled","disabled");
+	}
+	if($('#serialNum').val()&&fserialNumFlag!=0){
+		$('#serialNum').attr("disabled","disabled");
+	}
+	if($('#serialLen').val()&&fserialLenFlag!=0){
+		$('#serialLen').attr("disabled","disabled");
+	}
 
-        var param = {
-            "fixValue" : $('#fixValue').val(),
-            "fyear" :$('#fyear').val(),
-            "fmonth":$('#fmonth').val(),
-            "fday":$('#fday').val(),
-            "serialNum":$('#serialNum').val(),
-            "serialLen":$('#serialLen').val(),
-        };
-
-        CoreUtil.sendAjax("/base/rule/getFsampleByForm", JSON.stringify(param),
-            function(data) {
-                if (data.result) {
-                    $('#fsample').val(data.data);
-                    // layer.alert("操作成功", function() {
-                    // 	$('#fsample').val(data.data);
-                    // });
-                } else {
-                    layer.alert(data.msg, function(index) {
-                        layer.close(index);
-                    });
-                }
-            }, "POST", false, function(res) {
-                layer.alert(res.msg);
-            });
-
-    }
+	if($('#fixValue').val()) {
+		frule = frule + "+" + $('#fixValue').val();
+	}
+	if(frule.substr(0,1)=="+"){
+		frule = frule.substr(1);
+	}
+	$('#fsample').val(frule);
+	layui.form.render('select');
 }
 
 //年、月、日、流水号 下拉框
@@ -447,7 +512,7 @@ function getBarList() {
 					var fserialNum = data.data.fserialNum;
 					$("#serialNum").append(
 						"<option value=" + "" + ">"
-						+ "请选择年" + "</option>");
+						+ "请选择流水号" + "</option>");
 					for (var i = 0; i < fserialNum.length; i++) {
 						$("#serialNum").append(
 							"<option value=" + fserialNum[i].FCODE + ">"
@@ -494,6 +559,10 @@ function addBarcodeRule() {
 }
 
 function  addFixValue() {
+	// if(!$('#fixValue').val()){
+	// 	layer.msg("请先输入固定值！");
+	// 	return ;
+	// }
 	getFsample();
 	$('#fixValue').val('');
 }
@@ -506,7 +575,7 @@ function addSubmit(obj) {
 	obj.field.itemId=str;
 	//console.log(obj)
 	console.log(obj);
-	CoreUtil.sendAjax("/base/rule/add", JSON.stringify(obj.field),
+	CoreUtil.sendAjax("/base/rule/addByProc", JSON.stringify(obj.field),
 			function(data) {
 				if (data.result) {
 					layer.alert("操作成功", function() {

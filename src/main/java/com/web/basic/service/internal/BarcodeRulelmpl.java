@@ -111,7 +111,6 @@ public class BarcodeRulelmpl extends PrcUtils implements BarcodeRuleService {
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
 		return ApiResponseResult.success("").data(list.get(2));
-
 	}
 //	getFsampleString
 
@@ -128,16 +127,24 @@ public class BarcodeRulelmpl extends PrcUtils implements BarcodeRuleService {
 		if (StringUtils.isEmpty(barcodeRule.getItemNo())) {
 			return ApiResponseResult.failure("物料编码不能为空！");
 		}
-		// 重复字段检验
-		// int count = barcodeRuleDao.countByDelFlagAndDefectCode(0,
-		// barcodeRule.getDefectCode());
-		// if(count > 0){
-		// return ApiResponseResult.failure("该校验规则编号已存在，请填写其他校验规则编码！");
-		// }
 		barcodeRule.setCreateDate(new Date());
 		barcodeRule.setCreateBy(UserUtil.getSessionUser().getId());
 		barcodeRuleDao.save(barcodeRule);
 		return ApiResponseResult.success("校验规则添加成功！").data(barcodeRule);
+	}
+
+	@Override
+	public ApiResponseResult addByProc(BarcodeRule barcodeRule) throws Exception{
+		List<Object> list = addRuleByProc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				barcodeRule.getItemNo(),barcodeRule.getItemId()+"",barcodeRule.getItemNoCus(),barcodeRule.getCustId(),
+				barcodeRule.getFmemo(), barcodeRule.getFixValue(),barcodeRule.getFyear(),barcodeRule.getFmonth(),
+				barcodeRule.getFday(), barcodeRule.getSerialNum(),barcodeRule.getSerialLen(),
+				barcodeRule.getFsample(),"prc_mes_cof_bar_s_role_save");
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success("");
 	}
 
 	/**

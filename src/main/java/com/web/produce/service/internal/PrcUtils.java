@@ -281,7 +281,49 @@ public class PrcUtils {
         return resultList;
     }
 
-    //prc_mes_cof_bar_s_join 传参带出条码样例
+    //prc_mes_cof_bar_s_role_save 保存小码校验规则
+    public List addRuleByProc(String company,String facoty,String userId,String itemNo,String itemId,
+                              String itemNoCus,Long custId,String fmemo,
+                              String fixValue, String fyear , String fmonth,String fday,String serialNum,
+                              Integer serialLen,String fsample,String prc_name) throws Exception {
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call " + prc_name + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, company);
+                cs.setString(2, facoty);
+                cs.setString(3, userId);
+                cs.setString(4, itemNo);
+                cs.setString(5, itemId);
+                cs.setString(6, itemNoCus);
+                cs.setLong(7, custId);
+                cs.setString(8, fmemo);
+                cs.setString(9, fixValue);
+                cs.setString(10,fyear);
+                cs.setString(11, fmonth);
+                cs.setString(12, fday);
+                cs.setString(13, serialNum);
+                cs.setInt(14, serialLen);
+                cs.setString(15, fsample);
+                cs.registerOutParameter(16, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(17, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(16));
+                result.add(cs.getString(17));
+                return result;
+            }
+
+        });
+        return resultList;
+    }
+
     public List getFsamplePrc(String company,String facoty,String userId,
                               String fixValue, String fyear , String fmonth,String fday,String serialNum,
                               String serialLen,String prc_name) throws Exception {

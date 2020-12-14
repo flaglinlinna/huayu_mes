@@ -510,6 +510,7 @@ function getDetailByTask(taskNo){
 			if (data.result) {
 				playSaoMiaoMusic();
 				 $("#wbarcode").val("");
+				 $("#cQty").val(data.data.cQty);
 				 $("#wbarcode").focus();
 			}else{
 			    playMusic();

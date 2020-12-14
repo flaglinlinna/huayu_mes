@@ -257,4 +257,20 @@ public class BarcodeRule extends BaseEntity {
 	public void setFsample(String fsample) {
 		this.fsample = fsample;
 	}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("客户id:").append(this.custId);
+		sb.append(",物料编码:").append(this.itemNo);
+		sb.append(",客户物料编码:").append(this.itemNoCus);
+		sb.append(",固定值:").append(this.fixValue);
+		sb.append(",年:").append(this.fyear);
+		sb.append(",月:").append(this.fmonth);
+		sb.append(",日:").append(this.fday);
+		sb.append(",流水号:").append(this.serialNum);
+		sb.append(",位数:").append(this.serialLen);
+		sb.append(",样例:").append(this.fsample);
+		return sb.toString();
+	}
 }
