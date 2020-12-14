@@ -164,7 +164,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 			text : '效率:' + eff_rate + '%',
 			textStyle : {
 				color : '#FFFFFF' ,// 图例文字颜色
-				fontSize : 18,// 字体大小
+				fontSize : 17,// 字体大小
 			},
 			left : '5px',
 			top : '5px'
@@ -266,7 +266,7 @@ function getChartXlpm3(done, plan, doneRate) {
 			text : '完工率:' + doneRate + '%',
 			textStyle : {
 				color : '#FFFFFF', // 图例文字颜色
-				fontSize : 18,// 字体大小
+				fontSize : 17,// 字体大小
 			},
 			left : '5px',
 			top : '5px'
@@ -359,10 +359,10 @@ function setCxdzTable(kanbanData) {
 		var arr = kanbanData[j];
 		html += '<tr><td>' + arr.TASK_NO + '</td><td>' + arr.ITEM_NAME+ '</td><td>' + arr.ITEM_NAME1
 				+ '</td><td>' + arr.PROD_DATE + '</td><td>' + arr.CLASS_NO
-				+ '</td><td>' + arr.QTY_PLAN + '</td><td>' + arr.QTY_DONE
+				+ '</td><td>' + arr.QTY_PLAN + '</td><td>' + arr.QTY_DONE+ '</td><td>' + arr.QTY_OK
 				+ '</td><td>' + arr.MANPOWER + '</td><td>' + arr.CAPACITY
 				+ '</td><td>' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT
-				+ '</td><td>' + arr.HOUR_ABN + '</td><td>' + arr.RATE_DONE
+				+ '</td><td>' + arr.HOUR_ABN +'</td><td>' + arr.RATE_OK + '%</td><td>' + arr.RATE_DONE
 				+ '%</td><td>' + arr.RATE_EFF + '%</td></tr> ';
 	}
 	$("#tableCxdzList").empty();
@@ -404,8 +404,7 @@ function setCxscTable(kanbanData){
 		var arr = kanbanData[j];
 		html += '<tr><td>' + arr.FTIME + '</td><td>' + arr.QTY_NPT
 				+ '</td><td>' + arr.QTY_DONE + '</td><td>' + arr.QTY_OK
-				+ '</td><td>' + arr.QTY_NG + '</td><td>' + arr.RATE_OK
-				+ '%</td></tr> ';
+				+ '</td><td>' + arr.QTY_NG + '</td></tr> ';
 		if(j==kanbanData.length-1){
 			html+='<tr height=25></tr>'
 		}
