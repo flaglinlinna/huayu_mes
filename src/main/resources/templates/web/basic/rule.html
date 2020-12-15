@@ -61,8 +61,9 @@
 			<form id="ruleForm" class="layui-form layui-form-pane"
 				lay-filter="ruleForm" method="post" action=""
 				style="margin-top: 20px;">
-				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
-					type="hidden" name="id" />
+				<input id="pageNum" type="hidden" name="pageNum" />
+				<input id="id" type="hidden" name="id" />
+				<!--<input id="itemId" type="hidden" name="itemId" />-->
 
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">物料编码</label>
@@ -88,7 +89,7 @@
 					<label class="layui-form-label">物料描述</label>
 					<div class="layui-input-inline" style="width: 320px;">
 						<textarea disabled id="itemName" name="itemName" placeholder="选择内部物料编码获取物料描述" 
-							 style="background: #efefef;" class="layui-textarea"></textarea>
+							 style="background: #efefef;" class="layui-input"></textarea>
 					</div>
 				</div>
 
@@ -140,7 +141,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">年份</label>
 					<div class="layui-input-inline" style="width: 320px;">
-						<select id="fyear" name="fyear" lay-filter="getFsample" placeholder="请选择年份">
+						<select id="fyear" name="fyear" lay-filter="yearFsample" placeholder="请选择年份">
 						</select>
 					</div>
 				</div>
@@ -148,7 +149,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">月份</label>
 					<div class="layui-input-inline" style="width: 320px;">
-						<select id="fmonth" name="fmonth" lay-filter="getFsample" placeholder="请选择月份">
+						<select id="fmonth" name="fmonth" lay-filter="monthFsample" placeholder="请选择月份">
 						</select>
 					</div>
 				</div>
@@ -156,7 +157,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">日</label>
 					<div class="layui-input-inline" style="width: 320px;">
-						<select id="fday" name="fday" lay-filter="getFsample" placeholder="请选择日">
+						<select id="fday" name="fday" lay-filter="dayFsample" placeholder="请选择日">
 						</select>
 					</div>
 				</div>
@@ -164,7 +165,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">流水号</label>
 					<div class="layui-input-inline" style="width: 320px;">
-						<select id="serialNum" name="serialNum"  lay-filter="getFsample" placeholder="请输入流水号">
+						<select id="serialNum" name="serialNum"  lay-filter="serialNumFsample" placeholder="请输入流水号">
 						</select>
 					</div>
 				</div>
@@ -176,11 +177,22 @@
 					</div>
 				</div>
 
+				<!--<div class="layui-form-item">-->
+					<!--<label class="layui-form-label">生成的规则</label>-->
+					<!--<div class="layui-input-inline" style="width: 320px;">-->
+						<!--<textarea id="frule" name="frule"  disabled="disabled" style="background: #efefef;"-->
+							   <!--autocomplete="off" class="layui-input" type="text" >-->
+						<!--</textarea>-->
+					<!--</div>-->
+				<!--</div>-->
+
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">条码规则样例</label>
 					<div class="layui-input-inline" style="width: 320px;">
-						<input id="fsample" name="fsample"  disabled="disabled" style="background: #efefef;"
-							   autocomplete="off" class="layui-input" type="text" />
+						<textarea id="fsample" name="fsample"  disabled="disabled" style="background: #efefef;"
+							   autocomplete="off" class="layui-input" type="text" >
+						</textarea>
+
 					</div>
 				</div>
 

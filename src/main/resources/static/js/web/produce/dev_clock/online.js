@@ -170,7 +170,13 @@ $(function() {
 							} ] ],
 							data : []
 						});
-						
+
+						//监听行双击查看事件
+						table.on('rowDouble(onlineTable)', function(obj){
+							var data = obj.data;
+							getOnlineStaff(data, data.id);
+						});
+
 						//日期选择器
 						laydate.render({ 
 						  elem: '#workDate',

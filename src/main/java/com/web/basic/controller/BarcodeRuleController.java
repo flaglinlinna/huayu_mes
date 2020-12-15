@@ -63,23 +63,42 @@ public class BarcodeRuleController extends WebController{
 	    }
 	    
 	    
-	    @ApiOperation(value = "新增小码校验规则信息", notes = "新增小码校验规则信息",hidden = true)
-	    @RequestMapping(value = "/add", method = RequestMethod.POST)
-	    @ResponseBody
-	    public ApiResponseResult add(@RequestBody BarcodeRule rule) {
-	        String method = "base/rule/add";String methodName ="新增小码校验规则信息";
-	        try{
-	            ApiResponseResult result = ruleService.add(rule);
-	            logger.debug("新增小码校验规则信息=add:");
-	            getSysLogService().success(module,method, methodName, rule.toString());
-	            return result;
-	        }catch(Exception e){
-	            e.printStackTrace();
-	            logger.error("小码校验规则信息新增失败！", e);
-	            getSysLogService().error(module,method, methodName, rule.toString()+";"+e.toString());
-	            return ApiResponseResult.failure("小码校验规则信息新增失败！");
-	        }
-	    }
+	@ApiOperation(value = "新增小码校验规则信息", notes = "新增小码校验规则信息",hidden = true)
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult add(@RequestBody BarcodeRule rule) {
+		String method = "base/rule/add";String methodName ="新增小码校验规则信息";
+		try{
+			ApiResponseResult result = ruleService.add(rule);
+			logger.debug("新增小码校验规则信息=add:");
+			getSysLogService().success(module,method, methodName, rule.toString());
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("小码校验规则信息新增失败！", e);
+			getSysLogService().error(module,method, methodName, rule.toString()+";"+e.toString());
+			return ApiResponseResult.failure("小码校验规则信息新增失败！");
+		}
+	}
+
+
+	@ApiOperation(value = "新增小码校验规则信息", notes = "新增小码校验规则信息",hidden = true)
+	@RequestMapping(value = "/addByProc", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult addByProc(@RequestBody BarcodeRule rule) {
+		String method = "base/rule/addByProc";String methodName ="新增小码校验规则信息";
+		try{
+			ApiResponseResult result = ruleService.addByProc(rule);
+			logger.debug("新增小码校验规则信息=add:");
+			getSysLogService().success(module,method, methodName, rule.toString());
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("小码校验规则信息新增失败！", e);
+			getSysLogService().error(module,method, methodName, rule.toString()+";"+e.toString());
+			return ApiResponseResult.failure("小码校验规则信息新增失败！");
+		}
+	}
 	    
 	    @ApiOperation(value = "编辑小码校验规则信息", notes = "编辑小码校验规则信息",hidden = true)
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
@@ -99,6 +118,7 @@ public class BarcodeRuleController extends WebController{
 	            return ApiResponseResult.failure("编辑小码校验规则信息失败！");
 	        }
 	    }
+
 		@ApiOperation(value = "根据ID获取小码校验规则信息", notes = "根据ID获取小码校验规则信息",hidden = true)
 	    @RequestMapping(value = "/getBarcodeRule", method = RequestMethod.POST)
 	    @ResponseBody

@@ -51,7 +51,7 @@ public class Productlmpl extends PrcUtils implements ProductService {
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		return ApiResponseResult.success("");
+		return ApiResponseResult.success(list.get(1).toString());
 	}
 
 	@Override
