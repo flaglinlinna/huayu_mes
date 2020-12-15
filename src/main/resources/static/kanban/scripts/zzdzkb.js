@@ -515,6 +515,7 @@ function getList() {
 		"sdata" : date,
 		"liner" : liner
 	};
+	console.log(params)
 	$.ajax({
 		type : "GET",
 		url : context + "kanban/toZzdzkbList",
