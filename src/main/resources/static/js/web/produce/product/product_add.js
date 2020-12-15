@@ -22,7 +22,9 @@ $(function() {
 					cellMinWidth : 80,
 					height:'full-380'//固定表头&full-查询框高度
 					,even:true,//条纹样式
-					page : false,
+					page : true,
+					limit:20,
+					limits:[20,50,100,200,400,600,1000],
 					data : [],
 					request : {
 						pageName : 'page' //页码的参数名称，默认：page
@@ -508,10 +510,12 @@ function getDetailByTask(taskNo){
 		CoreUtil.sendAjax("/product/afterNei", params, function(data) {
 			
 			if (data.result) {
+				// console.log(data.data[0].QTY);
 				playSaoMiaoMusic();
 				 $("#wbarcode").val("");
-				 $("#cQty").val(data.data.cQty);
+				 $("#cQty").val(data.data[0].QTY);
 				 $("#wbarcode").focus();
+				layer.form.render();// 重新渲染
 			}else{
 			    playMusic();
 				layer.alert(data.msg,function () {

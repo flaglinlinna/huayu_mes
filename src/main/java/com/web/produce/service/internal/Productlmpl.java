@@ -51,7 +51,13 @@ public class Productlmpl extends PrcUtils implements ProductService {
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		return ApiResponseResult.success(list.get(1).toString());
+        List<Object> list2 = getBarcodeByPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",
+                UserUtil.getSessionUser().getId()+"",5,barcode);
+
+        if (!list2.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list2.get(1).toString());
+        }
+		return ApiResponseResult.success("").data(list2.get(2));
 	}
 
 	@Override

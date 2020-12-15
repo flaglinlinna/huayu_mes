@@ -3,11 +3,11 @@
  */
 var pageCurr;
 var frule = "";
-var fyearFlag = 0;
-var fmonthFlag = 0;
-var fdayFlag = 0;
-var fserialNumFlag = 0;
-var fserialLenFlag = 0;
+var fyearFlag = -1;
+var fmonthFlag = -1;
+var fdayFlag = -1;
+var fserialNumFlag = -1;
+var fserialLenFlag = -1;
 $(function() {
 	layui.use([ 'form', 'table','tableSelect' ], function() {
 		var table = layui.table, form = layui.form,tableSelect1 = layui.tableSelect,
@@ -355,7 +355,7 @@ $(function() {
 
 		//流水号位数 输入框
 		$("#serialLen").blur(function(){
-			if(fserialLenFlag==0) {
+			if(fserialLenFlag==-1) {
 				var fruleArr = frule.split("+");
 				fserialLenFlag = fruleArr.length;
 				fruleArr[fserialLenFlag] = "位数("+ $('#serialLen').val() +")";
@@ -371,7 +371,7 @@ $(function() {
 
 		//监听年选择框
 		form.on('select(yearFsample)', function(){
-			if(fyearFlag ==0){
+			if(fyearFlag ==-1){
 				var fruleArr = frule.split("+");
 				fyearFlag = fruleArr.length;
 				fruleArr[fyearFlag] = "年("+$('select[name="fyear"] option:selected').text()+")";
@@ -385,7 +385,7 @@ $(function() {
 		});
 
 		form.on('select(monthFsample)', function(){
-			if(fmonthFlag ==0){
+			if(fmonthFlag ==-1){
 				var fruleArr = frule.split("+");
 				fmonthFlag = fruleArr.length;
 				fruleArr[fmonthFlag] = "月("+$('select[name="fmonth"] option:selected').text()+")";
@@ -399,7 +399,7 @@ $(function() {
 		});
 
 		form.on('select(dayFsample)', function(){
-			if(fdayFlag ==0){
+			if(fdayFlag ==-1){
 				var fruleArr = frule.split("+");
 				fdayFlag = fruleArr.length;
 				fruleArr[fdayFlag] = "日("+$('select[name="fday"] option:selected').text()+")";
@@ -413,7 +413,7 @@ $(function() {
 		});
 
 		form.on('select(serialNumFsample)', function(){
-			if(fserialNumFlag ==0){
+			if(fserialNumFlag ==-1){
 				var fruleArr = frule.split("+");
 				fserialNumFlag = fruleArr.length;
 				fruleArr[fserialNumFlag] = "流水号("+$('select[name="serialNum"] option:selected').text()+")";
@@ -437,19 +437,19 @@ $(function() {
 
 // 固定值添加按钮
 function getFsample() {
-	if($('#fyear').val()&&fyearFlag!=0){
+	if($('#fyear').val()&&fyearFlag!=-1){
 		$('#fyear').attr("disabled","disabled");
 	}
-	if($('#fmonth').val()&&fmonthFlag!=0){
+	if($('#fmonth').val()&&fmonthFlag!=-1){
 		$('#fmonth').attr("disabled","disabled");
 	}
-	if($('#fday').val()&&fdayFlag!=0){
+	if($('#fday').val()&&fdayFlag!=-1){
 		$('#fday').attr("disabled","disabled");
 	}
-	if($('#serialNum').val()&&fserialNumFlag!=0){
+	if($('#serialNum').val()&&fserialNumFlag!=-1){
 		$('#serialNum').attr("disabled","disabled");
 	}
-	if($('#serialLen').val()&&fserialLenFlag!=0){
+	if($('#serialLen').val()&&fserialLenFlag!=-1){
 		$('#serialLen').attr("disabled","disabled");
 	}
 
