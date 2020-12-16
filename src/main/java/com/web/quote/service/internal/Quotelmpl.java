@@ -83,6 +83,6 @@ public class Quotelmpl implements QuoteService {
     	}
     	
     	
-        return ApiResponseResult.success("报价单新增成功！").data(quote);
+        return ApiResponseResult.success("报价单新增成功！").data(lqi);
 	}
 }
