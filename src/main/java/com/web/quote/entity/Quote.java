@@ -4,14 +4,20 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.app.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.web.basePrice.entity.ProfitProd;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -112,6 +118,19 @@ public class Quote extends BaseEntity {
 	protected String bsProdType;
 	
 	/**
+	 * 关联产品利润率维护表
+	 * **/	
+	@ApiModelProperty(name="pkProfitProd",value="产品利润率表ID")
+    @Column
+    protected Long pkProfitProd;
+
+    @ApiModelProperty(name="profitProd",hidden=true,value="产品利润率表")
+    @ManyToOne
+    @JoinColumn(name = "pkProfitProd", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected ProfitProd profitProd;
+	
+	/**
 	 * 客户名称
 	 */
 	@ApiModelProperty(name = "bsCustName", value = "客户名称")
@@ -133,11 +152,25 @@ public class Quote extends BaseEntity {
 	protected String bsMaterial;
 	
 	/**
+	 * 外观检验项【多选】
+	 */
+	@ApiModelProperty(name = "bsChkOutItem", value = "外观检验项【多选】")
+	@Column(length = 100)
+	protected String bsChkOutItem;
+	
+	/**
 	 * 外观检验
 	 */
 	@ApiModelProperty(name = "bsChkOut", value = "外观检验")
 	@Column(length = 200)
 	protected String bsChkOut;
+	
+	/**
+	 * 功能性能项【多选】
+	 */
+	@ApiModelProperty(name = "bsFunctionItem", value = "功能性能项【多选】")
+	@Column(length = 100)
+	protected String bsFunctionItem;
 	
 	/**
 	 * 功能性能
