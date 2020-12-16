@@ -41,7 +41,7 @@ public class CustomQsController extends WebController{
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getList(String keyword) {
-        String method = "basePrice/profitProd/getList";String methodName ="获取客户品质标准列表";
+        String method = "basePrice/customQs/getList";String methodName ="获取客户品质标准列表";
         try {
             System.out.println(keyword);
             Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -61,7 +61,7 @@ public class CustomQsController extends WebController{
     @RequestMapping(value = "/getQsType", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getQsType(String keyword) {
-        String method = "basePrice/profitProd/getQsType";String methodName ="获取客户品质标准类别";
+        String method = "basePrice/customQs/getQsType";String methodName ="获取客户品质标准类别";
         try {
             Sort sort = Sort.unsorted();
             ApiResponseResult result = customQsService.getQsType(keyword,super.getPageRequest(sort));
@@ -80,7 +80,7 @@ public class CustomQsController extends WebController{
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult add(@RequestBody CustomQs customQs) {
-        String method = "basePrice/profitProd/add";String methodName ="新增客户品质标准信息";
+        String method = "basePrice/customQs/add";String methodName ="新增客户品质标准信息";
         try{
             ApiResponseResult result = customQsService.add(customQs);
             logger.debug("新增客户品质标准信息=add:");
@@ -98,7 +98,7 @@ public class CustomQsController extends WebController{
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult edit(@RequestBody CustomQs customQs){
-        String method = "basePrice/profitProd/edit";String methodName ="编辑客户品质标准信息";
+        String method = "basePrice/customQs/edit";String methodName ="编辑客户品质标准信息";
         try{
             ApiResponseResult result = customQsService.edit(customQs);
             logger.debug("编辑客户品质标准信息=edit:");
@@ -116,7 +116,7 @@ public class CustomQsController extends WebController{
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult delete(@RequestBody Map<String, Object> params){
-        String method = "basePrice/profitProd/delete";String methodName ="删除客户品质标准信息";
+        String method = "basePrice/customQs/delete";String methodName ="删除客户品质标准信息";
         try{
             long id = Long.parseLong(params.get("id").toString()) ;
             ApiResponseResult result = customQsService.delete(id);
@@ -135,7 +135,7 @@ public class CustomQsController extends WebController{
     @RequestMapping(value = "/delFile", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult delFile(Long recordId, Long fileId){
-        String method = "basePrice/profitProd/delFile";String methodName ="删除客户品质标准附件";
+        String method = "basePrice/customQs/delFile";String methodName ="删除客户品质标准附件";
         try{
             ApiResponseResult result = customQsService.delFile(recordId);
             logger.debug("删除客户品质标准附件=delete:");

@@ -1,5 +1,5 @@
 /**
- * 不良类别管理
+ * 流程管理
  */
 var pageCurr;
 $(function() {
@@ -282,7 +282,7 @@ $(function() {
 				"bsFlowName" : obj.bsFlowName,
 				"bsFlowDescribe" : obj.bsFlowDescribe,
 			});
-			openDefect(id, "编辑不良类别")
+			openDefect(id, "编辑流程")
 		}
 		//编辑步骤
 		function getStep(obj, id) {
@@ -305,7 +305,7 @@ $(function() {
 			// 正常/禁用
 
 			layer.confirm(
-					'您确定要把不良类别：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+					'您确定要把流程：' + name + '设置为' + deaprtisStatus + '状态吗？', {
 						btn1 : function(index) {
 							var param = {
 								"id" : id,
