@@ -82,7 +82,8 @@ $(function() {
 			,even:true,//条纹样式
 			data : [],
 			//height: 'full',
-			page : true,
+			page : false,
+			limit:100,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -142,6 +143,67 @@ $(function() {
 			}
 		});
 
+		///sysUser/getList
+		tableSelect = tableSelect.render({
+			elem : '#productType',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '试着搜索',
+			table : {
+				url : context + '/basePrice/profitProd/getProdTypeList',
+				method : 'get',
+				// width:800,
+				cols : [ [ {
+					type : 'numbers',
+					title : '序号'
+				}, {
+					type : 'radio'
+				},
+					{
+						field : 'ID',
+						title : 'id',
+						width : 0,
+						hide : true
+					},
+					{
+						field : 'PRODUCT_TYPE',
+						title : '类型',
+						width : 120
+					},
+					{
+						field : 'FMEMO',
+						title : '备注',
+						width : 120
+					},
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+				parseData : function(res) {
+					if (res.result) {
+						// 可进行数据操作
+						return {
+							"count" : res.data.total,
+							"msg" : res.msg,
+							"data" : res.data.rows,
+							"code" : res.status
+							// code值为200表示成功
+						}
+					}
+				},
+			},
+			done : function(elem, data) {
+				var da = data.data;
+				form.val("itemForm", {
+					"productType" : da[0].PRODUCT_TYPE,
+				});
+				form.render();// 重新渲染
+			}
+		});
+
 		// 监听在职操作
 		form.on('switch(isStatusTpl)', function(obj) {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
@@ -181,7 +243,6 @@ $(function() {
 				getDefect(data, data.id);
 			}
 		});
-
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
 			if (data.field.id == null || data.field.id == "") {
@@ -209,7 +270,7 @@ $(function() {
 			load(data);
 			return false;
 		});
-		// 编辑不良类别
+		// 编辑流程
 		function getDefect(obj, id) {
 			console.log(obj)
 			form.val("defectForm", {
@@ -219,6 +280,19 @@ $(function() {
 				"bsFlowDescribe" : obj.bsFlowDescribe,
 			});
 			openDefect(id, "编辑不良类别")
+		}
+		//编辑步骤
+		function getDefect(obj, id) {
+			console.log(obj)
+			form.val("workflowStep", {
+				"id" : obj.id,
+				"bsCheckGrade" : obj.bsCheckGrade,
+				"bsStepName" : obj.bsStepName,
+				"bsCheckBy" : obj.bsCheckBy,
+				"bsCheckId":obj.bsCheckId,
+				"bsCheckName":obj.bsCheckName,
+			});
+			openWorkflowStep(id, "编辑步骤信息")
 		}
 		// 设置用户正常/禁用
 		function setStatus(obj, id, name, checked) {
@@ -307,6 +381,11 @@ function openDefect(id, title) {
 		}
 	});
 	layer.full(index);
+}
+
+//编辑步骤信息
+function openWorkflowStep(id ,title) {
+
 }
 
 // 添加不良类别
