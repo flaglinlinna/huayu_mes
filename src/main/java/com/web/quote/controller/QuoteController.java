@@ -45,7 +45,7 @@ public class QuoteController extends WebController {
 	 @ApiOperation(value = "报价信息列表页", notes = "报价信息列表页", hidden = true)
 	    @RequestMapping(value = "/toQuoteList")
 	    public String toQuoteList(){
-	        return "/web/quote/quote_list";
+	        return "/web/quote/01business/quote_list";
 	    }
 	 
 	 @ApiOperation(value = "新增报价单", notes = "新增报价单", hidden = true)

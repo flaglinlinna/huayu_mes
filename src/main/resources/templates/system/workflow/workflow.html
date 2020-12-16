@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='流程信息'">
+<meta charset="UTF-8">
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+	 <div style="margin: 10px">
+	 <form id="defectSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+           <div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+						<div class="layui-input-inline">
+							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
+								placeholder="请输入关键字" class="layui-input" type="text" />
+						</div>
+						
+						 <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
+					<button type="reset" class="layui-btn layui-btn-primary layui-btn-sm"
+							title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+					</div>
+				</div>
+        </form>
+         <hr class="layui-bg-black"/>
+         <script type="text/html" id="toolbar">
+             <div class="layui-btn-container layui-inline">
+                     <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addWorkflow()">添加流程信息</button>
+             </div>
+         </script>
+
+        <table id="workflowList" lay-filter="workflowTable"></table>
+
+        <script type="text/html" id="statusTpl">
+            {{#  if(d.bsFlowStatus){ }}
+            <input type="checkbox" name="{{d.bsFlowName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
+            {{#  } else { }}
+            <input type="checkbox" name="{{d.bsFlowName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
+            {{#  } }}
+        </script>
+
+         <script type="text/html" id="optBar">
+                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                 <a class="layui-btn layui-btn-xs" lay-event="setStep">流程步骤</a>
+                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+         </script>
+
+         <script type="text/html" id="optBar1">
+             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+         </script>
+
+	 </div>
+	 <!--添加或编辑流程信息-->
+    <div id="setDefect" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
+        <form id="defectForm" class="layui-form layui-form-pane" lay-filter="defectForm" method="post" action="" style="margin-top: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum"/>
+            <input id="id" type="hidden" name="id"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">流程编号</label>
+                <div class="layui-input-inline">
+                    <input id="bsFlowCode" name="bsFlowCode" placeholder="请输入流程编号" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">流程名称</label>
+                <div class="layui-input-inline">
+                    <input id="bsFlowName" name="bsFlowName" placeholder="请输入流程名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">流程备注</label>
+                <div class="layui-input-inline">
+                    <input id="bsFlowDescribe" name="bsFlowDescribe" placeholder="请输入流程备注"  autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="setworkflowStep" class="layer_self_wrap" style="display:none;margin-left: 10px;">
+            <form id="workflowStep" class="layui-form layui-form-pane" lay-filter="workflowStep" method="post" action="" style="margin-top: 20px;">
+                <input id="stepId" type="hidden" name="id"/>
+                <input id="bsFlowId" type="hidden" name="bsFlowId"/>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                    <label class="layui-form-label layui-required">步骤序号</label>
+                    <div class="layui-input-inline">
+                        <input id="bsCheckGrade" name="bsCheckGrade" placeholder="请输入流程编号" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    </div>
+                    <label class="layui-form-label layui-required">步骤名称</label>
+                    <div class="layui-input-inline">
+                        <input id="bsStepName" name="bsStepName" placeholder="请输入流程名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    </div>
+                    <label class="layui-form-label">审批人</label>
+                    <div class="layui-input-inline">
+                        <input id="bsCheckBy" name="bsCheckBy" placeholder="请选择审批人"  autocomplete="off" class="layui-input" type="text"/>
+                    </div>
+
+                    </div>
+                    <div class="layui-input-block" style="margin-left: 10px;">
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit1">提交</button>
+                    </div>
+                    <table id="iList" lay-filter="iTable"></table>
+            </div>
+            </form>
+        </div>
+    <script th:src="@{/js/auth/workflow.js}" src="/js/auth/workflow.js"></script>
+	</div>
+</body>
+</html>
