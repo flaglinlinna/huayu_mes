@@ -1,6 +1,5 @@
 package com.web.basic.dao;
 
-import com.web.basic.entity.TodoInfo;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
