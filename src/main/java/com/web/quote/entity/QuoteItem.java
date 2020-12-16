@@ -31,17 +31,22 @@ public class QuoteItem extends BaseEntity{
 	/**
      * 关联主表
      */
-    @ApiModelProperty(name="pkQuoteId",value="报价主表")
+    @ApiModelProperty(name="pkQuote",value="报价主表")
     @Column
-    protected Long pkQuoteId;
+    protected Long pkQuote;
 
     @ApiModelProperty(name="quote",hidden=true,value="报价主表")
     @ManyToOne
-    @JoinColumn(name = "pkQuoteId", insertable = false, updatable = false)
+    @JoinColumn(name = "pkQuote", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     protected Quote quote;
 	
-	
+    /**
+	 * 报价项目-编码
+	 */
+	@ApiModelProperty(name = "bsCode", value = "报价项目-编码")
+	@Column(length = 50)
+	protected String bsCode;
 	/**
 	 * 报价项目名
 	 */
@@ -71,18 +76,20 @@ public class QuoteItem extends BaseEntity{
 	protected String bsEndTime;
 	
 	/**
-	 * 项目进度状态（未开始、未完成、已完成）
+	 * 项目进度状态（0未开始、1未完成、2已完成）
 	 */
 	@ApiModelProperty(name = "bsStatus", value = "项目进度状态")
-	@Column(length = 50)
-	protected String bsStatus;
+	@Column
+	protected int bsStatus=0;
 
-	public Long getPkQuoteId() {
-		return pkQuoteId;
+	
+
+	public Long getPkQuote() {
+		return pkQuote;
 	}
 
-	public void setPkQuoteId(Long pkQuoteId) {
-		this.pkQuoteId = pkQuoteId;
+	public void setPkQuote(Long pkQuote) {
+		this.pkQuote = pkQuote;
 	}
 
 	public Quote getQuote() {
@@ -125,11 +132,21 @@ public class QuoteItem extends BaseEntity{
 		this.bsEndTime = bsEndTime;
 	}
 
-	public String getBsStatus() {
+	public int getBsStatus() {
 		return bsStatus;
 	}
 
-	public void setBsStatus(String bsStatus) {
+	public void setBsStatus(int bsStatus) {
 		this.bsStatus = bsStatus;
 	}
+
+	public String getBsCode() {
+		return bsCode;
+	}
+
+	public void setBsCode(String bsCode) {
+		this.bsCode = bsCode;
+	}
+	
+	
 }

@@ -3,6 +3,7 @@ package com.web.quote.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicUpdate;
 import com.app.base.entity.BaseEntity;
@@ -21,7 +22,18 @@ import io.swagger.annotations.ApiModelProperty;
 public class Quote extends BaseEntity {
 	private static final long serialVersionUID = 4625660587007894370L;
 	public static final String TABLE_NAME = "price_quote";
+	
+	/**
+     * 状态
+     * 0：草稿，1:
+     * 99:关闭
+     */
+	@Column
+	@NotNull
+	@ApiModelProperty(name="bsStatus",value="状态")
+    protected int bsStatus = 0;
 
+	//---业务字段
 	/**
 	 * 报价单编号
 	 */

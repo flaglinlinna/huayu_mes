@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiOperation;
 @CrossOrigin
 @ControllerAdvice
 @Controller
-@RequestMapping(value = "price/quote")
+@RequestMapping(value = "quote")
 public class QuoteController extends WebController {
 	
 	private String module = "报价信息";
@@ -36,10 +36,16 @@ public class QuoteController extends WebController {
 	        return new Quote();
 	    }
 	 
+	 @ApiOperation(value = "报价新增信息列表页", notes = "报价新增信息列表页", hidden = true)
+	    @RequestMapping(value = "/toQuoteAdd")
+	    public String toQuoteAdd(){
+	        return "/web/quote/quote_add";
+	    }
+	 
 	 @ApiOperation(value = "报价信息列表页", notes = "报价信息列表页", hidden = true)
-	    @RequestMapping(value = "/toQuote")
-	    public String toQuote(){
-	        return "/price/quote/quote";
+	    @RequestMapping(value = "/toQuoteList")
+	    public String toQuoteList(){
+	        return "/web/quote/quote_list";
 	    }
 	 
 	 @ApiOperation(value = "新增报价单", notes = "新增报价单", hidden = true)
