@@ -52,7 +52,7 @@ public class QuoteController extends WebController {
 	    @RequestMapping(value = "/add", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult add(@RequestBody Quote quote) {
-	        String method = "price/quote/add";String methodName ="新增报价单";
+	        String method = "quote/add";String methodName ="新增报价单";
 	        try{
 	            ApiResponseResult result = quoteService.add(quote);
 	            logger.debug("新增报价单=add:");
