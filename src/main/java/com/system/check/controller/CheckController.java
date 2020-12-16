@@ -29,6 +29,9 @@
 //@Controller
 //@RequestMapping(value="/check")
 //public class CheckController extends WebController {
+//
+//    private String module = "审批信息";
+//
 //	@Autowired
 //	private CheckService checkService;
 //
@@ -50,13 +53,13 @@
 //		try {
 //            ApiResponseResult result = checkService.getInfo(id,wname);
 //            logger.debug("获取审批初始化信息=getInfo:");
-//            getSysLogService().success(method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
 //            return result;
 //		} catch (Exception e) {
 //            e.printStackTrace();
 //            logger.error("获取审批初始化信息失败！", e);
-
-//            getSysLogService().error(method, methodName, e.toString());
+//
+//            getSysLogService().error(module,method, methodName, e.toString());
 //			return ApiResponseResult.failure("获取审批初始化信息失败！");
 //		}
 //	}
@@ -73,9 +76,9 @@
 //			if(checkService.checkFirst(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode())){
 //				//1.首次发起审批
 //				SysUser user = UserUtil.getSessionUser();
-//				if(user.getBsType() !=2){
-//					return ApiResponseResult.failure("只有防御单位才可以发起审批!");
-//				}
+////				if(user.getBsType() !=2){
+////					return ApiResponseResult.failure("只有防御单位才可以发起审批!");
+////				}
 //				//新增流程信息
 //				checkService.addCheckFirst(checkInfo);
 //			}else{
@@ -89,12 +92,12 @@
 //                }
 //			}
 //            logger.debug("提交审批=doCheck:");
-//            getSysLogService().success(method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
 //			return ApiResponseResult.success("提交审批成功");
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //            logger.error("获取审批初始化信息失败！", e);
-//            getSysLogService().error(method, methodName, e.toString());
+//            getSysLogService().error(module,method, methodName, e.toString());
 //			return ApiResponseResult.failure("提交审批失败！");
 //		}
 //	}
@@ -106,12 +109,12 @@
 //		try {
 //            ApiResponseResult result = checkService.getCheckByRecordId(id);
 //            logger.debug("获取审批信息=getCheckList:");
-//            getSysLogService().success(method, methodName, null);
+//            getSysLogService().success(module,method, methodName, null);
 //            return result;
 //		} catch (Exception e) {
 //            e.printStackTrace();
 //            logger.error("获取审批信息失败！", e);
-//            getSysLogService().error(method, methodName, e.toString());
+//            getSysLogService().error(module,method, methodName, e.toString());
 //			return ApiResponseResult.failure("获取审批信息失败！");
 //		}
 //	}
