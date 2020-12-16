@@ -4,6 +4,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 
 import com.system.check.dao.WorkflowDao;
+import com.system.check.dao.WorkflowStepDao;
 import com.system.check.entity.Workflow;
 import com.system.check.service.WorkflowService;
 import com.utils.BaseService;
@@ -30,6 +31,8 @@ import java.util.List;
 public class WorkflowImpl implements WorkflowService {
     @Autowired
     private WorkflowDao workflowDao;
+    @Autowired
+    private WorkflowStepDao workflowStepDao;
 
     /**
      * 新增不良类别
@@ -107,6 +110,9 @@ public class WorkflowImpl implements WorkflowService {
         Workflow o  = workflowDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("流程信息不存在！");
+        }
+        if(workflowStepDao.countByBsFlowIdAndDelFlag(id,0)>0){
+            return ApiResponseResult.failure("流程信息下存在步骤，请先删除步骤！");
         }
         o.setDelTime(new Date());
         o.setDelFlag(1);

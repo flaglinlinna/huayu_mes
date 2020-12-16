@@ -47,8 +47,8 @@
                  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
          </script>
 
+         <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
          <script type="text/html" id="optBar1">
-             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
              <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
          </script>
 
@@ -89,6 +89,8 @@
             <form id="workflowStep" class="layui-form layui-form-pane" lay-filter="workflowStep" method="post" action="" style="margin-top: 20px;">
                 <input id="stepId" type="hidden" name="id"/>
                 <input id="bsFlowId" type="hidden" name="bsFlowId"/>
+                <input id="bsCheckBy" type="hidden" name="bsCheckBy"/>
+                <input id="bsCheckId" type="hidden" name="bsCheckId"/>
                 <div class="layui-form-item">
                     <div class="layui-inline">
                     <label class="layui-form-label layui-required">步骤序号</label>
@@ -101,7 +103,7 @@
                     </div>
                     <label class="layui-form-label">审批人</label>
                     <div class="layui-input-inline">
-                        <input id="bsCheckBy" name="bsCheckBy" placeholder="请选择审批人"  autocomplete="off" class="layui-input" type="text"/>
+                        <input id="bsCheckName" name="bsCheckName" placeholder="请选择审批人"  autocomplete="off" class="layui-input" type="text"/>
                     </div>
 
                     </div>
