@@ -32,21 +32,21 @@ public class WorkflowStep extends BaseEntity {
 	protected int bsCheckGrade;
 	
 	/**
-	 * 步骤审批人
+	 * 步骤审批人 (账号)
 	 */
 	@Column(length=100)
 	protected String bsCheckBy;
 	
-//	/**
-//	 * 用户id
-//	 */
-//	@Column
-//	protected Long bsCheckId;
-//	/**
-//	 * 用户名称
-//	 */
-//	@Column(length=100)
-//	protected String bsCheckName;
+	/**
+	 * 用户id
+	 */
+	@Column
+	protected Long bsCheckId;
+	/**
+	 * 用户名称
+	 */
+	@Column(length=100)
+	protected String bsCheckName;
 
 	public Long getBsFlowId() {
 		return bsFlowId;
@@ -80,21 +80,21 @@ public class WorkflowStep extends BaseEntity {
 		this.bsCheckBy = bsCheckBy;
 	}
 
-//	public Long getBsCheckId() {
-//		return bsCheckId;
-//	}
-//
-//	public void setBsCheckId(Long bsCheckId) {
-//		this.bsCheckId = bsCheckId;
-//	}
-//
-//	public String getBsCheckName() {
-//		return bsCheckName;
-//	}
-//
-//	public void setBsCheckName(String bsCheckName) {
-//		this.bsCheckName = bsCheckName;
-//	}
+	public Long getBsCheckId() {
+		return bsCheckId;
+	}
+
+	public void setBsCheckId(Long bsCheckId) {
+		this.bsCheckId = bsCheckId;
+	}
+
+	public String getBsCheckName() {
+		return bsCheckName;
+	}
+
+	public void setBsCheckName(String bsCheckName) {
+		this.bsCheckName = bsCheckName;
+	}
 	
 	
 

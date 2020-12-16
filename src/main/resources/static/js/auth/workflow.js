@@ -171,26 +171,14 @@ $(function() {
 		});
 
 		//监听
-		table.on('tool(workflowTable)', function(obj) {
+		table.on('tool(iTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delDefect(data, data.id, data.defectTypeCode);
+				delFlowStep(data, data.id, data.bsStepName);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				getDefect(data, data.id);
-			} else if (obj.event ==='setStep'){
-				var param = {
-					"mid" : data.id
-				};
-				tableIns1.reload({
-					url:context+'/check/WorkflowStep/getList',
-					where:param,
-					done: function(res1, curr, count){
-						pageCurr1=curr;
-					}
-				})
-				openSetStep(data.id,data.bsFlowName);
 			}
 		});
 
@@ -412,7 +400,7 @@ function editSubmit1(obj) {
 	});
 }
 
-// 删除不良类别
+// 删除流程
 function delDefect(obj, id, name) {
 	if (id != null) {
 		var param = {
@@ -439,6 +427,37 @@ function delDefect(obj, id, name) {
 							}
 						}
 					});
+		});
+	}
+}
+
+// 删除步骤
+function delFlowStep(obj, id, name) {
+	if (id != null) {
+		var param = {
+			"id" : id
+		};
+		layer.confirm('您确定要删除' + name + '步骤吗？', {
+			btn : [ '确认', '返回' ]
+			// 按钮
+		}, function() {
+			CoreUtil.sendAjax("/check/WorkflowStep/delete", JSON.stringify(param),
+				function(data) {
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("删除成功！", function() {
+								layer.closeAll();
+								// 加载load方法
+								loadAll();
+							});
+						} else {
+							layer.alert(data, function() {
+								layer.closeAll();
+							});
+						}
+					}
+				});
 		});
 	}
 }
