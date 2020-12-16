@@ -1,5 +1,6 @@
 package com.web.quote.service.internal;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,16 @@ public class Quotelmpl implements QuoteService {
     	if(quote == null){
             return ApiResponseResult.failure("报价单不能为空！");
         }
+    	//生成报价编号
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateStr = sdf.format(new Date());
+        quote.setBsCode("EQ-" + dateStr);  //编号格式：EQ-年月日时分秒
+        
     	quote.setCreateDate(new Date());
     	quote.setCreateBy(UserUtil.getSessionUser().getId());
     	quoteDao.save(quote);
+    	//建立子表-编码-项目名-代办人-开始/结束时间-进度状态【需有基础信息】
+    	
         return ApiResponseResult.success("报价单新增成功！").data(quote);
 	}
 }

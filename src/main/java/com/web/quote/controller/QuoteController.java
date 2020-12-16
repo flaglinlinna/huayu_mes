@@ -39,7 +39,7 @@ public class QuoteController extends WebController {
 	 @ApiOperation(value = "报价新增信息列表页", notes = "报价新增信息列表页", hidden = true)
 	    @RequestMapping(value = "/toQuoteAdd")
 	    public String toQuoteAdd(){
-	        return "/web/quote/quote_add";
+	        return "/web/quote/01business/quote_add";
 	    }
 	 
 	 @ApiOperation(value = "报价信息列表页", notes = "报价信息列表页", hidden = true)
