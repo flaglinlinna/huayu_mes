@@ -37,14 +37,15 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'bsFlowCode',
-				title : '编码',sort:true
+				title : '编码',sort:true,width : 95
 			}, {
 				field : 'bsFlowName',
-				title : '名称',sort:true
+				title : '名称',width : 140,sort:true
 			},
 				{
 					field : 'bsFlowDescribe',
-					title : '备注'
+					title : '备注',
+					width : 260,
 				},
 				{
 				field : 'checkStatus',
@@ -53,15 +54,16 @@ $(function() {
 				templet : '#statusTpl'
 			}, {
 				field : 'lastupdateDate',
-				title : '更新时间'
+				title : '更新时间',width : 145
 			}, {
 				field : 'createDate',
-				title : '添加时间',
+				title : '添加时间',width : 145,
 			}, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
-				toolbar : '#optBar'
+				toolbar : '#optBar',
+					width : 200,
 			} ] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
@@ -118,7 +120,7 @@ $(function() {
 					title : '步骤名称',width : 160, sort: true
 				},
 				{
-					field : 'bsCheckBy',
+					field : 'bsCheckName',
 					title : '审批人',width : 120, sort: true
 				},
 				// {
@@ -145,14 +147,13 @@ $(function() {
 
 		///sysUser/getList
 		tableSelect = tableSelect.render({
-			elem : '#productType',
+			elem : '#bsCheckName',
 			searchKey : 'keyword',
 			checkedKey : 'id',
 			searchPlaceholder : '试着搜索',
 			table : {
-				url : context + '/basePrice/profitProd/getProdTypeList',
+				url : context + '/sysUser/getList',
 				method : 'get',
-				// width:800,
 				cols : [ [ {
 					type : 'numbers',
 					title : '序号'
@@ -166,13 +167,13 @@ $(function() {
 						hide : true
 					},
 					{
-						field : 'PRODUCT_TYPE',
-						title : '类型',
+						field : 'userName',
+						title : '姓名',
 						width : 120
 					},
 					{
-						field : 'FMEMO',
-						title : '备注',
+						field : 'roles',
+						title : '角色',
 						width : 120
 					},
 				] ],
@@ -197,8 +198,10 @@ $(function() {
 			},
 			done : function(elem, data) {
 				var da = data.data;
-				form.val("itemForm", {
-					"productType" : da[0].PRODUCT_TYPE,
+				form.val("workflowStep", {
+					"bsCheckBy" : da[0].userCode,
+					"bsCheckId" : da[0].id,
+					"bsCheckName":da[0].userName,
 				});
 				form.render();// 重新渲染
 			}
@@ -213,7 +216,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delDefect(data, data.id, data.defectTypeCode);
+				delDefect(data, data.id, data.bsFlowCode);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				getDefect(data, data.id);
@@ -282,7 +285,7 @@ $(function() {
 			openDefect(id, "编辑不良类别")
 		}
 		//编辑步骤
-		function getDefect(obj, id) {
+		function getStep(obj, id) {
 			console.log(obj)
 			form.val("workflowStep", {
 				"id" : obj.id,
@@ -442,11 +445,11 @@ function addSubmit1(obj) {
 	CoreUtil.sendAjax("/check/WorkflowStep/add", JSON.stringify(obj.field), function(
 		data) {
 		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				cleanDefect();
+			layer.alert("操作成功", function(index) {
+				layer.close(index);
+				cleanStep();
 				// 加载页面
-				loadAll();
+				loadStep();
 			});
 		} else {
 			layer.alert(data.msg, function() {
@@ -485,11 +488,11 @@ function delDefect(obj, id, name) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除' + name + '不良类别吗？', {
+		layer.confirm('您确定要删除' + name + '流程信息吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("/base/defect/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/check/Workflow/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -500,7 +503,7 @@ function delDefect(obj, id, name) {
 									loadAll();
 								});
 							} else {
-								layer.alert(data, function() {
+								layer.alert(data.msg, function() {
 									layer.closeAll();
 								});
 							}
@@ -525,10 +528,10 @@ function delFlowStep(obj, id, name) {
 					if (isLogin(data)) {
 						if (data.result == true) {
 							// 回调弹框
-							layer.alert("删除成功！", function() {
-								layer.closeAll();
+							layer.alert("删除成功！", function(index) {
+								layer.close(index);
 								// 加载load方法
-								loadAll();
+								loadStep();
 							});
 						} else {
 							layer.alert(data, function() {
@@ -565,7 +568,12 @@ function loadAll() {
 		}
 	});
 }
-
+// 重新加载表格 步骤
+function loadStep() {
+	// 重新加载table
+	tableIns1.reload({
+	});
+}
 // 清空新增表单数据
 function cleanDefect() {
 	$('#defectForm')[0].reset();

@@ -9,5 +9,7 @@ public interface WorkflowStepDao extends CrudRepository<WorkflowStep, Long>, Jpa
 //	Integer countByDelFlagA(Integer delFlag,String bsFlowCode);
 //
 	WorkflowStep findById(long id);
+
+	Integer countByBsFlowIdAndDelFlag(Long bsFlowId,Integer delFlag);
 	
 }
