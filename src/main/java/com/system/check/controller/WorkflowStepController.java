@@ -42,7 +42,7 @@ public class WorkflowStepController extends WebController{
 	    public ApiResponseResult getList(Long mid) {
 	        String method = "check/WorkflowStep/getList";String methodName ="获取流程步骤信息列表";
 	        try {
-	            Sort sort = new Sort(Sort.Direction.DESC, "id");
+	            Sort sort = new Sort(Sort.Direction.ASC, "bsCheckGrade");
 	            ApiResponseResult result = workflowStepService.getList(mid, super.getPageRequest(sort));
 	            logger.debug("获取流程步骤信息列表=getList:");
 //	            getSysLogService().success(module,method, methodName, keyword);

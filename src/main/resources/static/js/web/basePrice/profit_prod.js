@@ -1,5 +1,5 @@
 /**
- * 物料通用价格维护管理
+ * 利润率维护管理
  */
 var pageCurr;
 $(function() {
@@ -144,6 +144,16 @@ $(function() {
 		// 切换状态操作
 		form.on('switch(isStatusTpl)', function(obj) {
 			doStatus(obj, this.value, this.name, obj.elem.checked);
+		});
+
+		//自定义验证规则
+		form.verify({
+			double: function(value){
+				if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false)
+				{
+					return '利润率只能输入数字';
+				}
+			}
 		});
 
 		// 监听工具条

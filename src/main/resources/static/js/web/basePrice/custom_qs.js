@@ -193,7 +193,7 @@ function add() {
 	cleanData();
 	// 打开弹出框
 	getTypeList("");
-	openData(null, "添加产品利润信息");
+	openData(null, "添加客户品质标准信息");
 }
 // 新增价格维护的提交
 function addSubmit(obj) {
