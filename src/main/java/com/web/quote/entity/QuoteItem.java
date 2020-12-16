@@ -67,6 +67,13 @@ public class QuoteItem extends BaseEntity{
 	protected String bsPerson;
 	
 	/**
+     * 待办人Id
+     */
+	@ApiModelProperty(name = "toDoBy", value = "待办人Id")
+    @Column(length = 30)
+    protected Long toDoBy;
+	
+	/**
      * 开始时间
      */
 	@Column
@@ -156,6 +163,14 @@ public class QuoteItem extends BaseEntity{
 
 	public void setBsCode(String bsCode) {
 		this.bsCode = bsCode;
+	}
+
+	public Long getToDoBy() {
+		return toDoBy;
+	}
+
+	public void setToDoBy(Long toDoBy) {
+		this.toDoBy = toDoBy;
 	}
 	
 	
