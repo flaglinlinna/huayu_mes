@@ -55,6 +55,7 @@
 //		} catch (Exception e) {
 //            e.printStackTrace();
 //            logger.error("获取审批初始化信息失败！", e);
+
 //            getSysLogService().error(method, methodName, e.toString());
 //			return ApiResponseResult.failure("获取审批初始化信息失败！");
 //		}
