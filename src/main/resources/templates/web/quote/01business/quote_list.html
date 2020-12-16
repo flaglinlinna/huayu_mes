@@ -5,7 +5,21 @@
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div>
-			<form id="searchFrom" class="layui-form layui-form-pane"
+		<div class="retrieval">
+			<div class="title">
+			   <h3>状态</h3> 
+			   <div class="filter">
+			    <ul>
+			     <li class="current"><a><span>全部</span></a></li>
+			     <li class=""><a onclick=""><span>进行中</span></a></li>
+			     <li class=""><a><span>已完成</span></a></li>
+			     <li class=""><a><span>已关闭</span></a></li>
+			    </ul>
+			   </div> 
+			   <span class="more" id="_search_btn"></span>
+			 </div> 
+        <div class="searchDiv" >
+        <form id="searchFrom" class="layui-form layui-form-pane"
 				lay-filter="searchFrom" method="post" action=""
 				style="margin-top: 5px; margin-left: 10px;">
 				<div class="layui-form-item" style="margin-bottom: 0px">
@@ -31,6 +45,8 @@
 					</div>
 				</div>
 			</form>
+      </div>
+    </div>
 			<table id="listTable" lay-filter="listTable"></table>
 			<script type="text/html" id="statusTpl">
             {{#  if(d.ISERROR == 0){ }}

@@ -21,6 +21,9 @@
 
     <link href="/css/login.css" th:href="@{/css/login.css}" rel="stylesheet" type="text/css" />
 
+     <link href="/css/retrieval-com.css" th:href="@{/css/retrieval-com.css}" rel="stylesheet" type="text/css" />
+
+
     <link href="/css/layui-icon-extend/iconfont.css" th:href="@{/css/layui-icon-extend/iconfont.css}" rel="stylesheet" type="text/css" />
 
     <script src="/layui/layui.js"  th:src="@{/layui/layui.js}"></script>
@@ -57,7 +60,9 @@
             index: 'lib/index' //主入口模块
         }).use(['index']);
         
-        
+        $("#_search_btn").click(function () {
+            alert('12');
+     	});
         
         function getNextDateTime(day) {
 
