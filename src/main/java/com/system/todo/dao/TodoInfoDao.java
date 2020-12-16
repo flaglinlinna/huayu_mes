@@ -1,13 +1,11 @@
 package com.system.todo.dao;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.web.basic.entity.TodoInfo;
+import com.system.todo.entity.TodoInfo;
 
 
 public interface TodoInfoDao extends CrudRepository<TodoInfo, Long>, JpaSpecificationExecutor<TodoInfo>{

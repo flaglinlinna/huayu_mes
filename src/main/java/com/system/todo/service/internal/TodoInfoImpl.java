@@ -1,27 +1,30 @@
 package com.system.todo.service.internal;
 
 
-import com.utils.SearchFilter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
+import com.system.todo.dao.TodoInfoDao;
+import com.system.todo.entity.TodoInfo;
+import com.system.todo.service.TodoInfoService;
 import com.utils.BaseService;
+import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
-import com.web.basic.dao.TodoInfoDao;
-import com.web.basic.entity.TodoInfo;
-import com.web.basic.service.TodoInfoService;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
