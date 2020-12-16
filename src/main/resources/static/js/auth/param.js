@@ -4,6 +4,7 @@
 var pageCurr;
 var pageCurr1;
 var mid;
+var index2;
 $(function() {
 	layui.use([ 'form', 'table' ], function() {
 		var table = layui.table, form = layui.form;
@@ -288,7 +289,7 @@ function openSysParamSub(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	var index=layer.open({
+	index2=layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -300,7 +301,7 @@ function openSysParamSub(id, title) {
 			cleanSysParamSub();
 		}
 	});
-	layer.full(index);
+	layer.full(index2);
 }
 
 //新增编辑子参数弹出框
@@ -337,7 +338,7 @@ function changeButton(type) {
 		$('#subButton').prop("disabled", "disabled");
 		$('#subButton').addClass("layui-btn-disabled");
 	}else {
-		$('#subButton').attr("disabled");
+		$('#subButton').attr("disabled",false);
 		$('#subButton').removeClass("layui-btn-disabled");
 	}
 }
@@ -395,12 +396,11 @@ function addSubSubmit(obj) {
 	CoreUtil.sendAjax("/sysParamSub/add", JSON.stringify(obj.field), function(
 		data) {
 		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				cleanSysParam();
+			layer.close(layer.index);
+			layer.alert("操作成功");
 				// 加载页面
-				loadAll();
-			});
+			loadSub();
+
 		} else {
 			layer.alert(data.msg, function(index) {
 				layer.close(index);
@@ -416,12 +416,10 @@ function editSubSubmit(obj) {
 	CoreUtil.sendAjax("/sysParamSub/edit", JSON.stringify(obj.field), function(
 		data) {
 		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				cleanSysParam();
-				// 加载页面
-				loadAll();
-			});
+			layer.close(layer.index);
+			layer.alert("操作成功");
+			// 加载页面
+			loadSub();
 		} else {
 			layer.alert(data.msg, function(index) {
 				layer.close(index);

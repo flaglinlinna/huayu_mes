@@ -49,36 +49,36 @@ $(function() {
 					{
 						field : 'ITEM_BARCODE',
 						title : '箱内条码',
-						width : 130,sort: true
+						width : 180,sort: true
 					},{
 						field : 'ITEM_BARCODE',
 						title : '箱外条码',
-						width : 130,sort: true
+						width : 180,sort: true
 					}, {
 						field : 'TYPE',
 						title : '类型',
-						width : 90,sort: true
+						width : 90,
 					}, {
 						field : 'QUANTITY',
 						title : '数量',
-						width : 90,sort: true
+						width : 80,sort: true
 					},{
 						field : 'TASK_NO',
 						title : '制令单号',
-							width : 250,
+							width : 150,
 							sort: true
 					},{
 						field : 'ITEM_NO',
 						title : '物料编号',
-						width : 130,sort: true
+						width : 160,sort: true
 					},{
 						field : 'CREATE_BY',
 						title : '操作人',sort: true,
-						width : 100
+						width : 80
 					},{
 						field : 'CREATE_DATE',
 						title : '操作时间',
-						width : 120,sort: true
+						width : 145,sort: true
 					}] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;
