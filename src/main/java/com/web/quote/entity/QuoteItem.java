@@ -1,16 +1,21 @@
 package com.web.quote.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import com.app.base.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -51,29 +56,34 @@ public class QuoteItem extends BaseEntity{
 	 * 报价项目名
 	 */
 	@ApiModelProperty(name = "bsName", value = "报价项目名")
-	@Column(length = 50)
+	@Column(length = 150)
 	protected String bsName;
 	
 	/**
 	 * 待办人
 	 */
 	@ApiModelProperty(name = "bsPerson", value = "待办人")
-	@Column(length = 50)
+	@Column(length = 100)
 	protected String bsPerson;
 	
 	/**
-	 * 开始时间
-	 */
-	@ApiModelProperty(name = "bsBegTime", value = "开始时间")
-	@Column(length = 50)
-	protected String bsBegTime;
+     * 开始时间
+     */
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="bsBegTime",value="开始时间")
+	protected Date bsBegTime;
+	
 	
 	/**
 	 * 结束时间
-	 */
-	@ApiModelProperty(name = "bsEndTime", value = "结束时间")
-	@Column(length = 50)
-	protected String bsEndTime;
+	 */	
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="bsEndTime",value="结束时间")
+	protected Date bsEndTime;
 	
 	/**
 	 * 项目进度状态（0未开始、1未完成、2已完成）
@@ -116,19 +126,19 @@ public class QuoteItem extends BaseEntity{
 		this.bsPerson = bsPerson;
 	}
 
-	public String getBsBegTime() {
+	public Date getBsBegTime() {
 		return bsBegTime;
 	}
 
-	public void setBsBegTime(String bsBegTime) {
+	public void setBsBegTime(Date bsBegTime) {
 		this.bsBegTime = bsBegTime;
 	}
 
-	public String getBsEndTime() {
+	public Date getBsEndTime() {
 		return bsEndTime;
 	}
 
-	public void setBsEndTime(String bsEndTime) {
+	public void setBsEndTime(Date bsEndTime) {
 		this.bsEndTime = bsEndTime;
 	}
 

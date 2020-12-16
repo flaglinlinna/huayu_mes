@@ -1,12 +1,17 @@
 package com.web.quote.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicUpdate;
 import com.app.base.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,63 +43,65 @@ public class Quote extends BaseEntity {
 	 * 报价单编号
 	 */
 	@ApiModelProperty(name = "bsCode", value = "报价单编号")
-	@Column(length = 50)
+	@Column(length = 100)
 	protected String bsCode;
 	
 	/**
 	 * 报价类型
 	 */
 	@ApiModelProperty(name = "bsType", value = "报价类型")
-	@Column(length = 50)
+	@Column(length = 100)
 	protected String bsType;
 	
 	/**
 	 * 完成日期
 	 */
-	@ApiModelProperty(name = "bsFinishTime", value = "完成日期")
-	@Column(length = 50)
-	protected String bsFinishTime;
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+	@ApiModelProperty(name="bsFinishTime",value="完成日期")
+	protected Date bsFinishTime;
 	
 	/**
 	 * 项目编号
 	 */
 	@ApiModelProperty(name = "bsProject", value = "项目编号")
-	@Column(length = 50)
+	@Column(length = 150)
 	protected String bsProject;
 	
 	/**
 	 * 项目版本
 	 */
 	@ApiModelProperty(name = "bsProjVer", value = "项目版本")
-	@Column(length = 50)
+	@Column(length = 100)
 	protected String bsProjVer;
 	
 	/**
 	 * 报价备注
 	 */
 	@ApiModelProperty(name = "bsRemarks", value = "报价备注")
-	@Column(length = 200)
+	@Column(length = 300)
 	protected String bsRemarks;
 	
 	/**
 	 * 产品型号
 	 */
 	@ApiModelProperty(name = "bsProd", value = "产品型号")
-	@Column(length = 50)
+	@Column(length = 150)
 	protected String bsProd;
 	
 	/**
 	 * 相似产品
 	 */
 	@ApiModelProperty(name = "bsSimilarProd", value = "相似产品")
-	@Column(length = 50)
+	@Column(length = 150)
 	protected String bsSimilarProd;
 	
 	/**
 	 * 机种型号
 	 */
 	@ApiModelProperty(name = "bsDevType", value = "机种型号")
-	@Column(length = 50)
+	@Column(length = 100)
 	protected String bsDevType;
 	
 	/**
@@ -108,35 +115,35 @@ public class Quote extends BaseEntity {
 	 * 客户名称
 	 */
 	@ApiModelProperty(name = "bsCustName", value = "客户名称")
-	@Column(length = 50)
+	@Column(length = 150)
 	protected String bsCustName;
 	
 	/**
 	 * 市场定位
 	 */
 	@ApiModelProperty(name = "bsPosition", value = "市场定位")
-	@Column(length = 50)
+	@Column(length = 100)
 	protected String bsPosition;
 	
 	/**
 	 * 客户提供资料
 	 */
 	@ApiModelProperty(name = "bsMaterial", value = "客户提供资料")
-	@Column(length = 100)
+	@Column(length = 200)
 	protected String bsMaterial;
 	
 	/**
 	 * 外观检验
 	 */
 	@ApiModelProperty(name = "bsChkOut", value = "外观检验")
-	@Column(length = 100)
+	@Column(length = 200)
 	protected String bsChkOut;
 	
 	/**
 	 * 功能性能
 	 */
 	@ApiModelProperty(name = "bsFunction", value = "功能性能")
-	@Column(length = 100)
+	@Column(length = 200)
 	protected String bsFunction;
 	
 	/**
@@ -164,22 +171,25 @@ public class Quote extends BaseEntity {
 	 * 业务承办人
 	 */
 	@ApiModelProperty(name = "bsUndertaker", value = "业务承办人")
-	@Column(length = 50)
+	@Column(length = 100)
 	protected String bsUndertaker;
 	
 	/**
 	 * 核准人
 	 */
 	@ApiModelProperty(name = "bsApproved", value = "核准人")
-	@Column(length = 50)
+	@Column(length = 100)
 	protected String bsApproved;
 	
 	/**
-	 * 核准时间
-	 */
-	@ApiModelProperty(name = "bsApprovalTime", value = "核准时间")
-	@Column(length = 50)
-	protected String bsApprovalTime;
+     * 核准时间
+     */
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="bsApprovalTime",value="核准时间")
+	protected Date bsApprovalTime;
+	
 
 	public String getBsCode() {
 		return bsCode;
@@ -197,11 +207,19 @@ public class Quote extends BaseEntity {
 		this.bsType = bsType;
 	}
 
-	public String getBsFinishTime() {
+	public int getBsStatus() {
+		return bsStatus;
+	}
+
+	public void setBsStatus(int bsStatus) {
+		this.bsStatus = bsStatus;
+	}
+
+	public Date getBsFinishTime() {
 		return bsFinishTime;
 	}
 
-	public void setBsFinishTime(String bsFinishTime) {
+	public void setBsFinishTime(Date bsFinishTime) {
 		this.bsFinishTime = bsFinishTime;
 	}
 
@@ -341,11 +359,11 @@ public class Quote extends BaseEntity {
 		this.bsApproved = bsApproved;
 	}
 
-	public String getBsApprovalTime() {
+	public Date getBsApprovalTime() {
 		return bsApprovalTime;
 	}
 
-	public void setBsApprovalTime(String bsApprovalTime) {
+	public void setBsApprovalTime(Date bsApprovalTime) {
 		this.bsApprovalTime = bsApprovalTime;
 	}
 }
