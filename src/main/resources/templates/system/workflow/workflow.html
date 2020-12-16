@@ -34,7 +34,7 @@
         <table id="workflowList" lay-filter="workflowTable"></table>
 
         <script type="text/html" id="statusTpl">
-            {{#  if(d.bsFlowStatus){ }}
+            {{#  if(d.bsFlowStatus==1){ }}
             <input type="checkbox" name="{{d.bsFlowName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
             <input type="checkbox" name="{{d.bsFlowName}}" value="{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="isStatusTpl"/>
