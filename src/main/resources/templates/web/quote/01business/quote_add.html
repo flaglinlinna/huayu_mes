@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='新增报价单'"></head>
+<head th:include="layout :: htmlhead" th:with="title='鏂板鎶ヤ环鍗�'"></head>
 <style th:inline="text">
 .layui-form-label {
 	text-align: right;
@@ -33,29 +33,29 @@ color:#FF3366;
 		<div style="margin: 10px">
 			<form id="itemForm" class="layui-form layui-form-pane"
 				lay-filter="itemForm" method="post" action="">
-				<h3 style="text-align:center;">华誉精密产品报价需求单</h3>
+				<h3 style="text-align:center;">鍗庤獕绮惧瘑浜у搧鎶ヤ环闇�姹傚崟</h3>
 				<fieldset class="layui-elem-field layui-field-title">
-					<legend class="legend-font" style="font-size: 14px;">报价基础信息</legend>
+					<legend class="legend-font" style="font-size: 14px;">鎶ヤ环鍩虹淇℃伅</legend>
 				</fieldset>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-required">报价类型</label>
+						<label class="layui-form-label layui-required">鎶ヤ环绫诲瀷</label>
 						<div class="layui-input-inline">
 							<select id="bsType" lay-verify="required" name="bsType"
 								autocomplete="off" class="layui-select" lay-search>
-								<option value="">请选择</option>
-								<option value="1">类型1</option>
-								<option value="2">类型2</option>
-								<option value="3">类型3</option>
-								<option value="4">类型4</option>
+								<option value="">璇烽�夋嫨</option>
+								<option value="1">绫诲瀷1</option>
+								<option value="2">绫诲瀷2</option>
+								<option value="3">绫诲瀷3</option>
+								<option value="4">绫诲瀷4</option>
 							</select>
 						</div>
-						<label class="layui-form-label layui-required">完成日期</label>
+						<label class="layui-form-label layui-required">瀹屾垚鏃ユ湡</label>
 						<div class="layui-input-inline" style="width: 130px;">
 							<input id="bsFinishTime" lay-verify="required" name="bsFinishTime"
 								autocomplete="off" class="layui-input" type="text" />
 						</div>
-						<label class="layui-form-label">报价备注</label>
+						<label class="layui-form-label">鎶ヤ环澶囨敞</label>
 						<div class="layui-input-inline" style="width: 360px;">
 							<input id="bsRemarks" autocomplete="off" name="bsRemarks"
 								class="layui-input" type="text" />
@@ -64,17 +64,17 @@ color:#FF3366;
 				</div>
 				<hr style="margin-top:10px;margin-bottom:10px;">
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">产品型号</label>
+					<label class="layui-form-label layui-required">浜у搧鍨嬪彿</label>
 					<div class="layui-input-inline">
 						<input id="bsProd" autocomplete="off" name="bsProd"
 						lay-verify="required" class="layui-input" type="text" />
 					</div>
-					<label class="layui-form-label">相似产品</label>
+					<label class="layui-form-label">鐩镐技浜у搧</label>
 					<div class="layui-input-inline" style="width: 130px;">
 						<input id="bsSimilarProd" autocomplete="off" name="bsSimilarProd"
 							class="layui-input" type="text" />
 					</div>
-					<label class="layui-form-label layui-required">产品类型</label>
+					<label class="layui-form-label layui-required">浜у搧绫诲瀷</label>
 					<div class="layui-input-inline" style="width: 200px;">
 						<select id="pkProfitProd" lay-verify="required"  autocomplete="off"
 						name="pkProfitProd" class="layui-select" lay-search>
@@ -83,50 +83,50 @@ color:#FF3366;
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-required">客户名称</label>
+						<label class="layui-form-label layui-required">瀹㈡埛鍚嶇О</label>
 						<div class="layui-input-inline" style="width: 310px;">
 							<input id="bsCustName" lay-verify="required" autocomplete="off"
 								name="bsCustName" class="layui-input" type="text" />
 						</div>
-						<label class="layui-form-label">市场定位</label>
+						<label class="layui-form-label">甯傚満瀹氫綅</label>
 						<div class="layui-input-inline" style="width: 350px;">
 							<input type="radio" name="bsPosition" lay-filter="bsPosition"
-								value="高端" title="高端" checked> <input type="radio"
-								name="bsPosition" lay-filter="bsPosition" value="一般" title="一般">
+								value="楂樼" title="楂樼" checked> <input type="radio"
+								name="bsPosition" lay-filter="bsPosition" value="涓�鑸�" title="涓�鑸�">
 							<input type="radio" name="bsPosition" lay-filter="bsPosition"
-								value="低端" title="低端">
+								value="浣庣" title="浣庣">
 						</div>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-required">客户提供资料</label>
+						<label class="layui-form-label layui-required">瀹㈡埛鎻愪緵璧勬枡</label>
 						<div class="layui-input-inline" style="width: 550px;">
-							<input type="checkbox" name="bsMaterial" title="ID图" value="ID图"
+							<input type="checkbox" name="bsMaterial" title="ID鍥�" value="ID鍥�"
 								lay-skin="primary"> 
 								<input type="checkbox" 
 								name="bsMaterial" title="sample"  value="sample" lay-skin="primary"> 
 								<input
-								type="checkbox" name="bsMaterial" title="产品规格书" value="产品规格书"
+								type="checkbox" name="bsMaterial" title="浜у搧瑙勬牸涔�" value="浜у搧瑙勬牸涔�"
 								lay-skin="primary"> 
-								<input type="checkbox" name="bsMaterial" title="BOM清单" value="BOM清单" lay-skin="primary">
-								 <input type="checkbox" name="bsMaterial" title="3D图" value="3D图"  lay-skin="primary">
+								<input type="checkbox" name="bsMaterial" title="BOM娓呭崟" value="BOM娓呭崟" lay-skin="primary">
+								 <input type="checkbox" name="bsMaterial" title="3D鍥�" value="3D鍥�"  lay-skin="primary">
 						</div>
 					</div>
 				</div>
 
 				<fieldset class="layui-elem-field layui-field-title">
-					<legend class="legend-font" style="font-size: 14px;">品质检验要求</legend>
+					<legend class="legend-font" style="font-size: 14px;">鍝佽川妫�楠岃姹�</legend>
 				</fieldset>
 
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-required">1.外观检验</label>
+						<label class="layui-form-label layui-required">1.澶栬妫�楠�</label>
 						<div class="layui-input-inline" style="width: 340px;">		
 							<input type="checkbox" name="bsChkOutItem" lay-filter="bsChkOutItem"
-								value="按我司成品标准" title="按我司成品标准" lay-skin="primary"> 
-								<input type="checkbox"name="bsChkOutItem" lay-filter="bsChkOutItem" value="按客户规格书标准" lay-skin="primary"
-								title="按客户规格书标准">
+								value="鎸夋垜鍙告垚鍝佹爣鍑�" title="鎸夋垜鍙告垚鍝佹爣鍑�" lay-skin="primary"> 
+								<input type="checkbox"name="bsChkOutItem" lay-filter="bsChkOutItem" value="鎸夊鎴疯鏍间功鏍囧噯" lay-skin="primary"
+								title="鎸夊鎴疯鏍间功鏍囧噯">
 						</div>
 						<div class="layui-input-inline" style="width: 310px;">
 							<input id="bsChkOut" name="bsChkOut" autocomplete="off"
@@ -136,12 +136,12 @@ color:#FF3366;
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-required">2.性能要求</label>
+						<label class="layui-form-label layui-required">2.鎬ц兘瑕佹眰</label>
 						<div class="layui-input-inline" style="width: 340px;">
 							<input type="checkbox" name="bsFunctionItem" lay-skin="primary"
-								lay-filter="bsFunctionItem" value="按我司成品标准" title="按我司成品标准">
+								lay-filter="bsFunctionItem" value="鎸夋垜鍙告垚鍝佹爣鍑�" title="鎸夋垜鍙告垚鍝佹爣鍑�">
 							<input type="checkbox" name="bsFunctionItem" lay-skin="primary"
-								lay-filter="bsFunctionItem" value="按客户规格书标准" title="按客户规格书标准">
+								lay-filter="bsFunctionItem" value="鎸夊鎴疯鏍间功鏍囧噯" title="鎸夊鎴疯鏍间功鏍囧噯">
 						</div>
 						<div class="layui-input-inline" style="width: 310px;">
 							<input id="bsFunction" name="bsFunction" autocomplete="off"
@@ -151,7 +151,7 @@ color:#FF3366;
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-required">3.环保要求</label>
+						<label class="layui-form-label layui-required">3.鐜繚瑕佹眰</label>
 						<div class="layui-input-inline" style="width: 730px;">
 							<input type="checkbox" name="bsRequire" title="RoHS"
 								lay-skin="primary"> <input type="checkbox"
@@ -162,31 +162,31 @@ color:#FF3366;
 								type="checkbox" name="bsRequire" title="3BPA"
 								lay-skin="primary"> <input type="checkbox"
 								name="bsRequire" title="HFS" lay-skin="primary"> <input
-								type="checkbox" name="bsRequire" title="无卤" lay-skin="primary">
-							<input type="checkbox" name="bsRequire" title="其他"
+								type="checkbox" name="bsRequire" title="鏃犲崵" lay-skin="primary">
+							<input type="checkbox" name="bsRequire" title="鍏朵粬"
 								lay-skin="primary">
 						</div>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-required">4.防水防尘等级</label>
+						<label class="layui-form-label layui-required">4.闃叉按闃插皹绛夌骇</label>
 						<div class="layui-input-inline">
 							<select id="bsLevel" lay-filter="bsLevel" name="bsLevel"
 								autocomplete="off" class="layui-select" lay-search>
-								<option value="不涉及">不涉及</option>
-								<option value="涉及">涉及</option>
+								<option value="涓嶆秹鍙�">涓嶆秹鍙�</option>
+								<option value="娑夊強">娑夊強</option>
 							</select>
 						</div>
 					</div>
 				</div>
 				<fieldset class="layui-elem-field layui-field-title">
-					<legend class="legend-font" style="font-size: 14px;">客户其他要求</legend>
+					<legend class="legend-font" style="font-size: 14px;">瀹㈡埛鍏朵粬瑕佹眰</legend>
 				</fieldset>
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<div class="layui-input-inline" style="width: 700px;">
-							<textarea id="bsCustRequire" name="bsCustRequire" placeholder="请输入内容"
+							<textarea id="bsCustRequire" name="bsCustRequire" placeholder="璇疯緭鍏ュ唴瀹�"
 								class="layui-textarea"></textarea>
 						</div>
 					</div>
@@ -197,7 +197,7 @@ color:#FF3366;
 					<div class="layui-inline">
 						<button type="button"
 							class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
-							lay-filter="saveData">下一步</button>
+							lay-filter="saveData">涓嬩竴姝�</button>
 					</div>
 				</div>
 			</form>

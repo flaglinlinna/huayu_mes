@@ -48,18 +48,10 @@
       </div>
     </div>
 			<table id="listTable" lay-filter="listTable"></table>
-			<script type="text/html" id="statusTpl">
-            {{#  if(d.ISERROR == 0){ }}
-            <span style="color: green;">正常</span>
-            {{#  } else if(d.ISERROR == 1) { }}
-            <span style="color: red;">异常</span>
-            {{#  } else { }}
-            <span></span>
-            {{#  } }}
-        </script>
+
 		</div>
-		<script th:src="@{/js/web/report/differ.js}"
-			src="/js/web/report/differ.js"></script>
+		<script th:src="@{/js/web/quote/01business/quote_list.js}"
+			src="/js/web/quote/01business/quote_list.js"></script>
 	</div>
 </body>
 </html>
