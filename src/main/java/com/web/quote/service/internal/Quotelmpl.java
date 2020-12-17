@@ -25,6 +25,7 @@ import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.ProfitProdDao;
 import com.web.basePrice.entity.ProfitProd;
 import com.web.basic.entity.Client;
+import com.web.basic.entity.Defective;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemBaseDao;
 import com.web.quote.dao.QuoteItemDao;
@@ -99,6 +100,7 @@ public class Quotelmpl implements QuoteService {
     /**
      * 获取产品利润率维护表
      * **/
+    
     public ApiResponseResult getProfitProd()throws Exception{
     	List<ProfitProd> list=profitProdDao.findByDelFlag(0);
     	return ApiResponseResult.success().data(list);
@@ -107,6 +109,8 @@ public class Quotelmpl implements QuoteService {
     /**
      * 获取报价单列表
      * **/
+    @Override
+    @Transactional
     public ApiResponseResult getList(String keyword,PageRequest pageRequest)throws Exception{
     	// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
@@ -125,9 +129,87 @@ public class Quotelmpl implements QuoteService {
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
-    
+    /**
+     * 获取报价单-项目列表
+     * **/
+    @Override
+    @Transactional
     public ApiResponseResult getItemPage(Long id)throws Exception{
     	List<QuoteItem> list=quoteItemDao.findByDelFlagAndPkQuote(0,id);
     	return ApiResponseResult.success().data(list);
+    }
+    
+    /**
+     * 变更报价单状态
+     * **/
+    @Override
+    @Transactional
+    public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception{
+    	if(id == null){
+            return ApiResponseResult.failure("报价单ID不能为空！");
+        }
+        if(bsStatus == null){
+            return ApiResponseResult.failure("请正确设置报价单状态！");
+        }
+        Quote o = quoteDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("该报价单不存在！");
+        }
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setBsStatus(bsStatus);
+        quoteDao.save(o);
+        return ApiResponseResult.success("设置报价单状态成功！").data(o);
+    }
+    
+    /**
+     * 编辑报价单
+     * **/
+    @Override
+    @Transactional
+    public ApiResponseResult edit(Quote quote)throws Exception{
+    	if(quote == null){
+            return ApiResponseResult.failure("报价单不能为空！");
+        }
+        if(quote.getId() == null){
+            return ApiResponseResult.failure("报价单ID不能为空！");
+        }
+        Quote o = quoteDao.findById((long) quote.getId());
+        if(o == null){
+            return ApiResponseResult.failure("该报价单不存在！");
+        }
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setBsType(quote.getBsType());
+        o.setBsFinishTime(quote.getBsFinishTime());
+        o.setBsRemarks(quote.getBsRemarks());
+        o.setBsSimilarProd(quote.getBsSimilarProd());
+        o.setPkProfitProd(quote.getPkProfitProd());
+        o.setBsCustName(quote.getBsCustName());
+        o.setBsPosition(quote.getBsPosition());
+        o.setBsMaterial(quote.getBsMaterial());
+        o.setBsChkOutItem(quote.getBsChkOutItem());
+        o.setBsChkOut(quote.getBsChkOut());
+        o.setBsFunctionItem(quote.getBsFunctionItem());
+        o.setBsFunction(quote.getBsFunction());
+        o.setBsRequire(quote.getBsRequire());
+        o.setBsLevel(quote.getBsLevel());
+        o.setBsCustRequire(quote.getBsCustRequire());
+        quoteDao.save(o);
+        return ApiResponseResult.success("编辑成功！");
+    }
+    
+    /**
+     * 获取单张报价单
+     * **/
+    public ApiResponseResult getSingle(Long id)throws Exception{
+    	if(id == null){
+            return ApiResponseResult.failure("报价单ID不能为空！");
+        }
+        Quote o = quoteDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("该报价单不存在！");
+        }
+        return ApiResponseResult.success().data(o);
     }
 }

@@ -1,5 +1,7 @@
 package com.web.quote.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -59,6 +61,21 @@ public class QuoteController extends WebController {
 		return "/web/quote/01business/quote_list";
 	}
 	
+	@ApiOperation(value = "报价信息项目列表页", notes = "报价信息项目列表页", hidden = true)
+	@RequestMapping(value = "/toQuoteItem")
+	public ModelAndView toQuoteItem(Long id) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			ApiResponseResult info = quoteService.getSingle((long) 5055);//5053\5054\5055
+			mav.addObject("info", info);
+			mav.setViewName("/web/quote/01business/quote_items");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价信息项目列表页数据失败！", e);
+		}
+		return mav;
+	}
+	
 	@ApiOperation(value = "报价项目-Bom", notes = "报价项目-Bom", hidden = true)
 	@RequestMapping(value = "/toQuoteBom")
 	public ModelAndView toQuoteBom(String quoteId) {
@@ -108,6 +125,63 @@ public class QuoteController extends WebController {
             logger.error("获取报价单列表失败！", e);
             getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
             return ApiResponseResult.failure("获取报价单列表失败！");
+        }
+    }
+	
+	@ApiOperation(value = "获取报价单-项目列表", notes = "获取报价单-项目列表",hidden = true)
+    @RequestMapping(value = "/getItemPage", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getItemPage(Long id) {
+        String method = "quote/getItemPage";String methodName ="获取报价单-项目列表";
+        try {
+            ApiResponseResult result = quoteService.getItemPage((long) 5053);
+            logger.debug("获取报价单-项目列表=getItemPage:");
+            getSysLogService().success(module,method, methodName, id);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取报价单-项目列表失败！", e);
+            getSysLogService().error(module,method, methodName, id+e.toString());
+            return ApiResponseResult.failure("获取报价单-项目列表失败！");
+        }
+    }
+	
+	@ApiOperation(value = "编辑报价单", notes = "编辑报价单", hidden = true)
+	@RequestMapping(value = "/eidt", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult eidt(@RequestBody Quote quote) {
+		String method = "quote/eidt";
+		String methodName = "编辑报价单";
+		try {
+			ApiResponseResult result = quoteService.edit(quote);
+			logger.debug("编辑报价单=eidt:");
+			getSysLogService().success(module, method, methodName, quote.toString());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("报价单编辑失败！", e);
+			getSysLogService().error(module, method, methodName, quote.toString() + "," + e.toString());
+			return ApiResponseResult.failure("报价单编辑失败！");
+		}
+	}
+	
+	@ApiOperation(value = "设置报价单状态", notes = "设置报价单状态", hidden = true)
+    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "quote/doStatus";String methodName ="设置报价单状态";
+        try{
+        	long id = Long.parseLong(params.get("id").toString()) ;
+        	Integer bsStatus=Integer.parseInt(params.get("bsStatus").toString());
+            ApiResponseResult result = quoteService.doStatus(id, bsStatus);
+            logger.debug("设置报价单状态=doStatus:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("设置报价单状态失败！", e);
+            getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+            return ApiResponseResult.failure("设置报价单状态失败！");
         }
     }
 }
