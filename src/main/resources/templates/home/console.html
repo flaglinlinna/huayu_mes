@@ -71,7 +71,7 @@
 	          
           </div>
          <script type="text/html" id="optBar">
-             <a class="layui-btn layui-btn-xs" lay-event="edit" title-data="{{d.bsTitle}}" onclick="set_show({{d.id}},'{{d.bsRouter}}',this)">点击处理</a>
+             <a class="layui-btn layui-btn-xs" lay-event="edit"  onclick="set_show('{{d.bsModel}}','{{d.bsRouter}}',this)">点击处理</a>
              <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">关闭待办</a>
          </script>
 <!--   <script src="../../layuiadmin/layui/layui.js?t=1"></script>  
@@ -158,11 +158,8 @@
 				}); */
 		
 	});
-  function set_show(id,url,t){
-	  parent.layui.index.openTabsPage(context+url,'test');
-		/* var Urlss = '{:U("'+context+url+'")}&mer_id='+id;
-		//var Urlss = '{:U("'+context+url+'")}';
-		parent.layui.index.openTabsPage(Urlss, $(t).attr("title-data")); */
+  function set_show(title,url,t){
+	  parent.layui.index.openTabsPage(context+url,title);
 	}
   
   </script>

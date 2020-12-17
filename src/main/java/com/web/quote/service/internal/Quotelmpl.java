@@ -111,8 +111,9 @@ public class Quotelmpl implements QuoteService {
     		todoInfo.setBsUserId(qb.getToDoBy());
     		todoInfo.setBsTitle("新增报价-"+qb.getBsName()+"的资料待录入");
     		todoInfo.setBsContent(quote.getBsCode()+"-"+quote.getBsCustName()+ "的报价单");
-    		todoInfo.setBsRouter("/quote/toQuoteAdd?id="+quote.getId());
+    		todoInfo.setBsRouter(qb.getBsRouter()+quote.getId());
     		todoInfo.setBsReferId(quote.getId()); //关联ID
+    		todoInfo.setBsModel(qb.getBsName());
 
     		todoInfoService.add(todoInfo);
     	}
