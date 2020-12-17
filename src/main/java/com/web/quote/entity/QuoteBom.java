@@ -68,7 +68,7 @@ public class QuoteBom extends BaseEntity {
     
     @ApiModelProperty(name="itp",hidden=true,value="物料类型")
     @ManyToOne
-    @JoinColumn(name = "pkBjWorkCenter", insertable = false, updatable = false)
+    @JoinColumn(name = "pkItemTypeWg", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     protected ItemTypeWg itp;
     /**
@@ -90,6 +90,13 @@ public class QuoteBom extends BaseEntity {
 	@ApiModelProperty(name = "bsItemCode", value = "物料编码")
 	@Column(length = 50)
 	protected String bsItemCode;
+
+	/**
+	 * 组件名称
+	 */
+	@ApiModelProperty(name = "bsElement", value = "组件名称")
+	@Column(length = 150)
+	protected String bsElement;
 	
 	/**
 	 * 零件名称
@@ -110,7 +117,7 @@ public class QuoteBom extends BaseEntity {
 	 * 材料规格
 	 */
 	@ApiModelProperty(name = "bsModel", value = "材料规格")
-	@Column(length = 50)
+	@Column(length = 200)
 	protected String bsModel;
 
 	/**
@@ -140,6 +147,14 @@ public class QuoteBom extends BaseEntity {
 	@ApiModelProperty(name = "bsSupplier", value = "供应商")
 	@Column(length = 50)
 	protected String bsSupplier;
+
+	public String getBsElement() {
+		return bsElement;
+	}
+
+	public void setBsElement(String bsElement) {
+		this.bsElement = bsElement;
+	}
 
 	public Long getPkQuote() {
 		return pkQuote;

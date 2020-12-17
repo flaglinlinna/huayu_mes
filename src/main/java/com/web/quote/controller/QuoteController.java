@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
@@ -184,4 +185,59 @@ public class QuoteController extends WebController {
             return ApiResponseResult.failure("设置报价单状态失败！");
         }
     }
+
+	@ApiOperation(value = "获取报价BOM清单列表", notes = "获取报价BOM清单列表",hidden = true)
+	@RequestMapping(value = "/getQuoteBomList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getQuoteBomList(String keyword,Long pkQuote) {
+		String method = "quote/getQuoteBomList";String methodName ="获取报价BOM清单列表";
+		try {
+			Sort sort = new Sort(Sort.Direction.ASC, "id");
+			ApiResponseResult result = quoteService.getQuoteBomList(keyword,pkQuote, super.getPageRequest(sort));
+			logger.debug("获取报价BOM清单列表=getList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价BOM清单列表失败！", e);
+			getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
+			return ApiResponseResult.failure("获取报价BOM清单列表失败！");
+		}
+	}
+
+	@ApiOperation(value="导入模板", notes="导入模板", hidden = true)
+	@RequestMapping(value = "/QuoteBom/importExcel", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getExcel(MultipartFile[] file, Long pkQuote ) {
+		String method = "/QuoteBom/importExcel";String methodName ="导入模板";
+		try {
+			logger.debug("导入模板=importExcel:");
+			getSysLogService().success(module,method, methodName, "");
+			return quoteService.doQuoteBomExcel(file,pkQuote);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("导入模板失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return null;
+		}
+	}
+
+	@ApiOperation(value = "删除外购件信息", notes = "删除外购件信息", hidden = true)
+	@RequestMapping(value = "/deleteQuoteBom", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult delete(@RequestBody Map<String, Object> params) {
+		String method = "quote/deleteQuoteBom";
+		String methodName = "删除外购件信息";
+		try {
+			long id = Long.parseLong(params.get("id").toString());
+			ApiResponseResult result = quoteService.deleteQuoteBom(id);
+			logger.debug("删除外购件信息=delete:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("删除外购件信息失败！", e);
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			return ApiResponseResult.failure("删除外购件信息失败！");
+		}
+	}
 }
