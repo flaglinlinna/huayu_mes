@@ -66,8 +66,8 @@ public class QuoteController extends WebController {
 	public ModelAndView toQuoteItem(Long id) {
 		ModelAndView mav = new ModelAndView();
 		try {
-			ApiResponseResult info = quoteService.getSingle((long) 5055);//5053\5054\5055
-			mav.addObject("info", info);
+			ApiResponseResult ItemList = quoteService.getItemPage((long) 5055);//5053\5054\5055
+			mav.addObject("ItemList", ItemList);
 			mav.setViewName("/web/quote/01business/quote_items");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

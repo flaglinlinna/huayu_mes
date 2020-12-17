@@ -8,86 +8,54 @@ $(function() {
 		laydate = layui.laydate, table = layui.table;
 						// 按钮监听事件
 		setData();
-		tableIns = table.render({
-			elem : '#listTable',
-			url : context + '/quote/getItemPage',
-			method : 'get' // 默认：get请求
-			//, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-			,cellMinWidth : 80,
-			height:'full-200',//固定表头&full-查询框高度
-			//	,even:true,//条纹样式
-			data : [],
-			// height: 'full',
-			page : true,
-			request : {
-				pageName : 'page' // 页码的参数名称，默认：page
-				,
-				limitName : 'rows' // 每页数据量的参数名，默认：limit
-			},
-			parseData : function(res) {
-				if(!res.result){
-					return {
-						"count" : 0,
-						"msg" : res.msg,
-						"data" : [],
-						"code" : res.status
-					} 
-				}
-				// 可进行数据操作
-				return {
-					"count" : res.count,
-					"msg" : res.msg,
-					"data" : res.data,
-					"code" : res.status
-				}
-			},
-			cols : [ [ {
-				type : 'numbers'
-			},
-			 {
-				field : 'bsStatus',
-				title : '状态',width : 120,
-				templet:function (d) {
-					if(d.bsStatus="0"){
-						return "未开始"
-					}else if(d.bsStatus="1"){
-						return "未完成"
-					}else if(d.bsStatus="2"){
-						return "已完成"
-					}
-				}
-			}, {
-				field : 'bsCode',
-				title : '项目编号', width : 100
-			},
-			 {
-				field : 'bsName',
-				title : '项目名称'
-			}
-			, {
-				field : 'bsPerson',
-				title : '待办人',width : 150
-			},{
-					fixed : 'right',
-					title : '操作',
-					align : 'center',
-					toolbar : '#optBar',
-					width : 120
-				}
-			] ],
-			done : function(res, curr, count) {
-				//
-				pageCurr = curr;
-			}
-		});			
+		setTable();
+		form.on('submit(saveData)',function() {
+			saveData()
+		});
 	});
 });
 
+function saveDate(){}
+
 function setData(){
-	console.log(info)
-	var data_info=info.data;
+	var data_info=ItemList.data[0].quote;
+	var create=checkNull(data_info.createDate)
 	$("#header1").text("报价单号："+data_info.bsCode)
 	$("#header2").text("报价类型："+data_info.bsType)
 	$("#header3").text("产品型号："+data_info.bsProd)
-	$("#header4").text("创建时间："+data_info.createDate)
+	$("#header4").text("创建时间："+create)
+}
+function setTable(){
+	var list = ItemList.data;
+	console.log(list)
+	var html = "";
+	for (var j = 0; j < list.length; j++) {
+		var arr = list[j];
+		var status=""
+		var status_color1="blue"//状态颜色
+		var	status_color2 ="bgblue"
+		if(arr.bsStatus="0"){
+			status= "未开始"
+		}else if(arr.bsStatus="1"){
+			status= "未完成"
+		}else if(arr.bsStatus="2"){
+			status= "已完成"
+			status_color1="green"
+			status_color2 ="bggreen"
+		}
+		var beg = checkNull(arr.bsBegTime)
+		var end = checkNull(arr.bsEndTime)
+		html += '<tr><td class="td1" style="width: 20%; "> <button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;"><span>' + arr.bsName + 
+		'</span></button></td><td  class="td1 '+status_color1+'" style="width: 20%;"><span class="circle '+status_color2+'"></span>' +  status + 
+		'</td><td class="td1" style="width: 20%;">' + arr.bsPerson
+				+ '</td><td class="td1" style="width: 20%;">'+beg+
+				'</td><td class="td1" style="width: 20%;">'+end+'</td></tr>';
+	}
+	$("#tableList").empty();
+	$("#tableList").append(html);
+}
+function checkNull(str){
+	if(str==null){
+		return ""
+	}
 }

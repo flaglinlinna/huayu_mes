@@ -13,6 +13,7 @@
 </style>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
+
 		<div style="margin: 10px">
 			<div class="layui-card">
 				<div class="layui-card-header">
@@ -25,24 +26,44 @@
 					<h4 class="layui-input-inline h3_header" id="header4"></h4>
 				</div>
 			</div>
-			<div>
+			<!-- <div>
 				<table id="listTable" lay-filter="listTable"></table>
 				<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         </script>
+			</div> -->
+
+			<div class="layout-content">
+				<table class="approvedItem" style="width: 100%;">
+					<thead>
+						<tr>
+							<th>项目名</th>
+							<th>状态</th>
+							<th>待办人</th>
+							<th>开始时间</th>
+							<th>结束时间</th>
+						</tr>
+					</thead>
+					<tbody id="tableList"></tbody>
+				</table>
 			</div>
+
 			<fieldset class="layui-elem-field layui-field-title"></fieldset>
-			<div class="layui-form-item">
-				<div class="layui-inline">
-					<button type="button"
-						class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
-						lay-filter="saveData">提交</button>
+			<form id="itemForm" class="layui-form layui-form-pane"
+				lay-filter="itemForm" method="post" action="">
+				<div class="layui-form-item">
+					<div class="layui-input-block" style="width: 100%;" >
+					<!--<i class="layui-icon layui-icon-ok" style="margin-left: 30%;font-size:36px;color:green;"> </i> 
+					<i class="layui-icon layui-icon-close" style="margin-left: 30%;font-size:36px;color:red;"> </i> -->
+                    <button class="layui-btn layui-btn-sm layui-btn-normal" 
+                    style="width:15%;margin-left:35%;"
+                    lay-submit="" lay-filter="saveData">提 交</button>
+                </div>
 				</div>
-			</div>
+			</form>
 		</div>
 		<script th:inline="javascript">
 		var ItemList=[[${ItemList}]];
-		var info=[[${info}]];
 		</script>
 		<script th:src="@{/js/web/quote/01business/quote_items.js}"
 			src="/js/web/quote/01business/quote_items.js"></script>
