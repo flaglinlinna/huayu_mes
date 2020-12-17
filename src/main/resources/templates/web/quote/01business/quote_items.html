@@ -24,6 +24,7 @@
 					<h4 class="layui-input-inline h3_header" id="header2"></h4>
 					<h4 class="layui-input-inline h3_header" id="header3"></h4>
 					<h4 class="layui-input-inline h3_header" id="header4"></h4>
+					<h4 class="layui-input-inline h3_header" id="header5"></h4>
 				</div>
 			</div>
 			<!-- <div>
@@ -49,21 +50,20 @@
 			</div>
 
 			<fieldset class="layui-elem-field layui-field-title"></fieldset>
-			<form id="itemForm" class="layui-form layui-form-pane"
+			<!-- <form id="itemForm" class="layui-form layui-form-pane"
 				lay-filter="itemForm" method="post" action="">
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="width: 100%;" >
-					<!--<i class="layui-icon layui-icon-ok" style="margin-left: 30%;font-size:36px;color:green;"> </i> 
-					<i class="layui-icon layui-icon-close" style="margin-left: 30%;font-size:36px;color:red;"> </i> -->
                     <button class="layui-btn layui-btn-sm layui-btn-normal" 
                     style="width:15%;margin-left:35%;"
                     lay-submit="" lay-filter="saveData">提 交</button>
                 </div>
 				</div>
-			</form>
+			</form>-->
 		</div>
 		<script th:inline="javascript">
 		var ItemList=[[${ItemList}]];
+		var info=[[${info}]];
 		</script>
 		<script th:src="@{/js/web/quote/01business/quote_items.js}"
 			src="/js/web/quote/01business/quote_items.js"></script>
