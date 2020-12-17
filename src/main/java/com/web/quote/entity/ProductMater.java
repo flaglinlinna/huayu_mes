@@ -15,14 +15,25 @@ import java.math.BigDecimal;
  *
  */
 @Entity(name = "HardwareMater")
-@Table(name = HardwareMater.TABLE_NAME)
+@Table(name = ProductMater.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class HardwareMater extends BaseEntity {
+public class ProductMater extends BaseEntity {
 	private static final long serialVersionUID = 4625660587007894370L;
 
-	public static final String TABLE_NAME = "PRICE_HARDWARE_MATER";
-
+	public static final String TABLE_NAME = "PRICE_product_MATER";
+	
+	/**
+	 * 类型
+	 * 五金:hardware
+	 * 注塑:molding
+	 * 表面处理:surface
+	 * 组装:assemble
+	 */
+	@ApiModelProperty(name = "bsType", value = "零件名称")
+	@Column(length = 50)
+	protected String bsType;
+	
 	/**
 	 * 关联主表
 	 */
