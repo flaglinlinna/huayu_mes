@@ -151,7 +151,7 @@ $(function() {
 			double: function(value){
 				if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false)
 				{
-					return '利润率只能输入数字';
+					return '毛利率只能输入数字';
 				}
 			}
 		});
