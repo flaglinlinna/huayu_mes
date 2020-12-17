@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#quoteBomList',
-			url : context + '/quote/getQuoteBomList',
+			url : context + '/quoteBom/getQuoteBomList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -179,7 +179,7 @@ $(function() {
 		//导入
 		upload.render({
 			elem: '#upload'
-			,url: context + '/quote/QuoteBom/importExcel'
+			,url: context + '/quoteBom/importExcel'
 			,accept: 'file' //普通文件
 			,data: {
 				quoteId: function(){
@@ -289,7 +289,7 @@ function delProdErr(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("/quote/deleteQuoteBom", JSON.stringify(param),
+			CoreUtil.sendAjax("/quoteBom/deleteQuoteBom", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
