@@ -18,19 +18,27 @@ $(function() {
 function saveDate(){}
 
 function setData(){
-	var data_info=ItemList.data[0].quote;
+	var data_info=info.data;
 	var create=checkNull(data_info.createDate)
 	$("#header1").text("报价单号："+data_info.bsCode)
 	$("#header2").text("报价类型："+data_info.bsType)
 	$("#header3").text("产品型号："+data_info.bsProd)
-	$("#header4").text("创建时间："+create)
+	$("#header4").text("创建人："+data_info.createBy)
+	$("#header5").text("创建时间："+create)
 }
 function setTable(){
 	var list = ItemList.data;
+	var header=ItemList.data.quote
 	console.log(list)
 	var html = "";
 	for (var j = 0; j < list.length; j++) {
 		var arr = list[j];
+		
+		var link="";
+		
+		var beg = checkNull(arr.bsBegTime)
+		var end = checkNull(arr.bsEndTime) 
+		
 		var status=""
 		var status_color1="blue"//状态颜色
 		var	status_color2 ="bgblue"
@@ -43,9 +51,11 @@ function setTable(){
 			status_color1="green"
 			status_color2 ="bggreen"
 		}
-		var beg = checkNull(arr.bsBegTime)
-		var end = checkNull(arr.bsEndTime)
-		html += '<tr><td class="td1" style="width: 20%; "> <button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;"><span>' + arr.bsName + 
+		
+		if(arr.bsName=="外购件清单"){
+			link="/quote/toQuoteBom?quoteId="+arr.quote.id
+		}
+		html += '<tr><td class="td1" style="width: 20%; "><button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;" onclick=toPage("'+link+'","'+arr.bsName+'")><span>' + arr.bsName + 
 		'</span></button></td><td  class="td1 '+status_color1+'" style="width: 20%;"><span class="circle '+status_color2+'"></span>' +  status + 
 		'</td><td class="td1" style="width: 20%;">' + arr.bsPerson
 				+ '</td><td class="td1" style="width: 20%;">'+beg+
@@ -59,3 +69,7 @@ function checkNull(str){
 		return ""
 	}
 }
+function toPage(link,title){
+	parent.layui.index.openTabsPage(link,title);
+}
+

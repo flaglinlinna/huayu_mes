@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.web.basePrice.dao.BjWorkCenterDao;
 import com.web.basePrice.dao.ItemTypeWgDao;
@@ -30,6 +32,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.system.todo.entity.TodoInfo;
 import com.system.todo.service.TodoInfoService;
+import com.system.user.dao.SysUserDao;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
@@ -63,13 +66,7 @@ public class Quotelmpl implements QuoteService {
     private TodoInfoService todoInfoService;
 
 	@Autowired
-	private QuoteBomDao quoteBomDao;
-	@Autowired
-	private ItemTypeWgDao itemTypeWgDao;
-	@Autowired
-	private UnitDao unitDao;
-	@Autowired
-	private BjWorkCenterDao bjWorkCenterDao;
+	private SysUserDao sysUserDao;
 	
 	/**
      * 新增报价单
@@ -233,7 +230,14 @@ public class Quotelmpl implements QuoteService {
         if(o == null){
             return ApiResponseResult.failure("该报价单不存在！");
         }
-        return ApiResponseResult.success().data(o);
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", o.getId());
+        map.put("bsType", o.getBsType());
+        map.put("bsCode", o.getBsCode());
+        map.put("bsProd", o.getBsProd());
+        map.put("createDate", o.getCreateDate());
+        map.put("createBy", sysUserDao.findById((long) o.getCreateBy()).getUserName());
+        return ApiResponseResult.success().data(map);
     }
 
 
