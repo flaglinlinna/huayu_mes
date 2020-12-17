@@ -399,4 +399,36 @@ public class Quote extends BaseEntity {
 	public void setBsApprovalTime(Date bsApprovalTime) {
 		this.bsApprovalTime = bsApprovalTime;
 	}
+
+	public Long getPkProfitProd() {
+		return pkProfitProd;
+	}
+
+	public void setPkProfitProd(Long pkProfitProd) {
+		this.pkProfitProd = pkProfitProd;
+	}
+
+	public ProfitProd getProfitProd() {
+		return profitProd;
+	}
+
+	public void setProfitProd(ProfitProd profitProd) {
+		this.profitProd = profitProd;
+	}
+
+	public String getBsChkOutItem() {
+		return bsChkOutItem;
+	}
+
+	public void setBsChkOutItem(String bsChkOutItem) {
+		this.bsChkOutItem = bsChkOutItem;
+	}
+
+	public String getBsFunctionItem() {
+		return bsFunctionItem;
+	}
+
+	public void setBsFunctionItem(String bsFunctionItem) {
+		this.bsFunctionItem = bsFunctionItem;
+	}
 }

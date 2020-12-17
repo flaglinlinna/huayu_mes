@@ -10,11 +10,17 @@ $(function() {
 					function() {
 						var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table;
 						// 按钮监听事件
-						form.on('submit(saveData)', function(data) {
-							
-							 console.log(data.field)
-							//saveData(data.field, empIdList);
+						
+						
+						
+						form.on('submit(saveData)',function(data) {
+						    var paramlist = data.field;
+							paramlist["bsMaterial"] = GetCheckboxValues('material');
+							paramlist["bsRequire"]= GetCheckboxValues('require');
+							console.log(paramlist)
+							saveData(paramlist);
 						});
+						
 						// 日期选择器
 						laydate.render({// 完成日期
 							elem : '#bsFinishTime',
@@ -22,6 +28,17 @@ $(function() {
 						});
 					});
 });
+
+// 将checke拼接为"value1,value2,value3"
+function GetCheckboxValues(Name) {
+	var result = [];
+	$("[id='" + Name + "']:checkbox").each(function() {
+		if ($(this).is(":checked")) {
+			result.push($(this).attr("title"));
+		}
+	});
+	return result.join(",");
+}
 
 function setData() {
 	$("#pkProfitProd").empty();
@@ -38,6 +55,18 @@ function setData() {
 }
 
 function saveData(obj) {
+	CoreUtil.sendAjax("/quote/add", JSON.stringify(obj), function(data) {
+		if (data.result) {
+			layer.alert("操作成功", function() {
+				clean();
+				layer.closeAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
 function clean() {
