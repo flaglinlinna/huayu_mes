@@ -13,7 +13,10 @@
 </head>
 
 <body style="background-color:#f2f2f2" >
-<div class="layui-col-md12">
+  
+  
+  
+<div class="layui-col-md12 " id="main-div" style="display:none">
             <div class="layui-card">
               <div class="layui-card-header" style="text-align:center;"><h1>东莞华誉组装MES系统</h1></div>
               <div class="layui-card-body" style="text-align: center;margin: 0 auto; ">
@@ -21,8 +24,55 @@
               </div>
             </div>
           </div>
+          <div class="layui-col-md12 " id="daiban-div" style="display:none;">
+              <div class="layui-card">
+	              <div class="layui-card-body" style="height:70px;">
+	                <div class="layui-carousel layadmin-carousel layadmin-backlog" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;">
+	                  <div carousel-item="">
+	                    <ul class="layui-row layui-col-space10 layui-this">
+	                      <li class="layui-col-xs6">
+	                      <a lay-href="app/forum/list.html" class="layadmin-backlog-body" style="height:62px;">
+	                          <img src="/img/touxiang.png" th:src="@{/images/touxiang.png}" class="layui-nav-img">
+	                                                          你好,<shiro:principal property="userName"></shiro:principal>
+	                        </a>
+	                        
+	                      </li>
+	                      <li class="layui-col-xs2">
+	                        <a lay-href="app/forum/list.html" class="layadmin-backlog-body">
+	                          <h3>待办任务</h3>
+	                          <p><cite id="totalNum">12</cite></p>
+	                        </a>
+	                      </li>
+	                      <li class="layui-col-xs2">
+	                        <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+	                          <h3>已完成</h3>
+	                          <p><cite id="completedNum">99</cite></p>
+	                        </a>
+	                      </li>
+	                      <li class="layui-col-xs2">
+	                        <a href="javascript:;" onclick="layer.tips('不跳转', this, {tips: 3});" class="layadmin-backlog-body">
+	                          <h3>未完成</h3>
+	                          <p><cite id="inCompleteNum">20</cite></p>
+	                        </a>
+	                      </li>
+	                    </ul>
 
-
+	                  </div>
+	              </div>
+	            </div>
+	          </div>
+	          
+	          <div class="layui-card">
+              <div class="layui-card-header">待办事项</div>
+              <div class="layui-card-body" style="text-align: center;margin: 0 auto; ">
+                  <table id="listTable" lay-filter="listTable"></table>
+              </div>
+            </div>
+	          
+          </div>
+         <script type="text/html" id="optBar">
+             <a class="layui-btn layui-btn-xs" lay-event="edit">点击处理</a>
+         </script>
 <!--   <script src="../../layuiadmin/layui/layui.js?t=1"></script>  
   <script>
   layui.config({
@@ -31,5 +81,75 @@
     index: 'lib/index' //主入口模块
   }).use(['index', 'console']);
   </script> -->
+  <script th:inline="javascript">
+  var pageCurr;var tableIns;
+  $(function() {
+		layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ],
+			function() {
+				var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table;
+				tableIns = table.render({
+					elem : '#listTable',
+					url:context + '/todoInfo/getlist',
+					where:{'bsStatus':0},
+					method : 'get' // 默认：get请求
+					,cellMinWidth : 80,
+					height:'full-180'//固定表头&full-查询框高度
+						,even:true,//条纹样式
+					//data : [],
+					page : true,
+					parseData : function(res) {
+						console.log(res)
+						if(res.data.totalNum>0){
+							$("#main-div").hide();//隐藏div
+							$("#daiban-div").show();//显示div
+						}else{
+							$("#daiban-div").hide();//隐藏div
+							$("#main-div").show();//显示div
+						}
+						//封装数量
+						$('#completedNum').html(res.data.completedNum);
+						$('#inCompleteNum').html(res.data.inCompleteNum);
+						$('#totalNum').html(res.data.totalNum);
+						if(!res.result){
+							return {
+								"count" : 0,"msg" : res.msg,"data" : [],"code" : res.status
+							} 
+						}
+						// 可进行数据操作
+						return {"count" : res.data.list.total,"msg" : res.msg,
+							"data" : res.data.list.rows,"code" : res.status
+						}
+					},
+					cols:[[ 
+					    {type : 'numbers'},
+					    {field : 'bsTitle',title : '待办类型',sort: true},
+					    {field : 'bsContent',title : '待办内容',sort: true},
+					    {field : 'createDate',title : '创建时间',sort: true},
+					    {fixed : 'right',title : '操作',toolbar : '#optBar'} 
+					   ] ],
+					done : function(res, curr, count) {
+						pageCurr = curr;
+					}
+				});	
+			});
+		/* CoreUtil.sendAjax("/todoInfo/getlist", {'bsStatus':0},
+				function(data) {
+					console.log(data)
+					tableIns.reload({
+						url:context + '/todoInfo/getlist',
+						where:{'bsStatus':0},
+						done: function(res1, curr, count){
+							console.log(res1)
+							pageCurr=curr;
+						}
+ 						});
+				}, "GET", false, function(res) {
+					layer.alert(res.msg);
+				}); */
+		
+	});
+  
+  
+  </script>
 </body>
 </html>
