@@ -29,11 +29,13 @@
          <script type="text/html" id="toolbar">
              <div class="layui-btn-container layui-inline">
                      <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addHardware()">添加五金材料信息</button>
+                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="downloadExcel()">下载模板</button>
+                 <button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入模板</button>
              </div>
          </script>
 
 
-        <table id="prodErrList" lay-filter="prodErrTable"></table>
+        <table id="hardwareList" lay-filter="hardwareTable"></table>
 
          <script type="text/html" id="optBar">
                  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -42,55 +44,55 @@
 	 </div>
 	 <!--添加或编辑异常类别-->
     <div id="setProdErr" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
-        <form id="prodErrForm" class="layui-form layui-form-pane" lay-filter="prodErrForm" method="post" action="" style="margin-top: 20px;">
+        <form id="hardwareForm" class="layui-form layui-form-pane" lay-filter="hardwareForm" method="post" action="" style="margin-top: 20px;">
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">零件名称</label>
                 <div class="layui-input-inline">
-                    <input id="component" name="component" placeholder="请输入零件名称" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsComponent" name="bsComponent" placeholder="请输入零件名称" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">材料名称</label>
                 <div class="layui-input-inline">
-                    <input id="materName" name="materName" placeholder="请输入材料名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsMaterName" name="bsMaterName" placeholder="请输入材料名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">材料规格</label>
                 <div class="layui-input-inline">
-                    <input id="model" name="model" placeholder="请输入材料名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsModel" name="bsModel" placeholder="请输入材料规格"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">用量</label>
                 <div class="layui-input-inline">
-                    <input id="qty" name="qty" placeholder="请输入材料名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsQty" name="bsQty" placeholder="请输入用量"  lay-verify="required|double" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">单位</label>
                 <div class="layui-input-inline">
-                    <input id="unit" name="unit" placeholder="请输入材料名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsUnit" name="bsUnit" placeholder="请输入单位"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">基数</label>
                 <div class="layui-input-inline">
-                    <input id="radix" name="radix" placeholder="请输入材料名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsRadix" name="bsRadix" placeholder="请输入基数"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">备选供应商</label>
                 <div class="layui-input-inline">
-                    <input id="supplier" name="supplier" placeholder="请输入材料名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsSupplier" name="bsSupplier" placeholder="请输入备选供应商"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">备注</label>
                 <div class="layui-input-inline">
-                    <input id="fmemo" name="fmemo" placeholder="请输入材料名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="fmemo" name="fmemo" placeholder="请输入备注"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -101,7 +103,7 @@
             </div>
         </form>
     </div>
-    <script th:src="@{/js/web/basic/proderr.js}" src="/js/basic/web/proderr.js"></script>
+    <script th:src="@{/js/web/quote/02produce/hardware.js}" src="/js/web/quote/02produce/hardware.js"></script>
 	</div>
 </body>
 </html>
