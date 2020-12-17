@@ -48,6 +48,43 @@ public class QuoteBomlmpl implements QuoteBomService {
 	private UnitDao unitDao;
 	@Autowired
 	private BjWorkCenterDao bjWorkCenterDao;
+
+	@Override
+	public ApiResponseResult add(QuoteBom quoteBom) throws Exception {
+		if(quoteBom == null){
+			return ApiResponseResult.failure("外购件清单信息不能为空！");
+		}
+		quoteBomDao.save(quoteBom);
+		return ApiResponseResult.success("外购件清单信息新增成功！").data(quoteBom);
+	}
+
+	@Override
+	public ApiResponseResult edit(QuoteBom quoteBom) throws Exception {
+		if(quoteBom == null){
+			return ApiResponseResult.failure("外购件清单信息不能为空！");
+		}
+		if(quoteBom.getId() == null){
+			return ApiResponseResult.failure("外购件清单信息ID不能为空！");
+		}
+
+//		ProductMater o = hardwareDao.findById((long) hardwareMater.getId());
+//		if(o == null){
+//			return ApiResponseResult.failure("该五金材料不存在！");
+//		}
+//		o.setBsComponent(hardwareMater.getBsComponent());
+//		o.setBsMaterName(hardwareMater.getBsMaterName());
+//		o.setBsModel(hardwareMater.getBsModel());
+//		o.setBsQty(hardwareMater.getBsQty());
+//		o.setBsRadix(hardwareMater.getBsRadix());
+//		o.setBsUnit(hardwareMater.getBsUnit());
+//		o.setBsSupplier(hardwareMater.getBsSupplier());
+//		o.setLastupdateDate(new Date());
+//		o.setLastupdateBy(UserUtil.getSessionUser().getId());
+//		hardwareDao.save(o);
+		return ApiResponseResult.success("编辑成功！");
+
+	}
+
 	/**
 	 * 删除外购件清单列表
 	 * **/
@@ -69,7 +106,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 	/**
 	 * 获取报价单列表
 	 * **/
-	public ApiResponseResult getQuoteBomList(String keyword,Long pkQuote,PageRequest pageRequest) throws Exception{
+	public ApiResponseResult getQuoteBomList(String keyword,String pkQuote,PageRequest pageRequest) throws Exception{
 		// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
@@ -78,7 +115,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 		if (StringUtils.isNotEmpty(keyword)) {
 			filters1.add(new SearchFilter("bsComponent", SearchFilter.Operator.LIKE, keyword));
 		}
-		if (pkQuote!=null) {
+		if (!"null".equals(pkQuote)&&pkQuote!=null) {
 			filters1.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
 		}
 		Specification<QuoteBom> spec = Specification.where(BaseService.and(filters, QuoteBom.class));
@@ -112,7 +149,8 @@ public class QuoteBomlmpl implements QuoteBomService {
 			//获取最后一行的num，即总行数。此处从0开始计数
 			int maxRow = sheet.getLastRowNum();
 			List<QuoteBom> quoteBomList = new ArrayList<>();
-			for (int row = 1; row <= maxRow; row++) {
+			//前两行为标题
+			for (int row = 2; row <= maxRow; row++) {
 				QuoteBom quoteBom = new QuoteBom();
 				String bsElement = tranCell(sheet.getRow(row).getCell(0));
 				String bsComponent = tranCell(sheet.getRow(row).getCell(1));
@@ -145,7 +183,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 				quoteBom.setBsModel(bsModel);
 				quoteBom.setFmemo(fmemo);
 				if(StringUtils.isNotEmpty(bsProQty)) {
-					quoteBom.setBsQty(new BigDecimal(bsProQty));
+					quoteBom.setBsProQty(new BigDecimal(bsProQty));
 				}
 				quoteBom.setBsElement(bsElement);
 				quoteBom.setBsElement(bsElement);

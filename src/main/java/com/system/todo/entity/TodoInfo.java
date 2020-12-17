@@ -66,6 +66,13 @@ public class TodoInfo extends BaseEntity {
     @ApiModelProperty(name="bsContent",value="内容")
     @Column(length = 200)
     protected String bsContent;
+    
+    /**
+     * 模块
+     */
+    @ApiModelProperty(name="bsModel",value="模块")
+    @Column(length = 200)
+    protected String bsModel;
 
     /**
      * 备注
@@ -267,6 +274,15 @@ public class TodoInfo extends BaseEntity {
     public void setPkModifiedBy(Long pkModifiedBy) {
         this.pkModifiedBy = pkModifiedBy;
     }
+
+	public String getBsModel() {
+		return bsModel;
+	}
+
+	public void setBsModel(String bsModel) {
+		this.bsModel = bsModel;
+	}
+    
 //
 //    public SysUser getCreatedBy() {
 //        return createdBy;

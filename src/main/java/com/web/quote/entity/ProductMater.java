@@ -11,17 +11,17 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 
 /**
- * 五金材料信息表
+ * 制作部材料信息表
  *
  */
-@Entity(name = "HardwareMater")
+@Entity(name = "ProductMater")
 @Table(name = ProductMater.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
 public class ProductMater extends BaseEntity {
 	private static final long serialVersionUID = 4625660587007894370L;
 
-	public static final String TABLE_NAME = "PRICE_product_MATER";
+	public static final String TABLE_NAME = "PRICE_PRODUCT_MATER";
 	
 	/**
 	 * 类型
@@ -30,7 +30,7 @@ public class ProductMater extends BaseEntity {
 	 * 表面处理:surface
 	 * 组装:assemble
 	 */
-	@ApiModelProperty(name = "bsType", value = "零件名称")
+	@ApiModelProperty(name = "bsType", value = "类型")
 	@Column(length = 50)
 	protected String bsType;
 	
@@ -90,6 +90,34 @@ public class ProductMater extends BaseEntity {
 	@Column(length = 200)
 	protected String bsSupplier;
 
+	/**
+	 * 水口量(注塑)
+	 */
+	@ApiModelProperty(name = "unit", value = "水口量(注塑)")
+	@Column(length = 50)
+	protected String bsWaterGap;
+
+	/**
+	 * 穴数(注塑)
+	 */
+	@ApiModelProperty(name = "bsCave", value = "穴数(注塑)")
+	@Column(length = 50)
+	protected String bsCave;
+
+	/**
+	 * 加工类型(表面处理)
+	 */
+	@ApiModelProperty(name = "bsMachiningType", value = "加工类型(表面处理)")
+	@Column(length = 50)
+	protected String bsMachiningType;
+
+	/**
+	 * 配色工艺(表面处理)
+	 */
+	@ApiModelProperty(name = "bsColor", value = "配色工艺(表面处理)")
+	@Column(length = 50)
+	protected String bsColor;
+
 	public Long getPkQuote() {
 		return pkQuote;
 	}
@@ -97,7 +125,6 @@ public class ProductMater extends BaseEntity {
 	public void setPkQuote(Long pkQuote) {
 		this.pkQuote = pkQuote;
 	}
-
 
 	public String getBsComponent() {
 		return bsComponent;

@@ -2,10 +2,9 @@ package com.web.quote.controller;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
-import com.web.quote.entity.Quote;
+
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.service.QuoteBomService;
-import com.web.quote.service.QuoteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +16,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
-@Api(description = "报价信息模块")
+@Api(description = "外购件清单模块")
 @CrossOrigin
 @ControllerAdvice
 @Controller
 @RequestMapping(value = "quoteBom")
 public class QuoteBomController extends WebController {
 
-	private String module = "报价信息";
+	private String module = "外购件清单信息";
 
 	@Autowired
 	private QuoteBomService quoteBomService;
@@ -44,11 +43,49 @@ public class QuoteBomController extends WebController {
 		return mav;
 	}
 
+	@ApiOperation(value = "编辑外购件清单Bom", notes = "编辑外购件清单Bom", hidden = true)
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult add(@RequestBody QuoteBom quoteBom) {
+		String method = "quote/add";
+		String methodName = "新增外购件清单信息";
+		try {
+			ApiResponseResult result = quoteBomService.add(quoteBom);
+			logger.debug("新增外购件清单信息=edit:");
+			getSysLogService().success(module, method, methodName, quoteBom.toString());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("外购件清单信息新增失败！", e);
+			getSysLogService().error(module, method, methodName, quoteBom.toString() + "," + e.toString());
+			return ApiResponseResult.failure("外购件清单信息新增失败！");
+		}
+	}
+
+	@ApiOperation(value = "编辑外购件清单信息", notes = "编辑外购件清单信息", hidden = true)
+	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult edit(@RequestBody QuoteBom quoteBom) {
+		String method = "quote/edit";
+		String methodName = "编辑外购件清单信息";
+		try {
+			ApiResponseResult result = quoteBomService.edit(quoteBom);
+			logger.debug("编辑外购件清单信息=edit:");
+			getSysLogService().success(module, method, methodName, quoteBom.toString());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("编辑外购件清单信息编辑失败！", e);
+			getSysLogService().error(module, method, methodName, quoteBom.toString() + "," + e.toString());
+			return ApiResponseResult.failure("编辑外购件清单信息编辑失败！");
+		}
+	}
+
 
 	@ApiOperation(value = "获取报价BOM清单列表", notes = "获取报价BOM清单列表",hidden = true)
 	@RequestMapping(value = "/getQuoteBomList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getQuoteBomList(String keyword,Long pkQuote) {
+	public ApiResponseResult getQuoteBomList(String keyword,String pkQuote) {
 		String method = "quote/getQuoteBomList";String methodName ="获取报价BOM清单列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.ASC, "id");
