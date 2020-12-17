@@ -62,10 +62,9 @@ public class Quote extends BaseEntity {
 	/**
 	 * 完成日期
 	 */
-	@Column
-    @Temporal(TemporalType.TIMESTAMP)
 	@ApiModelProperty(name="bsFinishTime",value="完成日期")
-	protected Date bsFinishTime;
+	@Column(length = 50)
+	protected String bsFinishTime;
 	
 	/**
 	 * 项目编号
@@ -216,10 +215,10 @@ public class Quote extends BaseEntity {
 	/**
      * 核准时间
      */
-	@Column
-    @Temporal(TemporalType.TIMESTAMP)
+	
 	@ApiModelProperty(name="bsApprovalTime",value="核准时间")
-	protected Date bsApprovalTime;
+	@Column(length = 50)
+	protected String  bsApprovalTime;
 	
 
 	public String getBsCode() {
@@ -244,14 +243,6 @@ public class Quote extends BaseEntity {
 
 	public void setBsStatus(int bsStatus) {
 		this.bsStatus = bsStatus;
-	}
-
-	public Date getBsFinishTime() {
-		return bsFinishTime;
-	}
-
-	public void setBsFinishTime(Date bsFinishTime) {
-		this.bsFinishTime = bsFinishTime;
 	}
 
 	public String getBsProject() {
@@ -390,14 +381,6 @@ public class Quote extends BaseEntity {
 		this.bsApproved = bsApproved;
 	}
 
-	public Date getBsApprovalTime() {
-		return bsApprovalTime;
-	}
-
-	public void setBsApprovalTime(Date bsApprovalTime) {
-		this.bsApprovalTime = bsApprovalTime;
-	}
-
 	public Long getPkProfitProd() {
 		return pkProfitProd;
 	}
@@ -428,5 +411,21 @@ public class Quote extends BaseEntity {
 
 	public void setBsFunctionItem(String bsFunctionItem) {
 		this.bsFunctionItem = bsFunctionItem;
+	}
+
+	public String getBsFinishTime() {
+		return bsFinishTime;
+	}
+
+	public void setBsFinishTime(String bsFinishTime) {
+		this.bsFinishTime = bsFinishTime;
+	}
+
+	public String getBsApprovalTime() {
+		return bsApprovalTime;
+	}
+
+	public void setBsApprovalTime(String bsApprovalTime) {
+		this.bsApprovalTime = bsApprovalTime;
 	}
 }
