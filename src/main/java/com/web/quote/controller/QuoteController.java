@@ -1,5 +1,7 @@
 package com.web.quote.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
@@ -57,6 +60,21 @@ public class QuoteController extends WebController {
 	@RequestMapping(value = "/toQuoteList")
 	public String toQuoteList() {
 		return "/web/quote/01business/quote_list";
+	}
+	
+	@ApiOperation(value = "报价信息项目列表页", notes = "报价信息项目列表页", hidden = true)
+	@RequestMapping(value = "/toQuoteItem")
+	public ModelAndView toQuoteItem(Long id) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			ApiResponseResult info = quoteService.getSingle((long) 5055);//5053\5054\5055
+			mav.addObject("info", info);
+			mav.setViewName("/web/quote/01business/quote_items");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价信息项目列表页数据失败！", e);
+		}
+		return mav;
 	}
 	
 	@ApiOperation(value = "报价项目-Bom", notes = "报价项目-Bom", hidden = true)
@@ -110,4 +128,116 @@ public class QuoteController extends WebController {
             return ApiResponseResult.failure("获取报价单列表失败！");
         }
     }
+	
+	@ApiOperation(value = "获取报价单-项目列表", notes = "获取报价单-项目列表",hidden = true)
+    @RequestMapping(value = "/getItemPage", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getItemPage(Long id) {
+        String method = "quote/getItemPage";String methodName ="获取报价单-项目列表";
+        try {
+            ApiResponseResult result = quoteService.getItemPage((long) 5053);
+            logger.debug("获取报价单-项目列表=getItemPage:");
+            getSysLogService().success(module,method, methodName, id);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取报价单-项目列表失败！", e);
+            getSysLogService().error(module,method, methodName, id+e.toString());
+            return ApiResponseResult.failure("获取报价单-项目列表失败！");
+        }
+    }
+	
+	@ApiOperation(value = "编辑报价单", notes = "编辑报价单", hidden = true)
+	@RequestMapping(value = "/eidt", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult eidt(@RequestBody Quote quote) {
+		String method = "quote/eidt";
+		String methodName = "编辑报价单";
+		try {
+			ApiResponseResult result = quoteService.edit(quote);
+			logger.debug("编辑报价单=eidt:");
+			getSysLogService().success(module, method, methodName, quote.toString());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("报价单编辑失败！", e);
+			getSysLogService().error(module, method, methodName, quote.toString() + "," + e.toString());
+			return ApiResponseResult.failure("报价单编辑失败！");
+		}
+	}
+	
+	@ApiOperation(value = "设置报价单状态", notes = "设置报价单状态", hidden = true)
+    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "quote/doStatus";String methodName ="设置报价单状态";
+        try{
+        	long id = Long.parseLong(params.get("id").toString()) ;
+        	Integer bsStatus=Integer.parseInt(params.get("bsStatus").toString());
+            ApiResponseResult result = quoteService.doStatus(id, bsStatus);
+            logger.debug("设置报价单状态=doStatus:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("设置报价单状态失败！", e);
+            getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+            return ApiResponseResult.failure("设置报价单状态失败！");
+        }
+    }
+
+	@ApiOperation(value = "获取报价BOM清单列表", notes = "获取报价BOM清单列表",hidden = true)
+	@RequestMapping(value = "/getQuoteBomList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getQuoteBomList(String keyword,Long pkQuote) {
+		String method = "quote/getQuoteBomList";String methodName ="获取报价BOM清单列表";
+		try {
+			Sort sort = new Sort(Sort.Direction.ASC, "id");
+			ApiResponseResult result = quoteService.getQuoteBomList(keyword,pkQuote, super.getPageRequest(sort));
+			logger.debug("获取报价BOM清单列表=getList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价BOM清单列表失败！", e);
+			getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
+			return ApiResponseResult.failure("获取报价BOM清单列表失败！");
+		}
+	}
+
+	@ApiOperation(value="导入模板", notes="导入模板", hidden = true)
+	@RequestMapping(value = "/QuoteBom/importExcel", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getExcel(MultipartFile[] file, Long pkQuote ) {
+		String method = "/QuoteBom/importExcel";String methodName ="导入模板";
+		try {
+			logger.debug("导入模板=importExcel:");
+			getSysLogService().success(module,method, methodName, "");
+			return quoteService.doQuoteBomExcel(file,pkQuote);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("导入模板失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return null;
+		}
+	}
+
+	@ApiOperation(value = "删除外购件信息", notes = "删除外购件信息", hidden = true)
+	@RequestMapping(value = "/deleteQuoteBom", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult delete(@RequestBody Map<String, Object> params) {
+		String method = "quote/deleteQuoteBom";
+		String methodName = "删除外购件信息";
+		try {
+			long id = Long.parseLong(params.get("id").toString());
+			ApiResponseResult result = quoteService.deleteQuoteBom(id);
+			logger.debug("删除外购件信息=delete:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("删除外购件信息失败！", e);
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			return ApiResponseResult.failure("删除外购件信息失败！");
+		}
+	}
 }
