@@ -64,7 +64,6 @@ public class Quote extends BaseEntity {
 	 */
 	@Column
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 	@ApiModelProperty(name="bsFinishTime",value="完成日期")
 	protected Date bsFinishTime;
 	
@@ -219,7 +218,6 @@ public class Quote extends BaseEntity {
      */
 	@Column
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@ApiModelProperty(name="bsApprovalTime",value="核准时间")
 	protected Date bsApprovalTime;
 	

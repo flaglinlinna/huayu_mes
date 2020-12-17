@@ -8,7 +8,7 @@ $(function() {
 			var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table;
 			tableIns = table.render({
 				elem : '#listTable',
-			//	url : context + '/base/line/getList',
+				url : context + '/quote/getList',
 				method : 'get' // 默认：get请求
 				, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 				,cellMinWidth : 80,
@@ -45,44 +45,78 @@ $(function() {
 				//,{type:'checkbox'}
 				// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 				 {
-					field : 'EMP_CODE',
-					title : '工号',width : 100, sort: true
+					field : 'bsStatus',
+					title : '状态',width : 100
 				},
 				 {
-					field : 'EMP_NAME',
-					title : '员工姓名',width : 100,
+					field : 'bsCode',
+					title : '报价单编号',width : 150,
 					sort: true
 				}, {
-					field : 'LINER_NAME',
-					title : '组长姓名', width : 100,sort: true
+					field : 'bsType',
+					title : '报价类型', width : 100
 				}
 				, {
-					field : 'TASK_NO',
-					title : '制令单号',
+					field : 'bsFinishTime',
+					title : '完成日期',
 					 sort: true
-						, width : 170
+					, width : 140
 				}, {
-					field : 'WORK_DATE',
-					title : '工作日期',width : 140, sort: true
+					field : 'bsRemarks',
+					title : '报价备注',width : 170
 				},
 					{
-						field : 'TIME_BEGIN',
-						title : '上线时间',width : 150, sort: true
+						field : 'bsProd',
+						title : '产品型号',width : 120
 					},
 					{
-						field : 'TIME_END',
-						title : '下线时间',width : 150, sort: true
+						field : 'bsSimilarProd',
+						title : '相似型号',width : 150
 					},
 					{
-						field : 'ITEM_NO',
-						title : '物料编号',width : 140, sort: true
+						field : 'bsDevType',
+						title : '机种型号',width : 140, sort: true
 					},
 					{
-						field : 'ITEM_NAME',
-						title : '物料名称',width : 140, sort: true
+						field : 'bsProdType',
+						title : '产品类型',width : 140, sort: true
+					},{
+						field : 'bsCustName',
+						title : '客户名称',width : 120
 					},
-
-
+					{
+						field : 'bsPosition',
+						title : '市场定位',width : 150
+					},
+					{
+						field : 'bsMaterial',
+						title : '客户提供资料',width : 140, sort: true
+					},
+					{
+						field : 'bsChkOutItem',
+						title : '外观检验项',width : 140, sort: true
+					},{
+						field : 'bsChkOut',
+						title : '外观检验',width : 150
+					},
+					{
+						field : 'bsFunctionItem',
+						title : '功能性能项',width : 140
+					},
+					{
+						field : 'bsFunction',
+						title : '功能性能',width : 140
+					},{
+						field : 'bsRequire',
+						title : '环保要求',width : 140
+					},
+					{
+						field : 'bsLevel',
+						title : '防水防尘等级',width : 140
+					},{
+						field : 'bsCustRequire',
+						title : '客户其他要求',width : 200
+					}
 				] ],
 				done : function(res, curr, count) {
 					//

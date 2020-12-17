@@ -1,6 +1,7 @@
 package com.web.quote.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -76,4 +77,23 @@ public class QuoteController extends WebController {
 			return ApiResponseResult.failure("报价单新增失败！");
 		}
 	}
+	
+	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表",hidden = true)
+    @RequestMapping(value = "/getList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getList(String keyword) {
+        String method = "quote/getList";String methodName ="获取报价单列表";
+        try {
+            Sort sort = new Sort(Sort.Direction.ASC, "id");
+            ApiResponseResult result = quoteService.getList(keyword, super.getPageRequest(sort));
+            logger.debug("获取报价单列表=getList:");
+            getSysLogService().success(module,method, methodName, keyword);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取报价单列表失败！", e);
+            getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
+            return ApiResponseResult.failure("获取报价单列表失败！");
+        }
+    }
 }
