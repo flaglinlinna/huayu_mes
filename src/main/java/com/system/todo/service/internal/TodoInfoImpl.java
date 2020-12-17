@@ -169,20 +169,25 @@ public class TodoInfoImpl  implements TodoInfoService {
 
     @Transactional(readOnly = true)
     public ApiResponseResult getlist(int bsStatus, PageRequest pageRequest) throws Exception {
+    	
+    	Long uid = UserUtil.getSessionUser().getId();
+    	
         List<SearchFilter> filters = new ArrayList<SearchFilter>();
-        filters.add(new SearchFilter("isDel", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         filters.add(new SearchFilter("bsStatus", SearchFilter.Operator.EQ, bsStatus));
-        filters.add(new SearchFilter("bsUserId", SearchFilter.Operator.EQ, UserUtil.getCurrUser().getId()));
+        filters.add(new SearchFilter("bsUserId", SearchFilter.Operator.EQ, uid));
         Specification<TodoInfo> spec = Specification.where(BaseService.and(filters, TodoInfo.class));
-
+        
+        
+        
         //1.获取当前登录用户待办
         Page<TodoInfo> page = todoInfoDao.findAll(spec, pageRequest);
         DataGrid dataGrid = DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize());
 
         //2.统计当前登录用户所有待办数量
-        int totalNum = todoInfoDao.countByDelFlagAndBsUserId(BasicStateEnum.FALSE.intValue(), UserUtil.getCurrUser().getId());
-        int completedNum = todoInfoDao.countByDelFlagAndBsUserIdAndBsStatus(BasicStateEnum.FALSE.intValue(), UserUtil.getCurrUser().getId(), 1);
-        int inCompleteNum = todoInfoDao.countByDelFlagAndBsUserIdAndBsStatus(BasicStateEnum.FALSE.intValue(), UserUtil.getCurrUser().getId(), 0);
+        int totalNum = todoInfoDao.countByDelFlagAndBsUserId(BasicStateEnum.FALSE.intValue(), uid);
+        int completedNum = todoInfoDao.countByDelFlagAndBsUserIdAndBsStatus(BasicStateEnum.FALSE.intValue(), uid, 1);
+        int inCompleteNum = todoInfoDao.countByDelFlagAndBsUserIdAndBsStatus(BasicStateEnum.FALSE.intValue(), uid, 0);
 
         //3.封装数据
         Map<String, Object> map = new HashMap<>();

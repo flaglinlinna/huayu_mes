@@ -88,3 +88,177 @@
   height: 18px;
   cursor: pointer;
 }
+
+
+.circle {
+  font-size: 14px;
+  color: #27558e;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  background-color: #27558e;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.red {
+  color: #fd5822;
+}
+.blue {
+  color: #409eff;
+}
+.green {
+  color: #67c23a;
+}
+.yellow {
+  color: #ebf552;
+}
+.orange {
+  color: #fd5822;
+}
+.gray {
+  color: #333;
+}
+
+.bgred {
+  background-color: #fd5822;
+}
+.bgblue {
+  background-color: #409eff;
+}
+.bggreen {
+  background-color: #67c23a;
+}
+.bgorange {
+  background-color: #fd5822;
+}
+.bggray {
+  background-color: #333;
+}
+.mt10 {
+  margin-top: 10px;
+}
+.title-panel {
+  padding: 12px 40px;
+  /*margin-bottom: 30px;*/
+  background-color: #ffffff;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  /*box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.05);*/
+  width: 100%;
+}
+.setpadding {
+  padding: 10px 40px;
+  border: 1px solid #ddd;
+  border-top: none;
+}
+.layout-content {
+  background-color: white;
+}
+
+.Title {
+  padding-left: 1%;
+  padding-right: 1%;
+  height: 35px;
+  line-height: 35px;
+  font-size: 14px;
+  font-family: "Microsoft YaHei";
+  font-weight: 600;
+  text-align: center;
+  background: #f0f0f0;
+  margin-top: 10px;
+}
+.td1 {
+  width: 25%;
+  height: 55px;
+  text-align: center;
+  font-size: 14px;
+  font-family: "Microsoft YaHei";
+}
+.status {
+  color: #657180;
+  font-family: "Microsoft YaHei";
+  font-size: 14px;
+}
+.cpshtd2 {
+  height: 50px;
+  background-color: #f5f7f9;
+  padding-left: 50px;
+}
+
+.grid-content .ivu-icon {
+  font-size: 20px;
+  color: #888;
+  margin-right: 10px;
+}
+.grid-content {
+  font-size: 15px;
+}
+.top .fr {
+  float: right;
+  margin-right: 6%;
+}
+.top .fl {
+  float: left;
+  display: inline-block;
+  width: 70%;
+  line-height: 30px;
+}
+.RecordeBtn {
+  width: 140px;
+  padding: 12px 12px;
+}
+.tag {
+  text-align: right;
+  margin-left: 40%;
+}
+.fr .el-button--success {
+  padding: 10px 10px;
+}
+.icon {
+  font-size: 14px;
+}
+.top .grid-content .ivu-icon {
+  color: #fd5822;
+}
+.bscode {
+  line-height: 50px;
+  color: 16px;
+  height: 50px;
+}
+.bscode .icon {
+  font-size: 18px;
+  color: blue;
+}
+.approvedItem .el-button {
+  padding: 9px 20px;
+}
+.approvedstatus {
+  float: right;
+  font-size: 14px;
+  margin-right: 6%;
+}
+.panel1 {
+  background: #f1f6fc !important;
+}
+.result-info {
+  font-size: 14px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  font-weight: 600;
+}
+.el-row{
+	box-sizing:border-box;
+}
+.el-button--success.is-plain{
+	color:#67C23A;
+	background:#f0f9eb;
+	border-color:#c2e7b0;
+}
+.el-button--success.is-plain:focus, .el-button--success.is-plain:hover{
+	background:#67C23A;
+	border-color:#67C23A;
+	color:#FFF;
+}
