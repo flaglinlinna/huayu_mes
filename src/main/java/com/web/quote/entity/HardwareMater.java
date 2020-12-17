@@ -24,122 +24,123 @@ public class HardwareMater extends BaseEntity {
 	public static final String TABLE_NAME = "PRICE_HARDWARE_MATER";
 
 	/**
-	 * 报价表Id
+	 * 关联主表
 	 */
-	@ApiModelProperty(name = "QuoteId", value = "报价表Id")
-	@Column(length = 50)
-	protected Long quoteId;
+	@ApiModelProperty(name="pkQuote",value="报价主表")
+	@Column
+	protected Long pkQuote;
 
 	/**
 	 * 零件
 	 */
-	@ApiModelProperty(name = "component", value = "零件名称")
-	@Column(length = 50)
-	protected String component;
+	@ApiModelProperty(name = "bsComponent", value = "零件名称")
+	@Column(length = 200)
+	protected String bsComponent;
 
 	/**
 	 * 材料名称
 	 */
-	@ApiModelProperty(name = "materName", value = "材料名称")
-	@Column(length = 50)
-	protected String materName;
+	@ApiModelProperty(name = "bsMaterName", value = "材料名称")
+	@Column(length = 200)
+	protected String bsMaterName;
 
 	/**
 	 * 材料规格
 	 */
-	@ApiModelProperty(name = "model", value = "材料规格")
+	@ApiModelProperty(name = "bsModel", value = "材料规格")
 	@Column(length = 50)
-	protected String model;
+	protected String bsModel;
 
 	/**
 	 * 用量
 	 */
-	@ApiModelProperty(name = "qty", value = "用量")
+	@ApiModelProperty(name = "bsQty", value = "用量")
 	@Column(length = 50)
-	protected BigDecimal qty;
+	protected BigDecimal bsQty;
 
 	/**
 	 * 单位
 	 */
 	@ApiModelProperty(name = "unit", value = "单位")
 	@Column(length = 50)
-	protected String unit;
+	protected String bsUnit;
 
 	/**
 	 * 基数
 	 */
-	@ApiModelProperty(name = "radix", value = "基数")
+	@ApiModelProperty(name = "bsRadix", value = "基数")
 	@Column(length = 50)
-	protected String radix;
+	protected String bsRadix;
 
 	/**
 	 * 供应商
 	 */
 	@ApiModelProperty(name = "supplier", value = "供应商")
-	@Column(length = 50)
-	protected String supplier;
+	@Column(length = 200)
+	protected String bsSupplier;
 
-	public Long getQuoteId() {
-		return quoteId;
+	public Long getPkQuote() {
+		return pkQuote;
 	}
 
-	public void setQuoteId(Long quoteId) {
-		this.quoteId = quoteId;
+	public void setPkQuote(Long pkQuote) {
+		this.pkQuote = pkQuote;
 	}
 
-	public String getComponent() {
-		return component;
+
+	public String getBsComponent() {
+		return bsComponent;
 	}
 
-	public void setComponent(String component) {
-		this.component = component;
+	public void setBsComponent(String bsComponent) {
+		this.bsComponent = bsComponent;
 	}
 
-	public String getMaterName() {
-		return materName;
+	public String getBsMaterName() {
+		return bsMaterName;
 	}
 
-	public void setMaterName(String materName) {
-		this.materName = materName;
+	public void setBsMaterName(String bsMaterName) {
+		this.bsMaterName = bsMaterName;
 	}
 
-	public String getModel() {
-		return model;
+	public String getBsModel() {
+		return bsModel;
 	}
 
-	public void setModel(String model) {
-		this.model = model;
+	public void setBsModel(String bsModel) {
+		this.bsModel = bsModel;
 	}
 
-	public BigDecimal getQty() {
-		return qty;
+	public BigDecimal getBsQty() {
+		return bsQty;
 	}
 
-	public void setQty(BigDecimal qty) {
-		this.qty = qty;
+	public void setBsQty(BigDecimal bsQty) {
+		this.bsQty = bsQty;
 	}
 
-	public String getUnit() {
-		return unit;
+	public String getBsUnit() {
+		return bsUnit;
 	}
 
-	public void setUnit(String unit) {
-		this.unit = unit;
+	public void setBsUnit(String bsUnit) {
+		this.bsUnit = bsUnit;
 	}
 
-	public String getRadix() {
-		return radix;
+	public String getBsRadix() {
+		return bsRadix;
 	}
 
-	public void setRadix(String radix) {
-		this.radix = radix;
+	public void setBsRadix(String bsRadix) {
+		this.bsRadix = bsRadix;
 	}
 
-	public String getSupplier() {
-		return supplier;
-	}
+    public String getBsSupplier() {
+        return bsSupplier;
+    }
 
-	public void setSupplier(String supplier) {
-		this.supplier = supplier;
-	}
+    public void setBsSupplier(String bsSupplier) {
+        this.bsSupplier = bsSupplier;
+    }
 }

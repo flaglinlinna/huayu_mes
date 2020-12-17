@@ -58,6 +58,20 @@ public class QuoteController extends WebController {
 	public String toQuoteList() {
 		return "/web/quote/01business/quote_list";
 	}
+	
+	@ApiOperation(value = "报价项目-Bom", notes = "报价项目-Bom", hidden = true)
+	@RequestMapping(value = "/toQuoteBom")
+	public ModelAndView toQuoteBom(String quoteId) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			mav.addObject("quoteId", quoteId);
+			mav.setViewName("/web/quote/01business/quote_bom");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价基础数据失败！", e);
+		}
+		return mav;
+	}
 
 	@ApiOperation(value = "新增报价单", notes = "新增报价单", hidden = true)
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
