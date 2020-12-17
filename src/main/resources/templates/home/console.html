@@ -64,14 +64,15 @@
 	          
 	          <div class="layui-card">
               <div class="layui-card-header">待办事项</div>
-              <div class="layui-card-body" style="text-align: center;margin: 0 auto; ">
+              <div class="layui-card-body" style="margin: 0 auto; ">
                   <table id="listTable" lay-filter="listTable"></table>
               </div>
             </div>
 	          
           </div>
          <script type="text/html" id="optBar">
-             <a class="layui-btn layui-btn-xs" lay-event="edit">点击处理</a>
+             <a class="layui-btn layui-btn-xs" lay-event="edit" title-data="{{d.bsTitle}}" onclick="set_show({{d.id}},'{{d.bsRouter}}',this)">点击处理</a>
+             <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">关闭待办</a>
          </script>
 <!--   <script src="../../layuiadmin/layui/layui.js?t=1"></script>  
   <script>
@@ -92,7 +93,7 @@
 					url:context + '/todoInfo/getlist',
 					where:{'bsStatus':0},
 					method : 'get' // 默认：get请求
-					,cellMinWidth : 80,
+					,cellMinWidth : 50,
 					height:'full-180'//固定表头&full-查询框高度
 						,even:true,//条纹样式
 					//data : [],
@@ -125,12 +126,21 @@
 					    {field : 'bsTitle',title : '待办类型',sort: true},
 					    {field : 'bsContent',title : '待办内容',sort: true},
 					    {field : 'createDate',title : '创建时间',sort: true},
-					    {fixed : 'right',title : '操作',toolbar : '#optBar'} 
+					    {title : '操作',width:160,toolbar : '#optBar'} 
 					   ] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;
 					}
 				});	
+				// 监听工具条
+				/* table.on('tool(listTable)', function(obj) {
+					var data = obj.data;
+					if (obj.event === 'del') {
+						
+					} else if (obj.event === 'edit') {
+						
+					}
+				}); */
 			});
 		/* CoreUtil.sendAjax("/todoInfo/getlist", {'bsStatus':0},
 				function(data) {
@@ -148,7 +158,12 @@
 				}); */
 		
 	});
-  
+  function set_show(id,url,t){
+	  parent.layui.index.openTabsPage(context+url,'test');
+		/* var Urlss = '{:U("'+context+url+'")}&mer_id='+id;
+		//var Urlss = '{:U("'+context+url+'")}';
+		parent.layui.index.openTabsPage(Urlss, $(t).attr("title-data")); */
+	}
   
   </script>
 </body>

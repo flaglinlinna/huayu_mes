@@ -15,6 +15,7 @@ public interface BjWorkCenterDao extends CrudRepository<BjWorkCenter, Long>,JpaS
 
     public List<BjWorkCenter> findAll();
     public List<BjWorkCenter> findByDelFlag(Integer delFlag);
+    public List<BjWorkCenter> findByWorkcenterNameAndDelFlag(String workcenterName, Integer delFlag);
     int countByDelFlagAndWorkcenterCode(Integer delFlag,String workcenterCode);
     public BjWorkCenter findById(long id);
 }

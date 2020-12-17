@@ -1,15 +1,15 @@
 package com.web.quote.service;
 
 import com.app.base.data.ApiResponseResult;
-import com.web.quote.entity.HardwareMater;
+import com.web.quote.entity.ProductMater;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface HardwareService {
 
-	public ApiResponseResult add(HardwareMater hardwareMater)throws Exception;
+	public ApiResponseResult add(ProductMater hardwareMater)throws Exception;
 
-	public ApiResponseResult edit(HardwareMater hardwareMater)throws Exception;
+	public ApiResponseResult edit(ProductMater hardwareMater)throws Exception;
 
 	public ApiResponseResult delete(Long id) throws Exception;
 

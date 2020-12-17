@@ -537,6 +537,7 @@ function getDetailByTask(taskNo){
 			console.log(data)
 			if (data.result) {
 				playSaoMiaoMusic();
+				$("#cQty").val("");
 				$('#inqty').val(data.data.Qty);
 				$('#rate').val(data.data.Rate);
 				tableIns.reload({

@@ -1,11 +1,23 @@
 package com.web.quote.service.internal;
 
+import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.web.basePrice.dao.BjWorkCenterDao;
+import com.web.basePrice.dao.ItemTypeWgDao;
+import com.web.basePrice.dao.UnitDao;
+import com.web.basePrice.entity.BjWorkCenter;
+import com.web.basePrice.entity.ItemTypeWg;
+import com.web.basePrice.entity.Unit;
+import com.web.quote.dao.QuoteBomDao;
+import com.web.quote.entity.QuoteBom;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +45,7 @@ import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteItem;
 import com.web.quote.entity.QuoteItemBase;
 import com.web.quote.service.QuoteService;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service(value = "QuoteService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -48,6 +61,15 @@ public class Quotelmpl implements QuoteService {
     private QuoteItemBaseDao quoteItemBaseDao;
 	@Autowired
     private TodoInfoService todoInfoService;
+
+	@Autowired
+	private QuoteBomDao quoteBomDao;
+	@Autowired
+	private ItemTypeWgDao itemTypeWgDao;
+	@Autowired
+	private UnitDao unitDao;
+	@Autowired
+	private BjWorkCenterDao bjWorkCenterDao;
 	
 	/**
      * 新增报价单
@@ -212,4 +234,7 @@ public class Quotelmpl implements QuoteService {
         }
         return ApiResponseResult.success().data(o);
     }
+
+
+
 }

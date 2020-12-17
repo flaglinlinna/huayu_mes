@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
@@ -184,4 +185,5 @@ public class QuoteController extends WebController {
             return ApiResponseResult.failure("设置报价单状态失败！");
         }
     }
+
 }

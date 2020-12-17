@@ -2,7 +2,7 @@ package com.web.quote.controller;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
-import com.web.quote.entity.HardwareMater;
+import com.web.quote.entity.ProductMater;
 import com.web.quote.service.HardwareService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,11 +27,11 @@ public class HardwareController extends WebController {
 	@Autowired
 	private HardwareService hardwareService;
 
-	@ApiOperation(value = "五金材料信息表结构", notes = "五金材料信息表结构" + HardwareMater.TABLE_NAME)
+	@ApiOperation(value = "五金材料信息表结构", notes = "五金材料信息表结构" + ProductMater.TABLE_NAME)
 	@RequestMapping(value = "/getHardware", method = RequestMethod.GET)
 	@ResponseBody
-	public HardwareMater getHardware() {
-		return new HardwareMater();
+	public ProductMater getHardware() {
+		return new ProductMater();
 	}
 
 
@@ -45,7 +45,7 @@ public class HardwareController extends WebController {
 	@ApiOperation(value = "新增五金材料信息", notes = "新增五金材料信息", hidden = true)
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult add(@RequestBody HardwareMater hardwareMater) {
+	public ApiResponseResult add(@RequestBody ProductMater hardwareMater) {
 		String method = "hardware/add";
 		String methodName = "新增五金材料信息";
 		try {
@@ -64,7 +64,7 @@ public class HardwareController extends WebController {
 	@ApiOperation(value = "编辑五金材料信息", notes = "编辑五金材料信息", hidden = true)
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult edit(@RequestBody HardwareMater hardwareMater) {
+	public ApiResponseResult edit(@RequestBody ProductMater hardwareMater) {
 		String method = "hardware/edit";
 		String methodName = "编辑五金材料信息";
 		try {

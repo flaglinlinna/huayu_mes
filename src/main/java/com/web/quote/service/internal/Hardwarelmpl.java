@@ -7,7 +7,7 @@ import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.quote.dao.HardwareDao;
-import com.web.quote.entity.HardwareMater;
+import com.web.quote.entity.ProductMater;
 import com.web.quote.service.HardwareService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -39,7 +39,7 @@ public class Hardwarelmpl implements HardwareService {
      */
     @Override
     @Transactional
-	public ApiResponseResult add(HardwareMater hardwareMater)throws Exception{
+	public ApiResponseResult add(ProductMater hardwareMater)throws Exception{
     	if(hardwareMater == null){
             return ApiResponseResult.failure("五金材料不能为空！");
         }
@@ -52,7 +52,7 @@ public class Hardwarelmpl implements HardwareService {
      */
     @Override
     @Transactional
-    public ApiResponseResult edit(HardwareMater hardwareMater) throws Exception {
+    public ApiResponseResult edit(ProductMater hardwareMater) throws Exception {
         if(hardwareMater == null){
             return ApiResponseResult.failure("五金材料不能为空！");
         }
@@ -60,7 +60,7 @@ public class Hardwarelmpl implements HardwareService {
             return ApiResponseResult.failure("五金材料ID不能为空！");
         }
 
-        HardwareMater o = hardwareDao.findById((long) hardwareMater.getId());
+        ProductMater o = hardwareDao.findById((long) hardwareMater.getId());
         if(o == null){
             return ApiResponseResult.failure("该五金材料不存在！");
         }
@@ -86,7 +86,7 @@ public class Hardwarelmpl implements HardwareService {
         if(id == null){
             return ApiResponseResult.failure("异常类别ID不能为空！");
         }
-        HardwareMater o  = hardwareDao.findById((long) id);
+        ProductMater o  = hardwareDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("异常类别不存在！");
         }
@@ -114,7 +114,7 @@ public class Hardwarelmpl implements HardwareService {
             XSSFSheet sheet = workbook.getSheetAt(0);
             //获取最后一行的num，即总行数。此处从0开始计数
             int maxRow = sheet.getLastRowNum();
-            List<HardwareMater> hardwareMaterList = new ArrayList<>();
+            List<ProductMater> hardwareMaterList = new ArrayList<>();
             for (int row = 1; row <= maxRow; row++) {
                 String bsComponent = tranCell(sheet.getRow(row).getCell(0));
                 String bsMaterName = tranCell(sheet.getRow(row).getCell(1));
@@ -124,7 +124,7 @@ public class Hardwarelmpl implements HardwareService {
                 String bsRadix = tranCell(sheet.getRow(row).getCell(5));
                 String bsSupplier = tranCell(sheet.getRow(row).getCell(6));
                 String fmemo = tranCell(sheet.getRow(row).getCell(7));
-                HardwareMater hardwareMater = new HardwareMater();
+                ProductMater hardwareMater = new ProductMater();
                 hardwareMater.setBsComponent(bsComponent);
                 hardwareMater.setBsMaterName(bsMaterName);
                 hardwareMater.setBsModel(bsModel);
@@ -159,9 +159,9 @@ public class Hardwarelmpl implements HardwareService {
 //            filters1.add(new SearchFilter("errCode", SearchFilter.Operator.LIKE, keyword));
 //            filters1.add(new SearchFilter("errName", SearchFilter.Operator.LIKE, keyword));
         }
-        Specification<HardwareMater> spec = Specification.where(BaseService.and(filters, HardwareMater.class));
-        Specification<HardwareMater> spec1 = spec.and(BaseService.or(filters1, HardwareMater.class));
-        Page<HardwareMater> page = hardwareDao.findAll(spec1, pageRequest);
+        Specification<ProductMater> spec = Specification.where(BaseService.and(filters, ProductMater.class));
+        Specification<ProductMater> spec1 = spec.and(BaseService.or(filters1, ProductMater.class));
+        Page<ProductMater> page = hardwareDao.findAll(spec1, pageRequest);
 
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
@@ -181,9 +181,9 @@ public class Hardwarelmpl implements HardwareService {
         if (pkQuote!=null) {
             filters1.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
         }
-        Specification<HardwareMater> spec = Specification.where(BaseService.and(filters, HardwareMater.class));
-        Specification<HardwareMater> spec1 = spec.and(BaseService.or(filters1, HardwareMater.class));
-        Page<HardwareMater> page = hardwareDao.findAll(spec1, pageRequest);
+        Specification<ProductMater> spec = Specification.where(BaseService.and(filters, ProductMater.class));
+        Specification<ProductMater> spec1 = spec.and(BaseService.or(filters1, ProductMater.class));
+        Page<ProductMater> page = hardwareDao.findAll(spec1, pageRequest);
 
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
