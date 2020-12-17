@@ -125,4 +125,9 @@ public class Quotelmpl implements QuoteService {
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
+    
+    public ApiResponseResult getItemPage(Long id)throws Exception{
+    	List<QuoteItem> list=quoteItemDao.findByDelFlagAndPkQuote(0,id);
+    	return ApiResponseResult.success().data(list);
+    }
 }

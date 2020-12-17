@@ -12,7 +12,7 @@ $(function() {
 				method : 'get' // 默认：get请求
 				, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 				,cellMinWidth : 80,
-				height:'full-180'//固定表头&full-查询框高度
+				height:'full-65'//固定表头&full-查询框高度
 					,even:true,//条纹样式
 				data : [],
 				// height: 'full',
@@ -46,7 +46,16 @@ $(function() {
 				// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 				 {
 					field : 'bsStatus',
-					title : '状态',width : 100
+					title : '状态',width : 80,
+					templet:function (d) {
+						if(d.bsStatus="0"){
+							return "进行中"
+						}else if(d.bsStatus="1"){
+							return "已完成"
+						}else if(d.bsStatus="99"){
+							return "已关闭"
+						}
+					}
 				},
 				 {
 					field : 'bsCode',
@@ -116,6 +125,12 @@ $(function() {
 					},{
 						field : 'bsCustRequire',
 						title : '客户其他要求',width : 200
+					}, {
+						fixed : 'right',
+						title : '操作',
+						align : 'center',
+						toolbar : '#optBar',
+						width : 120
 					}
 				] ],
 				done : function(res, curr, count) {
@@ -123,6 +138,35 @@ $(function() {
 					pageCurr = curr;
 				}
 			});	
+			// 监听工具条
+			table.on('tool(listTable)', function(obj) {
+				var data = obj.data;
+				if (obj.event === 'del') {
+					// 关闭
+					//del(data, data.id, data.custNo);
+				} else if (obj.event === 'edit') {
+					// 编辑
+					//edit(data);
+					open("编辑项目资料")
+				}
+			});
 		});
 });
+//编辑项目弹出框
+function open(title) {
+	
+	var index =layer.open({
+		type : 1,
+		title : title,
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#setItemPage'),
+		end : function() {
+			
+		}
+	});
+	layer.full(index)
+}
 
