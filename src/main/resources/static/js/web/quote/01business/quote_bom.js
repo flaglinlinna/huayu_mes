@@ -6,9 +6,10 @@ $(function() {
 	layui.use([ 'form', 'table','upload' ], function() {
 		var table = layui.table, form = layui.form,upload = layui.upload;
 
+
 		tableIns = table.render({
 			elem : '#quoteBomList',
-			url : context + '/quoteBom/getQuoteBomList',
+			url : context + '/quoteBom/getQuoteBomList?pkQuote='+ quoteId,
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -182,7 +183,7 @@ $(function() {
 			,url: context + '/quoteBom/importExcel'
 			,accept: 'file' //普通文件
 			,data: {
-				quoteId: function(){
+				pkQuote: function(){
 					return quoteId;
 				}
 			}
@@ -235,15 +236,15 @@ function openProdErr(id, title) {
 }
 
 // 添加五金材料
-function addHardware() {
+function addQuoteBom() {
 	// 清空弹出框数据
 	cleanProdErr();
 	// 打开弹出框
-	openProdErr(null, "添加五金材料");
+	openProdErr(null, "添加外购件清单信息");
 }
 // 新增五金材料提交
 function addSubmit(obj) {
-	CoreUtil.sendAjax("/hardware/add", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/quoteBom/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -262,7 +263,7 @@ function addSubmit(obj) {
 
 // 编辑五金材料提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("/hardware/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/quoteBom/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
