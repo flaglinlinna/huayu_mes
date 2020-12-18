@@ -122,7 +122,7 @@ public class ItemTypeWgImpl extends  BasePriceUtils implements ItemTypeWgService
 			map.put("createBy", sysUserDao.findById((long) itemTypeWg.getCreateBy()).getUserName());
 			map.put("createDate", df.format(itemTypeWg.getCreateDate()));
 			if (itemTypeWg.getLastupdateBy() != null) {
-				map.put("lastupdateBy", sysUserDao.findById((long) itemTypeWg.getCreateBy()).getUserName());
+				map.put("lastupdateBy", sysUserDao.findById((long) itemTypeWg.getLastupdateBy()).getUserName());
 				map.put("lastupdateDate", df.format(itemTypeWg.getLastupdateDate()));
 			}
 			mapList.add(map);

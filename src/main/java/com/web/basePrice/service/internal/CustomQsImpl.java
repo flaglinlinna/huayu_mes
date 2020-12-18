@@ -81,7 +81,7 @@ public class CustomQsImpl extends  BasePriceUtils implements CustomQsService {
 	public ApiResponseResult getQsType(String keyword,PageRequest pageRequest) throws Exception {
 		List<Object> list =getSystemSubParamPrc(UserUtil.getSessionUser().getCompany()+"",
 				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
-				keyword,pageRequest);
+				"BJ_BASE_QS_TYPE",pageRequest);
 		Map map = new HashMap();
 		map.put("total", list.get(2));
 		map.put("rows", list.get(3));
