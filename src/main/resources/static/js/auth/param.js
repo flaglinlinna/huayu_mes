@@ -73,6 +73,7 @@ $(function() {
 			}, {
 				fixed : 'right',
 				title : '操作',
+					width : 180,
 				align : 'center',
 				toolbar : '#optBar'
 			} ] ],
@@ -146,7 +147,7 @@ $(function() {
 					title : '操作',
 					align : 'center',
 					width : 125,
-					toolbar : '#optBar'
+					toolbar : '#optBar1'
 				}
 
 			] ],
@@ -168,8 +169,22 @@ $(function() {
 				delSysParam(data, data.id, data.paramName);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				mid = data.id;
 				getSysParam(data, data.id);
+			}else if(obj.event ==='editSub'){
+				//子参数管理
+				mid = data.id;
+				openSysParamSub(data.id,data.paramName);
+				var param = {
+					"id" : data.id
+				};
+				tableIns1.reload({
+					url:context+'/sysParamSub/getList',
+					where:param,
+					done: function(res1, curr, count){
+						pageCurr1=curr;
+					}
+				})
+				loadSub(data.id);
 			}
 		});
 
@@ -306,12 +321,12 @@ function openSysParamSub(id, title) {
 
 //新增编辑子参数弹出框
 function openSysParamSub(id, title) {
-	if (id == null || id == "") {
-		$("#id").val("");
-	}
+	// if (id == null || id == "") {
+	// 	$("#id").val("");
+	// }
 	var index=layer.open({
 		type : 1,
-		title : title,
+		title : title +" 的参数信息",
 		fixed : false,
 		resize : false,
 		shadeClose : true,
@@ -355,9 +370,9 @@ function addSubmit(obj) {
 			data) {
 		if (data.result) {
 			mid = data.data.id;
-			changeButton(1);
-			layer.alert("操作成功", function(index) {
-				layer.close(index);
+			// changeButton(1);
+			layer.alert("操作成功", function() {
+				layer.closeAll();
 			});
 		} else {
 			layer.alert(data.msg, function() {
@@ -396,10 +411,13 @@ function addSubSubmit(obj) {
 	CoreUtil.sendAjax("/sysParamSub/add", JSON.stringify(obj.field), function(
 		data) {
 		if (data.result) {
-			layer.close(layer.index);
-			layer.alert("操作成功");
-				// 加载页面
-			loadSub();
+			layer.alert("操作成功",function (index) {
+				layer.close(index);
+				cleanSysParamSub();
+				loadSub(mid);
+			});
+			// 	// 加载页面
+			// loadSub(mid);
 
 		} else {
 			layer.alert(data.msg, function(index) {
@@ -416,7 +434,7 @@ function editSubSubmit(obj) {
 	CoreUtil.sendAjax("/sysParamSub/edit", JSON.stringify(obj.field), function(
 		data) {
 		if (data.result) {
-			layer.close(layer.index);
+
 			layer.alert("操作成功");
 			// 加载页面
 			loadSub();
@@ -505,12 +523,10 @@ function load(obj) {
 	});
 }
 
-function loadSub() {
+function loadSub(id) {
 	tableIns1.reload({
 		where : {
-			id : function () {
-				return mid;
-			}
+			id : id,
 		},
 		page : {
 			curr : pageCurr1

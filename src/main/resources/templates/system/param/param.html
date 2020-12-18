@@ -33,9 +33,14 @@
 			<table id="paramList" lay-filter="paramTable"></table>
 
 			<script type="text/html" id="optBar">
-            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        </script>
+				<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="editSub">参数管理</a>
+				<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        	</script>
+
+			<script type="text/html" id="optBar1">
+				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			</script>
 		</div>
 		<!--添加或编辑系统参数信息-->
 		<div id="setSysParam" class="layer_self_wrap"
@@ -104,25 +109,10 @@
 				</div>
 			</form>
 
-			<div class="layui-tab layui-tab-brief" lay-filter="tabFilter">
-				<ul class="layui-tab-title">
-					<li lay-id="add" class="layui-this">子参数信息</li>
-				</ul>
-				<div class="layui-tab-content" style="height: 100px; display: block">
-					<div class="layui-tab-item layui-show">
-						<div id="btnDiv">
-							<button type="button" id="subButton" class="layui-btn layui-btn-sm" onclick="addSysParamSub()">添加子参数信息</button>
-						</div>
-						<table id="iList" lay-filter="iTable"></table>
-					</div>
-				</div>
-			</div>
-
 		</div>
 
 		<!--添加或编辑系统子参数信息-->
-		<div id="setSysParamSub" class="layer_self_wrap"
-			 style="display: none;">
+		<div id="setSysParamSub" class="layer_self_wrap" style="display: none;">
 			<form id="paramSubForm" class="layui-form layui-form-pane"
 				  lay-filter="paramSubForm" method="post" action=""
 				  style="margin-top: 20px;">
@@ -159,6 +149,19 @@
 					</div>
 				</div>
 			</form>
+			<div class="layui-tab layui-tab-brief" lay-filter="tabFilter">
+				<ul class="layui-tab-title">
+					<li lay-id="add" class="layui-this">子参数信息</li>
+				</ul>
+				<div class="layui-tab-content" style="height: 100px; display: block">
+					<div class="layui-tab-item layui-show">
+						<!--<div id="btnDiv">-->
+							<!--<button type="button" id="subButton" class="layui-btn layui-btn-sm" onclick="addSysParamSub()">添加子参数信息</button>-->
+						<!--</div>-->
+						<table id="iList" lay-filter="iTable"></table>
+					</div>
+				</div>
+			</div>
 		</div>
 
 
