@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import com.app.base.entity.BaseEntity;
 import com.web.basePrice.entity.BjWorkCenter;
 import com.web.basePrice.entity.Proc;
 
@@ -20,11 +21,11 @@ import io.swagger.annotations.ApiModelProperty;
  * 报价报价工艺流程表
  *
  */
-@Entity(name = "QuoteProcess")
+@Entity(name = "QuoteProcesslmpl")
 @Table(name = QuoteProcess.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class QuoteProcess {
+public class QuoteProcess extends BaseEntity {
 	
 	private static final long serialVersionUID = 4625660587007894370L;
 	public static final String TABLE_NAME = "price_quote_process";
@@ -45,11 +46,11 @@ public class QuoteProcess {
     /**
      * 关联外购件清单（报价BOM清单）
      */
-    @ApiModelProperty(name="pkQuoteBom",value="报价主表")
+    @ApiModelProperty(name="pkQuoteBom",value="BOM清单表")
     @Column
     protected Long pkQuoteBom;
 
-    @ApiModelProperty(name="quoteBom",hidden=true,value="报价主表")
+    @ApiModelProperty(name="quoteBom",hidden=true,value="BOM清单表")
     @ManyToOne
     @JoinColumn(name = "pkQuoteBom", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
@@ -95,4 +96,86 @@ public class QuoteProcess {
 	@ApiModelProperty(name = "bsExplain", value = "工序说明")
 	@Column(length = 100)
 	protected String bsExplain;
+
+	public Long getPkQuote() {
+		return pkQuote;
+	}
+
+	public void setPkQuote(Long pkQuote) {
+		this.pkQuote = pkQuote;
+	}
+
+	public Quote getQuote() {
+		return quote;
+	}
+
+	public void setQuote(Quote quote) {
+		this.quote = quote;
+	}
+
+	public Long getPkQuoteBom() {
+		return pkQuoteBom;
+	}
+
+	public void setPkQuoteBom(Long pkQuoteBom) {
+		this.pkQuoteBom = pkQuoteBom;
+	}
+
+	public QuoteBom getQuoteBom() {
+		return quoteBom;
+	}
+
+	public void setQuoteBom(QuoteBom quoteBom) {
+		this.quoteBom = quoteBom;
+	}
+
+	public Long getPkProc() {
+		return pkProc;
+	}
+
+	public void setPkProc(Long pkProc) {
+		this.pkProc = pkProc;
+	}
+
+	public Proc getProc() {
+		return proc;
+	}
+
+	public void setProc(Proc proc) {
+		this.proc = proc;
+	}
+
+	public Long getPkBjWorkCenter() {
+		return pkBjWorkCenter;
+	}
+
+	public void setPkBjWorkCenter(Long pkBjWorkCenter) {
+		this.pkBjWorkCenter = pkBjWorkCenter;
+	}
+
+	public BjWorkCenter getBjWorkCenter() {
+		return bjWorkCenter;
+	}
+
+	public void setBjWorkCenter(BjWorkCenter bjWorkCenter) {
+		this.bjWorkCenter = bjWorkCenter;
+	}
+
+	public String getBsOrder() {
+		return bsOrder;
+	}
+
+	public void setBsOrder(String bsOrder) {
+		this.bsOrder = bsOrder;
+	}
+
+	public String getBsExplain() {
+		return bsExplain;
+	}
+
+	public void setBsExplain(String bsExplain) {
+		this.bsExplain = bsExplain;
+	}
+	
+	
 }
