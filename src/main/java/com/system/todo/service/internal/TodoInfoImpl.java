@@ -31,18 +31,8 @@ import com.utils.enumeration.BasicStateEnum;
 public class TodoInfoImpl  implements TodoInfoService {
     @Autowired
     private TodoInfoDao todoInfoDao;
-/*    @Autowired
-    private SysUserRolesAggDao sysUserRolesAggDao;
-    @Autowired
-    private SysRouterDao sysRoleDao;
-    @Autowired
-    private TodoInfoDao supplierInfoDao;
-    @Autowired
-    private SysUserDao sysUserDao;
-    @Autowired
-    private MailSenderService mailSenderService;
-    @Autowired
-    private AppConfig appConfig;*/
+    
+    
 
     @Transactional
     public ApiResponseResult add(TodoInfo todoInfo) throws Exception {

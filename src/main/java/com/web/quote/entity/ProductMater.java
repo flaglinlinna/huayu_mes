@@ -1,12 +1,18 @@
 package com.web.quote.entity;
 
 import com.app.base.entity.BaseEntity;
+import com.web.basePrice.entity.Unit;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 
@@ -28,7 +34,7 @@ public class ProductMater extends BaseEntity {
 	 * 五金:hardware
 	 * 注塑:molding
 	 * 表面处理:surface
-	 * 组装:assemble
+	 * 组装:packag
 	 */
 	@ApiModelProperty(name = "bsType", value = "类型")
 	@Column(length = 50)
@@ -42,7 +48,7 @@ public class ProductMater extends BaseEntity {
 	protected Long pkQuote;
 
 	/**
-	 * 零件
+	 * 零件名称
 	 */
 	@ApiModelProperty(name = "bsComponent", value = "零件名称")
 	@Column(length = 200)
@@ -68,6 +74,12 @@ public class ProductMater extends BaseEntity {
 	@ApiModelProperty(name = "bsQty", value = "用量")
 	@Column(length = 50)
 	protected BigDecimal bsQty;
+	/**
+	 * 制品量
+	 */
+	@ApiModelProperty(name = "bsProQty", value = "制品量")
+	@Column(length = 50)
+	protected BigDecimal bsProQty;
 
 	/**
 	 * 单位
@@ -75,6 +87,19 @@ public class ProductMater extends BaseEntity {
 	@ApiModelProperty(name = "unit", value = "单位")
 	@Column(length = 50)
 	protected String bsUnit;
+	
+	/**
+     * 关联单位
+     */
+    @ApiModelProperty(name="pkUnit",value="关联单位")
+    @Column
+    protected Long pkUnit;
+    
+    @ApiModelProperty(name="unit",hidden=true,value="单位")
+    @ManyToOne
+    @JoinColumn(name = "pkUnit", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected Unit unit;
 
 	/**
 	 * 基数
@@ -221,4 +246,29 @@ public class ProductMater extends BaseEntity {
 	public void setBsColor(String bsColor) {
 		this.bsColor = bsColor;
 	}
+
+	public Long getPkUnit() {
+		return pkUnit;
+	}
+
+	public void setPkUnit(Long pkUnit) {
+		this.pkUnit = pkUnit;
+	}
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+
+	public BigDecimal getBsProQty() {
+		return bsProQty;
+	}
+
+	public void setBsProQty(BigDecimal bsProQty) {
+		this.bsProQty = bsProQty;
+	}
+	
 }

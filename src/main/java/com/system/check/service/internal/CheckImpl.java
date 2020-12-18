@@ -17,16 +17,17 @@ import com.system.check.dao.WorkflowStepDao;
 import com.system.check.entity.CheckInfo;
 import com.system.check.entity.WorkflowStep;
 import com.system.check.service.CheckService;
-import com.system.role.dao.SysRoleDao;
-import com.system.role.entity.SysRole;
 import com.system.todo.dao.TodoInfoDao;
 import com.system.todo.entity.TodoInfo;
 import com.system.todo.service.TodoInfoService;
-import com.system.user.dao.SysUserDao;
-import com.system.user.dao.UserRoleMapDao;
 import com.system.user.entity.SysUser;
-import com.system.user.entity.UserRoleMap;
 import com.utils.UserUtil;
+import com.web.quote.dao.ProductMaterDao;
+import com.web.quote.dao.QuoteBomDao;
+import com.web.quote.dao.QuoteDao;
+import com.web.quote.entity.ProductMater;
+import com.web.quote.entity.Quote;
+import com.web.quote.entity.QuoteBom;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -37,16 +38,15 @@ public class CheckImpl   implements CheckService {
 	@Autowired
     private WorkflowStepDao workflowStepDao;
     @Autowired
-    private SysUserDao sysUserDao;
-    @Autowired
-    private UserRoleMapDao userRoleMapDao;
-    @Autowired
-    private SysRoleDao sysRoleDao;
-    @Autowired
     private TodoInfoService todoInfoService;
     @Autowired
     private TodoInfoDao todoInfoDao;
-
+    @Autowired
+    private QuoteDao quoteDao;
+    @Autowired
+    private QuoteBomDao quoteBomDao;
+    @Autowired
+    private ProductMaterDao productMaterDao;
 
 	@Override
 	public boolean checkFirst(Long id, String checkCode) throws Exception {
@@ -253,13 +253,35 @@ public class CheckImpl   implements CheckService {
 				//流程结束
                 //1.如果是“QUOTE_NEW”第一步，业务部流程审批
                 if(c.getBsCheckCode().equals("QUOTE_NEW") && c.getBsRecordId() != null){
-                    //1.1获取单位信息，修改状态为“审核通过”
-                    /*Unit unit = unitDao.findById((long) c.getBsRecordId());
-                    if(unit != null){
-                        unit.setModifiedTime(new Date());
-                        unit.setBsStatus(2);
-                        unitDao.save(unit);
-                    }*/
+                    //1.1获取报价单，修改状态为“已完成”
+                	Quote quote = quoteDao.findById((long) c.getBsRecordId());
+                    if(quote != null){
+                    	quote.setLastupdateDate(new Date());
+                    	quote.setBsStatus(1);
+                    	quoteDao.save(quote);
+                    }
+                    //2.1根据工作中心下发BOM
+                    List<QuoteBom> lql = quoteBomDao.findByDelFlagAndPkQuote(0, c.getBsRecordId());
+                    if(lql.size() > 0){
+                    	List<ProductMater> lpm = new ArrayList<ProductMater>();
+                    	for(QuoteBom qb:lql){
+                    		ProductMater pm = new ProductMater();
+                    		pm.setBsType(qb.getWc().getBsCode());//类型
+                    		pm.setBsComponent(qb.getBsComponent());
+                    		pm.setBsMaterName(qb.getBsMaterName());
+                    		pm.setBsModel(qb.getBsModel());
+                    		pm.setBsQty(qb.getBsQty());
+                    		pm.setPkUnit(qb.getPkUnit());
+                    		pm.setBsRadix(qb.getBsRadix());
+                    		pm.setBsProQty(qb.getBsProQty());
+                    		lpm.add(pm);
+                        }
+                    	productMaterDao.saveAll(lpm);
+                    }
+                    
+                    //3。发送待办消息
+                    
+                    
                 }
 
                 //2.如果是“RULE”防御工作制度审核
