@@ -41,22 +41,22 @@ $(function() {
 				},
 				cols : [ [ 
 				           {type : 'numbers'},
-							 {
-								field : 'bsStatus',
-								title : '状态',width : 80,
-								templet:function (d) {
-									if(d.bsStatus="0"){
-										return "进行中"
-									}else if(d.bsStatus="1"){
-										return "已完成"
-									}else if(d.bsStatus="99"){
-										return "已关闭"
-									}
-								}
-							},
+							 
 				 {field : 'bsCode',title : '报价单编号',width : 150,sort: true}, 
 				 {field : 'bsType',title : '报价类型', width : 100}
-				, {
+				,{
+					field : 'bsStatus',
+					title : '状态',width : 80
+					,templet:function (d) {
+						if(d.bsStatus="0"){
+							return "进行中"
+						}else if(d.bsStatus="1"){
+							return "已完成"
+						}else if(d.bsStatus="99"){
+							return "已关闭"
+						}
+					}
+				}, {
 					field : 'bsFinishTime',
 					title : '完成日期',
 					 sort: true
@@ -109,14 +109,9 @@ $(function() {
 					},{
 						field : 'bsRequire',
 						title : '环保要求',width : 140
-					},
-					{
-						field : 'bsLevel',
-						title : '防水防尘等级',width : 140
-					},{
-						field : 'bsCustRequire',
-						title : '客户其他要求',width : 200
-					}, {
+					},{field : 'bsLevel',title : '防水防尘等级',width : 140},
+					  {field : 'bsCustRequire',
+						title : '客户其他要求',width : 200}, {
 						fixed : 'right',
 						title : '操作',
 						//align : 'center',
@@ -127,6 +122,16 @@ $(function() {
 				done : function(res, curr, count) {
 					//
 					pageCurr = curr;
+					res.data.forEach(function (item, index) {
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
+						if(item.bsStatus == 0){
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
+						}else if(item.bsStatus="2"){
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
+						}else if(item.bsStatus="99"){
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');
+						}
+					});
 				}
 			});	
 			// 监听工具条
