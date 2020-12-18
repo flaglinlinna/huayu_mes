@@ -5,10 +5,9 @@ var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table' , 'tableSelect' ], function() {
 		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
-
 		tableIns = table.render({
 			elem : '#client_procList',
-			url : context + '/base/prodproc/getList',
+			url : context + '/quoteProcess/getList',
 			method : 'get' // 默认：get请求
 			, toolbar: '#toolbar',
 			cellMinWidth : 80,
@@ -35,40 +34,35 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			,{
-				field : 'itemId',
-				title : '物料Id',
-				width:0,
-				hide:true
-			}
-			,{
-				field : 'itemNo',
-				title : '物料编码',
-				width:140
+				field : 'bsName',
+				title : '零件名称'
 			},{
-				field : 'itemName',
-				title : '物料名称',
-				templet:'<div>{{d.mtrial.itemName}}</div>'
-			}, {
-				field : 'procOrder',
-				title : '工序顺序',"edit":"number","event": "dataCol",
-				width:80
-			}, {
 				field : 'procNo',
-				title : '工序编号',
-				width:80,
-				templet:'<div>{{d.process.procNo}}</div>'
-			}, {
+				title : '工序编码',
+				templet:'<div>{{d.proc.procNo}}</div>'
+			},{
 				field : 'procName',
 				title : '工序名称',
-				width:130,
-				templet:'<div>{{d.process.procName}}</div>'
+				templet:'<div>{{d.proc.procName}}</div>'
 			}, {
-				field : 'jobAttr',
-				title : '过程属性',
-				templet : '#statusTpl',
-				width:90,
-				align : 'center'
+				field : 'workCenter',
+				title : '工作中心',
+				templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>'
+			}, {
+				field : 'bsOrder',
+				title : '工序顺序',"edit":"number","event": "dataCol",
+				width:80
 			},{
+				field : 'fmemo',
+				title : '工序说明',
+				templet:function (d) {
+					if(d.proc.fmemo==null){
+						return ""
+					}else{
+						return d.proc.fmemo
+					}
+				},
+			},  {
 				fixed : 'right',
 				title : '操作',
 				width:120,
@@ -77,43 +71,48 @@ $(function() {
 			} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
-				merge(res.data,['itemNo','mtrial.itemName'],[2,3]);
+				merge(res.data,['bsName',],[1,1]);
 			}
 		});
-		
+		/*
 		tableSelect=tableSelect.render({
 			elem : '#num',
 			searchKey : 'keyword',
 			checkedKey : 'id',
 			searchPlaceholder : '试着搜索',
 			table : {
-				url:  context +'/base/prodproc/getProdList',
+				url:  context +'/quoteProcess/getBomList',
 				method : 'get',
 				cols : [ [
-				{ type: 'checkbox' },//多选  radio
+				{ type: 'radio' },//多选 checkbox
 				, {
 					field : 'ID',
 					title : 'id',
 					width : 0,hide:true
-				}, {
-					field : 'ITEM_NO',
-					title : '物料编码',
-					width : 150
-				}, {
-					field : 'ITEM_NAME_S',
-					title : '物料简称',
-					width : 150
 				},{
-					field : 'ITEM_NAME',
-					title : '物料描述',
-					width : 400
-				} ] ],
-				page : true,
+					field : 'bsComponent',
+					title : '零件名称',
+					width : 120,
+				},{
+					field : 'bsElement',
+					title : '组件名称',
+					width : 110,
+				},{
+					field : 'bsMaterName',
+					title : '材料名称',
+					width : 130,
+				},{
+					field : 'bsModel',
+					title : '材料规格',
+					width : 150,
+				}, ] ],
+				page : false,
 				request : {
 					pageName : 'page', // 页码的参数名称，默认：page
 					limitName : 'rows' // 每页数据量的参数名，默认：limit
 				},
 				parseData : function(res) {
+					console.log(res)
 					if(res.result){
 						// 可进行数据操作
 						return {
@@ -134,21 +133,16 @@ $(function() {
 				//console.log(da[0].num)
 				var ids = '';var nos = "";
 				data.data.forEach(function(element) {
-					ids += element.ID+",";
-					nos += element.ITEM_NO+",";
+					element_id = element.id;
+					bsComponent = element.bsComponent;
 				});
 				form.val("clientProcForm", {
-					"itemId":ids,
-					"num" : nos
+					"itemId":element_id,
+					"num" : bsComponent
 				});
 				form.render();// 重新渲染
 		}
-		});
-		
-		form.on('checkbox(isStatusTpl)', function(obj) {//修改过程属性
-			console.log(this)
-			setStatus(obj, this.value, this.name, obj.elem.checked);
-		});
+		});*/
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
 			// 重新加载table
@@ -172,13 +166,14 @@ $(function() {
 				title : '序号',width:80
 			}, */{
 				field : 'procNo',
-				title : '编码', minWidth: 100
+				title : '工序编码', minWidth: 100
 			}, {
 				field : 'procName',
-				title : '名称', minWidth: 200
+				title : '工序名称', minWidth: 200
 			}, {
-				field : 'jobAttr',width:100,
-				title : '过程属性',templet:'#add_statusTpl'
+				field : 'workcenterName',
+				title : '工作中心', minWidth: 250,
+				templet:'<div>{{d.bjWorkCenter.workcenterName}}</div>'
 			},{
 	              type: 'toolbar',
 	              title: '操作',
@@ -188,10 +183,7 @@ $(function() {
 			data:[]
 		});	
 		
-		form.on('select(fdemoName)', function(data){//监听选择事件
-			//var params={"client":$("#pkClient").val()}
-			getProcByClient($("#fdemoName").val());
-		})
+		
 		//监听单元格编辑
 		  table.on('edit(client_procTable)', function(obj){
 		    var value = obj.value //得到修改后的值
@@ -201,7 +193,7 @@ $(function() {
 		    var tr = obj.tr;
 	        // 单元格编辑之前的值
 	        var oldtext = $(tr).find("td[data-field='"+obj.field+"'] div").text();
-		    if(field == 'procOrder'){
+		    if(field == 'bsOrder'){
 		    	//判断是否为数字
 		    	if(isRealNum(value)){
 		    		doProcOrder(data.id,value);
@@ -274,70 +266,27 @@ $(function() {
 		        	//fyx-202011-02
 		        	var checks = $('tbody tr[data-index="'+i+'"] td[data-field="jobAttr"] input[type="checkbox"]:checked');
 
-		        	if(checks.length > 0){
-		        		procIdList += checkStatus[i].id+"@1,";
-		        	}else{
-		        		procIdList += checkStatus[i].id+"@0,";
-		        	}
+		        	procIdList += checkStatus[i].id+",";
 				}
 		    });
-			addSubmit(procIdList,data.field.itemId,data.field.num);
+			if(data.field.num==""){
+				alert("请选择零件")
+				return false;
+			}
+			console.log(data.field.num)
+			//addSubmit(procIdList,data.field.itemId);
+			addSubmit(procIdList,data.field.num);
 			return false;
 			
 		});
 		
-		// 设置过程属性
-		function setStatus(obj, id, name, checked) {
-			//console.log(checked)
-			var jobAttr = checked ? 1 : 0;
-			//console.log(jobAttr)
-			var deaprtisStatus = checked ? "勾选" : "不勾选";
-			// 正常/禁用
-			layer.confirm('您确定要把工序：' + name + '过程属性设置为' + deaprtisStatus + '状态吗？',
-					{
-						btn1 : function(index) {
-							var param = {
-								"id" : id,
-								"jobAttr" : jobAttr
-							};
-							CoreUtil.sendAjax("/base/prodproc/doJobAttr", JSON
-									.stringify(param), function(data) {
-								if (data.result) {
-									layer.alert("操作成功", function() {
-										layer.closeAll();
-										loadAll();
-									});
-								} else {
-									layer.alert(data.msg, function() {
-										layer.closeAll();
-									});
-								}
-							}, "POST", false, function(res) {
-								layer.alert("操作请求错误，请您稍后再试", function() {
-									layer.closeAll();
-								});
-							});
-						},
-						btn2 : function() {
-							obj.elem.checked = !jobAttr;
-							form.render();
-							layer.closeAll();
-						},
-						cancel : function() {
-							obj.elem.checked = !jobAttr;
-							form.render();
-							layer.closeAll();
-						}
-					});
-		}
-		
-		// 设置过程属性
+		// 设置工序顺序
 		function doProcOrder(id, procOrder) {
 			var param = {
 					"id" : id,
 					"procOrder" : procOrder
 				};
-				CoreUtil.sendAjax("/base/prodproc/doProcOrder", JSON
+				CoreUtil.sendAjax("/quoteProcess/doProcOrder", JSON
 						.stringify(param), function(data) {
 					layer.alert(data.msg, function() {
 						layer.closeAll();
@@ -351,7 +300,7 @@ $(function() {
 		}
 	});
 });
-//添加不工艺流程
+//添加工艺流程
 function addProc(id) {
 	// 获取初始化信息
 	getAddList(id);
@@ -359,52 +308,6 @@ function addProc(id) {
 	openProc(null, "添加工艺流程");
 }
 
-//根据客户信息获取工序数据
-function getProcByClient(params){
-	var params={"fdemoName":params}
-	CoreUtil.sendAjax("/base/client_proc/getClientItem", JSON.stringify(params), function(
-			data) {
-		if (data.result) {
-			//console.log(data.data)		
-			var beSelected=data.data;
-			tableProc.reload({
-				done : function(res, curr, count) {
-					for(var q=0;q<res.data.length;q++){//更改css来实现未选中的效果 增加-2020-11-23
-	                      $('tbody tr[data-index="'+q+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('false', true);
-	                      $('tbody tr[data-index="'+q+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().removeClass('layui-form-checked');          
-					}
-					for(var i =0;i<res.data.length;i++){
-						for(var j=0;j<beSelected.length;j++){
-							if(res.data[i].id == beSelected[j].procId){
-								//这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
-						      /*  res.data[i]["LAY_CHECKED"]='true';
-								//更改css来实现选中的效果
-								//$('tbody tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
-								$('tbody tr[data-index="'+i+'"]  div.layui-form-checkbox').addClass('layui-form-checked');*/
-								
-								//res.data[i]["LAY_CHECKED"]='true';//delect -2020-11-23
-		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
-		                        $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
-
-		                        if(beSelected[j].jobAttr==1){
-									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().addClass('layui-form-checked');
-									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').prop('checked', true);
-								}else{
-									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').next().removeClass('layui-form-checked');
-									$('tbody tr[data-index="'+i+'"]  td[data-field="jobAttr"] input[type="checkbox"]').prop('checked', false);
-								}
-							}
-						}
-					}
-				}
-			})
-		} else {
-			layer.alert(data.msg);
-		}
-	}, "POST", false, function(res) {
-		layer.alert(res.msg);
-	});
-}
 
 
 function delClientProc( id) {
@@ -416,7 +319,7 @@ function delClientProc( id) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("/base/prodproc/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/quoteProcess/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
@@ -438,15 +341,16 @@ function delClientProc( id) {
 }
 
 //新增工艺流程提交
-function addSubmit(procIdlist,itemIds,itemNos) {
+function addSubmit(procIdlist,itemIds) {
 	var params = {
 			"proc":procIdlist,
-			"itemIds" : itemIds,
-			"itemNos":itemNos
+			"itemId" : itemIds,
+			"quoteId":quoteId
 		};
 
-	CoreUtil.sendAjax("/base/prodproc/add", JSON.stringify(params), function(
+	CoreUtil.sendAjax("/quoteProcess/add", JSON.stringify(params), function(
 			data) {
+		console.log(data)
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
@@ -464,45 +368,42 @@ function addSubmit(procIdlist,itemIds,itemNos) {
 	});
 }
 
-//获取客户，工序信息
-function getAddList(id){
-	CoreUtil.sendAjax("/base/prodproc/getAddList", "",
+//获取工序列表
+function getAddList(){
+	//console.log(bomNameList)
+	
+	CoreUtil.sendAjax("/quoteProcess/getAddList", "",
 			function(data) {
 				if (data.result) {
 					//工序表
 					tableProc.reload({
-						data:data.data.Process,
+						data:data.data,
 						done : function(res, curr, count) {
 							cleanProc();//清空之前的选中
-							if(id != ''){
-								getProcByClient(id)
-							}
 						}
 					});
-					$("#fdemoName").empty();
-					var c=data.data.Client;
-					for (var i = 0; i < c.length; i++) {
-						if(i==0){
-							$("#fdemoName").append("<option value=''>请点击选择</option>");
-						}
-						if(id != ''){
-							if(c[i].id == id){
-								$("#fdemoName").append("<option value=" + c[i][0]+ " selected>"+c[i][1]+"</option>");
-							}else{
-								$("#fdemoName").append("<option value=" + c[i][0]+ ">"+c[i][1]+"</option>");
-							}
-						}else{
-							$("#fdemoName").append("<option value=" + c[i][0]+ ">"+c[i][1]+"</option>");
-						}
-					}			
-					layui.form.render('select');
 				} else {
 					layer.alert(data.msg)
 				}
 				//console.log(data)
-			}, "POST", false, function(res) {
+			}, "GET", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试");
 			});
+	//零件下拉框
+	$("#num").empty();
+	var bomlist=bomNameList.data;
+	for(var i=0;i<bomlist.length;i++){
+		if(i==0){
+			if (i == 0) {
+				$("#num")
+						.append("<option value=''> 请选择</option>");
+			}
+			$("#num").append(
+					"<option value=" + bomlist[i].BS_COMPONENT + ">"
+							+ bomlist[i].BS_COMPONENT +"</option>");
+		}
+	}
+	layui.form.render('select');
 }
 function merge(res,columsName,columsIndex) {
     var data = res;
@@ -516,7 +417,7 @@ function merge(res,columsName,columsIndex) {
                 var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
                 var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);//获取相同列的第一列
                 if (data[i][columsName[0]] === data[i-1][columsName[0]]) { //后一行的值与前一行的值做比较，相同就需要合并
-                    mark += 1;
+                	mark += 1;
                     tdPreArr.each(function () {//相同列的第一列增加rowspan属性
                         $(this).attr("rowspan", mark);
                     });

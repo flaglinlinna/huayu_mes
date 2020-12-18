@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 报价工艺流程表
  *
  */
-@Entity(name = "QuoteProcesslmpl")
+@Entity(name = "QuoteProcess")
 @Table(name = QuoteProcess.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
@@ -56,6 +56,12 @@ public class QuoteProcess extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     protected QuoteBom quoteBom;
     
+    /**
+	 * Bom零件名称
+	 */
+	@ApiModelProperty(name = "bsName", value = "Bom零件名称")
+	@Column(length = 100)
+	protected String bsName;
     
     /**
      * 关联工序表
@@ -70,32 +76,12 @@ public class QuoteProcess extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     protected Proc proc;
     
-    /**
-     * 关联工作中心
-     */
-    @ApiModelProperty(name="pkBjWorkCenter",value="工作中心表")
-    @Column
-    protected Long pkBjWorkCenter;
-    
-    @ApiModelProperty(name="bjWorkCenter",hidden=true,value="工作中心表")
-    @ManyToOne
-    @JoinColumn(name = "pkBjWorkCenter", insertable = false, updatable = false)
-    @NotFound(action = NotFoundAction.IGNORE)
-    protected BjWorkCenter bjWorkCenter;
 	
 	/**
 	 * 工序顺序
 	 */
 	@ApiModelProperty(name = "bsOrder", value = "工序顺序")
-	@Column(length = 50)
-	protected String bsOrder;
-	
-	/**
-	 * 工序说明
-	 */
-	@ApiModelProperty(name = "bsExplain", value = "工序说明")
-	@Column(length = 100)
-	protected String bsExplain;
+	protected int bsOrder;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -145,37 +131,22 @@ public class QuoteProcess extends BaseEntity {
 		this.proc = proc;
 	}
 
-	public Long getPkBjWorkCenter() {
-		return pkBjWorkCenter;
+	
+
+	public String getBsName() {
+		return bsName;
 	}
 
-	public void setPkBjWorkCenter(Long pkBjWorkCenter) {
-		this.pkBjWorkCenter = pkBjWorkCenter;
+	public void setBsName(String bsName) {
+		this.bsName = bsName;
 	}
 
-	public BjWorkCenter getBjWorkCenter() {
-		return bjWorkCenter;
-	}
-
-	public void setBjWorkCenter(BjWorkCenter bjWorkCenter) {
-		this.bjWorkCenter = bjWorkCenter;
-	}
-
-	public String getBsOrder() {
+	public int getBsOrder() {
 		return bsOrder;
 	}
 
-	public void setBsOrder(String bsOrder) {
+	public void setBsOrder(int bsOrder) {
 		this.bsOrder = bsOrder;
 	}
-
-	public String getBsExplain() {
-		return bsExplain;
-	}
-
-	public void setBsExplain(String bsExplain) {
-		this.bsExplain = bsExplain;
-	}
-	
 	
 }

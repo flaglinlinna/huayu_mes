@@ -1,5 +1,6 @@
 package com.web.quote.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,12 @@ public class QuoteProcessController extends WebController {
 	
 	@ApiOperation(value = "报价工艺流程页", notes = "报价工艺流程页", hidden = true)
 	@RequestMapping(value = "/toQuoteProcess")
-	public ModelAndView toQuoteProcess() {
+	public ModelAndView toQuoteProcess(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
-			//mav.addObject("info", info);
+			ApiResponseResult bomNameList=quoteProcessService.getBomList2(quoteId);
+			mav.addObject("quoteId", quoteId);
+			mav.addObject("bomNameList", bomNameList);
 			mav.setViewName("/web/quote/01business/quote_process");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -75,4 +78,100 @@ public class QuoteProcessController extends WebController {
             return ApiResponseResult.failure("获取报价工艺流程列表失败！");
         }
     }	
+	@ApiOperation(value = "获取报价工艺流程-bom列表", notes = "获取报价工艺流程-bom列表",hidden = true)
+    @RequestMapping(value = "/getBomList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getBomList(String keyword) {
+        String method = "quoteProcess/getBomList";String methodName ="获取报价工艺流程-bom列表";
+        try {
+            Sort sort = new Sort(Sort.Direction.ASC, "id");
+            ApiResponseResult result = quoteProcessService.getBomList(keyword, super.getPageRequest(sort));
+            logger.debug("获取报价工艺流程列表=getBomList:");
+            getSysLogService().success(module,method, methodName, keyword);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取报价工艺流程-bom列表失败！", e);
+            getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
+            return ApiResponseResult.failure("获取报价工艺流程-bom列表失败！");
+        }
+    }	
+	@ApiOperation(value = "获取报价工艺流程-工序列表", notes = "获取报价工艺流程-工序列表",hidden = true)
+    @RequestMapping(value = "/getAddList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getAddList() {
+        String method = "quoteProcess/getAddList";String methodName ="获取报价工艺流程-工序列表";
+        try {
+            ApiResponseResult result = quoteProcessService.getAddList();
+            logger.debug("获取报价工艺流程列表=getAddList:");
+            getSysLogService().success(module,method, methodName,"" );
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取报价工艺流程-工序列表失败！", e);
+            getSysLogService().error(module,method, methodName, "关键字:;"+e.toString());
+            return ApiResponseResult.failure("获取报价工艺流程-工序列表失败！");
+        }
+    }	
+	
+	@ApiOperation(value = "新增报价-工艺流程", notes = "新增报价-工艺流程",hidden = true)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult add(@RequestBody Map<String, Object> params) {   	
+        String method = "quoteProcess/add";String methodName ="新增报价-工艺流程";
+        String proc = params.get("proc").toString();
+        String itemId = params.get("itemId").toString();
+        String quoteId = params.get("quoteId").toString();
+        try{
+            ApiResponseResult result = quoteProcessService.add(proc,itemId,quoteId);
+            logger.debug("新增报价-工艺流程=add:");
+            getSysLogService().success(module,method, methodName,
+                    "外购清单:"+itemId+";报价单id:"+quoteId+";工序Id:"+proc);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("新增报价-工艺流程失败！", e);
+            getSysLogService().error(module,method, methodName,"外购清单id:"+itemId+";报价单id:"+quoteId+";工序Id:"+proc+";"+ e.toString());
+            return ApiResponseResult.failure("新增报价-工艺流程失败！");
+        }
+    }
+	
+	@ApiOperation(value = "修改顺序", notes = "修改顺序", hidden = true)
+    @RequestMapping(value = "/doProcOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doProcOrder(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "quoteProcess/doProcOrder";String methodName ="修改顺序";
+        try{
+        	Long id = Long.parseLong(params.get("id").toString()) ;
+        	Integer procOrder=Integer.parseInt(params.get("procOrder").toString());
+            ApiResponseResult result = quoteProcessService.doProcOrder(id, procOrder);
+            logger.debug("修改顺序=doProcOrder:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("修改顺序失败！", e);
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            return ApiResponseResult.failure("修改顺序失败！");
+        }
+    }
+	
+	@ApiOperation(value = "删除", notes = "删除",hidden = true)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult delete(@RequestBody Map<String, Object> params){
+        String method = "quoteProcess/delete";String methodName ="删除";
+        try{
+        	Long id = Long.parseLong(params.get("id").toString()) ;
+            ApiResponseResult result = quoteProcessService.delete(id);
+            logger.debug("删除=delete:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("删除失败！", e);
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            return ApiResponseResult.failure("删除失败！");
+        }
+    }
 }

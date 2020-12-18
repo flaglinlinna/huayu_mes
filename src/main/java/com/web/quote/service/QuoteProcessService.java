@@ -8,15 +8,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface QuoteProcessService {
 
-//ApiResponseResult getAddList()  throws Exception;
+   public ApiResponseResult getAddList()  throws Exception;
 	
-	//ApiResponseResult getBomList(String keyword, PageRequest pageRequest)  throws Exception;//获取物料列表
+   public ApiResponseResult getBomList(String keyword, PageRequest pageRequest)  throws Exception;//获取物料列表
 	
-	//ApiResponseResult add(String proc,String itemIds,String itemNos)  throws Exception;
+   public ApiResponseResult getBomList2(String quoteId)throws Exception;
 	
-	ApiResponseResult getList(String keyword, PageRequest pageRequest)  throws Exception;
+   public ApiResponseResult add(String proc,String itemId,String quoteId)  throws Exception;
 	
-	//ApiResponseResult delete(Long id)  throws Exception;
+   public ApiResponseResult getList(String keyword, PageRequest pageRequest)  throws Exception;
 	
-	//ApiResponseResult doProcOrder(Long id,Integer procOrder)  throws Exception;
+   public ApiResponseResult delete(Long id)  throws Exception;
+	
+   public ApiResponseResult doProcOrder(Long id,Integer bsOrder)  throws Exception;
 }
