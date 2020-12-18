@@ -181,4 +181,44 @@ public class ProductMater extends BaseEntity {
     public void setBsSupplier(String bsSupplier) {
         this.bsSupplier = bsSupplier;
     }
+
+	public String getBsType() {
+		return bsType;
+	}
+
+	public void setBsType(String bsType) {
+		this.bsType = bsType;
+	}
+
+	public String getBsWaterGap() {
+		return bsWaterGap;
+	}
+
+	public void setBsWaterGap(String bsWaterGap) {
+		this.bsWaterGap = bsWaterGap;
+	}
+
+	public String getBsCave() {
+		return bsCave;
+	}
+
+	public void setBsCave(String bsCave) {
+		this.bsCave = bsCave;
+	}
+
+	public String getBsMachiningType() {
+		return bsMachiningType;
+	}
+
+	public void setBsMachiningType(String bsMachiningType) {
+		this.bsMachiningType = bsMachiningType;
+	}
+
+	public String getBsColor() {
+		return bsColor;
+	}
+
+	public void setBsColor(String bsColor) {
+		this.bsColor = bsColor;
+	}
 }
