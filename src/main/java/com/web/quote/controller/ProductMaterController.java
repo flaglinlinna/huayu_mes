@@ -3,7 +3,7 @@ package com.web.quote.controller;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.ProductMater;
-import com.web.quote.service.HardwareService;
+import com.web.quote.service.ProductMaterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +19,16 @@ import java.util.Map;
 @CrossOrigin
 @ControllerAdvice
 @Controller
-@RequestMapping(value = "hardware")
-public class HardwareController extends WebController {
+@RequestMapping(value = "productMater")
+public class ProductMaterController extends WebController {
 
 	private String module = "五金材料信息";
 
 	@Autowired
-	private HardwareService hardwareService;
+	private ProductMaterService productMaterService;
 
 	@ApiOperation(value = "五金材料信息表结构", notes = "五金材料信息表结构" + ProductMater.TABLE_NAME)
-	@RequestMapping(value = "/getHardware", method = RequestMethod.GET)
+	@RequestMapping(value = "/getProductMater", method = RequestMethod.GET)
 	@ResponseBody
 	public ProductMater getHardware() {
 		return new ProductMater();
@@ -37,19 +37,27 @@ public class HardwareController extends WebController {
 
 
 	@ApiOperation(value = "五金材料信息列表页", notes = "五金材料信息列表页", hidden = true)
-	@RequestMapping(value = "/toHardware")
-	public String toHardware() {
-		return "/web/quote/02produce/hardware";
+		@RequestMapping(value = "/toProductMater")
+	public ModelAndView toProductMater(String bsType) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			mav.addObject("bsType", bsType);
+			mav.setViewName("/web/quote/02produce/product_mater");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价基础数据失败！", e);
+		}
+		return mav;
 	}
 
 	@ApiOperation(value = "新增五金材料信息", notes = "新增五金材料信息", hidden = true)
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult add(@RequestBody ProductMater hardwareMater) {
-		String method = "hardware/add";
+		String method = "productMater/add";
 		String methodName = "新增五金材料信息";
 		try {
-			ApiResponseResult result = hardwareService.add(hardwareMater);
+			ApiResponseResult result = productMaterService.add(hardwareMater);
 			logger.debug("新增五金材料信息=add:");
 			getSysLogService().success(module, method, methodName, hardwareMater.toString());
 			return result;
@@ -65,10 +73,10 @@ public class HardwareController extends WebController {
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult edit(@RequestBody ProductMater hardwareMater) {
-		String method = "hardware/edit";
+		String method = "productMater/edit";
 		String methodName = "编辑五金材料信息";
 		try {
-			ApiResponseResult result = hardwareService.edit(hardwareMater);
+			ApiResponseResult result = productMaterService.edit(hardwareMater);
 			logger.debug("编辑五金材料信息=edit:");
 			getSysLogService().success(module, method, methodName, hardwareMater.toString());
 			return result;
@@ -84,11 +92,11 @@ public class HardwareController extends WebController {
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult delete(@RequestBody Map<String, Object> params) {
-		String method = "hardware/delete";
+		String method = "productMater/delete";
 		String methodName = "删除五金材料信息";
 		try {
 			long id = Long.parseLong(params.get("id").toString());
-			ApiResponseResult result = hardwareService.delete(id);
+			ApiResponseResult result = productMaterService.delete(id);
 			logger.debug("删除五金材料信息=delete:");
 			getSysLogService().success(module,method, methodName, params);
 			return result;
@@ -104,11 +112,11 @@ public class HardwareController extends WebController {
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getList(String keyword) {
-		String method = "hardware/getList";
+		String method = "productMater/getList";
 		String methodName = "获取五金材料列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = hardwareService.getList(keyword, super.getPageRequest(sort));
+			ApiResponseResult result = productMaterService.getList(keyword, super.getPageRequest(sort));
 			logger.debug("获取五金材料列表=getList:");
 			return result;
 		} catch (Exception e) {
@@ -127,7 +135,7 @@ public class HardwareController extends WebController {
 		String methodName = "获取报价单下五金材料列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = hardwareService.getListByPkQuote(pkQuote, super.getPageRequest(sort));
+			ApiResponseResult result = productMaterService.getListByPkQuote(pkQuote, super.getPageRequest(sort));
 			logger.debug("获取报价单下五金材料列表=getList:");
 			return result;
 		} catch (Exception e) {
@@ -142,11 +150,11 @@ public class HardwareController extends WebController {
 	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult getExcel(MultipartFile[] file) {
-		String method = "/hardware/importExcel";String methodName ="导入模板";
+		String method = "/productMater/importExcel";String methodName ="导入模板";
 		try {
 			logger.debug("导入模板=importExcel:");
 			getSysLogService().success(module,method, methodName, "");
-			return hardwareService.doExcel(file);
+			return productMaterService.doExcel(file);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("导入模板失败！", e);

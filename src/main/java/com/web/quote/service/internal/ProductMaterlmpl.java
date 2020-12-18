@@ -6,12 +6,10 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
-import com.web.quote.dao.HardwareDao;
+import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.entity.ProductMater;
-import com.web.quote.service.HardwareService;
+import com.web.quote.service.ProductMaterService;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,24 +25,26 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Service(value = "HardwareService")
+@Service(value = "ProductMaterService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class Hardwarelmpl implements HardwareService {
+public class ProductMaterlmpl implements ProductMaterService {
 	
 	@Autowired
-    private HardwareDao hardwareDao;
+    private ProductMaterDao productMaterDao;
 	
 	/**
      * 新增报价单
      */
     @Override
     @Transactional
-	public ApiResponseResult add(ProductMater hardwareMater)throws Exception{
-    	if(hardwareMater == null){
-            return ApiResponseResult.failure("五金材料不能为空！");
+	public ApiResponseResult add(ProductMater productMater)throws Exception{
+    	if(productMater == null){
+            return ApiResponseResult.failure("制造部材料信息不能为空！");
         }
-		hardwareDao.save(hardwareMater);
-        return ApiResponseResult.success("报价单新增成功！").data(hardwareMater);
+        productMater.setCreateDate(new Date());
+        productMater.setCreateBy(UserUtil.getSessionUser().getId());
+		productMaterDao.save(productMater);
+        return ApiResponseResult.success("制造部材料信息添加成功！").data(productMater);
 	}
 
     /**
@@ -54,15 +54,15 @@ public class Hardwarelmpl implements HardwareService {
     @Transactional
     public ApiResponseResult edit(ProductMater hardwareMater) throws Exception {
         if(hardwareMater == null){
-            return ApiResponseResult.failure("五金材料不能为空！");
+            return ApiResponseResult.failure("制造部材料信息不能为空！");
         }
         if(hardwareMater.getId() == null){
-            return ApiResponseResult.failure("五金材料ID不能为空！");
+            return ApiResponseResult.failure("制造部材料信息ID不能为空！");
         }
 
-        ProductMater o = hardwareDao.findById((long) hardwareMater.getId());
+        ProductMater o = productMaterDao.findById((long) hardwareMater.getId());
         if(o == null){
-            return ApiResponseResult.failure("该五金材料不存在！");
+            return ApiResponseResult.failure("该制造部材料信息不存在！");
         }
         o.setBsComponent(hardwareMater.getBsComponent());
         o.setBsMaterName(hardwareMater.getBsMaterName());
@@ -71,9 +71,12 @@ public class Hardwarelmpl implements HardwareService {
         o.setBsRadix(hardwareMater.getBsRadix());
         o.setBsUnit(hardwareMater.getBsUnit());
         o.setBsSupplier(hardwareMater.getBsSupplier());
+        o.setBsCave(hardwareMater.getBsCave());
+        o.setBsMachiningType(hardwareMater.getBsMachiningType());
+        o.setBsWaterGap(hardwareMater.getBsWaterGap());
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
-        hardwareDao.save(o);
+        productMaterDao.save(o);
         return ApiResponseResult.success("编辑成功！");
     }
 
@@ -86,14 +89,14 @@ public class Hardwarelmpl implements HardwareService {
         if(id == null){
             return ApiResponseResult.failure("异常类别ID不能为空！");
         }
-        ProductMater o  = hardwareDao.findById((long) id);
+        ProductMater o  = productMaterDao.findById((long) id);
         if(o == null){
             return ApiResponseResult.failure("异常类别不存在！");
         }
         o.setDelTime(new Date());
         o.setDelFlag(1);
         o.setDelBy(UserUtil.getSessionUser().getId());
-        hardwareDao.save(o);
+        productMaterDao.save(o);
         return ApiResponseResult.success("删除成功！");
     }
 
@@ -135,7 +138,7 @@ public class Hardwarelmpl implements HardwareService {
                 hardwareMater.setFmemo(fmemo);
                 hardwareMaterList.add(hardwareMater);
             }
-            hardwareDao.saveAll(hardwareMaterList);
+            productMaterDao.saveAll(hardwareMaterList);
             return ApiResponseResult.success("导入成功");
         }
         catch (Exception e){
@@ -161,7 +164,7 @@ public class Hardwarelmpl implements HardwareService {
         }
         Specification<ProductMater> spec = Specification.where(BaseService.and(filters, ProductMater.class));
         Specification<ProductMater> spec1 = spec.and(BaseService.or(filters1, ProductMater.class));
-        Page<ProductMater> page = hardwareDao.findAll(spec1, pageRequest);
+        Page<ProductMater> page = productMaterDao.findAll(spec1, pageRequest);
 
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
@@ -183,7 +186,7 @@ public class Hardwarelmpl implements HardwareService {
         }
         Specification<ProductMater> spec = Specification.where(BaseService.and(filters, ProductMater.class));
         Specification<ProductMater> spec1 = spec.and(BaseService.or(filters1, ProductMater.class));
-        Page<ProductMater> page = hardwareDao.findAll(spec1, pageRequest);
+        Page<ProductMater> page = productMaterDao.findAll(spec1, pageRequest);
 
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));

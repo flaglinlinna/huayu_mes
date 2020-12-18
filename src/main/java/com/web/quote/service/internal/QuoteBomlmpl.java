@@ -123,6 +123,10 @@ public class QuoteBomlmpl implements QuoteBomService {
 		}
 		if (!"null".equals(pkQuote)&&pkQuote!=null) {
 			filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
+		}else {
+			List<QuoteBom> quoteBomList = new ArrayList<>();
+			return ApiResponseResult.success().data(DataGrid.create(quoteBomList, 0,
+					1, 10));
 		}
 		Specification<QuoteBom> spec = Specification.where(BaseService.and(filters, QuoteBom.class));
 		Specification<QuoteBom> spec1 = spec.and(BaseService.or(filters1, QuoteBom.class));

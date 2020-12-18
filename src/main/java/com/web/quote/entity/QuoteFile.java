@@ -14,14 +14,14 @@ import java.math.BigDecimal;
  * 产品资料信息表
  *
  */
-@Entity(name = "ProductFile")
-@Table(name = ProductFile.TABLE_NAME)
+@Entity(name = "QuoteFile")
+@Table(name = QuoteFile.TABLE_NAME)
 @DynamicUpdate
 @ApiModel
-public class ProductFile extends BaseEntity {
+public class QuoteFile extends BaseEntity {
 	private static final long serialVersionUID = 4625660587007894370L;
 
-	public static final String TABLE_NAME = "PRICE_PRODUCT_FILE";
+	public static final String TABLE_NAME = "PRICE_QUOTE_FILE";
 
 	/**
 	 * 关联主表

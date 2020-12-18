@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='五金材料信息'">
+<head th:include="layout :: htmlhead" th:with="title='制造部材料信息'">
 <meta charset="UTF-8">
 </head>
 <body class="layui-layout-body">
@@ -28,7 +28,7 @@
          <hr class="layui-bg-black"/>
          <script type="text/html" id="toolbar">
              <div class="layui-btn-container layui-inline">
-                     <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addHardware()">添加五金材料信息</button>
+                     <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addHardware()">添加材料信息</button>
                  <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="downloadExcel()">下载模板</button>
                  <button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入模板</button>
              </div>
@@ -103,7 +103,7 @@
             </div>
         </form>
     </div>
-    <script th:src="@{/js/web/quote/02produce/hardware.js}" src="/js/web/quote/02produce/hardware.js"></script>
+    <script th:src="@{/js/web/quote/02produce/product_mater.js}" src="/js/web/quote/02produce/product_mater.js"></script>
 	</div>
 </body>
 </html>

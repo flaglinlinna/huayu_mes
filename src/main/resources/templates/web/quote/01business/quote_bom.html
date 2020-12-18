@@ -47,6 +47,7 @@
 	 </div>
 	 <!--添加或编辑外购件清单信息-->
     <div id="setQuoteBom" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
+
         <form id="quoteBomForm" class="layui-form layui-form-pane" lay-filter="quoteBomForm" method="post" action="" style="margin-top: 20px;">
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
@@ -56,26 +57,26 @@
             <input id="pkUnit" type="hidden" name="pkUnit"/>
             <div class="layui-form-item">
                 <label class="layui-form-label ">组件名称</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-block">
                     <input id="bsElement" name="bsElement" placeholder="请输入组件名称"  autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label ">零件名称</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-block">
                     <input id="bsComponent" name="bsComponent" placeholder="请输入零件名称"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label ">工作中心</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-block">
                     <input id="BjWorkCenter" name="BjWorkCenter" lay-filter="BjWorkCenter"
                            placeholder="请选择工作中心"  class="layui-input" type="text"  autocomplete="off" />
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label ">物料类型</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-block">
                     <!--<select id="pkItemTypeWg" name="pkItemTypeWg" lay-filter="pkItemTypeWg" placeholder="请选择物料类型"   autocomplete="off" >-->
                     <!--</select>-->
                     <input id="ItemTypeWg" name="ItemTypeWg" lay-filter="ItemTypeWg"
@@ -85,28 +86,35 @@
 
             <div class="layui-form-item">
                 <label class="layui-form-label ">材料名称</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-block">
                     <input id="bsMaterName" name="bsMaterName" placeholder="请输入材料名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label ">材料规格</label>
-                <div class="layui-input-inline">
-                    <input id="bsModel" name="bsModel" placeholder="请输入材料规格"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+            <!--<div class="layui-form-item">-->
+                <!--<label class="layui-form-label ">材料规格</label>-->
+                <!--<div class="layui-input-block">-->
+                    <!--<input id="bsModel" name="bsModel" placeholder="请输入材料规格"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">材料规格</label>
+                <div class="layui-input-block">
+                    <textarea  id="bsModel" name="bsModel" placeholder="请输入材料规格" class="layui-textarea"></textarea>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label ">工艺说明</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-block">
                     <input id="fmemo" name="fmemo" placeholder="请输入工艺说明"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label ">制品量</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-block">
                     <input id="bsProQty" name="bsProQty" placeholder="请输入制品量"  lay-verify="double" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
@@ -114,7 +122,7 @@
 
             <div class="layui-form-item">
                 <label class="layui-form-label">单位</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-block">
                     <!--<select id="pkUnit" name="pkUnit" placeholder="请选择单位" lay-filter="pkUnit"   autocomplete="off">-->
                     <!--</select>-->
 
@@ -125,7 +133,7 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label ">基数</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-block">
                     <input id="bsRadix" name="bsRadix" placeholder="请输入基数"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>

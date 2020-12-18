@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#hardwareList',
-			url : context + '/hardware/getList',
+			url : context + '/productMater/getList',
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -59,6 +59,26 @@ $(function() {
 				{
 					field : 'bsSupplier',
 					title : '供应商',
+				},
+				{
+					field : 'bsWaterGap',
+					title : '水口量',
+					//(注塑)
+				},
+				{
+					field : 'bsCave',
+					title : '穴数',
+					//(注塑)
+				},
+				{
+					field : 'bsMachiningType',
+					title : '加工类型',
+					//(表面处理)
+				},
+				{
+					field : 'bsColor',
+					title : '配色工艺',
+					//(表面处理)
 				},
 				{
 					field : 'fmemo',
