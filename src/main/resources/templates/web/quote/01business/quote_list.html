@@ -11,7 +11,7 @@
 					<div class="filter">
 						<ul>
 							<li class="current"><a><span>全部</span></a></li>
-							<li class=""><a onclick=""><span>进行中</span></a></li>
+							<li class=""><a onclick="alert(1);"><span>进行中</span></a></li>
 							<li class=""><a><span>已完成</span></a></li>
 							<li class=""><a><span>已关闭</span></a></li>
 						</ul>
@@ -40,8 +40,9 @@
 					</form>
 				</div>
 			</div>
-			<table id="listTable" lay-filter="listTable"></table>
+			<table id="listTable" lay-filter="listTable" style="margin:0px;"></table>
 			<script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看进度</a>
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">关闭</a>
         </script>
@@ -49,10 +50,6 @@
 		<div id="setItemPage" class="layer_self_wrap" style="width:500px;display:none;">
         <form id="setItemForm" class="layui-form layui-form-pane" lay-filter="setItemForm" method="post" action="" style="margin: 20px;">
 			<input id="pageNum" type="hidden" name="pageNum" /> <input id="id" type="hidden" name="id"/>
-           
-            
-            
-            
             <div class="layui-form-item">
                 <div class="layui-input-block" style="margin-left: 10px;">
                     <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addItem">提交</button>
