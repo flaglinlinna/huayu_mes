@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 报价报价工艺流程表
+ * 报价工艺流程表
  *
  */
 @Entity(name = "QuoteProcesslmpl")

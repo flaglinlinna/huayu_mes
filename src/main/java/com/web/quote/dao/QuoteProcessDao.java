@@ -9,7 +9,7 @@ import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteProcess;
 
 
-public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaSpecificationExecutor<Quote>{
+public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaSpecificationExecutor<QuoteProcess>{
 
 	public List<QuoteProcess> findAll();
 	public List<QuoteProcess> findByDelFlag(Integer delFlag);
