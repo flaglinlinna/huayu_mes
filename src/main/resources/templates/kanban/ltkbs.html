@@ -50,17 +50,24 @@ body {
 		<script th:inline="javascript">
 		    var liner=[[${liner}]];
 		    var inType=[[${inType}]];
-		    $("#page").attr({
-				"src" : "toXlpm?liner="+liner+"&inType=apk" //设置默认页
-			});
 		    var rotation=[[${rotation}]];
 		    var rotationdata = rotation.data;
 		    rotationdata = rotationdata[0].R;// 获取系统设置的刷新间隔时间
 			var interval_kb = null;// iframe切换定时器
-			interval_kb = setInterval(switchPage,rotationdata * 1000);  // 启动
-			function switchPage() {//切换列表
-				var src = $(window.parent.document).find("#page").attr("src"); 
-
+			
+			if(inType=="apk"){
+				$("#page").attr({
+					"src" : "toXlpm?liner="+liner+"&inType=apk" //设置默认页
+				});
+				interval_kb = setInterval(switchApkPage,rotationdata * 1000);  // 启动
+			}else{
+				$("#page").attr({
+					"src" : "toXlpm" //设置默认页
+				});
+				interval_kb = setInterval(switchPage,rotationdata * 1000);  // 启动
+			}
+			function switchApkPage() {//切换列表
+				var src = $("#page").attr('src'); 
 					if(src=="toXlpm?liner="+liner+"&inType=apk"){
 						$("#page").attr({
 							"src" : "toCxdz?liner="+liner+"&inType=apk"
@@ -73,8 +80,23 @@ body {
 						$("#page").attr({
 							"src" : "toXlpm?liner="+liner+"&inType=apk"
 						});
-					}
-					
+					}	
+			}
+			function switchPage(){
+				var src = $("#page").attr('src'); 
+				if(src=="toXlpm"){
+					$("#page").attr({
+						"src" : "toCxdz"
+					});
+				}else if(src=="toCxdz") {
+					$("#page").attr({
+						"src" : "toCxsc"
+					});
+				}else if(src=="toCxsc"){
+					$("#page").attr({
+						"src" : "toXlpm"
+					});
+				}	
 			}
 		</script>
 	</div>

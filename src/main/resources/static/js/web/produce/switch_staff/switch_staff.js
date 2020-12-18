@@ -255,11 +255,11 @@ $(function() {
 								}, {
 									field : 'ITEM_NAME',
 									title : '物料描述',
-									width : 250
+									width : 160
 								}, {
 									field : 'ITEM_NO',
 									title : '物料编码',
-									width : 170
+									width : 140
 								}, {
 									field : 'LINER_NAME',
 									title : '组长',
@@ -267,7 +267,7 @@ $(function() {
 								}, {
 									field : 'CUST_NAME_S',
 									title : '客户',
-									width : 100
+									width : 80
 								}, {
 									field : 'WORK_DATE',
 									title : '生产时间',
