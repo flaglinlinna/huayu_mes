@@ -5,11 +5,11 @@ import com.web.quote.entity.ProductMater;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface HardwareService {
+public interface ProductMaterService {
 
-	public ApiResponseResult add(ProductMater hardwareMater)throws Exception;
+	public ApiResponseResult add(ProductMater productMater)throws Exception;
 
-	public ApiResponseResult edit(ProductMater hardwareMater)throws Exception;
+	public ApiResponseResult edit(ProductMater productMater)throws Exception;
 
 	public ApiResponseResult delete(Long id) throws Exception;
 

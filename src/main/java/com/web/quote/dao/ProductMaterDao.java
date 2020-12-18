@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 
-public interface HardwareDao extends CrudRepository<ProductMater, Long>,JpaSpecificationExecutor<ProductMater>{
+public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaSpecificationExecutor<ProductMater>{
 
 	public List<ProductMater> findAll();
 	ProductMater findById(long id);
