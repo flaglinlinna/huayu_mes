@@ -7,7 +7,7 @@ $(function() {
 		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
 		tableIns = table.render({
 			elem : '#client_procList',
-			url : context + '/quoteProcess/getList',
+			url : context + '/quoteProcess/getList?pkQuote='+ quoteId,
 			method : 'get' // 默认：get请求
 			, toolbar: '#toolbar',
 			cellMinWidth : 80,
@@ -213,7 +213,7 @@ $(function() {
 			} else if (obj.event === 'edit') {
 				// 编辑
 				//getClientProc(data, data.id);//未写
-				addProc(data.custId)
+				//addProc(data.custId)
 			}
 		});
 		table.on('tool(procTable)', function(obj) {
@@ -273,7 +273,7 @@ $(function() {
 				alert("请选择零件")
 				return false;
 			}
-			console.log(data.field.num)
+			//console.log(data.field.num)
 			//addSubmit(procIdList,data.field.itemId);
 			addSubmit(procIdList,data.field.num);
 			return false;
@@ -307,7 +307,26 @@ function addProc(id) {
 	// 打开弹出框
 	openProc(null, "添加工艺流程");
 }
-
+function saveProc(){
+	console.log(quoteId)
+	var param = {"quoteId" : quoteId};
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/quoteProcess/doStatus", JSON.stringify(param),
+				function(data) {
+			console.log(data)
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("提交成功！");
+						} else {
+							layer.alert(data);
+						}
+					}
+				});
+	});
+}
 
 
 function delClientProc( id) {
@@ -350,7 +369,7 @@ function addSubmit(procIdlist,itemIds) {
 
 	CoreUtil.sendAjax("/quoteProcess/add", JSON.stringify(params), function(
 			data) {
-		console.log(data)
+		//console.log(data)
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();

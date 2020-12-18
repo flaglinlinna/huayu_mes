@@ -79,7 +79,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 * 工艺流程表
 	 **/
 	@Override
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getList(String keyword,String pkQuote, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
@@ -88,8 +88,14 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		if (StringUtils.isNotEmpty(keyword)) {
 			filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("proc.procName", SearchFilter.Operator.LIKE, keyword));
-			// filters1.add(new SearchFilter("mtrial.itemName",
-			// SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("proc.procNo", SearchFilter.Operator.LIKE, keyword));
+		}
+		if (!"null".equals(pkQuote)&&pkQuote!=null) {
+			filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
+		}else {
+			List<QuoteProcess> quoteProcessList = new ArrayList<>();
+			return ApiResponseResult.success().data(DataGrid.create(quoteProcessList, (int) quoteProcessList.size(),
+					pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 		}
 		Specification<QuoteProcess> spec = Specification.where(BaseService.and(filters, QuoteProcess.class));
 		Specification<QuoteProcess> spec1 = spec.and(BaseService.or(filters1, QuoteProcess.class));
@@ -188,4 +194,13 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	        quoteProcessDao.save(o);
 	        return ApiResponseResult.success("删除成功！");
 	}
+	/**
+	 * 提交工序维护清单
+	 * **/
+	 public ApiResponseResult doStatus(String quoteId)throws Exception{
+		 
+		 quoteProcessDao.saveQuoteProcessByQuoteId(Long.parseLong(quoteId));
+		 
+		 return ApiResponseResult.success("提交成功！");
+	 }
 }
