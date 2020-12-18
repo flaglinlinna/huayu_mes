@@ -65,7 +65,7 @@ public class ProductMater extends BaseEntity {
 	 * 材料规格
 	 */
 	@ApiModelProperty(name = "bsModel", value = "材料规格")
-	@Column(length = 50)
+	@Column(length = 150)
 	protected String bsModel;
 
 	/**
@@ -119,28 +119,28 @@ public class ProductMater extends BaseEntity {
 	 * 水口量(注塑)
 	 */
 	@ApiModelProperty(name = "unit", value = "水口量(注塑)")
-	@Column(length = 50)
+	@Column(length = 150)
 	protected String bsWaterGap;
 
 	/**
 	 * 穴数(注塑)
 	 */
 	@ApiModelProperty(name = "bsCave", value = "穴数(注塑)")
-	@Column(length = 50)
+	@Column(length = 150)
 	protected String bsCave;
 
 	/**
 	 * 加工类型(表面处理)
 	 */
 	@ApiModelProperty(name = "bsMachiningType", value = "加工类型(表面处理)")
-	@Column(length = 50)
+	@Column(length = 150)
 	protected String bsMachiningType;
 
 	/**
 	 * 配色工艺(表面处理)
 	 */
 	@ApiModelProperty(name = "bsColor", value = "配色工艺(表面处理)")
-	@Column(length = 50)
+	@Column(length = 150)
 	protected String bsColor;
 
 	public Long getPkQuote() {

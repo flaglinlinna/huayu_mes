@@ -25,9 +25,13 @@ import com.utils.UserUtil;
 import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.dao.QuoteBomDao;
 import com.web.quote.dao.QuoteDao;
+import com.web.quote.dao.QuoteItemBaseDao;
+import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteBom;
+import com.web.quote.entity.QuoteItem;
+import com.web.quote.entity.QuoteItemBase;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -47,6 +51,10 @@ public class CheckImpl   implements CheckService {
     private QuoteBomDao quoteBomDao;
     @Autowired
     private ProductMaterDao productMaterDao;
+    @Autowired
+    private QuoteItemBaseDao quoteItemBaseDao;
+    @Autowired
+    private QuoteItemDao quoteItemDao;
 
 	@Override
 	public boolean checkFirst(Long id, String checkCode) throws Exception {
@@ -258,9 +266,27 @@ public class CheckImpl   implements CheckService {
                     if(quote != null){
                     	quote.setLastupdateDate(new Date());
                     	quote.setBsStatus(1);
+                    	quote.setBsStep(2);
+                    	quote.setBsEndTime1(new Date());
                     	quoteDao.save(quote);
                     }
-                    //2.1根据工作中心下发BOM
+                    //2.1下发制造部待办项目
+                    List<QuoteItemBase> lqb = quoteItemBaseDao.findByDelFlagAndBsStyle(0,"mater");
+                    List<QuoteItem> lqi = new ArrayList<QuoteItem>();
+                	for(QuoteItemBase qb:lqb){
+                		QuoteItem qi = new QuoteItem();
+                		qi.setPkQuote(quote.getId());
+                		qi.setBsCode(qb.getBsCode());
+                		qi.setBsName(qb.getBsName());
+                		qi.setToDoBy(qb.getToDoBy());
+                		qi.setBsPerson(qb.getBsPerson());
+                		qi.setCreateDate(new Date());
+                		qi.setCreateBy(UserUtil.getSessionUser().getId());
+                		qi.setBsBegTime(new Date());
+                		lqi.add(qi);
+                	}
+                	quoteItemDao.saveAll(lqi);
+                    //2.2根据工作中心下发BOM
                     List<QuoteBom> lql = quoteBomDao.findByDelFlagAndPkQuote(0, c.getBsRecordId());
                     if(lql.size() > 0){
                     	List<ProductMater> lpm = new ArrayList<ProductMater>();
@@ -279,7 +305,7 @@ public class CheckImpl   implements CheckService {
                     	productMaterDao.saveAll(lpm);
                     }
                     
-                    //3。发送待办消息
+                    //3。发送待办消息--fyx-?
                     
                     
                 }
