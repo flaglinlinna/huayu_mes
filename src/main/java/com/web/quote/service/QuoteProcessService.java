@@ -16,9 +16,11 @@ public interface QuoteProcessService {
 	
    public ApiResponseResult add(String proc,String itemId,String quoteId)  throws Exception;
 	
-   public ApiResponseResult getList(String keyword, PageRequest pageRequest)  throws Exception;
+   public ApiResponseResult getList(String keyword,String pkQuote, PageRequest pageRequest)  throws Exception;
 	
    public ApiResponseResult delete(Long id)  throws Exception;
 	
    public ApiResponseResult doProcOrder(Long id,Integer bsOrder)  throws Exception;
+   
+   public ApiResponseResult doStatus(String quoteId)throws Exception;
 }

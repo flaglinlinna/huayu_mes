@@ -63,11 +63,11 @@ public class QuoteProcessController extends WebController {
 	@ApiOperation(value = "获取报价工艺流程列表", notes = "获取报价工艺流程列表",hidden = true)
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getList(String keyword) {
+    public ApiResponseResult getList(String keyword,String pkQuote) {
         String method = "quoteProcess/getList";String methodName ="获取报价工艺流程列表";
         try {
             Sort sort = new Sort(Sort.Direction.ASC, "id");
-            ApiResponseResult result = quoteProcessService.getList(keyword, super.getPageRequest(sort));
+            ApiResponseResult result = quoteProcessService.getList(keyword,pkQuote, super.getPageRequest(sort));
             logger.debug("获取报价工艺流程列表=getList:");
             getSysLogService().success(module,method, methodName, keyword);
             return result;
@@ -172,6 +172,26 @@ public class QuoteProcessController extends WebController {
             logger.error("删除失败！", e);
             getSysLogService().error(module,method, methodName, params+";"+e.toString());
             return ApiResponseResult.failure("删除失败！");
+        }
+    }
+	
+	@ApiOperation(value = "提交报价-工艺流程", notes = "提交报价-工艺流程",hidden = true)
+    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doStatus(@RequestBody Map<String, Object> param) {   	
+        String method = "quoteProcess/doStatus";String methodName ="提交报价-工艺流程";
+        String pkQuote = param.get("quoteId").toString();
+        try{
+            ApiResponseResult result = quoteProcessService.doStatus(pkQuote);
+            logger.debug("提交报价-工艺流程=add:");
+            getSysLogService().success(module,method, methodName,
+                    "报价单id:"+pkQuote);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("提交报价-工艺流程失败！", e);
+            getSysLogService().error(module,method, methodName,"报价单id:"+pkQuote+ e.toString());
+            return ApiResponseResult.failure("提交报价-工艺流程失败！");
         }
     }
 }

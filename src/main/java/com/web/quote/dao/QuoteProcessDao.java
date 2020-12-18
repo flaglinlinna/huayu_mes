@@ -32,4 +32,8 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	
 	@Query(value = "select distinct t.bs_component from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag='0'", nativeQuery = true)	
 	public List<Map<String, Object>> getBomName(String quoteid);
+	
+	@Modifying
+    @Query("update QuoteProcess t set t.bsStatus=1 where t.pkQuote=?1 and t.delFlag=0")
+    public void saveQuoteProcessByQuoteId(Long  quoteId);//变更字段状态
 }
