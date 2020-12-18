@@ -1,14 +1,14 @@
 package com.web.quote.service;
 
 import com.app.base.data.ApiResponseResult;
-import com.web.quote.entity.ProductFile;
+import com.web.quote.entity.QuoteFile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface ProductFileService {
+public interface QuoteFileService {
 
 	//新增产品资料文件
-	public ApiResponseResult add(ProductFile productFile) throws Exception;
+	public ApiResponseResult add(QuoteFile productFile) throws Exception;
 
 	//删除产品资料文件
 	public ApiResponseResult delete(Long id) throws Exception;
