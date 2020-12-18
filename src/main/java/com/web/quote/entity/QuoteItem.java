@@ -93,7 +93,7 @@ public class QuoteItem extends BaseEntity{
 	protected Date bsEndTime;
 	
 	/**
-	 * 项目进度状态（0未开始、1未完成、2已完成）
+	 * 项目进度状态（0未开始、1进行中、2已完成）
 	 */
 	@ApiModelProperty(name = "bsStatus", value = "项目进度状态")
 	@Column

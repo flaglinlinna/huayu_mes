@@ -8,6 +8,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 
 /**
@@ -22,6 +24,14 @@ public class QuoteFile extends BaseEntity {
 	private static final long serialVersionUID = 4625660587007894370L;
 
 	public static final String TABLE_NAME = "PRICE_QUOTE_FILE";
+	
+	/**
+     * 状态
+     * 0：草稿，1:完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus",value="状态")
+    protected int bsStatus = 0;
 
 	/**
 	 * 关联主表
@@ -67,4 +77,13 @@ public class QuoteFile extends BaseEntity {
 	public void setPkFileId(String pkFileId) {
 		this.pkFileId = pkFileId;
 	}
+
+	public int getBsStatus() {
+		return bsStatus;
+	}
+
+	public void setBsStatus(int bsStatus) {
+		this.bsStatus = bsStatus;
+	}
+	
 }

@@ -4,8 +4,8 @@ import com.app.base.data.ApiResponseResult;
 import com.system.check.entity.CheckInfo;
 
 /**
- * excel模板
- * @author chen
+ * 审批
+ * @author fyx
  *
  */
 public interface CheckService {

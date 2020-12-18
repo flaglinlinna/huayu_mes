@@ -1,5 +1,7 @@
 package com.system.todo.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +31,10 @@ public interface TodoInfoDao extends CrudRepository<TodoInfo, Long>, JpaSpecific
     @Modifying
     @Query("update TodoInfo t set t.bsStatus='1' where t.bsReferId=?1 and t.bsType=?2 and t.bsStatus='0'")
     public void closeByBsReferIdAndBsType(Long bsReferId, Integer bsType);
+    
+    @Modifying
+    @Query("update TodoInfo t set t.bsStatus='1' where t.bsReferId=?1 and t.bsRouter=?2 and t.bsStatus='0'")
+    public void closeByBsReferIdAndBsRouter(Long bsReferId, String bsRouter);
 
     @Modifying
     @Query(value = "update "+TodoInfo.TABLE_NAME+" t set t.bs_status = '1' where t.bs_refer_id = ?2 and t.bs_status = '0' and t.bs_user_id " +
@@ -38,5 +44,7 @@ public interface TodoInfoDao extends CrudRepository<TodoInfo, Long>, JpaSpecific
     public int countByDelFlagAndBsUserId(Integer isDel, Long bsUserId);
 
     public int countByDelFlagAndBsUserIdAndBsStatus(Integer isDel, Long bsUserId, int bsStatus);
+    
+    public List<TodoInfo> findByDelFlagAndBsUserIdAndBsTypeAndBsStatus(Integer isDel, Long bsUserId,int bsType, int bsStatus);
 
 }

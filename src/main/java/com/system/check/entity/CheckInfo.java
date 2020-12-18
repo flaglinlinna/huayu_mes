@@ -19,13 +19,6 @@ public class CheckInfo extends BaseEntity {
 	public static final String TABLE_NAME = "sys_check_info";
 
 	/**
-     * 重点防御单位所属区域
-     */
-    @ApiModelProperty(name = "unitArea", value = "重点防御单位所属区域")
-    @Column
-    protected String unitArea;
-
-	/**
 	 * 步骤审批人
 	 */
 	@Column(length=100)
@@ -209,14 +202,6 @@ public class CheckInfo extends BaseEntity {
 
 	public void setBsCheckOrg(String bsCheckOrg) {
 		this.bsCheckOrg = bsCheckOrg;
-	}
-
-	public String getUnitArea() {
-		return unitArea;
-	}
-
-	public void setUnitArea(String unitArea) {
-		this.unitArea = unitArea;
 	}
 
 
