@@ -18,7 +18,7 @@ import java.util.Map;
 @CrossOrigin
 @ControllerAdvice
 @Controller
-@RequestMapping(value = "productFile")
+@RequestMapping(value = "quoteFile")
 public class QuoteFileController extends WebController {
 
 	private String module = "产品资料信息";
@@ -82,10 +82,10 @@ public class QuoteFileController extends WebController {
 
 
 	@ApiOperation(value = "删除产品资料信息列表", notes = "删除产品资料信息列表", hidden = true)
-	@RequestMapping(value = "productFile/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult delete(@RequestBody Map<String, Object> params) {
-		String method = "/delete";
+		String method = "productFile/delete";
 		String methodName = "删除产品资料信息列表";
 		try {
 			long id = Long.parseLong(params.get("id").toString());

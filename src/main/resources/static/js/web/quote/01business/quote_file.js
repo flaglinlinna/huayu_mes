@@ -8,7 +8,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#productFileList',
-			url : context + '/productFile/getList?pkQuote='+ quoteId,
+			url : context + '/quoteFile/getList?pkQuote='+ quoteId,
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -139,7 +139,7 @@ $(function() {
 // 新增五金材料提交
 function addSubmit(obj) {
 	obj.pkQuote = quoteId;
-	CoreUtil.sendAjax("/productFile/add", JSON.stringify(obj), function(
+	CoreUtil.sendAjax("/quoteFile/add", JSON.stringify(obj), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -166,7 +166,7 @@ function delProdErr(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("/productFile/delete", JSON.stringify(param),
+			CoreUtil.sendAjax("/quoteFile/delete", JSON.stringify(param),
 					function(data) {
 						if (isLogin(data)) {
 							if (data.result == true) {
