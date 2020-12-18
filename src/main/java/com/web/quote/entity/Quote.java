@@ -54,7 +54,6 @@ public class Quote extends BaseEntity {
      * 6:总经理
      */
 	@Column
-	@NotNull
 	@ApiModelProperty(name="bsStep",value="流程步骤")
     protected int bsStep = 1;
 
