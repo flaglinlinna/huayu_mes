@@ -705,6 +705,7 @@ function loadAll() {
 
 // 清空新增表单数据
 function cleanBarcodeRule() {
+	frule = "";
 	$('#ruleForm')[0].reset();
 	layui.form.render();// 必须写
 }

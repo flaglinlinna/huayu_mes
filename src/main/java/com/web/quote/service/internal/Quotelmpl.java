@@ -88,7 +88,7 @@ public class Quotelmpl implements QuoteService {
     	//2:建立子表-编码-项目名-代办人-开始/结束时间-进度状态【需有基础信息】
     	List<QuoteItem> lqi = new ArrayList<QuoteItem>();
     	//获取配置的待办项目
-    	List<QuoteItemBase> lqb = quoteItemBaseDao.findByDelFlag(0);
+    	List<QuoteItemBase> lqb = quoteItemBaseDao.findByDelFlagAndBsStyle(0,"item");
     	for(QuoteItemBase qb:lqb){
     		QuoteItem qi = new QuoteItem();
     		qi.setPkQuote(quote.getId());

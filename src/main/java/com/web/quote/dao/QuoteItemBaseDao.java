@@ -12,4 +12,5 @@ public interface QuoteItemBaseDao extends CrudRepository<QuoteItemBase, Long>,Jp
 
 	public List<QuoteItemBase> findByDelFlag(Integer delFlag);
 
+	public List<QuoteItemBase> findByDelFlagAndBsStyle(Integer delFlag,String bsStyle);
 }

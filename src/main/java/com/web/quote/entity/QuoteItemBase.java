@@ -29,6 +29,16 @@ public class QuoteItemBase extends BaseEntity{
 	private static final long serialVersionUID = 4625660587007894370L;
 	public static final String TABLE_NAME = "price_quote_item_base";
 	
+	/**
+	 * 类型
+	 * 1:item
+	 * 2:mater
+	 * 3:process
+	 */
+	@ApiModelProperty(name = "bsStyle", value = "报价项目-编码")
+	@Column(length = 50)
+	protected String bsStyle;
+	
     /**
 	 * 报价项目-编码
 	 */
@@ -101,6 +111,14 @@ public class QuoteItemBase extends BaseEntity{
 
 	public void setBsRouter(String bsRouter) {
 		this.bsRouter = bsRouter;
+	}
+
+	public String getBsStyle() {
+		return bsStyle;
+	}
+
+	public void setBsStyle(String bsStyle) {
+		this.bsStyle = bsStyle;
 	}
 	
 	

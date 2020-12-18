@@ -43,6 +43,20 @@ public class Quote extends BaseEntity {
 	@NotNull
 	@ApiModelProperty(name="bsStatus",value="状态")
     protected int bsStatus = 0;
+	
+	/**
+     * 流程步骤
+     * 1:业务部
+     * 2:制造部
+     * 3:采购部
+     * 4:外协部
+     * 5:业务部
+     * 6:总经理
+     */
+	@Column
+	@NotNull
+	@ApiModelProperty(name="bsStep",value="流程步骤")
+    protected int bsStep = 1;
 
 	//---业务字段
 	/**
@@ -219,6 +233,60 @@ public class Quote extends BaseEntity {
 	@ApiModelProperty(name="bsApprovalTime",value="核准时间")
 	@Column(length = 50)
 	protected String  bsApprovalTime;
+	
+	/**
+	 * 结束时间
+	 */	
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="bsEndTime1",value="结束时间")
+	protected Date bsEndTime1;
+	
+	/**
+	 * 结束时间
+	 */	
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="bsEndTime2",value="结束时间")
+	protected Date bsEndTime2;
+	
+	/**
+	 * 结束时间
+	 */	
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="bsEndTime3",value="结束时间")
+	protected Date bsEndTime3;
+	
+	/**
+	 * 结束时间
+	 */	
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="bsEndTime4",value="结束时间")
+	protected Date bsEndTime4;
+	
+	/**
+	 * 结束时间
+	 */	
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="bsEndTime5",value="结束时间")
+	protected Date bsEndTime5;
+	
+	/**
+	 * 结束时间
+	 */	
+	@Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@ApiModelProperty(name="bsEndTime6",value="结束时间")
+	protected Date bsEndTime6;
 	
 
 	public String getBsCode() {
@@ -428,4 +496,63 @@ public class Quote extends BaseEntity {
 	public void setBsApprovalTime(String bsApprovalTime) {
 		this.bsApprovalTime = bsApprovalTime;
 	}
+
+	public int getBsStep() {
+		return bsStep;
+	}
+
+	public void setBsStep(int bsStep) {
+		this.bsStep = bsStep;
+	}
+
+	public Date getBsEndTime1() {
+		return bsEndTime1;
+	}
+
+	public void setBsEndTime1(Date bsEndTime1) {
+		this.bsEndTime1 = bsEndTime1;
+	}
+
+	public Date getBsEndTime2() {
+		return bsEndTime2;
+	}
+
+	public void setBsEndTime2(Date bsEndTime2) {
+		this.bsEndTime2 = bsEndTime2;
+	}
+
+	public Date getBsEndTime3() {
+		return bsEndTime3;
+	}
+
+	public void setBsEndTime3(Date bsEndTime3) {
+		this.bsEndTime3 = bsEndTime3;
+	}
+
+	public Date getBsEndTime4() {
+		return bsEndTime4;
+	}
+
+	public void setBsEndTime4(Date bsEndTime4) {
+		this.bsEndTime4 = bsEndTime4;
+	}
+
+	public Date getBsEndTime5() {
+		return bsEndTime5;
+	}
+
+	public void setBsEndTime5(Date bsEndTime5) {
+		this.bsEndTime5 = bsEndTime5;
+	}
+
+	public Date getBsEndTime6() {
+		return bsEndTime6;
+	}
+
+	public void setBsEndTime6(Date bsEndTime6) {
+		this.bsEndTime6 = bsEndTime6;
+	}
+	
+	
+	
 }

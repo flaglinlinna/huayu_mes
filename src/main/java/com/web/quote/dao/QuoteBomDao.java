@@ -12,4 +12,6 @@ public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecifica
 	public List<QuoteBom> findAll();
 	public List<QuoteBom> findByDelFlag(Integer delFlag);
 	public QuoteBom findById(long id);
+	
+	public List<QuoteBom> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 }

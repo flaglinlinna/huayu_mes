@@ -157,8 +157,30 @@ $(function() {
 		});
 
 		table.on('rowDouble(paramTable)', function(obj){
-			mid = obj.data.id;
-			getSysParam(obj.data, obj.data.id);
+			data = obj.data;
+			mid = data.id;
+			openSysParamSub(data.id,data.paramName);
+			var param = {
+				"id" : data.id
+			};
+			tableIns1.reload({
+				url:context+'/sysParamSub/getList',
+				where:param,
+				done: function(res1, curr, count){
+					pageCurr1=curr;
+				}
+			})
+			loadSub(data.id);
+			form.val("paramSubForm", {
+				"paramType1" : data.paramType,
+				"paramCode1" : data.paramCode,
+				"paramName1" : data.paramName,
+				"paramSort1" :data.paramSort,
+				"paramValue1" : data.paramValue,
+				"fmemo1" : data.fmemo
+			});
+			form.render();
+
 		});
 
 		// 监听工具条
@@ -185,6 +207,15 @@ $(function() {
 					}
 				})
 				loadSub(data.id);
+				form.val("paramSubForm", {
+					"paramType1" : data.paramType,
+					"paramCode1" : data.paramCode,
+					"paramName1" : data.paramName,
+					"paramSort1" :data.paramSort,
+					"paramValue1" : data.paramValue,
+					"fmemo1" : data.fmemo
+				});
+				form.render();
 			}
 		});
 
@@ -554,6 +585,9 @@ function cleanSysParam() {
 
 // 清空新增表单数据 子参数
 function cleanSysParamSub() {
-	$('#paramSubForm')[0].reset();
+	// $('#paramSubForm')[0].reset();
+	$('#subCode').val("");
+	$('#subName').val("");
+	$('#forder').val("");
 	layui.form.render();// 必须写
 }
