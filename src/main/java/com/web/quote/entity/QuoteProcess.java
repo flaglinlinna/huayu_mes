@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -29,6 +30,22 @@ public class QuoteProcess extends BaseEntity {
 	
 	private static final long serialVersionUID = 4625660587007894370L;
 	public static final String TABLE_NAME = "price_quote_process";
+	
+	/**
+     * 状态
+     * 0：草稿，1:完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus",value="状态")
+    protected int bsStatus = 0;
+	
+	/**
+     * 是否需要填写
+     * 0：需要，1:不需要
+     */
+	@Column
+	@ApiModelProperty(name="bsNeed",value="是否需要填写")
+    protected int bsNeed = 0;
 	
 	/**
      * 关联主表
@@ -147,6 +164,22 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setBsOrder(int bsOrder) {
 		this.bsOrder = bsOrder;
+	}
+
+	public int getBsStatus() {
+		return bsStatus;
+	}
+
+	public void setBsStatus(int bsStatus) {
+		this.bsStatus = bsStatus;
+	}
+
+	public int getBsNeed() {
+		return bsNeed;
+	}
+
+	public void setBsNeed(int bsNeed) {
+		this.bsNeed = bsNeed;
 	}
 	
 }

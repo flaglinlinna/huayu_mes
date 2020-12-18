@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
@@ -58,6 +59,16 @@ public class QuoteBom extends BaseEntity {
     @JoinColumn(name = "pkBjWorkCenter", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     protected BjWorkCenter wc;
+    
+    
+    /**
+     * 状态
+     * 0：草稿，1:完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus",value="状态")
+    protected int bsStatus = 0;
+
     
     /**
      * 关联物料类型
@@ -282,6 +293,14 @@ public class QuoteBom extends BaseEntity {
 
 	public void setBsSupplier(String bsSupplier) {
 		this.bsSupplier = bsSupplier;
+	}
+
+	public int getBsStatus() {
+		return bsStatus;
+	}
+
+	public void setBsStatus(int bsStatus) {
+		this.bsStatus = bsStatus;
 	}
 
 	

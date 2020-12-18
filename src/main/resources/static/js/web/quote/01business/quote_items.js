@@ -52,8 +52,14 @@ function setTable(){
 			status_color2 ="bggreen"
 		}
 		
-		if(arr.bsName=="外购件清单"){
+		if(arr.bsCode=="A001"){//外购件清单
 			link="/quote/toQuoteBom?quoteId="+arr.quote.id
+		}else if(arr.bsCode=="A002"){//"产品资料"
+			link="/quoteFile/toProductFile?quoteId="+arr.quote.id
+		}else if(arr.bsCode=="A003"){//"模具清单"
+			link="/quoteFile/toProductFile?quoteId="+arr.quote.id
+		}else if(arr.bsCode=="A004"){//"工艺流程"
+			link="/quoteProcess/toQuoteProcess?quoteId="+arr.quote.id
 		}
 		html += '<tr><td class="td1" style="width: 20%; "><button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;" onclick=toPage("'+link+'","'+arr.bsName+'")><span>' + arr.bsName + 
 		'</span></button></td><td  class="td1 '+status_color1+'" style="width: 20%;"><span class="circle '+status_color2+'"></span>' +  status + 
