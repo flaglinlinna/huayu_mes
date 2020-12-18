@@ -64,11 +64,11 @@ public class QuoteController extends WebController {
 	
 	@ApiOperation(value = "报价信息项目列表页", notes = "报价信息项目列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteItem")
-	public ModelAndView toQuoteItem(Long id) {
+	public ModelAndView toQuoteItem(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
-			ApiResponseResult info = quoteService.getSingle((long) 5055);
-			ApiResponseResult ItemList = quoteService.getItemPage((long) 5055);//5053\5054\5055
+			ApiResponseResult info = quoteService.getSingle( Long.parseLong(quoteId));
+			ApiResponseResult ItemList = quoteService.getItemPage( Long.parseLong(quoteId));
 			mav.addObject("ItemList", ItemList);
 			mav.addObject("info", info);
 			mav.setViewName("/web/quote/01business/quote_items");// 返回路径

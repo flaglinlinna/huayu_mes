@@ -67,20 +67,26 @@ public class QuoteBomlmpl implements QuoteBomService {
 			return ApiResponseResult.failure("外购件清单信息ID不能为空！");
 		}
 
-//		ProductMater o = hardwareDao.findById((long) hardwareMater.getId());
-//		if(o == null){
-//			return ApiResponseResult.failure("该五金材料不存在！");
-//		}
-//		o.setBsComponent(hardwareMater.getBsComponent());
-//		o.setBsMaterName(hardwareMater.getBsMaterName());
-//		o.setBsModel(hardwareMater.getBsModel());
-//		o.setBsQty(hardwareMater.getBsQty());
-//		o.setBsRadix(hardwareMater.getBsRadix());
-//		o.setBsUnit(hardwareMater.getBsUnit());
-//		o.setBsSupplier(hardwareMater.getBsSupplier());
-//		o.setLastupdateDate(new Date());
-//		o.setLastupdateBy(UserUtil.getSessionUser().getId());
-//		hardwareDao.save(o);
+		QuoteBom o = quoteBomDao.findById((long) quoteBom.getId());
+		if(o == null){
+			return ApiResponseResult.failure("该外购件清单信息不存在！");
+		}
+		o.setBsComponent(quoteBom.getBsComponent());
+		o.setBsElement(quoteBom.getBsElement());
+		o.setBsModel(quoteBom.getBsModel());
+		o.setPkUnit(quoteBom.getPkUnit());
+		o.setPkItemTypeWg(quoteBom.getPkItemTypeWg());
+		o.setPkBjWorkCenter(quoteBom.getPkBjWorkCenter());
+		o.setBsProQty(quoteBom.getBsProQty());
+		o.setBsMaterName(quoteBom.getBsMaterName());
+		o.setBsModel(quoteBom.getBsModel());
+//		o.setBsQty(quoteBom.getBsQty());
+		o.setBsRadix(quoteBom.getBsRadix());
+//		o.setBsUnit(quoteBom.getBsUnit());
+		o.setBsSupplier(quoteBom.getBsSupplier());
+		o.setLastupdateDate(new Date());
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
+		quoteBomDao.save(o);
 		return ApiResponseResult.success("编辑成功！");
 
 	}
@@ -116,7 +122,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 			filters1.add(new SearchFilter("bsComponent", SearchFilter.Operator.LIKE, keyword));
 		}
 		if (!"null".equals(pkQuote)&&pkQuote!=null) {
-			filters1.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
+			filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
 		}
 		Specification<QuoteBom> spec = Specification.where(BaseService.and(filters, QuoteBom.class));
 		Specification<QuoteBom> spec1 = spec.and(BaseService.or(filters1, QuoteBom.class));

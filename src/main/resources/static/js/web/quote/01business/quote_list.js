@@ -10,7 +10,7 @@ $(function() {
 				elem : '#listTable',
 				url : context + '/quote/getList',
 				method : 'get' // 默认：get请求
-				, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+				//, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 				,cellMinWidth : 80,
 				height:'full-65'//固定表头&full-查询框高度
 					,even:true,//条纹样式
@@ -39,32 +39,23 @@ $(function() {
 						"code" : res.status
 					}
 				},
-				cols : [ [ {
-					type : 'numbers'
-				},
-				//,{type:'checkbox'}
-				// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-				 {
-					field : 'bsStatus',
-					title : '状态',width : 80,
-					templet:function (d) {
-						if(d.bsStatus="0"){
-							return "进行中"
-						}else if(d.bsStatus="1"){
-							return "已完成"
-						}else if(d.bsStatus="99"){
-							return "已关闭"
-						}
-					}
-				},
-				 {
-					field : 'bsCode',
-					title : '报价单编号',width : 150,
-					sort: true
-				}, {
-					field : 'bsType',
-					title : '报价类型', width : 100
-				}
+				cols : [ [ 
+				           {type : 'numbers'},
+							 {
+								field : 'bsStatus',
+								title : '状态',width : 80,
+								templet:function (d) {
+									if(d.bsStatus="0"){
+										return "进行中"
+									}else if(d.bsStatus="1"){
+										return "已完成"
+									}else if(d.bsStatus="99"){
+										return "已关闭"
+									}
+								}
+							},
+				 {field : 'bsCode',title : '报价单编号',width : 150,sort: true}, 
+				 {field : 'bsType',title : '报价类型', width : 100}
 				, {
 					field : 'bsFinishTime',
 					title : '完成日期',
@@ -128,9 +119,9 @@ $(function() {
 					}, {
 						fixed : 'right',
 						title : '操作',
-						align : 'center',
+						//align : 'center',
 						toolbar : '#optBar',
-						width : 120
+						width : 200
 					}
 				] ],
 				done : function(res, curr, count) {
@@ -146,10 +137,16 @@ $(function() {
 					//del(data, data.id, data.custNo);
 				} else if (obj.event === 'edit') {
 					// 编辑
-					//edit(data);
 					open("编辑项目资料")
+				}else if(obj.event === 'view'){
+					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id,'报价项目');
 				}
 			});
+			
+			$("#_search_btn").click(function () {
+				$(".searchDiv").toggle();
+                //var val=$(this).attr("id");
+            })
 		});
 });
 //编辑项目弹出框

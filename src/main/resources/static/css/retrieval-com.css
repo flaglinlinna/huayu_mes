@@ -262,3 +262,9 @@
 	border-color:#67C23A;
 	color:#FFF;
 }
+
+
+a:link { color: #06F; text-decoration: none; }/* 未访问的链接 */
+a:visited { color: #999; text-decoration: line-through; } /* 已访问的链接 */
+a:hover { color: #F00; text-decoration: underline; }/* 鼠标移动到链接上 */
+a:active { color: #F0F; } /* 选定的链接 */

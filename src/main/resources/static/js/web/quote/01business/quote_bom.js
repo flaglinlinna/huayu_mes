@@ -3,9 +3,182 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table','upload' ], function() {
-		var table = layui.table, form = layui.form,upload = layui.upload;
+	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
+		var table = layui.table, form = layui.form,upload = layui.upload,
+			tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect;
 
+		tableSelect=tableSelect.render({
+			elem : '#BjWorkCenter',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '内部编码搜索',
+			table : {
+				url : context + '/basePrice/workCenter/getList',
+				method : 'get',
+
+				parseData : function(res) {
+					// 可进行数据操作
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+				cols : [ [
+					{ type: 'radio' },//单选  radio
+					{
+						field : 'id',
+						title : 'id',
+						width : 0,hide:true
+					},
+					{
+						type : 'numbers'
+					}, {
+						field : 'workcenterCode',
+						title : '工作中心编号',
+					}, {
+						field : 'workcenterName',
+						title : '工作中心名称',
+					}, {
+						field : 'fmemo',
+						title : '备注',
+					}
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+
+			},
+			done : function(elem, data) {
+				var da=data.data;
+				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+				form.val("quoteBomForm", {
+					"pkBjWorkCenter":da[0].id,
+					"BjWorkCenter":da[0].workcenterName,
+				});
+				form.render();// 重新渲染
+			}
+		});
+
+		tableSelect1=tableSelect1.render({
+			elem : '#ItemTypeWg',
+			searchKey : 'keyword',
+			checkedKey : 'ID',
+			searchPlaceholder : '关键字搜索',
+			table : {
+				url : context + '/basePrice/itemTypeWg/getList',
+				method : 'get',
+
+				parseData : function(res) {
+					// 可进行数据操作
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+				cols : [ [
+					{ type: 'radio' },//单选  radio
+					{
+						type : 'numbers'
+					},
+					{
+						field : 'id',
+						title : 'id',
+						width : 0,hide:true
+					},
+					 {
+						field : 'itemType',
+						title : '物料类型',
+						width : 150
+					},  {
+						field : 'fmemo',
+						title : '备注',
+						width : 150
+					}
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+
+			},
+			done : function(elem, data) {
+				var da=data.data;
+				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+				form.val("quoteBomForm", {
+					"pkItemTypeWg":da[0].id,
+					"ItemTypeWg":da[0].itemType
+				});
+				form.render();// 重新渲染
+			}
+		});
+
+		tableSelect2=tableSelect2.render({
+			elem : '#Unit',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '关键字搜索',
+			table : {
+				url : context + '/basePrice/unit/getList',
+				method : 'get',
+
+				parseData : function(res) {
+					// 可进行数据操作
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+				cols : [ [
+					{ type: 'radio' },//单选  radio
+					{
+						field : 'id',
+						title : 'id',
+						width : 0,hide:true
+					},
+					{
+						type : 'numbers'
+					},
+					{
+						field : 'unitCode',
+						title : '单位编码',
+					},
+					{
+						field : 'unitName',
+						title : '单位名称',
+					}
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+
+			},
+			done : function(elem, data) {
+				var da=data.data;
+				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+				form.val("quoteBomForm", {
+					"pkUnit":da[0].id,
+					"Unit":da[0].unitName
+				});
+				form.render();// 重新渲染
+			}
+		});
 
 		tableIns = table.render({
 			elem : '#quoteBomList',
@@ -70,7 +243,6 @@ $(function() {
 						}
 					}
 				},
-
 				{
 					field : 'bsMaterName',
 					title : '材料名称',sort:true
@@ -163,18 +335,35 @@ $(function() {
 		});
 		// 编辑五金材料
 		function getProdErr(obj, id) {
-			form.val("hardwareForm", {
+			var workcenterName="";
+			var itemType="";
+			var unitName="";
+			if(obj.wc!=null){
+				workcenterName = obj.wc.workcenterName;
+			}
+			if(obj.itp!=null){
+				itemType = obj.itp.itemType;
+			}
+			if(obj.unit!=null){
+				unitName = obj.unit.unitName;
+			}
+			form.val("quoteBomForm", {
 				"id" : obj.id,
 				"bsComponent" : obj.bsComponent,
-				"bsMaterName" : obj.bsMaterName,
-				"bsModel" : obj.bsModel,
-				"bsQty" : obj.bsQty,
-				"bsUnit" : obj.bsUnit,
-				"bsRadix" : obj.bsRadix,
-				"bsSupplier" : obj.bsSupplier,
+				"bsElement" : obj.bsElement,
+				"pkBjWorkCenter" : obj.pkBjWorkCenter,
+				"BjWorkCenter": workcenterName,
+				"pkItemTypeWg" : obj.pkItemTypeWg,
+				"ItemTypeWg": itemType,
+				"bsMaterName":obj.bsMaterName,
+				"bsModel":obj.bsModel,
 				"fmemo" : obj.fmemo,
+				"bsProQty" : obj.bsProQty,
+				"pkUnit" : obj.pkUnit,
+				"Unit":unitName,
+				"bsRadix" : obj.bsRadix,
 			});
-			openProdErr(id, "编辑五金材料信息")
+			openProdErr(id, "编辑外购件清单信息")
 		};
 
 		//导入
