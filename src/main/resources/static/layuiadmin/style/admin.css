@@ -939,11 +939,11 @@ html {
 }
 
 .layuiadmin-card-status {
-	padding: 0 10px 10px
+	/* padding: 0 10px 10px */
 }
 
 .layuiadmin-card-status dd {
-	padding: 15px 0;
+	padding: 5px 0;
 	border-bottom: 1px solid #EEE;
 	display: -webkit-flex;
 	display: flex
@@ -954,8 +954,8 @@ html {
 }
 
 .layuiadmin-card-status dd div.layui-status-img,.layuiadmin-card-team .layui-team-img {
-	width: 32px;
-	height: 32px;
+	width: 16px;
+	height: 16px;
 	border-radius: 50%;
 	background-color: #009688;
 	margin-right: 15px

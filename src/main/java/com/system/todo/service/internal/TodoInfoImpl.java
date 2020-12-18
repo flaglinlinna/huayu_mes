@@ -176,6 +176,7 @@ public class TodoInfoImpl  implements TodoInfoService {
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         filters.add(new SearchFilter("bsStatus", SearchFilter.Operator.EQ, bsStatus));
         filters.add(new SearchFilter("bsUserId", SearchFilter.Operator.EQ, uid));
+        filters.add(new SearchFilter("bsType", SearchFilter.Operator.EQ, 1));
         Specification<TodoInfo> spec = Specification.where(BaseService.and(filters, TodoInfo.class));
         
         
@@ -195,6 +196,8 @@ public class TodoInfoImpl  implements TodoInfoService {
         map.put("totalNum", totalNum);
         map.put("completedNum", completedNum);
         map.put("inCompleteNum", inCompleteNum);
+        
+        map.put("Check", todoInfoDao.findByDelFlagAndBsUserIdAndBsTypeAndBsStatus(0, uid, 2,0));
 
         return ApiResponseResult.success().data(map);
     }

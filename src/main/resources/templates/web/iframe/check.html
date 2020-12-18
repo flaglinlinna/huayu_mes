@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='审批公用'"></head>
+<style>
+    body{padding:10px; font-size:14px; background:#fff; width:95%; margin:0 auto; font-size:14px; line-height:20px; overflow:hidden;}
+        p{margin-bottom:10px;}
+        input{border:1px solid #999; padding:5px 10px; margin:0 10px 10px 0;}
+        .ap-foot{
+            border-top:1px solid #e6e6e6;
+        }
+        .layui-timeline-item{padding-bottom:0px;}
+</style>
+<body class="layui-layout-body">
+<fieldset class="layui-elem-field" id="infoDiv">
+    <legend>审批流程说明:</legend>
+    <div class="layui-field-box" id="flow_info">
+        审批:防御单位>惠州气象局以及各地区分局
+    </div>
+</fieldset>
+<hr>
+<div class="layui-card">
+    <div class="layui-card-body" >
+        <ul class="layui-timeline" id="timeline">
+
+        </ul>
+
+    </div>
+</div>
+<hr>
+<textarea name="desc" id="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+<hr>
+
+<div class="ap-foot">
+    <div style="padding:12px 40px 0;">
+        <input type="radio" name="checkRadio" value="1" title="同意" checked>同意&nbsp;
+        <input type="radio" name="checkRadio" value="2" title="驳回" id="th">驳回
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" data-type="close" style="float:right;margin-left:10px;">取消</button>
+        <button type="button" class="layui-btn layui-btn-sm" data-type="submit" style="float:right;">提交</button>
+    </div>
+</div>
+
+   
+    <script src="/js/web/iframe/check.js" th:src="@{/js/web/iframe/check.js}"></script>
+</body>
+</html>

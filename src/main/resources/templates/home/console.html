@@ -62,12 +62,30 @@
 	            </div>
 	          </div>
 	          
-	          <div class="layui-card">
-              <div class="layui-card-header">待办事项</div>
-              <div class="layui-card-body" style="margin: 0 auto; ">
-                  <table id="listTable" lay-filter="listTable"></table>
-              </div>
-            </div>
+	          <div class="layui-row layui-col-space10">
+		          <div class="layui-row layui-col-space10">
+		             <div class="layui-card layui-col-xs8">
+		              <div class="layui-card-header">待办事项</div>
+		              <div class="layui-card-body" style="margin: 0 auto; ">
+		                  <table id="listTable" lay-filter="listTable"></table>
+		              </div>
+	                 </div>
+	                 
+	                 <div class="layui-card layui-col-xs4">
+		              <div class="layui-card-header">待审批</div>
+		              <div class="layui-card-body" style="margin: 0 auto; ">
+		                  <dl class="layuiadmin-card-status" id="check-list">
+				              <dd>
+				                <div class="layui-status-img"><a href="javascript:;"></a></div>
+				                <div>
+				                  <p>胡歌 在 <a lay-href="http://fly.layui.com/vipclub/list/layuiadmin/">layuiadmin专区</a> 回答问题</p>
+				                </div>
+				              </dd>
+                           </dl>
+		              </div>
+	                 </div>
+		          </div>
+	          </div>
 	         
           </div>
          <script type="text/html" id="optBar">
@@ -97,6 +115,13 @@
 					height:'full-180'//固定表头&full-查询框高度
 						,even:true,//条纹样式
 					//data : [],
+					limit:8,
+					limits: [8,10,15,20,30,40,50],
+					request : {
+						pageName : 'page' // 页码的参数名称，默认：page
+						,
+						limitName : 'rows' // 每页数据量的参数名，默认：limit
+					},
 					page : true,
 					parseData : function(res) {
 						console.log(res)
@@ -107,6 +132,17 @@
 							$("#daiban-div").hide();//隐藏div
 							$("#main-div").show();//显示div
 						}
+						//审批列表
+						var check_html = "";
+						var dd = res.data.Check;
+						for (var j = 0; j < dd.length; j++) {
+							var url = "";
+							if(dd[j].bsRouter == "QUOTE_NEW"){
+								url = context+"/quote/toQuoteList?quoteId="+dd[j].bsReferId;
+							}
+							check_html += '<dd><div class="layui-status-img"><a href="javascript:;"></a></div><div> <a  lay-href="'+url+'">'+dd[j].bsTitle+'</a>  </div></dd>'
+						}
+						$("#check-list").html(check_html);
 						//封装数量
 						$('#completedNum').html(res.data.completedNum);
 						$('#inCompleteNum').html(res.data.inCompleteNum);
@@ -123,7 +159,7 @@
 					},
 					cols:[[ 
 					    {type : 'numbers'},
-					    {field : 'bsTitle',title : '待办类型',sort: true},
+					    {field : 'bsTitle',title : '待办标题',sort: true},
 					    {field : 'bsContent',title : '待办内容',sort: true},
 					    {field : 'createDate',title : '创建时间',sort: true},
 					    {title : '操作',width:160,toolbar : '#optBar'} 

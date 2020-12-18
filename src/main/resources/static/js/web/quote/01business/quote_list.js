@@ -116,7 +116,7 @@ $(function() {
 						title : '操作',
 						//align : 'center',
 						toolbar : '#optBar',
-						width : 200
+						width : 250
 					}
 				] ],
 				done : function(res, curr, count) {
@@ -145,6 +145,25 @@ $(function() {
 					open("编辑项目资料")
 				}else if(obj.event === 'view'){
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id,'报价项目');
+				}else if(obj.event === 'check'){
+					//先判断是否填写完成资料-暂时未校验-20201218-fyx
+					if(true){
+						layer.open({
+		                    type: 2,
+		                    title:'报价单核查审批',
+		                    area: ['600px', '550px'],
+		                    fixed: false,
+		                    maxmin: true,
+		                    //content: '../../views/iframe/check.html',
+		                    content: context+'/check/toCheck',
+		                    success: function (layero, index) {
+		                    	 // 获取子页面的iframe
+		                        var iframe = window['layui-layer-iframe' + index];
+		                        // 向子页面的全局函数child传参，流程编码
+		                        iframe.child("QUOTE_NEW",data.id);
+		                    }
+		                  });
+					}
 				}
 			});
 			
