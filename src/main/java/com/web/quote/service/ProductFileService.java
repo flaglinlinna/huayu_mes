@@ -11,12 +11,9 @@ public interface ProductFileService {
 	public ApiResponseResult add(ProductFile productFile) throws Exception;
 
 	//删除产品资料文件
-//	public ApiResponseResult edit(QuoteBom quoteBom) throws Exception;
-
-	//删除产品资料文件
 	public ApiResponseResult delete(Long id) throws Exception;
 
-	//获取BOM(外购件清单)列表
+	//获取产品资料文件列表
 	public ApiResponseResult getList(String keyword, String pkQuote, PageRequest pageRequest) throws Exception;
 
 }

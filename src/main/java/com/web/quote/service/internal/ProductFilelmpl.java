@@ -8,7 +8,6 @@ import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.quote.dao.ProductFileDao;
 import com.web.quote.entity.ProductFile;
-import com.web.quote.entity.QuoteBom;
 import com.web.quote.service.ProductFileService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +71,10 @@ public class ProductFilelmpl implements ProductFileService {
 		}
 		if (!"null".equals(pkQuote)&&pkQuote!=null) {
 			filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
+		}else {
+			List<ProductFile> quoteBomList = new ArrayList<>();
+			return ApiResponseResult.success().data(DataGrid.create(quoteBomList, 0,
+					1, 10));
 		}
 		Specification<ProductFile> spec = Specification.where(BaseService.and(filters, ProductFile.class));
 		Specification<ProductFile> spec1 = spec.and(BaseService.or(filters1, ProductFile.class));
