@@ -148,7 +148,7 @@ public class MjProcPriceController extends WebController{
         String method = "basePrice/mjProcPrice/getProcList";String methodName ="获取工序信息";
         try{
         	Sort sort = Sort.unsorted();
-            ApiResponseResult result = mjProcPriceService.getProcList("01", keyword,super.getPageRequest(sort));
+            ApiResponseResult result = mjProcPriceService.getProcList("BJ_MJ_WORKCENTER", keyword,super.getPageRequest(sort));
             logger.debug("获取工序信息=getProcList:");
             getSysLogService().success(module,method, methodName, keyword);
             return result;

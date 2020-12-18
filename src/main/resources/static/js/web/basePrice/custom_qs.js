@@ -137,7 +137,7 @@ $(function() {
 			if(obj.fileId!=null){
                 document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcFieldBefore(filedata,obj.id,"/basePrice/customQs/delFile");
             }
-
+			getTypeList(obj.qsType);
 			openData(obj.id, "编辑价格信息")
 		}
 
@@ -221,17 +221,18 @@ function addSubmit(obj) {
 function getTypeList(id) {
 	CoreUtil.sendAjax("/basePrice/customQs/getQsType", "", function(data) {
 		if (data.result) {
+
 			$("#qsType").empty();
-			var list = data.data;
+			var list = data.data.rows;
+			console.log(list);
 			for (var i = 0; i < list.length; i++) {
 				if (i == 0) {
 					$("#qsType").append("<option value=''>请选择</option>")
 				}
 				$("#qsType").append(
-						"<option value=" + list[i].id + ">" + list[i].unitCode
-								+ "——" + list[i].unitName + "</option>")
-				if(id==list[i].id){
-					$("#qsType").val(list[i].id);
+						"<option value=" + list[i].SUB_CODE + ">" + list[i].SUB_NAME+ "</option>")
+				if(id==list[i].SUB_CODE){
+					$("#qsType").val(list[i].SUB_CODE);
 				}
 			}
 			
