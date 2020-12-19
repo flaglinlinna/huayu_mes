@@ -269,7 +269,7 @@ public class Quotelmpl implements QuoteService {
 			
 		}*/
 		
-		return null;
+		return ApiResponseResult.success();
 	}
 
 
