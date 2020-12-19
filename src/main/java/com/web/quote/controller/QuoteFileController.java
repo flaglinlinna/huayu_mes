@@ -100,4 +100,24 @@ public class QuoteFileController extends WebController {
 			return ApiResponseResult.failure("删除产品资料信息列表失败！");
 		}
 	}
+	
+	@ApiOperation(value = "提交报价-产品资料信息", notes = "提交报价-产品资料信息",hidden = true)
+    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doStatus(@RequestBody Map<String, Object> param) {   	
+        String method = "productFile/doStatus";String methodName ="提交报价-产品资料信息";
+        String pkQuote = param.get("quoteId").toString();
+        try{
+            ApiResponseResult result = quoteFileService.doStatus(pkQuote);
+            logger.debug("提交报价-产品资料信息=doStatus:");
+            getSysLogService().success(module,method, methodName,
+                    "报价单id:"+pkQuote);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("提交报价-产品资料信息失败！", e);
+            getSysLogService().error(module,method, methodName,"报价单id:"+pkQuote+ e.toString());
+            return ApiResponseResult.failure("提交报价-产品资料信息失败！");
+        }
+    }
 }

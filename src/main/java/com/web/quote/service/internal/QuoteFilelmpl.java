@@ -101,5 +101,11 @@ public class QuoteFilelmpl implements QuoteFileService {
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 
-
+	/**
+	 * 
+	 * **/
+	 public ApiResponseResult doStatus(String quoteId)throws Exception{
+		 quoteFileDao.saveQuoteFileByQuoteId(Long.parseLong(quoteId));
+		 return ApiResponseResult.success("提交成功！");
+	 }
 }
