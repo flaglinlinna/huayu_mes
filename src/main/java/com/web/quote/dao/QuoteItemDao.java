@@ -14,4 +14,5 @@ public interface QuoteItemDao extends CrudRepository<QuoteItem, Long>,JpaSpecifi
 	public List<QuoteItem> findByDelFlag(Integer delFlag);
 	public QuoteItem findById(long id);
 	public List<QuoteItem> findByDelFlagAndPkQuote(Integer delFlag,Long PkQuote);
+	public List<QuoteItem> findByDelFlagAndPkQuoteAndBsStyle(Integer delFlag,Long PkQuote,String bsStyle);
 }

@@ -74,6 +74,7 @@ function checkNull(str){
 	if(str==null){
 		return ""
 	}
+	return str;
 }
 function toPage(link,title){
 	parent.layui.index.openTabsPage(link,title);

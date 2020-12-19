@@ -30,7 +30,7 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	
 	public List<QuoteProcess> findByDelFlagAndPkQuoteBomAndBsOrder(Integer delFlag,Long pkQuoteBom,Integer bsOrder);
 	
-	@Query(value = "select distinct t.bs_component from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag='0'", nativeQuery = true)	
+	@Query(value = "select distinct t.bs_component from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag='0' and t.bs_component is not null", nativeQuery = true)	
 	public List<Map<String, Object>> getBomName(String quoteid);
 	
 	@Modifying
