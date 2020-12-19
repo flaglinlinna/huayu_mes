@@ -15,14 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
-@Api(description = "五金材料信息模块")
+@Api(description = "制造部材料信息模块")
 @CrossOrigin
 @ControllerAdvice
 @Controller
 @RequestMapping(value = "productMater")
 public class ProductMaterController extends WebController {
 
-	private String module = "五金材料信息";
+	private String module = "制造部材料信息";
 
 	@Autowired
 	private ProductMaterService productMaterService;
@@ -37,7 +37,7 @@ public class ProductMaterController extends WebController {
 
 
 	@ApiOperation(value = "五金材料信息列表页", notes = "五金材料信息列表页", hidden = true)
-		@RequestMapping(value = "/toProductMater")
+	@RequestMapping(value = "/toProductMater")
 	public ModelAndView toProductMater(String bsType) {
 		ModelAndView mav = new ModelAndView();
 		try {
@@ -45,7 +45,7 @@ public class ProductMaterController extends WebController {
 			mav.setViewName("/web/quote/02produce/product_mater");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("获取报价基础数据失败！", e);
+			logger.error("获取制造部材料信息失败！", e);
 		}
 		return mav;
 	}
@@ -111,12 +111,12 @@ public class ProductMaterController extends WebController {
 	@ApiOperation(value = "获取五金材料列表", notes = "获取五金材料列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getList(String keyword) {
+	public ApiResponseResult getList(String keyword,String bsType) {
 		String method = "productMater/getList";
 		String methodName = "获取五金材料列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = productMaterService.getList(keyword, super.getPageRequest(sort));
+			ApiResponseResult result = productMaterService.getList(keyword,bsType, super.getPageRequest(sort));
 			logger.debug("获取五金材料列表=getList:");
 			return result;
 		} catch (Exception e) {
@@ -149,12 +149,12 @@ public class ProductMaterController extends WebController {
 	@ApiOperation(value="导入模板", notes="导入模板", hidden = true)
 	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult getExcel(MultipartFile[] file) {
+	public ApiResponseResult getExcel(MultipartFile[] file,String bsType) {
 		String method = "/productMater/importExcel";String methodName ="导入模板";
 		try {
 			logger.debug("导入模板=importExcel:");
 			getSysLogService().success(module,method, methodName, "");
-			return productMaterService.doExcel(file);
+			return productMaterService.doExcel(file,bsType);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("导入模板失败！", e);

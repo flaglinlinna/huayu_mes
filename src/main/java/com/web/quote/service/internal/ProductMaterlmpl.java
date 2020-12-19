@@ -68,14 +68,18 @@ public class ProductMaterlmpl implements ProductMaterService {
         o.setBsMaterName(hardwareMater.getBsMaterName());
         o.setBsModel(hardwareMater.getBsModel());
         o.setBsQty(hardwareMater.getBsQty());
+        o.setBsProQty(hardwareMater.getBsProQty());
         o.setBsRadix(hardwareMater.getBsRadix());
         o.setBsUnit(hardwareMater.getBsUnit());
+        o.setPkUnit(hardwareMater.getPkUnit());
         o.setBsSupplier(hardwareMater.getBsSupplier());
         o.setBsCave(hardwareMater.getBsCave());
         o.setBsMachiningType(hardwareMater.getBsMachiningType());
         o.setBsWaterGap(hardwareMater.getBsWaterGap());
+        o.setBsColor(hardwareMater.getBsColor());
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setFmemo(hardwareMater.getFmemo());
         productMaterDao.save(o);
         return ApiResponseResult.success("编辑成功！");
     }
@@ -110,8 +114,10 @@ public class ProductMaterlmpl implements ProductMaterService {
 
 
     //导入模板
-    public ApiResponseResult doExcel(MultipartFile[] file) throws Exception{
+    public ApiResponseResult doExcel(MultipartFile[] file,String bsType) throws Exception{
         try {
+            Date doExcleDate = new Date();
+            Long userId = UserUtil.getSessionUser().getId();
             InputStream fin = file[0].getInputStream();
             XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
             XSSFSheet sheet = workbook.getSheetAt(0);
@@ -136,6 +142,8 @@ public class ProductMaterlmpl implements ProductMaterService {
                 hardwareMater.setBsRadix(bsRadix);
                 hardwareMater.setBsSupplier(bsSupplier);
                 hardwareMater.setFmemo(fmemo);
+                hardwareMater.setCreateBy(userId);
+                hardwareMater.setCreateDate(doExcleDate);
                 hardwareMaterList.add(hardwareMater);
             }
             productMaterDao.saveAll(hardwareMaterList);
@@ -152,15 +160,18 @@ public class ProductMaterlmpl implements ProductMaterService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
+    public ApiResponseResult getList(String keyword,String bsType, PageRequest pageRequest) throws Exception {
         // 查询条件1
         List<SearchFilter> filters = new ArrayList<>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        if (StringUtils.isNotEmpty(bsType)) {
+            filters.add(new SearchFilter("bsType", SearchFilter.Operator.EQ, bsType));
+        }
         // 查询2
         List<SearchFilter> filters1 = new ArrayList<>();
         if (StringUtils.isNotEmpty(keyword)) {
-//            filters1.add(new SearchFilter("errCode", SearchFilter.Operator.LIKE, keyword));
-//            filters1.add(new SearchFilter("errName", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("bsComponent", SearchFilter.Operator.LIKE, keyword));
+            filters1.add(new SearchFilter("bsMaterName", SearchFilter.Operator.LIKE, keyword));
         }
         Specification<ProductMater> spec = Specification.where(BaseService.and(filters, ProductMater.class));
         Specification<ProductMater> spec1 = spec.and(BaseService.or(filters1, ProductMater.class));
