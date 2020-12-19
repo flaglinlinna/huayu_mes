@@ -22,4 +22,6 @@ public interface QuoteService {
 	
 	public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;//变更报价单状态
 
+	
+	public ApiResponseResult doItemFinish(String code,Long quoteId)throws Exception;//20201219-fyx-确认完成后要调用
 }
