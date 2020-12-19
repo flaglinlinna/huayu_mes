@@ -51,7 +51,8 @@ public class QuoteBomlmpl implements QuoteBomService {
 	@Autowired
 	private BjWorkCenterDao bjWorkCenterDao;
 	
-	QuoteService quoteService;
+	@Autowired
+	private QuoteService quoteService;
 
 	@Override
 	public ApiResponseResult add(QuoteBom quoteBom) throws Exception {
@@ -219,6 +220,8 @@ public class QuoteBomlmpl implements QuoteBomService {
 	 * **/
 	public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
 		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId));
+		System.out.println(Long.parseLong(quoteId));
+		System.out.println(code);
 		quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		return ApiResponseResult.success("提交成功！");
 	}
