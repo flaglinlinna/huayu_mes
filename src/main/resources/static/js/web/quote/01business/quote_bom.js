@@ -277,7 +277,8 @@ $(function() {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
-				toolbar : '#optBar'
+				toolbar : '#optBar',
+					width:120,
 			}
 			] ],
 			done : function(res, curr, count) {
@@ -433,6 +434,7 @@ function addQuoteBom() {
 }
 // 新增五金材料提交
 function addSubmit(obj) {
+	obj.field.pkQuote = quoteId;
 	CoreUtil.sendAjax("/quoteBom/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
@@ -498,6 +500,28 @@ function delProdErr(obj, id, name) {
 					});
 		});
 	}
+}
+
+function saveProc(){
+	console.log(quoteId)
+	var param = {"quoteId" : quoteId};
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/quoteBom/doStatus", JSON.stringify(param),
+				function(data) {
+			console.log(data)
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("提交成功！");
+							loadAll();
+						} else {
+							layer.alert(data);
+						}
+					}
+				});
+	});
 }
 
 // 重新加载表格（搜索）

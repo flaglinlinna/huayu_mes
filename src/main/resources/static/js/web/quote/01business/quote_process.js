@@ -325,6 +325,7 @@ function saveProc(){
 						if (data.result == true) {
 							// 回调弹框
 							layer.alert("提交成功！");
+							loadAll();
 						} else {
 							layer.alert(data);
 						}
