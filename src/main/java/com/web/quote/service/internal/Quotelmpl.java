@@ -98,6 +98,7 @@ public class Quotelmpl implements QuoteService {
     		qi.setBsPerson(qb.getBsPerson());
     		qi.setCreateDate(new Date());
     		qi.setCreateBy(UserUtil.getSessionUser().getId());
+    		qi.setBsStyle(qb.getBsStyle());
     		if(qb.getBsCode().equals("A001") || qb.getBsCode().equals("A002")){
     			qi.setBsBegTime(new Date());//20201218-fyx
     		}

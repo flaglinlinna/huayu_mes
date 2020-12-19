@@ -283,6 +283,7 @@ public class CheckImpl   implements CheckService {
                 		qi.setCreateDate(new Date());
                 		qi.setCreateBy(UserUtil.getSessionUser().getId());
                 		qi.setBsBegTime(new Date());
+                		qi.setBsStyle(qb.getBsStyle());
                 		lqi.add(qi);
                 	}
                 	quoteItemDao.saveAll(lqi);

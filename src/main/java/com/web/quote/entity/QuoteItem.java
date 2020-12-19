@@ -47,6 +47,13 @@ public class QuoteItem extends BaseEntity{
     protected Quote quote;
 	
     /**
+   	 * 报价项目-类型
+   	 */
+   	@ApiModelProperty(name = "bsStyle", value = "报价项目-类型")
+   	@Column(length = 50)
+   	protected String bsStyle;
+   	
+    /**
 	 * 报价项目-编码
 	 */
 	@ApiModelProperty(name = "bsCode", value = "报价项目-编码")
@@ -171,6 +178,14 @@ public class QuoteItem extends BaseEntity{
 
 	public void setToDoBy(Long toDoBy) {
 		this.toDoBy = toDoBy;
+	}
+
+	public String getBsStyle() {
+		return bsStyle;
+	}
+
+	public void setBsStyle(String bsStyle) {
+		this.bsStyle = bsStyle;
 	}
 	
 	
