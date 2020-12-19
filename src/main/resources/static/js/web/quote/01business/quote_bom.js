@@ -277,7 +277,8 @@ $(function() {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
-				toolbar : '#optBar'
+				toolbar : '#optBar',
+					width:120,
 			}
 			] ],
 			done : function(res, curr, count) {
@@ -433,6 +434,7 @@ function addQuoteBom() {
 }
 // 新增五金材料提交
 function addSubmit(obj) {
+	obj.field.pkQuote = quoteId;
 	CoreUtil.sendAjax("/quoteBom/add", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {

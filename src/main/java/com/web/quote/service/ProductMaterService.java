@@ -13,9 +13,9 @@ public interface ProductMaterService {
 
 	public ApiResponseResult delete(Long id) throws Exception;
 
-	public ApiResponseResult doExcel(MultipartFile[] file) throws Exception;
+	public ApiResponseResult doExcel(MultipartFile[] file,String bsType) throws Exception;
 
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getList(String keyword,String bsType, PageRequest pageRequest) throws Exception;
 
     public ApiResponseResult getListByPkQuote(Long pkQuote, PageRequest pageRequest) throws Exception;
 }
