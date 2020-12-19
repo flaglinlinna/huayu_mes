@@ -154,7 +154,28 @@ function addSubmit(obj) {
 		layer.alert(res.msg);
 	});
 }
-
+//确认完成
+function save(){
+	console.log(quoteId)
+	var param = {"quoteId" : quoteId};
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/quoteFile/doStatus", JSON.stringify(param),
+				function(data) {
+			console.log(data)
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("提交成功！");
+							loadAll();
+						} else {
+							layer.alert(data);
+						}
+					}
+				});
+	});
+}
 
 // 删除五金材料
 function delProdErr(obj, id, name) {

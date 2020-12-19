@@ -16,4 +16,6 @@ public interface QuoteFileService {
 	//获取产品资料文件列表
 	public ApiResponseResult getList(String keyword, String pkQuote, PageRequest pageRequest) throws Exception;
 
+	//确认完成（变更状态bsStatus字段）
+	public ApiResponseResult doStatus(String quoteId)throws Exception;
 }

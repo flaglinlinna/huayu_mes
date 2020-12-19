@@ -502,7 +502,7 @@ function delProdErr(obj, id, name) {
 	}
 }
 
-function saveProc(){
+function save(){
 	console.log(quoteId)
 	var param = {"quoteId" : quoteId};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
