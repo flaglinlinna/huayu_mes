@@ -10,6 +10,8 @@ import com.utils.enumeration.BasicStateEnum;
 import com.web.quote.dao.QuoteFileDao;
 import com.web.quote.entity.QuoteFile;
 import com.web.quote.service.QuoteFileService;
+import com.web.quote.service.QuoteService;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,8 @@ public class QuoteFilelmpl implements QuoteFileService {
 	private QuoteFileDao quoteFileDao;
 	@Autowired
 	private SysUserDao sysUserDao;
+	@Autowired
+	private QuoteService quoteService;
 
 
 	@Override
@@ -102,10 +106,11 @@ public class QuoteFilelmpl implements QuoteFileService {
 	}
 
 	/**
-	 * 
+	 * 确认完成
 	 * **/
-	 public ApiResponseResult doStatus(String quoteId)throws Exception{
+	 public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
 		 quoteFileDao.saveQuoteFileByQuoteId(Long.parseLong(quoteId));
+		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		 return ApiResponseResult.success("提交成功！");
 	 }
 }

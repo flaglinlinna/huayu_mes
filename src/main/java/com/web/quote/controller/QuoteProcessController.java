@@ -46,11 +46,12 @@ public class QuoteProcessController extends WebController {
 	
 	@ApiOperation(value = "报价工艺流程页", notes = "报价工艺流程页", hidden = true)
 	@RequestMapping(value = "/toQuoteProcess")
-	public ModelAndView toQuoteProcess(String quoteId) {
+	public ModelAndView toQuoteProcess(String quoteId,String code) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult bomNameList=quoteProcessService.getBomList2(quoteId);
 			mav.addObject("quoteId", quoteId);
+			mav.addObject("code", code);
 			mav.addObject("bomNameList", bomNameList);
 			mav.setViewName("/web/quote/01business/quote_process");// 返回路径
 		} catch (Exception e) {

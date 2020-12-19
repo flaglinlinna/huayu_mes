@@ -29,10 +29,11 @@ public class QuoteFileController extends WebController {
 	
 	@ApiOperation(value = "产品资料模块页", notes = "产品资料模块页", hidden = true)
 	@RequestMapping(value = "/toProductFile")
-	public ModelAndView toProductFile(String quoteId) {
+	public ModelAndView toProductFile(String quoteId,String code) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			mav.addObject("quoteId", quoteId);
+			mav.addObject("code", code);
 			mav.setViewName("/web/quote/01business/quote_file");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,8 +108,9 @@ public class QuoteFileController extends WebController {
     public ApiResponseResult doStatus(@RequestBody Map<String, Object> param) {   	
         String method = "productFile/doStatus";String methodName ="提交报价-产品资料信息";
         String pkQuote = param.get("quoteId").toString();
+        String code = param.get("code").toString();
         try{
-            ApiResponseResult result = quoteFileService.doStatus(pkQuote);
+            ApiResponseResult result = quoteFileService.doStatus(pkQuote,code);
             logger.debug("提交报价-产品资料信息=doStatus:");
             getSysLogService().success(module,method, methodName,
                     "报价单id:"+pkQuote);

@@ -220,8 +220,6 @@ public class QuoteBomlmpl implements QuoteBomService {
 	 * **/
 	public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
 		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId));
-		System.out.println(Long.parseLong(quoteId));
-		System.out.println(code);
 		quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		return ApiResponseResult.success("提交成功！");
 	}
