@@ -48,6 +48,9 @@ public class QuoteItem extends BaseEntity{
 	
     /**
    	 * 报价项目-类型
+   	 * 1:item
+	 * 2:mater
+	 * 3:process
    	 */
    	@ApiModelProperty(name = "bsStyle", value = "报价项目-类型")
    	@Column(length = 50)

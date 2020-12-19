@@ -159,7 +159,7 @@ public class Quotelmpl implements QuoteService {
     @Override
     @Transactional
     public ApiResponseResult getItemPage(Long id)throws Exception{
-    	List<QuoteItem> list=quoteItemDao.findByDelFlagAndPkQuote(0,id);
+    	List<QuoteItem> list=quoteItemDao.findByDelFlagAndPkQuoteAndBsStyle(0,id,"item");
     	return ApiResponseResult.success().data(list);
     }
     
@@ -234,8 +234,12 @@ public class Quotelmpl implements QuoteService {
         if(o == null){
             return ApiResponseResult.failure("该报价单不存在！");
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String cDate = sdf.format(o.getCreateDate());//格式化创建时间
+        String cDate="";
+        if(o.getCreateDate()!=null){
+        	 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+             cDate = sdf.format(o.getCreateDate());//格式化创建时间
+        }
+       
         Map<String, Object> map = new HashMap<>();
         map.put("id", o.getId());
         map.put("bsType", o.getBsType());
