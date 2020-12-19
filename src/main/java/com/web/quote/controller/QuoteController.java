@@ -58,19 +58,28 @@ public class QuoteController extends WebController {
 
 	@ApiOperation(value = "报价信息列表页", notes = "报价信息列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteList")
-	public String toQuoteList() {
-		return "/web/quote/01business/quote_list";
+	public ModelAndView toQuoteList(String step) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			mav.addObject("Step", step);
+			mav.setViewName("/web/quote/01business/quote_list");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价基础数据失败！", e);
+		}
+		return mav;
 	}
 	
 	@ApiOperation(value = "报价信息项目列表页", notes = "报价信息项目列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteItem")
-	public ModelAndView toQuoteItem(String quoteId) {
+	public ModelAndView toQuoteItem(String quoteId,String style) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult info = quoteService.getSingle( Long.parseLong(quoteId));
 			ApiResponseResult ItemList = quoteService.getItemPage( Long.parseLong(quoteId));
 			mav.addObject("ItemList", ItemList);
 			mav.addObject("info", info);
+			mav.addObject("Style", style);
 			mav.setViewName("/web/quote/01business/quote_items");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
