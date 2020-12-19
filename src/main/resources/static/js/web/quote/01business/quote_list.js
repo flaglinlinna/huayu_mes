@@ -48,11 +48,11 @@ $(function() {
 					field : 'bsStatus',
 					title : '状态',width : 80
 					,templet:function (d) {
-						if(d.bsStatus="0"){
+						if(d.bsStatus=="0"){
 							return "进行中"
-						}else if(d.bsStatus="1"){
+						}else if(d.bsStatus=="1"){
 							return "已完成"
-						}else if(d.bsStatus="99"){
+						}else if(d.bsStatus=="99"){
 							return "已关闭"
 						}
 					}
@@ -120,13 +120,13 @@ $(function() {
 					}
 				] ],
 				done : function(res, curr, count) {
-					//
+					console.log(res)
 					pageCurr = curr;
 					res.data.forEach(function (item, index) {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
 						if(item.bsStatus == 0){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
-						}else if(item.bsStatus="2"){
+						}else if(item.bsStatus="1"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
 						}else if(item.bsStatus="99"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');

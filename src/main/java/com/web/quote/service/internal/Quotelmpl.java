@@ -233,12 +233,14 @@ public class Quotelmpl implements QuoteService {
         if(o == null){
             return ApiResponseResult.failure("该报价单不存在！");
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String cDate = sdf.format(o.getCreateDate());//格式化创建时间
         Map<String, Object> map = new HashMap<>();
         map.put("id", o.getId());
         map.put("bsType", o.getBsType());
         map.put("bsCode", o.getBsCode());
         map.put("bsProd", o.getBsProd());
-        map.put("createDate", o.getCreateDate());
+        map.put("createDate", cDate);
         map.put("createBy", sysUserDao.findById((long) o.getCreateBy()).getUserName());
         return ApiResponseResult.success().data(map);
     }

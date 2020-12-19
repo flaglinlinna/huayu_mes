@@ -301,9 +301,14 @@ $(function() {
 	});
 });
 //添加工艺流程
-function addProc(id) {
+function addProc() {
+	
+	if(bomNameList.data<1){
+		layer.alert("该报价单未维护外购件清单数据")
+		return false;
+	}
 	// 获取初始化信息
-	getAddList(id);
+	getAddList();
 	// 打开弹出框
 	openProc(null, "添加工艺流程");
 }
@@ -413,14 +418,11 @@ function getAddList(){
 	var bomlist=bomNameList.data;
 	for(var i=0;i<bomlist.length;i++){
 		if(i==0){
-			if (i == 0) {
-				$("#num")
-						.append("<option value=''> 请选择</option>");
-			}
-			$("#num").append(
+				$("#num").append("<option value=''> 请选择</option>");  
+		}
+		 $("#num").append(
 					"<option value=" + bomlist[i].BS_COMPONENT + ">"
 							+ bomlist[i].BS_COMPONENT +"</option>");
-		}
 	}
 	layui.form.render('select');
 }
