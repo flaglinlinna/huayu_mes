@@ -31,10 +31,12 @@ public class QuoteBomController extends WebController {
 	
 	@ApiOperation(value = "报价项目-Bom", notes = "报价项目-Bom", hidden = true)
 	@RequestMapping(value = "/toQuoteBom")
-	public ModelAndView toQuoteBom(String quoteId) {
+	public ModelAndView toQuoteBom(String quoteId,String code) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			mav.addObject("code", code);
 			mav.addObject("quoteId", quoteId);
+			
 			mav.setViewName("/web/quote/01business/quote_bom");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -143,8 +145,9 @@ public class QuoteBomController extends WebController {
     public ApiResponseResult doStatus(@RequestBody Map<String, Object> param) {   	
         String method = "quoteBom/doStatus";String methodName ="提交报价-外购件信息";
         String pkQuote = param.get("quoteId").toString();
+        String code = param.get("code").toString();
         try{
-            ApiResponseResult result = quoteBomService.doStatus(pkQuote);
+            ApiResponseResult result = quoteBomService.doStatus(pkQuote,code);
             logger.debug("提交报价-外购件信息=doStatus:");
             getSysLogService().success(module,method, methodName,
                     "报价单id:"+pkQuote);

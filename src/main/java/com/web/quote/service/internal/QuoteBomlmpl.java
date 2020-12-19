@@ -17,6 +17,8 @@ import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.QuoteBomDao;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.service.QuoteBomService;
+import com.web.quote.service.QuoteService;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -48,6 +50,8 @@ public class QuoteBomlmpl implements QuoteBomService {
 	private UnitDao unitDao;
 	@Autowired
 	private BjWorkCenterDao bjWorkCenterDao;
+	
+	QuoteService quoteService;
 
 	@Override
 	public ApiResponseResult add(QuoteBom quoteBom) throws Exception {
@@ -213,8 +217,9 @@ public class QuoteBomlmpl implements QuoteBomService {
 	/**
 	 * 确认完成外购件清单 
 	 * **/
-	public ApiResponseResult doStatus(String quoteId)throws Exception{
+	public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
 		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId));
+		quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		return ApiResponseResult.success("提交成功！");
 	}
 }

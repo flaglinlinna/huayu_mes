@@ -23,6 +23,6 @@ public interface QuoteBomService {
 	public ApiResponseResult getQuoteBomList(String keyword, String pkQuote, PageRequest pageRequest) throws Exception;
 	
 	//确认完成外购件清单 （修改项目状态）
-	public ApiResponseResult doStatus(String quoteId)throws Exception;
+	public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
 
 }
