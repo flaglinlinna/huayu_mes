@@ -22,5 +22,5 @@ public interface QuoteProcessService {
 	
    public ApiResponseResult doProcOrder(Long id,Integer bsOrder)  throws Exception;
    
-   public ApiResponseResult doStatus(String quoteId)throws Exception;
+   public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
 }

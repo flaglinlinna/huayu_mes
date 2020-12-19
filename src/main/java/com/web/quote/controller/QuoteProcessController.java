@@ -181,8 +181,9 @@ public class QuoteProcessController extends WebController {
     public ApiResponseResult doStatus(@RequestBody Map<String, Object> param) {   	
         String method = "quoteProcess/doStatus";String methodName ="提交报价-工艺流程";
         String pkQuote = param.get("quoteId").toString();
+        String code = param.get("code").toString();
         try{
-            ApiResponseResult result = quoteProcessService.doStatus(pkQuote);
+            ApiResponseResult result = quoteProcessService.doStatus(pkQuote,code);
             logger.debug("提交报价-工艺流程=doStatus:");
             getSysLogService().success(module,method, methodName,
                     "报价单id:"+pkQuote);

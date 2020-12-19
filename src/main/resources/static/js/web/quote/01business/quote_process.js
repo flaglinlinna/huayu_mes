@@ -314,7 +314,7 @@ function addProc() {
 }
 function saveProc(){
 	console.log(quoteId)
-	var param = {"quoteId" : quoteId};
+	var param = {"quoteId" : quoteId ,"code":code};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {

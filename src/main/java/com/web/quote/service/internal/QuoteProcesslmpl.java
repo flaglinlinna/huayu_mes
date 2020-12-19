@@ -29,6 +29,7 @@ import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.QuoteProcessService;
+import com.web.quote.service.QuoteService;
 
 /**
  * 报价工艺流程表
@@ -46,6 +47,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 
 	@Autowired
 	ProcDao procDao;
+	
+	@Autowired
+	QuoteService quoteService;
 
 	/**
 	 * 获取bom列表-下拉选择
@@ -197,8 +201,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	/**
 	 * 提交工序维护清单
 	 * **/
-	 public ApiResponseResult doStatus(String quoteId)throws Exception{
-		 
+	 public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
+		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		 quoteProcessDao.saveQuoteProcessByQuoteId(Long.parseLong(quoteId));
 		 
 		 return ApiResponseResult.success("提交成功！");
