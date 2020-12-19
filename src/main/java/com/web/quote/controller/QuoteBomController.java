@@ -47,7 +47,7 @@ public class QuoteBomController extends WebController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult add(@RequestBody QuoteBom quoteBom) {
-		String method = "quote/add";
+		String method = "quoteBom/add";
 		String methodName = "新增外购件清单信息";
 		try {
 			ApiResponseResult result = quoteBomService.add(quoteBom);
@@ -66,7 +66,7 @@ public class QuoteBomController extends WebController {
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult edit(@RequestBody QuoteBom quoteBom) {
-		String method = "quote/edit";
+		String method = "quoteBom/edit";
 		String methodName = "编辑外购件清单信息";
 		try {
 			ApiResponseResult result = quoteBomService.edit(quoteBom);
@@ -86,7 +86,7 @@ public class QuoteBomController extends WebController {
 	@RequestMapping(value = "/getQuoteBomList", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getQuoteBomList(String keyword,String pkQuote) {
-		String method = "quote/getQuoteBomList";String methodName ="获取报价BOM清单列表";
+		String method = "quoteBom/getQuoteBomList";String methodName ="获取报价BOM清单列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.ASC, "id");
 			ApiResponseResult result = quoteBomService.getQuoteBomList(keyword,pkQuote, super.getPageRequest(sort));
@@ -121,7 +121,7 @@ public class QuoteBomController extends WebController {
 	@RequestMapping(value = "/deleteQuoteBom", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult delete(@RequestBody Map<String, Object> params) {
-		String method = "quote/deleteQuoteBom";
+		String method = "quoteBom/deleteQuoteBom";
 		String methodName = "删除外购件信息";
 		try {
 			long id = Long.parseLong(params.get("id").toString());
@@ -136,4 +136,24 @@ public class QuoteBomController extends WebController {
 			return ApiResponseResult.failure("删除外购件信息失败！");
 		}
 	}
+	
+	@ApiOperation(value = "提交报价-外购件信息", notes = "提交报价-外购件信息",hidden = true)
+    @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doStatus(@RequestBody Map<String, Object> param) {   	
+        String method = "quoteBom/doStatus";String methodName ="提交报价-外购件信息";
+        String pkQuote = param.get("quoteId").toString();
+        try{
+            ApiResponseResult result = quoteBomService.doStatus(pkQuote);
+            logger.debug("提交报价-外购件信息=doStatus:");
+            getSysLogService().success(module,method, methodName,
+                    "报价单id:"+pkQuote);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("提交报价-外购件信息失败！", e);
+            getSysLogService().error(module,method, methodName,"报价单id:"+pkQuote+ e.toString());
+            return ApiResponseResult.failure("提交报价-外购件信息失败！");
+        }
+    }
 }

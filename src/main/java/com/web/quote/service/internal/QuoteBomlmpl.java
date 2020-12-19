@@ -210,4 +210,11 @@ public class QuoteBomlmpl implements QuoteBomService {
 			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
 		}
 	}
+	/**
+	 * 确认完成外购件清单 
+	 * **/
+	public ApiResponseResult doStatus(String quoteId)throws Exception{
+		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId));
+		return ApiResponseResult.success("提交成功！");
+	}
 }

@@ -183,7 +183,7 @@ public class QuoteProcessController extends WebController {
         String pkQuote = param.get("quoteId").toString();
         try{
             ApiResponseResult result = quoteProcessService.doStatus(pkQuote);
-            logger.debug("提交报价-工艺流程=add:");
+            logger.debug("提交报价-工艺流程=doStatus:");
             getSysLogService().success(module,method, methodName,
                     "报价单id:"+pkQuote);
             return result;

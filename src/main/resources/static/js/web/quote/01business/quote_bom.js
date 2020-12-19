@@ -502,6 +502,28 @@ function delProdErr(obj, id, name) {
 	}
 }
 
+function saveProc(){
+	console.log(quoteId)
+	var param = {"quoteId" : quoteId};
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/quoteBom/doStatus", JSON.stringify(param),
+				function(data) {
+			console.log(data)
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("提交成功！");
+							loadAll();
+						} else {
+							layer.alert(data);
+						}
+					}
+				});
+	});
+}
+
 // 重新加载表格（搜索）
 function load(obj) {
 	// 重新加载table
