@@ -60,6 +60,12 @@
     </div>
     <script th:inline="javascript">
             var Step=[[${Step}]];
+            var Check_code="QUOTE_NEW";
+            if(Step == '1'){
+            	Check_code="QUOTE_NEW";
+            }
+            
+            
         </script>
 		<script th:src="@{/js/web/quote/01business/quote_list.js}"
 			src="/js/web/quote/01business/quote_list.js"></script>
