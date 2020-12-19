@@ -8,7 +8,7 @@ $(function() {
 			var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table;
 			tableIns = table.render({
 				elem : '#listTable',
-				url : context + '/quote/getList?step='+ Step,
+				url : context + '/quoteProdect/getList',
 				method : 'get' // 默认：get请求
 				//, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 				,cellMinWidth : 80,
@@ -48,11 +48,11 @@ $(function() {
 					field : 'bsStatus',
 					title : '状态',width : 80
 					,templet:function (d) {
-						if(d.bsStatus=="0"){
+						if(d.bsStatus="0"){
 							return "进行中"
-						}else if(d.bsStatus=="1"){
+						}else if(d.bsStatus="1"){
 							return "已完成"
-						}else if(d.bsStatus=="99"){
+						}else if(d.bsStatus="99"){
 							return "已关闭"
 						}
 					}
@@ -116,17 +116,17 @@ $(function() {
 						title : '操作',
 						//align : 'center',
 						toolbar : '#optBar',
-						width : 250
+						width : 150
 					}
 				] ],
 				done : function(res, curr, count) {
-					console.log(res)
+					//
 					pageCurr = curr;
 					res.data.forEach(function (item, index) {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
 						if(item.bsStatus == 0){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
-						}else if(item.bsStatus="1"){
+						}else if(item.bsStatus="2"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
 						}else if(item.bsStatus="99"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');

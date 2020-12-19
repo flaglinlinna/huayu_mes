@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='报价单列表'"></head>
+<head th:include="layout :: htmlhead" th:with="title='制造部列表'"></head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div>
@@ -13,7 +13,6 @@
 							<li class="current"><a><span>全部</span></a></li>
 							<li class=""><a onclick="alert(1);"><span>进行中</span></a></li>
 							<li class=""><a><span>已完成</span></a></li>
-							<li class=""><a><span>已关闭</span></a></li>
 						</ul>
 					</div>
 					<span class="more" id="_search_btn"></span>
@@ -44,9 +43,7 @@
 			<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看进度</a>
             <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="check">审批</a>
-            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">关闭</a>
-        </script>
+            </script>
 		</div>
 		<div id="setItemPage" class="layer_self_wrap" style="width:500px;display:none;">
         <form id="setItemForm" class="layui-form layui-form-pane" lay-filter="setItemForm" method="post" action="" style="margin: 20px;">
@@ -58,11 +55,8 @@
             </div>
         </form>
     </div>
-    <script th:inline="javascript">
-            var Step=[[${Step}]];
-        </script>
-		<script th:src="@{/js/web/quote/01business/quote_list.js}"
-			src="/js/web/quote/01business/quote_list.js"></script>
+		<script th:src="@{/js/web/quote/02produce/product_list.js}"
+			src="/js/web/quote/02produce/product_list.js"></script>
 	</div>
 </body>
 </html>

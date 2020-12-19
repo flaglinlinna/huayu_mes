@@ -35,14 +35,56 @@ public class Quote extends BaseEntity {
 	public static final String TABLE_NAME = "price_quote";
 	
 	/**
-     * 状态
-     * 0：草稿，1:已完成
+     * 1-业务部状态
+     * 0：草稿，
+     * 1:进行中
+     * 2:已完成
      * 99:关闭
      */
 	@Column
 	@NotNull
 	@ApiModelProperty(name="bsStatus",value="状态")
     protected int bsStatus = 0;
+	
+	/**
+     * 2-制造部状态
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus2",value="状态")
+    protected int bsStatus2 = 0;
+	
+	/**
+     * 3-采购部状态
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus3",value="状态")
+    protected int bsStatus3 = 0;
+	
+	/**
+     * 4-业务部状态
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus4",value="状态")
+    protected int bsStatus4 = 0;
+	
+	/**
+     * 5-总经理审批状态
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus5",value="状态")
+    protected int bsStatus5 = 0;
 	
 	/**
      * 流程步骤
@@ -550,6 +592,38 @@ public class Quote extends BaseEntity {
 
 	public void setBsEndTime6(Date bsEndTime6) {
 		this.bsEndTime6 = bsEndTime6;
+	}
+
+	public int getBsStatus2() {
+		return bsStatus2;
+	}
+
+	public void setBsStatus2(int bsStatus2) {
+		this.bsStatus2 = bsStatus2;
+	}
+
+	public int getBsStatus3() {
+		return bsStatus3;
+	}
+
+	public void setBsStatus3(int bsStatus3) {
+		this.bsStatus3 = bsStatus3;
+	}
+
+	public int getBsStatus4() {
+		return bsStatus4;
+	}
+
+	public void setBsStatus4(int bsStatus4) {
+		this.bsStatus4 = bsStatus4;
+	}
+
+	public int getBsStatus5() {
+		return bsStatus5;
+	}
+
+	public void setBsStatus5(int bsStatus5) {
+		this.bsStatus5 = bsStatus5;
 	}
 	
 	
