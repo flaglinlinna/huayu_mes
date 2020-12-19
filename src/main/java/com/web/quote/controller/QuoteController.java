@@ -76,10 +76,9 @@ public class QuoteController extends WebController {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult info = quoteService.getSingle( Long.parseLong(quoteId));
-			ApiResponseResult ItemList = quoteService.getItemPage( Long.parseLong(quoteId));
+			ApiResponseResult ItemList = quoteService.getItemPage( Long.parseLong(quoteId),style);
 			mav.addObject("ItemList", ItemList);
 			mav.addObject("info", info);
-			mav.addObject("Style", style);
 			mav.setViewName("/web/quote/01business/quote_items");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -143,10 +142,10 @@ public class QuoteController extends WebController {
 	@ApiOperation(value = "获取报价单-项目列表", notes = "获取报价单-项目列表",hidden = true)
     @RequestMapping(value = "/getItemPage", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getItemPage(Long id) {
+    public ApiResponseResult getItemPage(Long id,String bsStyle) {
         String method = "quote/getItemPage";String methodName ="获取报价单-项目列表";
         try {
-            ApiResponseResult result = quoteService.getItemPage((long) 5053);
+            ApiResponseResult result = quoteService.getItemPage(id,bsStyle);
             logger.debug("获取报价单-项目列表=getItemPage:");
             getSysLogService().success(module,method, methodName, id);
             return result;

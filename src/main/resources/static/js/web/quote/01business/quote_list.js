@@ -144,7 +144,7 @@ $(function() {
 					// 编辑
 					open("编辑项目资料")
 				}else if(obj.event === 'view'){
-					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id,'报价项目');
+					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item','报价项目');
 				}else if(obj.event === 'check'){
 					//先判断是否填写完成资料-暂时未校验-20201218-fyx
 					if(true){

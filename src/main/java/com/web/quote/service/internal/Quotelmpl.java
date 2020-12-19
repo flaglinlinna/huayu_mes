@@ -158,8 +158,8 @@ public class Quotelmpl implements QuoteService {
      * **/
     @Override
     @Transactional
-    public ApiResponseResult getItemPage(Long id)throws Exception{
-    	List<QuoteItem> list=quoteItemDao.findByDelFlagAndPkQuoteAndBsStyle(0,id,"item");
+    public ApiResponseResult getItemPage(Long id,String bsStatus)throws Exception{
+    	List<QuoteItem> list=quoteItemDao.findByDelFlagAndPkQuoteAndBsStyle(0,id,bsStatus);
     	return ApiResponseResult.success().data(list);
     }
     
