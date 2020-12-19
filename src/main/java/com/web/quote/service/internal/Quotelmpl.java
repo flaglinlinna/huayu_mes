@@ -250,6 +250,28 @@ public class Quotelmpl implements QuoteService {
         return ApiResponseResult.success().data(map);
     }
 
+	@Override
+	public ApiResponseResult doItemFinish(String code, Long quoteId) throws Exception {
+		// TODO Auto-generated method stub
+		//单个项目完成后，执行
+		//1.1 修改状态
+		List<QuoteItem> lqi = quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,quoteId,code);
+		if(lqi.size() == 0){
+			return ApiResponseResult.failure("报价单不存在!");
+		}
+		QuoteItem q = lqi.get(0);
+		q.setBsEndTime(new Date());
+		quoteItemDao.save(q);
+		//2.1 查询该报价单是否都已经全部提交
+		//2.3修改报价单状态（如果要自动发起审批则在这个地方触发，目前还未）
+		/*List<QuoteItem> lqii = quoteItemDao.findByDelFlagAndPkQuoteAndNotBsEndTime(0,quoteId);
+		if(lqii.size()>0){
+			
+		}*/
+		
+		return ApiResponseResult.success();
+	}
+
 
 
 }
