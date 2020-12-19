@@ -22,11 +22,13 @@ import com.system.todo.entity.TodoInfo;
 import com.system.todo.service.TodoInfoService;
 import com.system.user.dao.SysUserDao;
 import com.utils.BaseService;
+import com.utils.BaseSql;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.ProfitProdDao;
 import com.web.basePrice.entity.ProfitProd;
+import com.web.basic.entity.Line;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemBaseDao;
 import com.web.quote.dao.QuoteItemDao;
@@ -37,7 +39,7 @@ import com.web.quote.service.QuoteProductService;
 
 @Service(value = "QuoteProductService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class QuoteProductlmpl implements QuoteProductService {
+public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 	
 	@Autowired
     private QuoteDao quoteDao;
@@ -47,9 +49,9 @@ public class QuoteProductlmpl implements QuoteProductService {
      * **/
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword,PageRequest pageRequest)throws Exception{
+    public ApiResponseResult getList(String keyword,String style,PageRequest pageRequest)throws Exception{
     	// 查询条件1
-		List<SearchFilter> filters = new ArrayList<>();
+		/*List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 		filters.add(new SearchFilter("bsStep", SearchFilter.Operator.EQ, 2));
 		// 查询2
@@ -64,7 +66,62 @@ public class QuoteProductlmpl implements QuoteProductService {
 		Page<Quote> page = quoteDao.findAll(spec1, pageRequest);
 
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
+    	
+    	String sql = "select p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
+				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(i.bs_end_time,null,'0','1') col from "+Quote.TABLE_NAME+" p "
+						+ " left join price_quote_item i on p.id=i.pk_quote  where p.del_flag=0 and p.bs_step=2 ";
+		if (StringUtils.isNotEmpty(keyword)) {
+			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
+					+ keyword + "') > 0 ";*/
+		}
+		//checkStatus--需要转移的类型
+		if(StringUtils.isNotEmpty(style)){
+			if(style.equals("hardware")){
+				sql += "  and i.bs_code in ('B001','C001') ";
+			}else if(style.equals("molding")){
+				sql += "  and i.bs_code in ('B002','C002') ";
+			}else if(style.equals("surface")){
+				sql += "  and i.bs_code in ('B003','C003') ";
+			}else if(style.equals("packag")){
+				sql += "  and i.bs_code in ('B004','C004') ";
+			}
+		}
+		int pn = pageRequest.getPageNumber() + 1;
+		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
+				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
+				+ pageRequest.getPageSize() + " ";
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		List<Object[]>  list = createSQLQuery(sql, param);
+		long count = createSQLQuery(sql, param, null).size();
+		
+		List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
+		for (int i=0;i<list.size();i++) {
+			Object[] object=(Object[]) list.get(i);	
+			Map<String, Object> map1 = new HashMap<>();
+			map1.put("id", object[0]);
+			map1.put("bsCode", object[1]);
+			map1.put("bsType", object[2]);
+			//map1.put("bsStatus", object[3]);
+			map1.put("bsFinishTime", object[4]);
+			map1.put("bsRemarks", object[5]);
+			map1.put("bsProd", object[6]);
+			map1.put("bsSimilarProd", object[7]);
+			map1.put("bsDevType", object[8]);
+			map1.put("bsProdType", object[9]);
+			map1.put("bsCustName", object[10]);
+			map1.put("bsStatus", object[11]);
+			list_new.add(map1);
+			
+			
+			
+		}
+		
+		
+		return ApiResponseResult.success().data(DataGrid.create(list_new, (int) count,
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
     }
 
 }

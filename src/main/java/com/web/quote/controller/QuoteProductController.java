@@ -32,11 +32,12 @@ public class QuoteProductController extends WebController {
 	@Autowired
 	private QuoteProductService quoteProductService;
 
-	@ApiOperation(value = "报价新增信息列表页", notes = "报价新增信息列表页", hidden = true)
+	@ApiOperation(value = "报价信息列表页", notes = "报价信息列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteProdect")
-	public ModelAndView toQuoteProdect() {
+	public ModelAndView toQuoteProdect(String style) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			mav.addObject("Style", style);
 			mav.setViewName("/web/quote/02produce/product_list");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -48,11 +49,11 @@ public class QuoteProductController extends WebController {
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表",hidden = true)
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getList(String keyword) {
+    public ApiResponseResult getList(String keyword,String style) {
         String method = "quote/getList";String methodName ="获取报价单列表";
         try {
             Sort sort = new Sort(Sort.Direction.ASC, "id");
-            ApiResponseResult result = quoteProductService.getList(keyword, super.getPageRequest(sort));
+            ApiResponseResult result = quoteProductService.getList(keyword,style, super.getPageRequest(sort));
             logger.debug("获取报价单列表=getList:");
             getSysLogService().success(module,method, methodName, keyword);
             return result;
