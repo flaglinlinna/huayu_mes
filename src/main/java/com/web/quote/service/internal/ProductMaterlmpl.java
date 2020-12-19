@@ -6,6 +6,8 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.basePrice.dao.UnitDao;
+import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.service.ProductMaterService;
@@ -31,6 +33,9 @@ public class ProductMaterlmpl implements ProductMaterService {
 	
 	@Autowired
     private ProductMaterDao productMaterDao;
+
+    @Autowired
+    private UnitDao unitDao;
 	
 	/**
      * 新增报价单
@@ -124,7 +129,11 @@ public class ProductMaterlmpl implements ProductMaterService {
             //获取最后一行的num，即总行数。此处从0开始计数
             int maxRow = sheet.getLastRowNum();
             List<ProductMater> hardwareMaterList = new ArrayList<>();
-            for (int row = 1; row <= maxRow; row++) {
+            //五金材料导入顺序: 零件名称、材料名称、规格、用量、单位、基数、供应商、备注
+            //组装材料导入顺序: 零件名称、材料名称、规格、用量、单位、基数、供应商、备注
+            //注塑材料导入顺序: 零件名称、材料名称、规格、制品量、单位、基数、水后数、穴数、备注
+            //表面处理导入顺序: 零件名称、加工类型、配色工艺、材料名称、规格、用料、单位、基数、备注
+            for (int row = 2; row <= maxRow; row++) {
                 String bsComponent = tranCell(sheet.getRow(row).getCell(0));
                 String bsMaterName = tranCell(sheet.getRow(row).getCell(1));
                 String bsModel = tranCell(sheet.getRow(row).getCell(2));
@@ -133,15 +142,67 @@ public class ProductMaterlmpl implements ProductMaterService {
                 String bsRadix = tranCell(sheet.getRow(row).getCell(5));
                 String bsSupplier = tranCell(sheet.getRow(row).getCell(6));
                 String fmemo = tranCell(sheet.getRow(row).getCell(7));
+                String fmemo1 = tranCell(sheet.getRow(row).getCell(8));
                 ProductMater hardwareMater = new ProductMater();
+
+                //设置类型
+                hardwareMater.setBsType(bsType);
+
                 hardwareMater.setBsComponent(bsComponent);
-                hardwareMater.setBsMaterName(bsMaterName);
-                hardwareMater.setBsModel(bsModel);
-                hardwareMater.setBsQty(new BigDecimal(bsQty));
-                hardwareMater.setBsUnit(bsUnit);
-                hardwareMater.setBsRadix(bsRadix);
-                hardwareMater.setBsSupplier(bsSupplier);
-                hardwareMater.setFmemo(fmemo);
+                if(("surface").equals(bsType)){
+                    hardwareMater.setBsMachiningType(bsMaterName);
+                    hardwareMater.setBsColor(bsModel);
+                }else {
+                    hardwareMater.setBsMaterName(bsMaterName);
+                    hardwareMater.setBsModel(bsModel);
+                }
+
+                if(("molding").equals(bsType)){
+                    hardwareMater.setBsProQty(new BigDecimal(bsQty));
+                }else if(("surface").equals(bsType)){
+                    hardwareMater.setBsMaterName(bsQty);
+                }else {
+                    hardwareMater.setBsQty(new BigDecimal(bsQty));
+                }
+
+                if(("surface").equals(bsType)){
+                    hardwareMater.setBsModel(bsUnit);
+                }else {
+                    hardwareMater.setBsUnit(bsUnit);
+                    List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(bsUnit,0);
+                    if(unitList!=null&& unitList.size()>0){
+                        hardwareMater.setPkUnit(unitList.get(0).getId());
+                    }
+                }
+
+                 if(("surface").equals(bsType)){
+                     hardwareMater.setBsQty(new BigDecimal(bsRadix));
+                }else {
+                    hardwareMater.setBsRadix(bsRadix);
+                }
+
+
+                if(("molding").equals(bsType)){
+                    hardwareMater.setBsWaterGap(bsSupplier);
+                }else if(("surface").equals(bsType)){
+                    hardwareMater.setBsUnit(bsSupplier);
+                    List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(bsSupplier,0);
+                    if(unitList!=null&& unitList.size()>0){
+                        hardwareMater.setPkUnit(unitList.get(0).getId());
+                    }
+                }else {
+                    hardwareMater.setBsSupplier(bsSupplier);
+                }
+
+
+                if(("molding").equals(bsType)){
+                    hardwareMater.setBsCave(bsSupplier);
+                    hardwareMater.setBsCave(fmemo1);
+                }else if(("surface").equals(bsType)){
+                    hardwareMater.setBsRadix(fmemo1);
+                }else {
+                    hardwareMater.setFmemo(fmemo);
+                }
                 hardwareMater.setCreateBy(userId);
                 hardwareMater.setCreateDate(doExcleDate);
                 hardwareMaterList.add(hardwareMater);
