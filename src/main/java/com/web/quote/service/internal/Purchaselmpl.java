@@ -15,42 +15,30 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseSql;
-import com.web.quote.dao.QuoteDao;
+import com.web.quote.dao.ProductMaterDao;
+import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.Quote;
-import com.web.quote.entity.QuoteItem;
-import com.web.quote.service.QuoteProductService;
+import com.web.quote.service.PurchaseService;
 
-@Service(value = "QuoteProductService")
+@Service(value = "PurchaseService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
+public class Purchaselmpl extends BaseSql implements PurchaseService {
 	
 	@Autowired
-    private QuoteDao quoteDao;
-    
+    private ProductMaterDao productMaterDao;
+	
     /**
-     * 获取报价单列表
-     * **/
+     * 查询列表
+     */
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword,String style,PageRequest pageRequest)throws Exception{
-    	
+    public ApiResponseResult getList(String keyword,PageRequest pageRequest) throws Exception {
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
-				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(i.bs_end_time,null,'0','1') col from "+Quote.TABLE_NAME+" p "
-						+ " left join price_quote_item i on p.id=i.pk_quote  where p.del_flag=0 and p.bs_step=2 ";
+				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(p.bs_end_time3,null,'0','1') col from "+Quote.TABLE_NAME+" p "
+						+ " where p.del_flag=0 and p.bs_step=3 ";
 		if (StringUtils.isNotEmpty(keyword)) {
 			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
 					+ keyword + "') > 0 ";*/
-		}
-		if(StringUtils.isNotEmpty(style)){
-			if(style.equals("hardware")){
-				sql += "  and i.bs_code in ('B001','C001') ";
-			}else if(style.equals("molding")){
-				sql += "  and i.bs_code in ('B002','C002') ";
-			}else if(style.equals("surface")){
-				sql += "  and i.bs_code in ('B003','C003') ";
-			}else if(style.equals("packag")){
-				sql += "  and i.bs_code in ('B004','C004') ";
-			}
 		}
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
@@ -78,6 +66,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 			map1.put("bsProdType", object[9]);
 			map1.put("bsCustName", object[10]);
 			map1.put("bsStatus", object[11]);
+			
 			list_new.add(map1);
 		}
 		
@@ -85,30 +74,25 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 		return ApiResponseResult.success().data(DataGrid.create(list_new, (int) count,
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
     }
-    
-    /**
-     * 获取报价单-项目列表
-     * **/
-    @Override
-    @Transactional
-    public ApiResponseResult getItemPage(Long quoteId,String style)throws Exception{
-    	//List<QuoteItem> list=quoteItemDao.findByDelFlagAndPkQuoteAndBsStyle(0,id,bsStatus);
-    	String sql = "select a.* from "+QuoteItem.TABLE_NAME+" a" + " where 1=1 and del_Flag=0  ";
-    	sql += "and a.pk_quote="+quoteId;
-    	if(StringUtils.isNotEmpty(style)){
-			if(style.equals("hardware")){
-				sql += "  and a.bs_code in ('B001','C001') ";
-			}else if(style.equals("molding")){
-				sql += "  and a.bs_code in ('B002','C002') ";
-			}else if(style.equals("surface")){
-				sql += "  and a.bs_code in ('B003','C003') ";
-			}else if(style.equals("packag")){
-				sql += "  and a.bs_code in ('B004','C004') ";
-			}
-		}
-    	Map<String, Object> param = new HashMap<String, Object>();
-    	List<QuoteItem> list = createSQLQuery(sql, param, QuoteItem.class);
-    	return ApiResponseResult.success().data(list);
-    }
 
+	@Override
+	public ApiResponseResult getQuoteList(String keyword, String quoteId, PageRequest pageRequest) throws Exception {
+		// TODO Auto-generated method stub
+		
+		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
+		
+		int pn = pageRequest.getPageNumber() + 1;
+		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
+				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
+				+ pageRequest.getPageSize() + " ";
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		//List<Map<String, Object>> list = super.findBySql(sql, param);
+		List<ProductMater> list = createSQLQuery(sql, param, ProductMater.class);
+		long count = createSQLQuery(hql, param, null).size();
+		
+		return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
+	}
 }
