@@ -57,6 +57,42 @@ public class Quote extends BaseEntity {
     protected int bsStatus2 = 0;
 	
 	/**
+     * 2-制造部状态-五金
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus2Hardware",value="状态")
+    protected int bsStatus2Hardware = 0;
+	/**
+     * 2-制造部状态-注塑
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus2Molding",value="状态")
+    protected int bsStatus2Molding = 0;
+	/**
+     * 2-制造部状态-表面处理
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus2Surface",value="状态")
+    protected int bsStatus2Surface = 0;
+	/**
+     * 2-制造部状态-组装
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus2Packag",value="状态")
+    protected int bsStatus2Packag = 0;
+	/**
      * 3-采购部状态
      * 0:草稿
      * 1:进行中
@@ -624,6 +660,38 @@ public class Quote extends BaseEntity {
 
 	public void setBsStatus5(int bsStatus5) {
 		this.bsStatus5 = bsStatus5;
+	}
+
+	public int getBsStatus2Hardware() {
+		return bsStatus2Hardware;
+	}
+
+	public void setBsStatus2Hardware(int bsStatus2Hardware) {
+		this.bsStatus2Hardware = bsStatus2Hardware;
+	}
+
+	public int getBsStatus2Molding() {
+		return bsStatus2Molding;
+	}
+
+	public void setBsStatus2Molding(int bsStatus2Molding) {
+		this.bsStatus2Molding = bsStatus2Molding;
+	}
+
+	public int getBsStatus2Surface() {
+		return bsStatus2Surface;
+	}
+
+	public void setBsStatus2Surface(int bsStatus2Surface) {
+		this.bsStatus2Surface = bsStatus2Surface;
+	}
+
+	public int getBsStatus2Packag() {
+		return bsStatus2Packag;
+	}
+
+	public void setBsStatus2Packag(int bsStatus2Packag) {
+		this.bsStatus2Packag = bsStatus2Packag;
 	}
 	
 	

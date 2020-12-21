@@ -33,15 +33,26 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
     @Override
     @Transactional
     public ApiResponseResult getList(String keyword,String style,PageRequest pageRequest)throws Exception{
-    	
+    	String temp = "";
+    	if(StringUtils.isNotEmpty(style)){
+			if(style.equals("hardware")){
+				temp = "  p.bs_status2hardware ";
+			}else if(style.equals("molding")){
+				temp = "  p.bs_status2molding ";
+			}else if(style.equals("surface")){
+				temp = "  p.bs_status2surface ";
+			}else if(style.equals("packag")){
+				temp = "  p.bs_status2packag ";
+			}
+		}
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
-				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(i.bs_end_time,null,'0','1') col from "+Quote.TABLE_NAME+" p "
-						+ " left join price_quote_item i on p.id=i.pk_quote  where p.del_flag=0 and p.bs_step=2 ";
+				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,"+temp+" col from "+Quote.TABLE_NAME+" p "
+						+ "  where p.del_flag=0 and p.bs_step=2 ";
 		if (StringUtils.isNotEmpty(keyword)) {
 			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
 					+ keyword + "') > 0 ";*/
 		}
-		if(StringUtils.isNotEmpty(style)){
+		/*if(StringUtils.isNotEmpty(style)){
 			if(style.equals("hardware")){
 				sql += "  and i.bs_code in ('B001','C001') ";
 			}else if(style.equals("molding")){
@@ -51,7 +62,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 			}else if(style.equals("packag")){
 				sql += "  and i.bs_code in ('B004','C004') ";
 			}
-		}
+		}*/
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
