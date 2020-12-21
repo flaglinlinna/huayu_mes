@@ -16,10 +16,10 @@ $(function() {
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
-			toolbar: '#toolbar',
-			height:'full-110'//固定表头&full-查询框高度
-			,even:true,//条纹样式
-			page : true,
+			//toolbar: '#toolbar',
+			height:'full-95'//固定表头&full-查询框高度
+			//,even:true,//条纹样式
+			,page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -41,53 +41,51 @@ $(function() {
 				field: 'bsType',
 				width: 100,
 				title: '类型', sort: true,
+				style:'background-color:#d2d2d2',
 				// * 五金:hardware
 				// * 注塑:molding
 				// * 表面处理:surface
 				// * 组装:packag
 				templet: function (d) {
-					if (d.bsType == 'hardware') {
-						return '五金'
-					} else if (d.bsType == 'molding') {
-						return '注塑'
-					}else if (d.bsType == 'surface') {
-						return '表面处理'
-					}else if (d.bsType == 'packag') {
-						return '组装'
-					}
+						if (d.bsType == 'hardware') {
+							return '五金'
+						} else if (d.bsType == 'molding') {
+							return '注塑'
+						}else if (d.bsType == 'surface') {
+							return '表面处理'
+						}else if (d.bsType == 'packag') {
+							return '组装'
+						}
 					}
 				},
+				{field : 'bsComponent',width:150,title : '零/组件名称',sort:true,style:'background-color:#d2d2d2'}, 
 				{
-				field : 'bsComponent',
-				width:120,
-				title : '零/组件名称',sort:true
-			}, {
 				field : 'bsMaterName',width:120,
-				title : '材料名称',sort:true
+				title : '材料名称',sort:true,style:'background-color:#d2d2d2'
 			},
 			{
 				field : 'bsModel',
 				width:150,
-				title : '材料规格'
+				title : '材料规格',style:'background-color:#d2d2d2'
 			}, {
 				field : 'bsQty',
 					width:80,
-				title : '用量',
+				title : '用量',style:'background-color:#d2d2d2'
 			},
 				{
 					field : 'bsUnit',
 					width:80,
-					title : '单位',
+					title : '单位',style:'background-color:#d2d2d2'
 				},
 				{
 					field : 'bsRadix',
 					width:80,
-					title : '基数',
+					title : '基数',style:'background-color:#d2d2d2'
 				},
 				{
 					field : 'bsGeneral',
-					width:80,
-					title : '是否通用物料',
+					width:120,
+					title : '是否通用物料',style:'background-color:#d2d2d2'
 				},
 				{
 					field : 'bsGear',
@@ -98,7 +96,7 @@ $(function() {
 				{
 					field : 'bsRefer',
 					width:110,
-					title : '参考价格',
+					title : '参考价格',style:'background-color:#d2d2d2'
 				},
 				{
 					field : 'bsAssess',
@@ -122,6 +120,12 @@ $(function() {
 				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
+				//不可填写的颜色变灰色
+				res.data.forEach(function (item, index) {
+					/*if(item.bsStatus=="99"){
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');
+					}*/
+				});
 			}
 		});
 
