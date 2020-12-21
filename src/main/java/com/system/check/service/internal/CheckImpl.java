@@ -23,15 +23,19 @@ import com.system.todo.service.TodoInfoService;
 import com.system.user.entity.SysUser;
 import com.utils.UserUtil;
 import com.web.quote.dao.ProductMaterDao;
+import com.web.quote.dao.ProductProcessDao;
 import com.web.quote.dao.QuoteBomDao;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemBaseDao;
 import com.web.quote.dao.QuoteItemDao;
+import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductMater;
+import com.web.quote.entity.ProductProcess;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteItem;
 import com.web.quote.entity.QuoteItemBase;
+import com.web.quote.entity.QuoteProcess;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -55,6 +59,10 @@ public class CheckImpl   implements CheckService {
     private QuoteItemBaseDao quoteItemBaseDao;
     @Autowired
     private QuoteItemDao quoteItemDao;
+    @Autowired
+    private QuoteProcessDao quoteProcessDao;
+    @Autowired
+    private ProductProcessDao productProcessDao;
 
 	@Override
 	public boolean checkFirst(Long id, String checkCode) throws Exception {
@@ -270,8 +278,8 @@ public class CheckImpl   implements CheckService {
                     	quote.setBsEndTime1(new Date());
                     	quoteDao.save(quote);
                     }
-                    //2.1下发制造部待办项目
-                    List<QuoteItemBase> lqb = quoteItemBaseDao.findByDelFlagAndBsStyle(0,"mater");
+                    //2.1下发制造部待办项目-材料+工序
+                    List<QuoteItemBase> lqb = quoteItemBaseDao.findByDelFlagAndStyles(0);
                     List<QuoteItem> lqi = new ArrayList<QuoteItem>();
                 	for(QuoteItemBase qb:lqb){
                 		QuoteItem qi = new QuoteItem();
@@ -287,7 +295,7 @@ public class CheckImpl   implements CheckService {
                 		lqi.add(qi);
                 	}
                 	quoteItemDao.saveAll(lqi);
-                    //2.2根据工作中心下发BOM
+                    //2.2根据工作中心下发BOM-材料
                     List<QuoteBom> lql = quoteBomDao.findByDelFlagAndPkQuote(0, c.getBsRecordId());
                     if(lql.size() > 0){
                     	List<ProductMater> lpm = new ArrayList<ProductMater>();
@@ -305,8 +313,20 @@ public class CheckImpl   implements CheckService {
                         }
                     	productMaterDao.saveAll(lpm);
                     }
-                    
-                    //3。发送待办消息--fyx-?
+                    //2.3根据工作中心下发BOM-工序
+                    List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuote(0, c.getBsRecordId());
+                    if(lpd.size() > 0){
+                    	List<ProductProcess> lpp = new ArrayList<ProductProcess>();
+                    	for(QuoteProcess qb:lpd){
+                    		ProductProcess pp = new ProductProcess();
+                    		pp.setBsName(qb.getBsName());
+                    		pp.setBsType(qb.getProc().getBjWorkCenter().getBsCode());//类型
+                    		pp.setBsOrder(qb.getBsOrder());
+                    		lpp.add(pp);
+                        }
+                    	productProcessDao.saveAll(lpp);
+                    }
+                    //4。发送待办消息--fyx-?
                     
                     
                 }

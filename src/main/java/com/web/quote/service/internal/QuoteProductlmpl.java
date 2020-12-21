@@ -1,40 +1,23 @@
 package com.web.quote.service.internal;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
-import com.system.todo.entity.TodoInfo;
-import com.system.todo.service.TodoInfoService;
-import com.system.user.dao.SysUserDao;
-import com.utils.BaseService;
 import com.utils.BaseSql;
-import com.utils.SearchFilter;
-import com.utils.UserUtil;
-import com.utils.enumeration.BasicStateEnum;
-import com.web.basePrice.dao.ProfitProdDao;
-import com.web.basePrice.entity.ProfitProd;
-import com.web.basic.entity.Line;
 import com.web.quote.dao.QuoteDao;
-import com.web.quote.dao.QuoteItemBaseDao;
-import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteItem;
-import com.web.quote.entity.QuoteItemBase;
 import com.web.quote.service.QuoteProductService;
 
 @Service(value = "QuoteProductService")
@@ -68,7 +51,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
     	
-    	String sql = "select p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
+    	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
 				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(i.bs_end_time,null,'0','1') col from "+Quote.TABLE_NAME+" p "
 						+ " left join price_quote_item i on p.id=i.pk_quote  where p.del_flag=0 and p.bs_step=2 ";
 		if (StringUtils.isNotEmpty(keyword)) {
@@ -94,7 +77,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 		
 		Map<String, Object> param = new HashMap<String, Object>();
 		
-		List<Object[]>  list = createSQLQuery(sql, param);
+		List<Object[]>  list = createSQLQuery(sql_page, param);
 		long count = createSQLQuery(sql, param, null).size();
 		
 		List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
@@ -122,6 +105,31 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 		
 		return ApiResponseResult.success().data(DataGrid.create(list_new, (int) count,
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
+    }
+    
+    /**
+     * 获取报价单-项目列表
+     * **/
+    @Override
+    @Transactional
+    public ApiResponseResult getItemPage(Long quoteId,String style)throws Exception{
+    	//List<QuoteItem> list=quoteItemDao.findByDelFlagAndPkQuoteAndBsStyle(0,id,bsStatus);
+    	String sql = "select a.* from "+QuoteItem.TABLE_NAME+" a" + " where 1=1 and del_Flag=0  ";
+    	sql += "and a.pk_quote="+quoteId;
+    	if(StringUtils.isNotEmpty(style)){
+			if(style.equals("hardware")){
+				sql += "  and a.bs_code in ('B001','C001') ";
+			}else if(style.equals("molding")){
+				sql += "  and a.bs_code in ('B002','C002') ";
+			}else if(style.equals("surface")){
+				sql += "  and a.bs_code in ('B003','C003') ";
+			}else if(style.equals("packag")){
+				sql += "  and a.bs_code in ('B004','C004') ";
+			}
+		}
+    	Map<String, Object> param = new HashMap<String, Object>();
+    	List<QuoteItem> list = createSQLQuery(sql, param, QuoteItem.class);
+    	return ApiResponseResult.success().data(list);
     }
 
 }

@@ -10,4 +10,5 @@ public interface QuoteProductService {
 	
 	public ApiResponseResult getList(String keyword,String style,PageRequest pageRequest)throws Exception;//获取列表
 
+	public ApiResponseResult getItemPage(Long id,String bsStyle)throws Exception;//获取待办项数据
 }

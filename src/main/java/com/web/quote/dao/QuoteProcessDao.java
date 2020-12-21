@@ -20,6 +20,8 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	public QuoteProcess findById(long id);
 	//public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询编号是否存在
 	
+	public List<QuoteProcess> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
+	
 	@Modifying
     @Query("update QuoteProcess t set t.delFlag=1 where t.pkQuoteBom=?1 and t.delFlag=0")
     public void delteQuoteProcessByPkQuoteBom(Long pkQuoteBom);//根据ID修改表数据

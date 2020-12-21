@@ -144,13 +144,13 @@ $(function() {
 					// 编辑
 					open("编辑项目资料")
 				}else if(obj.event === 'view'){
-					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id,'报价项目');
+					parent.layui.index.openTabsPage(context+'/quoteProdect/toProductItem?quoteId='+data.id+"&style="+Style,'填报项目');
 				}else if(obj.event === 'check'){
 					//先判断是否填写完成资料-暂时未校验-20201218-fyx
 					if(true){
 						layer.open({
 		                    type: 2,
-		                    title:'报价单核查审批',
+		                    title:'审批',
 		                    area: ['600px', '550px'],
 		                    fixed: false,
 		                    maxmin: true,
@@ -160,7 +160,7 @@ $(function() {
 		                    	 // 获取子页面的iframe
 		                        var iframe = window['layui-layer-iframe' + index];
 		                        // 向子页面的全局函数child传参，流程编码
-		                        iframe.child("QUOTE_NEW",data.id);
+		                        iframe.child(Style,data.id);
 		                    }
 		                  });
 					}
@@ -171,6 +171,9 @@ $(function() {
 				$(".searchDiv").toggle();
                 //var val=$(this).attr("id");
             })
+            $("#ul-list li").click(function () {
+                    $(this).addClass("current").siblings().removeClass();
+                })
 		});
 });
 //编辑项目弹出框
