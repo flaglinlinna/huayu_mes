@@ -1,5 +1,5 @@
 /**
- * 制造部材料管理
+ * 产品价格维护
  * 五金:hardware
  * 注塑:molding
  * 表面处理:surface
@@ -11,15 +11,15 @@ $(function() {
 		var table = layui.table, form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect;
 
 		tableIns = table.render({
-			elem : '#hardwareList',
-			url : context + '/productMater/getList?bsType='+bsType+'&quoteId='+quoteId,
+			elem : '#productPriceList',
+			url : context + '/productMater/getList?quoteId='+quoteId,
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
-			toolbar: '#toolbar',
-			height:'full-110'//固定表头&full-查询框高度
-			,even:true,//条纹样式
-			page : true,
+			//toolbar: '#toolbar',
+			height:'full-95'//固定表头&full-查询框高度
+			//,even:true,//条纹样式
+			,page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -35,135 +35,111 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
-				field : 'bsComponent',
-					width:150,
-				title : '零件名称',sort:true
-			}, {
-				field : 'bsMaterName',width:150,
-				title : '材料名称',sort:true
+			cols : [ [ 
+			    {type : 'numbers',style:'background-color:#d2d2d2'}, 
+				{
+				field: 'bsType',
+				width: 100,
+				title: '类型', sort: true,
+				style:'background-color:#d2d2d2',
+				// * 五金:hardware
+				// * 注塑:molding
+				// * 表面处理:surface
+				// * 组装:packag
+				templet: function (d) {
+						if (d.bsType == 'hardware') {
+							return '五金'
+						} else if (d.bsType == 'molding') {
+							return '注塑'
+						}else if (d.bsType == 'surface') {
+							return '表面处理'
+						}else if (d.bsType == 'packag') {
+							return '组装'
+						}
+					}
+				},
+				{field : 'bsComponent',width:150,title : '零/组件名称',sort:true,style:'background-color:#d2d2d2'}, 
+				{
+				field : 'bsMaterName',width:120,
+				title : '材料名称',sort:true,style:'background-color:#d2d2d2'
 			},
 			{
 				field : 'bsModel',
 				width:150,
-				title : '规格'
+				title : '材料规格',style:'background-color:#d2d2d2'
 			}, {
 				field : 'bsQty',
-					width:100,
-				title : '用量',
+					width:80,
+				title : '用量',style:'background-color:#d2d2d2'
 			},
 				{
-					field : 'bsProQty',
-					width:100,
-					title : '制品量',
-				},
-				{
 					field : 'bsUnit',
-					title : '单位',
+					width:80,
+					title : '单位',style:'background-color:#d2d2d2'
 				},
 				{
 					field : 'bsRadix',
-					title : '基数',
+					width:80,
+					title : '基数',style:'background-color:#d2d2d2'
 				},
 				{
-					field : 'bsSupplier',
-					title : '供应商',
+					field : 'bsGeneral',
+					width:120,
+					title : '是否通用物料',style:'background-color:#d2d2d2'
 				},
 				{
-					field : 'bsWaterGap',
-					title : '水口量',
-					//(注塑)
+					field : 'bsGear',
+					width:80,
+					title : '价格挡位',
+					edit:'text',templet: '#selectGear'
 				},
 				{
-					field : 'bsCave',
-					title : '穴数',
-					//(注塑)
+					field : 'bsRefer',
+					width:110,
+					title : '参考价格',style:'background-color:#d2d2d2'
 				},
 				{
-					field : 'bsMachiningType',
-					title : '加工类型',
-					//(表面处理)
-				},
-				{
-					field : 'bsColor',
-					title : '配色工艺',
-					//(表面处理)
+					field : 'bsAssess',
+					width:110,
+					title : '评估价格',
+					edit:'number',
+					// placeholder:'请输入评估价格(数字)',
 				},
 				{
 					field : 'fmemo',
+					width:110,
 					title : '备注',
+					edit:'text'
 				},
 				{
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-					width:120,
-				toolbar : '#optBar'
-			} ] ],
+					field : 'bsSupplier',
+					width:110,
+					title : '供应商',
+					edit:'text'
+				}
+				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
+				//不可填写的颜色变灰色
+				res.data.forEach(function (item, index) {
+					/*if(item.bsStatus=="99"){
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');
+					}*/
+				});
 			}
 		});
-
-		tableSelect=tableSelect.render({
-			elem : '#bsUnit',
-			searchKey : 'keyword',
-			checkedKey : 'id',
-			searchPlaceholder : '关键字搜索',
-			table : {
-				url : context + '/basePrice/unit/getList',
-				method : 'get',
-
-				parseData : function(res) {
-					// 可进行数据操作
-					return {
-						"count" : res.data.total,
-						"msg" : res.msg,
-						"data" : res.data.rows,
-						"code" : res.status
-						// code值为200表示成功
-					}
-				},
-				cols : [ [
-					{ type: 'radio' },//单选  radio
-					{
-						field : 'id',
-						title : 'id',
-						width : 0,hide:true
-					},
-					{
-						type : 'numbers'
-					},
-					{
-						field : 'unitCode',
-						title : '单位编码',
-					},
-					{
-						field : 'unitName',
-						title : '单位名称',
-					}
-				] ],
-				page : true,
-				request : {
-					pageName : 'page' // 页码的参数名称，默认：page
-					,
-					limitName : 'rows' // 每页数据量的参数名，默认：limit
-				},
-
-			},
-			done : function(elem, data) {
-				var da=data.data;
-				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
-				form.val("hardwareForm", {
-					"pkUnit":da[0].id,
-					"bsUnit":da[0].unitName
-				});
-				form.render();// 重新渲染
-			}
+		
+		//下拉框监听事件
+		form.on('select(roleIdSelect)', function(data) {
+			alert('1');
+			return;
+			//获取行tr对象
+			var elem = data.othis.parents('tr');
+	        //获取第一列的值，第一列为ID列，
+			var id = elem.first().find('td').eq(1).text();
+	        //选择的select对象值；
+	        var selectValue=data.value;
+			//处理字段更新的逻辑
 		});
 
 		//自定义验证规则
@@ -176,12 +152,24 @@ $(function() {
 			}
 		});
 
+		table.on('edit(productPriceTable)',function (obj) {
+			var bsAssess = obj.data.bsAssess;
+			if(/^\d+$/.test(bsAssess)==false && /^\d+\.\d+$/.test(bsAssess)==false && bsAssess!="" && bsAssess!=null)
+			{
+				layer.msg("评估价格只能输入数字");
+				loadAll();
+				return false;
+			}
+			obj.field = obj.data;
+			editSubmit(obj);
+		})
+
 		// 监听在职操作
 		form.on('switch(isStatusTpl)', function(obj) {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(hardwareTable)', function(obj) {
+		table.on('tool(productPriceList)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
@@ -331,7 +319,7 @@ function editSubmit(obj) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanProdErr();
+				// cleanProdErr();
 				// 加载页面
 				loadAll();
 			});

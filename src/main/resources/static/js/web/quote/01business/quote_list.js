@@ -40,14 +40,10 @@ $(function() {
 					}
 				},
 				cols : [ [ 
-				           {type : 'numbers'},
-							 
+				 {type : 'numbers'},		 
 				 {field : 'bsCode',title : '报价单编号',width : 150,sort: true}, 
-				 {field : 'bsType',title : '报价类型', width : 100}
-				,{
-					field : 'bsStatus',
-					title : '状态',width : 80
-					,templet:function (d) {
+				 {field : 'bsType',title : '报价类型', width : 100},
+				 {field : 'bsStatus',title : '状态',width : 80,templet:function (d) {
 						if(d.bsStatus=="0"){
 							return "进行中"
 						}else if(d.bsStatus=="1"){
@@ -55,31 +51,13 @@ $(function() {
 						}else if(d.bsStatus=="99"){
 							return "已关闭"
 						}
-					}
-				}, {
-					field : 'bsFinishTime',
-					title : '完成日期',
-					 sort: true
-					, width : 140
-				}, {
-					field : 'bsRemarks',
-					title : '报价备注',width : 170
-				},
-					{
-						field : 'bsProd',
-						title : '产品型号',width : 120
-					},
-					{
-						field : 'bsSimilarProd',
-						title : '相似型号',width : 150
-					},
-					{
-						field : 'bsDevType',
-						title : '机种型号',width : 140, sort: true
-					},
-					{
-						field : 'bsProdType',
-						title : '产品类型',width : 140, sort: true
+					}},
+				{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140}, 
+				{field : 'bsRemarks',title : '报价备注',width : 170},
+				{field : 'bsProd',title : '产品型号',width : 120},
+				{field : 'bsSimilarProd',title : '相似型号',width : 150},
+				{field : 'bsDevType',title : '机种型号',width : 140, sort: true},
+				{field : 'bsProdType',title : '产品类型',width : 140, sort: true
 					},{
 						field : 'bsCustName',
 						title : '客户名称',width : 120

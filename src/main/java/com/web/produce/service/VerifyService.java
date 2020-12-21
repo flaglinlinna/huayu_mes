@@ -15,7 +15,7 @@ public interface VerifyService {
 	
 	public ApiResponseResult save(String task_no,String line_id,
 			String hour_type,String class_id,String wdate,String emp_ids) throws Exception;
-	
+
 	public ApiResponseResult getInfoCreateReturn() throws Exception;
 	
 	public  ApiResponseResult getReworkItem(String keyword,PageRequest pageRequest) throws Exception;
@@ -25,4 +25,6 @@ public interface VerifyService {
 	public ApiResponseResult getHistoryList(String keyword, String hStartTime,String hEndTime,PageRequest pageRequest) throws Exception;
 
 	public ApiResponseResult getInfoBarcode(String barcode) throws Exception;
+
+	public ApiResponseResult getOnTimeByPrc(PageRequest pageRequest) throws Exception;
 }

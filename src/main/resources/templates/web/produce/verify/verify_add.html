@@ -82,10 +82,16 @@
 														<option value="法定加班">法定加班</option>
 													</select>
 												</div>
-												<label class="layui-form-label layui-required">统一上线时间</label>
-												<div class="layui-input-inline">
+												<label class="layui-form-label layui-required">统一上线日期</label>
+												<div class="layui-input-inline" style="width: 180px;" >
 													<input type="text" name="pdate" class="layui-input"
 														id="on_date" placeholder="yyyy-MM-dd">
+												</div>
+												<label class="layui-form-label layui-required">统一上线时间</label>
+												<div class="layui-input-inline" style="width: 180px;">
+													<select type="text" name="ptime" lay-filter="on_time"
+														   id="on_time">
+													</select>
 												</div>
 
 											</div>
@@ -94,7 +100,7 @@
 										<div class="layui-form-item">
 											<div class="layui-inline">
 												<label class="layui-form-label layui-required">线体</label>
-												<div class="layui-input-inline">
+												<div class="layui-input-inline" style="width: 180px;">
 													<select lay-filter="pline" id="pline" name="pline"
 															lay-verify="required">
 													</select>

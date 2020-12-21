@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.service.QuoteProductService;
+import com.web.quote.service.QuoteService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +32,8 @@ public class QuoteProductController extends WebController {
 
 	@Autowired
 	private QuoteProductService quoteProductService;
+	@Autowired
+	private QuoteService quoteService;
 
 	@ApiOperation(value = "报价信息列表页", notes = "报价信息列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteProdect")
@@ -42,6 +45,24 @@ public class QuoteProductController extends WebController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取报价基础数据失败！", e);
+		}
+		return mav;
+	}
+	
+	@ApiOperation(value = "填报信息项目列表页", notes = "填报信息项目列表页", hidden = true)
+	@RequestMapping(value = "/toProductItem")
+	public ModelAndView toQuoteItem(String quoteId,String style) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			ApiResponseResult info = quoteService.getSingle( Long.parseLong(quoteId));
+			ApiResponseResult ItemList = quoteProductService.getItemPage(Long.parseLong(quoteId),style);
+			mav.addObject("ItemList", ItemList);
+			mav.addObject("info", info);
+			mav.addObject("Style", style);
+			mav.setViewName("/web/quote/02produce/product_items");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价信息项目列表页数据失败！", e);
 		}
 		return mav;
 	}

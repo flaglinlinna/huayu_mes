@@ -61,6 +61,8 @@ public class VerifyController extends WebController {
              return ApiResponseResult.failure("获取指令单信息失败！");
         }
     }
+
+
     
     @ApiOperation(value="加载页面默认数据", notes="加载页面默认数据", hidden = true)
     @RequestMapping(value = "/getInfoAdd", method = RequestMethod.GET)
@@ -224,5 +226,23 @@ public class VerifyController extends WebController {
             return ApiResponseResult.failure(methodName+"失败！");
         }
 	}
+
+    @ApiOperation(value="获取在线返工统一上线时间", notes="获取在线返工统一上线时间", hidden = true)
+    @RequestMapping(value = "/getOnTime", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getOnTime() {
+        String method = "/verify/getOnTime";String methodName ="获取在线返工统一上线时间";
+        try {
+            ApiResponseResult result = verifyService.getOnTimeByPrc(super.getPageRequest());
+            logger.debug("获取在线返工统一上线时间=getOnTime:");
+//            getSysLogService().success(module,method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取在线返工统一上线时间失败！", e);
+            getSysLogService().error(module,method, methodName,"");
+            return ApiResponseResult.failure("获取在线返工统一上线时间失败！");
+        }
+    }
 
 }

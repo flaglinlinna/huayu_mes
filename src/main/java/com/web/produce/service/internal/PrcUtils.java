@@ -1547,4 +1547,52 @@ public class PrcUtils {
         });
         return resultList;
     }
+
+    /**
+     * 获取系统参数子表 (1.统一上线时间)
+     * */
+    public List getSystemSubParamPrc(String company,String facoty,String user_id,
+                                     String condition, PageRequest pageRequest) throws Exception {
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  prc_SYS_GET_parameter_SUB (?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, facoty);
+                cs.setString(2, company);
+                cs.setString(3, user_id);
+                cs.setString(4, condition);
+                cs.setInt(5, pageRequest.getPageSize());
+                cs.setInt(6, pageRequest.getPageNumber()+1);
+                cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(8, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(10, -10);// 输出参数 追溯数据
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(7));
+                result.add(cs.getString(8));
+                if (cs.getString(7).toString().equals("0")) {
+                    result.add(cs.getString(9));
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(10);
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+                }
+                System.out.println(l);
+                return result;
+            }
+        });
+        return resultList;
+    }
 }

@@ -38,14 +38,29 @@ public class ProductMaterController extends WebController {
 
 	@ApiOperation(value = "五金材料信息列表页", notes = "五金材料信息列表页", hidden = true)
 	@RequestMapping(value = "/toProductMater")
-	public ModelAndView toProductMater(String bsType) {
+	public ModelAndView toProductMater(String bsType,String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			mav.addObject("bsType", bsType);
+			mav.addObject("quoteId", quoteId);
 			mav.setViewName("/web/quote/02produce/product_mater");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取制造部材料信息失败！", e);
+		}
+		return mav;
+	}
+
+	@ApiOperation(value = "制造部材料价格列表页", notes = "制造部材料价格列表页", hidden = true)
+	@RequestMapping(value = "/toProductPrice")
+	public ModelAndView toProductPrice(String quoteId) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			mav.addObject("quoteId", quoteId);
+			mav.setViewName("/web/quote/02produce/product_price");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取制造部材料价格信息失败！", e);
 		}
 		return mav;
 	}
@@ -111,12 +126,12 @@ public class ProductMaterController extends WebController {
 	@ApiOperation(value = "获取五金材料列表", notes = "获取五金材料列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getList(String keyword,String bsType) {
-		String method = "productMater/getList";
+	public ApiResponseResult getList(String keyword,String bsType,String quoteId) {
+		String method = "/productMater/getList";
 		String methodName = "获取五金材料列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = productMaterService.getList(keyword,bsType, super.getPageRequest(sort));
+			ApiResponseResult result = productMaterService.getList(keyword,bsType,quoteId, super.getPageRequest(sort));
 			logger.debug("获取五金材料列表=getList:");
 			return result;
 		} catch (Exception e) {
@@ -149,12 +164,12 @@ public class ProductMaterController extends WebController {
 	@ApiOperation(value="导入模板", notes="导入模板", hidden = true)
 	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult getExcel(MultipartFile[] file,String bsType) {
+	public ApiResponseResult getExcel(MultipartFile[] file,String bsType,Long pkQuote) {
 		String method = "/productMater/importExcel";String methodName ="导入模板";
 		try {
 			logger.debug("导入模板=importExcel:");
 			getSysLogService().success(module,method, methodName, "");
-			return productMaterService.doExcel(file,bsType);
+			return productMaterService.doExcel(file,bsType,pkQuote);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("导入模板失败！", e);

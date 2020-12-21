@@ -85,6 +85,8 @@ public class ProductMaterlmpl implements ProductMaterService {
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setFmemo(hardwareMater.getFmemo());
+        o.setBsGear(hardwareMater.getBsGear());
+        o.setBsAssess(hardwareMater.getBsAssess());
         productMaterDao.save(o);
         return ApiResponseResult.success("编辑成功！");
     }
@@ -119,7 +121,7 @@ public class ProductMaterlmpl implements ProductMaterService {
 
 
     //导入模板
-    public ApiResponseResult doExcel(MultipartFile[] file,String bsType) throws Exception{
+    public ApiResponseResult doExcel(MultipartFile[] file,String bsType,Long quoteId) throws Exception{
         try {
             Date doExcleDate = new Date();
             Long userId = UserUtil.getSessionUser().getId();
@@ -147,62 +149,40 @@ public class ProductMaterlmpl implements ProductMaterService {
 
                 //设置类型
                 hardwareMater.setBsType(bsType);
-
+                hardwareMater.setPkQuote(quoteId);
                 hardwareMater.setBsComponent(bsComponent);
-                if(("surface").equals(bsType)){
-                    hardwareMater.setBsMachiningType(bsMaterName);
-                    hardwareMater.setBsColor(bsModel);
-                }else {
-                    hardwareMater.setBsMaterName(bsMaterName);
-                    hardwareMater.setBsModel(bsModel);
-                }
-
                 if(("molding").equals(bsType)){
                     hardwareMater.setBsProQty(new BigDecimal(bsQty));
-                }else if(("surface").equals(bsType)){
-                    hardwareMater.setBsMaterName(bsQty);
-                }else {
-                    hardwareMater.setBsQty(new BigDecimal(bsQty));
-                }
-
-                if(("surface").equals(bsType)){
-                    hardwareMater.setBsModel(bsUnit);
-                }else {
-                    hardwareMater.setBsUnit(bsUnit);
-                    List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(bsUnit,0);
-                    if(unitList!=null&& unitList.size()>0){
-                        hardwareMater.setPkUnit(unitList.get(0).getId());
-                    }
-                }
-
-                 if(("surface").equals(bsType)){
-                     hardwareMater.setBsQty(new BigDecimal(bsRadix));
-                }else {
                     hardwareMater.setBsRadix(bsRadix);
-                }
-
-
-                if(("molding").equals(bsType)){
                     hardwareMater.setBsWaterGap(bsSupplier);
-                }else if(("surface").equals(bsType)){
+                    hardwareMater.setBsCave(bsSupplier);
+                    hardwareMater.setBsCave(fmemo1);
+                } else if(("surface").equals(bsType)){
+                    hardwareMater.setBsMachiningType(bsMaterName);
+                    hardwareMater.setBsColor(bsModel);
+                    hardwareMater.setBsMaterName(bsQty);
+                    hardwareMater.setBsQty(new BigDecimal(bsRadix));
+                    hardwareMater.setBsModel(bsUnit);
                     hardwareMater.setBsUnit(bsSupplier);
                     List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(bsSupplier,0);
                     if(unitList!=null&& unitList.size()>0){
                         hardwareMater.setPkUnit(unitList.get(0).getId());
                     }
-                }else {
-                    hardwareMater.setBsSupplier(bsSupplier);
-                }
-
-
-                if(("molding").equals(bsType)){
-                    hardwareMater.setBsCave(bsSupplier);
-                    hardwareMater.setBsCave(fmemo1);
-                }else if(("surface").equals(bsType)){
                     hardwareMater.setBsRadix(fmemo1);
                 }else {
+                    hardwareMater.setBsMaterName(bsMaterName);
+                    hardwareMater.setBsModel(bsModel);
+                    hardwareMater.setBsQty(new BigDecimal(bsQty));
+                    hardwareMater.setBsUnit(bsUnit);
+                    List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(bsUnit,0);
+                    if(unitList!=null&& unitList.size()>0){
+                        hardwareMater.setPkUnit(unitList.get(0).getId());
+                    }
+                    hardwareMater.setBsRadix(bsRadix);
+                    hardwareMater.setBsSupplier(bsSupplier);
                     hardwareMater.setFmemo(fmemo);
                 }
+
                 hardwareMater.setCreateBy(userId);
                 hardwareMater.setCreateDate(doExcleDate);
                 hardwareMaterList.add(hardwareMater);
@@ -221,12 +201,19 @@ public class ProductMaterlmpl implements ProductMaterService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword,String bsType, PageRequest pageRequest) throws Exception {
+    public ApiResponseResult getList(String keyword,String bsType, String quoteId,PageRequest pageRequest) throws Exception {
         // 查询条件1
         List<SearchFilter> filters = new ArrayList<>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         if (StringUtils.isNotEmpty(bsType)) {
             filters.add(new SearchFilter("bsType", SearchFilter.Operator.EQ, bsType));
+        }
+        if (!"null".equals(quoteId)&&quoteId!=null) {
+            filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));
+        }else {
+            List<ProductMater> productMaterList = new ArrayList<>();
+            return ApiResponseResult.success().data(DataGrid.create(productMaterList, 0,
+                    1, 10));
         }
         // 查询2
         List<SearchFilter> filters1 = new ArrayList<>();
