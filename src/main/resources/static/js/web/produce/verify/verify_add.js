@@ -513,6 +513,7 @@ function save(params, emp_ids) {
 		"hour_type" : params.ptyle,
 		"class_id" : params.pclass,
 		"wdate" : params.pdate + " "+ params.ptime,
+		// "wdate" : params.pdate,
 		"emp_ids" : emp_ids
 	};
 	CoreUtil.sendAjax("/verify/save", JSON.stringify(param), function(data) {
