@@ -50,58 +50,58 @@
 				lay-filter="itemForm" method="post" action=""
 				style="margin-top: 20px;">
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
-					type="hidden" name="id" /> 
-				<div class="layui-form-item">
+					type="hidden" name="id" />
+					<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">产品名称</label>
+						<div class="layui-input-inline">
+							<input id="productName" name="productName" placeholder="请输入产品名称"
+								autocomplete="off" class="layui-input" type="text" />
+						</div>
+						<label class="layui-form-label" style="width: 150px;">模具报价价格</label>
+						<div class="layui-input-inline">
+							<input id="mjPrice" name="mjPrice" placeholder="请输入模具报价价格"
+								autocomplete="off" class="layui-input" type="text" />
+						</div>
+					</div>
+				</div>
+				<!-- <div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label" style="width: 150px;">图示id</label>
 						<div class="layui-input-inline">
 							<input id="fimg" name="fimg" placeholder="请输入图示id"
 								autocomplete="off" class="layui-input" type="text" />
 						</div>
-						<label class="layui-form-label" style="width: 150px;">产品</label>
-						<div class="layui-input-inline">
-							<input id="productName" name="productName" placeholder="请输入产品"
-								autocomplete="off" class="layui-input" type="text" />
-						</div>
 					</div>
-				</div>
+				</div>-->
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label" style="width: 150px;">穴数</label>
 						<div class="layui-input-inline">
-							<input id="numHole" name="numHole" lay-filter="bsHole" lay-verify="required|num"
+							<input id="numHole" name="numHole" 
 								placeholder="请输入穴数" class="layui-input" type="text"
 								autocomplete="off" />
 						</div>
 						<label class="layui-form-label" style="width: 150px;">模具结构</label>
 						<div class="layui-input-inline">
-							<input id="structureMj" name="structureMj" lay-filter="structureMj"
-								placeholder="请输入模具结构" class="layui-input" type="text"
-								autocomplete="off" />
+							<input id="structureMj" name="structureMj"
+								lay-filter="structureMj" placeholder="请输入模具结构"
+								class="layui-input" type="text" autocomplete="off" />
 						</div>
 					</div>
 				</div>
-				<div class="layui-form-item">
-					<div class="layui-inline">
-						<label class="layui-form-label" style="width: 150px;">模具报价价格</label>
-						<div class="layui-input-inline">
-							<input id="mjPrice" name="mjPrice"
-								placeholder="请输入模具报价价格" lay-verify="required|num" autocomplete="off"
-								class="layui-input" type="text" />
-						</div>
-					</div>
-				</div>
+				
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label" style="width: 150px;">钢料+配件+热处理费用</label>
 						<div class="layui-input-inline">
-							<input id="feeType1" name="feeType1" placeholder="请输入费用"
+							<input id="feeType1" name="feeType1" lay-filter="feeType1" placeholder="请输入费用" 
 								lay-verify="required|num" autocomplete="off" class="layui-input"
 								type="text" />
 						</div>
 						<label class="layui-form-label" style="width: 150px;">铜公材料费用</label>
 						<div class="layui-input-inline">
-							<input id="feeType2" name="feeType2" placeholder="请输入费用"
+							<input id="feeType2" name="feeType2"  lay-filter="feeType2" placeholder="请输入费用"
 								lay-verify="required|num" autocomplete="off" class="layui-input"
 								type="text" />
 						</div>
@@ -111,14 +111,14 @@
 					<div class="layui-inline">
 						<label class="layui-form-label" style="width: 150px;">模胚价格+加工费用</label>
 						<div class="layui-input-inline">
-							<input id="feeType3" name="feeType3" placeholder="请输入费用"
+							<input id="feeType3" name="feeType3"  lay-filter="feeType3" placeholder="请输入费用" 
 								lay-verify="required|num" autocomplete="off" class="layui-input"
 								type="text" />
 						</div>
 					</div>
 					<label class="layui-form-label" style="width: 150px;">热流道费用</label>
 					<div class="layui-input-inline">
-						<input id="feeType4" name="feeType4" placeholder="请输入费用"
+						<input id="feeType4" name="feeType4"  placeholder="请输入费用"
 							lay-verify="required|num" autocomplete="off" class="layui-input"
 							type="text" />
 					</div>
@@ -133,9 +133,8 @@
 						</div>
 						<label class="layui-form-label" style="width: 150px;">评估总费用(含税)</label>
 						<div class="layui-input-inline">
-							<input id="feeAll" name="feeAll"
-								placeholder="请输入评估总费用(含税)" lay-verify="num"
-								autocomplete="off" class="layui-input" type="text" />
+							<input id="feeAll" name="feeAll" style="background:#efefef;" 
+							disabled autocomplete="off" class="layui-input"type="text" />
 						</div>
 					</div>
 				</div>

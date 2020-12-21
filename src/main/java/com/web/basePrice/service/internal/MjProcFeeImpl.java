@@ -27,7 +27,7 @@ import com.web.basePrice.service.MjProcFeeService;
 
 /**
  *
- * @date Nov 4, 2020 4:27:53 PM
+ * @date Dec 21, 2020 4:27:53 PM
  */
 @Service(value = "MjProcFeeService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -45,6 +45,12 @@ public class MjProcFeeImpl implements MjProcFeeService {
     if(mjProcFee == null){
     	return ApiResponseResult.failure("模具成本信息不可为空");
     }
+    
+   //生成模具编号
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+    String dateStr = sdf.format(new Date());
+    mjProcFee.setProductCode("MJ-" + dateStr);  //编号格式：MJ-年月日时分秒
+    
     mjProcFee.setCreateDate(new Date());
     mjProcFee.setCreateBy(UserUtil.getSessionUser().getId());
     mjProcFeeDao.save(mjProcFee);
@@ -52,7 +58,7 @@ public class MjProcFeeImpl implements MjProcFeeService {
     }
 
     /**
-    * 修改基本单位维护
+    * 修改
     */
     @Override
     @Transactional
@@ -83,10 +89,8 @@ public class MjProcFeeImpl implements MjProcFeeService {
     return ApiResponseResult.success("编辑成功！");
 }
 
-    
-
     /**
-    * 删除基本单位维护
+    * 删除
     */
     @Override
     @Transactional
@@ -104,7 +108,7 @@ public class MjProcFeeImpl implements MjProcFeeService {
     }
 
     /**
-    * 查询基本单位维护列表
+    * 查询
     */
     @Override
     @Transactional
@@ -126,6 +130,7 @@ public class MjProcFeeImpl implements MjProcFeeService {
             for(MjProcFee mjProcFee:mjProcFeeList){
                 Map<String,Object> map = new HashMap<>();
                 map.put("id",mjProcFee.getId());
+                map.put("productCode",mjProcFee.getProductCode());
                 map.put("fimg",mjProcFee.getFimg());
                 map.put("productName",mjProcFee.getProductName());
                 map.put("structureMj",mjProcFee.getStructureMj());

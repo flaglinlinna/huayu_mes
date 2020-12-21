@@ -14,7 +14,7 @@ $(function() {
 			,
 			cellMinWidth : 80,
 			toolbar: '#toolbar',
-			height:'full-110'//固定表头&full-查询框高度
+			height:'full-65'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,
 			request : {
@@ -36,62 +36,20 @@ $(function() {
 				type : 'numbers'
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
-				field : 'fimg',
-				title : '图示',
-				width:130
-				},{
-					field : 'productName',
-					title : '产品',sort:true,
-					width:100
-				},{
-					field : 'numHole',
-					title : '穴数',sort:true,
-					width:100
-				},{			
-					field : 'structureMj',
-					title : '模具结构',
-					width:100
-				},{
-					field : 'mjPrice',
-					title : '模具报价价格',sort:true,
-					width:120
-				},{
-					field : 'feeType1',
-					title : '钢料+配件+热处理费用',
-					width:160
-				}, {
-					field : 'feeType2',
-					title : '铜公材料费用',
-					width:120
-				},{
-					field : 'feeType3',
-					title : '模胚价格+加工费用',
-					width:140
-				},{
-					field : 'feeType4',
-					title : '热流道费用',
-					width:130
-				},{
-					field : 'feeProc',
-					title : '工序成本',
-					width:100
-				},{
-					field : 'feeAll',
-					title : '评估总费用(含税)',
-					width:130
-				},{
-					field : 'fmemo',
-					title : '备注',
-					width:100
-				},
-				{
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar',
-					width:120,
-			}
+			, {field : 'productCode',title : '模具编号',width:150},
+			  {field : 'fimg',title : '图示',width:130},
+			  {field : 'productName',title : '产品',sort:true,width:100},
+			  {field : 'numHole',title : '穴数',sort:true,width:100},
+			  {field : 'structureMj',title : '模具结构',width:100},
+			  {field : 'mjPrice',title : '模具报价价格',sort:true,width:120},
+			  {field : 'feeType1',title : '钢料+配件+热处理费用',width:160},
+			  {field : 'feeType2',title : '铜公材料费用',width:120},
+			  {field : 'feeType3',title : '模胚价格+加工费用',width:140},
+			  {field : 'feeType4',title : '热流道费用',width:130},
+			  {field : 'feeProc',title : '工序成本',width:100},
+			  {field : 'feeAll',title : '评估总费用(含税)',width:130},
+			  {field : 'fmemo',title : '备注',width:100},
+			  {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width:120,}
 			] ],
 			done : function(res, curr, count) {
 				console.log(res)
@@ -120,24 +78,25 @@ $(function() {
 			}
 		});
 		// 监听提交
-		form.on('submit(addSubmit)', function(data) {
-			if (data.field.id == null || data.field.id == "") {
-				// 新增
-				addSubmit(data);
-			} else {
-				editSubmit(data);
-			}
-			return false;
-		});
+		form.on('submit(addSubmit)', function(data) {	
+			console.log(data)
+			   if (data.field.id == null || data.field.id == "") {
+			// 新增
+			     addSubmit(data);
+		     } else {
+			     editSubmit(data);
+	       	}	
+			 return false;
+			});
+
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
 			// 重新加载table
 			load(data);
 			return false;
 		});
-		// 编辑五金材料
+		// 编辑
 		function getItemData(obj, id) {
-			
 			form.val("itemForm", {
 				"id" : obj.id,
 				"fimg" : obj.fimg,
@@ -154,9 +113,12 @@ $(function() {
 				"fmemo" : obj.fmemo,
 			});
 			openPage(id, "编辑模具成本信息")
-		};
+		};	
 	});
-
+	$("#feeType1,#feeType2,#feeType3,#feeType4").on("input",function(e){
+		 //console.log(e.delegateTarget.value); //获取input输入的值
+		 calAll();
+	});
 });
 
 
@@ -191,11 +153,10 @@ function add() {
 function addSubmit(obj) {
 	CoreUtil.sendAjax("/basePrice/procFee/add", JSON.stringify(obj.field), function(
 			data) {
+		console.log(data)
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				clean();
-				// 加载页面
 				loadAll();
 			});
 		} else {
@@ -210,11 +171,10 @@ function addSubmit(obj) {
 function editSubmit(obj) {
 	CoreUtil.sendAjax("/basePrice/procFee/edit", JSON.stringify(obj.field), function(
 			data) {
+		console.log(data)
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				clean();
-				// 加载页面
 				loadAll();
 			});
 		} else {
@@ -281,7 +241,15 @@ function loadAll() {
 		}
 	});
 }
-
+function calAll(){
+	var fee1=$("#feeType1").val()==""?0:parseFloat($("#feeType1").val())
+	var fee2=$("#feeType2").val()==""?0:parseFloat($("#feeType2").val())
+	var fee3=$("#feeType3").val()==""?0:parseFloat($("#feeType3").val())
+	var fee4=$("#feeType4").val()==""?0:parseFloat($("#feeType4").val())
+	
+	var all= fee1+fee2+fee3+fee4
+	$("#feeAll").val(all)
+}
 // 清空新增表单数据
 function clean() {
 	$('#itemForm')[0].reset();

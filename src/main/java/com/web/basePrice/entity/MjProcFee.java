@@ -28,6 +28,13 @@ public class MjProcFee extends BaseEntity {
 	    @ApiModelProperty(name = "productTypeId", value = "产品类型ID")
 	    @Column(length = 20)
 	    protected Long productTypeId;
+	    
+	    /**
+	     * 产品编号
+	     */
+	    @ApiModelProperty(name = "productCode", value = "产品编号")
+	    @Column(length = 200)
+	    protected String productCode;
 
 	    /**
 	     * 图示
@@ -51,7 +58,7 @@ public class MjProcFee extends BaseEntity {
 		protected String structureMj;
 		
 		/**
-		 * mo ju jia ge
+		 * 模具价格
 		 */
 		@ApiModelProperty(name = "mjPrice", value = "")
 		@Column(length = 20)
@@ -218,5 +225,13 @@ public class MjProcFee extends BaseEntity {
 		this.mjPrice = mjPrice;
 	}
 
+	public String getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+	
 	
 }
