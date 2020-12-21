@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='报价单列表'"></head>
+<head th:include="layout :: htmlhead" th:with="title='采购部列表'"></head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div>
@@ -10,10 +10,9 @@
 					<h3>状态</h3>
 					<div class="filter">
 						<ul id="ul-list">
-							<li class="current"><a><span id="all-num" data-status="">全部(0)</span></a></li>
-							<li class=""><a><span id="in-num" data-status="0">进行中(0)</span></a></li>
-							<li class=""><a><span id="over-num" data-status="1">已完成(0)</span></a></li>
-							<li class=""><a><span id="close-num" data-status="99">已关闭(0)</span></a></li>
+							<li class="current"><a><span>全部</span></a></li>
+							<li class=""><a><span>进行中</span></a></li>
+							<li class=""><a><span>已完成</span></a></li>
 						</ul>
 					</div>
 					<span class="more" id="_search_btn"></span>
@@ -42,11 +41,9 @@
 			</div>
 			<table id="listTable" lay-filter="listTable" style="margin:0px;"></table>
 			<script type="text/html" id="optBar">
-            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看进度</a>
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">填写价格</a>
             <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="check">审批</a>
-            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">关闭</a>
-        </script>
+            </script>
 		</div>
 		<div id="setItemPage" class="layer_self_wrap" style="width:500px;display:none;">
         <form id="setItemForm" class="layui-form layui-form-pane" lay-filter="setItemForm" method="post" action="" style="margin: 20px;">
@@ -59,16 +56,10 @@
         </form>
     </div>
     <script th:inline="javascript">
-            var Step=[[${Step}]];
-            var Check_code="QUOTE_NEW";
-            if(Step == '1'){
-            	Check_code="QUOTE_NEW";
-            }
-            
-            
+            var Style=[[${Style}]];
         </script>
-		<script th:src="@{/js/web/quote/01business/quote_list.js}"
-			src="/js/web/quote/01business/quote_list.js"></script>
+		<script th:src="@{/js/web/quote/03purchase/purchase_list.js}"
+			src="/js/web/quote/03purchase/purchase_list.js"></script>
 	</div>
 </body>
 </html>

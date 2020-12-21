@@ -331,16 +331,43 @@ public class CheckImpl   implements CheckService {
                     
                 }
 
-                //2.如果是“RULE”防御工作制度审核
-                /*if(c.getBsCheckCode().equals("RULE") && c.getBsRecordId() != null){
-                    //2.1获取信息，修改状态为“审核通过”
-                    RuleFile ruleFile = ruleFileDao.findById((long) c.getBsRecordId());
-                    if(ruleFile != null){
-                        ruleFile.setModifiedTime(new Date());
-                        ruleFile.setBsStatus(2);
-                        ruleFileDao.save(ruleFile);
-                    }
-                }*/
+                //2.制造部-审批完成
+                /**
+            	 * 类型
+            	 * 五金:hardware
+            	 * 注塑:molding
+            	 * 表面处理:surface
+            	 * 组装:packag
+            	 */
+                if(c.getBsRecordId() != null){
+                	if(c.getBsCheckCode().equals("hardware") || c.getBsCheckCode().equals("molding") ||
+                			c.getBsCheckCode().equals("surface") || c.getBsCheckCode().equals("packag")){
+                   	 //1.1获取报价单，修改状态为“已完成”
+                   	Quote quote = quoteDao.findById((long) c.getBsRecordId());
+                       if(quote != null){
+                       	quote.setLastupdateDate(new Date());
+                       	if(c.getBsCheckCode().equals("hardware")){
+                       		quote.setBsStatus2Hardware(1);
+                       	}else if(c.getBsCheckCode().equals("molding")){
+                       		quote.setBsStatus2Molding(1);
+                       	}else if(c.getBsCheckCode().equals("surface")){
+                       		quote.setBsStatus2Surface(1);
+                       	}else if(c.getBsCheckCode().equals("packag")){
+                       		quote.setBsStatus2Packag(1);
+                       	}
+                       	quoteDao.save(quote);
+                       	
+                       	//判断制造部是否全部审批完成
+                       	List<Quote> lq = quoteDao.findByDelFlagAndStatus2();
+                       	if(lq.size()>0){
+                       		quote.setBsStep(3);
+                       		quote.setBsStatus2(1);
+                       		quoteDao.save(quote);
+                       	}
+                       }	
+                   }
+                }
+                
 
 			}
 			checkInfoDao.saveAll(lcr);

@@ -124,11 +124,11 @@ public class QuoteController extends WebController {
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表",hidden = true)
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getList(String keyword) {
+    public ApiResponseResult getList(String keyword,String status) {
         String method = "quote/getList";String methodName ="获取报价单列表";
         try {
             Sort sort = new Sort(Sort.Direction.ASC, "id");
-            ApiResponseResult result = quoteService.getList(keyword, super.getPageRequest(sort));
+            ApiResponseResult result = quoteService.getList(keyword, status, super.getPageRequest(sort));
             logger.debug("获取报价单列表=getList:");
             getSysLogService().success(module,method, methodName, keyword);
             return result;

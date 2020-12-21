@@ -135,10 +135,13 @@ public class Quotelmpl implements QuoteService {
      * **/
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword,PageRequest pageRequest)throws Exception{
+    public ApiResponseResult getList(String keyword,String status,PageRequest pageRequest)throws Exception{
     	// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		if(!StringUtils.isEmpty(status)){
+			filters.add(new SearchFilter("bsStatus", SearchFilter.Operator.EQ, Integer.parseInt(status)));
+		}
 		// 查询2
 		List<SearchFilter> filters1 = new ArrayList<>();
 		if (StringUtils.isNotEmpty(keyword)) {
@@ -150,8 +153,13 @@ public class Quotelmpl implements QuoteService {
 		Specification<Quote> spec1 = spec.and(BaseService.or(filters1, Quote.class));
 		Page<Quote> page = quoteDao.findAll(spec1, pageRequest);
 
-		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+		Map map = new HashMap();
+		map.put("List", DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+		map.put("Nums", quoteDao.getNumByStatus());
+		return ApiResponseResult.success().data(map);
+		/*return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
     }
     /**
      * 获取报价单-项目列表

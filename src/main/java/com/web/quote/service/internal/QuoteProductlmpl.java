@@ -33,33 +33,26 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
     @Override
     @Transactional
     public ApiResponseResult getList(String keyword,String style,PageRequest pageRequest)throws Exception{
-    	// 查询条件1
-		/*List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-		filters.add(new SearchFilter("bsStep", SearchFilter.Operator.EQ, 2));
-		// 查询2
-		List<SearchFilter> filters1 = new ArrayList<>();
-		if (StringUtils.isNotEmpty(keyword)) {
-			filters1.add(new SearchFilter("bsType", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("bsCode", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("bsProd", SearchFilter.Operator.LIKE, keyword));
+    	String temp = "";
+    	if(StringUtils.isNotEmpty(style)){
+			if(style.equals("hardware")){
+				temp = "  p.bs_status2hardware ";
+			}else if(style.equals("molding")){
+				temp = "  p.bs_status2molding ";
+			}else if(style.equals("surface")){
+				temp = "  p.bs_status2surface ";
+			}else if(style.equals("packag")){
+				temp = "  p.bs_status2packag ";
+			}
 		}
-		Specification<Quote> spec = Specification.where(BaseService.and(filters, Quote.class));
-		Specification<Quote> spec1 = spec.and(BaseService.or(filters1, Quote.class));
-		Page<Quote> page = quoteDao.findAll(spec1, pageRequest);
-
-		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
-    	
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
-				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(i.bs_end_time,null,'0','1') col from "+Quote.TABLE_NAME+" p "
-						+ " left join price_quote_item i on p.id=i.pk_quote  where p.del_flag=0 and p.bs_step=2 ";
+				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,"+temp+" col from "+Quote.TABLE_NAME+" p "
+						+ "  where p.del_flag=0 and p.bs_step=2 ";
 		if (StringUtils.isNotEmpty(keyword)) {
 			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
 					+ keyword + "') > 0 ";*/
 		}
-		//checkStatus--需要转移的类型
-		if(StringUtils.isNotEmpty(style)){
+		/*if(StringUtils.isNotEmpty(style)){
 			if(style.equals("hardware")){
 				sql += "  and i.bs_code in ('B001','C001') ";
 			}else if(style.equals("molding")){
@@ -69,7 +62,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 			}else if(style.equals("packag")){
 				sql += "  and i.bs_code in ('B004','C004') ";
 			}
-		}
+		}*/
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
@@ -97,9 +90,6 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 			map1.put("bsCustName", object[10]);
 			map1.put("bsStatus", object[11]);
 			list_new.add(map1);
-			
-			
-			
 		}
 		
 		

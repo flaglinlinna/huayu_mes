@@ -12,7 +12,7 @@ public interface QuoteService {
 	
 	public ApiResponseResult getProfitProd()throws Exception;//获取产品利润率维护表
 	
-	public ApiResponseResult getList(String keyword,PageRequest pageRequest)throws Exception;//获取报价单列表
+	public ApiResponseResult getList(String keyword,String status,PageRequest pageRequest)throws Exception;//获取报价单列表
 
 	public ApiResponseResult edit(Quote quote)throws Exception;
 	
