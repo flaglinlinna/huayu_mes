@@ -143,6 +143,36 @@ public class ProductMater extends BaseEntity {
 	@Column(length = 150)
 	protected String bsColor;
 
+	/**
+	 * 是否通用物料
+	 */
+	@ApiModelProperty(name = "bsGeneral", value = "是否通用物料")
+	@Column(length = 10)
+	protected Integer bsGeneral;
+
+	/**
+	 * 价格挡位
+	 */
+	@ApiModelProperty(name = "bsGear", value = "价格挡位")
+	@Column(length = 50)
+	protected String bsGear;
+
+	/**
+	 * 参考价格
+	 */
+	@ApiModelProperty(name = "bsGear", value = "参考价格")
+	@Column(length = 50)
+	protected BigDecimal bsRefer;
+
+
+	/**
+	 * 评估价格
+	 */
+	@ApiModelProperty(name = "bsAssess", value = "评估价格")
+	@Column(length = 50)
+	protected BigDecimal bsAssess;
+
+
 	public Long getPkQuote() {
 		return pkQuote;
 	}
@@ -270,5 +300,36 @@ public class ProductMater extends BaseEntity {
 	public void setBsProQty(BigDecimal bsProQty) {
 		this.bsProQty = bsProQty;
 	}
-	
+
+	public Integer getBsGeneral() {
+		return bsGeneral;
+	}
+
+	public void setBsGeneral(Integer bsGeneral) {
+		this.bsGeneral = bsGeneral;
+	}
+
+	public String getBsGear() {
+		return bsGear;
+	}
+
+	public void setBsGear(String bsGear) {
+		this.bsGear = bsGear;
+	}
+
+	public BigDecimal getBsRefer() {
+		return bsRefer;
+	}
+
+	public void setBsRefer(BigDecimal bsRefer) {
+		this.bsRefer = bsRefer;
+	}
+
+	public BigDecimal getBsAssess() {
+		return bsAssess;
+	}
+
+	public void setBsAssess(BigDecimal bsAssess) {
+		this.bsAssess = bsAssess;
+	}
 }

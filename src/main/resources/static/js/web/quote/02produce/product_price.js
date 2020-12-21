@@ -1,5 +1,5 @@
 /**
- * 制造部材料管理
+ * 产品价格维护
  * 五金:hardware
  * 注塑:molding
  * 表面处理:surface
@@ -11,8 +11,8 @@ $(function() {
 		var table = layui.table, form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect;
 
 		tableIns = table.render({
-			elem : '#hardwareList',
-			url : context + '/productMater/getList?bsType='+bsType+'&quoteId='+quoteId,
+			elem : '#productPriceList',
+			url : context + '/productMater/getList?quoteId='+quoteId,
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
@@ -37,73 +37,88 @@ $(function() {
 			},
 			cols : [ [ {
 				type : 'numbers'
-			}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
-				field : 'bsComponent',
-					width:150,
-				title : '零件名称',sort:true
 			}, {
-				field : 'bsMaterName',width:150,
+				field: 'bsType',
+				width: 100,
+				title: '类型', sort: true,
+				// * 五金:hardware
+				// * 注塑:molding
+				// * 表面处理:surface
+				// * 组装:packag
+				templet: function (d) {
+					if (d.bsType == 'hardware') {
+						return '五金'
+					} else if (d.bsType == 'molding') {
+						return '注塑'
+					}else if (d.bsType == 'surface') {
+						return '表面处理'
+					}else if (d.bsType == 'packag') {
+						return '组装'
+					}
+					}
+				},
+				{
+				field : 'bsComponent',
+				width:120,
+				title : '零/组件名称',sort:true
+			}, {
+				field : 'bsMaterName',width:120,
 				title : '材料名称',sort:true
 			},
 			{
 				field : 'bsModel',
 				width:150,
-				title : '规格'
+				title : '材料规格'
 			}, {
 				field : 'bsQty',
-					width:100,
+					width:80,
 				title : '用量',
 			},
 				{
-					field : 'bsProQty',
-					width:100,
-					title : '制品量',
-				},
-				{
 					field : 'bsUnit',
+					width:80,
 					title : '单位',
 				},
 				{
 					field : 'bsRadix',
+					width:80,
 					title : '基数',
 				},
 				{
-					field : 'bsSupplier',
-					title : '供应商',
+					field : 'bsGeneral',
+					width:80,
+					title : '是否通用物料',
 				},
 				{
-					field : 'bsWaterGap',
-					title : '水口量',
-					//(注塑)
+					field : 'bsGear',
+					width:80,
+					title : '价格挡位',
+					edit:'text'
 				},
 				{
-					field : 'bsCave',
-					title : '穴数',
-					//(注塑)
+					field : 'bsRefer',
+					width:110,
+					title : '参考价格',
 				},
 				{
-					field : 'bsMachiningType',
-					title : '加工类型',
-					//(表面处理)
-				},
-				{
-					field : 'bsColor',
-					title : '配色工艺',
-					//(表面处理)
+					field : 'bsAssess',
+					width:110,
+					title : '评估价格',
+					edit:'text'
 				},
 				{
 					field : 'fmemo',
+					width:110,
 					title : '备注',
+					edit:'text'
 				},
 				{
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-					width:120,
-				toolbar : '#optBar'
-			} ] ],
+					field : 'bsSupplier',
+					width:110,
+					title : '供应商',
+					edit:'text'
+				}
+				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 			}
@@ -176,12 +191,17 @@ $(function() {
 			}
 		});
 
+		table.on('edit(productPriceTable)',function (obj) {
+			obj.field = obj.data;
+			editSubmit(obj);
+		})
+
 		// 监听在职操作
 		form.on('switch(isStatusTpl)', function(obj) {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(hardwareTable)', function(obj) {
+		table.on('tool(productPriceList)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
@@ -331,7 +351,7 @@ function editSubmit(obj) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				cleanProdErr();
+				// cleanProdErr();
 				// 加载页面
 				loadAll();
 			});
