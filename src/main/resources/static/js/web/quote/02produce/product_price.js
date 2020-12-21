@@ -104,7 +104,8 @@ $(function() {
 					field : 'bsAssess',
 					width:110,
 					title : '评估价格',
-					edit:'text'
+					edit:'number',
+					// placeholder:'请输入评估价格(数字)',
 				},
 				{
 					field : 'fmemo',
@@ -192,6 +193,13 @@ $(function() {
 		});
 
 		table.on('edit(productPriceTable)',function (obj) {
+			var bsAssess = obj.data.bsAssess;
+			if(/^\d+$/.test(bsAssess)==false && /^\d+\.\d+$/.test(bsAssess)==false && bsAssess!="" && bsAssess!=null)
+			{
+				layer.msg("评估价格只能输入数字");
+				loadAll();
+				return false;
+			}
 			obj.field = obj.data;
 			editSubmit(obj);
 		})

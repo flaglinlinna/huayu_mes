@@ -256,7 +256,7 @@ $(function() {
 						laydate.render({
 							elem : '#on_date',
 							trigger : 'click'// 呼出事件改成click
-							,type: 'datetime',
+							,type: 'date',
 							value:new Date()
 							//value : getCurDate(0)
 						});
@@ -324,7 +324,7 @@ $(function() {
 						$(document).on('click', '#addBtn', function() {
 							open(0);
 						});
-
+						getOnTime();
 						form.on('submit(add)', function(data) {
 							add(data.field);// 保存创建在线返工制令单
 							return false;
@@ -432,6 +432,27 @@ $(function() {
 
 });
 
+function getOnTime() {
+	CoreUtil.sendAjax("/verify/getOnTime", {}, function(data) {
+		// console.log(data)
+		if (data.result) {
+				$("#on_time").empty();
+				var pline = data.data;
+				for (var i = 0; i < pline.length; i++) {
+					$("#on_time").append(
+						"<option value=" + pline[i].SUB_NAME + ">"
+						+ pline[i].SUB_NAME + "</option>");
+				}
+				layui.form.render('select');
+
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "GET", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
 function getInfoAdd() {
 	CoreUtil.sendAjax("/verify/getInfoAdd", {}, function(data) {
 		// console.log(data)
@@ -491,7 +512,7 @@ function save(params, emp_ids) {
 		"line_id" : params.pline,
 		"hour_type" : params.ptyle,
 		"class_id" : params.pclass,
-		"wdate" : params.pdate,
+		"wdate" : params.pdate + " "+ params.ptime,
 		"emp_ids" : emp_ids
 	};
 	CoreUtil.sendAjax("/verify/save", JSON.stringify(param), function(data) {

@@ -163,5 +163,14 @@ public class Veritylmpl extends PrcUtils implements VerifyService {
 	}
 
 
+	public ApiResponseResult getOnTimeByPrc(PageRequest pageRequest) throws Exception{
+		// TODO Auto-generated method stub
+		List<Object> list = getSystemSubParamPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",
+				UserUtil.getSessionUser().getId()+"","统一上线时间",pageRequest);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success().data(list.get(3));
+	}
 	
 }
