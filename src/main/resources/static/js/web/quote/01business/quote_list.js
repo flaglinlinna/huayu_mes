@@ -8,7 +8,7 @@ $(function() {
 			var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table;
 			tableIns = table.render({
 				elem : '#listTable',
-				url : context + '/quote/getList?step='+ Step,
+				url : context + '/quote/getList?status=',
 				method : 'get' // 默认：get请求
 				//, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 				,cellMinWidth : 80,
@@ -31,11 +31,26 @@ $(function() {
 							"code" : res.status
 						} 
 					}
+					//填写数据
+					
+					var num_list = res.data.Nums;
+					var all = 0;
+					res.data.Nums.forEach(function (item, index) {
+						if(item.STATUS == '0'){
+							$('#in-num').text('进行中('+item.NUMS+')');
+						}else if(item.STATUS == '0'){
+							$('#over-num').text('已完成('+item.NUMS+')');
+						}else if(item.STATUS == '99'){
+							$('#close-num').text('已关闭('+item.NUMS+')');
+						}
+						all = Number(all)+Number(item.NUMS);
+					});
+					$('#all-num').text('全部('+all+')');
 					// 可进行数据操作
 					return {
-						"count" : res.data.total,
+						"count" : res.data.List.total,
 						"msg" : res.msg,
-						"data" : res.data.rows,
+						"data" : res.data.List.rows,
 						"code" : res.status
 					}
 				},
@@ -98,7 +113,6 @@ $(function() {
 					}
 				] ],
 				done : function(res, curr, count) {
-					console.log(res)
 					pageCurr = curr;
 					res.data.forEach(function (item, index) {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
@@ -154,7 +168,11 @@ $(function() {
             
              $("#ul-list li").click(function () {
                     $(this).addClass("current").siblings().removeClass();
-                })
+                    //alert($("span:last",this).attr("data-status"));
+                    tableIns.reload({
+                		url:context + '/quote/getList?status='+$("span:last",this).attr("data-status")
+                	});
+             })
 		});
 });
 //编辑项目弹出框
