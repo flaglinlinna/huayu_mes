@@ -173,6 +173,10 @@ $(function() {
 				$(".searchDiv").toggle();
                 //var val=$(this).attr("id");
             })
+            
+             $("#ul-list li").click(function () {
+                    $(this).addClass("current").siblings().removeClass();
+                })
 		});
 });
 //编辑项目弹出框
