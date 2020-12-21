@@ -126,9 +126,9 @@ $(function() {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
 						if(item.bsStatus == 0){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
-						}else if(item.bsStatus="1"){
+						}else if(item.bsStatus=="1"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
-						}else if(item.bsStatus="99"){
+						}else if(item.bsStatus=="99"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');
 						}
 					});
@@ -137,11 +137,13 @@ $(function() {
 			// 监听工具条
 			table.on('tool(listTable)', function(obj) {
 				var data = obj.data;
-				if (obj.event === 'del') {
-					// 关闭
-					//del(data, data.id, data.custNo);
-				} else if (obj.event === 'edit') {
-					// 编辑
+				if (obj.event === 'del') {// 关闭				
+					layer.confirm('您确定要关闭报价单：【' + data.bsCode + '】吗？', {
+						btn : [ '确认', '返回' ]
+					}, function() {
+						del(data.id);
+					});	
+				} else if (obj.event === 'edit') {// 编辑
 					open("编辑项目资料")
 				}else if(obj.event === 'view'){
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item','报价项目');
@@ -174,8 +176,7 @@ $(function() {
 		});
 });
 //编辑项目弹出框
-function open(title) {
-	
+function open(title) {	
 	var index =layer.open({
 		type : 1,
 		title : title,
@@ -184,10 +185,38 @@ function open(title) {
 		shadeClose : true,
 		area : [ '550px' ],
 		content : $('#setItemPage'),
-		end : function() {
-			
+		end : function() {			
 		}
 	});
 	layer.full(index)
 }
 
+//关闭报价单
+function del(id){
+	var param = {
+			"id" : id,
+			"bsStatus":'99'
+		};
+	CoreUtil.sendAjax("/quote/doStatus", JSON.stringify(param),
+			function(data) {
+				if (data.result) {
+					layer.alert("操作成功",function(){
+						layer.closeAll();
+						loadAll();
+					})
+				} else {
+					layer.alert(data.msg)
+				}
+			}, "POST", false, function(res) {
+				layer.alert("操作请求错误，请您稍后再试");
+			});
+}
+function loadAll() {
+	// 重新加载table
+	tableIns.reload({
+		page : {
+			curr : pageCurr
+		// 从当前页码开始
+		}
+	});
+}
