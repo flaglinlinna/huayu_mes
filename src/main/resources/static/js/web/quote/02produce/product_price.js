@@ -35,9 +35,9 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			}, {
+			cols : [ [ 
+			    {type : 'numbers',style:'background-color:#d2d2d2'}, 
+				{
 				field: 'bsType',
 				width: 100,
 				title: '类型', sort: true,
@@ -91,7 +91,7 @@ $(function() {
 					field : 'bsGear',
 					width:80,
 					title : '价格挡位',
-					edit:'text'
+					edit:'text',templet: '#selectGear'
 				},
 				{
 					field : 'bsRefer',
@@ -128,62 +128,18 @@ $(function() {
 				});
 			}
 		});
-
-		tableSelect=tableSelect.render({
-			elem : '#bsUnit',
-			searchKey : 'keyword',
-			checkedKey : 'id',
-			searchPlaceholder : '关键字搜索',
-			table : {
-				url : context + '/basePrice/unit/getList',
-				method : 'get',
-
-				parseData : function(res) {
-					// 可进行数据操作
-					return {
-						"count" : res.data.total,
-						"msg" : res.msg,
-						"data" : res.data.rows,
-						"code" : res.status
-						// code值为200表示成功
-					}
-				},
-				cols : [ [
-					{ type: 'radio' },//单选  radio
-					{
-						field : 'id',
-						title : 'id',
-						width : 0,hide:true
-					},
-					{
-						type : 'numbers'
-					},
-					{
-						field : 'unitCode',
-						title : '单位编码',
-					},
-					{
-						field : 'unitName',
-						title : '单位名称',
-					}
-				] ],
-				page : true,
-				request : {
-					pageName : 'page' // 页码的参数名称，默认：page
-					,
-					limitName : 'rows' // 每页数据量的参数名，默认：limit
-				},
-
-			},
-			done : function(elem, data) {
-				var da=data.data;
-				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
-				form.val("hardwareForm", {
-					"pkUnit":da[0].id,
-					"bsUnit":da[0].unitName
-				});
-				form.render();// 重新渲染
-			}
+		
+		//下拉框监听事件
+		form.on('select(roleIdSelect)', function(data) {
+			alert('1');
+			return;
+			//获取行tr对象
+			var elem = data.othis.parents('tr');
+	        //获取第一列的值，第一列为ID列，
+			var id = elem.first().find('td').eq(1).text();
+	        //选择的select对象值；
+	        var selectValue=data.value;
+			//处理字段更新的逻辑
 		});
 
 		//自定义验证规则
