@@ -12,6 +12,9 @@ $(function() {
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
+			toolbar: '#toolbar',
+			height:'full-110'//固定表头&full-查询框高度
+			,even:true,//条纹样式
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -37,20 +40,24 @@ $(function() {
 				width : 95
 			}, {
 				field : 'itemName',
-				title : '物料名称名称',
+				title : '物料名称',
 				width : 150
 			},  {
 				field : 'rangePrice',
 				title : '价格档位',
+				width : 100
 			}, {
 				field : 'priceUn',
 				title : '单价',
+				width : 80
 			}, {
 				field : 'unit',
 				title : '单位',
+				width : 80
 			},{
 				field : 'alternativeSuppliers',
 				title : '备选供应商',
+				width : 150
 			},{
 				field : 'createBy',
 				title : '创建人',

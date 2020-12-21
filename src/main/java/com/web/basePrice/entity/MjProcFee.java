@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 public class MjProcFee extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
 	    public static final String TABLE_NAME = "BJ_BASE_MJ_PROC_FEE";
-
+	    
 		/**
 	     * 产品类型ID
 	     */
@@ -49,11 +49,18 @@ public class MjProcFee extends BaseEntity {
 		@ApiModelProperty(name = "structureMj", value = "模具结构")
 		@Column(length = 50)
 		protected String structureMj;
+		
+		/**
+		 * mo ju jia ge
+		 */
+		@ApiModelProperty(name = "mjPrice", value = "")
+		@Column(length = 20)
+		protected BigDecimal mjPrice;
 
 		/**
 		 * 穴数
 		 */
-		@ApiModelProperty(name = "unitName", value = "穴数")
+		@ApiModelProperty(name = "numHole", value = "穴数")
 		@Column(length = 20)
 		protected BigDecimal numHole;
 
@@ -99,6 +106,7 @@ public class MjProcFee extends BaseEntity {
 		@Column(length = 20)
 		protected BigDecimal feeType5;
 
+		
 		/**
 		 * 评估总费用（含税）
 		 */
@@ -201,4 +209,14 @@ public class MjProcFee extends BaseEntity {
 	public void setFeeAll(BigDecimal feeAll) {
 		this.feeAll = feeAll;
 	}
+
+	public BigDecimal getMjPrice() {
+		return mjPrice;
+	}
+
+	public void setMjPrice(BigDecimal mjPrice) {
+		this.mjPrice = mjPrice;
+	}
+
+	
 }

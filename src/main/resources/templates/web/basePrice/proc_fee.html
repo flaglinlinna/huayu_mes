@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='模具成本信息'">
+<meta charset="UTF-8">
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div style="margin: 10px">
+			<form id="keySearch" class="layui-form layui-form-pane" method="post"
+				action="" style="margin-top: 5px;">
+				<div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+						<div class="layui-input-inline">
+							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
+								placeholder="请输入关键字" class="layui-input" type="text" />
+						</div>
+
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="searchSubmit">查询</button>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+					</div>
+				</div>
+			</form>
+
+			<hr class="layui-bg-black" />
+			<script type="text/html" id="toolbar">
+             <div class="layui-btn-container layui-inline">
+                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="add()">添加模具成本信息</button>
+      
+             </div>
+         </script>
+
+
+			<table id="iList" lay-filter="iTable"></table>
+
+			<script type="text/html" id="optBar">
+                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+         </script>
+		</div>
+		<!--添加或编辑外购件清单信息-->
+		<div id="setItem" class="layer_self_wrap"
+			style="width: 1000px; display: none; margin-left: 10px;">
+			<form id="itemForm" class="layui-form layui-form-pane"
+				lay-filter="itemForm" method="post" action=""
+				style="margin-top: 20px;">
+				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
+					type="hidden" name="id" /> 
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">图示id</label>
+						<div class="layui-input-inline">
+							<input id="fimg" name="fimg" placeholder="请输入图示id"
+								autocomplete="off" class="layui-input" type="text" />
+						</div>
+						<label class="layui-form-label" style="width: 150px;">产品</label>
+						<div class="layui-input-inline">
+							<input id="productName" name="productName" placeholder="请输入产品"
+								autocomplete="off" class="layui-input" type="text" />
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">穴数</label>
+						<div class="layui-input-inline">
+							<input id="numHole" name="numHole" lay-filter="bsHole" lay-verify="required|num"
+								placeholder="请输入穴数" class="layui-input" type="text"
+								autocomplete="off" />
+						</div>
+						<label class="layui-form-label" style="width: 150px;">模具结构</label>
+						<div class="layui-input-inline">
+							<input id="structureMj" name="structureMj" lay-filter="structureMj"
+								placeholder="请输入模具结构" class="layui-input" type="text"
+								autocomplete="off" />
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">模具报价价格</label>
+						<div class="layui-input-inline">
+							<input id="mjPrice" name="mjPrice"
+								placeholder="请输入模具报价价格" lay-verify="required|num" autocomplete="off"
+								class="layui-input" type="text" />
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">钢料+配件+热处理费用</label>
+						<div class="layui-input-inline">
+							<input id="feeType1" name="feeType1" placeholder="请输入费用"
+								lay-verify="required|num" autocomplete="off" class="layui-input"
+								type="text" />
+						</div>
+						<label class="layui-form-label" style="width: 150px;">铜公材料费用</label>
+						<div class="layui-input-inline">
+							<input id="feeType2" name="feeType2" placeholder="请输入费用"
+								lay-verify="required|num" autocomplete="off" class="layui-input"
+								type="text" />
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">模胚价格+加工费用</label>
+						<div class="layui-input-inline">
+							<input id="feeType3" name="feeType3" placeholder="请输入费用"
+								lay-verify="required|num" autocomplete="off" class="layui-input"
+								type="text" />
+						</div>
+					</div>
+					<label class="layui-form-label" style="width: 150px;">热流道费用</label>
+					<div class="layui-input-inline">
+						<input id="feeType4" name="feeType4" placeholder="请输入费用"
+							lay-verify="required|num" autocomplete="off" class="layui-input"
+							type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">工序成本</label>
+						<div class="layui-input-inline">
+							<input id="feeProc" name="feeProc" placeholder="请输入工序成本"
+								lay-verify="required|num" autocomplete="off" class="layui-input"
+								type="text" />
+						</div>
+						<label class="layui-form-label" style="width: 150px;">评估总费用(含税)</label>
+						<div class="layui-input-inline">
+							<input id="feeAll" name="feeAll"
+								placeholder="请输入评估总费用(含税)" lay-verify="num"
+								autocomplete="off" class="layui-input" type="text" />
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label" style="width: 150px;">备注</label>
+					<div class="layui-input-inline" style="width: 540px;">
+						<textarea id="fmemo" name="fmemo" placeholder="请输入备注"
+							class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block" style="margin-left: 10px;">
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="addSubmit">提交</button>
+						<button type="reset"
+							class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<script th:src="@{/js/web/basePrice/proc_fee.js}"
+			src="/js/web/basePrice/proc_fee.js"></script>
+	</div>
+</body>
+</html>
