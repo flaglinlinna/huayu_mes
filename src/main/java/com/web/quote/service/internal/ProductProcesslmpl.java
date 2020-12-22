@@ -1,8 +1,10 @@
 package com.web.quote.service.internal;
 
+import com.alibaba.fastjson.JSONObject;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
+import com.utils.ExcelExport;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
@@ -14,10 +16,15 @@ import com.web.quote.dao.ProductProcessDao;
 import com.web.quote.entity.ProductProcess;
 
 import com.web.quote.service.ProductProcessService;
+import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,11 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletResponse;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service(value = "ProductProcessService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -42,6 +50,9 @@ public class ProductProcesslmpl implements ProductProcessService {
 
     @Autowired
     private ProcDao procDao;
+
+    @Autowired
+    private Environment env;
 	
 	/**
      * 新增报价单
@@ -120,11 +131,65 @@ public class ProductProcesslmpl implements ProductProcessService {
         }else return object.toString();
     }
 
-    public ApiResponseResult exportExcel(MultipartFile[] file, String bsType, Long quoteId) throws Exception{
-        String fileName = "五金工艺模板";
-        InputStream in = this.getClass().getResourceAsStream("/static/excelFile/"+fileName);
-        return null;
+    public void exportExcel(HttpServletResponse response, String bsType, Long quoteId) throws Exception{
+        String excelPath = "static/excelFile/";
+        String fileName = "";
+        String[] map_arr = null;
+        //五金工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、成型周期(S)、工序良率、备注
+        //注塑工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、穴数、成型周期(S)、加工人数、工序良率、备注
+        //组装工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
+        //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
+        if(("hardware").equals(bsType)){
+            fileName = "五金工艺模板.xlsx";
+            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsRadix","bsUserNum","bsCycle","bsYield","fmemo"};
+        }else if(("molding").equals(bsType)){
+            fileName = "注塑工艺模板.xlsx";
+            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsRadix","bsCave","bsCycle","bsUserNum","bsYield","fmemo"};
+        }else if(("surface").equals(bsType)){
+            fileName = "表面处理工艺模板.xlsx";
+            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsRadix","bsUserNum","bsCapacity","bsYield","fmemo"};
+        }else if(("packag").equals(bsType)){
+            fileName = "组装工艺模板.xlsx";
+            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsRadix","bsUserNum","bsCapacity","bsYield","fmemo"};
+        }
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        Resource resource = new ClassPathResource(excelPath+fileName);
+        InputStream in = resource.getInputStream();
+
+//        XSSFWorkbook workbook = new XSSFWorkbook(in);
+//        in.close();
+        List<SearchFilter> filters = new ArrayList<>();
+        filters.add(new SearchFilter("bsType", SearchFilter.Operator.EQ, bsType));
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));
+        Specification<ProductProcess> spec = Specification.where(BaseService.and(filters, ProductProcess.class));
+        List<ProductProcess> productProcessesList  = productProcessDao.findAll(spec);
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        for (ProductProcess bs : productProcessesList) {
+            Map<String, Object> map = new HashMap<>();
+//			map.put("lineId", bs.getLine().getLineName());// 获取关联表的数据
+			map.put("id", bs.getId());
+            map.put("bsName", bs.getBsName());
+            map.put("bsOrder", bs.getBsOrder());
+            if(bs.getProc()!=null){
+                map.put("procName", bs.getProc().getProcName());
+            }else {
+                map.put("procName", "");
+            }
+            map.put("bsModelType", bs.getBsModelType());
+            map.put("bsRadix", bs.getBsRadix());
+            map.put("bsUserNum", bs.getBsUserNum());
+            map.put("bsCycle", bs.getBsCycle());
+            map.put("bsYield", bs.getBsYield());
+            map.put("fmemo", bs.getFmemo());
+            map.put("bsCave", bs.getBsCave());
+            map.put("bsCapacity", bs.getBsCapacity());
+            list.add(map);
+        }
+        ExcelExport.export(response,list,workbook,in,map_arr,fileName);
     }
+
+
 
 //    导入模板
     public ApiResponseResult doExcel(MultipartFile[] file,String bsType,Long quoteId) throws Exception{
@@ -137,66 +202,66 @@ public class ProductProcesslmpl implements ProductProcessService {
             //获取最后一行的num，即总行数。此处从0开始计数
             int maxRow = sheet.getLastRowNum();
             List<ProductProcess> hardwareMaterList = new ArrayList<>();
-            //五金工艺导入顺序: 零件名称、工序顺序、工序名称、工序说明、机台类型、基数、人数、成型周期(S)、工序良率、备注
-            //注塑工艺导入顺序: 零件名称、工序顺序、工序名称、工序说明、机台类型、基数、穴数、成型周期(S)、加工人数、工序良率、备注
-            //组装工艺导入顺序: 零件名称、工序顺序、工序名称、工序说明、机台类型、基数、人数、产能、工序良率、备注
-            //表面工艺导入顺序: 零件名称、工序顺序、工序名称、工序说明、机台类型、基数、人数、产能、工序良率、备注
+            //五金工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、成型周期(S)、工序良率、备注
+            //注塑工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、穴数、成型周期(S)、加工人数、工序良率、备注
+            //组装工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
+            //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
             for (int row = 2; row <= maxRow; row++) {
-                String bsName = tranCell(sheet.getRow(row).getCell(0));
-                String bsOrder = tranCell(sheet.getRow(row).getCell(1));
-                String procName = tranCell(sheet.getRow(row).getCell(2));
-                String procFmemo = tranCell(sheet.getRow(row).getCell(3));
+                String id = tranCell(sheet.getRow(row).getCell(0));
+                String bsName = tranCell(sheet.getRow(row).getCell(1));
+                String bsOrder = tranCell(sheet.getRow(row).getCell(2));
+                String procName = tranCell(sheet.getRow(row).getCell(3));
                 String bsModelType = tranCell(sheet.getRow(row).getCell(4));
+
                 String bsRadix = tranCell(sheet.getRow(row).getCell(5));
-                String bsUserNum = tranCell(sheet.getRow(row).getCell(6));
-                String fmemo = tranCell(sheet.getRow(row).getCell(7));
-                String fmemo1 = tranCell(sheet.getRow(row).getCell(8));
+                String row6 = tranCell(sheet.getRow(row).getCell(6));
+                String row7 = tranCell(sheet.getRow(row).getCell(7));
+                String row8 = tranCell(sheet.getRow(row).getCell(8));
+                String row9 = tranCell(sheet.getRow(row).getCell(9));
+                String row10 = tranCell(sheet.getRow(row).getCell(10));
                 ProductProcess process = new ProductProcess();
 
                 //设置类型
                 process.setBsType(bsType);
                 process.setPkQuote(quoteId);
                 process.setBsName(bsName);
-                process.setBsOrder(Integer.parseInt(bsOrder));
+                if(StringUtils.isNotEmpty(id)){
+                    process.setId(Long.parseLong(id));
+                    process.setLastupdateBy(userId);
+                    process.setLastupdateDate(doExcleDate);
+                }else {
+                    process.setCreateBy(userId);
+                    process.setCreateDate(doExcleDate);
+                }
+                process.setBsOrder((int)Double.parseDouble(bsOrder));
+                process.setBsRadix((int)Double.parseDouble(bsRadix));
                 List<Proc> procList = procDao.findByDelFlagAndProcName(0,procName);
                 if(procList.size()>0&&procList!=null){
                     process.setPkProc(procList.get(0).getId());
                 }
                 process.setBsModelType(bsModelType);
-//                if(("molding").equals(bsType)){
-//                    process.setBsProQty(new BigDecimal(bsQty));
-//                    process.setBsRadix(bsRadix);
-//                    process.setBsWaterGap(bsSupplier);
-//                    process.setBsCave(bsSupplier);
-//                    process.setBsCave(fmemo1);
-//                } else if(("surface").equals(bsType)){
-//                    process.setBsMachiningType(bsMaterName);
-//                    process.setBsColor(bsModel);
-//                    process.setBsMaterName(bsQty);
-//                    process.setBsQty(new BigDecimal(bsRadix));
-//                    process.setBsModel(bsUnit);
-//                    process.setBsUnit(bsSupplier);
-//                    List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(bsSupplier,0);
-//                    if(unitList!=null&& unitList.size()>0){
-//                        process.setPkUnit(unitList.get(0).getId());
-//                    }
-//                    process.setBsRadix(fmemo1);
-//                }else {
-//                    process.setBsMaterName(bsMaterName);
-//                    process.setBsModel(bsModel);
-//                    process.setBsQty(new BigDecimal(bsQty));
-//                    process.setBsUnit(bsUnit);
-//                    List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(bsUnit,0);
-//                    if(unitList!=null&& unitList.size()>0){
-//                        process.setPkUnit(unitList.get(0).getId());
-//                    }
-//                    process.setBsRadix(bsRadix);
-//                    process.setBsSupplier(bsSupplier);
-//                    process.setFmemo(fmemo);
-//                }
-
-                process.setCreateBy(userId);
-                process.setCreateDate(doExcleDate);
+                if(("molding").equals(bsType)){
+                    //注塑
+                    process.setBsCave(row6);
+                    process.setBsCycle((int)Double.parseDouble(row7));
+                    process.setBsUserNum(new BigDecimal(row8));
+                    process.setBsYield((int)Double.parseDouble(row9));
+                    process.setFmemo(row10);
+                }else if(("hardware").equals(bsType)){
+                    //五金
+                    process.setBsUserNum(new BigDecimal(row6));
+                    process.setBsCycle((int)Double.parseDouble(row7));
+                    process.setBsYield((int)Double.parseDouble(row8));
+                    process.setFmemo(row9);
+                }else {
+                    //组装和表面
+                    process.setBsUserNum(new BigDecimal(row6));
+                    process.setBsCapacity(row7);
+                    process.setBsYield((int)Double.parseDouble(row8));
+                    process.setFmemo(row9);
+                }
+//                process.setCreateBy(userId);
+//                process.setCreateDate(doExcleDate);
                 hardwareMaterList.add(process);
             }
             productProcessDao.saveAll(hardwareMaterList);
@@ -242,7 +307,7 @@ public class ProductProcesslmpl implements ProductProcessService {
     }
 
     /**
-     * 查询报价单下 五金材料列表
+     * 查询报价单下 工艺列表
      */
     @Override
     @Transactional

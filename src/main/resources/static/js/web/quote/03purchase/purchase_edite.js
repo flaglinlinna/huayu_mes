@@ -215,9 +215,6 @@ $(function() {
 			,url: context + '/productMater/importExcel'
 			,accept: 'file' //普通文件
 			,data: {
-				bsType: function(){
-					return bsType;
-				},
 				pkQuote: function(){
 					return quoteId;
 				}
@@ -308,7 +305,7 @@ function addSubmit(obj) {
 
 // 编辑五金材料提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("/productMater/edit", JSON.stringify(obj.field), function(
+	CoreUtil.sendAjax("/purchase/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
@@ -385,4 +382,8 @@ function loadAll() {
 function cleanProdErr() {
 	$('#hardwareForm')[0].reset();
 	layui.form.render();// 必须写
+}
+
+function exportExcel() {
+	location.href = context + "/purchase/exportExcel?pkQuote="+quoteId;
 }

@@ -1,12 +1,15 @@
 package com.web.quote.service.internal;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.*;
 
+import com.utils.ExcelExport;
+import com.utils.UserUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,6 +22,8 @@ import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.Quote;
 import com.web.quote.service.PurchaseService;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Service(value = "PurchaseService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -75,6 +80,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
     }
 
+
 	@Override
 	public ApiResponseResult getQuoteList(String keyword, String quoteId, PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
@@ -94,5 +100,65 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		
 		return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
+	}
+
+	/**
+	 * 编辑
+	 */
+	@Override
+	@Transactional
+	public ApiResponseResult edit(ProductMater productMater) throws Exception {
+		if(productMater == null){
+			return ApiResponseResult.failure("制造部材料信息不能为空！");
+		}
+		if(productMater.getId() == null){
+			return ApiResponseResult.failure("制造部材料信息ID不能为空！");
+		}
+		ProductMater o = productMaterDao.findById((long) productMater.getId());
+		if(o == null){
+			return ApiResponseResult.failure("该制造部材料信息不存在！");
+		}
+		o.setLastupdateDate(new Date());
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
+		o.setFmemo(productMater.getFmemo());
+		o.setBsGear(productMater.getBsGear());
+		o.setBsSupplier(productMater.getBsSupplier());
+		o.setBsAssess(productMater.getBsAssess());
+		productMaterDao.save(o);
+		return ApiResponseResult.success("编辑成功！");
+	}
+
+	/**
+	 * 导出数据
+	 */
+	public void exportExcel(HttpServletResponse response, Long quoteId) throws Exception{
+		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
+		Map<String, Object> param = new HashMap<String, Object>();
+		List<ProductMater> list = createSQLQuery(hql, param, ProductMater.class);
+        XSSFWorkbook workbook = new XSSFWorkbook();
+		Resource resource = new ClassPathResource("static/excelFile/采购填报价格模板.xlsx");
+		InputStream in = resource.getInputStream();
+		String[] map_arr = new String[]{"id","bsType","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix",
+				"bsGeneral","bsGear","bsRefer","bsAssess","fmemo","bsSupplier"};
+		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+		for(ProductMater productMater : list){
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", productMater.getId());
+			map.put("bsType", productMater.getBsType());
+			map.put("bsComponent", productMater.getBsComponent());
+			map.put("bsMaterName", productMater.getBsMaterName());
+			map.put("bsModel", productMater.getBsModel());
+			map.put("bsQty", productMater.getBsQty());
+			map.put("bsUnit", productMater.getBsUnit());
+			map.put("bsRadix", productMater.getBsRadix());
+			map.put("bsGeneral", productMater.getBsGeneral());
+			map.put("bsGear", productMater.getBsGear());
+			map.put("bsRefer", productMater.getBsRefer());
+			map.put("bsAssess", productMater.getBsAssess());
+			map.put("fmemo", productMater.getFmemo());
+			map.put("bsSupplier", productMater.getBsSupplier());
+			listMap.add(map);
+		}
+		ExcelExport.export(response,listMap,workbook,in,map_arr,"采购填报价格模板.xlsx");
 	}
 }

@@ -706,5 +706,11 @@ function loadAll() {
 function cleanBarcodeRule() {
 	frule = "";
 	$('#ruleForm')[0].reset();
+	$('#fyear').attr("disabled",false);
+	$('#fmonth').attr("disabled",false);
+	$('#fday').attr("disabled",false);
+	$('#serialNum').attr("disabled",false);
+	$('#serialLen').attr("disabled",false);
+
 	layui.form.render();// 必须写
 }
