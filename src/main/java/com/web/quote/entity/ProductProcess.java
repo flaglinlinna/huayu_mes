@@ -102,7 +102,6 @@ public class ProductProcess extends BaseEntity {
 	
 	/**
 	 * 机台类型
-	 * @return
 	 */
 	@ApiModelProperty(name = "bsModelType", value = "机台类型")
 	@Column(length = 100)
@@ -135,7 +134,21 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsYield", value = "工序良率(%)")
 	@Column(length = 50)
 	protected Integer bsYield=0;
-	
+
+
+	/**
+	 * 穴数
+	 */
+	@ApiModelProperty(name = "bsCave", value = "穴数")
+	@Column(length = 100)
+	protected String bsCave;
+
+	/**
+	 * 产能
+	 */
+	@ApiModelProperty(name = "bsCapacity", value = "产能")
+	@Column(length = 100)
+	protected String bsCapacity;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -250,6 +263,20 @@ public class ProductProcess extends BaseEntity {
 	public void setBsYield(Integer bsYield) {
 		this.bsYield = bsYield;
 	}
-	
-	
+
+	public String getBsCave() {
+		return bsCave;
+	}
+
+	public void setBsCave(String bsCave) {
+		this.bsCave = bsCave;
+	}
+
+	public String getBsCapacity() {
+		return bsCapacity;
+	}
+
+	public void setBsCapacity(String bsCapacity) {
+		this.bsCapacity = bsCapacity;
+	}
 }

@@ -362,10 +362,24 @@ public class CheckImpl   implements CheckService {
                        	if(lq.size()>0){
                        		quote.setBsStep(3);
                        		quote.setBsStatus2(1);
+                       		quote.setBsEndTime2(new Date());
                        		quoteDao.save(quote);
                        	}
                        }	
                    }
+                }
+                
+                //3.采购部审批完成
+                if(c.getBsCheckCode().equals("QUOTE_PUR") && c.getBsRecordId() != null){
+                	//1.1获取报价单，修改状态为“已完成”
+                	Quote quote = quoteDao.findById((long) c.getBsRecordId());
+                    if(quote != null){
+                    	quote.setLastupdateDate(new Date());
+                    	quote.setBsStatus3(1);
+                    	quote.setBsStep(4);
+                    	quote.setBsEndTime3(new Date());
+                    	quoteDao.save(quote);
+                    }
                 }
                 
 

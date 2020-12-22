@@ -314,7 +314,6 @@ $(function() {
 
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
-		console.log(data);
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
 				addSubmit(data);
