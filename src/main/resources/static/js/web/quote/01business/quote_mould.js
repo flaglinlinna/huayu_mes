@@ -36,7 +36,7 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			,{
 				field : 'bsName',
-				title : '零件名称'
+				title : '组件名称'
 			},{
 				field : 'bsMoCode',
 				title : '模具编码',

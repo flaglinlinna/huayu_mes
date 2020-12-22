@@ -49,9 +49,6 @@
   	<a class="layui-btn layui-btn-xs" lay-event="moveUp"><i class="layui-icon layui-icon-up"></i>上移</a>
   	<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="moveDown"><i class="layui-icon layui-icon-down"></i>下移</a>
 				</script>
-			<script type="text/html" id="add_statusTpl">
-            <input type="checkbox" name="jobAttr" value="1" lay-skin="primary" lay-filter="isAddStatusTpl"  />
-        </script>
 
 			<script type="text/html" id="optBar">
 				<shiro:hasPermission name="prodProc-del">
@@ -73,7 +70,7 @@
 						<!--<input type="text" name="num" placeholder="请选择" autocomplete="off"
 							class="layui-input" readonly="readonly" lay-verify="required"
 							id="num">-->
-						<select class="layui-input" id="num" name="num"></select>
+						<select class="layui-input" id="num" name="num" lay-search></select>
 					</div>
 				</div>
 				<table id="procList" lay-filter="procTable" class="layui-table"

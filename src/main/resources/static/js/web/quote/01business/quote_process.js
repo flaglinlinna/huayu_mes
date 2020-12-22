@@ -39,19 +39,34 @@ $(function() {
 			},{
 				field : 'procNo',
 				title : '工序编码',
-				templet:'<div>{{d.proc.procNo}}</div>'
+				templet:'<div>{{d.proc.procNo}}</div>',
+				style:'background-color:#d2d2d2'
 			},{
 				field : 'procName',
 				title : '工序名称',
-				templet:'<div>{{d.proc.procName}}</div>'
+				templet:'<div>{{d.proc.procName}}</div>',
+				style:'background-color:#d2d2d2'
 			}, {
 				field : 'workCenter',
 				title : '工作中心',
-				templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>'
+				templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',
+				style:'background-color:#d2d2d2'
 			}, {
 				field : 'bsOrder',
 				title : '工序顺序',"edit":"number","event": "dataCol",
 				width:80
+			},{
+				field : 'bsFeeLh',
+				title : '是否已维护人工制费',
+				width:140,
+				templet:function (d) {
+					if(d.bsFeeLh==null||d.bsFeeLh==''){
+						return "<div class='orange'>否</div>"
+					}else{
+						return "<div class='green'>是</div>"
+					}
+				},
+				align : 'center',
 			},{
 				field : 'fmemo',
 				title : '工序说明',
@@ -62,10 +77,11 @@ $(function() {
 						return d.proc.fmemo
 					}
 				},
+				style:'background-color:#d2d2d2'
 			},  {
 				fixed : 'right',
 				title : '操作',
-				width:120,
+				width:100,
 				align : 'center',
 				toolbar : '#optBar'
 			} ] ],
@@ -146,9 +162,9 @@ $(function() {
 		
 		 var tip_index = 0;
 	        $(document).on('mouseover', '#save-btn', function(data){
-	        	 tip_index =  layer.tips("<span style='font-size:13px;line-height:20px;'>123213213</span>", ($(this)),{ tips: [3, '5CBA59'],time:0,time:0,area: ['200px']});
+	        	 tip_index =  layer.tips("<span style='font-size:13px;line-height:20px;'>如果有未维护基础信息的人工制费费用，请先联系IT部填写好基础信息后再确认完成</span>", ($(this)),{ tips: [3, '5CBA59'],time:0,time:0,area: ['200px']});
 	 
-	        }).on('mouseleave', '#goodTitleMsg', function(){
+	        }).on('mouseleave', '#save-btn', function(){
 	            layer.close(tip_index);
 	        });
 	        
