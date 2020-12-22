@@ -16,7 +16,9 @@ public interface QuoteService {
 
 	public ApiResponseResult edit(Quote quote)throws Exception;
 	
-	public ApiResponseResult getSingle(Long id)throws Exception;//获取单张报价单
+	public ApiResponseResult getSingle(Long id)throws Exception;//获取单张报价单部分信息
+	
+	public ApiResponseResult getSingleAll(Long id)throws Exception;//获取单张报价单全部信息
 	
 	public ApiResponseResult getItemPage(Long id,String bsStyle)throws Exception;//获取待办项数据
 	

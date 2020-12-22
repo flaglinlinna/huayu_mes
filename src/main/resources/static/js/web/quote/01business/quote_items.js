@@ -42,14 +42,18 @@ function setTable(){
 		var status=""
 		var status_color1="blue"//状态颜色
 		var	status_color2 ="bgblue"
-		if(arr.bsStatus="0"){
+		if(arr.bsStatus=="0"){
 			status= "未开始"
-		}else if(arr.bsStatus="1"){
+		}else if(arr.bsStatus=="1"){
 			status= "未完成"
-		}else if(arr.bsStatus="2"){
+		}else if(arr.bsStatus=="2"){
 			status= "已完成"
 			status_color1="green"
 			status_color2 ="bggreen"
+		}else if(arr.bsStatus=="3"){
+			status= "不需要报价"
+			status_color1="orange"
+			status_color2 ="bgorange"
 		}
 		
 		if(arr.bsCode=="A001"){//外购件清单

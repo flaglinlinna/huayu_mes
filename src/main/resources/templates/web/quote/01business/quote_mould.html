@@ -43,6 +43,7 @@
 			<button class="layui-btn layui-btn-sm layui-btn-normal"
 				onclick="add('')">新增模具信息</button>
 			<button class="layui-btn layui-btn-sm" onclick="save()">确认完成</button>
+            <button class="layui-btn layui-btn-sm layui-btn-warm" onclick="doNoNeed()">不需要报价</button>
 			</script>
 
 			<script type="text/html" id="moveBar">
@@ -90,7 +91,6 @@
             var quoteId=[[${quoteId}]];
             var code=[[${code}]];
             var bomNameList=[[${bomNameList}]];
-            console.log(code)
         </script>
 		<script th:src="@{/js/web/quote/01business/quote_mould.js}"
 			src="/js/web/quote/01business/quote_mould.js"></script>

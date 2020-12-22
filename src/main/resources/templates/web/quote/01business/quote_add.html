@@ -37,6 +37,7 @@ color:#FF3366;
 				<fieldset class="layui-elem-field layui-field-title">
 					<legend class="legend-font" style="font-size: 14px;">报价基础信息</legend>
 				</fieldset>
+				 <input id="id" type="hidden" name="id"/>
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">报价类型</label>
@@ -123,9 +124,9 @@ color:#FF3366;
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">1.外观检验</label>
 						<div class="layui-input-inline" style="width: 340px;">		
-							<input type="checkbox" name="bsChkOutItem" lay-filter="bsChkOutItem"
+							<input type="checkbox" id="chkOutItem" 
 								value="按我司成品标准" title="按我司成品标准" lay-skin="primary"> 
-								<input type="checkbox"name="bsChkOutItem" lay-filter="bsChkOutItem" value="按客户规格书标准" lay-skin="primary"
+								<input type="checkbox"id="chkOutItem"  value="按客户规格书标准" lay-skin="primary"
 								title="按客户规格书标准">
 						</div>
 						<div class="layui-input-inline" style="width: 310px;">
@@ -138,10 +139,10 @@ color:#FF3366;
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">2.性能要求</label>
 						<div class="layui-input-inline" style="width: 340px;">
-							<input type="checkbox" name="bsFunctionItem" lay-skin="primary"
-								lay-filter="bsFunctionItem" value="按我司成品标准" title="按我司成品标准">
-							<input type="checkbox" name="bsFunctionItem" lay-skin="primary"
-								lay-filter="bsFunctionItem" value="按客户规格书标准" title="按客户规格书标准">
+							<input type="checkbox" lay-skin="primary"
+								id="functionItem" value="按我司成品标准" title="按我司成品标准">
+							<input type="checkbox"  lay-skin="primary"
+								id="functionItem" value="按客户规格书标准" title="按客户规格书标准">
 						</div>
 						<div class="layui-input-inline" style="width: 310px;">
 							<input id="bsFunction" name="bsFunction" autocomplete="off"
@@ -195,7 +196,7 @@ color:#FF3366;
 				<fieldset class="layui-elem-field layui-field-title"></fieldset>
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="width: 100%;" >
-                    <button class="layui-btn layui-btn-sm layui-btn-normal" 
+                    <button class="layui-btn layui-btn-sm layui-btn-normal"  type="button"
                     style="width:15%;margin-left:35%;"
                     lay-submit="" lay-filter="saveData">确认提交</button>
 				</div>
@@ -203,6 +204,7 @@ color:#FF3366;
 		</div>
 		<script th:inline="javascript">
 		var profitProdList=[[${profitProdList}]];
+		var quoteId=[[${quoteId}]];
 		</script>
 		<script th:src="@{/js/web/quote/01business/quote_add.js}"
 			src="/js/web/quote/01business/quote_add.js"></script>

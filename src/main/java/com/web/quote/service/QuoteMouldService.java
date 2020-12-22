@@ -25,4 +25,6 @@ public interface QuoteMouldService {
    public ApiResponseResult doActQuote(Long id,BigDecimal bsActQuote)  throws Exception;
    
    public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
+   
+   public ApiResponseResult doNoNeed(String quoteId ,String bsCode)throws Exception;
 }

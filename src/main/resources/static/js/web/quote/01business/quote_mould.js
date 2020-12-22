@@ -2,6 +2,7 @@
  * 产品工艺流程
  */
 var pageCurr;
+var totalCount=0;//表格记录数
 $(function() {
 	layui.use([ 'form', 'table' , 'tableSelect' ], function() {
 		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
@@ -39,19 +40,23 @@ $(function() {
 			},{
 				field : 'bsMoCode',
 				title : '模具编码',
-				templet:'<div>{{d.mjProcFee.productCode}}</div>'
+				templet:'<div>{{d.mjProcFee.productCode}}</div>',
+				style:'background-color:#d2d2d2'
 			},{
 				field : 'bsMoName',
 				title : '模具名称',
-				templet:'<div>{{d.mjProcFee.productName}}</div>'
+				templet:'<div>{{d.mjProcFee.productName}}</div>',
+				style:'background-color:#d2d2d2'
 			}, {
 				field : 'bsMoFee',
 				title : '模具成本',
-				templet:'<div>{{d.mjProcFee.feeAll}}</div>'
+				templet:'<div>{{d.mjProcFee.feeAll}}</div>',
+				style:'background-color:#d2d2d2'
 			}, {
 				field : 'stQuote',
 				title : '参考报价',
-				templet:'<div>{{d.mjProcFee.stQuote}}</div>'
+				templet:'<div>{{d.mjProcFee.stQuote}}</div>',
+				style:'background-color:#d2d2d2'
 			},{
 				field : 'bsActQuote',
 				title : '实际报价',"edit":"number","event": "dataCol",
@@ -65,6 +70,7 @@ $(function() {
 			} ] ],
 			done : function(res, curr, count) {
 				console.log(res)
+				totalCount=res.count
 				pageCurr = curr;
 				merge(res.data,['bsName',],[1,1]);
 			}
@@ -156,9 +162,10 @@ $(function() {
 			, 
 			{field : 'checkColumn',type:"checkbox",},
 			{field : 'productCode',title : '产品编码', minWidth: 250},
-			{field : 'productName',title : '产品名称', minWidth: 250},
+			{field : 'productName',title : '产品名称', minWidth: 200},
+			{field : 'stQuote',title : '参考报价', minWidth: 100},
 			{field : 'feeAll',title : '评估总费用（含税）', minWidth: 200},
-			{field : 'structureMj',title : '模具结构', minWidth: 250},
+			{field : 'structureMj',title : '模具结构', minWidth: 200},
 			//{type: 'toolbar',title: '操作',width: 160,align : 'center',toolbar: '#moveBar'}
 			] ],
 			data:[]
@@ -294,6 +301,10 @@ function add() {
 	openProc(null, "添加工艺流程");
 }
 function save(){
+	if(totalCount==0){
+		layer.alert("当前模块无数据，“确认提交”不可用")
+		return false;
+	}
 	var param = {"quoteId" : quoteId ,"code":code};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
@@ -313,7 +324,32 @@ function save(){
 				});
 	});
 }
-
+//设定-不需要报价
+function doNoNeed(){
+	if(totalCount>0){
+		layer.alert("当前模块已有数据，“不需要报价”不可用")
+		return false;
+	}
+	
+	var param = {"quoteId" : quoteId ,"code":code};
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/quoteMould/doNoNeed", JSON.stringify(param),
+				function(data) {
+			console.log(data)
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("提交成功！");
+							loadAll();
+						} else {
+							layer.alert(data.msg);
+						}
+					}
+				});
+	});
+}
 
 function delClientProc( id) {
 	if (id != null) {

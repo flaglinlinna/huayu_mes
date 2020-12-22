@@ -232,7 +232,7 @@ public class Quotelmpl implements QuoteService {
     }
     
     /**
-     * 获取单张报价单
+     * 获取单张报价单部分内容
      * **/
     public ApiResponseResult getSingle(Long id)throws Exception{
     	if(id == null){
@@ -258,6 +258,22 @@ public class Quotelmpl implements QuoteService {
         return ApiResponseResult.success().data(map);
     }
 
+    /**
+     * 根据ID获取全部内容
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getSingleAll(Long id) throws Exception{
+        if(id == null){
+            return ApiResponseResult.failure("报价单ID不能为空！");
+        }
+        Quote o = quoteDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("该报价单不存在！");
+        }
+        return ApiResponseResult.success().data(o);
+    }
+    
 	@Override
 	public ApiResponseResult doItemFinish(String code, Long quoteId) throws Exception {
 		// TODO Auto-generated method stub

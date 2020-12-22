@@ -43,10 +43,11 @@ public class QuoteController extends WebController {
 
 	@ApiOperation(value = "报价新增信息列表页", notes = "报价新增信息列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteAdd")
-	public ModelAndView toQuoteAdd() {
+	public ModelAndView toQuoteAdd(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult profitProdList = quoteService.getProfitProd();
+			mav.addObject("quoteId", quoteId);
 			mav.addObject("profitProdList", profitProdList);
 			mav.setViewName("/web/quote/01business/quote_add");// 返回路径
 		} catch (Exception e) {
@@ -159,14 +160,14 @@ public class QuoteController extends WebController {
     }
 	
 	@ApiOperation(value = "编辑报价单", notes = "编辑报价单", hidden = true)
-	@RequestMapping(value = "/eidt", method = RequestMethod.POST)
+	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult eidt(@RequestBody Quote quote) {
-		String method = "quote/eidt";
+	public ApiResponseResult edit(@RequestBody Quote quote) {
+		String method = "quote/edit";
 		String methodName = "编辑报价单";
 		try {
 			ApiResponseResult result = quoteService.edit(quote);
-			logger.debug("编辑报价单=eidt:");
+			logger.debug("编辑报价单=edit:");
 			getSysLogService().success(module, method, methodName, quote.toString());
 			return result;
 		} catch (Exception e) {
@@ -176,6 +177,24 @@ public class QuoteController extends WebController {
 			return ApiResponseResult.failure("报价单编辑失败！");
 		}
 	}
+	
+	@ApiOperation(value = "根据ID获取报价单数据", notes = "根据ID获取报价单数据", hidden = true)
+    @RequestMapping(value = "/getSingleAll", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult getSingleAll(@RequestBody Map<String, Object> params){
+        String method = "quote/getSingleAll";String methodName ="根据ID获取报价单数据";
+        long id = Long.parseLong(params.get("id").toString()) ;
+        try{
+            ApiResponseResult result = quoteService.getSingleAll(id);
+            logger.debug("根据ID获取报价单数据=getSingleAll:");
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("根据ID获取报价单数据失败！", e);
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            return ApiResponseResult.failure("获取不良类别失败！");
+        }
+    }
 	
 	@ApiOperation(value = "设置报价单状态", notes = "设置报价单状态", hidden = true)
     @RequestMapping(value = "/doStatus", method = RequestMethod.POST)

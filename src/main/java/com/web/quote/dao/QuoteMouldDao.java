@@ -23,7 +23,6 @@ public interface QuoteMouldDao extends CrudRepository<QuoteMould, Long>,JpaSpeci
 	
 	public List<QuoteMould> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 	
-	
 	@Modifying
     @Query("update QuoteMould t set t.delFlag=1 where t.bsName=?1 and t.pkQuote=?2 and t.delFlag=0")
     public void delteQuoteMouldByBsNameAndPkQuote(String  bsName,Long pkQuote);//根据组件名称修改表数据
@@ -35,5 +34,6 @@ public interface QuoteMouldDao extends CrudRepository<QuoteMould, Long>,JpaSpeci
     @Query("update QuoteMould t set t.bsStatus=1 where t.pkQuote=?1 and t.delFlag=0")
     public void saveQuoteMouldByQuoteId(Long  quoteId);//变更字段状态
 	
-	public int countByDelFlagAndPkQuoteAndBsActQuote(Integer delFlag,Long pkQuote, BigDecimal bsActQuote);//查询编号是否存在
+	public int countByDelFlagAndPkQuoteAndBsActQuote(Integer delFlag,Long pkQuote, BigDecimal bsActQuote);//删除同报价单下的同名记录
+
 }

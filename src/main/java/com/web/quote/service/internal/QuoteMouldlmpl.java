@@ -24,6 +24,7 @@ import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.MjProcFeeDao;
 import com.web.basePrice.entity.MjProcFee;
 import com.web.basePrice.entity.Proc;
+import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteMouldDao;
 import com.web.quote.entity.QuoteMould;
 import com.web.quote.entity.QuoteProcess;
@@ -44,6 +45,9 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 	
 	@Autowired
 	MjProcFeeDao mjProcFeeDao;
+	
+	@Autowired
+	QuoteItemDao quoteItemDao;
 	
 	@Autowired
 	QuoteService quoteService;
@@ -185,5 +189,20 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		 //写个一个根据quoteId获取其所有记录，并批量修改修改人，修改时间字段 的DAO
 		 return ApiResponseResult.success("提交成功！");
+	 }
+	 
+	 /**
+	  * 不需要报价状态设置
+	  * **/
+	 public ApiResponseResult doNoNeed(String quoteId,String bsCode)throws Exception{
+		 if(quoteId==null||quoteId==""){
+			 return ApiResponseResult.failure("报价单不可为空");
+		 }
+		 if(bsCode==null||bsCode==""){
+			 return ApiResponseResult.failure("报价单项目编码不可为空");
+		 }
+		 //状态 3：不需要填写
+		 quoteItemDao.switchStatus(3, Long.parseLong(quoteId), bsCode);
+		 return ApiResponseResult.success("操作成功！");
 	 }
 }
