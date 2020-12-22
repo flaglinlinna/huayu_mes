@@ -82,6 +82,10 @@ $(function() {
 						title : '市场定位',width : 150
 					},
 					{
+						field : 'bsManageFee',
+						title : '管理费用（10%）',width : 140
+					},
+					{
 						field : 'bsMaterial',
 						title : '客户提供资料',width : 140, sort: true
 					},

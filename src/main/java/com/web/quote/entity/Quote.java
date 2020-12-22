@@ -1,5 +1,6 @@
 package com.web.quote.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -253,6 +254,13 @@ public class Quote extends BaseEntity {
 	@ApiModelProperty(name = "bsChkOut", value = "外观检验")
 	@Column(length = 200)
 	protected String bsChkOut;
+	
+	/**
+	 * 管理费用
+	 */
+	@ApiModelProperty(name = "bsManageFee", value = "管理费用")
+	@Column(length = 20)
+	protected BigDecimal bsManageFee;
 	
 	/**
 	 * 功能性能项【多选】
@@ -693,7 +701,12 @@ public class Quote extends BaseEntity {
 	public void setBsStatus2Packag(int bsStatus2Packag) {
 		this.bsStatus2Packag = bsStatus2Packag;
 	}
-	
-	
-	
+
+	public BigDecimal getBsManageFee() {
+		return bsManageFee;
+	}
+
+	public void setBsManageFee(BigDecimal bsManageFee) {
+		this.bsManageFee = bsManageFee;
+	}
 }

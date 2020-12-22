@@ -21,6 +21,14 @@ $(function() {
 			                }
 			                return false;			
 						});
+						form.verify({
+							num: function(value){
+								if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false)
+								{
+									return '只能输入数字';
+								}
+							}
+						});
 						
 						// 日期选择器
 						laydate.render({// 完成日期

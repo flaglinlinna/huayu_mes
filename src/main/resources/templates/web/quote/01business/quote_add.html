@@ -22,8 +22,9 @@
 .long-item .layui-input-block {
 	margin-left: 160px;
 }
-.legend-font{
-color:#FF3366;
+
+.legend-font {
+	color: #FF3366;
 }
 </style>
 <body class="layui-layout-body">
@@ -33,11 +34,11 @@ color:#FF3366;
 		<div style="margin: 10px">
 			<form id="itemForm" class="layui-form layui-form-pane"
 				lay-filter="itemForm" method="post" action="">
-				<h3 style="text-align:center;">华誉精密产品报价需求单</h3>
+				<h3 style="text-align: center;">华誉精密产品报价需求单</h3>
 				<fieldset class="layui-elem-field layui-field-title">
 					<legend class="legend-font" style="font-size: 14px;">报价基础信息</legend>
 				</fieldset>
-				 <input id="id" type="hidden" name="id"/>
+				<input id="id" type="hidden" name="id" />
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">报价类型</label>
@@ -52,23 +53,35 @@ color:#FF3366;
 							</select>
 						</div>
 						<label class="layui-form-label layui-required">完成日期</label>
-						<div class="layui-input-inline" style="width: 130px;">
-							<input id="bsFinishTime" lay-verify="required" name="bsFinishTime"
-								autocomplete="off" class="layui-input" type="text" />
+						<div class="layui-input-inline" style="width: 140px;">
+							<input id="bsFinishTime" lay-verify="required"
+								name="bsFinishTime" autocomplete="off" class="layui-input"
+								type="text" />
 						</div>
+						<label class="layui-form-label layui-required">管理费用</label>
+						<div class="layui-input-inline">
+							<input id="bsManageFee" autocomplete="off" name="bsManageFee"
+								class="layui-input" type="text" lay-verify="required|num"/> <span
+								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
+						</div>
+
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
 						<label class="layui-form-label">报价备注</label>
-						<div class="layui-input-inline" style="width: 360px;">
+						<div class="layui-input-inline" style="width: 450px;">
 							<input id="bsRemarks" autocomplete="off" name="bsRemarks"
 								class="layui-input" type="text" />
 						</div>
 					</div>
 				</div>
-				<hr style="margin-top:10px;margin-bottom:10px;">
+				<hr style="margin-top: 10px; margin-bottom: 10px;">
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">产品型号</label>
 					<div class="layui-input-inline">
 						<input id="bsProd" autocomplete="off" name="bsProd"
-						lay-verify="required" class="layui-input" type="text" />
+							lay-verify="required" class="layui-input" type="text" />
 					</div>
 					<label class="layui-form-label">相似产品</label>
 					<div class="layui-input-inline" style="width: 130px;">
@@ -77,8 +90,8 @@ color:#FF3366;
 					</div>
 					<label class="layui-form-label layui-required">产品类型</label>
 					<div class="layui-input-inline" style="width: 200px;">
-						<select id="pkProfitProd" lay-verify="required"  autocomplete="off"
-						name="pkProfitProd" class="layui-select" lay-search>
+						<select id="pkProfitProd" lay-verify="required" autocomplete="off"
+							name="pkProfitProd" class="layui-select" lay-search>
 						</select>
 					</div>
 				</div>
@@ -104,14 +117,13 @@ color:#FF3366;
 						<label class="layui-form-label layui-required">客户提供资料</label>
 						<div class="layui-input-inline" style="width: 550px;">
 							<input type="checkbox" id="material" title="ID图" value="ID图"
-								lay-skin="primary"> 
-								<input type="checkbox" 
-								id="material" title="sample"  value="sample" lay-skin="primary"> 
-								<input
+								lay-skin="primary"> <input type="checkbox" id="material"
+								title="sample" value="sample" lay-skin="primary"> <input
 								type="checkbox" id="material" title="产品规格书" value="产品规格书"
-								lay-skin="primary"> 
-								<input type="checkbox" id="material" title="BOM清单" value="BOM清单" lay-skin="primary">
-								<input type="checkbox" id="material" title="3D图" value="3D图"  lay-skin="primary">
+								lay-skin="primary"> <input type="checkbox" id="material"
+								title="BOM清单" value="BOM清单" lay-skin="primary"> <input
+								type="checkbox" id="material" title="3D图" value="3D图"
+								lay-skin="primary">
 						</div>
 					</div>
 				</div>
@@ -123,11 +135,11 @@ color:#FF3366;
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">1.外观检验</label>
-						<div class="layui-input-inline" style="width: 340px;">		
-							<input type="checkbox" id="chkOutItem" 
-								value="按我司成品标准" title="按我司成品标准" lay-skin="primary"> 
-								<input type="checkbox"id="chkOutItem"  value="按客户规格书标准" lay-skin="primary"
-								title="按客户规格书标准">
+						<div class="layui-input-inline" style="width: 340px;">
+							<input type="checkbox" id="chkOutItem" value="按我司成品标准"
+								title="按我司成品标准" lay-skin="primary"> <input
+								type="checkbox" id="chkOutItem" value="按客户规格书标准"
+								lay-skin="primary" title="按客户规格书标准">
 						</div>
 						<div class="layui-input-inline" style="width: 310px;">
 							<input id="bsChkOut" name="bsChkOut" autocomplete="off"
@@ -139,10 +151,10 @@ color:#FF3366;
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">2.性能要求</label>
 						<div class="layui-input-inline" style="width: 340px;">
-							<input type="checkbox" lay-skin="primary"
-								id="functionItem" value="按我司成品标准" title="按我司成品标准">
-							<input type="checkbox"  lay-skin="primary"
-								id="functionItem" value="按客户规格书标准" title="按客户规格书标准">
+							<input type="checkbox" lay-skin="primary" id="functionItem"
+								value="按我司成品标准" title="按我司成品标准"> <input type="checkbox"
+								lay-skin="primary" id="functionItem" value="按客户规格书标准"
+								title="按客户规格书标准">
 						</div>
 						<div class="layui-input-inline" style="width: 310px;">
 							<input id="bsFunction" name="bsFunction" autocomplete="off"
@@ -155,17 +167,15 @@ color:#FF3366;
 						<label class="layui-form-label layui-required">3.环保要求</label>
 						<div class="layui-input-inline" style="width: 730px;">
 							<input type="checkbox" id="require" title="RoHS"
-								lay-skin="primary"> <input type="checkbox"
-								id="require" title="RECAH" lay-skin="primary"> <input
-								type="checkbox" id="require" title="PAHS"
-								lay-skin="primary"> <input type="checkbox"
-								id="require" title="CA65" lay-skin="primary"> <input
-								type="checkbox" id="require" title="3BPA"
-								lay-skin="primary"> <input type="checkbox"
-								id="require" title="HFS" lay-skin="primary"> <input
-								type="checkbox" id="require" title="无卤" lay-skin="primary">
-							<input type="checkbox" id="require" title="其他"
-								lay-skin="primary">
+								lay-skin="primary"> <input type="checkbox" id="require"
+								title="RECAH" lay-skin="primary"> <input type="checkbox"
+								id="require" title="PAHS" lay-skin="primary"> <input
+								type="checkbox" id="require" title="CA65" lay-skin="primary">
+							<input type="checkbox" id="require" title="3BPA"
+								lay-skin="primary"> <input type="checkbox" id="require"
+								title="HFS" lay-skin="primary"> <input type="checkbox"
+								id="require" title="无卤" lay-skin="primary"> <input
+								type="checkbox" id="require" title="其他" lay-skin="primary">
 						</div>
 					</div>
 				</div>
@@ -187,19 +197,19 @@ color:#FF3366;
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<div class="layui-input-inline" style="width: 700px;">
-							<textarea id="bsCustRequire" name="bsCustRequire" placeholder="请输入内容"
-								class="layui-textarea"></textarea>
+							<textarea id="bsCustRequire" name="bsCustRequire"
+								placeholder="请输入内容" class="layui-textarea"></textarea>
 						</div>
 					</div>
 				</div>
-				
+
 				<fieldset class="layui-elem-field layui-field-title"></fieldset>
 				<div class="layui-form-item">
-					<div class="layui-input-block" style="width: 100%;" >
-                    <button class="layui-btn layui-btn-sm layui-btn-normal"  type="button"
-                    style="width:15%;margin-left:35%;"
-                    lay-submit="" lay-filter="saveData">确认提交</button>
-				</div>
+					<div class="layui-input-block" style="width: 100%;">
+						<button class="layui-btn layui-btn-sm layui-btn-normal"
+							type="button" style="width: 15%; margin-left: 35%;" lay-submit=""
+							lay-filter="saveData">确认提交</button>
+					</div>
 			</form>
 		</div>
 		<script th:inline="javascript">

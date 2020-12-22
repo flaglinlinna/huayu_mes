@@ -222,6 +222,7 @@ public class Quotelmpl implements QuoteService {
         o.setBsMaterial(quote.getBsMaterial());
         o.setBsChkOutItem(quote.getBsChkOutItem());
         o.setBsChkOut(quote.getBsChkOut());
+        o.setBsManageFee(quote.getBsManageFee());
         o.setBsFunctionItem(quote.getBsFunctionItem());
         o.setBsFunction(quote.getBsFunction());
         o.setBsRequire(quote.getBsRequire());
