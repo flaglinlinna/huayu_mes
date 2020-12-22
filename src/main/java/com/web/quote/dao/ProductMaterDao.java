@@ -12,4 +12,6 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 	public List<ProductMater> findAll();
 	ProductMater findById(long id);
 	public List<ProductMater> findByDelFlag(Integer delFlag);
+	
+	public List<ProductMater> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 }

@@ -1,5 +1,6 @@
 package com.web.quote.service.internal;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,10 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseSql;
 import com.web.quote.dao.ProductMaterDao;
+import com.web.quote.dao.ProductProcessDao;
+import com.web.quote.dao.QuoteDao;
 import com.web.quote.entity.ProductMater;
+import com.web.quote.entity.ProductProcess;
 import com.web.quote.entity.Quote;
 import com.web.quote.service.QuoteSumService;
 
@@ -26,6 +30,11 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 	
 	@Autowired
     private ProductMaterDao productMaterDao;
+	@Autowired
+    private QuoteDao quoteDao;
+	@Autowired
+    private ProductProcessDao productProcessDao;
+	
 	
     /**
      * 查询列表
@@ -94,5 +103,60 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		
 		return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
+	}
+
+	@Override
+	public ApiResponseResult getSumByQuote(String quoteId) throws Exception {
+		// TODO Auto-generated method stub
+		if(StringUtils.isEmpty(quoteId)){
+			return ApiResponseResult.failure("报价单ID不能为空");
+		}
+		Map map = new HashMap();
+		Quote quote = quoteDao.findById(Long.parseLong(quoteId));
+		map.put("Quote", quote);//报价基础信息
+		
+		//1:材料价格汇总
+		//BigDecimal cl_all = new BigDecimal(0);//材料总价格
+		BigDecimal cl_hardware = new BigDecimal(0);//五金
+		BigDecimal cl_molding = new BigDecimal(0);//注塑
+		BigDecimal cl_surface = new BigDecimal(0);//表面处理
+		BigDecimal cl_packag = new BigDecimal(0);//组装
+		
+		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuote(0,Long.valueOf(quoteId));
+		for(ProductMater pm:lpm){
+			if(pm.getBsType().equals("hardware")){
+				cl_hardware = cl_hardware.add(pm.getBsFee());
+			}else if(pm.getBsType().equals("molding")){
+				cl_molding = cl_molding.add(pm.getBsFee());
+			}else if(pm.getBsType().equals("surface")){
+				cl_surface = cl_surface.add(pm.getBsFee());
+			}else if(pm.getBsType().equals("packag")){
+				cl_packag = cl_packag.add(pm.getBsFee());
+			}
+		}
+		
+		//2:人工成本+制造费用
+		BigDecimal lh_hardware = new BigDecimal(0);//五金
+		BigDecimal lh_molding = new BigDecimal(0);//注塑
+		BigDecimal lh_surface = new BigDecimal(0);//表面处理
+		BigDecimal lh_packag = new BigDecimal(0);//组装
+		BigDecimal lw_hardware = new BigDecimal(0);//五金
+		BigDecimal lw_molding = new BigDecimal(0);//注塑
+		BigDecimal lw_surface = new BigDecimal(0);//表面处理
+		BigDecimal lw_packag = new BigDecimal(0);//组装
+		List<ProductProcess> lpp = productProcessDao.findByDelFlagAndPkQuote(0,Long.valueOf(quoteId));
+		for(ProductProcess pp:lpp){
+			if(pp.getBsType().equals("hardware")){
+				lh_hardware = lh_hardware.add(pp.getBsFeeLhAll());
+				//lh_hardware = lh_hardware.add(pp.getBsFeeLhAll());
+			}else if(pp.getBsType().equals("molding")){
+				//lh_molding = lh_molding.add(pp.getBsFeeLhAll());
+			}else if(pp.getBsType().equals("surface")){
+				//lh_surface = lh_surface.add(pp.getBsFeeLhAll());
+			}else if(pp.getBsType().equals("packag")){
+				//lh_packag = lh_packag.add(pp.getBsFeeLhAll());
+			}
+		}
+		return ApiResponseResult.success().data(map);
 	}
 }

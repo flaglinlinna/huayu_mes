@@ -1,18 +1,18 @@
 package com.web.quote.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import com.app.base.entity.BaseEntity;
-import com.web.basePrice.entity.BjWorkCenter;
 import com.web.basePrice.entity.Proc;
 
 import io.swagger.annotations.ApiModel;
@@ -105,14 +105,14 @@ public class QuoteProcess extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "feeLh", value = "人工费率（元/小时）")
 	@Column(length = 50)
-	protected String bsFeeLh;
+	protected BigDecimal bsFeeLh;
 
 	/**
 	 * 制费费率（元/小时）
 	 */
 	@ApiModelProperty(name = "feeMh", value = "制费费率（元/小时）")
 	@Column(length = 50)
-	protected String bsFeeMh;
+	protected BigDecimal bsFeeMh;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -196,20 +196,21 @@ public class QuoteProcess extends BaseEntity {
 		this.bsNeed = bsNeed;
 	}
 
-	public String getBsFeeLh() {
+	public BigDecimal getBsFeeLh() {
 		return bsFeeLh;
 	}
 
-	public void setBsFeeLh(String bsFeeLh) {
+	public void setBsFeeLh(BigDecimal bsFeeLh) {
 		this.bsFeeLh = bsFeeLh;
 	}
 
-	public String getBsFeeMh() {
+	public BigDecimal getBsFeeMh() {
 		return bsFeeMh;
 	}
 
-	public void setBsFeeMh(String bsFeeMh) {
+	public void setBsFeeMh(BigDecimal bsFeeMh) {
 		this.bsFeeMh = bsFeeMh;
 	}
+	
 	
 }
