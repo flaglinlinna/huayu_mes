@@ -18,4 +18,7 @@ public interface ProductMaterService {
 	public ApiResponseResult getList(String keyword,String bsType, String quoteId,PageRequest pageRequest) throws Exception;
 
     public ApiResponseResult getListByPkQuote(Long pkQuote, PageRequest pageRequest) throws Exception;
+    
+    //20201222-fyx-计算报价汇总
+    public ApiResponseResult doSumFee(Long pkQuote) throws Exception;
 }

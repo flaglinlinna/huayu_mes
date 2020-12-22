@@ -2,7 +2,6 @@ package com.web.quote.service.internal;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +20,10 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.basePrice.dao.BaseFeeDao;
 import com.web.basePrice.dao.ProcDao;
+import com.web.basePrice.entity.BaseFee;
 import com.web.basePrice.entity.Proc;
-import com.web.basic.entity.ProdProcDetail;
 import com.web.quote.dao.QuoteBomDao;
 import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.QuoteBom;
@@ -50,6 +50,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	
 	@Autowired
 	QuoteService quoteService;
+	@Autowired
+	BaseFeeDao baseFeeDao;
 
 	/**
 	 * 获取bom列表-下拉选择
@@ -206,5 +208,27 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 quoteProcessDao.saveQuoteProcessByQuoteId(Long.parseLong(quoteId));
 		 
 		 return ApiResponseResult.success("提交成功！");
+	 }
+	 /**
+	  * 根据工作中心id和工序id查询人工和制费
+	  * @param w_id
+	  * @param p_id
+	  * @return
+	  */
+	 private String[] getLhBy(Long w_id,Long p_id ){
+		 String[] strs = new String[2];
+		 strs[0]="";strs[1]="";
+		 List<BaseFee> lbl = baseFeeDao.findByDelFlagAndWorkcenterIdAndProcId(0, w_id, p_id);
+		 if(lbl.size() == 0){
+			 lbl = baseFeeDao.findByDelFlagAndWorkcenterId(0, w_id);
+			 if(lbl.size()>0){
+				 strs[0] = lbl.get(0).getFeeLh();
+				 strs[1] = lbl.get(0).getFeeMh();
+			 }
+		 }else{
+			 strs[0] = lbl.get(0).getFeeLh();
+			 strs[1] = lbl.get(0).getFeeMh();
+		 }
+		 return strs;
 	 }
 }

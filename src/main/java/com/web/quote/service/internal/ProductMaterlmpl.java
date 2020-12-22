@@ -250,4 +250,12 @@ public class ProductMaterlmpl implements ProductMaterService {
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
+
+	@Override
+	public ApiResponseResult doSumFee(Long pkQuote) throws Exception {
+		// TODO Auto-generated method stub
+		//五金材料,表面处理,组装-材料单价*材料用量/基数
+		//注塑-材料单价*(制品重+水口重/穴数)/基数
+		return null;
+	}
 }

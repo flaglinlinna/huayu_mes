@@ -55,7 +55,7 @@ function setTable(){
 			//材料
 			link = "/productMater/toProductMater?bsType="+Style+"&quoteId="+arr.quote.id;
 		}else if(arr.bsCode.indexOf("C00") != -1){
-			//link="/quote/toQuoteBom?quoteId="+arr.quote.id+"&code="+arr.bsCode
+			link = "/productProcess/toProductProcess?bsType="+Style+"&quoteId="+arr.quote.id;
 		}
 		html += '<tr><td class="td1" style="width: 20%; "><button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;" onclick=toPage("'+link+'","'+arr.bsName+'")><span>' + arr.bsName + 
 		'</span></button></td><td  class="td1 '+status_color1+'" style="width: 20%;"><span class="circle '+status_color2+'"></span>' +  status + 

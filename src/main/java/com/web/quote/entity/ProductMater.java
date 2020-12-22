@@ -171,6 +171,13 @@ public class ProductMater extends BaseEntity {
 	@ApiModelProperty(name = "bsAssess", value = "评估价格")
 	@Column(length = 50)
 	protected BigDecimal bsAssess;
+	
+	/**
+	 * 总价格(未税)
+	 */
+	@ApiModelProperty(name = "bsFee", value = "总价格(未税)")
+	@Column(length = 50)
+	protected BigDecimal bsFee;
 
 
 	public Long getPkQuote() {
@@ -332,4 +339,13 @@ public class ProductMater extends BaseEntity {
 	public void setBsAssess(BigDecimal bsAssess) {
 		this.bsAssess = bsAssess;
 	}
+
+	public BigDecimal getBsFee() {
+		return bsFee;
+	}
+
+	public void setBsFee(BigDecimal bsFee) {
+		this.bsFee = bsFee;
+	}
+	
 }
