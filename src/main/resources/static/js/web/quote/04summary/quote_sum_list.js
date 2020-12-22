@@ -144,7 +144,7 @@ $(function() {
 					// 编辑
 					open("编辑项目资料")
 				}else if(obj.event === 'view'){
-					parent.layui.index.openTabsPage(context+'/purchase/toPurchaseEdite?quoteId='+data.id,'采购填报价格');
+					parent.layui.index.openTabsPage(context+'/quoteSum/toQuoteSum?quoteId='+data.id,'报价单汇总详情');
 				}else if(obj.event === 'check'){
 					//先判断是否填写完成资料-暂时未校验-20201218-fyx
 					if(true){

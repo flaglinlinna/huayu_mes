@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='报价单汇总详情'"></head>
+<style th:inline="text">
+.layui-form-label {
+	text-align: right;
+}
+
+.layui-form-switch {
+	margin-top: 0px;
+}
+
+.layui-form-radio {
+	margin: 0px 10px 0 0;
+}
+
+.long-item .layui-form-label {
+	width: 160px;
+}
+
+.long-item .layui-input-block {
+	margin-left: 160px;
+}
+.legend-font{
+color:#FF3366;
+}
+.quote-from .layui-form-pane .layui-form-label{
+width:98px;
+}
+.quote-from .layui-form-pane .layui-input-block{
+margin-left:98px;
+}
+</style>
+<body class="layui-layout-body">
+	<div th:replace="audio/fragment/audio :: audio"></div>
+	<div th:replace="audio/fragment/saomiao :: saomiao"></div>
+	<div class="layui-layout layui-layout-admin">
+		<div style="margin: 10px" class="quote-from">
+			<form id="itemForm" class="layui-form layui-form-pane"
+				lay-filter="itemForm" method="post" action="">
+				<h3 style="text-align:center;">华誉精密产品-报价汇总单</h3>
+				<fieldset class="layui-elem-field layui-field-title" style="margin:10px 0 10px;">
+					<legend class="legend-font" style="font-size: 14px;">报价基础信息</legend>
+				</fieldset>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label layui-required">报价类型</label>
+						<div class="layui-input-inline">
+							<select id="bsType" lay-verify="required" name="bsType"
+								autocomplete="off" class="layui-select" lay-search>
+								<option value="">请选择</option>
+								<option value="1">类型1</option>
+								<option value="2">类型2</option>
+								<option value="3">类型3</option>
+								<option value="4">类型4</option>
+							</select>
+						</div>
+						<label class="layui-form-label layui-required">完成日期</label>
+						<div class="layui-input-inline" style="width: 130px;">
+							<input id="bsFinishTime" lay-verify="required" name="bsFinishTime"
+								autocomplete="off" class="layui-input" type="text" />
+						</div>
+						<label class="layui-form-label">报价备注</label>
+						<div class="layui-input-inline" style="width: 360px;">
+							<input id="bsRemarks" autocomplete="off" name="bsRemarks"
+								class="layui-input" type="text" />
+						</div>
+					</div>
+				</div>
+				<fieldset class="layui-elem-field layui-field-title"style="margin:10px 0 10px;">
+					<legend class="legend-font" style="font-size: 14px;">报价结构</legend>
+				</fieldset>
+				 <div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label class="layui-form-label">系统报价</label>
+						<div class="layui-input-block">
+							<input id=""  autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">生产成本</label>
+						<div class="layui-input-inline">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+							<span style=" position: absolute; top: 8%; right: 0%; display: table-cell;background-color: #d2d2d2;white-space: nowrap; padding: 7px 10px;">10%</span>
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">净利润</label>
+						<div class="layui-input-inline" >
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+							<span style=" position: absolute; top: 8%; right: 0%; display: table-cell;background-color: #d2d2d2;white-space: nowrap; padding: 7px 10px;">10%</span>
+						</div>
+				    </div>
+				  </div>
+				   <div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label class="layui-form-label">模具费用</label>
+				      <div class="layui-input-block">
+				        <input id=""  autocomplete="off" class="layui-input" type="text" />
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">管理费用</label>
+						<div class="layui-input-inline">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+							<span style=" position: absolute; top: 8%; right: 0%; display: table-cell;background-color: #d2d2d2;white-space: nowrap; padding: 7px 10px;">10%</span>
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">毛利</label>
+						<div class="layui-input-inline" >
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+							<span style=" position: absolute; top: 8%; right: 0%; display: table-cell;background-color: #d2d2d2;white-space: nowrap; padding: 7px 5px;">15.8%</span>
+						</div>
+				    </div>
+				  </div>
+				
+				<fieldset class="layui-elem-field layui-field-title" style="margin:10px 0 10px;">
+					<legend class="legend-font" style="font-size: 14px;">生产成本构成</legend>
+				</fieldset>
+				<div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label class="layui-form-label">五金材料</label>
+				      <div class="layui-input-block" style="width: 110px;">
+				        <input id=""  autocomplete="off" class="layui-input" type="text" />
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">注塑材料</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">表面处理材料</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">组装材料</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">外协加工</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				  </div>
+				  <div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label class="layui-form-label">五金人工</label>
+				      <div class="layui-input-block" style="width: 110px;">
+				        <input id=""  autocomplete="off" class="layui-input" type="text" />
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">注塑人工</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">表面处理人工</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">组装人工</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">后工序损料</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				  </div>
+				  <div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label class="layui-form-label">五金制费</label>
+				      <div class="layui-input-block" style="width: 110px;">
+				        <input id=""  autocomplete="off" class="layui-input" type="text" />
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">注塑制费</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">表面处理制费</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">组装制费</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+						</div>
+				    </div>
+				  </div>
+				  <div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label class="layui-form-label">五金小计</label>
+				      <div class="layui-input-block" style="width: 110px;">
+				        <input id=""  autocomplete="off" class="layui-input" type="text" />
+				        <span style=" position: absolute; top: 8%; right: 0%; display: table-cell;background-color: #d2d2d2;white-space: nowrap; padding: 7px 10px;">10%</span>
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">注塑小计</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+							<span style=" position: absolute; top: 8%; right: 0%; display: table-cell;background-color: #d2d2d2;white-space: nowrap; padding: 7px 10px;">10%</span>
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">表面处理小计</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+							<span style=" position: absolute; top: 8%; right: 0%; display: table-cell;background-color: #d2d2d2;white-space: nowrap; padding: 7px 10px;">10%</span>
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">组装小计</label>
+						<div class="layui-input-inline" style="width: 110px;">
+							<input id="" autocomplete="off" class="layui-input" type="text" />
+							<span style=" position: absolute; top: 8%; right: 0%; display: table-cell;background-color: #d2d2d2;white-space: nowrap; padding: 7px 10px;">10%</span>
+						</div>
+				    </div>
+				  </div>
+
+			</form>
+		</div>
+		<script th:inline="javascript">
+		var quoteId=[[${quoteId}]];
+		</script>
+		<!-- <script th:src="@{/js/web/quote/01business/quote_add.js}"
+			src="/js/web/quote/01business/quote_add.js"></script> -->
+	</div>
+</body>
+</html>

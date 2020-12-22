@@ -43,12 +43,12 @@ public class QuoteSumController extends WebController {
 	}
 
 	@ApiOperation(value = "报价单汇详情页", notes = "报价单汇详情页", hidden = true)
-	@RequestMapping(value = "/toPurchaseEdite")
-	public ModelAndView toPurchaseEdite(String quoteId) {
+	@RequestMapping(value = "/toQuoteSum")
+	public ModelAndView toQuoteSum(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			mav.addObject("quoteId", quoteId);
-			mav.setViewName("/web/quote/03purchase/purchase_edite");// 返回路径
+			mav.setViewName("/web/quote/04summary/quote_sum");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("报价单汇详情页失败！", e);
