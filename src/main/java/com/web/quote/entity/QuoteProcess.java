@@ -99,6 +99,20 @@ public class QuoteProcess extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "bsOrder", value = "工序顺序")
 	protected int bsOrder;
+	
+	/**
+	 * 人工费率（元/小时）
+	 */
+	@ApiModelProperty(name = "feeLh", value = "人工费率（元/小时）")
+	@Column(length = 50)
+	protected String bsFeeLh;
+
+	/**
+	 * 制费费率（元/小时）
+	 */
+	@ApiModelProperty(name = "feeMh", value = "制费费率（元/小时）")
+	@Column(length = 50)
+	protected String bsFeeMh;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -180,6 +194,22 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setBsNeed(int bsNeed) {
 		this.bsNeed = bsNeed;
+	}
+
+	public String getBsFeeLh() {
+		return bsFeeLh;
+	}
+
+	public void setBsFeeLh(String bsFeeLh) {
+		this.bsFeeLh = bsFeeLh;
+	}
+
+	public String getBsFeeMh() {
+		return bsFeeMh;
+	}
+
+	public void setBsFeeMh(String bsFeeMh) {
+		this.bsFeeMh = bsFeeMh;
 	}
 	
 }
