@@ -148,6 +148,7 @@ $(function() {
 			var bsUserNum = obj.data.bsUserNum;
 			var bsYield = obj.data.bsYield;
 			var bsCave = obj.data.bsCave;
+			var bsCycle = obj.data.bsCycle;
 			if(/^\d+$/.test(bsRadix)==false && /^\d+\.\d+$/.test(bsRadix)==false || bsRadix<=0)
 			{
 				layer.msg("基数必填且只能输入数字且大于0");
@@ -163,6 +164,12 @@ $(function() {
 			if(/^\d+$/.test(bsYield)==false && /^\d+\.\d+$/.test(bsYield)==false && bsYield!="" && bsYield!=null)
 			{
 				layer.msg("工序良率只能输入数字");
+				loadAll();
+				return false;
+			}
+			if(/^\d+$/.test(bsCycle)==false && /^\d+\.\d+$/.test(bsCycle)==false && bsCycle!="" && bsCycle!=null)
+			{
+				layer.msg("成型周期只能输入数字");
 				loadAll();
 				return false;
 			}

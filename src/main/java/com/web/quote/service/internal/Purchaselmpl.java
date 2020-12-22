@@ -1,11 +1,13 @@
 package com.web.quote.service.internal;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.*;
 
 import com.utils.ExcelExport;
 import com.utils.UserUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -22,6 +24,7 @@ import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.Quote;
 import com.web.quote.service.PurchaseService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -136,22 +139,34 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<ProductMater> list = createSQLQuery(hql, param, ProductMater.class);
         XSSFWorkbook workbook = new XSSFWorkbook();
-		Resource resource = new ClassPathResource("static/excelFile/采购填报价格模板.xlsx");
-		InputStream in = resource.getInputStream();
+        String filePath = "static/excelFile/采购填报价格模板.xlsx";
+//		Resource resource = new ClassPathResource("static/excelFile/采购填报价格模板.xlsx");
+//		InputStream in = resource.getInputStream();
 		String[] map_arr = new String[]{"id","bsType","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix",
 				"bsGeneral","bsGear","bsRefer","bsAssess","fmemo","bsSupplier"};
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		for(ProductMater productMater : list){
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", productMater.getId());
-			map.put("bsType", productMater.getBsType());
+			String bsType = productMater.getBsType();
+			if(("hardware").equals(bsType)){
+				map.put("bsType", "五金");
+			}else if(("molding").equals(bsType)){
+				map.put("bsType", "注塑");
+			}else if(("surface").equals(bsType)){
+				map.put("bsType", "表面处理");
+			}else if(("packag").equals(bsType)){
+				map.put("bsType", "组装");
+			}
 			map.put("bsComponent", productMater.getBsComponent());
 			map.put("bsMaterName", productMater.getBsMaterName());
 			map.put("bsModel", productMater.getBsModel());
 			map.put("bsQty", productMater.getBsQty());
 			map.put("bsUnit", productMater.getBsUnit());
 			map.put("bsRadix", productMater.getBsRadix());
-			map.put("bsGeneral", productMater.getBsGeneral());
+			if(productMater.getBsGeneral()!=null){
+				map.put("bsGeneral", productMater.getBsGeneral()==1?"是":"否");
+			}
 			map.put("bsGear", productMater.getBsGear());
 			map.put("bsRefer", productMater.getBsRefer());
 			map.put("bsAssess", productMater.getBsAssess());
@@ -159,6 +174,59 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			map.put("bsSupplier", productMater.getBsSupplier());
 			listMap.add(map);
 		}
-		ExcelExport.export(response,listMap,workbook,in,map_arr,"采购填报价格模板.xlsx");
+		ExcelExport.export(response,listMap,workbook,map_arr,filePath,"采购填报价格模板.xlsx");
+	}
+
+	//防止读取Excel为null转String 报空指针异常
+	public String tranCell(Object object)
+	{
+		if(object==null||object==""||("").equals(object)){
+			return null;
+		}else return object.toString();
+	}
+
+	//    导入模板
+	public ApiResponseResult doExcel(MultipartFile[] file,Long quoteId) throws Exception{
+		try {
+			Date doExcleDate = new Date();
+			Long userId = UserUtil.getSessionUser().getId();
+			InputStream fin = file[0].getInputStream();
+			XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			//获取最后一行的num，即总行数。此处从0开始计数
+			int maxRow = sheet.getLastRowNum();
+			List<ProductMater> hardwareMaterList = new ArrayList<>();
+			//五金工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、成型周期(S)、工序良率、备注
+			for (int row = 2; row <= maxRow; row++) {
+				String id = tranCell(sheet.getRow(row).getCell(0));
+				String bsGear = tranCell(sheet.getRow(row).getCell(9));
+				String bsAssess = tranCell(sheet.getRow(row).getCell(11));
+				String fmemo = tranCell(sheet.getRow(row).getCell(12));
+				String bsSupplier = tranCell(sheet.getRow(row).getCell(13));
+				ProductMater productMater = new ProductMater();
+				if(StringUtils.isNotEmpty(id)){
+					productMater = productMaterDao.findById(Long.parseLong(id));
+					productMater.setId(Long.parseLong(id));
+					productMater.setLastupdateBy(userId);
+                	productMater.setLastupdateDate(doExcleDate);
+				}else {
+					productMater.setCreateBy(userId);
+					productMater.setCreateDate(doExcleDate);
+				}
+				productMater.setPkQuote(quoteId);
+				productMater.setBsGear(bsGear);
+				productMater.setBsAssess(new BigDecimal(bsAssess));
+				productMater.setFmemo(fmemo);
+				productMater.setBsSupplier(bsSupplier);
+
+				hardwareMaterList.add(productMater);
+			}
+			productMaterDao.saveAll(hardwareMaterList);
+			return ApiResponseResult.success("导入成功");
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
+		}
 	}
 }

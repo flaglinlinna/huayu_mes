@@ -149,6 +149,34 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsCapacity", value = "产能")
 	@Column(length = 100)
 	protected String bsCapacity;
+	
+	/**
+	 * 人工费率（元/小时）
+	 */
+	@ApiModelProperty(name = "feeLh", value = "人工费率（元/小时）")
+	@Column(length = 50)
+	protected BigDecimal bsFeeLh;
+
+	/**
+	 * 制费费率（元/小时）
+	 */
+	@ApiModelProperty(name = "feeMh", value = "制费费率（元/小时）")
+	@Column(length = 50)
+	protected BigDecimal bsFeeMh;
+	
+	/**
+	 * 人工费率总
+	 */
+	@ApiModelProperty(name = "bsFeeLhAll", value = "人工费率总")
+	@Column(length = 50)
+	protected BigDecimal bsFeeLhAll;
+
+	/**
+	 * 制费费率总
+	 */
+	@ApiModelProperty(name = "bsFeeMhAll", value = "制费费率总")
+	@Column(length = 50)
+	protected BigDecimal bsFeeMhAll;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -279,4 +307,38 @@ public class ProductProcess extends BaseEntity {
 	public void setBsCapacity(String bsCapacity) {
 		this.bsCapacity = bsCapacity;
 	}
+
+	public BigDecimal getBsFeeLh() {
+		return bsFeeLh;
+	}
+
+	public void setBsFeeLh(BigDecimal bsFeeLh) {
+		this.bsFeeLh = bsFeeLh;
+	}
+
+	public BigDecimal getBsFeeMh() {
+		return bsFeeMh;
+	}
+
+	public void setBsFeeMh(BigDecimal bsFeeMh) {
+		this.bsFeeMh = bsFeeMh;
+	}
+
+	public BigDecimal getBsFeeLhAll() {
+		return bsFeeLhAll;
+	}
+
+	public void setBsFeeLhAll(BigDecimal bsFeeLhAll) {
+		this.bsFeeLhAll = bsFeeLhAll;
+	}
+
+	public BigDecimal getBsFeeMhAll() {
+		return bsFeeMhAll;
+	}
+
+	public void setBsFeeMhAll(BigDecimal bsFeeMhAll) {
+		this.bsFeeMhAll = bsFeeMhAll;
+	}
+
+	
 }

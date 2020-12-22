@@ -10,4 +10,6 @@ public interface QuoteSumService {
 	public ApiResponseResult getList(String keyword,PageRequest pageRequest) throws Exception;
 
 	public ApiResponseResult getQuoteList(String keyword,String quoteId,PageRequest pageRequest) throws Exception;
+	
+	public ApiResponseResult getSumByQuote(String quoteId)throws Exception;
 }

@@ -186,7 +186,7 @@ public class ProductProcesslmpl implements ProductProcessService {
             map.put("bsCapacity", bs.getBsCapacity());
             list.add(map);
         }
-        ExcelExport.export(response,list,workbook,in,map_arr,fileName);
+        ExcelExport.export(response,list,workbook,map_arr,excelPath+fileName,fileName);
     }
 
 

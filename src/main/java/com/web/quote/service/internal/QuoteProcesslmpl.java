@@ -1,5 +1,6 @@
 package com.web.quote.service.internal;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -120,8 +121,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,pkQuote,0);
 		for(QuoteProcess qp:lqp){
 			String[] strs = this.getLhBy(qp.getProc().getWorkcenterId(), qp.getPkProc());
-			qp.setBsFeeLh(strs[0]);
-			qp.setBsFeeMh(strs[1]);
+			qp.setBsFeeLh(new BigDecimal(strs[0]));
+			qp.setBsFeeMh(new BigDecimal(strs[1]));
 		}
 		quoteProcessDao.saveAll(lqp);
 	}
@@ -163,8 +164,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				Proc pp1 = procDao.findById(Long.parseLong(pro));
 				if(pp1!=null){
 					String[] strs = this.getLhBy(pp1.getWorkcenterId(), Long.valueOf(pro));
-					pd.setBsFeeLh(strs[0]);
-					pd.setBsFeeMh(strs[1]);
+					pd.setBsFeeLh(new BigDecimal(strs[0]));
+					pd.setBsFeeMh(new BigDecimal(strs[1]));
 				}
 				//--end
 				lp.add(pd);

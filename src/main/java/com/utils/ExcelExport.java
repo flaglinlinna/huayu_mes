@@ -15,6 +15,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 
 /**
@@ -93,11 +95,13 @@ public final class ExcelExport {
     }
 
     //一定要在XSSFWorkbook用输入流当成构造函数参数创建新对象后，再使用输入流
-    public static void export(HttpServletResponse response, List<Map<String, Object>> importlist,XSSFWorkbook workbook, InputStream in, String[] mapNames, String file_name) throws Exception {
+    public static void export(HttpServletResponse response, List<Map<String, Object>> importlist,XSSFWorkbook workbook, String[] mapNames,String filePath, String file_name) throws Exception {
         //获取数据集
         List<Map<String, Object>> datalist = importlist;
         //获取第一页
-         workbook = new XSSFWorkbook(in);
+        Resource resource = new ClassPathResource(filePath);
+        InputStream in = resource.getInputStream();
+        workbook = new XSSFWorkbook(in);
         XSSFSheet sheet = workbook.getSheetAt(0);
         //循环字段名数组，创建标题行-16
         Row row = sheet.getRow(0);

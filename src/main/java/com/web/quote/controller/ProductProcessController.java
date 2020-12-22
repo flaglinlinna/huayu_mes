@@ -184,23 +184,7 @@ public class ProductProcessController extends WebController {
 		}
 	}
 
-//	@ApiOperation(value="导入模板", notes="导入模板", hidden = true)
-//	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
-//	@ResponseBody
-//	public ApiResponseResult getExcel(MultipartFile[] file,String bsType,Long pkQuote) {
-//		String method = "/productProcess/importExcel";String methodName ="导入模板";
-//		try {
-//			logger.debug("导入模板=importExcel:");
-//			getSysLogService().success(module,method, methodName, "");
-////			return null;
-//			return productProcessService.doExcel(file,bsType,pkQuote);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			logger.error("导入模板失败！", e);
-//			getSysLogService().error(module,method, methodName, e.toString());
-//			return null;
-//		}
-//	}
+
 
 
 }
