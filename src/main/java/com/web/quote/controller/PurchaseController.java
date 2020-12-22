@@ -103,7 +103,7 @@ public class PurchaseController extends WebController {
 	}
 
 
-	@ApiOperation(value = "报价单信息编辑页", notes = "报价单信息编辑页", hidden = true)
+	@ApiOperation(value = "报价单信息编辑", notes = "报价单信息编辑", hidden = true)
 	@RequestMapping(value = "/edit")
 	public ApiResponseResult edit(@RequestBody ProductMater hardwareMater) {
 		String method = "productMater/edit";
@@ -134,6 +134,24 @@ public class PurchaseController extends WebController {
 			e.printStackTrace();
 			logger.error("导出数据失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
+		}
+	}
+
+		@ApiOperation(value="导入模板", notes="导入模板", hidden = true)
+	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getExcel(MultipartFile[] file,Long pkQuote) {
+		String method = "/purchase/importExcel";String methodName ="导入模板";
+		try {
+			logger.debug("导入模板=importExcel:");
+			getSysLogService().success(module,method, methodName, "");
+//			return null;
+			return purchaseService.doExcel(file,pkQuote);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("导入模板失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return null;
 		}
 	}
 

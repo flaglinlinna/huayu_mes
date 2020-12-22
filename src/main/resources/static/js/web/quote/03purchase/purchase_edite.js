@@ -212,7 +212,7 @@ $(function() {
 		//导入
 		upload.render({
 			elem: '#upload'
-			,url: context + '/productMater/importExcel'
+			,url: context + '/purchase/importExcel'
 			,accept: 'file' //普通文件
 			,data: {
 				pkQuote: function(){
