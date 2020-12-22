@@ -143,6 +143,15 @@ $(function() {
 				form.render();// 重新渲染
 		}
 		});*/
+		
+		 var tip_index = 0;
+	        $(document).on('mouseover', '#save-btn', function(data){
+	        	 tip_index =  layer.tips("<span style='font-size:13px;line-height:20px;'>123213213</span>", ($(this)),{ tips: [3, '5CBA59'],time:0,time:0,area: ['200px']});
+	 
+	        }).on('mouseleave', '#goodTitleMsg', function(){
+	            layer.close(tip_index);
+	        });
+	        
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
 			// 重新加载table
