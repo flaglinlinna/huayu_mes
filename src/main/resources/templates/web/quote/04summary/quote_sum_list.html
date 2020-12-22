@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='报价汇总列表'"></head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div>
+			<div class="retrieval">
+				<div class="title">
+					<h3>状态</h3>
+					<div class="filter">
+						<ul id="ul-list">
+							<li class="current"><a><span>全部</span></a></li>
+							<li class=""><a><span>进行中</span></a></li>
+							<li class=""><a><span>已完成</span></a></li>
+						</ul>
+					</div>
+					<span class="more" id="_search_btn"></span>
+				</div>
+				<div class="searchDiv">
+					<form id="searchFrom" class="layui-form layui-form-pane"
+						lay-filter="searchFrom" method="post" action=""
+						style="margin-top: 5px; margin-left: 10px;">
+						<div class="layui-form-item" style="margin-bottom: 0px">
+							<div class="layui-inline">
+								<label class="layui-form-label layui-required">日期</label>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" name="dates"
+										placeholder="请选择日期范围" id="dates">
+								</div>
+								<button class="layui-btn layui-btn-sm" lay-submit
+									lay-filter="searchSubmit">查询</button>
+								<button type="reset"
+									class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+									<i class="layui-icon">&#xe669;</i>重置
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<table id="listTable" lay-filter="listTable" style="margin:0px;"></table>
+			<script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看汇总</a>
+            <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="check">审批</a>
+            </script>
+		</div>
+		<div id="setItemPage" class="layer_self_wrap" style="width:500px;display:none;">
+        <form id="setItemForm" class="layui-form layui-form-pane" lay-filter="setItemForm" method="post" action="" style="margin: 20px;">
+			<input id="pageNum" type="hidden" name="pageNum" /> <input id="id" type="hidden" name="id"/>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addItem">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script th:inline="javascript">
+            var Style=[[${Style}]];
+        </script>
+		<script th:src="@{/js/web/quote/04summary/quote_sum_list.js}"
+			src="/js/web/quote/04summary/quote_sum_list.js"></script>
+	</div>
+</body>
+</html>
