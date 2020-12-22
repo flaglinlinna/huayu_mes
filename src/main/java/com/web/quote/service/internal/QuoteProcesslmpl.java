@@ -96,20 +96,34 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			filters1.add(new SearchFilter("proc.procName", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("proc.procNo", SearchFilter.Operator.LIKE, keyword));
 		}
-		if (!"null".equals(pkQuote)&&pkQuote!=null) {
-			filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
+		filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
+		/*if (!"null".equals(pkQuote)&&pkQuote!=null) {
+			
 		}else {
 			List<QuoteProcess> quoteProcessList = new ArrayList<>();
 			return ApiResponseResult.success().data(DataGrid.create(quoteProcessList, (int) quoteProcessList.size(),
 					pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
-		}
+		}*/
 		Specification<QuoteProcess> spec = Specification.where(BaseService.and(filters, QuoteProcess.class));
 		Specification<QuoteProcess> spec1 = spec.and(BaseService.or(filters1, QuoteProcess.class));
 		Page<QuoteProcess> page = quoteProcessDao.findAll(spec1, pageRequest);
-
+		//20201222-fyx
+		updateLwAndHw(Long.valueOf(pkQuote));
+		//--end
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 
+	}
+	
+	private void updateLwAndHw(Long pkQuote){
+		//获取该报价单的所有的未提交的数据，更新一下 人工和制费
+		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,pkQuote,0);
+		for(QuoteProcess qp:lqp){
+			String[] strs = this.getLhBy(qp.getProc().getWorkcenterId(), qp.getPkProc());
+			qp.setBsFeeLh(strs[0]);
+			qp.setBsFeeMh(strs[1]);
+		}
+		quoteProcessDao.saveAll(lqp);
 	}
 
 	/**
@@ -145,6 +159,14 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				pd.setCreateBy(UserUtil.getSessionUser().getId());
 				pd.setCreateDate(new Date());
 				pd.setPkQuote(Long.valueOf(quoteId));//报价单主表
+				//--20201222-fyx-获取人工和制费
+				Proc pp1 = procDao.findById(Long.parseLong(pro));
+				if(pp1!=null){
+					String[] strs = this.getLhBy(pp1.getWorkcenterId(), Long.valueOf(pro));
+					pd.setBsFeeLh(strs[0]);
+					pd.setBsFeeMh(strs[1]);
+				}
+				//--end
 				lp.add(pd);
 				j++;
 			}
