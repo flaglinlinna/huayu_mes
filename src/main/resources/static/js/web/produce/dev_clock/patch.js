@@ -53,7 +53,7 @@ $(function() {
 			}, {
 				field : 'taskNo',
 				title : '制令单',
-				width:350
+				width:170
 			}, {
 				field : 'hourType',
 				title : '工时类型',
@@ -103,6 +103,7 @@ $(function() {
 			table : {
 				url : context
 						+ '/produce/patch/getEmpInfo',
+				width:750,
 				method : 'get',
 				cols : [ [ {
 					type : 'radio'
@@ -153,6 +154,7 @@ $(function() {
 			checkedKey : 'id',
 			searchPlaceholder : '试着搜索',
 			table : {
+				width:750,
 				url : context
 						+ '/produce/patch/getTaskNo',
 				method : 'get',

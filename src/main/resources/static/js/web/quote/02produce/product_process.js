@@ -35,24 +35,27 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {type : 'numbers'},
-				{field : 'bsName', width:150, title : '零件名称',sort:true},
-				{field : 'bsOrder',width:150, title : '工艺顺序',sort:true},
-				{field : 'proc', width:150, title : '工序名称',templet:function (d) {
+			cols : [ [ {type : 'numbers',style:'background-color:#d2d2d2'},
+				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'bsOrder',width:150, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'proc', width:150, title : '工序名称',style:'background-color:#d2d2d2',
+					templet:function (d) {
 						if(d.proc!=null){
 							return d.proc.procName==null||undefined?"":d.proc.procName;
 						}else {
 							return "";
 						}
 					}},
-				{field : 'procfmemo', width:100, title : '工序说明',templet:function (d) {
+				{field : 'procfmemo', width:100, title : '工序说明',style:'background-color:#d2d2d2',
+					templet:function (d) {
 						if(d.proc!=null){
 							return d.proc.fmemo==null||undefined?"":d.proc.fmemo;
 						}else {
 							return "";
 						}
 					}},
-				{field : 'workcenterName', width:100, title : '工作中心',templet:function (d) {
+				{field : 'workcenterName', width:100, title : '工作中心',style:'background-color:#d2d2d2'
+					,templet:function (d) {
 						if(d.proc!=null){
 							if(d.proc.bjWorkCenter!=null){
 								return d.proc.bjWorkCenter.workcenterName==null||undefined?"":d.proc.bjWorkCenter.workcenterName;
@@ -63,14 +66,14 @@ $(function() {
 							return "";
 						}
 					}},
-				{field : 'bsModelType', width:100, title : '机台类型'},
-				{field : 'bsRadix', title : '基数'},
-				{field : 'bsUserNum', title : '人数'},
-				{field : 'bsCycle', title : '成型周期(S)', width:150},
-				{field : 'bsYield', title : '工序良率%', width:120},
-				{field : 'bsCave', title : '穴数'},
-				{field : 'bsCapacity', title : '产能'},
-				{field : 'fmemo', title : '备注'},
+				{field : 'bsModelType', width:100, title : '机台类型',edit:'text'},
+				{field : 'bsRadix', title : '基数',edit:'text'},
+				{field : 'bsUserNum', title : '人数',edit:'text'},
+				{field : 'bsCycle', title : '成型周期(S)', width:150,edit:'text'},
+				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
+				{field : 'bsCave', title : '穴数',edit:'text'},
+				{field : 'bsCapacity', title : '产能',edit:'text'},
+				{field : 'fmemo', title : '备注',edit:'text'},
 				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
@@ -83,7 +86,8 @@ $(function() {
 			checkedKey : 'id',
 			searchPlaceholder : '关键字搜索',
 			table : {
-				url : context + '/quoteProcess/getList?pkQuote='+quoteId,
+				url : context + '/basePrice/proc/getList',
+					// ?pkQuote='+quoteId,
 				method : 'get',
 
 				parseData : function(res) {
@@ -100,16 +104,9 @@ $(function() {
 					{ type: 'radio' },//单选  radio
 					{field : 'id', title : 'id', width : 0,hide:true},
 					{type : 'numbers'},
-					{field : 'procNo', title : '工序编码' ,templet:function (d) {
-							if(d.proc!=null){
-								return d.proc.procNo
-							}
-						}},
-					{field : 'procName', title : '工序名称' ,templet:function (d) {
-							if(d.proc!=null){
-								return d.proc.procName
-							}
-						}}
+					{field : 'procNo', title : '工序编号' },
+					{field : 'procName', title : '工序名称' },
+					{field : 'workCenter', title : '工作中心名称' }
 				] ],
 				page : true,
 				request : {
@@ -123,13 +120,13 @@ $(function() {
 				var da=data.data;
 				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
 				form.val("productProcessForm", {
-					"pkProc":da[0].pkProc,
-					"procName":da[0].proc.procName
+					"pkProc":da[0].id,
+					"procName":da[0].procName
 				});
 				form.render();// 重新渲染
 			}
 		});
-
+		// positiveNum
 		//自定义验证规则
 		form.verify({
 			double: function(value){
@@ -137,8 +134,47 @@ $(function() {
 				{
 					return '用量/制品量 只能输入数字';
 				}
+			},
+			positiveNum:function (value) {
+				if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false || value<=0){
+					return '基数只能输入数字且大于0';
+				}
+
 			}
 		});
+
+		table.on('edit(productProcessTable)',function (obj) {
+			var bsRadix = obj.data.bsRadix;
+			var bsUserNum = obj.data.bsUserNum;
+			var bsYield = obj.data.bsYield;
+			var bsCave = obj.data.bsCave;
+			if(/^\d+$/.test(bsRadix)==false && /^\d+\.\d+$/.test(bsRadix)==false || bsRadix<=0)
+			{
+				layer.msg("基数必填且只能输入数字且大于0");
+				loadAll();
+				return false;
+			}
+			if(/^\d+$/.test(bsUserNum)==false && /^\d+\.\d+$/.test(bsUserNum)==false && bsUserNum!="" && bsUserNum!=null)
+			{
+				layer.msg("人数只能输入数字");
+				loadAll();
+				return false;
+			}
+			if(/^\d+$/.test(bsYield)==false && /^\d+\.\d+$/.test(bsYield)==false && bsYield!="" && bsYield!=null)
+			{
+				layer.msg("工序良率只能输入数字");
+				loadAll();
+				return false;
+			}
+			if(/^\d+$/.test(bsCave)==false && /^\d+\.\d+$/.test(bsCave)==false && bsCave!="" && bsCave!=null)
+			{
+				layer.msg("穴数只能输入数字");
+				loadAll();
+				return false;
+			}
+			obj.field = obj.data;
+			editSubmit(obj);
+		})
 
 		// 监听在职操作
 		form.on('switch(isStatusTpl)', function(obj) {
@@ -245,8 +281,9 @@ function  downloadExcel() {
 	}
 }
 
+//导出数据
 function exportExcel() {
-
+	location.href = context + "/productProcess/exportExcel?bsType="+bsType+"&pkQuote="+quoteId;
 }
 
 // 新增编辑弹出框

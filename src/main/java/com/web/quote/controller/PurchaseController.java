@@ -22,6 +22,8 @@ import com.web.quote.service.PurchaseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Api(description = "采购部报价模块")
 @CrossOrigin
 @ControllerAdvice
@@ -60,7 +62,8 @@ public class PurchaseController extends WebController {
 		}
 		return mav;
 	}
-	
+
+
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
@@ -100,5 +103,38 @@ public class PurchaseController extends WebController {
 	}
 
 
+	@ApiOperation(value = "报价单信息编辑页", notes = "报价单信息编辑页", hidden = true)
+	@RequestMapping(value = "/edit")
+	public ApiResponseResult edit(@RequestBody ProductMater hardwareMater) {
+		String method = "productMater/edit";
+		String methodName = "编辑报价单信息";
+		try {
+			ApiResponseResult result = purchaseService.edit(hardwareMater);
+			logger.debug("编辑报价单信息=edit:");
+			getSysLogService().success(module, method, methodName, hardwareMater.toString());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("报价单信息编辑失败！", e);
+			getSysLogService().error(module, method, methodName, hardwareMater.toString() + "," + e.toString());
+			return ApiResponseResult.failure("报价单信息编辑失败！");
+		}
+	}
+
+	@ApiOperation(value="导出数据", notes="导出数据", hidden = true)
+	@RequestMapping(value = "/exportExcel", method = RequestMethod.GET)
+	@ResponseBody
+	public void exportExcel(HttpServletResponse response,Long pkQuote) {
+		String method = "/purchase/exportExcel";String methodName ="导出数据";
+		try {
+			logger.debug("导出数据=exportExcel:");
+			getSysLogService().success(module,method, methodName, "");
+			purchaseService.exportExcel(response,pkQuote);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("导出数据失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+		}
+	}
 
 }

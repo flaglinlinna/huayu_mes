@@ -237,6 +237,7 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
+								width:750,
 								url : context
 										+ '/produce/switch_staff/getTaskNo',
 								method : 'get',
@@ -306,6 +307,7 @@ $(function() {
 							checkedKey : 'id',
 							searchPlaceholder : '试着搜索',
 							table : {
+								width:750,
 								url : context
 										+ '/produce/switch_staff/getNewTaskNo',
 								method : 'get',

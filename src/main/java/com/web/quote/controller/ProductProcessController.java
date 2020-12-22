@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Api(description = "报价工艺流程信息模块")
@@ -153,12 +154,12 @@ public class ProductProcessController extends WebController {
 	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult getExcel(MultipartFile[] file,String bsType,Long pkQuote) {
-		String method = "/productMater/importExcel";String methodName ="导入模板";
+		String method = "/productProcess/importExcel";String methodName ="导入模板";
 		try {
 			logger.debug("导入模板=importExcel:");
 			getSysLogService().success(module,method, methodName, "");
-			return null;
-//			return productProcessService.doExcel(file,bsType,pkQuote);
+//			return null;
+			return productProcessService.doExcel(file,bsType,pkQuote);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("导入模板失败！", e);
@@ -168,21 +169,38 @@ public class ProductProcessController extends WebController {
 	}
 
 	@ApiOperation(value="导出数据", notes="导出数据", hidden = true)
-	@RequestMapping(value = "/exportExcel", method = RequestMethod.POST)
+	@RequestMapping(value = "/exportExcel", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult exportExcel(MultipartFile[] file,String bsType,Long pkQuote) {
-		String method = "/productMater/exportExcel";String methodName ="导出数据";
+	public void exportExcel(HttpServletResponse response, String bsType, Long pkQuote) {
+		String method = "/productProcess/exportExcel";String methodName ="导出数据";
 		try {
 			logger.debug("导出数据=exportExcel:");
 			getSysLogService().success(module,method, methodName, "");
-			return productProcessService.exportExcel(file,bsType,pkQuote);
+			productProcessService.exportExcel(response,bsType,pkQuote);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("导入模板失败！", e);
+			logger.error("导出数据失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
-			return null;
 		}
 	}
+
+//	@ApiOperation(value="导入模板", notes="导入模板", hidden = true)
+//	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
+//	@ResponseBody
+//	public ApiResponseResult getExcel(MultipartFile[] file,String bsType,Long pkQuote) {
+//		String method = "/productProcess/importExcel";String methodName ="导入模板";
+//		try {
+//			logger.debug("导入模板=importExcel:");
+//			getSysLogService().success(module,method, methodName, "");
+////			return null;
+//			return productProcessService.doExcel(file,bsType,pkQuote);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error("导入模板失败！", e);
+//			getSysLogService().error(module,method, methodName, e.toString());
+//			return null;
+//		}
+//	}
 
 
 }

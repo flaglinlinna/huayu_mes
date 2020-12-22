@@ -30,7 +30,7 @@
              <div class="layui-btn-container layui-inline">
                      <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addHardware()">添加工艺信息</button>
                  <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="downloadExcel()">下载模板</button>
-                 <!--<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="exportExcel()">导出数据</button>-->
+                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="exportExcel()">导出数据</button>
                  <button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入模板</button>
              </div>
          </script>
@@ -49,22 +49,22 @@
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
-                <label class="layui-form-label">零件名称</label>
+                <label class="layui-form-label layui-required">零件名称</label>
                 <div class="layui-input-block">
-                    <input id="bsName" name="bsName" placeholder="请输入零件名称"  autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsName" name="bsName" lay-verify="required" placeholder="请输入零件名称"  autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">工艺</label>
+                <label class="layui-form-label layui-required">工艺</label>
                 <div class="layui-input-block">
-                    <input id="procName" name="procName" placeholder="请选择工艺"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="procName" name="procName"  lay-verify="required" placeholder="请选择工艺"   autocomplete="off" class="layui-input" type="text"/>
                     <input id="pkProc" name="pkProc"  type="hidden"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">工艺顺序</label>
+                <label class="layui-form-label layui-required">工艺顺序</label>
                 <div class="layui-input-block">
-                    <input id="bsOrder" name="bsOrder" placeholder="请输入工艺顺序"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsOrder" name="bsOrder" lay-verify="required"  placeholder="请输入工艺顺序"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -73,34 +73,34 @@
                     <input id="bsModelType" name="bsModelType" placeholder="请输入机台类型"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">基数</label>
+            <div class="layui-form-item ">
+                <label class="layui-form-label layui-required">基数</label>
                 <div class="layui-input-block">
-                    <input id="bsRadix" name="bsRadix" placeholder="请输入基数"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsRadix" name="bsRadix" lay-verify="required|positiveNum" value="1" placeholder="请输入基数"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">人数</label>
+                <label class="layui-form-label layui-required">人数</label>
                 <div class="layui-input-block">
-                    <input id="bsUserNum" name="bsUserNum" placeholder="请输入人数"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsUserNum" name="bsUserNum" lay-verify="required" placeholder="请输入人数"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">成型周期</label>
+                <label class="layui-form-label layui-required">成型周期</label>
                 <div class="layui-input-block">
-                    <input id="bsCycle" name="bsCycle" placeholder="请输入成型周期"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsCycle" name="bsCycle" lay-verify="required" placeholder="请输入成型周期"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">工序良率%</label>
+                <label class="layui-form-label layui-required">工序良率%</label>
                 <div class="layui-input-block">
-                    <input id="bsYield" name="bsYield" placeholder="工序良率%"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsYield" name="bsYield" lay-verify="required" placeholder="工序良率%"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">穴数</label>
+                <label class="layui-form-label layui-required">穴数</label>
                 <div class="layui-input-block">
-                    <input id="bsCave" name="bsCave" placeholder="请输入穴数"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsCave" name="bsCave" lay-verify="required" placeholder="请输入穴数"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
