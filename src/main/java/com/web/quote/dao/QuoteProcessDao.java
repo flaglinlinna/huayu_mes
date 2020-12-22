@@ -23,12 +23,12 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	public List<QuoteProcess> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 	
 	@Modifying
-    @Query("update QuoteProcess t set t.delFlag=1 where t.pkQuoteBom=?1 and t.delFlag=0")
-    public void delteQuoteProcessByPkQuoteBom(Long pkQuoteBom);//根据ID修改表数据
+    @Query("update QuoteProcess t set t.delFlag=1 where t.pkQuoteBom=?1  and t.pkQuote=?2 and t.delFlag=0")
+    public void delteQuoteProcessByPkQuoteBomAndPkQuote(Long pkQuoteBom,Long pkQuote);//根据ID修改表数据
 	
 	@Modifying
-    @Query("update QuoteProcess t set t.delFlag=1 where t.bsName=?1 and t.delFlag=0")
-    public void delteQuoteProcessByBsName(String  bsName);//根据零件名称修改表数据
+    @Query("update QuoteProcess t set t.delFlag=1 where t.bsName=?1 and t.pkQuote=?2 and t.delFlag=0")
+    public void delteQuoteProcessByBsNameAndPkQuote(String  bsName,Long pkQuote);//根据零件名称修改表数据
 	
 	public List<QuoteProcess> findByDelFlagAndPkQuoteBomAndBsOrder(Integer delFlag,Long pkQuoteBom,Integer bsOrder);
 	

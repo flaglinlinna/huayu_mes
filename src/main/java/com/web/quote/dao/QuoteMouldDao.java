@@ -1,5 +1,6 @@
 package com.web.quote.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +25,8 @@ public interface QuoteMouldDao extends CrudRepository<QuoteMould, Long>,JpaSpeci
 	
 	
 	@Modifying
-    @Query("update QuoteMould t set t.delFlag=1 where t.bsName=?1 and t.delFlag=0")
-    public void delteQuoteMouldByBsName(String  bsName);//根据组件名称修改表数据
+    @Query("update QuoteMould t set t.delFlag=1 where t.bsName=?1 and t.pkQuote=?2 and t.delFlag=0")
+    public void delteQuoteMouldByBsNameAndPkQuote(String  bsName,Long pkQuote);//根据组件名称修改表数据
 	
 	@Query(value = "select distinct t.bs_Element from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag='0' and t.bs_component is not null", nativeQuery = true)	
 	public List<Map<String, Object>> getBomName(String quoteid);//获取组件列表
@@ -33,4 +34,6 @@ public interface QuoteMouldDao extends CrudRepository<QuoteMould, Long>,JpaSpeci
 	@Modifying
     @Query("update QuoteMould t set t.bsStatus=1 where t.pkQuote=?1 and t.delFlag=0")
     public void saveQuoteMouldByQuoteId(Long  quoteId);//变更字段状态
+	
+	public int countByDelFlagAndPkQuoteAndBsActQuote(Integer delFlag,Long pkQuote, BigDecimal bsActQuote);//查询编号是否存在
 }

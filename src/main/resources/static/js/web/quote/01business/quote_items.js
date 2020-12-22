@@ -29,7 +29,7 @@ function setData(){
 function setTable(){
 	var list = ItemList.data;
 	var header=ItemList.data.quote
-	console.log(list)
+	//console.log(list)
 	var html = "";
 	for (var j = 0; j < list.length; j++) {
 		var arr = list[j];
@@ -57,7 +57,7 @@ function setTable(){
 		}else if(arr.bsCode=="A002"){//"产品资料"
 			link="/quoteFile/toProductFile?quoteId="+arr.quote.id+"&code="+arr.bsCode
 		}else if(arr.bsCode=="A003"){//"模具清单"
-			link="/quoteFile/toProductFile?quoteId="+arr.quote.id+"&code="+arr.bsCode
+			link="/quoteMould/toQuoteMould?quoteId="+arr.quote.id+"&code="+arr.bsCode
 		}else if(arr.bsCode=="A004"){//"工艺流程"
 			link="/quoteProcess/toQuoteProcess?quoteId="+arr.quote.id+"&code="+arr.bsCode
 		}

@@ -47,6 +47,7 @@ $(function() {
 			  {field : 'feeType3',title : '模胚价格+加工费用',width:140},
 			  {field : 'feeType4',title : '热流道费用',width:130},
 			  {field : 'feeProc',title : '工序成本',width:100},
+			  {field : 'stQuote',title : '参考报价',width:130},
 			  {field : 'feeAll',title : '评估总费用(含税)',width:130},
 			  {field : 'fmemo',title : '备注',width:100},
 			  {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width:120,}
@@ -110,12 +111,13 @@ $(function() {
 				"feeType4": obj.feeType4,
 				"feeProc":obj.feeProc,
 				"feeAll":obj.feeAll,
+				"stQuote":obj.stQuote,
 				"fmemo" : obj.fmemo,
 			});
 			openPage(id, "编辑模具成本信息")
 		};	
 	});
-	$("#feeType1,#feeType2,#feeType3,#feeType4").on("input",function(e){
+	$("#feeType1,#feeType2,#feeType3,#feeType4,#feeProc").on("input",function(e){
 		 //console.log(e.delegateTarget.value); //获取input输入的值
 		 calAll();
 	});
@@ -246,8 +248,8 @@ function calAll(){
 	var fee2=$("#feeType2").val()==""?0:parseFloat($("#feeType2").val())
 	var fee3=$("#feeType3").val()==""?0:parseFloat($("#feeType3").val())
 	var fee4=$("#feeType4").val()==""?0:parseFloat($("#feeType4").val())
-	
-	var all= fee1+fee2+fee3+fee4
+	var fee_proc=$("#feeProc").val()==""?0:parseFloat($("#feeProc").val())
+	var all= fee1+fee2+fee3+fee4+fee_proc
 	$("#feeAll").val(all)
 }
 // 清空新增表单数据

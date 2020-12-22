@@ -15,6 +15,7 @@ import org.hibernate.annotations.NotFoundAction;
 
 import com.app.base.entity.BaseEntity;
 import com.web.basePrice.entity.BjWorkCenter;
+import com.web.basePrice.entity.MjProcFee;
 import com.web.basePrice.entity.Proc;
 
 import io.swagger.annotations.ApiModel;
@@ -70,13 +71,27 @@ public class QuoteMould extends BaseEntity {
 	@Column(length = 100)
 	protected String bsName;
 	
+	
+
+	/**
+     * 模具信息-模具成本
+     */
+    @ApiModelProperty(name="pkProcFee",value="模具信息-模具成本")
+    @Column
+    protected Long pkProcFee;
+
+    @ApiModelProperty(name="mjProcFee",hidden=true,value="模具信息-模具成本")
+    @ManyToOne
+    @JoinColumn(name = "pkProcFee", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected MjProcFee mjProcFee;
+	
 	/**
 	 * 模具编码
 	 */
 	@ApiModelProperty(name = "bsMoCode", value = "模具编码")
 	@Column(length = 100)
 	protected String bsMoCode;
-	
 	
 	/**
 	 * 模具名称
@@ -90,7 +105,6 @@ public class QuoteMould extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "bsMoFee", value = "模具成本")
 	protected BigDecimal bsMoFee;
-    
 	
 	/**
 	 * 实际报价
@@ -183,4 +197,22 @@ public class QuoteMould extends BaseEntity {
 	public void setBsStQuote(BigDecimal bsStQuote) {
 		this.bsStQuote = bsStQuote;
 	}
+
+	public Long getPkProcFee() {
+		return pkProcFee;
+	}
+
+	public void setPkProcFee(Long pkProcFee) {
+		this.pkProcFee = pkProcFee;
+	}
+
+	public MjProcFee getMjProcFee() {
+		return mjProcFee;
+	}
+
+	public void setMjProcFee(MjProcFee mjProcFee) {
+		this.mjProcFee = mjProcFee;
+	}
+	
+	
 }

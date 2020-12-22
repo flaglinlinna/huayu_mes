@@ -130,7 +130,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		List<QuoteProcess> lp = new ArrayList<QuoteProcess>();
 		// 20201218-先删除后在新增
 		//quoteProcessDao.delteQuoteProcessByPkQuoteBom(Long.parseLong(itemId));//使用id
-		quoteProcessDao.delteQuoteProcessByBsName(itemId);//使用零件名字
+		quoteProcessDao.delteQuoteProcessByBsNameAndPkQuote(itemId,Long.valueOf(quoteId));//使用零件名字
 		int j = 1;
 		for (String pro : procs) {
 			if (!StringUtils.isEmpty(pro)) {

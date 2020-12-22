@@ -113,6 +113,12 @@ public class MjProcFee extends BaseEntity {
 		@Column(length = 20)
 		protected BigDecimal feeType5;
 
+		/**
+		 * 参考报价
+		 */
+		@ApiModelProperty(name = "stQuote", value = "参考报价")
+		@Column(length = 20)
+		protected BigDecimal stQuote;
 		
 		/**
 		 * 评估总费用（含税）
@@ -232,6 +238,13 @@ public class MjProcFee extends BaseEntity {
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
 	}
-	
-	
+
+	public BigDecimal getStQuote() {
+		return stQuote;
+	}
+
+	public void setStQuote(BigDecimal stQuote) {
+		this.stQuote = stQuote;
+	}
+
 }

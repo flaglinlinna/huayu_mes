@@ -83,6 +83,7 @@ public class MjProcFeeImpl implements MjProcFeeService {
 	o.setFeeType2(mjProcFee.getFeeType2());//
 	o.setFeeType3(mjProcFee.getFeeType3());//
 	o.setFeeType4(mjProcFee.getFeeType4());//
+	o.setStQuote(mjProcFee.getStQuote());//参考报价
 	o.setFeeAll(mjProcFee.getFeeAll());//评估总费用（含税）
     
     mjProcFeeDao.save(o);
@@ -143,6 +144,7 @@ public class MjProcFeeImpl implements MjProcFeeService {
                 map.put("feeType3",mjProcFee.getFeeType3());
                 map.put("feeType4",mjProcFee.getFeeType4());
                 
+                map.put("stQuote",mjProcFee.getStQuote());
                 map.put("feeAll",mjProcFee.getFeeAll());
                 map.put("fmemo",mjProcFee.getFmemo());
                 map.put("createBy",sysUserDao.findById((long)mjProcFee.getCreateBy()).getUserName());
