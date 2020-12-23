@@ -121,8 +121,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,pkQuote,0);
 		for(QuoteProcess qp:lqp){
 			String[] strs = this.getLhBy(qp.getProc().getWorkcenterId(), qp.getPkProc());
-			qp.setBsFeeLh(new BigDecimal(strs[0]));
-			qp.setBsFeeMh(new BigDecimal(strs[1]));
+			if(!StringUtils.isEmpty(strs[0]))qp.setBsFeeLh(new BigDecimal(strs[0]));
+			if(!StringUtils.isEmpty(strs[1]))qp.setBsFeeMh(new BigDecimal(strs[1]));
 		}
 		quoteProcessDao.saveAll(lqp);
 	}
@@ -224,9 +224,18 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	        return ApiResponseResult.success("删除成功！");
 	}
 	/**
-	 * 提交工序维护清单
+	 * 确认完成
 	 * **/
 	 public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
+		 //20201223-fyx-先判断是否维护了人工和制费
+		//获取该报价单的所有的未提交的数据，更新一下 人工和制费
+			List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,Long.valueOf(quoteId),0);
+			for(QuoteProcess qp:lqp){
+				if(qp.getBsFeeLh() == null || qp.getBsFeeMh() == null){
+					return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
+				}
+			}
+		 
 		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		 quoteProcessDao.saveQuoteProcessByQuoteId(Long.parseLong(quoteId));
 		 

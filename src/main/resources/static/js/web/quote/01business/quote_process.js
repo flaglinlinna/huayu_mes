@@ -345,15 +345,15 @@ function saveProc(){
 	}, function() {
 		CoreUtil.sendAjax("/quoteProcess/doStatus", JSON.stringify(param),
 				function(data) {
-			console.log(data)
-					if (isLogin(data)) {
-						if (data.result == true) {
-							// 回调弹框
-							layer.alert("提交成功！");
-							loadAll();
-						} else {
-							layer.alert(data);
-						}
+					if (data.result == true) {
+						// 回调弹框
+						layer.alert("提交成功！");
+						loadAll();
+					} else {
+						layer.msg(data.msg, {
+			   	                    time: 2000, //2s后自动关闭
+			   	                    btn: ['知道了']
+			   	                });
 					}
 				});
 	});
@@ -371,7 +371,6 @@ function delClientProc( id) {
 		}, function() {
 			CoreUtil.sendAjax("/quoteProcess/delete", JSON.stringify(param),
 					function(data) {
-						if (isLogin(data)) {
 							if (data.result == true) {
 								// 回调弹框
 								layer.alert("删除成功！", function() {
@@ -384,7 +383,6 @@ function delClientProc( id) {
 									layer.closeAll();
 								});
 							}
-						}
 					});
 		});
 	}

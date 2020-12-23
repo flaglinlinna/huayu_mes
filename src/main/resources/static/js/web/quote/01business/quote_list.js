@@ -38,7 +38,7 @@ $(function() {
 					res.data.Nums.forEach(function (item, index) {
 						if(item.STATUS == '0'){
 							$('#in-num').text('进行中('+item.NUMS+')');
-						}else if(item.STATUS == '0'){
+						}else if(item.STATUS == '1'){
 							$('#over-num').text('已完成('+item.NUMS+')');
 						}else if(item.STATUS == '99'){
 							$('#close-num').text('已关闭('+item.NUMS+')');
