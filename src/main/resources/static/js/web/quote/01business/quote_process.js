@@ -35,7 +35,7 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			,{
 				field : 'bsName',
-				title : '零件名称'
+				title : '零件名称',style:'background-color:#d2d2d2'
 			},{
 				field : 'procNo',
 				title : '工序编码',
@@ -65,7 +65,7 @@ $(function() {
 					}else{
 						return "<div class='green'>是</div>"
 					}
-				},
+				},style:'background-color:#d2d2d2',
 				align : 'center',
 			},{
 				field : 'fmemo',

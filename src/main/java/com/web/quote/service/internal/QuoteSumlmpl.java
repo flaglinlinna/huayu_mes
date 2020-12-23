@@ -19,9 +19,11 @@ import com.utils.BaseSql;
 import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.dao.ProductProcessDao;
 import com.web.quote.dao.QuoteDao;
+import com.web.quote.dao.QuoteMouldDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.ProductProcess;
 import com.web.quote.entity.Quote;
+import com.web.quote.entity.QuoteMould;
 import com.web.quote.service.QuoteSumService;
 
 @Service(value = "QuoteSumService")
@@ -34,6 +36,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
     private QuoteDao quoteDao;
 	@Autowired
     private ProductProcessDao productProcessDao;
+	@Autowired
+    private QuoteMouldDao quoteMouldDao;
 	
 	
     /**
@@ -148,15 +152,40 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for(ProductProcess pp:lpp){
 			if(pp.getBsType().equals("hardware")){
 				lh_hardware = lh_hardware.add(pp.getBsFeeLhAll());
-				//lh_hardware = lh_hardware.add(pp.getBsFeeLhAll());
+				lw_hardware = lw_hardware.add(pp.getBsFeeMhAll());
 			}else if(pp.getBsType().equals("molding")){
-				//lh_molding = lh_molding.add(pp.getBsFeeLhAll());
+				lh_molding = lh_molding.add(pp.getBsFeeLhAll());
+				lw_molding = lw_molding.add(pp.getBsFeeMhAll());
 			}else if(pp.getBsType().equals("surface")){
-				//lh_surface = lh_surface.add(pp.getBsFeeLhAll());
+				lh_surface = lh_surface.add(pp.getBsFeeLhAll());
+				lw_surface = lw_surface.add(pp.getBsFeeMhAll());
 			}else if(pp.getBsType().equals("packag")){
-				//lh_packag = lh_packag.add(pp.getBsFeeLhAll());
+				lh_packag = lh_packag.add(pp.getBsFeeLhAll());
+				lw_packag = lw_packag.add(pp.getBsFeeMhAll());
 			}
 		}
+		//3：小计
+		BigDecimal hardware_all = cl_hardware.add(lh_hardware).add(lw_hardware);//五金小计
+		BigDecimal molding_all = cl_molding.add(lh_molding).add(lw_molding);//注塑小计
+		BigDecimal surface_all = cl_surface.add(lh_surface).add(lw_surface);//表面处理小计
+		BigDecimal packag_all = cl_packag.add(lh_packag).add(lw_packag);//组装小计
+		
+		//4.模具费用
+		List<QuoteMould> lqm = quoteMouldDao.findByDelFlagAndPkQuote(0, Long.valueOf(quoteId));
+		BigDecimal mould_all = new BigDecimal(0);
+		for(QuoteMould qm:lqm){
+			mould_all = mould_all.add(qm.getBsActQuote());//实际报价
+		}
+		
+		//5.生产成本
+		BigDecimal p_cb = new BigDecimal(0);//生产成本
+		BigDecimal wx_all = new BigDecimal(0);//外协工艺成本?
+		
+		//6.生产管理费-管理费用的计算=管理费率*产品生产成本
+		BigDecimal gl = quote.getBsManageFee().multiply(p_cb).divide(new BigDecimal(100));
+		
+		//7.
+		
 		return ApiResponseResult.success().data(map);
 	}
 }
