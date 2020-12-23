@@ -21,5 +21,8 @@ public interface QuoteDao extends CrudRepository<Quote, Long>,JpaSpecificationEx
 	 public List<Map<String, Object>> getNumByStatus();
 	 
 	 @Query(value = "select map from Quote map  where map.delFlag=0 and map.bsStatus2Hardware=1 and  map.bsStatus2Molding=1 and map.bsStatus2Surface=1 and map.bsStatus2Packag=1 ")
-		public  List<Quote> findByDelFlagAndStatus2();
+	 public  List<Quote> findByDelFlagAndStatus2();
+	 
+	 @Query(value = "select map from Quote map  where map.delFlag=0 and map.bsStatus3Out=1 and  map.bsStatus3Purchase=1 ")
+	 public  List<Quote> findByDelFlagAndStatus3();
 }

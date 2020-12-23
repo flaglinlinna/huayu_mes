@@ -39,6 +39,7 @@ public class ProductProcess extends BaseEntity {
 	 * 注塑:molding
 	 * 表面处理:surface
 	 * 组装:packag
+	 * 外协:out
 	 */
 	@ApiModelProperty(name = "bsType", value = "类型")
 	@Column(length = 50)

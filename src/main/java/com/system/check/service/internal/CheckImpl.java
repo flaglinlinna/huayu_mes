@@ -369,24 +369,44 @@ public class CheckImpl   implements CheckService {
                    }
                 }
                 
-                //3.采购部审批完成
+                //3.1采购部审批完成
                 if(c.getBsCheckCode().equals("QUOTE_PUR") && c.getBsRecordId() != null){
                 	//1.1获取报价单，修改状态为“已完成”
                 	Quote quote = quoteDao.findById((long) c.getBsRecordId());
                     if(quote != null){
                     	quote.setLastupdateDate(new Date());
-                    	quote.setBsStatus3(1);
-                    	quote.setBsStep(4);
-                    	quote.setBsEndTime3(new Date());
+                    	quote.setBsStatus3Purchase(1);
                     	quoteDao.save(quote);
                     }
+                   //判断 采购部+外协部 是否全部审批完成
+                   	List<Quote> lq = quoteDao.findByDelFlagAndStatus2();
+                   	if(lq.size()>0){
+                   		quote.setBsStep(4);
+                   		quote.setBsStatus3(1);
+                   		quote.setBsEndTime3(new Date());
+                   		quoteDao.save(quote);
+                   	}
                 }
-                
-
+                //3.2外协部审批完成
+                if(c.getBsCheckCode().equals("out") && c.getBsRecordId() != null){
+                	//1.1获取报价单，修改状态为“已完成”
+                	Quote quote = quoteDao.findById((long) c.getBsRecordId());
+                    if(quote != null){
+                    	quote.setLastupdateDate(new Date());
+                    	quote.setBsStatus3Out(1);
+                    	quoteDao.save(quote);
+                    }
+                   //判断 采购部+外协部 是否全部审批完成
+                   	List<Quote> lq = quoteDao.findByDelFlagAndStatus2();
+                   	if(lq.size()>0){
+                   		quote.setBsStep(4);
+                   		quote.setBsStatus3(1);
+                   		quote.setBsEndTime3(new Date());
+                   		quoteDao.save(quote);
+                   	}
+                }
 			}
 			checkInfoDao.saveAll(lcr);
-
-			
 
 			return true;
 		}else{

@@ -2,35 +2,37 @@ package com.web.quote.service.internal;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.utils.ExcelExport;
-import com.utils.UserUtil;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseSql;
+import com.utils.ExcelExport;
+import com.utils.UserUtil;
 import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.Quote;
-import com.web.quote.service.PurchaseService;
-import org.springframework.web.multipart.MultipartFile;
+import com.web.quote.service.OutService;
 
-import javax.servlet.http.HttpServletResponse;
-
-@Service(value = "PurchaseService")
+@Service(value = "OutService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class Purchaselmpl extends BaseSql implements PurchaseService {
+public class Outlmpl extends BaseSql implements OutService {
 	
 	@Autowired
     private ProductMaterDao productMaterDao;
@@ -42,8 +44,8 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
     @Transactional
     public ApiResponseResult getList(String keyword,PageRequest pageRequest) throws Exception {
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
-				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_status3purchase col from "+Quote.TABLE_NAME+" p "
-						+ " where p.del_flag=0 and p.bs_step=3 ";
+				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_status3out col from "+Quote.TABLE_NAME+" p "
+						+ " where p.del_flag=0 and p.bs_step=2 ";
 		if (StringUtils.isNotEmpty(keyword)) {
 			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
 					+ keyword + "') > 0 ";*/

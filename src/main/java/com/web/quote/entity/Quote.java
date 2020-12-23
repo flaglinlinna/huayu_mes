@@ -94,7 +94,7 @@ public class Quote extends BaseEntity {
 	@ApiModelProperty(name="bsStatus2Packag",value="状态")
     protected int bsStatus2Packag = 0;
 	/**
-     * 3-采购部状态
+     * 3-采购部+外协部状态
      * 0:草稿
      * 1:进行中
      * 2:已完成
@@ -102,6 +102,24 @@ public class Quote extends BaseEntity {
 	@Column
 	@ApiModelProperty(name="bsStatus3",value="状态")
     protected int bsStatus3 = 0;
+	/**
+     * 3-采购部状态
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus2Surface",value="状态")
+    protected int bsStatus3Purchase = 0;
+	/**
+     * 3-外协部状态
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus2Packag",value="状态")
+    protected int bsStatus3Out = 0;
 	
 	/**
      * 4-业务部状态
@@ -710,4 +728,21 @@ public class Quote extends BaseEntity {
 	public void setBsManageFee(BigDecimal bsManageFee) {
 		this.bsManageFee = bsManageFee;
 	}
+
+	public int getBsStatus3Purchase() {
+		return bsStatus3Purchase;
+	}
+
+	public void setBsStatus3Purchase(int bsStatus3Purchase) {
+		this.bsStatus3Purchase = bsStatus3Purchase;
+	}
+
+	public int getBsStatus3Out() {
+		return bsStatus3Out;
+	}
+
+	public void setBsStatus3Out(int bsStatus3Out) {
+		this.bsStatus3Out = bsStatus3Out;
+	}
+	
 }
