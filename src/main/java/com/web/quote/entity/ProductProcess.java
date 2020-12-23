@@ -178,6 +178,13 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsFeeMhAll", value = "制费费率总")
 	@Column(length = 50)
 	protected BigDecimal bsFeeMhAll;
+	
+	/**
+	 * 外协价格
+	 */
+	@ApiModelProperty(name = "bsFeeWxAll", value = "外协价格")
+	@Column(length = 50)
+	protected BigDecimal bsFeeWxAll;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -341,5 +348,13 @@ public class ProductProcess extends BaseEntity {
 		this.bsFeeMhAll = bsFeeMhAll;
 	}
 
+	public BigDecimal getBsFeeWxAll() {
+		return bsFeeWxAll;
+	}
+
+	public void setBsFeeWxAll(BigDecimal bsFeeWxAll) {
+		this.bsFeeWxAll = bsFeeWxAll;
+	}
+	
 	
 }

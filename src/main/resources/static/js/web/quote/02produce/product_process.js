@@ -11,7 +11,7 @@ $(function() {
 		var table = layui.table, table2 = layui.table,form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect;
 
 		tableIns = table.render({
-			elem : '#productProcessList',
+			elem : '#listTable',
 			url : context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
 			method : 'get' // 默认：get请求
 			,
@@ -73,18 +73,20 @@ $(function() {
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
 				{field : 'bsCave', title : '穴数',edit:'text'},
 				{field : 'bsCapacity', title : '产能',edit:'text'},
+				{field : 'bsFeeWxAll', title : '外协价格',edit:'text', hide:true},
 				{field : 'fmemo', title : '备注',edit:'text'},
 				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
-				//循环表数据根据flag状态给行上色
-				$.each(res['data'], function (i, j) {
-					// console.log(i + ' -454- ' + j['bsCave']);
-						if (j['bsCave'] === null||j['bsCave']=='') {
-							// console.log(i + ' -458- ' + 'jdjg is null');
-							Layui_SetDataTableRowColor('table', i + 1, '#b1070a');
-						}
-					});
+				//根据不同的类型显示不同的字段
+				res.data.forEach(function (item, index) {
+					if(bsType == 'out'){//外协
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').css("display","none");
+					}else if(bsType == 'hardware'){//五金
+						
+					}else if(bsType == 'molding'){//注塑
+					}
+				});
 			}
 		});
 
@@ -235,7 +237,7 @@ $(function() {
 
 		initSelect();
 
-		table.on('edit(productProcessTable)',function (obj) {
+		table.on('edit(listTable)',function (obj) {
 			console.log(obj.field);//当前编辑列名
 			var bsRadix = obj.data.bsRadix;
 			var bsUserNum = obj.data.bsUserNum;
@@ -324,7 +326,7 @@ $(function() {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 		// 监听工具条
-		table.on('tool(productProcessTable)', function(obj) {
+		table.on('tool(listTable)', function(obj) {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
