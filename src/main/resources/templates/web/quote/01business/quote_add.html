@@ -35,7 +35,7 @@
 			<form id="itemForm" class="layui-form layui-form-pane"
 				lay-filter="itemForm" method="post" action="">
 				<h3 style="text-align: center;">华誉精密产品报价需求单</h3>
-				<fieldset class="layui-elem-field layui-field-title">
+				<fieldset class="layui-elem-field layui-field-title" style="margin:10px 0 10px;">
 					<legend class="legend-font" style="font-size: 14px;">报价基础信息</legend>
 				</fieldset>
 				<input id="id" type="hidden" name="id" />
@@ -128,7 +128,7 @@
 					</div>
 				</div>
 
-				<fieldset class="layui-elem-field layui-field-title">
+				<fieldset class="layui-elem-field layui-field-title"  style="margin:10px 0 10px;">
 					<legend class="legend-font" style="font-size: 14px;">品质检验要求</legend>
 				</fieldset>
 
@@ -191,25 +191,26 @@
 						</div>
 					</div>
 				</div>
-				<fieldset class="layui-elem-field layui-field-title">
+				<fieldset class="layui-elem-field layui-field-title"  style="margin:10px 0 10px;">
 					<legend class="legend-font" style="font-size: 14px;">客户其他要求</legend>
 				</fieldset>
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<div class="layui-input-inline" style="width: 700px;">
-							<textarea id="bsCustRequire" name="bsCustRequire"
+							<textarea id="bsCustRequire" name="bsCustRequire" style="min-height:70px;height:70px;"
 								placeholder="请输入内容" class="layui-textarea"></textarea>
 						</div>
 					</div>
 				</div>
 
-				<fieldset class="layui-elem-field layui-field-title"></fieldset>
+				<hr style="margin-top: 10px; margin-bottom: 10px;">
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="width: 100%;">
 						<button class="layui-btn layui-btn-sm layui-btn-normal"
 							type="button" style="width: 15%; margin-left: 35%;" lay-submit=""
 							lay-filter="saveData">确认提交</button>
 					</div>
+				</div>
 			</form>
 		</div>
 		<script th:inline="javascript">
