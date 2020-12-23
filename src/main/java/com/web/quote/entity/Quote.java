@@ -210,7 +210,7 @@ public class Quote extends BaseEntity {
 	/**
 	 * 关联产品利润率维护表
 	 * **/	
-	@ApiModelProperty(name="pkProfitProd",value="产品利润率表ID")
+	/*@ApiModelProperty(name="pkProfitProd",value="产品利润率表ID")
     @Column
     protected Long pkProfitProd;
 
@@ -218,7 +218,15 @@ public class Quote extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "pkProfitProd", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
-    protected ProfitProd profitProd;
+    protected ProfitProd profitProd;*/
+	
+	/**
+	 * 产品利润率
+	 */
+	@ApiModelProperty(name = "bsProfitProd", value = "产品利润率")
+	@Column(length = 20)
+	protected BigDecimal bsProfitProd;
+	
 	
 	/**
 	 * 客户名称
@@ -533,21 +541,14 @@ public class Quote extends BaseEntity {
 	public void setBsApproved(String bsApproved) {
 		this.bsApproved = bsApproved;
 	}
+	
 
-	public Long getPkProfitProd() {
-		return pkProfitProd;
+	public BigDecimal getBsProfitProd() {
+		return bsProfitProd;
 	}
 
-	public void setPkProfitProd(Long pkProfitProd) {
-		this.pkProfitProd = pkProfitProd;
-	}
-
-	public ProfitProd getProfitProd() {
-		return profitProd;
-	}
-
-	public void setProfitProd(ProfitProd profitProd) {
-		this.profitProd = profitProd;
+	public void setBsProfitProd(BigDecimal bsProfitProd) {
+		this.bsProfitProd = bsProfitProd;
 	}
 
 	public String getBsChkOutItem() {

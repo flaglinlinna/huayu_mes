@@ -184,7 +184,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		//6.生产管理费-管理费用的计算=管理费率*产品生产成本
 		BigDecimal gl = quote.getBsManageFee().multiply(p_cb).divide(new BigDecimal(100));
 		
-		//7.
+		//7.利润
 		
 		return ApiResponseResult.success().data(map);
 	}

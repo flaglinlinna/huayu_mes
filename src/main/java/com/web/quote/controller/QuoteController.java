@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.service.SysParamSubService;
 import com.web.quote.entity.Quote;
 import com.web.quote.service.QuoteService;
 
@@ -33,6 +33,8 @@ public class QuoteController extends WebController {
 
 	@Autowired
 	private QuoteService quoteService;
+	@Autowired
+	private SysParamSubService sysParamSubService;
 
 	@ApiOperation(value = "报价信息表结构", notes = "报价信息表结构" + Quote.TABLE_NAME)
 	@RequestMapping(value = "/getQuote", method = RequestMethod.GET)
@@ -49,6 +51,7 @@ public class QuoteController extends WebController {
 			ApiResponseResult profitProdList = quoteService.getProfitProd();
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("profitProdList", profitProdList);
+			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());//机台类型
 			mav.setViewName("/web/quote/01business/quote_add");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

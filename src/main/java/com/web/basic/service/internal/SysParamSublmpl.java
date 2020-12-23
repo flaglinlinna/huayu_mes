@@ -129,6 +129,11 @@ public class SysParamSublmpl implements SysParamSubService {
 				return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 						pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
+	@Override
+	public ApiResponseResult getListByMCode(String mcode) throws Exception {
+		// TODO Auto-generated method stub
+		return ApiResponseResult.success().data(sysParamSubDao.findByDelFlagAndCode(mcode));
+	}
 
 
 

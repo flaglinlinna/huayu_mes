@@ -66,7 +66,7 @@ $(function() {
 										layer.alert("操作请求错误，请您稍后再试");
 									});
 						}
-						
+						layui.form.render('select');
 	});
 });
 

@@ -1,7 +1,7 @@
 package com.web.quote.service.internal;
 
-import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,17 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.web.basePrice.dao.BjWorkCenterDao;
-import com.web.basePrice.dao.ItemTypeWgDao;
-import com.web.basePrice.dao.UnitDao;
-import com.web.basePrice.entity.BjWorkCenter;
-import com.web.basePrice.entity.ItemTypeWg;
-import com.web.basePrice.entity.Unit;
-import com.web.quote.dao.QuoteBomDao;
-import com.web.quote.entity.QuoteBom;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,8 +29,6 @@ import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.ProfitProdDao;
 import com.web.basePrice.entity.ProfitProd;
-import com.web.basic.entity.Client;
-import com.web.basic.entity.Defective;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemBaseDao;
 import com.web.quote.dao.QuoteItemDao;
@@ -48,7 +36,6 @@ import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteItem;
 import com.web.quote.entity.QuoteItemBase;
 import com.web.quote.service.QuoteService;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service(value = "QuoteService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -64,10 +51,8 @@ public class Quotelmpl implements QuoteService {
     private QuoteItemBaseDao quoteItemBaseDao;
 	@Autowired
     private TodoInfoService todoInfoService;
-
 	@Autowired
 	private SysUserDao sysUserDao;
-	
 	/**
      * 新增报价单
      */
@@ -77,6 +62,14 @@ public class Quotelmpl implements QuoteService {
     	if(quote == null){
             return ApiResponseResult.failure("报价单不能为空！");
         }
+    	 //20201223-fyx-先校验是否维护了利润
+        ApiResponseResult api = this.doCheckProfit(quote.getBsDevType(), quote.getBsProdType());
+        if(!api.isResult()){
+        	return ApiResponseResult.failure("请先在报价基础信息中的利润维护好数据!");
+        }else{
+        	quote.setBsProfitProd(getBigDecimal(api.getData()));
+        }
+        //---end----
     	//1:生成报价编号
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String dateStr = sdf.format(new Date());
@@ -210,13 +203,20 @@ public class Quotelmpl implements QuoteService {
         if(o == null){
             return ApiResponseResult.failure("该报价单不存在！");
         }
+        //20201223-fyx-先校验是否维护了利润
+        ApiResponseResult api = this.doCheckProfit(quote.getBsDevType(), quote.getBsProdType());
+        if(!api.isResult()){
+        	return ApiResponseResult.failure("请先在报价基础信息中的利润维护好数据!");
+        }else{
+        	o.setBsProfitProd(getBigDecimal(api.getData()));
+        }
+        //---end----
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setBsType(quote.getBsType());
         o.setBsFinishTime(quote.getBsFinishTime());
         o.setBsRemarks(quote.getBsRemarks());
         o.setBsSimilarProd(quote.getBsSimilarProd());
-        o.setPkProfitProd(quote.getPkProfitProd());
         o.setBsCustName(quote.getBsCustName());
         o.setBsPosition(quote.getBsPosition());
         o.setBsMaterial(quote.getBsMaterial());
@@ -296,7 +296,34 @@ public class Quotelmpl implements QuoteService {
 		
 		return ApiResponseResult.success();
 	}
+	@Override
+	public ApiResponseResult doCheckProfit(String bsDevType, String bsProdType) throws Exception {
+		// TODO Auto-generated method stub
+		List<ProfitProd> lpp = profitProdDao.findByDelFlagAndItemTypeAndProductTypeAndEnabled(0,bsDevType,bsProdType,1);
+		
+		if(lpp.size() == 0){
+			return ApiResponseResult.failure();
+		}
+		return ApiResponseResult.success().data(lpp.get(0).getProfitRateGs());
+	}
 
+	public  BigDecimal getBigDecimal( Object value ) {  
+        BigDecimal ret = null;  
+        if( value != null ) {  
+            if( value instanceof BigDecimal ) {  
+                ret = (BigDecimal) value;  
+            } else if( value instanceof String ) {  
+                ret = new BigDecimal( (String) value );  
+            } else if( value instanceof BigInteger ) {  
+                ret = new BigDecimal( (BigInteger) value );  
+            } else if( value instanceof Number ) {  
+                ret = new BigDecimal( ((Number)value).doubleValue() );  
+            } else {  
+                throw new ClassCastException("Not possible to coerce ["+value+"] from class "+value.getClass()+" into a BigDecimal.");  
+            }  
+        }  
+        return ret;  
+    }  
 
 
 }

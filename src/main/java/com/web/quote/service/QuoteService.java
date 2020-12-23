@@ -26,4 +26,6 @@ public interface QuoteService {
 
 	
 	public ApiResponseResult doItemFinish(String code,Long quoteId)throws Exception;//20201219-fyx-确认完成后要调用
+	
+	public ApiResponseResult doCheckProfit(String bsDevType,String bsProdType)throws Exception;//20201223-校验是否维护了利润
 }
