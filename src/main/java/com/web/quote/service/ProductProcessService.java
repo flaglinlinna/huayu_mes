@@ -22,4 +22,6 @@ public interface ProductProcessService {
 	public ApiResponseResult getList(String keyword, String bsType, String quoteId, PageRequest pageRequest) throws Exception;
 
     public ApiResponseResult getListByPkQuote(Long pkQuote, PageRequest pageRequest) throws Exception;
+
+	public ApiResponseResult getBomSelect(String pkQuote) throws Exception;
 }

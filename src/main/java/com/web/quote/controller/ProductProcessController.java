@@ -44,6 +44,7 @@ public class ProductProcessController extends WebController {
 		try {
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
+			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,8 +52,6 @@ public class ProductProcessController extends WebController {
 		}
 		return mav;
 	}
-
-
 
 	@ApiOperation(value = "新增报价工艺流程信息", notes = "新增报价工艺流程信息", hidden = true)
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -158,7 +157,6 @@ public class ProductProcessController extends WebController {
 		try {
 			logger.debug("导入模板=importExcel:");
 			getSysLogService().success(module,method, methodName, "");
-//			return null;
 			return productProcessService.doExcel(file,bsType,pkQuote);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -183,8 +181,5 @@ public class ProductProcessController extends WebController {
 			getSysLogService().error(module,method, methodName, e.toString());
 		}
 	}
-
-
-
 
 }

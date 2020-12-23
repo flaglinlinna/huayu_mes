@@ -1,6 +1,5 @@
 package com.web.quote.service.internal;
 
-import com.alibaba.fastjson.JSONObject;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
@@ -9,20 +8,16 @@ import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.ProcDao;
-import com.web.basePrice.dao.UnitDao;
 import com.web.basePrice.entity.Proc;
-import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.ProductProcessDao;
+import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductProcess;
 
 import com.web.quote.service.ProductProcessService;
-import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -35,8 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.servlet.http.HttpServletResponse;
-import java.beans.PropertyDescriptor;
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
@@ -47,12 +40,10 @@ public class ProductProcesslmpl implements ProductProcessService {
 	
 	@Autowired
     private ProductProcessDao productProcessDao;
-
     @Autowired
     private ProcDao procDao;
-
     @Autowired
-    private Environment env;
+    QuoteProcessDao quoteProcessDao;
 	
 	/**
      * 新增报价单
@@ -167,7 +158,6 @@ public class ProductProcesslmpl implements ProductProcessService {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (ProductProcess bs : productProcessesList) {
             Map<String, Object> map = new HashMap<>();
-//			map.put("lineId", bs.getLine().getLineName());// 获取关联表的数据
 			map.put("id", bs.getId());
             map.put("bsName", bs.getBsName());
             map.put("bsOrder", bs.getBsOrder());
@@ -260,8 +250,6 @@ public class ProductProcesslmpl implements ProductProcessService {
                     process.setBsYield((int)Double.parseDouble(row8));
                     process.setFmemo(row9);
                 }
-//                process.setCreateBy(userId);
-//                process.setCreateDate(doExcleDate);
                 hardwareMaterList.add(process);
             }
             productProcessDao.saveAll(hardwareMaterList);
@@ -326,5 +314,11 @@ public class ProductProcesslmpl implements ProductProcessService {
 
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
+
+    @Override
+    public ApiResponseResult getBomSelect(String pkQuote) throws Exception {
+        List<Map<String, Object>> list=quoteProcessDao.getBomName(pkQuote);
+        return ApiResponseResult.success().data(list);
     }
 }

@@ -51,7 +51,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">零件名称</label>
                 <div class="layui-input-block">
-                    <input id="bsName" name="bsName" lay-verify="required" placeholder="请输入零件名称"  autocomplete="off" class="layui-input" type="text"/>
+                    <select id="bsName" name="bsName" lay-verify="required" lay-filter="bsName" placeholder="请选择零件名称"  autocomplete="off">
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -127,6 +128,7 @@
         <script th:inline="javascript">
             var bsType=[[${bsType}]];
             var quoteId=[[${quoteId}]];
+            var bomNameList=[[${bomNameList}]];
         </script>
 
     <script th:src="@{/js/web/quote/02produce/product_process.js}" src="/js/web/quote/02produce/product_process.js"></script>

@@ -143,6 +143,8 @@ $(function() {
 			}
 		});
 
+		initSelect();
+
 		table.on('edit(productProcessTable)',function (obj) {
 			var bsRadix = obj.data.bsRadix;
 			var bsUserNum = obj.data.bsUserNum;
@@ -275,6 +277,19 @@ $(function() {
 
 });
 
+function initSelect() {
+	$("#bsName").empty();
+	var bomlist=bomNameList.data;
+	for(var i=0;i<bomlist.length;i++){
+		if(i==0){
+			$("#bsName").append("<option value=''> 请选择</option>");
+		}
+		$("#bsName").append(
+			"<option value=" + bomlist[i].BS_COMPONENT + ">"
+			+ bomlist[i].BS_COMPONENT +"</option>");
+	}
+	layui.form.render('select');
+}
 //模板下载
 function  downloadExcel() {
 	if(bsType =="hardware"){
