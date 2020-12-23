@@ -182,4 +182,22 @@ public class ProductProcessController extends WebController {
 		}
 	}
 
+	@ApiOperation(value="从临时表导入数据", notes="从临时表导入数据", hidden = true)
+	@RequestMapping(value = "/uploadCheck", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult uploadCheck(@RequestBody Map<String, Object> params) {
+		String method = "/productProcess/uploadCheck";String methodName ="导出数据";
+		try {
+			String ids = params.get("ids").toString();
+			logger.debug("导入临时表数据=uploadCheck:");
+			getSysLogService().success(module,method, methodName, "");
+			return  productProcessService.uploadCheck(ids);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("导出数据失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("失败！");
+		}
+	}
+
 }

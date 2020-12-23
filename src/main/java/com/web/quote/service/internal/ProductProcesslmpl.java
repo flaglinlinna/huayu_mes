@@ -10,9 +10,11 @@ import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.ProcDao;
 import com.web.basePrice.entity.Proc;
 import com.web.quote.dao.ProductProcessDao;
+import com.web.quote.dao.ProductProcessTempDao;
 import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductProcess;
 
+import com.web.quote.entity.ProductProcessTemp;
 import com.web.quote.service.ProductProcessService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -40,6 +42,10 @@ public class ProductProcesslmpl implements ProductProcessService {
 	
 	@Autowired
     private ProductProcessDao productProcessDao;
+
+    @Autowired
+    private ProductProcessTempDao productProcessTempDao;
+
     @Autowired
     private ProcDao procDao;
     @Autowired
@@ -224,7 +230,7 @@ public class ProductProcesslmpl implements ProductProcessService {
                     process.setCreateDate(doExcleDate);
                 }
                 process.setBsOrder((int)Double.parseDouble(bsOrder));
-                process.setBsRadix((int)Double.parseDouble(bsRadix));
+                process.setBsRadix(new BigDecimal(bsRadix));
                 List<Proc> procList = procDao.findByDelFlagAndProcName(0,procName);
                 if(procList.size()>0&&procList!=null){
                     process.setPkProc(procList.get(0).getId());
@@ -233,21 +239,21 @@ public class ProductProcesslmpl implements ProductProcessService {
                 if(("molding").equals(bsType)){
                     //注塑
                     process.setBsCave(row6);
-                    process.setBsCycle((int)Double.parseDouble(row7));
+                    process.setBsCycle(new BigDecimal(row7));
                     process.setBsUserNum(new BigDecimal(row8));
-                    process.setBsYield((int)Double.parseDouble(row9));
+                    process.setBsYield(new BigDecimal(row9));
                     process.setFmemo(row10);
                 }else if(("hardware").equals(bsType)){
                     //五金
                     process.setBsUserNum(new BigDecimal(row6));
-                    process.setBsCycle((int)Double.parseDouble(row7));
-                    process.setBsYield((int)Double.parseDouble(row8));
+                    process.setBsCycle(new BigDecimal(row7));
+                    process.setBsYield(new BigDecimal(row8));
                     process.setFmemo(row9);
                 }else {
                     //组装和表面
                     process.setBsUserNum(new BigDecimal(row6));
                     process.setBsCapacity(row7);
-                    process.setBsYield((int)Double.parseDouble(row8));
+                    process.setBsYield(new BigDecimal(row8));
                     process.setFmemo(row9);
                 }
                 hardwareMaterList.add(process);
@@ -320,5 +326,57 @@ public class ProductProcesslmpl implements ProductProcessService {
     public ApiResponseResult getBomSelect(String pkQuote) throws Exception {
         List<Map<String, Object>> list=quoteProcessDao.getBomName(pkQuote);
         return ApiResponseResult.success().data(list);
+    }
+
+    @Override
+    public ApiResponseResult uploadCheck(String ids) throws Exception {
+        String [] idsArr = ids.split(",");
+        Long[] longIdsArr = new Long[idsArr.length];
+        for(int i = 0; i < idsArr.length; i++){
+            longIdsArr[i] = Long.parseLong(idsArr[i]);
+        }
+        Date doDate = new Date();
+        Long userId = UserUtil.getSessionUser().getId();
+        //选中的临时表数据
+        List<ProductProcessTemp> productProcessTempList =productProcessTempDao.findAllByIdIn(longIdsArr);
+        //需要新增的主表数据
+        List<ProductProcess> productProcessList = new ArrayList<>();
+        for(ProductProcessTemp processTemp : productProcessTempList){
+            ProductProcess process = new ProductProcess();
+            process.setPkProc(processTemp.getPkProc());
+            process.setPkQuote(processTemp.getPkQuote());
+            process.setBsName(processTemp.getBsName());
+            process.setBsModelType(processTemp.getBsModelType());
+            process.setFmemo(processTemp.getFmemo());
+            process.setBsType(processTemp.getBsType());
+            process.setBsCapacity(processTemp.getBsCapacity());
+            process.setBsCave(processTemp.getBsCave());
+            if(StringUtils.isNotEmpty(processTemp.getBsCycle())){
+                process.setBsCycle(new BigDecimal(processTemp.getBsCycle()));
+            }
+            if(StringUtils.isNotEmpty(processTemp.getBsUserNum())){
+                process.setBsUserNum(new BigDecimal(processTemp.getBsUserNum()));
+            }
+            if(StringUtils.isNotEmpty(processTemp.getBsRadix())){
+                process.setBsRadix(new BigDecimal(processTemp.getBsRadix()));
+            }
+            if(StringUtils.isNotEmpty(processTemp.getBsYield())){
+                process.setBsYield(new BigDecimal(processTemp.getBsYield()));
+            }
+            if(StringUtils.isNotEmpty(processTemp.getBsOrder())){
+                process.setBsOrder(Integer.parseInt(processTemp.getBsOrder()));
+            }
+            //有则更新
+            process.setId(processTemp.getMid());
+            process.setCreateDate(doDate);
+            process.setCreateBy(userId);
+            productProcessList.add(process);
+            //标记已导入
+            processTemp.setEnabled(1);
+        }
+        productProcessTempDao.saveAll(productProcessTempList);
+        productProcessDao.saveAll(productProcessList);
+//        return ApiResponseResult.success().data(productProcessTempDao.findAllByIdIn(longIdsArr));
+        return ApiResponseResult.success();
     }
 }

@@ -8,7 +8,7 @@
 var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
-		var table = layui.table, form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect;
+		var table = layui.table, table2 = layui.table,form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect;
 
 		tableIns = table.render({
 			elem : '#productProcessList',
@@ -77,6 +77,96 @@ $(function() {
 				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
+				//循环表数据根据flag状态给行上色
+				$.each(res['data'], function (i, j) {
+					// console.log(i + ' -454- ' + j['bsCave']);
+						if (j['bsCave'] === null||j['bsCave']=='') {
+							// console.log(i + ' -458- ' + 'jdjg is null');
+							Layui_SetDataTableRowColor('table', i + 1, '#b1070a');
+						}
+					});
+			}
+		});
+
+		tableIns2 = table.render({
+			elem : '#uploadList',
+			// url : context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
+			method : 'get' // 默认：get请求
+			,
+			cellMinWidth : 80,
+			height:'full-110'//固定表头&full-查询框高度
+			,even:true,//条纹样式
+			page : true,
+			request : {
+				pageName : 'page' // 页码的参数名称，默认：page
+				,
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			},
+			parseData : function(res) {
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+					// code值为200表示成功
+				}
+			},
+			cols : [ [
+				{type: "checkbox"},
+				{type : 'numbers',style:'background-color:#d2d2d2'},
+				{field : 'checkStatus', width:100, title : '状态',sort:true,style:'background-color:#d2d2d2',templet: '#checkStatus'},
+				{field : 'enabled', width:100, title : '是否导入',sort:true,style:'background-color:#d2d2d2', templet: '#enabledTpl'},
+				{field : 'errorInfo', width:150, title : '错误信息',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'bsOrder',width:150, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'proc', width:150, title : '工序名称',style:'background-color:#d2d2d2',
+					templet:function (d) {
+						if(d.proc!=null){
+							return d.proc.procName==null||undefined?"":d.proc.procName;
+						}else {
+							return "";
+						}
+					}},
+				{field : 'procfmemo', width:100, title : '工序说明',style:'background-color:#d2d2d2',
+					templet:function (d) {
+						if(d.proc!=null){
+							return d.proc.fmemo==null||undefined?"":d.proc.fmemo;
+						}else {
+							return "";
+						}
+					}},
+				{field : 'workcenterName', width:100, title : '工作中心',style:'background-color:#d2d2d2'
+					,templet:function (d) {
+						if(d.proc!=null){
+							if(d.proc.bjWorkCenter!=null){
+								return d.proc.bjWorkCenter.workcenterName==null||undefined?"":d.proc.bjWorkCenter.workcenterName;
+							}else {
+								return "";
+							}
+						}else {
+							return "";
+						}
+					}},
+				{field : 'bsModelType', width:100, title : '机台类型',edit:'text'},
+				{field : 'bsRadix', title : '基数',edit:'text'},
+				{field : 'bsUserNum', title : '人数',edit:'text'},
+				{field : 'bsCycle', title : '成型周期(S)', width:150,edit:'text'},
+				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
+				{field : 'bsCave', title : '穴数',edit:'text'},
+				{field : 'bsCapacity', title : '产能',edit:'text'},
+				{field : 'fmemo', title : '备注',edit:'text'},
+				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
+			done : function(res, curr, count) {
+				pageCurr = curr;
+				//循环表数据根据flag状态给行上色
+				$.each(res['data'], function (i, j) {
+					// console.log(i + ' -454- ' + j['bsCave']);
+					if (j['bsCave'] === null||j['bsCave']=='') {
+						// console.log(i + ' -458- ' + 'jdjg is null');
+						Layui_SetDataTableRowColor('table', i + 1, '#b1070a');
+					}
+				});
 			}
 		});
 
@@ -146,43 +236,87 @@ $(function() {
 		initSelect();
 
 		table.on('edit(productProcessTable)',function (obj) {
+			console.log(obj.field);//当前编辑列名
 			var bsRadix = obj.data.bsRadix;
 			var bsUserNum = obj.data.bsUserNum;
 			var bsYield = obj.data.bsYield;
 			var bsCave = obj.data.bsCave;
 			var bsCycle = obj.data.bsCycle;
-			if(/^\d+$/.test(bsRadix)==false && /^\d+\.\d+$/.test(bsRadix)==false || bsRadix<=0)
-			{
-				layer.msg("基数必填且只能输入数字且大于0");
-				loadAll();
-				return false;
-			}
-			if(/^\d+$/.test(bsUserNum)==false && /^\d+\.\d+$/.test(bsUserNum)==false && bsUserNum!="" && bsUserNum!=null)
-			{
-				layer.msg("人数只能输入数字");
-				loadAll();
-				return false;
-			}
-			if(/^\d+$/.test(bsYield)==false && /^\d+\.\d+$/.test(bsYield)==false && bsYield!="" && bsYield!=null)
-			{
-				layer.msg("工序良率只能输入数字");
-				loadAll();
-				return false;
-			}
-			if(/^\d+$/.test(bsCycle)==false && /^\d+\.\d+$/.test(bsCycle)==false && bsCycle!="" && bsCycle!=null)
-			{
-				layer.msg("成型周期只能输入数字");
-				loadAll();
-				return false;
-			}
-			if(/^\d+$/.test(bsCave)==false && /^\d+\.\d+$/.test(bsCave)==false && bsCave!="" && bsCave!=null)
-			{
-				layer.msg("穴数只能输入数字");
-				loadAll();
-				return false;
+			if(obj.field =="bsRadix") {
+				if (/^\d+$/.test(bsRadix) == false && /^\d+\.\d+$/.test(bsRadix) == false || bsRadix <= 0) {
+					layer.msg("基数必填且只能输入数字且大于0");
+					loadAll();
+					return false;
+				}
+			}else if(obj.field =="bsUserNum") {
+				if (/^\d+$/.test(bsUserNum) == false && /^\d+\.\d+$/.test(bsUserNum) == false && bsUserNum != "" && bsUserNum != null) {
+					layer.msg("人数只能输入数字");
+					loadAll();
+					return false;
+				}
+			}else if(obj.field =="bsYield") {
+				if (/^\d+$/.test(bsYield) == false && /^\d+\.\d+$/.test(bsYield) == false && bsYield != "" && bsYield != null) {
+					layer.msg("工序良率只能输入数字");
+					loadAll();
+					return false;
+				}
+			}else if(obj.field =="bsCave") {
+				if (/^\d+$/.test(bsCycle) == false && /^\d+\.\d+$/.test(bsCycle) == false && bsCycle != "" && bsCycle != null) {
+					layer.msg("成型周期只能输入数字");
+					loadAll();
+					return false;
+				}
+			}else if(obj.field =="bsCycle") {
+				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false && bsCave != "" && bsCave != null) {
+					layer.msg("穴数只能输入数字");
+					loadAll();
+					return false;
+				}
 			}
 			obj.field = obj.data;
 			editSubmit(obj);
+		})
+
+		table.on('edit(uploadTable)',function (obj) {
+			console.log(obj.field);//当前编辑列名
+			var bsRadix = obj.data.bsRadix;
+			var bsUserNum = obj.data.bsUserNum;
+			var bsYield = obj.data.bsYield;
+			var bsCave = obj.data.bsCave;
+			var bsCycle = obj.data.bsCycle;
+			if(obj.field =="bsRadix") {
+				if (/^\d+$/.test(bsRadix) == false && /^\d+\.\d+$/.test(bsRadix) == false || bsRadix <= 0) {
+					layer.msg("基数必填且只能输入数字且大于0");
+					loadAll2();
+					return false;
+				}
+			}else if(obj.field =="bsUserNum") {
+				if (/^\d+$/.test(bsUserNum) == false && /^\d+\.\d+$/.test(bsUserNum) == false && bsUserNum != "" && bsUserNum != null) {
+					layer.msg("人数只能输入数字");
+					loadAll2();
+					return false;
+				}
+			}else if(obj.field =="bsYield") {
+				if (/^\d+$/.test(bsYield) == false && /^\d+\.\d+$/.test(bsYield) == false && bsYield != "" && bsYield != null) {
+					layer.msg("工序良率只能输入数字");
+					loadAll2();
+					return false;
+				}
+			}else if(obj.field =="bsCycle") {
+				if (/^\d+$/.test(bsCycle) == false && /^\d+\.\d+$/.test(bsCycle) == false && bsCycle != "" && bsCycle != null) {
+					layer.msg("成型周期只能输入数字");
+					loadAll2();
+					return false;
+				}
+			}else if(obj.field =="bsCave") {
+				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false && bsCave != "" && bsCave != null) {
+					layer.msg("穴数只能输入数字");
+					loadAll2();
+					return false;
+				}
+			}
+			obj.field = obj.data;
+			editSubmitTemp(obj);
 		})
 
 		// 监听在职操作
@@ -200,6 +334,20 @@ $(function() {
 				getProdErr(data, data.id);
 			}
 		});
+
+		//监听导入临时表的工具条
+		table.on('tool(uploadTable)', function(obj) {
+			var data = obj.data;
+			if (obj.event === 'del') {
+				// 删除
+				delProcessTemp(data, data.id, data.bsName);
+			} else if (obj.event === 'edit') {
+				// 编辑
+				// getProdErr(data, data.id);
+				getProcessTemp(data, data.id);
+			}
+		});
+
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
 			if (data.field.id == null || data.field.id == "") {
@@ -210,6 +358,13 @@ $(function() {
 			}
 			return false;
 		});
+
+		// 监听提交
+		form.on('submit(addSubmit1)', function(data) {
+			editSubmitTemp(data);
+			return false;
+		});
+
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
 			// 重新加载table
@@ -218,7 +373,6 @@ $(function() {
 		});
 		// 编辑五金工艺
 		function getProdErr(obj, id) {
-			console.log(obj);
 			var procName="";
 			if(obj.proc!=null){
 				procName=obj.proc.procName
@@ -241,10 +395,33 @@ $(function() {
 			openProdErr(id, "编辑工艺信息")
 		};
 
+		function getProcessTemp(obj, id) {
+			var procName="";
+			if(obj.proc!=null){
+				procName=obj.proc.procName
+			}
+			form.val("productProcessTempForm", {
+				"id" : obj.id,
+				"bsName" : obj.bsName,
+				"procName" : procName,
+				"pkProc":obj.pkProc,
+				"bsOrder" : obj.bsOrder,
+				"bsModelType" : obj.bsModelType,
+				"bsRadix" : obj.bsRadix,
+				"fmemo" : obj.fmemo,
+				"bsUserNum":obj.bsUserNum,
+				"bsCave":obj.bsCave,
+				"bsCapacity":obj.bsCapacity,
+				"bsCycle":obj.bsCycle,
+				"bsYield":obj.bsYield,
+			});
+			openProcessTemp(id, "编辑工艺信息")
+		};
+
 		//导入
 		upload.render({
 			elem: '#upload'
-			,url: context + '/productProcess/importExcel'
+			,url: context + '/productProcessTemp/importExcel'
 			,accept: 'file' //普通文件
 			,data: {
 				bsType: function(){
@@ -277,6 +454,53 @@ $(function() {
 
 });
 
+function Layui_SetDataTableRowColor(TabDivId, RowIndex, ColorString) {
+	try {
+		var div = $("[lay-id='demo'] tr:eq(" + RowIndex + ")");
+		if (div != null) //找到对象了
+		{
+			div.css("color", ColorString);
+		}
+	} catch (e) {
+		console.log(e.message);
+	}
+}
+
+function uploadChecked() {
+	var tempIds = "";
+	var checkStatus = layui.table.checkStatus("uploadList");
+	for(var i = 0; i < checkStatus.data.length; i++){
+		if(i == 0){
+			tempIds += checkStatus.data[i].id;
+		}else{
+			tempIds += "," + checkStatus.data[i].id;
+		}
+		if(checkStatus.data[i].checkStatus == "1"){
+			layer.msg("选择导入的数据中存在校验未通过,请修改后导入");
+			return false;
+		}
+	}
+	console.log(tempIds);
+	var params = {
+		"ids": tempIds
+	};
+	CoreUtil.sendAjax("/productProcess/uploadCheck", JSON.stringify(params), function(
+		data) {
+		if (data.result) {
+			layer.alert("操作成功", function() {
+				layer.closeAll();
+				cleanProdErr();
+				// 加载页面
+				loadAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
 function initSelect() {
 	$("#bsName").empty();
 	var bomlist=bomNameList.data;
@@ -285,6 +509,16 @@ function initSelect() {
 			$("#bsName").append("<option value=''> 请选择</option>");
 		}
 		$("#bsName").append(
+			"<option value=" + bomlist[i].BS_COMPONENT + ">"
+			+ bomlist[i].BS_COMPONENT +"</option>");
+	}
+	$("#bsName1").empty();
+	var bomlist=bomNameList.data;
+	for(var i=0;i<bomlist.length;i++){
+		if(i==0){
+			$("#bsName1").append("<option value=''> 请选择</option>");
+		}
+		$("#bsName1").append(
 			"<option value=" + bomlist[i].BS_COMPONENT + ">"
 			+ bomlist[i].BS_COMPONENT +"</option>");
 	}
@@ -328,6 +562,25 @@ function openProdErr(id, title) {
 	layer.full(index);
 }
 
+function openProcessTemp(id, title) {
+	if (id == null || id == "") {
+		$("#id").val("");
+	}
+	var index2=layer.open({
+		type : 1,
+		title : title,
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#setProcessTemp'),
+		end : function() {
+			cleanProcessTemp();
+		}
+	});
+	layer.full(index2);
+}
+
 // 添加五金工艺
 function addHardware() {
 	// 清空弹出框数据
@@ -335,6 +588,28 @@ function addHardware() {
 	// 打开弹出框
 	openProdErr(null, "添加工艺信息");
 }
+
+// 添加导入页
+function openUpload() {
+	tableIns2.reload({
+		url:context + '/productProcessTemp/getList?bsType='+bsType+'&quoteId='+quoteId,
+		done: function(res1, curr, count){
+			pageCurr=curr;
+		}
+	})
+	// 打开弹出框
+	var index=layer.open({
+		type : 1,
+		title : "导入工艺信息",
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#uploadDiv')
+	});
+	layer.full(index);
+}
+
 // 新增五金工艺提交
 function addSubmit(obj) {
 	obj.field.bsType = bsType;
@@ -375,6 +650,25 @@ function editSubmit(obj) {
 	});
 }
 
+// 编辑临时表数据提交
+function editSubmitTemp(obj) {
+	CoreUtil.sendAjax("/productProcessTemp/edit", JSON.stringify(obj.field), function(
+		data) {
+		if (data.result) {
+			layer.alert("操作成功", function(index) {
+				layer.close(index);
+				// cleanProdErr();
+				// 加载页面
+				loadAll2();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
 // 删除五金工艺
 function delProdErr(obj, id, name) {
 	if (id != null) {
@@ -406,6 +700,37 @@ function delProdErr(obj, id, name) {
 	}
 }
 
+// 删除临时表
+function delProcessTemp(obj, id, name) {
+	if (id != null) {
+		var param = {
+			"id" : id
+		};
+		layer.confirm('您确定要删除临时导入数据：' + name + '吗？', {
+			btn : [ '确认', '返回' ]
+			// 按钮
+		}, function() {
+			CoreUtil.sendAjax("/productProcessTemp/delete", JSON.stringify(param),
+				function(data) {
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("删除成功！", function(index) {
+								layer.close(index);
+								// 加载load方法
+								loadAll2();
+							});
+						} else {
+							layer.alert(data, function(index) {
+								layer.close(index);
+							});
+						}
+					}
+				});
+		});
+	}
+}
+
 // 重新加载表格（搜索）
 function load(obj) {
 	// 重新加载table
@@ -429,10 +754,32 @@ function loadAll() {
 		// 从当前页码开始
 		}
 	});
+	tableIns2.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
+		}
+	});
+}
+
+function loadAll2() {
+	// 重新加载table
+	tableIns2.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
+		}
+	});
 }
 
 // 清空新增表单数据
 function cleanProdErr() {
 	$('#productProcessForm')[0].reset();
+	layui.form.render();// 必须写
+}
+
+// 清空新增表单数据
+function cleanProcessTemp() {
+	$('#productProcessTempForm')[0].reset();
 	layui.form.render();// 必须写
 }

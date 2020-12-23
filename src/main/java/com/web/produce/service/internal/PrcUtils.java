@@ -297,7 +297,11 @@ public class PrcUtils {
                 cs.setString(4, itemNo);
                 cs.setString(5, itemId);
                 cs.setString(6, itemNoCus);
-                cs.setLong(7, custId);
+                if(custId ==null){
+                    cs.setString(7,null);
+                }else {
+                    cs.setLong(7, custId);
+                }
                 cs.setString(8, fmemo);
                 cs.setString(9, fixValue);
                 cs.setString(10,fyear);
