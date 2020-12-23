@@ -113,7 +113,7 @@ public class ProductProcess extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "bsRadix", value = "基数")
 	@Column(length = 50)
-	protected int bsRadix=1;
+	protected BigDecimal bsRadix=BigDecimal.ZERO;
 	
 	/**
 	 * 人数
@@ -127,14 +127,14 @@ public class ProductProcess extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "bsCycle", value = "成型周期")
 	@Column(length = 50)
-	protected Integer bsCycle=0;
+	protected BigDecimal bsCycle=BigDecimal.ZERO;
 	
 	/**
 	 * 工序良率(%)
 	 */
 	@ApiModelProperty(name = "bsYield", value = "工序良率(%)")
 	@Column(length = 50)
-	protected Integer bsYield=0;
+	protected BigDecimal bsYield=BigDecimal.ZERO;
 
 
 	/**
@@ -261,11 +261,11 @@ public class ProductProcess extends BaseEntity {
 		this.bsModelType = bsModelType;
 	}
 
-	public int getBsRadix() {
+	public BigDecimal getBsRadix() {
 		return bsRadix;
 	}
 
-	public void setBsRadix(int bsRadix) {
+	public void setBsRadix(BigDecimal bsRadix) {
 		this.bsRadix = bsRadix;
 	}
 
@@ -277,19 +277,19 @@ public class ProductProcess extends BaseEntity {
 		this.bsUserNum = bsUserNum;
 	}
 
-	public Integer getBsCycle() {
+	public BigDecimal getBsCycle() {
 		return bsCycle;
 	}
 
-	public void setBsCycle(Integer bsCycle) {
+	public void setBsCycle(BigDecimal bsCycle) {
 		this.bsCycle = bsCycle;
 	}
 
-	public Integer getBsYield() {
+	public BigDecimal getBsYield() {
 		return bsYield;
 	}
 
-	public void setBsYield(Integer bsYield) {
+	public void setBsYield(BigDecimal bsYield) {
 		this.bsYield = bsYield;
 	}
 
