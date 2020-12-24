@@ -31,9 +31,9 @@
 	<div th:replace="audio/fragment/audio :: audio"></div>
 	<div th:replace="audio/fragment/saomiao :: saomiao"></div>
 	<div class="layui-layout layui-layout-admin">
-		<div style="margin: 10px">
+		<div style="margin: 10px;">
 			<form id="itemForm" class="layui-form layui-form-pane"
-				lay-filter="itemForm" method="post" action="">
+				lay-filter="itemForm" method="post" action="" style="overflow-x: hidden;">
 				<h3 style="text-align: center;">华誉精密产品报价需求单</h3>
 				<fieldset class="layui-elem-field layui-field-title" style="margin:10px 0 10px;">
 					<legend class="legend-font" style="font-size: 14px;">报价基础信息</legend>
@@ -60,7 +60,7 @@
 						</div>
 						<label class="layui-form-label layui-required">管理费用</label>
 						<div class="layui-input-inline">
-							<input id="bsManageFee" autocomplete="off" name="bsManageFee"
+							<input id="bsManageFee" autocomplete="off" name="bsManageFee" value="3.6"
 								class="layui-input" type="text" lay-verify="required|num"/> <span
 								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
 						</div>
