@@ -290,7 +290,6 @@ $(function() {
 			}
 		});
 
-		initSelect();
 
 		table.on('edit(listTable)',function (obj) {
 			console.log(obj.field);//当前编辑列名
@@ -558,29 +557,7 @@ function uploadChecked() {
 	});
 }
 
-function initSelect() {
-	$("#bsName").empty();
-	var bomlist=bomNameList.data;
-	for(var i=0;i<bomlist.length;i++){
-		if(i==0){
-			$("#bsName").append("<option value=''> 请选择</option>");
-		}
-		$("#bsName").append(
-			"<option value=" + bomlist[i].BS_COMPONENT + ">"
-			+ bomlist[i].BS_COMPONENT +"</option>");
-	}
-	$("#bsName1").empty();
-	var bomlist=bomNameList.data;
-	for(var i=0;i<bomlist.length;i++){
-		if(i==0){
-			$("#bsName1").append("<option value=''> 请选择</option>");
-		}
-		$("#bsName1").append(
-			"<option value=" + bomlist[i].BS_COMPONENT + ">"
-			+ bomlist[i].BS_COMPONENT +"</option>");
-	}
-	layui.form.render('select');
-}
+
 //模板下载
 function  downloadExcel() {
 	if(bsType =="hardware"){
