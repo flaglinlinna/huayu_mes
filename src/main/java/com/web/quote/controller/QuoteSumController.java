@@ -47,7 +47,9 @@ public class QuoteSumController extends WebController {
 	public ModelAndView toQuoteSum(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			ApiResponseResult quoteDetail=quoteSumService.getSumByQuote(quoteId);
 			mav.addObject("quoteId", quoteId);
+			mav.addObject("quoteDetail", quoteDetail);
 			mav.setViewName("/web/quote/04summary/quote_sum");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

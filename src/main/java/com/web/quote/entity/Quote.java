@@ -226,6 +226,13 @@ public class Quote extends BaseEntity {
 	protected String bsProdType;
 	
 	/**
+	 * 产品类型id
+	 * **/	
+	@ApiModelProperty(name="bsProdTypeId",value="产品类型id")
+    @Column
+    protected Long bsProdTypeId;
+	
+	/**
 	 * 关联产品利润率维护表
 	 * **/	
 	/*@ApiModelProperty(name="pkProfitProd",value="产品利润率表ID")

@@ -97,6 +97,7 @@ public class BjWorkCenterImpl implements BjWorkCenterService {
     }
    o.setLastupdateDate(new Date());
    o.setLastupdateBy(UserUtil.getSessionUser().getId());
+   o.setBsCode(workCenter.getBsCode());
    o.setFmemo(workCenter.getFmemo());
    o.setWorkcenterName(workCenter.getWorkcenterName());
    o.setCheckStatus(workCenter.getCheckStatus());
@@ -188,6 +189,7 @@ public class BjWorkCenterImpl implements BjWorkCenterService {
         for(BjWorkCenter bjWorkCenter:bjWorkCenterList){
             Map<String,Object> map = new HashMap<>();
             map.put("id",bjWorkCenter.getId());
+            map.put("bsCode",bjWorkCenter.getBsCode());
             map.put("workcenterCode",bjWorkCenter.getWorkcenterCode());
             map.put("workcenterName",bjWorkCenter.getWorkcenterName());
             map.put("fmemo",bjWorkCenter.getFmemo());

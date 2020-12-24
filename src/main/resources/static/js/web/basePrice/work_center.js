@@ -30,48 +30,61 @@ $(function() {
 			},
 			cols : [ [ {
 				type : 'numbers'
+			},{
+				field : 'bsCode',
+				title : '工作中心大类',width:130,
+				templet:function(d){
+					if(d.bsCode=="hardware"){
+						return "五金"
+					}else if(d.bsCode=="molding"){
+						return "注塑"
+					}else if(d.bsCode=="surface"){
+						return "表面处理"
+					}else if(d.bsCode=='packag'){
+						return "组装"
+					}else if(d.bsCode=='out'){
+						return "外协"
+					}else{
+						return ""
+					}
+				}
 			}, {
 				field : 'workcenterCode',
-				title : '工作中心编号',
+				title : '工作中心编号',width:130
 			}, {
 				field : 'workcenterName',
-				title : '工作中心名称',
+				title : '工作中心名称',width:130
 			}, {
 				field : 'fmemo',
-				title : '备注',
+				title : '备注',width:130
 			}, {
 				field : 'checkStatus',
-				title : '有效状态',
+				title : '有效状态',width:95,
 				templet : '#statusTpl'
 			},
-
 			{
 				field : 'createBy',
-				title : '创建人',
+				title : '创建人',width:100
 			}, {
 				field : 'createDate',
-				title : '创建时间',
+				title : '创建时间',width:150
 			}, {
 				field : 'lastupdateBy',
-				title : '更新人',
+				title : '更新人',width:100
 			}, {
 				field : 'lastupdateDate',
-				title : '更新时间',
+				title : '更新时间',width:150
 			}, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
-				toolbar : '#optBar'
+				toolbar : '#optBar',
+				width:130
 			} ] ],
 			done : function(res, curr, count) {
-				// 如果是异步请求数据方式，res即为你接口返回的信息。
-				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-				// console.log(res);
-				// 得到当前页码
-				// console.log(curr);
-				// 得到数据总量
-				// console.log(count);
+				console.log(res)
 				pageCurr = curr;
+				merge(res.data,['bsCode',],[1,1]);
 			}
 		});
 		// 切换状态操作
@@ -116,6 +129,7 @@ $(function() {
 				if (data.result) {
 					form.val("workCenterForm", {
 						"id" : data.data.id,
+						"bsCode" : data.data.bsCode,
 						"workcenterCode" : data.data.workcenterCode,
 						"workcenterName" : data.data.workcenterName,
 					});
@@ -275,7 +289,34 @@ function delWorkCenter(obj, id, name) {
 		});
 	}
 }
-
+function merge(res,columsName,columsIndex) {
+    var data = res;
+    var mergeIndex = 0;//定位需要添加合并属性的行数
+    var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+    //var columsName = ['itemCode'];//需要合并的列名称
+    //var columsIndex = [3];//需要合并的列索引值
+    for (var k = 0; k < columsIndex.length; k++) { //这里循环所有要合并的列
+        var trArr = $(".layui-table-body>.layui-table").find("tr");//所有行
+            for (var i = 1; i < data.length; i++) { //这里循环表格当前的数据
+                var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
+                var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);//获取相同列的第一列
+                if (data[i][columsName[0]] === data[i-1][columsName[0]]) { //后一行的值与前一行的值做比较，相同就需要合并
+                	mark += 1;
+                    tdPreArr.each(function () {//相同列的第一列增加rowspan属性
+                        $(this).attr("rowspan", mark);
+                    });
+                    tdCurArr.each(function () {//当前行隐藏
+                        $(this).css("display", "none");
+                    });
+                }else {
+                    mergeIndex = i;
+                    mark = 1;//一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+                }
+            }
+        mergeIndex = 0;
+        mark = 1;
+    }
+}
 // 重新加载表格（搜索）
 function load(obj) {
 	// 重新加载table

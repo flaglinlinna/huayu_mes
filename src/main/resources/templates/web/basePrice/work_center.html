@@ -45,6 +45,19 @@
             <input id="pageNum" type="hidden" name="pageNum"/>
             <input id="id" type="hidden" name="id"/>
             <div class="layui-form-item">
+                <label class="layui-form-label layui-required">工作中心大类</label>
+                <div class="layui-input-inline">
+                   <select id="bsCode" name="bsCode" class="layui-input">
+                     <option value=""></option>
+                     <option value="hardware">五金</option>
+                     <option value="molding">注塑</option>
+                     <option value="surface">表面处理</option>
+                     <option value="packag">组装</option>
+                     <option value="out">外协</option>
+                   </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label layui-required">工作中心编号</label>
                 <div class="layui-input-inline">
                     <input id="workcenterCode" name="workcenterCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>

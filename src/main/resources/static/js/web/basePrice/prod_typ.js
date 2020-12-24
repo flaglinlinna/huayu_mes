@@ -1,5 +1,5 @@
 /**
- * 工序维护管理
+ * 产品类型维护管理
  */
 var pageCurr;
 $(function() {
@@ -32,7 +32,7 @@ $(function() {
 				type : 'numbers'
 			},{
 				field : 'productType',
-				title : '工序名称',
+				title : '产品类型',
 			},{
 				field : 'enabled',
 				title : '有效状态',
@@ -104,13 +104,13 @@ $(function() {
 			load(data);
 			return false;
 		});
-		// 编辑工序维护
+		// 编辑产品类型维护
 		function getProdTyp(obj) {	
 			form.val("prodTypForm", {
 						"id" : obj.id,
 						"productType" : obj.productType,
 					});
-					openProdTyp(obj.id, "编辑工序信息")
+					openProdTyp(obj.id, "编辑产品类型信息")
 		}
 
 		// 设置正常/禁用
@@ -119,7 +119,7 @@ $(function() {
 			var deaprtisStatus = checked ? "正常" : "禁用";
 			// 正常/禁用
 			layer.confirm(
-					'您确定要把工序：' + name + '设置为' + deaprtisStatus + '状态吗？', {
+					'您确定要把产品类型：' + name + '设置为' + deaprtisStatus + '状态吗？', {
 						btn1 : function(index) {
 							var params = {
 								"id" : id,
@@ -181,14 +181,14 @@ function openProdTyp(id, title) {
 	layer.full(index);
 }
 
-// 新增工序维护
+// 新增产品类型维护
 function addProdTyp() {
 	// 清空弹出框数据
 	cleanProdTyp();
 	// 打开弹出框
-	openProdTyp(null, "添加工序信息");
+	openProdTyp(null, "添加产品类型信息");
 }
-// 新增工序维护的提交
+// 新增产品类型维护的提交
 function addSubmit(obj) {
 	CoreUtil.sendAjax("/basePrice/prodTyp/add", JSON.stringify(obj.field),
 			function(data) {
@@ -209,7 +209,7 @@ function addSubmit(obj) {
 			});
 }
 
-// 编辑工序维护的提交
+// 编辑产品类型维护的提交
 function editSubmit(obj) {
 	CoreUtil.sendAjax("/basePrice/prodTyp/edit", JSON.stringify(obj.field),
 			function(data) {
@@ -230,13 +230,13 @@ function editSubmit(obj) {
 			});
 }
 
-// 删除工序维护
+// 删除产品类型维护
 function delProdTyp(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除该名称为:' + name + ' 的工序信息吗？', {
+		layer.confirm('您确定要删除该名称为:' + name + ' 的产品类型信息吗？', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {

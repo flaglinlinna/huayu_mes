@@ -48,9 +48,9 @@ public class QuoteController extends WebController {
 	public ModelAndView toQuoteAdd(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
-			ApiResponseResult profitProdList = quoteService.getProfitProd();
+			ApiResponseResult prodType = quoteService.getProdType();
 			mav.addObject("quoteId", quoteId);
-			mav.addObject("profitProdList", profitProdList);
+			mav.addObject("prodType", prodType);
 			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());//机台类型
 			mav.setViewName("/web/quote/01business/quote_add");// 返回路径
 		} catch (Exception e) {
@@ -219,4 +219,23 @@ public class QuoteController extends WebController {
         }
     }
 
+	@ApiOperation(value = "检验利润率信息", notes = "检验利润率信息", hidden = true)
+    @RequestMapping(value = "/doCheckProfit", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doCheckProfit(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "quote/doCheckProfit";String methodName ="检验利润率信息";
+        try{
+        	String bsDevType=params.get("bsDevType").toString();
+        	String bsProdType=params.get("bsProdType").toString();
+            ApiResponseResult result = quoteService.doCheckProfit(bsDevType, bsProdType);
+            logger.debug("检验利润率信息=doCheckProfit:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("检验利润率信息失败！", e);
+            getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+            return ApiResponseResult.failure("检验利润率信息失败！");
+        }
+    }
 }

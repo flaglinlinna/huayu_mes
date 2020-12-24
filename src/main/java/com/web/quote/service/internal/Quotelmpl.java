@@ -27,7 +27,9 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.basePrice.dao.ProdTypDao;
 import com.web.basePrice.dao.ProfitProdDao;
+import com.web.basePrice.entity.ProdTyp;
 import com.web.basePrice.entity.ProfitProd;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemBaseDao;
@@ -53,6 +55,8 @@ public class Quotelmpl implements QuoteService {
     private TodoInfoService todoInfoService;
 	@Autowired
 	private SysUserDao sysUserDao;
+	@Autowired
+	private ProdTypDao prodTypDao;
 	/**
      * 新增报价单
      */
@@ -115,11 +119,11 @@ public class Quotelmpl implements QuoteService {
         return ApiResponseResult.success("报价单新增成功！").data(lqi);
 	}
     /**
-     * 获取产品利润率维护表
+     * 获取产品类型表
      * **/
     
-    public ApiResponseResult getProfitProd()throws Exception{
-    	List<ProfitProd> list=profitProdDao.findByDelFlag(0);
+    public ApiResponseResult getProdType()throws Exception{
+    	List<ProdTyp> list=prodTypDao.findByDelFlag(0);
     	return ApiResponseResult.success().data(list);
     }
     

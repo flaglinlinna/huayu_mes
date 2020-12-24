@@ -21,6 +21,19 @@ $(function() {
 			                }
 			                return false;			
 						});
+						  form.on('select(bsProdTypeId)', function(data){
+						        var elem = data.elem;
+						        var textId = elem.getAttribute("textId");
+						        $("#bsProdType").val(this.innerText)//保存中文字符
+						        if($("#bsDevType").val()!=""){
+						        	doCheckProfit()
+							       }
+						  })
+						   form.on('select(bsDevType)', function(data){
+						       if($("#bsProdTypeId").val()!=""){
+						    	   doCheckProfit()
+						       }
+						  })
 						form.verify({
 							num: function(value){
 								if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false)
@@ -46,7 +59,7 @@ $(function() {
 												"bsRemarks" : data.data.bsRemarks,
 												"bsProd" : data.data.bsProd,
 												"bsSimilarProd" : data.data.bsSimilarProd,
-												"pkProfitProd" : data.data.pkProfitProd,
+												"bsProdTypeId" : data.data.bsProdTypeId,
 												"bsCustName" : data.data.bsCustName,
 												"bsPosition" : data.data.bsPosition,
 												"bsChkOut" : data.data.bsChkOut,
@@ -96,15 +109,23 @@ function setCheckboxValues(Name,str) {//name checkbox控件id, str 字符串
 }
 
 function setData() {
-	$("#pkProfitProd").empty();
-	var data = profitProdList.data;
+	$("#bsProdTypeId").empty();
+	var data = prodType.data;
 	for (var i = 0; i < data.length; i++) {
 		if (i == 0) {
-			$("#pkProfitProd").append("<option value=''>请点击选择</option>");
+			$("#bsProdTypeId").append("<option value=''>请点击选择</option>");
 		}
-		$("#pkProfitProd").append(
-				"<option value=" + data[i].id + ">" + data[i].productType
-						+ "——" + data[i].itemType + "</option>");
+		$("#bsProdTypeId").append(
+				"<option value=" + data[i].id + ">" + data[i].productType+"</option>");
+	}
+	$("#bsDevType").empty();
+	var data = Jitai
+	for (var i = 0; i < data.length; i++) {
+		if (i == 0) {
+			$("#bsDevType").append("<option value=''>请点击选择</option>");
+		}
+		$("#bsDevType").append(
+				"<option value=" + data[i].subCode + ">" + data[i].subName+"</option>");
 	}
 }
 
@@ -136,6 +157,24 @@ function editData(obj) {
 	}, "POST", false, function(res) {
 		layer.alert(res.msg);
 	});
+}
+
+//关闭报价单
+function doCheckProfit(){
+	var param = {
+			"bsDevType" : $("#bsDevType").val(),//code
+			"bsProdType":$("#bsProdType").val()
+		};
+	CoreUtil.sendAjax("/quote/doCheckProfit", JSON.stringify(param),
+			function(data) {
+				if (data.result) {
+					
+				} else {
+					layer.alert("利润率未维护")
+				}
+			}, "POST", false, function(res) {
+				layer.alert("操作请求错误，请您稍后再试");
+			});
 }
 
 function clean() {

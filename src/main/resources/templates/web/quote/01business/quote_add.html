@@ -79,26 +79,33 @@
 				<hr style="margin-top: 10px; margin-bottom: 10px;">
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">产品型号</label>
-					<div class="layui-input-inline">
+					<div class="layui-input-inline" style="width: 160px;">
 						<input id="bsProd" autocomplete="off" name="bsProd"
 							lay-verify="required" class="layui-input" type="text" />
 					</div>
-					<label class="layui-form-label">相似产品</label>
-					<div class="layui-input-inline" style="width: 130px;">
-						<input id="bsSimilarProd" autocomplete="off" name="bsSimilarProd"
-							class="layui-input" type="text" />
-					</div>
+					<input id="bsProdType" type="hidden" name="bsProdType" />
 					<label class="layui-form-label layui-required">产品类型</label>
+					<div class="layui-input-inline" style="width: 180px;">
+						<select id="bsProdTypeId" lay-filter="bsProdTypeId" lay-verify="required" autocomplete="off"
+							name="bsProdTypeId" class="layui-select" lay-search>
+						</select>
+					</div>
+					<label class="layui-form-label layui-required">机种型号</label>
 					<div class="layui-input-inline" style="width: 200px;">
-						<select id="pkProfitProd" lay-verify="required" autocomplete="off"
-							name="pkProfitProd" class="layui-select" lay-search>
+						<select id="bsDevType" lay-verify="required" autocomplete="off"
+							name="bsDevType" class="layui-select" lay-filter="bsDevType" lay-search>
 						</select>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
+					<label class="layui-form-label">相似产品</label>
+					<div class="layui-input-inline" style="width: 160px;">
+						<input id="bsSimilarProd" autocomplete="off" name="bsSimilarProd"
+							class="layui-input" type="text" />
+					</div>
 						<label class="layui-form-label layui-required">客户名称</label>
-						<div class="layui-input-inline" style="width: 310px;">
+						<div class="layui-input-inline" style="width: 180px;">
 							<input id="bsCustName" lay-verify="required" autocomplete="off"
 								name="bsCustName" class="layui-input" type="text" />
 						</div>
@@ -214,7 +221,7 @@
 			</form>
 		</div>
 		<script th:inline="javascript">
-		var profitProdList=[[${profitProdList}]];
+		var prodType=[[${prodType}]];
 		var quoteId=[[${quoteId}]];
 		var Jitai = [[${Jitai}]];
 		console.log(Jitai)
