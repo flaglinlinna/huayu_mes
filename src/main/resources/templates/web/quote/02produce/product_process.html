@@ -29,7 +29,7 @@
          <script type="text/html" id="toolbar">
              <div class="layui-btn-container layui-inline">
                      <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addHardware()">添加工艺信息</button>
-                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="downloadExcel()">下载模板</button>
+                 <!--<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="downloadExcel()">下载模板</button>-->
                  <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="exportExcel()">导出模板</button>
                  <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="openUpload()">导入数据</button>
              </div>
@@ -153,8 +153,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label layui-required">零件名称</label>
                     <div class="layui-input-block">
-                        <select id="bsName1" name="bsName" lay-verify="required" lay-filter="bsName1" placeholder="请选择零件名称"  autocomplete="off">
-                        </select>
+                        <input id="bsName1" name="bsName" lay-verify="required" lay-filter="bsName1" placeholder="请选择零件名称"
+                               class="layui-input" type="text" autocomplete="off">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -228,8 +228,8 @@
         </div>
 
         <div id="uploadDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
-            <button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入数据</button>
-            <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadChecked()">导入选中</button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">选择文件</button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadChecked()">确认导入</button>
             <table id="uploadList" lay-filter="uploadTable"></table>
         </div>
 

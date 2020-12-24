@@ -330,17 +330,15 @@ public class ProductProcesslmpl implements ProductProcessService {
     }
 
     @Override
-    public ApiResponseResult uploadCheck(String ids) throws Exception {
-        String [] idsArr = ids.split(",");
-        Long[] longIdsArr = new Long[idsArr.length];
-        for(int i = 0; i < idsArr.length; i++){
-            longIdsArr[i] = Long.parseLong(idsArr[i]);
-        }
-        Date doDate = new Date();
+    public ApiResponseResult uploadCheck(Long pkQuote,String bsType) throws Exception {
         Long userId = UserUtil.getSessionUser().getId();
-        //选中的临时表数据
-        List<ProductProcessTemp> productProcessTempList =productProcessTempDao.findAllByIdIn(longIdsArr);
-        //需要新增的主表数据
+
+        //临时表数据 (未删除且校验通过)
+        List<ProductProcessTemp> productProcessTempList =productProcessTempDao.
+                findByDelFlagAndPkQuoteAndBsTypeAndCreateByAndCheckStatus(0,pkQuote,bsType,userId,0);
+        Date doDate = new Date();
+
+        //需要导入的主表数据
         List<ProductProcess> productProcessList = new ArrayList<>();
         for(ProductProcessTemp processTemp : productProcessTempList){
             ProductProcess process = new ProductProcess();
@@ -368,17 +366,23 @@ public class ProductProcesslmpl implements ProductProcessService {
                 process.setBsOrder(Integer.parseInt(processTemp.getBsOrder()));
             }
             //有则更新
-            process.setId(processTemp.getMid());
-            process.setCreateDate(doDate);
-            process.setCreateBy(userId);
+            if(processTemp.getMid()!=null){
+                process.setId(processTemp.getMid());
+                process.setLastupdateBy(userId);
+                process.setLastupdateDate(doDate);
+            }else {
+                process.setCreateDate(doDate);
+                process.setCreateBy(userId);
+            }
             productProcessList.add(process);
 
             //标记已导入
-            processTemp.setEnabled(1);
+//            processTemp.setEnabled(1);
             //导入后删除标记
-            processTemp.setDelFlag(1);
+//            processTemp.setDelFlag(1);
         }
-        productProcessTempDao.saveAll(productProcessTempList);
+        //删除临时表数据
+        productProcessTempDao.deleteByPkQuoteAndBsTypeAndCreateBy(pkQuote,bsType,userId);
         productProcessDao.saveAll(productProcessList);
 //        return ApiResponseResult.success().data(productProcessTempDao.findAllByIdIn(longIdsArr));
         return ApiResponseResult.success();

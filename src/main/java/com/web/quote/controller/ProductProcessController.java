@@ -207,10 +207,11 @@ public class ProductProcessController extends WebController {
 	public ApiResponseResult uploadCheck(@RequestBody Map<String, Object> params) {
 		String method = "/productProcess/uploadCheck";String methodName ="导出数据";
 		try {
-			String ids = params.get("ids").toString();
+			Long pkQuote = Long.parseLong(params.get("pkQuote").toString());
+			String bsType = params.get("bsType").toString();
 			logger.debug("导入临时表数据=uploadCheck:");
 			getSysLogService().success(module,method, methodName, "");
-			return  productProcessService.uploadCheck(ids);
+			return  productProcessService.uploadCheck(pkQuote,bsType);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("导出数据失败！", e);

@@ -31,11 +31,7 @@ $(function() {
 			},
 			cols : [ [ 
 			    {type : 'numbers',style:'background-color:#d2d2d2'}, 
-				{
-				field: 'bsType',
-				width: 100,
-				title: '类型', sort: true,
-				style:'background-color:#d2d2d2',
+				{field: 'bsType', width: 100, title: '类型', sort: true, style:'background-color:#d2d2d2',
 				// * 五金:hardware
 				// * 注塑:molding
 				// * 表面处理:surface
@@ -53,73 +49,69 @@ $(function() {
 					}
 				},
 				{field : 'bsComponent',width:150,title : '零/组件名称',sort:true,style:'background-color:#d2d2d2'}, 
-				{
-				field : 'bsMaterName',width:120,
-				title : '材料名称',sort:true,style:'background-color:#d2d2d2'
-			},
-			{
-				field : 'bsModel',
-				width:150,
-				title : '材料规格',style:'background-color:#d2d2d2'
-			}, {
-				field : 'bsQty',
-					width:80,
-				title : '用量',style:'background-color:#d2d2d2'
-			},
-				{
-					field : 'bsUnit',
-					width:80,
-					title : '单位',style:'background-color:#d2d2d2'
-				},
-				{
-					field : 'bsRadix',
-					width:80,
-					title : '基数',style:'background-color:#d2d2d2'
-				},
-				{
-					field : 'bsGeneral',
-					width:120,
-					title : '是否通用物料',style:'background-color:#d2d2d2'
-				},
-				{
-					field : 'bsGear',
-					width:80,
-					title : '价格挡位',
-					edit:'text',templet: '#selectGear'
-				},
-				{
-					field : 'bsRefer',
-					width:110,
-					title : '参考价格',style:'background-color:#d2d2d2'
-				},
-				{
-					field : 'bsAssess',
-					width:110,
-					title : '评估价格',
-					edit:'number',
-					// placeholder:'请输入评估价格(数字)',
-				},
-				{
-					field : 'fmemo',
-					width:110,
-					title : '备注',
-					edit:'text'
-				},
-				{
-					field : 'bsSupplier',
-					width:110,
-					title : '供应商',
-					edit:'text'
-				}
+				{field : 'bsMaterName',width:120, title : '材料名称',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'bsModel', width:150, title : '材料规格',style:'background-color:#d2d2d2'},
+				{field : 'bsQty', width:80, title : '用量',style:'background-color:#d2d2d2'},
+				{field : 'bsUnit', width:80, title : '单位',style:'background-color:#d2d2d2'},
+				{field : 'bsRadix', width:80, title : '基数',style:'background-color:#d2d2d2'},
+				{field : 'bsGeneral', width:120, title : '是否通用物料',style:'background-color:#d2d2d2'},
+				{field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet: '#selectGear'},
+				{field : 'bsRefer', width:110, title : '参考价格',style:'background-color:#d2d2d2'},
+				{field : 'bsAssess', width:110, title : '评估价格', edit:'number'	},
+				{field : 'fmemo', width:110, title : '备注', edit:'text'},
+				{field : 'bsSupplier', width:110, title : '供应商', edit:'text'}
 				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
-				//不可填写的颜色变灰色
-				res.data.forEach(function (item, index) {
-					/*if(item.bsStatus=="99"){
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');
-					}*/
-				});
+
+			}
+		});
+
+		tableIns2 = table.render({
+			elem : '#uploadList',
+			// url : context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
+			method : 'get' // 默认：get请求
+			,
+			cellMinWidth : 80,
+			height:'full-110'//固定表头&full-查询框高度
+			,even:true,//条纹样式
+			page : true,
+			request : {
+				pageName : 'page' // 页码的参数名称，默认：page
+				,
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			},
+			parseData : function(res) {
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+					// code值为200表示成功
+				}
+			},
+			cols : [ [
+				{type : 'numbers',style:'background-color:#d2d2d2'},
+				{field : 'checkStatus', width:100, title : '状态',sort:true,style:'background-color:#d2d2d2',templet: '#checkStatus'},
+				{field : 'errorInfo', width:150, title : '错误信息',sort:true,style:'background-color:#d2d2d2'},
+				{field: 'bsType', width: 100, title: '类型', sort: true, style:'background-color:#d2d2d2'},
+				{field : 'bsComponent',width:150,title : '零/组件名称',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'bsMaterName',width:120, title : '材料名称',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'bsModel', width:150, title : '材料规格',style:'background-color:#d2d2d2'},
+				{field : 'bsQty', width:80, title : '用量',style:'background-color:#d2d2d2'},
+				{field : 'bsUnit', width:80, title : '单位',style:'background-color:#d2d2d2'},
+				{field : 'bsRadix', width:80, title : '基数',style:'background-color:#d2d2d2'},
+				{field : 'bsGeneral', width:120, title : '是否通用物料',style:'background-color:#d2d2d2'},
+				{field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet: '#selectGear'},
+				{field : 'bsRefer', width:110, title : '参考价格',style:'background-color:#d2d2d2'},
+				{field : 'bsAssess', width:110, title : '评估价格', edit:'number'	},
+				{field : 'fmemo', width:110, title : '备注', edit:'text'},
+				{field : 'bsSupplier', width:110, title : '供应商', edit:'text'},
+				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
+				] ],
+			done : function(res, curr, count) {
+				pageCurr = curr;
 			}
 		});
 		
@@ -209,10 +201,10 @@ $(function() {
 			openProdErr(id, "编辑材料信息")
 		};
 
-		//导入
+		//导入 到临时表
 		upload.render({
 			elem: '#upload'
-			,url: context + '/purchase/importExcel'
+			,url: context + '/productMaterTemp/importByPurchase'
 			,accept: 'file' //普通文件
 			,data: {
 				pkQuote: function(){
@@ -226,7 +218,7 @@ $(function() {
 				layer.closeAll('loading'); //关闭loading
 				layer.alert(res.msg, function (index) {
 					layer.close(index);
-					loadAll();
+					loadAll2();
 				});
 
 			}
@@ -242,17 +234,29 @@ $(function() {
 
 });
 
-//模板下载
-function  downloadExcel() {
-	if(bsType =="hardware"){
-		location.href = "../../excelFile/五金材料模板.xlsx";
-	}else if(bsType =="molding"){
-		location.href = "../../excelFile/注塑材料模板.xlsx";
-	}else if(bsType =="surface"){
-		location.href = "../../excelFile/表面处理材料模板.xlsx";
-	}else if(bsType =="packag"){
-		location.href = "../../excelFile/组装材料模板.xlsx";
-	}
+function uploadChecked() {
+	
+}
+
+// 打开导入页
+function openUpload() {
+	tableIns2.reload({
+		url:context + '/productMaterTemp/getList?quoteId='+quoteId+'&bsPurchase='+0,
+		done: function(res1, curr, count){
+			pageCurr=curr;
+		}
+	})
+	// 打开弹出框
+	var index=layer.open({
+		type : 1,
+		title : "导入采购填报价格",
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#uploadDiv')
+	});
+	layer.full(index);
 }
 
 // 新增编辑弹出框
@@ -374,6 +378,16 @@ function loadAll() {
 		page : {
 			curr : pageCurr
 		// 从当前页码开始
+		}
+	});
+}
+// 重新加载表格（全部）
+function loadAll2() {
+	// 重新加载table
+	tableIns2.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
 		}
 	});
 }

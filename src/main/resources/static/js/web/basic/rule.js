@@ -129,9 +129,7 @@ $(function() {
 		//下拉框初始化
 		getBarList();
 
-        // $("#fixValue").blur(function(){
-        //     getFsample();
-        // });
+
 
 		tableIns = table.render({
 			elem : '#ruleList',
@@ -352,20 +350,37 @@ $(function() {
 			openBarcodeRule(id, "编辑校验规则",obj.ID)
 		}
 
+
+		$(document).on('click','#setBarcodeRule',function (obj) {
+			if($("#serialNum").val()&&!$("#serialLen").val()){
+				layer.msg("请先输入流水号位数");
+			}
+		})
+
+		$("#serialLen").on("click", function () {
+			if(!$("#serialNum").val()){
+				layer.msg("请先选中流水号");
+				$("#serialNum").focus();
+				$("#serialLen").val("");
+			}
+		});
+
 		//流水号位数 输入框
 		$("#serialLen").blur(function(){
-			if(fserialLenFlag==-1) {
-				var fruleArr = frule.split("+");
-				fserialLenFlag = fruleArr.length;
-				fruleArr[fserialLenFlag] = "位数("+ $('#serialLen').val() +")";
-				frule = fruleArr.join("+");
+			if($("#serialLen").val()) {
+					if (fserialLenFlag == -1) {
+						var fruleArr = frule.split("+");
+						fserialLenFlag = fruleArr.length;
+						fruleArr[fserialLenFlag] = "位数(" + $('#serialLen').val() + ")";
+						frule = fruleArr.join("+");
+					} else {
+						var fruleArr = frule.split("+");
+						fruleArr[fserialLenFlag] = "位数(" + $('#serialLen').val() + ")";
+						frule = fruleArr.join("+");
+					}
+
+					showFsample();
 			}
-			else {
-					var fruleArr = frule.split("+");
-					fruleArr[fserialLenFlag] = "位数("+ $('#serialLen').val() +")";
-					frule = fruleArr.join("+");
-				}
-				showFsample();
 		});
 
 		//监听年选择框
@@ -558,10 +573,10 @@ function addBarcodeRule() {
 }
 
 function  addFixValue() {
-	// if(!$('#fixValue').val()){
-	// 	layer.msg("请先输入固定值！");
-	// 	return ;
-	// }
+	if(!$('#fixValue').val()){
+		layer.msg("请先输入固定值！");
+		return ;
+	}
 	getFsample();
 	$('#fixValue').val('');
 }

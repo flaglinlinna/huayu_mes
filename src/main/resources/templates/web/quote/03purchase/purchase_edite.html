@@ -22,7 +22,7 @@
 							<i class="layui-icon">&#xe669;</i>重置
 						</button>
 						<a class="layui-btn layui-btn-sm layui-btn-normal" onclick="exportExcel()">导出模板</a>
-						<a class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入数据</a>
+						<a class="layui-btn layui-btn-sm layui-btn-normal" onclick="openUpload()">导入数据</a>
 					</div>
 				</div>
         </form>
@@ -38,6 +38,22 @@
 
 
         <table id="productPriceList" lay-filter="productPriceTable"></table>
+
+		 <div id="uploadDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
+			 <button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">选择文件</button>
+			 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadChecked()">确认导入</button>
+			 <table id="uploadList" lay-filter="uploadTable"></table>
+		 </div>
+
+		 <script type="text/html" id="checkStatus">
+			 {{#  if(d.checkStatus == 0){ }}
+			 <span style="color: green;">校验通过</span>
+			 {{#  } else if(d.checkStatus == 1) { }}
+			 <span style="color: red;">校验不通过</span>
+			 {{#  } else { }}
+			 <span></span>
+			 {{#  } }}
+		 </script>
 
          <!--<script type="text/html" id="optBar">-->
                  <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->

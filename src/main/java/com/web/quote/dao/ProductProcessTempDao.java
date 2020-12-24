@@ -13,5 +13,9 @@ public interface ProductProcessTempDao extends CrudRepository<ProductProcessTemp
 	public ProductProcessTemp findById(long id);
 	public List<ProductProcessTemp> findAllByIdIn(Long[] ids);
 	public List<ProductProcessTemp> findByDelFlag(Integer delFlag);
+	public List<ProductProcessTemp> findByDelFlagAndPkQuoteAndBsTypeAndCreateByAndCheckStatus(Integer delFlag,Long pkQuote,String bsType,
+																							  Long createBy,Integer checkStatus);
+
+	Integer deleteByPkQuoteAndBsTypeAndCreateBy(Long pkQuote,String bsType,Long createBy);
 	public List<ProductProcessTemp> findByDelFlagAndPkQuote(Integer delFlag, String pkQuote);
 }

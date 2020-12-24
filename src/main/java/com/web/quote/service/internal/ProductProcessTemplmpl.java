@@ -157,8 +157,11 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
 //    导入模板
     public ApiResponseResult doExcel(MultipartFile[] file,String bsType,Long quoteId) throws Exception{
         try {
-            Date doExcleDate = new Date();
             Long userId = UserUtil.getSessionUser().getId();
+
+            //先删除临时表中存在的数据
+            productProcessTempDao.deleteByPkQuoteAndBsTypeAndCreateBy(quoteId,bsType,userId);
+            Date doExcleDate = new Date();
             InputStream fin = file[0].getInputStream();
             XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
             XSSFSheet sheet = workbook.getSheetAt(0);
@@ -197,7 +200,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 process.setCreateDate(doExcleDate);
                 process.setBsOrder(bsOrder);
                 if(!bsOrder.matches("^\\d+$")){
-                    errInfo = errInfo + "工序顺序需位正整数;";
+                    errInfo = errInfo + "工序顺序需为正整数;";
                 }
 //                process.setBsRadix((int)Double.parseDouble(bsRadix));
                 List<Proc> procList = procDao.findByDelFlagAndProcName(0,procName);

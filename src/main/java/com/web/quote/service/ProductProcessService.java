@@ -25,5 +25,5 @@ public interface ProductProcessService {
 
 	public ApiResponseResult getBomSelect(String pkQuote, PageRequest pageRequest) throws Exception;
 
-	public ApiResponseResult uploadCheck(String ids) throws  Exception;
+	public ApiResponseResult uploadCheck(Long pkQuote,String bsType) throws  Exception;
 }

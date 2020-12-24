@@ -129,10 +129,10 @@ $(function() {
 				}
 			},
 			cols : [ [
-				{type: "checkbox"},
-				{type : 'numbers',style:'background-color:#d2d2d2'},
+				// {type: "checkbox"},
+				{type : 'numbers',width:50,style:'background-color:#d2d2d2'},
 				{field : 'checkStatus', width:100, title : '状态',sort:true,style:'background-color:#d2d2d2',templet: '#checkStatus'},
-				{field : 'enabled', width:100, title : '是否导入',sort:true,style:'background-color:#d2d2d2', templet: '#enabledTpl'},
+				// {field : 'enabled', width:100, title : '是否导入',sort:true,style:'background-color:#d2d2d2', templet: '#enabledTpl'},
 				{field : 'errorInfo', width:150, title : '错误信息',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'bsOrder',width:150, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
@@ -165,24 +165,36 @@ $(function() {
 						}
 					}},
 				{field : 'bsModelType', width:100, title : '机台类型',edit:'text'},
-				{field : 'bsRadix', title : '基数',edit:'text'},
-				{field : 'bsUserNum', title : '人数',edit:'text'},
-				{field : 'bsCycle', title : '成型周期(S)', width:150,edit:'text'},
+				{field : 'bsRadix', title : '基数',width:80,edit:'text'},
+				{field : 'bsUserNum', title : '人数',width:80,edit:'text'},
+				{field : 'bsCycle', title : '成型周期(S)', width:120,edit:'text', hide:true},
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
-				{field : 'bsCave', title : '穴数',edit:'text'},
-				{field : 'bsCapacity', title : '产能',edit:'text'},
-				{field : 'fmemo', title : '备注',edit:'text'},
+				{field : 'bsCave', title : '穴数',edit:'text', width:80, hide:true},
+				{field : 'bsCapacity', title : '产能',edit:'text', width:80, hide:true},
+				{field : 'fmemo', title : '备注',width:120,edit:'text'},
 				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
-				//循环表数据根据flag状态给行上色
-				$.each(res['data'], function (i, j) {
-					// console.log(i + ' -454- ' + j['bsCave']);
-					if (j['bsCave'] === null||j['bsCave']=='') {
-						// console.log(i + ' -458- ' + 'jdjg is null');
-						Layui_SetDataTableRowColor('table', i + 1, '#b1070a');
-					}
-				});
+				// if(bsType == 'out'){//外协
+				// 	$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+				// 	$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+				// }else if(bsType == 'hardware'){//五金
+				// 	$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+				// 	$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+				// }else if(bsType == 'molding'){//注塑
+				// 	$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+				// 	$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+				// 	$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+				// 	$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+				//
+				// }else if(bsType == 'surface'){
+				// 	$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+				// 	$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+				// }else if(bsType == 'packag'){
+				// 	$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+				// 	$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+				// }
+
 			}
 		});
 
@@ -564,35 +576,11 @@ $(function() {
 
 });
 
-function Layui_SetDataTableRowColor(TabDivId, RowIndex, ColorString) {
-	try {
-		var div = $("[lay-id='demo'] tr:eq(" + RowIndex + ")");
-		if (div != null) //找到对象了
-		{
-			div.css("color", ColorString);
-		}
-	} catch (e) {
-		console.log(e.message);
-	}
-}
 
 function uploadChecked() {
-	var tempIds = "";
-	var checkStatus = layui.table.checkStatus("uploadList");
-	for(var i = 0; i < checkStatus.data.length; i++){
-		if(i == 0){
-			tempIds += checkStatus.data[i].id;
-		}else{
-			tempIds += "," + checkStatus.data[i].id;
-		}
-		if(checkStatus.data[i].checkStatus == "1"){
-			layer.msg("选择导入的数据中存在校验未通过,请修改后导入");
-			return false;
-		}
-	}
-	console.log(tempIds);
 	var params = {
-		"ids": tempIds
+		"pkQuote": quoteId,
+		"bsType":bsType
 	};
 	CoreUtil.sendAjax("/productProcess/uploadCheck", JSON.stringify(params), function(
 		data) {
@@ -683,6 +671,23 @@ function openUpload() {
 		url:context + '/productProcessTemp/getList?bsType='+bsType+'&quoteId='+quoteId,
 		done: function(res1, curr, count){
 			pageCurr=curr;
+			res.data.forEach(function (item, index) {
+			 if(bsType == 'hardware'){//五金
+				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+			}else if(bsType == 'molding'){//注塑
+				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+			}else if(bsType == 'surface'){
+				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+			}else if(bsType == 'packag'){
+				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+			}
+			});
 		}
 	})
 	// 打开弹出框
@@ -743,11 +748,12 @@ function editSubmitTemp(obj) {
 	CoreUtil.sendAjax("/productProcessTemp/edit", JSON.stringify(obj.field), function(
 		data) {
 		if (data.result) {
-			layer.alert("操作成功", function(index) {
+			layer.alert("操作成功", function() {
 				layer.close(index);
 				// cleanProdErr();
 				// 加载页面
 				loadAll2();
+				// layer.close(layer.index);
 			});
 		} else {
 			layer.alert(data.msg);
