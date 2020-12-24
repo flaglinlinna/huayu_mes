@@ -372,8 +372,11 @@ public class ProductProcesslmpl implements ProductProcessService {
             process.setCreateDate(doDate);
             process.setCreateBy(userId);
             productProcessList.add(process);
+
             //标记已导入
             processTemp.setEnabled(1);
+            //导入后删除标记
+            processTemp.setDelFlag(1);
         }
         productProcessTempDao.saveAll(productProcessTempList);
         productProcessDao.saveAll(productProcessList);

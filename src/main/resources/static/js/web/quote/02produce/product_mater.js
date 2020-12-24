@@ -10,9 +10,9 @@ $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
 		var table = layui.table, form = layui.form,upload = layui.upload,
 			tableSelect1 = layui.tableSelect,tableSelect = layui.tableSelect;
-
+		// hardwareList
 		tableIns = table.render({
-			elem : '#hardwareList',
+			elem : '#listTable',
 			url : context + '/productMater/getList?bsType='+bsType+'&quoteId='+quoteId,
 			method : 'get' // 默认：get请求
 			,
@@ -36,77 +36,47 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
-				field : 'bsComponent',
-					width:150,
-				title : '零件名称',sort:true
-			}, {
-				field : 'bsMaterName',width:150,
-				title : '材料名称',sort:true
-			},
-			{
-				field : 'bsModel',
-				width:150,
-				title : '规格'
-			}, {
-				field : 'bsQty',
-					width:100,
-				title : '用量',
-			},
-				{
-					field : 'bsProQty',
-					width:100,
-					title : '制品量',
-				},
-				{
-					field : 'bsUnit',
-					title : '单位',
-				},
-				{
-					field : 'bsRadix',
-					title : '基数',
-				},
-				{
-					field : 'bsSupplier',
-					title : '供应商',
-				},
-				{
-					field : 'bsWaterGap',
-					title : '水口量',
-					//(注塑)
-				},
-				{
-					field : 'bsCave',
-					title : '穴数',
-					//(注塑)
-				},
-				{
-					field : 'bsMachiningType',
-					title : '加工类型',
-					//(表面处理)
-				},
-				{
-					field : 'bsColor',
-					title : '配色工艺',
-					//(表面处理)
-				},
-				{
-					field : 'fmemo',
-					title : '备注',
-				},
-				{
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-					width:120,
-				toolbar : '#optBar'
-			} ] ],
+			cols : [ [
+				{type : 'numbers'},
+				{field : 'bsComponent', width:140, title : '零件名称',sort:true},
+				{field : 'bsMachiningType', title : '加工类型',width:100,hide:true},//(表面处理)
+				{field : 'bsColor', title : '配色工艺',width:100,hide:true},//(表面处理)
+				{field : 'bsMaterName',width:140, title : '材料名称',sort:true},
+				{field : 'bsModel', width:160, title : '规格'},
+				{field : 'bsQty', width:100, title : '用量',hide:true},
+				{field : 'bsProQty', width:100, title : '制品量',hide:true},
+				{field : 'bsUnit', width:80,title : '单位',},
+				{field : 'bsRadix', width:80,title : '基数',},
+				{field : 'bsWaterGap', title : '水口量',width:100,hide:true}, //(注塑)
+				{field : 'bsCave', title : '穴数',width:100,hide:true}, //(注塑)
+				{field : 'bsSupplier', title : '备选供应商',width:100},
+				{field : 'fmemo', title : '备注',width:120},
+				{fixed : 'right', title : '操作', align : 'center', width:120, toolbar : '#optBar'}
+				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
+				res.data.forEach(function (item, index) {
+					if(bsType == 'hardware'){//五金
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+					}else if(bsType == 'molding'){//注塑
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsWaterGap"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsProQty"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsWaterGap"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsProQty"]').removeClass("layui-hide");
+
+					}else if(bsType == 'surface'){
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
+					}else if(bsType == 'packag'){
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+					}
+				});
 			}
 		});
 

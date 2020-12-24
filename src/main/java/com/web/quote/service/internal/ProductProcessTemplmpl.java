@@ -63,16 +63,17 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 errInfo = errInfo + "工序顺序需为正整数;";
             }
         }else {
-            errInfo = errInfo + "工序顺序需为正整数;";
+            errInfo = errInfo + "工序顺序不能为空;";
         }
-
-        if(StringUtils.isNotEmpty(productProcess.getBsCycle())){
-            if(!productProcess.getBsCycle().matches("^\\d+\\.\\d+$")
-                    && !productProcess.getBsCycle().matches("^^\\d+$")){
-                errInfo = errInfo + "成型周期需输入数字;";
+        if("molding".equals(productProcess.getBsType())||"hardware".equals(productProcess.getBsType())) {
+            if (StringUtils.isNotEmpty(productProcess.getBsCycle())) {
+                if (!productProcess.getBsCycle().matches("^\\d+\\.\\d+$")
+                        && !productProcess.getBsCycle().matches("^^\\d+$")) {
+                    errInfo = errInfo + "成型周期需输入数字;";
+                }
+            } else {
+                errInfo = errInfo + "成型周期不能为空;";
             }
-        }else {
-            errInfo = errInfo + "成型周期需输入数字;";
         }
         if(StringUtils.isNotEmpty(productProcess.getBsRadix())) {
             if (!productProcess.getBsRadix().matches("^\\d+\\.\\d+$")
@@ -88,7 +89,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 errInfo = errInfo + "人数需输入数字;";
             }
         }else {
-            errInfo = errInfo + "人数需输入数字;";
+            errInfo = errInfo + "人数不能为空;";
         }
         if(StringUtils.isNotEmpty(productProcess.getBsYield())) {
             if (!productProcess.getBsYield().matches("^\\d+\\.\\d+$")
@@ -96,7 +97,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 errInfo = errInfo + "工序良率需输入数字;";
             }
         }else {
-            errInfo = errInfo + "工序良率需输入数字;";
+            errInfo = errInfo + "工序良率不能为空;";
         }
 
         o.setBsName(productProcess.getBsName());
@@ -215,9 +216,9 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
 //                    }
                     if(!row7.matches("^\\d+$")){
                         errInfo = errInfo + "成型周期必须是数字类型;";
-                    }if(!row8.matches("^[1-9](\\\\d{0,9})((\\\\.\\\\d{1,2})?)$")){
+                    }if(!row8.matches("^\\d+\\.\\d+$")&&!row8.matches("^\\d+$")){
                         errInfo = errInfo + "人数必须是数字类型;";
-                    }if(!row9.matches("^[1-9](\\\\d{0,9})((\\\\.\\\\d{1,2})?)$")){
+                    }if(!row9.matches("^\\d+\\.\\d+$")&&!row9.matches("^\\d+$")){
                         errInfo = errInfo + "工序良率必须是数字类型;";
                     }
                     process.setFmemo(row10);
@@ -226,12 +227,12 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                     process.setBsUserNum(row6);
                     process.setBsCycle(row7);
                     process.setBsYield(row8);
-                    if(!row6.matches("^\\d+$")){
+                    if(!row6.matches("^\\d+$")&&!row6.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "人数必须是数字类型;";
                     }
-                    if(!row7.matches("^\\d+$")){
+                    if(!row7.matches("^\\d+$")&&!row7.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "成型周期必须是数字类型;";
-                    }if(!row8.matches("^\\d+$")){
+                    }if(!row8.matches("^\\d+$")&&!row8.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "工序良率必须是数字类型;";
                     }
                     process.setFmemo(row9);
@@ -240,12 +241,12 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                     process.setBsUserNum(row6);
                     process.setBsCapacity(row7);
                     process.setBsYield(row8);
-                    if(!row6.matches("^\\d+$")){
+                    if(!row6.matches("^\\d+$")&&!row6.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "人数必须是数字类型;";
                     }
-                    if(!row7.matches("^\\d+$")){
+                    if(!row7.matches("^\\d+$")&&!row7.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "产能必须是数字类型;";
-                    }if(!row8.matches("^\\d+$")){
+                    }if(!row8.matches("^\\d+$")&&!row8.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "工序良率必须数字类型;";
                     }
                     process.setFmemo(row9);
