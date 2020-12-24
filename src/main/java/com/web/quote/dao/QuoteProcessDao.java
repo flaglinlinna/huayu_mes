@@ -3,6 +3,8 @@ package com.web.quote.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -36,6 +38,13 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	
 	@Query(value = "select distinct t.bs_component from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag='0' and t.bs_component is not null", nativeQuery = true)	
 	public List<Map<String, Object>> getBomName(String quoteid);
+
+	@Query(value = " select distinct t.bs_component from price_quote_bom t"+
+			" where t.pk_quote=?1  and t.del_Flag='0' and t.bs_component is not null",
+			countQuery =  " select count(distinct t.bs_component) from price_quote_bom t"+
+					" where t.pk_quote=?1  and t.del_Flag='0' and t.bs_component is not null",
+			nativeQuery = true)
+	Page<Map<String, Object>> getBomNameByPage(String quoteid, Pageable pageable);
 	
 	@Modifying
     @Query("update QuoteProcess t set t.bsStatus=1 where t.pkQuote=?1 and t.delFlag=0")

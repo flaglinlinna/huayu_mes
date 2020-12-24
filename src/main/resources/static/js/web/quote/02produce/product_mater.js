@@ -8,7 +8,8 @@
 var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
-		var table = layui.table, form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect;
+		var table = layui.table, form = layui.form,upload = layui.upload,
+			tableSelect1 = layui.tableSelect,tableSelect = layui.tableSelect;
 
 		tableIns = table.render({
 			elem : '#hardwareList',
@@ -161,6 +162,53 @@ $(function() {
 				form.val("hardwareForm", {
 					"pkUnit":da[0].id,
 					"bsUnit":da[0].unitName
+				});
+				form.render();// 重新渲染
+			}
+		});
+
+		tableSelect1=tableSelect1.render({
+			elem : '#bsComponent',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '关键字搜索',
+			table : {
+				url : context + '/quoteBom/getQuoteBomList?pkQuote='+ quoteId,
+				// ?pkQuote='+quoteId,
+				method : 'get',
+
+				parseData : function(res) {
+					// 可进行数据操作
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+				cols : [ [
+					{ type: 'radio' },//单选  radio
+					{field : 'id', title : 'id', width : 0,hide:true},
+					{type : 'numbers'},
+					{field : 'bsComponent',title : '零件名称',sort:true,width:130},
+					{field : 'bsMaterName',title : '材料名称',sort:true,width:130},
+					{field : 'bsModel',title : '材料规格',width:150},
+					{field : 'fmemo',title : '工艺说明',width:150},
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+
+			},
+			done : function(elem, data) {
+				var da=data.data;
+				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+				form.val("hardwareForm", {
+					"bsComponent":da[0].bsComponent
 				});
 				form.render();// 重新渲染
 			}

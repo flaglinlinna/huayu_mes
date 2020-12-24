@@ -8,7 +8,8 @@
 var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
-		var table = layui.table, table2 = layui.table,form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect;
+		var table = layui.table, table2 = layui.table,form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect,
+			tableSelect1 = layui.tableSelect;
 
 		tableIns = table.render({
 			elem : '#listTable',
@@ -69,10 +70,10 @@ $(function() {
 				{field : 'bsModelType', width:100, title : '机台类型',edit:'text'},
 				{field : 'bsRadix', title : '基数',edit:'text'},
 				{field : 'bsUserNum', title : '人数',edit:'text'},
-				{field : 'bsCycle', title : '成型周期(S)', width:150,edit:'text'},
+				{field : 'bsCycle', title : '成型周期(S)', width:150,edit:'text', hide:true},
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
-				{field : 'bsCave', title : '穴数',edit:'text'},
-				{field : 'bsCapacity', title : '产能',edit:'text'},
+				{field : 'bsCave', title : '穴数',edit:'text', hide:true},
+				{field : 'bsCapacity', title : '产能',edit:'text', hide:true},
 				{field : 'bsFeeWxAll', title : '外协价格',edit:'text', hide:true},
 				{field : 'fmemo', title : '备注',edit:'text'},
 				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
@@ -83,8 +84,14 @@ $(function() {
 					if(bsType == 'out'){//外协
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').css("display","none");
 					}else if(bsType == 'hardware'){//五金
-						
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').css("display","none");
 					}else if(bsType == 'molding'){//注塑
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').css("display","none");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').css("display","none");
+					}else if(bsType == 'surface'){
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').css("display","none");
+					}else if(bsType == 'packag'){
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').css("display","none");
 					}
 				});
 			}
@@ -218,6 +225,54 @@ $(function() {
 				form.render();// 重新渲染
 			}
 		});
+
+		tableSelect1=tableSelect1.render({
+			elem : '#bsName',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '关键字搜索',
+			table : {
+				url : context + '/quoteBom/getQuoteBomList?pkQuote='+ quoteId,
+				// ?pkQuote='+quoteId,
+				method : 'get',
+
+				parseData : function(res) {
+					// 可进行数据操作
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+				cols : [ [
+					{ type: 'radio' },//单选  radio
+					{field : 'id', title : 'id', width : 0,hide:true},
+					{type : 'numbers'},
+					{field : 'bsComponent',title : '零件名称',sort:true,width:130},
+					{field : 'bsMaterName',title : '材料名称',sort:true,width:130},
+					{field : 'bsModel',title : '材料规格',width:150},
+					{field : 'fmemo',title : '工艺说明',width:150},
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+
+			},
+			done : function(elem, data) {
+				var da=data.data;
+				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+				form.val("productProcessForm", {
+					"bsName":da[0].bsComponent
+				});
+				form.render();// 重新渲染
+			}
+		});
+
 		// positiveNum
 		//自定义验证规则
 		form.verify({

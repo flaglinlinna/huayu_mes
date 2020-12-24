@@ -44,7 +44,7 @@ public class ProductProcessController extends WebController {
 		try {
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
-			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
+//			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -110,6 +110,25 @@ public class ProductProcessController extends WebController {
 			return ApiResponseResult.failure("删除报价工艺流程信息失败！");
 		}
 	}
+
+//	@ApiOperation(value = "获取报价工艺流程列表", notes = "获取报价工艺流程列表", hidden = true)
+//	@RequestMapping(value = "/getBomByQuoteId", method = RequestMethod.GET)
+//	@ResponseBody
+//	public ApiResponseResult getList(String keyword,String bsType,String quoteId) {
+//		String method = "/productProcess/getList";
+//		String methodName = "获取报价工艺流程列表";
+//		try {
+//			Sort sort = new Sort(Sort.Direction.DESC, "id");
+//			ApiResponseResult result = productProcessService.getList(keyword,bsType,quoteId, super.getPageRequest(sort));
+//			logger.debug("获取报价工艺流程列表=getList:");
+//			return result;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error("获取报价工艺流程列表失败！", e);
+//			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+//			return ApiResponseResult.failure("获取报价工艺流程列表失败！");
+//		}
+//	}
 
 	@ApiOperation(value = "获取报价工艺流程列表", notes = "获取报价工艺流程列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
@@ -199,5 +218,7 @@ public class ProductProcessController extends WebController {
 			return ApiResponseResult.failure("失败！");
 		}
 	}
+
+
 
 }

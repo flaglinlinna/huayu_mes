@@ -323,9 +323,10 @@ public class ProductProcesslmpl implements ProductProcessService {
     }
 
     @Override
-    public ApiResponseResult getBomSelect(String pkQuote) throws Exception {
-        List<Map<String, Object>> list=quoteProcessDao.getBomName(pkQuote);
-        return ApiResponseResult.success().data(list);
+    public ApiResponseResult getBomSelect(String pkQuote,PageRequest pageRequest) throws Exception {
+        Page<Map<String, Object>> pageList=quoteProcessDao.getBomNameByPage(pkQuote,pageRequest);
+        return ApiResponseResult.success().data(DataGrid.create(pageList.getContent(), (int) pageList.getTotalElements(),
+                pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
 
     @Override
