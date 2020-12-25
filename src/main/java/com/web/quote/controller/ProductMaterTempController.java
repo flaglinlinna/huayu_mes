@@ -80,7 +80,7 @@ public class ProductMaterTempController extends WebController {
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getList(String bsType,String bsPurchase,String quoteId) {
-		String method = "/productMaterTemp/getListByPurchase";
+		String method = "/productMaterTemp/getList";
 		String methodName = "获取导入临时列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -90,43 +90,63 @@ public class ProductMaterTempController extends WebController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取导入临时列表失败！", e);
-//			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			getSysLogService().error(module,method, methodName,"");
 			return ApiResponseResult.failure("获取导入临时列表失败！");
 		}
 	}
 
-	@ApiOperation(value="导入模板", notes="导入模板", hidden = true)
+	@ApiOperation(value="导入制造部材料模板", notes="导入模板", hidden = true)
 	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult getExcel(MultipartFile[] file,String bsType,Long pkQuote) {
 		String method = "/productMaterTemp/importExcel";String methodName ="导入模板";
 		try {
-			logger.debug("导入模板=importExcel:");
+			logger.debug("导入制造部材料模板=importExcel:");
 			getSysLogService().success(module,method, methodName, "");
 			return tempService.doExcel(file,bsType,pkQuote);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("导入模板失败！", e);
+			logger.error("导入制造部材料模板失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return null;
 		}
 	}
 
-	@ApiOperation(value="导入模板", notes="导入模板", hidden = true)
+	@ApiOperation(value="导入采购填报价格模板", notes="导入采购填报价格模板", hidden = true)
 	@RequestMapping(value = "/importByPurchase", method = RequestMethod.POST)
 	@ResponseBody
 	public ApiResponseResult importByPurchase(MultipartFile[] file,Long pkQuote) {
 		String method = "/productMaterTemp/importByPurchase";String methodName ="导入模板";
 		try {
-			logger.debug("导入模板=importExcel:");
+			logger.debug("导入采购填报价格模板=importByPurchase:");
 			getSysLogService().success(module,method, methodName, "");
 			return tempService.doExcel(file,pkQuote);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("导入模板失败！", e);
+			logger.error("导入采购填报价格模板失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return null;
 		}
 	}
+
+    @ApiOperation(value="采购填报价格确定导入正式表", notes="采购填报价格确定导入正式表", hidden = true)
+    @RequestMapping(value = "/confirmUpload", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult confirmUpload(@RequestBody Map<String, Object> params) {
+        String method = "/productMaterTemp/confirmUpload";String methodName ="导出数据";
+        try {
+            Long pkQuote = Long.parseLong(params.get("pkQuote").toString());
+//            String bsType = params.get("bsType").toString();
+            logger.debug("导入临时表数据=uploadCheck:");
+            getSysLogService().success(module,method, methodName, "");
+            return  tempService.importByTemp(pkQuote);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("导出数据失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("失败！");
+        }
+    }
+
 
 }

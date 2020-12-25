@@ -111,6 +111,20 @@ public class ProductMaterlmpl implements ProductMaterService {
         return ApiResponseResult.success("删除成功！");
     }
 
+    /**
+     * 确认完成
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult Confirm(Long quoteId,String bsType) throws Exception{
+        List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
+        for(ProductMater o : productMaterList) {
+            o.setBsStatus(1);
+        }
+        productMaterDao.saveAll(productMaterList);
+        return ApiResponseResult.success("确认完成成功！");
+    }
+
     //防止读取Excel为null转String 报空指针异常
     public String tranCell(Object object)
     {

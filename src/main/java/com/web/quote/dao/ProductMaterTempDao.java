@@ -15,6 +15,9 @@ public interface ProductMaterTempDao extends CrudRepository<ProductMaterTemp, Lo
 	public List<ProductMaterTemp> findByDelFlag(Integer delFlag);
 	public List<ProductMaterTemp> findByDelFlagAndPkQuote(Integer delFlag, Long pkQuote);
 	public List<ProductMaterTemp> findByDelFlagAndPkQuoteAndCreateBy(Integer delFlag,Long pkQuote,Long createBy);
+
+	Integer deleteByPkQuoteAndBsTypeAndCreateBy(Long pkQuote,String bsType ,Long createBy);
+
 	Integer deleteByPkQuoteAndCreateByAndBsPurchase(Long pkQuote,Long createBy,Integer purchases);
 
 	//采购填报价格 确定导入数据

@@ -201,6 +201,27 @@ public class ProductProcessController extends WebController {
 		}
 	}
 
+	@ApiOperation(value = "确认完成", notes = "确认完成", hidden = true)
+	@RequestMapping(value = "/Confirm", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult Confirm(@RequestBody Map<String, Object> params) {
+		String method = "/productProcess/Confirm";
+		String methodName = "确认完成";
+		try {
+			long id = Long.parseLong(params.get("id").toString());
+			String bsType = params.get("bsType").toString();
+			ApiResponseResult result = productProcessService.Confirm(id,bsType);
+			logger.debug("确认完成=Confirm:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("确认完成失败！", e);
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			return ApiResponseResult.failure("确认完成信息失败！");
+		}
+	}
+
 	@ApiOperation(value="从临时表导入数据", notes="从临时表导入数据", hidden = true)
 	@RequestMapping(value = "/uploadCheck", method = RequestMethod.POST)
 	@ResponseBody

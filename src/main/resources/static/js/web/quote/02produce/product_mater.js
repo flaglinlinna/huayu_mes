@@ -80,6 +80,53 @@ $(function() {
 			}
 		});
 
+		tableIns2 = table.render({
+			elem : '#uploadList',
+			// url : context + '/productMater/getList?bsType='+bsType+'&quoteId='+quoteId,
+			method : 'get' // 默认：get请求
+			,
+			cellMinWidth : 80,
+			// toolbar: '#toolbar',
+			height:'full-110'//固定表头&full-查询框高度
+			,even:true,//条纹样式
+			page : true,
+			request : {
+				pageName : 'page' // 页码的参数名称，默认：page
+				,
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			},
+			parseData : function(res) {
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+					// code值为200表示成功
+				}
+			},
+			cols : [ [
+				{type : 'numbers'},
+				{field : 'bsComponent', width:140, title : '零件名称',sort:true},
+				{field : 'bsMachiningType', title : '加工类型',width:100,hide:true},//(表面处理)
+				{field : 'bsColor', title : '配色工艺',width:100,hide:true},//(表面处理)
+				{field : 'bsMaterName',width:140, title : '材料名称',sort:true},
+				{field : 'bsModel', width:160, title : '规格'},
+				{field : 'bsQty', width:100, title : '用量',hide:true},
+				{field : 'bsProQty', width:100, title : '制品量',hide:true},
+				{field : 'bsUnit', width:80,title : '单位',},
+				{field : 'bsRadix', width:80,title : '基数',},
+				{field : 'bsWaterGap', title : '水口量',width:100,hide:true}, //(注塑)
+				{field : 'bsCave', title : '穴数',width:100,hide:true}, //(注塑)
+				{field : 'bsSupplier', title : '备选供应商',width:100},
+				{field : 'fmemo', title : '备注',width:120},
+				// {fixed : 'right', title : '操作', align : 'center', width:120, toolbar : '#optBar'}
+			] ],
+			done : function(res1, curr, count) {
+				pageCurr = curr;
+			}
+		});
+
 		tableSelect=tableSelect.render({
 			elem : '#bsUnit',
 			searchKey : 'keyword',
@@ -248,7 +295,7 @@ $(function() {
 		//导入
 		upload.render({
 			elem: '#upload'
-			,url: context + '/productMater/importExcel'
+			,url: context + '/productMaterTemp/importExcel'
 			,accept: 'file' //普通文件
 			,data: {
 				bsType: function(){
@@ -265,7 +312,7 @@ $(function() {
 				layer.closeAll('loading'); //关闭loading
 				layer.alert(res.msg, function (index) {
 					layer.close(index);
-					loadAll();
+					loadAll2();
 				});
 
 			}
@@ -280,6 +327,72 @@ $(function() {
 	});
 
 });
+
+function Confirm(){
+	var params = {
+		"id" : quoteId,
+		"bsType":bsType
+	};
+	CoreUtil.sendAjax("/productMater/Confirm", JSON.stringify(params), function(
+		data) {
+		if (data.result) {
+			layer.alert("确认完成成功", function() {
+				layer.closeAll();
+				// cleanProdErr();
+				// 加载页面
+				loadAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
+// 打开导入页
+function openUpload() {
+	tableIns2.reload({
+		url:context + '/productMaterTemp/getList?quoteId='+quoteId+'&bsType='+bsType,
+		done: function(res1, curr, count){
+			pageCurr=curr;
+			res1.data.forEach(function (item, index) {
+				if(bsType == 'hardware'){//五金
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+				}else if(bsType == 'molding'){//注塑
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsWaterGap"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsProQty"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsWaterGap"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsProQty"]').removeClass("layui-hide");
+
+				}else if(bsType == 'surface'){
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
+				}else if(bsType == 'packag'){
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+				}
+			});
+		}
+	})
+	// 打开弹出框
+	var index=layer.open({
+		type : 1,
+		title : "导入采购填报价格",
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#uploadDiv')
+	});
+	layer.full(index);
+}
+
 
 //模板下载
 function  downloadExcel() {
@@ -413,6 +526,16 @@ function loadAll() {
 		page : {
 			curr : pageCurr
 		// 从当前页码开始
+		}
+	});
+}
+
+function loadAll2() {
+	// 重新加载table
+	tableIns2.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
 		}
 	});
 }

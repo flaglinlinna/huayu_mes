@@ -235,7 +235,24 @@ $(function() {
 });
 
 function uploadChecked() {
-	
+    var params = {
+        "pkQuote": quoteId,
+    };
+    CoreUtil.sendAjax("/productMaterTemp/confirmUpload", JSON.stringify(params), function(
+        data) {
+        if (data.result) {
+            layer.alert("操作成功", function() {
+                layer.closeAll();
+                // cleanProdErr();
+                // 加载页面
+                loadAll();
+            });
+        } else {
+            layer.alert(data.msg);
+        }
+    }, "POST", false, function(res) {
+        layer.alert(res.msg);
+    });
 }
 
 // 打开导入页

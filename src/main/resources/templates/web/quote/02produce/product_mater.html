@@ -30,7 +30,9 @@
              <div class="layui-btn-container layui-inline">
                      <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addHardware()">添加材料信息</button>
                  <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="downloadExcel()">下载模板</button>
-                 <button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入模板</button>
+                 <!--<button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入模板</button>-->
+                 <a class="layui-btn layui-btn-sm layui-btn-normal" onclick="openUpload()">导入数据</a>
+                 <button class="layui-btn layui-btn-sm" onclick="Confirm()">确认完成</button>
              </div>
          </script>
 
@@ -139,6 +141,12 @@
             </div>
         </form>
     </div>
+
+        <div id="uploadDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
+            <button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">选择文件</button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadChecked()">确认导入</button>
+            <table id="uploadList" lay-filter="uploadTable"></table>
+        </div>
 
         <script th:inline="javascript">
             var bsType=[[${bsType}]];

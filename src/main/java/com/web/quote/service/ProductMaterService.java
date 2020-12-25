@@ -13,6 +13,8 @@ public interface ProductMaterService {
 
 	public ApiResponseResult delete(Long id) throws Exception;
 
+	public ApiResponseResult Confirm(Long quoteId,String bsType) throws Exception;
+
 	public ApiResponseResult doExcel(MultipartFile[] file,String bsType,Long quoteId) throws Exception;
 
 	public ApiResponseResult getList(String keyword,String bsType, String quoteId,PageRequest pageRequest) throws Exception;

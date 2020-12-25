@@ -665,6 +665,28 @@ function addHardware() {
 	openProdErr(null, "添加工艺信息");
 }
 
+function Confirm(){
+	var params = {
+		"id" : quoteId,
+		"bsType":bsType
+	};
+	CoreUtil.sendAjax("/productProcess/Confirm", JSON.stringify(params), function(
+		data) {
+		if (data.result) {
+			layer.alert("确认完成成功", function() {
+				layer.closeAll();
+				// cleanProdErr();
+				// 加载页面
+				loadAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
 // 添加导入页
 function openUpload() {
 	tableIns2.reload({

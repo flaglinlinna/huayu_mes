@@ -28,7 +28,16 @@ public class ProductMater extends BaseEntity {
 	private static final long serialVersionUID = 4625660587007894370L;
 
 	public static final String TABLE_NAME = "PRICE_PRODUCT_MATER";
-	
+
+	/**
+	 * 状态
+	 * 0：草稿，1:完成
+	 */
+	@Column
+	@ApiModelProperty(name="bsStatus",value="状态")
+	protected int bsStatus = 0;
+
+
 	/**
 	 * 类型
 	 * 五金:hardware
@@ -179,6 +188,13 @@ public class ProductMater extends BaseEntity {
 	@Column(length = 50)
 	protected BigDecimal bsFee;
 
+	public int getBsStatus() {
+		return bsStatus;
+	}
+
+	public void setBsStatus(int bsStatus) {
+		this.bsStatus = bsStatus;
+	}
 
 	public Long getPkQuote() {
 		return pkQuote;

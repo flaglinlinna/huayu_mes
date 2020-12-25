@@ -15,4 +15,6 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	public List<ProductProcess> findByDelFlag(Integer delFlag);
 	
 	public List<ProductProcess> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
+
+	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsType(Integer delFlag,Long pkQuote,String bsType);
 }
