@@ -24,5 +24,7 @@ public interface ProductMaterTempService {
 //	public ApiResponseResult importByTemp(String quoteId,String bsType) throws Exception;
 
 	//采购填报价格 确定导入正式表
-	public ApiResponseResult importByTemp(Long quoteId) throws Exception;
+	public ApiResponseResult importByPurchase(Long quoteId) throws Exception;
+
+	public ApiResponseResult importByMater(Long quoteId,String bsType) throws Exception;
 }

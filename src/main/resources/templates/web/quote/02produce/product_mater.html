@@ -29,13 +29,23 @@
          <script type="text/html" id="toolbar">
              <div class="layui-btn-container layui-inline">
                      <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addHardware()">添加材料信息</button>
-                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="downloadExcel()">下载模板</button>
+                 <!--<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="downloadExcel()">下载模板</button>-->
+                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="exportExcel()">导出模板</button>
                  <!--<button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入模板</button>-->
                  <a class="layui-btn layui-btn-sm layui-btn-normal" onclick="openUpload()">导入数据</a>
                  <button class="layui-btn layui-btn-sm" onclick="Confirm()">确认完成</button>
              </div>
          </script>
 
+         <script type="text/html" id="checkStatus">
+             {{#  if(d.checkStatus == 0){ }}
+             <span style="color: green;">校验通过</span>
+             {{#  } else if(d.checkStatus == 1) { }}
+             <span style="color: red;">校验不通过</span>
+             {{#  } else { }}
+             <span></span>
+             {{#  } }}
+         </script>
 
         <table id="listTable" lay-filter="hardwareTable"></table>
 
@@ -52,8 +62,9 @@
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">零件名称</label>
                 <div class="layui-input-block">
-                    <input id="bsComponent" name="bsComponent" lay-filter="bsComponent"  placeholder="请输入零件名称" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
-                </div>
+                    <select id="bsComponent" name="bsComponent" lay-verify="required" lay-filter="bsComponent" lay-search>
+                    </select>
+                    </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label layui-required">材料名称</label>
@@ -151,6 +162,7 @@
         <script th:inline="javascript">
             var bsType=[[${bsType}]];
             var quoteId=[[${quoteId}]];
+            var bomNameList=[[${bomNameList}]];
         </script>
 
     <script th:src="@{/js/web/quote/02produce/product_mater.js}" src="/js/web/quote/02produce/product_mater.js"></script>
