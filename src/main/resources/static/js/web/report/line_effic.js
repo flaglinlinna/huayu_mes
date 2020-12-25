@@ -16,6 +16,8 @@ $(function() {
 			data : [],
 			height: 'full-70',
 			page : true,
+			limit:50,
+			limits:[50,100,200,500,1000,5000],
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
