@@ -322,11 +322,23 @@ public class ProductProcesslmpl implements ProductProcessService {
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
 
+    /**
+     * 确认完成
+     */
     @Override
-    public ApiResponseResult getBomSelect(String pkQuote,PageRequest pageRequest) throws Exception {
-        Page<Map<String, Object>> pageList=quoteProcessDao.getBomNameByPage(pkQuote,pageRequest);
-        return ApiResponseResult.success().data(DataGrid.create(pageList.getContent(), (int) pageList.getTotalElements(),
-                pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    @Transactional
+    public ApiResponseResult Confirm(Long quoteId,String bsType) throws Exception{
+        List<ProductProcess> productMaterList  = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
+        for(ProductProcess o : productMaterList) {
+            o.setBsStatus(1);
+        }
+        productProcessDao.saveAll(productMaterList);
+        return ApiResponseResult.success("确认完成成功！");
+    }
+
+    @Override
+    public ApiResponseResult getBomSelect(String pkQuote) throws Exception {
+        return ApiResponseResult.success().data(quoteProcessDao.getBomName(pkQuote));
     }
 
     @Override
@@ -384,7 +396,6 @@ public class ProductProcesslmpl implements ProductProcessService {
         //删除临时表数据
         productProcessTempDao.deleteByPkQuoteAndBsTypeAndCreateBy(pkQuote,bsType,userId);
         productProcessDao.saveAll(productProcessList);
-//        return ApiResponseResult.success().data(productProcessTempDao.findAllByIdIn(longIdsArr));
         return ApiResponseResult.success();
     }
 }

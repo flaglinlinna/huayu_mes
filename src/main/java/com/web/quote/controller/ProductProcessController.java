@@ -44,7 +44,7 @@ public class ProductProcessController extends WebController {
 		try {
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
-//			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
+			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -198,6 +198,27 @@ public class ProductProcessController extends WebController {
 			e.printStackTrace();
 			logger.error("导出数据失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
+		}
+	}
+
+	@ApiOperation(value = "确认完成", notes = "确认完成", hidden = true)
+	@RequestMapping(value = "/Confirm", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult Confirm(@RequestBody Map<String, Object> params) {
+		String method = "/productProcess/Confirm";
+		String methodName = "确认完成";
+		try {
+			long id = Long.parseLong(params.get("id").toString());
+			String bsType = params.get("bsType").toString();
+			ApiResponseResult result = productProcessService.Confirm(id,bsType);
+			logger.debug("确认完成=Confirm:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("确认完成失败！", e);
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			return ApiResponseResult.failure("确认完成信息失败！");
 		}
 	}
 

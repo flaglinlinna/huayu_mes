@@ -3,18 +3,22 @@ package com.web.quote.service.internal;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
+import com.utils.ExcelExport;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.UnitDao;
 import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.ProductMaterDao;
+import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.service.ProductMaterService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,6 +27,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
@@ -36,6 +41,9 @@ public class ProductMaterlmpl implements ProductMaterService {
 
     @Autowired
     private UnitDao unitDao;
+
+    @Autowired
+    QuoteProcessDao quoteProcessDao;
 	
 	/**
      * 新增报价单
@@ -109,6 +117,89 @@ public class ProductMaterlmpl implements ProductMaterService {
         o.setDelBy(UserUtil.getSessionUser().getId());
         productMaterDao.save(o);
         return ApiResponseResult.success("删除成功！");
+    }
+
+    @Override
+    public ApiResponseResult getBomSelect(String pkQuote) throws Exception {
+        return ApiResponseResult.success().data(quoteProcessDao.getBomName(pkQuote));
+    }
+
+    public void exportExcel(HttpServletResponse response, String bsType, Long quoteId) throws Exception{
+        String excelPath = "static/excelFile/";
+        String fileName = "";
+        String[] map_arr = null;
+        //五金材料导入顺序: 零件名称、材料名称、规格、用量、单位、基数、供应商、备注
+        //组装材料导入顺序: 零件名称、材料名称、规格、用量、单位、基数、供应商、备注
+        //注塑材料导入顺序: 零件名称、材料名称、规格、制品量、单位、基数、水后数、穴数、备注
+        //表面处理导入顺序: 零件名称、加工类型、配色工艺、材料名称、规格、用料、单位、基数、备注
+        if(("hardware").equals(bsType)){
+            fileName = "五金材料模板.xlsx";
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
+        }else if(("molding").equals(bsType)){
+            fileName = "注塑材料模板.xlsx";
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
+        }else if(("surface").equals(bsType)){
+            fileName = "表面处理材料模板.xlsx";
+            map_arr = new String[]{"id","bsComponent","bsMachiningType","bsColor","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","fmemo"};
+        }else if(("packag").equals(bsType)){
+            fileName = "组装材料模板.xlsx";
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsRadix","bsWaterGap","bsCave","fmemo"};
+        }
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        Resource resource = new ClassPathResource(excelPath+fileName);
+        InputStream in = resource.getInputStream();
+
+//        XSSFWorkbook workbook = new XSSFWorkbook(in);
+//        in.close();
+        List<SearchFilter> filters = new ArrayList<>();
+        filters.add(new SearchFilter("bsType", SearchFilter.Operator.EQ, bsType));
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));
+        Specification<ProductMater> spec = Specification.where(BaseService.and(filters, ProductMater.class));
+        List<ProductMater> productMaterList  = productMaterDao.findAll(spec);
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        for (ProductMater bs : productMaterList) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", bs.getId());
+//            if(("hardware").equals(bsType)){
+//                map.put("bsType", "五金");
+//            }else if(("molding").equals(bsType)){
+//                map.put("bsType", "注塑");
+//            }else if(("surface").equals(bsType)){
+//                map.put("bsType", "表面处理");
+//            }else if(("packag").equals(bsType)){
+//                map.put("bsType", "组装");
+//            }
+            map.put("bsComponent", bs.getBsComponent());
+            map.put("bsMaterName", bs.getBsMaterName());
+            map.put("bsModel", bs.getBsModel());
+            map.put("bsRadix", bs.getBsRadix());
+            map.put("bsQty", bs.getBsQty());
+            map.put("bsProQty", bs.getBsProQty());
+            map.put("bsUnit", bs.getBsUnit());
+            map.put("fmemo", bs.getFmemo());
+            map.put("bsSupplier", bs.getBsSupplier());
+            map.put("bsWaterGap", bs.getBsWaterGap());
+            map.put("bsCave", bs.getBsCave());
+            map.put("bsMachiningType", bs.getBsMachiningType());
+            map.put("bsColor", bs.getBsColor());
+            list.add(map);
+        }
+        ExcelExport.export(response,list,workbook,map_arr,excelPath+fileName,fileName);
+    }
+
+    /**
+     * 确认完成
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult Confirm(Long quoteId,String bsType) throws Exception{
+        List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
+        for(ProductMater o : productMaterList) {
+            o.setBsStatus(1);
+        }
+        productMaterDao.saveAll(productMaterList);
+        return ApiResponseResult.success("确认完成成功！");
     }
 
     //防止读取Excel为null转String 报空指针异常
