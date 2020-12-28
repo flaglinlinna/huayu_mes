@@ -162,8 +162,12 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				pd.setPkQuote(Long.valueOf(quoteId));//报价单主表
 				//--20201222-fyx-获取人工和制费
 				Proc pp1 = procDao.findById(Long.parseLong(pro));
-				if(pp1!=null){
+				if(pp1!=null){			
 					String[] strs = this.getLhBy(pp1.getWorkcenterId(), Long.valueOf(pro));
+					
+					if(strs[0]==""||strs[1]==""){//--20201228-lst-判断人工制费是否有维护	
+						return ApiResponseResult.failure("有未维护的人工制费,请先维护");
+					}
 					pd.setBsFeeLh(new BigDecimal(strs[0]));
 					pd.setBsFeeMh(new BigDecimal(strs[1]));
 				}
@@ -202,8 +206,29 @@ public class QuoteProcesslmpl implements QuoteProcessService {
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setBsOrder(procOrder);
         quoteProcessDao.save(o);
-        return ApiResponseResult.success("修改成功！").data(o);
+        return ApiResponseResult.success("修改工序顺序成功！").data(o);
 	}
+	
+	/**
+	 * 增加备注
+	 * **/
+	@Override
+	public ApiResponseResult doFmemo(Long id, String  fmemo) throws Exception {
+		// TODO Auto-generated method stub
+		if(id == null){
+            return ApiResponseResult.failure("工序ID不能为空！");
+        }
+        QuoteProcess o = quoteProcessDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("工序记录不存在！");
+        }
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setFmemo(fmemo);
+        quoteProcessDao.save(o);
+        return ApiResponseResult.success("修改备注成功！").data(o);
+	}
+	
 	/**
 	 * 删除
 	 * **/

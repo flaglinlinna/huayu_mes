@@ -223,6 +223,8 @@ public class Quotelmpl implements QuoteService {
         o.setBsSimilarProd(quote.getBsSimilarProd());
         o.setBsCustName(quote.getBsCustName());
         o.setBsPosition(quote.getBsPosition());
+        o.setBsProdTypeId(quote.getBsProdTypeId());
+        o.setBsDevType(quote.getBsDevType());
         o.setBsMaterial(quote.getBsMaterial());
         o.setBsChkOutItem(quote.getBsChkOutItem());
         o.setBsChkOut(quote.getBsChkOut());
@@ -311,6 +313,10 @@ public class Quotelmpl implements QuoteService {
 		return ApiResponseResult.success().data(lpp.get(0).getProfitRateGs());
 	}
 
+	public ApiResponseResult findUserName(Long usr_id)throws Exception{
+		return ApiResponseResult.success().data(sysUserDao.findById((long) usr_id).getUserName());
+	}
+	
 	public  BigDecimal getBigDecimal( Object value ) {  
         BigDecimal ret = null;  
         if( value != null ) {  

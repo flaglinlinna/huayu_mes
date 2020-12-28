@@ -434,13 +434,16 @@ function getAddList(){
 	//零件下拉框
 	$("#num").empty();
 	var bomlist=bomNameList.data;
+	console.log(bomlist)
 	for(var i=0;i<bomlist.length;i++){
 		if(i==0){
 				$("#num").append("<option value=''> 请选择</option>");  
 		}
-		 $("#num").append(
+		if(bomlist[i]){//为空的不显示
+			$("#num").append(
 					"<option value=" + bomlist[i].BS_ELEMENT + ">"
 							+ bomlist[i].BS_ELEMENT +"</option>");
+		} 
 	}
 	layui.form.render('select');
 }

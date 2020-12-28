@@ -69,15 +69,14 @@ $(function() {
 				align : 'center',
 			},{
 				field : 'fmemo',
-				title : '工序说明',
+				title : '备注',"edit":"number","event": "dataCol",
 				templet:function (d) {
-					if(d.proc.fmemo==null){
+					if(d.fmemo==null){
 						return ""
 					}else{
-						return d.proc.fmemo
+						return d.fmemo
 					}
 				},
-				style:'background-color:#d2d2d2'
 			},  {
 				fixed : 'right',
 				title : '操作',
@@ -86,6 +85,7 @@ $(function() {
 				toolbar : '#optBar'
 			} ] ],
 			done : function(res, curr, count) {
+				//console.log(res)
 				pageCurr = curr;
 				merge(res.data,['bsName',],[1,1]);
 			}
@@ -227,6 +227,10 @@ $(function() {
 		    		loadAll();
 		    	}
 		    }
+		    if(field == 'fmemo'){
+		    	//console.log(data.id,value)
+		    	doFmemo(data.id,value)
+		    }
 		  });
 		
 		// 监听工具条
@@ -323,6 +327,24 @@ $(function() {
 					});
 				});
 		}
+		// 填写备注
+		function doFmemo(id, fmemo) {
+			var param = {
+					"id" : id,
+					"fmemo" : fmemo
+				};
+				CoreUtil.sendAjax("/quoteProcess/doFmemo", JSON
+						.stringify(param), function(data) {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+					loadAll();
+				}, "POST", false, function(res) {
+					layer.alert("操作请求错误，请您稍后再试", function() {
+						layer.closeAll();
+					});
+				});
+		}
 	});
 });
 //添加工艺流程
@@ -338,7 +360,7 @@ function addProc() {
 	openProc(null, "添加工艺流程");
 }
 function saveProc(){
-	console.log(quoteId)
+	//console.log(quoteId)
 	var param = {"quoteId" : quoteId ,"code":code};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
@@ -407,9 +429,7 @@ function addSubmit(procIdlist,itemIds) {
 				loadAll();
 			});
 		} else {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
-			});
+			layer.alert(data.msg);
 		}
 	}, "POST", false, function(res) {
 		layer.alert(res.msg);

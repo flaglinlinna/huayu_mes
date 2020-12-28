@@ -157,6 +157,26 @@ public class QuoteProcessController extends WebController {
         }
     }
 	
+	@ApiOperation(value = "修改备注", notes = "修改备注", hidden = true)
+    @RequestMapping(value = "/doFmemo", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doFmemo(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "quoteProcess/doFmemo";String methodName ="修改备注";
+        try{
+        	Long id = Long.parseLong(params.get("id").toString()) ;
+        	String fmemo=params.get("fmemo").toString();
+            ApiResponseResult result = quoteProcessService.doFmemo(id, fmemo);
+            logger.debug("修改备注=doFmemo:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("修改备注失败！", e);
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            return ApiResponseResult.failure("修改备注失败！");
+        }
+    }
+	
 	@ApiOperation(value = "删除", notes = "删除",hidden = true)
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody

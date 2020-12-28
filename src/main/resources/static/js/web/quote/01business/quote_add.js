@@ -51,6 +51,7 @@ $(function() {
 						if(quoteId){//存在quote为修改，不存在为新增
 							var param = {"id" : quoteId};
 							CoreUtil.sendAjax("/quote/getSingleAll", JSON.stringify(param),function(data) {
+								console.log(data.data)
 								if (data.result) {	
 											form.val("itemForm", {
 												"id" : data.data.id,
@@ -60,6 +61,7 @@ $(function() {
 												"bsProd" : data.data.bsProd,
 												"bsSimilarProd" : data.data.bsSimilarProd,
 												"bsProdTypeId" : data.data.bsProdTypeId,
+												"bsDevType":data.data.bsDevType,
 												"bsCustName" : data.data.bsCustName,
 												"bsPosition" : data.data.bsPosition,
 												"bsChkOut" : data.data.bsChkOut,
@@ -105,7 +107,7 @@ function setCheckboxValues(Name,str) {//name checkbox控件id, str 字符串
 				}	
 			});
 		}
-		form.render();
+		//form.render();
 	}
 }
 
@@ -126,6 +128,15 @@ function setData() {
 			$("#bsDevType").append("<option value=''>请点击选择</option>");
 		}
 		$("#bsDevType").append(
+				"<option value=" + data[i].subCode + ">" + data[i].subName+"</option>");
+	}
+	$("#bsType").empty();
+	var data = QuoteType
+	for (var i = 0; i < data.length; i++) {
+		if (i == 0) {
+			$("#bsType").append("<option value=''>请点击选择</option>");
+		}
+		$("#bsType").append(
 				"<option value=" + data[i].subCode + ">" + data[i].subName+"</option>");
 	}
 }
