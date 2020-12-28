@@ -4,6 +4,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 
 import com.utils.BaseService;
+import com.utils.ExcelExport;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
@@ -23,6 +24,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -31,12 +34,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.math.BigDecimal;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service(value = "QuoteBomService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -112,6 +114,39 @@ public class QuoteBomlmpl implements QuoteBomService {
 		o.setDelBy(UserUtil.getSessionUser().getId());
 		quoteBomDao.save(o);
 		return ApiResponseResult.success("删除成功！");
+	}
+
+	@Override
+	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception {
+		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuote(0,pkQuote);
+		String excelPath = "static/excelFile/";
+		String fileName = "外购件清单模板.xlsx";
+		String[] map_arr = new String[]{"id","bsElement","bsComponent","wcName","itemType","bsMaterName","bsModel",
+										"fmemo","bsProQty","bsRadix"};
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for(QuoteBom quoteBom :quoteBomList){
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", quoteBom.getId());
+			map.put("bsElement",quoteBom.getBsElement());
+			map.put("bsComponent",quoteBom.getBsComponent());
+			map.put("bsMaterName",quoteBom.getBsMaterName());
+			map.put("bsModel",quoteBom.getBsModel());
+			if(quoteBom.getItp()!=null) {
+				map.put("itemType", quoteBom.getItp().getItemType());
+			}
+			if(quoteBom.getWc()!=null){
+				map.put("wcName", quoteBom.getWc().getWorkcenterName());
+			}
+			if(quoteBom.getUnit()!=null){
+				map.put("unitName", quoteBom.getUnit().getUnitName());
+			}
+			map.put("fmemo",quoteBom.getFmemo());
+			map.put("bsProQty",quoteBom.getBsProQty());
+			map.put("bsRadix",quoteBom.getBsRadix());
+			list.add(map);
+		}
+		ExcelExport.export(response,list,workbook,map_arr,excelPath+fileName,fileName);
 	}
 
 	/**

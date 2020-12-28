@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -126,6 +127,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             InputStream fin = file[0].getInputStream();
             XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
             XSSFSheet sheet = workbook.getSheetAt(0);
+            NumberFormat nf = NumberFormat.getInstance();
             //获取最后一行的num，即总行数。此处从0开始计数
             int maxRow = sheet.getLastRowNum();
             List<ProductMaterTemp> hardwareMaterList = new ArrayList<>();
@@ -155,33 +157,58 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 temp.setBsType(bsType);
                 temp.setPkQuote(quoteId);
                 temp.setBsComponent(row1);
+                if(!StringUtils.isNotEmpty(row1)){
+                    errInfo += errInfo + "零件名称不能为空";
+                }
                 if(("molding").equals(bsType)){
                     temp.setBsMaterName(row2);
-                    temp.setBsModel(row3);
-                    temp.setBsProQty(row4);
-                    temp.setBsUnit(row5);
-                    List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row5,0);
-                    if(unitList!=null&& unitList.size()>0){
-                        temp.setPkUnit(unitList.get(0).getId());
+                    if(!StringUtils.isNotEmpty(row2)){
+                        errInfo += errInfo + "材料名称不能为空";
                     }
+                    temp.setBsModel(row3);
+                    if(!StringUtils.isNotEmpty(row3)){
+                        errInfo += errInfo + "材料规格不能为空";
+                    }
+
                     temp.setBsRadix(row6);
                     temp.setBsWaterGap(row7);
                     temp.setBsCave(row8);
                     temp.setBsSupplier(row9);
                     temp.setFmemo(row10);
+
                     if(StringUtils.isNotEmpty(row4)) {
+                        temp.setBsProQty(row4);
                         if (!row4.matches("^\\d+\\.\\d+$") && !row4.matches("^\\d+$")) {
                             errInfo = errInfo + "制品量必须是数字类型;";
                         }
                     }else {
                         errInfo = errInfo + "制品量不能为空;";
                     }
+                    if(StringUtils.isNotEmpty(row5)){
+                        temp.setBsUnit(row5);
+                        List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row5,0);
+                        if(unitList!=null&& unitList.size()>0){
+                            temp.setPkUnit(unitList.get(0).getId());
+                        }else {
+                            errInfo = errInfo +"没有维护:"+ row5 + " 单位;";
+                        }
+                    }else {
+                        errInfo = errInfo + "单位不能为空;";
+                    }
+
                     if(StringUtils.isNotEmpty(row6)) {
                         if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
                             errInfo = errInfo + "基数必须是数字类型;";
                         }
                     }else {
                         errInfo = errInfo + "基数不能为空;";
+                    }
+                    if(StringUtils.isNotEmpty(row8)) {
+                        if (!row8.matches("^\\d+\\.\\d+$") && !row8.matches("^\\d+$")) {
+                            errInfo = errInfo + "穴数必须是数字类型;";
+                        }
+                    }else {
+                        errInfo = errInfo + "穴数不能为空;";
                     }
 
                 } else if(("surface").equals(bsType)){
@@ -195,8 +222,13 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                     temp.setBsColor(row3);
                     temp.setBsMaterName(row4);
                     temp.setBsModel(row5);
+                    if(!StringUtils.isNotEmpty(row4)){
+                        errInfo += errInfo + "材料名称不能为空";
+                    }
+                    if(!StringUtils.isNotEmpty(row5)){
+                        errInfo += errInfo + "材料规格不能为空";
+                    }
                     temp.setBsQty(row6);
-
                     if(StringUtils.isNotEmpty(row6)) {
                         if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
                             errInfo = errInfo + "用量必须是数字类型;";
@@ -205,11 +237,18 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         errInfo = errInfo + "用量不能为空;";
                     }
 
-                    temp.setBsUnit(row7);
-                    List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row7,0);
-                    if(unitList!=null&& unitList.size()>0){
-                        temp.setPkUnit(unitList.get(0).getId());
+                    if(StringUtils.isNotEmpty(row7)){
+                        temp.setBsUnit(row7);
+                        List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row7,0);
+                        if(unitList!=null&& unitList.size()>0){
+                            temp.setPkUnit(unitList.get(0).getId());
+                        }else {
+                            errInfo = errInfo +"没有维护:"+ row7 + " 单位;";
+                        }
+                    }else {
+                        errInfo = errInfo + "单位不能为空;";
                     }
+
                     temp.setBsRadix(row8);
                     if(StringUtils.isNotEmpty(row8)) {
                         if (!row8.matches("^\\d+\\.\\d+$") && !row8.matches("^\\d+$")) {
@@ -223,11 +262,26 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                     temp.setBsComponent(row1);
                     temp.setBsMaterName(row2);
                     temp.setBsModel(row3);
+                    if(!StringUtils.isNotEmpty(row1)){
+                        errInfo += errInfo + "零件名称不能为空";
+                    }
+                    if(!StringUtils.isNotEmpty(row2)){
+                        errInfo += errInfo + "材料名称不能为空";
+                    }
+                    if(!StringUtils.isNotEmpty(row3)){
+                        errInfo += errInfo + "材料规格不能为空";
+                    }
                     temp.setBsQty(row4);
-                    temp.setBsUnit(row5);
-                    List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row5,0);
-                    if(unitList!=null&& unitList.size()>0){
-                        temp.setPkUnit(unitList.get(0).getId());
+                    if(StringUtils.isNotEmpty(row5)){
+                        temp.setBsUnit(row5);
+                        List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row5,0);
+                        if(unitList!=null&& unitList.size()>0){
+                            temp.setPkUnit(unitList.get(0).getId());
+                        }else {
+                            errInfo = errInfo +"没有维护:"+ row5 + " 单位;";
+                        }
+                    }else {
+                        errInfo = errInfo + "单位不能为空;";
                     }
                     temp.setBsRadix(row6);
 

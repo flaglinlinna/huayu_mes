@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.*;
 
 @Service(value = "ProductProcessTempService")
@@ -46,6 +47,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
     @Transactional
     public ApiResponseResult edit(ProductProcessTemp productProcess) throws Exception {
         String errInfo ="";
+        NumberFormat nf = NumberFormat.getInstance();
         if(productProcess == null){
             return ApiResponseResult.failure("制造部材料信息不能为空！");
         }
@@ -59,9 +61,12 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
         }
 
         if(StringUtils.isNotEmpty(productProcess.getBsOrder())){
-            if(!productProcess.getBsOrder().matches("^\\d+$")){
+            String bsOrder = nf.format(productProcess.getBsOrder());
+
+            if(!bsOrder.matches("^\\d+$")){
                 errInfo = errInfo + "工序顺序需为正整数;";
             }
+            o.setBsOrder(productProcess.getBsOrder());
         }else {
             errInfo = errInfo + "工序顺序不能为空;";
         }
@@ -110,7 +115,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
 
 
-        o.setBsOrder(productProcess.getBsOrder());
+//        o.setBsOrder(productProcess.getBsOrder());
         o.setBsCycle(productProcess.getBsCycle());
         o.setBsYield(productProcess.getBsYield());
         o.setBsUserNum(productProcess.getBsUserNum());
@@ -168,6 +173,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
             //获取最后一行的num，即总行数。此处从0开始计数
             int maxRow = sheet.getLastRowNum();
             List<ProductProcessTemp> tempList = new ArrayList<>();
+            NumberFormat nf = NumberFormat.getInstance();
             //五金工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、成型周期(S)、工序良率、备注
             //注塑工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、穴数、成型周期(S)、加工人数、工序良率、备注
             //组装工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
@@ -191,6 +197,21 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 process.setBsType(bsType);
                 process.setPkQuote(quoteId);
                 process.setBsName(bsName);
+                process.setBsRadix(bsRadix);
+
+                if(StringUtils.isNotEmpty(bsRadix)) {
+                    if (!bsRadix.matches("^\\d+\\.\\d+$")
+                            && !bsRadix.matches("^^\\d+$")){
+                        errInfo = errInfo + "基数需输入数字;";
+                    }else if(("0").equals(bsRadix)){
+                        errInfo = errInfo + "基数不能为0;";
+                     }else {
+                        process.setBsRadix(nf.format(new BigDecimal(bsRadix)));
+                    }
+                }else {
+                    errInfo = errInfo + "基数不能为空;";
+                }
+
                 if(StringUtils.isNotEmpty(id)){
                     process.setMid(Long.parseLong(id));
 //                    process.setLastupdateBy(userId);
@@ -198,9 +219,12 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 }
                 process.setCreateBy(userId);
                 process.setCreateDate(doExcleDate);
-                process.setBsOrder(bsOrder);
-                if(!bsOrder.matches("^\\d+$")){
-                    errInfo = errInfo + "工序顺序需为正整数;";
+                if(StringUtils.isNotEmpty(bsOrder)) {
+                    if (!bsOrder.matches("^\\d+$")&&!bsOrder.matches("^\\d+\\.\\d+$")) {
+                        errInfo = errInfo + "工序顺序需为正整数;";
+                    }else {
+                        process.setBsOrder(nf.format(new BigDecimal(bsOrder)));
+                    }
                 }
 //                process.setBsRadix((int)Double.parseDouble(bsRadix));
                 List<Proc> procList = procDao.findByDelFlagAndProcName(0,procName);
@@ -211,27 +235,34 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 if(("molding").equals(bsType)){
                     //注塑
                     process.setBsCave(row6);
-                    process.setBsCycle(row7);
-                    process.setBsUserNum(row8);
+
                     process.setBsYield(row9);
 //                    if(!row6.matches("^\\d+$")){
 //                        errInfo = errInfo + "穴数数字类型;";
 //                    }
-                    if(!row7.matches("^\\d+$")){
+                    if(!row7.matches("^\\d+\\.\\d+$")&&!row7.matches("^\\d+$")){
                         errInfo = errInfo + "成型周期必须是数字类型;";
-                    }if(!row8.matches("^\\d+\\.\\d+$")&&!row8.matches("^\\d+$")){
+                    }else {
+                        process.setBsCycle(nf.format(new BigDecimal(row7)));
+                    }
+                    if(!row8.matches("^\\d+\\.\\d+$")&&!row8.matches("^\\d+$")){
                         errInfo = errInfo + "人数必须是数字类型;";
-                    }if(!row9.matches("^\\d+\\.\\d+$")&&!row9.matches("^\\d+$")){
+                    }else {
+                        process.setBsUserNum(nf.format(new BigDecimal(row8)));
+                    }
+                    if(!row9.matches("^\\d+\\.\\d+$")&&!row9.matches("^\\d+$")){
                         errInfo = errInfo + "工序良率必须是数字类型;";
                     }
                     process.setFmemo(row10);
                 }else if(("hardware").equals(bsType)){
                     //五金
-                    process.setBsUserNum(row6);
+//                    process.setBsUserNum(row6);
                     process.setBsCycle(row7);
                     process.setBsYield(row8);
                     if(!row6.matches("^\\d+$")&&!row6.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "人数必须是数字类型;";
+                    }else {
+                        process.setBsUserNum(nf.format(new BigDecimal(row6)));
                     }
                     if(!row7.matches("^\\d+$")&&!row7.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "成型周期必须是数字类型;";
@@ -241,11 +272,13 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                     process.setFmemo(row9);
                 }else {
                     //组装和表面
-                    process.setBsUserNum(row6);
+//                    process.setBsUserNum(row6);
                     process.setBsCapacity(row7);
                     process.setBsYield(row8);
                     if(!row6.matches("^\\d+$")&&!row6.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "人数必须是数字类型;";
+                    }else {
+                        process.setBsUserNum(nf.format(new BigDecimal(row6)));
                     }
                     if(!row7.matches("^\\d+$")&&!row7.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "产能必须是数字类型;";
@@ -279,7 +312,9 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
     public ApiResponseResult getList(String keyword,String bsType, String quoteId,PageRequest pageRequest) throws Exception {
         // 查询条件1
         List<SearchFilter> filters = new ArrayList<>();
+        Long userId = UserUtil.getSessionUser().getId();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("createBy", SearchFilter.Operator.EQ, userId));
         if (StringUtils.isNotEmpty(bsType)) {
             filters.add(new SearchFilter("bsType", SearchFilter.Operator.EQ, bsType));
         }

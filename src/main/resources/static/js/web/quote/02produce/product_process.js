@@ -73,6 +73,7 @@ $(function() {
 				{field : 'bsUserNum', title : '人数',width:90,edit:'text',hide:true},
 				{field : 'bsCycle', title : '成型周期(S)', width:150,edit:'text', hide:true},
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
+				{field : 'bsLoss', title : '损耗率', width:100,edit:'text'},
 				{field : 'bsCave', title : '穴数',edit:'text',width:90, hide:true},
 				{field : 'bsCapacity', title : '产能',edit:'text',width:90, hide:true},
 				{field : 'bsFeeWxAll', title : '外协价格',edit:'text',width:120, hide:true},
@@ -85,6 +86,8 @@ $(function() {
 					if(bsType == 'out'){//外协
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
 					}else if(bsType == 'hardware'){//五金
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
@@ -304,7 +307,7 @@ $(function() {
 					return false;
 				}
 			}else if(obj.field =="bsCave") {
-				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false && bsCave != "" && bsCave != null) {
+				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false) {
 					layer.msg("穴数只能输入数字");
 					loadAll();
 					return false;
@@ -348,8 +351,8 @@ $(function() {
 					return false;
 				}
 			}else if(obj.field =="bsCave") {
-				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false && bsCave != "" && bsCave != null) {
-					layer.msg("穴数只能输入数字");
+				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false) {
+					layer.msg("穴数只能输入数字且不能为空");
 					loadAll2();
 					return false;
 				}
@@ -595,17 +598,21 @@ function selectDiv() {
 	if(bsType=="hardware"){
 		$("#bsCaveDiv").hide();
 		$("#bsCapacityDiv").hide();
+		$("#bsLossDiv").hide();
 		$("#bsFeeWxAllDiv").hide();
 	} else if(bsType=="molding"){
 		$("#bsCapacityDiv").hide();
 		$("#bsFeeWxAllDiv").hide();
+		$("#bsLossDiv").hide();
 	}else if(bsType=="surface"){
 		$("#bsCycleDiv").hide();
 		$("#bsCaveDiv").hide();
 		$("#bsFeeWxAllDiv").hide();
+		$("#bsLossDiv").hide();
 	}else if(bsType=="packag"){
 		$("#bsCycleDiv").hide();
 		$("#bsCaveDiv").hide();
+		$("#bsLossDiv").hide();
 		$("#bsFeeWxAllDiv").hide();
 	}else if(bsType=="out"){
 		$("#bsCycleDiv").hide();
@@ -701,6 +708,8 @@ function openUpload() {
 			 if(bsType == 'hardware'){//五金
 				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
 				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+				 $('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
+				 $('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
 			}else if(bsType == 'molding'){//注塑
 				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
 				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");

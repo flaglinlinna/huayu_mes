@@ -192,6 +192,13 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsFeeWxAll", value = "外协价格")
 	@Column(length = 50)
 	protected BigDecimal bsFeeWxAll;
+
+	/**
+	 * 损耗率
+	 */
+	@ApiModelProperty(name = "bsLoss", value = "损耗率")
+	@Column(length = 50)
+	protected BigDecimal bsLoss;
 	
 	
 
@@ -372,6 +379,12 @@ public class ProductProcess extends BaseEntity {
 	public void setBsHouYield(BigDecimal bsHouYield) {
 		this.bsHouYield = bsHouYield;
 	}
-	
-	
+
+	public BigDecimal getBsLoss() {
+		return bsLoss;
+	}
+
+	public void setBsLoss(BigDecimal bsLoss) {
+		this.bsLoss = bsLoss;
+	}
 }

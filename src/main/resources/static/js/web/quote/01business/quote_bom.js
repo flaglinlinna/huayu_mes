@@ -4,7 +4,7 @@
 var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
-		var table = layui.table, form = layui.form,upload = layui.upload,
+		var table = layui.table, table1 = layui.table,form = layui.form,upload = layui.upload,
 			tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect;
 
 		tableSelect=tableSelect.render({
@@ -240,12 +240,71 @@ $(function() {
 			}
 		});
 
+		tableIns1 = table1.render({
+			elem : '#uploadList',
+			// url : context + '/quoteBom/getQuoteBomList?pkQuote='+ quoteId,
+			method : 'get' // 默认：get请求
+			,
+			cellMinWidth : 80,
+			height:'full-110'//固定表头&full-查询框高度
+			,even:true,//条纹样式
+			page : true,
+			request : {
+				pageName : 'page' // 页码的参数名称，默认：page
+				,
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			},
+			parseData : function(res) {
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+					// code值为200表示成功
+				}
+			},
+			cols : [ [
+				{type : 'numbers'},
+				{field : 'checkStatus', width:100, title : '状态',sort:true,style:'background-color:#d2d2d2',templet: '#checkStatus'},
+				{field : 'errorInfo', width:150, title : '错误信息',sort:true,style:'background-color:#d2d2d2'},
+				 {field : 'bsElement',title : '组件名称',sort:true,width:120},
+				{field : 'bsComponent',title : '零件名称',sort:true,width:200},
+				{field : 'wc',title : '材料耗用工作中心',sort:true,width:145,
+					templet:function (d) {
+						if(d.wc!=null) {return d.wc.workcenterName;}else {return "";}}},
+				{field : 'bsItemCode',title : '材料编码',sort:true,width:120},
+				{field : 'itp',title : '物料类型',sort:true,width:120,
+					templet:function (d) {
+						if(d.itp!=null) {return d.itp.itemType;}else {return "";}}},
+				{field : 'bsMaterName',title : '材料名称',sort:true,width:150},
+				{field : 'bsModel',title : '材料规格',width:200},
+				{field : 'fmemo',title : '工艺说明',width:200},
+				{field : 'bsProQty',title : '制品量',width:90},
+				{field : 'unit',title : '单位',width:80,
+					templet:function (d) {
+						if(d.unit!=null) {return d.unit.unitName;}else {return "";}}},
+				{field : 'bsRadix',title : '基数',width:80}
+				// , {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width:120}
+			] ],
+			done : function(res, curr, count) {
+				// 如果是异步请求数据方式，res即为你接口返回的信息。
+				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+				// console.log(res);
+				// 得到当前页码
+				// console.log(curr);
+				// 得到数据总量
+				// console.log(count);
+				pageCurr = curr;
+			}
+		});
+
 		//自定义验证规则
 		form.verify({
 			double: function(value){
-				if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false)
+				if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false && value!="" && value!=null)
 				{
-					return '用量只能输入数字';
+					return '只能输入数字类型';
 				}
 			}
 		});
@@ -317,7 +376,7 @@ $(function() {
 		//导入
 		upload.render({
 			elem: '#upload'
-			,url: context + '/quoteBom/importExcel'
+			,url: context + '/quoteBomTemp/importExcel'
 			,accept: 'file' //普通文件
 			,data: {
 				pkQuote: function(){
@@ -331,7 +390,7 @@ $(function() {
 				layer.closeAll('loading'); //关闭loading
 				layer.alert(res.msg, function (index) {
 					layer.close(index);
-					loadAll();
+					loadAll2();
 				});
 
 			}
@@ -350,6 +409,54 @@ $(function() {
 //模板下载
 function  downloadExcel() {
 	location.href = "../../excelFile/外购件清单模板.xlsx";
+}
+
+//导出数据
+function exportExcel() {
+	location.href = context + "/quoteBom/exportExcel?pkQuote="+quoteId;
+}
+
+// 打开导入页
+function openUpload() {
+	tableIns1.reload({
+		url:context + '/quoteBomTemp/getList?quoteId='+quoteId,
+		done: function(res1, curr, count){
+			pageCurr=curr;
+		}
+	})
+	// 打开弹出框
+	var index=layer.open({
+		type : 1,
+		title : "导入外购件清单信息",
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#uploadDiv')
+	});
+	layer.full(index);
+}
+
+//确定导入
+function uploadChecked() {
+	var params = {
+		"pkQuote": quoteId,
+	};
+	CoreUtil.sendAjax("/quoteBomTemp/uploadChecked", JSON.stringify(params), function(
+		data) {
+		if (data.result) {
+			layer.alert("操作成功", function() {
+				layer.closeAll();
+				cleanProdErr();
+				// 加载页面
+				loadAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
 // 新增编辑弹出框
@@ -491,6 +598,16 @@ function loadAll() {
 		page : {
 			curr : pageCurr
 		// 从当前页码开始
+		}
+	});
+}
+
+function loadAll2() {
+	// 重新加载table
+	tableIns1.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
 		}
 	});
 }

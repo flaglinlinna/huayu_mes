@@ -115,15 +115,23 @@
                 </div>
             </div>
             <div class="layui-form-item" >
-                <label class="layui-form-label layui-required">工序良率%</label>
+            <label class="layui-form-label layui-required">工序良率%</label>
+            <div class="layui-input-block">
+                <input id="bsYield" name="bsYield" lay-verify="double" placeholder="请输入工序良率%"   autocomplete="off" class="layui-input" type="text"/>
+            </div>
+        </div>
+
+            <div class="layui-form-item" id="bsLossDiv">
+                <label class="layui-form-label">损耗率</label>
                 <div class="layui-input-block">
-                        <input id="bsYield" name="bsYield" lay-verify="double" placeholder="工序良率%"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsLoss" name="bsLoss" lay-verify="double" placeholder="请输入损耗率"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
+
             <div class="layui-form-item" id="bsCaveDiv">
                 <label class="layui-form-label layui-required">穴数</label>
                 <div class="layui-input-block">
-                    <input id="bsCave" name="bsCave"  placeholder="请输入穴数"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsCave" name="bsCave"  placeholder="请输入穴数"  lay-verify="double"  autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item" id="bsCapacityDiv">

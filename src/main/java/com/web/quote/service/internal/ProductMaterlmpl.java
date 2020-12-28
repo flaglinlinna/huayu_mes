@@ -146,8 +146,8 @@ public class ProductMaterlmpl implements ProductMaterService {
             map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsRadix","bsWaterGap","bsCave","fmemo"};
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
-        Resource resource = new ClassPathResource(excelPath+fileName);
-        InputStream in = resource.getInputStream();
+//        Resource resource = new ClassPathResource(excelPath+fileName);
+//        InputStream in = resource.getInputStream();
 
 //        XSSFWorkbook workbook = new XSSFWorkbook(in);
 //        in.close();

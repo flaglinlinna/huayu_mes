@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Api(description = "外购件清单模块")
@@ -159,4 +160,20 @@ public class QuoteBomController extends WebController {
             return ApiResponseResult.failure("提交报价-外购件信息失败！");
         }
     }
+
+	@ApiOperation(value="导出数据", notes="导出数据", hidden = true)
+	@RequestMapping(value = "/exportExcel", method = RequestMethod.GET)
+	@ResponseBody
+	public void exportExcel(HttpServletResponse response, Long pkQuote) {
+		String method = "/quoteBom/exportExcel";String methodName ="导出数据";
+		try {
+			logger.debug("导出数据=exportExcel:");
+			getSysLogService().success(module,method, methodName, "");
+			quoteBomService.exportExcel(response,pkQuote);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("导出数据失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+		}
+	}
 }

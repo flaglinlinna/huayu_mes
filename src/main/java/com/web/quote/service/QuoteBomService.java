@@ -5,16 +5,20 @@ import com.web.quote.entity.QuoteBom;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface QuoteBomService {
 
-	//删除BOM 外购件清单列表
+	//新增BOM 外购件清单列表
 	public ApiResponseResult add(QuoteBom quoteBom) throws Exception;
 
-	//删除BOM 外购件清单列表
+	//编辑BOM 外购件清单列表
 	public ApiResponseResult edit(QuoteBom quoteBom) throws Exception;
 
 	//删除BOM 外购件清单列表
 	public ApiResponseResult deleteQuoteBom(Long id) throws Exception;
+
+	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception;
 
 	//导入BOM Excel
 	public ApiResponseResult doQuoteBomExcel(MultipartFile[] file, Long pkQuote) throws Exception;
