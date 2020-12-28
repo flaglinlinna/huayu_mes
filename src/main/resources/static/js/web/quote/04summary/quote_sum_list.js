@@ -151,11 +151,11 @@ $(function() {
 						layer.open({
 		                    type: 2,
 		                    title:'审批',
-		                    area: ['600px', '550px'],
+		                    area: ['700px', '550px'],
 		                    fixed: false,
 		                    maxmin: true,
 		                    //content: '../../views/iframe/check.html',
-		                    content: context+'/check/toCheck',
+		                    content: context+'/check/toCheckQuote',
 		                    success: function (layero, index) {
 		                    	 // 获取子页面的iframe
 		                        var iframe = window['layui-layer-iframe' + index];

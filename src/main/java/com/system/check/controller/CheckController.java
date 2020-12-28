@@ -39,9 +39,9 @@ public class CheckController extends WebController {
         return "/web/iframe/check";
     }
 
-    @RequestMapping(value = "/toCheckUnit")
-    public String toCheckUnit(){
-        return "/web/views/iframe/checkUnit";
+    @RequestMapping(value = "/toCheckQuote")
+    public String toCheckQuote(){
+        return "/web/iframe/check_quote";
     }
 
 	@ApiOperation(value="获取审批初始化信息", notes="获取审批初始化信息")
