@@ -21,6 +21,9 @@ public interface QuoteProcessService {
    public ApiResponseResult delete(Long id)  throws Exception;
 	
    public ApiResponseResult doProcOrder(Long id,Integer bsOrder)  throws Exception;
+
+   public ApiResponseResult doFmemo(Long id,String  fmemo)throws Exception;
    
    public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
+   
 }

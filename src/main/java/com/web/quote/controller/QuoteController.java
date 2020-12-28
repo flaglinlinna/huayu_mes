@@ -51,6 +51,7 @@ public class QuoteController extends WebController {
 			ApiResponseResult prodType = quoteService.getProdType();
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("prodType", prodType);
+			mav.addObject("QuoteType", sysParamSubService.getListByMCode("BJ_LIST_TYPE").getData());//报价类型
 			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());//机台类型
 			mav.setViewName("/web/quote/01business/quote_add");// 返回路径
 		} catch (Exception e) {
@@ -236,6 +237,20 @@ public class QuoteController extends WebController {
             logger.error("检验利润率信息失败！", e);
             getSysLogService().error(module,method, methodName,params+":"+ e.toString());
             return ApiResponseResult.failure("检验利润率信息失败！");
+        }
+    }
+	
+	@ApiOperation(value = "获取用户姓名信息", notes = "获取用户姓名信息", hidden = true)
+    @RequestMapping(value = "/findUserName", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult findUserName(@RequestBody Map<String, Object> params) throws Exception{
+        try{      	
+        	long user_id = Long.parseLong(params.get("user_id").toString()) ;
+            ApiResponseResult result = quoteService.findUserName(user_id);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            return ApiResponseResult.failure("获取用户姓名信息失败！");
         }
     }
 }
