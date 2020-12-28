@@ -105,6 +105,7 @@ function setCheckboxValues(Name,str) {//name checkbox控件id, str 字符串
 				}	
 			});
 		}
+		form.render();
 	}
 }
 

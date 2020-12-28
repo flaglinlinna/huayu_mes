@@ -42,8 +42,8 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
     @Transactional
     public ApiResponseResult getList(String keyword,PageRequest pageRequest) throws Exception {
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
-				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_status3purchase col from "+Quote.TABLE_NAME+" p "
-						+ " where p.del_flag=0 and p.bs_step=3 ";
+				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_status2purchase col from "+Quote.TABLE_NAME+" p "
+						+ " where p.del_flag=0 and p.bs_step=2  ";
 		if (StringUtils.isNotEmpty(keyword)) {
 			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
 					+ keyword + "') > 0 ";*/
@@ -228,5 +228,12 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			e.printStackTrace();
 			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
 		}
+	}
+
+
+	@Override
+	public ApiResponseResult doSumHouLoss(Long quoteId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

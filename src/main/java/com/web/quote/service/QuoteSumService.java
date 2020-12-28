@@ -12,4 +12,6 @@ public interface QuoteSumService {
 	public ApiResponseResult getQuoteList(String keyword,String quoteId,PageRequest pageRequest) throws Exception;
 	
 	public ApiResponseResult getSumByQuote(String quoteId)throws Exception;
+	
+	public ApiResponseResult countMeterAndProcess(String quoteId)throws Exception;
 }

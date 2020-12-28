@@ -113,7 +113,7 @@ public class ProductProcess extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "bsRadix", value = "基数")
 	@Column(length = 50)
-	protected BigDecimal bsRadix=BigDecimal.ZERO;
+	protected BigDecimal bsRadix= new BigDecimal("1");
 	
 	/**
 	 * 人数
@@ -127,7 +127,7 @@ public class ProductProcess extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "bsCycle", value = "成型周期")
 	@Column(length = 50)
-	protected BigDecimal bsCycle=BigDecimal.ZERO;
+	protected BigDecimal bsCycle = new BigDecimal("1");
 	
 	/**
 	 * 工序良率(%)
@@ -135,6 +135,13 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsYield", value = "工序良率(%)")
 	@Column(length = 50)
 	protected BigDecimal bsYield=BigDecimal.ZERO;
+	
+	/**
+	 * 后工序良率(%)
+	 */
+	@ApiModelProperty(name = "bsHouYield", value = "后工序良率(%)")
+	@Column(length = 50)
+	protected BigDecimal bsHouYield;
 
 
 	/**
@@ -185,6 +192,8 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsFeeWxAll", value = "外协价格")
 	@Column(length = 50)
 	protected BigDecimal bsFeeWxAll;
+	
+	
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -354,6 +363,14 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsFeeWxAll(BigDecimal bsFeeWxAll) {
 		this.bsFeeWxAll = bsFeeWxAll;
+	}
+
+	public BigDecimal getBsHouYield() {
+		return bsHouYield;
+	}
+
+	public void setBsHouYield(BigDecimal bsHouYield) {
+		this.bsHouYield = bsHouYield;
 	}
 	
 	

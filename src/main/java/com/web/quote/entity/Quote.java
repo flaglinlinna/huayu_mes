@@ -48,7 +48,7 @@ public class Quote extends BaseEntity {
     protected int bsStatus = 0;
 	
 	/**
-     * 2-制造部状态
+     * 2-制造部+采购部+外协部的状态
      * 0:草稿
      * 1:进行中
      * 2:已完成
@@ -93,8 +93,28 @@ public class Quote extends BaseEntity {
 	@Column
 	@ApiModelProperty(name="bsStatus2Packag",value="状态")
     protected int bsStatus2Packag = 0;
+	
 	/**
-     * 3-采购部+外协部状态
+     * 2-采购部状态
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus2Surface",value="状态")
+    protected int bsStatus2Purchase = 0;
+	/**
+     * 2-外协部状态
+     * 0:草稿
+     * 1:进行中
+     * 2:已完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatus2Out",value="状态")
+    protected int bsStatus2Out = 0;
+	
+	/**
+     * 3-业务部状态
      * 0:草稿
      * 1:进行中
      * 2:已完成
@@ -102,53 +122,23 @@ public class Quote extends BaseEntity {
 	@Column
 	@ApiModelProperty(name="bsStatus3",value="状态")
     protected int bsStatus3 = 0;
-	/**
-     * 3-采购部状态
-     * 0:草稿
-     * 1:进行中
-     * 2:已完成
-     */
-	@Column
-	@ApiModelProperty(name="bsStatus2Surface",value="状态")
-    protected int bsStatus3Purchase = 0;
-	/**
-     * 3-外协部状态
-     * 0:草稿
-     * 1:进行中
-     * 2:已完成
-     */
-	@Column
-	@ApiModelProperty(name="bsStatus2Packag",value="状态")
-    protected int bsStatus3Out = 0;
 	
 	/**
-     * 4-业务部状态
-     * 0:草稿
-     * 1:进行中
-     * 2:已完成
-     */
-	@Column
-	@ApiModelProperty(name="bsStatus4",value="状态")
-    protected int bsStatus4 = 0;
-	
-	/**
-     * 5-总经理审批状态
+     * 4-总经理审批状态
      * 0:草稿
      * 1:进行中
      * 2:已完成
      */
 	@Column
 	@ApiModelProperty(name="bsStatus5",value="状态")
-    protected int bsStatus5 = 0;
+    protected int bsStatus4 = 0;
 	
 	/**
      * 流程步骤
      * 1:业务部
-     * 2:制造部
-     * 3:采购部
-     * 4:外协部
-     * 5:业务部
-     * 6:总经理
+     * 2:制造部+采购部+外协部
+     * 3:业务部
+     * 4:总经理
      */
 	@Column
 	@ApiModelProperty(name="bsStep",value="流程步骤")
@@ -688,14 +678,6 @@ public class Quote extends BaseEntity {
 		this.bsStatus4 = bsStatus4;
 	}
 
-	public int getBsStatus5() {
-		return bsStatus5;
-	}
-
-	public void setBsStatus5(int bsStatus5) {
-		this.bsStatus5 = bsStatus5;
-	}
-
 	public int getBsStatus2Hardware() {
 		return bsStatus2Hardware;
 	}
@@ -736,20 +718,28 @@ public class Quote extends BaseEntity {
 		this.bsManageFee = bsManageFee;
 	}
 
-	public int getBsStatus3Purchase() {
-		return bsStatus3Purchase;
+	public int getBsStatus2Purchase() {
+		return bsStatus2Purchase;
 	}
 
-	public void setBsStatus3Purchase(int bsStatus3Purchase) {
-		this.bsStatus3Purchase = bsStatus3Purchase;
+	public void setBsStatus2Purchase(int bsStatus2Purchase) {
+		this.bsStatus2Purchase = bsStatus2Purchase;
 	}
 
-	public int getBsStatus3Out() {
-		return bsStatus3Out;
+	public int getBsStatus2Out() {
+		return bsStatus2Out;
 	}
 
-	public void setBsStatus3Out(int bsStatus3Out) {
-		this.bsStatus3Out = bsStatus3Out;
+	public void setBsStatus2Out(int bsStatus2Out) {
+		this.bsStatus2Out = bsStatus2Out;
+	}
+
+	public Long getBsProdTypeId() {
+		return bsProdTypeId;
+	}
+
+	public void setBsProdTypeId(Long bsProdTypeId) {
+		this.bsProdTypeId = bsProdTypeId;
 	}
 	
 }

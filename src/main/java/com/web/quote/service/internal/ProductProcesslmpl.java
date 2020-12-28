@@ -331,9 +331,40 @@ public class ProductProcesslmpl implements ProductProcessService {
         List<ProductProcess> productMaterList  = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductProcess o : productMaterList) {
             o.setBsStatus(1);
+            o.setLastupdateDate(new Date());
+            o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
         productProcessDao.saveAll(productMaterList);
+        //20201225-fyx-计算后工序良率
+        this.updateHouYield(quoteId, bsType);
+        
         return ApiResponseResult.success("确认完成成功！");
+    }
+    private ApiResponseResult updateHouYield(Long quoteId,String bsType) throws Exception{
+    	//20201225-fyx-计算后工序良率
+        //1.先查询有多少个零件名称 
+        //2.根据零件名称,工艺顺序倒叙获取信息
+        //3.计算后工序
+    	
+    	List<Map<String, Object>> lml = productProcessDao.getBomName(bsType, quoteId);
+        if(lml.size()>0){
+        	for(Map<String, Object> map:lml){
+        		System.out.println(map.get("BS_NAME").toString());
+        		List<ProductProcess> lpp = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsNameOrderByBsOrderDesc(0, quoteId, bsType, map.get("BS_NAME").toString());
+        		for(int i=0;i<lpp.size();i++){
+        			ProductProcess pp = lpp.get(i);
+        			if(i == 0){//认为是最后一道工序,后工序良率是100
+        				pp.setBsHouYield(new BigDecimal(100));
+        			}else{//3的后工序良率就是4的后工序良率/100*本工序良率
+        				pp.setBsHouYield(lpp.get(i-1).getBsHouYield().divide(new BigDecimal(100)).multiply(pp.getBsYield()));
+        			}
+        			pp.setLastupdateDate(new Date());
+        			pp.setLastupdateBy(UserUtil.getSessionUser().getId());
+        		}
+        		productProcessDao.saveAll(lpp);
+        	}
+        }
+        return ApiResponseResult.success();
     }
 
     @Override
