@@ -120,14 +120,14 @@ public class ProductMater extends BaseEntity {
 	/**
 	 * 供应商
 	 */
-	@ApiModelProperty(name = "supplier", value = "供应商")
+	@ApiModelProperty(name = "bsSupplier", value = "供应商")
 	@Column(length = 200)
 	protected String bsSupplier;
 
 	/**
 	 * 水口量(注塑)
 	 */
-	@ApiModelProperty(name = "unit", value = "水口量(注塑)")
+	@ApiModelProperty(name = "bsWaterGap", value = "水口量(注塑)")
 	@Column(length = 150)
 	protected String bsWaterGap;
 

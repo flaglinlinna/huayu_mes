@@ -188,4 +188,56 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		
 		return ApiResponseResult.success().data(map);
 	}
+	/**
+	 * 第二步全部审批通过后，计算物料的价格，工序的人工费和制费
+	 */
+	@Override
+	public ApiResponseResult countMeterAndProcess(String quoteId) throws Exception {
+		// TODO Auto-generated method stub
+		//五金，表面，组装的材料总价格(未税)计算公式-单价*用量/基数
+		List<ProductMater> lpm3 = productMaterDao.findByDelFlagAnd3Tyle(Long.valueOf(quoteId));
+		for(ProductMater pm:lpm3){
+			BigDecimal bsRadix = new BigDecimal("1");//基数
+			if(!StringUtils.isEmpty(pm.getBsRadix())){
+				if(!"1".equals(pm.getBsRadix())){
+					bsRadix = new BigDecimal(pm.getBsRadix());
+				}
+			}
+			pm.setBsFee(pm.getBsAssess().multiply(pm.getBsQty().divide(bsRadix)));
+		}
+		productMaterDao.saveAll(lpm3);
+		//注塑的材料总价格(未税)计算公式-材料单价*(制品重+水口重/穴数)/用量基数
+		List<ProductMater> lpm1 = productMaterDao.findByDelFlagAndMolding(Long.valueOf(quoteId));
+		for(ProductMater pm:lpm1){
+			BigDecimal bsRadix = new BigDecimal("1");//基数
+			if(!StringUtils.isEmpty(pm.getBsRadix())){
+				if(!"1".equals(pm.getBsRadix())){
+					bsRadix = new BigDecimal(pm.getBsRadix());
+				}
+			}
+			BigDecimal bsCave = new BigDecimal(pm.getBsCave());//穴数
+			BigDecimal qty = new BigDecimal(pm.getBsWaterGap()).divide(bsCave).add(pm.getBsProQty());//水口重/穴数+制品重
+			pm.setBsFee(pm.getBsAssess().multiply(qty).divide(bsRadix));
+		}
+		productMaterDao.saveAll(lpm1);
+		//五金-人工工时费（元/H）*人数*成型周期(S）/3600 /基数；制费工时费（元/H）*成型周期(S）/3600/ /基数
+		List<ProductProcess> lpp_hardware = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId), "hardware");
+		for(ProductProcess pp:lpp_hardware){
+			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(pp.getBsRadix()));
+		    
+			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(pp.getBsRadix()));
+		}
+		productProcessDao.saveAll(lpp_hardware);
+		//注塑-人工工时费（元/H）*人数*成型周期(S）/3600/ 穴数/基数;制费工时费（元/H）*成型周期(S）/3600/穴数/ 基数
+		List<ProductProcess> lpp_molding = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId), "molding");
+		for(ProductProcess pp:lpp_molding){
+			BigDecimal bsCave = new BigDecimal(pp.getBsCave());//穴数
+			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(bsCave).divide(pp.getBsRadix()));
+		    
+			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(bsCave).divide(pp.getBsRadix()));
+		}
+		productProcessDao.saveAll(lpp_molding);
+		//更新表面处理-
+		return null;
+	}
 }
