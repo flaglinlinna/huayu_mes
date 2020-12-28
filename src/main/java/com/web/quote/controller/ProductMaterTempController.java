@@ -76,7 +76,7 @@ public class ProductMaterTempController extends WebController {
 
 
 
-	@ApiOperation(value = "获取导入临时列表", notes = "获取导入临时列表", hidden = true)
+	@ApiOperation(value = "获取导入的临时列表", notes = "获取导入的临时列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getList(String bsType,String bsPurchase,String quoteId) {
@@ -139,7 +139,7 @@ public class ProductMaterTempController extends WebController {
 //            String bsType = params.get("bsType").toString();
             logger.debug("导入临时表数据=uploadCheck:");
             getSysLogService().success(module,method, methodName, "");
-            return  tempService.importByTemp(pkQuote);
+            return  tempService.importByPurchase(pkQuote);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("导出数据失败！", e);
@@ -147,6 +147,25 @@ public class ProductMaterTempController extends WebController {
             return ApiResponseResult.failure("失败！");
         }
     }
+
+	@ApiOperation(value="制造部材料确定导入正式表", notes="制造部材料确定导入正式表", hidden = true)
+	@RequestMapping(value = "/uploadMater", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult uploadMater(@RequestBody Map<String, Object> params) {
+		String method = "/productMaterTemp/confirmUpload";String methodName ="导出数据";
+		try {
+			Long pkQuote = Long.parseLong(params.get("pkQuote").toString());
+            String bsType = params.get("bsType").toString();
+			logger.debug("导入临时表数据=uploadCheck:");
+			getSysLogService().success(module,method, methodName, "");
+			return  tempService.importByMater(pkQuote,bsType);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("导出数据失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("失败！");
+		}
+	}
 
 
 }

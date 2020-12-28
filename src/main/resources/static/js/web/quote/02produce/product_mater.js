@@ -107,6 +107,9 @@ $(function() {
 			},
 			cols : [ [
 				{type : 'numbers'},
+				{field : 'checkStatus', width:100, title : '状态',sort:true,style:'background-color:#d2d2d2',templet: '#checkStatus'},
+				// {field : 'enabled', width:100, title : '是否导入',sort:true,style:'background-color:#d2d2d2', templet: '#enabledTpl'},
+				{field : 'errorInfo', width:150, title : '错误信息',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'bsComponent', width:140, title : '零件名称',sort:true},
 				{field : 'bsMachiningType', title : '加工类型',width:100,hide:true},//(表面处理)
 				{field : 'bsColor', title : '配色工艺',width:100,hide:true},//(表面处理)
@@ -184,52 +187,7 @@ $(function() {
 			}
 		});
 
-		tableSelect1=tableSelect1.render({
-			elem : '#bsComponent',
-			searchKey : 'keyword',
-			checkedKey : 'id',
-			searchPlaceholder : '关键字搜索',
-			table : {
-				url : context + '/quoteBom/getQuoteBomList?pkQuote='+ quoteId,
-				// ?pkQuote='+quoteId,
-				method : 'get',
 
-				parseData : function(res) {
-					// 可进行数据操作
-					return {
-						"count" : res.data.total,
-						"msg" : res.msg,
-						"data" : res.data.rows,
-						"code" : res.status
-						// code值为200表示成功
-					}
-				},
-				cols : [ [
-					{ type: 'radio' },//单选  radio
-					{field : 'id', title : 'id', width : 0,hide:true},
-					{type : 'numbers'},
-					{field : 'bsComponent',title : '零件名称',sort:true,width:130},
-					{field : 'bsMaterName',title : '材料名称',sort:true,width:130},
-					{field : 'bsModel',title : '材料规格',width:150},
-					{field : 'fmemo',title : '工艺说明',width:150},
-				] ],
-				page : true,
-				request : {
-					pageName : 'page' // 页码的参数名称，默认：page
-					,
-					limitName : 'rows' // 每页数据量的参数名，默认：limit
-				},
-
-			},
-			done : function(elem, data) {
-				var da=data.data;
-				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
-				form.val("hardwareForm", {
-					"bsComponent":da[0].bsComponent
-				});
-				form.render();// 重新渲染
-			}
-		});
 
 		//自定义验证规则
 		form.verify({
@@ -328,6 +286,34 @@ $(function() {
 
 });
 
+
+function uploadChecked() {
+	var params = {
+		"pkQuote": quoteId,
+		"bsType":bsType
+	};
+	CoreUtil.sendAjax("/productMaterTemp/uploadMater", JSON.stringify(params), function(
+		data) {
+		if (data.result) {
+			layer.alert("操作成功", function() {
+				layer.closeAll();
+				cleanProdErr();
+				// 加载页面
+				loadAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
+//导出数据
+function exportExcel() {
+	location.href = context + "/productMater/exportExcel?bsType="+bsType+"&pkQuote="+quoteId;
+}
+
 function Confirm(){
 	var params = {
 		"id" : quoteId,
@@ -412,6 +398,7 @@ function openProdErr(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
+	initSelect();
 	var index=layer.open({
 		type : 1,
 		title : title,
@@ -425,6 +412,19 @@ function openProdErr(id, title) {
 		}
 	});
 	layer.full(index);
+}
+
+function initSelect() {
+	$("#bsComponent").empty();
+	var bomlist = bomNameList.data;
+	for (var i = 0; i < bomlist.length; i++) {
+		if (i == 0) {
+			$("#bsComponent").append("<option value=''> 请选择</option>");
+		}
+		$("#bsComponent").append(
+			"<option value=" + bomlist[i].BS_COMPONENT + ">"
+			+ bomlist[i].BS_COMPONENT + "</option>");
+	}
 }
 
 // 添加五金材料

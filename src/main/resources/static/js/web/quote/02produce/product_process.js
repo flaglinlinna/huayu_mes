@@ -245,107 +245,13 @@ $(function() {
 			}
 		});
 
-		tableSelect1=tableSelect1.render({
-			elem : '#bsName',
-			searchKey : 'keyword',
-			checkedKey : 'id',
-			searchPlaceholder : '关键字搜索',
-			table : {
-				url : context + '/quoteBom/getQuoteBomList?pkQuote='+ quoteId,
-				// ?pkQuote='+quoteId,
-				method : 'get',
-
-				parseData : function(res) {
-					// 可进行数据操作
-					return {
-						"count" : res.data.total,
-						"msg" : res.msg,
-						"data" : res.data.rows,
-						"code" : res.status
-						// code值为200表示成功
-					}
-				},
-				cols : [ [
-					{ type: 'radio' },//单选  radio
-					{field : 'id', title : 'id', width : 0,hide:true},
-					{type : 'numbers'},
-					{field : 'bsComponent',title : '零件名称',sort:true,width:130},
-					{field : 'bsMaterName',title : '材料名称',sort:true,width:130},
-					{field : 'bsModel',title : '材料规格',width:150},
-					{field : 'fmemo',title : '工艺说明',width:150},
-				] ],
-				page : true,
-				request : {
-					pageName : 'page' // 页码的参数名称，默认：page
-					,
-					limitName : 'rows' // 每页数据量的参数名，默认：limit
-				},
-
-			},
-			done : function(elem, data) {
-				var da=data.data;
-				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
-				form.val("productProcessForm", {
-					"bsName":da[0].bsComponent
-				});
-				form.render();// 重新渲染
-			}
-		});
-
-		tableSelect2=tableSelect2.render({
-			elem : '#bsName1',
-			searchKey : 'keyword',
-			checkedKey : 'id',
-			searchPlaceholder : '关键字搜索',
-			table : {
-				url : context + '/quoteBom/getQuoteBomList?pkQuote='+ quoteId,
-				// ?pkQuote='+quoteId,
-				method : 'get',
-
-				parseData : function(res) {
-					// 可进行数据操作
-					return {
-						"count" : res.data.total,
-						"msg" : res.msg,
-						"data" : res.data.rows,
-						"code" : res.status
-						// code值为200表示成功
-					}
-				},
-				cols : [ [
-					{ type: 'radio' },//单选  radio
-					{field : 'id', title : 'id', width : 0,hide:true},
-					{type : 'numbers'},
-					{field : 'bsComponent',title : '零件名称',sort:true,width:130},
-					{field : 'bsMaterName',title : '材料名称',sort:true,width:130},
-					{field : 'bsModel',title : '材料规格',width:150},
-					{field : 'fmemo',title : '工艺说明',width:150},
-				] ],
-				page : true,
-				request : {
-					pageName : 'page' // 页码的参数名称，默认：page
-					,
-					limitName : 'rows' // 每页数据量的参数名，默认：limit
-				},
-
-			},
-			done : function(elem, data) {
-				var da=data.data;
-				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
-				form.val("productProcessTempForm", {
-					"bsName":da[0].bsComponent
-				});
-				form.render();// 重新渲染
-			}
-		});
-
 		// positiveNum
 		//自定义验证规则
 		form.verify({
 			double: function(value){
 				if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false && value!="" && value!=null)
 				{
-					return '用量/制品量 只能输入数字';
+					return '只能输入数字';
 				}
 			},
 			positiveNum:function (value) {
@@ -382,13 +288,13 @@ $(function() {
 					loadAll();
 					return false;
 				}
-			}else if(obj.field =="bsCave") {
+			}else if(obj.field =="bsCycle") {
 				if (/^\d+$/.test(bsCycle) == false && /^\d+\.\d+$/.test(bsCycle) == false && bsCycle != "" && bsCycle != null) {
 					layer.msg("成型周期只能输入数字");
 					loadAll();
 					return false;
 				}
-			}else if(obj.field =="bsCycle") {
+			}else if(obj.field =="bsCave") {
 				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false && bsCave != "" && bsCave != null) {
 					layer.msg("穴数只能输入数字");
 					loadAll();
@@ -398,6 +304,8 @@ $(function() {
 			obj.field = obj.data;
 			editSubmit(obj);
 		})
+
+		// initSelect();
 
 		table.on('edit(uploadTable)',function (obj) {
 			console.log(obj.field);//当前编辑列名
@@ -493,7 +401,7 @@ $(function() {
 			load(data);
 			return false;
 		});
-		// 编辑五金工艺
+		// 编辑工艺
 		function getProdErr(obj, id) {
 			var procName="";
 			if(obj.proc!=null){
@@ -576,6 +484,30 @@ $(function() {
 
 });
 
+function initSelect() {
+	$("#bsName").empty();
+	var bomlist=bomNameList.data;
+	for(var i=0;i<bomlist.length;i++){
+		if(i==0){
+			$("#bsName").append("<option value=''> 请选择</option>");
+		}
+		$("#bsName").append(
+			"<option value=" + bomlist[i].BS_COMPONENT + ">"
+			+ bomlist[i].BS_COMPONENT +"</option>");
+	}
+	$("#bsName1").empty();
+	var bomlist=bomNameList.data;
+	for(var i=0;i<bomlist.length;i++){
+		if(i==0){
+			$("#bsName1").append("<option value=''> 请选择</option>");
+		}
+		$("#bsName1").append(
+			"<option value=" + bomlist[i].BS_COMPONENT + ">"
+			+ bomlist[i].BS_COMPONENT +"</option>");
+	}
+	layui.form.render('select');
+}
+
 
 function uploadChecked() {
 	var params = {
@@ -623,6 +555,7 @@ function openProdErr(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
+	initSelect();
 	var index=layer.open({
 		type : 1,
 		title : title,
@@ -642,6 +575,7 @@ function openProcessTemp(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
+	initSelect();
 	var index2=layer.open({
 		type : 1,
 		title : title,
@@ -657,7 +591,7 @@ function openProcessTemp(id, title) {
 	layer.full(index2);
 }
 
-// 添加五金工艺
+// 添加工艺
 function addHardware() {
 	// 清空弹出框数据
 	cleanProdErr();
@@ -693,7 +627,7 @@ function openUpload() {
 		url:context + '/productProcessTemp/getList?bsType='+bsType+'&quoteId='+quoteId,
 		done: function(res1, curr, count){
 			pageCurr=curr;
-			res.data.forEach(function (item, index) {
+			res1.data.forEach(function (item, index) {
 			 if(bsType == 'hardware'){//五金
 				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
 				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
@@ -746,7 +680,7 @@ function addSubmit(obj) {
 	});
 }
 
-// 编辑五金工艺提交
+// 编辑工艺提交
 function editSubmit(obj) {
 	CoreUtil.sendAjax("/productProcess/edit", JSON.stringify(obj.field), function(
 			data) {

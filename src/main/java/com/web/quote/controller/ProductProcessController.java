@@ -44,7 +44,7 @@ public class ProductProcessController extends WebController {
 		try {
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
-//			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
+			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
