@@ -327,7 +327,7 @@ public class ProductProcesslmpl implements ProductProcessService {
      */
     @Override
     @Transactional
-    public ApiResponseResult Confirm(Long quoteId,String bsType) throws Exception{
+    public ApiResponseResult doStatus(Long quoteId,String bsType) throws Exception{
         List<ProductProcess> productMaterList  = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductProcess o : productMaterList) {
             o.setBsStatus(1);

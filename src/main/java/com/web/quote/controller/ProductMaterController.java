@@ -126,16 +126,16 @@ public class ProductMaterController extends WebController {
 	}
 
 	@ApiOperation(value = "确认完成", notes = "确认完成", hidden = true)
-	@RequestMapping(value = "/Confirm", method = RequestMethod.POST)
+	@RequestMapping(value = "/doStatus", method = RequestMethod.POST)
 	@ResponseBody
-	public ApiResponseResult Confirm(@RequestBody Map<String, Object> params) {
-		String method = "/productMater/Confirm";
+	public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) {
+		String method = "/productMater/doStatus";
 		String methodName = "确认完成";
 		try {
 			long id = Long.parseLong(params.get("id").toString());
 			String bsType = params.get("bsType").toString();
-			ApiResponseResult result = productMaterService.Confirm(id,bsType);
-			logger.debug("确认完成=Confirm:");
+			ApiResponseResult result = productMaterService.doStatus(id,bsType);
+			logger.debug("确认完成=doStatus:");
 			getSysLogService().success(module,method, methodName, params);
 			return result;
 		} catch (Exception e) {

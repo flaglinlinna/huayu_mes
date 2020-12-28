@@ -78,15 +78,15 @@
                     <input id="bsModel" name="bsModel" placeholder="请输入材料规格"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item" id = "bsQtyDiv">
                 <label class="layui-form-label layui-required">用量</label>
                 <div class="layui-input-block">
-                    <input id="bsQty" name="bsQty" placeholder="请输入用量"  lay-verify="required|double" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsQty" name="bsQty" placeholder="请输入用量"  lay-verify="double" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">制品量</label>
+            <div class="layui-form-item" id ="bsProQtyDiv">
+                <label class="layui-form-label layui-required">制品量</label>
                 <div class="layui-input-block">
                     <input id="bsProQty" name="bsProQty" placeholder="请输入制品量"  lay-verify="double" autocomplete="off" class="layui-input" type="text"/>
                 </div>
@@ -100,9 +100,9 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">基数</label>
+                <label class="layui-form-label layui-required">基数</label>
                 <div class="layui-input-block">
-                    <input id="bsRadix" name="bsRadix" placeholder="请输入基数"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsRadix" name="bsRadix" placeholder="请输入基数"  value="1" lay-verify="double" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -112,27 +112,27 @@
                 </div>
             </div>
 
-            <div class="layui-form-item">
+            <div class="layui-form-item" id = "bsWaterGapDiv">
                 <label class="layui-form-label">水口量</label>
                 <div class="layui-input-block">
                     <input id="bsWaterGap" name="bsWaterGap" placeholder="请输入水口量"  autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">穴数</label>
+            <div class="layui-form-item" id ="bsCaveDiv">
+                <label class="layui-form-label layui-required">穴数</label>
                 <div class="layui-input-block">
-                    <input id="bsCave" name="bsCave" placeholder="请输入穴数"   autocomplete="off" class="layui-input" type="text"/>
+                    <input id="bsCave" name="bsCave" placeholder="请输入穴数"  lay-verify="double"  autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">配色工艺</label>
+            <div class="layui-form-item" id = "bsColorDiv">
+                <label class="layui-form-label layui-required">配色工艺</label>
                 <div class="layui-input-block">
                     <input id="bsColor" name="bsColor" placeholder="请输入配色工艺"   autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">加工类型</label>
+            <div class="layui-form-item" id="bsMachiningTypeDiv">
+                <label class="layui-form-label layui-required">加工类型</label>
                 <div class="layui-input-block">
                     <input id="bsMachiningType" name="bsMachiningType" placeholder="请输入加工类型"  autocomplete="off" class="layui-input" type="text"/>
                 </div>
