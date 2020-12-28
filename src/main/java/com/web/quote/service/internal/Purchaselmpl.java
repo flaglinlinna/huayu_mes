@@ -229,4 +229,11 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
 		}
 	}
+
+
+	@Override
+	public ApiResponseResult doSumHouLoss(Long quoteId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

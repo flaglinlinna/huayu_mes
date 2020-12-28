@@ -349,7 +349,8 @@ public class ProductProcesslmpl implements ProductProcessService {
     	List<Map<String, Object>> lml = productProcessDao.getBomName(bsType, quoteId);
         if(lml.size()>0){
         	for(Map<String, Object> map:lml){
-        		List<ProductProcess> lpp = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsNameOrderByBsOrderDesc(0, quoteId, bsType, map.get("BSNAME").toString());
+        		System.out.println(map.get("BS_NAME").toString());
+        		List<ProductProcess> lpp = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsNameOrderByBsOrderDesc(0, quoteId, bsType, map.get("BS_NAME").toString());
         		for(int i=0;i<lpp.size();i++){
         			ProductProcess pp = lpp.get(i);
         			if(i == 0){//认为是最后一道工序,后工序良率是100

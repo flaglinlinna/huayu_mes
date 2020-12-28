@@ -18,4 +18,6 @@ public interface PurchaseService {
 	public void exportExcel(HttpServletResponse response, Long quoteId) throws Exception;
 
 	public ApiResponseResult doExcel(MultipartFile[] file, Long quoteId) throws Exception;
+	
+	public ApiResponseResult doSumHouLoss(Long quoteId) throws Exception;//计算后工序损耗
 }
