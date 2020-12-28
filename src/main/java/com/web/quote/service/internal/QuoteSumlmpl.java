@@ -237,7 +237,25 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(bsCave).divide(pp.getBsRadix()));
 		}
 		productProcessDao.saveAll(lpp_molding);
-		//更新表面处理-
-		return null;
+		//更新表面处理-人数*费率/产能/基数;费率/产能/基数
+		List<ProductProcess> lpp_surface = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId), "surface");
+		for(ProductProcess pp:lpp_surface){
+			BigDecimal bsCapacity = new BigDecimal(pp.getBsCapacity());//产能
+			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity).divide(pp.getBsRadix()));
+		    
+			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity).divide(pp.getBsRadix()));
+		}
+		productProcessDao.saveAll(lpp_surface);
+		//组装工艺成本-人数*费率/产能/基数;费率/产能/基数
+		List<ProductProcess> lpp_packag = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId), "packag");
+		for(ProductProcess pp:lpp_packag){
+			BigDecimal bsCapacity = new BigDecimal(pp.getBsCapacity());//产能
+			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity).divide(pp.getBsRadix()));
+		    
+			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity).divide(pp.getBsRadix()));
+		}
+		productProcessDao.saveAll(lpp_packag);
+		//
+		return ApiResponseResult.success();
 	}
 }

@@ -193,7 +193,7 @@ public class ProductMaterlmpl implements ProductMaterService {
      */
     @Override
     @Transactional
-    public ApiResponseResult Confirm(Long quoteId,String bsType) throws Exception{
+    public ApiResponseResult doStatus(Long quoteId,String bsType) throws Exception{
         List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductMater o : productMaterList) {
             o.setBsStatus(1);

@@ -38,18 +38,18 @@ $(function() {
 			},
 			cols : [ [
 				{type : 'numbers'},
-				{field : 'bsComponent', width:140, title : '零件名称',sort:true},
+				{field : 'bsComponent',title : '零件名称',sort:true},
 				{field : 'bsMachiningType', title : '加工类型',width:100,hide:true},//(表面处理)
 				{field : 'bsColor', title : '配色工艺',width:100,hide:true},//(表面处理)
-				{field : 'bsMaterName',width:140, title : '材料名称',sort:true},
-				{field : 'bsModel', width:160, title : '规格'},
+				{field : 'bsMaterName', title : '材料名称',sort:true},
+				{field : 'bsModel', title : '规格'},
 				{field : 'bsQty', width:100, title : '用量',hide:true},
 				{field : 'bsProQty', width:100, title : '制品量',hide:true},
-				{field : 'bsUnit', width:80,title : '单位',},
-				{field : 'bsRadix', width:80,title : '基数',},
+				{field : 'bsUnit', width:80,title : '单位'},
+				{field : 'bsRadix', width:80,title : '基数'},
 				{field : 'bsWaterGap', title : '水口量',width:100,hide:true}, //(注塑)
 				{field : 'bsCave', title : '穴数',width:100,hide:true}, //(注塑)
-				{field : 'bsSupplier', title : '备选供应商',width:100},
+				{field : 'bsSupplier', title : '备选供应商'},
 				{field : 'fmemo', title : '备注',width:120},
 				{fixed : 'right', title : '操作', align : 'center', width:120, toolbar : '#optBar'}
 				] ],
@@ -72,6 +72,8 @@ $(function() {
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
+                        $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+                        $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
 					}else if(bsType == 'packag'){
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
@@ -192,9 +194,10 @@ $(function() {
 		//自定义验证规则
 		form.verify({
 			double: function(value){
+				//可为空
 				if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false && value!="" && value!=null)
 				{
-					return '用量/制品量 只能输入数字';
+					return '只能输入数字';
 				}
 			}
 		});
@@ -216,6 +219,29 @@ $(function() {
 		});
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
+
+            if(bsType=="hardware"){
+                if(data.field.bsQty==""){
+                    layer.msg("请输入所有带*的必填项");
+                    return false;
+                }
+            }else if(bsType=="molding"){
+                if(data.field.bsProQty==""||data.field.bsCave==""){
+                    layer.msg("请输入所有带*的必填项");
+                    return false;
+                }
+            }else if(bsType=="surface"){
+                if(data.field.bsColor==""||data.field.bsMachiningType==""){
+                    layer.msg("请输入所有带*的必填项");
+                    return false;
+                }
+            }else if(bsType=="packag"){
+                if(data.field.bsQty==""){
+                    layer.msg("请输入所有带*的必填项");
+                    return false;
+                }
+            }
+
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
 				addSubmit(data);
@@ -319,21 +345,25 @@ function Confirm(){
 		"id" : quoteId,
 		"bsType":bsType
 	};
-	CoreUtil.sendAjax("/productMater/Confirm", JSON.stringify(params), function(
-		data) {
-		if (data.result) {
-			layer.alert("确认完成成功", function() {
-				layer.closeAll();
-				// cleanProdErr();
-				// 加载页面
-				loadAll();
-			});
-		} else {
-			layer.alert(data.msg);
-		}
-	}, "POST", false, function(res) {
-		layer.alert(res.msg);
-	});
+    layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+        btn : [ '确认', '返回' ]
+    }, function() {
+        CoreUtil.sendAjax("/productMater/doStatus", JSON.stringify(params), function(
+            data) {
+            if (data.result) {
+                layer.alert("确认完成成功", function() {
+                    layer.closeAll();
+                    // cleanProdErr();
+                    // 加载页面
+                    loadAll();
+                });
+            } else {
+                layer.alert(data.msg);
+            }
+        }, "POST", false, function(res) {
+            layer.alert(res.msg);
+        });
+    });
 }
 
 // 打开导入页
@@ -359,6 +389,8 @@ function openUpload() {
 					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
 					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
 					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
+                    $('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+                    $('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
 				}else if(bsType == 'packag'){
 					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
@@ -393,12 +425,38 @@ function  downloadExcel() {
 	}
 }
 
+function selectDiv() {
+	if(bsType=="hardware"){
+		$("#bsProQtyDiv").hide();
+		$("#bsWaterGapDiv").hide();
+		$("#bsCaveDiv").hide();
+		$("#bsColorDiv").hide();
+		$("#bsMachiningTypeDiv").hide();
+
+	} else if(bsType=="molding"){
+		$("#bsQtyDiv").hide();
+		$("#bsColorDiv").hide();
+		$("#bsMachiningTypeDiv").hide();
+	}else if(bsType=="surface"){
+		$("#bsProQtyDiv").hide();
+		$("#bsWaterGapDiv").hide();
+		$("#bsCaveDiv").hide();
+	}else if(bsType=="packag"){
+		$("#bsProQtyDiv").hide();
+		$("#bsWaterGapDiv").hide();
+		$("#bsCaveDiv").hide();
+		$("#bsColorDiv").hide();
+		$("#bsMachiningTypeDiv").hide();
+	}
+}
+
 // 新增编辑弹出框
 function openProdErr(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
 	initSelect();
+	selectDiv();
 	var index=layer.open({
 		type : 1,
 		title : title,
@@ -425,6 +483,7 @@ function initSelect() {
 			"<option value=" + bomlist[i].BS_COMPONENT + ">"
 			+ bomlist[i].BS_COMPONENT + "</option>");
 	}
+    layui.form.render();
 }
 
 // 添加五金材料

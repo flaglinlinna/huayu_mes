@@ -36,6 +36,7 @@ import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteItem;
 import com.web.quote.entity.QuoteItemBase;
 import com.web.quote.entity.QuoteProcess;
+import com.web.quote.service.QuoteSumService;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -63,6 +64,8 @@ public class CheckImpl   implements CheckService {
     private QuoteProcessDao quoteProcessDao;
     @Autowired
     private ProductProcessDao productProcessDao;
+    @Autowired
+    private QuoteSumService quoteSumService;
 
 	@Override
 	public boolean checkFirst(Long id, String checkCode) throws Exception {
@@ -364,6 +367,8 @@ public class CheckImpl   implements CheckService {
                        		quote.setBsStatus2(1);
                        		quote.setBsEndTime2(new Date());
                        		quoteDao.save(quote);
+                       		
+                       		quoteSumService.countMeterAndProcess(c.getBsRecordId()+"");
                        	}
                        }	
                    }
@@ -385,6 +390,7 @@ public class CheckImpl   implements CheckService {
                    		quote.setBsStatus2(1);
                    		quote.setBsEndTime2(new Date());
                    		quoteDao.save(quote);
+                   		quoteSumService.countMeterAndProcess(c.getBsRecordId()+"");
                    	}
                 }
                 //3.2外协部审批完成
@@ -403,6 +409,7 @@ public class CheckImpl   implements CheckService {
                    		quote.setBsStatus2(1);
                    		quote.setBsEndTime2(new Date());
                    		quoteDao.save(quote);
+                   		quoteSumService.countMeterAndProcess(c.getBsRecordId()+"");
                    	}
                 }
 			}

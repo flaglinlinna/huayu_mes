@@ -4,6 +4,7 @@
  * 注塑:molding
  * 表面处理:surface
  * 组装:packag
+ * 外协:out
  */
 var pageCurr;
 $(function() {
@@ -67,9 +68,9 @@ $(function() {
 							return "";
 						}
 					}},
-				{field : 'bsModelType', width:100, title : '机台类型',edit:'text'},
-				{field : 'bsRadix', title : '基数',edit:'text'},
-				{field : 'bsUserNum', title : '人数',edit:'text'},
+				{field : 'bsModelType', width:100, title : '机台类型',width:90,edit:'text'},
+				{field : 'bsRadix', title : '基数',width:90,edit:'text'},
+				{field : 'bsUserNum', title : '人数',width:90,edit:'text',hide:true},
 				{field : 'bsCycle', title : '成型周期(S)', width:150,edit:'text', hide:true},
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
 				{field : 'bsCave', title : '穴数',edit:'text',width:90, hide:true},
@@ -87,18 +88,26 @@ $(function() {
 					}else if(bsType == 'hardware'){//五金
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 					}else if(bsType == 'molding'){//注塑
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						
 					}else if(bsType == 'surface'){
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 					}else if(bsType == 'packag'){
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 					}
 				});
 			}
@@ -380,6 +389,34 @@ $(function() {
 
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
+
+			if(bsType=="hardware"){
+				if(data.field.bsCycle==""||data.field.bsYield==""||data.field.bsUserNum==""){
+					layer.msg("请输入所有带*的必填项");
+					return false;
+				}
+			}else if(bsType=="molding"){
+				if(data.field.bsCycle==""||data.field.bsYield==""||data.field.bsUserNum==""||data.field.bsCave==""){
+					layer.msg("请输入所有带*的必填项");
+					return false;
+				}
+			}else if(bsType=="surface"){
+				if(data.field.bsYield==""||data.field.bsUserNum==""){
+					layer.msg("请输入所有带*的必填项");
+					return false;
+				}
+			}else if(bsType=="packag"){
+				if(data.field.bsYield==""||data.field.bsUserNum==""){
+					layer.msg("请输入所有带*的必填项");
+					return false;
+				}
+			}else if(bsType=="out"){
+				if(data.field.bsYield==""||data.field.bsFeeWxAll==""){
+					layer.msg("请输入所有带*的必填项");
+					return false;
+				}
+			}
+
 			if (data.field.id == null || data.field.id == "") {
 				// 新增
 				addSubmit(data);
@@ -495,6 +532,10 @@ function initSelect() {
 			"<option value=" + bomlist[i].BS_COMPONENT + ">"
 			+ bomlist[i].BS_COMPONENT +"</option>");
 	}
+	layui.form.render();
+}
+
+function initSelectTemp() {
 	$("#bsName1").empty();
 	var bomlist=bomNameList.data;
 	for(var i=0;i<bomlist.length;i++){
@@ -505,7 +546,7 @@ function initSelect() {
 			"<option value=" + bomlist[i].BS_COMPONENT + ">"
 			+ bomlist[i].BS_COMPONENT +"</option>");
 	}
-	layui.form.render('select');
+	layui.form.render();
 }
 
 
@@ -550,12 +591,37 @@ function exportExcel() {
 	location.href = context + "/productProcess/exportExcel?bsType="+bsType+"&pkQuote="+quoteId;
 }
 
+function selectDiv() {
+	if(bsType=="hardware"){
+		$("#bsCaveDiv").hide();
+		$("#bsCapacityDiv").hide();
+		$("#bsFeeWxAllDiv").hide();
+	} else if(bsType=="molding"){
+		$("#bsCapacityDiv").hide();
+		$("#bsFeeWxAllDiv").hide();
+	}else if(bsType=="surface"){
+		$("#bsCycleDiv").hide();
+		$("#bsCaveDiv").hide();
+		$("#bsFeeWxAllDiv").hide();
+	}else if(bsType=="packag"){
+		$("#bsCycleDiv").hide();
+		$("#bsCaveDiv").hide();
+		$("#bsFeeWxAllDiv").hide();
+	}else if(bsType=="out"){
+		$("#bsCycleDiv").hide();
+		$("#bsCaveDiv").hide();
+		$("#bsUserNumDiv").hide();
+	}
+}
+
+
 // 新增编辑弹出框
 function openProdErr(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
 	initSelect();
+	selectDiv();
 	var index=layer.open({
 		type : 1,
 		title : title,
@@ -575,7 +641,7 @@ function openProcessTemp(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	initSelect();
+	initSelectTemp();
 	var index2=layer.open({
 		type : 1,
 		title : title,
@@ -604,20 +670,24 @@ function Confirm(){
 		"id" : quoteId,
 		"bsType":bsType
 	};
-	CoreUtil.sendAjax("/productProcess/Confirm", JSON.stringify(params), function(
-		data) {
-		if (data.result) {
-			layer.alert("确认完成成功", function() {
-				layer.closeAll();
-				// cleanProdErr();
-				// 加载页面
-				loadAll();
-			});
-		} else {
-			layer.alert(data.msg);
-		}
-	}, "POST", false, function(res) {
-		layer.alert(res.msg);
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/productProcess/doStatus", JSON.stringify(params), function(
+			data) {
+			if (data.result) {
+				layer.alert("确认完成成功", function() {
+					layer.closeAll();
+					// cleanProdErr();
+					// 加载页面
+					loadAll();
+				});
+			} else {
+				layer.alert(data.msg);
+			}
+		}, "POST", false, function(res) {
+			layer.alert(res.msg);
+		});
 	});
 }
 
