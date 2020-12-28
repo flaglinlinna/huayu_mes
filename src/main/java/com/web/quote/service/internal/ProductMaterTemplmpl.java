@@ -156,6 +156,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 temp.setPkQuote(quoteId);
                 temp.setBsComponent(row1);
                 if(("molding").equals(bsType)){
+                    temp.setBsMaterName(row2);
+                    temp.setBsModel(row3);
                     temp.setBsProQty(row4);
                     temp.setBsUnit(row5);
                     List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row5,0);
@@ -171,6 +173,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         if (!row4.matches("^\\d+\\.\\d+$") && !row4.matches("^\\d+$")) {
                             errInfo = errInfo + "制品量必须是数字类型;";
                         }
+                    }else {
+                        errInfo = errInfo + "制品量不能为空;";
                     }
                     if(StringUtils.isNotEmpty(row6)) {
                         if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
@@ -182,6 +186,12 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
 
                 } else if(("surface").equals(bsType)){
                     temp.setBsMachiningType(row2);
+                    if(!StringUtils.isNotEmpty(row2)) {
+                        errInfo = errInfo + "加工类型不能为空;";
+                    }
+                    if(!StringUtils.isNotEmpty(row3)) {
+                        errInfo = errInfo + "配色工艺不能为空;";
+                    }
                     temp.setBsColor(row3);
                     temp.setBsMaterName(row4);
                     temp.setBsModel(row5);
@@ -191,6 +201,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
                             errInfo = errInfo + "用量必须是数字类型;";
                         }
+                    }else {
+                        errInfo = errInfo + "用量不能为空;";
                     }
 
                     temp.setBsUnit(row7);
@@ -223,6 +235,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         if (!row4.matches("^\\d+\\.\\d+$") && !row4.matches("^\\d+$")) {
                             errInfo = errInfo + "用量必须是数字类型;";
                         }
+                    }else {
+                        errInfo = errInfo + "用量不能为空;";
                     }
 
                     if(StringUtils.isNotEmpty(row6)) {
