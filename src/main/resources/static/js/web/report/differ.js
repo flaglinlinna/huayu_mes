@@ -18,11 +18,10 @@ $(function() {
 							toolbar : '#toolbar' // 开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 							,
 							cellMinWidth : 80,
-							//height : 'full-180',// 固定表头&full-查询框高度
+							height : 'full-180',// 固定表头&full-查询框高度
 							
 							even : true,// 条纹样式
 							data : [],
-							height : 'full',
 							page : true,
 							limit:50,
 							limits:[50,100,200,500,1000,5000],
@@ -32,6 +31,7 @@ $(function() {
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
 							},
 							parseData : function(res) {
+								console.log(res)
 								if (!res.result) {
 									return {
 										"count" : 0,

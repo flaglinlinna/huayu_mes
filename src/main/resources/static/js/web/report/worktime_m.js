@@ -112,8 +112,6 @@ $(function() {
 							data : [],
 							height : 'full-60',
 							page : true,
-							limit:50,
-							limits:[50,100,200,500,1000,5000],
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -218,7 +216,7 @@ $(function() {
 									limitName : 'rows' // 每页数据量的参数名，默认：limit
 								},
 								parseData : function(res) {
-									console.log(res)
+									//console.log(res)
 									if(res.result){
 										return {
 											"count" :res.data.total,
@@ -359,7 +357,7 @@ function getLinerList() {
 										"<option value=''>请点击选择</option>");
 							}
 							$("#liner_id").append(
-									"<option value=" + list[i].ID + ">"
+									"<option value=" + list[i].LEAD_BY + ">"
 											+ list[i].LEAD_BY + "</option>");
 						}
 						layui.form.render('select');

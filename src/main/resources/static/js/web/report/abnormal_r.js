@@ -12,11 +12,13 @@ $(function() {
 			method : 'get' // 默认：get请求
 			, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 			,cellMinWidth : 80,
-			height:'full-180'//固定表头&full-查询框高度
+			height:'full-110'//固定表头&full-查询框高度
 				,even:true,//条纹样式
 			data : [],
 			// height: 'full',
 			page : true,
+			limit:50,
+			limits:[50,100,200,500,1000,5000],
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -174,7 +176,7 @@ $(function() {
 					"liner" : data.field.liner,
 					"taskno" : data.field.taskno
 				};
-			//console.log(params)
+			console.log(params)
 			getReport(params)
 			return false;
 		});
@@ -237,7 +239,7 @@ function getLiner(){
 							if(i==0){
 								$("#liner").append("<option value=''>请点击选择</option>");
 							}
-							$("#liner").append("<option value=" + list[i].ID+ ">" + list[i].LEAD_BY + "</option>");
+							$("#liner").append("<option value=" + list[i].LEAD_BY+ ">" + list[i].LEAD_BY + "</option>");
 						}				
 						layui.form.render('select');
 					} else {
