@@ -18,7 +18,7 @@ import org.hibernate.annotations.NotFoundAction;
 
 import com.app.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.web.basePrice.entity.ProfitProd;
+import com.system.user.entity.SysUser;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -396,6 +396,14 @@ public class Quote extends BaseEntity {
 	@ApiModelProperty(name="bsEndTime6",value="结束时间")
 	protected Date bsEndTime6;
 	
+	
+	
+	@ApiModelProperty(name="user",hidden=true,value="用户表")
+    @ManyToOne
+    @JoinColumn(name = "createBy", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    protected SysUser user;
+	
 
 	public String getBsCode() {
 		return bsCode;
@@ -740,6 +748,14 @@ public class Quote extends BaseEntity {
 
 	public void setBsProdTypeId(Long bsProdTypeId) {
 		this.bsProdTypeId = bsProdTypeId;
+	}
+
+	public SysUser getUser() {
+		return user;
+	}
+
+	public void setUser(SysUser user) {
+		this.user = user;
 	}
 	
 }

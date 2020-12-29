@@ -136,6 +136,22 @@ public class ProductProcess extends BaseEntity {
 	@Column(length = 50)
 	protected BigDecimal bsYield=BigDecimal.ZERO;
 	
+	
+	/**
+	 * 本工序损耗-人工
+	 * 总费用*100/工序良率-总费用
+	 */
+	@ApiModelProperty(name = "bsLossTheLh", value = "本工序损耗")
+	@Column(length = 100)
+	protected BigDecimal bsLossTheLh;
+	/**
+	 * 本工序损耗-制费
+	 * 总费用*100/工序良率-总费用
+	 */
+	@ApiModelProperty(name = "bsLossTheMh", value = "本工序损耗")
+	@Column(length = 100)
+	protected BigDecimal bsLossTheMh;
+	
 	/**
 	 * 后工序良率(%)
 	 */
@@ -143,7 +159,21 @@ public class ProductProcess extends BaseEntity {
 	@Column(length = 50)
 	protected BigDecimal bsHouYield;
 
-
+	/**
+	 * 人工-后工序损耗
+	 * 总费用*100/工序良率-总费用
+	 */
+	@ApiModelProperty(name = "bsLossHouLh", value = "后工序损耗")
+	@Column(length = 100)
+	protected BigDecimal bsLossHouLh;
+	/**
+	 * 制费-后工序损耗
+	 * 总费用*100/工序良率-总费用
+	 */
+	@ApiModelProperty(name = "bsLossHouMh", value = "后工序损耗")
+	@Column(length = 100)
+	protected BigDecimal bsLossHouMh;
+	
 	/**
 	 * 穴数
 	 */
@@ -387,4 +417,39 @@ public class ProductProcess extends BaseEntity {
 	public void setBsLoss(BigDecimal bsLoss) {
 		this.bsLoss = bsLoss;
 	}
+
+	public BigDecimal getBsLossTheLh() {
+		return bsLossTheLh;
+	}
+
+	public void setBsLossTheLh(BigDecimal bsLossTheLh) {
+		this.bsLossTheLh = bsLossTheLh;
+	}
+
+	public BigDecimal getBsLossHouLh() {
+		return bsLossHouLh;
+	}
+
+	public void setBsLossHouLh(BigDecimal bsLossHouLh) {
+		this.bsLossHouLh = bsLossHouLh;
+	}
+
+	public BigDecimal getBsLossTheMh() {
+		return bsLossTheMh;
+	}
+
+	public void setBsLossTheMh(BigDecimal bsLossTheMh) {
+		this.bsLossTheMh = bsLossTheMh;
+	}
+
+	public BigDecimal getBsLossHouMh() {
+		return bsLossHouMh;
+	}
+
+	public void setBsLossHouMh(BigDecimal bsLossHouMh) {
+		this.bsLossHouMh = bsLossHouMh;
+	}
+	
+	
+	
 }

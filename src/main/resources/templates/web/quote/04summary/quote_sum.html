@@ -123,7 +123,7 @@
 					<div class="layui-inline">
 						<label class="layui-form-label">净利润</label>
 						<div class="layui-input-inline">
-							<input id="" autocomplete="off" class="layui-input" type="text" />
+							<input id="" lay-verify="num" autocomplete="off" class="layui-input" type="text" />
 							<span
 								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
 						</div>
@@ -288,6 +288,8 @@
 		<script th:inline="javascript">
 		var quoteId=[[${quoteId}]];
 		var quoteDetail=[[${quoteDetail}]];
+		
+		console.log(quoteDetail)
 		
 		</script>
 		<script th:src="@{/js/web/quote/04summary/quote_sum.js}"
