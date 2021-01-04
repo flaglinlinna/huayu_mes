@@ -46,7 +46,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 			}
 		}
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
-				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,"+temp+" col from "+Quote.TABLE_NAME+" p "
+				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_cust_name,"+temp+" col from "+Quote.TABLE_NAME+" p "
 						+ "  where p.del_flag=0 and p.bs_step=2 ";
 		if (StringUtils.isNotEmpty(keyword)) {
 			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
@@ -89,6 +89,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 			map1.put("bsProdType", object[9]);
 			map1.put("bsCustName", object[10]);
 			map1.put("bsStatus", object[11]);
+			//[5403, EQ-20210104140202, XPBJ, 1, 2021-01-06, 流程测试2, AAA, null, CNC1, 穿戴, 1, 3]
 			list_new.add(map1);
 		}
 		
