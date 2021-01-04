@@ -156,4 +156,25 @@ public class PurchaseController extends WebController {
 		}
 	}
 
+	@ApiOperation(value = "确认完成", notes = "确认完成", hidden = true)
+	@RequestMapping(value = "/doStatus", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) {
+		String method = "/purchase/doStatus";
+		String methodName = "确认完成";
+		try {
+			long id = Long.parseLong(params.get("id").toString());
+//			String bsType = params.get("bsType").toString();
+			ApiResponseResult result = purchaseService.doStatus(id);
+			logger.debug("确认完成=doStatus:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("确认完成失败！", e);
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			return ApiResponseResult.failure("确认完成信息失败！");
+		}
+	}
+
 }

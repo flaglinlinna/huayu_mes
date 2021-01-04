@@ -227,7 +227,7 @@ $(function() {
                     return false;
                 }
             }else if(bsType=="molding"){
-                if(data.field.bsProQty==""||data.field.bsCave==""){
+                if(data.field.bsProQty==""||data.field.bsCave==""||data.field.bsWaterGap==""){
                     layer.msg("请输入所有带*的必填项");
                     return false;
                 }
