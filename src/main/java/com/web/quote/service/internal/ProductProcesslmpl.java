@@ -96,6 +96,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setFmemo(productProcess.getFmemo());
+        o.setBsLoss(productProcess.getBsLoss());
         productProcessDao.save(o);
         return ApiResponseResult.success("编辑成功！");
     }

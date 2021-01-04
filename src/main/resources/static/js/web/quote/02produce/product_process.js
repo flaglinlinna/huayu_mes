@@ -73,7 +73,7 @@ $(function() {
 				{field : 'bsUserNum', title : '人数',width:90,edit:'text',hide:true},
 				{field : 'bsCycle', title : '成型周期(S)', width:150,edit:'text', hide:true},
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
-				{field : 'bsLoss', title : '损耗率', width:100,edit:'text'},
+				{field : 'bsLoss', title : '损耗率', width:100,edit:'text',hide:true},
 				{field : 'bsCave', title : '穴数',edit:'text',width:90, hide:true},
 				{field : 'bsCapacity', title : '产能',edit:'text',width:90, hide:true},
 				{field : 'bsFeeWxAll', title : '外协价格',edit:'text',width:120, hide:true},
@@ -282,6 +282,7 @@ $(function() {
 			var bsYield = obj.data.bsYield;
 			var bsCave = obj.data.bsCave;
 			var bsCycle = obj.data.bsCycle;
+			var bsLoss = obj.data.bsLoss;
 			if(obj.field =="bsRadix") {
 				if (/^\d+$/.test(bsRadix) == false && /^\d+\.\d+$/.test(bsRadix) == false || bsRadix <= 0) {
 					layer.msg("基数必填且只能输入数字且大于0");
@@ -309,6 +310,12 @@ $(function() {
 			}else if(obj.field =="bsCave") {
 				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false) {
 					layer.msg("穴数只能输入数字");
+					loadAll();
+					return false;
+				}
+			}else if(obj.field =="bsLoss") {
+				if (/^\d+$/.test(bsLoss) == false && /^\d+\.\d+$/.test(bsLoss) == false && bsLoss != "" && bsLoss != null) {
+					layer.msg("损耗率只能输入数字");
 					loadAll();
 					return false;
 				}
