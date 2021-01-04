@@ -276,6 +276,32 @@ function openUpload() {
 	layer.full(index);
 }
 
+
+function confirm(){
+	var params = {
+		"id" : quoteId,
+	};
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/purchase/doStatus", JSON.stringify(params), function(
+			data) {
+			if (data.result) {
+				layer.alert("确认完成成功", function() {
+					layer.closeAll();
+					// cleanProdErr();
+					// 加载页面
+					loadAll();
+				});
+			} else {
+				layer.alert(data.msg);
+			}
+		}, "POST", false, function(res) {
+			layer.alert(res.msg);
+		});
+	});
+}
+
 // 新增编辑弹出框
 function openProdErr(id, title) {
 	if (id == null || id == "") {

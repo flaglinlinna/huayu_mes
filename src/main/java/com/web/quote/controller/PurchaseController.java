@@ -105,8 +105,9 @@ public class PurchaseController extends WebController {
 
 	@ApiOperation(value = "报价单信息编辑", notes = "报价单信息编辑", hidden = true)
 	@RequestMapping(value = "/edit")
+	@ResponseBody
 	public ApiResponseResult edit(@RequestBody ProductMater hardwareMater) {
-		String method = "productMater/edit";
+		String method = "purchase/edit";
 		String methodName = "编辑报价单信息";
 		try {
 			ApiResponseResult result = purchaseService.edit(hardwareMater);
@@ -152,6 +153,27 @@ public class PurchaseController extends WebController {
 			logger.error("导入模板失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return null;
+		}
+	}
+
+	@ApiOperation(value = "确认完成", notes = "确认完成", hidden = true)
+	@RequestMapping(value = "/doStatus", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) {
+		String method = "/purchase/doStatus";
+		String methodName = "确认完成";
+		try {
+			long id = Long.parseLong(params.get("id").toString());
+//			String bsType = params.get("bsType").toString();
+			ApiResponseResult result = purchaseService.doStatus(id);
+			logger.debug("确认完成=doStatus:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("确认完成失败！", e);
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			return ApiResponseResult.failure("确认完成信息失败！");
 		}
 	}
 

@@ -230,6 +230,21 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		}
 	}
 
+	@Override
+	public ApiResponseResult doStatus(Long quoteId) throws Exception {
+		if(productMaterDao.countByDelFlagAndPkQuoteAndBsAssessIsNull(0,quoteId)>0){
+			return ApiResponseResult.failure("确认完成失败！请填写完所有评估价格后确认！");
+		}else {
+			List<ProductMater> productMaterList = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+			for(ProductMater o:productMaterList){
+				o.setBsStatus(1);
+				o.setLastupdateDate(new Date());
+				o.setLastupdateBy(UserUtil.getSessionUser().getId());
+			}
+			productMaterDao.saveAll(productMaterList);
+		}
+		return ApiResponseResult.success("确认完成成功！");
+	}
 
 	@Override
 	public ApiResponseResult doSumHouLoss(Long quoteId) throws Exception {

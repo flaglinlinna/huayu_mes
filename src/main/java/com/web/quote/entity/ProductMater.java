@@ -74,7 +74,7 @@ public class ProductMater extends BaseEntity {
 	 * 材料规格
 	 */
 	@ApiModelProperty(name = "bsModel", value = "材料规格")
-	@Column(length = 150)
+	@Column(length = 250)
 	protected String bsModel;
 
 	/**

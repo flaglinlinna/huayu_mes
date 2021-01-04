@@ -72,7 +72,7 @@ $(function() {
 				{field : 'bsRadix', title : '基数',width:90,edit:'text'},
 				{field : 'bsUserNum', title : '人数',width:90,edit:'text',hide:true},
 				{field : 'bsCycle', title : '成型周期(S)', width:150,edit:'text', hide:true},
-				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
+				{field : 'bsYield', title : '工序良率%', width:120,edit:'text',hide:true},
 				{field : 'bsLoss', title : '损耗率', width:100,edit:'text',hide:true},
 				{field : 'bsCave', title : '穴数',edit:'text',width:90, hide:true},
 				{field : 'bsCapacity', title : '产能',edit:'text',width:90, hide:true},
@@ -93,6 +93,8 @@ $(function() {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
 					}else if(bsType == 'molding'){//注塑
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
@@ -100,17 +102,22 @@ $(function() {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
-						
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
 					}else if(bsType == 'surface'){
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
 					}else if(bsType == 'packag'){
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
 					}
 				});
 			}
@@ -324,7 +331,7 @@ $(function() {
 			editSubmit(obj);
 		})
 
-		// initSelect();
+		initSelect();
 
 		table.on('edit(uploadTable)',function (obj) {
 			console.log(obj.field);//当前编辑列名
@@ -622,6 +629,7 @@ function selectDiv() {
 		$("#bsLossDiv").hide();
 		$("#bsFeeWxAllDiv").hide();
 	}else if(bsType=="out"){
+		$("#bsYieldDiv").hide();
 		$("#bsCycleDiv").hide();
 		$("#bsCaveDiv").hide();
 		$("#bsUserNumDiv").hide();
@@ -634,7 +642,7 @@ function openProdErr(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	initSelect();
+
 	selectDiv();
 	var index=layer.open({
 		type : 1,
@@ -790,7 +798,7 @@ function editSubmitTemp(obj) {
 	CoreUtil.sendAjax("/productProcessTemp/edit", JSON.stringify(obj.field), function(
 		data) {
 		if (data.result) {
-			layer.alert("操作成功", function() {
+			layer.alert("操作成功", function(index) {
 				layer.close(index);
 				// cleanProdErr();
 				// 加载页面
