@@ -39,6 +39,7 @@ public class OutController extends WebController {
 	public ModelAndView toOutList() {
 		ModelAndView mav = new ModelAndView();
 		try {
+			mav.addObject("Style", "out");
 			mav.setViewName("/web/quote/03purchase/out_list");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
