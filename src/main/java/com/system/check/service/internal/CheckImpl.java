@@ -312,6 +312,7 @@ public class CheckImpl   implements CheckService {
                     		pm.setPkUnit(qb.getPkUnit());
                     		pm.setBsRadix(qb.getBsRadix());
                     		pm.setBsProQty(qb.getBsProQty());
+                    		pm.setPkQuote(c.getBsRecordId());
                     		lpm.add(pm);
                         }
                     	productMaterDao.saveAll(lpm);
@@ -325,6 +326,7 @@ public class CheckImpl   implements CheckService {
                     		pp.setBsName(qb.getBsName());
                     		pp.setBsType(qb.getProc().getBjWorkCenter().getBsCode());//类型
                     		pp.setBsOrder(qb.getBsOrder());
+                    		pp.setPkQuote(c.getBsRecordId());
                     		lpp.add(pp);
                         }
                     	productProcessDao.saveAll(lpp);
