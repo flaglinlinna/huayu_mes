@@ -62,9 +62,9 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">机种类型</label>
 					<div class="layui-input-inline">
-						<input id="itemType" name="itemType" lay-verify="required"
-							   autocomplete="off" class="layui-input" type="text" />
-
+					<select id="itemType" lay-verify="required" autocomplete="off"
+							name="itemType" class="layui-select" lay-filter="itemType" lay-search>
+						</select>
 					</div>
 				</div>
 
@@ -93,6 +93,10 @@
 				</div>
 			</form>
 		</div>
+		<script th:inline="javascript">
+		var Jitai = [[${Jitai}]];
+		console.log(Jitai)
+		</script>
 		<script th:src="@{/js/web/basePrice/profit_prod.js}"
 			src="/js/web/basePrice/profit_prod.js"></script>
 	</div>

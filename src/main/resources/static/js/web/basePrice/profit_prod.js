@@ -5,7 +5,7 @@ var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table' ,'tableSelect'], function() {
 		var table = layui.table, form = layui.form,tableSelect = layui.tableSelect;
-
+		setData()
 		tableSelect = tableSelect.render({
 			elem : '#productType',
 			searchKey : 'keyword',
@@ -329,6 +329,17 @@ function getTypeList(id) {
 	});
 }
 
+function setData(){
+	$("#itemType").empty();
+	var data = Jitai
+	for (var i = 0; i < data.length; i++) {
+		if (i == 0) {
+			$("#itemType").append("<option value=''>请点击选择</option>");
+		}
+		$("#itemType").append(
+				"<option value=" + data[i].subCode + ">" + data[i].subName+"</option>");
+	}
+}
 // 编辑价格维护的提交
 function editSubmit(obj) {
 	CoreUtil.sendAjax("/basePrice/profitProd/edit", JSON.stringify(obj.field),

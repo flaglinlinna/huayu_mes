@@ -4,12 +4,15 @@ import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.basePrice.entity.ProfitProd;
 import com.web.basePrice.service.ProfitProdService;
+import com.web.basic.service.SysParamSubService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
@@ -23,6 +26,8 @@ public class ProfitProdController extends WebController{
     private String module = "产品利润率信息维护";
     @Autowired
     private ProfitProdService profitProdService;
+    @Autowired
+	private SysParamSubService sysParamSubService;
 
     @ApiOperation(value = "产品利润率信息维护表结构", notes = "产品利润率信息维护结构"+ ProfitProd.TABLE_NAME)
     @RequestMapping(value = "/getProfitProd", method = RequestMethod.GET)
@@ -31,11 +36,25 @@ public class ProfitProdController extends WebController{
         return new ProfitProd();
     }
 
-    @ApiOperation(value = "产品利润率信息维护列表页", notes = "产品利润率信息列表页", hidden = true)
-    @RequestMapping(value = "/toProfitProd")
-    public String toProfitProd(){
-        return "/web/basePrice/profit_prod";
-    }
+    //@ApiOperation(value = "产品利润率信息维护列表页", notes = "产品利润率信息列表页", hidden = true)
+   // @RequestMapping(value = "/toProfitProd")
+    //public String toProfitProd(){
+   //     return "/web/basePrice/profit_prod";
+   // }
+    
+    @ApiOperation(value = "产品利润率信息维护列表页", notes = "产品利润率信息维护列表页", hidden = true)
+	@RequestMapping(value = "/toProfitProd")
+	public ModelAndView toProfitProd() {
+		ModelAndView mav = new ModelAndView();
+		try {
+			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());//机台类型
+			mav.setViewName("/web/basePrice/profit_prod");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取产品利润率信息维护列表页失败！", e);
+		}
+		return mav;
+	}
 
     @ApiOperation(value = "获取产品利润率信息列表", notes = "获取产品利润率信息列表",hidden = true)
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
