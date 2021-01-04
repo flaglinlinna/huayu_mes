@@ -189,12 +189,13 @@ $(function() {
 			}
 		});
 
-
+		initSelect();
 
 		//自定义验证规则
 		form.verify({
 			double: function(value){
 				//可为空
+				// console.log(value);
 				if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false && value!="" && value!=null)
 				{
 					return '只能输入数字';
@@ -401,7 +402,7 @@ function openUpload() {
 	// 打开弹出框
 	var index=layer.open({
 		type : 1,
-		title : "导入采购填报价格",
+		title : "导入信息",
 		fixed : false,
 		resize : false,
 		shadeClose : true,
@@ -455,7 +456,6 @@ function openProdErr(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	initSelect();
 	selectDiv();
 	var index=layer.open({
 		type : 1,

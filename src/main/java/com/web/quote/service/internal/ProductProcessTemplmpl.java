@@ -61,7 +61,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
         }
 
         if(StringUtils.isNotEmpty(productProcess.getBsOrder())){
-            String bsOrder = nf.format(productProcess.getBsOrder());
+            String bsOrder = nf.format(new BigDecimal(productProcess.getBsOrder()));
 
             if(!bsOrder.matches("^\\d+$")){
                 errInfo = errInfo + "工序顺序需为正整数;";
@@ -125,6 +125,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
             o.setCheckStatus(0);
         }else {
             o.setErrorInfo(errInfo);
+            o.setCheckStatus(1);
         }
         productProcessTempDao.save(o);
         return ApiResponseResult.success("编辑成功！");

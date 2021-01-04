@@ -163,11 +163,11 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 if(("molding").equals(bsType)){
                     temp.setBsMaterName(row2);
                     if(!StringUtils.isNotEmpty(row2)){
-                        errInfo += errInfo + "材料名称不能为空";
+                        errInfo = errInfo + "材料名称不能为空";
                     }
                     temp.setBsModel(row3);
                     if(!StringUtils.isNotEmpty(row3)){
-                        errInfo += errInfo + "材料规格不能为空";
+                        errInfo = errInfo + "材料规格不能为空";
                     }
 
                     temp.setBsRadix(row6);
@@ -223,10 +223,10 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                     temp.setBsMaterName(row4);
                     temp.setBsModel(row5);
                     if(!StringUtils.isNotEmpty(row4)){
-                        errInfo += errInfo + "材料名称不能为空";
+                        errInfo = errInfo + "材料名称不能为空";
                     }
                     if(!StringUtils.isNotEmpty(row5)){
-                        errInfo += errInfo + "材料规格不能为空";
+                        errInfo = errInfo + "材料规格不能为空";
                     }
                     temp.setBsQty(row6);
                     if(StringUtils.isNotEmpty(row6)) {
@@ -263,13 +263,13 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                     temp.setBsMaterName(row2);
                     temp.setBsModel(row3);
                     if(!StringUtils.isNotEmpty(row1)){
-                        errInfo += errInfo + "零件名称不能为空";
+                        errInfo = errInfo + "零件名称不能为空";
                     }
                     if(!StringUtils.isNotEmpty(row2)){
-                        errInfo += errInfo + "材料名称不能为空";
+                        errInfo = errInfo + "材料名称不能为空";
                     }
                     if(!StringUtils.isNotEmpty(row3)){
-                        errInfo += errInfo + "材料规格不能为空";
+                        errInfo = errInfo + "材料规格不能为空";
                     }
                     temp.setBsQty(row4);
                     if(StringUtils.isNotEmpty(row5)){
@@ -533,6 +533,15 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
 //            }
             mater.setBsColor(temp.getBsColor());
             mater.setBsMachiningType(temp.getBsMachiningType());
+            if(StringUtils.isNotEmpty(temp.getBsProQty())){
+                mater.setBsProQty(new BigDecimal(temp.getBsProQty()));
+            }
+            if(StringUtils.isNotEmpty(temp.getBsWaterGap())){
+                mater.setBsWaterGap(temp.getBsWaterGap());
+            }
+            if(StringUtils.isNotEmpty(temp.getBsCave())){
+                mater.setBsCave(temp.getBsCave());
+            }
             mater.setBsComponent(temp.getBsComponent());
             mater.setBsMaterName(temp.getBsMaterName());
             mater.setBsModel(temp.getBsModel());

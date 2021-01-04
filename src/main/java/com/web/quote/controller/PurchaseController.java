@@ -105,8 +105,9 @@ public class PurchaseController extends WebController {
 
 	@ApiOperation(value = "报价单信息编辑", notes = "报价单信息编辑", hidden = true)
 	@RequestMapping(value = "/edit")
+	@ResponseBody
 	public ApiResponseResult edit(@RequestBody ProductMater hardwareMater) {
-		String method = "productMater/edit";
+		String method = "purchase/edit";
 		String methodName = "编辑报价单信息";
 		try {
 			ApiResponseResult result = purchaseService.edit(hardwareMater);
