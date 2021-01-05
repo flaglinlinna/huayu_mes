@@ -471,6 +471,7 @@ function getInfoBarcode(barcode){
             $( "input[name='mtrdescr']").val(data.data[0].ITEM_NAME);
             $( "input[name='org']").val(data.data[0].DEPT_ID);
             $( "input[name='supplier']").val(data.data[0].VENDER_ID);
+            $('#itemNo').focus();
             // supplier
         }else{
             playMusic();

@@ -61,7 +61,7 @@ public class BadMaterialImpl extends PrcUtils implements BadMaterialService {
     @Override
     public ApiResponseResult getBadList(String company,String factory,String keyword) throws Exception {
         // TODO Auto-generated method stub
-        List<Object> list = getBadSelectPrc(company,factory,keyword);
+        List<Object> list = getBadSelectPrc(company,factory,"来料不良");
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
             return ApiResponseResult.failure(list.get(1).toString());
         }

@@ -38,21 +38,21 @@ $(function() {
 			},
 			cols : [ [
 				{type : 'numbers'},
-				{field : 'bsComponent',title : '零件名称',sort:true},
-				{field : 'bsMachiningType', title : '加工类型',width:100,hide:true},//(表面处理)
-				{field : 'bsColor', title : '配色工艺',width:100,hide:true},//(表面处理)
-				{field : 'bsMaterName', title : '材料名称',sort:true},
-				{field : 'bsModel', title : '规格'},
-				{field : 'bsQty', width:100, title : '用量',hide:true},
-				{field : 'bsProQty', width:100, title : '制品量',hide:true},
-				{field : 'bsUnit', width:80,title : '单位'},
-				{field : 'bsRadix', width:80,title : '基数'},
-				{field : 'bsWaterGap', title : '水口量',width:100,hide:true}, //(注塑)
-				{field : 'bsCave', title : '穴数',width:100,hide:true}, //(注塑)
-				{field : 'bsSupplier', title : '备选供应商'},
-				{field : 'fmemo', title : '备注',width:120},
+				{field : 'bsComponent',title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'bsMachiningType', title : '加工类型',width:100,hide:true,edit:'text'},//(表面处理)
+				{field : 'bsColor', title : '配色工艺',width:100,hide:true,edit:'text'},//(表面处理)
+				{field : 'bsMaterName', title : '材料名称',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'bsModel', title : '规格',style:'background-color:#d2d2d2'},
+				{field : 'bsQty', width:100, title : '用量',hide:true,edit:'text'},
+				{field : 'bsProQty', width:100, title : '制品重',hide:true,edit:'text'},
+				{field : 'bsUnit', width:80,title : '单位',edit:'text'},
+				{field : 'bsRadix', width:80,title : '基数',edit:'text'},
+				{field : 'bsWaterGap', title : '水口量',width:100,hide:true,edit:'text'}, //(注塑)
+				{field : 'bsCave', title : '穴数',width:100,hide:true,edit:'text'}, //(注塑)
+				{field : 'bsSupplier', title : '备选供应商',edit:'text'},
+				{field : 'fmemo', title : '备注',width:120,edit:'text'},
 				{fixed : 'right', title : '操作', align : 'center', width:120, toolbar : '#optBar'}
-				] ],
+			] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 				res.data.forEach(function (item, index) {
@@ -188,6 +188,55 @@ $(function() {
 				form.render();// 重新渲染
 			}
 		});
+
+		table.on('edit(hardwareTable)',function (obj) {
+			console.log(obj.field);//当前编辑列名
+			var bsRadix = obj.data.bsRadix;
+			var bsQty = obj.data.bsQty;
+			var bsWaterGap = obj.data.bsWaterGap;
+			var bsCave = obj.data.bsCave;
+			var bsProQty = obj.data.bsProQty;
+			// var bsLoss = obj.data.bsLoss;
+			if(obj.field =="bsRadix") {
+				if (/^\d+$/.test(bsRadix) == false  || bsRadix <= 0) {
+					layer.msg("基数必填且只能输入整数且大于0");
+					loadAll();
+					return false;
+				}
+			}else if(obj.field =="bsQty") {
+				if (/^\d+$/.test(bsQty) == false && /^\d+\.\d+$/.test(bsQty) == false) {
+					layer.msg("用量只能输入数字");
+					loadAll();
+					return false;
+				}
+			}else if(obj.field =="bsWaterGap") {
+				if (/^\d+$/.test(bsWaterGap) == false && /^\d+\.\d+$/.test(bsWaterGap) == false) {
+					layer.msg("水口量只能输入数字");
+					loadAll();
+					return false;
+				}
+			}else if(obj.field =="bsProQty") {
+				if (/^\d+$/.test(bsProQty) == false && /^\d+\.\d+$/.test(bsProQty) == false && bsProQty != "" && bsProQty != null) {
+					layer.msg("制品重只能输入数字");
+					loadAll();
+					return false;
+				}
+			}else if(obj.field =="bsCave") {
+				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false || bsCave ==0) {
+					layer.msg("穴数只能输入数字且不能为0");
+					loadAll();
+					return false;
+				}
+			}else if(obj.field =="bsLoss") {
+				if (/^\d+$/.test(bsLoss) == false && /^\d+\.\d+$/.test(bsLoss) == false && bsLoss != "" && bsLoss != null) {
+					layer.msg("损耗率只能输入数字");
+					loadAll();
+					return false;
+				}
+			}
+			obj.field = obj.data;
+			editSubmit(obj);
+		})
 
 		initSelect();
 

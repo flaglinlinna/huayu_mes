@@ -334,6 +334,23 @@ public class ProductProcesslmpl implements ProductProcessService {
     public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception{
         List<ProductProcess> productMaterList  = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductProcess o : productMaterList) {
+            if("hardware".equals(bsType)) {
+                if (o.getBsUserNum() == null || o.getBsRadix() == null ||o.getBsCycle()==null ||o.getBsYield()==null) {
+                    return ApiResponseResult.failure("人数、基数、成型周期和工序良率不能为空,请检查后再确认！");
+                }
+            } else if("molding".equals(bsType)) {
+                if (o.getBsRadix() == null || o.getBsUserNum() == null||o.getBsCycle()==null ||o.getBsYield()==null||o.getBsCave()==null) {
+                    return ApiResponseResult.failure("人数、基数、穴数、成型周期和工序良率不能为空,请检查后再确认！");
+                }
+            } else if("surface".equals(bsType)) {
+                if (o.getBsRadix() == null || o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null) {
+                    return ApiResponseResult.failure("基数、人数、工序良率、产能不能为空,请检查后再确认！");
+                }
+            } else if("packag".equals(bsType)) {
+                if (o.getBsRadix() == null || o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null) {
+                    return ApiResponseResult.failure("基数、人数、工序良率、产能不能为空,请检查后再确认！");
+                }
+            }
             o.setBsStatus(1);
             o.setLastupdateDate(new Date());
             o.setLastupdateBy(UserUtil.getSessionUser().getId());
