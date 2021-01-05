@@ -372,8 +372,9 @@ public class CheckImpl   implements CheckService {
                        	List<Quote> lq = quoteDao.findByDelFlagAndStatus2();
                        	if(lq.size()>0){
                        		quote.setBsStep(3);
-                       		quote.setBsStatus2(1);
+                       		quote.setBsStatus2(2);
                        		quote.setBsEndTime2(new Date());
+                       		quote.setBsStatus3(1);
                        		quoteDao.save(quote);
                        		
                        		quoteSumService.countMeterAndProcess(c.getBsRecordId()+"");
@@ -395,8 +396,9 @@ public class CheckImpl   implements CheckService {
                    	List<Quote> lq = quoteDao.findByDelFlagAndStatus2();
                    	if(lq.size()>0){
                    		quote.setBsStep(3);
-                   		quote.setBsStatus2(1);
+                   		quote.setBsStatus2(2);
                    		quote.setBsEndTime2(new Date());
+                   		quote.setBsStatus3(1);
                    		quoteDao.save(quote);
                    		quoteSumService.countMeterAndProcess(c.getBsRecordId()+"");
                    	}
@@ -414,8 +416,9 @@ public class CheckImpl   implements CheckService {
                    	List<Quote> lq = quoteDao.findByDelFlagAndStatus2();
                    	if(lq.size()>0){
                    		quote.setBsStep(3);
-                   		quote.setBsStatus2(1);
+                   		quote.setBsStatus2(2);
                    		quote.setBsEndTime2(new Date());
+                   		quote.setBsStatus3(1);
                    		quoteDao.save(quote);
                    		quoteSumService.countMeterAndProcess(c.getBsRecordId()+"");
                    	}
