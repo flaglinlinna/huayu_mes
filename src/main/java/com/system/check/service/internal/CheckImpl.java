@@ -279,6 +279,12 @@ public class CheckImpl   implements CheckService {
                     	quote.setBsStatus(1);
                     	quote.setBsStep(2);
                     	quote.setBsEndTime1(new Date());
+                    	quote.setBsStatus2Hardware(1);//把第二个流程的置为进行中
+                    	quote.setBsStatus2Molding(1);
+                    	quote.setBsStatus2Out(1);
+                    	quote.setBsStatus2Purchase(1);
+                    	quote.setBsStatus2Packag(1);
+                    	quote.setBsStatus2Surface(1);
                     	quoteDao.save(quote);
                     }
                     //2.1下发制造部待办项目-材料+工序
