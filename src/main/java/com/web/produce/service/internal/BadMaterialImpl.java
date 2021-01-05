@@ -70,7 +70,7 @@ public class BadMaterialImpl extends PrcUtils implements BadMaterialService {
 
     @Override
     public ApiResponseResult getTaskNo(String keyword) throws Exception {
-        List<Object> list = getTaskNoPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",1,UserUtil.getSessionUser().getId()+"",keyword);
+        List<Object> list = getTaskNoPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",4,UserUtil.getSessionUser().getId()+"",keyword);
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
             return ApiResponseResult.failure(list.get(1).toString());
         }
@@ -88,9 +88,9 @@ public class BadMaterialImpl extends PrcUtils implements BadMaterialService {
 
     @Override
     public ApiResponseResult saveMaterial(String itemNo,Integer deptId, Integer venderId,String barcode,String prodDate,
-                                    String lotNo,String defectCode,String defectQty) throws Exception {
+                                    String lotNo,String defectCode,String defectQty,String taskNo) throws Exception {
         List<Object> list = saveMaterialPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",
-                UserUtil.getSessionUser().getId()+"", barcode,itemNo, deptId, venderId,prodDate, lotNo,defectCode,defectQty);
+                UserUtil.getSessionUser().getId()+"", barcode,itemNo, deptId, venderId,prodDate, lotNo,defectCode,defectQty,taskNo);
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
             return ApiResponseResult.failure(list.get(1).toString());
         }
@@ -100,7 +100,7 @@ public class BadMaterialImpl extends PrcUtils implements BadMaterialService {
     @Override
     public ApiResponseResult getInfoBarcode(String barcode) throws Exception {
         // TODO Auto-generated method stub
-        List<Object> list = getItemByBarcodePrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",2,barcode,"prc_mes_barcode_info_get");
+        List<Object> list = getItemByBarcodePrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",1,barcode,"prc_mes_barcode_info_get");
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
             return ApiResponseResult.failure(list.get(1).toString());
         }

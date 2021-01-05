@@ -1375,12 +1375,12 @@ public class PrcUtils {
 
 //    prc_mes_material_ng_save
         public List saveMaterialPrc(String company, String factory,String userId,String barcode,String itemNo,Integer deptId,
-                                 Integer venderId,String prodDate,String lotNo,String defectCode,String defectQty)
+                                 Integer venderId,String prodDate,String lotNo,String defectCode,String defectQty,String taskNo)
                 throws Exception {
             List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
                 @Override
                 public CallableStatement createCallableStatement(Connection con) throws SQLException {
-                    String storedProc = "{call  prc_mes_material_ng_save(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                    String storedProc = "{call  prc_mes_material_ng_save(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
                     CallableStatement cs = con.prepareCall(storedProc);
                     cs.setString(1, factory);
                     cs.setString(2, company);
@@ -1388,14 +1388,19 @@ public class PrcUtils {
                     cs.setString(4, barcode);
                     cs.setString(5, itemNo);
                     cs.setInt(6, deptId);
-                    cs.setInt(7, venderId);
+                    if(venderId==null){
+                        cs.setString(7, "");
+                    }else {
+                        cs.setInt(7, venderId);
+                    }
                     cs.setString(8, prodDate);
                     cs.setString(9, lotNo);
                     cs.setString(10, defectCode);
                     cs.setString(11, defectQty);
-                    cs.registerOutParameter(12, java.sql.Types.INTEGER);// 输出参数 返回标识
-                    cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回标识
-                    cs.registerOutParameter(14, -10);// 输出参数 返回标识
+                    cs.setString(12, taskNo);
+                    cs.registerOutParameter(13, java.sql.Types.INTEGER);// 输出参数 返回标识
+                    cs.registerOutParameter(14, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                    cs.registerOutParameter(15, -10);// 输出参数 返回标识
                     return cs;
                 }
             }, new CallableStatementCallback() {
@@ -1403,11 +1408,11 @@ public class PrcUtils {
                     List<Object> result = new ArrayList<>();
                     List<Map<String, Object>> l = new ArrayList();
                     cs.execute();
-                    result.add(cs.getInt(12));
-                    result.add(cs.getString(13));
-                    if (cs.getString(12).toString().equals("0")) {
+                    result.add(cs.getInt(13));
+                    result.add(cs.getString(14));
+                    if (cs.getString(13).toString().equals("0")) {
                         // 游标处理
-                        ResultSet rs = (ResultSet) cs.getObject(14);
+                        ResultSet rs = (ResultSet) cs.getObject(15);
                         try {
                             l = fitMap(rs);
                         } catch (Exception e) {

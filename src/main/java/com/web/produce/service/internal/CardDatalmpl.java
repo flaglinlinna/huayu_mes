@@ -2,6 +2,7 @@ package com.web.produce.service.internal;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -73,48 +74,71 @@ public class CardDatalmpl implements CardDataService {
 	/**
 	 * 查询列表
 	 */
+//	@Override
+//	@Transactional
+//	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
+//		// 查询条件1
+//		List<SearchFilter> filters = new ArrayList<>();
+//		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+//		// 查询2
+//		List<SearchFilter> filters1 = new ArrayList<>();
+//		if (StringUtils.isNotEmpty(keyword)) {
+//			filters1.add(new SearchFilter("employee.empCode", SearchFilter.Operator.LIKE, keyword));
+//			filters1.add(new SearchFilter("employee.empName", SearchFilter.Operator.LIKE, keyword));
+//			filters1.add(new SearchFilter("employee.empType", SearchFilter.Operator.LIKE, keyword));
+//			filters1.add(new SearchFilter("devClock.devCode", SearchFilter.Operator.LIKE, keyword));
+//			filters1.add(new SearchFilter("devClock.devName", SearchFilter.Operator.LIKE, keyword));
+//			filters1.add(new SearchFilter("devClock.devIp", SearchFilter.Operator.LIKE, keyword));
+//			filters1.add(new SearchFilter("devClock.devType", SearchFilter.Operator.LIKE, keyword));
+//		}
+//		Specification<CardData> spec = Specification.where(BaseService.and(filters, CardData.class));
+//		Specification<CardData> spec1 = spec.and(BaseService.or(filters1, CardData.class));
+//		Page<CardData> page = cardDataDao.findAll(spec1, pageRequest);
+//
+//		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+//		for(CardData bs:page.getContent()){
+//			Map<String, Object> map = new HashMap<>();
+//			map.put("id", bs.getId());
+//			map.put("empCode",bs.getEmployee().getEmpCode());//获取关联表的数据-工号
+//			map.put("empName",bs.getEmployee().getEmpName());//获取关联表的数据-姓名
+//			map.put("devType", bs.getDevClock().getDevType());
+//			map.put("devIp",bs.getDevClock().getDevIp());//获取关联表的数据-卡机IP
+//			if(bs.getDevClock().getLine()!=null){
+//				map.put("lineName",bs.getDevClock().getLine().getLineName());
+//			}
+//			map.put("cardDate", bs.getCardDate());
+//			map.put("cardTime", bs.getCardTime());
+//			map.put("fstatus", bs.getFstatus());
+//			map.put("fmemo", bs.getFmemo());
+//			list.add(map);
+//		}
+//
+//		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
+//				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+//	}
+
+
+	/**
+	 * 查询列表
+	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
-		// 查询条件1
-		List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-		// 查询2
-		List<SearchFilter> filters1 = new ArrayList<>();
-		if (StringUtils.isNotEmpty(keyword)) {
-			filters1.add(new SearchFilter("employee.empCode", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("employee.empName", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("employee.empType", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("devClock.devCode", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("devClock.devName", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("devClock.devIp", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("devClock.devType", SearchFilter.Operator.LIKE, keyword));
+	public ApiResponseResult getList(String keyword,String status, PageRequest pageRequest) throws Exception {
+		if(StringUtils.isEmpty(status)){
+			status ="2";
 		}
-		Specification<CardData> spec = Specification.where(BaseService.and(filters, CardData.class));
-		Specification<CardData> spec1 = spec.and(BaseService.or(filters1, CardData.class));
-		Page<CardData> page = cardDataDao.findAll(spec1, pageRequest);
-
-		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
-		for(CardData bs:page.getContent()){ 
-			Map<String, Object> map = new HashMap<>();
-			map.put("id", bs.getId());
-			map.put("empCode",bs.getEmployee().getEmpCode());//获取关联表的数据-工号
-			map.put("empName",bs.getEmployee().getEmpName());//获取关联表的数据-姓名
-			map.put("devType", bs.getDevClock().getDevType());
-			map.put("devIp",bs.getDevClock().getDevIp());//获取关联表的数据-卡机IP
-			if(bs.getDevClock().getLine()!=null){
-				map.put("lineName",bs.getDevClock().getLine().getLineName());
-			}
-			map.put("cardDate", bs.getCardDate());
-			map.put("cardTime", bs.getCardTime());
-			map.put("fstatus", bs.getFstatus());
-			map.put("fmemo", bs.getFmemo());
-			list.add(map);
+		List<Object> list = getCardDate(UserUtil.getSessionUser().getCompany() + "",
+				UserUtil.getSessionUser().getFactory() + "",UserUtil.getSessionUser().getId() + "",
+				keyword,status, pageRequest);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
 		}
-		
-		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
 	}
+//	getCardDate
 	
 	/**
 	 * 新增卡点记录
@@ -406,4 +430,73 @@ public class CardDatalmpl implements CardDataService {
         ExcelExport.export(response,cardDataDao.queryExport(),arr,map_arr,"打卡记录.xls");
         
 	}
+
+	public List getCardDate(String company,String facoty,String user_id,String keyword,
+							String pi_type,PageRequest pageRequest)throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call  prc_mes_card_data_get(?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, facoty);
+				cs.setString(2, company);
+				cs.setString(3, user_id);
+				cs.setString(4, pi_type);
+				cs.setString(5, keyword);
+				cs.setInt(6, pageRequest.getPageSize());
+				cs.setInt(7,pageRequest.getPageNumber()+1);
+				cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回信息
+				cs.registerOutParameter(10, java.sql.Types.INTEGER);// 总记录
+				cs.registerOutParameter(11, -10);// 输出参数 返回数据集合
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				List<Map<String, Object>> l = new ArrayList();
+				cs.execute();
+				result.add(cs.getInt(8));
+				result.add(cs.getString(9));
+				if (cs.getString(8).toString().equals("0")) {
+					result.add(cs.getInt(10));
+					// 游标处理
+					ResultSet rs = (ResultSet) cs.getObject(11);
+
+					try {
+						l = fitMap(rs);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(l);
+				}
+				System.out.println(l);
+				return result;
+			}
+		});
+		return resultList;
+	}
+
+	private List<Map<String, Object>> fitMap(ResultSet rs) throws Exception {
+		List<Map<String, Object>> list = new ArrayList<>();
+		if (null != rs) {
+			Map<String, Object> map;
+			int colNum = rs.getMetaData().getColumnCount();
+			List<String> columnNames = new ArrayList<String>();
+			for (int i = 1; i <= colNum; i++) {
+				columnNames.add(rs.getMetaData().getColumnName(i));
+			}
+			while (rs.next()) {
+				map = new HashMap<String, Object>();
+				for (String columnName : columnNames) {
+					map.put(columnName, rs.getString(columnName));
+				}
+				list.add(map);
+			}
+		}
+		return list;
+	}
+
+
 }
