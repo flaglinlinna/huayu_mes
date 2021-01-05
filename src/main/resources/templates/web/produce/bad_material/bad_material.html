@@ -44,20 +44,24 @@
 										lay-filter="itemFrom" method="post" action="">
 
 										<div class="layui-form-item">
-											<label class="layui-form-label">条码</label>
+											<label class="layui-form-label layui-required">制令单号</label>
 											<div class="layui-input-inline" style="width: 150px;">
-												<input class="layui-input" lay-filter="barcode" id="barcode" name="barcode">
+												<input class="layui-input" lay-filter="taskNo" id="taskNo"
+													   lay-verify="required" name="taskNo">
+											</div>
+												<label class="layui-form-label">条码</label>
+												<div class="layui-input-inline" style="width: 150px;">
+													<input class="layui-input" lay-filter="barcode" id="barcode" name="barcode">
+												</div>
+												<label class="layui-form-label layui-required ">物料编码</label>
+												<div class="layui-input-inline" style="width: 150px;">
+													<input id="itemNo" name="itemNo" autocomplete="off"
+														   class="layui-input" type="text" />
 											</div>
 										</div>
 
-										<div class="layui-form-item">
-										<label class="layui-form-label layui-required ">物料编码</label>
-										<div class="layui-input-inline" style="width: 150px;">
-											<input id="itemNo" name="itemNo" autocomplete="off"
-												    class="layui-input"
-												   type="text" />
-										</div>
-										</div>
+
+
 
 										<div class="layui-form-item">
 											<div class="layui-inline">
@@ -67,24 +71,22 @@
 														   style="background: #efefef;" class="layui-input" disabled
 														   type="text" />
 												</div>
-											</div>
-										</div>
-
-										<div class="layui-form-item">
-											<label class="layui-form-label layui-required">来料部门</label>
-											<div class="layui-input-inline" style="width: 150px;">
-												<select  name="org" placeholder="请选择"
-													lay-verify="required" id="org">
-												</select>
-										</div>
-
-											<div class="layui-form-item">
+												<label class="layui-form-label layui-required">来料部门</label>
+												<div class="layui-input-inline" style="width: 150px;">
+													<select  name="org" placeholder="请选择"
+															 lay-verify="required" id="org">
+													</select>
+												</div>
 												<label class="layui-form-label ">供应商名称</label>
 												<div class="layui-input-inline" style="width: 150px;">
 													<input type="text" name="supplier" placeholder="请选择"
 														   autocomplete="off" class="layui-input"
-														   lay-verify="required" id="supplier">
+														   id="supplier">
 												</div>
+											</div>
+										</div>
+
+
 
 											<div class="layui-form-item">
 											<label class="layui-form-label">生产日期</label>
@@ -93,32 +95,32 @@
 														class="layui-input"
 														type="text" />
 												</div>
-											</div>
 
-												<div class="layui-form-item">
 													<label class="layui-form-label">物料批次</label>
 													<div class="layui-input-inline" style="width: 150px;">
 														<input id="lotNo" name="lotNo" autocomplete="off"
 															   class="layui-input"
 															   type="text" />
 													</div>
+
+
+												<label class="layui-form-label layui-required">不良内容</label>
+												<div class="layui-input-inline" style="width: 150px;">
+													<select id="defect" name="defect" autocomplete="off"
+															type="text" >
+													</select>
 												</div>
-
-
-										<div class="layui-form-item">
-											<label class="layui-form-label layui-required">不良内容</label>
-											<div class="layui-input-inline" style="width: 150px;">
-												<select id="defect" name="defect" autocomplete="off"
-													  type="text" >
-												</select>
 											</div>
-										</div>
+
+
 												<div class="layui-form-item">
 												<label class="layui-form-label layui-required">不良数量</label>
 												<div class="layui-input-inline" style="width: 150px;">
 													<input id="inqty" name="inqty" autocomplete="off"
 														 class="layui-input" type="text" />
 												</div>
+
+
 										</div>
 
 
@@ -131,9 +133,6 @@
 													重置</button>
 											</div>
 										</div>
-											</div>
-										</div>
-
 									</form>
 								</div>
 							</div>

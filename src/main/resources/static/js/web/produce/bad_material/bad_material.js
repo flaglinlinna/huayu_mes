@@ -8,7 +8,8 @@ $(function() {
         [ 'table', 'form', 'layedit', 'laydate', 'tableSelect' ],
         function() {
             var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table,
-                table1 = layui.table,laydate = layui.laydate, tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect;
+                table1 = layui.table,laydate = layui.laydate, tableSelect = layui.tableSelect
+                ,tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect;
             ;
 
             //日期选择器
@@ -156,6 +157,90 @@ $(function() {
 
                     // getDetailByTask(da[0].TASK_NO);
 
+                }
+            });
+
+            tableSelect2=tableSelect2.render({
+                elem : '#taskNo',
+                searchKey : 'keyword',
+                checkedKey : 'id',
+                searchPlaceholder : '试着搜索',
+                table : {
+                    url:  context +'/produce/badMaterial/getTaskNo',
+                    method : 'get',
+                    width:800,
+                    cols : [ [
+                        { type: 'radio' },//多选  radio
+                        , {
+                            field : 'id',
+                            title : 'id',
+                            width : 0,hide:true
+                        },
+                        {
+                            field : 'LINER_NAME',
+                            title : '组长',
+                            width : 70
+                        },
+                        {
+                            field : 'PROD_DATE',
+                            title : '计划日期',
+                            width : 100,
+                            templet:function (d) {
+                                if(d.PROD_DATE!=null){
+                                    return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
+                                }
+                            }
+                        },
+                        {
+                            field : 'ITEM_NO',
+                            title : '物料编码',
+                            width : 170
+                        },{
+                            field : 'ITEM_NAME',
+                            title : '物料描述',
+                            width : 240
+                        }, {
+                            field : 'QTY_PLAN',
+                            title : '数量',
+                            width : 80
+                        },{
+                            field : 'QUANTITY',
+                            title : '投入数量',
+                            width : 80
+                        },
+                        {
+                            field : 'TASK_NO',
+                            title : '制令单号',
+                            width : 175,sort: true
+                        },] ],
+                    page : true,
+                    request : {
+                        pageName : 'page' // 页码的参数名称，默认：page
+                        ,
+                        limitName : 'rows' // 每页数据量的参数名，默认：limit
+                    },
+                    parseData : function(res) {
+                        if(res.result){
+                            // 可进行数据操作
+                            return {
+                                "count" :0,
+                                "msg" : res.msg,
+                                "data" : res.data,
+                                "code" : res.status
+                                // code值为200表示成功
+                            }
+                        }
+
+                    },
+                },
+                done : function(elem, data) {
+                    //选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
+                    var da=data.data;
+                    //console.log(da[0].num)
+                    form.val("itemFrom", {
+                        "taskNo":da[0].TASK_NO,
+                    });
+                    form.render();// 重新渲染
                 }
             });
 
@@ -382,7 +467,7 @@ function getInfoBarcode(barcode){
         if (data.result) {
             playSaoMiaoMusic();
             $( "input[name='itemNo']").val(data.data[0].ITEM_NO);
-            $( "input[name='prodDate']").val(data.data[0].PROD_DATE);
+            $( "input[name='procDate']").val(data.data[0].PROD_DATE);
             $( "input[name='mtrdescr']").val(data.data[0].ITEM_NAME);
             $( "input[name='org']").val(data.data[0].DEPT_ID);
             $( "input[name='supplier']").val(data.data[0].VENDER_ID);
@@ -423,7 +508,7 @@ function getInfoBarcode(barcode){
 // }
 //录入来料不良信息
 function addPut(obj){
-    console.log(obj);
+    // console.log(obj);
     var supplierId = $('#supplier').attr('ts-selected');
     var params={
         "barcode":obj.barcode,
@@ -434,6 +519,7 @@ function addPut(obj){
         "defectCode":obj.defect,
         "venderId":supplierId,
         "procDate":obj.procDate,
+        "taskNo":obj.taskNo
     };
     CoreUtil.sendAjax("/produce/badMaterial/saveMaterial", params, function(data) {
         if (data.result) {

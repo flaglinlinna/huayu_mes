@@ -96,17 +96,34 @@ public class BadMaterialController extends WebController {
         }
     }
 
+    @ApiOperation(value="制令单下拉信息", notes="制令单下拉信息", hidden = true)
+    @RequestMapping(value = "/getTaskNo", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getTaskNo(String keyword) {
+        String method = "/badMaterial/getTaskNo";String methodName ="获取制令单下拉信息";
+        try {
+            ApiResponseResult result = badMaterialService.getTaskNo(keyword);
+            logger.debug("获取制令单下拉信息=getTaskNo:");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取制令单下拉信息失败！", e);
+            getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+            return ApiResponseResult.failure("获取制令单下拉信息失败！");
+        }
+    }
+
 
 
     @ApiOperation(value="确认投入", notes="确认投入", hidden = true)
     @RequestMapping(value = "/saveMaterial", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult  saveMaterial(String itemNo,Integer deptId, Integer venderId,String barcode,String prodDate,
-                                           String lotNo,String defectCode,String defectQty){
+                                           String lotNo,String defectCode,String defectQty,String taskNo){
         String method = "/badMaterial/addPut";String methodName ="确认投入";
 //        String param = "条码:"+ barcode +";生产指令号"+task_no+";物料编码:"+item_no+";数量"+qty;
         try {
-            ApiResponseResult result = badMaterialService.saveMaterial(itemNo,deptId,venderId,barcode,prodDate,lotNo,defectCode,defectQty);
+            ApiResponseResult result = badMaterialService.saveMaterial(itemNo,deptId,venderId,barcode,prodDate,lotNo,defectCode,defectQty,taskNo);
             logger.debug("确认投入=addPut:");
             getSysLogService().success(module,method, methodName, "");
             return result;
