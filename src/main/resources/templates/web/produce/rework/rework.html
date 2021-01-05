@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='小码校验'"></head>
+<head th:include="layout :: htmlhead" th:with="title='在线返工'"></head>
 <style th:inline="text">
 .layui-form-label {
 	text-align: right;
@@ -52,7 +52,7 @@
 													type="radio" name="isRecord" value="0" title="否"
 													lay-filter="isRecord">
 											</div>
-											<label class="layui-form-label layui-required">制令单号</label>
+											<label class="layui-form-label layui-required">返工制令单</label>
 											<div class="layui-input-inline" style="width: 320px;">
 												<input type="text" name="sTaskno" placeholder="请选择"
 													autocomplete="off" class="layui-input" readonly="readonly"
