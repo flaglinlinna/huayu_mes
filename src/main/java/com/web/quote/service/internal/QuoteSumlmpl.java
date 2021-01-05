@@ -251,7 +251,11 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 					bsRadix = new BigDecimal(pm.getBsRadix());
 				}
 			}
-			pm.setBsFee(pm.getBsAssess().multiply(pm.getBsQty().divide(bsRadix)));
+			BigDecimal bsAssess = new BigDecimal("0");//采购价
+			if(pm.getBsAssess() != null){
+				bsAssess = pm.getBsAssess();
+			}
+			pm.setBsFee(bsAssess.multiply(pm.getBsQty().divide(bsRadix,5)));
 		}
 		productMaterDao.saveAll(lpm3);
 		//注塑的材料总价格(未税)计算公式-材料单价*(制品重+水口重/穴数)/用量基数
@@ -264,13 +268,23 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				}
 			}
 			BigDecimal bsCave = new BigDecimal(pm.getBsCave());//穴数
-			BigDecimal qty = new BigDecimal(pm.getBsWaterGap()).divide(bsCave).add(pm.getBsProQty());//水口重/穴数+制品重
-			pm.setBsFee(pm.getBsAssess().multiply(qty).divide(bsRadix));
+			
+			BigDecimal bsWaterGap = new BigDecimal("1");//水口量
+			if(pm.getBsWaterGap() != null){
+				bsWaterGap = new BigDecimal(pm.getBsWaterGap());
+			}
+			BigDecimal qty = bsWaterGap.divide(bsCave,5).add(pm.getBsProQty());//水口重/穴数+制品重
+			BigDecimal bsAssess = new BigDecimal("0");//采购价
+			if(pm.getBsAssess() != null){
+				bsAssess = pm.getBsAssess();
+			}
+			pm.setBsFee(bsAssess.multiply(qty).divide(bsRadix,5));
 		}
 		productMaterDao.saveAll(lpm1);
 		//五金-人工工时费（元/H）*人数*成型周期(S）/3600 /基数；制费工时费（元/H）*成型周期(S）/3600/ /基数
 		List<ProductProcess> lpp_hardware = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId), "hardware");
 		for(ProductProcess pp:lpp_hardware){
+			System.out.println(pp.getId());
 			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(pp.getBsRadix()));
 		    
 			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(pp.getBsRadix()));

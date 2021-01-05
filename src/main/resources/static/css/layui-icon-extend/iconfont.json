@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "19167504",
+      "name": "汇总",
+      "font_class": "huizong",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "6789087",
+      "name": "外协管理",
+      "font_class": "waixieguanli-",
+      "unicode": "e635",
+      "unicode_decimal": 58933
+    },
+    {
       "icon_id": "1614433",
       "name": "采购单",
       "font_class": "caigoudan",

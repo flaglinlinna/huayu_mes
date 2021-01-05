@@ -144,8 +144,8 @@ $(function() {
 				}else if(obj.event === 'view'){
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item','报价项目');
 				}else if(obj.event === 'check'){
-					//先判断是否填写完成资料-暂时未校验-20201218-fyx
-					if(true){
+					//先判断是否填写完成资料-fyx-20210105
+					if(data.bsStatusCheck>1){
 						layer.open({
 		                    type: 2,
 		                    title:'报价单核查审批',
@@ -161,6 +161,11 @@ $(function() {
 		                        iframe.child("QUOTE_NEW",data.id);
 		                    }
 		                  });
+					}else{
+						layer.msg('资料未填写完毕，不允许审批!', {
+	   	   	                    time: 5000, //2s后自动关闭
+	   	   	                    btn: ['知道了']
+	   	   	                });
 					}
 				}
 			});
