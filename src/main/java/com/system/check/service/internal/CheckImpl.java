@@ -333,6 +333,8 @@ public class CheckImpl   implements CheckService {
                     		pp.setBsType(qb.getProc().getBjWorkCenter().getBsCode());//类型
                     		pp.setBsOrder(qb.getBsOrder());
                     		pp.setPkQuote(c.getBsRecordId());
+                    		pp.setBsFeeMh(qb.getBsFeeMh());
+                    		pp.setBsFeeLh(qb.getBsFeeLh());
                     		lpp.add(pp);
                         }
                     	productProcessDao.saveAll(lpp);
@@ -476,5 +478,50 @@ public class CheckImpl   implements CheckService {
 
 		return null;
 	}
+
+	@Override
+	public ApiResponseResult doCheckQuote(CheckInfo checkInfo) throws Exception {
+		// TODO Auto-generated method stub
+		//判断是否是第一次发起审批
+		/*if(checkService.checkFirst(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode())){
+			//1.首次发起审批
+			//新增流程信息
+			checkService.addCheckFirst(checkInfo);
+		}else{
+			//2.判断此用户是否有审核权限
+			if(checkService.checkSecond(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode())){
+                //2.1 审批
+				checkService.doCheck(checkInfo);
+            }else{
+			    //2.2 无审批权限，返回提示信息
+                return ApiResponseResult.failure("当前用户在该步骤无审批权限");
+            }
+		}*/
+		//判断是否是第一次发起审批
+		if(this.checkFirst(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode())){
+			if(checkInfo.getBsStepCheckStatus() != 1){
+				//return this.doBack(checkInfo);
+			}else{
+				if(this.addCheckFirst(checkInfo)){
+					return ApiResponseResult.success();
+				}else{
+					return ApiResponseResult.failure("首次发起审批失败");
+				}
+			}
+		}else{
+			//2.判断此用户是否有审核权限
+			if(this.checkSecond(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode())){
+                //2.1 审批
+				this.doCheck(checkInfo);
+            }else{
+			    //2.2 无审批权限，返回提示信息
+                return ApiResponseResult.failure("当前用户在该步骤无审批权限");
+            }
+		}
+		return null;
+	}
+	
+	
+	
 
 }

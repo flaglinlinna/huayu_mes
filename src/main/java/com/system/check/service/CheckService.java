@@ -23,5 +23,7 @@ public interface CheckService {
 	public ApiResponseResult getCheckByRecordId(Long id) throws Exception;
 
 	public ApiResponseResult getUnCheckList() throws Exception;
+	
+	public ApiResponseResult doCheckQuote(CheckInfo checkInfoSrm) throws Exception;
 
 }

@@ -34,10 +34,11 @@ layui.use('layer', function(){
                     }
                 }
                 var cc = $('#desc').val();
-                var json = {"bsRecordId":ppid,"bsStepCheckStatus":radioVal,"bsCheckComments":cc,"bsCheckCode":wn}
+                var strs = low_flag.getValue('valueStr');
+                var json = {"bsRecordId":ppid,"bsStepCheckStatus":radioVal,"bsCheckComments":cc,"bsCheckCode":wn,"bsCheckDes":strs}
                 return false;
                 $.ajax({
-                    url: context+'/check/doCheck',
+                    url: context+'/check/doCheckQuote',
                     type: "post",
                     data: json,
                     dataType: "json",
