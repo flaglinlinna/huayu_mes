@@ -177,19 +177,15 @@ $(function() {
 						});
 
 						// 监听
-						form.on('submit(saveDef)', function(data) {
-							if (data.field.inputCode == "") {
-								layer.alert("请选择不良信息！");
-							} else if (data.field.qty == "") {
-								layer.alert("数量不可为空！");
-							} else {
-								saveBad(data.field)
-							}
-							// console.log(data.field)
-						});
-						
-						
-
+//						form.on('submit(saveDef)', function(data) {
+//							if (data.field.inputCode == "") {
+//								layer.alert("请选择不良信息！");
+//							} else {
+//								//console.log(data.field)
+//								saveBad(data.field)
+//							}
+//							
+//						});
 						form.on('select(defcode)', function(data) {
 							//console.log(data)
 							$("#defcode1").val("");
@@ -200,7 +196,7 @@ $(function() {
 											var str=select_text;
 											//console.log(str.substring(0,5))
 											//console.log(str.substring(7,str.length))
-											$("#inputCode").val(str.substring(0,5));
+											$("#inputCode").val(str.substring(0,str.indexOf("——")));
 											$("#selectCode").next().find("dl").css({"display" : "none"});
 											$("#defName").val(str.substring(7,str.length));
 											form.render();
@@ -308,25 +304,32 @@ $(function() {
 							}
 						});
 						
-						
+						$('#barcode').bind('keypress', function(event) {
+							if (event.keyCode == "13") {
+								if ($('#barcode').val()) {
+									if ($('#taskno').val()) {
+										
+										if ($('#inputCode').val()) {
+											var obj = form.val("itemFrom")
+											checkBarCode($('#taskno').val(), $('#barcode').val(),obj);
+											return false;	
+										} else {
+											layer.alert("请选择不良信息！");
+										}
+										
+									} else {
+										$('#taskno').val('');
+										layer.alert("请选择制令单号!");
+									}
+								} else {
+									$('#qty').val("");
+									layer.alert("请先扫描条码!");
+								}
+							}
+						});	
 						
 					});
-	$('#barcode').bind('keypress', function(event) {
-		if (event.keyCode == "13") {
-			if ($('#barcode').val()) {
-				if ($('#taskno').val()) {
-					checkBarCode($('#taskno').val(), $('#barcode').val());
-					return false;
-				} else {
-					$('#taskno').val('');
-					layer.alert("请选择制令单号!");
-				}
-			} else {
-				$('#qty').val("");
-				layer.alert("请先扫描条码!");
-			}
-		}
-	});
+	
 
 	$('#inputCode').bind('keypress', function(event) {
 		if (event.keyCode == "13") {
@@ -380,7 +383,7 @@ function getBadInfo(keyword, type) {
 function getDetailByTask(taskNo){
 	 var params={"taskNo":taskNo}
 		CoreUtil.sendAjax("/produce/bad_entry/getDetailByTask", params, function(data) {
-			console.log(data)
+			//console.log(data)
 			if (data.result) {
 				tableIns.reload({
 					data:data.data
@@ -392,7 +395,7 @@ function getDetailByTask(taskNo){
 			layer.alert(res.msg);
 		});
 }
-function checkBarCode(taskNo, barcode) {
+function checkBarCode(taskNo, barcode,obj) {
 	var params = {
 		"taskNo" : taskNo,
 		"barcode" : barcode,
@@ -404,6 +407,8 @@ function checkBarCode(taskNo, barcode) {
 					playSaoMiaoMusic();
 					var q = data.data;
 					$("#qty").val(q[0].qty);
+					//console.log(obj)
+					saveBad(obj)
 				} else {
 					playMusic();
 					layer.alert(data.msg);
@@ -415,17 +420,17 @@ function checkBarCode(taskNo, barcode) {
 }
 function saveBad(obj) {
 	var str=obj.inputCode;
-	console.log(str)
-	if(str.length<5){
+	//console.log(str)
+	if(str.length<4){
 		layer.alert("请输入正确的不良代码");
 		return false;
 	}
 	var params = {
 		"taskNo" : obj.taskno,
 		"barcode" : obj.barcode,
-		"qty" : obj.qty,
+		"qty" : $("#qty").val(),
 		"defCode" : str,
-		"memo" : obj.memo
+		"memo" : ""
 	}
 	CoreUtil.sendAjax("/produce/bad_entry/saveBad", JSON.stringify(params),
 			function(data) {
@@ -451,7 +456,7 @@ function saveBad(obj) {
 			});
 }
 function del(obj, id, code) {
-	console.log(id)
+	//console.log(id)
 	if (id != null) {
 		var params = {
 			"recordId" : id
@@ -462,7 +467,7 @@ function del(obj, id, code) {
 		}, function() {
 			CoreUtil.sendAjax("/produce/bad_entry/deleteBad", JSON
 					.stringify(params), function(data) {
-				console.log(data)
+				//console.log(data)
 				if (data.result == true) {
 					// 回调弹框
 					tableIns.reload({

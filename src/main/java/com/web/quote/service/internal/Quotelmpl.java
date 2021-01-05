@@ -293,6 +293,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         o.setBsSimilarProd(quote.getBsSimilarProd());
         o.setBsCustName(quote.getBsCustName());
         o.setBsPosition(quote.getBsPosition());
+        o.setBsProdType(quote.getBsProdType());
         o.setBsProdTypeId(quote.getBsProdTypeId());
         o.setBsDevType(quote.getBsDevType());
         o.setBsMaterial(quote.getBsMaterial());
