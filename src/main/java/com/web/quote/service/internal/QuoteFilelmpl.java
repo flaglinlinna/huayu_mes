@@ -8,6 +8,7 @@ import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.quote.dao.QuoteFileDao;
+import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.entity.QuoteFile;
 import com.web.quote.service.QuoteFileService;
 import com.web.quote.service.QuoteService;
@@ -34,6 +35,8 @@ public class QuoteFilelmpl implements QuoteFileService {
 	private SysUserDao sysUserDao;
 	@Autowired
 	private QuoteService quoteService;
+	@Autowired
+	private QuoteItemDao quoteItemDao;
 
 
 	@Override
@@ -109,7 +112,10 @@ public class QuoteFilelmpl implements QuoteFileService {
 	 * 确认完成
 	 * **/
 	 public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
+		
 		 quoteFileDao.saveQuoteFileByQuoteId(Long.parseLong(quoteId));
+		 //项目状态设置-状态 2：已完成
+		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
 		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		 return ApiResponseResult.success("提交成功！");
 	 }
