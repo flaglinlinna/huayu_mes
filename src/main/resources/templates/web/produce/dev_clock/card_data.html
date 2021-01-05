@@ -17,6 +17,15 @@
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
 							 placeholder="请输入关键字"	class="layui-input" type="text" />
 						</div>
+
+						<label class="layui-form-label">分配状态</label>
+						<div class="layui-input-inline" style="width:100px;">
+							<select id="statusSearch" name="statusSearch" class="layui-input">
+								<option value="2">未分配</option>
+								<option value="1">所有</option>
+							</select>
+						</div>
+
 						<button class="layui-btn layui-btn-sm" lay-submit=""
 							lay-filter="searchSubmit">查询</button>
 						<button type="reset"
@@ -33,10 +42,10 @@
 			<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="doExport()">导出Excel</button>
 			<table id="cardList" lay-filter="cardTable"></table>
 			<script type="text/html" id="statusTpl">
-            {{#  if(d.fstatus){ }}
-            <input type="checkbox" name="{{d.empName}}" value="{{d.id}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl" checked="checked" />
+            {{#  if(d.FSTATUS){ }}
+            <input type="checkbox" name="{{d.EMP_NAME}}" value="{{d.ID}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl" checked="checked" />
             {{#  } else { }}
-            <input type="checkbox" name="{{d.empName}}" value="{{d.id}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl"/>
+            <input type="checkbox" name="{{d.EMP_NAME}}" value="{{d.ID}}" lay-skin="switch" lay-text="有效|无效" lay-filter="isStatusTpl"/>
             {{#  } }}
         </script>
 			<script type="text/html" id="optBar">

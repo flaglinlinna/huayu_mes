@@ -15,7 +15,7 @@ public interface ProductMaterService {
 
 	public ApiResponseResult delete(Long id) throws Exception;
 
-	public ApiResponseResult doStatus(Long quoteId,String bsType) throws Exception;
+	public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception;
 
 	public ApiResponseResult getBomSelect(String pkQuote) throws Exception;
 

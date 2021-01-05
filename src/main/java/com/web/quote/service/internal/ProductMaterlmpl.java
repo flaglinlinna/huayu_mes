@@ -10,6 +10,7 @@ import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.UnitDao;
 import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.ProductMaterDao;
+import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.service.ProductMaterService;
@@ -44,6 +45,9 @@ public class ProductMaterlmpl implements ProductMaterService {
 
     @Autowired
     QuoteProcessDao quoteProcessDao;
+    
+    @Autowired
+    private QuoteItemDao quoteItemDao;
 	
 	/**
      * 新增报价单
@@ -193,12 +197,18 @@ public class ProductMaterlmpl implements ProductMaterService {
      */
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long quoteId,String bsType) throws Exception{
+    public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception{
         List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductMater o : productMaterList) {
             o.setBsStatus(1);
+            o.setLastupdateDate(new Date());
+            o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
         productMaterDao.saveAll(productMaterList);
+        //项目状态设置-状态 2：已完成
+      	quoteItemDao.switchStatus(2, quoteId, bsCode);
+        //设置结束时间
+        quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
         return ApiResponseResult.success("确认完成成功！");
     }
 

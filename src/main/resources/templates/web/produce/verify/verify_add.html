@@ -88,9 +88,10 @@
 														id="on_date" placeholder="yyyy-MM-dd">
 												</div>
 												<label class="layui-form-label layui-required">统一上线时间</label>
-												<div class="layui-input-inline" style="width: 180px;">
+												<div class="layui-input-inline" style="width: 180px;" id="ptime">
+													<input type="text" name="ptimeInput" id="ptimeInput" class="layui-input" style="position:absolute;z-index:2;width:80%;"  onkeyup="searchInput()" placeholder="hh:mm:ss" autocomplete="off">
 													<select type="text" name="ptime" lay-filter="on_time"
-														   id="on_time">
+															autocomplete="off"   id="on_time" lay-search>
 													</select>
 												</div>
 

@@ -44,44 +44,46 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
-				field : 'empCode',
+				field : 'EMP_CODE',
 				title : '员工工号',
 					width : 100,
 			},{
-				field : 'empName',
+				field : 'EMP_NAME',
 				title : '员工姓名',
 					width : 100,
 			},{
-				field : 'devType',
+				field : 'DEV_TYPE',
 				title : '卡机类型',
 					width : 100,
 			}, {
-				field : 'devIp',
+				field : 'DEV_IP',
 				title : '卡机IP',
 					width : 120,
 			},  {
-					field : 'lineName',
+					field : 'LINE_NAME',
 					title : '线体名称',
 					width : 100,
 				},
 				{
-				field : 'cardDate',
+				field : 'CARD_DATE',
 				title : '打卡日期',
 					width : 120,
 			}, {
-				field : 'cardTime',
+				field : 'CARD_TIME',
 				title : '打卡时间',
 					width : 120,
 			}, {
-				field : 'fstatus',
+				field : 'FSTATUS',
 				title : '卡点状态',
 				width : 95,
 				templet : '#statusTpl'
-			}, {
-				field : 'fmemo',
-				title : '备注',
+			},
+				{
+				field : 'FDIS',
+				title : '状态',
 					width : 120,
-			} /*, {
+			}
+			/*, {
 				fixed : 'right',
 				title : '操作',
 				align : 'center',
@@ -297,7 +299,8 @@ function load(obj) {
 	// 重新加载table
 	tableIns.reload({
 		where : {
-			keyword : obj.field.keywordSearch
+			keyword : obj.field.keywordSearch,
+			status:obj.field.statusSearch
 		},
 		page : {
 			curr : pageCurr

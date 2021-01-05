@@ -344,7 +344,8 @@ function exportExcel() {
 function Confirm(){
 	var params = {
 		"id" : quoteId,
-		"bsType":bsType
+		"bsType":bsType,
+		"bsCode":bsCode
 	};
     layer.confirm('一经提交则不得再修改，确定要提交吗？', {
         btn : [ '确认', '返回' ]

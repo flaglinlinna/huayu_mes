@@ -16,6 +16,7 @@ import com.web.basePrice.entity.BjWorkCenter;
 import com.web.basePrice.entity.ItemTypeWg;
 import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.QuoteBomDao;
+import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.service.QuoteBomService;
 import com.web.quote.service.QuoteService;
@@ -51,11 +52,12 @@ public class QuoteBomlmpl implements QuoteBomService {
 	@Autowired
 	private UnitDao unitDao;
 	@Autowired
+	private QuoteItemDao quoteItemDao;
+	@Autowired
 	private BjWorkCenterDao bjWorkCenterDao;
-	
 	@Autowired
 	private QuoteService quoteService;
-
+	
 	@Override
 	public ApiResponseResult add(QuoteBom quoteBom) throws Exception {
 		if(quoteBom == null){
@@ -255,6 +257,12 @@ public class QuoteBomlmpl implements QuoteBomService {
 	 * **/
 	public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
 		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId));
+		//项目状态设置-状态 2：已完成
+		quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
+		//模具清单、工艺流程增加开始时间
+		quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A003");
+		quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A004");
+		
 		quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		return ApiResponseResult.success("提交成功！");
 	}

@@ -195,6 +195,19 @@ $(function() {
 							}
 						});
 
+						laydate.render({
+							elem : '#ptimeInput', trigger: 'click',
+							type : 'time' // 默认，可不填
+						});
+
+
+						form.on('select(on_time)', function (data) {   //选择移交单位 赋值给input框
+							$("#ptimeInput").val(data.value);
+							$("#on_time").next().find("dl").css({ "display": "none" });
+							form.render();
+						});
+
+
 						liaoTableIns = tableSelect1.render({
 							elem : '#pliao',
 							searchKey : 'keyword',
@@ -438,6 +451,7 @@ function getOnTime() {
 		if (data.result) {
 				$("#on_time").empty();
 				var pline = data.data;
+				$("#ptimeInput").val(pline[0].SUB_NAME);
 				for (var i = 0; i < pline.length; i++) {
 					$("#on_time").append(
 						"<option value=" + pline[i].SUB_NAME + ">"
@@ -451,6 +465,24 @@ function getOnTime() {
 	}, "GET", false, function(res) {
 		layer.alert(res.msg);
 	});
+}
+
+function searchInput() {
+	var value = $("#ptimeInput").val();
+	$("#on_time").val(value);
+	layui.form.render();
+	$("#on_time").next().find("dl").css({ "display": "block" });
+	var dl = $("#on_time").next().find("dl").children();
+	var j = -1;
+	for (var i = 0; i < dl.length; i++) {
+		if (dl[i].innerHTML.indexOf(value) <= -1) {
+			dl[i].style.display = "none";
+			j++;
+		}
+		if (j == dl.length-1) {
+			$("#on_time").next().find("dl").css({ "display": "none" });
+		}
+	}
 }
 
 function getInfoAdd() {
@@ -507,6 +539,8 @@ function update(lineId) {
 }
 
 function save(params, emp_ids) {
+	console.log(params);
+	params.ptime = $("#ptimeInput").val();
 	var param = {
 		"task_no" : params.num,
 		"line_id" : params.pline,
