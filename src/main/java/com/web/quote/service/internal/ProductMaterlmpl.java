@@ -200,6 +200,23 @@ public class ProductMaterlmpl implements ProductMaterService {
     public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception{
         List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductMater o : productMaterList) {
+            if("hardware".equals(bsType)) {
+                if (o.getBsQty() == null || o.getBsRadix() == null) {
+                    return ApiResponseResult.failure("用量或基数存在空值,请检查后再确认！");
+                }
+            }else if("molding".equals(bsType)) {
+                if (o.getBsRadix() == null || o.getBsProQty() == null || o.getBsCave() == null || o.getBsWaterGap() == null) {
+                    return ApiResponseResult.failure("制品重和基数和穴数和水口数不能为空,请检查后再确认！");
+                }
+            }else if("surface".equals(bsType)) {
+                if (o.getBsColor() == null || o.getBsMachiningType() == null || o.getBsQty() == null || o.getBsRadix() == null) {
+                    return ApiResponseResult.failure("配色工艺和加工类型和用量基数不能为空,请检查后再确认！");
+                }
+            }else if("packag".equals(bsType)) {
+                if (o.getBsQty() == null || o.getBsRadix() == null) {
+                    return ApiResponseResult.failure("用量或基数存在空值,请检查后再确认！");
+                }
+            }
             o.setBsStatus(1);
             o.setLastupdateDate(new Date());
             o.setLastupdateBy(UserUtil.getSessionUser().getId());

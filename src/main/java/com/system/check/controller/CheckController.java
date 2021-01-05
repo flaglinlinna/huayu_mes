@@ -125,5 +125,24 @@ public class CheckController extends WebController {
 			return ApiResponseResult.failure("获取待审批信息！");
 		}
 	}
+	
+	@ApiOperation(value="提交审批-报价最终流程", notes="提交审批-报价最终流程")
+	@ApiImplicitParams({
+	})
+	@RequestMapping(value = "/doCheckQuote", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult doCheckQuote(CheckInfo checkInfo) {
+        String method = "/check/doCheckQuote";String methodName ="提交审批-报价最终流程";
+		try {
+			logger.debug("提交审批=doCheckQuote:");
+            getSysLogService().success(module,method, methodName, null);
+			return checkService.doCheckQuote(checkInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+            logger.error("获取审批初始化信息失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("提交审批失败！");
+		}
+	}
 
 }

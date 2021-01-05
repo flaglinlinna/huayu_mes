@@ -34,7 +34,7 @@ $(function() {
 					"msg" : res.msg,
 					"data" : res.data.rows,
 					"code" : res.status
-				// code值为200表示成功
+					// code值为200表示成功
 				}
 			},
 			cols : [ [ {type : 'numbers',style:'background-color:#d2d2d2'},
@@ -68,7 +68,7 @@ $(function() {
 							return "";
 						}
 					}},
-				{field : 'bsModelType', width:100, title : '机台类型',width:90,edit:'text'},
+				{field : 'bsModelType', width:100, title : '机台类型',width:90,},
 				{field : 'bsRadix', title : '基数',width:90,edit:'text'},
 				{field : 'bsUserNum', title : '人数',width:90,edit:'text',hide:true},
 				{field : 'bsCycle', title : '成型周期(S)', width:150,edit:'text', hide:true},
@@ -224,7 +224,7 @@ $(function() {
 			searchPlaceholder : '关键字搜索',
 			table : {
 				url : context + '/basePrice/proc/getList',
-					// ?pkQuote='+quoteId,
+				// ?pkQuote='+quoteId,
 				method : 'get',
 
 				parseData : function(res) {
@@ -297,19 +297,19 @@ $(function() {
 					return false;
 				}
 			}else if(obj.field =="bsUserNum") {
-				if (/^\d+$/.test(bsUserNum) == false && /^\d+\.\d+$/.test(bsUserNum) == false && bsUserNum != "" && bsUserNum != null) {
+				if (/^\d+$/.test(bsUserNum) == false && /^\d+\.\d+$/.test(bsUserNum) == false) {
 					layer.msg("人数只能输入数字");
 					loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsYield") {
-				if (/^\d+$/.test(bsYield) == false && /^\d+\.\d+$/.test(bsYield) == false && bsYield != "" && bsYield != null) {
+				if (/^\d+$/.test(bsYield) == false && /^\d+\.\d+$/.test(bsYield) == false) {
 					layer.msg("工序良率只能输入数字");
 					loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsCycle") {
-				if (/^\d+$/.test(bsCycle) == false && /^\d+\.\d+$/.test(bsCycle) == false && bsCycle != "" && bsCycle != null) {
+				if (/^\d+$/.test(bsCycle) == false && /^\d+\.\d+$/.test(bsCycle) == false) {
 					layer.msg("成型周期只能输入数字");
 					loadAll();
 					return false;
@@ -721,23 +721,23 @@ function openUpload() {
 		done: function(res1, curr, count){
 			pageCurr=curr;
 			res1.data.forEach(function (item, index) {
-			 if(bsType == 'hardware'){//五金
-				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
-				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-				 $('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
-				 $('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
-			}else if(bsType == 'molding'){//注塑
-				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
-				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
-				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
-				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-			}else if(bsType == 'surface'){
-				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
-				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
-			}else if(bsType == 'packag'){
-				$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
-				$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
-			}
+				if(bsType == 'hardware'){//五金
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+				}else if(bsType == 'molding'){//注塑
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+				}else if(bsType == 'surface'){
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+				}else if(bsType == 'packag'){
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+				}
 			});
 		}
 	})
@@ -759,7 +759,7 @@ function addSubmit(obj) {
 	obj.field.bsType = bsType;
 	obj.field.pkQuote = quoteId;
 	CoreUtil.sendAjax("/productProcess/add", JSON.stringify(obj.field), function(
-			data) {
+		data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
@@ -778,7 +778,7 @@ function addSubmit(obj) {
 // 编辑工艺提交
 function editSubmit(obj) {
 	CoreUtil.sendAjax("/productProcess/edit", JSON.stringify(obj.field), function(
-			data) {
+		data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
@@ -822,25 +822,25 @@ function delProdErr(obj, id, name) {
 		};
 		layer.confirm('您确定要删除工艺：' + name + '吗？', {
 			btn : [ '确认', '返回' ]
-		// 按钮
+			// 按钮
 		}, function() {
 			CoreUtil.sendAjax("/productProcess/delete", JSON.stringify(param),
-					function(data) {
-						if (isLogin(data)) {
-							if (data.result == true) {
-								// 回调弹框
-								layer.alert("删除成功！", function() {
-									layer.closeAll();
-									// 加载load方法
-									loadAll();
-								});
-							} else {
-								layer.alert(data, function() {
-									layer.closeAll();
-								});
-							}
+				function(data) {
+					if (isLogin(data)) {
+						if (data.result == true) {
+							// 回调弹框
+							layer.alert("删除成功！", function() {
+								layer.closeAll();
+								// 加载load方法
+								loadAll();
+							});
+						} else {
+							layer.alert(data, function() {
+								layer.closeAll();
+							});
 						}
-					});
+					}
+				});
 		});
 	}
 }
@@ -885,7 +885,7 @@ function load(obj) {
 		},
 		page : {
 			curr : pageCurr
-		// 从当前页码开始
+			// 从当前页码开始
 		}
 	});
 }
@@ -896,7 +896,7 @@ function loadAll() {
 	tableIns.reload({
 		page : {
 			curr : pageCurr
-		// 从当前页码开始
+			// 从当前页码开始
 		}
 	});
 	tableIns2.reload({
