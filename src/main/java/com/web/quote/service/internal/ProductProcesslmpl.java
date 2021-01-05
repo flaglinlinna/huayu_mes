@@ -11,6 +11,7 @@ import com.web.basePrice.dao.ProcDao;
 import com.web.basePrice.entity.Proc;
 import com.web.quote.dao.ProductProcessDao;
 import com.web.quote.dao.ProductProcessTempDao;
+import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductProcess;
 
@@ -50,6 +51,8 @@ public class ProductProcesslmpl implements ProductProcessService {
     private ProcDao procDao;
     @Autowired
     QuoteProcessDao quoteProcessDao;
+    @Autowired
+    private QuoteItemDao quoteItemDao;
 	
 	/**
      * 新增报价单
@@ -328,7 +331,7 @@ public class ProductProcesslmpl implements ProductProcessService {
      */
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long quoteId,String bsType) throws Exception{
+    public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception{
         List<ProductProcess> productMaterList  = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductProcess o : productMaterList) {
             o.setBsStatus(1);
@@ -336,6 +339,10 @@ public class ProductProcesslmpl implements ProductProcessService {
             o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
         productProcessDao.saveAll(productMaterList);
+        //项目状态设置-状态 2：已完成
+      	quoteItemDao.switchStatus(2, quoteId, bsCode);
+        //设置结束时间
+        quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
         //20201225-fyx-计算后工序良率
         this.updateHouYield(quoteId, bsType);
         

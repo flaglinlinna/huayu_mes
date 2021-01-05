@@ -29,11 +29,11 @@ function setData(){
 function setTable(){
 	var list = ItemList.data;
 	var header=ItemList.data.quote
-
+	console.log(ItemList)
 	var html = "";
 	for (var j = 0; j < list.length; j++) {
 		var arr = list[j];
-		
+		console.log(arr)
 		var link="";
 		
 		var beg = checkNull(arr.bsBegTime)
@@ -42,20 +42,20 @@ function setTable(){
 		var status=""
 		var status_color1="blue"//状态颜色
 		var	status_color2 ="bgblue"
-		if(arr.bsStatus="0"){
+		if(arr.bsStatus=="0"){
 			status= "未开始"
-		}else if(arr.bsStatus="1"){
+		}else if(arr.bsStatus=="1"){
 			status= "未完成"
-		}else if(arr.bsStatus="2"){
+		}else if(arr.bsStatus=="2"){
 			status= "已完成"
 			status_color1="green"
 			status_color2 ="bggreen"
 		}
 		if(arr.bsCode.indexOf("B00") != -1 ){
 			//材料
-			link = "/productMater/toProductMater?bsType="+Style+"&quoteId="+arr.quote.id;
+			link = "/productMater/toProductMater?bsType="+Style+"&quoteId="+arr.quote.id+"&bsCode="+arr.bsCode;
 		}else if(arr.bsCode.indexOf("C00") != -1){
-			link = "/productProcess/toProductProcess?bsType="+Style+"&quoteId="+arr.quote.id;
+			link = "/productProcess/toProductProcess?bsType="+Style+"&quoteId="+arr.quote.id+"&bsCode="+arr.bsCode;
 		}
 		html += '<tr><td class="td1" style="width: 20%; "><button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;" onclick=toPage("'+link+'","'+arr.bsName+'")><span>' + arr.bsName + 
 		'</span></button></td><td  class="td1 '+status_color1+'" style="width: 20%;"><span class="circle '+status_color2+'"></span>' +  status + 

@@ -39,11 +39,12 @@ public class ProductMaterController extends WebController {
 
 	@ApiOperation(value = "五金材料信息列表页", notes = "五金材料信息列表页", hidden = true)
 	@RequestMapping(value = "/toProductMater")
-	public ModelAndView toProductMater(String bsType,String quoteId) {
+	public ModelAndView toProductMater(String bsType,String quoteId,String bsCode) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
+			mav.addObject("bsCode", bsCode);
 			mav.addObject("bomNameList",productMaterService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_mater");// 返回路径
 		} catch (Exception e) {
@@ -134,7 +135,8 @@ public class ProductMaterController extends WebController {
 		try {
 			long id = Long.parseLong(params.get("id").toString());
 			String bsType = params.get("bsType").toString();
-			ApiResponseResult result = productMaterService.doStatus(id,bsType);
+			String bsCode = params.get("bsCode").toString();
+			ApiResponseResult result = productMaterService.doStatus(id,bsType,bsCode);
 			logger.debug("确认完成=doStatus:");
 			getSysLogService().success(module,method, methodName, params);
 			return result;

@@ -1,5 +1,6 @@
 package com.web.quote.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -26,4 +27,14 @@ public interface QuoteItemDao extends CrudRepository<QuoteItem, Long>,JpaSpecifi
 	@Modifying
     @Query("update QuoteItem t set t.bsStatus=?1 where t.pkQuote=?2 and t.bsCode=?3")
     public void switchStatus(int bsStatus,Long quoteId,String bsCode);
+	
+	//增加开始时间
+	@Modifying
+    @Query("update QuoteItem t set t.bsBegTime=?1 where t.pkQuote=?2 and t.bsCode=?3")
+    public void setBegTime(Date begtime,Long quoteId,String bsCode);
+	
+	//增加结束时间
+	@Modifying
+	@Query("update QuoteItem t set t.bsEndTime=?1 where t.pkQuote=?2 and t.bsCode=?3")
+	public void setEndTime(Date endTime,Long quoteId,String bsCode);
 }

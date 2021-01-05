@@ -39,11 +39,12 @@ public class ProductProcessController extends WebController {
 
 	@ApiOperation(value = "报价工艺流程列表页", notes = "报价工艺流程列表页", hidden = true)
 	@RequestMapping(value = "/toProductProcess")
-	public ModelAndView toProductProcess(String bsType,String quoteId) {
+	public ModelAndView toProductProcess(String bsType,String quoteId,String bsCode) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
+			mav.addObject("bsCode", bsCode);
 			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径
 		} catch (Exception e) {
@@ -210,7 +211,8 @@ public class ProductProcessController extends WebController {
 		try {
 			long id = Long.parseLong(params.get("id").toString());
 			String bsType = params.get("bsType").toString();
-			ApiResponseResult result = productProcessService.doStatus(id,bsType);
+			String bsCode = params.get("bsCode").toString();
+			ApiResponseResult result = productProcessService.doStatus(id,bsType,bsCode);
 			logger.debug("确认完成=Confirm:");
 			getSysLogService().success(module,method, methodName, params);
 			return result;
