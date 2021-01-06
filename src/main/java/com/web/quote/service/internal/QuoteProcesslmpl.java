@@ -26,6 +26,7 @@ import com.web.basePrice.dao.ProcDao;
 import com.web.basePrice.entity.BaseFee;
 import com.web.basePrice.entity.Proc;
 import com.web.quote.dao.QuoteBomDao;
+import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteProcess;
@@ -48,6 +49,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 
 	@Autowired
 	ProcDao procDao;
+	
+	@Autowired
+	private QuoteItemDao quoteItemDao;
 	
 	@Autowired
 	QuoteService quoteService;
@@ -260,8 +264,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
 				}
 			}
-		 
 		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
+		 //项目状态设置-状态 2：已完成
+		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
 		 quoteProcessDao.saveQuoteProcessByQuoteId(Long.parseLong(quoteId));
 		 
 		 return ApiResponseResult.success("提交成功！");

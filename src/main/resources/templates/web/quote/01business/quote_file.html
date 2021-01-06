@@ -27,11 +27,13 @@
 
 
 
+
          <hr class="layui-bg-black"/>
          <script type="text/html" id="toolbar">
-             <div class="layui-btn-container layui-inline">
-                 <button class="layui-btn layui-btn-sm layui-btn-normal" id = "upload">文件上传</button>
-                 <button class="layui-btn layui-btn-sm" onclick="save()">确认完成</button>            
+             <div class="layui-btn-container layui-inline" id ="uploadBtn">
+				 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="InitUpload()">文件上传</button>
+				 <button id = "upload" style="display: none"></button>
+				 <button class="layui-btn layui-btn-sm" onclick="save()">确认完成</button>
              </div>
          </script>
 

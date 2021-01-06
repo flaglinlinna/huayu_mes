@@ -99,6 +99,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     		qi.setBsStyle(qb.getBsStyle());
     		if(qb.getBsCode().equals("A001") || qb.getBsCode().equals("A002")){
     			qi.setBsBegTime(new Date());//20201218-fyx
+    			qi.setBsStatus(1);//20210106-lst设置状态“进行中”
     		}
     		lqi.add(qi);
     	}

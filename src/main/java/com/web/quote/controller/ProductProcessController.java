@@ -2,6 +2,7 @@ package com.web.quote.controller;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.service.SysParamSubService;
 import com.web.quote.entity.ProductProcess;
 import com.web.quote.service.ProductProcessService;
 import io.swagger.annotations.Api;
@@ -27,6 +28,8 @@ public class ProductProcessController extends WebController {
 
 	@Autowired
 	private ProductProcessService productProcessService;
+	@Autowired
+	private SysParamSubService sysParamSubService;
 
 	@ApiOperation(value = "报价工艺流程表结构", notes = "报价工艺流程表结构" + ProductProcess.TABLE_NAME)
 	@RequestMapping(value = "/getProductProcess", method = RequestMethod.GET)
@@ -45,6 +48,7 @@ public class ProductProcessController extends WebController {
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("bsCode", bsCode);
+			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());
 			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径
 		} catch (Exception e) {

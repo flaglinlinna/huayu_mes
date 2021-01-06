@@ -186,6 +186,8 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 			 return ApiResponseResult.failure("提交失败：实际报价不可为空，请检查数据");
 		 }
 		 quoteMouldDao.saveQuoteMouldByQuoteId(Long.parseLong(quoteId));
+		 //项目状态设置-状态 2：已完成
+		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
 		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		 //写个一个根据quoteId获取其所有记录，并批量修改修改人，修改时间字段 的DAO
 		 return ApiResponseResult.success("提交成功！");

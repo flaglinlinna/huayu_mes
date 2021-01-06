@@ -157,83 +157,35 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			},
-				{type:'checkbox'}
+			cols : [ [
+				{type : 'numbers'},
+				{type:'checkbox'},
 				// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-				, {
-				field : 'ITEM_NO',
-				title : '物料编号',
-				width : 140, sort: true
-				},
-				{
-					field : 'CUST_NAME',
-					title : '客户名称',
-					width : 140,
-				},
-				{
-				field : 'ITEM_NAME',
-				title : '物料描述', sort: true,
-				width : 240
-			},
-				{
-				field : 'ITEM_NO_CUS',
-				title : '客户物料编码',
-				width : 130 ,sort: true
-			},
-				{
-					field : 'FSAMPLE',
-					title : '条码样例',
-					width : 120 ,sort: true
-				},
-				{
-				field : 'FIX_VALUE',
-				title : '固定值',
-				width : 80
-			}, {
-				field : 'YEAR_NAME',
-				title : '年',
-				width : 80
-			}, {
-				field : 'MONTH_NAME',
-				title : '月',
-				width : 80
-			}, {
-				field : 'DAY_NAME',
-				title : '日',
-				width : 80 ,sort: true
-			},
+				 {field : 'ITEM_NO', title : '物料编号', width : 140, sort: true},
+				{field : 'CUST_NAME', title : '客户名称', width : 140,},
+				{field : 'ITEM_NAME', title : '物料描述', sort: true, width : 240},
+				{field : 'ITEM_NO_CUS', title : '客户物料编码', width : 130 ,sort: true},
+				{field : 'FSAMPLE', title : '条码样例', width : 250 ,sort: true},
+				// {field : 'FIX_VALUE', title : '固定值', width : 80},
+				// {field : 'YEAR_NAME', title : '年', width : 80},
+				// {field : 'MONTH_NAME', title : '月', width : 80},
+				// {field : 'DAY_NAME', title : '日', width : 80 ,sort: true},
 			// 	{
 			// 	field : 'lastupdateDate',
 			// 	title : '更新时间',
 			// 	templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
 			// 	width : 150
 			// },
-				{
-				field : 'CREATE_DATE',
-				title : '添加时间',
+				{field : 'CREATE_DATE', title : '添加时间',
 				templet:'<div>{{d.CREATE_DATE?DateUtils.formatDate(d.CREATE_DATE):""}}</div>',
-				width : 150
-			},
-				{
-					field : 'SERIAL_NAME',
-					title : '流水号',
-					width : 100 ,sort: true
-				},
-				{
-					field : 'SERIAL_LEN',
-					title : '流水号位数',
-					width : 120 ,sort: true
-				},
+				width : 150},
+				// {field : 'SERIAL_NAME', title : '流水号', width : 100 ,sort: true},
+				// {field : 'SERIAL_LEN', title : '流水号位数', width : 120 ,sort: true},
 				// SERIAL_NUM 流水号
 				{
 				// fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar',
-				width : 120
-			} ] ],
+				title : '操作', align : 'center', toolbar : '#optBar', width : 120}
+			] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
@@ -296,7 +248,7 @@ $(function() {
 		// 监听工具条
 		table.on('tool(ruleTable)', function(obj) {
 			var data = obj.data;
-			console.log(obj)
+			// console.log(obj)
 			if (obj.event === 'del') {
 				// 删除
 				delBarcodeRule(data, data.ID, data.ITEM_NO);
@@ -328,7 +280,7 @@ $(function() {
 		});
 		// 编辑校验规则
 		function getBarcodeRule(obj, id) {
-			console.log(obj);
+			// console.log(obj);
 			form.val("ruleForm", {
 				"id" : obj.ID,
 				"itemId":obj.ITEM_NO,
@@ -338,13 +290,13 @@ $(function() {
 				"itemName" : obj.ITEM_NAME,
 				"itemModel":obj.ITEM_MODEL,
 				"itemNoCus" : obj.ITEM_NO_CUS,
-				"fyear" :obj.FYEAR,
-				"fmonth" : obj.FMONTH,
-				"fday" : obj.FDAY,
-				"serialNum":obj.SERIAL_NUM,
-				"serialLen":obj.SERIAL_LEN,
-				"fixValue" : obj.FIX_VALUE,
-				"fsample" :obj.FSAMPLE,
+				// "fyear" :obj.FYEAR,
+				// "fmonth" : obj.FMONTH,
+				// "fday" : obj.FDAY,
+				// "serialNum":obj.SERIAL_NUM,
+				// "serialLen":obj.SERIAL_LEN,
+				// "fixValue" : obj.FIX_VALUE,
+				// "fsample" :obj.FSAMPLE,
 				"custName":obj.CUST_NAME,
 			});
 			openBarcodeRule(id, "编辑校验规则",obj.ID)
@@ -370,7 +322,7 @@ $(function() {
 			if($("#serialLen").val()) {
 					if (fserialLenFlag == -1) {
 						var fruleArr = frule.split("+");
-						fserialLenFlag = fruleArr.length;
+						fserialLenFlag = getSpiltLength(frule);
 						fruleArr[fserialLenFlag] = "位数(" + $('#serialLen').val() + ")";
 						frule = fruleArr.join("+");
 					} else {
@@ -378,7 +330,6 @@ $(function() {
 						fruleArr[fserialLenFlag] = "位数(" + $('#serialLen').val() + ")";
 						frule = fruleArr.join("+");
 					}
-
 					showFsample();
 			}
 		});
@@ -387,7 +338,7 @@ $(function() {
 		form.on('select(yearFsample)', function(){
 			if(fyearFlag ==-1){
 				var fruleArr = frule.split("+");
-				fyearFlag = fruleArr.length;
+				fyearFlag = getSpiltLength(frule);
 				fruleArr[fyearFlag] = "年("+$('select[name="fyear"] option:selected').text()+")";
 				frule = fruleArr.join("+");
 			}else {
@@ -401,7 +352,7 @@ $(function() {
 		form.on('select(monthFsample)', function(){
 			if(fmonthFlag ==-1){
 				var fruleArr = frule.split("+");
-				fmonthFlag = fruleArr.length;
+				fmonthFlag = getSpiltLength(frule);
 				fruleArr[fmonthFlag] = "月("+$('select[name="fmonth"] option:selected').text()+")";
 				frule = fruleArr.join("+");
 			}else {
@@ -415,7 +366,7 @@ $(function() {
 		form.on('select(dayFsample)', function(){
 			if(fdayFlag ==-1){
 				var fruleArr = frule.split("+");
-				fdayFlag = fruleArr.length;
+				fdayFlag = getSpiltLength(frule);
 				fruleArr[fdayFlag] = "日("+$('select[name="fday"] option:selected').text()+")";
 				frule = fruleArr.join("+");
 			}else {
@@ -429,7 +380,7 @@ $(function() {
 		form.on('select(serialNumFsample)', function(){
 			if(fserialNumFlag ==-1){
 				var fruleArr = frule.split("+");
-				fserialNumFlag = fruleArr.length;
+				fserialNumFlag = getSpiltLength(frule);
 				fruleArr[fserialNumFlag] = "流水号("+$('select[name="serialNum"] option:selected').text()+")";
 				frule = fruleArr.join("+");
 			}else {
@@ -447,6 +398,15 @@ $(function() {
 			frule = frule.substr(1);
 		}
 		$('#fsample').val(frule);
+	}
+
+	function getSpiltLength(value) {
+		if(value ==""||value==null){
+			return 0;
+		}else {
+			console.log( value.split("+").length);
+			return value.split("+").length;
+		}
 	}
 
 // 固定值添加按钮
@@ -547,6 +507,9 @@ function getBarList() {
 function openBarcodeRule(id, title,item_id) {
 	if (id == null || id == "") {
 		$("#id").val("");
+		$('#itemId').attr('disabled',false);
+	}else {
+		$('#itemId').attr('disabled','disabled');
 	}
 	// getMtrial(item_id);
 	var index=layer.open({

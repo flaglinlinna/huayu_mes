@@ -102,38 +102,42 @@ $(function() {
 			return false;
 		});
 
-		//上传控件
-		upload.render({
-			elem: '#upload'
-			,url: context+'/file/upload'
-			,accept: 'file' //普通文件
-			,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致。
-				layer.load(); //上传loading
-			}
-			,done: function(res,index, upload){
-				if(res.result == true){
-					// document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data)
-					var params ={
-						"bsFileName":res.data.bsName,
-						"pkFileId":res.data.id
-					}
-					addSubmit(params);
-				}
-				layer.closeAll('loading'); //关闭loading
-
-			}
-			,error: function(index, upload){
-				layer.closeAll('loading'); //关闭loading
-			}
-		});
-
 
 	});
 
 });
 
 
+//上传控件
+function InitUpload () {
+	layui.upload.render({
+		elem: '#upload'
+		, url: context + '/file/upload'
+		, accept: 'file' //普通文件
+		, before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致。
+			layer.load(); //上传loading
+		}
+		, done: function (res, index, upload) {
+			if (res.result == true) {
+				// document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data)
+				var params = {
+					"bsFileName": res.data.bsName,
+					"pkFileId": res.data.id
+				}
+				addSubmit(params);
+				// $("#upload").remove();
+				// InitUpload();
+			}
+			layer.closeAll('loading'); //关闭loading
 
+		}
+		, error: function (index, upload) {
+			layer.closeAll('loading'); //关闭loading
+		}
+
+	});
+	$('#upload').click();
+}
 
 
 // 新增五金材料提交

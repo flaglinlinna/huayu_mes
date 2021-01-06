@@ -69,14 +69,24 @@ public class kanbanController extends WebController {
 
 	@RequestMapping(value = "/toIndex", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toIndex() {
+	public ModelAndView toIndex() {//看板apk指向此路径-隐藏了部分看板
 		String method = "/kanban/toIndex";
 		String methodName = "看板demo";
 		ModelAndView mav = new ModelAndView();
 		// mav.addObject("pname", p);
+		mav.setViewName("/kanban/index_apk");// 返回路径
+		return mav;
+	}
+	
+	@RequestMapping(value = "/toIndexAll", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toIndexAll() {//所有看板
+		String method = "/kanban/toIndexAll";
+		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/kanban/index1");// 返回路径
 		return mav;
 	}
+	
 	//复合看板（多个看板部分数据组装拼接合成
 		@RequestMapping(value = "/toCjdzkb", method = RequestMethod.GET)
 		@ResponseBody
