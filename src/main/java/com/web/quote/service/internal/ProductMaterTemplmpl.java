@@ -203,6 +203,15 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                     }else {
                         errInfo = errInfo + "基数不能为空;";
                     }
+
+                    if(StringUtils.isNotEmpty(row7)) {
+                        if (!row7.matches("^\\d+\\.\\d+$") && !row7.matches("^\\d+$")) {
+                            errInfo = errInfo + "水口数必须是数字类型;";
+                        }
+                    }else {
+                        errInfo = errInfo + "水口数不能为空;";
+                    }
+
                     if(StringUtils.isNotEmpty(row8)) {
                         if (!row8.matches("^\\d+\\.\\d+$") && !row8.matches("^\\d+$")) {
                             errInfo = errInfo + "穴数必须是数字类型;";

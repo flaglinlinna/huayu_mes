@@ -197,8 +197,13 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 //设置类型
                 process.setBsType(bsType);
                 process.setPkQuote(quoteId);
-                process.setBsName(bsName);
+                if(StringUtils.isNotEmpty(bsName)){
+                    process.setBsName(bsName);
+                }else {
+                    errInfo += "零件名称不能为空;";
+                }
                 process.setBsRadix(bsRadix);
+
 
                 if(StringUtils.isNotEmpty(bsRadix)) {
                     if (!bsRadix.matches("^\\d+\\.\\d+$")
@@ -228,14 +233,29 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                     }
                 }
 //                process.setBsRadix((int)Double.parseDouble(bsRadix));
-                List<Proc> procList = procDao.findByDelFlagAndProcName(0,procName);
-                if(procList.size()>0&&procList!=null){
-                    process.setPkProc(procList.get(0).getId());
+                if(StringUtils.isNotEmpty(procName)) {
+                    List<Proc> procList = procDao.findByDelFlagAndProcName(0, procName);
+                    if (procList.size() > 0 && procList != null) {
+                        process.setPkProc(procList.get(0).getId());
+                    }else {
+                        errInfo += "没有维护名称为 "+procName +" 的工序;";
+                    }
+                }else {
+                    errInfo += "工序名称不能为空;";
                 }
                 process.setBsModelType(bsModelType);
                 if(("molding").equals(bsType)){
                     //注塑
-                    process.setBsCave(row6);
+                    if(StringUtils.isNotEmpty(row6)){
+                        if(!row6.matches("^\\d+\\.\\d+$")&&!row6.matches("^\\d+$")){
+                            errInfo = errInfo + "穴数必须是数字类型;";
+                        }else {
+                            process.setBsCave(nf.format(new BigDecimal(row6)));
+                        }
+                    }else {
+                        errInfo = errInfo + "穴数不能为空;";
+                    }
+
 
                     process.setBsYield(row9);
 //                    if(!row6.matches("^\\d+$")){
