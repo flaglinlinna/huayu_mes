@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>Custom tree formatting</title>
+	<!-- <script src="../../codebase/dhtmlxgantt.js?v=5.2.0"></script>
+	<link rel="stylesheet" href="../../codebase/dhtmlxgantt.css?v=5.2.0">
+	<script src="../common/testdata.js?v=5.2.0"></script> -->
+	<script src="/gantt/dhtmlxgantt.js?v=5.2.0"></script>
+	<link rel="stylesheet" href="/gantt/dhtmlxgantt.css?v=5.2.0">
+	<script src="/gantt/testdata.js?v=5.2.0"></script>
+
+	<link rel="stylesheet" href="/gantt/dhtmlxgantt_terrace.css?v=5.2.0">
+	<link rel="stylesheet" href="/gantt/layui/css/layui.css">
+	<script src="/gantt/jquery/jquery-3.2.1.min.js"></script>
+	
+	<script src="/gantt/locale_ch.js" charset="utf-8"></script>
+	
+	<script src="http://export.dhtmlx.com/gantt/api.js"></script>  
+
+	<style>
+		html, body {
+			height: 100%;
+			padding: 0px;
+			margin: 0px;
+			overflow: hidden;
+		}
+
+		.red .gantt_cell, .odd.red .gantt_cell,
+		.red .gantt_task_cell, .odd.red .gantt_task_cell {
+			background-color: #FDE0E0;
+		}
+
+		.green .gantt_cell, .odd.green .gantt_cell,
+		.green .gantt_task_cell, .odd.green .gantt_task_cell {
+			background-color: #BEE4BE;
+		}
+	</style>
+</head>
+
+<body>
+<!-- <input value="Export to PNG" type="button" onclick='gantt.exportToPNG()'>  -->
+<!-- <input value="Export to Excel" type="button" onclick='gantt.exportToExcel()'> -->
+<div id="gantt_here" style='width:100%; height:100%'></div>
+
+<script>
+//自定义日期语言
+gantt.locale={
+    date: {
+        month_full: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+        month_short: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+        day_full: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+        day_short: ["日", "一", "二", "三", "四", "五", "六"]
+    },
+    labels: {
+        dhx_cal_today_button: "今天",
+        day_tab: "日",
+        week_tab: "周",
+        month_tab: "月",
+        new_event: "新建日程",
+        icon_save: "保存",
+        icon_cancel: "关闭",
+        icon_details: "详细",
+        icon_edit: "编辑",
+        icon_delete: "删除",
+        confirm_closing: "请确认是否撤销修改!", //Your changes will be lost, are your sure?
+        confirm_deleting: "是否删除任务?",
+        section_description: "描述",
+        section_time: "时间范围",
+        section_type: "类型",
+        section_priority:"优先级",
+        section_owner:"负责人",
+
+        /* grid columns */
+        column_text: "任务名",
+        column_start_date: "开始时间",
+        column_duration: "持续时间",
+        column_add: "",
+
+        /* link confirmation */
+        link: "关联",
+        confirm_link_deleting: "将被删除",
+        link_start: " (开始)",
+        link_end: " (结束)",
+
+        type_task: "任务",
+        type_project: "项目",
+        type_milestone: "里程碑",
+
+        minutes: "分钟",
+        hours: "小时",
+        days: "天",
+        weeks: "周",
+        months: "月",
+        years: "年"
+    }
+};
+var colHeader = '<div class="gantt_grid_head_cell gantt_grid_head_add" onclick="gantt.createTask()"></div>',
+colContent = function (task) {
+    return ('<i class="layui-icon layui-icon-edit fa-pencil" onclick="clickGridButton(' + task.id + ', \'edit\')"></i>' +
+    '<i class="layui-icon layui-icon-add-1 fa-plus" onclick="clickGridButton(' + task.id + ', \'add\')"></i>' +
+    '<i class="layui-icon layui-icon-delete fa-times" onclick="clickGridButton(' + task.id + ', \'delete\')"></i>');
+};
+gantt.serverList("staff", [
+                   		{key: "John", label: "John", backgroundColor:"#03A9F4", textColor:"#FFF"},
+                   		{key: "Mike", label: "Mike", backgroundColor:"#f57730", textColor:"#FFF"},
+                   		{key: 3, label: "Anna", backgroundColor:"#e157de", textColor:"#FFF"},
+                   		{key: 4, label: "Bill", backgroundColor:"#78909C", textColor:"#FFF"},
+                   		{key: 7, label: "Floe", backgroundColor:"#8D6E63", textColor:"#FFF"}
+                   	]);
+
+                   	gantt.serverList("priority", [
+                   		{key: 1, label: "高"},
+                   		{key: 2, label: "中"},
+                   		{key: 3, label: "低"}
+                   	]);
+	gantt.config.grid_width = 480;
+	gantt.config.add_column = false;
+	gantt.templates.grid_row_class = function (start_date, end_date, item) {
+		if (item.progress == 0) return "red";
+		if (item.progress >= 1) return "green";
+	};
+	gantt.templates.task_row_class = function (start_date, end_date, item) {
+		if (item.progress == 0) return "red";
+		if (item.progress >= 1) return "green";
+	};
+	function byId(list, id) {
+		for (var i = 0; i < list.length; i++) {
+			if (list[i].key == id)
+				return list[i].label || "";
+		}
+		return "";
+	}
+	gantt.config.columns = [
+		{name: "text", label: "任务名称", tree: true, width: '*'},
+		{
+			name: "progress", label: "进度", width: 80, align: "center",
+			template: function (item) {
+				if(!item.progress)return "未开始";
+				if (item.progress >= 1)
+					return "已完成";
+				if (item.progress == 0)
+					return "未开始";
+				return Math.round(item.progress * 100) + "%";
+			}
+		},
+		{
+			name: "priority", label: "优先级", align: "center", width: 100,template: function (item) {
+				return byId(gantt.serverList('priority'), item.priority)},
+		},
+		{
+			name: "assigned", label: "负责人", align: "center", width: 100,
+			template: function (item) {
+				if (!item.users) return "未指派";
+				return item.users;
+				/* return item.users.join(", "); */
+			}
+		},
+		{
+            name: "buttons",
+            label: colHeader,
+            width: 75,
+            template: colContent
+        }
+	];
+	// 按钮事件
+    function clickGridButton(id, action) {
+        switch (action) {
+            case "edit":
+                gantt.showLightbox(id);
+                break;
+            case "add":
+                gantt.createTask(null, id);
+                break;
+            case "delete":
+                gantt.confirm({
+                    title: gantt.locale.labels.confirm_deleting_title,
+                    text: gantt.locale.labels.confirm_deleting,
+                    callback: function (res) {
+                        if (res)
+                            gantt.deleteTask(id);
+                    }
+                });
+                break;
+        }
+    }
+    gantt.attachEvent('onBeforeTaskAdd', function (id, item) {
+         
+         console.log(JSON.stringify(item));
+        // 设置被指派人为当前用户
+    });
+    gantt.config.lightbox.sections = [
+                              		{name: "description", height: 38, map_to: "text", type: "textarea", focus: true},
+                              		{name: "priority", height: 22, map_to: "priority", type: "select", options: gantt.serverList("priority")},
+                              		{name: "owner", height: 22, map_to: "users", type: "select", options: gantt.serverList("staff")},
+                              		{name: "time", type: "duration", map_to: "auto"}
+                              	];
+	gantt.init("gantt_here");
+	gantt.parse(users_data);
+</script>
+</body>
