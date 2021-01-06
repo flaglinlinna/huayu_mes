@@ -93,7 +93,9 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">机台类型</label>
                 <div class="layui-input-block">
-                    <input id="bsModelType" name="bsModelType" placeholder="请输入机台类型"   autocomplete="off" class="layui-input" type="text"/>
+                    <!--<input id="bsModelType" name="bsModelType" placeholder="请输入机台类型"   autocomplete="off" class="layui-input" type="text"/>-->
+                    <select id="bsModelType" name="bsModelType" lay-filter ="bsModelType" placeholder="请输入机台类型" >
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item ">
@@ -191,7 +193,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">机台类型</label>
                     <div class="layui-input-block">
-                        <input id="bsModelType1" name="bsModelType" placeholder="请输入机台类型"   autocomplete="off" class="layui-input" type="text"/>
+                        <select id="bsModelType1" name="bsModelType" lay-filter ="bsModelType1" placeholder="请输入机台类型" >
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item ">
@@ -254,6 +257,7 @@
         <script th:inline="javascript">
             var bsType=[[${bsType}]];
             var quoteId=[[${quoteId}]];
+            var Jitai = [[${Jitai}]];
             var bsCode=[[${bsCode}]];
             var bomNameList=[[${bomNameList}]];
         </script>

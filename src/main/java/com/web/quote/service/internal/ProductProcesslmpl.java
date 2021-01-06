@@ -16,6 +16,7 @@ import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductProcess;
 
 import com.web.quote.entity.ProductProcessTemp;
+import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.ProductProcessService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -349,6 +350,16 @@ public class ProductProcesslmpl implements ProductProcessService {
             } else if("packag".equals(bsType)) {
                 if (o.getBsRadix() == null || o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null) {
                     return ApiResponseResult.failure("基数、人数、工序良率、产能不能为空,请检查后再确认！");
+                }
+            }
+            if(o.getBsFeeLh()==null||o.getBsFeeMh()==null){
+                //如果存在费率为空的情况，先查询
+                QuoteProcess  quoteProcess = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProc(0,quoteId,o.getPkProc());
+                if(quoteProcess == null){
+                    return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
+                }else{
+                    o.setBsFeeMh(quoteProcess.getBsFeeMh());
+                    o.setBsFeeLh(quoteProcess.getBsFeeLh());
                 }
             }
             o.setBsStatus(1);

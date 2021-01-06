@@ -285,61 +285,61 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> lpp_hardware = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId), "hardware");
 		for(ProductProcess pp:lpp_hardware){
 			System.out.println(pp.getId());
-			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(pp.getBsRadix()));
+			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle()).divide(new BigDecimal("3600"),5).divide(pp.getBsRadix(),5));
 		    
-			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(pp.getBsRadix()));
+			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600"),5).divide(pp.getBsRadix(),5));
 			
 			//本工序损耗
-			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield()).subtract(pp.getBsFeeLhAll()));
-			pp.setBsLossTheMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield()).subtract(pp.getBsFeeMhAll()));
+			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5).subtract(pp.getBsFeeLhAll()));
+			pp.setBsLossTheMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5).subtract(pp.getBsFeeMhAll()));
 			//后工序损耗
-			pp.setBsLossHouLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield()).subtract(pp.getBsFeeLhAll()));
-			pp.setBsLossHouMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield()).subtract(pp.getBsFeeMhAll()));
+			pp.setBsLossHouLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield(),5).subtract(pp.getBsFeeLhAll()));
+			pp.setBsLossHouMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield(),5).subtract(pp.getBsFeeMhAll()));
 		}
 		productProcessDao.saveAll(lpp_hardware);
 		//注塑-人工工时费（元/H）*人数*成型周期(S）/3600/ 穴数/基数;制费工时费（元/H）*成型周期(S）/3600/穴数/ 基数
 		List<ProductProcess> lpp_molding = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId), "molding");
 		for(ProductProcess pp:lpp_molding){
 			BigDecimal bsCave = new BigDecimal(pp.getBsCave());//穴数
-			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(bsCave).divide(pp.getBsRadix()));
+			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle()).divide(new BigDecimal("3600"),5).divide(bsCave,5).divide(pp.getBsRadix(),5));
 		    
-			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600")).divide(bsCave).divide(pp.getBsRadix()));
+			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600"),5).divide(bsCave,5).divide(pp.getBsRadix(),5));
 			//本工序损耗
-			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield()).subtract(pp.getBsFeeLhAll()));
-			pp.setBsLossTheMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield()).subtract(pp.getBsFeeMhAll()));
+			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5).subtract(pp.getBsFeeLhAll()));
+			pp.setBsLossTheMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5).subtract(pp.getBsFeeMhAll()));
 			//后工序损耗
-			pp.setBsLossHouLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield()).subtract(pp.getBsFeeLhAll()));
-			pp.setBsLossHouMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield()).subtract(pp.getBsFeeMhAll()));
+			pp.setBsLossHouLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield(),5).subtract(pp.getBsFeeLhAll()));
+			pp.setBsLossHouMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield(),5).subtract(pp.getBsFeeMhAll()));
 		}
 		productProcessDao.saveAll(lpp_molding);
 		//更新表面处理-人数*费率/产能/基数;费率/产能/基数
 		List<ProductProcess> lpp_surface = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId), "surface");
 		for(ProductProcess pp:lpp_surface){
 			BigDecimal bsCapacity = new BigDecimal(pp.getBsCapacity());//产能
-			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity).divide(pp.getBsRadix()));
+			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity,5).divide(pp.getBsRadix(),5));
 		    
-			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity).divide(pp.getBsRadix()));
+			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity,5).divide(pp.getBsRadix(),5));
 			//本工序损耗
-			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield()).subtract(pp.getBsFeeLhAll()));
-			pp.setBsLossTheMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield()).subtract(pp.getBsFeeMhAll()));
+			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5).subtract(pp.getBsFeeLhAll()));
+			pp.setBsLossTheMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5).subtract(pp.getBsFeeMhAll()));
 			//后工序损耗
-			pp.setBsLossHouLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield()).subtract(pp.getBsFeeLhAll()));
-			pp.setBsLossHouMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield()).subtract(pp.getBsFeeMhAll()));
+			pp.setBsLossHouLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield(),5).subtract(pp.getBsFeeLhAll()));
+			pp.setBsLossHouMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield(),5).subtract(pp.getBsFeeMhAll()));
 		}
 		productProcessDao.saveAll(lpp_surface);
 		//组装工艺成本-人数*费率/产能/基数;费率/产能/基数
 		List<ProductProcess> lpp_packag = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId), "packag");
 		for(ProductProcess pp:lpp_packag){
 			BigDecimal bsCapacity = new BigDecimal(pp.getBsCapacity());//产能
-			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity).divide(pp.getBsRadix()));
+			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity,5).divide(pp.getBsRadix(),5));
 		    
-			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity).divide(pp.getBsRadix()));
+			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity,5).divide(pp.getBsRadix(),5));
 			//本工序损耗
-			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield()).subtract(pp.getBsFeeLhAll()));
-			pp.setBsLossTheMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield()).subtract(pp.getBsFeeMhAll()));
+			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5).subtract(pp.getBsFeeLhAll()));
+			pp.setBsLossTheMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5).subtract(pp.getBsFeeMhAll()));
 			//后工序损耗
-			pp.setBsLossHouLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield()).subtract(pp.getBsFeeLhAll()));
-			pp.setBsLossHouMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield()).subtract(pp.getBsFeeMhAll()));
+			pp.setBsLossHouLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield(),5).subtract(pp.getBsFeeLhAll()));
+			pp.setBsLossHouMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield(),5).subtract(pp.getBsFeeMhAll()));
 		}
 		productProcessDao.saveAll(lpp_packag);
 		

@@ -264,6 +264,7 @@ $(function() {
 			}
 		});
 
+		setData();
 		// positiveNum
 		//自定义验证规则
 		form.verify({
@@ -685,6 +686,18 @@ function addHardware() {
 	cleanProdErr();
 	// 打开弹出框
 	openProdErr(null, "添加工艺信息");
+}
+
+function setData(){
+	$("#bsModelType").empty();
+	var data = Jitai
+	for (var i = 0; i < data.length; i++) {
+		if (i == 0) {
+			$("#bsModelType").append("<option value=''>请点击选择</option>");
+		}
+		$("#bsModelType").append(
+			"<option value=" + data[i].subCode + ">" + data[i].subName+"</option>");
+	}
 }
 
 function Confirm(){
