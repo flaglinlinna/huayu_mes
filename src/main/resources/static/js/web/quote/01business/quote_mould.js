@@ -441,7 +441,7 @@ function getAddList(){
 		}
 		if(bomlist[i]){//为空的不显示
 			$("#num").append(
-					"<option value=" + bomlist[i].BS_ELEMENT + ">"
+					"<option value='" + bomlist[i].BS_ELEMENT + "'>"
 							+ bomlist[i].BS_ELEMENT +"</option>");
 		} 
 	}

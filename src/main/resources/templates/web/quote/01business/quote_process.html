@@ -70,7 +70,7 @@
 						<!--<input type="text" name="num" placeholder="请选择" autocomplete="off"
 							class="layui-input" readonly="readonly" lay-verify="required"
 							id="num">-->
-						<select class="layui-input" id="num" name="num" lay-search></select>
+						<select class="layui-input" id="num" name="num" lay-filter="num"  lay-search></select>
 					</div>
 				</div>
 				<table id="procList" lay-filter="procTable" class="layui-table"
@@ -90,6 +90,7 @@
             var quoteId=[[${quoteId}]];
             var code=[[${code}]];
             var bomNameList=[[${bomNameList}]];
+    
         </script>
 		<script th:src="@{/js/web/quote/01business/quote_process.js}"
 			src="/js/web/quote/01business/quote_process.js"></script>

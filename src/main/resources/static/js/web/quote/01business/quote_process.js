@@ -302,7 +302,7 @@ $(function() {
 				alert("请选择零件")
 				return false;
 			}
-			//console.log(data.field.num)
+			console.log(data.field)
 			//addSubmit(procIdList,data.field.itemId);
 			addSubmit(procIdList,data.field.num);
 			return false;
@@ -442,6 +442,7 @@ function getAddList(){
 	
 	CoreUtil.sendAjax("/quoteProcess/getAddList", "",
 			function(data) {
+		//console.log(data)
 				if (data.result) {
 					//工序表
 					tableProc.reload({
@@ -465,7 +466,7 @@ function getAddList(){
 				$("#num").append("<option value=''> 请选择</option>");  
 		}
 		 $("#num").append(
-					"<option value=" + bomlist[i].BS_COMPONENT + ">"
+					"<option value='" + bomlist[i].BS_COMPONENT + "'>"
 							+ bomlist[i].BS_COMPONENT +"</option>");
 	}
 	layui.form.render('select');
