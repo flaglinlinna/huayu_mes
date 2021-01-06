@@ -291,6 +291,7 @@ $(function() {
                     //console.log(da[0].num)
                     form.val("itemFrom", {
                         "supplier":da[0].VENDER_NAME,
+                        "supplierId":da[0].ID
                     });
                     form.render();// 重新渲染
 
@@ -298,12 +299,19 @@ $(function() {
 
                 }
             });
-
+            form.verify({
+				num: function(value){
+					if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false)
+					{
+						return '只能输入数字';
+					}
+				}
+			});
             // 监听工具条
             table.on('tool(colTable)', function(obj) {
-                console.log(obj)
+                //console.log(obj)
                 var data = obj.data;
-                console.log(data)
+                //console.log(data)
                 if (obj.event === 'del') {
                     // 删除
                     del(obj,data.ID, data.ITEM_BARCODE);
@@ -443,7 +451,12 @@ function getOrgSelect() {
             if (data.data) {
                 $("#org").empty();
                 var pclass = data.data;
+                //console.log(pclass)
                 for (var i = 0; i < pclass.length; i++) {
+                	if(i==0){
+                		$("#org").append(
+                                "<option value=''>请选择</option>");
+                	}
                     $("#org").append(
                         "<option value=" + pclass[i].ID + ">"
                         + pclass[i].DEPT_NAME + "</option>");
@@ -465,12 +478,16 @@ function getInfoBarcode(barcode){
     }
     CoreUtil.sendAjax("/produce/badMaterial/getDetailByBarcode", params, function(data) {
         if (data.result) {
+        	//console.log(data.data[0])
             playSaoMiaoMusic();
             $( "input[name='itemNo']").val(data.data[0].ITEM_NO);
             $( "input[name='procDate']").val(data.data[0].PROD_DATE);
             $( "input[name='mtrdescr']").val(data.data[0].ITEM_NAME);
-            $( "input[name='org']").val(data.data[0].DEPT_ID);
-            $( "input[name='supplier']").val(data.data[0].VENDER_ID);
+            $("#org").val(data.data[0].DEPID);
+            $( "input[name='supplier']").val(data.data[0].VENDER); 
+            $( "input[name='supplierId']").val(data.data[0].VENDERID);
+            $( "input[name='lotNo']").val(data.data[0].BATCHNO);
+            layui.form.render('select');
             $('#itemNo').focus();
             // supplier
         }else{
@@ -510,7 +527,7 @@ function getInfoBarcode(barcode){
 //录入来料不良信息
 function addPut(obj){
     // console.log(obj);
-    var supplierId = $('#supplier').attr('ts-selected');
+    //var supplierId = $('#supplier').attr('ts-selected');
     var params={
         "barcode":obj.barcode,
         "itemNo":obj.itemNo,
@@ -518,10 +535,11 @@ function addPut(obj){
         "defectQty":obj.inqty,
         "deptId":obj.org,
         "defectCode":obj.defect,
-        "venderId":supplierId,
+        "venderId":obj.supplierId,
         "procDate":obj.procDate,
         "taskNo":obj.taskNo
     };
+
     CoreUtil.sendAjax("/produce/badMaterial/saveMaterial", params, function(data) {
         if (data.result) {
             // layer.alert("保存成功！");
@@ -552,7 +570,7 @@ function del(obj,id, barcode) {
             // 按钮
         }, function() {
             CoreUtil.sendAjax("/inputCheck/delete", params, function(data) {
-                console.log(data)
+               // console.log(data)
                 if (data.result == true) {
                     // 回调弹框
                     layer.alert("删除成功！", function() {

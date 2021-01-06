@@ -24,8 +24,8 @@
 }
 </style>
 <body class="layui-layout-body">
-<div th:replace="audio/fragment/audio :: audio"></div>
-<div th:replace="audio/fragment/saomiao :: saomiao"></div>
+	<div th:replace="audio/fragment/audio :: audio"></div>
+	<div th:replace="audio/fragment/saomiao :: saomiao"></div>
 	<div class="layui-layout layui-layout-admin">
 		<!--头-->
 		<!--<div th:replace="fragments/head :: header"></div>-->
@@ -47,11 +47,12 @@
 											<label class="layui-form-label layui-required">制令单号</label>
 											<div class="layui-input-inline" style="width: 150px;">
 												<input class="layui-input" lay-filter="taskNo" id="taskNo"
-													   lay-verify="required" name="taskNo">
+													lay-verify="required" name="taskNo">
 											</div>
 											<label class="layui-form-label">条码</label>
 											<div class="layui-input-inline" style="width: 150px;">
-												<input class="layui-input" lay-filter="barcode" id="barcode" name="barcode">
+												<input class="layui-input" lay-filter="barcode" id="barcode"
+													name="barcode">
 											</div>
 
 										</div>
@@ -60,72 +61,71 @@
 											<label class="layui-form-label layui-required ">物料编码</label>
 											<div class="layui-input-inline" style="width: 150px;">
 												<input id="itemNo" name="itemNo" autocomplete="off"
-													   class="layui-input" type="text" />
+													class="layui-input" type="text" />
 											</div>
 											<label class="layui-form-label">物料描述</label>
 											<div class="layui-input-inline" style="width: 150px;">
 												<input id="mtrdescr" name="mtrdescr" autocomplete="off"
-													   style="background: #efefef;" class="layui-input" disabled
-													   type="text" />
+													style="background: #efefef;" class="layui-input" disabled
+													type="text" />
 											</div>
 										</div>
-										
+
 
 										<div class="layui-form-item">
 											<div class="layui-inline">
 												<label class="layui-form-label layui-required">来料部门</label>
 												<div class="layui-input-inline" style="width: 150px;">
-													<select  name="org" placeholder="请选择"
-															 lay-verify="required" id="org">
+													<select name="org" placeholder="请选择" lay-verify="required"
+														id="org">
 													</select>
 												</div>
 												<label class="layui-form-label ">供应商名称</label>
 												<div class="layui-input-inline" style="width: 150px;">
 													<input type="text" name="supplier" placeholder="请选择"
-														   autocomplete="off" class="layui-input"
-														   id="supplier">
+														autocomplete="off" class="layui-input" id="supplier">
 												</div>
+												<input id="supplierId" type="hidden" name="supplierId" />
 											</div>
 										</div>
 
 
 
-											<div class="layui-form-item">
+										<div class="layui-form-item">
 											<label class="layui-form-label">生产日期</label>
-												<div class="layui-input-inline" style="width: 150px;">
-													<input id="procDate" name="procDate" autocomplete="off"
-														class="layui-input"
-														type="text" />
-												</div>
-
-													<label class="layui-form-label">物料批次</label>
-													<div class="layui-input-inline" style="width: 150px;">
-														<input id="lotNo" name="lotNo" autocomplete="off"
-															   class="layui-input"
-															   type="text" />
-													</div>
-
+											<div class="layui-input-inline" style="width: 150px;">
+												<input id="procDate" name="procDate" autocomplete="off"
+													class="layui-input" type="text" />
 											</div>
+
+											<label class="layui-form-label">物料批次</label>
+											<div class="layui-input-inline" style="width: 150px;">
+												<input id="lotNo" name="lotNo" autocomplete="off"
+													class="layui-input" type="text" />
+											</div>
+
+										</div>
 
 
 										<div class="layui-form-item">
-												<label class="layui-form-label layui-required">不良内容</label>
-												<div class="layui-input-inline" style="width: 150px;">
-													<select id="defect" name="defect" autocomplete="off"
-															disabled type="text" >
-													</select>
-												</div>
-												<label class="layui-form-label layui-required">不良数量</label>
-												<div class="layui-input-inline" style="width: 150px;">
-													<input id="inqty" name="inqty" autocomplete="off"
-														 class="layui-input" type="text" />
-												</div>
+											<label class="layui-form-label layui-required">不良内容</label>
+											<div class="layui-input-inline" style="width: 150px;">
+												<select id="defect" name="defect" autocomplete="off"
+													disabled type="text">
+												</select>
+											</div>
+											<label class="layui-form-label layui-required">不良数量</label>
+											<div class="layui-input-inline" style="width: 150px;">
+												<input id="inqty" name="inqty" autocomplete="off" lay-verify="required|num"
+													class="layui-input" type="text" />
+											</div>
 										</div>
 
 
 										<div class="layui-form-item">
 											<div class="layui-inline">
-												<button type="button" class="layui-btn layui-btn-sm layui-btn-normal"
+												<button type="button"
+													class="layui-btn layui-btn-sm layui-btn-normal"
 													lay-submit="" lay-filter="confirmSubmit">保存数据</button>
 												<button type="reset"
 													class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
@@ -140,7 +140,7 @@
 							<legend style="font-size: 14px;">不良录入列表</legend>
 						</fieldset>
 						<table id="colTable" lay-filter="colTable"
-							   style="margin-top: -20px;"></table>
+							style="margin-top: -20px;"></table>
 						<script type="text/html" id="optBar">
 							<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 						</script>
@@ -161,8 +161,8 @@
 		</div>
 
 		<!--<script type="text/html" id="optBar">-->
-        <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
-    <!--</script>-->
+		<!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+		<!--</script>-->
 
 		<script th:src="@{/js/web/produce/bad_material/bad_material.js}"
 			src="/js/web/produce/bad_material/bad_material.js"></script>
