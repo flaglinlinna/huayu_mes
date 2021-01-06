@@ -50,7 +50,7 @@ public class ProductMaterlmpl implements ProductMaterService {
     private QuoteItemDao quoteItemDao;
 	
 	/**
-     * 新增报价单
+     * 新增
      */
     @Override
     @Transactional
@@ -65,7 +65,7 @@ public class ProductMaterlmpl implements ProductMaterService {
 	}
 
     /**
-     * 修改不良类别
+     * 修改
      */
     @Override
     @Transactional
@@ -104,7 +104,7 @@ public class ProductMaterlmpl implements ProductMaterService {
     }
 
     /**
-     * 删除异常类别
+     * 删除
      */
     @Override
     @Transactional

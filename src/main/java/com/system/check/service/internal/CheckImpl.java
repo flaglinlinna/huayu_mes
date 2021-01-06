@@ -299,6 +299,7 @@ public class CheckImpl   implements CheckService {
                 		qi.setBsPerson(qb.getBsPerson());
                 		qi.setCreateDate(new Date());
                 		qi.setCreateBy(UserUtil.getSessionUser().getId());
+                		qi.setBsStatus(1);//lst-20210106-状态变更：进行中
                 		qi.setBsBegTime(new Date());
                 		qi.setBsStyle(qb.getBsStyle());
                 		lqi.add(qi);

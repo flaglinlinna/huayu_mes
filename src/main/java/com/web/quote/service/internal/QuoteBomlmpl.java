@@ -259,8 +259,10 @@ public class QuoteBomlmpl implements QuoteBomService {
 		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId));
 		//项目状态设置-状态 2：已完成
 		quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
-		//模具清单、工艺流程增加开始时间
+		//模具清单、工艺流程增加开始时间+状态变更：进行中
+		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A003");
 		quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A003");
+		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A004");
 		quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A004");
 		
 		quoteService.doItemFinish(code, Long.parseLong(quoteId));

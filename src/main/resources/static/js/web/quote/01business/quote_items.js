@@ -45,7 +45,9 @@ function setTable(){
 		if(arr.bsStatus=="0"){
 			status= "未开始"
 		}else if(arr.bsStatus=="1"){
-			status= "未完成"
+			status= "进行中"
+			status_color1="black"
+			status_color2 ="bgblack"
 		}else if(arr.bsStatus=="2"){
 			status= "已完成"
 			status_color1="green"
