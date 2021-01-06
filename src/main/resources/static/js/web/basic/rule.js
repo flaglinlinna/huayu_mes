@@ -162,10 +162,10 @@ $(function() {
 				{type:'checkbox'},
 				// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 				 {field : 'ITEM_NO', title : '物料编号', width : 140, sort: true},
-				{field : 'CUST_NAME', title : '客户名称', width : 140,},
+				// {field : 'CUST_NAME', title : '客户名称', width : 140,},
 				{field : 'ITEM_NAME', title : '物料描述', sort: true, width : 240},
-				{field : 'ITEM_NO_CUS', title : '客户物料编码', width : 130 ,sort: true},
-				{field : 'FSAMPLE', title : '条码样例', width : 250 ,sort: true},
+				{field : 'ITEM_NO_CUS', title : '客户物料编码', width : 120 ,sort: true},
+				{field : 'FSAMPLE', title : '条码样例', width : 440 ,sort: true},
 				// {field : 'FIX_VALUE', title : '固定值', width : 80},
 				// {field : 'YEAR_NAME', title : '年', width : 80},
 				// {field : 'MONTH_NAME', title : '月', width : 80},
@@ -259,7 +259,7 @@ $(function() {
 		});
 
 		table.on('rowDouble(ruleTable)', function(obj){
-			getBarcodeRule(obj.data, obj.data.id);
+			getBarcodeRule(obj.data, obj.data.ID);
 		});
 
 		// 监听提交
@@ -508,8 +508,11 @@ function openBarcodeRule(id, title,item_id) {
 	if (id == null || id == "") {
 		$("#id").val("");
 		$('#itemId').attr('disabled',false);
+		$('#itemId').css('background','');
+		// style="background: #efefef;"
 	}else {
 		$('#itemId').attr('disabled','disabled');
+		$('#itemId').css('background'," #efefef");
 	}
 	// getMtrial(item_id);
 	var index=layer.open({

@@ -197,7 +197,7 @@ public class BjWorkCenterImpl implements BjWorkCenterService {
             map.put("createBy",sysUserDao.findById((long)bjWorkCenter.getCreateBy()).getUserName());
             map.put("createDate",df.format(bjWorkCenter.getCreateDate()));
             if(bjWorkCenter.getLastupdateBy()!=null){
-                map.put("lastupdateBy",sysUserDao.findById((long)bjWorkCenter.getCreateBy()).getUserName());
+                map.put("lastupdateBy",sysUserDao.findById((long)bjWorkCenter.getLastupdateBy()).getUserName());
                 map.put("lastupdateDate",df.format(bjWorkCenter.getLastupdateDate()));
             }
             mapList.add(map);

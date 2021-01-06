@@ -214,7 +214,7 @@ $(function() {
 			  {field : 'wc',title : '材料耗用工作中心',sort:true,width:145,
 				  templet:function (d) {
 						if(d.wc!=null) {return d.wc.workcenterName;}else {return "";}}},
-			  {field : 'bsItemCode',title : '材料编码',sort:true,width:120},
+			  // {field : 'bsItemCode',title : '材料编码',sort:true,width:120},
 			  {field : 'itp',title : '物料类型',sort:true,width:120,
 				  templet:function (d) {
 						if(d.itp!=null) {return d.itp.itemType;}else {return "";}}},
@@ -273,7 +273,7 @@ $(function() {
 				{field : 'wc',title : '材料耗用工作中心',sort:true,width:145,
 					templet:function (d) {
 						if(d.wc!=null) {return d.wc.workcenterName;}else {return "";}}},
-				{field : 'bsItemCode',title : '材料编码',sort:true,width:120},
+				// {field : 'bsItemCode',title : '材料编码',sort:true,width:120},
 				{field : 'itp',title : '物料类型',sort:true,width:120,
 					templet:function (d) {
 						if(d.itp!=null) {return d.itp.itemType;}else {return "";}}},
