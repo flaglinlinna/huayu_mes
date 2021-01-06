@@ -80,7 +80,7 @@ $(function() {
 			},
 				{
 				field : 'FDIS',
-				title : '状态',
+				title : '分配状态',
 					width : 120,
 			}
 			/*, {
@@ -303,7 +303,7 @@ function load(obj) {
 			status:obj.field.statusSearch
 		},
 		page : {
-			curr : pageCurr
+			curr : 1
 		// 从当前页码开始
 		}
 	});

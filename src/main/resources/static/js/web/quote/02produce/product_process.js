@@ -429,7 +429,7 @@ $(function() {
 					return false;
 				}
 			}else if(bsType=="out"){
-				if(data.field.bsYield==""||data.field.bsFeeWxAll==""){
+				if(data.field.bsLoss==""||data.field.bsFeeWxAll==""){
 					layer.msg("请输入所有带*的必填项");
 					return false;
 				}

@@ -333,6 +333,7 @@ public class CheckImpl   implements CheckService {
 							pp.setBsName(qb.getBsName());
 							pp.setBsType(qb.getProc().getBjWorkCenter().getBsCode());//类型
 							pp.setBsOrder(qb.getBsOrder());
+							pp.setPkProc(qb.getPkProc());
 							pp.setPkQuote(c.getBsRecordId());
 							pp.setBsFeeMh(qb.getBsFeeMh());
 							pp.setBsFeeLh(qb.getBsFeeLh());

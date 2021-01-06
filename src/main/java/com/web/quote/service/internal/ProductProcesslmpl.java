@@ -64,8 +64,17 @@ public class ProductProcesslmpl implements ProductProcessService {
     	if(productProcess == null){
             return ApiResponseResult.failure("制造部材料信息不能为空！");
         }
+        QuoteProcess  quoteProcess = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProc(0,productProcess.getPkQuote(),productProcess.getPkProc());
+        if(quoteProcess == null){
+            return ApiResponseResult.failure("该工序未维护人工制费,请维护后再选择！");
+        }else {
+            productProcess.setBsFeeMh(quoteProcess.getBsFeeMh());
+            productProcess.setBsFeeLh(quoteProcess.getBsFeeLh());
+        }
         productProcess.setCreateDate(new Date());
         productProcess.setCreateBy(UserUtil.getSessionUser().getId());
+
+
         productProcessDao.save(productProcess);
         return ApiResponseResult.success("制造部材料信息添加成功！").data(productProcess);
 	}
@@ -90,6 +99,19 @@ public class ProductProcesslmpl implements ProductProcessService {
         o.setBsName(productProcess.getBsName());
         o.setBsOrder(productProcess.getBsOrder());
         o.setPkProc(productProcess.getPkProc());
+        //如果工序重新选择了
+        if(productProcess.getPkProc()!=null&&o.getPkProc()!=null) {
+            if (!productProcess.getPkProc().equals(o.getPkProc())) {
+                o.setPkProc(productProcess.getPkProc());
+                QuoteProcess quoteProcess = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProc(0, productProcess.getPkQuote(), productProcess.getPkProc());
+                if (quoteProcess == null) {
+                    return ApiResponseResult.failure("该工序未维护人工制费,请维护后再选择！");
+                } else {
+                    productProcess.setBsFeeMh(quoteProcess.getBsFeeMh());
+                    productProcess.setBsFeeLh(quoteProcess.getBsFeeLh());
+                }
+            }
+        }
         o.setBsModelType(productProcess.getBsModelType());
         o.setBsCycle(productProcess.getBsCycle());
         o.setBsCapacity(productProcess.getBsCapacity());

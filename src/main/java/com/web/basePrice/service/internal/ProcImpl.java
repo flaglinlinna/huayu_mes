@@ -199,7 +199,7 @@ public class ProcImpl extends BasePriceUtils implements ProcService {
 			map.put("createBy", sysUserDao.findById((long) proc.getCreateBy()).getUserName());
 			map.put("createDate", df.format(proc.getCreateDate()));
 			if (proc.getLastupdateBy() != null) {
-				map.put("lastupdateBy", sysUserDao.findById((long) proc.getCreateBy()).getUserName());
+				map.put("lastupdateBy", sysUserDao.findById((long) proc.getLastupdateBy()).getUserName());
 				map.put("lastupdateDate", df.format(proc.getLastupdateDate()));
 			}
 			mapList.add(map);
