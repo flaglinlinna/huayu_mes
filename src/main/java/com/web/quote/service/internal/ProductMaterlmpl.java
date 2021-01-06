@@ -134,20 +134,20 @@ public class ProductMaterlmpl implements ProductMaterService {
         String[] map_arr = null;
         //五金材料导入顺序: 零件名称、材料名称、规格、用量、单位、基数、供应商、备注
         //组装材料导入顺序: 零件名称、材料名称、规格、用量、单位、基数、供应商、备注
-        //注塑材料导入顺序: 零件名称、材料名称、规格、制品量、单位、基数、水后数、穴数、备注
+        //注塑材料导入顺序: 零件名称、材料名称、规格、制品量、单位、基数、水口数、穴数、备注
         //表面处理导入顺序: 零件名称、加工类型、配色工艺、材料名称、规格、用料、单位、基数、备注
         if(("hardware").equals(bsType)){
             fileName = "五金材料模板.xlsx";
             map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
         }else if(("molding").equals(bsType)){
             fileName = "注塑材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsRadix","bsWaterGap","bsCave","fmemo"};
         }else if(("surface").equals(bsType)){
             fileName = "表面处理材料模板.xlsx";
             map_arr = new String[]{"id","bsComponent","bsMachiningType","bsColor","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","fmemo"};
         }else if(("packag").equals(bsType)){
             fileName = "组装材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsRadix","bsWaterGap","bsCave","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
 //        Resource resource = new ClassPathResource(excelPath+fileName);
