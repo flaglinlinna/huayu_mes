@@ -101,11 +101,10 @@ public class WorkTimeMesController extends WebController {
 	}
 	
 	@ApiOperation(value = "工时统计表(Mes)-明细", notes = "工时统计表(Mes)-明细", hidden = true)
-	@RequestMapping(value = "/getListDetail", method = RequestMethod.POST)
+	@RequestMapping(value = "/getListDetail", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getListDetail(@RequestBody Map<String, Object> param) {
+	public ApiResponseResult getListDetail(String list_id) {
 		String method = "report/worktime_m/getListDetail";
-		String list_id=param.get("list_id").toString();
 		String methodName = "工时统计表(Mes)-明细";
 		try {
 			Sort sort = Sort.unsorted();

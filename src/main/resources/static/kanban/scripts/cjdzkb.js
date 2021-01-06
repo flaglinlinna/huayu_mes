@@ -139,6 +139,7 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 		xAxis : [ {
 			type : 'category',
 			data : xAxis_data,
+			triggerEvent: true,//横坐标点击事件
 			axisPointer : {
 				type : 'shadow'
 			},
@@ -237,6 +238,13 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 	var myCharts1 = echarts.init(document.getElementById('echart_scdz'));
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
+	myCharts1.on('click', function (params) {	
+		if(params.componentType=="xAxis"){			
+			var liner=params.value
+			var url="toZzdzkb?inType=apk&liner="+liner;
+			window.open(url);
+		}
+	});
 }
 
 function getChart2(emp_plan, emp_now, emp_off) {
@@ -358,6 +366,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 		xAxis : [ {
 			type : 'category',
 			data : xAxis_data,
+			triggerEvent: true,//横坐标点击事件
 			axisPointer : {
 				type : 'shadow'
 			},
@@ -441,15 +450,30 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			name : '生产效率',
 			type : 'line',
 			yAxisIndex : 1,
-			
 			data : series3_data,
+			itemStyle:{
+	            normal:{
+	                color:function(params){
+	                    var d=params.value;
+	                    if(d<100){
+	                        return '#fe4365';
+	                    }else{
+	                    	return '#99FFCC';
+	                    }
+	                },
+	                lineStyle: {
+						color: '#99FFCC' //改变折线颜色
+					}
+		
+	            }
+	        },
 			label : {
 				show : true,
 				position : 'top',
 				formatter : '{c}%',
 				textStyle : {
 					fontSize : 22,// 字体大小
-				}
+				}	
 			},
 		} ]
 	};
@@ -457,6 +481,14 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 	var myCharts1 = echarts.init(document.getElementById('echart_cjbg'));
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
+	myCharts1.on('click', function (params) {	
+		if(params.componentType=="xAxis"){			
+			var liner=params.value
+			liner=liner.substring(0,liner.indexOf("\n"))
+			var url="toZzdzkb?inType=apk&liner="+liner;
+			window.open(url);
+		}
+	});
 }
 
 function getChart3(done, plan, doneRate) {

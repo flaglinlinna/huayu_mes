@@ -55,7 +55,11 @@ $(function() {
 								title : '日期',
 								sort : true,
 								width : 110,
-								totalRowText:"合计"
+								totalRowText:"合计",
+								templet:function(d){
+									var date=d.WORK_DATE
+									return date.substring(0,date.indexOf(" "))
+								},
 							},  {
 								field : 'LINER_NAME',
 								title : '组长',
@@ -112,6 +116,8 @@ $(function() {
 							data : [],
 							height : 'full-60',
 							page : true,
+							limit:50,
+							limits:[50,100,200,500,1000,5000],
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -310,13 +316,25 @@ function getReport(params) {
 	     url:context+'/report/worktime_m/getList',
         where:params,
 	     done: function(res1, curr, count){
-	    	// console.log(res1)
+	    	 console.log(res1)
               pageCurr=curr;
           }
 	}) 
 }
 
 function getDetail(param){
+	
+	tableIns1.reload({
+	   url:context+'/report/worktime_m/getListDetail',
+       where:param,
+	     done: function(res1, curr, count){
+	    	// console.log(res1)
+             pageCurr=curr;
+         }
+	}) 
+	openData("查看明细")
+	
+	/*
 	CoreUtil.sendAjax("/report/worktime_m/getListDetail", JSON.stringify(param),
 			function(data) {
 		 console.log(data.data)
@@ -339,7 +357,7 @@ function getDetail(param){
 				}
 			}, "POST", false, function(res) {
 				layer.alert(res.msg);
-			});
+			});*/
 }
 
 
