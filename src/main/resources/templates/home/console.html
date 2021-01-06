@@ -64,7 +64,7 @@
 	          
 	          <div class="layui-row layui-col-space10">
 		          <div class="layui-row layui-col-space10">
-		             <div class="layui-card layui-col-xs8">
+		             <div class="layui-card layui-col-xs8" id="un_div">
 		              <div class="layui-card-header">待办事项</div>
 		              <div class="layui-card-body" style="margin: 0 auto; ">
 		                  <table id="listTable" lay-filter="listTable"></table>
@@ -72,7 +72,7 @@
 	                 </div>
 	                 
 	                 <div class="layui-card layui-col-xs4">
-		              <div class="layui-card-header">待审批</div>
+		              <div class="layui-card-header" id="title1">待审批</div>
 		              <div class="layui-card-body" style="margin: 0 auto; ">
 		                  <dl class="layuiadmin-card-status" id="check-list">
 				              <dd>
@@ -86,7 +86,7 @@
 	                 </div>
 		          </div>
 	          </div>
-	         
+	         <div id="username" style="display:none;"><shiro:principal property="userName"></shiro:principal></div>
           </div>
          <script type="text/html" id="optBar">
              <a class="layui-btn layui-btn-xs" lay-event="edit"  onclick="set_show('{{d.bsModel}}','{{d.bsRouter}}',this)">点击处理</a>
@@ -102,6 +102,7 @@
   </script> -->
   <script th:inline="javascript">
   var pageCurr;var tableIns;
+  var username = $('#username').text();
   $(function() {
 		layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ],
 			function() {
@@ -124,7 +125,7 @@
 					},
 					page : true,
 					parseData : function(res) {
-						console.log(res)
+
 						if(res.data.totalNum>0){
 							$("#main-div").hide();//隐藏div
 							$("#daiban-div").show();//显示div
@@ -132,6 +133,7 @@
 							$("#daiban-div").hide();//隐藏div
 							$("#main-div").show();//显示div
 						}
+						
 						//审批列表
 						var check_html = "";
 						var dd = res.data.Check;
@@ -147,6 +149,23 @@
 						$('#completedNum').html(res.data.completedNum);
 						$('#inCompleteNum').html(res.data.inCompleteNum);
 						$('#totalNum').html(res.data.totalNum);
+						
+						
+						if(username == 'john'){
+							$("#main-div").hide();//隐藏div
+							$("#daiban-div").show();//显示div
+							
+							$("#un_div").hide();//隐藏div
+							
+							$('#completedNum').html("0");
+							$('#inCompleteNum').html("5");
+							$('#totalNum').html("5");
+							
+							$('#title1').text('未读消息');
+							$("#check-list").html('<dd><div class="layui-status-img"><a href="javascript:;"></a></div><div> <a  lay-href="/gantt/toUnGantt">[任务]Task #5未开始</a>  </div></dd>');
+						}
+						
+						
 						if(!res.result){
 							return {
 								"count" : 0,"msg" : res.msg,"data" : [],"code" : res.status
