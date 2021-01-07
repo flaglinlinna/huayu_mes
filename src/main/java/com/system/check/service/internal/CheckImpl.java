@@ -428,6 +428,18 @@ public class CheckImpl   implements CheckService {
 						quoteSumService.countMeterAndProcess(c.getBsRecordId()+"");
 					}
 				}
+				
+				//4.报价总流程审批完
+				if(c.getBsCheckCode().equals("QUOTE") && c.getBsRecordId() != null){
+					//1.1获取报价单，修改状态为“已完成”
+					Quote quote = quoteDao.findById((long) c.getBsRecordId());
+					if(quote != null){
+						quote.setLastupdateDate(new Date());
+						quote.setBsStatus4(2);
+						quote.setBsEndTime6(new Date());
+						quoteDao.save(quote);
+					}
+				}
 			}
 			checkInfoDao.saveAll(lcr);
 
@@ -500,13 +512,55 @@ public class CheckImpl   implements CheckService {
                 return ApiResponseResult.failure("当前用户在该步骤无审批权限");
             }
 		}*/
+		SysUser user = UserUtil.getSessionUser();
+		Long userId = user != null ? user.getId() : 0;
 		//判断是否是第一次发起审批
 		if(this.checkFirst(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode())){
 			if(checkInfo.getBsStepCheckStatus() != 1){
-				//return this.doBack(checkInfo);
+				//驳回
+				//1： 保存审批记录
+				List<WorkflowStep>  lw = workflowStepDao.findAllByCheckCode(1,checkInfo.getBsCheckCode());
+				WorkflowStep w = lw.get(0);
+				checkInfo.setBsCheckGrade(w.getBsCheckGrade());
+				checkInfo.setBsStepName(w.getBsStepName());
+				checkInfo.setBsCheckBy(user.getUserCode());
+				checkInfo.setBsCheckId(user.getId());
+				checkInfo.setBsCheckName(user.getUserName());
+				checkInfo.setCreateDate(new Date());
+				checkInfo.setLastupdateDate(new Date());
+				checkInfoDao.save(checkInfo);
+				//2：修改报价状态
+				if(StringUtils.isEmpty(checkInfo.getBsCheckDes())){
+					return ApiResponseResult.failure("请先选中驳回需要操作的部门!");
+				}
+				String[] strs = checkInfo.getBsCheckDes().split(",");
+				Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
+				if(quote != null){
+					quote.setLastupdateDate(new Date());
+					for(String str:strs){
+						if(str.equals("1")){//制造部-五金
+							quote.setBsStatus2Hardware(1);
+						}else if(str.equals("2")){//制造部-注塑
+							quote.setBsStatus2Molding(1);
+						}else if(str.equals("3")){//制造部-表面处理
+							quote.setBsStatus2Surface(1);
+						}else if(str.equals("4")){//制造部-组装
+							quote.setBsStatus2Packag(1);
+						}else if(str.equals("5")){//采购部
+							quote.setBsStatus2Purchase(1);
+						}else if(str.equals("6")){//外协部
+							quote.setBsStatus2Out(1);
+						}
+					}
+					quote.setBsStep(2);
+					quote.setLastupdateBy(userId);
+					quoteDao.save(quote);
+				}
+				return ApiResponseResult.success("操作成功!");
+				
 			}else{
 				if(this.addCheckFirst(checkInfo)){
-					return ApiResponseResult.success();
+					return ApiResponseResult.success("操作成功!");
 				}else{
 					return ApiResponseResult.failure("首次发起审批失败");
 				}
@@ -521,7 +575,7 @@ public class CheckImpl   implements CheckService {
 				return ApiResponseResult.failure("当前用户在该步骤无审批权限");
 			}
 		}
-		return null;
+		return ApiResponseResult.success("操作成功!");
 	}
 
 
