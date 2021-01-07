@@ -36,7 +36,7 @@ layui.use('layer', function(){
                 var cc = $('#desc').val();
                 var strs = low_flag.getValue('valueStr');
                 var json = {"bsRecordId":ppid,"bsStepCheckStatus":radioVal,"bsCheckComments":cc,"bsCheckCode":wn,"bsCheckDes":strs}
-                return false;
+                
                 $.ajax({
                     url: context+'/check/doCheckQuote',
                     type: "post",
@@ -58,33 +58,7 @@ layui.use('layer', function(){
                     }
 
                 });
-            },
-
-            //防御单位提交审核
-            submit2: function(){
-                var radioVal = $('input:radio[name="checkRadio"]:checked').val();
-                var cc = $('#desc').val();
-                var json = {"bsRecordId":ppid,"bsStepCheckStatus":1,"bsCheckComments":cc,"bsCheckCode":wn}
-                $.ajax({
-                    url: context+'/check/doCheck',
-                    type: "post",
-                    data: json,
-                    dataType: "json",
-                    success: function (res) {
-                        console.log(res)
-                        if(res.result===true){
-                        	layer.msg(res.msg, function () {
-                        		parent.layer.close(index);
-                        	});
-                            //parent.doLoadAll();//调用父页面重新加载表格的方法
-                        }else{
-                            layer.msg("当前用户在该步骤无审批权限或已提交审批！");
-                        }
-                    }
-
-                });
             }
-
             //在内部关闭iframe
             ,close: function(set){
                 parent.layer.close(index);
