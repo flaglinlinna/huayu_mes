@@ -241,6 +241,13 @@ public class Quote extends BaseEntity {
 	@ApiModelProperty(name = "bsProfitProd", value = "产品利润率")
 	@Column(length = 20)
 	protected BigDecimal bsProfitProd;
+
+	/**
+	 * 净利润(手工录入)
+	 */
+	@ApiModelProperty(name = "bsProfitNet", value = "净利润")
+	@Column(length = 20)
+	protected BigDecimal bsProfitNet;
 	
 	
 	/**
@@ -403,7 +410,15 @@ public class Quote extends BaseEntity {
     @JoinColumn(name = "createBy", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     protected SysUser user;
-	
+
+
+	public BigDecimal getBsProfitNet() {
+		return bsProfitNet;
+	}
+
+	public void setBsProfitNet(BigDecimal bsProfitNet) {
+		this.bsProfitNet = bsProfitNet;
+	}
 
 	public String getBsCode() {
 		return bsCode;

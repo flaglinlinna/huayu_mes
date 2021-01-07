@@ -26,7 +26,7 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsStatus(Integer delFlag,Long pkQuote,int bsStatus);
 
-	QuoteProcess findByDelFlagAndPkQuoteAndPkProc(Integer delFlag,Long pkQuote,Long pkProc);
+	QuoteProcess findByDelFlagAndPkQuoteAndPkProcAndBsName(Integer delFlag,Long pkQuote,Long pkProc,String bsName);
 	
 	@Modifying
     @Query("update QuoteProcess t set t.delFlag=1 where t.pkQuoteBom=?1  and t.pkQuote=?2 and t.delFlag=0")

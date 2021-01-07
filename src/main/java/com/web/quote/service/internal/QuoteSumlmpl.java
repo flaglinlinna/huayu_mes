@@ -1,6 +1,7 @@
 package com.web.quote.service.internal;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -202,8 +203,27 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		BigDecimal gl = quote.getBsManageFee().multiply(p_cb).divide(new BigDecimal(100));
 		
 		//7.利润
-		
-		
+
+		//净利润PROFIT_NET：手工维护录入。 (注意：修改净利润后其他数据需联动变化)
+		BigDecimal profitNet = quote.getBsProfitNet();
+		if(profitNet!=null) {
+			//系统报价：生产成本FEE_PROD_NET+管理费用FEE_MANAGE+净利润PROFIT_NET
+			BigDecimal bj_all = p_cb.add(gl).add(profitNet);
+			//毛利：管理费用FEE_MANAGE+净利润PROFIT_NET
+			BigDecimal ml = gl.add(profitNet);
+			//毛利率：毛利/系统报价
+			BigDecimal ml_gate =  ml.divide(bj_all,4,5);
+			//净利率：净利润/系统报价
+			BigDecimal profit_gs = profitNet.divide(bj_all,4,5);
+
+			map.put("bj_all",bj_all); //系统报价
+			map.put("ml",ml);  //毛利
+			map.put("ml_gate",ml_gate); //毛利率
+			map.put("profit_gs",profit_gs); //净利率
+
+		}
+
+
 		map.put("cl_hardware", cl_hardware);//五金材料
 		map.put("cl_molding", cl_molding);//注塑材料
 		map.put("cl_surface", cl_surface);//表面处理材料
@@ -230,9 +250,12 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		
 		map.put("mould_all", mould_all);//模具费用
 		
-		map.put("gl", mould_all);//管理费用
+		map.put("gl", gl);//管理费用
+		map.put("p_cb",p_cb); //生产成本
+		map.put("profitNet",profitNet); //净利润
+
 		
-		//map.put("", quote.getBsProfitProd());//保底毛利率
+//		map.put("", quote.getBsProfitProd());//保底毛利率
 		
 		return ApiResponseResult.success().data(map);
 	}
@@ -356,5 +379,17 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		productProcessDao.saveAll(lpp_out);
 
 		return ApiResponseResult.success();
+	}
+
+	@Override
+	public ApiResponseResult updateProfitNet(long quoteId, BigDecimal profitNet) throws Exception {
+		Quote o = quoteDao.findById(quoteId);
+		if(o==null){
+			return ApiResponseResult.failure("没有这个报价单");
+		}else {
+			o.setBsProfitNet(profitNet);
+			quoteDao.save(o);
+		}
+		return ApiResponseResult.success("修改净利润成功!");
 	}
 }

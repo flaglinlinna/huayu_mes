@@ -17,6 +17,34 @@ $(function() {
 							}
 						});
 
+						$('#profitNet').bind('keypress',function(event){
+							if(event.keyCode == "13") {
+								//alert('你输入的内容为：' + $('#barcode').val());
+								if(/^\d+$/.test($('#profitNet').val())==false && /^\d+\.\d+$/.test($('#profitNet').val())==false)
+								{
+									layer.msg("请输入数字类型的净利润");
+									return false;
+								}
+								if($('#profitNet').val()){
+
+									updateProfitNet($('#profitNet').val());
+
+									var bj_all = Number(quoteDetail.data.gl)+ Number(quoteDetail.data.p_cb) + Number($('#profitNet').val());
+									var ml =  Number(quoteDetail.data.gl) +  Number($('#profitNet').val());
+									form.val("itemForm", {
+										"bj_all":bj_all,
+										"ml":ml
+									})
+									layui.form.render('select');
+								}else{
+									layer.alert("请输入净利润!",function () {
+										$('#profitNet').focus();
+										layer.closeAll();
+									});
+								}
+							}
+						});
+
 						var quote_data = quoteDetail.data.Quote;
 						form.val("itemForm", {
 							"id" : quote_data.id,
@@ -49,13 +77,41 @@ $(function() {
 							
 							"wx_all" : quoteDetail.data.wx_all,
 							"hou_loss_all" : quoteDetail.data.hou_loss_all,
+
 							"mould_all" : quoteDetail.data.mould_all,
 							"gl" : quoteDetail.data.gl,
+							"bj_all":quoteDetail.data.bj_all,
+							"ml":quoteDetail.data.ml,
+							"profitNet":quoteDetail.data.profitNet,
+							"p_cb":quoteDetail.data.p_cb
 							
 						});
 						layui.form.render('select');
 					});
 });
+
+//修改净利润
+function updateProfitNet(value) {
+	var params = {
+		"pkQuote": quoteId,
+		"profitNet":value
+	};
+	CoreUtil.sendAjax("/quoteSum/updateProfitNet", JSON.stringify(params), function(
+		data) {
+		if (data.result) {
+			layer.alert(data.msg, function(index) {
+				layer.close(index);
+				// cleanProdErr();
+				// 加载页面
+				// loadAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
 
 function clean() {
 	// console.log($('#itemForm')[0])

@@ -3,11 +3,7 @@ package com.web.quote.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
@@ -16,6 +12,9 @@ import com.web.quote.service.QuoteSumService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import java.math.BigDecimal;
+import java.util.Map;
 
 @Api(description = "报价单汇总模块")
 @CrossOrigin
@@ -92,6 +91,26 @@ public class QuoteSumController extends WebController {
 			e.printStackTrace();
 			logger.error(methodName+"失败！", e);
 			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
+
+	@ApiOperation(value = "修改净利润", notes = "修改净利润", hidden = true)
+	@RequestMapping(value = "/updateProfitNet", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult updateProfitNet(@RequestBody Map<String, Object> params) {
+		long pkQuote = Long.parseLong(params.get("pkQuote").toString()) ;
+		BigDecimal profitNet = new BigDecimal(params.get("profitNet").toString());
+		String method = "/quoteSum/updateProfitNet";
+		String methodName = "修改净利润";
+		try {
+			ApiResponseResult result = quoteSumService.updateProfitNet(pkQuote,profitNet);
+			logger.debug(methodName+"=getQuoteList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+//			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 			return ApiResponseResult.failure(methodName+"失败！");
 		}
 	}

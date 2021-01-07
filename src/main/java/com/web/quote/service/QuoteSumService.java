@@ -5,6 +5,8 @@ import com.web.quote.entity.ProductMater;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+
 public interface QuoteSumService {
 	
 	public ApiResponseResult getList(String keyword,PageRequest pageRequest) throws Exception;
@@ -14,4 +16,6 @@ public interface QuoteSumService {
 	public ApiResponseResult getSumByQuote(String quoteId)throws Exception;
 	
 	public ApiResponseResult countMeterAndProcess(String quoteId)throws Exception;
+
+	public ApiResponseResult updateProfitNet(long quoteId, BigDecimal profitNet)throws Exception;
 }
