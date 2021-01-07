@@ -165,6 +165,13 @@ public class ProductMater extends BaseEntity {
 	@ApiModelProperty(name = "bsGear", value = "价格挡位")
 	@Column(length = 50)
 	protected String bsGear;
+	
+	/**
+	 * 采购说明
+	 */
+	@ApiModelProperty(name = "bsExplain", value = "采购说明")
+	@Column(length = 200)
+	protected String bsExplain;
 
 	/**
 	 * 参考价格
@@ -362,6 +369,14 @@ public class ProductMater extends BaseEntity {
 
 	public void setBsFee(BigDecimal bsFee) {
 		this.bsFee = bsFee;
+	}
+
+	public String getBsExplain() {
+		return bsExplain;
+	}
+
+	public void setBsExplain(String bsExplain) {
+		this.bsExplain = bsExplain;
 	}
 	
 }

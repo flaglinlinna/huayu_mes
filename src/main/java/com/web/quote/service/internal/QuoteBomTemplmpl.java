@@ -147,7 +147,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 					temp.setPkUnit(unitList.get(0).getId());
 				}
 				String bsRadix = tranCell(sheet.getRow(row).getCell(10));
-
+				String bsExplain = tranCell(sheet.getRow(row).getCell(11));//lst-20210107增加采购说明字段
 				if(StringUtils.isNotEmpty(bsProQty)) {
 					if(!bsProQty.matches("^\\d+\\.\\d+$") && !bsProQty.matches("^^\\d+$")){
 						errInfo += "制品重需输入数字类型";
@@ -180,6 +180,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 
 				temp.setBsElement(bsElement);
 				temp.setBsRadix(bsRadix);
+				temp.setBsExplain(bsExplain);
 				temp.setCreateDate(doExcleDate);
 				temp.setCreateBy(userId);
 				quoteBomList.add(temp);
@@ -217,6 +218,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			quoteBom.setPkBjWorkCenter(temp.getPkBjWorkCenter());
 			quoteBom.setFmemo(temp.getFmemo());
 			quoteBom.setBsRadix(temp.getBsRadix());
+			quoteBom.setBsExplain(temp.getBsExplain());
 			quoteBomList.add(quoteBom);
 		}
 		quoteBomDao.saveAll(quoteBomList);

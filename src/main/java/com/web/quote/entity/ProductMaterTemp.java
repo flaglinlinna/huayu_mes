@@ -190,7 +190,13 @@ public class ProductMaterTemp extends BaseEntity {
 	@Column(length = 50)
 	protected String bsRefer;
 
-
+	/**
+	 * 采购说明
+	 */
+	@ApiModelProperty(name = "bsExplain", value = "采购说明")
+	@Column(length = 200)
+	protected String bsExplain;
+	
 	/**
 	 * 评估价格
 	 */
@@ -405,4 +411,13 @@ public class ProductMaterTemp extends BaseEntity {
 	public void setCheckStatus(Integer checkStatus) {
 		this.checkStatus = checkStatus;
 	}
+
+	public String getBsExplain() {
+		return bsExplain;
+	}
+
+	public void setBsExplain(String bsExplain) {
+		this.bsExplain = bsExplain;
+	}
+	
 }

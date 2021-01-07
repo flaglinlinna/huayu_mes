@@ -143,7 +143,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 //		Resource resource = new ClassPathResource("static/excelFile/采购填报价格模板.xlsx");
 //		InputStream in = resource.getInputStream();
 		String[] map_arr = new String[]{"id","bsType","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix",
-				"bsGeneral","bsGear","bsRefer","bsAssess","fmemo","bsSupplier"};
+				"bsGeneral","bsGear","bsRefer","bsAssess","fmemo","bsSupplier","bsExplain"};
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		for(ProductMater productMater : list){
 			Map<String, Object> map = new HashMap<>();
@@ -164,6 +164,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			map.put("bsQty", productMater.getBsQty());
 			map.put("bsUnit", productMater.getBsUnit());
 			map.put("bsRadix", productMater.getBsRadix());
+			map.put("bsExplain", productMater.getBsExplain());
 			if(productMater.getBsGeneral()!=null){
 				map.put("bsGeneral", productMater.getBsGeneral()==1?"是":"否");
 			}

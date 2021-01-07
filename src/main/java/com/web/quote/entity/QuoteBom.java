@@ -130,6 +130,13 @@ public class QuoteBom extends BaseEntity {
 	@ApiModelProperty(name = "bsModel", value = "材料规格")
 	@Column(length = 200)
 	protected String bsModel;
+	
+	/**
+	 * 采购说明
+	 */
+	@ApiModelProperty(name = "bsExplain", value = "采购说明")
+	@Column(length = 200)
+	protected String bsExplain;
 
 	/**
 	 * 用量
@@ -303,6 +310,11 @@ public class QuoteBom extends BaseEntity {
 		this.bsStatus = bsStatus;
 	}
 
-	
-	
+	public String getBsExplain() {
+		return bsExplain;
+	}
+
+	public void setBsExplain(String bsExplain) {
+		this.bsExplain = bsExplain;
+	}
 }

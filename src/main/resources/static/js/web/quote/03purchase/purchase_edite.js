@@ -58,6 +58,7 @@ $(function() {
 				{field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet: '#selectGear'},
 				{field : 'bsRefer', width:110, title : '参考价格',style:'background-color:#d2d2d2'},
 				{field : 'bsAssess', width:110, title : '评估价格', edit:'number'	},
+				{field : 'bsExplain', width:110, title : '采购说明'},
 				{field : 'fmemo', width:110, title : '备注', edit:'text'},
 				{field : 'bsSupplier', width:110, title : '供应商', edit:'text'}
 				] ],
@@ -106,6 +107,7 @@ $(function() {
 				{field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet: '#selectGear'},
 				{field : 'bsRefer', width:110, title : '参考价格',style:'background-color:#d2d2d2'},
 				{field : 'bsAssess', width:110, title : '评估价格', edit:'number'	},
+				{field : 'bsExplain', width:110, title : '采购说明'},
 				{field : 'fmemo', width:110, title : '备注', edit:'text'},
 				{field : 'bsSupplier', width:110, title : '供应商', edit:'text'},
 				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}

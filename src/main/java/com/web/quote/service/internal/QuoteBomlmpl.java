@@ -91,6 +91,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 		o.setBsModel(quoteBom.getBsModel());
 //		o.setBsQty(quoteBom.getBsQty());
 		o.setBsRadix(quoteBom.getBsRadix());
+		o.setBsExplain(quoteBom.getBsExplain());
 //		o.setBsUnit(quoteBom.getBsUnit());
 		o.setBsSupplier(quoteBom.getBsSupplier());
 		o.setLastupdateDate(new Date());
@@ -124,7 +125,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 		String excelPath = "static/excelFile/";
 		String fileName = "外购件清单模板.xlsx";
 		String[] map_arr = new String[]{"id","bsElement","bsComponent","wcName","itemType","bsMaterName","bsModel",
-										"fmemo","bsProQty","bsRadix"};
+										"fmemo","bsProQty","unitName","bsRadix","bsExplain"};
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for(QuoteBom quoteBom :quoteBomList){
@@ -146,6 +147,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 			map.put("fmemo",quoteBom.getFmemo());
 			map.put("bsProQty",quoteBom.getBsProQty());
 			map.put("bsRadix",quoteBom.getBsRadix());
+			map.put("bsExplain",quoteBom.getBsExplain());//lst-20210107-增加采购说明字段
 			list.add(map);
 		}
 		ExcelExport.export(response,list,workbook,map_arr,excelPath+fileName,fileName);
@@ -227,6 +229,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 					quoteBom.setPkUnit(unitList.get(0).getId());
 				}
 				String bsRadix = tranCell(sheet.getRow(row).getCell(9));
+				String bsExplain = tranCell(sheet.getRow(row).getCell(10));//lst-20210107-新增采购说明字段
 				quoteBom.setPkQuote(pkQuote);
 				quoteBom.setBsElement(bsElement);
 				quoteBom.setBsComponent(bsComponent);
@@ -234,6 +237,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 //				quoteBom.setBsItemCode(bsItemCode); 暂定不存，系统生成
 				quoteBom.setBsModel(bsModel);
 				quoteBom.setFmemo(fmemo);
+				quoteBom.setBsExplain(bsExplain);//lst-20210107
 				if(StringUtils.isNotEmpty(bsProQty)) {
 					quoteBom.setBsProQty(new BigDecimal(bsProQty));
 				}

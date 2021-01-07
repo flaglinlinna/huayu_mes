@@ -186,6 +186,13 @@ public class QuoteBomTemp extends BaseEntity {
 	@ApiModelProperty(name = "bsSupplier", value = "供应商")
 	@Column(length = 50)
 	protected String bsSupplier;
+	
+	/**
+	 * 采购说明
+	 */
+	@ApiModelProperty(name = "bsExplain", value = "采购说明")
+	@Column(length = 200)
+	protected String bsExplain;
 
 	public String getBsElement() {
 		return bsElement;
@@ -371,6 +378,11 @@ public class QuoteBomTemp extends BaseEntity {
 		this.bsStatus = bsStatus;
 	}
 
-	
-	
+	public String getBsExplain() {
+		return bsExplain;
+	}
+
+	public void setBsExplain(String bsExplain) {
+		this.bsExplain = bsExplain;
+	}
 }

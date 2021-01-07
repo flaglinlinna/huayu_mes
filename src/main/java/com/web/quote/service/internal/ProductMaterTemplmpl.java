@@ -368,6 +368,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 String bsAssess = tranCell(sheet.getRow(row).getCell(11));
                 String fmemo = tranCell(sheet.getRow(row).getCell(12));
                 String bsSupplier = tranCell(sheet.getRow(row).getCell(13));
+                String bsExplain = tranCell(sheet.getRow(row).getCell(14));
                 ProductMaterTemp temp = new ProductMaterTemp();
                 temp.setBsPurchase(0);
                 temp.setCreateBy(userId);
@@ -422,6 +423,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 temp.setBsAssess(bsAssess);
                 temp.setFmemo(fmemo);
                 temp.setBsSupplier(bsSupplier);
+                temp.setBsExplain(bsExplain);
                 if(errInfo ==""){
                     temp.setCheckStatus(0);
                 }else {
@@ -508,6 +510,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             purchase.setBsAssess(new BigDecimal(temp.getBsAssess()));
             purchase.setFmemo(temp.getFmemo());
             purchase.setBsSupplier(temp.getBsSupplier());
+            purchase.setBsExplain(temp.getBsExplain());//lst-202107
             productMaterList.add(purchase);
         }
         productMaterDao.saveAll(productMaterList);
