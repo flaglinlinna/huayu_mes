@@ -54,5 +54,21 @@ public class GanttController extends WebController {
 		}
 		return mav;
 	}
+	
+	@ApiOperation(value = "甘特图", notes = "甘特图", hidden = true)
+	@RequestMapping(value = "/toImg1")
+	public ModelAndView toImg1(String img) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			mav.addObject("Img", img);
+			mav.setViewName("/web/gantt/img1");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("甘特图失败！", e);
+		}
+		return mav;
+	}
+
+	
 
 }

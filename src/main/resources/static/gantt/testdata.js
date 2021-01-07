@@ -55,19 +55,19 @@ var demo_tasks = {
 
 var users_data = {
 	"data":[
-		{"id":1, "text":"Project #1", "start_date":"01-04-2020", "duration":"11", "progress": 0.6, "open": true, "users": "John", "priority": "2"},
-		{"id":2, "text":"Task #1", "start_date":"03-04-2020", "duration":"5", "parent":"1", "progress": 1, "open": true, "users": "Mike", "priority": "1"},
-		{"id":3, "text":"Task #2", "start_date":"02-04-2020", "duration":"7", "parent":"1", "progress": 0.5, "open": true, "users": "Anna", "priority": "1"},
-		{"id":4, "text":"Task #3", "start_date":"02-04-2020", "duration":"6", "parent":"1", "progress": 0.8, "open": true, "users": "Mike", "priority": "2"},
-		{"id":5, "text":"Task #4", "start_date":"02-04-2020", "duration":"5", "parent":"1", "progress": 0.2, "open": true, "users": "John", "priority": "3"},
-		{"id":6, "text":"Task #5", "start_date":"02-04-2020", "duration":"7", "parent":"1", "progress": 0, "open": true, "users": "John", "priority": "2"},
-		{"id":7, "text":"Task #2.1", "start_date":"03-04-2020", "duration":"2", "parent":"3", "progress": 1, "open": true, "users": "Mike", "priority": "2"},
-		{"id":8, "text":"Task #2.2", "start_date":"06-04-2020", "duration":"3", "parent":"3", "progress": 0.8, "open": true, "users": "Anna", "priority": "3"},
-		{"id":9, "text":"Task #2.3", "start_date":"10-04-2020", "duration":"4", "parent":"3", "progress": 0.2, "open": true, "users": "Mike", "priority": "1"},
-		{"id":10, "text":"Task #2.4", "start_date":"10-04-2020", "duration":"4", "parent":"3", "progress": 0, "open": true, "users": "John", "priority": "1"},
-		{"id":11, "text":"Task #4.1", "start_date":"03-04-2020", "duration":"4", "parent":"5", "progress": 0.5, "open": true, "users": "John", "priority": "3"},
-		{"id":12, "text":"Task #4.2", "start_date":"03-04-2020", "duration":"4", "parent":"5", "progress": 0.1, "open": true, "users": "John", "priority": "3"},
-		{"id":13, "text":"Task #4.3", "start_date":"03-04-2020", "duration":"5", "parent":"5", "progress": 0, "open": true, "users": "Anna", "priority": "3"}
+		{"id":1, "text":"Project #1", "start_date":"01-04-2020", "duration":"11", "progress": 0.6, "open": true, "users": "John", "priority": "2","descrip":""},
+		{"id":2, "text":"Task #1", "start_date":"03-04-2020", "duration":"5", "parent":"1", "progress": 1, "open": true, "users": "Mike", "priority": "1","descrip":"按照进度完成"},
+		{"id":3, "text":"Task #2", "start_date":"02-04-2020", "duration":"7", "parent":"1", "progress": 0.5, "open": true, "users": "Anna", "priority": "1","descrip":""},
+		{"id":4, "text":"Task #3", "start_date":"02-04-2020", "duration":"6", "parent":"1", "progress": 0.8, "open": true, "users": "Mike", "priority": "2","descrip":""},
+		{"id":5, "text":"Task #4", "start_date":"02-04-2020", "duration":"5", "parent":"1", "progress": 0.2, "open": true, "users": "John", "priority": "3","descrip":""},
+		{"id":6, "text":"Task #5", "start_date":"02-04-2020", "duration":"7", "parent":"1", "progress": 0, "open": true, "users": "John", "priority": "2","descrip":""},
+		{"id":7, "text":"Task #2.1", "start_date":"03-04-2020", "duration":"2", "parent":"3", "progress": 1, "open": true, "users": "Mike", "priority": "2","descrip":"良好"},
+		{"id":8, "text":"Task #2.2", "start_date":"06-04-2020", "duration":"3", "parent":"3", "progress": 0.8, "open": true, "users": "Anna", "priority": "3","descrip":""},
+		{"id":9, "text":"Task #2.3", "start_date":"10-04-2020", "duration":"4", "parent":"3", "progress": 0.2, "open": true, "users": "Mike", "priority": "1","descrip":""},
+		{"id":10, "text":"Task #2.4", "start_date":"10-04-2020", "duration":"4", "parent":"3", "progress": 0, "open": true, "users": "John", "priority": "1","descrip":""},
+		{"id":11, "text":"Task #4.1", "start_date":"03-04-2020", "duration":"4", "parent":"5", "progress": 0.5, "open": true, "users": "John", "priority": "3","descrip":""},
+		{"id":12, "text":"Task #4.2", "start_date":"03-04-2020", "duration":"4", "parent":"5", "progress": 0.1, "open": true, "users": "John", "priority": "3","descrip":""},
+		{"id":13, "text":"Task #4.3", "start_date":"03-04-2020", "duration":"5", "parent":"5", "progress": 0, "open": true, "users": "Anna", "priority": "3","descrip":""}
 	],
 	/*"links":[
 		{"id":"10","source":"11","target":"12","type":"1"},

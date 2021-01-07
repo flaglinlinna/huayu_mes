@@ -64,7 +64,7 @@ gantt.locale={
         icon_delete: "删除",
         confirm_closing: "请确认是否撤销修改!", //Your changes will be lost, are your sure?
         confirm_deleting: "是否删除任务?",
-        section_description: "描述",
+        section_description: "任务",
         section_time: "时间范围",
         section_type: "类型",
         section_priority:"优先级",
@@ -113,7 +113,7 @@ gantt.serverList("staff", [
                    		{key: 2, label: "中"},
                    		{key: 3, label: "低"}
                    	]);
-	gantt.config.grid_width = 480;
+	gantt.config.grid_width = 730;
 	gantt.config.add_column = false;
 	gantt.templates.grid_row_class = function (start_date, end_date, item) {
 		if (item.progress == 0) return "red";
@@ -131,7 +131,9 @@ gantt.serverList("staff", [
 		return "";
 	}
 	gantt.config.columns = [
-		{name: "text", label: "任务名称", tree: true, width: '*'},
+		{name: "text", label: "任务", tree: true, width: '*'},
+		{name: "start_date", label: "开始时间", align: "center", width: 100},
+		{name: "end_date", label: "开始时间", align: "center", width: 100},
 		{
 			name: "progress", label: "进度", width: 80, align: "center",
 			template: function (item) {
@@ -143,12 +145,18 @@ gantt.serverList("staff", [
 				return Math.round(item.progress * 100) + "%";
 			}
 		},
+		{name: "descrip", label: "完成情况说明", align: "center", width: 100,
+			template: function (item) {				
+				if(!item.descrip)return "";
+				return item.descrip;
+			}
+		},
 		{
-			name: "priority", label: "优先级", align: "center", width: 100,template: function (item) {
+			name: "priority", label: "优先级", align: "center", width: 50,template: function (item) {
 				return byId(gantt.serverList('priority'), item.priority)},
 		},
 		{
-			name: "assigned", label: "负责人", align: "center", width: 100,
+			name: "assigned", label: "负责人", align: "center", width: 80,
 			template: function (item) {
 				if (!item.users) return "未指派";
 				return item.users;
