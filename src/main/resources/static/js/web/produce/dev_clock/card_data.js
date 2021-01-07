@@ -39,22 +39,13 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			}
+			cols : [ [
+				{type : 'numbers'},
+				{type : 'checkbox'},
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
-				field : 'EMP_CODE',
-				title : '员工工号',
-					width : 100,
-			},{
-				field : 'EMP_NAME',
-				title : '员工姓名',
-					width : 100,
-			},{
-				field : 'DEV_TYPE',
-				title : '卡机类型',
-					width : 100,
+			 	{field : 'EMP_CODE', title : '员工工号', width : 100,},
+				{field : 'EMP_NAME', title : '员工姓名', width : 100,},
+				{field : 'DEV_TYPE', title : '卡机类型', width : 100,
 			}, {
 				field : 'DEV_IP',
 				title : '卡机IP',
@@ -275,6 +266,58 @@ $(function() {
 		}
 	});
 });
+
+//批量设置状态
+function setBatchStatus() {
+	var checkdata = layui.table.checkStatus("cardList").data;
+	var ids = "";
+	for(var i = 0;i<checkdata.length;i++){
+		ids = ids+ checkdata[i].ID+',';
+	}
+	if(ids ==""){
+		layer.msg("请先选中需要修改的信息");
+		return false;
+	}
+	layer.confirm(
+		'您确定要修改选中信息的卡点状态吗？', {
+			btn1 : function(index) {
+				var param = {
+					"id" : ids,
+				};
+				CoreUtil.sendAjax("/produce/card_data/doStatus", JSON
+					.stringify(param), function(data) {
+					if (data.result) {
+						layer.alert("操作成功", function() {
+							layer.closeAll();
+							loadAll();
+						});
+					} else {
+						layer.alert(data.msg, function() {
+							// obj.elem.checked = isStatus;
+							layer.form.render();
+							layer.closeAll();
+						});
+					}
+				}, "POST", false, function(res) {
+					layer.alert("操作请求错误，请您稍后再试", function() {
+
+						layer.closeAll();
+					});
+				});
+			},
+			btn2 : function() {
+				obj.elem.checked = isStatus;
+				form.render();
+				layer.closeAll();
+			},
+			cancel : function() {
+				obj.elem.checked = isStatus;
+				form.render();
+				layer.closeAll();
+			}
+		})
+}
+
 // 新增编辑弹出框
 function openCardData(id, title) {
 	if (id == null || id == "") {

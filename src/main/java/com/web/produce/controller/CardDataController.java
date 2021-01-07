@@ -203,9 +203,9 @@ public class CardDataController extends WebController{
 		public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) {
 			String method = "/produce/card_data/doStatus";String methodName ="设置卡点状态";
 			try {
-				long id = Long.parseLong(params.get("id").toString()) ;
-				Integer fstatus=Integer.parseInt(params.get("checkStatus").toString());
-	            ApiResponseResult result = cardDataService.doStatus(id,fstatus);
+				String ids = params.get("id").toString() ;
+//				Integer fstatus=Integer.parseInt(params.get("checkStatus").toString());
+	            ApiResponseResult result = cardDataService.doStatus(ids,0);
 	            logger.debug("根据产线更新指纹机信息=doStatus:");
 	            getSysLogService().success(module,method, methodName, params);
 	            return result;

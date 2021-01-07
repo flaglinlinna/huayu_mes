@@ -530,7 +530,7 @@ function initSelect() {
 			$("#bsComponent").append("<option value=''> 请选择</option>");
 		}
 		$("#bsComponent").append(
-			"<option value=" + bomlist[i].BS_COMPONENT + ">"
+			"<option value='" + bomlist[i].BS_COMPONENT + "'>"
 			+ bomlist[i].BS_COMPONENT + "</option>");
 	}
     layui.form.render();

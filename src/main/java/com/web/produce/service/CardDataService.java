@@ -20,7 +20,7 @@ public interface CardDataService {
 
 	public ApiResponseResult getList(String keyword,String status, PageRequest pageRequest) throws Exception;
 	
-	public ApiResponseResult doStatus(Long id, Integer fstatus) throws Exception;// 卡点是否有效
+	public ApiResponseResult doStatus(String ids, Integer fstatus) throws Exception;// 卡点是否有效
 	
 	public ApiResponseResult getEmp() throws Exception;
 	

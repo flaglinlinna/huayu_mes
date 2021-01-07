@@ -215,7 +215,10 @@ public class ProductProcessController extends WebController {
 		try {
 			long id = Long.parseLong(params.get("id").toString());
 			String bsType = params.get("bsType").toString();
-			String bsCode = params.get("bsCode").toString();
+			String bsCode = "";
+			if(!("out").equals(bsType)){
+				 bsCode = params.get("bsCode").toString();
+			}
 			ApiResponseResult result = productProcessService.doStatus(id,bsType,bsCode);
 			logger.debug("确认完成=Confirm:");
 			getSysLogService().success(module,method, methodName, params);

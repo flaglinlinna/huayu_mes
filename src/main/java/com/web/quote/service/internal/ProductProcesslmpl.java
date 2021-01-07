@@ -388,13 +388,16 @@ public class ProductProcesslmpl implements ProductProcessService {
             o.setLastupdateDate(new Date());
             o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
-        productProcessDao.saveAll(productMaterList);
-        //项目状态设置-状态 2：已完成
-      	quoteItemDao.switchStatus(2, quoteId, bsCode);
-        //设置结束时间
-        quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
-        //20201225-fyx-计算后工序良率
-        this.updateHouYield(quoteId, bsType);
+        if(!("out").equals(bsType)) {
+            productProcessDao.saveAll(productMaterList);
+            //项目状态设置-状态 2：已完成
+            quoteItemDao.switchStatus(2, quoteId, bsCode);
+            //设置结束时间
+            quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
+        }
+            //20201225-fyx-计算后工序良率
+            this.updateHouYield(quoteId, bsType);
+
         
         return ApiResponseResult.success("确认完成成功！");
     }
