@@ -212,14 +212,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			//毛利：管理费用FEE_MANAGE+净利润PROFIT_NET
 			BigDecimal ml = gl.add(profitNet);
 			//毛利率：毛利/系统报价
-			BigDecimal ml_gate =  ml.divide(bj_all,4,5);
+			BigDecimal ml_rate =  ml.multiply(new BigDecimal("100")).divide(bj_all,2,5);
 			//净利率：净利润/系统报价
-			BigDecimal profit_gs = profitNet.divide(bj_all,4,5);
+			BigDecimal profit_gs = profitNet.multiply(new BigDecimal("100")).divide(bj_all,2,5);
 
 			map.put("bj_all",bj_all); //系统报价
 			map.put("ml",ml);  //毛利
-			map.put("ml_gate",ml_gate); //毛利率
-			map.put("profit_gs",profit_gs); //净利率
+			map.put("ml_rate",ml_rate+"%"); //毛利率
+			map.put("profit_gs",profit_gs+"%"); //净利率
 
 		}
 

@@ -31,9 +31,13 @@ $(function() {
 
 									var bj_all = Number(quoteDetail.data.gl)+ Number(quoteDetail.data.p_cb) + Number($('#profitNet').val());
 									var ml =  Number(quoteDetail.data.gl) +  Number($('#profitNet').val());
+									var ml_rate = ml/bj_all*100;
+									var profit_gs = $('#profitNet').val()/bj_all*100;
 									form.val("itemForm", {
-										"bj_all":bj_all,
-										"ml":ml
+										"bj_all":bj_all.toFixed(2),
+										"ml":ml,
+										"ml_rate":ml_rate.toFixed(2)+"%",
+										"profit_gs":profit_gs.toFixed(2)+"%"
 									})
 									layui.form.render('select');
 								}else{
@@ -83,7 +87,9 @@ $(function() {
 							"bj_all":quoteDetail.data.bj_all,
 							"ml":quoteDetail.data.ml,
 							"profitNet":quoteDetail.data.profitNet,
-							"p_cb":quoteDetail.data.p_cb
+							"p_cb":quoteDetail.data.p_cb,
+							"ml_rate":quoteDetail.data.ml_rate,
+							"profit_gs":quoteDetail.data.profit_gs,
 							
 						});
 						layui.form.render('select');
