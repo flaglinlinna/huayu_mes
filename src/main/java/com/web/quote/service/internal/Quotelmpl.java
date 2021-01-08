@@ -82,6 +82,8 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         
     	quote.setCreateDate(new Date());
     	quote.setCreateBy(UserUtil.getSessionUser().getId());
+
+    	quote.setBsProfitNet(new BigDecimal("4.87")); //20210108-hjj-净利润设定默认值
     	quote = quoteDao.save(quote);
     	//2:建立子表-编码-项目名-代办人-开始/结束时间-进度状态【需有基础信息】
     	List<QuoteItem> lqi = new ArrayList<QuoteItem>();

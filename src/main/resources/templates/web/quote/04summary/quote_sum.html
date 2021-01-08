@@ -109,14 +109,14 @@
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label">系统报价</label>
-						<div class="layui-input-block">
+						<div class="layui-input-block" style="width: 130px;">
 							<input id="" name ="bj_all" autocomplete="off" class="layui-input grey"
 								   readonly="readonly" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">生产成本</label>
-						<div class="layui-input-inline">
+						<div class="layui-input-inline" style="width: 130px;">
 							<input id="" name="p_cb" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 							<span
@@ -125,7 +125,7 @@
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">净利润</label>
-						<div class="layui-input-inline">
+						<div class="layui-input-inline" style="width: 130px;">
 							<input id="profitNet" name ="profitNet" lay-filter="profitNet" lay-verify="num"
 								   autocomplete="off" class="layui-input" type="text" />
 							<span
@@ -134,23 +134,23 @@
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">净利率</label>
-						<div class="layui-input-inline">
+						<div class="layui-input-inline" style="width: 130px;">
 							<input id="profit_gs" name="profit_gs" autocomplete="off"
-								   style="width: 75%"  readonly="readonly" class="layui-input grey" type="text" />
+								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label">模具费用</label>
-						<div class="layui-input-block">
+						<div class="layui-input-block" style="width: 130px;">
 							<input id="mould_all" name="mould_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">管理费用</label>
-						<div class="layui-input-inline">
+						<div class="layui-input-inline" style="width: 130px;">
 							<input id="gl" name="gl" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 							<span
@@ -159,7 +159,7 @@
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">毛利</label>
-						<div class="layui-input-inline">
+						<div class="layui-input-inline" style="width: 130px;">
 							<input id="" name="ml" autocomplete="off" readonly="readonly"
 								   class="layui-input grey" type="text" />
 							<span
@@ -168,9 +168,9 @@
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">毛利率</label>
-						<div class="layui-input-inline" >
+						<div class="layui-input-inline" style="width: 130px;">
 							<input id="ml_rate" name="ml_rate" autocomplete="off"
-								   style="width: 75%"   readonly="readonly" class="layui-input grey" type="text" />
+								    readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 				</div>
@@ -325,6 +325,18 @@
 
 			</form>
 		</div>
+
+		<!--材料价格明细-->
+		<div id="materDetailDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
+			<table id="materTable" lay-filter="materTable"></table>
+		</div>
+
+		<!--人工、制费明细-->
+		<div id="processDetailDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
+			<table id="processTable" lay-filter="processTable"></table>
+		</div>
+
+
 		<script th:inline="javascript">
 		var quoteId=[[${quoteId}]];
 		var quoteDetail=[[${quoteDetail}]];

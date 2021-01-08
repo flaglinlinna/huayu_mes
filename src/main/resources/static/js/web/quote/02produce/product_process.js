@@ -476,6 +476,8 @@ $(function() {
 				"bsCapacity":obj.bsCapacity,
 				"bsCycle":obj.bsCycle,
 				"bsYield":obj.bsYield,
+				"bsLoss":obj.bsLoss,
+				"bsFeeWxAll":obj.bsFeeWxAll
 			});
 			openProdErr(id, "编辑工艺信息")
 		};

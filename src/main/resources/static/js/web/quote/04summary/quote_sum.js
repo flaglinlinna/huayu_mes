@@ -6,7 +6,7 @@ $(function() {
 
 	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ],
 					function() {
-						var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table;
+						var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table ,table1 =layui.table;
 
 						form.verify({
 							num : function(value) {
@@ -35,7 +35,7 @@ $(function() {
 									var profit_gs = $('#profitNet').val()/bj_all*100;
 									form.val("itemForm", {
 										"bj_all":bj_all.toFixed(2),
-										"ml":ml,
+										"ml":ml.toFixed(2),
 										"ml_rate":ml_rate.toFixed(2)+"%",
 										"profit_gs":profit_gs.toFixed(2)+"%"
 									})
@@ -93,8 +93,304 @@ $(function() {
 							
 						});
 						layui.form.render('select');
+
+						//监听双击事件
+						$(document).on('dblclick',function (obj) {
+						    console.log(obj.target.id);
+						    var inputId = obj.target.id;
+						    //材料成本
+						    if(inputId =="cl_hardware"){
+                                getMaterDetail("hardware","五金材料价格明细 单价*用量/基数")
+                            }else if(inputId == "cl_molding"){
+                                getMaterDetail("molding","注塑材料价格明细  材料单价*(制品重+水口重/穴数)用量/基数")
+                            }else if(inputId == "cl_surface"){
+                                getMaterDetail("surface","表面处理材料价格明细  单价*用量/基数")
+                            }else if(inputId == "cl_packag"){
+                                getMaterDetail("packag","组装材料价格明细  单价*用量/基数")
+                            }
+						    //人工和制费
+						    else if(inputId =="lh_hardware"){
+                                getProcessDetail("hardware","五金人工/制费明细 人工工时费（元/H）*人数*成型周期(S）/3600 /基数")
+                            }else if(inputId == "lh_molding"){
+                                getProcessDetail("molding","注塑人工/制费明细  人工费率（元/H）*人数*成型周期(S）/3600/ 穴数/基数")
+                            }else if(inputId == "lh_surface"){
+                                getProcessDetail("surface","表面处理人工/制费明细  人数*费率/产能/基数")
+                            }else if(inputId == "lh_packag"){
+                                getProcessDetail("packag","组装人工/制费明细  人数*费率/产能/基数")
+                            }else if(inputId =="wx_all"){
+                                getProcessDetail("out","外协加工费用明细 损耗费=外协费用*损耗率")
+                            }
+                        })
+
+						//材料价格明细
+                        tableIns = table.render({
+                            elem : '#materTable',
+                            // url : context + '/purchase/getQuoteList?quoteId='+quoteId,
+                            method : 'get' // 默认：get请求
+                            ,
+                            cellMinWidth : 80,
+                            totalRow :true,
+                            height:'full-95'//固定表头&full-查询框高度
+                            //,even:true,//条纹样式
+                            ,page : true,
+                            request : {
+                                pageName : 'page' // 页码的参数名称，默认：page
+                                ,
+                                limitName : 'rows' // 每页数据量的参数名，默认：limit
+                            },
+                            parseData : function(res) {
+                                // 可进行数据操作
+                                return {
+                                    "count" : res.data.total,
+                                    "msg" : res.msg,
+                                    "data" : res.data.rows,
+                                    "code" : res.status
+                                    // code值为200表示成功
+                                }
+                            },
+                            cols : [ [
+                                {type : 'numbers'},
+                                {field: 'bsType', width: 100, title: '类型', sort: true, style:'background-color:#d2d2d2',
+                                    // * 五金:hardware
+                                    // * 注塑:molding
+                                    // * 表面处理:surface
+                                    // * 组装:packag
+                                    templet: function (d) {
+                                        if (d.bsType == 'hardware') {
+                                            return '五金'
+                                        } else if (d.bsType == 'molding') {
+                                            return '注塑'
+                                        }else if (d.bsType == 'surface') {
+                                            return '表面处理'
+                                        }else if (d.bsType == 'packag') {
+                                            return '组装'
+                                        }
+                                    },totalRowText:"合计"
+                                },
+                                {field : 'bsComponent',width:150,title : '零/组件名称',sort:true},
+                                {field : 'bsMaterName',width:120, title : '材料名称',sort:true},
+                                {field : 'bsModel', width:150, title : '材料规格'},
+                                {field : 'bsQty', width:80, title : '用量',totalRow: true},
+                                {field : 'bsUnit', width:80, title : '单位'},
+                                {field : 'bsRadix', width:80, title : '基数'},
+                                {field : 'bsGeneral', width:120, title : '是否通用物料'},
+                                // {field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet: '#selectGear'},
+                                {field : 'bsRefer', width:110, title : '参考价格'},
+                                {field : 'bsAssess', width:110, title : '评估价格'	},
+                                {field : 'bsFee', width:110, title : '材料总价',
+                                    // templet:function(d){
+                                    //  return Number(d.bsQty)*Number(d.bsAssess)/Number(d.bsRadix);
+                                    // },
+                                    style:'background-color:#d2d2d2',totalRow: true},
+                                {field : 'bsExplain', width:110, title : '采购说明'},
+                                {field : 'fmemo', width:110, title : '备注'},
+                                {field : 'bsSupplier', width:110, title : '供应商'}
+                            ] ],
+                            done : function(res, curr, count) {
+                                pageCurr = curr;
+                                // var bsFee=0;//统计结算后
+                                // layui.each(res.data,function(index,d){
+                                //     bsFee+=Number(res.bsQty)*Number(res.bsAssess)/Number(res.bsRadix)
+                                // })
+                                // this.elem.next().find('.layui-table-total td[data-field=“bsFee”] .layui-table-cell').text(bsFee)
+                            }
+                        });
+
+                        tableIns1 = table1.render({
+                            elem : '#processTable',
+                            // url : context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
+                            method : 'get' // 默认：get请求
+                            ,
+                            cellMinWidth : 80,
+                            totalRow :true,
+                            height:'full-110'//固定表头&full-查询框高度
+                            ,even:true,//条纹样式
+                            page : true,
+                            request : {
+                                pageName : 'page' // 页码的参数名称，默认：page
+                                ,
+                                limitName : 'rows' // 每页数据量的参数名，默认：limit
+                            },
+                            parseData : function(res) {
+                                // 可进行数据操作
+                                return {
+                                    "count" : res.data.total,
+                                    "msg" : res.msg,
+                                    "data" : res.data.rows,
+                                    "code" : res.status
+                                    // code值为200表示成功
+                                }
+                            },
+                            cols : [ [ {type : 'numbers'},
+                                {field : 'bsName', width:150, title : '零件名称',sort:true,totalRowText:"合计"},
+                                {field : 'bsOrder',width:150, title : '工艺顺序',sort:true},
+                                {field : 'proc', width:150, title : '工序名称',
+                                    templet:function (d) {
+                                        if(d.proc!=null){
+                                            return d.proc.procName==null||undefined?"":d.proc.procName;
+                                        }else {
+                                            return "";
+                                        }
+                                    }},
+                                {field : 'procfmemo', width:100, title : '工序说明',
+                                    templet:function (d) {
+                                        if(d.proc!=null){
+                                            return d.proc.fmemo==null||undefined?"":d.proc.fmemo;
+                                        }else {
+                                            return "";
+                                        }
+                                    }},
+                                {field : 'workcenterName', width:100, title : '工作中心'
+                                    ,templet:function (d) {
+                                        if(d.proc!=null){
+                                            if(d.proc.bjWorkCenter!=null){
+                                                return d.proc.bjWorkCenter.workcenterName==null||undefined?"":d.proc.bjWorkCenter.workcenterName;
+                                            }else {
+                                                return "";
+                                            }
+                                        }else {
+                                            return "";
+                                        }
+                                    }},
+                                {field : 'bsModelType', width:100, title : '机台类型',width:90,},
+                                {field : 'bsRadix', title : '基数',width:90},
+                                {field : 'bsUserNum', title : '人数',width:90,hide:true},
+                                {field : 'bsCycle', title : '成型周期(S)', width:150, hide:true},
+                                {field : 'bsYield', title : '工序良率%', width:120,hide:true},
+                                {field : 'bsLoss', title : '损耗率', width:100,hide:true},
+                                {field : 'bsCave', title : '穴数',width:90, hide:true},
+                                {field : 'bsCapacity', title : '产能',width:90, hide:true},
+                                {field : 'bsFeeLh', title : '人工费率',width:90},
+                                {field : 'bsFeeMh', title : '制费费率',width:90},
+                                {field : 'bsFeeLhAll', title : '总人工费',width:90,totalRow :true},
+                                {field : 'bsFeeMhAll', title : '总制费费',width:90,totalRow :true},
+                                {field : 'bsFeeWxAll', title : '外协加工',width:120,totalRow :true, hide:true},
+                                {field : 'bsFeeWxAll', title : '外协加工',width:120,totalRow :true, hide:true},
+                                {field : 'fmemo', title : '备注',edit:'text'}] ],
+                            done : function(res, curr, count) {
+                                pageCurr = curr;
+                                //根据不同的类型显示不同的字段
+                                res.data.forEach(function (item, index) {
+                                    console.log(item);
+                                    if(bsType == 'out'){//外协
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+                                    }else if(bsType == 'hardware'){//五金
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                                    }else if(bsType == 'molding'){//注塑
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                                    }else if(bsType == 'surface'){
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                                    }else if(bsType == 'packag'){
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                                    }
+                                });
+                            }
+                        });
+
+
 					});
 });
+
+function getMaterDetail(bsType,title) {
+    tableIns.reload({
+        url:context + '/productMater/getList?quoteId='+quoteId+'&bsType='+bsType,
+        done: function(res1, curr, count){
+            pageCurr=curr;
+        }
+    })
+    var index=layer.open({
+        type : 1,
+        title : title,
+        fixed : false,
+        resize : false,
+        shadeClose : true,
+        area : [ '550px' ],
+        content : $('#materDetailDiv')
+    });
+    layer.full(index);
+}
+
+function getProcessDetail(bsType,title) {
+    tableIns1.reload({
+        url:context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
+        done: function(res, curr, count){
+            pageCurr=curr;
+            res.data.forEach(function (item, index) {
+                if(item.bsType == 'out'){//外协
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+                }else if(item.bsType == 'hardware'){//五金
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                }else if(item.bsType == 'molding'){//注塑
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                }else if(item.bsType == 'surface'){
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                }else if(item.bsType == 'packag'){
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                }
+            });
+        }
+    })
+    var index=layer.open({
+        type : 1,
+        title : title,
+        fixed : false,
+        resize : false,
+        shadeClose : true,
+        area : [ '550px' ],
+        content : $('#processDetailDiv')
+    });
+    layer.full(index);
+}
 
 //修改净利润
 function updateProfitNet(value) {
