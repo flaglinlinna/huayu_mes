@@ -45,12 +45,35 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 		return ApiResponseResult.success().data(list.get(2));
 	}
 
+
 	@Override
-	public ApiResponseResult subCode(String taskNo,String barcode1, String barcode2) throws Exception {
+	public ApiResponseResult getLiner(String keyword, PageRequest pageRequest) throws Exception {
+		List<Object> list1 = getLinerPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"");
+		if (!list1.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list1.get(1).toString());
+		}
+		return ApiResponseResult.success("").data(list1.get(2));
+	}
+
+	@Override
+	public ApiResponseResult getItemCode(String keyword, PageRequest pageRequest) throws Exception {
+		List<Object> list = getReworkItemPrc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"","成品",keyword,pageRequest);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
+	}
+
+	@Override
+	public ApiResponseResult subCode(String taskNo,String itemCode,String linerName,String barcode1, String barcode2) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = subCodePrc(UserUtil.getSessionUser().getCompany() + "",
 				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "",
-				taskNo,  barcode1,barcode2);
+				taskNo,itemCode,linerName,barcode1,barcode2);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -58,30 +81,31 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 	}
 
 	// 提交条码
-	public List subCodePrc(String company, String facoty, String user_id,String taskNo , 
-			String barcode1, String barcode2)
-			throws Exception {
+	public List subCodePrc(String company, String facoty, String user_id,String taskNo , String itemCode,
+			String linerName, String barcode1, String barcode2) throws Exception {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  prc_mes_cof_bar_s_save(?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  prc_mes_cof_bar_s_save(?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
 				cs.setString(2, company);
 				cs.setString(3, user_id);
 				cs.setString(4, taskNo);
-				cs.setString(5, barcode1);
-				cs.setString(6, barcode2);
-				cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(8, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.setString(5, taskNo);
+				cs.setString(6, taskNo);
+				cs.setString(7, barcode1);
+				cs.setString(8, barcode2);
+				cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
 				return cs;
 			}
 		}, new CallableStatementCallback() {
 			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
 				List<Object> result = new ArrayList<>();
 				cs.execute();
-				result.add(cs.getInt(7));
-				result.add(cs.getString(8));
+				result.add(cs.getInt(9));
+				result.add(cs.getString(10));
 				return result;
 			}
 		});

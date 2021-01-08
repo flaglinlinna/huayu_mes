@@ -100,33 +100,33 @@ $(function() {
 						
 						//监听双击事件
 						$(document).on('dblclick',function (obj) {
-						    console.log(obj.target.id);
+						    // console.log(obj.target.id);
 						    var inputId = obj.target.id;
 						    getUrl(inputId);
                         })
                         
                         function getUrl(inputId){
 							//材料成本
-						    if(inputId =="cl_hardware"){
-                                getMaterDetail("hardware","五金材料价格明细 单价*用量/基数")
+                            if(inputId =="cl_hardware"){
+                                getMaterDetail("hardware","五金材料价格明细 (价格=单价*用量/基数)")
                             }else if(inputId == "cl_molding"){
-                                getMaterDetail("molding","注塑材料价格明细  材料单价*(制品重+水口重/穴数)用量/基数")
+                                getMaterDetail("molding","注塑材料价格明细  (价格=单价*(制品重+水口重/穴数)用量/基数)")
                             }else if(inputId == "cl_surface"){
-                                getMaterDetail("surface","表面处理材料价格明细  单价*用量/基数")
+                                getMaterDetail("surface","表面处理材料价格明细  (价格=单价*用量/基数)")
                             }else if(inputId == "cl_packag"){
-                                getMaterDetail("packag","组装材料价格明细  单价*用量/基数")
+                                getMaterDetail("packag","组装材料价格明细  (价格=单价*用量/基数)")
                             }
-						    //人工和制费
-						    else if(inputId =="lh_hardware"){
-                                getProcessDetail("hardware","五金人工/制费明细 人工工时费（元/H）*人数*成型周期(S）/3600 /基数")
-                            }else if(inputId == "lh_molding"){
-                                getProcessDetail("molding","注塑人工/制费明细  人工费率（元/H）*人数*成型周期(S）/3600/ 穴数/基数")
-                            }else if(inputId == "lh_surface"){
-                                getProcessDetail("surface","表面处理人工/制费明细  人数*费率/产能/基数")
-                            }else if(inputId == "lh_packag"){
-                                getProcessDetail("packag","组装人工/制费明细  人数*费率/产能/基数")
-                            }else if(inputId =="wx_all"){
-                                getProcessDetail("out","外协加工费用明细 损耗费=外协费用*损耗率")
+                            //人工和制费
+                            else if(inputId =="lh_hardware"||inputId =="lw_hardware"){
+                                getProcessDetail("hardware","五金人工/制费明细  (总人工费=人工工时费（元/H）*人数*成型周期(S）/3600 /基数)")
+                            }else if(inputId == "lh_molding"||inputId == "lw_molding"){
+                                getProcessDetail("molding","注塑人工/制费明细   (总人工费=人工费率（元/H）*人数*成型周期(S）/3600/ 穴数/基数)")
+                            }else if(inputId == "lh_surface"||inputId == "lw_surface"){
+                                getProcessDetail("surface","表面处理人工/制费明细   (总人工费=人数*费率/产能/基数)")
+                            }else if(inputId == "lh_packag"||inputId == "lw_packag"){
+                                getProcessDetail("packag","组装人工/制费明细   (总人工费=人数*费率/产能/基数)")
+                            }else if(inputId =="wx_all"||inputId =="hou_lose_all"){
+                                getProcessDetail("out","外协加工费用明细 ")
                             }
 						}
 
@@ -158,7 +158,7 @@ $(function() {
                             },
                             cols : [ [
                                 {type : 'numbers'},
-                                {field: 'bsType', width: 100, title: '类型', sort: true, style:'background-color:#d2d2d2',
+                                {field: 'bsType', width: 100, title: '类型', sort: true,
                                     // * 五金:hardware
                                     // * 注塑:molding
                                     // * 表面处理:surface
@@ -189,7 +189,7 @@ $(function() {
                                     // templet:function(d){
                                     //  return Number(d.bsQty)*Number(d.bsAssess)/Number(d.bsRadix);
                                     // },
-                                    style:'background-color:#d2d2d2',totalRow: true},
+                                    totalRow: true},
                                 {field : 'bsExplain', width:110, title : '采购说明'},
                                 {field : 'fmemo', width:110, title : '备注'},
                                 {field : 'bsSupplier', width:110, title : '供应商'}
@@ -268,12 +268,12 @@ $(function() {
                                 {field : 'bsLoss', title : '损耗率', width:100,hide:true},
                                 {field : 'bsCave', title : '穴数',width:90, hide:true},
                                 {field : 'bsCapacity', title : '产能',width:90, hide:true},
-                                {field : 'bsFeeLh', title : '人工费率',width:90},
-                                {field : 'bsFeeMh', title : '制费费率',width:90},
-                                {field : 'bsFeeLhAll', title : '总人工费',width:90,totalRow :true},
-                                {field : 'bsFeeMhAll', title : '总制费费',width:90,totalRow :true},
+                                {field : 'bsFeeLh', title : '人工费率',width:90, hide:true},
+                                {field : 'bsFeeMh', title : '制费费率',width:90, hide:true},
+                                {field : 'bsFeeLhAll', title : '总人工费',width:90,totalRow :true,hide:true},
+                                {field : 'bsFeeMhAll', title : '总制费费',width:90,totalRow :true,hide:true},
                                 {field : 'bsFeeWxAll', title : '外协加工',width:120,totalRow :true, hide:true},
-                                {field : 'bsFeeWxAll', title : '外协加工',width:120,totalRow :true, hide:true},
+                                {field : 'bsLossHouLh', title : '后工序损料',width:120,totalRow :true,hide:true},
                                 {field : 'fmemo', title : '备注',edit:'text'}] ],
                             done : function(res, curr, count) {
                                 pageCurr = curr;
@@ -349,18 +349,40 @@ function getProcessDetail(bsType,title) {
         done: function(res, curr, count){
             pageCurr=curr;
             res.data.forEach(function (item, index) {
+                console.log(res.data.length);
                 if(item.bsType == 'out'){//外协
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossHouLh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossHouTh"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsLoss"]').removeClass("layui-hide");
                 }else if(item.bsType == 'hardware'){//五金
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+
                 }else if(item.bsType == 'molding'){//注塑
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
@@ -370,6 +392,26 @@ function getProcessDetail(bsType,title) {
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+
+                    $(".layui-table-total").find('tr').find('td[data-field="bsCave"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+
+
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+
                 }else if(item.bsType == 'surface'){
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
@@ -377,6 +419,23 @@ function getProcessDetail(bsType,title) {
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+
+                    $(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+
                 }else if(item.bsType == 'packag'){
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
@@ -384,6 +443,23 @@ function getProcessDetail(bsType,title) {
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+
+                    $(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+                    $(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+
                 }
             });
         }

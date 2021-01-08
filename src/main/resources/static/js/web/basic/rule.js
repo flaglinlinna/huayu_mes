@@ -404,7 +404,7 @@ $(function() {
 		if(value ==""||value==null){
 			return 0;
 		}else {
-			console.log( value.split("+").length);
+			// console.log( value.split("+").length);
 			return value.split("+").length;
 		}
 	}

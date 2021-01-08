@@ -24,6 +24,8 @@ public interface BarcodeRuleService {
 
 	public ApiResponseResult addByProc(BarcodeRule barcodeRule) throws Exception;
 
+	public ApiResponseResult editByProc(BarcodeRule barcodeRule) throws Exception;
+
 	// 根据ID获取
 	public ApiResponseResult getBarcodeRule(Long id) throws Exception;
 

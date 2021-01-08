@@ -140,7 +140,21 @@ public class BarcodeRulelmpl extends PrcUtils implements BarcodeRuleService {
 				barcodeRule.getItemNo(),barcodeRule.getItemId()+"",barcodeRule.getItemNoCus(),barcodeRule.getCustId(),
 				barcodeRule.getFmemo(), barcodeRule.getFixValue(),barcodeRule.getFyear(),barcodeRule.getFmonth(),
 				barcodeRule.getFday(), barcodeRule.getSerialNum(),barcodeRule.getSerialLen(),
-				barcodeRule.getFsample(),"prc_mes_cof_bar_s_role_save");
+				barcodeRule.getFsample(),1,"prc_mes_cof_bar_s_rule_save");
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		return ApiResponseResult.success("");
+	}
+
+	@Override
+	public ApiResponseResult editByProc(BarcodeRule barcodeRule) throws Exception{
+		List<Object> list = addRuleByProc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				barcodeRule.getItemNo(),barcodeRule.getItemId()+"",barcodeRule.getItemNoCus(),barcodeRule.getCustId(),
+				barcodeRule.getFmemo(), barcodeRule.getFixValue(),barcodeRule.getFyear(),barcodeRule.getFmonth(),
+				barcodeRule.getFday(), barcodeRule.getSerialNum(),barcodeRule.getSerialLen(),
+				barcodeRule.getFsample(),2,"prc_mes_cof_bar_s_rule_save");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

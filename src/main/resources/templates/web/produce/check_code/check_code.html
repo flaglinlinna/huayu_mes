@@ -45,32 +45,31 @@
 						<form id="itemFrom" class="layui-form layui-form-pane"
 							lay-filter="itemFrom" method="post" action="">
 							<div class="layui-form-item">
-								<label class="layui-form-label layui-required">制令单号</label>
+								<label class="layui-form-label">制令单号</label>
 								<div class="layui-input-inline" style="width: 320px;">
-									<input type="text" name="taskno" placeholder="请选择"
+									<input type="text" name="taskno" placeholder="请选择制令单"
 										autocomplete="off" class="layui-input" readonly="readonly"
-										lay-verify="required" id="taskno">
+										 id="taskno">
 								</div>
 								<label class="layui-form-label">组长</label>
 								<div class="layui-input-inline">
-									<input id=liner name="liner" autocomplete="off"
-										style="background: #efefef;" class="layui-input" disabled
-										type="text" />
+									<select id=liner name="liner" lay-filter="liner">
+									</select>
 								</div>
 							</div>
 							<div class="layui-form-item">
 								<label class="layui-form-label">产品编码</label>
 								<div class="layui-input-inline" style="width: 320px;">
-									<input id="itemcode" name="itemcode" autocomplete="off"
-										style="background: #efefef;" class="layui-input" disabled
-										type="text" />
+									<input id=itemcode name="itemcode" lay-filter="itemcode"
+										   type="text"  class="layui-input" readonly="readonly"/>
+
 								</div>
-								<label class="layui-form-label">客户简称</label>
-								<div class="layui-input-inline" >
-									<input id="cust" name="cust" autocomplete="off"
-										style="background: #efefef;" class="layui-input" disabled
-										type="text" />
-								</div>
+								<!--<label class="layui-form-label">客户简称</label>-->
+								<!--<div class="layui-input-inline" >-->
+									<!--<input id="cust" name="cust" autocomplete="off"-->
+										<!--style="background: #efefef;" class="layui-input" disabled-->
+										<!--type="text" />-->
+								<!--</div>-->
 							</div>
 							<div class="layui-form-item">
 							<div class="layui-word-aux" style="margin:5px;">一个条码，请在此操作</div>

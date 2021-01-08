@@ -54,6 +54,43 @@ public class CheckCodeController extends WebController {
 	             return ApiResponseResult.failure("获取指令单信息失败！");
 	        }
 	    }
+
+	@ApiOperation(value="获取产品编码信息", notes="获取产品编码信息", hidden = true)
+	@RequestMapping(value = "/getItemCode", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getItemCode(String keyword) {
+		String method = "produce/check_code/getItemCode";String methodName ="获取产品编码信息";
+		try {
+			ApiResponseResult result = checkCodeService.getItemCode(keyword,super.getPageRequest());
+			logger.debug("获取产品编码信息=getTaskNo:");
+//	            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取产品编码信息失败！", e);
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure("获取产品编码信息失败！");
+		}
+	}
+
+	@ApiOperation(value="获取组长信息", notes="获取组长信息", hidden = true)
+	@RequestMapping(value = "/getLiner", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getLiner(String keyword) {
+		String method = "produce/check_code/getLiner";String methodName ="获取产品编码信息";
+		try {
+			ApiResponseResult result = checkCodeService.getLiner(keyword,super.getPageRequest());
+			logger.debug("获取组长信息=getLiner:");
+//	            getSysLogService().success(module,method, methodName, "关键字:"+keyword);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取组长信息失败！", e);
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure("获取组长信息失败！");
+		}
+	}
+
 	  @ApiOperation(value="小码校验", notes="小码校验", hidden = true)
 	    @RequestMapping(value = "/subCode", method = RequestMethod.POST)
 	    @ResponseBody
@@ -63,7 +100,9 @@ public class CheckCodeController extends WebController {
 	        	String taskNo = params.get("taskNo").toString();
 	        	String barcode1 = params.get("barcode1") == null?"":params.get("barcode1").toString();
 	        	String barcode2 = params.get("barcode2") == null?"":params.get("barcode2").toString();
-	            ApiResponseResult result = checkCodeService.subCode(taskNo,barcode1,barcode2);
+				String itemCode = params.get("itemCode") == null?"":params.get("itemCode").toString();
+				String linerName = params.get("linerName") == null?"":params.get("linerName").toString();
+	            ApiResponseResult result = checkCodeService.subCode(taskNo,itemCode,linerName,barcode1,barcode2);
 	            logger.debug("小码校验=subCode:");
 	            getSysLogService().success(module,method, methodName, params);
 	            return result;

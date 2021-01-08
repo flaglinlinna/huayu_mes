@@ -8,8 +8,8 @@ $(function() {
 			.use(
 					[ 'table', 'form', 'layedit', 'tableSelect' ],
 					function() {
-						var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table, table1 = layui.table, tableSelect = layui.tableSelect;
-						;
+						var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table,
+							table1 = layui.table, tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect;
 
 						tableIns = table.render({
 							elem : '#colTable'
@@ -154,11 +154,71 @@ $(function() {
 											"taskno" : da[0].TASK_NO,
 											"itemcode" : da[0].ITEM_NO,
 											"liner" : da[0].LINER_NAME,
-											"cust" : da[0].CUST_NAME_S
+											// "cust" : da[0].CUST_NAME_S
 										});
 										form.render();// 重新渲染
 									}
 								});
+
+						initSelect();
+
+						tableSelect1 = tableSelect1.render({
+							elem : '#itemcode',
+							searchKey : 'keyword',
+							checkedKey : 'ITEM_NO',
+							searchPlaceholder : '试着搜索',
+							page : true,
+							request : {
+								pageName : 'page' // 页码的参数名称，默认：page
+								,
+								limitName : 'rows' // 每页数据量的参数名，默认：limit
+							},
+							table : {
+								url : context + '/produce/check_code/getItemCode',
+								method : 'get',
+								cols : [ [ {
+									type : 'radio'
+								},// 多选 radio
+									{
+										field : 'ITEM_NO',
+										title : '物料编号',
+										width : 150,
+										sort : true
+									}, {
+										field : 'ITEM_NAME',
+										title : '物料描述',
+										width : 400
+									},
+									{
+										field : 'ITEM_NAME_S',
+										title : '物料简称',
+										width : 110,
+										sort : true
+									},
+								] ],
+								parseData : function(res) {
+									//console.log(res)
+									if (res.result) {
+										// 可进行数据操作
+										return {
+											"count" : res.data.total,
+											"msg" : res.msg,
+											"data" : res.data.rows,
+											"code" : res.status
+											// code值为200表示成功
+										}
+									}
+								},
+							},
+							done : function(elem, data) {
+								var da = data.data;
+								form.val("itemFrom", {
+									"itemcode" : da[0].ITEM_NO,
+									// "itemName":da[0].ITEM_NAME,
+								});
+								form.render();// 重新渲染
+							}
+						});
 
 						// 监听提交
 						form.on('submit(hsearchSubmit)', function(data) {
@@ -230,11 +290,11 @@ $(function() {
 			$('#barcode1').val("");
 			$('#barcode2').val("");
 			if ($('#barcode').val()) {
-				if ($('#taskno').val()) {
+				if ($('#itemcode').val()&&$('#taskno').val()) {
 					subCode($('#taskno').val(), $('#barcode').val(), "")
 					$('#barcode').val("");
 				} else {
-					layer.alert("请选择制令单号!");
+					layer.alert("请选择制令单号或产品编码!");
 				}
 
 			} else {
@@ -272,11 +332,40 @@ $(function() {
 			});
 });
 
+function initSelect() {
+	CoreUtil.sendAjax("/produce/check_code/getLiner", "",
+		function(data) {
+			if (data.result) {
+				$("#liner").empty();
+				var linerList = data.data;
+				for (var i = 0; i < linerList.length; i++) {
+					if (i == 0) {
+						$("#liner").append("<option value=''> 请选择组长</option>");
+					}
+					$("#liner").append(
+						"<option value='" + linerList[i].LEAD_BY + "'>"
+						+ linerList[i].LEAD_BY + "</option>");
+				}
+				layui.form.render('select');
+			}else {
+				layer.alert(res.msg);
+			}
+
+		}, "GET", false, function(res) {
+			layer.alert(res.msg);
+		});
+}
+
 function subCode(taskNo, barcode1, barcode2) {
+	var itemCode = $('#itemcode').val();
+	var linerName = $('#liner').val();
+	console.log(linerName);
 	var params = {
 		"taskNo" : taskNo,
 		"barcode1" : barcode1,
-		"barcode2" : barcode2
+		"barcode2" : barcode2,
+		"itemCode":itemCode,
+		"linerName":linerName
 	}
 	CoreUtil.sendAjax("/produce/check_code/subCode", JSON.stringify(params),
 			function(data) {

@@ -285,11 +285,11 @@ public class PrcUtils {
     public List addRuleByProc(String company,String facoty,String userId,String itemNo,String itemId,
                               String itemNoCus,Long custId,String fmemo,
                               String fixValue, String fyear , String fmonth,String fday,String serialNum,
-                              Integer serialLen,String fsample,String prc_name) throws Exception {
+                              Integer serialLen,String fsample,Integer insert, String prc_name) throws Exception {
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
-                String storedProc = "{call " + prc_name + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                String storedProc = "{call " + prc_name + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
                 CallableStatement cs = con.prepareCall(storedProc);
                 cs.setString(1, company);
                 cs.setString(2, facoty);
@@ -310,8 +310,9 @@ public class PrcUtils {
                 cs.setString(13, serialNum);
                 cs.setInt(14, serialLen);
                 cs.setString(15, fsample);
-                cs.registerOutParameter(16, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(17, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.setInt(16, insert);
+                cs.registerOutParameter(17, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(18, java.sql.Types.VARCHAR);// 输出参数 返回标识
                 return cs;
             }
         }, new CallableStatementCallback() {
@@ -319,8 +320,8 @@ public class PrcUtils {
                 List<Object> result = new ArrayList<>();
                 List<Map<String, Object>> l = new ArrayList();
                 cs.execute();
-                result.add(cs.getInt(16));
-                result.add(cs.getString(17));
+                result.add(cs.getInt(17));
+                result.add(cs.getString(18));
                 return result;
             }
 

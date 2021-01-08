@@ -106,7 +106,7 @@ public class BarcodeRuleController extends WebController{
 	    public ApiResponseResult edit(@RequestBody BarcodeRule rule){
 	        String method = "base/rule/edit";String methodName ="编辑小码校验规则信息";
 	        try{
-	            ApiResponseResult result = ruleService.edit(rule);
+	            ApiResponseResult result = ruleService.editByProc(rule);
 	            logger.debug("编辑小码校验规则信息=edit:");
 	            //getSysLogService().success(module,method, methodName, JSON.toJSONString(rule));
 	            getSysLogService().success(module,method, methodName, rule.toString());
