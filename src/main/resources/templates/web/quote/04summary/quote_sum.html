@@ -196,7 +196,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">表面处理材料</label>
+						<label class="layui-form-label"><a data-type="cl_surface">表面处理材料</a></label>
 						<div class="layui-input-inline" style="width: 110px;">
 							<input id="cl_surface" name="cl_surface" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
@@ -338,6 +338,9 @@
 
 
 		<script th:inline="javascript">
+		
+		$("a").css("text-decoration", "underline"); //加上下划线
+		
 		var quoteId=[[${quoteId}]];
 		var quoteDetail=[[${quoteDetail}]];
 		

@@ -93,12 +93,20 @@ $(function() {
 							
 						});
 						layui.form.render('select');
-
+						
+						$("a").click(function(obj) { 
+							getUrl($(this).attr("data-type"))
+						})
+						
 						//监听双击事件
 						$(document).on('dblclick',function (obj) {
 						    console.log(obj.target.id);
 						    var inputId = obj.target.id;
-						    //材料成本
+						    getUrl(inputId);
+                        })
+                        
+                        function getUrl(inputId){
+							//材料成本
 						    if(inputId =="cl_hardware"){
                                 getMaterDetail("hardware","五金材料价格明细 单价*用量/基数")
                             }else if(inputId == "cl_molding"){
@@ -120,7 +128,7 @@ $(function() {
                             }else if(inputId =="wx_all"){
                                 getProcessDetail("out","外协加工费用明细 损耗费=外协费用*损耗率")
                             }
-                        })
+						}
 
 						//材料价格明细
                         tableIns = table.render({
