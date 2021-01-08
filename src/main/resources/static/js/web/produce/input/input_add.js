@@ -57,7 +57,7 @@ $(function() {
 								field : 'ITEM_NO',
 								title : '物料编号',
 								align : 'center',
-								width : 140,
+								width : 160,
 								sort : true
 							}, {
 								field : 'ITEM_NAME',
@@ -144,7 +144,7 @@ $(function() {
 									 {
 									field : 'ITEM_NO',
 									title : '物料编码',
-									width : 170
+									width : 190
 								}, {
 									field : 'ITEM_NAME',
 									title : '物料描述',

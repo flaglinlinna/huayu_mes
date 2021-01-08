@@ -49,7 +49,7 @@ $(function() {
 				title : '班别',width : 120, sort: true,
 			}, {
 				field : 'ITEM_NO',
-				title : '物料编码',width : 140, sort: true
+				title : '物料编码',width : 160, sort: true
 			},
 			{
 				field : 'ITEM_TYPE',

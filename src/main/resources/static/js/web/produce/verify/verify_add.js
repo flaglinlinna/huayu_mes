@@ -182,16 +182,32 @@ $(function() {
 								// 选择完后的回调，包含2个返回值
 								// elem:返回之前input对象；data:表格返回的选中的数据 []
 								var da = data.data;
-								// console.log(da[0])
-								form.val("itemFrom", {
-									"num" : da[0].TASK_NO,
-									"mtrcode" : da[0].ITEM_NO,
-									// "mtrdescr" : da[0].ITEM_NAME,
-									"cus" : da[0].CUST_NAME_S,
-									"linerName":da[0].LINER_NAME
-								});
-								form.render();// 重新渲染
-
+								var prodDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(da.PROD_DATE);
+								if(new Date().toDateString() === new Date(prodDate).toDateString()){
+									form.val("itemFrom", {
+										"num" : da[0].TASK_NO,
+										"mtrcode" : da[0].ITEM_NO,
+										// "mtrdescr" : da[0].ITEM_NAME,
+										"cus" : da[0].CUST_NAME_S,
+										"linerName":da[0].LINER_NAME
+									});
+									form.render();// 重新渲染
+								}else {
+									layer.confirm("选择的计划日期不是今天,是否确认继续操作", {
+										btn: ["取消","确定"] //按钮
+									}, function(){
+										layer.closeAll('dialog');
+									}, function(){
+										form.val("itemFrom", {
+											"num" : da[0].TASK_NO,
+											"mtrcode" : da[0].ITEM_NO,
+											// "mtrdescr" : da[0].ITEM_NAME,
+											"cus" : da[0].CUST_NAME_S,
+											"linerName":da[0].LINER_NAME
+										});
+										form.render();// 重新渲染
+									});
+								}
 							}
 						});
 

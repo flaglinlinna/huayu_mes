@@ -359,7 +359,6 @@ function initSelect() {
 function subCode(taskNo, barcode1, barcode2) {
 	var itemCode = $('#itemcode').val();
 	var linerName = $('#liner').val();
-	console.log(linerName);
 	var params = {
 		"taskNo" : taskNo,
 		"barcode1" : barcode1,

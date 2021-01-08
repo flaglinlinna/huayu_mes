@@ -58,7 +58,7 @@ $(function() {
 				},
 				{
 					field : 'ITEM_NO',
-					title : '物料编码',width : 140,sort: true
+					title : '物料编码',width : 160,sort: true
 				},
 				{
 					field : 'PROD_DATE',
@@ -179,7 +179,7 @@ $(function() {
 					}, {
 						field : 'ITEM_NO',
 						title : '物料编码',
-						width : 150
+						width : 170
 					},{
 						field : 'ITEM_NAME',
 						title : '物料描述',

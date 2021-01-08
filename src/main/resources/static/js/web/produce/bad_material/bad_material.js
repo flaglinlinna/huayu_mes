@@ -53,7 +53,7 @@ $(function() {
                     },  {
                         field : 'ITEM_NO',
                         title : '物料料号',
-                        width : 140
+                        width : 160
                     },
                     {
                         field : 'ITEM_NAME',
@@ -363,7 +363,7 @@ $(function() {
                 },  {
                     field : 'ITEM_NO',
                     title : '物料料号',
-                    width : 140
+                    width : 160
                 },
                     {
                     field : 'ITEM_NAME',
