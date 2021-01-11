@@ -159,7 +159,11 @@ $(function() {
 		                    	 // 获取子页面的iframe
 		                        var iframe = window['layui-layer-iframe' + index];
 		                        // 向子页面的全局函数child传参，流程编码
-		                        iframe.child(Style,data.id);
+		                        if(data.bsStatus=='2'){
+		                        	iframe.child(Style,data.id,'end');
+		                        }else{
+		                        	iframe.child(Style,data.id,'check');
+		                        }
 		                    }
 		                  });
 					}

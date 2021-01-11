@@ -146,9 +146,12 @@ layui.use('layer', function(){
         //接受流程类型参数
         ppid = pid;
         wn = wname;
+        status = bsStatus;
         getInfo({"id":pid,"wname":wname});
         if(status == 'end'){
         	$('#summit-btn').addClass("layui-btn-disabled").attr("disabled",true);//失效
+        }else{
+        	$('#summit-btn').removeClass("layui-btn-disabled").attr("disabled",false);//有效
         }
     }
 
