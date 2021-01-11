@@ -50,17 +50,17 @@ $(function() {
 					title : '品质标准说明',
 					width : 150,
 				},
-                {
-                    field : 'fftp',
-                    title : '品质标准附件',
-                    width : 150,
-                    templet: '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="'+context+'/file/get?fsFileId={{d.fileId}}" th:href="@{/file/get?fsFileId={{d.fileId}}}">{{ d.fftp==null?"":d.fftp }}</a></div>'
-                },
-                {
-                    field : 'qsType',
-                    title : '品质标准类型',
-                    width : 150,
-                    },
+                // {
+                //     field : 'fftp',
+                //     title : '品质标准附件',
+                //     width : 150,
+                //     templet: '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="'+context+'/file/get?fsFileId={{d.fileId}}" th:href="@{/file/get?fsFileId={{d.fileId}}}">{{ d.fftp==null?"":d.fftp }}</a></div>'
+                // },
+                // {
+                //     field : 'qsType',
+                //     title : '品质标准类型',
+                //     width : 150,
+                //     },
                 {
 				field : 'createBy',
 				title : '创建人',
@@ -136,21 +136,12 @@ $(function() {
 				function(data) {
 				console.log(data);
 					for(var i =0;i<data.data.length; i++){
-						document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcFieldBefore(data.data[i],data.data[i].id,"/basePrice/customQs/delFile");
+						document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcFieldBefore(data.data[i],data.data[i].qsFileId,"/basePrice/customQs/delFile");
 					}
 				}, "GET", false, function(res) {
 					layer.alert(res.msg);
 				});
 
-			// var filedata = {
-			//     "id":obj.fileId,
-            //     "bsName":obj.fftp,
-            //     "bsContentType":"stp",
-            // }
-			//
-			// if(obj.fileId!=null){
-            //     document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcFieldBefore(filedata,obj.id,"/basePrice/customQs/delFile");
-            // }
 			getTypeList(obj.qsType);
 			openData(obj.id, "编辑价格信息")
 		}
@@ -169,8 +160,7 @@ $(function() {
                     document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data);
 					_index++;
 					fileId +=res.data.id +",";
-                    // $('#fileId').val(res.data.id);
-					// $('#fftp').val(res.data.bsName);
+
                 }
 				$('#fileId').val(fileId);
             }

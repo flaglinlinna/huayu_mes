@@ -34,10 +34,10 @@ $(function() {
 									var ml_rate = ml/bj_all*100;
 									var profit_gs = $('#profitNet').val()/bj_all*100;
 									form.val("itemForm", {
-										"bj_all":bj_all.toFixed(2),
-										"ml":ml.toFixed(2),
-										"ml_rate":ml_rate.toFixed(2)+"%",
-										"profit_gs":profit_gs.toFixed(2)+"%"
+										"bj_all":bj_all.toFixed(5),
+										"ml":ml.toFixed(5),
+										"ml_rate":ml_rate.toFixed(5)+"%",
+										"profit_gs":profit_gs.toFixed(5)+"%"
 									})
 									layui.form.render('select');
 								}else{
@@ -271,7 +271,7 @@ $(function() {
                                 {field : 'bsFeeLh', title : '人工费率',width:90, hide:true},
                                 {field : 'bsFeeMh', title : '制费费率',width:90, hide:true},
                                 {field : 'bsFeeLhAll', title : '总人工费',width:90,totalRow :true,hide:true},
-                                {field : 'bsFeeMhAll', title : '总制费费',width:90,totalRow :true,hide:true},
+                                {field : 'bsFeeMhAll', title : '总制费',width:90,totalRow :true,hide:true},
                                 {field : 'bsFeeWxAll', title : '外协加工',width:120,totalRow :true, hide:true},
                                 {field : 'bsLossHouLh', title : '后工序损料',width:120,totalRow :true,hide:true},
                                 {field : 'fmemo', title : '备注',edit:'text'}] ],

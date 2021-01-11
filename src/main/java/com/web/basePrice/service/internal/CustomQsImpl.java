@@ -88,6 +88,25 @@ public class CustomQsImpl extends  BasePriceUtils implements CustomQsService {
 		if (o == null) {
 			return ApiResponseResult.failure("该客户品质标准信息不存在！");
 		}
+
+		String[] fileIds =  customQs.getFileId().split(",");
+		List<CustomQsFile> fileList = new ArrayList<>();
+		for(String fileId :fileIds){
+			if(StringUtils.isNotEmpty(fileId)){
+				FsFile fsFile = fsFileDao.findById(Long.parseLong(fileId));
+				if(fsFile.getDelFlag()==0) {
+					CustomQsFile qsFile = new CustomQsFile();
+					qsFile.setCustomId(customQs.getId());
+					qsFile.setFileId(fsFile.getId());
+					qsFile.setFileName(fsFile.getBsName());
+					qsFile.setCreateDate(new Date());
+					qsFile.setCreateBy(UserUtil.getSessionUser().getId());
+					fileList.add(qsFile);
+				}
+			}
+		}
+		customQsFileDao.saveAll(fileList);
+
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		o.setQsNo(customQs.getQsNo());
@@ -217,7 +236,8 @@ public class CustomQsImpl extends  BasePriceUtils implements CustomQsService {
 		List<Map<String, Object>> mapList = new ArrayList<>();
 		for(CustomQsFile qsFile :customQsFiles){
 			Map<String, Object> map = new HashMap<>();
-			map.put("id",qsFile.getId());
+			map.put("id",qsFile.getFileId());
+			map.put("qsFileId",qsFile.getId());
 			map.put("bsName",qsFile.getFileName());
 			map.put("bsContentType","stp");
 			mapList.add(map);
