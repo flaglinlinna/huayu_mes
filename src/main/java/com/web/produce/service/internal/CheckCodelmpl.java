@@ -92,8 +92,8 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 				cs.setString(2, company);
 				cs.setString(3, user_id);
 				cs.setString(4, taskNo);
-				cs.setString(5, taskNo);
-				cs.setString(6, taskNo);
+				cs.setString(5, itemCode);
+				cs.setString(6, linerName);
 				cs.setString(7, barcode1);
 				cs.setString(8, barcode2);
 				cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识

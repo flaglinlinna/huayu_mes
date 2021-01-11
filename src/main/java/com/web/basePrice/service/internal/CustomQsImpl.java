@@ -2,13 +2,17 @@ package com.web.basePrice.service.internal;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
+import com.system.file.dao.FsFileDao;
+import com.system.file.entity.FsFile;
 import com.system.user.dao.SysUserDao;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.CustomQsDao;
+import com.web.basePrice.dao.CustomQsFileDao;
 import com.web.basePrice.entity.CustomQs;
+import com.web.basePrice.entity.CustomQsFile;
 import com.web.basePrice.service.CustomQsService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,10 @@ import java.util.*;
 public class CustomQsImpl extends  BasePriceUtils implements CustomQsService {
 	@Autowired
 	private CustomQsDao customQsDao;
+	@Autowired
+	private CustomQsFileDao customQsFileDao;
+	@Autowired
+	private FsFileDao fsFileDao;
 
 	@Autowired
 	private SysUserDao sysUserDao;
@@ -44,6 +52,23 @@ public class CustomQsImpl extends  BasePriceUtils implements CustomQsService {
 		customQs.setCreateDate(new Date());
 		customQs.setCreateBy(UserUtil.getSessionUser().getId());
 		customQsDao.save(customQs);
+		String[] fileIds =  customQs.getFileId().split(",");
+		List<CustomQsFile> fileList = new ArrayList<>();
+		for(String fileId :fileIds){
+			if(StringUtils.isNotEmpty(fileId)){
+				FsFile fsFile = fsFileDao.findById(Long.parseLong(fileId));
+				if(fsFile.getDelFlag()==0) {
+					CustomQsFile qsFile = new CustomQsFile();
+					qsFile.setCustomId(customQs.getId());
+					qsFile.setFileId(fsFile.getId());
+					qsFile.setFileName(fsFile.getBsName());
+					qsFile.setCreateDate(new Date());
+					qsFile.setCreateBy(UserUtil.getSessionUser().getId());
+					fileList.add(qsFile);
+				}
+			}
+		}
+		customQsFileDao.saveAll(fileList);
 		return ApiResponseResult.success("客户品质标准信息添加成功！").data(customQs);
 	}
 
@@ -69,8 +94,8 @@ public class CustomQsImpl extends  BasePriceUtils implements CustomQsService {
 	    o.setQsName(customQs.getQsName());
 	    o.setFmemo(customQs.getFmemo());
 	    o.setQsType(customQs.getQsType());
-        o.setFftp(customQs.getFftp());
-        o.setFileId(customQs.getFileId());
+//        o.setFftp(customQs.getFftp());
+//        o.setFileId(customQs.getFileId());
 		customQsDao.save(o);
 		return ApiResponseResult.success("编辑成功！");
 	}
@@ -111,17 +136,23 @@ public class CustomQsImpl extends  BasePriceUtils implements CustomQsService {
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult delFile(Long id) throws Exception {
+	public ApiResponseResult delFile(Long id,Long fileId) throws Exception {
 		if (id == null) {
 			return ApiResponseResult.failure("客户品质标准信息ID不能为空！");
 		}
-		CustomQs o = customQsDao.findById((long) id);
+		CustomQsFile o = customQsFileDao.findById((long) id);
 		if (o == null) {
 			return ApiResponseResult.failure("客户品质标准信息不存在！");
 		}
-		o.setFileId(null);
-		o.setFftp(null);
-		customQsDao.save(o);
+		o.setDelFlag(1);
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
+		o.setLastupdateDate(new Date());
+		customQsFileDao.save(o);
+
+		FsFile fsFile = fsFileDao.findById((long) fileId);
+		fsFile.setDelFlag(1);
+		fsFileDao.save(fsFile);
+
 		return ApiResponseResult.success("删除附件成功！");
 	}
 
@@ -172,7 +203,25 @@ public class CustomQsImpl extends  BasePriceUtils implements CustomQsService {
 		return ApiResponseResult.success().data(DataGrid.create(mapList, (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
-	
 
 
+	/**
+	 *
+	 * @param customId 主表id
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public ApiResponseResult getFileList(Long customId) throws Exception {
+		List<CustomQsFile> customQsFiles = customQsFileDao.findByDelFlagAndCustomId(0,customId);
+		List<Map<String, Object>> mapList = new ArrayList<>();
+		for(CustomQsFile qsFile :customQsFiles){
+			Map<String, Object> map = new HashMap<>();
+			map.put("id",qsFile.getId());
+			map.put("bsName",qsFile.getFileName());
+			map.put("bsContentType","stp");
+			mapList.add(map);
+		}
+		return ApiResponseResult.success().data(mapList);
+	}
 }

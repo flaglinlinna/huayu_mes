@@ -56,6 +56,25 @@ public class CustomQsController extends WebController{
         }
     }
 
+    @ApiOperation(value = "获取客户品质标准文件列表", notes = "获取客户品质标准文件列表",hidden = true)
+    @RequestMapping(value = "/getFileList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getFileList(Long customId) {
+        String method = "basePrice/customQs/getFileList";String methodName ="获取客户品质标准文件列表";
+        try {
+            System.out.println(customId);
+            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = customQsService.getFileList(customId);
+            logger.debug("获取客户品质标准列表=getList:");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取客户品质标准列表失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取客户品质标准列表失败！");
+        }
+    }
+
 
     @ApiOperation(value = "获取客户品质标准类别", notes = "获取客户品质标准类别",hidden = true)
     @RequestMapping(value = "/getQsType", method = RequestMethod.GET)
@@ -93,6 +112,8 @@ public class CustomQsController extends WebController{
             return ApiResponseResult.failure("新增客户品质标准新增失败！");
         }
     }
+
+
 
     @ApiOperation(value = "编辑客户品质标准信息", notes = "编辑客户品质标准信息",hidden = true)
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
@@ -137,7 +158,7 @@ public class CustomQsController extends WebController{
     public ApiResponseResult delFile(Long recordId, Long fileId){
         String method = "basePrice/customQs/delFile";String methodName ="删除客户品质标准附件";
         try{
-            ApiResponseResult result = customQsService.delFile(recordId);
+            ApiResponseResult result = customQsService.delFile(recordId,fileId);
             logger.debug("删除客户品质标准附件=delete:");
             getSysLogService().success(module,method, methodName, null);
             return result;

@@ -182,7 +182,7 @@ $(function() {
 								// 选择完后的回调，包含2个返回值
 								// elem:返回之前input对象；data:表格返回的选中的数据 []
 								var da = data.data;
-								var prodDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(da.PROD_DATE);
+								var prodDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(da[0].PROD_DATE);
 								if(new Date().toDateString() === new Date(prodDate).toDateString()){
 									form.val("itemFrom", {
 										"num" : da[0].TASK_NO,

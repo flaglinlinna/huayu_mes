@@ -290,7 +290,7 @@ $(function() {
 			$('#barcode1').val("");
 			$('#barcode2').val("");
 			if ($('#barcode').val()) {
-				if ($('#itemcode').val()&&$('#taskno').val()) {
+				if ($('#itemcode').val()||$('#taskno').val()) {
 					subCode($('#taskno').val(), $('#barcode').val(), "")
 					$('#barcode').val("");
 				} else {

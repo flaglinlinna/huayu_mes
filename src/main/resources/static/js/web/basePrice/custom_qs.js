@@ -3,6 +3,7 @@
  */
 var pageCurr;
 var _index = 0;
+var fileId = "";
 $(function() {
 	layui.use([ 'form', 'table','upload' ], function() {
 		var table = layui.table, form = layui.form ,upload = layui.upload;
@@ -129,14 +130,27 @@ $(function() {
                 "fftp":obj.fftp,
                 "fileId":obj.fileId,
 			});
-			var filedata = {
-			    "id":obj.fileId,
-                "bsName":obj.fftp,
-                "bsContentType":"stp",
-            }
-			if(obj.fileId!=null){
-                document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcFieldBefore(filedata,obj.id,"/basePrice/customQs/delFile");
-            }
+
+			//获取客户品质标准文件
+			CoreUtil.sendAjax("/basePrice/customQs/getFileList?customId="+obj.id,"",
+				function(data) {
+				console.log(data);
+					for(var i =0;i<data.data.length; i++){
+						document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcFieldBefore(data.data[i],data.data[i].id,"/basePrice/customQs/delFile");
+					}
+				}, "GET", false, function(res) {
+					layer.alert(res.msg);
+				});
+
+			// var filedata = {
+			//     "id":obj.fileId,
+            //     "bsName":obj.fftp,
+            //     "bsContentType":"stp",
+            // }
+			//
+			// if(obj.fileId!=null){
+            //     document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcFieldBefore(filedata,obj.id,"/basePrice/customQs/delFile");
+            // }
 			getTypeList(obj.qsType);
 			openData(obj.id, "编辑价格信息")
 		}
@@ -152,10 +166,13 @@ $(function() {
             ,done: function(res,index, upload){
                 layer.closeAll('loading'); //关闭loading
                 if(res.result == true){
-                    document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data)
-                    $('#fileId').val(res.data.id);
-					$('#fftp').val(res.data.bsName);
+                    document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data);
+					_index++;
+					fileId +=res.data.id +",";
+                    // $('#fileId').val(res.data.id);
+					// $('#fftp').val(res.data.bsName);
                 }
+				$('#fileId').val(fileId);
             }
             ,error: function(index, upload){
                 layer.closeAll('loading'); //关闭loading
@@ -217,14 +234,13 @@ function addSubmit(obj) {
 }
 
 
-
 function getTypeList(id) {
 	CoreUtil.sendAjax("/basePrice/customQs/getQsType", "", function(data) {
 		if (data.result) {
 
 			$("#qsType").empty();
 			var list = data.data.rows;
-			console.log(list);
+			// console.log(list);
 			for (var i = 0; i < list.length; i++) {
 				if (i == 0) {
 					$("#qsType").append("<option value=''>请选择</option>")
@@ -325,5 +341,7 @@ function loadAll() {
 // 清空新增表单数据
 function cleanData() {
 	$('#itemForm')[0].reset();
+	_index = 0;
+	document.getElementById("filelist").innerHTML = "";
 	layui.form.render();// 必须写
 }

@@ -13,11 +13,13 @@ public interface CustomQsService {
 
   public ApiResponseResult delete(Long id) throws Exception;
 
-  public ApiResponseResult delFile(Long id) throws Exception;
+  public ApiResponseResult delFile(Long id,Long fileId) throws Exception;
 
   public ApiResponseResult getQsType(String keyword,PageRequest pageRequest) throws Exception;
 
   public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
+
+  public ApiResponseResult getFileList(Long customId) throws Exception;
   
 //  public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;// 状态改变
   

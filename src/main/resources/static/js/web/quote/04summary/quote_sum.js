@@ -110,7 +110,7 @@ $(function() {
                             if(inputId =="cl_hardware"){
                                 getMaterDetail("hardware","五金材料价格明细 (价格=单价*用量/基数)")
                             }else if(inputId == "cl_molding"){
-                                getMaterDetail("molding","注塑材料价格明细  (价格=单价*(制品重+水口重/穴数)用量/基数)")
+                                getMaterDetail("molding","注塑材料价格明细  (价格=单价*(制品重+水口重/穴数)/基数)")
                             }else if(inputId == "cl_surface"){
                                 getMaterDetail("surface","表面处理材料价格明细  (价格=单价*用量/基数)")
                             }else if(inputId == "cl_packag"){
@@ -176,14 +176,19 @@ $(function() {
                                     },totalRowText:"合计"
                                 },
                                 {field : 'bsComponent',width:150,title : '零/组件名称',sort:true},
+                                {field : 'bsMachiningType', title : '加工类型',width:100,hide:true},//(表面处理)
+                                {field : 'bsColor', title : '配色工艺',width:100,hide:true},//(表面处理)
                                 {field : 'bsMaterName',width:120, title : '材料名称',sort:true},
                                 {field : 'bsModel', width:150, title : '材料规格'},
-                                {field : 'bsQty', width:80, title : '用量',totalRow: true},
+                                {field : 'bsQty', width:80, title : '用量',totalRow: true,hide:true},
+                                {field : 'bsProQty', width:80, title : '制品重',totalRow: true,hide:true},
                                 {field : 'bsUnit', width:80, title : '单位'},
                                 {field : 'bsRadix', width:80, title : '基数'},
                                 {field : 'bsGeneral', width:120, title : '是否通用物料'},
                                 // {field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet: '#selectGear'},
                                 {field : 'bsRefer', width:110, title : '参考价格'},
+                                {field : 'bsWaterGap', title : '水口量',width:100,hide:true}, //(注塑)
+                                {field : 'bsCave', title : '穴数',width:100,hide:true}, //(注塑)
                                 {field : 'bsAssess', width:110, title : '评估价格'	},
                                 {field : 'bsFee', width:110, title : '材料总价',
                                     // templet:function(d){
@@ -196,11 +201,6 @@ $(function() {
                             ] ],
                             done : function(res, curr, count) {
                                 pageCurr = curr;
-                                // var bsFee=0;//统计结算后
-                                // layui.each(res.data,function(index,d){
-                                //     bsFee+=Number(res.bsQty)*Number(res.bsAssess)/Number(res.bsRadix)
-                                // })
-                                // this.elem.next().find('.layui-table-total td[data-field=“bsFee”] .layui-table-cell').text(bsFee)
                             }
                         });
 
@@ -278,45 +278,6 @@ $(function() {
                             done : function(res, curr, count) {
                                 pageCurr = curr;
                                 //根据不同的类型显示不同的字段
-                                res.data.forEach(function (item, index) {
-                                    console.log(item);
-                                    if(bsType == 'out'){//外协
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
-                                    }else if(bsType == 'hardware'){//五金
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
-                                    }else if(bsType == 'molding'){//注塑
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
-                                    }else if(bsType == 'surface'){
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
-                                    }else if(bsType == 'packag'){
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
-                                        $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
-                                    }
-                                });
                             }
                         });
 
@@ -329,6 +290,39 @@ function getMaterDetail(bsType,title) {
         url:context + '/productMater/getList?quoteId='+quoteId+'&bsType='+bsType,
         done: function(res1, curr, count){
             pageCurr=curr;
+            res1.data.forEach(function (item, index) {
+            if(bsType == 'hardware'){//五金
+                $('div[lay-id="materTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+                $(".layui-table-total").find('tr').find('td[data-field="bsQty"]').removeClass("layui-hide");
+
+            }else if(bsType == 'molding'){//注塑
+                $('div[lay-id="materTable"]').find('thead').find('th[data-field="bsWaterGap"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('thead').find('th[data-field="bsProQty"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsWaterGap"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsProQty"]').removeClass("layui-hide");
+                $(".layui-table-total").find('tr').find('td[data-field="bsWaterGap"]').removeClass("layui-hide");
+                $(".layui-table-total").find('tr').find('td[data-field="bsCave"]').removeClass("layui-hide");
+                $(".layui-table-total").find('tr').find('td[data-field="bsProQty"]').removeClass("layui-hide");
+
+            }else if(bsType == 'surface'){
+                $('div[lay-id="materTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+                $(".layui-table-total").find('tr').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
+                $(".layui-table-total").find('tr').find('td[data-field="bsColor"]').removeClass("layui-hide");
+                $(".layui-table-total").find('tr').find('td[data-field="bsQty"]').removeClass("layui-hide");
+            }else if(bsType == 'packag'){
+                $('div[lay-id="materTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+                $('div[lay-id="materTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+                $(".layui-table-total").find('tr').find('td[data-field="bsQty"]').removeClass("layui-hide");
+            }
+            });
         }
     })
     var index=layer.open({
@@ -349,7 +343,7 @@ function getProcessDetail(bsType,title) {
         done: function(res, curr, count){
             pageCurr=curr;
             res.data.forEach(function (item, index) {
-                console.log(res.data.length);
+                // console.log(res.data.length);
                 if(item.bsType == 'out'){//外协
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
