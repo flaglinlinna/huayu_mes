@@ -42,11 +42,14 @@
     <div class="layui-field-box" id="flow_info">
         <div class="wrap">
 		    <ul class="step-case" id="step"> 
-		        <li class="s-finish"><span>第1步</span><b class="b-l"></b></li>
+		    <li class="s-cur" id="li-1"><span>第1步</span><b class="b-l"></b></li>
+		        <li class="s-cur-next" id="li-2"><span>第2步</span><b class="b-1"></b><b class="b-2"></b></li>
+		        <li id="li-3"><span>第3步</span><b class="b-1"></b><b class="b-2"></b></li>
+		        <!-- <li class="s-finish"><span>第1步</span><b class="b-l"></b></li>
 		        <li class="s-finish"><span>第2步</span><b class="b-1"></b><b class="b-2"></b></li>
 		        <li class="s-cur"><span>第3步</span><b class="b-1"></b><b class="b-2"></b></li>
 		        <li class="s-cur-next"><span>第4步</span><b class="b-1"></b><b class="b-2"></b></li>
-		        <li><span>第5步</span><b class="b-1"></b><b class="b-2"></b></li>
+		        <li><span>第5步</span><b class="b-1"></b><b class="b-2"></b></li> -->
 		    </ul>
 		</div>
     </div>
@@ -66,12 +69,13 @@
 
 <div class="ap-foot">
     <div style="padding:12px 40px 0;">
-        <input type="radio" name="checkRadio" value="1" title="同意" checked>同意&nbsp;
+        <input type="radio" name="checkRadio" value="1" title="同意 " checked><span id="sure-span">总经理审批&nbsp;</span>
         <input type="radio" name="checkRadio" value="2" title="驳回" id="th">驳回
+        <input type="radio" name="checkRadio" value="3" title="驳回" id="end-btn"><span id="end-span">同意并且结束流程</span>
         
         <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" data-type="close" style="float:right;margin-left:10px;">取消</button>
-        <button type="button" class="layui-btn layui-btn-sm" data-type="submit" style="float:right;margin-left:10px;">提交</button>
-        <div id="low_flag" style="width:250px;float:right;margin-left:100px;"></div>
+        <button type="button" class="layui-btn layui-btn-sm" data-type="submit" style="float:right;margin-left:10px;" id="summit-btn">提交</button>
+        <div id="low_flag" style="width:210px;float:right;margin-left:100px;"></div>
     </div>
 </div>
 

@@ -432,13 +432,7 @@ public class CheckImpl   implements CheckService {
 				//4.报价总流程审批完
 				if(c.getBsCheckCode().equals("QUOTE") && c.getBsRecordId() != null){
 					//1.1获取报价单，修改状态为“已完成”
-					Quote quote = quoteDao.findById((long) c.getBsRecordId());
-					if(quote != null){
-						quote.setLastupdateDate(new Date());
-						quote.setBsStatus4(2);
-						quote.setBsEndTime6(new Date());
-						quoteDao.save(quote);
-					}
+					doEndQuote(c);
 				}
 			}
 			checkInfoDao.saveAll(lcr);
@@ -568,8 +562,29 @@ public class CheckImpl   implements CheckService {
 		}else{
 			//2.判断此用户是否有审核权限
 			if(this.checkSecond(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode())){
-				//2.1 审批
-				this.doCheck(checkInfo);
+				//同意并且结束流程
+				if(checkInfo.getBsStepCheckStatus() == 3){
+					//1:保存当前步骤的信息
+					List<CheckInfo> lc = checkInfoDao.findNotByRecordId(checkInfo.getBsRecordId(), checkInfo.getBsCheckCode());
+					if(lc.size()>0){
+						CheckInfo ci = lc.get(0);
+						ci.setBsCheckComments(checkInfo.getBsCheckComments());
+						ci.setBsStepCheckStatus(checkInfo.getBsStepCheckStatus());
+						ci.setBsCheckDes(checkInfo.getBsCheckDes());
+						ci.setLastupdateDate(new Date());
+						ci.setBsStepCheckStatus(1);
+						ci.setBsCheckPerson(UserUtil.getSessionUser().getUserCode());
+						ci.setBsCheckBy(UserUtil.getSessionUser().getUserCode());
+						ci.setBsCheckName(UserUtil.getSessionUser().getUserName());
+						ci.setBsCheckId(UserUtil.getSessionUser().getId());
+						checkInfoDao.save(ci);
+					}
+					doEndQuote(checkInfo);
+				}else{
+					//2.1 审批
+					this.doCheck(checkInfo);
+				}
+				
 			}else{
 				//2.2 无审批权限，返回提示信息
 				return ApiResponseResult.failure("当前用户在该步骤无审批权限");
@@ -577,8 +592,16 @@ public class CheckImpl   implements CheckService {
 		}
 		return ApiResponseResult.success("操作成功!");
 	}
-
-
+	
+	public void doEndQuote(CheckInfo c){
+		Quote quote = quoteDao.findById((long) c.getBsRecordId());
+		if(quote != null){
+			quote.setLastupdateDate(new Date());
+			quote.setBsStatus4(2);
+			quote.setBsEndTime3(new Date());
+			quoteDao.save(quote);
+		}
+	}
 
 
 }

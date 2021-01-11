@@ -48,7 +48,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
     @Transactional
     public ApiResponseResult getList(String keyword,PageRequest pageRequest) throws Exception {
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
-				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(p.bs_end_time3,null,'0','1') col from "+Quote.TABLE_NAME+" p "
+				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(p.bs_end_time3,null,'1','2') col from "+Quote.TABLE_NAME+" p "
 						+ " where p.del_flag=0 and p.bs_step>2 ";
 		if (StringUtils.isNotEmpty(keyword)) {
 			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"

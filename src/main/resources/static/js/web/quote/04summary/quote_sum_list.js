@@ -151,7 +151,7 @@ $(function() {
 						layer.open({
 		                    type: 2,
 		                    title:'审批',
-		                    area: ['700px', '550px'],
+		                    area: ['750px', '550px'],
 		                    fixed: false,
 		                    maxmin: true,
 		                    //content: '../../views/iframe/check.html',
@@ -160,7 +160,10 @@ $(function() {
 		                    	 // 获取子页面的iframe
 		                        var iframe = window['layui-layer-iframe' + index];
 		                        // 向子页面的全局函数child传参，流程编码
-		                        iframe.child("QUOTE",data.id);
+		                        iframe.child("QUOTE",data.id,data.bsStatus);
+		                    },end: function () {
+		                    	tableIns.reload({
+		                    	});
 		                    }
 		                  });
 					}

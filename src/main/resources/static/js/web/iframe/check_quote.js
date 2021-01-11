@@ -43,11 +43,11 @@ layui.use('layer', function(){
                     data: json,
                     dataType: "json",
                     success: function (res) {
-                        console.log(res)
                         if(res.result===true){
                         	layer.msg(res.msg, {
                         	     btn: [ '知道了']
                         	     ,yes: function(index, layero){
+                        	    	 console.log(index)
                         	    	 parent.layer.close(index);
                         	     }
                         	});
@@ -98,7 +98,25 @@ layui.use('layer', function(){
                     }else{
                     	$("#low_flag").hide();
                     }
-
+                    //隐藏
+                    if(list.grade == '2'){
+                    	$("#end-btn").show();
+                    	$("#end-span").show();
+                    	$("#sure-span").text("总经理审批");
+                    }else{
+                    	$("#end-btn").hide();
+                    	$("#end-span").hide();
+                    	$("#sure-span").text("同意");
+                    }
+                    //end
+                    
+                  //已完成
+                    if(status == '2'){
+                    	setLiColor(4)
+                    }else{
+                    	setLiColor(list.grade)
+                    }
+                    
                     if(list.data.length == 0){
                         document.getElementById('timeline').innerHTML = "";
                     }else{
@@ -117,23 +135,6 @@ layui.use('layer', function(){
                         }
                         document.getElementById('timeline').innerHTML = timeHtml;
                     }
-                    
-                    //20201228-fyx-流程信息 flow_info
-                    /*if(list.Lw.length == 0){
-                    	document.getElementById('flow_info').innerHTML = "请先配置流程步骤!";
-                    }else{
-                    	var info = "审批:";
-                    	for(var i=0; i<list.Lw.length; i++){
-                    		if( i == 0){
-                    			info += list.Lw[i].bsStepName+"("+list.curBy+")>";
-                    		}else{
-                    			info += list.Lw[i].bsStepName+"("+list.Lw[i].bsCheckName+")>";
-                    		}	
-                    	}
-                    	info= info.substring(0,info.length - 1);
-                    	document.getElementById('flow_info').innerHTML = info;
-                    }*/
-                    
 
                 }else{
                     layer.msg(res.msg);
@@ -143,14 +144,43 @@ layui.use('layer', function(){
 
         });
     }
+    //设置流程信息
+    function setLiColor(grade){
+    	if(grade == '1'){
+    		$("#li-1").attr("class","s-cur");
+    		$("#li-2").attr("class","s-cur-next");
+    		$("#li-3").attr("class","");
+    	}else if(grade == '2'){
+    		$("#li-1").attr("class","s-finish");
+    		$("#li-2").attr("class","s-cur");
+    		$("#li-3").attr("class","s-cur-next");
+    	}else if(grade == '3'){
+    		$("#li-1").attr("class","s-finish");
+    		$("#li-2").attr("class","s-finish");
+    		$("#li-3").attr("class","s-cur");
+    	}else if(grade == '4'){
+    		//已经全部完成
+    		$("#li-1").attr("class","s-finish");
+    		$("#li-2").attr("class","s-finish");
+    		$("#li-3").attr("class","s-finish");
+    	}
+    }
+    
     var ppid;
     var wn='';
-    function child(wname,pid) {
+    var status=0;
+    function child(wname,pid,bsStatus) {
     	console.log()
         //接受流程类型参数
         ppid = pid;
         wn = wname;
+        status = bsStatus;
         getInfo({"id":pid,"wname":wname});
+
+        //已完成
+        if(status == '2'){
+        	$('#summit-btn').addClass("layui-btn-disabled").attr("disabled",true);//失效
+        }
     }
 
     function getRadio(status){

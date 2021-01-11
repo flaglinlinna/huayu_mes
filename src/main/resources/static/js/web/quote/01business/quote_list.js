@@ -157,8 +157,12 @@ $(function() {
 		                    success: function (layero, index) {
 		                    	 // 获取子页面的iframe
 		                        var iframe = window['layui-layer-iframe' + index];
-		                        // 向子页面的全局函数child传参，流程编码
-		                        iframe.child("QUOTE_NEW",data.id);
+		                       // 向子页面的全局函数child传参，流程编码
+		                        if(data.bsStatus=='1'){
+		                        	iframe.child("QUOTE_NEW",data.id,'end');
+		                        }else{
+		                        	iframe.child("QUOTE_NEW",data.id,'check');
+		                        }
 		                    }
 		                  });
 					}else{

@@ -140,12 +140,16 @@ layui.use('layer', function(){
     }
     var ppid;
     var wn='';
-    function child(wname,pid) {
+    var status='end';
+    function child(wname,pid,bsStatus) {
     	console.log()
         //接受流程类型参数
         ppid = pid;
         wn = wname;
         getInfo({"id":pid,"wname":wname});
+        if(status == 'end'){
+        	$('#summit-btn').addClass("layui-btn-disabled").attr("disabled",true);//失效
+        }
     }
 
     function getRadio(status){
