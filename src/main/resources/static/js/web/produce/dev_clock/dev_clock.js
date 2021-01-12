@@ -37,7 +37,7 @@ $(function() {
 			, {
 				field : 'devCode',
 				title : '卡机编码',
-				width : 120,
+				width : 140,
 			}, {
 				field : 'devName',
 				title : '卡机名称',

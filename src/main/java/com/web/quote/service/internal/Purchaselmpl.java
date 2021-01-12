@@ -259,7 +259,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		}else {
 			List<ProductMater> productMaterList = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
 			for(ProductMater o:productMaterList){
-				o.setBsStatus(1);
+				o.setBsStatusPurchase(1);
 				o.setLastupdateDate(new Date());
 				o.setLastupdateBy(UserUtil.getSessionUser().getId());
 			}

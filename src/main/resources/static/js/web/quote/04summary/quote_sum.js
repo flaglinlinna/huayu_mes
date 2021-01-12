@@ -343,7 +343,6 @@ function getMouldDetail(title) {
             res1.data.forEach(function (item, index) {
                 feeAll+= item.mjProcFee.feeAll;
                 stQuote+= item.mjProcFee.stQuote;
-                console.log(feeAll);
             });
             $(".layui-table-total").find('tr').find('td[data-field="bsMoFee"]').find('div').html(feeAll);
             $(".layui-table-total").find('tr').find('td[data-field="stQuote"]').find('div').html(stQuote);

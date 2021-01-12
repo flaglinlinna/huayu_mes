@@ -419,12 +419,12 @@ $(function() {
 					return false;
 				}
 			}else if(bsType=="surface"){
-				if(data.field.bsYield==""||data.field.bsUserNum==""){
+				if(data.field.bsYield==""||data.field.bsUserNum==""||data.field.bsCapacity ==""){
 					layer.msg("请输入所有带*的必填项");
 					return false;
 				}
 			}else if(bsType=="packag"){
-				if(data.field.bsYield==""||data.field.bsUserNum==""){
+				if(data.field.bsYield==""||data.field.bsUserNum==""||data.field.bsCapacity ==""){
 					layer.msg("请输入所有带*的必填项");
 					return false;
 				}
