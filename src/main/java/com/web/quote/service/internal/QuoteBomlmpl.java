@@ -2,7 +2,7 @@ package com.web.quote.service.internal;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
-
+import com.system.todo.service.TodoInfoService;
 import com.utils.BaseService;
 import com.utils.ExcelExport;
 import com.utils.SearchFilter;
@@ -57,6 +57,8 @@ public class QuoteBomlmpl implements QuoteBomService {
 	private BjWorkCenterDao bjWorkCenterDao;
 	@Autowired
 	private QuoteService quoteService;
+	@Autowired
+	TodoInfoService todoInfoService;
 	
 	@Override
 	public ApiResponseResult add(QuoteBom quoteBom) throws Exception {
@@ -276,6 +278,9 @@ public class QuoteBomlmpl implements QuoteBomService {
 		quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A004");
 		
 		quoteService.doItemFinish(code, Long.parseLong(quoteId));
+		
+		//20210112-fyx-关闭待办
+		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "外购件清单");
 		return ApiResponseResult.success("提交成功！");
 	}
 }

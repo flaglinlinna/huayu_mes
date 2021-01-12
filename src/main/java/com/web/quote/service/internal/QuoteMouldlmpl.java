@@ -17,17 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
+import com.system.todo.service.TodoInfoService;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.MjProcFeeDao;
 import com.web.basePrice.entity.MjProcFee;
-import com.web.basePrice.entity.Proc;
 import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteMouldDao;
-import com.web.quote.entity.QuoteMould;
-import com.web.quote.entity.QuoteProcess;
 import com.web.quote.entity.QuoteMould;
 import com.web.quote.service.QuoteMouldService;
 import com.web.quote.service.QuoteService;
@@ -51,6 +49,8 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 	
 	@Autowired
 	QuoteService quoteService;
+	@Autowired
+	TodoInfoService todoInfoService;
 	
 	/**
 	 * 获取Bom清单的组件下拉列表
@@ -194,6 +194,9 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
 		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		 //写个一个根据quoteId获取其所有记录，并批量修改修改人，修改时间字段 的DAO
+		 
+		 //20210112-fyx-关闭待办
+		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "模具清单");
 		 return ApiResponseResult.success("提交成功！");
 	 }
 	 
