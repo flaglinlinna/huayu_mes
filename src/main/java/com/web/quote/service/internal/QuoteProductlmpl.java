@@ -23,17 +23,15 @@ import com.web.quote.service.QuoteProductService;
 @Service(value = "QuoteProductService")
 @Transactional(propagation = Propagation.REQUIRED)
 public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
-	
-	@Autowired
-    private QuoteDao quoteDao;
-    
+
     /**
      * 获取报价单列表
      * **/
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword,String style,PageRequest pageRequest)throws Exception{
+    public ApiResponseResult getList(String keyword,String style,String status,PageRequest pageRequest)throws Exception{
     	String temp = "";
+    	String statusTemp ="";
     	if(StringUtils.isNotEmpty(style)){
 			if(style.equals("hardware")){
 				temp = "  p.bs_status2hardware ";
@@ -45,9 +43,22 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 				temp = "  p.bs_status2packag ";
 			}
 		}
+    	if(StringUtils.isNotEmpty(status)){
+			if(style.equals("hardware")){
+				statusTemp = " and p.bs_status2hardware ="+status;
+			}else if(style.equals("molding")){
+				statusTemp = " and p.bs_status2molding ="+status;
+			}else if(style.equals("surface")){
+				statusTemp = "and  p.bs_status2surface ="+status;
+			}else if(style.equals("packag")){
+				statusTemp = "and  p.bs_status2packag ="+status;
+			}
+		}
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
-				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_cust_name,"+temp+" col from "+Quote.TABLE_NAME+" p "
-						+ "  where p.del_flag=0 and p.bs_step=2 ";
+				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_cust_name,"+temp+" col ,p.bs_position," +
+				"  p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
+				"  p.bs_Cust_Require from "+Quote.TABLE_NAME+" p "
+						+ "  where p.del_flag=0 and p.bs_step=2 "+statusTemp;
 		if (StringUtils.isNotEmpty(keyword)) {
 			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
 					+ keyword + "') > 0 ";*/
@@ -67,9 +78,8 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
 				+ pageRequest.getPageSize() + " ";
-		
+
 		Map<String, Object> param = new HashMap<String, Object>();
-		
 		List<Object[]>  list = createSQLQuery(sql_page, param);
 		long count = createSQLQuery(sql, param, null).size();
 		
@@ -90,12 +100,37 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 			map1.put("bsCustName", object[10]);
 			map1.put("bsStatus", object[11]);
 			//[5403, EQ-20210104140202, XPBJ, 1, 2021-01-06, 流程测试2, AAA, null, CNC1, 穿戴, 1, 3]
+
+			map1.put("bsPosition", object[12]);
+			map1.put("bsMaterial", object[13]);
+			map1.put("bsChkOutItem", object[14]);
+			map1.put("bsChkOut", object[15]);
+			map1.put("bsFunctionItem", object[16]);
+			map1.put("bsFunction", object[17]);
+			map1.put("bsRequire", object[18]);
+			map1.put("bsLevel", object[19]);
+			map1.put("bsCustRequire", object[20]);
+
+
 			list_new.add(map1);
 		}
-		
-		
-		return ApiResponseResult.success().data(DataGrid.create(list_new, (int) count,
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
+		Map map = new HashMap();
+
+		String sql_num = "select count(p.id) as nums,"+temp+" as status from "+Quote.TABLE_NAME+" p where p.del_flag=0 and p.bs_step =2 group by "+temp+" ";
+		List<Object[]>  list_num = createSQLQuery(sql_num, param);
+		List<Map<String, Object>> list_num2 = new ArrayList<Map<String, Object>>();
+		for(int i = 0;i<list_num.size();i++){
+			Object[] object=(Object[]) list_num.get(i);
+			Map<String, Object> map1 = new HashMap<>();
+			map1.put("NUMS",object[0]);
+			map1.put("STATUS",object[1]);
+			list_num2.add(map1);
+		}
+
+		map.put("List", DataGrid.create(list_new,  (int) count,
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+		map.put("Nums", list_num2);
+		return ApiResponseResult.success().data(map);
     }
     
     /**

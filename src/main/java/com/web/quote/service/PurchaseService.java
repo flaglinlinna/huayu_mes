@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface PurchaseService {
 	
-	public ApiResponseResult getList(String keyword,PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getList(String keyword,String bsStatus,PageRequest pageRequest) throws Exception;
 
 	public ApiResponseResult getQuoteList(String keyword,String quoteId,PageRequest pageRequest) throws Exception;
 

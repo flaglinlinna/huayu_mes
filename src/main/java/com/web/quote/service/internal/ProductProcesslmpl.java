@@ -395,8 +395,8 @@ public class ProductProcesslmpl implements ProductProcessService {
             o.setLastupdateDate(new Date());
             o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
+        productProcessDao.saveAll(productMaterList);
         if(!("out").equals(bsType)) {
-            productProcessDao.saveAll(productMaterList);
             //项目状态设置-状态 2：已完成
             quoteItemDao.switchStatus(2, quoteId, bsCode);
             //设置结束时间

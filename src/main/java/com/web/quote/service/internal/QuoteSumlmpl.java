@@ -46,10 +46,16 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword,PageRequest pageRequest) throws Exception {
+    public ApiResponseResult getList(String keyword,String bsStatus,PageRequest pageRequest) throws Exception {
+    	String statusTemp = "";
+    	if(StringUtils.isNotEmpty(bsStatus)){
+			statusTemp = "and decode(p.bs_end_time3,null,'1','2') = " + bsStatus;
+		}
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
-				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(p.bs_end_time3,null,'1','2') col from "+Quote.TABLE_NAME+" p "
-						+ " where p.del_flag=0 and p.bs_step>2 ";
+				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(p.bs_end_time3,null,'1','2') col ,p.bs_position," +
+				"p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
+				"p.bs_Cust_Require from "+Quote.TABLE_NAME+" p "
+						+ " where p.del_flag=0 and p.bs_step>2 "+statusTemp;
 		if (StringUtils.isNotEmpty(keyword)) {
 			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
 					+ keyword + "') > 0 ";*/
@@ -80,13 +86,25 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			map1.put("bsProdType", object[9]);
 			map1.put("bsCustName", object[10]);
 			map1.put("bsStatus", object[11]);
+
+			map1.put("bsPosition", object[12]);
+			map1.put("bsMaterial", object[13]);
+			map1.put("bsChkOutItem", object[14]);
+			map1.put("bsChkOut", object[15]);
+			map1.put("bsFunctionItem", object[16]);
+			map1.put("bsFunction", object[17]);
+			map1.put("bsRequire", object[18]);
+			map1.put("bsLevel", object[19]);
+			map1.put("bsCustRequire", object[20]);
 			
 			list_new.add(map1);
 		}
+		HashMap map = new HashMap();
+		map.put("List",DataGrid.create(list_new, (int) count,
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+		map.put("Nums",quoteDao.getNumBySumAndBsStep());
 		
-		
-		return ApiResponseResult.success().data(DataGrid.create(list_new, (int) count,
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
+		return ApiResponseResult.success().data(map);
     }
 
 	@Override

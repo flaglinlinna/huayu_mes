@@ -180,6 +180,8 @@ layui.use('layer', function(){
         //已完成
         if(status == '2'){
         	$('#summit-btn').addClass("layui-btn-disabled").attr("disabled",true);//失效
+        }else{
+        	$('#summit-btn').removeClass("layui-btn-disabled").attr("disabled",false);//有效
         }
     }
 
