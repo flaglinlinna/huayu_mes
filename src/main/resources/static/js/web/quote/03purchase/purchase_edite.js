@@ -20,6 +20,7 @@ $(function() {
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
+				console.log(res.data.rows)
 				// 可进行数据操作
 				return {
 					"count" : res.data.total,
@@ -60,7 +61,21 @@ $(function() {
 				{field : 'bsUnit', width:80, title : '单位',style:'background-color:#d2d2d2'},
 				{field : 'bsRadix', width:80, title : '基数',style:'background-color:#d2d2d2'},
 				{field : 'bsGeneral', width:120, title : '是否通用物料',style:'background-color:#d2d2d2'},
-				{field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet: '#selectGear'},
+				{field : 'bsGear', width:120, title : '价格挡位', templet: '#selectGear'},
+				/*{field : 'bsGear', width:120, title : '价格挡位',templet: function (d) {
+					if(d.bsPriceList){
+						var list = $.parseJSON( d.bsPriceList );
+					}
+                    // 模板的实现方式也是多种多样，这里简单返回固定的
+                    return '<select name="city" lay-filter="testSelect" lay-verify="required" data-value="' + d.bsGear + '" >\n' +
+                        '        <option value=""></option>\n' +
+                        '        <option value="18000">北京</option>\n' +
+                        '        <option value="20000">上海</option>\n' +
+                        '        <option value="20001">广州</option>\n' +
+                        '        <option value="20002">深圳</option>\n' +
+                        '        <option value="20003">杭州</option>\n' +
+                        '      </select>';
+                }},*/
 				{field : 'bsRefer', width:110, title : '参考价格',style:'background-color:#d2d2d2'},
 				{field : 'bsAssess', width:110, title : '评估价格', edit:'number'	},
 				{field : 'bsExplain', width:110, title : '采购说明'},

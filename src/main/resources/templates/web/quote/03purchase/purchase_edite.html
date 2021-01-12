@@ -4,6 +4,17 @@
 <head th:include="layout :: htmlhead" th:with="title='产品价格维护信息'">
 <meta charset="UTF-8">
 </head>
+<style>
+ .layui-table-cell, .layui-table-tool-panel li {
+overflow: visible !important;
+}
+
+.layui-form-select .layui-input {
+height: 30px;
+}
+
+
+    </style>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 	 <div style="margin: 10px">
@@ -28,7 +39,6 @@
 				</div>
         </form>
 
-         <hr class="layui-bg-black"/>
          <!--<script type="text/html" id="toolbar">-->
              <!--<div class="layui-btn-container layui-inline">-->
                      <!--<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addHardware()">添加材料信息</button>-->
@@ -60,11 +70,14 @@
                  <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
                  <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
          <!--</script>-->
-         
+
          <script type="text/html" id="selectGear" >
-            <select name='roleId' id='roleId'  lay-filter="roleIdSelect" data-value = {{d.roleId}}  lay-verify='' lay-search=''>    
-              {{d.roleSelect}}
-            </select>
+            <select name="selectDemo" lay-filter="selectDemo" lay-search>
+<option value="">请选择</option>
+{{# layui.each($.parseJSON( d.bsPriceList ), function(index, item){     }}
+<option value="{{ item.PRICE_UN }}">{{ item.RANGE_PRICE }}</option>
+                    {{# });  }}
+</select>
          </script>
 	 </div>
 
