@@ -2,32 +2,38 @@ package com.web.quote.service.internal;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.utils.ExcelExport;
-import com.utils.UserUtil;
-import com.web.quote.dao.QuoteDao;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseSql;
+import com.utils.ExcelExport;
+import com.utils.UserUtil;
+import com.web.basePrice.dao.PriceCommDao;
 import com.web.quote.dao.ProductMaterDao;
+import com.web.quote.dao.QuoteDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.Quote;
 import com.web.quote.service.PurchaseService;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
 
 @Service(value = "PurchaseService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -37,7 +43,8 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
     private ProductMaterDao productMaterDao;
 	@Autowired
 	private QuoteDao quoteDao;
-	
+	@Autowired
+	private PriceCommDao priceCommDao;
     /**
      * 查询列表
      */
@@ -122,6 +129,19 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		//List<Map<String, Object>> list = super.findBySql(sql, param);
 		List<ProductMater> list = createSQLQuery(sql, param, ProductMater.class);
 		long count = createSQLQuery(hql, param, null).size();
+		
+		for(ProductMater pm:list){
+			List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(pm.getBsMaterName());
+			if(lm.size()>0){
+		        String str1 = JSON.toJSONString(lm); //此行转换
+		        String str = "";
+		        for(Map<String, Object> map:lm){
+		        	str += map.get("RANGE_PRICE").toString()+",";
+		        }
+		        str = str.substring(0, str.length()-1);
+				pm.setBsPriceList(str1);
+			}
+		}
 		
 		return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 

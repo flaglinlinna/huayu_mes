@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.springframework.data.annotation.Transient;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 制作部材料信息表
@@ -202,6 +205,12 @@ public class ProductMater extends BaseEntity {
 	@ApiModelProperty(name = "bsFee", value = "总价格(未税)")
 	@Column(length = 50)
 	protected BigDecimal bsFee;
+	
+	/**
+	 * 
+	 */
+	@Transient
+    private String bsPriceList;
 
 	public int getBsStatus() {
 		return bsStatus;
@@ -394,5 +403,15 @@ public class ProductMater extends BaseEntity {
 	public void setBsStatusPurchase(int bsStatusPurchase) {
 		this.bsStatusPurchase = bsStatusPurchase;
 	}
+
+	public void setBsPriceList(String bsPriceList) {
+		this.bsPriceList = bsPriceList;
+	}
+
+	public String getBsPriceList() {
+		return bsPriceList;
+	}
+	
+	
 	
 }
