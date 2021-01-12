@@ -119,6 +119,31 @@ public class CheckImpl   implements CheckService {
 		checkInfoDao.saveAll(lc);
 		return true;
 	}
+	/**
+	 * 关闭待办
+	 * @param bsRouter
+	 * @param bsRecordId
+	 * @throws Exception
+	 */
+	private void closeTodo(String bsRouter,Long bsRecordId) throws Exception{
+		List<TodoInfo> tl = todoInfoDao.findByDelFlagAndBsRouterAndBsReferIdAndBsStatusOrderByCreateDateDesc(0, bsRouter, bsRecordId, 0);
+		if(tl.size()>0){
+			//假如正常情况下只有一条记录
+			if(tl.size() == 1){
+				TodoInfo td = tl.get(0);
+				td.setBsStatus(1);
+				td.setLastupdateDate(new Date());
+				todoInfoDao.save(td);
+			}else{
+				for(int i=0;i<tl.size();i++){
+					TodoInfo td = tl.get(i);
+					td.setBsStatus(1);
+					td.setLastupdateDate(new Date());
+					todoInfoDao.save(td);
+				}
+			}
+		}
+	}
 	private void sendTodo(CheckInfo ci) throws Exception{
 		TodoInfo tf = new TodoInfo();
 		tf.setBsUserId(ci.getBsCheckId());
@@ -181,6 +206,9 @@ public class CheckImpl   implements CheckService {
 	@Override
 	public boolean doCheck(CheckInfo checkInfo) throws Exception {
 		// TODO Auto-generated method stub
+		//20210112-fyx-关闭待办
+		closeTodo(checkInfo.getBsCheckCode(),checkInfo.getBsRecordId());
+		
 		if(checkInfo.getBsStepCheckStatus() != 1){
 			return this.doBack(checkInfo);
 		}else{
@@ -266,8 +294,8 @@ public class CheckImpl   implements CheckService {
 				lcr.add(sr);
 				//20200615-待办
 				//20200615-fyx-关闭待办
-				todoInfoDao.closeByBsReferIdAndBsRouter(ci.getBsRecordId(), ci.getBsCheckCode());
-				//this.sendTodo(sr);
+				//todoInfoDao.closeByBsReferIdAndBsRouter(ci.getBsRecordId(), ci.getBsCheckCode());
+				this.sendTodo(sr);
 			}else{
 				//流程结束
 				//1.如果是“QUOTE_NEW”第一步，业务部流程审批

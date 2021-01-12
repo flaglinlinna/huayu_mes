@@ -53,4 +53,5 @@ public interface TodoInfoDao extends CrudRepository<TodoInfo, Long>, JpaSpecific
     
     public List<TodoInfo> findByDelFlagAndBsUserIdAndBsTypeAndBsStatus(Integer isDel, Long bsUserId,int bsType, int bsStatus);
 
+    public List<TodoInfo> findByDelFlagAndBsRouterAndBsReferIdAndBsStatusOrderByCreateDateDesc(Integer isDel,String router, Long bsReferId,int bsStatus);
 }
