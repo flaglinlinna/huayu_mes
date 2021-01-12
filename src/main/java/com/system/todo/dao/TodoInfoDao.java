@@ -40,6 +40,12 @@ public interface TodoInfoDao extends CrudRepository<TodoInfo, Long>, JpaSpecific
     @Query(value = "update "+TodoInfo.TABLE_NAME+" t set t.bs_status = '1' where t.bs_refer_id = ?2 and t.bs_status = '0' and t.bs_user_id " +
             "in (select v.pk_user from sys_user_roles_agg v where v.pk_role = ?1)", nativeQuery = true)
     public void closeByRoleIdAndBsReferId(Long roleId, Long bsReferId);
+    
+    
+    @Modifying
+    @Query("update TodoInfo t set t.bsStatus='1' where t.bsReferId=?1 and t.bsModel=?2")
+    public void closeByBsReferIdAndModel(Long bsReferId,String model);
+    
 
     public int countByDelFlagAndBsUserId(Integer isDel, Long bsUserId);
 

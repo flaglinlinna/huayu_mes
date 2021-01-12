@@ -192,4 +192,11 @@ public class TodoInfoImpl  implements TodoInfoService {
         return ApiResponseResult.success().data(map);
     }
 
+	@Override
+	public ApiResponseResult closeByIdAndModel(Long bsReferId,String model) throws Exception {
+		// TODO Auto-generated method stub
+		todoInfoDao.closeByBsReferIdAndModel(bsReferId,model);
+		return ApiResponseResult.success();
+	}
+
 }

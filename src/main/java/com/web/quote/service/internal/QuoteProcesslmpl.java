@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
+import com.system.todo.service.TodoInfoService;
 import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
@@ -57,6 +58,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	QuoteService quoteService;
 	@Autowired
 	BaseFeeDao baseFeeDao;
+	@Autowired
+	TodoInfoService todoInfoService;
 
 	/**
 	 * 获取bom列表-下拉选择
@@ -273,6 +276,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 //项目状态设置-状态 2：已完成
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
 		 quoteProcessDao.saveQuoteProcessByQuoteId(Long.parseLong(quoteId));
+		 
+		//20210112-fyx-关闭待办
+		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "工艺流程");
 		 
 		 return ApiResponseResult.success("提交成功！");
 	 }

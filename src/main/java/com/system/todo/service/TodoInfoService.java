@@ -27,4 +27,6 @@ public interface TodoInfoService {
 	public ApiResponseResult delete(Long id) throws Exception;
 
 	public ApiResponseResult getlist(int bsStatus, PageRequest pageRequest) throws Exception;
+	
+	public ApiResponseResult closeByIdAndModel(Long bsReferId,String model) throws Exception;
 }

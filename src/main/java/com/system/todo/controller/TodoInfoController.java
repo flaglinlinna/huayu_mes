@@ -57,7 +57,7 @@ public class TodoInfoController extends WebController {
 			@ApiImplicitParam(name = "roleId", value = "角色ID（可传可不传，传值时关联ID也必须传值）", dataType = "Long", paramType="query", defaultValue=""),
 			@ApiImplicitParam(name = "bsReferId", value = "关联ID（可传可不传）", dataType = "Long", paramType="query", defaultValue="")
 	})
-	@RequestMapping(value = "/close", method = RequestMethod.POST)
+	@RequestMapping(value = "/close", method = RequestMethod.GET)
 	public ApiResponseResult close(Long Id, Long bsUserId, Long roleId, Long bsReferId) {
 		try {
 			return todoInfoService.close(Id, bsUserId, roleId, bsReferId);
