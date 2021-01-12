@@ -106,7 +106,11 @@ display: none;
 			</div>
 			<table id="listTable" lay-filter="listTable" style="margin:0px;"></table>
 			<script type="text/html" id="optBar">
-            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看汇总</a>
+            {{# if(d.bsStatus3 >= 1){ }}
+           <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看汇总</a>
+       {{# } else { }}
+           <a class="layui-btn layui-btn-xs layui-btn-disabled" >查看汇总</a>
+       {{# } }}
             </script>
             <script type="text/html" id="statusTpl">
 <ul class="steps">
