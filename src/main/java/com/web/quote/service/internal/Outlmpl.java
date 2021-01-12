@@ -59,6 +59,7 @@ public class Outlmpl extends BaseSql implements OutService {
 			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
 					+ keyword + "') > 0 ";*/
 		}
+		sql += "  order by p.bs_code desc";
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
