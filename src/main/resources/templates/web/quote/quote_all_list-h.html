@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='报价单列表'"></head>
+<style th:inline="text">
+
+.steps {
+  list-style: none;
+  display: flex;
+  width:180px;
+}
+.steps li {
+  flex: 1;
+  position: relative;
+  min-width: 30px;
+}
+.sub_title{
+font-size:12px;
+}
+.step-num {
+  display: inline-block;
+  height: 26px;
+  width: 26px;
+  color: #fff;
+  background-color: #b9b9b9;
+  line-height: 26px;
+  border-radius: 50%;
+  text-align: center;
+  border: 1px solid rgba(224, 224, 224, 1);
+  font-size:12px;
+}
+.step_active .step-num {
+  background-color: #f3862d;
+}
+.step_pass .step-num {
+  background-color: #1dce05;
+}
+.step-num:after {
+  content: "";
+  width: 90%;
+  height: 5px;
+  background-color: #e0e0e0;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 15px;
+  margin-left: 4%;
+}
+.step_edd .step-num:after {
+  display: none;
+}
+.step_pass .step-num:after {
+  background-color: #2ad613;
+}
+.step-sub {
+  width: 90%;
+  position: absolute;
+  left: 50%;
+}
+
+	</style>
+<body class="layui-layout-body">
+<ul class="steps">
+        <li  class="step_pass">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">开始</div>
+          </div>
+        </li>
+        <li  class="step_active">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">1</div>
+            <div class="sub_title">业务部</div>
+          </div>
+        </li>
+        <li  class="">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">2</div>
+            <div class="sub_title">制造部-五金</div>
+            <div class="step-sub">
+            </div>
+          </div>
+        </li>
+        <li  class="">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">2</div>
+            <div class="sub_title">制造部-注塑</div>
+          </div>
+        </li>
+        <li  class="">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">2</div>
+            <div class="sub_title">制造部-表面</div>
+          </div>
+        </li>
+        <li  class="">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">2</div>
+            <div class="sub_title">制造部-组装</div>
+          </div>
+        </li>
+        <li  class="">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">2</div>
+            <div class="sub_title">采购部</div>
+          </div>
+        </li>
+        <li  class="">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">2</div>
+            <div class="sub_title">外协部</div>
+          </div>
+        </li>
+        <li  class="">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">3</div>
+            <div class="sub_title">业务部</div>
+          </div>
+        </li>
+        <li  class="">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">4</div>
+            <div class="sub_title">总经理</div>
+          </div>
+        </li>
+        <li  class="step_edd">
+          <div class="step-line"></div>
+          <div class="step-content">
+            <div class="step-num">结束</div>
+          </div>
+        </li>
+      </ul>
+        
+		<script th:src="@{/js/web/quote/quote_all_list.js}"
+			src="/js/web/quote/quote_all_list.js"></script>
+	</div>
+</body>
+</html>

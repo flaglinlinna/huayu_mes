@@ -52,7 +52,7 @@ public class ProductProcess extends BaseEntity {
 	@Column
 	@ApiModelProperty(name="bsStatus",value="状态")
     protected int bsStatus = 0;
-	
+		
 	/**
      * 是否需要填写
      * 0：需要，1:不需要
