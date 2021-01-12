@@ -60,12 +60,12 @@ public class QuoteSumController extends WebController {
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getList(String keyword) {
+	public ApiResponseResult getList(String keyword,String bsStatus) {
 		String method = "/quoteSum/getList";
 		String methodName = "获取报价单列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = quoteSumService.getList(keyword, super.getPageRequest(sort));
+			ApiResponseResult result = quoteSumService.getList(keyword,bsStatus, super.getPageRequest(sort));
 			logger.debug(methodName+"=getList:");
 			return result;
 		} catch (Exception e) {

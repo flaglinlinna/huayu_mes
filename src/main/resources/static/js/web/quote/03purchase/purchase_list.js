@@ -31,11 +31,24 @@ $(function() {
 							"code" : res.status
 						} 
 					}
+					var num_list = res.data.Nums;
+					var all = 0;
+					res.data.Nums.forEach(function (item, index) {
+						if(item.STATUS == '0'){
+							$('#draft-num').text('草稿('+item.NUMS+')');
+						}
+						 else if(item.STATUS == '1'){
+							$('#in-num').text('进行中('+item.NUMS+')');
+						}else if(item.STATUS == '2'){
+							$('#over-num').text('已完成('+item.NUMS+')');
+						}
+						all = Number(all)+Number(item.NUMS);
+					});
 					// 可进行数据操作
 					return {
-						"count" : res.data.total,
+						"count" : res.data.List.total,
 						"msg" : res.msg,
-						"data" : res.data.rows,
+						"data" : res.data.List.rows,
 						"code" : res.status
 					}
 				},
@@ -43,7 +56,15 @@ $(function() {
 				           {type : 'numbers'},
 							 
 				 {field : 'bsCode',title : '报价单编号',width : 150,sort: true}, 
-				 {field : 'bsType',title : '报价类型', width : 100}
+				 {field : 'bsType',title : '报价类型', width : 100,templet:function (d) {
+						 if(d.bsType=="YSBJ"){
+							 return "衍生报价";
+						 }else if(d.bsType =="XPBJ"){
+							 return "新品报价"
+						 }else {
+							 return "";
+						 }
+					 }}
 				,{
 					field : 'bsStatus',
 					title : '状态',width : 80
@@ -175,9 +196,14 @@ $(function() {
 				$(".searchDiv").toggle();
                 //var val=$(this).attr("id");
             })
-            $("#ul-list li").click(function () {
-                    $(this).addClass("current").siblings().removeClass();
-                })
+			$("#ul-list li").click(function () {
+				$(this).addClass("current").siblings().removeClass();
+				//alert($("span:last",this).attr("data-status"));
+				tableIns.reload({
+					url:context + '/purchase/getList?bsStatus='+$("span:last",this).attr("data-status"),
+					// url:context + '/quote/getList?status='+$("span:last",this).attr("data-status")
+				});
+			})
 		});
 });
 //编辑项目弹出框

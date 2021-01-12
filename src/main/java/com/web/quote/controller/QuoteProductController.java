@@ -70,11 +70,11 @@ public class QuoteProductController extends WebController {
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表",hidden = true)
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getList(String keyword,String style) {
+    public ApiResponseResult getList(String keyword,String style,String status) {
         String method = "quote/getList";String methodName ="获取报价单列表";
         try {
             Sort sort = new Sort(Sort.Direction.ASC, "id");
-            ApiResponseResult result = quoteProductService.getList(keyword,style, super.getPageRequest(sort));
+            ApiResponseResult result = quoteProductService.getList(keyword,style,status, super.getPageRequest(sort));
             logger.debug("获取报价单列表=getList:");
             getSysLogService().success(module,method, methodName, keyword);
             return result;
