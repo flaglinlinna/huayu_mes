@@ -74,6 +74,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 				sql += "  and i.bs_code in ('B004','C004') ";
 			}
 		}*/
+		sql += "  order by p.bs_code desc";
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
