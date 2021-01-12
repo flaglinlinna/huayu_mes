@@ -58,10 +58,10 @@ $(function() {
 			},
 			{
 				field : 'ITEM_MODEL',
-				title : '机型', sort: true
+				title : '机型',width : 110, sort: true
 			}, {
 				field : 'PROC_NAME',
-				title : '工序名称', sort: true
+				title : '工序名称',width : 100, sort: true
 			},
 				{
 					field : 'ITEM_NAME_S',
