@@ -27,6 +27,7 @@
 				</div>
 			</form>
 
+<<<<<<< HEAD
 
 
 			<hr class="layui-bg-black" />
@@ -40,6 +41,11 @@
                  <button class="layui-btn layui-btn-sm layui-btn-disabled" disabled id="savebtn" onclick="save()">确认完成</button>
                  {{# } else { }}   
                  <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addQuoteBom()">添加</button>         
+=======
+         <script type="text/html" id="toolbar">
+             <div class="layui-btn-container layui-inline">
+                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addQuoteBom()">添加</button>
+>>>>>>> 8e23db9bae6fdcad3cafac067ccf05a040742f2f
                  <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="exportExcel()">导出模板</button>
                  <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="openUpload()">导入数据</button>
                  <button class="layui-btn layui-btn-sm" id="savebtn" onclick="save()">确认完成</button>
@@ -50,6 +56,7 @@
 			<table id="quoteBomList" lay-filter="quoteBomTable"></table>
 
 			<script type="text/html" id="checkStatus">
+
              {{#  if(d.checkStatus == 0){ }}
              <span style="color: green;">校验通过</span>
              {{#  } else if(d.checkStatus == 1) { }}

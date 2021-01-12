@@ -6,7 +6,8 @@ $(function() {
 	setData();
 	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ],
 		function() {var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table;
-						// 按钮监听事件		
+		form.render();				
+		// 按钮监听事件		
 						form.on('submit(saveData)',function(data) {
 						    var paramlist = data.field;
 							paramlist["bsMaterial"] = GetCheckboxValues('material');
