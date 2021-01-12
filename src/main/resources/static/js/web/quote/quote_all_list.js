@@ -36,12 +36,10 @@ $(function() {
 					var num_list = res.data.Nums;
 					var all = 0;
 					res.data.Nums.forEach(function (item, index) {
-						if(item.STATUS == '0'){
-							$('#in-num').text('进行中('+item.NUMS+')');
-						}else if(item.STATUS == '1'){
+						if(item.STATUS == '2'){
 							$('#over-num').text('已完成('+item.NUMS+')');
-						}else if(item.STATUS == '99'){
-							$('#close-num').text('已关闭('+item.NUMS+')');
+						}else{
+							$('#in-num').text('进行中('+item.NUMS+')');
 						}
 						all = Number(all)+Number(item.NUMS);
 					});
@@ -59,10 +57,10 @@ $(function() {
 							 
 				 {field : 'bsCode',title : '报价单编号',width : 150,sort: true}, 
 				 {field : 'bsType',title : '报价类型', width : 100},
-				 {field : 'bsStatus',title : '状态',width : 350,templet:'#statusTpl'}, 
+				 {field : 'bsStatus',title : '状态',width : 341,templet:'#statusTpl'}, 
 				 {
 					field : 'bsFinishTime',
-					title : '完成日期',
+					title : '计划完成日期',
 					 sort: true
 					, width : 140
 				}, {
