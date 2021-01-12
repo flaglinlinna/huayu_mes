@@ -408,6 +408,8 @@ public class ProductProcesslmpl implements ProductProcessService {
             quoteItemDao.switchStatus(2, quoteId, bsCode);
             //设置结束时间
             quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
+            //增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, bsCode);
         }
             //20201225-fyx-计算后工序良率
             this.updateHouYield(quoteId, bsType);

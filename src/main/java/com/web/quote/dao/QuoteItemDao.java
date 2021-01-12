@@ -40,4 +40,9 @@ public interface QuoteItemDao extends CrudRepository<QuoteItem, Long>,JpaSpecifi
 	@Modifying
 	@Query("update QuoteItem t set t.bsEndTime=?1 where t.pkQuote=?2 and t.bsCode=?3")
 	public void setEndTime(Date endTime,Long quoteId,String bsCode);
+	
+	//增加处理人
+	@Modifying
+	@Query("update QuoteItem t set t.bsPerson=?1, t.toDoBy=?2 where t.pkQuote=?3 and t.bsCode=?4")
+	public void setPerson(String personName,Long personId,Long quoteId,String bsCode);
 }
