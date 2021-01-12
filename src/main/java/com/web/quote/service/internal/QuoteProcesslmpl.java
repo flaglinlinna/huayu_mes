@@ -256,6 +256,11 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 * 确认完成
 	 * **/
 	 public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
+		 //判断状态是否已执行过确认提交-lst-20210112
+		 int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
+		 if(i>0){
+			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
+		 }
 		 //20201223-fyx-先判断是否维护了人工和制费
 		//获取该报价单的所有的未提交的数据，更新一下 人工和制费
 			List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,Long.valueOf(quoteId),0);

@@ -94,11 +94,12 @@ public class QuoteController extends WebController {
 	
 	@ApiOperation(value = "报价项目-Bom", notes = "报价项目-Bom", hidden = true)
 	@RequestMapping(value = "/toQuoteBom")
-	public ModelAndView toQuoteBom(String quoteId,String code) {
+	public ModelAndView toQuoteBom(String quoteId,String code,String iStatus) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("code", code);
+			mav.addObject("iStatus", iStatus);
 			mav.setViewName("/web/quote/01business/quote_bom");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -23,6 +23,9 @@ public interface QuoteItemDao extends CrudRepository<QuoteItem, Long>,JpaSpecifi
 	
 	//public List<QuoteItem> findByDelFlagAndPkQuoteAndNotBsEndTime(Integer delFlag,Long PkQuote);
 	
+	//查询此报价的项目是否已完成
+	public int countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(Integer delFlag,Long PkQuote,String bsCode,int bsStatus);
+	
 	//变更项目进度状态（0未开始、1进行中、2已完成、3不需要填写）
 	@Modifying
     @Query("update QuoteItem t set t.bsStatus=?1 where t.pkQuote=?2 and t.bsCode=?3")

@@ -6,7 +6,7 @@ $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
 		var table = layui.table, table1 = layui.table,form = layui.form,upload = layui.upload,
 			tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect;
-
+		
 		tableSelect=tableSelect.render({
 			elem : '#BjWorkCenter',
 			searchKey : 'keyword',
@@ -187,7 +187,7 @@ $(function() {
 			,
 			cellMinWidth : 80,
 			toolbar: '#toolbar',
-			height:'full-110'//固定表头&full-查询框高度
+			height:'full-65'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,
 			request : {
@@ -404,7 +404,6 @@ $(function() {
 				layer.close(index);
 			}
 		});
-
 	});
 
 });
@@ -560,7 +559,7 @@ function delProdErr(obj, id, name) {
 }
 
 function save(){
-	console.log(quoteId,code)
+	//console.log(quoteId,code)
 	var param = {"quoteId" : quoteId,"code":code};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]

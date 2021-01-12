@@ -112,7 +112,11 @@ public class QuoteFilelmpl implements QuoteFileService {
 	 * 确认完成
 	 * **/
 	 public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
-		
+		//判断状态是否已执行过确认提交
+		 int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
+		 if(i>0){
+			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
+		 }
 		 quoteFileDao.saveQuoteFileByQuoteId(Long.parseLong(quoteId));
 		 //项目状态设置-状态 2：已完成
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);

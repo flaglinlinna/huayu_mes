@@ -47,12 +47,13 @@ public class QuoteMouldController extends WebController {
 	
 	@ApiOperation(value = "模具清单维护页", notes = "模具清单维护页", hidden = true)
 	@RequestMapping(value = "/toQuoteMould")
-	public ModelAndView toQuoteMould(String quoteId,String code) {
+	public ModelAndView toQuoteMould(String quoteId,String code,String iStatus) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult bomNameList=quoteMouldService.getBomList(quoteId);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("code", code);
+			mav.addObject("iStatus", iStatus);
 			mav.addObject("bomNameList", bomNameList);
 			mav.setViewName("/web/quote/01business/quote_mould");// 返回路径
 		} catch (Exception e) {

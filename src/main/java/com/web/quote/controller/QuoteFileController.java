@@ -29,11 +29,12 @@ public class QuoteFileController extends WebController {
 	
 	@ApiOperation(value = "产品资料模块页", notes = "产品资料模块页", hidden = true)
 	@RequestMapping(value = "/toProductFile")
-	public ModelAndView toProductFile(String quoteId,String code) {
+	public ModelAndView toProductFile(String quoteId,String code,String iStatus) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("code", code);
+			mav.addObject("iStatus", iStatus);
 			mav.setViewName("/web/quote/01business/quote_file");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
