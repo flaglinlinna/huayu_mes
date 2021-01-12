@@ -54,7 +54,7 @@ public class QuoteAlllmpl  extends BaseSql implements QuoteAllService {
 			sql += "  and INSTR((p.bsType || p.bsCode || p.bsProd),  '"
 					+ keyword + "') > 0 ";
         }
-
+        sql += "  order by p.bs_code desc";
         int pn = pageRequest.getPageNumber() + 1;
 
         String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
