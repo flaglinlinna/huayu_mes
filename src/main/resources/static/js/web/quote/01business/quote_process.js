@@ -2,6 +2,7 @@
  * 产品工艺流程
  */
 var pageCurr;
+var totalCount=0;//表格记录数
 $(function() {
 	layui.use([ 'form', 'table' , 'tableSelect' ], function() {
 		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
@@ -86,6 +87,7 @@ $(function() {
 			} ] ],
 			done : function(res, curr, count) {
 				//console.log(res)
+				totalCount=res.count
 				pageCurr = curr;
 				merge(res.data,['bsName',],[1,1]);
 			}
@@ -360,6 +362,10 @@ function addProc() {
 	openProc(null, "添加工艺流程");
 }
 function saveProc(){
+	if(totalCount==0){
+		layer.alert("当前模块无数据，“确认提交”不可用")
+		return false;
+	}
 	//console.log(quoteId)
 	var param = {"quoteId" : quoteId ,"code":code};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
