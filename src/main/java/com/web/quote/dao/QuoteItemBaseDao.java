@@ -13,6 +13,8 @@ public interface QuoteItemBaseDao extends CrudRepository<QuoteItemBase, Long>,Jp
 
 	public List<QuoteItemBase> findByDelFlag(Integer delFlag);
 
+	public  QuoteItemBase findById(long Id);
+
 	public List<QuoteItemBase> findByDelFlagAndBsStyle(Integer delFlag,String bsStyle);
 	
 	@Query(value = "select map from QuoteItemBase map  where map.delFlag=?1 and bsStyle in ('mater','process') ")
