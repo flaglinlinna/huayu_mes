@@ -28,12 +28,19 @@
          <hr class="layui-bg-black"/>
          <script type="text/html" id="toolbar">
              <div class="layui-btn-container layui-inline">
-                     <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addHardware()">添加材料信息</button>
-                 <!--<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="downloadExcel()">下载模板</button>-->
-                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="exportExcel()">导出模板</button>
-                 <!--<button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入模板</button>-->
+                <!--<button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入模板</button>-->
+                <!--<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="downloadExcel()">下载模板</button>-->
+                {{# if(iStatus==2){ }}
+                 <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled" disabled>添加材料信息</button>              
+                 <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled" disabled>导出模板</button>          
+                 <a class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled">导入数据</a>
+                 <button class="layui-btn layui-btn-sm layui-btn-disabled" disabled>确认完成</button>
+                 {{# } else { }}
+                <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addHardware()">添加材料信息</button>              
+                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="exportExcel()">导出模板</button>          
                  <a class="layui-btn layui-btn-sm layui-btn-normal" onclick="openUpload()">导入数据</a>
                  <button class="layui-btn layui-btn-sm" onclick="Confirm()">确认完成</button>
+                 {{# } }}          
              </div>
          </script>
 
@@ -50,8 +57,13 @@
         <table id="listTable" lay-filter="hardwareTable"></table>
 
          <script type="text/html" id="optBar">
+          {{# if(iStatus==2){ }}
+                 <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
+                 <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
+          {{# } else { }}
                  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
                  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+          {{# } }}  
          </script>
 	 </div>
 	 <!--添加或编辑异常类别-->
@@ -163,6 +175,7 @@
             var bsType=[[${bsType}]];
             var bsCode=[[${bsCode}]];
             var quoteId=[[${quoteId}]];
+            var iStatus=[[${iStatus}]];
             var bomNameList=[[${bomNameList}]];
         </script>
 

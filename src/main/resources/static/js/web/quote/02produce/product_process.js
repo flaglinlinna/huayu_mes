@@ -19,7 +19,7 @@ $(function() {
 			,
 			cellMinWidth : 80,
 			toolbar: '#toolbar',
-			height:'full-110'//固定表头&full-查询框高度
+			height:'full-65'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,
 			request : {

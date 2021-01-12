@@ -70,7 +70,7 @@ $(function() {
 				toolbar : '#optBar'
 			} ] ],
 			done : function(res, curr, count) {
-				console.log(res)
+				//console.log(res)
 				totalCount=res.count
 				pageCurr = curr;
 				merge(res.data,['bsName',],[1,1]);
