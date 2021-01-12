@@ -180,7 +180,11 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 	 * 提交模具维护清单
 	 * **/
 	 public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
-		 
+		//判断状态是否已执行过确认提交-lst-20210112
+		 int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
+		 if(i>0){
+			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
+		 }
 		 int count =quoteMouldDao.countByDelFlagAndPkQuoteAndBsActQuote(0,Long.parseLong(quoteId),null);
 		 if(count>0){
 			 return ApiResponseResult.failure("提交失败：实际报价不可为空，请检查数据");

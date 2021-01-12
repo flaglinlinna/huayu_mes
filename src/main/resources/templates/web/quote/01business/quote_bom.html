@@ -6,43 +6,50 @@
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
-	 <div style="margin: 10px">
-	 <form id="prodErrSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 5px;">
-           <div class="layui-form-item" style="margin-bottom: 0px">
+		<div style="margin: 10px">
+			<form id="prodErrSearch" class="layui-form layui-form-pane"
+				method="post" action="" style="margin-top: 5px;">
+				<div class="layui-form-item" style="margin-bottom: 0px">
 					<div class="layui-inline">
 						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
 						<div class="layui-input-inline">
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
 								placeholder="请输入关键字" class="layui-input" type="text" />
 						</div>
-						
-						 <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
-					<button type="reset" class="layui-btn layui-btn-primary layui-btn-sm"
-							title="重置">
+
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="searchSubmit">查询</button>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
 							<i class="layui-icon">&#xe669;</i>重置
 						</button>
 					</div>
 				</div>
-        </form>
+			</form>
 
 
 
-         <hr class="layui-bg-black"/>
-         <script type="text/html" id="toolbar">
-             <div class="layui-btn-container layui-inline">
-                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addQuoteBom()">添加</button>
+			<hr class="layui-bg-black" />
+			<script type="text/html" id="toolbar">
+             <div class="layui-btn-container layui-inline">              
+                 <!--<button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入模板</button>-->                
+                 {{# if(iStatus==2){ }}
+                 <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled"  disabled onclick="addQuoteBom()">添加</button>
+                  <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled" disabled onclick="exportExcel()">导出模板</button>
+                 <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled" disabled onclick="openUpload()">导入数据</button>
+                 <button class="layui-btn layui-btn-sm layui-btn-disabled" disabled id="savebtn" onclick="save()">确认完成</button>
+                 {{# } else { }}   
+                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addQuoteBom()">添加</button>         
                  <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="exportExcel()">导出模板</button>
-                 <!--<button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">导入模板</button>-->
                  <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="openUpload()">导入数据</button>
-                 <button class="layui-btn layui-btn-sm" onclick="save()">确认完成</button>
-             </div>
+                 <button class="layui-btn layui-btn-sm" id="savebtn" onclick="save()">确认完成</button>
+                 {{# } }}
+            </div>
          </script>
 
+			<table id="quoteBomList" lay-filter="quoteBomTable"></table>
 
-        <table id="quoteBomList" lay-filter="quoteBomTable"></table>
-
-
-         <script type="text/html" id="checkStatus">
+			<script type="text/html" id="checkStatus">
              {{#  if(d.checkStatus == 0){ }}
              <span style="color: green;">校验通过</span>
              {{#  } else if(d.checkStatus == 1) { }}
@@ -51,138 +58,166 @@
              <span></span>
              {{#  } }}
          </script>
-
-         <script type="text/html" id="optBar">
+		 <script type="text/html" id="optBar">
+                 {{# if(iStatus==2){ }}
+                 <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
+                 <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
+                 {{# } else { }}
                  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
                  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                 {{# } }}              
          </script>
-	 </div>
-	 <!--添加或编辑外购件清单信息-->
-    <div id="setQuoteBom" class="layer_self_wrap" style="width:500px;display:none;margin-left: 10px;">
+		</div>
+		<!--添加或编辑外购件清单信息-->
+		<div id="setQuoteBom" class="layer_self_wrap"
+			style="width: 500px; display: none; margin-left: 10px;">
 
-        <form id="quoteBomForm" class="layui-form layui-form-pane" lay-filter="quoteBomForm" method="post" action="" style="margin-top: 20px;">
-            <input id="pageNum" type="hidden" name="pageNum"/>
-            <input id="id" type="hidden" name="id"/>
-            <input id="pkQuote" type="hidden" name="pkQuote"/>
-            <input id="pkBjWorkCenter" type="hidden" name="pkBjWorkCenter"/>
-            <input id="pkItemTypeWg" type="hidden" name="pkItemTypeWg"/>
-            <input id="pkUnit" type="hidden" name="pkUnit"/>
-            <div class="layui-form-item">
-                <label class="layui-form-label layui-required">组件名称</label>
-                <div class="layui-input-block">
-                    <input id="bsElement" name="bsElement" placeholder="请输入组件名称"  lay-verify="required"
-                           autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label layui-required ">零件名称</label>
-                <div class="layui-input-block">
-                    <input id="bsComponent" name="bsComponent" placeholder="请输入零件名称" lay-verify="required"  autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label layui-required">工作中心</label>
-                <div class="layui-input-block">
-                    <input id="BjWorkCenter" name="BjWorkCenter" lay-filter="BjWorkCenter"
-                           lay-verify="required" readonly="readonly"
-                           placeholder="请选择工作中心"  class="layui-input" type="text"  autocomplete="off" />
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label layui-required">物料类型</label>
-                <div class="layui-input-block">
-                    <!--<select id="pkItemTypeWg" name="pkItemTypeWg" lay-filter="pkItemTypeWg" placeholder="请选择物料类型"   autocomplete="off" >-->
-                    <!--</select>-->
-                    <input id="ItemTypeWg" name="ItemTypeWg" lay-filter="ItemTypeWg" lay-verify="required"
-                           readonly="readonly"
-                           placeholder="请选择物料类型"  class="layui-input" type="text"  autocomplete="off" />
-                </div>
-            </div>
+			<form id="quoteBomForm" class="layui-form layui-form-pane"
+				lay-filter="quoteBomForm" method="post" action=""
+				style="margin-top: 20px;">
+				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
+					type="hidden" name="id" /> <input id="pkQuote" type="hidden"
+					name="pkQuote" /> <input id="pkBjWorkCenter" type="hidden"
+					name="pkBjWorkCenter" /> <input id="pkItemTypeWg" type="hidden"
+					name="pkItemTypeWg" /> <input id="pkUnit" type="hidden"
+					name="pkUnit" />
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">组件名称</label>
+					<div class="layui-input-block">
+						<input id="bsElement" name="bsElement" placeholder="请输入组件名称"
+							lay-verify="required" autocomplete="off" class="layui-input"
+							type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required ">零件名称</label>
+					<div class="layui-input-block">
+						<input id="bsComponent" name="bsComponent" placeholder="请输入零件名称"
+							lay-verify="required" autocomplete="off" class="layui-input"
+							type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">工作中心</label>
+					<div class="layui-input-block">
+						<input id="BjWorkCenter" name="BjWorkCenter"
+							lay-filter="BjWorkCenter" lay-verify="required"
+							readonly="readonly" placeholder="请选择工作中心" class="layui-input"
+							type="text" autocomplete="off" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">物料类型</label>
+					<div class="layui-input-block">
+						<!--<select id="pkItemTypeWg" name="pkItemTypeWg" lay-filter="pkItemTypeWg" placeholder="请选择物料类型"   autocomplete="off" >-->
+						<!--</select>-->
+						<input id="ItemTypeWg" name="ItemTypeWg" lay-filter="ItemTypeWg"
+							lay-verify="required" readonly="readonly" placeholder="请选择物料类型"
+							class="layui-input" type="text" autocomplete="off" />
+					</div>
+				</div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label layui-required">材料名称</label>
-                <div class="layui-input-block">
-                    <input id="bsMaterName" name="bsMaterName" lay-verify="required" placeholder="请输入材料名称"   autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">材料名称</label>
+					<div class="layui-input-block">
+						<input id="bsMaterName" name="bsMaterName" lay-verify="required"
+							placeholder="请输入材料名称" autocomplete="off" class="layui-input"
+							type="text" />
+					</div>
+				</div>
 
-            <!--<div class="layui-form-item">-->
-                <!--<label class="layui-form-label ">材料规格</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input id="bsModel" name="bsModel" placeholder="请输入材料规格"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>-->
-                <!--</div>-->
-            <!--</div>-->
+				<!--<div class="layui-form-item">-->
+				<!--<label class="layui-form-label ">材料规格</label>-->
+				<!--<div class="layui-input-block">-->
+				<!--<input id="bsModel" name="bsModel" placeholder="请输入材料规格"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>-->
+				<!--</div>-->
+				<!--</div>-->
 
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label layui-required">材料规格</label>
-                <div class="layui-input-block">
-                    <textarea  id="bsModel" name="bsModel" placeholder="请输入材料规格" lay-verify="required"  class="layui-textarea"></textarea>
-                </div>
-            </div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label layui-required">材料规格</label>
+					<div class="layui-input-block">
+						<textarea id="bsModel" name="bsModel" placeholder="请输入材料规格"
+							lay-verify="required" class="layui-textarea"></textarea>
+					</div>
+				</div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label ">工艺说明</label>
-                <div class="layui-input-block">
-                    <input id="fmemo" name="fmemo" placeholder="请输入工艺说明"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label ">采购说明</label>
-                <div class="layui-input-block">
-                    <input id="bsExplain" name="bsExplain" placeholder="请输入采购说明"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
+				<div class="layui-form-item">
+					<label class="layui-form-label ">工艺说明</label>
+					<div class="layui-input-block">
+						<input id="fmemo" name="fmemo" placeholder="请输入工艺说明"
+							lay-verify="required" autocomplete="off" class="layui-input"
+							type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label ">采购说明</label>
+					<div class="layui-input-block">
+						<input id="bsExplain" name="bsExplain" placeholder="请输入采购说明"
+							lay-verify="required" autocomplete="off" class="layui-input"
+							type="text" />
+					</div>
+				</div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label ">制品量</label>
-                <div class="layui-input-block">
-                    <input id="bsProQty" name="bsProQty" placeholder="请输入制品量"  lay-verify="double" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-
-
-            <div class="layui-form-item">
-                <label class="layui-form-label">单位</label>
-                <div class="layui-input-block">
-                    <!--<select id="pkUnit" name="pkUnit" placeholder="请选择单位" lay-filter="pkUnit"   autocomplete="off">-->
-                    <!--</select>-->
-
-                    <input id="Unit" name="Unit" lay-filter="Unit" readonly="readonly"
-                           placeholder="请选择单位"  class="layui-input" type="text"  autocomplete="off" />
-
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label ">基数</label>
-                <div class="layui-input-block">
-                    <input id="bsRadix" name="bsRadix" placeholder="请输入基数" lay-verify="double"  autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
+				<div class="layui-form-item">
+					<label class="layui-form-label ">制品量</label>
+					<div class="layui-input-block">
+						<input id="bsProQty" name="bsProQty" placeholder="请输入制品量"
+							lay-verify="double" autocomplete="off" class="layui-input"
+							type="text" />
+					</div>
+				</div>
 
 
-            <div class="layui-form-item">
-                <div class="layui-input-block" style="margin-left: 10px;">
-                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit">提交</button>
-                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
-                </div>
-            </div>
-        </form>
-    </div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">单位</label>
+					<div class="layui-input-block">
+						<!--<select id="pkUnit" name="pkUnit" placeholder="请选择单位" lay-filter="pkUnit"   autocomplete="off">-->
+						<!--</select>-->
 
-        <div id="uploadDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
-            <button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">选择文件</button>
-            <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadChecked()">确认导入</button>
-            <table id="uploadList" lay-filter="uploadTable"></table>
-        </div>
+						<input id="Unit" name="Unit" lay-filter="Unit" readonly="readonly"
+							placeholder="请选择单位" class="layui-input" type="text"
+							autocomplete="off" />
 
-        <script th:inline="javascript">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label ">基数</label>
+					<div class="layui-input-block">
+						<input id="bsRadix" name="bsRadix" placeholder="请输入基数"
+							lay-verify="double" autocomplete="off" class="layui-input"
+							type="text" />
+					</div>
+				</div>
+
+
+				<div class="layui-form-item">
+					<div class="layui-input-block" style="margin-left: 10px;">
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="addSubmit">提交</button>
+						<button type="reset"
+							class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div id="uploadDiv" class="layer_self_wrap"
+			style="display: none; margin-left: 10px;">
+			<button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">选择文件</button>
+			<button class="layui-btn layui-btn-sm layui-btn-normal"
+				onclick="uploadChecked()">确认导入</button>
+			<table id="uploadList" lay-filter="uploadTable"></table>
+		</div>
+
+		<script th:inline="javascript">
             var quoteId=[[${quoteId}]];
             var code=[[${code}]];
             var iStatus=[[${iStatus}]];
            // console.log(code)
         </script>
 
-    <script th:src="@{/js/web/quote/01business/quote_bom.js}" src="/js/web/quote/01business/quote_bom.js"></script>
+		<script th:src="@{/js/web/quote/01business/quote_bom.js}"
+			src="/js/web/quote/01business/quote_bom.js"></script>
 	</div>
 </body>
 </html>

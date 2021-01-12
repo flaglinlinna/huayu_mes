@@ -12,7 +12,7 @@ $(function() {
 			method : 'get' // 默认：get请求
 			, toolbar: '#toolbar',
 			cellMinWidth : 80,
-			height: 'full-110'
+			height: 'full-65'
 			,even:true,//条纹样式
 			page : true,
 			request : {
@@ -36,7 +36,8 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			,{
 				field : 'bsName',
-				title : '组件名称'
+				title : '组件名称',
+				style:'background-color:#d2d2d2'
 			},{
 				field : 'bsMoCode',
 				title : '模具编码',

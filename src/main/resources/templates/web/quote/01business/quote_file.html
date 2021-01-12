@@ -31,9 +31,15 @@
          <hr class="layui-bg-black"/>
          <script type="text/html" id="toolbar">
              <div class="layui-btn-container layui-inline" id ="uploadBtn">
-				 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="InitUpload()">文件上传</button>
+ 				 {{# if(iStatus==2){ }}
+                 <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled" disabled onclick="InitUpload()">文件上传</button>
+				 <button id = "upload" style="display: none" disabled ></button>
+				 <button class="layui-btn layui-btn-sm layui-btn-disabled" disabled onclick="save()">确认完成</button>
+                 {{# } else { }}
+                 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="InitUpload()">文件上传</button>
 				 <button id = "upload" style="display: none"></button>
 				 <button class="layui-btn layui-btn-sm" onclick="save()">确认完成</button>
+                 {{# } }} 			 
              </div>
          </script>
 
@@ -42,7 +48,11 @@
 
          <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
          <script type="text/html" id="optBar">
+                 {{# if(iStatus==2){ }}            
+                 <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
+                 {{# } else { }}
                  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                 {{# } }} 
          </script>
 	 </div>
 
@@ -50,6 +60,7 @@
         <script th:inline="javascript">
             var quoteId=[[${quoteId}]];
             var code=[[${code}]];
+            var iStatus=[[${iStatus}]];
         </script>
 
     <script th:src="@{/js/web/quote/01business/quote_file.js}" src="/js/web/quote/01business/quote_file.js"></script>

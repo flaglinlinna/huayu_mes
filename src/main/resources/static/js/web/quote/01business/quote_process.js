@@ -11,7 +11,7 @@ $(function() {
 			method : 'get' // 默认：get请求
 			, toolbar: '#toolbar',
 			cellMinWidth : 80,
-			height: 'full-110'
+			height: 'full-65'
 			,even:true,//条纹样式
 			page : true,
 			request : {

@@ -40,19 +40,29 @@
 			<!--onclick="addProc('')">新增产品工艺</button>-->
 			<table id="client_procList" lay-filter="client_procTable"></table>
 			<script type="text/html" id="toolbar">
-			<button class="layui-btn layui-btn-sm layui-btn-normal"
+                {{# if(iStatus==2){ }}
+                <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled"
+				disabled onclick="addProc('')">新增工艺流程</button>
+			    <button class="layui-btn layui-btn-sm layui-btn-disabled" disabled id="save-btn" onclick="saveProc()">确认完成</button>
+                {{# } else { }}
+                <button class="layui-btn layui-btn-sm layui-btn-normal"
 				onclick="addProc('')">新增工艺流程</button>
-			<button class="layui-btn layui-btn-sm" id="save-btn" onclick="saveProc()">确认完成</button>
+			    <button class="layui-btn layui-btn-sm" id="save-btn" onclick="saveProc()">确认完成</button>
+                 {{# } }} 			
 			</script>
 
 			<script type="text/html" id="moveBar">
-  	<a class="layui-btn layui-btn-xs" lay-event="moveUp"><i class="layui-icon layui-icon-up"></i>上移</a>
-  	<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="moveDown"><i class="layui-icon layui-icon-down"></i>下移</a>
-				</script>
+                <a class="layui-btn layui-btn-xs" lay-event="moveUp"><i class="layui-icon layui-icon-up"></i>上移</a>
+                <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="moveDown"><i class="layui-icon layui-icon-down"></i>下移</a>
+			</script>
 
 			<script type="text/html" id="optBar">
 				<shiro:hasPermission name="prodProc-del">
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                 {{# if(iStatus==2){ }}
+                 <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
+                 {{# } else { }}
+                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                 {{# } }}  
 				</shiro:hasPermission>
        		 </script>
 		</div>
@@ -89,6 +99,7 @@
 		<script th:inline="javascript">
             var quoteId=[[${quoteId}]];
             var code=[[${code}]];
+            var iStatus=[[${iStatus}]];
             var bomNameList=[[${bomNameList}]];
     
         </script>

@@ -6,7 +6,7 @@ $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
 		var table = layui.table, table1 = layui.table,form = layui.form,upload = layui.upload,
 			tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect;
-		isComplete();//状态判断及处理
+		
 		tableSelect=tableSelect.render({
 			elem : '#BjWorkCenter',
 			searchKey : 'keyword',
@@ -187,7 +187,7 @@ $(function() {
 			,
 			cellMinWidth : 80,
 			toolbar: '#toolbar',
-			height:'full-110'//固定表头&full-查询框高度
+			height:'full-65'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,
 			request : {
@@ -404,22 +404,6 @@ $(function() {
 				layer.close(index);
 			}
 		});
-		//状态判断及处理
-		function isComplete(){
-			if(iStatus==2){//若状态为已完成，则执行
-				//console.log(iStatus)
-				//$('#savebtn').addClass("layui-btn-disabled").attr("disabled",true);
-				//$('#addBom').addClass("layui-btn-disabled").attr("disabled",true);
-				
-//		        $(document).on('mouseover', '#savebtn', function(data){
-//		        	tip_index =  layer.tips("<span style='font-size:13px;line-height:20px;'>此项目已完成</span>", ($(this)),{ tips: [3, '5CBA59'],time:0,time:0,area: ['200px']});
-//		 
-//		        }).on('mouseleave', '#savebtn', function(){
-//		            layer.close(tip_index);
-//		        });
-			}
-		}
-
 	});
 
 });
