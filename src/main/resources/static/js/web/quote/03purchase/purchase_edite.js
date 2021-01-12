@@ -52,6 +52,11 @@ $(function() {
 				{field : 'bsMaterName',width:120, title : '材料名称',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'bsModel', width:150, title : '材料规格',style:'background-color:#d2d2d2'},
 				{field : 'bsQty', width:80, title : '用量',style:'background-color:#d2d2d2'},
+				{field : 'bsProQty', width:100, title : '制品重',style:'background-color:#d2d2d2'},
+				{field : 'bsMachiningType', title : '加工类型',width:100,style:'background-color:#d2d2d2'},//(表面处理)
+				{field : 'bsColor', title : '配色工艺',width:100,style:'background-color:#d2d2d2'},//(表面处理)
+				{field : 'bsWaterGap', title : '水口量',width:100,style:'background-color:#d2d2d2'}, //(注塑)
+				{field : 'bsCave', title : '穴数',width:100,style:'background-color:#d2d2d2'}, //(注塑)
 				{field : 'bsUnit', width:80, title : '单位',style:'background-color:#d2d2d2'},
 				{field : 'bsRadix', width:80, title : '基数',style:'background-color:#d2d2d2'},
 				{field : 'bsGeneral', width:120, title : '是否通用物料',style:'background-color:#d2d2d2'},

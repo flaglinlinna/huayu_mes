@@ -36,6 +36,14 @@ public class ProductMater extends BaseEntity {
 	@Column
 	@ApiModelProperty(name="bsStatus",value="状态")
 	protected int bsStatus = 0;
+	
+	/**
+     * 采购状态
+     * 0：草稿，1:完成
+     */
+	@Column
+	@ApiModelProperty(name="bsStatusPurchase",value="采购状态")
+    protected int bsStatusPurchase = 0;
 
 
 	/**
@@ -377,6 +385,14 @@ public class ProductMater extends BaseEntity {
 
 	public void setBsExplain(String bsExplain) {
 		this.bsExplain = bsExplain;
+	}
+
+	public int getBsStatusPurchase() {
+		return bsStatusPurchase;
+	}
+
+	public void setBsStatusPurchase(int bsStatusPurchase) {
+		this.bsStatusPurchase = bsStatusPurchase;
 	}
 	
 }

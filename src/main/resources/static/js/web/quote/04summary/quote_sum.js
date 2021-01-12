@@ -6,7 +6,8 @@ $(function() {
 
 	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ],
 					function() {
-						var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table ,table1 =layui.table;
+						var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table ,
+                            table1 =layui.table ,table2 = layui.table;
 
 						form.verify({
 							num : function(value) {
@@ -128,6 +129,9 @@ $(function() {
                             }else if(inputId =="wx_all"||inputId =="hou_lose_all"){
                                 getProcessDetail("out","外协加工费用明细 ")
                             }
+                            else if(inputId=="mould_all"){
+                                getMouldDetail("模具费用明细");
+                            }
 						}
 
 						//材料价格明细
@@ -204,6 +208,7 @@ $(function() {
                             }
                         });
 
+						//人工、制费明细
                         tableIns1 = table1.render({
                             elem : '#processTable',
                             // url : context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
@@ -281,9 +286,80 @@ $(function() {
                             }
                         });
 
+                        //模具费用明细
+                        tableIns2 = table2.render({
+                            elem : '#mouldTable',
+                            // url : context + '/quoteMould/getList?pkQuote='+ quoteId,
+                            method : 'get' ,// 默认：get请求
+                            //  toolbar: '#toolbar',
+                            cellMinWidth : 80,
+                            totalRow :true,
+                            height: 'full-110',
+                            even:true,//条纹样式
+                            page : true,
+                            request : {
+                                pageName : 'page' // 页码的参数名称，默认：page
+                                ,
+                                limitName : 'rows' // 每页数据量的参数名，默认：limit
+                            },
+                            parseData : function(res) {
+                                // 可进行数据操作
+                                return {
+                                    "count" : res.data.total,
+                                    "msg" : res.msg,
+                                    "data" : res.data.rows,
+                                    "code" : res.status
+                                    // code值为200表示成功
+                                }
+                            },
+                            cols : [ [ {type : 'numbers'},
+                                // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
+                                {field : 'bsName', title : '组件名称', width:200,totalRowText:"合计:"},
+                                {field : 'bsMoCode', title : '模具编码', width:200, templet:'<div>{{d.mjProcFee.productCode}}</div>'},
+                                {field : 'bsMoName', title : '模具名称', width:200, templet:'<div>{{d.mjProcFee.productName}}</div>'},
+                                {field : 'bsMoFee', title : '模具成本', width:120,templet:'<div>{{d.mjProcFee.feeAll}}</div>',totalRow :true},
+                                {field : 'stQuote', title : '参考报价', width:120, templet:'<div>{{d.mjProcFee.stQuote}}</div>',totalRow :true},
+                                {field : 'bsActQuote', title : '实际报价', width:120,totalRow :true},
+                                ] ],
+                            done : function(res, curr, count) {
+                                // console.log(res)
+                                // totalCount=res.count
+                                pageCurr = curr;
+                            }
+                        });
+
 
 					});
 });
+
+function getMouldDetail(title) {
+    tableIns2.reload({
+        url : context + '/quoteMould/getList?pkQuote='+ quoteId,
+        done: function(res1, curr, count){
+            pageCurr=curr;
+            merge(res1.data,['bsName'],[1,1]);
+            var feeAll=0;
+            var stQuote = 0;
+            res1.data.forEach(function (item, index) {
+                feeAll+= item.mjProcFee.feeAll;
+                stQuote+= item.mjProcFee.stQuote;
+                console.log(feeAll);
+            });
+            $(".layui-table-total").find('tr').find('td[data-field="bsMoFee"]').find('div').html(feeAll);
+            $(".layui-table-total").find('tr').find('td[data-field="stQuote"]').find('div').html(stQuote);
+        }
+    })
+    var index=layer.open({
+        type : 1,
+        title : title,
+        fixed : false,
+        resize : false,
+        shadeClose : true,
+        area : [ '550px' ],
+        content : $('#mouldDetailDiv')
+    });
+    layer.full(index);
+}
 
 function getMaterDetail(bsType,title) {
     tableIns.reload({
@@ -350,7 +426,7 @@ function getProcessDetail(bsType,title) {
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
                     $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossHouLh"]').removeClass("layui-hide");
-                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossHouTh"]').removeClass("layui-hide");
+                    $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
                     $(".layui-table-total").find('tr').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
                     $(".layui-table-total").find('tr').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
                     $(".layui-table-total").find('tr').find('td[data-field="bsLoss"]').removeClass("layui-hide");
@@ -497,4 +573,33 @@ function clean() {
 	// console.log($('#itemForm')[0])
 	$('#itemForm')[0].reset();
 	layui.form.render();// 必须写
+}
+
+function merge(res,columsName,columsIndex) {
+    var data = res;
+    var mergeIndex = 0;//定位需要添加合并属性的行数
+    var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+    //var columsName = ['itemCode'];//需要合并的列名称
+    //var columsIndex = [3];//需要合并的列索引值
+    for (var k = 0; k < columsIndex.length; k++) { //这里循环所有要合并的列
+        var trArr = $(".layui-table-body>.layui-table").find("tr");//所有行
+        for (var i = 1; i < data.length; i++) { //这里循环表格当前的数据
+            var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
+            var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);//获取相同列的第一列
+            if (data[i][columsName[0]] === data[i-1][columsName[0]]) { //后一行的值与前一行的值做比较，相同就需要合并
+                mark += 1;
+                tdPreArr.each(function () {//相同列的第一列增加rowspan属性
+                    $(this).attr("rowspan", mark);
+                });
+                tdCurArr.each(function () {//当前行隐藏
+                    $(this).css("display", "none");
+                });
+            }else {
+                mergeIndex = i;
+                mark = 1;//一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+            }
+        }
+        mergeIndex = 0;
+        mark = 1;
+    }
 }

@@ -53,7 +53,7 @@ $(function() {
 			},
 			{
 				field : 'ITEM_TYPE',
-				title : '机型', sort: true
+				title : '机型',width : 160, sort: true
 			}, {
 				field : 'LINER_NAME',
 				title : '组线', sort: true

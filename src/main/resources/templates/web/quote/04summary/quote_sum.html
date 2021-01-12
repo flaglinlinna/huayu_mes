@@ -142,7 +142,7 @@
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label">模具费用</label>
+						<label class="layui-form-label"><a data-type="mould_all">模具费用</a></label>
 						<div class="layui-input-block" style="width: 130px;">
 							<input id="mould_all" name="mould_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
@@ -334,6 +334,11 @@
 		<!--人工、制费明细-->
 		<div id="processDetailDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
 			<table id="processTable" lay-filter="processTable"></table>
+		</div>
+
+		<!--模具费用明细-->
+		<div id="mouldDetailDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
+			<table id="mouldTable" lay-filter="mouldTable"></table>
 		</div>
 
 

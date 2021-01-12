@@ -8,7 +8,7 @@ $(function() {
 			var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table;
 			tableIns = table.render({
 				elem : '#listTable',
-				url : context + '/quoteSum/getList',
+				url : context + '/quoteAll/getList',
 				method : 'get' // 默认：get请求
 				//, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 				,cellMinWidth : 80,
@@ -31,21 +31,19 @@ $(function() {
 							"code" : res.status
 						} 
 					}
-
+					//填写数据
+					
 					var num_list = res.data.Nums;
 					var all = 0;
 					res.data.Nums.forEach(function (item, index) {
-						if(item.STATUS == '0'){
-							$('#draft-num').text('草稿('+item.NUMS+')');
-						}
-						else if(item.STATUS == '1'){
-							$('#in-num').text('进行中('+item.NUMS+')');
-						}else if(item.STATUS == '2'){
+						if(item.STATUS == '2'){
 							$('#over-num').text('已完成('+item.NUMS+')');
+						}else{
+							$('#in-num').text('进行中('+item.NUMS+')');
 						}
 						all = Number(all)+Number(item.NUMS);
 					});
-
+					$('#all-num').text('全部('+all+')');
 					// 可进行数据操作
 					return {
 						"count" : res.data.List.total,
@@ -58,30 +56,11 @@ $(function() {
 				           {type : 'numbers'},
 							 
 				 {field : 'bsCode',title : '报价单编号',width : 150,sort: true}, 
-				 {field : 'bsType',title : '报价类型', width : 100,templet:function (d) {
-						 if(d.bsType=="YSBJ"){
-							 return "衍生报价";
-						 }else if(d.bsType =="XPBJ"){
-							 return "新品报价"
-						 }else {
-							 return "";
-						 }
-					 }}
-				,{
-					field : 'bsStatus',
-					title : '状态',width : 80
-					,templet:function (d) {
-						if(d.bsStatus=="0"){
-							return "草稿"
-						}else if(d.bsStatus=="1"){
-							return "进行中"
-						}else if(d.bsStatus=="2"){
-							return "已完成"
-						}
-					}
-				}, {
+				 {field : 'bsType',title : '报价类型', width : 100},
+				 {field : 'bsStatus',title : '状态',width : 341,templet:'#statusTpl'}, 
+				 {
 					field : 'bsFinishTime',
-					title : '完成日期',
+					title : '计划完成日期',
 					 sort: true
 					, width : 140
 				}, {
@@ -145,16 +124,6 @@ $(function() {
 				done : function(res, curr, count) {
 					//
 					pageCurr = curr;
-					res.data.forEach(function (item, index) {
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
-						if(item.bsStatus == 0){
-							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6699CC');
-						}else if(item.bsStatus=="1"){
-							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
-						}else if(item.bsStatus=="2"){
-							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
-						}
-					});
 				}
 			});	
 			// 监听工具条
@@ -197,14 +166,9 @@ $(function() {
 				$(".searchDiv").toggle();
                 //var val=$(this).attr("id");
             })
-			$("#ul-list li").click(function () {
-				$(this).addClass("current").siblings().removeClass();
-				//alert($("span:last",this).attr("data-status"));
-				tableIns.reload({
-					url:context + '/quoteSum/getList?bsStatus='+$("span:last",this).attr("data-status"),
-					// url:context + '/quote/getList?status='+$("span:last",this).attr("data-status")
-				});
-			})
+            $("#ul-list li").click(function () {
+                    $(this).addClass("current").siblings().removeClass();
+                })
 		});
 });
 //编辑项目弹出框

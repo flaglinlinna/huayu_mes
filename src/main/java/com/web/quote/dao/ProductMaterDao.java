@@ -3,6 +3,7 @@ package com.web.quote.dao;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -26,5 +27,14 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 	
 	@Query(value = "select map from ProductMater map  where map.delFlag=0 and map.pkQuote=?1 and  map.bsType='molding' ")
 	 public  List<ProductMater> findByDelFlagAndMolding(Long pkQuote);
+	
+	
+	@Modifying
+    @Query("update ProductMater t set t.bsStatus=?3 where t.pkQuote=?1 and t.bsType=?2 and t.delFlag=0")
+    public void updateStatus(Long pkQuote,String bsType,int status);
+	
+	@Modifying
+    @Query("update ProductMater t set t.bsStatusPurchase=?2 where t.pkQuote=?1 and t.delFlag=0")
+    public void updateStatusPurchase(Long pkQuote,int status);
 
 }

@@ -534,16 +534,22 @@ public class CheckImpl   implements CheckService {
 					for(String str:strs){
 						if(str.equals("1")){//制造部-五金
 							quote.setBsStatus2Hardware(1);
+							productMaterDao.updateStatus(checkInfo.getBsRecordId(), "hardware", 0);
 						}else if(str.equals("2")){//制造部-注塑
 							quote.setBsStatus2Molding(1);
+							productMaterDao.updateStatus(checkInfo.getBsRecordId(), "molding", 0);
 						}else if(str.equals("3")){//制造部-表面处理
 							quote.setBsStatus2Surface(1);
+							productMaterDao.updateStatus(checkInfo.getBsRecordId(), "surface", 0);
 						}else if(str.equals("4")){//制造部-组装
 							quote.setBsStatus2Packag(1);
+							productMaterDao.updateStatus(checkInfo.getBsRecordId(), "packag", 0);
 						}else if(str.equals("5")){//采购部
 							quote.setBsStatus2Purchase(1);
+							productMaterDao.updateStatusPurchase(checkInfo.getBsRecordId(), 0);
 						}else if(str.equals("6")){//外协部
 							quote.setBsStatus2Out(1);
+							productMaterDao.updateStatus(checkInfo.getBsRecordId(), "out", 0);
 						}
 					}
 					quote.setBsStep(2);

@@ -44,7 +44,7 @@ public class QuoteAlllmpl  extends BaseSql implements QuoteAllService {
         String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
                 + "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_position,p.bs_Manage_fee,  " +
                 "p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
-                "p.bs_Cust_Require,i.bs_status bs_status_check  from "+Quote.TABLE_NAME+" p  left join (select t.pk_quote,min(t.bs_status)bs_status from "+QuoteItem.TABLE_NAME+" t where  t.bs_style='item' group by t.pk_quote) i on i.pk_quote=p.id"
+                "p.bs_Cust_Require,p.bs_status2, p.bs_status2hardware, p.bs_status2molding,p.bs_status2out,p.bs_status2packag, p.bs_status2purchase,p.bs_status2surface, p.bs_status3, p.bs_status4 from "+Quote.TABLE_NAME+" p  "
                 + "  where p.del_flag=0";
 
         if(!StringUtils.isEmpty(status)){
@@ -91,14 +91,24 @@ public class QuoteAlllmpl  extends BaseSql implements QuoteAllService {
             map1.put("bsRequire", object[18]);
             map1.put("bsLevel", object[19]);
             map1.put("bsCustRequire", object[20]);
-            map1.put("bsStatusCheck", object[21]);
+            
+            map1.put("bsStatus2", object[21]);
+            map1.put("bsStatus2hardware", object[22]);
+            map1.put("bsStatus2molding", object[23]);
+            map1.put("bsStatus2out", object[24]);
+            map1.put("bsStatus2packag", object[25]);
+            map1.put("bsStatus2purchase", object[26]);
+            map1.put("bsStatus2surface", object[27]);
+            map1.put("bsStatus3", object[28]);
+            map1.put("bsStatus4", object[29]);
+            
             list_new.add(map1);
         }
 
         Map map = new HashMap();
         map.put("List", DataGrid.create(list_new,  (int) count,
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
-        map.put("Nums", quoteDao.getNumByStatus());
+        map.put("Nums", quoteDao.getNumByStatus4());
         return ApiResponseResult.success().data(map);
     }
 

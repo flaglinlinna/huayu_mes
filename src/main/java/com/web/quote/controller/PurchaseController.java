@@ -67,12 +67,12 @@ public class PurchaseController extends WebController {
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getList(String keyword) {
-		String method = "/productMater/getQuoteList";
+	public ApiResponseResult getList(String keyword,String bsStatus) {
+		String method = "/purchase/getQuoteList";
 		String methodName = "获取报价单列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = purchaseService.getList(keyword, super.getPageRequest(sort));
+			ApiResponseResult result = purchaseService.getList(keyword, bsStatus,super.getPageRequest(sort));
 			logger.debug(methodName+"=getQuoteList:");
 			return result;
 		} catch (Exception e) {
@@ -87,7 +87,7 @@ public class PurchaseController extends WebController {
 	@RequestMapping(value = "/getQuoteList", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getQuoteList(String keyword,String quoteId) {
-		String method = "/productMater/getQuoteList";
+		String method = "/purchase/getQuoteList";
 		String methodName = "获取采购部材料价格填写列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
