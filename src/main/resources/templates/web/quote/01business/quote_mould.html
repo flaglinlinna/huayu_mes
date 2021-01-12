@@ -39,7 +39,7 @@
 			<!--onclick="addProc('')">新增产品工艺</button>-->
 			<table id="client_procList" lay-filter="client_procTable"></table>
 			<script type="text/html" id="toolbar">
-            {{# if(iStatus==2){ }}              
+            {{# if(iStatus==2||iStatus==3){ }}              
             <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled" disabled onclick="add('')">新增模具信息</button>
 			<button class="layui-btn layui-btn-sm layui-btn-disabled" disabled onclick="save()">确认完成</button>
             <button class="layui-btn layui-btn-sm layui-btn-warm layui-btn-disabled" disabled onclick="doNoNeed()">不需要报价</button>
@@ -57,7 +57,7 @@
 
 			<script type="text/html" id="optBar">
 			<shiro:hasPermission name="prodProc-del">
-                {{# if(iStatus==2){ }}              
+                {{# if(iStatus==2||iStatus==3){ }}              
                 <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
                 {{# } else { }}
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>

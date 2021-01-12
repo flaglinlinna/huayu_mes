@@ -193,7 +193,6 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 		 //项目状态设置-状态 2：已完成
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
 		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
-		 //写个一个根据quoteId获取其所有记录，并批量修改修改人，修改时间字段 的DAO
 		 
 		 //20210112-fyx-关闭待办
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "模具清单");
@@ -212,6 +211,8 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 		 }
 		 //状态 3：不需要填写
 		 quoteItemDao.switchStatus(3, Long.parseLong(quoteId), bsCode);
+		 //写入完成时间-20210112-lst
+		 quoteService.doItemFinish(bsCode, Long.parseLong(quoteId));
 		 return ApiResponseResult.success("操作成功！");
 	 }
 }

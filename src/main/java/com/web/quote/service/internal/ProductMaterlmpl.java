@@ -231,6 +231,8 @@ public class ProductMaterlmpl implements ProductMaterService {
         productMaterDao.saveAll(productMaterList);
         //项目状态设置-状态 2：已完成
       	quoteItemDao.switchStatus(2, quoteId, bsCode);
+       //增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
+        quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, bsCode);
         //设置结束时间
         quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
         return ApiResponseResult.success("确认完成成功！");

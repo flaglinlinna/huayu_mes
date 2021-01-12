@@ -38,6 +38,7 @@ function setTable(){
 		
 		var beg = checkNull(arr.bsBegTime)
 		var end = checkNull(arr.bsEndTime) 
+		var person= checkNull(arr.bsPerson) 
 		
 		var status=""
 		var status_color1="blue"//状态颜色
@@ -61,7 +62,7 @@ function setTable(){
 		}
 		html += '<tr><td class="td1" style="width: 20%; "><button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;" onclick=toPage("'+link+'","'+arr.bsName+'")><span>' + arr.bsName + 
 		'</span></button></td><td  class="td1 '+status_color1+'" style="width: 20%;"><span class="circle '+status_color2+'"></span>' +  status + 
-		'</td><td class="td1" style="width: 20%;">' + arr.bsPerson
+		'</td><td class="td1" style="width: 20%;">' + person
 				+ '</td><td class="td1" style="width: 20%;">'+beg+
 				'</td><td class="td1" style="width: 20%;">'+end+'</td></tr>';
 	}
