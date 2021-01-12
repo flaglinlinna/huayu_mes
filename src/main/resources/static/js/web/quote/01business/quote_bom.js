@@ -6,7 +6,7 @@ $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
 		var table = layui.table, table1 = layui.table,form = layui.form,upload = layui.upload,
 			tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect;
-
+		isComplete();//状态判断及处理
 		tableSelect=tableSelect.render({
 			elem : '#BjWorkCenter',
 			searchKey : 'keyword',
@@ -404,6 +404,21 @@ $(function() {
 				layer.close(index);
 			}
 		});
+		//状态判断及处理
+		function isComplete(){
+			if(iStatus==2){//若状态为已完成，则执行
+				//console.log(iStatus)
+				//$('#savebtn').addClass("layui-btn-disabled").attr("disabled",true);
+				//$('#addBom').addClass("layui-btn-disabled").attr("disabled",true);
+				
+//		        $(document).on('mouseover', '#savebtn', function(data){
+//		        	tip_index =  layer.tips("<span style='font-size:13px;line-height:20px;'>此项目已完成</span>", ($(this)),{ tips: [3, '5CBA59'],time:0,time:0,area: ['200px']});
+//		 
+//		        }).on('mouseleave', '#savebtn', function(){
+//		            layer.close(tip_index);
+//		        });
+			}
+		}
 
 	});
 
@@ -560,7 +575,7 @@ function delProdErr(obj, id, name) {
 }
 
 function save(){
-	console.log(quoteId,code)
+	//console.log(quoteId,code)
 	var param = {"quoteId" : quoteId,"code":code};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
