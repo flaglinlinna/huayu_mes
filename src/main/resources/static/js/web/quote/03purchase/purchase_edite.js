@@ -55,7 +55,7 @@ $(function() {
 				{field : 'bsMaterName',width:120, title : '材料名称',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'bsModel', width:150, title : '材料规格',style:'background-color:#d2d2d2'},
 				{field : 'bsQty', width:80, title : '用量',style:'background-color:#d2d2d2'},
-				{field : 'bsGear', width:120, title : '价格挡位', templet: '#selectGear'},
+				{field : 'bsGear', width:120, title : '价格挡位', templet: '#selectGear',style:'background-color:#ffffff'},
 				/*{field : 'bsGear', width:120, title : '价格挡位',templet: function (d) {
 					if(d.bsPriceList){
 						var list = $.parseJSON( d.bsPriceList );
@@ -265,7 +265,7 @@ function uploadChecked() {
     CoreUtil.sendAjax("/productMaterTemp/confirmUpload", JSON.stringify(params), function(
         data) {
         if (data.result) {
-            layer.alert("操作成功", function() {
+            layer.alert(data.msg, function() {
                 layer.closeAll();
                 // cleanProdErr();
                 // 加载页面

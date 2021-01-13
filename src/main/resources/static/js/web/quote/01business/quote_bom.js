@@ -413,7 +413,7 @@ function uploadChecked() {
 	};
 	CoreUtil.sendAjax("/quoteBomTemp/uploadChecked", JSON.stringify(params), function(data) {
 		if (data.result) {
-			layer.alert("操作成功", function() {
+			layer.alert(data.msg, function() {
 				layer.closeAll();
 				cleanProdErr();
 				// 加载页面

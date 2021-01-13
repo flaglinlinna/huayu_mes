@@ -275,11 +275,11 @@ function setBatchStatus() {
 		ids = ids+ checkdata[i].ID+',';
 	}
 	if(ids ==""){
-		layer.msg("请先选中需要修改的信息");
+		layer.msg("请先选中需要失效的信息");
 		return false;
 	}
 	layer.confirm(
-		'您确定要修改选中信息的卡点状态吗？', {
+		'您确定要失效选中信息的卡点状态吗？', {
 			btn1 : function(index) {
 				var param = {
 					"id" : ids,
@@ -287,7 +287,7 @@ function setBatchStatus() {
 				CoreUtil.sendAjax("/produce/card_data/doStatus", JSON
 					.stringify(param), function(data) {
 					if (data.result) {
-						layer.alert("操作成功", function() {
+						layer.alert("失效成功", function() {
 							layer.closeAll();
 							loadAll();
 						});
@@ -306,13 +306,9 @@ function setBatchStatus() {
 				});
 			},
 			btn2 : function() {
-				obj.elem.checked = isStatus;
-				form.render();
 				layer.closeAll();
 			},
 			cancel : function() {
-				obj.elem.checked = isStatus;
-				form.render();
 				layer.closeAll();
 			}
 		})

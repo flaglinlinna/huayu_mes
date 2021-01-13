@@ -529,7 +529,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
         }
         productMaterDao.saveAll(productMaterList);
         productMaterTempDao.deleteByPkQuoteAndCreateByAndBsPurchase(quoteId,userId,0);
-        return ApiResponseResult.success();
+        return ApiResponseResult.success().message("确认成功!,共导入："+productMaterList.size()+" 条信息");
     }
 
     //制造部材料 临时表导入正式表
@@ -587,6 +587,6 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
         }
         productMaterDao.saveAll(productMaterList);
         productMaterTempDao.deleteByPkQuoteAndBsTypeAndCreateBy(quoteId,bsType,userId);
-        return ApiResponseResult.success();
+        return ApiResponseResult.success().message("确认成功!,共导入："+productMaterList.size()+" 条信息");
     }
 }
