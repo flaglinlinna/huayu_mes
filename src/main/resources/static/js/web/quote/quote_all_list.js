@@ -174,9 +174,13 @@ $(function() {
 				$(".searchDiv").toggle();
                 //var val=$(this).attr("id");
             })
-            $("#ul-list li").click(function () {
-                    $(this).addClass("current").siblings().removeClass();
-                })
+			$("#ul-list li").click(function () {
+				$(this).addClass("current").siblings().removeClass();
+
+				tableIns.reload({
+					url:context + '/quoteAll/getList?status='+$("span:last",this).attr("data-status"),
+				});
+			})
 		});
 });
 //编辑项目弹出框

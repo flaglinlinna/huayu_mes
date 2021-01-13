@@ -18,8 +18,7 @@ $(function() {
 				// height: 'full',
 				page : true,
 				request : {
-					pageName : 'page' // 页码的参数名称，默认：page
-					,
+					pageName : 'page', // 页码的参数名称，默认：page
 					limitName : 'rows' // 每页数据量的参数名，默认：limit
 				},
 				parseData : function(res) {
@@ -54,8 +53,7 @@ $(function() {
 						"code" : res.status
 					}
 				},
-				cols : [ [ 
-				 {type : 'numbers'},		 
+				cols : [ [ {type : 'numbers'},		 
 				 {field : 'bsCode',title : '报价单编号',width : 150,sort: true}, 
 				 {field : 'bsType',title : '报价类型', width : 100,templet:function (d) {
 						 if(d.bsType=="YSBJ"){
@@ -80,49 +78,19 @@ $(function() {
 				{field : 'bsProd',title : '产品型号',width : 120},
 				{field : 'bsSimilarProd',title : '相似型号',width : 150},
 				{field : 'bsDevType',title : '机种型号',width : 140, sort: true},
-				{field : 'bsProdType',title : '产品类型',width : 140, sort: true
-					},{
-						field : 'bsCustName',
-						title : '客户名称',width : 120
-					},
-					{
-						field : 'bsPosition',
-						title : '市场定位',width : 150
-					},
-					{
-						field : 'bsManageFee',
-						title : '管理费用（10%）',width : 140
-					},
-					{
-						field : 'bsMaterial',
-						title : '客户提供资料',width : 140, sort: true
-					},
-					{
-						field : 'bsChkOutItem',
-						title : '外观检验项',width : 140, sort: true
-					},{
-						field : 'bsChkOut',
-						title : '外观检验',width : 150
-					},
-					{
-						field : 'bsFunctionItem',
-						title : '功能性能项',width : 140
-					},
-					{
-						field : 'bsFunction',
-						title : '功能性能',width : 140
-					},{
-						field : 'bsRequire',
-						title : '环保要求',width : 140
-					},{field : 'bsLevel',title : '防水防尘等级',width : 140},
-					  {field : 'bsCustRequire',
-						title : '客户其他要求',width : 200}, {
-						fixed : 'right',
-						title : '操作',
-						//align : 'center',
-						toolbar : '#optBar',
-						width : 250
-					}
+				{field : 'bsProdType',title : '产品类型',width : 140, sort: true},
+				{field : 'bsCustName',title : '客户名称',width : 120},
+				{field : 'bsPosition',title : '市场定位',width : 150},
+				{field : 'bsManageFee',title : '管理费用（10%）',width : 140},
+				{field : 'bsMaterial',title : '客户提供资料',width : 140, sort: true},
+				{field : 'bsChkOutItem',title : '外观检验项',width : 140, sort: true},
+				{field : 'bsChkOut',title : '外观检验',width : 150},
+				{field : 'bsFunctionItem',title : '功能性能项',width : 140},
+				{field : 'bsFunction',title : '功能性能',width : 140},
+				{field : 'bsRequire',title : '环保要求',width : 140},
+				{field : 'bsLevel',title : '防水防尘等级',width : 140},
+				{field : 'bsCustRequire',title : '客户其他要求',width : 200}, 
+				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 250}
 				] ],
 				done : function(res, curr, count) {
 					localtableFilterIns.reload();
@@ -150,9 +118,9 @@ $(function() {
 					{field: 'bsRemarks', type:'input'},
 					{field: 'bsProd', type:'input'},
 					{field: 'bsSimilarProd', type:'input'},
-					{field: 'bsDevType', type:'input'},
+					{field: 'bsDevType', type:'checkbox'},
 					{field: 'bsProdType', type:'date'},
-					{field: 'bsCustName', type:'checkbox'},
+					{field: 'bsCustName', type:'input'},
 					{field: 'bsPosition', type:'checkbox'},
 					{field: 'bsLevel', type:'checkbox'},
 					{field: 'bsRequire', type:'checkbox', data:[{ "key":"RoHS", "value":"RoHS"},

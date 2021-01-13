@@ -179,6 +179,8 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
             //注塑工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、穴数、成型周期(S)、加工人数、工序良率、备注
             //组装工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
             //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
+            Integer successes = 0;
+            Integer failures = 0;
             for (int row = 2; row <= maxRow; row++) {
                 String errInfo = "";
                 String id = tranCell(sheet.getRow(row).getCell(0));
@@ -311,13 +313,16 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 process.setErrorInfo(errInfo);
                 if(errInfo ==""){
                     process.setCheckStatus(0);
+                    successes ++;
                 }else {
                     process.setCheckStatus(1);
+                    failures ++;
                 }
                 tempList.add(process);
             }
             productProcessTempDao.saveAll(tempList);
-            return ApiResponseResult.success("导入成功");
+            Integer all = maxRow -1;
+            return ApiResponseResult.success("导入成功! 导入总数:" +all+" :校验通过数:"+successes+" ;不通过数: "+failures);
         }
         catch (Exception e){
             e.printStackTrace();

@@ -203,7 +203,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 	@Override
 	public ApiResponseResult importByTemp(Long pkQuote) throws Exception {
 		Long userId = UserUtil.getSessionUser().getId();
-		Date doExcleDate = new Date();
+		Date doExcelDate = new Date();
 		List<QuoteBomTemp> tempList = quoteBomTempDao.findByCheckStatusAndDelFlagAndCreateByAndPkQuote(0,0,userId,pkQuote);
 		List<QuoteBom> quoteBomList =  new ArrayList<>();
 		for(QuoteBomTemp temp:tempList){
@@ -225,10 +225,12 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			quoteBom.setFmemo(temp.getFmemo());
 			quoteBom.setBsRadix(temp.getBsRadix());
 			quoteBom.setBsExplain(temp.getBsExplain());
+			quoteBom.setCreateBy(userId);
+			quoteBom.setCreateDate(doExcelDate);
 			quoteBomList.add(quoteBom);
 		}
 		quoteBomDao.saveAll(quoteBomList);
 		quoteBomTempDao.deleteByPkQuoteAndCreateBy(pkQuote,userId);
-		return ApiResponseResult.success();
+		return ApiResponseResult.success().message("确认导入成功!共导入:"+quoteBomList.size()+"条");
 	}
 }

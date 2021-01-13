@@ -3,22 +3,20 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table','upload' ], function() {
-		var table = layui.table, form = layui.form,upload = layui.upload;
+	layui.use([ 'form', 'table', 'upload' ], function() {
+		var table = layui.table, form = layui.form, upload = layui.upload;
 		isComplete()
 		tableIns = table.render({
 			elem : '#productFileList',
-			url : context + '/quoteFile/getList?pkQuote='+ quoteId,
-			method : 'get' // 默认：get请求
-			,
+			url : context + '/quoteFile/getList?pkQuote=' + quoteId,
+			method : 'get', // 默认：get请求
 			cellMinWidth : 80,
-			//toolbar: '#toolbar',
-			height:'full-65'//固定表头&full-查询框高度
-			,even:true,//条纹样式
+			// toolbar: '#toolbar',
+			height : 'full-65',// 固定表头&full-查询框高度
+			even : true,// 条纹样式
 			page : true,
 			request : {
-				pageName : 'page' // 页码的参数名称，默认：page
-				,
+				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
@@ -31,31 +29,13 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			},
-				{
-					field : 'bsFileName',
-					title : '文件名称',
-					templet: '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="'+context+'/file/get?fsFileId={{d.pkFileId}}" th:href="@{/file/get?fsFileId={{d.pkFileId}}}">{{ d.bsFileName==null?"":d.bsFileName }}</a></div>'
-				},
-				{
-					field : 'createBy',
-					title : '创建人',
-					width : 200
-				}, {
-					field : 'createDate',
-					title : '创建时间',
-					width : 200
-				},
-				{
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar',
-					width : 150
-			}
-			] ],
+			cols : [ [{type : 'numbers'},
+					{field : 'bsFileName',title : '文件名称',templet : '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="' + context
+								+ '/file/get?fsFileId={{d.pkFileId}}" th:href="@{/file/get?fsFileId={{d.pkFileId}}}">{{ d.bsFileName==null?"":d.bsFileName }}</a></div>'
+					}, {field : 'createBy',title : '创建人',width : 200
+					}, {field : 'createDate',title : '创建时间',width : 200
+					}, {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 150
+					} ] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
@@ -68,11 +48,10 @@ $(function() {
 			}
 		});
 
-		//自定义验证规则
+		// 自定义验证规则
 		form.verify({
-			double: function(value){
-				if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false)
-				{
+			double : function(value) {
+				if (/^\d+$/.test(value) == false && /^\d+\.\d+$/.test(value) == false) {
 					return '用量只能输入数字';
 				}
 			}
@@ -100,54 +79,53 @@ $(function() {
 			load(data);
 			return false;
 		});
-		function isComplete(){
-			if(iStatus==2){
-				$("#loadbtn").addClass("layui-btn-disabled").attr("disabled",true)
-				$("#savebtn").addClass("layui-btn-disabled").attr("disabled",true)
+		function isComplete() {
+			if (iStatus == 2) {
+				$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
+				$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
 			}
 		}
 
 	});
 });
 
-
-//上传控件
-function InitUpload () {
+// 上传控件
+function InitUpload() {
 	layui.upload.render({
-		elem: '#upload'
-		, url: context + '/file/upload'
-		, accept: 'file' //普通文件
-		, before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致。
-			layer.load(); //上传loading
-		}
-		, done: function (res, index, upload) {
+		elem : '#upload',
+		url : context + '/file/upload',
+		accept : 'file' // 普通文件
+		,
+		before : function(obj) { // obj参数包含的信息，跟 choose回调完全一致。
+			layer.load(); // 上传loading
+		},
+		done : function(res, index, upload) {
 			if (res.result == true) {
-				// document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data)
+				// document.getElementById("filelist").innerHTML =
+				// $("#filelist").html()+getExcField(_index,res.data)
 				var params = {
-					"bsFileName": res.data.bsName,
-					"pkFileId": res.data.id
+					"bsFileName" : res.data.bsName,
+					"pkFileId" : res.data.id
 				}
 				addSubmit(params);
 				// $("#upload").remove();
 				// InitUpload();
 			}
-			layer.closeAll('loading'); //关闭loading
+			layer.closeAll('loading'); // 关闭loading
 
-		}
-		, error: function (index, upload) {
-			layer.closeAll('loading'); //关闭loading
+		},
+		error : function(index, upload) {
+			layer.closeAll('loading'); // 关闭loading
 		}
 
 	});
 	$('#upload').click();
 }
 
-
 // 新增五金材料提交
 function addSubmit(obj) {
 	obj.pkQuote = quoteId;
-	CoreUtil.sendAjax("/quoteFile/add", JSON.stringify(obj), function(
-			data) {
+	CoreUtil.sendAjax("/quoteFile/add", JSON.stringify(obj), function(data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
@@ -161,26 +139,33 @@ function addSubmit(obj) {
 		layer.alert(res.msg);
 	});
 }
-//确认完成
-function save(){
-	console.log(quoteId,code)
-	var param = {"quoteId" : quoteId,"code":code};
+// 确认完成
+function save() {
+	console.log(quoteId, code)
+	var param = {
+		"quoteId" : quoteId,
+		"code" : code
+	};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
-		CoreUtil.sendAjax("/quoteFile/doStatus", JSON.stringify(param),
-				function(data) {
-			console.log(data)
-					if (isLogin(data)) {
-						if (data.result == true) {
-							// 回调弹框
-							layer.alert("提交成功！");
-							loadAll();
-						} else {
-							layer.alert(data);
-						}
-					}
-				});
+		CoreUtil.sendAjax("/quoteFile/doStatus", JSON.stringify(param), function(data) {
+			//console.log(data)
+			if (isLogin(data)) {
+				if (data.result == true) {
+					// 回调弹框
+					layer.alert("提交成功！");
+					//刷新页面
+					var link="/quoteFile/toProductFile?quoteId="+quoteId+"&code="+code+"&iStatus=2"
+					//1.打开新Tab
+					parent.layui.index.openTabsPage(link,"产品资料");
+					//2.关闭当前Tab
+					parent.layui.admin.events.closeThisTabs();
+				} else {
+					layer.alert(data);
+				}
+			}
+		});
 	});
 }
 
@@ -194,23 +179,22 @@ function delProdErr(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("/quoteFile/delete", JSON.stringify(param),
-					function(data) {
-						if (isLogin(data)) {
-							if (data.result == true) {
-								// 回调弹框
-								layer.alert("删除成功！", function() {
-									layer.closeAll();
-									// 加载load方法
-									loadAll();
-								});
-							} else {
-								layer.alert(data, function() {
-									layer.closeAll();
-								});
-							}
-						}
-					});
+			CoreUtil.sendAjax("/quoteFile/delete", JSON.stringify(param), function(data) {
+				if (isLogin(data)) {
+					if (data.result == true) {
+						// 回调弹框
+						layer.alert("删除成功！", function() {
+							layer.closeAll();
+							// 加载load方法
+							loadAll();
+						});
+					} else {
+						layer.alert(data, function() {
+							layer.closeAll();
+						});
+					}
+				}
+			});
 		});
 	}
 }
