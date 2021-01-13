@@ -48,7 +48,7 @@ public class QuoteAlllmpl  extends BaseSql implements QuoteAllService {
                 + "  where p.del_flag=0";
 
         if(!StringUtils.isEmpty(status)){
-            sql += "  and p.bs_Status = " + status + "";
+            sql += "  and p.bs_status4 = " + status + "";
         }
         if (StringUtils.isNotEmpty(keyword)) {
 			sql += "  and INSTR((p.bsType || p.bsCode || p.bsProd),  '"

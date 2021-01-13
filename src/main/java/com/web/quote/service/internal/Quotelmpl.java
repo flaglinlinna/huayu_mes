@@ -171,7 +171,8 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     @Transactional
     public ApiResponseResult getList(String keyword,String status,String bsCode,String bsType,String bsStatus,
                                      String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
-                                     String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,PageRequest pageRequest)throws Exception{
+                                     String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
+                                     String bsDevType,String bsCustName,PageRequest pageRequest)throws Exception{
 
         String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
                 + "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_position,p.bs_Manage_fee,  " +
@@ -190,8 +191,8 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         }
         if(StringUtils.isNotEmpty(bsFinishTime)){
             String[] dates = bsFinishTime.split(" - ");
-            sql += " and to_char(p.bs_Finish_Time,'yyyy-MM-dd') >= '"+dates[0]+"'";
-            sql += " and to_char(p.bs_Finish_Time,'yyyy-MM-dd') <= '"+dates[1]+"'";
+            sql += " and to_date(p.bs_Finish_Time,'yyyy-MM-dd') >= to_date('"+dates[0]+"','yyyy-MM-dd')";
+            sql += " and to_date(p.bs_Finish_Time,'yyyy-MM-dd') <= to_date('"+dates[1]+"','yyyy-MM-dd')";
         }
         if(StringUtils.isNotEmpty(bsRemarks)){
             sql += "  and p.bs_Remarks like '%" + bsRemarks + "%'";
@@ -209,14 +210,20 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             sql += "  and p.bs_Cust_Require like '%" + bsCustRequire + "%'";
         }
         if(StringUtils.isNotEmpty(bsLevel)){
-            sql += "  and p.bs_Level like '%" + bsLevel + "%'";
+            sql += "  and p.bs_Level like '" + bsLevel + "%'";
         }
         if(StringUtils.isNotEmpty(bsRequire)){
             sql += "  and p.bs_Require like '%" + bsRequire + "%'";
         }
+        if(StringUtils.isNoneEmpty(bsDevType)){
+            sql += "  and p.bs_Dev_Type like '%" + bsDevType + "%'";
+        }
+        if(StringUtils.isNotEmpty(bsCustName)){
+            sql += "  and p.bs_Cust_Name like '%" + bsCustName + "%'";
+        }
         if (StringUtils.isNotEmpty(keyword)) {
 			sql += "  and INSTR((p.bs_Code || p.bs_Prod ||p.bs_Similar_Prod ||p.bs_Remarks ||p.bs_Cust_Name" +
-                    "||p.bs_Dev_Type ||p.bs_Cust_Require || p.bs_position || p.bs_Require ||p.bs_Level), '"
+                    "||p.bs_Dev_Type ||p.bs_Cust_Require || p.bs_position || p.bs_Require ||p.bs_Level ||p.bs_Dev_Type), '"
 					+ keyword + "') > 0 ";
         }
         

@@ -14,7 +14,8 @@ public interface QuoteService {
 	
 	public ApiResponseResult getList(String keyword,String status,String bsCode,String bsType,String bsStatus,
 									 String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
-									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,PageRequest pageRequest)throws Exception;//获取报价单列表
+									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
+									 String bsDevType,String bsCustName,PageRequest pageRequest)throws Exception;//获取报价单列表
 
 	public ApiResponseResult edit(Quote quote)throws Exception;
 	
