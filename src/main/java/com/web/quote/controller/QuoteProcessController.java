@@ -1,5 +1,6 @@
 package com.web.quote.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,12 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
-import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.QuoteProcessService;
 
@@ -68,7 +67,13 @@ public class QuoteProcessController extends WebController {
     public ApiResponseResult getList(String keyword,String pkQuote) {
         String method = "quoteProcess/getList";String methodName ="获取报价工艺流程列表";
         try {
-            Sort sort = new Sort(Sort.Direction.ASC, "id");
+            //Sort sort = new Sort(Sort.Direction.ASC, "id");
+        	 Sort.Order order1 = new Sort.Order(Sort.Direction.ASC, "bsName");
+        	 Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "BsOrder");
+        	 List<Sort.Order> list = new ArrayList<>();
+        	 list.add(order1);
+        	 list.add(order2);
+        	 Sort sort = new Sort(list);
             ApiResponseResult result = quoteProcessService.getList(keyword,pkQuote, super.getPageRequest(sort));
             logger.debug("获取报价工艺流程列表=getList:");
             getSysLogService().success(module,method, methodName, keyword);
@@ -215,6 +220,24 @@ public class QuoteProcessController extends WebController {
             logger.error("提交报价-工艺流程失败！", e);
             getSysLogService().error(module,method, methodName,"报价单id:"+pkQuote+ e.toString());
             return ApiResponseResult.failure("提交报价-工艺流程失败！");
+        }
+    }
+	
+	@ApiOperation(value = "获取报价工艺流程-工序列表", notes = "获取报价工艺流程-工序列表",hidden = true)
+    @RequestMapping(value = "/getListByQuoteAndName", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getListByQuoteAndName(String quoteId,String name) {
+        String method = "quoteProcess/getListByQuoteAndName";String methodName ="获取报价工艺流程-工序列表";
+        try {
+            ApiResponseResult result = quoteProcessService.getListByQuoteAndName(quoteId, name);
+            logger.debug("获取报价工艺流程列表=getAddList:");
+            getSysLogService().success(module,method, methodName,"" );
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取报价工艺流程-工序列表失败！", e);
+            getSysLogService().error(module,method, methodName, "关键字:;"+e.toString());
+            return ApiResponseResult.failure("获取报价工艺流程-工序列表失败！");
         }
     }
 }

@@ -26,4 +26,6 @@ public interface QuoteProcessService {
    
    public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
    
+   public ApiResponseResult getListByQuoteAndName(String quoteId,String name)throws Exception;
+   
 }

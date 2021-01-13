@@ -154,8 +154,11 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		List<QuoteProcess> lp = new ArrayList<QuoteProcess>();
 		// 20201218-先删除后在新增
 		//quoteProcessDao.delteQuoteProcessByPkQuoteBom(Long.parseLong(itemId));//使用id
-		quoteProcessDao.delteQuoteProcessByBsNameAndPkQuote(itemId,Long.valueOf(quoteId));//使用零件名字
+		//20210113-fyx-先不删除
+		//quoteProcessDao.delteQuoteProcessByBsNameAndPkQuote(itemId,Long.valueOf(quoteId));//使用零件名字
 		int j = 1;
+		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),itemId);
+		j += lqp.size() ;
 		for (String pro : procs) {
 			if (!StringUtils.isEmpty(pro)) {
 				// Proc procItem = procDao.findById(Long.parseLong(pro));
@@ -184,6 +187,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			}
 		}
 		quoteProcessDao.saveAll(lp);
+		
 		return ApiResponseResult.success("新增成功!");
 	}
 	
@@ -204,7 +208,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
             return ApiResponseResult.failure("工序记录不存在！");
         }
         //判断顺序是否存在
-        List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuoteBomAndBsOrder(0, o.getPkQuoteBom(), procOrder);
+        List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameAndBsOrder(0, o.getPkQuote(),o.getBsName(), procOrder);
         if(lpd.size()>0){
         	 return ApiResponseResult.failure("工序序号重复,请重新填写！");
         }
@@ -304,4 +308,11 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 }
 		 return strs;
 	 }
+
+	@Override
+	public ApiResponseResult getListByQuoteAndName(String quoteId, String name) throws Exception {
+		// TODO Auto-generated method stub
+		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
+		return ApiResponseResult.success().data(lqp);
+	}
 }
