@@ -104,7 +104,7 @@ layui.use('layer', function(){
                                     /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
                                     ' <div class="layui-timeline-content layui-text">'+
                                     '  <div class="layui-timeline-title">'+
-                                    '   <span style="padding-right:20px;">'+'['+getRadio(list.data[i].bsStepCheckStatus)+']'+list.data[i].createDate+'</span>  '+list.data[i].bsCheckName+','+list.data[i].bsCheckComments+
+                                    '   <span style="padding-right:20px;">'+'['+getRadio(list.data[i].bsStepCheckStatus)+']'+list.data[i].lastupdateDate+'</span>  '+list.data[i].bsCheckName+','+list.data[i].bsCheckComments+
                                     '  </div>'+
                                     ' </div>'+
                                     ' </li>';

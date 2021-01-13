@@ -12,7 +12,9 @@ public interface QuoteService {
 	
 	public ApiResponseResult getProdType()throws Exception;//获取产品类型
 	
-	public ApiResponseResult getList(String keyword,String status,PageRequest pageRequest)throws Exception;//获取报价单列表
+	public ApiResponseResult getList(String keyword,String status,String bsCode,String bsType,String bsStatus,
+									 String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
+									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,PageRequest pageRequest)throws Exception;//获取报价单列表
 
 	public ApiResponseResult edit(Quote quote)throws Exception;
 	

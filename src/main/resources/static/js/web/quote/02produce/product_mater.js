@@ -316,6 +316,7 @@ $(function() {
 				"bsQty" : obj.bsQty,
 				"bsUnit" : obj.bsUnit,
 				"bsRadix" : obj.bsRadix,
+				"bsProQty":obj.bsProQty,
 				"bsSupplier" : obj.bsSupplier,
 				"fmemo" : obj.fmemo,
 				"bsWaterGap":obj.bsWaterGap,

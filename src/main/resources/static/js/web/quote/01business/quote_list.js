@@ -150,11 +150,17 @@ $(function() {
 					{field: 'bsRemarks', type:'input'},
 					{field: 'bsProd', type:'input'},
 					{field: 'bsSimilarProd', type:'input'},
-					/*{field: 'id', type:'input'},
-					{field: 'date', type:'date'},
-					{field: 'username', type:'checkbox', url:'json/filter.json'},
-					{field: 'sex', type:'radio'},
-					{field: 'class', type:'checkbox', data:[{ "key":"12", "value":"十二班"}]}*/
+					{field: 'bsDevType', type:'input'},
+					{field: 'bsProdType', type:'date'},
+					{field: 'bsCustName', type:'checkbox'},
+					{field: 'bsPosition', type:'checkbox'},
+					{field: 'bsLevel', type:'checkbox'},
+					{field: 'bsRequire', type:'checkbox', data:[{ "key":"RoHS", "value":"RoHS"},
+							{ "key":"RECAH", "value":"RECAH"},
+							{ "key":"PAHS", "value":"PAHS"},{ "key":"CA65", "value":"CA65"}
+							,{ "key":"3BPA", "value":"3BPA"},{ "key":"HFS", "value":"HFS"}
+							,{ "key":"无卤", "value":"无卤"},{ "key":"其他", "value":"其他"}]},
+					{field: 'bsCustRequire', type:'input'}
 				],
 				'done': function(filters){}
 			})
@@ -214,6 +220,13 @@ $(function() {
                 		url:context + '/quote/getList?status='+$("span:last",this).attr("data-status")
                 	});
              })
+
+			form.on('submit(searchSubmit)', function(data) {
+				// 重新加载table
+				load(data);
+				return false;
+			});
+
 		});
 });
 //编辑项目弹出框
@@ -230,6 +243,20 @@ function open(title) {
 		}
 	});
 	layer.full(index)
+}
+
+// 重新加载表格（搜索）
+function load(obj) {
+	// 重新加载table
+	tableIns.reload({
+		where : {
+			keyword : obj.field.keywordSearch
+		},
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
+		}
+	});
 }
 
 //关闭报价单

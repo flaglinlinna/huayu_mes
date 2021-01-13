@@ -45,7 +45,7 @@ $(function() {
 						}
 						all = Number(all)+Number(item.NUMS);
 					});
-
+					$('#all-num').text('全部('+all+')');
 					// 可进行数据操作
 					return {
 						"count" : res.data.List.total,
