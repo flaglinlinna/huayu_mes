@@ -118,7 +118,8 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		// TODO Auto-generated method stub
 		
 		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
-		
+		//20210113-fyx-去掉外协--?
+		//hql += " and p.bs_Type <> 'out' " ;
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
