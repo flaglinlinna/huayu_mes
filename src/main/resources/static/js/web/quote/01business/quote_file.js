@@ -37,17 +37,16 @@ $(function() {
 				{
 					field : 'bsFileName',
 					title : '文件名称',
-					width : 200,
 					templet: '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="'+context+'/file/get?fsFileId={{d.pkFileId}}" th:href="@{/file/get?fsFileId={{d.pkFileId}}}">{{ d.bsFileName==null?"":d.bsFileName }}</a></div>'
 				},
 				{
 					field : 'createBy',
 					title : '创建人',
-					width : 80
+					width : 200
 				}, {
 					field : 'createDate',
 					title : '创建时间',
-					width : 150
+					width : 200
 				},
 				{
 				fixed : 'right',
