@@ -94,6 +94,9 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			int maxRow = sheet.getLastRowNum();
 			List<QuoteBomTemp> quoteBomList = new ArrayList<>();
 			//前两行为标题
+			Integer successes = 0;
+			Integer failures = 0;
+
 			for (int row = 2; row <= maxRow; row++) {
 				String errInfo = "";
 				QuoteBomTemp temp = new QuoteBomTemp();
@@ -163,8 +166,10 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 				temp.setErrorInfo(errInfo);
 				if(("").equals(errInfo)){
 					temp.setCheckStatus(0);
+					successes ++;
 				}else {
 					temp.setCheckStatus(1);
+					failures ++;
 				}
 				if(StringUtils.isNotEmpty(mid)) {
 					temp.setMid(Long.parseLong(mid));
@@ -186,7 +191,8 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 				quoteBomList.add(temp);
 			}
 			quoteBomTempDao.saveAll(quoteBomList);
-			return ApiResponseResult.success("导入成功");
+			Integer all = maxRow -1;
+			return ApiResponseResult.success("导入成功! 导入总数:" +all+" :校验通过数:"+successes+" ;不通过数: "+failures);
 		}
 		catch (Exception e){
 			e.printStackTrace();

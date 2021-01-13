@@ -11,7 +11,7 @@ $(function() {
 			,
 			cellMinWidth : 80,
 			//toolbar: '#toolbar',
-			height:'full-95'//固定表头&full-查询框高度
+			height:'full-65'//固定表头&full-查询框高度
 			//,even:true,//条纹样式
 			,page : true,
 			request : {
@@ -46,6 +46,8 @@ $(function() {
 							return '表面处理'
 						}else if (d.bsType == 'packag') {
 							return '组装'
+						}else if (d.bsType == 'out') {
+							return '外协'
 						}
 					}
 				},

@@ -305,21 +305,27 @@ $(function() {
 
 		$(document).on('click','#setBarcodeRule',function (obj) {
 			if($("#serialNum").val()&&!$("#serialLen").val()){
-				layer.msg("请先输入流水号位数");
+				if(!$("#serialLen").is(":focus")) {
+					layer.msg("请先输入流水号位数");
+				}
+			}
+			if(obj.target.id=="serialLen"){
+				if(!$("#serialNum").val()){
+					layer.msg("请先选中流水号");
+				}
 			}
 		})
 
-		$("#serialLen").on("click", function () {
-			if(!$("#serialNum").val()){
-				layer.msg("请先选中流水号");
-				$("#serialNum").focus();
-				$("#serialLen").val("");
-			}
-		});
-
 		//流水号位数 输入框
 		$("#serialLen").blur(function(){
-			if($("#serialLen").val()) {
+			if(!$("#serialNum").val()){
+				if(!$("#serialNum").is(":focus")) {
+					layer.msg("请先选中流水号");
+					$("#serialNum").focus();
+					$("#serialLen").val("");
+				}
+			}else {
+				if ($("#serialLen").val()) {
 					if (fserialLenFlag == -1) {
 						var fruleArr = frule.split("+");
 						fserialLenFlag = getSpiltLength(frule);
@@ -331,6 +337,7 @@ $(function() {
 						frule = fruleArr.join("+");
 					}
 					showFsample();
+				}
 			}
 		});
 

@@ -41,8 +41,8 @@ import java.util.*;
 @Service(value = "ProductProcessService")
 @Transactional(propagation = Propagation.REQUIRED)
 public class ProductProcesslmpl implements ProductProcessService {
-	
-	@Autowired
+
+    @Autowired
     private ProductProcessDao productProcessDao;
 
     @Autowired
@@ -54,14 +54,14 @@ public class ProductProcesslmpl implements ProductProcessService {
     QuoteProcessDao quoteProcessDao;
     @Autowired
     private QuoteItemDao quoteItemDao;
-	
-	/**
+
+    /**
      * 新增报价单
      */
     @Override
     @Transactional
-	public ApiResponseResult add(ProductProcess productProcess)throws Exception{
-    	if(productProcess == null){
+    public ApiResponseResult add(ProductProcess productProcess)throws Exception{
+        if(productProcess == null){
             return ApiResponseResult.failure("制造部材料信息不能为空！");
         }
         QuoteProcess  quoteProcess = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0,productProcess.getPkQuote(),productProcess.getPkProc(),productProcess.getBsName());
@@ -77,7 +77,7 @@ public class ProductProcesslmpl implements ProductProcessService {
 
         productProcessDao.save(productProcess);
         return ApiResponseResult.success("制造部材料信息添加成功！").data(productProcess);
-	}
+    }
 
     /**
      * 修改不良类别
@@ -99,16 +99,15 @@ public class ProductProcesslmpl implements ProductProcessService {
         o.setBsName(productProcess.getBsName());
         o.setBsOrder(productProcess.getBsOrder());
 
-        //如果工序重新选择了
-        if (!o.getPkProc().equals(productProcess.getPkProc())) {
-            o.setPkProc(productProcess.getPkProc());
-            QuoteProcess quoteProcess = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0, productProcess.getPkQuote(), productProcess.getPkProc(),productProcess.getBsName());
-            if (quoteProcess == null) {
-                return ApiResponseResult.failure("该工序未维护人工制费,请维护后再选择！");
-            } else {
-                productProcess.setBsFeeMh(quoteProcess.getBsFeeMh());
-                productProcess.setBsFeeLh(quoteProcess.getBsFeeLh());
-            }
+
+        //查找工序的制费信息
+        o.setPkProc(productProcess.getPkProc());
+        QuoteProcess quoteProcess = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0, o.getPkQuote(), productProcess.getPkProc(), productProcess.getBsName());
+        if (quoteProcess == null) {
+            return ApiResponseResult.failure("该工序未维护人工制费,请维护后再选择！");
+        } else {
+            productProcess.setBsFeeMh(quoteProcess.getBsFeeMh());
+            productProcess.setBsFeeLh(quoteProcess.getBsFeeLh());
         }
 
         o.setBsModelType(productProcess.getBsModelType());
@@ -191,7 +190,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (ProductProcess bs : productProcessesList) {
             Map<String, Object> map = new HashMap<>();
-			map.put("id", bs.getId());
+            map.put("id", bs.getId());
             map.put("bsName", bs.getBsName());
             map.put("bsOrder", bs.getBsOrder());
             if(bs.getProc()!=null){
@@ -214,7 +213,7 @@ public class ProductProcesslmpl implements ProductProcessService {
 
 
 
-//    导入模板
+    //    导入模板
     public ApiResponseResult doExcel(MultipartFile[] file,String bsType,Long quoteId) throws Exception{
         try {
             Date doExcleDate = new Date();
@@ -355,13 +354,13 @@ public class ProductProcesslmpl implements ProductProcessService {
     @Override
     @Transactional
     public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception{
-    	
-    	//判断状态是否已执行过确认提交-lst-20210112
-    	int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,quoteId,bsCode, 2);
-    	if(i>0){
-    		return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
-    	}
-    	
+
+        //判断状态是否已执行过确认提交-lst-20210112
+        int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,quoteId,bsCode, 2);
+        if(i>0){
+            return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
+        }
+
         List<ProductProcess> productMaterList  = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductProcess o : productMaterList) {
             if(o.getPkProc()==null){
@@ -411,35 +410,35 @@ public class ProductProcesslmpl implements ProductProcessService {
             //增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, bsCode);
         }
-            //20201225-fyx-计算后工序良率
-            this.updateHouYield(quoteId, bsType);
+        //20201225-fyx-计算后工序良率
+        this.updateHouYield(quoteId, bsType);
 
-        
+
         return ApiResponseResult.success("确认完成成功！");
     }
     private ApiResponseResult updateHouYield(Long quoteId,String bsType) throws Exception{
-    	//20201225-fyx-计算后工序良率
+        //20201225-fyx-计算后工序良率
         //1.先查询有多少个零件名称 
         //2.根据零件名称,工艺顺序倒叙获取信息
         //3.计算后工序
-    	
-    	List<Map<String, Object>> lml = productProcessDao.getBomName(bsType, quoteId);
+
+        List<Map<String, Object>> lml = productProcessDao.getBomName(bsType, quoteId);
         if(lml.size()>0){
-        	for(Map<String, Object> map:lml){
-        		System.out.println(map.get("BS_NAME").toString());
-        		List<ProductProcess> lpp = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsNameOrderByBsOrderDesc(0, quoteId, bsType, map.get("BS_NAME").toString());
-        		for(int i=0;i<lpp.size();i++){
-        			ProductProcess pp = lpp.get(i);
-        			if(i == 0){//认为是最后一道工序,后工序良率是100
-        				pp.setBsHouYield(new BigDecimal(100));
-        			}else{//3的后工序良率就是4的后工序良率/100*本工序良率
-        				pp.setBsHouYield(lpp.get(i-1).getBsHouYield().divide(new BigDecimal(100)).multiply(pp.getBsYield()));
-        			}
-        			pp.setLastupdateDate(new Date());
-        			pp.setLastupdateBy(UserUtil.getSessionUser().getId());
-        		}
-        		productProcessDao.saveAll(lpp);
-        	}
+            for(Map<String, Object> map:lml){
+                System.out.println(map.get("BS_NAME").toString());
+                List<ProductProcess> lpp = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsNameOrderByBsOrderDesc(0, quoteId, bsType, map.get("BS_NAME").toString());
+                for(int i=0;i<lpp.size();i++){
+                    ProductProcess pp = lpp.get(i);
+                    if(i == 0){//认为是最后一道工序,后工序良率是100
+                        pp.setBsHouYield(new BigDecimal(100));
+                    }else{//3的后工序良率就是4的后工序良率/100*本工序良率
+                        pp.setBsHouYield(lpp.get(i-1).getBsHouYield().divide(new BigDecimal(100)).multiply(pp.getBsYield()));
+                    }
+                    pp.setLastupdateDate(new Date());
+                    pp.setLastupdateBy(UserUtil.getSessionUser().getId());
+                }
+                productProcessDao.saveAll(lpp);
+            }
         }
         return ApiResponseResult.success();
     }

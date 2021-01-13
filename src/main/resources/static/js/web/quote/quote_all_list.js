@@ -56,7 +56,15 @@ $(function() {
 				           {type : 'numbers'},
 							 
 				 {field : 'bsCode',title : '报价单编号',width : 150,sort: true}, 
-				 {field : 'bsType',title : '报价类型', width : 100},
+				 {field : 'bsType',title : '报价类型', width : 100,templet:function (d) {
+						 if(d.bsType=="YSBJ"){
+							 return "衍生报价";
+						 }else if(d.bsType =="XPBJ"){
+							 return "新品报价"
+						 }else {
+							 return "";
+						 }
+					 }},
 				 {field : 'bsStatus',title : '状态',width : 341,templet:'#statusTpl'}, 
 				 {
 					field : 'bsFinishTime',

@@ -135,6 +135,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             //组装材料导入顺序: 零件名称1、材料名称2、规格3、用量4、单位5、基数6、供应商7、备注8
             //注塑材料导入顺序: 零件名称1、材料名称2、规格3、制品量4、单位5、基数6、水口量7、穴数8、备注9
             //表面处理导入顺序: 零件名称1、加工类型2、配色工艺3、材料名称4、规格5、用料6、单位7、基数8、备注9
+            Integer successes = 0;
+            Integer failures = 0;
             for (int row = 2; row <= maxRow; row++) {
                 String errInfo = "";
                 String mid = tranCell(sheet.getRow(row).getCell(0));
@@ -207,6 +209,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                     if(StringUtils.isNotEmpty(row7)) {
                         if (!row7.matches("^\\d+\\.\\d+$") && !row7.matches("^\\d+$")) {
                             errInfo = errInfo + "水口数必须是数字类型;";
+                        }else if(row7 == "0.0"){
+                            errInfo = errInfo + "水口数不能是0;";
                         }
                     }else {
                         errInfo = errInfo + "水口数不能为空;";
@@ -215,6 +219,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                     if(StringUtils.isNotEmpty(row8)) {
                         if (!row8.matches("^\\d+\\.\\d+$") && !row8.matches("^\\d+$")) {
                             errInfo = errInfo + "穴数必须是数字类型;";
+                        }else if("0.0".equals(row8)){
+                            errInfo = errInfo + "穴数不能是0;";
                         }
                     }else {
                         errInfo = errInfo + "穴数不能为空;";
@@ -316,14 +322,18 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 temp.setCreateDate(doExcleDate);
                 if("".equals(errInfo)){
                     temp.setCheckStatus(0);
+                    successes ++;
                 }else {
                     temp.setCheckStatus(1);
                     temp.setErrorInfo(errInfo);
+                    failures ++;
                 }
                 hardwareMaterList.add(temp);
             }
             productMaterTempDao.saveAll(hardwareMaterList);
-            return ApiResponseResult.success("导入成功");
+            Integer all = maxRow -1;
+            return ApiResponseResult.success("导入成功! 导入总数:" +all+" :校验通过数:"+successes+" ;不通过数: "+failures);
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -351,7 +361,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             //获取最后一行的num，即总行数。此处从0开始计数
             int maxRow = sheet.getLastRowNum();
             List<ProductMaterTemp> hardwareMaterList = new ArrayList<>();
-
+            Integer successes = 0;
+            Integer failures = 0;
             for (int row = 2; row <= maxRow; row++) {
                 String errInfo = "";
                 String id = tranCell(sheet.getRow(row).getCell(0));
@@ -426,14 +437,17 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 temp.setBsExplain(bsExplain);
                 if(errInfo ==""){
                     temp.setCheckStatus(0);
+                    successes ++;
                 }else {
                     temp.setCheckStatus(1);
                     temp.setErrorInfo(errInfo);
+                    failures ++;
                 }
                 hardwareMaterList.add(temp);
             }
             productMaterTempDao.saveAll(hardwareMaterList);
-            return ApiResponseResult.success("导入成功");
+            Integer all = maxRow -1;
+            return ApiResponseResult.success("导入成功! 导入总数:" +all+" :校验通过数:"+successes+" ;不通过数: "+failures);
         }
         catch (Exception e){
             e.printStackTrace();
