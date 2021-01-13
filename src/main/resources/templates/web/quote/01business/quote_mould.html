@@ -23,6 +23,11 @@
 							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
 							<i class="layui-icon">&#xe669;</i>重置
 						</button>
+						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="addbtn"
+							onclick="add('')">新增模具信息</button>
+						<button class="layui-btn layui-btn-sm" type="button" id="savebtn" onclick="save()">确认完成</button>
+						<button class="layui-btn layui-btn-sm layui-btn-warm" type="button" id="nobtn"
+							onclick="doNoNeed()">不需要报价</button>
 					</div>
 				</div>
 			</form>
@@ -34,22 +39,8 @@
 					</shiro:hasPermission>
 				</div>
 			</script>-->
-			
-			<!--<button class="layui-btn layui-btn-sm layui-btn-normal"-->
-			<!--onclick="addProc('')">新增产品工艺</button>-->
-			<table id="client_procList" lay-filter="client_procTable"></table>
-			<script type="text/html" id="toolbar">
-            {{# if(iStatus==2||iStatus==3){ }}              
-            <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled" disabled onclick="add('')">新增模具信息</button>
-			<button class="layui-btn layui-btn-sm layui-btn-disabled" disabled onclick="save()">确认完成</button>
-            <button class="layui-btn layui-btn-sm layui-btn-warm layui-btn-disabled" disabled onclick="doNoNeed()">不需要报价</button>
-            {{# } else { }}
-            <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="add('')">新增模具信息</button>
-			<button class="layui-btn layui-btn-sm" onclick="save()">确认完成</button>
-            <button class="layui-btn layui-btn-sm layui-btn-warm" onclick="doNoNeed()">不需要报价</button>
-            {{# } }} 		
-			</script>
 
+			<table id="client_procList" lay-filter="client_procTable"></table>
 			<script type="text/html" id="moveBar">
              <a class="layui-btn layui-btn-xs" lay-event="moveUp"><i class="layui-icon layui-icon-up"></i>上移</a>
              <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="moveDown"><i class="layui-icon layui-icon-down"></i>下移</a>
@@ -79,8 +70,8 @@
 						<!--<input type="text" name="num" placeholder="请选择" autocomplete="off"
 							class="layui-input" readonly="readonly" lay-verify="required"
 							id="num">-->
-						<select class="layui-input" id="num" name="num" 
-						lay-search lay-verify="required"></select>
+						<select class="layui-input" id="num" name="num" lay-search
+							lay-verify="required"></select>
 					</div>
 				</div>
 				<table id="procList" lay-filter="procTable" class="layui-table"

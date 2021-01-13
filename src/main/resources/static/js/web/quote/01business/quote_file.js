@@ -5,14 +5,14 @@ var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table','upload' ], function() {
 		var table = layui.table, form = layui.form,upload = layui.upload;
-
+		isComplete()
 		tableIns = table.render({
 			elem : '#productFileList',
 			url : context + '/quoteFile/getList?pkQuote='+ quoteId,
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
-			toolbar: '#toolbar',
+			//toolbar: '#toolbar',
 			height:'full-65'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,
@@ -100,10 +100,14 @@ $(function() {
 			load(data);
 			return false;
 		});
-
+		function isComplete(){
+			if(iStatus==2){
+				$("#loadbtn").addClass("layui-btn-disabled").attr("disabled",true)
+				$("#savebtn").addClass("layui-btn-disabled").attr("disabled",true)
+			}
+		}
 
 	});
-
 });
 
 

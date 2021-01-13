@@ -6,11 +6,12 @@ var totalCount=0;//表格记录数
 $(function() {
 	layui.use([ 'form', 'table' , 'tableSelect' ], function() {
 		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
+		isComplete()
 		tableIns = table.render({
 			elem : '#client_procList',
 			url : context + '/quoteMould/getList?pkQuote='+ quoteId,
-			method : 'get' // 默认：get请求
-			, toolbar: '#toolbar',
+			method : 'get' ,// 默认：get请求
+			//, toolbar: '#toolbar',
 			cellMinWidth : 80,
 			height: 'full-65'
 			,even:true,//条纹样式
@@ -286,6 +287,14 @@ $(function() {
 						layer.closeAll();
 					});
 				});
+		}
+		
+		function isComplete(){
+			if(iStatus==2||iStatus==3){
+				$("#addbtn").addClass("layui-btn-disabled").attr("disabled",true)
+				$("#nobtn").addClass("layui-btn-disabled").attr("disabled",true)
+				$("#savebtn").addClass("layui-btn-disabled").attr("disabled",true)
+			}
 		}
 	});
 });

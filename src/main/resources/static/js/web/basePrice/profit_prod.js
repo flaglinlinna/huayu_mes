@@ -72,6 +72,7 @@ $(function() {
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
+			height:'full-70',//固定表头&full-查询框高度
 			page : true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page

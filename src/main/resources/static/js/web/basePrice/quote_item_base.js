@@ -12,6 +12,7 @@ $(function() {
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
+			height:'full-70',//固定表头&full-查询框高度
 			page : true,
 			limit:20,
 			request : {
@@ -34,15 +35,13 @@ $(function() {
 			}, {
 				field : 'bsCode',
 				title : '项目编码',
-				width:120
+				width:200
 			}, {
 				field : 'bsName',
 				title : '项目名称',
-				width:120
 			}, {
 				field : 'bsPerson',
 				title : '处理人',
-				width:120
 			},{
 				fixed : 'right',
 				title : '操作',

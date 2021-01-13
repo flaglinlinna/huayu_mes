@@ -6,7 +6,7 @@ $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
 		var table = layui.table, table1 = layui.table,form = layui.form,upload = layui.upload,
 			tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect;
-		
+		isComplete()
 		tableSelect=tableSelect.render({
 			elem : '#BjWorkCenter',
 			searchKey : 'keyword',
@@ -186,7 +186,7 @@ $(function() {
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
-			toolbar: '#toolbar',
+			//toolbar: '#toolbar',
 			height:'full-65'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,
@@ -404,6 +404,15 @@ $(function() {
 				layer.close(index);
 			}
 		});
+		
+		function isComplete(){
+			if(iStatus==2){
+				$("#addbtn").addClass("layui-btn-disabled").attr("disabled",true)
+				$("#exportbtn").addClass("layui-btn-disabled").attr("disabled",true)
+				$("#loadbtn").addClass("layui-btn-disabled").attr("disabled",true)
+				$("#savebtn").addClass("layui-btn-disabled").attr("disabled",true)
+			}
+		}
 	});
 
 });

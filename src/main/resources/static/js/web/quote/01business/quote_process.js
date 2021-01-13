@@ -6,6 +6,7 @@ var totalCount=0;//表格记录数
 $(function() {
 	layui.use([ 'form', 'table' , 'tableSelect' ], function() {
 		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
+		isComplete()
 		tableIns = table.render({
 			elem : '#client_procList',
 			url : context + '/quoteProcess/getList?pkQuote='+ quoteId,
@@ -347,6 +348,14 @@ $(function() {
 					});
 				});
 		}
+		
+		function isComplete(){
+			if(iStatus==2){
+				$("#addbtn").addClass("layui-btn-disabled").attr("disabled",true)
+				$("#savebtn").addClass("layui-btn-disabled").attr("disabled",true)
+			}
+		}
+		
 	});
 });
 //添加工艺流程

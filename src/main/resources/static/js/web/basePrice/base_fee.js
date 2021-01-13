@@ -12,6 +12,7 @@ $(function() {
 							method : 'get' // 默认：get请求
 							,
 							cellMinWidth : 80,
+							height:'full-70',//固定表头&full-查询框高度
 							page : true,
 							request : {
 								pageName : 'page' // 页码的参数名称，默认：page
@@ -28,56 +29,18 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {
-								type : 'numbers'
-							}, {
-								field : 'enabled',
-								title : '有效状态',
-								templet : '#statusTpl',
-								width : 95
-							}, {
-								field : 'workcenter',
-								title : '工作中心',
-								width : 100
-							}, {
-								field : 'procName',
-								title : '工序',
-								width : 100
-							}, {
-								field : 'mhType',
-								title : '机台类型',
-								width : 100
-							}, {
-								field : 'feeLh',
-								title : '人工费率（元/小时）',
-								width : 150
-							}, {
-								field : 'feeMh',
-								title : '制费费率（元/小时）',
-								width : 150
-							}, {
-								field : 'createBy',
-								title : '创建人',
-								width : 80
-							}, {
-								field : 'createDate',
-								title : '创建时间',
-								width : 150
-							}, {
-								field : 'lastupdateBy',
-								title : '更新人',
-								width : 80
-							}, {
-								field : 'lastupdateDate',
-								title : '更新时间',
-								width : 150
-							}, {
-								fixed : 'right',
-								title : '操作',
-								align : 'center',
-								toolbar : '#optBar',
-								width : 120
-							} ] ],
+							cols : [ [ {type : 'numbers'}, 
+							           {field : 'enabled',title : '有效状态',templet : '#statusTpl',width : 95}, 
+							           {field : 'workcenter',title : '工作中心',width : 100}, 
+							           {field : 'procName',title : '工序',width : 100},
+							           {field : 'mhType',title : '机台类型',width : 100}, 
+							           {field : 'feeLh',title : '人工费率（元/小时）',width : 150}, 
+							           {field : 'feeMh',title : '制费费率（元/小时）',width : 150}, 
+							           {field : 'createBy',title : '创建人',width : 80}, 
+							           {field : 'createDate',title : '创建时间',width : 150}, 
+							           {field : 'lastupdateBy',title : '更新人',width : 80}, 
+							           {field : 'lastupdateDate',title : '更新时间',width : 150}, 
+							           {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120} ] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}

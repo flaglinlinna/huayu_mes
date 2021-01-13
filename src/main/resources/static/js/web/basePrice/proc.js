@@ -11,6 +11,7 @@ $(function() {
 			url : context + '/basePrice/proc/getList',
 			method : 'get' // 默认：get请求
 			,
+			height:'full-70',//固定表头&full-查询框高度
 			cellMinWidth : 80,
 			page : true,
 			request : {
