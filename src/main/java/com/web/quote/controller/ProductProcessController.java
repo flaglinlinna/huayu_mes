@@ -42,13 +42,14 @@ public class ProductProcessController extends WebController {
 
 	@ApiOperation(value = "报价工艺流程列表页", notes = "报价工艺流程列表页", hidden = true)
 	@RequestMapping(value = "/toProductProcess")
-	public ModelAndView toProductProcess(String bsType,String quoteId,String bsCode,String iStatus) {
+	public ModelAndView toProductProcess(String bsType,String quoteId,String bsCode,String iStatus,String bsName) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("bsCode", bsCode);
 			mav.addObject("iStatus", iStatus);
+			mav.addObject("bsName", bsName);
 			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());
 			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径

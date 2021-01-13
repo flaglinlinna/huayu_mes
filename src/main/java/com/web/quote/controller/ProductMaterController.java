@@ -39,13 +39,14 @@ public class ProductMaterController extends WebController {
 
 	@ApiOperation(value = "五金材料信息列表页", notes = "五金材料信息列表页", hidden = true)
 	@RequestMapping(value = "/toProductMater")
-	public ModelAndView toProductMater(String bsType,String quoteId,String bsCode,String iStatus) {
+	public ModelAndView toProductMater(String bsType,String quoteId,String bsCode,String iStatus,String bsName) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("bsCode", bsCode);
 			mav.addObject("iStatus", iStatus);
+			mav.addObject("bsName", bsName);
 			mav.addObject("bomNameList",productMaterService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_mater");// 返回路径
 		} catch (Exception e) {

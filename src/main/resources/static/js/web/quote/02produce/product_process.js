@@ -11,14 +11,14 @@ $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
 		var table = layui.table, table2 = layui.table,form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect,
 			tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect;
-
+		isComplete()
 		tableIns = table.render({
 			elem : '#listTable',
 			url : context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
 			method : 'get' // 默认：get请求
 			,
 			cellMinWidth : 80,
-			toolbar: '#toolbar',
+			//toolbar: '#toolbar',
 			height:'full-65'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,
@@ -536,9 +536,15 @@ $(function() {
 				layer.close(index);
 			}
 		});
-
+		function isComplete() {
+			if (iStatus == 2) {
+				$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
+				$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
+				$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
+				$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+			}
+		}
 	});
-
 });
 
 function initSelect() {
@@ -716,9 +722,13 @@ function Confirm(){
 			if (data.result) {
 				layer.alert("确认完成成功", function() {
 					layer.closeAll();
-					// cleanProdErr();
-					// 加载页面
-					loadAll();
+					//刷新页面
+					var link = "/productProcess/toProductProcess?bsType="+
+					bsType+"&quoteId="+quoteId+"&bsCode="+bsCode+"&iStatus=2";
+					//1.打开新Tab
+					parent.layui.index.openTabsPage(link,iName);
+					//2.关闭当前Tab
+					parent.layui.admin.events.closeThisTabs();
 				});
 			} else {
 				layer.alert(data.msg);

@@ -583,7 +583,7 @@ function fontSize(res){
 	  var docEl = document.documentElement,
 	  clientWidth = window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth;
 	  if (!clientWidth) return;
-	  var fontSize = 100 * (clientWidth / 1920);
+	  var fontSize = 100 * (clientWidth / 2880);//原：1920/2400/2880
 	  return res*fontSize;
 }
 

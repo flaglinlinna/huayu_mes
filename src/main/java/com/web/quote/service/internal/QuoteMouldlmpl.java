@@ -213,6 +213,8 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 		 quoteItemDao.switchStatus(3, Long.parseLong(quoteId), bsCode);
 		 //写入完成时间-20210112-lst
 		 quoteService.doItemFinish(bsCode, Long.parseLong(quoteId));
+		 //20210113-lst-关闭待办
+		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "模具清单");
 		 return ApiResponseResult.success("操作成功！");
 	 }
 }
