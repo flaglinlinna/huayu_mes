@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.druid.util.StringUtils;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.ProductMater;
@@ -174,6 +175,33 @@ public class PurchaseController extends WebController {
 			logger.error("确认完成失败！", e);
 			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
 			return ApiResponseResult.failure("确认完成信息失败！");
+		}
+	}
+	
+	@ApiOperation(value = "选择价格档位", notes = "选择价格档位", hidden = true)
+	@RequestMapping(value = "/doGear", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult doGear(String id,String gearPrice) {
+		String method = "/purchase/doGear";
+		String methodName = "选择价格档位";
+		try {
+			if(StringUtils.isEmpty(gearPrice)){
+				return ApiResponseResult.failure("档位不能为空");
+			}
+			String[] strs = gearPrice.split(",");
+			if(strs.length != 2){
+				return ApiResponseResult.failure("档位格式不正确");
+			}
+			
+			ApiResponseResult result = purchaseService.doGear(id,strs[1],strs[0]);
+			logger.debug(methodName+"=:"+method);
+			getSysLogService().success(module,method, methodName, id);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
 		}
 	}
 

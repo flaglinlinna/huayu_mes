@@ -19,7 +19,9 @@ public interface PurchaseService {
 
 	public ApiResponseResult doExcel(MultipartFile[] file, Long quoteId) throws Exception;
 
-	public ApiResponseResult doStatus(Long quoteId) throws Exception;//计算后工序损耗
+	public ApiResponseResult doStatus(Long quoteId) throws Exception;//确认完成
 	
 	public ApiResponseResult doSumHouLoss(Long quoteId) throws Exception;//计算后工序损耗
+	
+	public ApiResponseResult doGear(String id,String gear,String price) throws Exception;//添加价格档位
 }

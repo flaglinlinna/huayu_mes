@@ -294,4 +294,21 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	@Override
+	public ApiResponseResult doGear(String id, String gear, String price) throws Exception {
+		// TODO Auto-generated method stub
+		ProductMater o = productMaterDao.findById(Long.parseLong(id));
+		if(o == null){
+			return ApiResponseResult.failure("该材料信息不存在！");
+		}
+		o.setBsGear(gear);
+		if(!StringUtils.isEmpty(price)){
+			o.setBsRefer(new BigDecimal(price));
+		}
+		o.setLastupdateDate(new Date());
+		productMaterDao.save(o);
+		return ApiResponseResult.success("操作成功!");
+	}
 }

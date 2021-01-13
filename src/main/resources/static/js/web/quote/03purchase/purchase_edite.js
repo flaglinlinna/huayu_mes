@@ -20,7 +20,6 @@ $(function() {
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
-				console.log(res.data.rows)
 				// 可进行数据操作
 				return {
 					"count" : res.data.total,
@@ -32,6 +31,7 @@ $(function() {
 			},
 			cols : [ [ 
 			    {type : 'numbers',style:'background-color:#d2d2d2'}, 
+			    {field:'id',title:'ID' ,hide:true},
 				{field: 'bsType', width: 100, title: '类型', sort: true, style:'background-color:#d2d2d2',
 				// * 五金:hardware
 				// * 注塑:molding
@@ -53,14 +53,6 @@ $(function() {
 				{field : 'bsMaterName',width:120, title : '材料名称',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'bsModel', width:150, title : '材料规格',style:'background-color:#d2d2d2'},
 				{field : 'bsQty', width:80, title : '用量',style:'background-color:#d2d2d2'},
-				{field : 'bsProQty', width:100, title : '制品重',style:'background-color:#d2d2d2'},
-				{field : 'bsMachiningType', title : '加工类型',width:100,style:'background-color:#d2d2d2'},//(表面处理)
-				{field : 'bsColor', title : '配色工艺',width:100,style:'background-color:#d2d2d2'},//(表面处理)
-				{field : 'bsWaterGap', title : '水口量',width:100,style:'background-color:#d2d2d2'}, //(注塑)
-				{field : 'bsCave', title : '穴数',width:100,style:'background-color:#d2d2d2'}, //(注塑)
-				{field : 'bsUnit', width:80, title : '单位',style:'background-color:#d2d2d2'},
-				{field : 'bsRadix', width:80, title : '基数',style:'background-color:#d2d2d2'},
-				{field : 'bsGeneral', width:120, title : '是否通用物料',style:'background-color:#d2d2d2'},
 				{field : 'bsGear', width:120, title : '价格挡位', templet: '#selectGear'},
 				/*{field : 'bsGear', width:120, title : '价格挡位',templet: function (d) {
 					if(d.bsPriceList){
@@ -77,8 +69,17 @@ $(function() {
                         '      </select>';
                 }},*/
 				{field : 'bsRefer', width:110, title : '参考价格',style:'background-color:#d2d2d2'},
+				{field : 'bsProQty', width:100, title : '制品重',style:'background-color:#d2d2d2'},
+				{field : 'bsMachiningType', title : '加工类型',width:100,style:'background-color:#d2d2d2'},//(表面处理)
+				{field : 'bsColor', title : '配色工艺',width:100,style:'background-color:#d2d2d2'},//(表面处理)
+				{field : 'bsWaterGap', title : '水口量',width:100,style:'background-color:#d2d2d2'}, //(注塑)
+				{field : 'bsCave', title : '穴数',width:100,style:'background-color:#d2d2d2'}, //(注塑)
+				{field : 'bsUnit', width:80, title : '单位',style:'background-color:#d2d2d2'},
+				{field : 'bsRadix', width:80, title : '基数',style:'background-color:#d2d2d2'},
+				{field : 'bsGeneral', width:120, title : '是否通用物料',style:'background-color:#d2d2d2'},
+				
 				{field : 'bsAssess', width:110, title : '评估价格', edit:'number'	},
-				{field : 'bsExplain', width:110, title : '采购说明'},
+				{field : 'bsExplain', width:110, title : '采购说明',style:'background-color:#d2d2d2'},
 				{field : 'fmemo', width:110, title : '备注', edit:'text'},
 				{field : 'bsSupplier', width:110, title : '供应商', edit:'text'}
 				] ],
@@ -136,19 +137,19 @@ $(function() {
 				pageCurr = curr;
 			}
 		});
-		
-		//下拉框监听事件
-		form.on('select(roleIdSelect)', function(data) {
-			alert('1');
-			return;
-			//获取行tr对象
-			var elem = data.othis.parents('tr');
-	        //获取第一列的值，第一列为ID列，
-			var id = elem.first().find('td').eq(1).text();
-	        //选择的select对象值；
-	        var selectValue=data.value;
-			//处理字段更新的逻辑
-		});
+		//监听下拉框编辑
+        form.on('select(selectGear)', function (data) {
+            //获取当前行tr对象
+            var elem = data.othis.parents('tr');
+            //第一列的值是Guid，取guid来判断
+            var id= elem.first().find('td').eq(1).text();
+            //选择的select对象值；
+            var selectValue = data.value;
+            if(selectValue){
+            	doGear(id,selectValue);
+            }
+            
+        })
 
 		//自定义验证规则
 		form.verify({
@@ -466,3 +467,24 @@ function cleanProdErr() {
 function exportExcel() {
 	location.href = context + "/purchase/exportExcel?pkQuote="+quoteId;
 }
+
+function doGear(id,gearPrice){
+	  CoreUtil.sendAjax("/purchase/doGear", {'id':id,'gearPrice':gearPrice},
+				function(res) {
+		          if(res.result){
+		        	  tableIns.reload({
+							done: function(res1, curr, count){
+								pageCurr=curr;
+							}
+							}); 
+		          }else{
+		        	  layer.msg(res.msg, {
+			              time: 20000, //20s后自动关闭
+			              btn: ['知道了']
+			            });
+		          }
+				  
+				}, "GET", false, function(res) {
+					layer.alert(res.msg);
+				}); 
+} 
