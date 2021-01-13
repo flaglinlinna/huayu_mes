@@ -110,7 +110,6 @@ $(function() {
 					"msg" : res.msg,
 					"data" : res.data.rows,
 					"code" : res.status
-					// code值为200表示成功
 				}
 			},
 			cols : [ [

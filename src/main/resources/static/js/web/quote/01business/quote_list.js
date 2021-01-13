@@ -3,9 +3,9 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ],
+	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer','tableFilter'  ],
 		function() {
-			var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table;
+			var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table,tableFilter = layui.tableFilter;
 			tableIns = table.render({
 				elem : '#listTable',
 				url : context + '/quote/getList?status=',
@@ -125,6 +125,7 @@ $(function() {
 					}
 				] ],
 				done : function(res, curr, count) {
+					localtableFilterIns.reload();
 					pageCurr = curr;
 					res.data.forEach(function (item, index) {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
@@ -138,6 +139,25 @@ $(function() {
 					});
 				}
 			});	
+			var localtableFilterIns = tableFilter.render({
+				'elem' : '#listTable',
+				'mode' : 'api',//服务端过滤
+				'filters' : [
+					{field: 'bsCode', type:'input'},
+					{field: 'bsType', type:'checkbox', data:[{ "key":"YSBJ", "value":"衍生报价"},{ "key":"XPBJ", "value":"新品报价"}]},
+					{field: 'bsStatus', type:'checkbox', data:[{ "key":"0", "value":"进行中"},{ "key":"1", "value":"已完成"},{ "key":"99", "value":"已关闭"}]},
+					{field: 'bsFinishTime', type:'date'},
+					{field: 'bsRemarks', type:'input'},
+					{field: 'bsProd', type:'input'},
+					{field: 'bsSimilarProd', type:'input'},
+					/*{field: 'id', type:'input'},
+					{field: 'date', type:'date'},
+					{field: 'username', type:'checkbox', url:'json/filter.json'},
+					{field: 'sex', type:'radio'},
+					{field: 'class', type:'checkbox', data:[{ "key":"12", "value":"十二班"}]}*/
+				],
+				'done': function(filters){}
+			})
 			// 监听工具条
 			table.on('tool(listTable)', function(obj) {
 				var data = obj.data;
