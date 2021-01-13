@@ -72,10 +72,10 @@ height: 30px;
          <!--</script>-->
 
          <script type="text/html" id="selectGear" >
-            <select name="selectDemo" lay-filter="selectDemo" lay-search>
+            <select name="selectGear" lay-filter="selectGear" lay-search>
 <option value="">请选择</option>
 {{# layui.each($.parseJSON( d.bsPriceList ), function(index, item){     }}
-<option value="{{ item.PRICE_UN }}">{{ item.RANGE_PRICE }}</option>
+<option value="{{ item.PRICE_UN }},{{ item.RANGE_PRICE }}"  {{ d.bsGear==item.RANGE_PRICE?'selected':''}}>{{ item.RANGE_PRICE }}</option>
                     {{# });  }}
 </select>
          </script>
