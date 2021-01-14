@@ -99,27 +99,12 @@ $(function() {
 			limit : 20,
 			method : 'get',// 默认：get请求
 			cols : [ [ {type : 'numbers'}
-			, 
-			{field : 'checkColumn',
-				type:"checkbox"
-			},/*{
-				field : 'procOrder',
-				title : '序号',width:80
-			}, */{
-				field : 'procNo',
-				title : '工序编码', minWidth: 80
-			}, {
-				field : 'procName',
-				title : '工序名称', minWidth: 120
-			}, {
-				field : 'workcenterName',
-				title : '工作中心', minWidth: 100,
-				templet:'<div>{{d.bjWorkCenter.workcenterName}}</div>'
-			},{
-	              type: 'toolbar',
-	              title: '操作',
-	              width: 70,align : 'center',
-	              toolbar: '#clickBar'
+			, {field : 'checkColumn',type:"checkbox"},
+			/*{field : 'procOrder',title : '序号',width:80}, */
+			{field : 'procNo',title : '工序编码', minWidth: 80}, 
+			{field : 'procName',title : '工序名称', minWidth: 120}, 
+			{field : 'workcenterName',title : '工作中心', minWidth: 100,templet:'<div>{{d.bjWorkCenter.workcenterName}}</div>'},
+			{type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#clickBar'
 	            }] ],
 			data:[]
 		});	
@@ -128,30 +113,13 @@ $(function() {
 			elem : '#procListCheck',
 			limit: 20,
 			method : 'get' ,// 默认：get请求			
-			cols : [ [ {type : 'numbers'}, 
-			           {
-				field : 'bsName',
-				title : '零件名称',style:'background-color:#d2d2d2'
-			},{
-				field : 'procNo',
-				title : '工序编码',
-				templet:'<div>{{d.proc.procNo}}</div>',
-				style:'background-color:#d2d2d2'
-			},{
-				field : 'procName',
-				title : '工序名称',
-				templet:'<div>{{d.proc.procName}}</div>',
-				style:'background-color:#d2d2d2'
-			}, {
-				field : 'workCenter',
-				title : '工作中心',
-				templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',
-				style:'background-color:#d2d2d2'
-			}, {
-				field : 'bsOrder',
-				title : '工序顺序',"edit":"number","event": "dataCol",
-				width:80
-			},
+			cols : 
+				[ [ {type : 'numbers'}, 
+			         {field : 'bsName',title : '零件名称',style:'background-color:#d2d2d2'},
+			         {field : 'procNo',title : '工序编码',templet:'<div>{{d.proc.procNo}}</div>',style:'background-color:#d2d2d2'},
+			         {field : 'procName',title : '工序名称',templet:'<div>{{d.proc.procName}}</div>',style:'background-color:#d2d2d2'},
+			         {field : 'workCenter',title : '工作中心',templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style:'background-color:#d2d2d2'}, 
+			         {field : 'bsOrder',title : '工序顺序',"edit":"number","event": "dataCol",width:80},
 			//{type: 'toolbar',title: '操作',width: 150,align : 'center',toolbar: '#moveBar'}
 			] ],
 			data:[]
