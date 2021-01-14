@@ -115,12 +115,13 @@ $(function() {
 			method : 'get' ,// 默认：get请求			
 			cols : 
 				[ [ {type : 'numbers'}, 
+				    {field : 'checkColumn',type:"checkbox"},
 			         {field : 'bsName',title : '零件名称',style:'background-color:#d2d2d2'},
 			         {field : 'procNo',title : '工序编码',templet:'<div>{{d.proc.procNo}}</div>',style:'background-color:#d2d2d2'},
 			         {field : 'procName',title : '工序名称',templet:'<div>{{d.proc.procName}}</div>',style:'background-color:#d2d2d2'},
 			         {field : 'workCenter',title : '工作中心',templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style:'background-color:#d2d2d2'}, 
 			         {field : 'bsOrder',title : '工序顺序',"edit":"number","event": "dataCol",width:80},
-			//{type: 'toolbar',title: '操作',width: 150,align : 'center',toolbar: '#moveBar'}
+			         {type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#optBar'}
 			] ],
 			data:[]
 		});	
@@ -208,16 +209,20 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delClientProc(data.id);
+				delClientProc(data.id,'list',"");
 			} else if (obj.event === 'edit') {
 				// 编辑
 				// getClientProc(data, data.id);//未写
 				// addProc(data.custId)
 			}
 		});
-		table.on('tool(procTableCheck)', function(obj) {
+		table.on('tool(procListCheck)', function(obj) {
 			var data = obj.data;
 			var tbData = table.cache.procListCheck; //是一个Array
+			if (obj.event === 'del') {
+				// 删除
+				delClientProc(data.id,'in',data.bsName);
+			} 
 			if (obj.event === 'moveUp') {
 				// 上移
 				var tr = $(this).parent().parent().parent();
@@ -307,7 +312,23 @@ $(function() {
 
 			}*/
 		});
-		
+
+		form.on('submit(dels)', function() {
+			var checkdata = layui.table.checkStatus("procListCheck").data;
+			var ids = "";
+			var bsName = "";
+			for(var i = 0;i<checkdata.length;i++){
+				ids = ids+ checkdata[i].id+',';
+			}
+			if(ids ==""){
+				return false;
+			}else {
+				bsName = checkdata[0].bsName;
+			}
+			delClientProc(ids,"in",bsName);
+			return false;
+		});
+
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
 			var checkStatus = table.cache.procList;
@@ -437,7 +458,7 @@ function saveProc() {
 	});
 }
 
-function delClientProc(id) {
+function delClientProc(id,type,bsName) {
 	if (id != null) {
 		var param = {
 			"id" : id
@@ -448,12 +469,21 @@ function delClientProc(id) {
 		}, function() {
 			CoreUtil.sendAjax("/quoteProcess/delete", JSON.stringify(param), function(data) {
 				if (data.result == true) {
-					// 回调弹框
-					layer.alert("删除成功！", function() {
-						layer.closeAll();
-						// 加载load方法
-						loadAll();
-					});
+					if(type == 'list'){
+						// 回调弹框
+						layer.alert("删除成功！", function() {
+							layer.closeAll();
+							// 加载load方法
+							loadAll();
+						});
+					}else{
+						// 回调弹框
+						layer.alert("删除成功！", function(index) {
+							layer.close(index);
+							getListByQuoteAndName(bsName);
+						});
+					}
+					
 				} else {
 					layer.alert(data, function() {
 						layer.closeAll();

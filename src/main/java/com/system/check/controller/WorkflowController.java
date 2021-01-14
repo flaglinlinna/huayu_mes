@@ -37,7 +37,7 @@ public class WorkflowController extends WebController{
 	 	@ApiOperation(value = "流程信息列表页", notes = "流程信息列表页", hidden = true)
 	    @RequestMapping(value = "/toWorkflow")
 	    public String toWorkflow(){
-	        return "/system/Workflow/Workflow";
+	        return "/system/workflow/workflow";
 	    }
 	    @ApiOperation(value = "获取流程信息列表", notes = "获取流程信息列表", hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)

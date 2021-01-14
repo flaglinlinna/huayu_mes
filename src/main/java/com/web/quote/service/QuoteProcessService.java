@@ -18,8 +18,8 @@ public interface QuoteProcessService {
 	
    public ApiResponseResult getList(String keyword,String pkQuote, PageRequest pageRequest)  throws Exception;
 	
-   public ApiResponseResult delete(Long id)  throws Exception;
-	
+   public ApiResponseResult delete(String ids)  throws Exception;
+
    public ApiResponseResult doProcOrder(Long id,Integer bsOrder)  throws Exception;
 
    public ApiResponseResult doFmemo(Long id,String  fmemo)throws Exception;

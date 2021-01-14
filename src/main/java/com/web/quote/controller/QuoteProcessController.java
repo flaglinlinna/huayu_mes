@@ -189,8 +189,8 @@ public class QuoteProcessController extends WebController {
     public ApiResponseResult delete(@RequestBody Map<String, Object> params){
         String method = "quoteProcess/delete";String methodName ="删除";
         try{
-        	Long id = Long.parseLong(params.get("id").toString()) ;
-            ApiResponseResult result = quoteProcessService.delete(id);
+        	String ids = params.get("id").toString() ;
+            ApiResponseResult result = quoteProcessService.delete(ids);
             logger.debug("删除=delete:");
             getSysLogService().success(module,method, methodName, params);
             return result;
