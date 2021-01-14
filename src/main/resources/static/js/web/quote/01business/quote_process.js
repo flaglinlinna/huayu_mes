@@ -209,7 +209,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delClientProc(data.id,'list');
+				delClientProc(data.id,'list',"");
 			} else if (obj.event === 'edit') {
 				// 编辑
 				// getClientProc(data, data.id);//未写
@@ -221,7 +221,7 @@ $(function() {
 			var tbData = table.cache.procListCheck; //是一个Array
 			if (obj.event === 'del') {
 				// 删除
-				delClientProc(data.id,'in');
+				delClientProc(data.id,'in',data.bsName);
 			} 
 			if (obj.event === 'moveUp') {
 				// 上移
@@ -312,7 +312,23 @@ $(function() {
 
 			}*/
 		});
-		
+
+		form.on('submit(dels)', function() {
+			var checkdata = layui.table.checkStatus("procListCheck").data;
+			var ids = "";
+			var bsName = "";
+			for(var i = 0;i<checkdata.length;i++){
+				ids = ids+ checkdata[i].id+',';
+			}
+			if(ids ==""){
+				return false;
+			}else {
+				bsName = checkdata[0].bsName;
+			}
+			delClientProc(ids,"in",bsName);
+			return false;
+		});
+
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
 			var checkStatus = table.cache.procList;
@@ -442,7 +458,7 @@ function saveProc() {
 	});
 }
 
-function delClientProc(id,type) {
+function delClientProc(id,type,bsName) {
 	if (id != null) {
 		var param = {
 			"id" : id
@@ -462,13 +478,9 @@ function delClientProc(id,type) {
 						});
 					}else{
 						// 回调弹框
-						layer.alert("删除成功！", function() {
-							tableProcCheck.reload({
-								data:data.data,
-								done : function(res, curr, count) {
-									//cleanProc();//清空之前的选中
-								}
-							});
+						layer.alert("删除成功！", function(index) {
+							layer.close(index);
+							getListByQuoteAndName(bsName);
 						});
 					}
 					

@@ -244,19 +244,24 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 * 删除
 	 * **/
 	@Override
-	public ApiResponseResult delete(Long id) throws Exception {
-		// TODO Auto-generated method stub
-		 if(id == null){
-	            return ApiResponseResult.failure("ID不能为空！");
-	        }
-		 QuoteProcess o  = quoteProcessDao.findById((long) id);
-	        if(o == null){
-	            return ApiResponseResult.failure("该记录不存在！");
-	        }
-	        o.setDelTime(new Date());
-	        o.setDelFlag(1);
-	        o.setDelBy(UserUtil.getSessionUser().getId());
-	        quoteProcessDao.save(o);
+	public ApiResponseResult delete(String ids) throws Exception {
+		String[] id_s = ids.split(",");
+		Date deleteTime = new Date();
+		List<QuoteProcess> quoteProcessList = new ArrayList<>();
+		for(String id :id_s){
+			if(id == null){
+				return ApiResponseResult.failure("ID不能为空！");
+			}
+				QuoteProcess o  = quoteProcessDao.findById(Long.parseLong(id));
+			if(o == null){
+				return ApiResponseResult.failure("该记录不存在！");
+			}
+				o.setDelTime(deleteTime);
+				o.setDelFlag(1);
+				o.setDelBy(UserUtil.getSessionUser().getId());
+				quoteProcessList.add(o);
+		}
+	        quoteProcessDao.saveAll(quoteProcessList);
 	        return ApiResponseResult.success("删除成功！");
 	}
 	/**
