@@ -320,7 +320,10 @@ $(function() {
 				}
 			});
 			if (data.field.num == "") {
-				alert("请选择零件")
+				layer.msg('请先选择零件', {
+		              time: 20000, //20s后自动关闭
+		              btn: ['知道了']
+		            });
 				return false;
 			}
 			console.log(data.field)
