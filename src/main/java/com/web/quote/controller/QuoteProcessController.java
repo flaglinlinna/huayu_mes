@@ -19,6 +19,7 @@ import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.QuoteProcessService;
+import com.web.quote.service.QuoteService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,9 @@ public class QuoteProcessController extends WebController {
 
 	@Autowired
 	private QuoteProcessService quoteProcessService;
+	
+	@Autowired
+	private QuoteService quoteService;
 
 	@ApiOperation(value = "报价工艺流程表结构", notes = "报价工艺流程表结构" + QuoteProcess.TABLE_NAME)
 	@RequestMapping(value = "/getQuoteProcess", method = RequestMethod.GET)
@@ -45,13 +49,14 @@ public class QuoteProcessController extends WebController {
 	
 	@ApiOperation(value = "报价工艺流程页", notes = "报价工艺流程页", hidden = true)
 	@RequestMapping(value = "/toQuoteProcess")
-	public ModelAndView toQuoteProcess(String quoteId,String code,String iStatus) {
+	public ModelAndView toQuoteProcess(String quoteId,String code) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult bomNameList=quoteProcessService.getBomList2(quoteId);
+			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),code);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("code", code);
-			mav.addObject("iStatus", iStatus);
+			mav.addObject("nowStatus", iStatus);
 			mav.addObject("bomNameList", bomNameList);
 			mav.setViewName("/web/quote/01business/quote_process");// 返回路径
 		} catch (Exception e) {

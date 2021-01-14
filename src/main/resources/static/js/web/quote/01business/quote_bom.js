@@ -540,7 +540,10 @@ function save() {
 					isComplete();
 					loadAll()
 				} else {
-					layer.alert(data.msg);
+					layer.msg(data.msg, {
+						time : 2000, // 2s后自动关闭
+						btn : [ '知道了' ]
+					});
 				}
 			}
 		});
