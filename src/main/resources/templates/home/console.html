@@ -141,6 +141,20 @@
 							var url = "";
 							if(dd[j].bsRouter == "QUOTE_NEW"){
 								url = context+"/quote/toQuoteList?quoteId="+dd[j].bsReferId;
+							}else if(dd[j].bsRouter == "hardware"){
+								url = context+"/quoteProdect/toQuoteProdect?style=hardware&quoteId="+dd[j].bsReferId;
+							}else if(dd[j].bsRouter == "molding"){
+								url = context+"/quoteProdect/toQuoteProdect?style=molding&quoteId="+dd[j].bsReferId;
+							}else if(dd[j].bsRouter == "surface"){
+								url = context+"/quoteProdect/toQuoteProdect?style=surface&quoteId="+dd[j].bsReferId;
+							}else if(dd[j].bsRouter == "packag"){
+								url = context+"/quoteProdect/toQuoteProdect?style=packag&quoteId="+dd[j].bsReferId;
+							}else if(dd[j].bsRouter == "out"){
+								url = context+"/out/toOutList?quoteId="+dd[j].bsReferId;
+							}else if(dd[j].bsRouter == "QUOTE_PUR"){
+								url = context+"/purchase/toPurchaseList?quoteId="+dd[j].bsReferId;
+							}else if(dd[j].bsRouter == "QUOTE"){
+								url = context+"/quoteSum/toQuoteSumList?quoteId="+dd[j].bsReferId;
 							}
 							check_html += '<dd><div class="layui-status-img"><a href="javascript:;"></a></div><div> <a  lay-href="'+url+'">'+dd[j].bsTitle+'</a>  </div></dd>'
 						}
