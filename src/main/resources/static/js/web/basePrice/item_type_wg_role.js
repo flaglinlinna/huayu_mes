@@ -4,7 +4,7 @@
 var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table','tableSelect' ], function() {
-		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
+		var table = layui.table,table1 = layui.table, form = layui.form, tableSelect = layui.tableSelect;
 
 		tableIns = table.render({
 			elem : '#colsList',
@@ -66,57 +66,51 @@ $(function() {
 			}
 		});
 
-		// tableIns=table.render({
-		// 	elem: '#roleList'
-		// 	,url:context+'/sysRole/getList'
-		// 	,method: 'get' //默认：get请求
-		// 	,cellMinWidth: 80
-		// 	,height:'full-160'//固定表头&full-查询框高度
-		// 	,even:true//条纹样式
-		// 	,page: true,
-		// 	request: {
-		// 		pageName: 'page' //页码的参数名称，默认：page
-		// 		,limitName: 'rows' //每页数据量的参数名，默认：limit
-		// 	},
-		// 	parseData: function (res) {
-		// 		// 可进行数据操作
-		// 		return {
-		// 			"count": res.data.total,
-		// 			"msg":res.msg,
-		// 			"data":res.data.rows,
-		// 			"code": res.status //code值为200表示成功
-		// 		}
-		// 	},
-		// 	// response:{
-		// 	//     statusName: 'status' //数据状态的字段名称，默认：code
-		// 	//     ,statusCode: 200 //成功的状态码，默认：0
-		// 	//     ,countName: 'count' //数据总数的字段名称，默认：count
-		// 	//     ,dataName: 'data' //数据列表的字段名称，默认：data
-		// 	// },
-		// 	cols: [[
-		// 		{type:'numbers'}
-		// 		// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-		// 		,{field:'roleCode', title:'编号',align:'center', width:120,sort:true}
-		// 		,{field:'roleName', title:'名称',align:'center', width:140,sort:true}
-		// 		,{field:'description', title: '描述',align:'center', minWidth:140,sort:true}
-		// 		,{field:'userCount', title: '用户数量',align:'center', width:120,sort:true,
-		// 			templet: '<div><a  style="text-decoration:underline;color:blue;cursor: pointer;"; onclick="showUser({{d.id}})">{{ d.userCount }}</a></div>'}
-		// 		,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
-		// 		,{field:'lastupdateDate', title: '更新时间', align:'center',width:150}
-		// 		,{field:'createDate', title: '添加时间',align:'center', width:150}
-		// 		,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
-		// 	]]
-		// 	,done: function(res, curr, count){
-		// 		//如果是异步请求数据方式，res即为你接口返回的信息。
-		// 		//如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-		// 		//console.log(res);
-		// 		//得到当前页码
-		// 		//console.log(curr);
-		// 		//得到数据总量
-		// 		//console.log(count);
-		// 		pageCurr=curr;
-		// 	}
-		// });
+		tableIns1=table.render({
+			elem: '#roleList'
+			,url:context+'/sysRole/getList'
+			,method: 'get' //默认：get请求
+			,cellMinWidth: 80
+			,height:'full-160'//固定表头&full-查询框高度
+			,even:true//条纹样式
+			,page: true,
+			request: {
+				pageName: 'page' //页码的参数名称，默认：page
+				,limitName: 'rows' //每页数据量的参数名，默认：limit
+			},
+			parseData: function (res) {
+				// 可进行数据操作
+				return {
+					"count": res.data.total,
+					"msg":res.msg,
+					"data":res.data.rows,
+					"code": res.status //code值为200表示成功
+				}
+			},
+			// response:{
+			//     statusName: 'status' //数据状态的字段名称，默认：code
+			//     ,statusCode: 200 //成功的状态码，默认：0
+			//     ,countName: 'count' //数据总数的字段名称，默认：count
+			//     ,dataName: 'data' //数据列表的字段名称，默认：data
+			// },
+			cols: [[
+				{type:'checkbox'}
+				// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
+				,{field:'roleCode', title:'编号',align:'center', width:120,sort:true}
+				,{field:'roleName', title:'名称',align:'center', width:140,sort:true}
+				,{field:'description', title: '描述',align:'center', width:200,sort:true}
+			]]
+			,done: function(res, curr, count){
+				//如果是异步请求数据方式，res即为你接口返回的信息。
+				//如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+				//console.log(res);
+				//得到当前页码
+				//console.log(curr);
+				//得到数据总量
+				//console.log(count);
+				pageCurr=curr;
+			}
+		});
 
 		tableSelect = tableSelect.render({
 				elem : '#itemType',
@@ -168,6 +162,7 @@ $(function() {
 					});
 					form.render();// 重新渲染
 					//刷新角色table
+					getRoleListByType(da[0].id);
 				}
 			});
 
@@ -215,7 +210,15 @@ $(function() {
 
 });
 
-
+function getRoleListByType(id) {
+	tableIns1.reload({
+		url:context+'/sysRole/getList',
+		// where:param,
+		done: function(res1, curr, count){
+			pageCurr1=curr;
+		}
+	})
+}
 
 // 新增编辑弹出框
 function openData(id, title) {
