@@ -608,6 +608,7 @@ function openProc(id, title) {
 		content : $('#setClientProc'),
 		end : function() {
 			cleanProc();
+			loadAll();
 		}
 	});
 	layer.full(index);
