@@ -3,7 +3,6 @@ package com.web.quote.service.internal;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -25,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSON;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
+import com.system.user.entity.SysUser;
 import com.utils.BaseSql;
 import com.utils.ExcelExport;
 import com.utils.UserUtil;
@@ -120,6 +119,15 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
 		//20210113-fyx-去掉外协--?
 		//hql += " and p.bs_Type <> 'out' " ;
+		
+		//根据角色过滤可以查看的物料类型
+		//1：如果设置了角色过滤的则过滤物料，否则认为是管理员可以查看全部方便测试
+		SysUser user = UserUtil.getSessionUser();
+		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(user.getId());
+		if(lmp.size()>0){
+			hql += "and wr.pk_sys_role in (select ur.role_id from sys_user_role ur where ur.del_flag=0 and ur.user_id="+user.getId()+"))";
+		}
+		
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
