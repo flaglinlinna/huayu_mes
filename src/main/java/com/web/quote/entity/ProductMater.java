@@ -66,6 +66,13 @@ public class ProductMater extends BaseEntity {
 	@ApiModelProperty(name="pkQuote",value="报价主表")
 	@Column
 	protected Long pkQuote;
+	
+	/**
+     * 关联物料类型
+     */
+    @ApiModelProperty(name="pkItemTypeWg",value="关联物料类型")
+    @Column
+    protected Long pkItemTypeWg;
 
 	/**
 	 * 零件名称
@@ -410,6 +417,14 @@ public class ProductMater extends BaseEntity {
 
 	public String getBsPriceList() {
 		return bsPriceList;
+	}
+
+	public Long getPkItemTypeWg() {
+		return pkItemTypeWg;
+	}
+
+	public void setPkItemTypeWg(Long pkItemTypeWg) {
+		this.pkItemTypeWg = pkItemTypeWg;
 	}
 	
 	

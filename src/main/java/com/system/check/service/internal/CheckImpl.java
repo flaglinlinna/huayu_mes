@@ -349,6 +349,7 @@ public class CheckImpl   implements CheckService {
 							pm.setBsExplain(qb.getBsExplain());//lst-20210107-增采购说明字段
 							pm.setBsProQty(qb.getBsProQty());
 							pm.setPkQuote(c.getBsRecordId());
+							pm.setPkItemTypeWg(qb.getPkItemTypeWg());//fyx-20210114-物料类型
 							lpm.add(pm);
 						}
 						productMaterDao.saveAll(lpm);
