@@ -5,6 +5,8 @@ import com.app.base.data.ApiResponseResult;
 import com.web.basic.service.SysParamSubService;
 import com.web.quote.entity.ProductProcess;
 import com.web.quote.service.ProductProcessService;
+import com.web.quote.service.QuoteService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class ProductProcessController extends WebController {
 	private ProductProcessService productProcessService;
 	@Autowired
 	private SysParamSubService sysParamSubService;
+	@Autowired
+	private QuoteService quoteService;
 
 	@ApiOperation(value = "报价工艺流程表结构", notes = "报价工艺流程表结构" + ProductProcess.TABLE_NAME)
 	@RequestMapping(value = "/getProductProcess", method = RequestMethod.GET)
@@ -38,18 +42,16 @@ public class ProductProcessController extends WebController {
 		return new ProductProcess();
 	}
 
-
-
 	@ApiOperation(value = "报价工艺流程列表页", notes = "报价工艺流程列表页", hidden = true)
 	@RequestMapping(value = "/toProductProcess")
-	public ModelAndView toProductProcess(String bsType,String quoteId,String bsCode,String iStatus,String bsName) {
+	public ModelAndView toProductProcess(String bsType,String quoteId,String bsCode) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),bsCode);
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("bsCode", bsCode);
-			mav.addObject("iStatus", iStatus);
-			mav.addObject("bsName", bsName);
+			mav.addObject("nowStatus", iStatus);
 			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());
 			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径

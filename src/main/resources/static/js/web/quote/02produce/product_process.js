@@ -530,16 +530,16 @@ $(function() {
 				layer.close(index);
 			}
 		});
-		function isComplete() {
-			if (iStatus == 2) {
-				$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
-				$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
-				$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
-				$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
-			}
-		}
 	});
 });
+function isComplete() {
+	if (iStatus == 2) {
+		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+	}
+}
 
 function initSelect() {
 	$("#bsName").empty();
@@ -717,12 +717,9 @@ function Confirm(){
 				layer.alert("确认完成成功", function() {
 					layer.closeAll();
 					//刷新页面
-					var link = "/productProcess/toProductProcess?bsType="+
-					bsType+"&quoteId="+quoteId+"&bsCode="+bsCode+"&iStatus=2";
-					//1.打开新Tab
-					parent.layui.index.openTabsPage(link,iName);
-					//2.关闭当前Tab
-					parent.layui.admin.events.closeThisTabs();
+					iStatus=2;
+					isComplete();
+					loadAll()
 				});
 			} else {
 				layer.alert(data.msg);

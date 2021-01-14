@@ -4,6 +4,8 @@ import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.service.ProductMaterService;
+import com.web.quote.service.QuoteService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class ProductMaterController extends WebController {
 
 	@Autowired
 	private ProductMaterService productMaterService;
+	
+	@Autowired
+	private QuoteService quoteService;
 
 	@ApiOperation(value = "五金材料信息表结构", notes = "五金材料信息表结构" + ProductMater.TABLE_NAME)
 	@RequestMapping(value = "/getProductMater", method = RequestMethod.GET)
@@ -39,14 +44,14 @@ public class ProductMaterController extends WebController {
 
 	@ApiOperation(value = "五金材料信息列表页", notes = "五金材料信息列表页", hidden = true)
 	@RequestMapping(value = "/toProductMater")
-	public ModelAndView toProductMater(String bsType,String quoteId,String bsCode,String iStatus,String bsName) {
+	public ModelAndView toProductMater(String bsType,String quoteId,String bsCode) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),bsCode);
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("bsCode", bsCode);
-			mav.addObject("iStatus", iStatus);
-			mav.addObject("bsName", bsName);
+			mav.addObject("nowStatus", iStatus);
 			mav.addObject("bomNameList",productMaterService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_mater");// 返回路径
 		} catch (Exception e) {
