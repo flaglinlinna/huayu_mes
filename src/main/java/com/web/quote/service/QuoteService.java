@@ -25,6 +25,8 @@ public interface QuoteService {
 	
 	public ApiResponseResult getItemPage(Long id,String bsStyle)throws Exception;//获取待办项数据
 	
+	public ApiResponseResult getItemStatus(Long quoteId,String bsCode)throws Exception;//获取项目的当前状态
+	
 	public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;//变更报价单状态
 
 	public ApiResponseResult findUserName(Long usr_id)throws Exception;//获取用户信息

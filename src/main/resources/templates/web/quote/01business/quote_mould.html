@@ -90,7 +90,8 @@
 		<script th:inline="javascript">
             var quoteId=[[${quoteId}]];
             var code=[[${code}]];
-            var iStatus=[[${iStatus}]];
+            var nowStatus=[[${nowStatus}]];
+            var iStatus=nowStatus.data[0].BS_STATUS
             var bomNameList=[[${bomNameList}]];
         </script>
 		<script th:src="@{/js/web/quote/01business/quote_mould.js}"

@@ -79,15 +79,15 @@ $(function() {
 			load(data);
 			return false;
 		});
-		function isComplete() {
-			if (iStatus == 2) {
-				$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
-				$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
-			}
-		}
-
 	});
 });
+
+function isComplete() {
+	if (iStatus == 2) {
+		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+	}
+}
 
 // 上传控件
 function InitUpload() {
@@ -156,11 +156,9 @@ function save() {
 					// 回调弹框
 					layer.alert("提交成功！");
 					//刷新页面
-					var link="/quoteFile/toProductFile?quoteId="+quoteId+"&code="+code+"&iStatus=2"
-					//1.打开新Tab
-					parent.layui.index.openTabsPage(link,"产品资料");
-					//2.关闭当前Tab
-					parent.layui.admin.events.closeThisTabs();
+					iStatus=2;
+					isComplete();
+					loadAll()
 				} else {
 					layer.alert(data);
 				}

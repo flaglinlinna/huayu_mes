@@ -4,6 +4,8 @@ import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.QuoteFile;
 import com.web.quote.service.QuoteFileService;
+import com.web.quote.service.QuoteService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +28,18 @@ public class QuoteFileController extends WebController {
 	@Autowired
 	private QuoteFileService quoteFileService;
 
+	@Autowired
+	private QuoteService quoteService;
 	
 	@ApiOperation(value = "产品资料模块页", notes = "产品资料模块页", hidden = true)
 	@RequestMapping(value = "/toProductFile")
-	public ModelAndView toProductFile(String quoteId,String code,String iStatus) {
+	public ModelAndView toProductFile(String quoteId,String code) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),code);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("code", code);
-			mav.addObject("iStatus", iStatus);
+			mav.addObject("nowStatus", iStatus);
 			mav.setViewName("/web/quote/01business/quote_file");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -362,18 +362,18 @@ $(function() {
 								layer.close(index);
 							}
 						});
-
-						function isComplete() {
-							if (iStatus == 2) {
-								$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
-								$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
-								$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
-								$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
-							}
-						}
 					});
 
 });
+
+function isComplete() {
+	if (iStatus == 2) {
+		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+	}
+}
 
 // 模板下载
 function downloadExcel() {
@@ -527,7 +527,6 @@ function save() {
 		"quoteId" : quoteId,
 		"code" : code
 	};
-	
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
@@ -537,11 +536,9 @@ function save() {
 					// 回调弹框
 					layer.alert("提交成功！");
 					//刷新页面
-					var link="/quote/toQuoteBom?quoteId="+quoteId+"&code="+code+"&iStatus=2"
-					//1.打开新Tab
-					parent.layui.index.openTabsPage(link,"外购件清单");
-					//2.关闭当前Tab
-					parent.layui.admin.events.closeThisTabs();
+					iStatus=2;
+					isComplete();
+					loadAll()
 				} else {
 					layer.alert(data.msg);
 				}

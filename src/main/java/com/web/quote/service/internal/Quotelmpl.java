@@ -436,6 +436,14 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 		return ApiResponseResult.success().data(sysUserDao.findById((long) usr_id).getUserName());
 	}
 	
+	/**
+	 * 获取项目的当前状态
+	 * 2021-01-4
+	 * **/
+	public ApiResponseResult getItemStatus(Long quoteId,String bsCode)throws Exception{
+		return ApiResponseResult.success().data(quoteItemDao.getItemBsStatus(quoteId,bsCode));
+	}
+	
 	public  BigDecimal getBigDecimal( Object value ) {  
         BigDecimal ret = null;  
         if( value != null ) {  

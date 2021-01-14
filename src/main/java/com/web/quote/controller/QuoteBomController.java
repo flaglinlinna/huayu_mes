@@ -5,6 +5,8 @@ import com.app.base.data.ApiResponseResult;
 
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.service.QuoteBomService;
+import com.web.quote.service.QuoteService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +30,19 @@ public class QuoteBomController extends WebController {
 
 	@Autowired
 	private QuoteBomService quoteBomService;
-
 	
+	@Autowired
+	private QuoteService quoteService;
+
 	@ApiOperation(value = "报价项目-Bom", notes = "报价项目-Bom", hidden = true)
 	@RequestMapping(value = "/toQuoteBom")
-	public ModelAndView toQuoteBom(String quoteId,String code,String iStatus) {
+	public ModelAndView toQuoteBom(String quoteId,String code) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),code);
 			mav.addObject("code", code);
 			mav.addObject("quoteId", quoteId);
-			mav.addObject("iStatus", iStatus);
+			mav.addObject("nowStatus", iStatus);
 			mav.setViewName("/web/quote/01business/quote_bom");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -21,6 +21,7 @@ import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteMould;
 import com.web.quote.service.QuoteMouldService;
+import com.web.quote.service.QuoteService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +37,9 @@ public class QuoteMouldController extends WebController {
 
 	@Autowired
 	private QuoteMouldService quoteMouldService;
+	
+	@Autowired
+	private QuoteService quoteService;
 
 	@ApiOperation(value = "模具清单维护表结构", notes = "模具清单维护表结构" + QuoteMould.TABLE_NAME)
 	@RequestMapping(value = "/getQuoteMould", method = RequestMethod.GET)
@@ -47,13 +51,14 @@ public class QuoteMouldController extends WebController {
 	
 	@ApiOperation(value = "模具清单维护页", notes = "模具清单维护页", hidden = true)
 	@RequestMapping(value = "/toQuoteMould")
-	public ModelAndView toQuoteMould(String quoteId,String code,String iStatus) {
+	public ModelAndView toQuoteMould(String quoteId,String code) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult bomNameList=quoteMouldService.getBomList(quoteId);
+			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),code);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("code", code);
-			mav.addObject("iStatus", iStatus);
+			mav.addObject("nowStatus", iStatus);
 			mav.addObject("bomNameList", bomNameList);
 			mav.setViewName("/web/quote/01business/quote_mould");// 返回路径
 		} catch (Exception e) {

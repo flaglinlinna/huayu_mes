@@ -178,7 +178,10 @@ $(function() {
 				}
 			});
 			if (data.field.num == "") {
-				alert("请选择零件")
+				layer.msg('请先选择组件', {
+		              time: 20000, //20s后自动关闭
+		              btn: ['知道了']
+		            });
 				return false;
 			}
 			// console.log(data.field.num)
@@ -205,16 +208,17 @@ $(function() {
 				});
 			});
 		}
-
-		function isComplete() {
-			if (iStatus == 2 || iStatus == 3) {
-				$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
-				$("#nobtn").addClass("layui-btn-disabled").attr("disabled", true)
-				$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
-			}
-		}
 	});
 });
+
+function isComplete() {
+	if (iStatus == 2 || iStatus == 3) {
+		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#nobtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+	}
+}
+
 // 添加工艺流程
 function add() {
 
@@ -247,11 +251,9 @@ function save() {
 					// 回调弹框
 					layer.alert("提交成功！");
 					//刷新页面
-					var link="/quoteMould/toQuoteMould?quoteId="+quoteId+"&code="+code+"&iStatus=2"	
-					//1.打开新Tab
-					parent.layui.index.openTabsPage(link,"模具清单");
-					//2.关闭当前Tab
-					parent.layui.admin.events.closeThisTabs();
+					iStatus=2;
+					isComplete();
+					loadAll()
 					
 				} else {
 					layer.alert(data.msg);
@@ -271,7 +273,7 @@ function doNoNeed() {
 		"quoteId" : quoteId,
 		"code" : code
 	};
-	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+	layer.confirm('一经设置则不得再修改，确定设为不需要报价吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
 		CoreUtil.sendAjax("/quoteMould/doNoNeed", JSON.stringify(param), function(data) {
@@ -280,7 +282,9 @@ function doNoNeed() {
 				if (data.result == true) {
 					// 回调弹框
 					layer.alert("提交成功！");
-					loadAll();
+					iStatus=3;
+					isComplete();
+					loadAll()
 				} else {
 					layer.alert(data.msg);
 				}

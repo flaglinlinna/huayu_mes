@@ -2,6 +2,7 @@ package com.web.quote.dao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -25,6 +26,10 @@ public interface QuoteItemDao extends CrudRepository<QuoteItem, Long>,JpaSpecifi
 	
 	//查询此报价的项目是否已完成
 	public int countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(Integer delFlag,Long PkQuote,String bsCode,int bsStatus);
+	
+	//查询项目的状态
+    @Query(value = "select t.bs_status from price_quote_item t where t.pk_quote=?1 and t.bs_code=?2",nativeQuery = true)
+    public List<Map<String, Object>> getItemBsStatus(Long quoteId,String bsCode);
 	
 	//变更项目进度状态（0未开始、1进行中、2已完成、3不需要填写）
 	@Modifying
