@@ -27,11 +27,11 @@ public class ItemTypeWgRole extends BaseEntity {
 	     */
 	    @ApiModelProperty(name = "roleId", value = "角色id")
 	    @Column(length = 50)
-	    protected Long roleId;
+	    protected Long pkSysRole;
 
 		@ApiModelProperty(name = "sysRole", hidden = true, value = "角色信息")
 		@ManyToOne
-		@JoinColumn(name = "roleId", insertable = false, updatable = false)
+		@JoinColumn(name = "pkSysRole", insertable = false, updatable = false)
 		@NotFound(action = NotFoundAction.IGNORE)
 		protected SysRole sysRole;
 
@@ -40,33 +40,43 @@ public class ItemTypeWgRole extends BaseEntity {
 		 */
 		@ApiModelProperty(name = "wgId", value = "外购物料类型ID")
 		@Column(length = 50)
-		protected Long wgId;
+		protected Long pkItemTypeWg;
 
 		@ApiModelProperty(name = "itemTypeWg", hidden = true, value = "外购物料类型")
 		@ManyToOne
-		@JoinColumn(name = "wgId", insertable = false, updatable = false)
+		@JoinColumn(name = "pkItemTypeWg", insertable = false, updatable = false)
 		@NotFound(action = NotFoundAction.IGNORE)
 		protected ItemTypeWg itemTypeWg;
 
-		public Long getRoleId() {
-			return roleId;
+		public Long getPkSysRole() {
+			return pkSysRole;
 		}
 
-		public void setRoleId(Long roleId) {
-			this.roleId = roleId;
+		public void setPkSysRole(Long pkSysRole) {
+			this.pkSysRole = pkSysRole;
 		}
 
-		public Long getWgId() {
-			return wgId;
+		public Long getPkItemTypeWg() {
+			return pkItemTypeWg;
 		}
 
-		public void setWgId(Long wgId) {
-			this.wgId = wgId;
+		public void setPkItemTypeWg(Long pkItemTypeWg) {
+			this.pkItemTypeWg = pkItemTypeWg;
 		}
+
+	public SysRole getSysRole() {
+			return sysRole;
+		}
+
+		public void setSysRole(SysRole sysRole) {
+			this.sysRole = sysRole;
+		}
+
+
 
 		public ItemTypeWg getItemTypeWg() {
-			return itemTypeWg;
-		}
+				return itemTypeWg;
+			}
 
 		public void setItemTypeWg(ItemTypeWg itemTypeWg) {
 			this.itemTypeWg = itemTypeWg;
