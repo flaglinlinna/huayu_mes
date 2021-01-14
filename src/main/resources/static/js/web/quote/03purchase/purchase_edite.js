@@ -1,22 +1,19 @@
-
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
-		var table = layui.table, form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect;
+	layui.use([ 'form', 'table', 'upload', 'tableSelect' ], function() {
+		var table = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect;
 
 		tableIns = table.render({
 			elem : '#productPriceList',
-			url : context + '/purchase/getQuoteList?quoteId='+quoteId,
-			method : 'get' // 默认：get请求
-			,
+			url : context + '/purchase/getQuoteList?quoteId=' + quoteId,
+			method : 'get', // 默认：get请求
 			cellMinWidth : 80,
-			//toolbar: '#toolbar',
-			height:'full-65'//固定表头&full-查询框高度
-			//,even:true,//条纹样式
-			,page : true,
+			// toolbar: '#toolbar',
+			height : 'full-65',// 固定表头&full-查询框高度
+			//even:true,//条纹样式
+			page : true,
 			request : {
-				pageName : 'page' // 页码的参数名称，默认：page
-				,
+				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
@@ -25,66 +22,61 @@ $(function() {
 					"count" : res.data.total,
 					"msg" : res.msg,
 					"data" : res.data.rows,
-					"code" : res.status
-				// code值为200表示成功
+					"code" : res.status// code值为200表示成功
 				}
 			},
-			cols : [ [ 
-			    {type : 'numbers',style:'background-color:#d2d2d2'}, 
-			    {field:'id',title:'ID' ,hide:true},
-				{field: 'bsType', width: 100, title: '类型', sort: true, style:'background-color:#d2d2d2',
-				// * 五金:hardware
-				// * 注塑:molding
-				// * 表面处理:surface
-				// * 组装:packag
-				templet: function (d) {
-						if (d.bsType == 'hardware') {
-							return '五金'
-						} else if (d.bsType == 'molding') {
-							return '注塑'
-						}else if (d.bsType == 'surface') {
-							return '表面处理'
-						}else if (d.bsType == 'packag') {
-							return '组装'
-						}else if (d.bsType == 'out') {
-							return '外协'
-						}
+			cols : 
+			[ [{type : 'numbers',style : 'background-color:#d2d2d2'
+			}, {field : 'id',title : 'ID',hide : true
+			}, {field : 'bsType',width : 100,title : '类型',sort : true,style : 'background-color:#d2d2d2',
+				templet : function(d) {
+					if (d.bsType == 'hardware') {// * 五金:hardware
+						return '五金'
+					} else if (d.bsType == 'molding') {// * 注塑:molding
+						return '注塑'
+					} else if (d.bsType == 'surface') {// * 表面处理:surface
+						return '表面处理'
+					} else if (d.bsType == 'packag') {// * 组装:packag
+						return '组装'
+					} else if (d.bsType == 'out') {
+						return '外协'
 					}
-				},
-				{field : 'bsComponent',width:150,title : '零/组件名称',sort:true,style:'background-color:#d2d2d2'}, 
-				{field : 'bsMaterName',width:120, title : '材料名称',sort:true,style:'background-color:#d2d2d2'},
-				{field : 'bsModel', width:150, title : '材料规格',style:'background-color:#d2d2d2'},
-				{field : 'bsQty', width:80, title : '用量',style:'background-color:#d2d2d2'},
-				{field : 'bsGear', width:120, title : '价格挡位', templet: '#selectGear',style:'background-color:#ffffff'},
-				/*{field : 'bsGear', width:120, title : '价格挡位',templet: function (d) {
-					if(d.bsPriceList){
-						var list = $.parseJSON( d.bsPriceList );
-					}
-                    // 模板的实现方式也是多种多样，这里简单返回固定的
-                    return '<select name="city" lay-filter="testSelect" lay-verify="required" data-value="' + d.bsGear + '" >\n' +
-                        '        <option value=""></option>\n' +
-                        '        <option value="18000">北京</option>\n' +
-                        '        <option value="20000">上海</option>\n' +
-                        '        <option value="20001">广州</option>\n' +
-                        '        <option value="20002">深圳</option>\n' +
-                        '        <option value="20003">杭州</option>\n' +
-                        '      </select>';
-                }},*/
-				{field : 'bsRefer', width:110, title : '参考价格',style:'background-color:#d2d2d2'},
-				{field : 'bsProQty', width:100, title : '制品重',style:'background-color:#d2d2d2'},
-				{field : 'bsMachiningType', title : '加工类型',width:100,style:'background-color:#d2d2d2'},//(表面处理)
-				{field : 'bsColor', title : '配色工艺',width:100,style:'background-color:#d2d2d2'},//(表面处理)
-				{field : 'bsWaterGap', title : '水口量',width:100,style:'background-color:#d2d2d2'}, //(注塑)
-				{field : 'bsCave', title : '穴数',width:100,style:'background-color:#d2d2d2'}, //(注塑)
-				{field : 'bsUnit', width:80, title : '单位',style:'background-color:#d2d2d2'},
-				{field : 'bsRadix', width:80, title : '基数',style:'background-color:#d2d2d2'},
-				{field : 'bsGeneral', width:120, title : '是否通用物料',style:'background-color:#d2d2d2'},
-				
-				{field : 'bsAssess', width:110, title : '评估价格', edit:'number'	},
-				{field : 'bsExplain', width:110, title : '采购说明',style:'background-color:#d2d2d2'},
-				{field : 'fmemo', width:110, title : '备注', edit:'text'},
-				{field : 'bsSupplier', width:110, title : '供应商', edit:'text'}
-				] ],
+				}
+			}, {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'
+			}, {field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'
+			}, {field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'
+			}, {field : 'bsQty',width : 80,title : '用量',style : 'background-color:#d2d2d2'
+			}, {field : 'bsGear',width : 120,title : '价格挡位',templet : '#selectGear',style : 'background-color:#ffffff'
+			},
+			/*
+			 * {field : 'bsGear', width:120, title : '价格挡位',templet: function
+			 * (d) { if(d.bsPriceList){ var list = $.parseJSON( d.bsPriceList ); } //
+			 * 模板的实现方式也是多种多样，这里简单返回固定的 return '<select name="city"
+			 * lay-filter="testSelect" lay-verify="required" data-value="' +
+			 * d.bsGear + '" >\n' + ' <option value=""></option>\n' + ' <option
+			 * value="18000">北京</option>\n' + ' <option value="20000">上海</option>\n' + '
+			 * <option value="20001">广州</option>\n' + ' <option
+			 * value="20002">深圳</option>\n' + ' <option value="20003">杭州</option>\n' + '
+			 * </select>'; }},
+			 */
+			   {field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'
+		    }, {field : 'bsProQty',width : 100,title : '制品重',style : 'background-color:#d2d2d2'
+			}, {field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'
+			},// (表面处理)
+			   {field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'
+			},// (表面处理)
+			   {field : 'bsWaterGap',title : '水口量',width : 100,style : 'background-color:#d2d2d2'
+			}, // (注塑)
+			   {field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'
+			}, // (注塑)
+			   {field : 'bsUnit',width : 80,title : '单位',style : 'background-color:#d2d2d2'
+			}, {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'
+			}, {field : 'bsGeneral',width : 120,title : '是否通用物料',style : 'background-color:#d2d2d2'
+			}, {field : 'bsAssess',width : 110,title : '评估价格',edit : 'number'
+			}, {field : 'bsExplain',width : 110,title : '采购说明',style : 'background-color:#d2d2d2'
+			}, {field : 'fmemo',width : 110,title : '备注',edit : 'text'
+			}, {field : 'bsSupplier',width : 110,title : '供应商',edit : 'text'
+			} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 
@@ -93,16 +85,15 @@ $(function() {
 
 		tableIns2 = table.render({
 			elem : '#uploadList',
-			// url : context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
-			method : 'get' // 默认：get请求
-			,
+			// url : context +
+			// '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
+			method : 'get', // 默认：get请求
 			cellMinWidth : 80,
-			height:'full-110'//固定表头&full-查询框高度
-			,even:true,//条纹样式
+			height : 'full-110',// 固定表头&full-查询框高度
+			even : true,// 条纹样式
 			page : true,
 			request : {
-				pageName : 'page' // 页码的参数名称，默认：page
-				,
+				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
@@ -114,58 +105,58 @@ $(function() {
 					"code" : res.status
 				}
 			},
-			cols : [ [
-				{type : 'numbers',style:'background-color:#d2d2d2'},
-				{field : 'checkStatus', width:100, title : '状态',sort:true,style:'background-color:#d2d2d2',templet: '#checkStatus'},
-				{field : 'errorInfo', width:150, title : '错误信息',sort:true,style:'background-color:#d2d2d2'},
-				{field: 'bsType', width: 100, title: '类型', sort: true, style:'background-color:#d2d2d2'},
-				{field : 'bsComponent',width:150,title : '零/组件名称',sort:true,style:'background-color:#d2d2d2'},
-				{field : 'bsMaterName',width:120, title : '材料名称',sort:true,style:'background-color:#d2d2d2'},
-				{field : 'bsModel', width:150, title : '材料规格',style:'background-color:#d2d2d2'},
-				{field : 'bsQty', width:80, title : '用量',style:'background-color:#d2d2d2'},
-				{field : 'bsUnit', width:80, title : '单位',style:'background-color:#d2d2d2'},
-				{field : 'bsRadix', width:80, title : '基数',style:'background-color:#d2d2d2'},
-				{field : 'bsGeneral', width:120, title : '是否通用物料',style:'background-color:#d2d2d2'},
-				{field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet: '#selectGear'},
-				{field : 'bsRefer', width:110, title : '参考价格',style:'background-color:#d2d2d2'},
-				{field : 'bsAssess', width:110, title : '评估价格', edit:'number'	},
-				{field : 'bsExplain', width:110, title : '采购说明'},
-				{field : 'fmemo', width:110, title : '备注', edit:'text'},
-				{field : 'bsSupplier', width:110, title : '供应商', edit:'text'},
-				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
-				] ],
+			cols : 
+			[ [ {type : 'numbers',style : 'background-color:#d2d2d2'
+			}, {field : 'checkStatus',width : 100,title : '状态',sort : true,style : 'background-color:#d2d2d2',templet : '#checkStatus'
+			}, {field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'
+			}, {field : 'bsType',width : 100,title : '类型',sort : true,style : 'background-color:#d2d2d2'
+			}, {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'
+			}, {field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'
+			}, {field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'
+			}, {field : 'bsQty',width : 80,title : '用量',style : 'background-color:#d2d2d2'
+			}, {field : 'bsUnit',width : 80,title : '单位',style : 'background-color:#d2d2d2'
+			}, {field : 'bsRadix',width : 80,title : '基数',style : 'background-color:#d2d2d2'
+			}, {field : 'bsGeneral',width : 120,title : '是否通用物料',style : 'background-color:#d2d2d2'
+			}, {field : 'bsGear',width : 80,title : '价格挡位',edit : 'text',templet : '#selectGear'
+			}, {field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'
+			}, {field : 'bsAssess',width : 110,title : '评估价格',edit : 'number'
+			}, {field : 'bsExplain',width : 110,title : '采购说明'
+			}, {field : 'fmemo',width : 110,title : '备注',edit : 'text'
+			}, {field : 'bsSupplier',width : 110,title : '供应商',edit : 'text'
+			},
+			// {fixed : 'right', title : '操作', align : 'center',width:120,
+			// toolbar : '#optBar'}
+			] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 			}
 		});
-		//监听下拉框编辑
-        form.on('select(selectGear)', function (data) {
-            //获取当前行tr对象
-            var elem = data.othis.parents('tr');
-            //第一列的值是Guid，取guid来判断
-            var id= elem.first().find('td').eq(1).text();
-            //选择的select对象值；
-            var selectValue = data.value;
-            if(selectValue){
-            	doGear(id,selectValue);
-            }
-            
-        })
+		// 监听下拉框编辑
+		form.on('select(selectGear)', function(data) {
+			// 获取当前行tr对象
+			var elem = data.othis.parents('tr');
+			// 第一列的值是Guid，取guid来判断
+			var id = elem.first().find('td').eq(1).text();
+			// 选择的select对象值；
+			var selectValue = data.value;
+			if (selectValue) {
+				doGear(id, selectValue);
+			}
 
-		//自定义验证规则
+		})
+
+		// 自定义验证规则
 		form.verify({
-			double: function(value){
-				if(/^\d+$/.test(value)==false && /^\d+\.\d+$/.test(value)==false && value!="" && value!=null)
-				{
+			double : function(value) {
+				if (/^\d+$/.test(value) == false && /^\d+\.\d+$/.test(value) == false && value != "" && value != null) {
 					return '用量/制品量 只能输入数字';
 				}
 			}
 		});
 
-		table.on('edit(productPriceTable)',function (obj) {
+		table.on('edit(productPriceTable)', function(obj) {
 			var bsAssess = obj.data.bsAssess;
-			if(/^\d+$/.test(bsAssess)==false && /^\d+\.\d+$/.test(bsAssess)==false && bsAssess!="" && bsAssess!=null)
-			{
+			if (/^\d+$/.test(bsAssess) == false && /^\d+\.\d+$/.test(bsAssess) == false && bsAssess != "" && bsAssess != null) {
 				layer.msg("评估价格只能输入数字");
 				loadAll();
 				return false;
@@ -217,39 +208,41 @@ $(function() {
 				"bsRadix" : obj.bsRadix,
 				"bsSupplier" : obj.bsSupplier,
 				"fmemo" : obj.fmemo,
-				"bsWaterGap":obj.bsWaterGap,
-				"bsCave":obj.bsCave,
-				"bsMachiningType":obj.bsMachiningType,
-				"bsColor":obj.bsColor,
+				"bsWaterGap" : obj.bsWaterGap,
+				"bsCave" : obj.bsCave,
+				"bsMachiningType" : obj.bsMachiningType,
+				"bsColor" : obj.bsColor,
 			});
 			openProdErr(id, "编辑材料信息")
-		};
+		}
+		;
 
-		//导入 到临时表
+		// 导入 到临时表
 		upload.render({
-			elem: '#upload'
-			,url: context + '/productMaterTemp/importByPurchase'
-			,accept: 'file' //普通文件
-			,data: {
-				pkQuote: function(){
+			elem : '#upload',
+			url : context + '/productMaterTemp/importByPurchase',
+			accept : 'file' // 普通文件
+			,
+			data : {
+				pkQuote : function() {
 					return quoteId;
 				}
-			}
-			,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
-				layer.load(); //上传loading
-			}
-			,done: function(res,index, upload){
-				layer.closeAll('loading'); //关闭loading
-				layer.alert(res.msg, function (index) {
+			},
+			before : function(obj) { // obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+				layer.load(); // 上传loading
+			},
+			done : function(res, index, upload) {
+				layer.closeAll('loading'); // 关闭loading
+				layer.alert(res.msg, function(index) {
 					layer.close(index);
 					loadAll2();
 				});
 
-			}
-			,error: function(index, upload){
-				layer.alert("操作请求错误，请您稍后再试",function(){
+			},
+			error : function(index, upload) {
+				layer.alert("操作请求错误，请您稍后再试", function() {
 				});
-				layer.closeAll('loading'); //关闭loading
+				layer.closeAll('loading'); // 关闭loading
 				layer.close(index);
 			}
 		});
@@ -259,36 +252,35 @@ $(function() {
 });
 
 function uploadChecked() {
-    var params = {
-        "pkQuote": quoteId,
-    };
-    CoreUtil.sendAjax("/productMaterTemp/confirmUpload", JSON.stringify(params), function(
-        data) {
-        if (data.result) {
-            layer.alert(data.msg, function() {
-                layer.closeAll();
-                // cleanProdErr();
-                // 加载页面
-                loadAll();
-            });
-        } else {
-            layer.alert(data.msg);
-        }
-    }, "POST", false, function(res) {
-        layer.alert(res.msg);
-    });
+	var params = {
+		"pkQuote" : quoteId,
+	};
+	CoreUtil.sendAjax("/productMaterTemp/confirmUpload", JSON.stringify(params), function(data) {
+		if (data.result) {
+			layer.alert(data.msg, function() {
+				layer.closeAll();
+				// cleanProdErr();
+				// 加载页面
+				loadAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
 // 打开导入页
 function openUpload() {
 	tableIns2.reload({
-		url:context + '/productMaterTemp/getList?quoteId='+quoteId+'&bsPurchase='+0,
-		done: function(res1, curr, count){
-			pageCurr=curr;
+		url : context + '/productMaterTemp/getList?quoteId=' + quoteId + '&bsPurchase=' + 0,
+		done : function(res1, curr, count) {
+			pageCurr = curr;
 		}
 	})
 	// 打开弹出框
-	var index=layer.open({
+	var index = layer.open({
 		type : 1,
 		title : "导入采购填报价格",
 		fixed : false,
@@ -300,16 +292,14 @@ function openUpload() {
 	layer.full(index);
 }
 
-
-function confirm(){
+function confirm() {
 	var params = {
 		"id" : quoteId,
 	};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
-		CoreUtil.sendAjax("/purchase/doStatus", JSON.stringify(params), function(
-			data) {
+		CoreUtil.sendAjax("/purchase/doStatus", JSON.stringify(params), function(data) {
 			if (data.result) {
 				layer.alert("确认完成成功", function() {
 					layer.closeAll();
@@ -331,7 +321,7 @@ function openProdErr(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
 	}
-	var index=layer.open({
+	var index = layer.open({
 		type : 1,
 		title : title,
 		fixed : false,
@@ -357,8 +347,7 @@ function addHardware() {
 function addSubmit(obj) {
 	obj.field.bsType = bsType;
 	obj.field.pkQuote = quoteId;
-	CoreUtil.sendAjax("/productMater/add", JSON.stringify(obj.field), function(
-			data) {
+	CoreUtil.sendAjax("/productMater/add", JSON.stringify(obj.field), function(data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
@@ -376,8 +365,7 @@ function addSubmit(obj) {
 
 // 编辑五金材料提交
 function editSubmit(obj) {
-	CoreUtil.sendAjax("/purchase/edit", JSON.stringify(obj.field), function(
-			data) {
+	CoreUtil.sendAjax("/purchase/edit", JSON.stringify(obj.field), function(data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
@@ -403,23 +391,22 @@ function delProdErr(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("/productMater/delete", JSON.stringify(param),
-					function(data) {
-						if (isLogin(data)) {
-							if (data.result == true) {
-								// 回调弹框
-								layer.alert("删除成功！", function() {
-									layer.closeAll();
-									// 加载load方法
-									loadAll();
-								});
-							} else {
-								layer.alert(data, function() {
-									layer.closeAll();
-								});
-							}
-						}
-					});
+			CoreUtil.sendAjax("/productMater/delete", JSON.stringify(param), function(data) {
+				if (isLogin(data)) {
+					if (data.result == true) {
+						// 回调弹框
+						layer.alert("删除成功！", function() {
+							layer.closeAll();
+							// 加载load方法
+							loadAll();
+						});
+					} else {
+						layer.alert(data, function() {
+							layer.closeAll();
+						});
+					}
+				}
+			});
 		});
 	}
 }
@@ -454,7 +441,7 @@ function loadAll2() {
 	tableIns2.reload({
 		page : {
 			curr : pageCurr
-			// 从当前页码开始
+		// 从当前页码开始
 		}
 	});
 }
@@ -466,26 +453,28 @@ function cleanProdErr() {
 }
 
 function exportExcel() {
-	location.href = context + "/purchase/exportExcel?pkQuote="+quoteId;
+	location.href = context + "/purchase/exportExcel?pkQuote=" + quoteId;
 }
 
-function doGear(id,gearPrice){
-	  CoreUtil.sendAjax("/purchase/doGear", {'id':id,'gearPrice':gearPrice},
-				function(res) {
-		          if(res.result){
-		        	  tableIns.reload({
-							done: function(res1, curr, count){
-								pageCurr=curr;
-							}
-							}); 
-		          }else{
-		        	  layer.msg(res.msg, {
-			              time: 20000, //20s后自动关闭
-			              btn: ['知道了']
-			            });
-		          }
-				  
-				}, "GET", false, function(res) {
-					layer.alert(res.msg);
-				}); 
-} 
+function doGear(id, gearPrice) {
+	CoreUtil.sendAjax("/purchase/doGear", {
+		'id' : id,
+		'gearPrice' : gearPrice
+	}, function(res) {
+		if (res.result) {
+			tableIns.reload({
+				done : function(res1, curr, count) {
+					pageCurr = curr;
+				}
+			});
+		} else {
+			layer.msg(res.msg, {
+				time : 20000, // 20s后自动关闭
+				btn : [ '知道了' ]
+			});
+		}
+
+	}, "GET", false, function(res) {
+		layer.alert(res.msg);
+	});
+}

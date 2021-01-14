@@ -15,16 +15,14 @@ $(function() {
 		tableIns = table.render({
 			elem : '#listTable',
 			url : context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
-			method : 'get' // 默认：get请求
-			,
+			method : 'get', // 默认：get请求
 			cellMinWidth : 80,
 			//toolbar: '#toolbar',
-			height:'full-65'//固定表头&full-查询框高度
-			,even:true,//条纹样式
+			height:'full-65',//固定表头&full-查询框高度
+			even:true,//条纹样式
 			page : true,
 			request : {
-				pageName : 'page' // 页码的参数名称，默认：page
-				,
+				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
@@ -126,15 +124,13 @@ $(function() {
 		tableIns2 = table.render({
 			elem : '#uploadList',
 			// url : context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
-			method : 'get' // 默认：get请求
-			,
+			method : 'get', // 默认：get请求
 			cellMinWidth : 80,
-			height:'full-110'//固定表头&full-查询框高度
-			,even:true,//条纹样式
+			height:'full-110',//固定表头&full-查询框高度
+			even:true,//条纹样式
 			page : true,
 			request : {
-				pageName : 'page' // 页码的参数名称，默认：page
-				,
+				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
@@ -226,7 +222,6 @@ $(function() {
 				url : context + '/basePrice/proc/getList',
 				// ?pkQuote='+quoteId,
 				method : 'get',
-
 				parseData : function(res) {
 					// 可进行数据操作
 					return {
@@ -247,8 +242,7 @@ $(function() {
 				] ],
 				page : true,
 				request : {
-					pageName : 'page' // 页码的参数名称，默认：page
-					,
+					pageName : 'page', // 页码的参数名称，默认：page
 					limitName : 'rows' // 每页数据量的参数名，默认：limit
 				},
 
