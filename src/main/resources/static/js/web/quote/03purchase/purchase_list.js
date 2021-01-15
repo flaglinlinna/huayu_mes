@@ -117,8 +117,8 @@ $(function() {
 				parent.layui.index.openTabsPage(context + '/purchase/toPurchaseEdite?quoteId=' + data.id, '采购填报价格');
 			} else if (obj.event === 'check') {
 				//发起审批前查看是否已经全部填写好价格
-				CoreUtil.sendAjax("/purchase/doCheckBefore", {'quoteId':data.id}, function(data) {
-					if (data.result) {
+				CoreUtil.sendAjax("/purchase/doCheckBefore", {'quoteId':data.id}, function(data1) {
+					if (data1.result) {
 						layer.open({
 							type : 2,
 							title : '审批',
