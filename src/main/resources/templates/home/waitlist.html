@@ -26,7 +26,7 @@
         <table id="iList" lay-filter="iTable"></table>
         <script type="text/html" id="optBar">
              {{# if(d.bsStatus==0){ }}    
-             <a class="layui-btn layui-btn-xs" onclick="set_show('{{d.bsTitle}}','{{d.bsRouter}}',this)">点击处理</a>
+             <a class="layui-btn layui-btn-xs" onclick="set_show('{{d.bsModel}}','{{d.bsRouter}}',this)">点击处理</a>
              <a class="layui-btn layui-btn-xs layui-btn-danger" onclick="del('{{d.id}}')">关闭待办</a>          
              {{# } else { }}
              <a class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="edit">点击处理</a>
@@ -51,24 +51,33 @@
     					limitName : 'rows' // 每页数据量的参数名，默认：limit
     				},
     				parseData : function(res) {
+    					console.log(res)
     					//bsRouter数据处理
     					var datalist=res.data.rows
     					for (var j = 0; j < datalist.length; j++) {
     						if(datalist[j].bsRouter == "QUOTE_NEW"){
+    							datalist[j].bsModel="报价单查询"
     							datalist[j].bsRouter = context+"/quote/toQuoteList?quoteId="+datalist[j].bsReferId;
 							}else if(datalist[j].bsRouter == "hardware"){
+								datalist[j].bsModel="五金-报价列表"
 								datalist[j].bsRouter = context+"/quoteProdect/toQuoteProdect?style=hardware&quoteId="+datalist[j].bsReferId;
 							}else if(datalist[j].bsRouter == "molding"){
+								datalist[j].bsModel="注塑-报价列表"
 								datalist[j].bsRouter = context+"/quoteProdect/toQuoteProdect?style=molding&quoteId="+datalist[j].bsReferId;
 							}else if(datalist[j].bsRouter == "surface"){
+								datalist[j].bsModel="表面-报价列表"
 								datalist[j].bsRouter = context+"/quoteProdect/toQuoteProdect?style=surface&quoteId="+datalist[j].bsReferId;
 							}else if(datalist[j].bsRouter == "packag"){
+								datalist[j].bsModel="组装-报价列表"
 								datalist[j].bsRouter = context+"/quoteProdect/toQuoteProdect?style=packag&quoteId="+datalist[j].bsReferId;
 							}else if(datalist[j].bsRouter == "out"){
+								datalist[j].bsModel="外协-报价列表"
 								datalist[j].bsRouter = context+"/out/toOutList?quoteId="+datalist[j].bsReferId;
 							}else if(datalist[j].bsRouter == "QUOTE_PUR"){
+								datalist[j].bsModel="采购-报价列表"
 								datalist[j].bsRouter = context+"/purchase/toPurchaseList?quoteId="+datalist[j].bsReferId;
 							}else if(datalist[j].bsRouter == "QUOTE"){
+								datalist[j].bsModel="报价单列表"
 								datalist[j].bsRouter = context+"/quoteSum/toQuoteSumList?quoteId="+datalist[j].bsReferId;
 							}
     					}		

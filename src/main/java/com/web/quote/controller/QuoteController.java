@@ -63,9 +63,10 @@ public class QuoteController extends WebController {
 
 	@ApiOperation(value = "报价信息列表页", notes = "报价信息列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteList")
-	public ModelAndView toQuoteList(String step) {
+	public ModelAndView toQuoteList(String step,String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			mav.addObject("quoteId", quoteId);
 			mav.addObject("Step", step);
 			mav.setViewName("/web/quote/01business/quote_list");// 返回路径
 		} catch (Exception e) {

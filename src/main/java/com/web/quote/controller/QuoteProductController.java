@@ -37,9 +37,10 @@ public class QuoteProductController extends WebController {
 
 	@ApiOperation(value = "报价信息列表页", notes = "报价信息列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteProdect")
-	public ModelAndView toQuoteProdect(String style) {
+	public ModelAndView toQuoteProdect(String style,String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			mav.addObject("quoteId", quoteId);
 			mav.addObject("Style", style);
 			mav.setViewName("/web/quote/02produce/product_list");// 返回路径
 		} catch (Exception e) {

@@ -36,9 +36,10 @@ public class OutController extends WebController {
 	
 	@ApiOperation(value = "外协部报价单页", notes = "外协部报价单页", hidden = true)
 	@RequestMapping(value = "/toOutList")
-	public ModelAndView toOutList() {
+	public ModelAndView toOutList(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			mav.addObject("quoteId", quoteId);
 			mav.addObject("Style", "out");
 			mav.setViewName("/web/quote/03purchase/out_list");// 返回路径
 		} catch (Exception e) {

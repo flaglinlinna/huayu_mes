@@ -39,9 +39,10 @@ public class PurchaseController extends WebController {
 	
 	@ApiOperation(value = "采购部报价单页", notes = "采购部报价单页", hidden = true)
 	@RequestMapping(value = "/toPurchaseList")
-	public ModelAndView toPurchaseList() {
+	public ModelAndView toPurchaseList(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			mav.addObject("quoteId", quoteId);
 			mav.setViewName("/web/quote/03purchase/purchase_list");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -7,7 +7,7 @@ $(function() {
 		var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table,tableFilter = layui.tableFilter;
 		tableIns = table.render({
 			elem : '#listTable',
-			url : context + '/purchase/getList',
+			url : context + '/purchase/getList?quoteId='+quoteId,
 			method : 'get', // 默认：get请求
 			// , toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 			cellMinWidth : 80,
@@ -50,10 +50,11 @@ $(function() {
 					"code" : res.status
 				}
 			},
-			cols :
-				[ [ {type : 'numbers'
-				},{field : 'bsCode',title : '报价单编号',width : 150,sort : true
-				}, {field : 'bsType',title : '报价类型',width : 100,templet : function(d) {
+			cols :[ [ 
+			    {type : 'numbers'},
+			    {field : 'bsCode',title : '报价单编号',width : 150,sort : true},
+			    {field : 'bsType',title : '报价类型',width : 100,
+			    	templet : function(d) {
 						if (d.bsType == "YSBJ") {
 							return "衍生报价";
 						} else if (d.bsType == "XPBJ") {
@@ -61,8 +62,9 @@ $(function() {
 						} else {
 							return "";
 						}
-					}
-				}, {field : 'bsStatus',title : '状态',width : 80,templet : function(d) {
+				}}, 
+				{field : 'bsStatus',title : '状态',width : 80,
+					templet : function(d) {
 						if (d.bsStatus == "0") {
 							return "草稿"
 						} else if (d.bsStatus == "1") {
@@ -70,25 +72,25 @@ $(function() {
 						} else if (d.bsStatus == "2") {
 							return "已完成"
 						}
-					}
-				}, {field : 'bsFinishTime',title : '完成日期',sort : true,width : 140
-				}, {field : 'bsRemarks',title : '报价备注',width : 170
-				}, {field : 'bsProd',title : '产品型号',width : 120
-				}, {field : 'bsSimilarProd',title : '相似型号',width : 150
-				}, {field : 'bsDevType',title : '机种型号',width : 140,sort : true
-				}, {field : 'bsProdType',title : '产品类型',width : 140,sort : true
-				}, {field : 'bsCustName',title : '客户名称',width : 120
-				}, {field : 'bsPosition',title : '市场定位',width : 150
-				}, {field : 'bsMaterial',title : '客户提供资料',width : 140,sort : true
-				}, {field : 'bsChkOutItem',title : '外观检验项',width : 140,sort : true
-				}, {field : 'bsChkOut',title : '外观检验',width : 150
-				}, {field : 'bsFunctionItem',title : '功能性能项',width : 140
-				}, {field : 'bsFunction',title : '功能性能',width : 140
-				}, {field : 'bsRequire',title : '环保要求',width : 140
-				}, {field : 'bsLevel',title : '防水防尘等级',width : 140
-				}, {field : 'bsCustRequire',title : '客户其他要求',width : 200
-				}, {fixed : 'right',title : '操作',toolbar : '#optBar',width : 150// align : 'center',
-				} ] ],
+				}}, 
+				{field : 'bsFinishTime',title : '完成日期',sort : true,width : 140},
+				{field : 'bsRemarks',title : '报价备注',width : 170},
+				{field : 'bsProd',title : '产品型号',width : 120},
+				{field : 'bsSimilarProd',title : '相似型号',width : 150},
+				{field : 'bsDevType',title : '机种型号',width : 140,sort : true},
+				{field : 'bsProdType',title : '产品类型',width : 140,sort : true},
+				{field : 'bsCustName',title : '客户名称',width : 120},
+				{field : 'bsPosition',title : '市场定位',width : 150},
+				{field : 'bsMaterial',title : '客户提供资料',width : 140,sort : true},
+				{field : 'bsChkOutItem',title : '外观检验项',width : 140,sort : true},
+				{field : 'bsChkOut',title : '外观检验',width : 150},
+				{field : 'bsFunctionItem',title : '功能性能项',width : 140},
+				{field : 'bsFunction',title : '功能性能',width : 140},
+				{field : 'bsRequire',title : '环保要求',width : 140},
+				{field : 'bsLevel',title : '防水防尘等级',width : 140},
+				{field : 'bsCustRequire',title : '客户其他要求',width : 200},
+				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150}
+				] ],
 			done : function(res, curr, count) {
 				//
 				pageCurr = curr;

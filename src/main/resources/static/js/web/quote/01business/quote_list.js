@@ -8,7 +8,7 @@ $(function() {
 			var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table,tableFilter = layui.tableFilter;
 			tableIns = table.render({
 				elem : '#listTable',
-				url : context + '/quote/getList?status=',
+				url : context + '/quote/getList?quoteId='+quoteId+'&status=',
 				method : 'get' // 默认：get请求
 				//, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 				,cellMinWidth : 80,

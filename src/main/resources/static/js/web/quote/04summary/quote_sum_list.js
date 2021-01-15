@@ -7,7 +7,7 @@ $(function() {
 		var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table,tableFilter = layui.tableFilter;
 		tableIns = table.render({
 			elem : '#listTable',
-			url : context + '/quoteSum/getList',
+			url : context + '/quoteSum/getList?quoteId='+quoteId,
 			method : 'get', // 默认：get请求
 			// , toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 			cellMinWidth : 80,

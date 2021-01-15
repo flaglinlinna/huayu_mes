@@ -30,9 +30,10 @@ public class QuoteSumController extends WebController {
 
 	@ApiOperation(value = "报价单汇总页", notes = "报价单汇总页", hidden = true)
 	@RequestMapping(value = "/toQuoteSumList")
-	public ModelAndView toQuoteSumList() {
+	public ModelAndView toQuoteSumList(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			mav.addObject("quoteId", quoteId);
 			mav.setViewName("/web/quote/04summary/quote_sum_list");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
