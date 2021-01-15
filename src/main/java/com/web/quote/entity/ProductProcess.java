@@ -78,8 +78,14 @@ public class ProductProcess extends BaseEntity {
 	 * Bom零件名称
 	 */
 	@ApiModelProperty(name = "bsName", value = "Bom零件名称")
-	@Column(length = 100)
+	@Column(length = 500)
 	protected String bsName;
+	 /**
+		 * 组件名称
+		 */
+		@ApiModelProperty(name = "bsElement", value = "组件名称")
+		@Column(length = 500)
+		protected String bsElement;
     
     /**
      * 关联工序表
@@ -448,6 +454,14 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsLossHouMh(BigDecimal bsLossHouMh) {
 		this.bsLossHouMh = bsLossHouMh;
+	}
+
+	public String getBsElement() {
+		return bsElement;
+	}
+
+	public void setBsElement(String bsElement) {
+		this.bsElement = bsElement;
 	}
 	
 	

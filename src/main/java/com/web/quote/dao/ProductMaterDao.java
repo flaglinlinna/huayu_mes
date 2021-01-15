@@ -46,5 +46,7 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 	
 	@Query(value = "select wr.pk_item_type_wg from "+ItemTypeWgRole.TABLE_NAME+" wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from "+UserRoleMap.TABLE_NAME+" ur where ur.del_flag=0 and ur.user_id=?1)", nativeQuery = true)	
 	public List<Map<String, Object>> getRoleByUid(Long uid);
+	
+	
 
 }

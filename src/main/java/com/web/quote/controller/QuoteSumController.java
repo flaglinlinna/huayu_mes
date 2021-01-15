@@ -57,6 +57,22 @@ public class QuoteSumController extends WebController {
 		return mav;
 	}
 	
+	@ApiOperation(value = "报价BOM树形", notes = "报价BOM树形", hidden = true)
+	@RequestMapping(value = "/toQuoteBom")
+	public ModelAndView toQuoteBom(String quoteId) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			ApiResponseResult quoteBom=quoteSumService.getQuoteBomByQuote(quoteId);
+			mav.addObject("quoteId", quoteId);
+			mav.addObject("quoteDetail", quoteBom);
+			mav.setViewName("/web/quote/04summary/quote_sum_bom");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("报价单汇详情页失败！", e);
+		}
+		return mav;
+	}
+	
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody

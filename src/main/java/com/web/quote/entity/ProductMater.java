@@ -74,25 +74,32 @@ public class ProductMater extends BaseEntity {
     @Column
     protected Long pkItemTypeWg;
 
+    /**
+	 * 组件名称
+	 */
+	@ApiModelProperty(name = "bsElement", value = "组件名称")
+	@Column(length = 500)
+	protected String bsElement;
+	
 	/**
 	 * 零件名称
 	 */
 	@ApiModelProperty(name = "bsComponent", value = "零件名称")
-	@Column(length = 200)
+	@Column(length = 500)
 	protected String bsComponent;
 
 	/**
 	 * 材料名称
 	 */
 	@ApiModelProperty(name = "bsMaterName", value = "材料名称")
-	@Column(length = 200)
+	@Column(length = 500)
 	protected String bsMaterName;
 
 	/**
 	 * 材料规格
 	 */
 	@ApiModelProperty(name = "bsModel", value = "材料规格")
-	@Column(length = 250)
+	@Column(length = 500)
 	protected String bsModel;
 
 	/**
@@ -425,6 +432,14 @@ public class ProductMater extends BaseEntity {
 
 	public void setPkItemTypeWg(Long pkItemTypeWg) {
 		this.pkItemTypeWg = pkItemTypeWg;
+	}
+
+	public String getBsElement() {
+		return bsElement;
+	}
+
+	public void setBsElement(String bsElement) {
+		this.bsElement = bsElement;
 	}
 	
 	

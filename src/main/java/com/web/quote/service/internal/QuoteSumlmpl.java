@@ -411,4 +411,12 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		return ApiResponseResult.success("修改净利润成功!");
 	}
+
+	@Override
+	public ApiResponseResult getQuoteBomByQuote(String quoteId) throws Exception {
+		// TODO Auto-generated method stub
+		//生产树形表格
+		//1:获取总数
+		return null;
+	}
 }

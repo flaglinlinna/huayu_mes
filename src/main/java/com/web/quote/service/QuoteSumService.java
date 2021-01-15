@@ -18,4 +18,6 @@ public interface QuoteSumService {
 	public ApiResponseResult countMeterAndProcess(String quoteId)throws Exception;
 
 	public ApiResponseResult updateProfitNet(long quoteId, BigDecimal profitNet)throws Exception;
+	
+	public ApiResponseResult getQuoteBomByQuote(String quoteId)throws Exception;//计算总费用
 }
