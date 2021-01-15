@@ -8,21 +8,18 @@
             grid.id = option.id || 'id';
             grid.parentid = option.parentid || 'parentid';
             grid.root = option.root || 0;
-            //grid.order = option.order || grid.id;
-            //grid.order = option.order || grid.parentid || grid.zindex;//排序字段
-            //grid.asc = option.asc || 'asc';
+            grid.order = option.order || grid.id;
+            grid.asc = option.asc || 'asc';
             grid.loadRow = option.loadRow;  //懒加载
 
-            grid.onCollapse = option.onCollapse;
+            //grid.onCollapse = option.onCollapse;
             //grid.onExpand = option.onExpand;
 
             grid.dataSuccess = function (pageData) {
                 if (option.dataSuccess) option.dataSuccess(pageData);
                 var treeRows = [];
                 HELPER.treeData(pageData.rows, treeRows, grid.root);
-
                 grid.pageData.rows = treeRows;
-
             };
 
             var EXPANDER = '<span class="treegrid-expander"></span>',
@@ -46,7 +43,7 @@
                         $.each(items, function (_, item) {
                             tree.push(item);
                             HELPER.treeData(rows, tree, item[grid.id]);
-                        }); 
+                        });
                     }
                 },
                 nodeId: function (node) {
@@ -145,7 +142,7 @@
                             else if (rows.length > 0) {
                                 grid.insertChild(rows, id);
                                 that.on('click', HELPER.onExpand);
-                                //tr.addClass('treegrid-expanded');
+                                tr.addClass('treegrid-expanded');
                             } else {
                                 that.replaceWith(INDENT);
                             }
@@ -169,33 +166,9 @@
                                 var selected = $(this).hasClass('selected');
                                 private_childSelect($(this), selected);
                                 var _pid = HELPER.nodePid($(this));
-
-                                if (_pid != null){
-                                	private_parentSelect(selected, _pid);
-                                }
-                                    
+                                if (_pid != null)
+                                    private_parentSelect(selected, _pid);
                             });
-                        }
-                        if(option.onCollapse){
-                        	var id = HELPER.nodeId(tr);
-	                        if (tr.next('.treegrid-parent-' + id).length > 0) {
-	                        	console.log(id)
-	                        	HELPER.cellapsed(false, id);
-	                        	//event.stopPropagation(); //阻止冒泡 rowClick
-	                        }
-                        	//console.log(tr);
-                        	//console.log(tr.hasClass('treegrid-collapse treegrid-expanded'))
-                            /*id = HELPER.nodeId(tr);
-                            
-                            if (tr.hasClass('treegrid-expanded')) {
-                                HELPER.cellapsed(false, id);
-                                event.stopPropagation(); //阻止冒泡 rowClick
-                            }*/
-                            
-                        }
-
-                        if(grid.onCollapse){
-                        	HELPER.cellapsed(false, pid);
                         }
                     });
 
@@ -248,7 +221,6 @@
                             }
                             tr.find('td:eq(0)').prepend(pindent + INDENT);
                         }
-                        
                     });
                     grid.resize();
                 }
