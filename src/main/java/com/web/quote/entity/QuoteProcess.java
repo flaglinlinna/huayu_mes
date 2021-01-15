@@ -92,6 +92,13 @@ public class QuoteProcess extends BaseEntity {
     @JoinColumn(name = "pkProc", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     protected Proc proc;
+
+	 /**
+	 * 组件名称
+	 */
+	@ApiModelProperty(name = "bsElement", value = "组件名称")
+	@Column(length = 500)
+	protected String bsElement;
     
 	
 	/**
@@ -211,6 +218,12 @@ public class QuoteProcess extends BaseEntity {
 	public void setBsFeeMh(BigDecimal bsFeeMh) {
 		this.bsFeeMh = bsFeeMh;
 	}
-	
-	
+
+	public String getBsElement() {
+		return bsElement;
+	}
+
+	public void setBsElement(String bsElement) {
+		this.bsElement = bsElement;
+	}
 }

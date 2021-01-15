@@ -54,27 +54,75 @@ $(function() {
 				merge(res.data, [ 'bsName', ], [ 1, 1 ]);
 			}
 		});
-		/*
-		 * tableSelect=tableSelect.render({ elem : '#num', searchKey :
-		 * 'keyword', checkedKey : 'id', searchPlaceholder : '试着搜索', table : {
-		 * url: context +'/quoteProcess/getBomList', method : 'get', cols : [ [ {
-		 * type: 'radio' },//多选 checkbox , { field : 'ID', title : 'id', width :
-		 * 0,hide:true },{ field : 'bsComponent', title : '零件名称', width : 120,
-		 * },{ field : 'bsElement', title : '组件名称', width : 110, },{ field :
-		 * 'bsMaterName', title : '材料名称', width : 130, },{ field : 'bsModel',
-		 * title : '材料规格', width : 150, }, ] ], page : false, request : {
-		 * pageName : 'page', // 页码的参数名称，默认：page limitName : 'rows' //
-		 * 每页数据量的参数名，默认：limit }, parseData : function(res) { console.log(res)
-		 * if(res.result){ // 可进行数据操作 return { "count" : res.data.total, "msg" :
-		 * res.msg, "data" : res.data.rows, "code" : res.status // code值为200表示成功 } } }, },
-		 * done : function(elem, data) { //选择完后的回调，包含2个返回值
-		 * elem:返回之前input对象；data:表格返回的选中的数据 [] //console.log(data); var
-		 * da=data.data; //console.log(da[0].num) var ids = '';var nos = "";
-		 * data.data.forEach(function(element) { element_id = element.id;
-		 * bsComponent = element.bsComponent; }); form.val("clientProcForm", {
-		 * "itemId":element_id, "num" : bsComponent }); form.render();// 重新渲染 }
-		 * });
-		 */
+
+		tableSelect = tableSelect.render({
+			elem : '#num',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '试着搜索',
+			table : {
+				url : context + '/quoteProcess/getBomList?quoteId='+quoteId,
+				method : 'get',
+				// width:800,
+				cols : [ [ {
+					type : 'numbers',
+					title : '序号'
+				}, {
+					type : 'radio'
+				},
+					{
+						field : 'ID',
+						title : 'id',
+						width : 0,
+						hide : true
+					},
+					{
+						field : 'BS_ELEMENT',
+						title : '组件名称',
+						width : 160
+					},
+					{
+						field : 'BS_COMPONENT',
+						title : '零件名称',
+					},
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+				parseData : function(res) {
+					if (res.result) {
+						// 可进行数据操作
+						return {
+							"count" : res.data.total,
+							"msg" : res.msg,
+							"data" : res.data.rows,
+							"code" : res.status
+							// code值为200表示成功
+						}
+					}
+				},
+			},
+			done : function(elem, data) {
+				var da = data.data;
+				form.val("clientProcForm", {
+					"num" : da[0].BS_COMPONENT,
+					"bsElement":da[0].BS_ELEMENT
+				});
+				form.render();// 重新渲染
+
+				if(da[0].BS_COMPONENT){
+					getListByQuoteAndName(da[0].BS_COMPONENT);
+				}else{
+					tableProcCheck.reload({
+						data:[]
+					});
+				}
+			}
+		});
+
 
 		var tip_index = 0;
 		$(document).on('mouseover', '#save-btn', function(data) {
@@ -170,16 +218,7 @@ $(function() {
 			    	}
 			    }
 			  });
-		
-			/*, {field : 'checkColumn',type : "checkbox"
-			},*//** { field : 'procOrder', title : '序号',width:80 },*//*
-			{field : 'procNo',title : '工序编码',minWidth : 100
-			}, {field : 'procName',title : '工序名称',minWidth : 200
-			}, {field : 'workcenterName',title : '工作中心',minWidth : 250,templet : '<div>{{d.bjWorkCenter.workcenterName}}</div>'
-			}, {type : 'toolbar',title : '操作',width : 160,align : 'center',toolbar : '#moveBar'
-			} ] ],
-			data : []
-		});*/
+
 
 		// 监听单元格编辑
 		table.on('edit(client_procTable)', function(obj) {
@@ -264,11 +303,12 @@ $(function() {
 
 		table.on('tool(procTable)', function(obj) {
 			 var checkValue=$("#num").val();
+			 var bsElement=$("#bsElement").val();
 			 if(checkValue){
 				 var data = obj.data;
 					var tbData = table.cache.procList; //是一个Array
 					if (obj.event == 'doClick') {
-						addSubmit(data.id,checkValue);
+						addSubmit(data.id,checkValue,bsElement);
 					}
 			 }else{
 				 layer.msg('请先选择零件', {
@@ -333,6 +373,7 @@ $(function() {
 
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
+			var bsElement=$("#bsElement").val();
 			var checkStatus = table.cache.procList;
 			var procIdList = "";
 			$('#clientProcForm tbody tr td[data-field="checkColumn"] input[type="checkbox"]').each(function(i) {
@@ -351,21 +392,21 @@ $(function() {
 			}
 			console.log(data.field)
 			// addSubmit(procIdList,data.field.itemId);
-			addSubmit(procIdList, data.field.num);
+			addSubmit(procIdList, data.field.num,bsElement);
 			return false;
 
 		});
 
 		//零件切换
-		form.on('select(num)', function(data){
-			if(data.value){
-				getListByQuoteAndName(data.value);
-			}else{
-				tableProcCheck.reload({
-					data:[]
-				});
-			}
-		});
+		// form.on('select(num)', function(data){
+		// 	if(data.value){
+		// 		getListByQuoteAndName(data.value);
+		// 	}else{
+		// 		tableProcCheck.reload({
+		// 			data:[]
+		// 		});
+		// 	}
+		// });
 
 
 		// 设置工序顺序
@@ -495,11 +536,12 @@ function delClientProc(id,type,bsName) {
 }
 
 // 新增工艺流程提交
-function addSubmit(procIdlist, itemIds) {
+function addSubmit(procIdlist, itemIds,bsElement) {
 	var params = {
 		"proc" : procIdlist,
 		"itemId" : itemIds,
-		"quoteId" : quoteId
+		"quoteId" : quoteId,
+		"bsElement":bsElement
 	};
 
 	CoreUtil.sendAjax("/quoteProcess/add", JSON.stringify(params), function(data) {

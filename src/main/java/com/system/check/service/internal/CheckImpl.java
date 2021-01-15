@@ -362,6 +362,7 @@ public class CheckImpl   implements CheckService {
 						for(QuoteProcess qb:lpd){
 							ProductProcess pp = new ProductProcess();
 							pp.setBsName(qb.getBsName());
+							pp.setBsElement(qb.getBsElement());
 							pp.setBsType(qb.getProc().getBjWorkCenter().getBsCode());//类型
 							pp.setBsOrder(qb.getBsOrder());
 							pp.setPkProc(qb.getPkProc());
