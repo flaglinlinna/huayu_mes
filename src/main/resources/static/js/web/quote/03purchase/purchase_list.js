@@ -116,28 +116,34 @@ $(function() {
 			} else if (obj.event === 'view') {
 				parent.layui.index.openTabsPage(context + '/purchase/toPurchaseEdite?quoteId=' + data.id, '采购填报价格');
 			} else if (obj.event === 'check') {
-				// 先判断是否填写完成资料-暂时未校验-20201218-fyx
-				if (true) {
-					layer.open({
-						type : 2,
-						title : '审批',
-						area : [ '600px', '550px' ],
-						fixed : false,
-						maxmin : true,
-						// content: '../../views/iframe/check.html',
-						content : context + '/check/toCheck',
-						success : function(layero, index) {
-							// 获取子页面的iframe
-							var iframe = window['layui-layer-iframe' + index];
-							// 向子页面的全局函数child传参，流程编码
-							if (data.bsStatus == '2') {
-								iframe.child("QUOTE_PUR", data.id, 'end');
-							} else {
-								iframe.child("QUOTE_PUR", data.id, 'check');
+				//发起审批前查看是否已经全部填写好价格
+				CoreUtil.sendAjax("/purchase/doCheckBefore", {'quoteId':data.id}, function(data) {
+					if (data.result) {
+						layer.open({
+							type : 2,
+							title : '审批',
+							area : [ '600px', '550px' ],
+							fixed : false,
+							maxmin : true,
+							content : context + '/check/toCheck',
+							success : function(layero, index) {
+								// 获取子页面的iframe
+								var iframe = window['layui-layer-iframe' + index];
+								// 向子页面的全局函数child传参，流程编码
+								if (data.bsStatus == '2') {
+									iframe.child("QUOTE_PUR", data.id, 'end');
+								} else {
+									iframe.child("QUOTE_PUR", data.id, 'check');
+								}
 							}
-						}
-					});
-				}
+						});
+					} else {
+						layer.alert(data.msg);
+					}
+				}, "GET", false, function(res) {
+					layer.alert(res.msg);
+				});
+
 			}
 		});
 
@@ -173,3 +179,4 @@ function open(title) {
 	});
 	layer.full(index)
 }
+

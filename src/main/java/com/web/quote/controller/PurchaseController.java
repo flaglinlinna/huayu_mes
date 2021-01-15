@@ -55,6 +55,8 @@ public class PurchaseController extends WebController {
 	public ModelAndView toPurchaseEdite(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			ApiResponseResult iStatus =purchaseService.getStatus(Long.parseLong(quoteId),1);
+			mav.addObject("nowStatus", iStatus);
 			mav.addObject("quoteId", quoteId);
 			mav.setViewName("/web/quote/03purchase/purchase_edite");// 返回路径
 		} catch (Exception e) {
@@ -201,6 +203,24 @@ public class PurchaseController extends WebController {
 			e.printStackTrace();
 			logger.error(methodName+"失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
+	
+	@ApiOperation(value = "采购部发起审批前校验", notes = "采购部发起审批前校验", hidden = true)
+	@RequestMapping(value = "/doCheckBefore", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult doCheckBefore(String keyword,String quoteId) {
+		String method = "/purchase/doCheckBefore";
+		String methodName = "采购部发起审批前校验";
+		try {
+			ApiResponseResult result = purchaseService.doCheckBefore(keyword,quoteId);
+			logger.debug(methodName+"=doCheckBefore:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
 			return ApiResponseResult.failure(methodName+"失败！");
 		}
 	}
