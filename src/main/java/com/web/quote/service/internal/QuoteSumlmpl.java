@@ -485,6 +485,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		return ApiResponseResult.success().data(quoteSumBomDao.findByDelFlagAndPkQuote(0, Long.valueOf(quoteId)));
 	}
 	
+	@Override
 	public ApiResponseResult countQuoteTreeBom(Long quoteId) throws Exception {
 		
 		List<Map<String, Object>> lm1 = productMaterDao.getBomFirt(quoteId);

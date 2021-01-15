@@ -22,5 +22,7 @@ public interface QuoteSumService {
 
 	public ApiResponseResult updateProfitNet(long quoteId, BigDecimal profitNet)throws Exception;
 
-	public ApiResponseResult getQuoteBomByQuote(String quoteId)throws Exception;//计算总费用
+	public ApiResponseResult getQuoteBomByQuote(String quoteId)throws Exception;//查询总费用
+	
+	public ApiResponseResult countQuoteTreeBom(Long quoteId) throws Exception;//计算总费用
 }
