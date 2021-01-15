@@ -60,7 +60,7 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 
 	@Query(value = "select wr.pk_item_type_wg from "+ItemTypeWgRole.TABLE_NAME+" wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from "+UserRoleMap.TABLE_NAME+" ur where ur.del_flag=0 and ur.user_id=?1)", nativeQuery = true)
 	public List<Map<String, Object>> getRoleByUid(Long uid);
-<<<<<<< HEAD
+
 	
 	@Query(value = "select A.bs_element ELEMENT,b.bs_fee FEE,nvl(c.fee_lh,0)fee_lh,nvl(c.fee_mh,0)fee_mh,nvl(c.fee_wx,0)fee_wx from (select  distinct pb.bs_element  from price_quote_bom pb where pb.del_flag=0 and pb.pk_quote=?1)A "+
 					"left join (select pm.bs_element,sum(pm.bs_fee)bs_fee from price_product_mater pm where pm.del_flag=0 and pm.pk_quote=?1 group by pm.bs_element)B "+
@@ -83,7 +83,6 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 					"on a.bs_element = b.bs_element and a.bs_component = b.bs_component and a.bs_mater_name = b.bs_mater_name "+
 					"order by a.bs_element,A.bs_component", nativeQuery = true)	
 public List<Map<String, Object>> getBomThree(Long quoteId,String element,String compent);
-=======
->>>>>>> 82a90ecc54fbdad5929d4a44889c1f0f4b5cde94
+
 
 }
