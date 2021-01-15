@@ -3,11 +3,11 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ], function() {
-		var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table;
+	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer','tableFilter' ], function() {
+		var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table,tableFilter = layui.tableFilter;
 		tableIns = table.render({
 			elem : '#listTable',
-			url : context + '/quoteProdect/getList?style=' + Style,
+			url : context + '/quoteProdect/getList?quoteId='+quoteId+'&style=' + Style,
 			method : 'get', // 默认：get请求
 			// , toolbar: '#toolbar', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 			cellMinWidth : 80,
@@ -83,6 +83,7 @@ $(function() {
 				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150} 
 				] ],
 			done : function(res, curr, count) {
+				localtableFilterIns.reload();
 				pageCurr = curr;
 				res.data.forEach(function(item, index) {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
@@ -96,6 +97,31 @@ $(function() {
 				});
 			}
 		});
+		var localtableFilterIns = tableFilter.render({
+			'elem' : '#listTable',
+			'mode' : 'api',//服务端过滤
+			'filters' : [
+				{field: 'bsCode', type:'input'},
+				{field: 'bsType', type:'checkbox', data:[{ "key":"YSBJ", "value":"衍生报价"},{ "key":"XPBJ", "value":"新品报价"}]},
+				// {field: 'bsStatus', type:'checkbox', data:[{ "key":"0", "value":"进行中"},{ "key":"1", "value":"已完成"},{ "key":"99", "value":"已关闭"}]},
+				{field: 'bsFinishTime', type:'date'},
+				{field: 'bsRemarks', type:'input'},
+				{field: 'bsProd', type:'input'},
+				{field: 'bsSimilarProd', type:'input'},
+				{field: 'bsDevType', type:'checkbox'},
+				{field: 'bsProdType', type:'checkbox'},
+				{field: 'bsCustName', type:'input'},
+				{field: 'bsPosition', type:'checkbox'},
+				{field: 'bsLevel', type:'checkbox'},
+				{field: 'bsRequire', type:'checkbox', data:[{ "key":"RoHS", "value":"RoHS"},
+						{ "key":"RECAH", "value":"RECAH"},
+						{ "key":"PAHS", "value":"PAHS"},{ "key":"CA65", "value":"CA65"}
+						,{ "key":"3BPA", "value":"3BPA"},{ "key":"HFS", "value":"HFS"}
+						,{ "key":"无卤", "value":"无卤"},{ "key":"其他", "value":"其他"}]},
+				{field: 'bsCustRequire', type:'input'}
+			],
+			'done': function(filters){}
+		})
 		// 监听工具条
 		table.on('tool(listTable)', function(obj) {
 			var data = obj.data;
@@ -139,6 +165,12 @@ $(function() {
 			// var val=$(this).attr("id");
 		})
 
+		form.on('submit(searchSubmit)', function(data) {
+			// 重新加载table
+			load(data);
+			return false;
+		});
+
 		$("#ul-list li").click(function() {
 			$(this).addClass("current").siblings().removeClass();
 			// alert($("span:last",this).attr("data-status"));
@@ -150,6 +182,21 @@ $(function() {
 		})
 	});
 });
+
+// 重新加载表格（搜索）
+function load(obj) {
+	// 重新加载table
+	tableIns.reload({
+		where : {
+			keyword : obj.field.keywordSearch
+		},
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
+		}
+	});
+}
+
 // 编辑项目弹出框
 function open(title) {
 

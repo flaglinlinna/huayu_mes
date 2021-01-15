@@ -63,9 +63,10 @@ public class QuoteController extends WebController {
 
 	@ApiOperation(value = "报价信息列表页", notes = "报价信息列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteList")
-	public ModelAndView toQuoteList(String step) {
+	public ModelAndView toQuoteList(String step,String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			mav.addObject("quoteId", quoteId);
 			mav.addObject("Step", step);
 			mav.setViewName("/web/quote/01business/quote_list");// 返回路径
 		} catch (Exception e) {
@@ -134,11 +135,11 @@ public class QuoteController extends WebController {
     public ApiResponseResult getList(String keyword,String status,String bsCode,String bsType,String bsStatus,
 									 String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
 									 String bsPosition ,String bsCustRequire,String bsLevel,String bsRequire,
-									 String bsDevType,String bsCustName) {
+									 String bsDevType,String bsCustName,String quoteId) {
         String method = "quote/getList";String methodName ="获取报价单列表";
         try {
             Sort sort = new Sort(Sort.Direction.ASC, "id");
-            ApiResponseResult result = quoteService.getList(keyword, status, bsCode,bsType,bsStatus,bsFinishTime,
+            ApiResponseResult result = quoteService.getList(quoteId,keyword, status, bsCode,bsType,bsStatus,bsFinishTime,
 					bsRemarks,bsProd,bsSimilarProd,bsPosition,bsCustRequire,bsLevel,bsRequire,bsDevType,
 					bsCustName,super.getPageRequest(sort));
             logger.debug("获取报价单列表=getList:");

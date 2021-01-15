@@ -65,8 +65,28 @@ public class QuoteProcessController extends WebController {
 		}
 		return mav;
 	}
-	
-	@ApiOperation(value = "获取报价工艺流程列表", notes = "获取报价工艺流程列表",hidden = true)
+
+    @ApiOperation(value = "获取工艺零件名称列表", notes = "获取工艺零件名称列表",hidden = true)
+    @RequestMapping(value = "/getBomNameList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getBomNameList(String keyword,String pkQuote) {
+        String method = "quoteProcess/getBomNameList";String methodName ="获取工艺零件名称列表";
+        try {
+            Sort sort = Sort.unsorted();
+            ApiResponseResult result = quoteProcessService.getList(keyword,pkQuote, super.getPageRequest(sort));
+            logger.debug("获取报价工艺流程列表=getList:");
+            getSysLogService().success(module,method, methodName, keyword);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取工艺零件名称列表失败！", e);
+            getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
+            return ApiResponseResult.failure("获取工艺零件名称列表失败！");
+        }
+    }
+
+
+    @ApiOperation(value = "获取报价工艺流程列表", notes = "获取报价工艺流程列表",hidden = true)
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getList(String keyword,String pkQuote) {
@@ -93,11 +113,11 @@ public class QuoteProcessController extends WebController {
 	@ApiOperation(value = "获取报价工艺流程-bom列表", notes = "获取报价工艺流程-bom列表",hidden = true)
     @RequestMapping(value = "/getBomList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getBomList(String keyword) {
+    public ApiResponseResult getBomList(String keyword,String quoteId) {
         String method = "quoteProcess/getBomList";String methodName ="获取报价工艺流程-bom列表";
         try {
-            Sort sort = new Sort(Sort.Direction.ASC, "id");
-            ApiResponseResult result = quoteProcessService.getBomList(keyword, super.getPageRequest(sort));
+            Sort sort =  Sort.unsorted();
+            ApiResponseResult result = quoteProcessService.getBomList(keyword,Long.parseLong(quoteId), super.getPageRequest(sort));
             logger.debug("获取报价工艺流程列表=getBomList:");
             getSysLogService().success(module,method, methodName, keyword);
             return result;
@@ -133,9 +153,10 @@ public class QuoteProcessController extends WebController {
         String method = "quoteProcess/add";String methodName ="新增报价-工艺流程";
         String proc = params.get("proc").toString();
         String itemId = params.get("itemId").toString();
+        String bsElement = params.get("bsElement").toString();
         String quoteId = params.get("quoteId").toString();
         try{
-            ApiResponseResult result = quoteProcessService.add(proc,itemId,quoteId);
+            ApiResponseResult result = quoteProcessService.add(proc,itemId,quoteId,bsElement);
             logger.debug("新增报价-工艺流程=add:");
             getSysLogService().success(module,method, methodName,
                     "外购清单:"+itemId+";报价单id:"+quoteId+";工序Id:"+proc);

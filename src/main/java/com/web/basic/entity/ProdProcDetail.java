@@ -42,6 +42,21 @@ public class ProdProcDetail extends BaseEntity {
     @ApiModelProperty(name = "itemNo", value = "物料编码")
     @Column(length = 50)
     protected String itemNo;
+
+	/**
+	 * 工序编号
+	 */
+	@ApiModelProperty(name = "procNo", value = "工序编号")
+	@Column(length = 50)
+	protected String procNo;
+
+	/**
+	 * 工序名称
+	 */
+	@ApiModelProperty(name = "procName", value = "工序名称")
+	@Column(length = 50)
+	protected String procName;
+
     
     /**
 	 * 关联工序ID
@@ -140,6 +155,22 @@ public class ProdProcDetail extends BaseEntity {
 
 	public void setFlag(Integer flag) {
 		this.flag = flag;
+	}
+
+	public String getProcNo() {
+		return procNo;
+	}
+
+	public void setProcNo(String procNo) {
+		this.procNo = procNo;
+	}
+
+	public String getProcName() {
+		return procName;
+	}
+
+	public void setProcName(String procName) {
+		this.procName = procName;
 	}
 
 	@Override

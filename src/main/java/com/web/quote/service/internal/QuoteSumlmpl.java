@@ -32,52 +32,104 @@ import com.web.quote.service.QuoteSumService;
 @Service(value = "QuoteSumService")
 @Transactional(propagation = Propagation.REQUIRED)
 public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
-	
+
 	@Autowired
-    private ProductMaterDao productMaterDao;
+	private ProductMaterDao productMaterDao;
 	@Autowired
-    private QuoteDao quoteDao;
+	private QuoteDao quoteDao;
 	@Autowired
-    private ProductProcessDao productProcessDao;
+	private ProductProcessDao productProcessDao;
 	@Autowired
     private QuoteMouldDao quoteMouldDao;
 	@Autowired
     private QuoteSumBomDao quoteSumBomDao;
-	
-	
-    /**
-     * 查询列表
-     */
-    @Override
-    @Transactional
-    public ApiResponseResult getList(String keyword,String bsStatus,PageRequest pageRequest) throws Exception {
-    	String statusTemp = "";
-    	if(StringUtils.isNotEmpty(bsStatus)){
+
+
+
+	/**
+	 * 查询列表
+	 */
+	@Override
+	@Transactional
+	public ApiResponseResult getList(String quoteId,String keyword,String bsStatus,String bsCode,String bsType,
+									 String bsFinishTime,String bsRemarks,String bsProd,String bsProdType,String bsSimilarProd,
+									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
+									 String bsDevType,String bsCustName,PageRequest pageRequest) throws Exception {
+		String statusTemp = "";
+		if(StringUtils.isNotEmpty(bsStatus)){
 			statusTemp = "and decode(p.bs_end_time3,null,'1','2') = " + bsStatus;
 		}
-    	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
+		String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
 				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(p.bs_end_time3,null,'1','2') col ,p.bs_position," +
 				"p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
 				"p.bs_Cust_Require from "+Quote.TABLE_NAME+" p "
-						+ " where p.del_flag=0 and p.bs_step>2 "+statusTemp;
+				+ " where p.del_flag=0 and p.bs_step>2 "+statusTemp;
+		if(StringUtils.isNotEmpty(quoteId)){
+			sql += "and p.id = " + quoteId + "";
+		}
+//		if(!StringUtils.isEmpty(status)){
+//			sql += "  and p.bs_Status = " + status + "";
+//		}
+		if(StringUtils.isNotEmpty(bsType)){
+			sql += "  and p.bs_Type like '%" + bsType + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsCode)){
+			sql += "  and p.bs_Code like '%" + bsCode + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsFinishTime)){
+			String[] dates = bsFinishTime.split(" - ");
+			sql += " and to_date(p.bs_Finish_Time,'yyyy-MM-dd') >= to_date('"+dates[0]+"','yyyy-MM-dd')";
+			sql += " and to_date(p.bs_Finish_Time,'yyyy-MM-dd') <= to_date('"+dates[1]+"','yyyy-MM-dd')";
+		}
+		if(StringUtils.isNotEmpty(bsRemarks)){
+			sql += "  and p.bs_Remarks like '%" + bsRemarks + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsProd)){
+			sql += "  and p.bs_Prod like '%" + bsProd + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsProdType)){
+			sql += "  and p.bs_Prod_Type like '%" + bsProdType + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsSimilarProd)){
+			sql += "  and p.bs_Similar_Prod like '%" + bsSimilarProd + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsPosition)){
+			sql += "  and p.bs_position like '%" + bsPosition + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsCustRequire)){
+			sql += "  and p.bs_Cust_Require like '%" + bsCustRequire + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsLevel)){
+			sql += "  and p.bs_Level like '" + bsLevel + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsRequire)){
+			sql += "  and p.bs_Require like '%" + bsRequire + "%'";
+		}
+		if(StringUtils.isNoneEmpty(bsDevType)){
+			sql += "  and p.bs_Dev_Type like '%" + bsDevType + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsCustName)){
+			sql += "  and p.bs_Cust_Name like '%" + bsCustName + "%'";
+		}
 		if (StringUtils.isNotEmpty(keyword)) {
-			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
-					+ keyword + "') > 0 ";*/
+			sql += "  and INSTR((p.bs_Code || p.bs_Prod ||p.bs_Similar_Prod ||p.bs_Remarks ||p.bs_Cust_Name" +
+					"||p.bs_Dev_Type ||p.bs_Cust_Require || p.bs_position || p.bs_Require ||p.bs_Level ||p.bs_Dev_Type), '"
+					+ keyword + "') > 0 ";
 		}
 		sql += "  order by p.bs_code desc";
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
 				+ pageRequest.getPageSize() + " ";
-		
+
 		Map<String, Object> param = new HashMap<String, Object>();
-		
+
 		List<Object[]>  list = createSQLQuery(sql_page, param);
 		long count = createSQLQuery(sql, param, null).size();
-		
+
 		List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
 		for (int i=0;i<list.size();i++) {
-			Object[] object=(Object[]) list.get(i);	
+			Object[] object=(Object[]) list.get(i);
 			Map<String, Object> map1 = new HashMap<>();
 			map1.put("id", object[0]);
 			map1.put("bsCode", object[1]);
@@ -101,36 +153,36 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			map1.put("bsRequire", object[18]);
 			map1.put("bsLevel", object[19]);
 			map1.put("bsCustRequire", object[20]);
-			
+
 			list_new.add(map1);
 		}
 		HashMap map = new HashMap();
 		map.put("List",DataGrid.create(list_new, (int) count,
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 		map.put("Nums",quoteDao.getNumBySumAndBsStep());
-		
+
 		return ApiResponseResult.success().data(map);
-    }
+	}
 
 	@Override
 	public ApiResponseResult getQuoteList(String keyword, String quoteId, PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
-		
+
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
 				+ pageRequest.getPageSize() + " ";
-		
+
 		Map<String, Object> param = new HashMap<String, Object>();
-		
+
 		//List<Map<String, Object>> list = super.findBySql(sql, param);
 		List<ProductMater> list = createSQLQuery(sql, param, ProductMater.class);
 		long count = createSQLQuery(hql, param, null).size();
-		
+
 		return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 
 	@Override
@@ -142,14 +194,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		Map map = new HashMap();
 		Quote quote = quoteDao.findById(Long.parseLong(quoteId));
 		map.put("Quote", quote);//报价基础信息
-		
+
 		//1:材料价格汇总
 		//BigDecimal cl_all = new BigDecimal(0);//材料总价格
 		BigDecimal cl_hardware = new BigDecimal(0);//五金
 		BigDecimal cl_molding = new BigDecimal(0);//注塑
 		BigDecimal cl_surface = new BigDecimal(0);//表面处理
 		BigDecimal cl_packag = new BigDecimal(0);//组装
-		
+
 		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuote(0,Long.valueOf(quoteId));
 		for(ProductMater pm:lpm){
 			if(pm.getBsType().equals("hardware")){
@@ -162,7 +214,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				cl_packag = cl_packag.add(pm.getBsFee());
 			}
 		}
-		
+
 		//2:人工成本+制造费用+外协工艺成本
 		BigDecimal lh_hardware = new BigDecimal(0);//五金
 		BigDecimal lh_molding = new BigDecimal(0);//注塑
@@ -172,14 +224,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		BigDecimal lw_molding = new BigDecimal(0);//注塑
 		BigDecimal lw_surface = new BigDecimal(0);//表面处理
 		BigDecimal lw_packag = new BigDecimal(0);//组装
-		
+
 		BigDecimal wx_all = new BigDecimal(0);//外协工艺成本?
-		
+
 		BigDecimal lh_the_loss = new BigDecimal(0);//五金+注塑+表面处理+组装+外协-人工-本工序损耗
 		BigDecimal wh_the_loss = new BigDecimal(0);//五金+注塑+表面处理+组装+外协-制费-本工序损耗
 		BigDecimal lh_hou_loss = new BigDecimal(0);//五金+注塑+表面处理+组装+外协-人工-后工序损耗
 		BigDecimal wh_hou_loss = new BigDecimal(0);//五金+注塑+表面处理+组装+外协-制费-后工序损耗
-		
+
 		List<ProductProcess> lpp = productProcessDao.findByDelFlagAndPkQuote(0,Long.valueOf(quoteId));
 		for(ProductProcess pp:lpp){
 			if(pp.getBsType().equals("hardware")){
@@ -197,7 +249,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}else if(pp.getBsType().equals("out")){
 				wx_all = wx_all.add(pp.getBsFeeWxAll());
 			}
-			
+
 			lh_the_loss = lh_the_loss.add(pp.getBsLossTheLh());
 			wh_the_loss = wh_the_loss.add(pp.getBsLossTheMh());
 			lh_hou_loss = lh_hou_loss.add(pp.getBsLossHouLh());
@@ -208,9 +260,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		BigDecimal molding_all = cl_molding.add(lh_molding).add(lw_molding);//注塑小计
 		BigDecimal surface_all = cl_surface.add(lh_surface).add(lw_surface);//表面处理小计
 		BigDecimal packag_all = cl_packag.add(lh_packag).add(lw_packag);//组装小计
-		
+
 		BigDecimal hou_loss_all = lh_hou_loss.add(wh_hou_loss);//后工序损料
-		
+
 		//4.模具费用
 		List<QuoteMould> lqm = quoteMouldDao.findByDelFlagAndPkQuote(0, Long.valueOf(quoteId));
 		BigDecimal mould_all = new BigDecimal(0);
@@ -218,13 +270,13 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			mould_all = mould_all.add(qm.getBsActQuote());//实际报价
 		}
 
-		
+
 		//5.生产成本=五金小计+注塑小计+表面处理小计+组装小计+后工序损料
 		BigDecimal p_cb = hardware_all.add(molding_all).add(surface_all).add(packag_all).add(wx_all).add(hou_loss_all);
-		
+
 		//6.生产管理费-管理费用的计算=管理费率*产品生产成本
 		BigDecimal gl = quote.getBsManageFee().multiply(p_cb).divide(new BigDecimal(100),5,5);
-		
+
 		//7.利润
 
 		//净利润PROFIT_NET：手工维护录入。 (注意：修改净利润后其他数据需联动变化)
@@ -251,35 +303,35 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		map.put("cl_molding", cl_molding);//注塑材料
 		map.put("cl_surface", cl_surface);//表面处理材料
 		map.put("cl_packag", cl_packag);//组装材料
-		
+
 		map.put("lh_hardware", lh_hardware);//五金人工
 		map.put("lh_molding", lh_molding);//注塑人工
 		map.put("lh_surface", lh_surface);//表面处理人工
 		map.put("lh_packag", lh_packag);//组装人工
-		
+
 		map.put("lw_hardware", lw_hardware);//五金制费
 		map.put("lw_molding", lw_molding);//注塑制费
 		map.put("lw_surface", lw_surface);//表面处理制费
 		map.put("lw_packag", lw_packag);//组装制费
-		
+
 		map.put("hardware_all", hardware_all);//五金小计
 		map.put("molding_all", molding_all);//注塑小计
 		map.put("surface_all", surface_all);//表面处理小计
 		map.put("packag_all", packag_all);//组装小计
-		
+
 		map.put("wx_all", wx_all);//外协加工
-		
+
 		map.put("hou_loss_all", hou_loss_all);//后工序损料
-		
+
 		map.put("mould_all", mould_all);//模具费用
-		
+
 		map.put("gl", gl);//管理费用
 		map.put("p_cb",p_cb); //生产成本
 		map.put("profitNet",profitNet); //净利润
 
-		
+
 //		map.put("", quote.getBsProfitProd());//保底毛利率
-		
+
 		return ApiResponseResult.success().data(map);
 	}
 	/**
@@ -314,7 +366,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				}
 			}
 			BigDecimal bsCave = new BigDecimal(pm.getBsCave());//穴数
-			
+
 			BigDecimal bsWaterGap = new BigDecimal("1");//水口量
 			if(pm.getBsWaterGap() != null){
 				bsWaterGap = new BigDecimal(pm.getBsWaterGap());
@@ -332,9 +384,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for(ProductProcess pp:lpp_hardware){
 //			System.out.println(pp.getId());
 			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle()).divide(new BigDecimal("3600"),5,5).divide(pp.getBsRadix(),5,5));
-		    
+
 			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600"),5,5).divide(pp.getBsRadix(),5,5));
-			
+
 			//本工序损耗
 			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5).subtract(pp.getBsFeeLhAll()));
 			pp.setBsLossTheMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5).subtract(pp.getBsFeeMhAll()));
@@ -348,7 +400,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for(ProductProcess pp:lpp_molding){
 			BigDecimal bsCave = new BigDecimal(pp.getBsCave());//穴数
 			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle()).divide(new BigDecimal("3600"),5,5).divide(bsCave,5,5).divide(pp.getBsRadix(),5,5));
-		    
+
 			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600"),5,5).divide(bsCave,5,5).divide(pp.getBsRadix(),5,5));
 			//本工序损耗
 			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5).subtract(pp.getBsFeeLhAll()));
@@ -363,7 +415,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for(ProductProcess pp:lpp_surface){
 			BigDecimal bsCapacity = new BigDecimal(pp.getBsCapacity());//产能
 			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity,5,5).divide(pp.getBsRadix(),5,5));
-		    
+
 			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity,5,5).divide(pp.getBsRadix(),5,5));
 			//本工序损耗
 			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5).subtract(pp.getBsFeeLhAll()));
@@ -378,7 +430,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for(ProductProcess pp:lpp_packag){
 			BigDecimal bsCapacity = new BigDecimal(pp.getBsCapacity());//产能
 			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity,5,5).divide(pp.getBsRadix(),5,5));
-		    
+
 			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity,5,5).divide(pp.getBsRadix(),5,5));
 			//本工序损耗
 			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5).subtract(pp.getBsFeeLhAll()));
@@ -388,7 +440,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			pp.setBsLossHouMh(pp.getBsFeeMhAll().multiply(new BigDecimal("100")).divide(pp.getBsHouYield(),5,5).subtract(pp.getBsFeeMhAll()));
 		}
 		productProcessDao.saveAll(lpp_packag);
-		
+
 		//外协-计算损耗
 		List<ProductProcess> lpp_out = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId), "out");
 		for(ProductProcess pp:lpp_out){
@@ -415,6 +467,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		return ApiResponseResult.success("修改净利润成功!");
 	}
+
 
 	@Override
 	public ApiResponseResult getQuoteBomByQuote(String quoteId) throws Exception {

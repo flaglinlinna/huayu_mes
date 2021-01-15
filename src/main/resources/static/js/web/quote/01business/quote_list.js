@@ -8,7 +8,7 @@ $(function() {
 			var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table,tableFilter = layui.tableFilter;
 			tableIns = table.render({
 				elem : '#listTable',
-				url : context + '/quote/getList?status=',
+				url : context + '/quote/getList?quoteId='+quoteId+'&status=',
 				method : 'get' // 默认：get请求
 				//, toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 				,cellMinWidth : 80,
@@ -113,13 +113,13 @@ $(function() {
 				'filters' : [
 					{field: 'bsCode', type:'input'},
 					{field: 'bsType', type:'checkbox', data:[{ "key":"YSBJ", "value":"衍生报价"},{ "key":"XPBJ", "value":"新品报价"}]},
-					{field: 'bsStatus', type:'checkbox', data:[{ "key":"0", "value":"进行中"},{ "key":"1", "value":"已完成"},{ "key":"99", "value":"已关闭"}]},
+					// {field: 'bsStatus', type:'checkbox', data:[{ "key":"0", "value":"进行中"},{ "key":"1", "value":"已完成"},{ "key":"99", "value":"已关闭"}]},
 					{field: 'bsFinishTime', type:'date'},
 					{field: 'bsRemarks', type:'input'},
 					{field: 'bsProd', type:'input'},
 					{field: 'bsSimilarProd', type:'input'},
 					{field: 'bsDevType', type:'checkbox'},
-					{field: 'bsProdType', type:'date'},
+					{field: 'bsProdType', type:'checkbox'},
 					{field: 'bsCustName', type:'input'},
 					{field: 'bsPosition', type:'checkbox'},
 					{field: 'bsLevel', type:'checkbox'},

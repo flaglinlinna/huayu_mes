@@ -36,9 +36,10 @@ public class OutController extends WebController {
 	
 	@ApiOperation(value = "外协部报价单页", notes = "外协部报价单页", hidden = true)
 	@RequestMapping(value = "/toOutList")
-	public ModelAndView toOutList() {
+	public ModelAndView toOutList(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			mav.addObject("quoteId", quoteId);
 			mav.addObject("Style", "out");
 			mav.setViewName("/web/quote/03purchase/out_list");// 返回路径
 		} catch (Exception e) {
@@ -52,12 +53,16 @@ public class OutController extends WebController {
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getList(String keyword,String bsStatus) {
+	public ApiResponseResult getList(String quoteId,String keyword,String bsStatus,String bsCode,String bsType,
+									 String bsFinishTime,String bsRemarks,String bsProd,String bsProdType,String bsSimilarProd,
+									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
+									 String bsDevType,String bsCustName) {
 		String method = "/out/getQuoteList";
 		String methodName = "获取报价单列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = outService.getList(keyword,bsStatus, super.getPageRequest(sort));
+			ApiResponseResult result = outService.getList(quoteId,keyword, bsStatus,bsCode,bsType,bsFinishTime,bsRemarks,
+					bsProd,bsProdType,bsSimilarProd,bsPosition,bsCustRequire,bsLevel,bsRequire,bsDevType,bsCustName,super.getPageRequest(sort));
 			logger.debug(methodName+"=getQuoteList:");
 			return result;
 		} catch (Exception e) {
@@ -68,12 +73,12 @@ public class OutController extends WebController {
 		}
 	}
 
-	@ApiOperation(value = "获取采购部材料价格填写列表", notes = "获取采购部材料价格填写列表", hidden = true)
+	@ApiOperation(value = "获取外协部价格填写列表", notes = "获取外协部价格填写列表", hidden = true)
 	@RequestMapping(value = "/getQuoteList", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getQuoteList(String keyword,String quoteId) {
 		String method = "/productMater/getQuoteList";
-		String methodName = "获取采购部材料价格填写列表";
+		String methodName = "获取外协部价格填写列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = outService.getQuoteList(keyword,quoteId, super.getPageRequest(sort));

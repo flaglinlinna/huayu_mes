@@ -39,46 +39,98 @@ import com.web.quote.service.PurchaseService;
 @Service(value = "PurchaseService")
 @Transactional(propagation = Propagation.REQUIRED)
 public class Purchaselmpl extends BaseSql implements PurchaseService {
-	
+
 	@Autowired
-    private ProductMaterDao productMaterDao;
+	private ProductMaterDao productMaterDao;
 	@Autowired
 	private QuoteDao quoteDao;
 	@Autowired
 	private PriceCommDao priceCommDao;
-    /**
-     * 查询列表
-     */
-    @Override
-    @Transactional
-    public ApiResponseResult getList(String keyword,String bsStatus,PageRequest pageRequest) throws Exception {
-    	String statusTemp = "";
-    	if(StringUtils.isNotEmpty(bsStatus)){
+	/**
+	 * 查询列表
+	 */
+	@Override
+	@Transactional
+	public ApiResponseResult getList(String quoteId,String keyword,String bsStatus,String bsCode,String bsType,
+									 String bsFinishTime,String bsRemarks,String bsProd,String bsProdType,String bsSimilarProd,
+									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
+									 String bsDevType,String bsCustName,PageRequest pageRequest) throws Exception {
+		String statusTemp = "";
+		if(StringUtils.isNotEmpty(bsStatus)){
 			statusTemp = "and p.bs_status2purchase = " + bsStatus;
 		}
-    	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
+		String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
 				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_status2purchase col ,p.bs_position," +
 				"p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
 				" p.bs_Cust_Require from "+Quote.TABLE_NAME+" p "
-						+ " where p.del_flag=0 and p.bs_step=2  "+statusTemp;
+				+ " where p.del_flag=0 and p.bs_step=2  "+statusTemp;
+		if(StringUtils.isNotEmpty(quoteId)){
+			sql += "and p.id = " + quoteId + "";
+		}
+
+//		if(!StringUtils.isEmpty(status)){
+//			sql += "  and p.bs_Status = " + status + "";
+//		}
+		if(StringUtils.isNotEmpty(bsType)){
+			sql += "  and p.bs_Type like '%" + bsType + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsCode)){
+			sql += "  and p.bs_Code like '%" + bsCode + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsFinishTime)){
+			String[] dates = bsFinishTime.split(" - ");
+			sql += " and to_date(p.bs_Finish_Time,'yyyy-MM-dd') >= to_date('"+dates[0]+"','yyyy-MM-dd')";
+			sql += " and to_date(p.bs_Finish_Time,'yyyy-MM-dd') <= to_date('"+dates[1]+"','yyyy-MM-dd')";
+		}
+		if(StringUtils.isNotEmpty(bsRemarks)){
+			sql += "  and p.bs_Remarks like '%" + bsRemarks + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsProd)){
+			sql += "  and p.bs_Prod like '%" + bsProd + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsProdType)){
+			sql += "  and p.bs_Prod_Type like '%" + bsProdType + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsSimilarProd)){
+			sql += "  and p.bs_Similar_Prod like '%" + bsSimilarProd + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsPosition)){
+			sql += "  and p.bs_position like '%" + bsPosition + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsCustRequire)){
+			sql += "  and p.bs_Cust_Require like '%" + bsCustRequire + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsLevel)){
+			sql += "  and p.bs_Level like '" + bsLevel + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsRequire)){
+			sql += "  and p.bs_Require like '%" + bsRequire + "%'";
+		}
+		if(StringUtils.isNoneEmpty(bsDevType)){
+			sql += "  and p.bs_Dev_Type like '%" + bsDevType + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsCustName)){
+			sql += "  and p.bs_Cust_Name like '%" + bsCustName + "%'";
+		}
 		if (StringUtils.isNotEmpty(keyword)) {
-			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
-					+ keyword + "') > 0 ";*/
+			sql += "  and INSTR((p.bs_Code || p.bs_Prod ||p.bs_Similar_Prod ||p.bs_Remarks ||p.bs_Cust_Name" +
+					"||p.bs_Dev_Type ||p.bs_Cust_Require || p.bs_position || p.bs_Require ||p.bs_Level ||p.bs_Dev_Type), '"
+					+ keyword + "') > 0 ";
 		}
 		sql += "  order by p.bs_code desc";
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
 				+ pageRequest.getPageSize() + " ";
-		
+
 		Map<String, Object> param = new HashMap<String, Object>();
-		
+
 		List<Object[]>  list = createSQLQuery(sql_page, param);
 		long count = createSQLQuery(sql, param, null).size();
-		
+
 		List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
 		for (int i=0;i<list.size();i++) {
-			Object[] object=(Object[]) list.get(i);	
+			Object[] object=(Object[]) list.get(i);
 			Map<String, Object> map1 = new HashMap<>();
 			map1.put("id", object[0]);
 			map1.put("bsCode", object[1]);
@@ -102,26 +154,26 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			map1.put("bsRequire", object[18]);
 			map1.put("bsLevel", object[19]);
 			map1.put("bsCustRequire", object[20]);
-			
+
 			list_new.add(map1);
 		}
 		Map map = new HashMap();
 		map.put("List", DataGrid.create(list_new,  (int) count,
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 		map.put("Nums",quoteDao.getNumByPurchaseAndBsStep(2));
-		
+
 		return ApiResponseResult.success().data(map);
-    }
+	}
 
 
 	@Override
 	public ApiResponseResult getQuoteList(String keyword, String quoteId, PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
 		//20210113-fyx-去掉外协--?
 		//hql += " and p.bs_Type <> 'out' " ;
-		
+
 		//根据角色过滤可以查看的物料类型
 		//1：如果设置了角色过滤的则过滤物料，否则认为是管理员可以查看全部方便测试
 		SysUser user = UserUtil.getSessionUser();
@@ -129,33 +181,33 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		if(lmp.size()>0){
 			hql += " and p.pk_item_type_wg in (select wr.pk_item_type_wg from "+ItemTypeWgRole.TABLE_NAME+" wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from "+UserRoleMap.TABLE_NAME+" ur where ur.del_flag=0 and ur.user_id="+user.getId()+")) ";
 		}
-		
+
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
 				+ pageRequest.getPageSize() + " ";
-		
+
 		Map<String, Object> param = new HashMap<String, Object>();
-		
+
 		//List<Map<String, Object>> list = super.findBySql(sql, param);
 		List<ProductMater> list = createSQLQuery(sql, param, ProductMater.class);
 		long count = createSQLQuery(hql, param, null).size();
-		
+
 		for(ProductMater pm:list){
 			List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(pm.getBsMaterName());
 			if(lm.size()>0){
-		        String str1 = JSON.toJSONString(lm); //此行转换
-		        String str = "";
-		        for(Map<String, Object> map:lm){
-		        	str += map.get("RANGE_PRICE").toString()+",";
-		        }
-		        str = str.substring(0, str.length()-1);
+				String str1 = JSON.toJSONString(lm); //此行转换
+				String str = "";
+				for(Map<String, Object> map:lm){
+					str += map.get("RANGE_PRICE").toString()+",";
+				}
+				str = str.substring(0, str.length()-1);
 				pm.setBsPriceList(str1);
 			}
 		}
-		
+
 		return ApiResponseResult.success().data(DataGrid.create(list, (int) count,
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize())); 
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 
 	/**
@@ -197,8 +249,8 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<ProductMater> list = createSQLQuery(hql, param, ProductMater.class);
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        String filePath = "static/excelFile/采购填报价格模板.xlsx";
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		String filePath = "static/excelFile/采购填报价格模板.xlsx";
 //		Resource resource = new ClassPathResource("static/excelFile/采购填报价格模板.xlsx");
 //		InputStream in = resource.getInputStream();
 		String[] map_arr = new String[]{"id","bsType","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix",
@@ -268,7 +320,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 					productMater = productMaterDao.findById(Long.parseLong(id));
 					productMater.setId(Long.parseLong(id));
 					productMater.setLastupdateBy(userId);
-                	productMater.setLastupdateDate(doExcleDate);
+					productMater.setLastupdateDate(doExcleDate);
 				}else {
 					productMater.setCreateBy(userId);
 					productMater.setCreateDate(doExcleDate);
@@ -292,10 +344,23 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 
 	@Override
 	public ApiResponseResult doStatus(Long quoteId) throws Exception {
-		if(productMaterDao.countByPkQuoteAndBsAssess(quoteId,UserUtil.getSessionUser().getId())>0){
+		Integer notFilled = 0;
+		List<ProductMater> productMaterList = new ArrayList<>();
+		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(UserUtil.getSessionUser().getId());
+		if(lmp.size()>0){
+			notFilled = productMaterDao.countByPkQuoteAndUserId(quoteId,UserUtil.getSessionUser().getId());
+			productMaterList =productMaterDao.findByPkQuoteAndUser(quoteId,UserUtil.getSessionUser().getId());
+		}else {
+			notFilled =productMaterDao.countByDelFlagAndPkQuoteAndBsAssessIsNull(0,quoteId);
+			productMaterList = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+		}
+		if(productMaterList.size()==0){
+			return ApiResponseResult.failure("确认完成失败！当前报价单无采购信息！");
+		}
+		//判断是否该用户下的物料类型下的采购单是否评估价格存在空值
+		if(notFilled>0){
 			return ApiResponseResult.failure("确认完成失败！请填写完所有评估价格后确认！");
 		}else {
-			List<ProductMater> productMaterList = productMaterDao.findByPkQuoteAndUser(quoteId,UserUtil.getSessionUser().getId());
 			for(ProductMater o:productMaterList){
 				o.setBsStatusPurchase(1);
 				o.setLastupdateDate(new Date());
@@ -337,7 +402,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			return ApiResponseResult.failure("报价单ID为空!");
 		}
 		//查询未完成的价格
-		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuoteAndBsStatus(0, Long.parseLong(quoteId), 0);
+		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuoteAndBsStatusPurchase(0, Long.parseLong(quoteId), 0);
 		if(lpm.size()>0){
 			return ApiResponseResult.failure("存在未报价的物料信息，不能发起审批!");
 		}else{

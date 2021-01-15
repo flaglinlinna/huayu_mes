@@ -141,23 +141,31 @@
 						for (var j = 0; j < dd.length; j++) {
 							var url = "";
 							if(dd[j].bsRouter == "QUOTE_NEW"){
+								dd[j].bsModel="报价单查询"
 								url = context+"/quote/toQuoteList?quoteId="+dd[j].bsReferId;
 							}else if(dd[j].bsRouter == "hardware"){
+								dd[j].bsModel="五金-报价列表"
 								url = context+"/quoteProdect/toQuoteProdect?style=hardware&quoteId="+dd[j].bsReferId;
 							}else if(dd[j].bsRouter == "molding"){
+								dd[j].bsModel="注塑-报价列表"
 								url = context+"/quoteProdect/toQuoteProdect?style=molding&quoteId="+dd[j].bsReferId;
 							}else if(dd[j].bsRouter == "surface"){
+								dd[j].bsModel="表面-报价列表"
 								url = context+"/quoteProdect/toQuoteProdect?style=surface&quoteId="+dd[j].bsReferId;
 							}else if(dd[j].bsRouter == "packag"){
+								dd[j].bsModel="组装-报价列表"
 								url = context+"/quoteProdect/toQuoteProdect?style=packag&quoteId="+dd[j].bsReferId;
 							}else if(dd[j].bsRouter == "out"){
+								dd[j].bsModel="外协-报价列表"
 								url = context+"/out/toOutList?quoteId="+dd[j].bsReferId;
 							}else if(dd[j].bsRouter == "QUOTE_PUR"){
+								dd[j].bsModel="采购-报价列表"
 								url = context+"/purchase/toPurchaseList?quoteId="+dd[j].bsReferId;
 							}else if(dd[j].bsRouter == "QUOTE"){
+								dd[j].bsModel="报价单列表"
 								url = context+"/quoteSum/toQuoteSumList?quoteId="+dd[j].bsReferId;
 							}
-							check_html += '<dd><div class="layui-status-img"><a href="javascript:;"></a></div><div> <a  lay-href="'+url+'">'+dd[j].bsTitle+'</a>  </div></dd>'
+							check_html += '<dd><div class="layui-status-img"><a href="javascript:;"></a></div><div> <a  lay-href="'+url+'" lay-text="'+dd[j].bsModel+'">'+dd[j].bsTitle+'</a>  </div></dd>'
 						}
 						$("#check-list").html(check_html);
 						//封装数量

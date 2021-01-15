@@ -65,15 +65,15 @@
 				style="margin: 20px;">
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
 					type="hidden" name="id" /> <input type="hidden" name="itemId" />
-
+				<input id="bsElement" type="hidden" name="bsElement" />
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">选择零件</label>
 					<div class="layui-input-inline">
 						<!--<input type="text" name="num" placeholder="请选择" autocomplete="off"
 							class="layui-input" readonly="readonly" lay-verify="required"
 							id="num">-->
-						<select class="layui-input" id="num" name="num" lay-filter="num"
-							lay-search></select>
+						<input class="layui-input" type="text" id="num" name="num" lay-filter="num"
+							   placeholder="请选择零件"  readonly="readonly"/>
 					</div>
 				</div>
 				  <div class="layui-row">
@@ -87,7 +87,7 @@
 					<div class="layui-form-item">
 					<div class="layui-input-block">
 						<button class="layui-btn layui-btn-sm" lay-submit=""
-							lay-filter="addSubmit">保存</button>
+							lay-filter="addSubmit">批量添加</button>
 						<button type="reset"
 							class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
 					</div>

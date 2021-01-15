@@ -122,6 +122,8 @@ public class ProdProclmpl implements ProdProcService {
 						ProdProcDetail pd = new ProdProcDetail();
 						pd.setItemId(Long.valueOf(it));
 						pd.setItemNo(itemNos[i]);
+						pd.setProcNo(process.getProcNo());
+						pd.setProcName(process.getProcName());
 						pd.setProcId(Long.valueOf(pros[0]));
 						pd.setCreateBy(UserUtil.getSessionUser().getId());
 						pd.setCreateDate(new Date());
