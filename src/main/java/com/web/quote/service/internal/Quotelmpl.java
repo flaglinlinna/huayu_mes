@@ -180,7 +180,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
                 "p.bs_Cust_Require,i.bs_status bs_status_check  from "+Quote.TABLE_NAME+" p  left join (select t.pk_quote,min(t.bs_status)bs_status from "+QuoteItem.TABLE_NAME+" t where  t.bs_style='item' group by t.pk_quote) i on i.pk_quote=p.id"
                 + "  where p.del_flag=0";
 
-        if(StringUtils.isNotEmpty(quoteId)){
+        if(StringUtils.isNotEmpty(quoteId)&&!("null").equals(quoteId)){
             sql += "and p.id = " + quoteId + "";
         }
 

@@ -63,7 +63,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 				"  p.bs_Cust_Require from "+Quote.TABLE_NAME+" p "
 						+ "  where p.del_flag=0 and p.bs_step=2 "+statusTemp;
 
-		if(StringUtils.isNotEmpty(quoteId)){
+		if(StringUtils.isNotEmpty(quoteId)&&!("null").equals(quoteId)){
 			sql += "and p.id = " + quoteId + "";
 		}
 
