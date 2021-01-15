@@ -96,5 +96,19 @@ public class TodoInfoController extends WebController {
 			return ApiResponseResult.failure(e.getMessage());
 		}
 	}
+	
+	@ApiOperation(value="获取待办事项", notes="获取待办事项")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "keyword", value = "查询关键字", dataType = "String", paramType="query",defaultValue=""),
+	})
+	@RequestMapping(value = "/getlist2", method = RequestMethod.GET)
+	public ApiResponseResult getlist2(String keyword) {
+		try {
+			Sort sort = new Sort(Sort.Direction.DESC,"id");
+			return todoInfoService.getlist2(keyword, super.getPageRequest(sort));
+		} catch (Exception e) {
+			return ApiResponseResult.failure(e.getMessage());
+		}
+	}
 }
 

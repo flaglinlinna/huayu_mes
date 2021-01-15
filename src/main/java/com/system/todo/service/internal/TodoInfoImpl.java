@@ -25,6 +25,7 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.basic.entity.Client;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -192,6 +193,36 @@ public class TodoInfoImpl  implements TodoInfoService {
         return ApiResponseResult.success().data(map);
     }
 
+    /**
+     * 20210114
+     * -lst
+     * 获取登陆人所有待办事项
+     * **/
+    @Transactional(readOnly = true)
+    public ApiResponseResult getlist2(String keyword,PageRequest pageRequest) throws Exception {
+    	
+    	Long uid = UserUtil.getSessionUser().getId();
+    	
+        List<SearchFilter> filters = new ArrayList<SearchFilter>();
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("bsUserId", SearchFilter.Operator.EQ, uid));
+        
+        List<SearchFilter> filters1 = new ArrayList<>();
+		if (StringUtils.isNotEmpty(keyword)) {
+			filters1.add(new SearchFilter("bsTitle", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("bsContent", SearchFilter.Operator.LIKE, keyword));
+		}
+        
+        Specification<TodoInfo> spec = Specification.where(BaseService.and(filters, TodoInfo.class));        
+        Specification<TodoInfo> spec1 = spec.and(BaseService.or(filters1, TodoInfo.class));
+        
+        //获取当前登录用户待办
+        Page<TodoInfo> page = todoInfoDao.findAll(spec1, pageRequest);
+        DataGrid dataGrid = DataGrid.create(page.getContent(), (int) page.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize());
+
+        return ApiResponseResult.success().data(dataGrid);
+    }
+    
 	@Override
 	public ApiResponseResult closeByIdAndModel(Long bsReferId,String model) throws Exception {
 		// TODO Auto-generated method stub

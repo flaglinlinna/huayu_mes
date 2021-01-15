@@ -23,6 +23,11 @@ public class ConsoleController extends WebController {
         return "/home/console";
     }
     
+    @RequestMapping(value = "/toWaitlist")
+    public String toWaitlist(){
+        return "/home/waitlist";
+    }
+    
     @RequestMapping(value = "/toConsole1")
     public String toUserList1(){
         return "/home/console1";
