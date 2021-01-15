@@ -31,10 +31,10 @@ $(function() {
 			},
 			cols : [ [{type : 'numbers'},
 					{field : 'bsFileName',title : '文件名称',templet : '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="' + context
-								+ '/file/get?fsFileId={{d.pkFileId}}" th:href="@{/file/get?fsFileId={{d.pkFileId}}}">{{ d.bsFileName==null?"":d.bsFileName }}</a></div>'
-					}, {field : 'createBy',title : '创建人',width : 200
-					}, {field : 'createDate',title : '创建时间',width : 200
-					}, {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 150
+								+ '/file/get?fsFileId={{d.pkFileId}}" th:href="@{/file/get?fsFileId={{d.pkFileId}}}">{{ d.bsFileName==null?"":d.bsFileName }}</a></div>'},
+					{field : 'createBy',title : '创建人',width : 200}, 
+					{field : 'createDate',title : '创建时间',width : 200}, 
+					{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 150
 					} ] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。

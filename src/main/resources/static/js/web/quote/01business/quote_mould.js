@@ -34,13 +34,13 @@ $(function() {
 			cols : [ [ {type : 'numbers'}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {field : 'bsName',title : '组件名称',style : 'background-color:#d2d2d2'}, 
-			{field : 'bsMoCode',title : '模具编码',templet : '<div>{{d.mjProcFee.productCode}}</div>',style : 'background-color:#d2d2d2'
-			}, {field : 'bsMoName',title : '模具名称',templet : '<div>{{d.mjProcFee.productName}}</div>',style : 'background-color:#d2d2d2'
-			}, {field : 'bsMoFee',title : '模具成本',templet : '<div>{{d.mjProcFee.feeAll}}</div>',style : 'background-color:#d2d2d2'
-			}, {field : 'stQuote',title : '参考报价',templet : '<div>{{d.mjProcFee.stQuote}}</div>',style : 'background-color:#d2d2d2'
-			}, {field : 'bsActQuote',title : '实际报价',"edit" : "number","event" : "dataCol",width : 80
-			}, {fixed : 'right',title : '操作',width : 80,align : 'center',toolbar : '#optBar'
-			} ] ],
+			{field : 'bsMoCode',title : '模具编码',templet : '<div>{{d.mjProcFee.productCode}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'bsMoName',title : '模具名称',templet : '<div>{{d.mjProcFee.productName}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'bsMoFee',title : '模具成本',templet : '<div>{{d.mjProcFee.feeAll}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'stQuote',title : '参考报价',templet : '<div>{{d.mjProcFee.stQuote}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'bsActQuote',title : '实际报价',"edit" : "number","event" : "dataCol",width : 80},
+			{fixed : 'right',title : '操作',width : 80,align : 'center',toolbar : '#optBar'}
+			] ],
 			done : function(res, curr, count) {
 				// console.log(res)
 				totalCount = res.count
@@ -80,15 +80,15 @@ $(function() {
 			elem : '#procList',
 			limit : 20,
 			method : 'get',// 默认：get请求
-			cols : [ [ {type : 'numbers'}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {field : 'checkColumn',type : "checkbox",
-			}, {field : 'productCode',title : '产品编码',minWidth : 250
-			}, {field : 'productName',title : '产品名称',minWidth : 200
-			}, {field : 'stQuote',title : '参考报价',minWidth : 100
-			}, {field : 'feeAll',title : '评估总费用（含税）',minWidth : 200
-			}, {field : 'structureMj',title : '模具结构',minWidth : 200
-			},
+			cols : [ [ 
+			{type : 'numbers'},
+			// {field:'id', title:'ID', width:80, unresize:true, sort:true},
+			{field : 'checkColumn',type : "checkbox",}, 
+			{field : 'productCode',title : '产品编码',minWidth : 250},
+			{field : 'productName',title : '产品名称',minWidth : 200},
+			{field : 'stQuote',title : '参考报价',minWidth : 100}, 
+			{field : 'feeAll',title : '评估总费用（含税）',minWidth : 200},
+			{field : 'structureMj',title : '模具结构',minWidth : 200},
 			// {type: 'toolbar',title: '操作',width: 160,align : 'center',toolbar:'#moveBar'}
 			] ],
 			data : []

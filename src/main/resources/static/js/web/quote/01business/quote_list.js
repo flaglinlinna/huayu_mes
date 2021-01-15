@@ -72,7 +72,7 @@ $(function() {
 						}else if(d.bsStatus=="99"){
 							return "已关闭"
 						}
-					}},
+				}},
 				{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140}, 
 				{field : 'bsRemarks',title : '报价备注',width : 170},
 				{field : 'bsProd',title : '产品型号',width : 120},

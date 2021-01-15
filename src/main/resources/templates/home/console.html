@@ -38,22 +38,23 @@
 	                        
 	                      </li>
 	                      <li class="layui-col-xs2">
-	                        <a lay-href="app/forum/list.html" class="layadmin-backlog-body">
+	                        <a lay-href="/console/toWaitlist" style="text-decoration:underline;"
+	                         class="layadmin-backlog-body">
 	                          <h3>待办任务</h3>
 	                          <p><cite id="totalNum">12</cite></p>
 	                        </a>
 	                      </li>
 	                      <li class="layui-col-xs2">
-	                        <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+	                        <span class="layadmin-backlog-body">
 	                          <h3>已完成</h3>
 	                          <p><cite id="completedNum">99</cite></p>
-	                        </a>
+	                        </span>
 	                      </li>
-	                      <li class="layui-col-xs2">
-	                        <a href="javascript:;" onclick="layer.tips('不跳转', this, {tips: 3});" class="layadmin-backlog-body">
+	                      <li class="layui-col-xs2">                   
+	                         <span  class="layadmin-backlog-body">
 	                          <h3>未完成</h3>
 	                          <p><cite id="inCompleteNum">20</cite></p>
-	                        </a>
+	                        </span>
 	                      </li>
 	                    </ul>
 
@@ -231,22 +232,28 @@
 	  parent.layui.index.openTabsPage(context+url,title);
 	}
   function del(id){
-	  CoreUtil.sendAjax("/todoInfo/close", {'Id':id,'bsUserId':'','roleId':'','bsReferId':''},
-				function(res) {
-				  layer.msg(res.msg, {
-		              time: 20000, //20s后自动关闭
-		              btn: ['知道了']
-		            });
-				  tableIns.reload({
-						url:context + '/todoInfo/getlist',
-						where:{'bsStatus':0},
-						done: function(res1, curr, count){
-							pageCurr=curr;
-						}
-						}); 
-				}, "GET", false, function(res) {
-					layer.alert(res.msg);
-				}); 
+	  
+	  layer.confirm('您确定要关闭此项待办吗？', {
+			btn : [ '确认', '返回' ]
+		// 按钮
+		}, function() {
+			  CoreUtil.sendAjax("/todoInfo/close", {'Id':id,'bsUserId':'','roleId':'','bsReferId':''},
+						function(res) {
+						  layer.msg(res.msg, {
+				              time: 20000, //20s后自动关闭
+				              btn: ['知道了']
+				            });
+						  tableIns.reload({
+								url:context + '/todoInfo/getlist',
+								where:{'bsStatus':0},
+								done: function(res1, curr, count){
+									pageCurr=curr;
+								}
+								}); 
+						}, "GET", false, function(res) {
+							layer.alert(res.msg);
+			}); 			
+		})  	
   } 
   </script>
 </body>

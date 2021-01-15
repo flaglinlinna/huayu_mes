@@ -186,7 +186,8 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 
 	@Override
 	public ApiResponseResult getStatus(Long pkQuote, Integer bsStatusPurchase) throws Exception {
-		return ApiResponseResult.success("").data(productMaterDao.countByDelFlagAndPkQuoteAndBsStatusPurchase(0,pkQuote,bsStatusPurchase));
+		Long userId = UserUtil.getSessionUser().getId();
+		return ApiResponseResult.success("").data(productMaterDao.countByPkQuoteAndBsStatusPurchase(pkQuote,bsStatusPurchase,userId));
 	}
 
 	/**
@@ -291,10 +292,10 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 
 	@Override
 	public ApiResponseResult doStatus(Long quoteId) throws Exception {
-		if(productMaterDao.countByDelFlagAndPkQuoteAndBsAssessIsNull(0,quoteId)>0){
+		if(productMaterDao.countByPkQuoteAndBsAssess(quoteId,UserUtil.getSessionUser().getId())>0){
 			return ApiResponseResult.failure("确认完成失败！请填写完所有评估价格后确认！");
 		}else {
-			List<ProductMater> productMaterList = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+			List<ProductMater> productMaterList = productMaterDao.findByPkQuoteAndUser(quoteId,UserUtil.getSessionUser().getId());
 			for(ProductMater o:productMaterList){
 				o.setBsStatusPurchase(1);
 				o.setLastupdateDate(new Date());
@@ -336,7 +337,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			return ApiResponseResult.failure("报价单ID为空!");
 		}
 		//查询未完成的价格
-		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuoteAndBsStatus(0, Long.parseLong(quoteId), 0);
+		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuoteAndBsStatusPurchase(0, Long.parseLong(quoteId), 0);
 		if(lpm.size()>0){
 			return ApiResponseResult.failure("存在未报价的物料信息，不能发起审批!");
 		}else{
