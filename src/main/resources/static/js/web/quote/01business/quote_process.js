@@ -392,7 +392,12 @@ $(function() {
 			}
 			console.log(data.field)
 			// addSubmit(procIdList,data.field.itemId);
+
 			addSubmit(procIdList, data.field.num,bsElement);
+
+			//提交后清空
+			$('#clientProcForm tbody tr td[data-field="checkColumn"] input[type="checkbox"]').prop('checked',false);
+			form.render('checkbox');
 			return false;
 
 		});
