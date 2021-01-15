@@ -145,7 +145,7 @@
                             else if (rows.length > 0) {
                                 grid.insertChild(rows, id);
                                 that.on('click', HELPER.onExpand);
-                                tr.addClass('treegrid-expanded');
+                                //tr.addClass('treegrid-expanded');
                             } else {
                                 that.replaceWith(INDENT);
                             }
@@ -169,17 +169,30 @@
                                 var selected = $(this).hasClass('selected');
                                 private_childSelect($(this), selected);
                                 var _pid = HELPER.nodePid($(this));
-                                console.log(_pid)
+
                                 if (_pid != null){
                                 	private_parentSelect(selected, _pid);
                                 }
                                     
                             });
                         }
-                        /*if(option.onCollapse){
-                        	alert('1')
-                        	HELPER.cellapsed(false, 0);
-                        }*/
+                        if(option.onCollapse){
+                        	var id = HELPER.nodeId(tr);
+	                        if (tr.next('.treegrid-parent-' + id).length > 0) {
+	                        	console.log(id)
+	                        	HELPER.cellapsed(false, id);
+	                        	//event.stopPropagation(); //阻止冒泡 rowClick
+	                        }
+                        	//console.log(tr);
+                        	//console.log(tr.hasClass('treegrid-collapse treegrid-expanded'))
+                            /*id = HELPER.nodeId(tr);
+                            
+                            if (tr.hasClass('treegrid-expanded')) {
+                                HELPER.cellapsed(false, id);
+                                event.stopPropagation(); //阻止冒泡 rowClick
+                            }*/
+                            
+                        }
 
                         if(grid.onCollapse){
                         	HELPER.cellapsed(false, pid);
@@ -235,6 +248,7 @@
                             }
                             tr.find('td:eq(0)').prepend(pindent + INDENT);
                         }
+                        
                     });
                     grid.resize();
                 }
