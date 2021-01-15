@@ -44,8 +44,25 @@ public class ItemTypeWgRoleController extends WebController{
         String method = "basePrice/itemTypeWgRole/getList";String methodName ="获取外购物料类型列表";
         try {
             System.out.println(keyword);
-            Sort sort = new Sort(Sort.Direction.DESC, "wgId");
+            Sort sort = new Sort(Sort.Direction.DESC, "pkItemTypeWg");
             ApiResponseResult result = itemTypeWgRoleService.getList(keyword, super.getPageRequest(sort));
+            logger.debug("获取外购物料类型列表=getList:");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取外购物料类型失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取外购物料类型列表失败！");
+        }
+    }
+
+    @ApiOperation(value = "获取外购物料类型列表", notes = "获取外购物料类型列表",hidden = true)
+    @RequestMapping(value = "/getListByWgId", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getListByWgId(Long wgId) {
+        String method = "basePrice/itemTypeWgRole/getListByWgId";String methodName ="获取外购物料类型列表";
+        try {
+            ApiResponseResult result = itemTypeWgRoleService.getByWgId(wgId);
             logger.debug("获取外购物料类型列表=getList:");
             return result;
         } catch (Exception e) {
@@ -59,10 +76,12 @@ public class ItemTypeWgRoleController extends WebController{
     @ApiOperation(value = "新增外购物料类型信息", notes = "新增外购物料类型信息",hidden = true)
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponseResult add(@RequestBody ItemTypeWgRole itemTypeWg) {
+    public ApiResponseResult add(@RequestBody Map<String, Object> params) {
         String method = "basePrice/itemTypeWgRole/add";String methodName ="新增外购物料类型信息";
         try{
-            ApiResponseResult result = itemTypeWgRoleService.add(itemTypeWg);
+            Long pkItemTypeWg = Long.parseLong(params.get("pkItemTypeWg").toString());
+            String roleIds = params.get("roleIds").toString();
+            ApiResponseResult result = itemTypeWgRoleService.add(pkItemTypeWg,roleIds);
             logger.debug("新增外购物料类型信息=add:");
             getSysLogService().success(module,method, methodName, null);
             return result;

@@ -184,6 +184,11 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		return ApiResponseResult.success("编辑成功！");
 	}
 
+	@Override
+	public ApiResponseResult getStatus(Long pkQuote, Integer bsStatusPurchase) throws Exception {
+		return ApiResponseResult.success("").data(productMaterDao.countByDelFlagAndPkQuoteAndBsStatusPurchase(0,pkQuote,bsStatusPurchase));
+	}
+
 	/**
 	 * 导出数据
 	 */

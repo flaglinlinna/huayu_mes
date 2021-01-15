@@ -15,6 +15,8 @@ public interface PurchaseService {
 
 	public ApiResponseResult edit(ProductMater productMater) throws Exception;
 
+	public ApiResponseResult getStatus(Long pkQuote,Integer bsStatusPurchase) throws Exception;
+
 	public void exportExcel(HttpServletResponse response, Long quoteId) throws Exception;
 
 	public ApiResponseResult doExcel(MultipartFile[] file, Long quoteId) throws Exception;

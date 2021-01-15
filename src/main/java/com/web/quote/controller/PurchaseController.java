@@ -55,6 +55,8 @@ public class PurchaseController extends WebController {
 	public ModelAndView toPurchaseEdite(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			ApiResponseResult iStatus =purchaseService.getStatus(Long.parseLong(quoteId),1);
+			mav.addObject("nowStatus", iStatus);
 			mav.addObject("quoteId", quoteId);
 			mav.setViewName("/web/quote/03purchase/purchase_edite");// 返回路径
 		} catch (Exception e) {

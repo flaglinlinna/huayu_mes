@@ -25,6 +25,8 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 
 	Integer countByDelFlagAndPkQuoteAndBsAssessIsNull(Integer delFlag,Long pkQuote);
 
+	Integer countByDelFlagAndPkQuoteAndBsStatusPurchase(Integer delFlag ,Long pkQuote,Integer bsStatusPurchase);
+
 	public List<ProductMater> findByDelFlagAndPkQuoteAndBsType(Integer delFlag,Long pkQuote,String bsType);
 	
 	@Query(value = "select map from ProductMater map  where map.delFlag=0 and map.pkQuote=?1 and ( map.bsType='hardware' or  map.bsType='surface' or map.bsType='packag') ")

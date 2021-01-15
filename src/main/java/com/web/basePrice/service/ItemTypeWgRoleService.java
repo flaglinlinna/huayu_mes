@@ -9,7 +9,11 @@ public interface ItemTypeWgRoleService {
 
   public ApiResponseResult add(ItemTypeWgRole itemTypeWgRole) throws Exception;
 
+  public ApiResponseResult add(Long pkItemTypeWg,String roleIds) throws Exception;
+
   public ApiResponseResult edit(ItemTypeWgRole itemTypeWgRole) throws Exception;
+
+  public ApiResponseResult getByWgId(Long wgId) throws Exception;
 
   public ApiResponseResult delete(Long id) throws Exception;
 

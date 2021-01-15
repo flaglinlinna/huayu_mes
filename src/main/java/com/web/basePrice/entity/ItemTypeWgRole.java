@@ -25,7 +25,7 @@ public class ItemTypeWgRole extends BaseEntity {
 	    /**
 	     * 角色id
 	     */
-	    @ApiModelProperty(name = "roleId", value = "角色id")
+	    @ApiModelProperty(name = "pkSysRole", value = "角色id")
 	    @Column(length = 50)
 	    protected Long pkSysRole;
 
@@ -38,7 +38,7 @@ public class ItemTypeWgRole extends BaseEntity {
 		/**
 		 * wgId
 		 */
-		@ApiModelProperty(name = "wgId", value = "外购物料类型ID")
+		@ApiModelProperty(name = "pkItemTypeWg", value = "外购物料类型ID")
 		@Column(length = 50)
 		protected Long pkItemTypeWg;
 
@@ -64,7 +64,7 @@ public class ItemTypeWgRole extends BaseEntity {
 			this.pkItemTypeWg = pkItemTypeWg;
 		}
 
-	public SysRole getSysRole() {
+		public SysRole getSysRole() {
 			return sysRole;
 		}
 

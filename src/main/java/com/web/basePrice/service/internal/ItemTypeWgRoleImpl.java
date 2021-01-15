@@ -48,6 +48,34 @@ public class ItemTypeWgRoleImpl extends  BasePriceUtils implements ItemTypeWgRol
 	}
 
 	/**
+	 * 新增外购物料类型
+	 */
+	@Override
+	@Transactional
+	public ApiResponseResult add(Long pkItemTypeWg, String roleIds) throws Exception {
+		if (pkItemTypeWg == null) {
+			return ApiResponseResult.failure("外购物料类型不能为空！");
+		}
+		Date addTime = new Date();
+		if(StringUtils.isNotEmpty(roleIds)){
+			//先删除,后新增
+			itemTypeWgRoleDao.deleteItemTypeWgRoleByPkItemTypeWg(pkItemTypeWg);
+			List<ItemTypeWgRole> itemTypeWgRoleList = new ArrayList<>();
+			String[] role_id = roleIds.split(",");
+			for(String roleId :role_id){
+				ItemTypeWgRole itemTypeWgRole = new ItemTypeWgRole();
+				itemTypeWgRole.setPkItemTypeWg(pkItemTypeWg);
+				itemTypeWgRole.setPkSysRole(Long.parseLong(roleId));
+				itemTypeWgRole.setCreateBy(UserUtil.getSessionUser().getId());
+				itemTypeWgRole.setCreateDate(addTime);
+				itemTypeWgRoleList.add(itemTypeWgRole);
+			}
+			itemTypeWgRoleDao.saveAll(itemTypeWgRoleList);
+		}
+		return ApiResponseResult.success("添加成功！");
+	}
+
+	/**
 	 * 修改外购物料类型
 	 */
 	@Override
@@ -72,6 +100,10 @@ public class ItemTypeWgRoleImpl extends  BasePriceUtils implements ItemTypeWgRol
 	}
 
 
+	@Override
+	public ApiResponseResult getByWgId(Long wgId) throws Exception {
+		return ApiResponseResult.success().data(itemTypeWgRoleDao.findByDelFlagAndPkItemTypeWg(0,wgId));
+	}
 
 	/**
 	 * 删除客户品质标准信息
@@ -105,8 +137,8 @@ public class ItemTypeWgRoleImpl extends  BasePriceUtils implements ItemTypeWgRol
 		// 查询2
 		List<SearchFilter> filters1 = new ArrayList<>();
 		if (StringUtils.isNotEmpty(keyword)) {
-//			filters1.add(new SearchFilter("itemType", SearchFilter.Operator.LIKE, keyword));
-//			filters1.add(new SearchFilter("fmemo", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("itemTypeWg.itemType", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("sysRole.roleName", SearchFilter.Operator.LIKE, keyword));
 		}
 		Specification<ItemTypeWgRole> spec = Specification.where(BaseService.and(filters, ItemTypeWgRole.class));
 		Specification<ItemTypeWgRole> spec1 = spec.and(BaseService.or(filters1, ItemTypeWgRole.class));
@@ -117,8 +149,10 @@ public class ItemTypeWgRoleImpl extends  BasePriceUtils implements ItemTypeWgRol
 		for (ItemTypeWgRole itemTypeWg : customQsList) {
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", itemTypeWg.getId());
-//			map.put("itemType", itemTypeWg.getItemType());
-			map.put("fmemo", itemTypeWg.getFmemo());
+			map.put("itemType", itemTypeWg.getItemTypeWg().getItemType());
+			map.put("pkItemTypeWg",itemTypeWg.getPkItemTypeWg());
+			map.put("roleName",itemTypeWg.getSysRole().getRoleName());
+//			map.put("fmemo", itemTypeWg.getFmemo());
 			map.put("createBy", sysUserDao.findById((long) itemTypeWg.getCreateBy()).getUserName());
 			map.put("createDate", df.format(itemTypeWg.getCreateDate()));
 			if (itemTypeWg.getLastupdateBy() != null) {

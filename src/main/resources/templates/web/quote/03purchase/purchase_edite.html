@@ -83,6 +83,8 @@ height: 30px;
 
         <script th:inline="javascript">
             var quoteId=[[${quoteId}]];
+			var nowStatus=[[${nowStatus}]];
+			var iStatus=nowStatus.data[0].BS_STATUS
         </script>
 
     <script th:src="@{/js/web/quote/03purchase/purchase_edite.js}" src="/js/web/quote/03purchase/purchase_edite.js"></script>

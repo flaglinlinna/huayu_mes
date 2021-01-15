@@ -34,26 +34,20 @@ $(function() {
 			},  {
 				field : 'itemType',
 				title : '物料类型',
-				width : 200
+                align : 'center',
 			},  {
-				field : 'fmemo',
-				title : '备注',
+				field : 'roleName',
+				title : '角色',
+				// width : 200,
+                align : 'center',
 			}, {
 				field : 'createBy',
 				title : '创建人',
-				width : 80
+				width : 200
 			}, {
 				field : 'createDate',
 				title : '创建时间',
-				width : 150
-			}, {
-				field : 'lastupdateBy',
-				title : '更新人',
-				width : 80
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间',
-				width : 150
+				width : 200
 			}, {
 				fixed : 'right',
 				title : '操作',
@@ -63,6 +57,7 @@ $(function() {
 			} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
+				merge(res.data, [ 'itemType', ], [ 1, 1 ]);
 			}
 		});
 
@@ -74,6 +69,7 @@ $(function() {
 			,height:'full-160'//固定表头&full-查询框高度
 			,even:true//条纹样式
 			,page: true,
+            limit:20,
 			request: {
 				pageName: 'page' //页码的参数名称，默认：page
 				,limitName: 'rows' //每页数据量的参数名，默认：limit
@@ -87,27 +83,13 @@ $(function() {
 					"code": res.status //code值为200表示成功
 				}
 			},
-			// response:{
-			//     statusName: 'status' //数据状态的字段名称，默认：code
-			//     ,statusCode: 200 //成功的状态码，默认：0
-			//     ,countName: 'count' //数据总数的字段名称，默认：count
-			//     ,dataName: 'data' //数据列表的字段名称，默认：data
-			// },
 			cols: [[
-				{type:'checkbox'}
-				// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
+				{field : 'checkColumn',type:'checkbox'}
 				,{field:'roleCode', title:'编号',align:'center', width:120,sort:true}
 				,{field:'roleName', title:'名称',align:'center', width:140,sort:true}
-				,{field:'description', title: '描述',align:'center', width:200,sort:true}
+				,{field:'description', title: '描述',align:'center', width:240,sort:true}
 			]]
 			,done: function(res, curr, count){
-				//如果是异步请求数据方式，res即为你接口返回的信息。
-				//如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-				//console.log(res);
-				//得到当前页码
-				//console.log(curr);
-				//得到数据总量
-				//console.log(count);
 				pageCurr=curr;
 			}
 		});
@@ -158,7 +140,8 @@ $(function() {
 					// elem:返回之前input对象；data:表格返回的选中的数据 []
 					var da = data.data;
 					form.val("itemForm", {
-						"itemType" : da[0].itemType
+						"itemType" : da[0].itemType,
+						"itemTypeId":da[0].id
 					});
 					form.render();// 重新渲染
 					//刷新角色table
@@ -178,13 +161,17 @@ $(function() {
 			}
 		});
 		// 监听提交
-		form.on('submit(addSubmit)', function(data) {
-			if (data.field.id == null || data.field.id == "") {
-				// 新增
-				addSubmit(data);
-			} else {
-				editSubmit(data);
-			}
+		form.on('submit(addSubmit)', function() {
+			var ids = "";
+			var itemTypeId = $('#itemTypeId').val();
+            var checkStatus = table.cache.roleList;
+            $('#itemForm tbody tr td[data-field="checkColumn"] input[type="checkbox"]').each(function(i){
+                if ($(this).is(":checked")) {
+                    ids += checkStatus[i].id +",";
+                }
+            });
+
+			addSubmit(itemTypeId,ids);
 			return false;
 		});
 		// 监听搜索框
@@ -198,10 +185,10 @@ $(function() {
 			
 			form.val("itemForm", {
 				"id" : obj.id,
-				"fmemo" : obj.fmemo,
+				"itemTypeId" : obj.pkItemTypeWg,
 				"itemType" : obj.itemType
 			});
-
+			getRoleListByType(obj.pkItemTypeWg);
 			openData(obj.id, "外购物料类型")
 		}
 
@@ -211,13 +198,30 @@ $(function() {
 });
 
 function getRoleListByType(id) {
-	tableIns1.reload({
-		url:context+'/sysRole/getList',
-		// where:param,
-		done: function(res1, curr, count){
-			pageCurr1=curr;
-		}
-	})
+	CoreUtil.sendAjax("/basePrice/itemTypeWgRole/getListByWgId?wgId="+id, "",
+		function(data) {
+			if (data.result) {
+				tableIns1.reload({
+					done : function(res, curr, count) {
+						for(var q=0;q<res.data.length;q++){
+							for(var j =0;j<data.data.length;j++){
+								if(data.data[j].pkSysRole == res.data[q].id){
+									$('tbody tr[data-index="'+q+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+									$('tbody tr[data-index="'+q+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+								}
+							}
+						}
+					}
+				})
+			} else {
+				layer.alert(data.msg, function() {
+					layer.closeAll();
+				});
+			}
+		}, "GET", false, function(res) {
+			layer.alert(res.msg);
+		});
+
 }
 
 // 新增编辑弹出框
@@ -248,24 +252,28 @@ function add() {
 }
 
 // 新增价格维护的提交
-function addSubmit(obj) {
-	CoreUtil.sendAjax("/basePrice/itemTypeWg/add", JSON.stringify(obj.field),
-			function(data) {
-				if (data.result) {
-					layer.alert("操作成功", function() {
-						layer.closeAll();
-						cleanData();
-						// 加载页面
-						loadAll();
-					});
-				} else {
-					layer.alert(data.msg, function() {
-						layer.closeAll();
-					});
-				}
-			}, "POST", false, function(res) {
-				layer.alert(res.msg);
+function addSubmit(pkItemTypeWg,roleIds) {
+	var params = {
+		"pkItemTypeWg":pkItemTypeWg,
+		"roleIds" : roleIds
+	};
+	CoreUtil.sendAjax("/basePrice/itemTypeWgRole/add", JSON.stringify(params), function(
+		data) {
+		if (data.result) {
+			layer.alert("操作成功", function() {
+				layer.closeAll();
+				// cleanProc();
+				// 加载页面
+				loadAll();
 			});
+		} else {
+			layer.alert(data.msg, function() {
+				layer.closeAll();
+			});
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
 
@@ -345,6 +353,35 @@ function loadAll() {
 		// 从当前页码开始
 		}
 	});
+}
+
+function merge(res, columsName, columsIndex) {
+	var data = res;
+	var mergeIndex = 0;// 定位需要添加合并属性的行数
+	var mark = 1; // 这里涉及到简单的运算，mark是计算每次需要合并的格子数
+	// var columsName = ['itemCode'];//需要合并的列名称
+	// var columsIndex = [3];//需要合并的列索引值
+	for (var k = 0; k < columsIndex.length; k++) { // 这里循环所有要合并的列
+		var trArr = $(".layui-table-body>.layui-table").find("tr");// 所有行
+		for (var i = 1; i < data.length; i++) { // 这里循环表格当前的数据
+			var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);// 获取当前行的当前列
+			var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]);// 获取相同列的第一列
+			if (data[i][columsName[0]] === data[i - 1][columsName[0]]) { // 后一行的值与前一行的值做比较，相同就需要合并
+				mark += 1;
+				tdPreArr.each(function() {// 相同列的第一列增加rowspan属性
+					$(this).attr("rowspan", mark);
+				});
+				tdCurArr.each(function() {// 当前行隐藏
+					$(this).css("display", "none");
+				});
+			} else {
+				mergeIndex = i;
+				mark = 1;// 一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+			}
+		}
+		mergeIndex = 0;
+		mark = 1;
+	}
 }
 
 // 清空新增表单数据
