@@ -29,7 +29,10 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
      * **/
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword,String style,String status,PageRequest pageRequest)throws Exception{
+    public ApiResponseResult getList(String keyword,String style,String status,String bsCode,String bsType,String bsStatus,
+									 String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
+									 String bsPosition ,String bsCustRequire,String bsLevel,String bsRequire,
+									 String bsDevType,String bsCustName,String quoteId,PageRequest pageRequest)throws Exception{
     	String temp = "";
     	String statusTemp ="";
     	if(StringUtils.isNotEmpty(style)){
@@ -59,21 +62,58 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 				"  p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
 				"  p.bs_Cust_Require from "+Quote.TABLE_NAME+" p "
 						+ "  where p.del_flag=0 and p.bs_step=2 "+statusTemp;
-		if (StringUtils.isNotEmpty(keyword)) {
-			/*sql += "  and INSTR((p.line_No || p.line_Name || p.liner_Code || p.liner_Name ),  '"
-					+ keyword + "') > 0 ";*/
+
+		if(StringUtils.isNotEmpty(quoteId)){
+			sql += "and p.id = " + quoteId + "";
 		}
-		/*if(StringUtils.isNotEmpty(style)){
-			if(style.equals("hardware")){
-				sql += "  and i.bs_code in ('B001','C001') ";
-			}else if(style.equals("molding")){
-				sql += "  and i.bs_code in ('B002','C002') ";
-			}else if(style.equals("surface")){
-				sql += "  and i.bs_code in ('B003','C003') ";
-			}else if(style.equals("packag")){
-				sql += "  and i.bs_code in ('B004','C004') ";
-			}
-		}*/
+
+//		if(!StringUtils.isEmpty(status)){
+//			sql += "  and p.bs_Status = " + status + "";
+//		}
+		if(StringUtils.isNotEmpty(bsType)){
+			sql += "  and p.bs_Type like '%" + bsType + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsCode)){
+			sql += "  and p.bs_Code like '%" + bsCode + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsFinishTime)){
+			String[] dates = bsFinishTime.split(" - ");
+			sql += " and to_date(p.bs_Finish_Time,'yyyy-MM-dd') >= to_date('"+dates[0]+"','yyyy-MM-dd')";
+			sql += " and to_date(p.bs_Finish_Time,'yyyy-MM-dd') <= to_date('"+dates[1]+"','yyyy-MM-dd')";
+		}
+		if(StringUtils.isNotEmpty(bsRemarks)){
+			sql += "  and p.bs_Remarks like '%" + bsRemarks + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsProd)){
+			sql += "  and p.bs_Prod like '%" + bsProd + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsSimilarProd)){
+			sql += "  and p.bs_Similar_Prod like '%" + bsSimilarProd + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsPosition)){
+			sql += "  and p.bs_position like '%" + bsPosition + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsCustRequire)){
+			sql += "  and p.bs_Cust_Require like '%" + bsCustRequire + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsLevel)){
+			sql += "  and p.bs_Level like '" + bsLevel + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsRequire)){
+			sql += "  and p.bs_Require like '%" + bsRequire + "%'";
+		}
+		if(StringUtils.isNoneEmpty(bsDevType)){
+			sql += "  and p.bs_Dev_Type like '%" + bsDevType + "%'";
+		}
+		if(StringUtils.isNotEmpty(bsCustName)){
+			sql += "  and p.bs_Cust_Name like '%" + bsCustName + "%'";
+		}
+		if (StringUtils.isNotEmpty(keyword)) {
+			sql += "  and INSTR((p.bs_Code || p.bs_Prod ||p.bs_Similar_Prod ||p.bs_Remarks ||p.bs_Cust_Name" +
+					"||p.bs_Dev_Type ||p.bs_Cust_Require || p.bs_position || p.bs_Require ||p.bs_Level ||p.bs_Dev_Type), '"
+					+ keyword + "') > 0 ";
+		}
+
 		sql += "  order by p.bs_code desc";
 		int pn = pageRequest.getPageNumber() + 1;
 		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("

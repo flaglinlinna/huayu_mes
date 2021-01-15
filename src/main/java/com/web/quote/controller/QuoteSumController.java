@@ -27,7 +27,7 @@ public class QuoteSumController extends WebController {
 
 	@Autowired
 	private QuoteSumService quoteSumService;
-	
+
 	@ApiOperation(value = "报价单汇总页", notes = "报价单汇总页", hidden = true)
 	@RequestMapping(value = "/toQuoteSumList")
 	public ModelAndView toQuoteSumList() {
@@ -56,7 +56,7 @@ public class QuoteSumController extends WebController {
 		}
 		return mav;
 	}
-	
+
 	@ApiOperation(value = "报价BOM树形", notes = "报价BOM树形", hidden = true)
 	@RequestMapping(value = "/toQuoteBom")
 	public ModelAndView toQuoteBom(String quoteId) {
@@ -72,16 +72,20 @@ public class QuoteSumController extends WebController {
 		}
 		return mav;
 	}
-	
+
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getList(String keyword,String bsStatus) {
+	public ApiResponseResult getList(String quoteId,String keyword,String bsStatus,String bsCode,String bsType,
+									 String bsFinishTime,String bsRemarks,String bsProd,String bsProdType,String bsSimilarProd,
+									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
+									 String bsDevType,String bsCustName) {
 		String method = "/quoteSum/getList";
 		String methodName = "获取报价单列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = quoteSumService.getList(keyword,bsStatus, super.getPageRequest(sort));
+			ApiResponseResult result = quoteSumService.getList(quoteId,keyword, bsStatus,bsCode,bsType,bsFinishTime,bsRemarks,
+					bsProd,bsProdType,bsSimilarProd,bsPosition,bsCustRequire,bsLevel,bsRequire,bsDevType,bsCustName,super.getPageRequest(sort));
 			logger.debug(methodName+"=getList:");
 			return result;
 		} catch (Exception e) {

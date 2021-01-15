@@ -8,16 +8,19 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 
 public interface QuoteSumService {
-	
-	public ApiResponseResult getList(String keyword,String bsStatus,PageRequest pageRequest) throws Exception;
+
+	public ApiResponseResult getList(String quoteId,String keyword,String bsStatus,String bsCode,String bsType,
+									 String bsFinishTime,String bsRemarks,String bsProd,String bsProdType,String bsSimilarProd,
+									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
+									 String bsDevType,String bsCustName,PageRequest pageRequest) throws Exception;
 
 	public ApiResponseResult getQuoteList(String keyword,String quoteId,PageRequest pageRequest) throws Exception;
-	
+
 	public ApiResponseResult getSumByQuote(String quoteId)throws Exception;
-	
+
 	public ApiResponseResult countMeterAndProcess(String quoteId)throws Exception;
 
 	public ApiResponseResult updateProfitNet(long quoteId, BigDecimal profitNet)throws Exception;
-	
+
 	public ApiResponseResult getQuoteBomByQuote(String quoteId)throws Exception;//计算总费用
 }

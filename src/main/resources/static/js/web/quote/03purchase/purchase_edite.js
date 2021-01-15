@@ -25,47 +25,47 @@ $(function() {
 					"code" : res.status// code值为200表示成功
 				}
 			},
-			cols : 
-			[ [{type : 'numbers',style : 'background-color:#d2d2d2'
-			}, {field : 'id',title : 'ID',hide : true
-			}, {field : 'bsType',width : 100,title : '类型',sort : true,style : 'background-color:#d2d2d2',
-				templet : function(d) {
-					if (d.bsType == 'hardware') {// * 五金:hardware
-						return '五金'
-					} else if (d.bsType == 'molding') {// * 注塑:molding
-						return '注塑'
-					} else if (d.bsType == 'surface') {// * 表面处理:surface
-						return '表面处理'
-					} else if (d.bsType == 'packag') {// * 组装:packag
-						return '组装'
-					} else if (d.bsType == 'out') {
-						return '外协'
+			cols :
+				[ [{type : 'numbers',style : 'background-color:#d2d2d2'
+				}, {field : 'id',title : 'ID',hide : true
+				}, {field : 'bsType',width : 100,title : '类型',sort : true,style : 'background-color:#d2d2d2',
+					templet : function(d) {
+						if (d.bsType == 'hardware') {// * 五金:hardware
+							return '五金'
+						} else if (d.bsType == 'molding') {// * 注塑:molding
+							return '注塑'
+						} else if (d.bsType == 'surface') {// * 表面处理:surface
+							return '表面处理'
+						} else if (d.bsType == 'packag') {// * 组装:packag
+							return '组装'
+						} else if (d.bsType == 'out') {
+							return '外协'
+						}
 					}
-				}
-			}, {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'
-			}, {field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'
-			}, {field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'
-			}, {field : 'bsQty',width : 80,title : '用量',style : 'background-color:#d2d2d2'
-			}, {field : 'bsGear',width : 120,title : '价格挡位',templet : '#selectGear',style : 'background-color:#ffffff'
-			},
-			   {field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'
-		    }, {field : 'bsProQty',width : 100,title : '制品重',style : 'background-color:#d2d2d2'
-			}, {field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'
-			},// (表面处理)
-			   {field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'
-			},// (表面处理)
-			   {field : 'bsWaterGap',title : '水口量',width : 100,style : 'background-color:#d2d2d2'
-			}, // (注塑)
-			   {field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'
-			}, // (注塑)
-			   {field : 'bsUnit',width : 80,title : '单位',style : 'background-color:#d2d2d2'
-			}, {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'
-			}, {field : 'bsGeneral',width : 120,title : '是否通用物料',style : 'background-color:#d2d2d2'
-			}, {field : 'bsAssess',width : 110,title : '评估价格<span style="color:red;font-size:12px;">*</span>',edit : 'number'
-			}, {field : 'bsExplain',width : 110,title : '采购说明',style : 'background-color:#d2d2d2'
-			}, {field : 'fmemo',width : 110,title : '备注',edit : 'text'
-			}, {field : 'bsSupplier',width : 110,title : '供应商',edit : 'text'
-			} ] ],
+				}, {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'
+				}, {field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'
+				}, {field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'
+				}, {field : 'bsQty',width : 80,title : '用量',style : 'background-color:#d2d2d2'
+				}, {field : 'bsGear',width : 120,title : '价格挡位',templet : '#selectGear',style : 'background-color:#ffffff'
+				},
+					{field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'
+					}, {field : 'bsProQty',width : 100,title : '制品重',style : 'background-color:#d2d2d2'
+					}, {field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'
+					},// (表面处理)
+					{field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'
+					},// (表面处理)
+					{field : 'bsWaterGap',title : '水口量',width : 100,style : 'background-color:#d2d2d2'
+					}, // (注塑)
+					{field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'
+					}, // (注塑)
+					{field : 'bsUnit',width : 80,title : '单位',style : 'background-color:#d2d2d2'
+					}, {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'
+					}, {field : 'bsGeneral',width : 120,title : '是否通用物料',style : 'background-color:#d2d2d2'
+					}, {field : 'bsAssess',width : 110,title : '评估价格<span style="color:red;font-size:12px;">*</span>',edit : 'number'
+					}, {field : 'bsExplain',width : 110,title : '采购说明',style : 'background-color:#d2d2d2'
+					}, {field : 'fmemo',width : 110,title : '备注',edit : 'text'
+					}, {field : 'bsSupplier',width : 110,title : '供应商',edit : 'text'
+					} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 
@@ -94,28 +94,28 @@ $(function() {
 					"code" : res.status
 				}
 			},
-			cols : 
-			[ [ {type : 'numbers',style : 'background-color:#d2d2d2'
-			}, {field : 'checkStatus',width : 100,title : '状态',sort : true,style : 'background-color:#d2d2d2',templet : '#checkStatus'
-			}, {field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'
-			}, {field : 'bsType',width : 100,title : '类型',sort : true,style : 'background-color:#d2d2d2'
-			}, {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'
-			}, {field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'
-			}, {field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'
-			}, {field : 'bsQty',width : 80,title : '用量',style : 'background-color:#d2d2d2'
-			}, {field : 'bsUnit',width : 80,title : '单位',style : 'background-color:#d2d2d2'
-			}, {field : 'bsRadix',width : 80,title : '基数',style : 'background-color:#d2d2d2'
-			}, {field : 'bsGeneral',width : 120,title : '是否通用物料',style : 'background-color:#d2d2d2'
-			}, {field : 'bsGear',width : 80,title : '价格挡位',edit : 'text',templet : '#selectGear'
-			}, {field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'
-			}, {field : 'bsAssess',width : 110,title : '评估价格',edit : 'number'
-			}, {field : 'bsExplain',width : 110,title : '采购说明'
-			}, {field : 'fmemo',width : 110,title : '备注',edit : 'text'
-			}, {field : 'bsSupplier',width : 110,title : '供应商',edit : 'text'
-			},
-			// {fixed : 'right', title : '操作', align : 'center',width:120,
-			// toolbar : '#optBar'}
-			] ],
+			cols :
+				[ [ {type : 'numbers',style : 'background-color:#d2d2d2'
+				}, {field : 'checkStatus',width : 100,title : '状态',sort : true,style : 'background-color:#d2d2d2',templet : '#checkStatus'
+				}, {field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'
+				}, {field : 'bsType',width : 100,title : '类型',sort : true,style : 'background-color:#d2d2d2'
+				}, {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'
+				}, {field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'
+				}, {field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'
+				}, {field : 'bsQty',width : 80,title : '用量',style : 'background-color:#d2d2d2'
+				}, {field : 'bsUnit',width : 80,title : '单位',style : 'background-color:#d2d2d2'
+				}, {field : 'bsRadix',width : 80,title : '基数',style : 'background-color:#d2d2d2'
+				}, {field : 'bsGeneral',width : 120,title : '是否通用物料',style : 'background-color:#d2d2d2'
+				}, {field : 'bsGear',width : 80,title : '价格挡位',edit : 'text',templet : '#selectGear'
+				}, {field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'
+				}, {field : 'bsAssess',width : 110,title : '评估价格',edit : 'number'
+				}, {field : 'bsExplain',width : 110,title : '采购说明'
+				}, {field : 'fmemo',width : 110,title : '备注',edit : 'text'
+				}, {field : 'bsSupplier',width : 110,title : '供应商',edit : 'text'
+				},
+					// {fixed : 'right', title : '操作', align : 'center',width:120,
+					// toolbar : '#optBar'}
+				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 			}
@@ -300,8 +300,8 @@ function confirm() {
 			if (data.result) {
 				layer.alert("确认完成成功", function() {
 					layer.closeAll();
-					isComplete();
-					// cleanProdErr();
+					$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
+					$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
 					// 加载页面
 					loadAll();
 				});
@@ -387,7 +387,7 @@ function delProdErr(obj, id, name) {
 		};
 		layer.confirm('您确定要删除材料：' + name + '吗？', {
 			btn : [ '确认', '返回' ]
-		// 按钮
+			// 按钮
 		}, function() {
 			CoreUtil.sendAjax("/productMater/delete", JSON.stringify(param), function(data) {
 				if (isLogin(data)) {
@@ -418,7 +418,7 @@ function load(obj) {
 		},
 		page : {
 			curr : pageCurr
-		// 从当前页码开始
+			// 从当前页码开始
 		}
 	});
 }
@@ -429,7 +429,7 @@ function loadAll() {
 	tableIns.reload({
 		page : {
 			curr : pageCurr
-		// 从当前页码开始
+			// 从当前页码开始
 		}
 	});
 }
@@ -439,7 +439,7 @@ function loadAll2() {
 	tableIns2.reload({
 		page : {
 			curr : pageCurr
-		// 从当前页码开始
+			// 从当前页码开始
 		}
 	});
 }

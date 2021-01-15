@@ -169,7 +169,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
      * **/
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword,String status,String bsCode,String bsType,String bsStatus,
+    public ApiResponseResult getList(String quoteId,String keyword,String status,String bsCode,String bsType,String bsStatus,
                                      String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
                                      String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
                                      String bsDevType,String bsCustName,PageRequest pageRequest)throws Exception{
@@ -179,6 +179,10 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
                 "p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
                 "p.bs_Cust_Require,i.bs_status bs_status_check  from "+Quote.TABLE_NAME+" p  left join (select t.pk_quote,min(t.bs_status)bs_status from "+QuoteItem.TABLE_NAME+" t where  t.bs_style='item' group by t.pk_quote) i on i.pk_quote=p.id"
                 + "  where p.del_flag=0";
+
+        if(StringUtils.isNotEmpty(quoteId)){
+            sql += "and p.id = " + quoteId + "";
+        }
 
         if(!StringUtils.isEmpty(status)){
             sql += "  and p.bs_Status = " + status + "";
