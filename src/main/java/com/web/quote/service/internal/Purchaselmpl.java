@@ -24,10 +24,12 @@ import com.alibaba.fastjson.JSON;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.system.user.entity.SysUser;
+import com.system.user.entity.UserRoleMap;
 import com.utils.BaseSql;
 import com.utils.ExcelExport;
 import com.utils.UserUtil;
 import com.web.basePrice.dao.PriceCommDao;
+import com.web.basePrice.entity.ItemTypeWgRole;
 import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.entity.ProductMater;
@@ -125,7 +127,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		SysUser user = UserUtil.getSessionUser();
 		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(user.getId());
 		if(lmp.size()>0){
-			hql += "and wr.pk_sys_role in (select ur.role_id from sys_user_role ur where ur.del_flag=0 and ur.user_id="+user.getId()+"))";
+			hql += " and p.pk_item_type_wg in (select wr.pk_item_type_wg from "+ItemTypeWgRole.TABLE_NAME+" wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from "+UserRoleMap.TABLE_NAME+" ur where ur.del_flag=0 and ur.user_id="+user.getId()+")) ";
 		}
 		
 		int pn = pageRequest.getPageNumber() + 1;
@@ -319,5 +321,21 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		o.setLastupdateDate(new Date());
 		productMaterDao.save(o);
 		return ApiResponseResult.success("操作成功!");
+	}
+
+
+	@Override
+	public ApiResponseResult doCheckBefore(String keyword, String quoteId) throws Exception {
+		// TODO Auto-generated method stub
+		if(StringUtils.isEmpty(quoteId)){
+			return ApiResponseResult.failure("报价单ID为空!");
+		}
+		//查询未完成的价格
+		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuoteAndBsStatus(0, Long.parseLong(quoteId), 0);
+		if(lpm.size()>0){
+			return ApiResponseResult.failure("存在未报价的物料信息，不能发起审批!");
+		}else{
+			return ApiResponseResult.success();
+		}
 	}
 }

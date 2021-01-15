@@ -24,4 +24,7 @@ public interface PurchaseService {
 	public ApiResponseResult doSumHouLoss(Long quoteId) throws Exception;//计算后工序损耗
 	
 	public ApiResponseResult doGear(String id,String gear,String price) throws Exception;//添加价格档位
+	
+	public ApiResponseResult doCheckBefore(String keyword,String quoteId) throws Exception;//采购部发起审批前校验
+	
 }
