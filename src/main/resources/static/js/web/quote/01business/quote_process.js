@@ -29,21 +29,23 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {type : 'numbers'}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {field : 'bsName',title : '零件名称',style : 'background-color:#d2d2d2'
-			}, {field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'
-			}, {field : 'procName',title : '工序名称',templet : '<div>{{d.proc.procName}}</div>',style : 'background-color:#d2d2d2'
-			}, {field : 'workCenter',title : '工作中心',templet : '<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style : 'background-color:#d2d2d2'
-			}, {field : 'bsOrder',title : '工序顺序',"edit" : "number","event" : "dataCol",width : 80
-			}, {field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,templet : function(d) {
+			cols : [ [ {type : 'numbers'},
+			// {field:'id', title:'ID', width:80, unresize:true, sort:true},
+			{field : 'bsName',title : '零件名称',style : 'background-color:#d2d2d2'},
+			{field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'procName',title : '工序名称',templet : '<div>{{d.proc.procName}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'workCenter',title : '工作中心',templet : '<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'bsOrder',title : '工序顺序',"edit" : "number","event" : "dataCol",width : 80},
+			{field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,style : 'background-color:#d2d2d2',align : 'center',
+				templet : function(d) {
 					if (d.bsFeeLh == null || d.bsFeeLh == '') {return "<div class='orange'>否</div>"} 
 					else {return "<div class='green'>是</div>"}
-				},style : 'background-color:#d2d2d2',align : 'center',
-			}, {field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",templet : function(d) {
+			}}, 
+			{field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",
+				templet : function(d) {
 					if (d.fmemo == null) {return ""} else {return d.fmemo}
-				},
-			}, {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar'
+			}}, 
+			{fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar'
 			} ] ],
 			done : function(res, curr, count) {
 				// console.log(res)
@@ -105,7 +107,7 @@ $(function() {
 			{field : 'procName',title : '工序名称', minWidth: 120}, 
 			{field : 'workcenterName',title : '工作中心', minWidth: 100,templet:'<div>{{d.bjWorkCenter.workcenterName}}</div>'},
 			{type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#clickBar'
-	            }] ],
+	        }] ],
 			data:[]
 		});	
 		
@@ -116,12 +118,12 @@ $(function() {
 			cols : 
 				[ [ {type : 'numbers'}, 
 				    {field : 'checkColumn',type:"checkbox"},
-			         {field : 'bsName',title : '零件名称',style:'background-color:#d2d2d2'},
-			         {field : 'procNo',title : '工序编码',templet:'<div>{{d.proc.procNo}}</div>',style:'background-color:#d2d2d2'},
-			         {field : 'procName',title : '工序名称',templet:'<div>{{d.proc.procName}}</div>',style:'background-color:#d2d2d2'},
-			         {field : 'workCenter',title : '工作中心',templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style:'background-color:#d2d2d2'}, 
-			         {field : 'bsOrder',title : '工序顺序',"edit":"number","event": "dataCol",width:80},
-			         {type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#optBar'}
+			        {field : 'bsName',title : '零件名称',style:'background-color:#d2d2d2'},
+			        {field : 'procNo',title : '工序编码',templet:'<div>{{d.proc.procNo}}</div>',style:'background-color:#d2d2d2'},
+			        {field : 'procName',title : '工序名称',templet:'<div>{{d.proc.procName}}</div>',style:'background-color:#d2d2d2'},
+			        {field : 'workCenter',title : '工作中心',templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style:'background-color:#d2d2d2'}, 
+			        {field : 'bsOrder',title : '工序顺序',"edit":"number","event": "dataCol",width:80},
+			        {type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#optBar'}
 			] ],
 			data:[]
 		});	

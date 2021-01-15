@@ -30,22 +30,23 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {type : 'numbers'
-			}, {field : 'bsComponent',title : '零件名称',sort : true,style : 'background-color:#d2d2d2'
-			}, {field : 'bsMachiningType',title : '加工类型',width : 100,hide : true,edit : 'text' // (表面处理)
-			},{field : 'bsColor',title : '配色工艺',width : 100,hide : true,edit : 'text' // (表面处理)
-			},{field : 'bsMaterName',title : '材料名称',sort : true,style : 'background-color:#d2d2d2'
-			}, {field : 'bsModel',title : '规格',style : 'background-color:#d2d2d2'
-			}, {field : 'bsQty',width : 100,title : '用量',hide : true,edit : 'text'
-			}, {field : 'bsProQty',width : 100,title : '制品重',hide : true,edit : 'text'
-			}, {field : 'bsUnit',width : 80,title : '单位',edit : 'text'
-			}, {field : 'bsRadix',width : 80,title : '基数',edit : 'text'
-			}, {field : 'bsWaterGap',title : '水口量',width : 100,hide : true,edit : 'text' // (注塑)
-			}, {field : 'bsCave',title : '穴数',width : 100,hide : true,edit : 'text' // (注塑)
-			}, {field : 'bsSupplier',title : '备选供应商',edit : 'text'
-			}, {field : 'fmemo',title : '备注',width : 120,edit : 'text'
-			}, {fixed : 'right',title : '操作',align : 'center',width : 120,toolbar : '#optBar'
-			} ] ],
+			cols : [ [
+			  {type : 'numbers'},
+			  {field : 'bsComponent',title : '零件名称',sort : true,style : 'background-color:#d2d2d2'},
+			  {field : 'bsMachiningType',title : '加工类型',width : 100,hide : true,edit : 'text' /* (表面处理)*/},
+			  {field : 'bsColor',title : '配色工艺',width : 100,hide : true,edit : 'text' /* (表面处理)*/},
+			  {field : 'bsMaterName',title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
+			  {field : 'bsModel',title : '规格',style : 'background-color:#d2d2d2'},
+			  {field : 'bsQty',width : 100,title : '用量',hide : true,edit : 'text'},
+			  {field : 'bsProQty',width : 100,title : '制品重',hide : true,edit : 'text'},
+			  {field : 'bsUnit',width : 80,title : '单位',edit : 'text'},
+			  {field : 'bsRadix',width : 80,title : '基数',edit : 'text'},
+			  {field : 'bsWaterGap',title : '水口量',width : 100,hide : true,edit : 'text' /*(注塑)*/},
+			  {field : 'bsCave',title : '穴数',width : 100,hide : true,edit : 'text' /* (注塑)*/}, 
+			  {field : 'bsSupplier',title : '备选供应商',edit : 'text'},
+			  {field : 'fmemo',title : '备注',width : 120,edit : 'text'},
+			  {fixed : 'right',title : '操作',align : 'center',width : 120,toolbar : '#optBar'} 
+			  ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 				res.data.forEach(function(item, index) {
@@ -99,25 +100,24 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			}, {field : 'checkStatus',width : 100,title : '状态',sort : true,style : 'background-color:#d2d2d2',templet : '#checkStatus'},
+			cols : [ [ 
+			   {type : 'numbers'}, 
+			   {field : 'checkStatus',width : 100,title : '状态',sort : true,style : 'background-color:#d2d2d2',templet : '#checkStatus'},
 			// {field : 'enabled', width:100, title :'是否导入',sort:true,style:'background-color:#d2d2d2', templet: '#enabledTpl'},
-			{field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'
-			}, {field : 'bsComponent',width : 140,title : '零件名称',sort : true
-			}, {field : 'bsMachiningType',title : '加工类型',width : 100,hide : true // (表面处理)
-			}, {field : 'bsColor',title : '配色工艺',width : 100,hide : true // (表面处理)
-			}, {field : 'bsMaterName',width : 140,title : '材料名称',sort : true
-			}, {field : 'bsModel',width : 160,title : '规格'
-			}, {field : 'bsQty',width : 100,title : '用量',hide : true
-			}, {field : 'bsProQty',width : 100,title : '制品量',hide : true
-			}, {field : 'bsUnit',width : 80,title : '单位',
-			}, {field : 'bsRadix',width : 80,title : '基数',
-			}, {field : 'bsWaterGap',title : '水口量',width : 100,hide : true // (注塑)
-			}, {field : 'bsCave',title : '穴数',width : 100,hide : true // (注塑)
-			}, {field : 'bsSupplier',title : '备选供应商',width : 100
-			}, {field : 'fmemo',title : '备注',width : 120
-			},
+			   {field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'},
+			   {field : 'bsComponent',width : 140,title : '零件名称',sort : true},
+			   {field : 'bsMachiningType',title : '加工类型',width : 100,hide : true /*(表面处理)*/},
+			   {field : 'bsColor',title : '配色工艺',width : 100,hide : true /*(表面处理)*/},
+			   {field : 'bsMaterName',width : 140,title : '材料名称',sort : true},
+			   {field : 'bsModel',width : 160,title : '规格'},
+			   {field : 'bsQty',width : 100,title : '用量',hide : true},
+			   {field : 'bsProQty',width : 100,title : '制品量',hide : true},
+			   {field : 'bsUnit',width : 80,title : '单位',},
+			   {field : 'bsRadix',width : 80,title : '基数',},
+			   {field : 'bsWaterGap',title : '水口量',width : 100,hide : true /*(注塑)*/},
+			   {field : 'bsCave',title : '穴数',width : 100,hide : true /*(注塑)*/},
+			   {field : 'bsSupplier',title : '备选供应商',width : 100},
+			   {field : 'fmemo',title : '备注',width : 120},
 			// {fixed : 'right', title : '操作', align : 'center', width:120, toolbar : '#optBar'}
 			] ],
 			done : function(res1, curr, count) {
@@ -145,11 +145,10 @@ $(function() {
 				},
 				cols : 
 				[ [{type : 'radio'},// 单选 radio
-				   {field : 'id',title : 'id',width : 0,hide : true
-				}, {type : 'numbers'
-				}, {field : 'unitCode',title : '单位编码',
-				}, {field : 'unitName',title : '单位名称',
-				} ] ],
+				   {field : 'id',title : 'id',width : 0,hide : true}, 
+				   {type : 'numbers'}, 
+				   {field : 'unitCode',title : '单位编码'},
+				   {field : 'unitName',title : '单位名称'} ] ],
 				page : true,
 				request : {
 					pageName : 'page' ,// 页码的参数名称，默认：page

@@ -155,32 +155,35 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {type : 'numbers'}
+							cols : [ [ {type : 'numbers'},
 							// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-							, {field : 'bsElement',title : '组件名称',sort : true,width : 120
-							},{field : 'bsComponent',title : '零件名称',sort : true,width : 200
-							},{field : 'wc',title : '材料耗用工作中心',sort : true,width : 145,templet : function(d) {
+							{field : 'bsElement',title : '组件名称',sort : true,width : 120},
+							{field : 'bsComponent',title : '零件名称',sort : true,width : 200},
+							{field : 'wc',title : '材料耗用工作中心',sort : true,width : 145,
+								templet : function(d) {
 									if (d.wc != null) {return d.wc.workcenterName;} 
 									else {return "";}
 								}
 							},
 							// {field : 'bsItemCode',title : '材料编码',sort:true,width:120},
-							{field : 'itp',title : '物料类型',sort : true,width : 120,templet : function(d) {
+							{field : 'itp',title : '物料类型',sort : true,width : 120,
+								templet : function(d) {
 									if (d.itp != null) {return d.itp.itemType;} 
 									else {return "";}
-								}
-							}, {field : 'bsMaterName',title : '材料名称',sort : true,width : 150
-							}, {field : 'bsModel',title : '材料规格',width : 200
-							}, {field : 'bsExplain',title : '采购说明',width : 200
-							}, {field : 'fmemo',title : '工艺说明',width : 200
-							}, {field : 'bsProQty',title : '制品量',width : 90
-							}, {field : 'unit',title : '单位',width : 80,templet : function(d) {
+							}}, 
+							{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
+							{field : 'bsModel',title : '材料规格',width : 200},
+							{field : 'bsExplain',title : '采购说明',width : 200}, 
+							{field : 'fmemo',title : '工艺说明',width : 200}, 
+							{field : 'bsProQty',title : '制品量',width : 90},
+							{field : 'unit',title : '单位',width : 80,
+								templet : function(d) {
 									if (d.unit != null) {return d.unit.unitName;} 
 									else {return "";}
-								}
-							}, {field : 'bsRadix',title : '基数',width : 80
-							}, {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120
-							} ] ],
+							}}, 
+							{field : 'bsRadix',title : '基数',width : 80}, 
+							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
+							] ],
 							done : function(res, curr, count) {
 								// 如果是异步请求数据方式，res即为你接口返回的信息。
 								// 如果是直接赋值的方式，res即为：{data: [], count: 99}
@@ -217,31 +220,33 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {type : 'numbers'}, {
-								field : 'checkStatus',width : 100,title : '状态',sort : true,style : 'background-color:#d2d2d2',templet : '#checkStatus'
-							}, {field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'
-							}, {field : 'bsElement',title : '组件名称',sort : true,width : 120
-							}, {field : 'bsComponent',title : '零件名称',sort : true,width : 200
-							}, {field : 'wc',title : '材料耗用工作中心',sort : true,width : 145,templet : function(d) {
+							cols : [ [
+							    {type : 'numbers'}, 
+							    {field : 'checkStatus',width : 100,title : '状态',sort : true,style : 'background-color:#d2d2d2',templet : '#checkStatus'},
+								{field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'},
+								{field : 'bsElement',title : '组件名称',sort : true,width : 120}, 
+								{field : 'bsComponent',title : '零件名称',sort : true,width : 200},
+								{field : 'wc',title : '材料耗用工作中心',sort : true,width : 145,
+									templet : function(d) {
 									if (d.wc != null) {return d.wc.workcenterName;}
 									else {return "";}
-								}
-							},
-							// {field : 'bsItemCode',title :'材料编码',sort:true,width:120},
-							{field : 'itp',title : '物料类型',sort : true,width : 120,templet : function(d) {
+								}},
+							 // {field : 'bsItemCode',title :'材料编码',sort:true,width:120},
+							    {field : 'itp',title : '物料类型',sort : true,width : 120,
+									templet : function(d) {
 									if (d.itp != null) {return d.itp.itemType;} 
 									else {return "";}
-								}
-							}, {field : 'bsMaterName',title : '材料名称',sort : true,width : 150
-							}, {field : 'bsModel',title : '材料规格',width : 200
-							}, {field : 'bsExplain',title : '采购说明',width : 200
-							}, {field : 'fmemo',title : '工艺说明',width : 200
-							}, {field : 'bsProQty',title : '制品量',width : 90
-							}, {field : 'unit',title : '单位',width : 80,templet : function(d) {
+								}},
+								{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
+								{field : 'bsModel',title : '材料规格',width : 200},
+								{field : 'bsExplain',title : '采购说明',width : 200},
+								{field : 'fmemo',title : '工艺说明',width : 200}, 
+								{field : 'bsProQty',title : '制品量',width : 90},
+								{field : 'unit',title : '单位',width : 80,templet : function(d) {
 									if (d.unit != null) {return d.unit.unitName;} 
 									else {return "";}
-								}
-							}, {field : 'bsRadix',title : '基数',width : 80}
+								}}, 
+								{field : 'bsRadix',title : '基数',width : 80}
 							// , {fixed : 'right',title : '操作',align :'center',toolbar : '#optBar',width:120}
 							] ],
 							done : function(res, curr, count) {

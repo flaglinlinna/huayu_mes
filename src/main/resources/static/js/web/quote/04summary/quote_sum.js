@@ -153,9 +153,10 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : 
-			[ [ {type : 'numbers'},
-			    {field : 'bsType',width : 100,title : '类型',sort : true,templet : function(d) {
+			cols : [ [ 
+			 {type : 'numbers'},
+			 {field : 'bsType',width : 100,title : '类型',sort : true,
+				 templet : function(d) {
 					if (d.bsType == 'hardware') {// * 五金:hardware
 						return '五金'
 					} else if (d.bsType == 'molding') {// * 注塑:molding
@@ -165,37 +166,30 @@ $(function() {
 					} else if (d.bsType == 'packag') {// * 组装:packag
 						return '组装'
 					}
-				},
-				totalRowText : "合计"
-			}, {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true
-			}, {field : 'bsMachiningType',title : '加工类型',width : 100,hide : true
-			},// (表面处理)
-			{field : 'bsColor',title : '配色工艺',width : 100,hide : true
-			},// (表面处理)
-			{field : 'bsMaterName',width : 120,title : '材料名称',sort : true
-			}, {field : 'bsModel',width : 150,title : '材料规格'
-			}, {field : 'bsQty',width : 80,title : '用量',totalRow : true,hide : true
-			}, {field : 'bsProQty',width : 80,title : '制品重',totalRow : true,hide : true
-			}, {field : 'bsUnit',width : 80,title : '单位'
-			}, {field : 'bsRadix',width : 80,title : '基数'
-			}, {field : 'bsGeneral',width : 120,title : '是否通用物料'
-			},
+				},totalRowText : "合计"}, 
+			{field : 'bsComponent',width : 150,title : '零/组件名称',sort : true},
+			{field : 'bsMachiningType',title : '加工类型',width : 100,hide : true},/*(表面处理)*/
+			{field : 'bsColor',title : '配色工艺',width : 100,hide : true},/*(表面处理)*/
+			{field : 'bsMaterName',width : 120,title : '材料名称',sort : true},
+			{field : 'bsModel',width : 150,title : '材料规格'},
+			{field : 'bsQty',width : 80,title : '用量',totalRow : true,hide : true},
+			{field : 'bsProQty',width : 80,title : '制品重',totalRow : true,hide : true},
+			{field : 'bsUnit',width : 80,title : '单位'},
+			{field : 'bsRadix',width : 80,title : '基数'},
+			{field : 'bsGeneral',width : 120,title : '是否通用物料'},
 			// {field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet:'#selectGear'},
-			{field : 'bsRefer',width : 110,title : '参考价格'
-			}, {field : 'bsWaterGap',title : '水口量',width : 100,hide : true
-			}, // (注塑)
-			{field : 'bsCave',title : '穴数',width : 100,hide : true
-			}, // (注塑)
-			{field : 'bsAssess',width : 110,title : '评估价格'
-			}, {field : 'bsFee',width : 110,title : '材料总价',
+			{field : 'bsRefer',width : 110,title : '参考价格'},
+			{field : 'bsWaterGap',title : '水口量',width : 100,hide : true}, /*(注塑)*/
+			{field : 'bsCave',title : '穴数',width : 100,hide : true}, /*(注塑)*/
+			{field : 'bsAssess',width : 110,title : '评估价格'},
+			{field : 'bsFee',width : 110,title : '材料总价',
 				// templet:function(d){
 				// return Number(d.bsQty)*Number(d.bsAssess)/Number(d.bsRadix);
 				// },
-				totalRow : true
-			}, {field : 'bsExplain',width : 110,title : '采购说明'
-			}, {field : 'fmemo',width : 110,title : '备注'
-			}, {field : 'bsSupplier',width : 110,title : '供应商'
-			} ] ],
+			 totalRow : true}, {field : 'bsExplain',width : 110,title : '采购说明'},
+			{field : 'fmemo',width : 110,title : '备注'},
+			{field : 'bsSupplier',width : 110,title : '供应商'} 
+			] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 			}
@@ -226,25 +220,28 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : 
-			[ [ {type : 'numbers'
-			}, {field : 'bsName',width : 150,title : '零件名称',sort : true,totalRowText : "合计"
-			}, {field : 'bsOrder',width : 150,title : '工艺顺序',sort : true
-			}, {field : 'proc',width : 150,title : '工序名称',templet : function(d) {
+			cols : [ [ 
+			   {type : 'numbers'},
+			   {field : 'bsName',width : 150,title : '零件名称',sort : true,totalRowText : "合计"},
+			   {field : 'bsOrder',width : 150,title : '工艺顺序',sort : true},
+			   {field : 'proc',width : 150,title : '工序名称',
+				  templet : function(d) {
 					if (d.proc != null) {
 						return d.proc.procName == null || undefined ? "" : d.proc.procName;
 					} else {
 						return "";
 					}
-				}
-			}, {field : 'procfmemo',width : 100,title : '工序说明',templet : function(d) {
+				}},
+			   {field : 'procfmemo',width : 100,title : '工序说明',
+				  templet : function(d) {
 					if (d.proc != null) {
 						return d.proc.fmemo == null || undefined ? "" : d.proc.fmemo;
 					} else {
 						return "";
 					}
-				}
-			}, {field : 'workcenterName',width : 100,title : '工作中心',templet : function(d) {
+				}},
+				{field : 'workcenterName',width : 100,title : '工作中心',
+				   templet : function(d) {
 					if (d.proc != null) {
 						if (d.proc.bjWorkCenter != null) {
 							return d.proc.bjWorkCenter.workcenterName == null || undefined ? "" : d.proc.bjWorkCenter.workcenterName;
@@ -254,23 +251,23 @@ $(function() {
 					} else {
 						return "";
 					}
-				}
-			}, {field : 'bsModelType',width : 100,title : '机台类型',width : 90,
-			}, {field : 'bsRadix',title : '基数',width : 90
-			}, {field : 'bsUserNum',title : '人数',width : 90,hide : true
-			}, {field : 'bsCycle',title : '成型周期(S)',width : 150,hide : true
-			}, {field : 'bsYield',title : '工序良率%',width : 120,hide : true
-			}, {field : 'bsLoss',title : '损耗率',width : 100,hide : true
-			}, {field : 'bsCave',title : '穴数',width : 90,hide : true
-			}, {field : 'bsCapacity',title : '产能',width : 90,hide : true
-			}, {field : 'bsFeeLh',title : '人工费率',width : 90,hide : true
-			}, {field : 'bsFeeMh',title : '制费费率',width : 90,hide : true
-			}, {field : 'bsFeeLhAll',title : '总人工费',width : 90,totalRow : true,hide : true
-			}, {field : 'bsFeeMhAll',title : '总制费',width : 90,totalRow : true,hide : true
-			}, {field : 'bsFeeWxAll',title : '外协加工',width : 120,totalRow : true,hide : true
-			}, {field : 'bsLossHouLh',title : '后工序损料',width : 120,totalRow : true,hide : true
-			}, {field : 'fmemo',title : '备注',edit : 'text'
-			} ] ],
+				}},
+				{field : 'bsModelType',width : 100,title : '机台类型',width : 90},
+				{field : 'bsRadix',title : '基数',width : 90},
+				{field : 'bsUserNum',title : '人数',width : 90,hide : true},
+				{field : 'bsCycle',title : '成型周期(S)',width : 150,hide : true},
+				{field : 'bsYield',title : '工序良率%',width : 120,hide : true},
+				{field : 'bsLoss',title : '损耗率',width : 100,hide : true},
+				{field : 'bsCave',title : '穴数',width : 90,hide : true},
+				{field : 'bsCapacity',title : '产能',width : 90,hide : true},
+				{field : 'bsFeeLh',title : '人工费率',width : 90,hide : true},
+				{field : 'bsFeeMh',title : '制费费率',width : 90,hide : true},
+				{field : 'bsFeeLhAll',title : '总人工费',width : 90,totalRow : true,hide : true},
+				{field : 'bsFeeMhAll',title : '总制费',width : 90,totalRow : true,hide : true},
+				{field : 'bsFeeWxAll',title : '外协加工',width : 120,totalRow : true,hide : true},
+				{field : 'bsLossHouLh',title : '后工序损料',width : 120,totalRow : true,hide : true},
+				{field : 'fmemo',title : '备注',edit : 'text'}
+				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 				// 根据不同的类型显示不同的字段
@@ -302,17 +299,16 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : 
-			[ [ {type : 'numbers'
-			},
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			{field : 'bsName',title : '组件名称',width : 200,totalRowText : "合计:"
-			}, {field : 'bsMoCode',title : '模具编码',width : 200,templet : '<div>{{d.mjProcFee.productCode}}</div>'
-			}, {field : 'bsMoName',title : '模具名称',width : 200,templet : '<div>{{d.mjProcFee.productName}}</div>'
-			}, {field : 'bsMoFee',title : '模具成本',width : 120,templet : '<div>{{d.mjProcFee.feeAll}}</div>',totalRow : true
-			}, {field : 'stQuote',title : '参考报价',width : 120,templet : '<div>{{d.mjProcFee.stQuote}}</div>',totalRow : true
-			}, {field : 'bsActQuote',title : '实际报价',width : 120,totalRow : true
-			}, ] ],
+			cols : [ [
+			{type : 'numbers'},
+			// {field:'id', title:'ID', width:80, unresize:true, sort:true},
+			{field : 'bsName',title : '组件名称',width : 200,totalRowText : "合计:"},
+			{field : 'bsMoCode',title : '模具编码',width : 200,templet : '<div>{{d.mjProcFee.productCode}}</div>'},
+			{field : 'bsMoName',title : '模具名称',width : 200,templet : '<div>{{d.mjProcFee.productName}}</div>'},
+			{field : 'bsMoFee',title : '模具成本',width : 120,templet : '<div>{{d.mjProcFee.feeAll}}</div>',totalRow : true},
+			{field : 'stQuote',title : '参考报价',width : 120,templet : '<div>{{d.mjProcFee.stQuote}}</div>',totalRow : true},
+			{field : 'bsActQuote',title : '实际报价',width : 120,totalRow : true}
+			] ],
 			done : function(res, curr, count) {
 				// console.log(res)
 				// totalCount=res.count
