@@ -203,8 +203,9 @@ $(function() {
 				"bsColor" : obj.bsColor,
 			});
 			openProdErr(id, "编辑材料信息")
-		}
-		;
+		};
+
+		isComplete();
 
 		// 导入 到临时表
 		upload.render({
@@ -239,6 +240,13 @@ $(function() {
 	});
 
 });
+
+function isComplete() {
+	if (nowStatus.data > 0) {
+		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
+		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
+	}
+}
 
 function uploadChecked() {
 	var params = {
@@ -292,6 +300,7 @@ function confirm() {
 			if (data.result) {
 				layer.alert("确认完成成功", function() {
 					layer.closeAll();
+					isComplete();
 					// cleanProdErr();
 					// 加载页面
 					loadAll();
