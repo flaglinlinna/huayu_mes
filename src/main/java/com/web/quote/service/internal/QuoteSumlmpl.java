@@ -1,8 +1,8 @@
 package com.web.quote.service.internal;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,10 +21,12 @@ import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.dao.ProductProcessDao;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteMouldDao;
+import com.web.quote.dao.QuoteSumBomDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.ProductProcess;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteMould;
+import com.web.quote.entity.QuoteSumBom;
 import com.web.quote.service.QuoteSumService;
 
 @Service(value = "QuoteSumService")
@@ -38,7 +40,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 	@Autowired
 	private ProductProcessDao productProcessDao;
 	@Autowired
-	private QuoteMouldDao quoteMouldDao;
+    private QuoteMouldDao quoteMouldDao;
+	@Autowired
+    private QuoteSumBomDao quoteSumBomDao;
+
 
 
 	/**
@@ -59,7 +64,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				"p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
 				"p.bs_Cust_Require from "+Quote.TABLE_NAME+" p "
 				+ " where p.del_flag=0 and p.bs_step>2 "+statusTemp;
-		if(StringUtils.isNotEmpty(quoteId)){
+		if(StringUtils.isNotEmpty(quoteId)&&!("null").equals(quoteId)){
 			sql += "and p.id = " + quoteId + "";
 		}
 //		if(!StringUtils.isEmpty(status)){
@@ -467,8 +472,99 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 	@Override
 	public ApiResponseResult getQuoteBomByQuote(String quoteId) throws Exception {
 		// TODO Auto-generated method stub
+		if(StringUtils.isEmpty(quoteId)){
+			return ApiResponseResult.failure("报价单号为空!");
+		}
 		//生产树形表格
-		//1:获取总数
-		return null;
+		/*ApiResponseResult ar = this.countQuoteTreeBom(Long.valueOf(quoteId));
+		if(ar.isResult()){
+			return ApiResponseResult.success().data(quoteSumBomDao.findByDelFlagAndPkQuote(0, Long.valueOf(quoteId)));
+		}else{
+			return ar;
+		}*/
+		return ApiResponseResult.success().data(quoteSumBomDao.findByDelFlagAndPkQuote(0, Long.valueOf(quoteId)));
 	}
+	
+	@Override
+	public ApiResponseResult countQuoteTreeBom(Long quoteId) throws Exception {
+		
+		List<Map<String, Object>> lm1 = productMaterDao.getBomFirt(quoteId);
+		if(lm1.size()>0){
+			List<QuoteSumBom> lqb1 = new ArrayList<QuoteSumBom>();
+			for(Map<String, Object> map1:lm1){
+				QuoteSumBom qb1 = new QuoteSumBom();
+				qb1.setPkQuote(quoteId);
+				qb1.setBsElement(map1.get("ELEMENT").toString());
+				qb1.setBsMaterName(map1.get("ELEMENT").toString());
+				qb1.setBsFeeItemAll(new BigDecimal(map1.get("FEE").toString()));//材料总费用
+				qb1.setBsFeeLhAll(new BigDecimal(map1.get("FEE_LH").toString()));
+				qb1.setBsFeeMhAll(new BigDecimal(map1.get("FEE_MH").toString()));
+				qb1.setBsFeeOut(new BigDecimal(map1.get("FEE_WX").toString()));
+				qb1.setBsFeeAll(qb1.getBsFeeItemAll().add(qb1.getBsFeeLhAll()).add(qb1.getBsFeeMhAll()).add(qb1.getBsFeeOut()));
+				qb1.setParenId(new Long((long)0));
+				qb1.setCreateDate(new Date());
+				lqb1.add(qb1);
+			}
+			quoteSumBomDao.saveAll(lqb1);
+			//填写虚拟编号
+			for(QuoteSumBom qsb:lqb1){
+				qsb.setBsItemCode("XN"+qsb.getId());
+				quoteSumBomDao.save(qsb);
+				
+				//--第二层
+				List<Map<String, Object>> lm2 = productMaterDao.getBomSecond(quoteId, qsb.getBsElement());
+				if(lm2.size()>0){
+					List<QuoteSumBom> lqb2 = new ArrayList<QuoteSumBom>();
+					for(Map<String, Object> map2:lm2){
+						QuoteSumBom qb2 = new QuoteSumBom();
+						qb2.setPkQuote(quoteId);
+						qb2.setCreateDate(new Date());
+						qb2.setBsMaterName(map2.get("COMPONENT").toString());
+						qb2.setParenId(qsb.getId());
+						qb2.setBsComponent(map2.get("COMPONENT").toString());
+						qb2.setBsFeeItemAll(new BigDecimal(map2.get("FEE").toString()));//材料总费用
+						qb2.setBsFeeLhAll(new BigDecimal(map2.get("FEE_LH").toString()));
+						qb2.setBsFeeMhAll(new BigDecimal(map2.get("FEE_MH").toString()));
+						qb2.setBsFeeOut(new BigDecimal(map2.get("FEE_WX").toString()));
+						qb2.setBsFeeAll(qb2.getBsFeeItemAll().add(qb2.getBsFeeLhAll()).add(qb2.getBsFeeMhAll()).add(qb2.getBsFeeOut()));
+						
+						qb2 = quoteSumBomDao.save(qb2);
+						
+						//填写虚拟编号
+						qb2.setBsItemCode("XN"+qb2.getId());
+						quoteSumBomDao.save(qb2);
+						
+						//填写第三层
+						List<Map<String, Object>> lm3 = productMaterDao.getBomThree(quoteId, qsb.getBsElement(), qb2.getBsComponent());
+						if(lm3.size()>0){
+							for(Map<String, Object> map3:lm3){
+								QuoteSumBom qb3 = new QuoteSumBom();
+								qb3.setPkQuote(quoteId);
+								qb3.setCreateDate(new Date());
+								qb3.setBsMaterName(map3.get("MATER_NAME").toString());
+								qb3.setBsFeeItemAll(new BigDecimal(map3.get("FEE").toString()));//材料总费用
+								qb3.setPkBjWorkCenter(Long.valueOf(map3.get("WKC").toString()));
+								String pkUnit = map3.get("PUNIT")==null?"":map3.get("PUNIT").toString();
+								if(!StringUtils.isEmpty(pkUnit)){
+									qb3.setPkUnit(Long.valueOf(pkUnit));
+								}
+								qb3.setParenId(qb2.getId());
+								
+								qb3.setBsFeeAll(qb3.getBsFeeItemAll());
+								
+								qb3 = quoteSumBomDao.save(qb3);
+								
+								//填写虚拟编号
+								qb3.setBsItemCode("XN"+qb3.getId());
+								quoteSumBomDao.save(qb3);
+							}
+						}
+					}
+					
+				}
+			}
+		}
+		return ApiResponseResult.success();
+	}
+
 }

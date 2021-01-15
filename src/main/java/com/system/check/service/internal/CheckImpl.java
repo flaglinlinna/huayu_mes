@@ -630,7 +630,7 @@ public class CheckImpl   implements CheckService {
 		return ApiResponseResult.success("操作成功!");
 	}
 	
-	public void doEndQuote(CheckInfo c){
+	public void doEndQuote(CheckInfo c) throws Exception{
 		Quote quote = quoteDao.findById((long) c.getBsRecordId());
 		if(quote != null){
 			quote.setLastupdateDate(new Date());
@@ -638,6 +638,8 @@ public class CheckImpl   implements CheckService {
 			quote.setBsEndTime3(new Date());
 			quoteDao.save(quote);
 		}
+		
+		quoteSumService.countQuoteTreeBom(Long.valueOf(c.getBsRecordId()));
 	}
 
 

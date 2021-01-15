@@ -40,12 +40,13 @@ public class QuoteSumBom extends BaseEntity {
     @ApiModelProperty(name="pkQuote",value="报价主表")
     @Column
     protected Long pkQuote;
-
-    @ApiModelProperty(name="quote",hidden=true,value="报价主表")
-    @ManyToOne
-    @JoinColumn(name = "pkQuote", insertable = false, updatable = false)
-    @NotFound(action = NotFoundAction.IGNORE)
-    protected Quote quote;
+    
+    /**
+     * 父节点id
+     */
+    @ApiModelProperty(name="parenId",value="父节点id")
+    @Column
+    protected Long parenId;
     
     /**
      * 关联报价工作中心
@@ -130,21 +131,6 @@ public class QuoteSumBom extends BaseEntity {
 	/**
 	 * 人工费率（元/小时）
 	 */
-	@ApiModelProperty(name = "feeLh", value = "人工费率（元/小时）")
-	@Column(length = 50)
-	protected BigDecimal bsFeeLh;
-
-	/**
-	 * 制费费率（元/小时）
-	 */
-	@ApiModelProperty(name = "feeMh", value = "制费费率（元/小时）")
-	@Column(length = 50)
-	protected BigDecimal bsFeeMh;
-	
-	
-	/**
-	 * 人工费率（元/小时）
-	 */
 	@ApiModelProperty(name = "bsFeeLhAll", value = "人工费率（元/小时）")
 	@Column(length = 50)
 	protected BigDecimal bsFeeLhAll;
@@ -171,6 +157,13 @@ public class QuoteSumBom extends BaseEntity {
 	@ApiModelProperty(name = "bsFeeOut", value = "外协费用")
 	@Column(length = 50)
 	protected BigDecimal bsFeeOut;
+	
+	/**
+	 * 合计
+	 */
+	@ApiModelProperty(name = "bsFeeAll", value = "合计")
+	@Column(length = 100)
+	protected BigDecimal bsFeeAll;
 
 
 	public Long getPkQuote() {
@@ -181,17 +174,6 @@ public class QuoteSumBom extends BaseEntity {
 	public void setPkQuote(Long pkQuote) {
 		this.pkQuote = pkQuote;
 	}
-
-
-	public Quote getQuote() {
-		return quote;
-	}
-
-
-	public void setQuote(Quote quote) {
-		this.quote = quote;
-	}
-
 
 	public Long getPkBjWorkCenter() {
 		return pkBjWorkCenter;
@@ -302,27 +284,6 @@ public class QuoteSumBom extends BaseEntity {
 		this.bsQty = bsQty;
 	}
 
-
-	public BigDecimal getBsFeeLh() {
-		return bsFeeLh;
-	}
-
-
-	public void setBsFeeLh(BigDecimal bsFeeLh) {
-		this.bsFeeLh = bsFeeLh;
-	}
-
-
-	public BigDecimal getBsFeeMh() {
-		return bsFeeMh;
-	}
-
-
-	public void setBsFeeMh(BigDecimal bsFeeMh) {
-		this.bsFeeMh = bsFeeMh;
-	}
-
-
 	public BigDecimal getBsFeeLhAll() {
 		return bsFeeLhAll;
 	}
@@ -360,6 +321,26 @@ public class QuoteSumBom extends BaseEntity {
 
 	public void setBsFeeOut(BigDecimal bsFeeOut) {
 		this.bsFeeOut = bsFeeOut;
+	}
+
+
+	public Long getParenId() {
+		return parenId;
+	}
+
+
+	public void setParenId(Long parenId) {
+		this.parenId = parenId;
+	}
+
+
+	public BigDecimal getBsFeeAll() {
+		return bsFeeAll;
+	}
+
+
+	public void setBsFeeAll(BigDecimal bsFeeAll) {
+		this.bsFeeAll = bsFeeAll;
 	}
 	
 	

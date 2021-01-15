@@ -64,7 +64,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 				"p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
 				" p.bs_Cust_Require from "+Quote.TABLE_NAME+" p "
 				+ " where p.del_flag=0 and p.bs_step=2  "+statusTemp;
-		if(StringUtils.isNotEmpty(quoteId)){
+		if(StringUtils.isNotEmpty(quoteId)&&!("null").equals(quoteId)){
 			sql += "and p.id = " + quoteId + "";
 		}
 

@@ -315,6 +315,11 @@ $(function() {
 				pageCurr = curr;
 			}
 		});
+		
+		//详情按钮
+		 $('#detailBtn').click(function(){
+			 parent.layui.index.openTabsPage(context+'/quoteSum/toQuoteTree?quoteId='+quoteId,'报价汇总树');
+		 })
 
 	});
 });

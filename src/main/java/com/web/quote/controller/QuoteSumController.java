@@ -59,14 +59,14 @@ public class QuoteSumController extends WebController {
 	}
 
 	@ApiOperation(value = "报价BOM树形", notes = "报价BOM树形", hidden = true)
-	@RequestMapping(value = "/toQuoteBom")
-	public ModelAndView toQuoteBom(String quoteId) {
+	@RequestMapping(value = "/toQuoteTree")
+	public ModelAndView toQuoteTree(String quoteId) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult quoteBom=quoteSumService.getQuoteBomByQuote(quoteId);
 			mav.addObject("quoteId", quoteId);
-			mav.addObject("quoteDetail", quoteBom);
-			mav.setViewName("/web/quote/04summary/quote_sum_bom");// 返回路径
+			mav.addObject("permList", quoteBom.getData());
+			mav.setViewName("/web/quote/04summary/quote_sum_tree");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("报价单汇详情页失败！", e);
@@ -107,6 +107,23 @@ public class QuoteSumController extends WebController {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = quoteSumService.getQuoteList(keyword,quoteId, super.getPageRequest(sort));
 			logger.debug(methodName+"=getQuoteList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
+	@ApiOperation(value = "获取报价单汇总详情-树形", notes = "获取报价单汇总详情-树形", hidden = true)
+	@RequestMapping(value = "/getQuoteTreeList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getQuoteTreeList(String keyword,String quoteId) {
+		String method = "/quoteSum/getQuoteTreeList";
+		String methodName = "获取报价单汇总详情-树形";
+		try {
+			ApiResponseResult result = quoteSumService.getQuoteBomByQuote(quoteId);
+			logger.debug(methodName+"=getQuoteTreeList:");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
