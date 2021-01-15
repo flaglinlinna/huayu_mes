@@ -344,7 +344,9 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 
 	@Override
 	public ApiResponseResult doStatus(Long quoteId) throws Exception {
+		//未填写的数目
 		Integer notFilled = 0;
+		//待确认的采购信息
 		List<ProductMater> productMaterList = new ArrayList<>();
 		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(UserUtil.getSessionUser().getId());
 		if(lmp.size()>0){
@@ -359,7 +361,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		}
 		//判断是否该用户下的物料类型下的采购单是否评估价格存在空值
 		if(notFilled>0){
-			return ApiResponseResult.failure("确认完成失败！请填写完所有评估价格后确认！");
+			return ApiResponseResult.failure("确认完成失败！当前还有 "+notFilled +"条信息未填写评估价格");
 		}else {
 			for(ProductMater o:productMaterList){
 				o.setBsStatusPurchase(1);
