@@ -337,7 +337,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			return ApiResponseResult.failure("报价单ID为空!");
 		}
 		//查询未完成的价格
-		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuoteAndBsStatusPurchase(0, Long.parseLong(quoteId), 0);
+		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuoteAndBsStatus(0, Long.parseLong(quoteId), 0);
 		if(lpm.size()>0){
 			return ApiResponseResult.failure("存在未报价的物料信息，不能发起审批!");
 		}else{

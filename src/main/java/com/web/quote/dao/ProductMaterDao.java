@@ -26,7 +26,7 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 
 	public List<ProductMater> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 
-	public List<ProductMater> findByDelFlagAndPkQuoteAndBsStatusPurchase(Integer delFlag,Long pkQuote,int bsStatus);
+	public List<ProductMater> findByDelFlagAndPkQuoteAndBsStatus(Integer delFlag,Long pkQuote,int bsStatus);
 
 	@Query(value = "SELECT count(1) FROM PRICE_PRODUCT_MATER p WHERE p.del_flag = 0 AND p.pk_quote = ?1 and p.BS_ASSESS is null" +
 			" AND p.pk_item_type_wg IN ( SELECT wr.pk_item_type_wg  FROM BJ_BASE_ITEM_TYPE_WG_ROLE wr WHERE wr.del_flag = 0" +
