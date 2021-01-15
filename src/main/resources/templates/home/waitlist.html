@@ -51,7 +51,7 @@
     					limitName : 'rows' // 每页数据量的参数名，默认：limit
     				},
     				parseData : function(res) {
-    					console.log(res)
+    					//console.log(res)
     					//bsRouter数据处理
     					var datalist=res.data.rows
     					for (var j = 0; j < datalist.length; j++) {
@@ -141,7 +141,6 @@
       }
       
       function set_show(title,url,t){
-    	  console.log(title,url,t)
     	  parent.layui.index.openTabsPage(context+url,title);
     	}
       
