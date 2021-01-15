@@ -65,21 +65,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 * 获取bom列表-下拉选择
 	 **/
 	@Override
-	public ApiResponseResult getBomList(String keyword, PageRequest pageRequest) throws Exception {
-		List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-		// 查询2
-		List<SearchFilter> filters1 = new ArrayList<>();
-		if (StringUtils.isNotEmpty(keyword)) {
-			filters1.add(new SearchFilter("bsItemCode", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("bsElement", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("bsComponent", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("bsMaterName", SearchFilter.Operator.LIKE, keyword));
-		}
-		Specification<QuoteBom> spec = Specification.where(BaseService.and(filters, QuoteBom.class));
-		Specification<QuoteBom> spec1 = spec.and(BaseService.or(filters1, QuoteBom.class));
-		Page<QuoteBom> page = quoteBomDao.findAll(spec1, pageRequest);
-
+	public ApiResponseResult getBomList(String keyword, Long quoteId,PageRequest pageRequest) throws Exception {
+		Page<Map<String, Object>> page=quoteProcessDao.getBomNameByPage(quoteId,keyword,pageRequest);
+//		return ApiResponseResult.success().data(list);
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
@@ -148,7 +136,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 * 增加工艺流程记录
 	 **/
 	@Override
-	public ApiResponseResult add(String proc, String itemId,String quoteId) throws Exception {
+	public ApiResponseResult add(String proc, String itemId,String quoteId,String bsElement) throws Exception {
 		// TODO Auto-generated method stub
 		String[] procs = proc.split("\\,");
 		List<QuoteProcess> lp = new ArrayList<QuoteProcess>();
@@ -165,6 +153,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				QuoteProcess pd = new QuoteProcess();
 				//pd.setPkQuoteBom(Long.valueOf(itemId));//bomID
 				pd.setBsName(itemId);//bom零件名称
+				pd.setBsElement(bsElement);
 				pd.setPkProc(Long.valueOf(pro));//工序id
 				pd.setBsOrder((j) * 10);//工序顺序
 				pd.setCreateBy(UserUtil.getSessionUser().getId());
