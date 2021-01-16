@@ -397,10 +397,18 @@ layui.define("view", function (e) {
     o.on("click", _, function () {
         var e = a(this),
             t = e.index();
-        P.tabsPage.type = "tab", P.tabsPage.index = t, A(e)
+        P.tabsPage.type = "tab", P.tabsPage.index = t, A(e);
+      //fyx-20210116-切换标签后刷新当前页面
+        var src = $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src");
+        $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
+        //--end
     }), i.on("tabDelete(" + p + ")", function (e) {
         var t = a(_ + ".layui-this");
-        e.index && P.tabsBody(e.index).remove(), A(t), P.delResize()
+        e.index && P.tabsBody(e.index).remove(), A(t), P.delResize();
+        //fyx-20210116-关闭标签后刷新当前页面
+        var src = $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src");
+        $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
+        //--end
     }), o.on("click", "*[lay-href]", function () {
         var e = a(this),
             t = e.attr("lay-href"),
@@ -420,6 +428,7 @@ layui.define("view", function (e) {
         var n = parent === self ? layui : top.layui;
         n.index.openTabsPage(t, i || e.text()), t === P.tabsBody(P.tabsPage.index).find("iframe").attr("src") && P.events.refresh();
     }), o.on("click", "*[layadmin-event]", function () {
+    	alert('2')
         var e = a(this),
             t = e.attr("layadmin-event");
         F[t] && F[t].call(this, e)
