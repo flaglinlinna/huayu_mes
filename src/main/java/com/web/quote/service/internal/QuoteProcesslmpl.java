@@ -66,7 +66,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 **/
 	@Override
 	public ApiResponseResult getBomList(String keyword, Long quoteId,PageRequest pageRequest) throws Exception {
-		Page<Map<String, Object>> page=quoteProcessDao.getBomNameByPage(quoteId,keyword,pageRequest);
+		Page<Map<String, Object>> page=quoteProcessDao.getBomNameByPage(quoteId,pageRequest);
 //		return ApiResponseResult.success().data(list);
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
