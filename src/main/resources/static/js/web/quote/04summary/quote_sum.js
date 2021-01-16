@@ -266,7 +266,7 @@ $(function() {
 				{field : 'bsFeeMhAll',title : '总制费',width : 90,totalRow : true,hide : true},
 				{field : 'bsFeeWxAll',title : '外协加工',width : 120,totalRow : true,hide : true},
 				{field : 'bsLossHouLh',title : '后工序损料',width : 120,totalRow : true,hide : true},
-				{field : 'fmemo',title : '备注',edit : 'text'}
+				{field : 'fmemo',title : '备注',edit : 'text',style : 'background-color:#ffffff'}
 				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;

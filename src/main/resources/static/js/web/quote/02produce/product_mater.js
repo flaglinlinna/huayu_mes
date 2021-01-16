@@ -2,9 +2,11 @@
  * 制造部材料管理 五金:hardware 注塑:molding 表面处理:surface 组装:packag
  */
 var pageCurr;
+var localtableFilterIns;
 $(function() {
 	layui.use([ 'form', 'table', 'upload', 'tableSelect' ], function() {
-		var table = layui.table, form = layui.form, upload = layui.upload, tableSelect1 = layui.tableSelect, tableSelect = layui.tableSelect;
+		var table = layui.table, form = layui.form, upload = layui.upload,
+		tableSelect1 = layui.tableSelect, tableSelect = layui.tableSelect;
 		isComplete()
 		// hardwareList
 		tableIns = table.render({
@@ -33,18 +35,18 @@ $(function() {
 			cols : [ [
 			  {type : 'numbers'},
 			  {field : 'bsComponent',title : '零件名称',sort : true,style : 'background-color:#d2d2d2'},
-			  {field : 'bsMachiningType',title : '加工类型<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text' /* (表面处理)*/},
-			  {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text' /* (表面处理)*/},
+			  {field : 'bsMachiningType',title : '加工类型<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
+			  {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
 			  {field : 'bsMaterName',title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
 			  {field : 'bsModel',title : '规格',style : 'background-color:#d2d2d2'},
-			  {field : 'bsQty',width : 100,title : '用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text'},
-			  {field : 'bsProQty',width : 100,title : '制品重<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text'},
-			  {field : 'bsUnit',width : 80,title : '单位',edit : 'text'},
-			  {field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text'},
-			  {field : 'bsWaterGap',title : '水口量<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text' /*(注塑)*/},
-			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text' /* (注塑)*/}, 
-			  {field : 'bsSupplier',title : '备选供应商',edit : 'text'},
-			  {field : 'fmemo',title : '备注',width : 120,edit : 'text'},
+			  {field : 'bsQty',width : 100,title : '用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
+			  {field : 'bsProQty',width : 100,title : '制品重<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
+			  {field : 'bsUnit',width : 80,title : '单位',edit : 'text',style : 'background-color:#ffffff'},
+			  {field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text',style : 'background-color:#ffffff'},
+			  {field : 'bsWaterGap',title : '水口量<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
+			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (注塑)*/}, 
+			  {field : 'bsSupplier',title : '备选供应商',edit : 'text',style : 'background-color:#ffffff'},
+			  {field : 'fmemo',title : '备注',width : 120,edit : 'text',style : 'background-color:#ffffff'},
 			  {fixed : 'right',title : '操作',align : 'center',width : 120,toolbar : '#optBar'} 
 			  ] ],
 			done : function(res, curr, count) {

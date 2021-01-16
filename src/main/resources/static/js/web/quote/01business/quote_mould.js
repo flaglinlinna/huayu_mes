@@ -38,7 +38,7 @@ $(function() {
 			{field : 'bsMoName',title : '模具名称',templet : '<div>{{d.mjProcFee.productName}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'bsMoFee',title : '模具成本',templet : '<div>{{d.mjProcFee.feeAll}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'stQuote',title : '参考报价',templet : '<div>{{d.mjProcFee.stQuote}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'bsActQuote',title : '实际报价',"edit" : "number","event" : "dataCol",width : 80},
+			{field : 'bsActQuote',title : '实际报价',"edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
 			{fixed : 'right',title : '操作',width : 80,align : 'center',toolbar : '#optBar'}
 			] ],
 			done : function(res, curr, count) {

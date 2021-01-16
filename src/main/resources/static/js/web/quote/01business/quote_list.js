@@ -130,7 +130,8 @@ $(function() {
 							,{ "key":"无卤", "value":"无卤"},{ "key":"其他", "value":"其他"}]},
 					{field: 'bsCustRequire', type:'input'}
 				],
-				'done': function(filters){}
+				'done': function(filters){
+				}
 			})
 			// 监听工具条
 			table.on('tool(listTable)', function(obj) {

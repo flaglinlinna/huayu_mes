@@ -53,11 +53,11 @@ $(function() {
 				{field : 'bsUnit',width:80,title : '单位',style:'background-color:#d2d2d2'},
 				{field : 'bsRadix',width:80,title : '基数',style:'background-color:#d2d2d2'},
 				{field : 'bsGeneral',width:120,title : '是否通用物料',style:'background-color:#d2d2d2'},
-				{field : 'bsGear',width:80,title : '价格挡位',edit:'text',templet: '#selectGear'},
+				{field : 'bsGear',width:80,title : '价格挡位',edit:'text',templet: '#selectGear',style : 'background-color:#ffffff'},
 				{field : 'bsRefer',width:110,title : '参考价格',style:'background-color:#d2d2d2'},
-				{field : 'bsAssess',width:110,title : '评估价格',edit:'number'},// placeholder:'请输入评估价格(数字)',
-				{field : 'fmemo',width:110,title : '备注',edit:'text'},
-				{field : 'bsSupplier',width:110,title : '供应商',edit:'text'}
+				{field : 'bsAssess',width:110,title : '评估价格',edit:'number',style : 'background-color:#ffffff'},// placeholder:'请输入评估价格(数字)',
+				{field : 'fmemo',width:110,title : '备注',edit:'text',style : 'background-color:#ffffff'},
+				{field : 'bsSupplier',width:110,title : '供应商',edit:'text',style : 'background-color:#ffffff'}
 				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;

@@ -35,13 +35,13 @@ $(function() {
 			{field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'procName',title : '工序名称',templet : '<div>{{d.proc.procName}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'workCenter',title : '工作中心',templet : '<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'bsOrder',title : '工序顺序',"edit" : "number","event" : "dataCol",width : 80},
+			{field : 'bsOrder',title : '工序顺序',"edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
 			{field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,style : 'background-color:#d2d2d2',align : 'center',
 				templet : function(d) {
 					if (d.bsFeeLh == null || d.bsFeeLh == '') {return "<div class='orange'>否</div>"} 
 					else {return "<div class='green'>是</div>"}
 			}}, 
-			{field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",
+			{field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
 				templet : function(d) {
 					if (d.fmemo == null) {return ""} else {return d.fmemo}
 			}}, 
@@ -170,7 +170,7 @@ $(function() {
 			        {field : 'procNo',title : '工序编码',templet:'<div>{{d.proc.procNo}}</div>',style:'background-color:#d2d2d2'},
 			        {field : 'procName',title : '工序名称',templet:'<div>{{d.proc.procName}}</div>',style:'background-color:#d2d2d2'},
 			        {field : 'workCenter',title : '工作中心',templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style:'background-color:#d2d2d2'}, 
-			        {field : 'bsOrder',title : '工序顺序',"edit":"number","event": "dataCol",width:80},
+			        {field : 'bsOrder',title : '工序顺序',"edit":"number","event": "dataCol",width:80,style : 'background-color:#ffffff'},
 			        {type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#optBar'}
 			] ],
 			data:[]
