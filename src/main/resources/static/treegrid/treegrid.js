@@ -8,21 +8,18 @@
             grid.id = option.id || 'id';
             grid.parentid = option.parentid || 'parentid';
             grid.root = option.root || 0;
-            //grid.order = option.order || grid.id;
-            //grid.order = option.order || grid.parentid || grid.zindex;//排序字段
-            //grid.asc = option.asc || 'asc';
+            grid.order = option.order || grid.id;
+            grid.asc = option.asc || 'asc';
             grid.loadRow = option.loadRow;  //懒加载
 
-            grid.onCollapse = option.onCollapse;
+            //grid.onCollapse = option.onCollapse;
             //grid.onExpand = option.onExpand;
 
             grid.dataSuccess = function (pageData) {
                 if (option.dataSuccess) option.dataSuccess(pageData);
                 var treeRows = [];
                 HELPER.treeData(pageData.rows, treeRows, grid.root);
-
                 grid.pageData.rows = treeRows;
-
             };
 
             var EXPANDER = '<span class="treegrid-expander"></span>',
@@ -46,7 +43,7 @@
                         $.each(items, function (_, item) {
                             tree.push(item);
                             HELPER.treeData(rows, tree, item[grid.id]);
-                        }); 
+                        });
                     }
                 },
                 nodeId: function (node) {
@@ -169,20 +166,9 @@
                                 var selected = $(this).hasClass('selected');
                                 private_childSelect($(this), selected);
                                 var _pid = HELPER.nodePid($(this));
-                                console.log(_pid)
-                                if (_pid != null){
-                                	private_parentSelect(selected, _pid);
-                                }
-                                    
+                                if (_pid != null)
+                                    private_parentSelect(selected, _pid);
                             });
-                        }
-                        /*if(option.onCollapse){
-                        	alert('1')
-                        	HELPER.cellapsed(false, 0);
-                        }*/
-
-                        if(grid.onCollapse){
-                        	HELPER.cellapsed(false, pid);
                         }
                     });
 
