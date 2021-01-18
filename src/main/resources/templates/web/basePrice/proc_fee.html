@@ -65,6 +65,8 @@
 						</div>
 					</div>
 				</div>-->
+				<input id="fimg" name="fimg" placeholder="请输入图示id"
+					   autocomplete="off" class="layui-input" type="hidden" />
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label" style="width: 150px;">穴数</label>
@@ -147,6 +149,15 @@
 							class="layui-textarea"></textarea>
 					</div>
 				</div>
+
+				<div class="layui-upload">
+					<button type="button" class="layui-btn layui-btn-sm" id="upload2">上传图片</button>
+					<div class="layui-upload-list">
+						<img class="layui-upload-img" id="demo1">
+						<p id="demoText"></p>
+					</div>
+				</div>
+
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 10px;">
 						<button class="layui-btn layui-btn-sm" lay-submit=""

@@ -3,9 +3,10 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
+	layui.use([ 'form', 'table','upload','tableSelect','upload' ], function() {
 		var table = layui.table, form = layui.form,upload = layui.upload,
-			tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect;
+			tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,
+			tableSelect2 = layui.tableSelect,upload = layui.upload;
 
 		tableIns = table.render({
 			elem : '#iList',
@@ -36,10 +37,13 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {field : 'productCode',title : '模具编号',width:150},
-			  //{field : 'fimg',title : '图示',width:130},
-			  {field:'img'       , title:'图片预览'  , width:260,templet:function (d) {
-                  return '<img src="/file/view?fsFileId=7304" />';
-              }},
+				{field:'img', title:'图片预览'  , width:260,templet:function (d) {
+					if(d.fimg!=null) {
+						return '<div><img  src="/file/get?fsFileId=' + d.fimg + '" /></div>';
+					}else {
+						return "";
+					}
+					}},
 			  {field : 'productName',title : '产品',sort:true,width:100},
 			  {field : 'numHole',title : '穴数',sort:true,width:100},
 			  {field : 'structureMj',title : '模具结构',width:100},
@@ -57,6 +61,50 @@ $(function() {
 			done : function(res, curr, count) {
 				console.log(res)
 				pageCurr = curr;
+			}
+		});
+
+		var uploadInst = upload.render({
+			elem: '#upload2'
+			,url: context + '/file/upload' //改成您自己的上传接口
+			,before: function(obj){
+				//预读本地文件示例，不支持ie8
+				// this.data = {
+				// 	employeeId: function(){
+				// 		return  employeeId;
+				// 	},
+				// 	employeeCode:function(){
+				// 		return  employeeCode;
+				// 	},
+				// },
+				// 	layer.load(); // 上传loading
+					obj.preview(function(index, file, result){
+						$('#demo1').attr('src', result); //图片链接（base64）
+					});
+			}
+			,done: function(res){
+				//如果上传失败
+				if(!res.result){
+					var demoText = $('#demoText');
+					demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+					demoText.find('.demo-reload').on('click', function(){
+						uploadInst.upload();
+					});
+				}else {
+					var demoText = $('#demoText');
+					demoText.html('<span style="color: #FF5722;">上传成功</span>');
+					$('#fimg').val(res.data.id);
+
+				}
+				//上传成功
+			}
+			,error: function(){
+				//演示失败状态，并实现重传
+				var demoText = $('#demoText');
+				demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+				demoText.find('.demo-reload').on('click', function(){
+					uploadInst.upload();
+				});
 			}
 		});
 
@@ -116,6 +164,9 @@ $(function() {
 				"stQuote":obj.stQuote,
 				"fmemo" : obj.fmemo,
 			});
+			if(obj.fimg){
+				$('#demo1').attr('src',  context + "/file/view?fsFileId="+obj.fimg);
+			}
 			openPage(id, "编辑模具成本信息")
 		};	
 	});

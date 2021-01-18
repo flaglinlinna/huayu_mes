@@ -572,7 +572,9 @@ function getListByQuoteAndName(name){
 		tableProcCheck.reload({
 			data:data.data,
 			done : function(res, curr, count) {
-				//cleanProc();//清空之前的选中
+				// cleanProc();//清空之前的选中
+				$('#clientProcForm tbody tr td[data-field="checkColumn"] input[type="checkbox"]').prop('checked',false);
+				layui.form.render('checkbox');
 			}
 		});
 	}, "GET", false, function(res) {

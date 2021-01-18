@@ -132,6 +132,16 @@ public class Quote extends BaseEntity {
 	@Column
 	@ApiModelProperty(name="bsStatus5",value="状态")
     protected int bsStatus4 = 0;
+
+
+	/**
+	 * 虚拟料号对应状态
+	 * 0:进行中
+	 * 1:已完成
+	 */
+	@Column
+	@ApiModelProperty(name="bsStatusItem",value="虚拟料号对应状态")
+	protected Integer bsStatusItem = 0;
 	
 	/**
      * 流程步骤
@@ -727,6 +737,14 @@ public class Quote extends BaseEntity {
 
 	public int getBsStatus2Packag() {
 		return bsStatus2Packag;
+	}
+
+	public Integer getBsStatusItem() {
+		return bsStatusItem;
+	}
+
+	public void setBsStatusItem(Integer bsStatusItem) {
+		this.bsStatusItem = bsStatusItem;
 	}
 
 	public void setBsStatus2Packag(int bsStatus2Packag) {

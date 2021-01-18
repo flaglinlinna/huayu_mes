@@ -428,7 +428,6 @@ layui.define("view", function (e) {
         var n = parent === self ? layui : top.layui;
         n.index.openTabsPage(t, i || e.text()), t === P.tabsBody(P.tabsPage.index).find("iframe").attr("src") && P.events.refresh();
     }), o.on("click", "*[layadmin-event]", function () {
-    	alert('2')
         var e = a(this),
             t = e.attr("layadmin-event");
         F[t] && F[t].call(this, e)
