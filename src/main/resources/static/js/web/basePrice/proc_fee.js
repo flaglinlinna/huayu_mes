@@ -18,8 +18,7 @@ $(function() {
 			,even:true,//条纹样式
 			page : true,
 			request : {
-				pageName : 'page' // 页码的参数名称，默认：page
-				,
+				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
@@ -37,7 +36,10 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {field : 'productCode',title : '模具编号',width:150},
-			  {field : 'fimg',title : '图示',width:130},
+			  //{field : 'fimg',title : '图示',width:130},
+			  {field:'img'       , title:'图片预览'  , width:260,templet:function (d) {
+                  return '<img src="/file/view?fsFileId=7304" />';
+              }},
 			  {field : 'productName',title : '产品',sort:true,width:100},
 			  {field : 'numHole',title : '穴数',sort:true,width:100},
 			  {field : 'structureMj',title : '模具结构',width:100},

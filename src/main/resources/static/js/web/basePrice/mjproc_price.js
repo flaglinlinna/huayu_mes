@@ -3,23 +3,19 @@
  */
 var pageCurr;
 $(function() {
-	layui
-			.use(
-					[ 'form', 'table', 'tableSelect' ],
+	layui.use([ 'form', 'table', 'tableSelect' ],
 					function() {
 						var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
 
 						tableIns = table.render({
 							elem : '#colsList',
 							url : context + '/basePrice/mjProcPrice/getList',
-							method : 'get' // 默认：get请求
-							,
+							method : 'get', // 默认：get请求
 							cellMinWidth : 80,
 							height:'full-70',//固定表头&full-查询框高度
 							page : true,
 							request : {
-								pageName : 'page' // 页码的参数名称，默认：page
-								,
+								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
 							},
 							parseData : function(res) {
@@ -81,14 +77,12 @@ $(function() {
 									searchPlaceholder : '试着搜索',
 									table : {
 										//width : 220,
-										url : context
-												+ '/basePrice/mjProcPrice/getProcList',
+										url : context+ '/basePrice/mjProcPrice/getProcList',
 										method : 'get',
-
 										cols : [ [ {
 											type : 'radio'
 										},// 多选 radio
-										, {
+										{
 											field : 'id',
 											title : 'id',
 											width : 0,
@@ -195,10 +189,7 @@ $(function() {
 							var isStatus = checked ? 1 : 0;
 							var deaprtisStatus = checked ? "正常" : "禁用";
 							// 正常/禁用
-							layer
-									.confirm(
-											'您确定要把工序：' + name + '设置为'
-													+ deaprtisStatus + '状态吗？',
+							layer.confirm('您确定要把工序：' + name + '设置为'+ deaprtisStatus + '状态吗？',
 											{
 												btn1 : function(index) {
 													var params = {
