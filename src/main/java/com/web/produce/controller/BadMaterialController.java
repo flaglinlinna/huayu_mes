@@ -178,4 +178,24 @@ public class BadMaterialController extends WebController {
             return ApiResponseResult.failure(methodName+"失败！");
         }
     }
+
+    @ApiOperation(value="根据条码获取物料信息", notes="根据条码获取物料信息", hidden = true)
+    @RequestMapping(value = "/getNgItem", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getNgItem(String barcode,String taskNo,String itemNo) {
+        String method = "/badMaterial/getNgItem";String methodName ="根据条码获取物料信息";
+        String params = "条码:"+barcode;
+        try {
+            ApiResponseResult result = badMaterialService.getNgItem(barcode,taskNo,itemNo);
+            logger.debug("根据条码获取物料信息=getNgItem:");
+//            getSysLogService().success(module,method, methodName, params);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("根据条码获取物料信息失败！", e);
+            getSysLogService().error(module,method, methodName,params+";"+ e.toString());
+            return ApiResponseResult.failure("根据条码获取物料信息失败！");
+        }
+    }
+
 }

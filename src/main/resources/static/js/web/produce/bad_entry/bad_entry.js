@@ -20,6 +20,8 @@ $(function() {
 							,even:true,//条纹样式
 							page : true,
 							data : [],
+							limit:100,
+							limits:[100,200,500,1000,2000],
 							request : {
 								pageName : 'page' // 页码的参数名称，默认：page
 								,
@@ -172,7 +174,7 @@ $(function() {
 							if (obj.event === 'del') {
 								// 删除
 								// console.log(data)
-								del(obj, data.ID, data.BOARD_BARCODE);
+								del(obj, data.ID, data.BOARD_BARCODE==null?"":data.BOARD_BARCODE);
 							}
 						});
 
@@ -304,9 +306,9 @@ $(function() {
 							}
 						});
 						
-						$('#barcode').bind('keypress', function(event) {
+						$('#barcode,#qty').bind('keypress', function(event) {
 							if (event.keyCode == "13") {
-								if ($('#barcode').val()) {
+								if ($('#qty').val()) {
 									if ($('#taskno').val()) {
 										
 										if ($('#inputCode').val()) {
@@ -322,8 +324,22 @@ $(function() {
 										layer.alert("请选择制令单号!");
 									}
 								} else {
-									$('#qty').val("");
-									layer.alert("请先扫描条码!");
+									if(!$('#barcode').val()) {
+										layer.alert("请先输入小条码或者数量!");
+									}else {
+										if ($('#taskno').val()) {
+											if ($('#inputCode').val()) {
+												var obj = form.val("itemFrom")
+												checkBarCode($('#taskno').val(), $('#barcode').val(),obj);
+												return false;
+											} else {
+												layer.alert("请选择不良信息！");
+											}
+										} else {
+											$('#taskno').val('');
+											layer.alert("请选择制令单号!");
+										}
+									}
 								}
 							}
 						});	
@@ -386,7 +402,16 @@ function getDetailByTask(taskNo){
 			//console.log(data)
 			if (data.result) {
 				tableIns.reload({
-					data:data.data
+					data:data.data,
+					done : function(res1, curr, count) {
+						var allNum = 0;
+						res1.data.forEach(function(item, index) {
+							allNum += Number(item.DEFECT_NUM);
+						});
+						// $(".layui-table-total").find('tr').find('td[data-field="bsMoFee"]').find('div').html(feeAll);
+						$("#allNum").val(allNum);
+
+					}
 				});
 			}else{
 				layer.alert(data.msg);
@@ -406,7 +431,14 @@ function checkBarCode(taskNo, barcode,obj) {
 				if (data.result) {
 					playSaoMiaoMusic();
 					var q = data.data;
-					$("#qty").val(q[0].qty);
+					console.log(q);
+					console.log(q[0]);
+					console.log(q[0].qty);
+					if(q[0].qty==0&&!$('#barcode').val()){
+						// $("#qty").val(q[0].qty);
+					}else {
+						$("#qty").val(q[0].qty);
+					}
 					//console.log(obj)
 					saveBad(obj)
 				} else {
@@ -437,7 +469,16 @@ function saveBad(obj) {
 				//console.log(data)
 				if (data.result) {
 					tableIns.reload({
-						data : data.data
+						data : data.data,
+						done : function(res1, curr, count) {
+							var allNum = 0;
+							res1.data.forEach(function(item, index) {
+								allNum += Number(item.DEFECT_NUM);
+							});
+							// $(".layui-table-total").find('tr').find('td[data-field="bsMoFee"]').find('div').html(feeAll);
+							$("#allNum").val(allNum);
+
+						}
 					});
 					$("#qty").val("");
 					$("#barcode").val("");
@@ -471,7 +512,14 @@ function del(obj, id, code) {
 				if (data.result == true) {
 					// 回调弹框
 					tableIns.reload({
-						data : data.data
+						data : data.data,
+						done : function(res1, curr, count) {
+							var allNum = 0;
+							res1.data.forEach(function(item, index) {
+								allNum += Number(item.DEFECT_NUM);
+							});
+							$("#allNum").val(allNum);
+						}
 					});
 					layer.alert("删除成功！");
 				} else {

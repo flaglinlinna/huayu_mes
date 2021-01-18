@@ -94,16 +94,24 @@
 							<div class="layui-form-item">
 								<div class="layui-word-aux" style="margin: 5px;">请输入或者扫描条码后回车</div>
 								<div class="layui-inline">
-									<label class="layui-form-label layui-required">条码</label>
+									<label class="layui-form-label">小条码</label>
 									<div class="layui-input-inline">
 										<input id="barcode" name="barcode" autocomplete="off"
-											placeholder="请输入或扫描条码" class="layui-input" type="text" />
+											placeholder="请输入或扫描小条码" class="layui-input" type="text" />
 									</div>
 									<label class="layui-form-label layui-required">数量</label>
-									<div class="layui-input-inline" >
-										<input id="qty" name="qty" autocomplete="off" style="background: #efefef;"
-											disabled placeholder="扫入条码获取数量" class="layui-input"  type="text" />
+									<div class="layui-input-inline"  style="width: 110px">
+										<input id="qty" name="qty" autocomplete="off" placeholder="扫入条码获取数量"
+											   class="layui-input"  type="text" />
 									</div>
+
+									<label class="layui-form-label">合计数量</label>
+									<div class="layui-input-inline" style="width: 110px" >
+										<input id="allNum" name="allNum" autocomplete="off"
+											   style="background: #efefef;"
+											 disabled=""  class="layui-input"  type="text" />
+									</div>
+
 								</div>
 							</div>
 						</form>

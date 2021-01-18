@@ -52,7 +52,7 @@ public class QuoteController extends WebController {
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("prodType", prodType);
 			mav.addObject("QuoteType", sysParamSubService.getListByMCode("BJ_LIST_TYPE").getData());//报价类型
-			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());//机台类型
+			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_MODEL_TYPE").getData());//机台类型
 			mav.setViewName("/web/quote/01business/quote_add");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1428,6 +1428,48 @@ public class PrcUtils {
             return resultList;
         }
 
+    public List getNgItemProc(String company, String factory,String userId,String barcode,String taskNo,String itemNo)
+            throws Exception {
+        List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call  prc_mes_material_ng_item(?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, factory);
+                cs.setString(2, company);
+                cs.setString(3, userId);
+                cs.setString(4, taskNo);
+                cs.setString(5, barcode);
+                cs.setString(6, itemNo);
+                cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(8, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(9, -10);// 输出参数 返回标识
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<Object> result = new ArrayList<>();
+                List<Map<String, Object>> l = new ArrayList();
+                cs.execute();
+                result.add(cs.getInt(7));
+                result.add(cs.getString(8));
+                if (cs.getString(7).toString().equals("0")) {
+                    // 游标处理
+                    ResultSet rs = (ResultSet) cs.getObject(9);
+                    try {
+                        l = fitMap(rs);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    result.add(l);
+                }
+                return result;
+            }
+        });
+        return resultList;
+    }
+
     //获取不良内容下拉列表
     public List getBadSelectPrc(String company, String factory,String keyword)
             throws Exception {

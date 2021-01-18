@@ -87,7 +87,11 @@ $(function() {
                         field : 'VENDER_NAME',
                         title : '供应商名称',
                         width : 200
-                    } ,
+                    },{
+                        field : 'TASK_NO',
+                        title : '制令单',
+                        width : 200
+                    }
                 ] ],
                 done : function(res, curr, count) {
                     pageCurr = curr;
@@ -155,7 +159,7 @@ $(function() {
                     });
                     form.render();// 重新渲染
 
-                    // getDetailByTask(da[0].TASK_NO);
+                    getNgItem(da[0].ITEM_NO);
 
                 }
             });
@@ -397,7 +401,12 @@ $(function() {
                         field : 'VENDER_NAME',
                         title : '供应商名称',
                         width : 200
-                    } ,
+                    },
+                    {
+                        field : 'TASK_NO',
+                        title : '制令单',
+                        width : 200
+                    }
                 ] ],
                 done : function(res, curr, count) {
                     pageCurr = curr;
@@ -590,3 +599,31 @@ function del(obj,id, barcode) {
     }
 }
 
+
+function getNgItem(itemNo){
+    var params={
+        "itemNo":itemNo,
+        "barcode":$('#barcode').val(),
+        "taskNo":$('#taskNo').val()
+    }
+    CoreUtil.sendAjax("/produce/badMaterial/getNgItem", params, function(data) {
+        //console.log(data)
+        if (data.result) {
+            tableIns.reload({
+                data:data.data,
+                done : function(res1, curr, count) {
+                    var allNum = 0;
+                    res1.data.forEach(function(item, index) {
+                        allNum += Number(item.DEFECT_DET_QTY);
+                    });
+                    $("#allNum").val(allNum);
+
+                }
+            });
+        }else{
+            layer.alert(data.msg);
+        }
+    }, "GET", false, function(res) {
+        layer.alert(res.msg);
+    });
+}

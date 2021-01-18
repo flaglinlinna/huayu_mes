@@ -69,6 +69,17 @@ public class BadMaterialImpl extends PrcUtils implements BadMaterialService {
     }
 
     @Override
+    public ApiResponseResult getNgItem(String barcode, String taskNo,String itemNo) throws Exception {
+//        getNgItemProc
+
+        List<Object> list = getNgItemProc(UserUtil.getSessionUser().getCompany(),UserUtil.getSessionUser().getFactory(),UserUtil.getSessionUser().getId()+"",barcode,taskNo,itemNo);
+        if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        return ApiResponseResult.success().data(list.get(2));
+    }
+
+    @Override
     public ApiResponseResult getTaskNo(String keyword) throws Exception {
         List<Object> list = getTaskNoPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",4,UserUtil.getSessionUser().getId()+"",keyword);
         if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标

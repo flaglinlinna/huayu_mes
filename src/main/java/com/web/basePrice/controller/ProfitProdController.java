@@ -47,7 +47,7 @@ public class ProfitProdController extends WebController{
 	public ModelAndView toProfitProd() {
 		ModelAndView mav = new ModelAndView();
 		try {
-			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());//机台类型
+			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_MODEL_TYPE").getData());//机台类型
 			mav.setViewName("/web/basePrice/profit_prod");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

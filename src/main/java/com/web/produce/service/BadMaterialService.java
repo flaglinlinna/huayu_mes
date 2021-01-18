@@ -22,6 +22,8 @@ public interface BadMaterialService {
 
     public ApiResponseResult getTaskNo(String keyword) throws Exception;
 
+    public ApiResponseResult getNgItem(String barcode, String taskNo ,String itemNo) throws Exception;
+
     public ApiResponseResult getInfoBarcode(String barcode, String taskNo) throws Exception;
 
     public ApiResponseResult saveMaterial(String itemNo,Integer deptId, Integer venderId,String barcode,String prodDate,
