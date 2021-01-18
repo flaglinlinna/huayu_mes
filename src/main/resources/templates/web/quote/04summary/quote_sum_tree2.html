@@ -7,11 +7,12 @@
  <!--    <div th:replace="fragments/head :: header"></div> -->
 
     <div  style="margin: 1%">
-    
-    <table class="layui-table layui-form" id="tree-table" lay-size="sm"></table>
-    
-<table  id="tableId" lay-filter="tableEvent"></table>
+        <div class="demoTable">
+            &nbsp;&nbsp;<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addPerm('{{r.id}}',0)">新建菜单</button>
+        </div>
 
+        <div id="permTable" class="grid">
+        </div>
         <script id="view" type="text/html">
             <table class="layui-table">
                 <thead>
@@ -119,8 +120,7 @@
  <!--    <div th:replace="fragments/footer :: footer"></div> -->
     <script th:inline="javascript">
         var permList=[[${permList}]];
-        var quoteId = [[${quoteId}]];
-        //console.log(permList)
+
     </script>
     <script th:src="@{/js/web/quote/04summary/quote_sum_tree.js}"
 			src="/js/web/quote/04summary/quote_sum_tree.js"></script>

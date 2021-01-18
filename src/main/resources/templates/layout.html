@@ -44,7 +44,9 @@
     <link rel="stylesheet" href="/gantt/dhtmlxgantt.css?v=5.2.0" th:href="@{/gantt/dhtmlxgantt.css?v=5.2.0}"></link>
     <script src="/gantt/testdata.js?v=5.2.0"  th:src="@{/gantt/testdata.js?v=5.2.0}"></script>
     
-    
+    <script src="/layuiadmin/tabletree.js"  th:src="@{/layuiadmin/tabletree.js}"></script>
+    <!-- <script src="/layui/tableTree/tableEdit.js"  th:src="@{/layui/tableTree/tableEdit.js}"></script> 
+    <link href="/layui/treetable-lay/treetable.css" th:href="@{/layui/treetable-lay/treetable.css}" rel="stylesheet" type="text/css" />-->
     
     <script th:inline="javascript">
         //var context = [[@{/}]];
@@ -56,9 +58,6 @@
             index: 'lib/index' //主入口模块
         }).use(['index']);
         
-        $("#_search_btn").click(function () {
-            alert('12');
-     	});
         
         function getNextDateTime(day) {
 

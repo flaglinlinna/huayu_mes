@@ -1,149 +1,151 @@
 /**
- * 权限列表
+ * 报价单-列表
  */
+var pageCurr;
 $(function() {
-    //初始化treegrid 页面表格
-    layui.config({
-        base: context+'/treegrid/'
-    }).use(['laytpl', 'treegrid'], function () {
-        var laytpl = layui.laytpl,
-            treegrid = layui.treegrid;
-        treegrid.config.render = function (viewid, data) {
-            var view = document.getElementById(viewid).innerHTML;
-            return laytpl(view).render(data) || '';
-        };
+	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ,'treeTable'], function() {
+		var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table,treetable = layui.treeTable;
+		
+		var	re = treetable.render({
+			elem: '#tree-table',
+			//data: [{"id":1,"pid":0,"title":"1-1"},{"id":2,"pid":0,"title":"1-2"},{"id":3,"pid":0,"title":"1-3"},{"id":4,"pid":1,"title":"1-1-1"},{"id":5,"pid":1,"title":"1-1-2"},{"id":6,"pid":2,"title":"1-2-1"},{"id":7,"pid":2,"title":"1-2-3"},{"id":8,"pid":3,"title":"1-3-1"},{"id":9,"pid":3,"title":"1-3-2"},{"id":10,"pid":4,"title":"1-1-1-1"},{"id":11,"pid":4,"title":"1-1-1-2"}],
+			data:permList,
+			icon_key: 'bsItemCode',
+			parent_key:'parenId',
+			is_checkbox: false,
+			end: function(e){
+				form.render();
+			},
+			cols: [
+				{key: 'bsItemCode',title: '物料编码',width: '100px'},
+				{key: '',title: '机型',width: '100px',align: 'center',template: function(item){return ''}},
+				{key: 'bsMaterName',title: '产品描述',width: '200px',align: 'center'},
+				{title: '工作中心',width: '100px',align: 'center',template: function(r){
+						return r.wc==null?'':r.wc.workcenterName;
+				    }
+				},
+				{title: '数量',width: '100px',align: 'center',template: function(r){
+						return r.bsQty==null?'':r.bsQty;
+				    }
+				},
+				{title: '单位',width: '100px',align: 'center',template: function(r){
+						return r.unit==null?'':r.unit.unitName;
+				    }
+				},
+				{key: 'bsFeeItemAll',title: '材料费用',width: '100px',align: 'center'},
+				{title: '单位',width: '100px',align: 'center',template: function(r){
+						return r.unit==null?'':r.unit.unitName;
+				    }
+				},
+				{title: '人工费用',width: '100px',align: 'center',template: function(r){
+						return r.bsFeeLhAll==null?'':r.bsFeeLhAll;
+				    }
+				},
+				{title: '制造费用',width: '100px',align: 'center',template: function(r){
+						return r.bsFeeMhAll==null?'':r.bsFeeMhAll;
+				    }
+				},
+				{title: '外协费用',width: '100px',align: 'center',template: function(r){
+						return r.bsFeeOut==null?'':r.bsFeeOut;
+				    }
+				},
+				{title: '合计',width: '100px',align: 'center',template: function(r){
+						return r.bsFeeAll==null?'':r.bsFeeAll;
+				    }
+				},
+			]
+		});
+		/*var	re = treetable.render({
+			elem: '#tree-table',
+			//url:'/quoteSum/getQuoteTreeList?quoteId='+quoteId,
+			data: [{"id":1,"pid":0,"title":"1-1"},{"id":2,"pid":0,"title":"1-2"},{"id":3,"pid":0,"title":"1-3"},{"id":4,"pid":1,"title":"1-1-1"},{"id":5,"pid":1,"title":"1-1-2"},{"id":6,"pid":2,"title":"1-2-1"},{"id":7,"pid":2,"title":"1-2-3"},{"id":8,"pid":3,"title":"1-3-1"},{"id":9,"pid":3,"title":"1-3-2"},{"id":10,"pid":4,"title":"1-1-1-1"},{"id":11,"pid":4,"title":"1-1-1-2"}],
+			//data:permList,
+			icon_key: 'title',
+			//parent_key:'parenId',
+			is_checkbox: true,
+			checked: {
+				key: 'id',
+				data: [0,1,4,10,11,5,2,6,7,3,8,9],
+			},
+			end: function(e){
+				form.render();
+			},
+			cols: [
+				{
+					key: 'id',
+					title: '名称',
+					width: '100px',
+					template: function(item){
+						if(item.level == 0){
+							return '<span style="color:red;">'+item.title+'</span>';
+						}else if(item.level == 1){
+							return '<span style="color:green;">'+item.title+'</span>';
+						}else if(item.level == 2){
+							return '<span style="color:#aaa;">'+item.title+'</span>';
+						}
+					}
+				},
+				{
+					key: 'id',
+					title: 'ID',
+					width: '100px',
+					align: 'center',
+				},
+				{
+					key: 'parenId',
+					title: '父ID',
+					width: '100px',
+					align: 'center',
+				}
+			]
+		});*/
+		/*var treeTable = treetable.render({
+            elem: '#tableId'
+            ,id:'tableTree'
+            ,url:'/quoteSum/getQuoteTreeList?quoteId='+quoteId
+            ,height: 'full-65'
+            ,page: false,
+            treeColIndex: 1,//树形图标显示在第几列
+            treeSpid: 0,//最上级的父级id
+            treeIdName: 'bsItemCode',//id字段的名称
+            treePidName: 'parenId',//pid字段的名称
+            treeDefaultClose: false,//是否默认折叠
+            treeLinkage: true,//父级展开时是否自动展开所有子级
+            
+            tree: {
+                iconIndex: 1,
+                isPidData: true,
+                idName: 'bsItemCode',
+                pidName: 'parenId',
+                
+            },
+            parseData : function(res) {
+				if (!res.result) {
+					return {
+						"count" : 0,
+						"msg" : res.msg,
+						"data" : [],
+						"code" : res.status
+					}
+				}
+				return {
+					"count" : res.data.length,
+					"msg" : res.msg,
+					"data" : res.data,
+					"code" : res.status
+				}
+			}
+            ,cols: [[
+                {type:'checkbox'},
+                {field:'bsItemCode',title: '物料编码',width:259},
+                {field:'id',title:'id',width:120,sort:true},
+                {field:'parenId',title:'parenId',width:120,sort:true},
+                {field:'bsMaterName',title:'产品描述',width:120,sort:true},
+            ]]
+        });*/
 
-        var treeForm=treegrid.createNew({
-            elem: 'permTable',
-            view: 'view',
-            data: { rows: permList },
-            parentid: 'parenId',
-            singleSelect: false,
-            onCollapse:true
-        });
-        treeForm.build();
 
-    });
-    //操作
-    layui.use('form', function(){
-        var form = layui.form;
-        //监听提交
-        form.on('submit(permSubmit)', function(data){
-            //校验 TODO
-            $.ajax({
-                type: "POST",
-                data: $("#permForm").serialize(),
-                url: context+"/quoteSum/getQuoteTreeList",
-                success: function (data) {
-                    if (data.result) {
-                        layer.alert("操作成功",function(){
-                            layer.closeAll();
-                        });
-                    } else {
-                        layer.alert(data.msg);
-                    }
-                },
-                error: function (data) {
-                    layer.alert("操作请求错误，请您稍后再试");
-                }
-            });
-            return false;
-        });
-        form.render();
-    });
-
+	});
 });
 
-function edit(id,type){
-    if(null!=id){
-        $("#type").val(type);
-        $("#id").val(id);
-        $.get(context+"/sysPermission/getPerm",{"id":id},function(data) {
-            // console.log(data);
-            if(data.result){
-                $("input[name='menuName']").val(data.data.menuName);
-                $("input[name='menuCode']").val(data.data.menuCode);
-                $("input[name='pageUrl']").val(data.data.pageUrl);
-                $("input[name='zindex']").val(data.data.zindex);
-                $("input[name='menuIcon']").val(data.data.menuIcon);
-                $("textarea[name='description']").text(data.data.description);
-                $("#parentId").val(data.data.parentId);
-                data.data.istype==0?$("input[name='istype']").val(0).checked:$("input[name='istype']").val(1).checked;
-                var index=layer.open({
-                    type:1,
-                    title: "更新权限",
-                    fixed:false,
-                    resize :false,
-                    shadeClose: true,
-                    area: ['500px'],
-                    content:$('#updatePerm'),
-                    end:function(){
-                        location.reload();
-                    }
-                });
-                layer.full(index);//弹出框全屏
-            }else{
-                layer.alert(data.msg);
-            }
-        });
-    }
-}
-//开通权限
-function addPerm(pid,flag){
-    if(null!=pid){
-        //flag[0:开通权限；1：新增子节点权限]
-        //type[0:编辑；1：新增]
-        if(flag==0){
-            $("#type").val(1);
-            $("#parentId").val(0);
-        }else{
-            //设置父id
-            $("#type").val(1);
-            $("#parentId").val(pid);
-        }
-       var index= layer.open({
-            type:1,
-            title: "添加权限",
-            fixed:false,
-            resize :false,
-            shadeClose: true,
-            area: ['500px'],
-            content:$('#updatePerm'),  //页面自定义的div，样式自定义
-            end:function(){
-                location.reload();
-            }
-        });
-       layer.full(index);//弹出框全屏
-    }
-}
 
-function del(id,name){
-    // console.log("===删除id："+id);
-    if(null!=id){
-        layer.confirm('您确定要删除'+name+'权限吗？', {
-            btn: ['确认','返回'] //按钮
-        }, function(){
-            $.post(context+"/sysPermission/delete",{"id":id},function(data){
-            	//alert(data.result)
-                if(data.result){
-                    //回调弹框
-                    layer.alert("删除成功！",function(){
-                        layer.closeAll();
-                        //加载load方法
-                        location.reload();//自定义
-                    });
-                }else{
-                    layer.alert(data.msg);//弹出错误提示
-                }
-            });
-        }, function(){
-            layer.closeAll();
-        });
-    }
-
-}
-
-//关闭弹框
-function close(){
-    layer.closeAll();
-}
