@@ -68,7 +68,7 @@ $(function() {
 					}},
 				/*{field : 'bsModelType', width:100, title : '机台类型',width:90,},*/
 				{field : 'bsModelType',width : 120,title : '机台类型',templet : '#selectModelType',style : 'background-color:#ffffff'},
-				{field : 'bsRadix', title : '基数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',style : 'background-color:#ffffff'},
+				/*{field : 'bsRadix', title : '基数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',style : 'background-color:#ffffff'},*/
 				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCycle', title : '成型周期(S)<span style="color:red;font-size:12px;">*</span>', width:150,edit:'text', hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsYield', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:120,edit:'text',hide:true,style : 'background-color:#ffffff'},

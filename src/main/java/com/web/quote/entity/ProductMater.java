@@ -140,7 +140,7 @@ public class ProductMater extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "bsRadix", value = "基数")
 	@Column(length = 50)
-	protected String bsRadix;
+	protected String bsRadix="1";
 
 	/**
 	 * 供应商
