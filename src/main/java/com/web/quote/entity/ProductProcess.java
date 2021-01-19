@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.springframework.data.annotation.Transient;
 
 import com.app.base.entity.BaseEntity;
 import com.web.basePrice.entity.BjWorkCenter;
@@ -236,7 +237,8 @@ public class ProductProcess extends BaseEntity {
 	@Column(length = 50)
 	protected BigDecimal bsLoss;
 	
-	
+	@Transient
+    private String bsTypeList;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -462,6 +464,14 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsElement(String bsElement) {
 		this.bsElement = bsElement;
+	}
+
+	public String getBsTypeList() {
+		return bsTypeList;
+	}
+
+	public void setBsTypeList(String bsTypeList) {
+		this.bsTypeList = bsTypeList;
 	}
 	
 	

@@ -1,23 +1,15 @@
 package com.web.quote.service.internal;
 
-import com.app.base.data.ApiResponseResult;
-import com.app.base.data.DataGrid;
-import com.utils.BaseService;
-import com.utils.ExcelExport;
-import com.utils.SearchFilter;
-import com.utils.UserUtil;
-import com.utils.enumeration.BasicStateEnum;
-import com.web.basePrice.dao.ProcDao;
-import com.web.basePrice.entity.Proc;
-import com.web.quote.dao.ProductProcessDao;
-import com.web.quote.dao.ProductProcessTempDao;
-import com.web.quote.dao.QuoteItemDao;
-import com.web.quote.dao.QuoteProcessDao;
-import com.web.quote.entity.ProductProcess;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.web.quote.entity.ProductProcessTemp;
-import com.web.quote.entity.QuoteProcess;
-import com.web.quote.service.ProductProcessService;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -32,11 +24,24 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.*;
+import com.alibaba.fastjson.JSON;
+import com.app.base.data.ApiResponseResult;
+import com.app.base.data.DataGrid;
+import com.utils.BaseService;
+import com.utils.ExcelExport;
+import com.utils.SearchFilter;
+import com.utils.UserUtil;
+import com.utils.enumeration.BasicStateEnum;
+import com.web.basePrice.dao.ProcDao;
+import com.web.basePrice.entity.Proc;
+import com.web.quote.dao.ProductProcessDao;
+import com.web.quote.dao.ProductProcessTempDao;
+import com.web.quote.dao.QuoteItemDao;
+import com.web.quote.dao.QuoteProcessDao;
+import com.web.quote.entity.ProductProcess;
+import com.web.quote.entity.ProductProcessTemp;
+import com.web.quote.entity.QuoteProcess;
+import com.web.quote.service.ProductProcessService;
 
 @Service(value = "ProductProcessService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -343,6 +348,15 @@ public class ProductProcesslmpl implements ProductProcessService {
         Specification<ProductProcess> spec = Specification.where(BaseService.and(filters, ProductProcess.class));
         Specification<ProductProcess> spec1 = spec.and(BaseService.or(filters1, ProductProcess.class));
         Page<ProductProcess> page = productProcessDao.findAll(spec1, pageRequest);
+        
+        
+        for(ProductProcess pm:page.getContent()){
+        	List<Map<String, Object>> lm = productProcessDao.findByDelFlagAndWorkcenter( pm.getProc().getBjWorkCenter().getId());
+			if(lm.size()>0){
+				String str1 = JSON.toJSONString(lm); //此行转换
+				pm.setBsTypeList(str1);
+			}
+		}
 
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
