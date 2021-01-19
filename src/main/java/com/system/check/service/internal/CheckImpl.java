@@ -634,6 +634,7 @@ public class CheckImpl   implements CheckService {
 		Quote quote = quoteDao.findById((long) c.getBsRecordId());
 		if(quote != null){
 			quote.setLastupdateDate(new Date());
+			quote.setBsStatus3(2);
 			quote.setBsStatus4(2);
 			quote.setBsEndTime3(new Date());
 			quoteDao.save(quote);
