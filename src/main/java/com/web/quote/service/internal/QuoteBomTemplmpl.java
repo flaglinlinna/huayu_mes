@@ -143,14 +143,30 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 					errInfo += "材料规格不能为空;";
 				}
 				String fmemo = tranCell(sheet.getRow(row).getCell(7));
-				String bsProQty = tranCell(sheet.getRow(row).getCell(8));
-				String unit = tranCell(sheet.getRow(row).getCell(9));
-				List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(unit,0);
-				if(unitList!=null&& unitList.size()>0){
-					temp.setPkUnit(unitList.get(0).getId());
+				String bsQty = tranCell(sheet.getRow(row).getCell(8)); //hjj-20210119增加用量字段
+				String bsProQty = tranCell(sheet.getRow(row).getCell(9));
+				String unit = tranCell(sheet.getRow(row).getCell(10));
+				if(StringUtils.isNotEmpty(unit)) {
+					List<Unit> unitList = unitDao.findByUnitNameAndDelFlag(unit, 0);
+					if (unitList != null && unitList.size() > 0) {
+						temp.setPkUnit(unitList.get(0).getId());
+					} else {
+						errInfo += "没有维护:"+ unit +" 单位;";
+					}
+				}else {
+					errInfo += "单位不能为空";
 				}
-				String bsRadix = tranCell(sheet.getRow(row).getCell(10));
-				String bsExplain = tranCell(sheet.getRow(row).getCell(11));//lst-20210107增加采购说明字段
+				temp.setBsQty(bsQty);
+				if(StringUtils.isNoneEmpty(bsQty)){
+					if(!bsQty.matches("^\\d+\\.\\d+$") && !bsQty.matches("^^\\d+$")){
+						errInfo += "数量需输入数字类型";
+					}
+				}else {
+					errInfo += "数量不能为空";
+				}
+
+				String bsRadix = tranCell(sheet.getRow(row).getCell(11));
+				String bsExplain = tranCell(sheet.getRow(row).getCell(12));//lst-20210107增加采购说明字段
 				if(StringUtils.isNotEmpty(bsProQty)) {
 					if(!bsProQty.matches("^\\d+\\.\\d+$") && !bsProQty.matches("^^\\d+$")){
 						errInfo += "制品重需输入数字类型";
@@ -217,6 +233,9 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			quoteBom.setBsModel(temp.getBsModel());
 			if(StringUtils.isNotEmpty(temp.getBsProQty())){
 				quoteBom.setBsProQty(new BigDecimal(temp.getBsProQty()));
+			}
+			if(StringUtils.isNotEmpty(temp.getBsQty())){
+				quoteBom.setBsQty(new BigDecimal(temp.getBsQty()));
 			}
 			quoteBom.setPkUnit(temp.getPkUnit());
 			quoteBom.setPkQuote(temp.getPkQuote());
