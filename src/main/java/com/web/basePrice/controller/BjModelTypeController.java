@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -170,25 +171,22 @@ public class BjModelTypeController extends WebController{
             return ApiResponseResult.failure("获取工作中心信息失败！");
         }
     }
-    
-    @ApiOperation(value = "检验工序与工作中心", notes = "检验工序与工作中心", hidden = true)
-    @RequestMapping(value = "/doCheckInfo", method = RequestMethod.POST)
+
+    @ApiOperation(value = "导入", notes = "导入", hidden = true)
+    @RequestMapping(value = "/doExcel", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponseResult doCheckInfo(@RequestBody Map<String, Object> params) throws Exception{
-        String method = "basePrice/bjModelType/doCheckInfo";
-        String methodName ="检验工序与工作中心";
+    public ApiResponseResult doExcel(MultipartFile[] file) throws Exception{
+        String method = "/basePrice/bjModelType/doExcel";String methodName ="导入";
         try{
-        	String  input1 = params.get("input1")==null?"":params.get("input1").toString();
-        	String  input2 = params.get("input2")==null?"":params.get("input2").toString();
-        	ApiResponseResult result = bjModelTypeService.doCheckInfo("01",input1,input2,"","");
-            logger.debug("检验工序与工作中心=doCheckInfo:");
-            getSysLogService().success(module,method, methodName, params);
+            ApiResponseResult result = bjModelTypeService.doExcel(file);
+            logger.debug("导入=doExcel:");
+            getSysLogService().success(module,method, methodName, null);
             return result;
         }catch (Exception e){
             e.printStackTrace();
-            logger.error("检验工序与工作中心失败！", e);
-            getSysLogService().error(module,method, methodName, params+";"+e.toString());
-            return ApiResponseResult.failure("检验工序与工作中心失败！");
+            logger.error("导入失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("导入失败！");
         }
     }
 }

@@ -9,9 +9,13 @@ import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 
 import com.web.basePrice.dao.BjModelTypeDao;
+import com.web.basePrice.dao.BjWorkCenterDao;
 import com.web.basePrice.entity.BjModelType;
+import com.web.basePrice.entity.BjWorkCenter;
 import com.web.basePrice.service.BjModelTypeService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +23,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -31,6 +37,9 @@ import java.util.*;
 public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeService {
 	@Autowired
 	private BjModelTypeDao bjModelTypeDao;
+
+	@Autowired
+	private BjWorkCenterDao bjWorkCenterDao;
 
 	@Autowired
 	private SysUserDao sysUserDao;
@@ -69,7 +78,12 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 
 		BjModelType o = bjModelTypeDao.findById((long) bjModelType.getId());
 		if (o == null) {
-			return ApiResponseResult.failure("该人工制费不存在！");
+			return ApiResponseResult.failure("该机台类型不存在！");
+		}
+		if (!o.getModelCode().equals(bjModelType.getModelCode())){
+			if(bjModelTypeDao.findByDelFlagAndModelCode(0,bjModelType.getModelCode()).size()>0){
+				return ApiResponseResult.failure("该机台编码已存在,请重新输入！");
+			}
 		}
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
@@ -124,8 +138,9 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 		for (BjModelType baseFee : baseFeeList) {
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", baseFee.getId());
-			map.put("workcenterId", baseFee.getPkWorkcenter());
-			map.put("workcenter", baseFee.getWorkCenter().getWorkcenterName());
+			map.put("workCenterId", baseFee.getPkWorkcenter());
+			map.put("workCenterCode", baseFee.getWorkCenter().getWorkcenterCode());
+            map.put("workCenterName", baseFee.getWorkCenter().getWorkcenterName());
 			map.put("modelCode", baseFee.getModelCode());
 			map.put("modelName", baseFee.getModelName());
 			map.put("createBy", sysUserDao.findById((long) baseFee.getCreateBy()).getUserName());
@@ -188,5 +203,63 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 					return ApiResponseResult.failure(list.get(1).toString());
 				}
 				return ApiResponseResult.success();
+	}
+
+	//防止读取Excel为null转String 报空指针异常
+	public String tranCell(Object object)
+	{
+		if(object==null||object==""||("").equals(object)){
+			return null;
+		}else return object.toString();
+	}
+
+	@Override
+	public ApiResponseResult doExcel(MultipartFile[] file) throws Exception{
+		try {
+			Date doExcleDate = new Date();
+			Long userId = UserUtil.getSessionUser().getId();
+			InputStream fin = file[0].getInputStream();
+			XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			//获取最后一行的num，即总行数。此处从0开始计数
+			int maxRow = sheet.getLastRowNum();
+//			Integer successes = 0;
+//			Integer failures = 0;
+			List<BjModelType> bjModelTypeList = new ArrayList<>();
+			for (int row = 1; row <= maxRow; row++) {
+//				String errInfo = "";
+				String workCenterCode = tranCell(sheet.getRow(row).getCell(0));
+				String modelCode = tranCell(sheet.getRow(row).getCell(1));
+				String modelName = tranCell(sheet.getRow(row).getCell(2));
+				BjModelType bjModelType = new BjModelType();
+				if(StringUtils.isNotEmpty(modelCode)){
+					List<BjModelType> bjModelTypeList1 = bjModelTypeDao.findByDelFlagAndModelCode(0,modelCode);
+					if(bjModelTypeList1.size()>0){
+						bjModelType = bjModelTypeList1.get(0);
+						bjModelType.setLastupdateBy(userId);
+						bjModelType.setLastupdateDate(doExcleDate);
+					}else {
+						bjModelType.setCreateBy(userId);
+						bjModelType.setCreateDate(doExcleDate);
+					}
+				}
+				if(StringUtils.isNotEmpty(workCenterCode)){
+					List<BjWorkCenter> bjWorkCenterList = bjWorkCenterDao.findByDelFlagAndWorkcenterCode(0,workCenterCode);
+					if(bjWorkCenterList.size()>0){
+						bjModelType.setPkWorkcenter(bjWorkCenterList.get(0).getId());
+					}
+				}
+				bjModelType.setModelCode(modelCode);
+				bjModelType.setModelName(modelName);
+				bjModelTypeList.add(bjModelType);
+			}
+			bjModelTypeDao.saveAll(bjModelTypeList);
+			return ApiResponseResult.success("导入成功!");
+//			return ApiResponseResult.success("导入成功! 导入总数:" +all+" :校验通过数:"+successes+" ;不通过数: "+failures);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
+		}
 	}
 }

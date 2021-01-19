@@ -3,6 +3,7 @@ package com.web.basePrice.service;
 import com.app.base.data.ApiResponseResult;
 import com.web.basePrice.entity.BjModelType;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -13,6 +14,8 @@ public interface BjModelTypeService {
   public ApiResponseResult add(BjModelType bjModelType) throws Exception;
 
   public ApiResponseResult edit(BjModelType bjModelType) throws Exception;
+
+  public ApiResponseResult doExcel(MultipartFile[] file) throws Exception;
 
   public ApiResponseResult delete(Long id) throws Exception;
 

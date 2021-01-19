@@ -14,6 +14,7 @@ public interface BjModelTypeDao extends CrudRepository<BjModelType, Long>,JpaSpe
     public List<BjModelType> findAll();
     public List<BjModelType> findByDelFlag(Integer delFlag);
     public BjModelType findById(long id);
+    public List<BjModelType> findByDelFlagAndModelCode(Integer delFlag,String modelCode);
 
 //    public List<BjModelType> findByDelFlagAndWorkcenterIdAndProcId(Integer delFlag, Long wid, Long procId);
 
