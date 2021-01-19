@@ -145,7 +145,7 @@ $(function() {
 				} else if (obj.event === 'edit') {// 编辑
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteAdd?quoteId='+data.id+'&status='+data.bsStatus,'修改报价单');
 				}else if(obj.event === 'view'){
-					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item','报价项目');
+					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item','报价项目清单');
 				}else if(obj.event === 'check'){
 					//先判断是否填写完成资料-fyx-20210105
 					if(data.bsStatusCheck>1){

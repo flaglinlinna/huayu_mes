@@ -133,7 +133,20 @@ $(function() {
 				// 编辑
 				open("编辑项目资料")
 			} else if (obj.event === 'view') {
-				parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, '填报项目');
+				//20210119-fyx-根据不同的类型标题不一样
+				var titel = '填报项目';
+				if(Style == 'out'){//外协
+					titel = "外协"+titel;
+				}else if(Style == 'hardware'){//五金
+					titel = "五金"+titel;
+				}else if(Style == 'molding'){//注塑
+					titel = "注塑"+titel;
+				}else if(Style == 'surface'){
+					titel = "表面处理"+titel;
+				}else if(Style == 'packag'){
+					titel = "包装"+titel;
+				}
+				parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel);
 			} else if (obj.event === 'check') {
 				// 先判断是否填写完成资料-暂时未校验-20201218-fyx
 				if (true) {
