@@ -327,6 +327,14 @@ public class ProductProcesslmpl implements ProductProcessService {
         Specification<ProductProcess> spec1 = spec.and(BaseService.or(filters1, ProductProcess.class));
         Page<ProductProcess> page = productProcessDao.findAll(spec1, pageRequest);
 
+        for(ProductProcess pm:page.getContent()){
+            List<Map<String, Object>> lm = productProcessDao.findByDelFlagAndWorkcenter( pm.getProc().getBjWorkCenter().getId());
+            if(lm.size()>0){
+                String str1 = JSON.toJSONString(lm); //此行转换
+                pm.setBsTypeList(str1);
+            }
+        }
+
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }

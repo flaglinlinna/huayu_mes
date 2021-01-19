@@ -258,7 +258,7 @@ public class ProductProcessController extends WebController {
 	@RequestMapping(value = "/getProcListByType", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getProcListByType(String bsType) {
-		String method = "productProcess/getListByPkQuote";
+		String method = "productProcess/getProcListByType";
 		String methodName = "根据大类获取工序中心";
 		try {
 			ApiResponseResult result = productProcessService.getProcListByType(bsType);

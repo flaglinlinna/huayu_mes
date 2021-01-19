@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Api("机台类型维护模块")
@@ -45,7 +47,15 @@ public class BjModelTypeController extends WebController{
         String method = "basePrice/bjModelType/getList";String methodName ="获取机台类型维护列表";
         try {
             System.out.println(keyword);
-            Sort sort = new Sort(Sort.Direction.DESC, "id");
+//            Sort sort = new Sort(Sort.Direction.DESC, "id");
+
+            Sort.Order order1 = new Sort.Order(Sort.Direction.ASC, "workCenter.bsCode");
+            Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "modelCode");
+            List<Sort.Order> list = new ArrayList<>();
+            list.add(order1);
+            list.add(order2);
+            Sort sort = new Sort(list);
+
             ApiResponseResult result = bjModelTypeService.getList(keyword, bsType,super.getPageRequest(sort));
             logger.debug("获取机台类型维护列表=getList:");
             getSysLogService().success(module,method, methodName, null);
