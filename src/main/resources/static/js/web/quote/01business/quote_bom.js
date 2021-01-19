@@ -174,8 +174,9 @@ $(function() {
 							{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
 							{field : 'bsModel',title : '材料规格',width : 200},
 							{field : 'bsExplain',title : '采购说明',width : 200}, 
-							{field : 'fmemo',title : '工艺说明',width : 200}, 
-							{field : 'bsProQty',title : '制品量',width : 90},
+							{field : 'fmemo',title : '工艺说明',width : 200},
+							{field : 'bsQty',title : '用量',width : 90},
+							{field : 'bsProQty',title : '制品重',width : 90},
 							{field : 'unit',title : '单位',width : 80,
 								templet : function(d) {
 									if (d.unit != null) {return d.unit.unitName;} 
@@ -240,7 +241,8 @@ $(function() {
 								{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
 								{field : 'bsModel',title : '材料规格',width : 200},
 								{field : 'bsExplain',title : '采购说明',width : 200},
-								{field : 'fmemo',title : '工艺说明',width : 200}, 
+								{field : 'fmemo',title : '工艺说明',width : 200},
+								{field : 'bsQty',title : '用量',width : 90},
 								{field : 'bsProQty',title : '制品量',width : 90},
 								{field : 'unit',title : '单位',width : 80,templet : function(d) {
 									if (d.unit != null) {return d.unit.unitName;} 

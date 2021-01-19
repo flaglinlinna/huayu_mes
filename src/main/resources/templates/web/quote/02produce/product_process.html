@@ -4,6 +4,15 @@
 <head th:include="layout :: htmlhead" th:with="title='报价工艺流程信息'">
 <meta charset="UTF-8">
 </head>
+<style>
+	.layui-table-cell, .layui-table-tool-panel li {
+		overflow: visible !important;
+	}
+
+	.layui-form-select .layui-input {
+		height: 30px;
+	}
+</style>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div style="margin: 10px">
@@ -71,7 +80,7 @@
             <select name="selectModelType" lay-filter="selectModelType" lay-search>
               <option value="">请选择</option>
               {{# layui.each($.parseJSON( d.bsTypeList ), function(index, item){     }}
-               <option value="{{ item.MODEL_CODE }},{{ item.MODEL_NAME }}"  {{ d.bsModelType==item.MODEL_CODE?'selected':''}}>{{ item.RANGE_NAME }}</option>
+               <option value="{{ item.MODEL_CODE }},{{ item.MODEL_NAME }}"  {{ d.bsModelType==item.MODEL_CODE?'selected':''}}>{{ item.MODEL_NAME }}</option>
               {{# });  }}
             </select>
          </script>
