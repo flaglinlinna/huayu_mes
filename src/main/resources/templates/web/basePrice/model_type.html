@@ -24,6 +24,9 @@
 							lay-filter="searchSubmit">查询</button>
 						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button"
 				        onclick="add()">添加机台类型信息</button>
+						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button"
+								id="exportbtn" onclick="exportExcel()">导出模板</button>
+						<button class="layui-btn layui-btn-sm layui-btn-normal"  type="button" id="upload">导入数据</button>
 					</div>
 				</div>
 			</form>
@@ -59,30 +62,22 @@
 							type="text" />
 					</div>
 				</div>
-				<input id="workcenterId" type="hidden" name="workcenterId" />
+				<input id="pkWorkcenter" type="hidden" name="pkWorkcenter" />
 				<div class="layui-form-item">
-					<label class="layui-form-label">机台类型</label>
+					<label class="layui-form-label  layui-required">机台编码</label>
 					<div class="layui-input-inline">
-						<input id="mhType" name="mhType" autocomplete="off"
+						<input id="modelCode" name="modelCode" autocomplete="off"
 							class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">人工费率</label>
+					<label class="layui-form-label layui-required">机台名称</label>
 					<div class="layui-input-inline">
-						<input id="feeLh" name="feeLh" lay-verify="required"
+						<input id="modelName" name="modelName" lay-verify="required"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
-					<div class="layui-word-aux" style="line-height: 20px;">（元/小时）</div>
 				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">制费费率</label>
-					<div class="layui-input-inline">
-						<input id="feeMh" name="feeMh" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text" />
-					</div>
-					<div class="layui-word-aux" style="line-height: 20px;">（元/小时）</div>
-				</div>
+
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 10px;">
 						<button class="layui-btn layui-btn-sm" lay-submit=""

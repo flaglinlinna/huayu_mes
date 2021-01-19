@@ -42,7 +42,7 @@ public class BjModelType extends BaseEntity {
 	    @Column(length = 20)
 	    protected Long pkWorkcenter;
 	    
-	    @ApiModelProperty(name="pkWorkcenter",hidden=true,value="工作中心id")
+	    @ApiModelProperty(name="workCenter",hidden=true,value="工作中心id")
 	    @ManyToOne
 	    @JoinColumn(name="pkWorkcenter",insertable=false,updatable=false)
 	    @NotFound(action=NotFoundAction.IGNORE)
@@ -55,6 +55,7 @@ public class BjModelType extends BaseEntity {
 	    @ApiModelProperty(name = "procId", value = "工序Id")
 	    @Column(length = 20)
 	    protected Long procId;
+
 
 		public Long getPkWorkcenter() {
 			return pkWorkcenter;
