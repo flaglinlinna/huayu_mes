@@ -47,7 +47,8 @@ $(function() {
 		// 日期选择器
 		laydate.render({// 完成日期
 			elem : '#bsFinishTime',
-			trigger : 'click'
+			trigger : 'click',
+			min:0
 		});
 		if (quoteId) {// 存在quote为修改，不存在为新增
 			var param = {

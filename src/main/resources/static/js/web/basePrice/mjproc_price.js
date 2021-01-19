@@ -383,3 +383,12 @@ function cleanData() {
 	$('#itemForm')[0].reset();
 	layui.form.render();// 必须写
 }
+/*自定义处理数字*/
+function zhzs(value) {
+   value = value.replace(/[^\d]/g, '').replace(/^0{1,}/g, '');
+   if (value != '')
+      value = parseFloat(value).toFixed(2);
+   else
+      value = parseFloat(0).toFixed(2);
+   return value;
+}

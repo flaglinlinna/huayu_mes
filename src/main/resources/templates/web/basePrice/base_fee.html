@@ -76,7 +76,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">人工费率</label>
 					<div class="layui-input-inline">
-						<input id="feeLh" name="feeLh" lay-verify="required"
+						<input id="feeLh" name="feeLh" lay-verify="required"  onblur="value=zhzs(this.value)"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 					<div class="layui-word-aux" style="line-height: 20px;">（元/小时）</div>
@@ -84,7 +84,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">制费费率</label>
 					<div class="layui-input-inline">
-						<input id="feeMh" name="feeMh" lay-verify="required"
+						<input id="feeMh" name="feeMh" lay-verify="required" onblur="value=zhzs(this.value)"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 					<div class="layui-word-aux" style="line-height: 20px;">（元/小时）</div>
