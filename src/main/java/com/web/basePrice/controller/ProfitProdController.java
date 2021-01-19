@@ -63,7 +63,7 @@ public class ProfitProdController extends WebController{
         String method = "basePrice/profitProd/getList";String methodName ="获取产品利润率信息列表";
         try {
             System.out.println(keyword);
-            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            Sort sort = new Sort(Sort.Direction.DESC, "productType");
             ApiResponseResult result = profitProdService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取产品利润率信息列表=getList:");
             return result;

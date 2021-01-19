@@ -51,7 +51,7 @@ public class ProcController extends WebController{
         String method = "basePrice/proc/getList";String methodName ="获取工序信息维护列表";
         try {
             System.out.println(keyword);
-            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            Sort sort = new Sort(Sort.Direction.DESC, "workcenterId");
             ApiResponseResult result = procService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取工序信息维护列表=getList:");
             getSysLogService().success(module,method, methodName, null);
