@@ -16,6 +16,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseSql;
 import com.web.quote.dao.QuoteDao;
+import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteItem;
 import com.web.quote.service.QuoteProductService;
@@ -24,6 +25,8 @@ import com.web.quote.service.QuoteProductService;
 @Transactional(propagation = Propagation.REQUIRED)
 public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 
+	@Autowired
+    private QuoteItemDao quoteItemDao;
     /**
      * 获取报价单列表
      * **/
@@ -198,5 +201,35 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
     	List<QuoteItem> list = createSQLQuery(sql, param, QuoteItem.class);
     	return ApiResponseResult.success().data(list);
     }
+
+	@Override
+	public ApiResponseResult doCheckBefore(String keyword, String quoteId, String bsType) throws Exception {
+		// TODO Auto-generated method stub
+		if(StringUtils.isEmpty(quoteId)){
+			return ApiResponseResult.failure("报价单ID为空");
+		}
+		if(StringUtils.isEmpty(bsType)){
+			return ApiResponseResult.failure("报价单类型为空");
+		}
+		int m=0,p=0;
+		if(bsType.equals("hardware")){
+			m = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"B001",1);
+			p = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"C001",1);
+		}else if(bsType.equals("molding")){
+			m = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"B002",1);
+			p = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"C002",1);
+		}else if(bsType.equals("surface")){
+			m = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"B003",1);
+			p = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"C003",1);
+		}else if(bsType.equals("packag")){
+			m = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"B004",0);
+			p = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"C004",0);
+		}
+		if((m+p) == 0){
+			return ApiResponseResult.success();
+		}else{
+			return ApiResponseResult.failure("存在未确认完成的项目!");
+		}
+	}
 
 }

@@ -14,4 +14,7 @@ public interface QuoteProductService {
 									 String bsDevType,String bsCustName,String quoteId,PageRequest pageRequest)throws Exception;//获取列表
 
 	public ApiResponseResult getItemPage(Long id,String bsStyle)throws Exception;//获取待办项数据
+	
+	//20210119-fyx-审批前校验
+	public ApiResponseResult doCheckBefore(String keyword,String quoteId,String bsType)throws Exception;
 }

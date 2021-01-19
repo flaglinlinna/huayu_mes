@@ -20,6 +20,9 @@ public interface QuoteItemDao extends CrudRepository<QuoteItem, Long>,JpaSpecifi
 	public List<QuoteItem> findByDelFlagAndPkQuote(Integer delFlag,Long PkQuote);
 	public List<QuoteItem> findByDelFlagAndPkQuoteAndBsStyle(Integer delFlag,Long PkQuote,String bsStyle);
 	
+	public List<QuoteItem> findByDelFlagAndPkQuoteAndBsStyleAndBsStatus(Integer delFlag,Long PkQuote,String bsStyle,int bsStatus);
+	
+	
 	public List<QuoteItem> findByDelFlagAndPkQuoteAndBsCode(Integer delFlag,Long PkQuote,String bsCode);
 	
 	//public List<QuoteItem> findByDelFlagAndPkQuoteAndNotBsEndTime(Integer delFlag,Long PkQuote);

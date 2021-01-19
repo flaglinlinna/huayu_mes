@@ -149,27 +149,36 @@ $(function() {
 				parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel);
 			} else if (obj.event === 'check') {
 				// 先判断是否填写完成资料-暂时未校验-20201218-fyx
-				if (true) {
-					layer.open({
-						type : 2,
-						title : '审批',
-						area : [ '600px', '550px' ],
-						fixed : false,
-						maxmin : true,
-						// content: '../../views/iframe/check.html',
-						content : context + '/check/toCheck',
-						success : function(layero, index) {
-							// 获取子页面的iframe
-							var iframe = window['layui-layer-iframe' + index];
-							// 向子页面的全局函数child传参，流程编码
-							if (data.bsStatus == '2') {
-								iframe.child(Style, data.id, 'end');
-							} else {
-								iframe.child(Style, data.id, 'check');
-							}
+				CoreUtil.sendAjax("/quoteProdect/doCheckBefore", {'quoteId':data.id,'bsType':Style}, function(data1) {
+					if (data1.result) {
+						layer.open({
+							type : 2,
+							title : '审批',
+							area : [ '600px', '550px' ],
+							fixed : false,
+							maxmin : true,
+							// content: '../../views/iframe/check.html',
+							content : context + '/check/toCheck',
+							success : function(layero, index) {
+								// 获取子页面的iframe
+								var iframe = window['layui-layer-iframe' + index];
+								// 向子页面的全局函数child传参，流程编码
+								if (data.bsStatus == '2') {
+									iframe.child(Style, data.id, 'end');
+								} else {
+									iframe.child(Style, data.id, 'check');
+								}
 
-						}
-					});
+							}
+						});
+					}else {
+						layer.alert(data1.msg);
+					}
+				}, "GET", false, function(res) {
+					layer.alert(res.msg);
+				});
+				if (true) {
+					
 				}
 			}
 		});
