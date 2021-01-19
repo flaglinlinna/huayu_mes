@@ -208,7 +208,7 @@
 				<hr style="margin-top: 10px; margin-bottom: 10px;">
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="width: 100%;">
-						<button class="layui-btn layui-btn-sm layui-btn-normal"
+						<button class="layui-btn layui-btn-sm layui-btn-normal" id="saveBtn"
 							type="button" style="width: 15%; margin-left: 35%;" lay-submit=""
 							lay-filter="saveData">确认提交</button>
 					</div>
@@ -220,7 +220,8 @@
 		var quoteId=[[${quoteId}]];
 		var QuoteType = [[${QuoteType}]];
 		var Jitai = [[${Jitai}]];
-		//console.log(QuoteType)
+		var Status=[[${Status}]];
+		
 		</script>
 		<script th:src="@{/js/web/quote/01business/quote_add.js}"
 			src="/js/web/quote/01business/quote_add.js"></script>

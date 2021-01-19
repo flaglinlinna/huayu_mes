@@ -399,8 +399,12 @@ layui.define("view", function (e) {
             t = e.index();
         P.tabsPage.type = "tab", P.tabsPage.index = t, A(e);
       //fyx-20210116-切换标签后刷新当前页面
+        
         var src = $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src");
-        $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
+        if(src != '/quote/toQuoteAdd'){//fyx-20210119-新增报价单不刷新
+        	$(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
+        }
+        
         //--end
     }), i.on("tabDelete(" + p + ")", function (e) {
         var t = a(_ + ".layui-this");

@@ -220,15 +220,14 @@ $(function() {
 			checkedKey : 'id',
 			searchPlaceholder : '关键字搜索',
 			table : {
-				url : context + '/basePrice/proc/getList',
-				// ?pkQuote='+quoteId,
+				url : context + '/productProcess/getProcListByType?bsType='+bsType,
 				method : 'get',
 				parseData : function(res) {
 					// 可进行数据操作
 					return {
-						"count" : res.data.total,
+						"count" : res.data.length,
 						"msg" : res.msg,
-						"data" : res.data.rows,
+						"data" : res.data,
 						"code" : res.status
 						// code值为200表示成功
 					}
@@ -241,7 +240,7 @@ $(function() {
 					{field : 'procName', title : '工序名称' },
 					{field : 'workCenter', title : '工作中心名称' }
 				] ],
-				page : true,
+				page : false,
 				request : {
 					pageName : 'page', // 页码的参数名称，默认：page
 					limitName : 'rows' // 每页数据量的参数名，默认：limit

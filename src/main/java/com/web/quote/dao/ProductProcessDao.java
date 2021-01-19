@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.web.basePrice.entity.BjModelType;
+import com.web.basePrice.entity.Proc;
 import com.web.quote.entity.ProductProcess;
 
 
@@ -28,4 +29,9 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	
 	 @Query(value = "select p.model_Code,p.model_Name  from "+BjModelType.TABLE_NAME+" p  where p.del_Flag=0 and p.pk_Workcenter=?1",nativeQuery = true)
 	 public  List<Map<String, Object>> findByDelFlagAndWorkcenter(Long pkWorkcenter);
+	 
+	 
+	 @Query(value = "select p from Proc p  where p.delFlag=0 and p.workcenterId in (select bj.id from BjWorkCenter bj where bj.delFlag=0 and bj.bsCode=?1)")
+	 public  List<Proc> getListByType(String code);
+	 
 }

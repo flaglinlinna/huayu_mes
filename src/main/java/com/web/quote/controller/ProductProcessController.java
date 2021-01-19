@@ -253,6 +253,24 @@ public class ProductProcessController extends WebController {
 			return ApiResponseResult.failure("失败！");
 		}
 	}
+	
+	@ApiOperation(value = "根据大类获取工序中心", notes = "根据大类获取工序中心", hidden = true)
+	@RequestMapping(value = "/getProcListByType", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getProcListByType(String bsType) {
+		String method = "productProcess/getListByPkQuote";
+		String methodName = "根据大类获取工序中心";
+		try {
+			ApiResponseResult result = productProcessService.getProcListByType(bsType);
+			logger.debug(methodName+"=getProcListByType:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"列表失败！", e);
+			getSysLogService().error(module,method, methodName,"关键字"+bsType==null?";":bsType+";"+e.toString());
+			return ApiResponseResult.failure(methodName+"列表失败！");
+		}
+	}
 
 
 

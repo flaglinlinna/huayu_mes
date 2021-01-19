@@ -88,6 +88,13 @@ $(function() {
 		}
 		layui.form.render('select');
 	});
+	
+	//20210119-fyx-根据Status判断是否隐藏saveBtn
+	if(Status == '1' ||Status == '99'){
+		$('#saveBtn').addClass("layui-btn-disabled").attr("disabled",true);
+	}else{
+		$('#saveBtn').removeClass("layui-btn-disabled").attr("disabled",false)
+	}
 });
 
 // 将checkbox拼接为"value1,value2,value3"
@@ -119,7 +126,6 @@ function setCheckboxValues(Name, str) {// name checkbox控件id, str 字符串
 function setData() {
 	$("#bsProdTypeId").empty();
 	var data = prodType.data;
-	console.log(data)
 	for (var i = 0; i < data.length; i++) {
 		if (i == 0) {
 			$("#bsProdTypeId").append("<option value=''>请点击选择</option>");

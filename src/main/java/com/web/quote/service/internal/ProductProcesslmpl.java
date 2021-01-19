@@ -519,4 +519,13 @@ public class ProductProcesslmpl implements ProductProcessService {
         productProcessDao.saveAll(productProcessList);
         return ApiResponseResult.success();
     }
+
+	@Override
+	public ApiResponseResult getProcListByType(String bsType) throws Exception {
+		// TODO Auto-generated method stub
+		if(StringUtils.isEmpty(bsType)){
+			return ApiResponseResult.failure("查询类型为空!");
+		}
+		return ApiResponseResult.success().data(productProcessDao.getListByType(bsType));
+	}
 }

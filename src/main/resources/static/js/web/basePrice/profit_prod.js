@@ -170,12 +170,32 @@ $(function() {
 		});
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
-			if (data.field.id == null || data.field.id == "") {
-				// 新增
-				addSubmit(data);
-			} else {
-				editSubmit(data);
+			//20210119-fyx-提示
+			if(Number(data.field.profitRateGs) > 100){
+				layer.open({
+		              content: '确认设置毛利润为'+data.field.profitRateGs+'吗?'
+		              ,btn: ['确定', '取消']
+		              ,yes: function(index, layero){
+		                //确定的回调
+		            	  if (data.field.id == null || data.field.id == "") {
+		      				// 新增
+		      				addSubmit(data);
+			      			} else {
+			      				editSubmit(data);
+			      			}
+		              }
+		              ,btn2: function(index, layero){
+		              }
+		            });
+			}else{
+				if (data.field.id == null || data.field.id == "") {
+					// 新增
+					addSubmit(data);
+				} else {
+					editSubmit(data);
+				}
 			}
+			
 			return false;
 		});
 		// 监听搜索框

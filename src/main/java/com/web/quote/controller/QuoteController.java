@@ -45,10 +45,11 @@ public class QuoteController extends WebController {
 
 	@ApiOperation(value = "报价新增信息列表页", notes = "报价新增信息列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteAdd")
-	public ModelAndView toQuoteAdd(String quoteId) {
+	public ModelAndView toQuoteAdd(String quoteId,String status) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult prodType = quoteService.getProdType();
+			mav.addObject("Status", status);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("prodType", prodType);
 			mav.addObject("QuoteType", sysParamSubService.getListByMCode("BJ_LIST_TYPE").getData());//报价类型
