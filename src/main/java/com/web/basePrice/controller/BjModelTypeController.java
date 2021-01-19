@@ -41,12 +41,12 @@ public class BjModelTypeController extends WebController{
     @ApiOperation(value = "获取机台类型维护列表", notes = "获取机台类型维护列表",hidden = true)
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getList(String keyword) {
+    public ApiResponseResult getList(String keyword,String bsType) {
         String method = "basePrice/bjModelType/getList";String methodName ="获取机台类型维护列表";
         try {
             System.out.println(keyword);
             Sort sort = new Sort(Sort.Direction.DESC, "id");
-            ApiResponseResult result = bjModelTypeService.getList(keyword, super.getPageRequest(sort));
+            ApiResponseResult result = bjModelTypeService.getList(keyword, bsType,super.getPageRequest(sort));
             logger.debug("获取机台类型维护列表=getList:");
             getSysLogService().success(module,method, methodName, null);
             return result;

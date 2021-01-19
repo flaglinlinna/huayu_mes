@@ -10,7 +10,7 @@ var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
 		var table = layui.table, table2 = layui.table,form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect,
-			tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect;
+			tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect,tableSelect3 = layui.tableSelect;
 		isComplete()
 		tableIns = table.render({
 			elem : '#listTable',
@@ -258,7 +258,60 @@ $(function() {
 			}
 		});
 
-		setData();
+		// 机台类型列表
+		typeTableSelect = tableSelect3.render({
+			elem : '#bsModelType',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '试着搜索',
+			table : {
+				// width : 220,
+				url : context + '/basePrice/modelType/getList?bsType='+bsType,
+				method : 'get',
+				cols : [ [ {type : 'radio'},
+					{field : 'ID', title : 'ID', width : 0, hide : true},
+					{field : 'modelCode', title : '机台编码'},
+					{field : 'modelName', title : '机台描述'},
+					{field : 'workCenterCode', title : '工作中心编码'}
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+				parseData : function(res) {
+					if (!res.result) {
+						// 可进行数据操作
+						return {
+							"count" : 0,
+							"msg" : res.msg,
+							"data" : [],
+							"code" : res.status
+							// code值为200表示成功
+						}
+					}
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+			},
+			done : function(elem, data) {
+				// 选择完后的回调，包含2个返回值
+				// elem:返回之前input对象；data:表格返回的选中的数据 []
+				var da = data.data;
+				form.val("productProcessForm", {
+					"bsModelType" : da[0].modelName
+				});
+				form.render();// 重新渲染
+			}
+		});
+
+		// setData();
 		// positiveNum
 		//自定义验证规则
 		form.verify({
@@ -690,17 +743,17 @@ function addHardware() {
 	openProdErr(null, "添加工艺信息");
 }
 
-function setData(){
-	$("#bsModelType").empty();
-	var data = Jitai
-	for (var i = 0; i < data.length; i++) {
-		if (i == 0) {
-			$("#bsModelType").append("<option value=''>请点击选择</option>");
-		}
-		$("#bsModelType").append(
-			"<option value=" + data[i].subCode + ">" + data[i].subName+"</option>");
-	}
-}
+// function setData(){
+// 	$("#bsModelType").empty();
+// 	var data = Jitai
+// 	for (var i = 0; i < data.length; i++) {
+// 		if (i == 0) {
+// 			$("#bsModelType").append("<option value=''>请点击选择</option>");
+// 		}
+// 		$("#bsModelType").append(
+// 			"<option value=" + data[i].subCode + ">" + data[i].subName+"</option>");
+// 	}
+// }
 
 function Confirm(){
 	var params = {

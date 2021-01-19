@@ -119,10 +119,13 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getList(String keyword,String bsType, PageRequest pageRequest) throws Exception {
 		// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		if(StringUtils.isNotEmpty(bsType)){
+			filters.add(new SearchFilter("workCenter.bsCode", SearchFilter.Operator.EQ, bsType));
+		}
 		// 查询2
 		List<SearchFilter> filters1 = new ArrayList<>();
 		if (StringUtils.isNotEmpty(keyword)) {
@@ -139,8 +142,10 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", baseFee.getId());
 			map.put("workCenterId", baseFee.getPkWorkcenter());
-			map.put("workCenterCode", baseFee.getWorkCenter().getWorkcenterCode());
-            map.put("workCenterName", baseFee.getWorkCenter().getWorkcenterName());
+			if(baseFee.getWorkCenter()!=null) {
+				map.put("workCenterCode", baseFee.getWorkCenter().getWorkcenterCode());
+				map.put("workCenterName", baseFee.getWorkCenter().getWorkcenterName());
+			}
 			map.put("modelCode", baseFee.getModelCode());
 			map.put("modelName", baseFee.getModelName());
 			map.put("createBy", sysUserDao.findById((long) baseFee.getCreateBy()).getUserName());
@@ -224,7 +229,7 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 			//获取最后一行的num，即总行数。此处从0开始计数
 			int maxRow = sheet.getLastRowNum();
 //			Integer successes = 0;
-//			Integer failures = 0;
+			Integer failures = 0;
 			List<BjModelType> bjModelTypeList = new ArrayList<>();
 			for (int row = 1; row <= maxRow; row++) {
 //				String errInfo = "";
@@ -247,6 +252,9 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 					List<BjWorkCenter> bjWorkCenterList = bjWorkCenterDao.findByDelFlagAndWorkcenterCode(0,workCenterCode);
 					if(bjWorkCenterList.size()>0){
 						bjModelType.setPkWorkcenter(bjWorkCenterList.get(0).getId());
+					}else {
+						failures++;
+						continue;
 					}
 				}
 				bjModelType.setModelCode(modelCode);
@@ -254,7 +262,7 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 				bjModelTypeList.add(bjModelType);
 			}
 			bjModelTypeDao.saveAll(bjModelTypeList);
-			return ApiResponseResult.success("导入成功!");
+			return ApiResponseResult.success("导入成功!,共导入:"+bjModelTypeList.size()+";不通过:"+failures);
 //			return ApiResponseResult.success("导入成功! 导入总数:" +all+" :校验通过数:"+successes+" ;不通过数: "+failures);
 		}
 		catch (Exception e){
