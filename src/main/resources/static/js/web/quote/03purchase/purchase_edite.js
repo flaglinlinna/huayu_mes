@@ -63,7 +63,12 @@ $(function() {
 				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
-
+				 var tableIns = this.elem.next(); // 当前表格渲染之后的视图
+				  layui.each(res.data, function(i, item){
+				    if(item.bsStatusPurchase=="1"){
+				    	tableIns.find('tr[data-index=' + i + ']').css("background-color", "#CCCCCC").find('td').data('edit',false)
+				    }
+				  });
 			}
 		});
 
@@ -236,7 +241,7 @@ $(function() {
 });
 
 function isComplete() {
-	if (nowStatus.data > 0) {
+	if (nowStatus.data == 0) {
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
 	}
