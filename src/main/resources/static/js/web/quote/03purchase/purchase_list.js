@@ -167,7 +167,7 @@ $(function() {
 							}
 						});
 					} else {
-						layer.alert(data.msg);
+						layer.alert(data1.msg);
 					}
 				}, "GET", false, function(res) {
 					layer.alert(res.msg);
