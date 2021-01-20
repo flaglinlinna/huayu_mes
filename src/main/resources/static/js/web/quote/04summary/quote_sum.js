@@ -126,6 +126,11 @@ $(function() {
 			} else if (inputId == "mould_all") {
 				getMouldDetail("模具费用明细");
 			}
+			
+			//20210120-fyx-后工序损料
+			else if(inputId == "hou_loss_all"){
+				getProcessDetail("", "后工序损料(后工序损料 = 后工序损料+本工序损料) ")
+			}
 		}
 
 		// 材料价格明细
@@ -203,6 +208,8 @@ $(function() {
 			method : 'get', // 默认：get请求
 			cellMinWidth : 80,
 			totalRow : true,
+			limit:200,
+			limits: [200,50,100,500,1000,2000,5000],
 			height : 'full-110',// 固定表头&full-查询框高度
 			even : true,// 条纹样式
 			page : true,
@@ -253,7 +260,7 @@ $(function() {
 					}
 				}},
 				{field : 'bsModelType',width : 100,title : '机台类型',width : 90},
-				{field : 'bsRadix',title : '基数',width : 90},
+				//{field : 'bsRadix',title : '基数',width : 90,hide : true},
 				{field : 'bsUserNum',title : '人数',width : 90,hide : true},
 				{field : 'bsCycle',title : '成型周期(S)',width : 150,hide : true},
 				{field : 'bsYield',title : '工序良率%',width : 120,hide : true},
@@ -266,11 +273,16 @@ $(function() {
 				{field : 'bsFeeMhAll',title : '总制费',width : 90,totalRow : true,hide : true},
 				{field : 'bsFeeWxAll',title : '外协加工',width : 120,totalRow : true,hide : true},
 				{field : 'bsLossHouLh',title : '后工序损料',width : 120,totalRow : true,hide : true},
-				{field : 'fmemo',title : '备注',edit : 'text',style : 'background-color:#ffffff'}
+				{field : 'bsLossTheMh',title : '本工序损料',width : 120,totalRow : true,hide : true},
+				{field : 'bsHeji',title : '工序损料合计',width : 120,totalRow : true,hide : true,templet: function (d) {
+					   return Number(d.bsLossHouLh)+Number(d.bsLossTheMh);
+				      }
+                 },
+				//{field : 'bsHeji',title : '工序损料合计',width : 120,totalRow : true,hide : false},
+				{field : 'fmemo',title : '备注',hide : true}
 				] ],
 			done : function(res, curr, count) {
-				pageCurr = curr;
-				// 根据不同的类型显示不同的字段
+				//pageCurr = curr;
 			}
 		});
 
@@ -408,120 +420,150 @@ function getProcessDetail(bsType, title) {
 	tableIns1.reload({
 		url : context + '/productProcess/getList?bsType=' + bsType + '&quoteId=' + quoteId,
 		done : function(res, curr, count) {
-			pageCurr = curr;
+			pageCurr = curr;var onwanceTotal=0;//统计结算后余额
 			res.data.forEach(function(item, index) {
-				// console.log(res.data.length);
-				if (item.bsType == 'out') {// 外协
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+				if(bsType == ''){
+					/*$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");*/
 					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
 					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+					
 					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossHouLh"]').removeClass("layui-hide");
 					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
 					$(".layui-table-total").find('tr').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsLoss"]').removeClass("layui-hide");
-				} else if (item.bsType == 'hardware') {// 五金
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+					/*$(".layui-table-total").find('tr').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");*/
+					
+					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossTheMh"]').removeClass("layui-hide");
+					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossTheMh"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsLossTheMh"]').removeClass("layui-hide");
+					
+					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsHeji"]').removeClass("layui-hide");
+					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsHeji"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsHeji"]').removeClass("layui-hide");
+					
+					
+					onwanceTotal += Number(item.bsLossHouLh)+Number(item.bsLossTheMh)
+				}else{
+					if (item.bsType == 'out' ) {// 外协
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossHouLh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+					} else if (item.bsType == 'hardware') {// 五金
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
 
-				} else if (item.bsType == 'molding') {// 注塑
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+					} else if (item.bsType == 'molding') {// 注塑
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
 
-					$(".layui-table-total").find('tr').find('td[data-field="bsCave"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsCave"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
 
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
 
-				} else if (item.bsType == 'surface') {
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+					} else if (item.bsType == 'surface') {
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
 
-					$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
 
-				} else if (item.bsType == 'packag') {
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
-					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+					} else if (item.bsType == 'packag') {
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
 
-					$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
 
+					}
 				}
+				// console.log(res.data.length);
+				
 			});
+			if(bsType == ''){
+				this.elem.next().find('.layui-table-total td[data-field="bsHeji"] .layui-table-cell').text(onwanceTotal);
+			}
+			
+			
 		}
 	})
 	var index = layer.open({
