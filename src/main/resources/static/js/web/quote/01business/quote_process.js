@@ -147,6 +147,7 @@ $(function() {
 		tableProc = table.render({
 			elem : '#procList',
 			limit : 20,
+			page:true,
 			method : 'get',// 默认：get请求
 			cols : [ [ {type : 'numbers'}
 			, {field : 'checkColumn',type:"checkbox"},
@@ -395,8 +396,10 @@ $(function() {
 
 			addSubmit(procIdList, data.field.num,bsElement);
 
-			//提交后清空
+			//提交后清空勾选
 			$('#clientProcForm tbody tr td[data-field="checkColumn"] input[type="checkbox"]').prop('checked',false);
+			//取消全选框的勾选
+			$("input[type='checkbox'][name='layTableCheckbox']").prop('checked', false);
 			form.render('checkbox');
 			return false;
 
@@ -572,8 +575,10 @@ function getListByQuoteAndName(name){
 		tableProcCheck.reload({
 			data:data.data,
 			done : function(res, curr, count) {
-				// cleanProc();//清空之前的选中
+				//提交后清空勾选
 				$('#clientProcForm tbody tr td[data-field="checkColumn"] input[type="checkbox"]').prop('checked',false);
+				//取消全选框的勾选
+				$("input[type='checkbox'][name='layTableCheckbox']").prop('checked', false);
 				layui.form.render('checkbox');
 			}
 		});
@@ -595,7 +600,7 @@ function getAddList() {
 			tableProc.reload({
 				data : data.data,
 				done : function(res, curr, count) {
-					cleanProc();// 清空之前的选中
+					// cleanProc();// 清空之前的选中
 				}
 			});
 		} else {
