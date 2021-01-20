@@ -35,6 +35,7 @@ $(function() {
 			cols : [ [
 			  {type : 'numbers'},
 			  {field:"id",title:"ID",hide:true},
+			  // {field:"bsStatus",title:"bsStatus",hide:true},
 			  {field : 'bsComponent',title : '零件名称',sort : true,style : 'background-color:#d2d2d2'},
 			  {field : 'bsMachiningType',title : '加工类型<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
 			  {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
@@ -52,6 +53,14 @@ $(function() {
 			  ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
+
+				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
+				layui.each(res.data, function(i, item){
+					if(item.bsStatus=="1"){
+						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
+					}
+				});
+
 				res.data.forEach(function(item, index) {
 					if (bsType == 'hardware') {// 五金
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
@@ -85,9 +94,11 @@ $(function() {
 			var elem = data.othis.parents('tr');
 			//第一列的值是Guid，取guid来判断
 			var Guid= elem.first().find('td').eq(1).text();
+			// var bsStatus= elem.first().find('td').eq(2).text();
 			//选择的select对象值；
 			var selectValue = data.value;
 			updateUnit(Guid,selectValue);
+
 		})
 
 		tableIns2 = table.render({
