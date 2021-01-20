@@ -1,11 +1,18 @@
 package com.web.basePrice.service.internal;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.system.user.dao.SysUserDao;
 
+import com.web.basePrice.dao.BjModelTypeDao;
+import com.web.basePrice.dao.ProcDao;
+import com.web.basePrice.entity.BjModelType;
+import com.web.basePrice.entity.Proc;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +35,7 @@ import com.web.basePrice.service.BaseFeeService;
 import com.web.basic.dao.WorkCenterDao;
 import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.WorkCenter;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -38,6 +46,13 @@ import com.web.basic.entity.WorkCenter;
 public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 	@Autowired
 	private BaseFeeDao baseFeeDao;
+
+	@Autowired
+	private BjModelTypeDao bjModelTypeDao;
+
+
+	@Autowired
+	private ProcDao procDao;
 
 	@Autowired
 	private SysUserDao sysUserDao;
@@ -236,5 +251,82 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 					return ApiResponseResult.failure(list.get(1).toString());
 				}
 				return ApiResponseResult.success();
+	}
+
+	//防止读取Excel为null转String 报空指针异常
+	public String tranCell(Object object)
+	{
+		if(object==null||object==""||("").equals(object)){
+			return null;
+		}else return object.toString();
+	}
+
+	@Override
+	public ApiResponseResult doExcel(MultipartFile[] file) throws Exception {
+		try {
+			Date doExcleDate = new Date();
+			Long userId = UserUtil.getSessionUser().getId();
+			InputStream fin = file[0].getInputStream();
+			XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			//获取最后一行的num，即总行数。此处从0开始计数
+			int maxRow = sheet.getLastRowNum();
+//			Integer successes = 0;
+			Integer failures = 0;
+			List<BaseFee> baseFeeList = new ArrayList<>();
+			for (int row = 1; row <= maxRow; row++) {
+//				String errInfo = "";
+				String procNo = tranCell(sheet.getRow(row).getCell(0));
+				String modelCode = tranCell(sheet.getRow(row).getCell(1));
+				String feeLh = tranCell(sheet.getRow(row).getCell(2));//人工费率（元/小时）
+				String feeMh = tranCell(sheet.getRow(row).getCell(3));//制费费率（元/小时）
+				BaseFee baseFee = new BaseFee();
+					List<Proc> procList = procDao.findByDelFlagAndProcNo(0,procNo);
+					if(procList.size()>0){
+						Proc proc = procList.get(0);
+						baseFee.setProcId(proc.getId());
+						baseFee.setProcName(proc.getProcName());
+						baseFee.setWorkcenterId(proc.getWorkcenterId());
+					}else {
+						failures++;
+						continue;
+					}
+					List<BjModelType> bjModelTypeList = bjModelTypeDao.findByDelFlagAndModelCode(0,modelCode);
+					if(bjModelTypeList.size()>0){
+						baseFee.setMhType(bjModelTypeList.get(0).getModelName());
+					}else {
+						failures++;
+						continue;
+					}
+					List<BaseFee> baseFeeList1 =baseFeeDao.findByDelFlagAndWorkcenterIdAndProcId(0,baseFee.getWorkcenterId(),baseFee.getProcId());
+					if(baseFeeList1.size()>0){
+						baseFee = baseFeeList1.get(0);
+						baseFee.setLastupdateBy(userId);
+						baseFee.setLastupdateDate(doExcleDate);
+					}else {
+						baseFee.setCreateBy(userId);
+						baseFee.setCreateDate(doExcleDate);
+					}
+					if (!feeMh.matches("^\\d+\\.\\d+$") && !feeMh.matches("^^\\d+$")){
+						failures++;
+						continue;
+					}else {
+						baseFee.setFeeMh(feeMh);
+					}
+					if (!feeLh.matches("^\\d+\\.\\d+$") && !feeLh.matches("^^\\d+$")){
+						failures++;
+						continue;
+					}else {
+						baseFee.setFeeLh(feeLh);
+					}
+					baseFeeList.add(baseFee);
+			}
+			baseFeeDao.saveAll(baseFeeList);
+			return ApiResponseResult.success("导入成功!,共导入:"+baseFeeList.size()+";不通过:"+failures);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
+		}
 	}
 }

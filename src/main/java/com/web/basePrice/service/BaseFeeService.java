@@ -3,6 +3,7 @@ package com.web.basePrice.service;
 import org.springframework.data.domain.PageRequest;
 import com.app.base.data.ApiResponseResult;
 import com.web.basePrice.entity.BaseFee;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -17,6 +18,8 @@ public interface BaseFeeService {
   public ApiResponseResult delete(Long id) throws Exception;
 
   public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
+
+  public ApiResponseResult doExcel(MultipartFile[] file) throws Exception;
   
   public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;// 状态改变
   
