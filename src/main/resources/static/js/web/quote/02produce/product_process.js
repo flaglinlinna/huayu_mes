@@ -36,6 +36,7 @@ $(function() {
 				}
 			},
 			cols : [ [ {type : 'numbers',style:'background-color:#d2d2d2'},
+				{field:"id",title:"ID",hide:true},
 				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'bsOrder',width:150, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'proc', width:150, title : '工序名称',style:'background-color:#d2d2d2',
@@ -67,7 +68,7 @@ $(function() {
 						}
 					}},
 				/*{field : 'bsModelType', width:100, title : '机台类型',width:90,},*/
-				{field : 'bsModelType',width : 120,title : '机台类型',templet : '#selectModelType',style : 'background-color:#ffffff'},
+				{field : 'bsModelType',width : 160,title : '机台类型',templet : '#selectModelType',style : 'background-color:#ffffff'},
 				/*{field : 'bsRadix', title : '基数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',style : 'background-color:#ffffff'},*/
 				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCycle', title : '成型周期(S)<span style="color:red;font-size:12px;">*</span>', width:150,edit:'text', hide:true,style : 'background-color:#ffffff'},
@@ -583,6 +584,17 @@ $(function() {
 				layer.close(index);
 			}
 		});
+
+		//监听机台类型下拉选择 并修改
+		form.on('select(selectModelType)', function (data) {
+			//获取当前行tr对象
+			var elem = data.othis.parents('tr');
+			//第一列的值是Guid，取guid来判断
+			var Guid= elem.first().find('td').eq(1).text();
+			//选择的select对象值；
+			var selectValue = data.value;
+			updateModelType(Guid,selectValue);
+		})
 	});
 });
 function isComplete() {
@@ -842,6 +854,30 @@ function addSubmit(obj) {
 	}, "POST", false, function(res) {
 		layer.alert(res.msg);
 	});
+}
+//更新机台类型
+function updateModelType(id,modelCode) {
+	var param = {
+		"id":id,
+		"modelCode":modelCode
+	}
+	CoreUtil.sendAjax("/productProcess/updateModelType", JSON.stringify(param),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					// 回调弹框
+					layer.alert("成功！", function() {
+						layer.closeAll();
+						// 加载load方法
+						loadAll();
+					});
+				} else {
+					layer.alert(data, function() {
+						layer.closeAll();
+					});
+				}
+			}
+		});
 }
 
 // 编辑工艺提交
