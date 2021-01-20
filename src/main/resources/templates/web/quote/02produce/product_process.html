@@ -75,12 +75,12 @@
             <span></span>
             {{#  } }}
         </script>
-        
+
         <script type="text/html" id="selectModelType" >
             <select name="selectModelType" lay-filter="selectModelType" lay-search>
               <option value="">请选择</option>
               {{# layui.each($.parseJSON( d.bsTypeList ), function(index, item){     }}
-               <option value="{{ item.MODEL_CODE }},{{ item.MODEL_NAME }}"  {{ d.bsModelType==item.MODEL_CODE?'selected':''}}>{{ item.MODEL_NAME }}</option>
+               <option value="{{ item.MODEL_CODE }}"  {{ d.bsModelType==item.MODEL_CODE?'selected':''}}>{{ item.MODEL_NAME }}</option>
               {{# });  }}
             </select>
          </script>

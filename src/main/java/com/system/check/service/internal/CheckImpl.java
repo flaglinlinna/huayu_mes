@@ -345,6 +345,9 @@ public class CheckImpl   implements CheckService {
 							pm.setBsModel(qb.getBsModel());
 							pm.setBsQty(qb.getBsQty());
 							pm.setPkUnit(qb.getPkUnit());
+							if(qb.getUnit()!=null){
+								pm.setBsUnit(qb.getUnit().getUnitName()); //hjj-20210120-补充单位名称
+							}
 							pm.setBsRadix(qb.getBsRadix());
 							pm.setBsExplain(qb.getBsExplain());//lst-20210107-增采购说明字段
 							pm.setBsProQty(qb.getBsProQty());

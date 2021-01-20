@@ -226,6 +226,12 @@ public class ProductMater extends BaseEntity {
 	@Transient
     private String bsPriceList;
 
+	/**
+	 * 价格下拉框
+	 */
+	@Transient
+	private String bsUnitList;
+
 	public int getBsStatus() {
 		return bsStatus;
 	}
@@ -424,6 +430,14 @@ public class ProductMater extends BaseEntity {
 
 	public String getBsPriceList() {
 		return bsPriceList;
+	}
+
+	public String getBsUnitList() {
+		return bsUnitList;
+	}
+
+	public void setBsUnitList(String bsUnitList) {
+		this.bsUnitList = bsUnitList;
 	}
 
 	public Long getPkItemTypeWg() {

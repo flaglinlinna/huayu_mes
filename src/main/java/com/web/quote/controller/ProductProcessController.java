@@ -274,4 +274,26 @@ public class ProductProcessController extends WebController {
 
 
 
+	@ApiOperation(value = "修改机种类型", notes = "修改机种类型", hidden = true)
+	@RequestMapping(value = "/updateModelType", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult updateModelType(@RequestBody Map<String, Object> params) {
+		String method = "/productProcess/updateModelType";
+		String methodName = "修改机种类型";
+		try {
+			long id = Long.parseLong(params.get("id").toString());
+			String modelCode = params.get("modelCode").toString();
+			ApiResponseResult result = productProcessService.updateModelType(id,modelCode);
+			logger.debug("修改机种类型=updateModelType:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("修改机种类型失败！", e);
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			return ApiResponseResult.failure("修改机种类型失败！");
+		}
+	}
+
+
 }

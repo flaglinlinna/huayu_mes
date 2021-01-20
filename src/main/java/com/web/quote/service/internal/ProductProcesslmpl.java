@@ -151,6 +151,26 @@ public class ProductProcesslmpl implements ProductProcessService {
         return ApiResponseResult.success("删除成功！");
     }
 
+    /**
+     * 修改机种类型
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult updateModelType(Long id,String bsModelType) throws Exception{
+        if(id == null){
+            return ApiResponseResult.failure("制造工艺ID不能为空！");
+        }
+        ProductProcess o  = productProcessDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("制造工艺不存在！");
+        }
+        o.setBsModelType(bsModelType);
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setLastupdateDate(new Date());
+        productProcessDao.save(o);
+        return ApiResponseResult.success("更新机台类型成功！");
+    }
+
     //防止读取Excel为null转String 报空指针异常
     public String tranCell(Object object)
     {
