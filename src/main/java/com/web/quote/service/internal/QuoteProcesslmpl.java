@@ -308,7 +308,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 strs[0]="";strs[1]="";
 		 List<BaseFee> lbl = baseFeeDao.findByDelFlagAndWorkcenterIdAndProcId(0, w_id, p_id);
 		 if(lbl.size() == 0){
-			 lbl = baseFeeDao.findByDelFlagAndWorkcenterId(0, w_id);
+			 lbl = baseFeeDao.findByDelFlagAndWorkcenterIdAndProcIdIsNull(0, w_id);
 			 if(lbl.size()>0){
 				 strs[0] = lbl.get(0).getFeeLh();
 				 strs[1] = lbl.get(0).getFeeMh();
