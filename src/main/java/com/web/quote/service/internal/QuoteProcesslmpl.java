@@ -3,6 +3,7 @@ package com.web.quote.service.internal;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,6 @@ import com.web.basePrice.entity.Proc;
 import com.web.quote.dao.QuoteBomDao;
 import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteProcessDao;
-import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.QuoteProcessService;
 import com.web.quote.service.QuoteService;
@@ -129,7 +129,24 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	public ApiResponseResult getAddList() throws Exception {
 		// TODO Auto-generated method stub
 		List<Proc> list = procDao.findByDelFlagAndCheckStatus(0, 1);
-		return ApiResponseResult.success().data(list);
+		/*return ApiResponseResult.success().data(list);*/
+		List<Map<String, Object>> lm = new ArrayList<Map<String, Object>>();
+		for(Proc proc:list){
+			String[] strs = this.getLhBy(proc.getWorkcenterId(), Long.valueOf(proc.getId()));
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("ID", proc.getId());
+			map.put("PROC_NO", proc.getProcNo());
+			map.put("PROC_NAME", proc.getProcName());
+			map.put("WORKCENTER_NAME", proc.getBjWorkCenter().getWorkcenterName());
+			if(strs[0]==""||strs[1]==""){//判断人工制费是否有维护	
+				map.put("STATUS", "0");
+			}else{
+				map.put("STATUS", "1");
+			}
+			lm.add(map);
+		}
+
+		return ApiResponseResult.success().data(lm);
 	}
 
 	/**

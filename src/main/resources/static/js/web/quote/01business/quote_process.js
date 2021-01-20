@@ -152,9 +152,10 @@ $(function() {
 			cols : [ [ {type : 'numbers'}
 			, {field : 'checkColumn',type:"checkbox"},
 			/*{field : 'procOrder',title : '序号',width:80}, */
-			{field : 'procNo',title : '工序编码', minWidth: 80}, 
-			{field : 'procName',title : '工序名称', minWidth: 120}, 
-			{field : 'workcenterName',title : '工作中心', minWidth: 100,templet:'<div>{{d.bjWorkCenter.workcenterName}}</div>'},
+			{field : 'PROC_NO',title : '工序编码', minWidth: 80}, 
+			{field : 'PROC_NAME',title : '工序名称', minWidth: 100}, 
+			{field : 'WORKCENTER_NAME',title : '工作中心', minWidth: 120},
+			{field : 'STATUS',title : '是否维护人工制费', minWidth: 100,templet:'<div>{{d.STATUS=="0"?"否":"是"}}</div>'},
 			{type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#clickBar'
 	        }] ],
 			data:[]
@@ -309,7 +310,7 @@ $(function() {
 				 var data = obj.data;
 					var tbData = table.cache.procList; //是一个Array
 					if (obj.event == 'doClick') {
-						addSubmit(data.id,checkValue,bsElement);
+						addSubmit(data.ID,checkValue,bsElement);
 					}
 			 }else{
 				 layer.msg('请先选择零件', {
@@ -381,7 +382,7 @@ $(function() {
 				if ($(this).is(":checked")) {
 					// fyx-202011-02
 					var checks = $('tbody tr[data-index="' + i + '"] td[data-field="jobAttr"] input[type="checkbox"]:checked');
-					procIdList += checkStatus[i].id + ",";
+					procIdList += checkStatus[i].ID + ",";
 				}
 			});
 			if (data.field.num == "") {

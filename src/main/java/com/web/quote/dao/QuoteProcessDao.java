@@ -10,6 +10,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import com.web.basePrice.entity.BaseFee;
+import com.web.basePrice.entity.BjWorkCenter;
+import com.web.basePrice.entity.Proc;
 import com.web.basic.entity.ProdProcDetail;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteProcess;
@@ -54,4 +57,5 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	@Modifying
     @Query("update QuoteProcess t set t.bsStatus=1 where t.pkQuote=?1 and t.delFlag=0")
     public void saveQuoteProcessByQuoteId(Long  quoteId);//变更字段状态
+
 }
