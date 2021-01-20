@@ -45,6 +45,15 @@ $(function() {
 				// console.log(res)
 				totalCount = res.count
 				pageCurr = curr;
+
+				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
+				layui.each(res.data, function(i, item){
+					if(item.bsStatus=="1"){
+						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
+					}
+				});
+
+
 				merge(res.data, [ 'bsName', ], [ 1, 1 ]);
 			}
 		});

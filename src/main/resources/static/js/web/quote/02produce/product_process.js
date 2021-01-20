@@ -81,6 +81,14 @@ $(function() {
 				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
+
+				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
+				layui.each(res.data, function(i, item){
+					if(item.bsStatus=="1"){
+						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
+					}
+				});
+
 				//根据不同的类型显示不同的字段
 				res.data.forEach(function (item, index) {
 					if(bsType == 'out'){//外协
