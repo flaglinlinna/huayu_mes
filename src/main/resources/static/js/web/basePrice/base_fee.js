@@ -31,7 +31,7 @@ $(function() {
 							},
 							cols : [ [ {type : 'numbers'}, 
 							           // {field : 'enabled',title : '有效状态',templet : '#statusTpl',width : 95},
-							           {field : 'workcenter',title : '工作中心',width : 100}, 
+							           {field : 'workcenter',title : '工作中心',width : 140},
 							           {field : 'procName',title : '工序',width : 100},
 							           {field : 'mhType',title : '机台类型',width : 160},
 							           {field : 'feeLh',title : '人工费率（元/小时）',width : 150}, 

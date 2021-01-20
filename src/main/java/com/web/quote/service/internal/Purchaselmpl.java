@@ -239,7 +239,14 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	@Override
 	public ApiResponseResult getStatus(Long pkQuote, Integer bsStatusPurchase) throws Exception {
 		Long userId = UserUtil.getSessionUser().getId();
-		return ApiResponseResult.success("").data(productMaterDao.countByPkQuoteAndBsStatusPurchase(pkQuote,bsStatusPurchase,userId));
+		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(userId);
+		Integer number = 0;
+		if(lmp.size()>0){
+			number = productMaterDao.countByPkQuoteAndBsStatusPurchase(pkQuote,bsStatusPurchase,userId);
+		}else {
+			number = productMaterDao.countByPkQuoteAndBsStatusPurchase(pkQuote,bsStatusPurchase);
+		}
+		return ApiResponseResult.success("").data(number);
 	}
 
 	/**

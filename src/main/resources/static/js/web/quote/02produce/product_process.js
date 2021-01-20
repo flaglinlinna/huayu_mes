@@ -86,6 +86,8 @@ $(function() {
 				layui.each(res.data, function(i, item){
 					if(item.bsStatus=="1"){
 						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
+						$("select[name='selectModelType']").attr("disabled","disabled");
+						form.render('select');
 					}
 				});
 
