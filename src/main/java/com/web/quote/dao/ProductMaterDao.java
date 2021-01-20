@@ -79,7 +79,7 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
     public List<Map<String, Object>> getBomSecond(Long quoteId,String element);
 	
 	
-	@Query(value = "select a.bs_mater_name mater_name,b.bs_fee FEE,a.pk_bj_work_center wkc,a.pk_unit punit,a.bs_qty qty  from (select  distinct pb.bs_element,pb.bs_component,pb.bs_mater_name,pb.pk_bj_work_center,pb.pk_unit,pb.bs_qty  from price_quote_bom pb where pb.del_flag=0 and pb.pk_quote=?1 and pb.bs_element=?2 and pb.bs_component=?3 )A "+
+	@Query(value = "select a.bs_mater_name mater_name,nvl(b.bs_fee,0) FEE,a.pk_bj_work_center wkc,a.pk_unit punit,a.bs_qty qty  from (select  distinct pb.bs_element,pb.bs_component,pb.bs_mater_name,pb.pk_bj_work_center,pb.pk_unit,pb.bs_qty  from price_quote_bom pb where pb.del_flag=0 and pb.pk_quote=?1 and pb.bs_element=?2 and pb.bs_component=?3 )A "+
 					"left join (select pm.bs_element,pm.bs_component,pm.bs_mater_name,sum(pm.bs_fee)bs_fee from price_product_mater pm where pm.del_flag=0 and pm.pk_quote=?1 and pm.bs_element=?2 and pm.bs_component=?3   group by pm.bs_element,pm.bs_component,pm.bs_mater_name)B "+
 					"on a.bs_element = b.bs_element and a.bs_component = b.bs_component and a.bs_mater_name = b.bs_mater_name "+
 					"order by a.bs_element,A.bs_component", nativeQuery = true)	
