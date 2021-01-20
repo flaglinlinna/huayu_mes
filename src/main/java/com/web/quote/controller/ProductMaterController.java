@@ -155,6 +155,27 @@ public class ProductMaterController extends WebController {
 		}
 	}
 
+	@ApiOperation(value = "更新单位", notes = "更新单位", hidden = true)
+	@RequestMapping(value = "/updateUnit", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult updateUnit(@RequestBody Map<String, Object> params) {
+		String method = "/productMater/updateUnit";
+		String methodName = "更新单位";
+		try {
+			long id = Long.parseLong(params.get("id").toString());
+			long unitId = Long.parseLong(params.get("unitId").toString());
+			ApiResponseResult result = productMaterService.updateUnit(id,unitId);
+			logger.debug("更新单位=updateUnit:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("更新单位失败！", e);
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			return ApiResponseResult.failure("更新单位信息失败！");
+		}
+	}
+
 	@ApiOperation(value = "获取五金材料列表", notes = "获取五金材料列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody

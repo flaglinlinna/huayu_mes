@@ -4,6 +4,15 @@
 <head th:include="layout :: htmlhead" th:with="title='制造部材料信息'">
 <meta charset="UTF-8">
 </head>
+<style>
+	.layui-table-cell, .layui-table-tool-panel li {
+		overflow: visible !important;
+	}
+
+	.layui-form-select .layui-input {
+		height: 30px;
+	}
+</style>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div style="margin: 10px">
@@ -43,6 +52,15 @@
              <span></span>
              {{#  } }}
          </script>
+
+			<script type="text/html" id="selectUnit" >
+				<select name="selectUnit" lay-filter="selectUnit" lay-search>
+					<option value="">请选择</option>
+					{{# layui.each($.parseJSON( d.bsUnitList ), function(index, item){     }}
+					<option value="{{ item.id }}"  {{ d.pkUnit==item.id?'selected':''}}>{{ item.unitName }}</option>
+					{{# });  }}
+				</select>
+			</script>
 
 			<table id="listTable" lay-filter="hardwareTable"></table>
 

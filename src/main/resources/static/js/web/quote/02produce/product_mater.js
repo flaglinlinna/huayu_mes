@@ -34,6 +34,7 @@ $(function() {
 			},
 			cols : [ [
 			  {type : 'numbers'},
+			  {field:"id",title:"ID",hide:true},
 			  {field : 'bsComponent',title : '零件名称',sort : true,style : 'background-color:#d2d2d2'},
 			  {field : 'bsMachiningType',title : '加工类型<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
 			  {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
@@ -41,7 +42,7 @@ $(function() {
 			  {field : 'bsModel',title : '规格',style : 'background-color:#d2d2d2'},
 			  {field : 'bsQty',width : 100,title : '用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'bsProQty',width : 100,title : '制品重<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
-			  {field : 'bsUnit',width : 80,title : '单位',edit : 'text',style : 'background-color:#ffffff'},
+				{field : 'bsUnit',width : 120,title : '单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
 			  /*{field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text',style : 'background-color:#ffffff'},*/
 			  {field : 'bsWaterGap',title : '水口量<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
 			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (注塑)*/}, 
@@ -77,6 +78,17 @@ $(function() {
 				});
 			}
 		});
+
+		//监听机台类型下拉选择 并修改
+		form.on('select(selectUnit)', function (data) {
+			//获取当前行tr对象
+			var elem = data.othis.parents('tr');
+			//第一列的值是Guid，取guid来判断
+			var Guid= elem.first().find('td').eq(1).text();
+			//选择的select对象值；
+			var selectValue = data.value;
+			updateUnit(Guid,selectValue);
+		})
 
 		tableIns2 = table.render({
 			elem : '#uploadList',
@@ -401,6 +413,31 @@ function Confirm() {
 			layer.alert(res.msg);
 		});
 	});
+}
+
+//更新单位
+function updateUnit(id,unitId) {
+	var param = {
+		"id":id,
+		"unitId":unitId
+	}
+	CoreUtil.sendAjax("/productMater/updateUnit", JSON.stringify(param),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					// 回调弹框
+					layer.alert("修改单位成功！", function() {
+						layer.closeAll();
+						// 加载load方法
+						loadAll();
+					});
+				} else {
+					layer.alert(data, function() {
+						layer.closeAll();
+					});
+				}
+			}
+		});
 }
 
 // 打开导入页

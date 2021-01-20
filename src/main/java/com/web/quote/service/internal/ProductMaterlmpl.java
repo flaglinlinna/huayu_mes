@@ -1,5 +1,6 @@
 package com.web.quote.service.internal;
 
+import com.alibaba.fastjson.JSON;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseService;
@@ -351,10 +352,41 @@ public class ProductMaterlmpl implements ProductMaterService {
         Specification<ProductMater> spec = Specification.where(BaseService.and(filters, ProductMater.class));
         Specification<ProductMater> spec1 = spec.and(BaseService.or(filters1, ProductMater.class));
         Page<ProductMater> page = productMaterDao.findAll(spec1, pageRequest);
-
+        List<Unit> unitList = unitDao.findByDelFlag(0);
+        for(ProductMater pm:page.getContent()){
+            if(unitList.size()>0){
+                String str1 = JSON.toJSONString(unitList); //此行转换
+                pm.setBsUnitList(str1);
+            }
+        }
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
+
+    /**
+     * 修改单位
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult updateUnit(Long id,Long unitId) throws Exception{
+        if(id == null){
+            return ApiResponseResult.failure("制造材料ID不能为空！");
+        }
+         ProductMater o = productMaterDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("制造材料不存在！");
+        }
+        Unit unit = unitDao.findById((long) unitId);
+        if(unit!=null) {
+            o.setBsUnit(unit.getUnitName());
+        }
+        o.setPkUnit(unitId);
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setLastupdateDate(new Date());
+        productMaterDao.save(o);
+        return ApiResponseResult.success("更新单位成功！");
+    }
+
 
     /**
      * 查询报价单下 五金材料列表

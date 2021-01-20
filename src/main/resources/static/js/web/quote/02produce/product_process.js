@@ -866,7 +866,7 @@ function updateModelType(id,modelCode) {
 			if (isLogin(data)) {
 				if (data.result == true) {
 					// 回调弹框
-					layer.alert("成功！", function() {
+					layer.alert("修改机台类型成功！", function() {
 						layer.closeAll();
 						// 加载load方法
 						loadAll();
