@@ -65,6 +65,11 @@ public class QuoteBomlmpl implements QuoteBomService {
 		if(quoteBom == null){
 			return ApiResponseResult.failure("外购件清单信息不能为空！");
 		}
+		//20210120-fyx-物料信息去掉头尾空格
+		quoteBom.setBsElement(quoteBom.getBsElement().trim());
+		quoteBom.setBsComponent(quoteBom.getBsComponent().trim());
+		quoteBom.setBsMaterName(quoteBom.getBsMaterName().trim());
+		//--end
 		quoteBomDao.save(quoteBom);
 		return ApiResponseResult.success("外购件清单信息新增成功！").data(quoteBom);
 	}
@@ -82,14 +87,14 @@ public class QuoteBomlmpl implements QuoteBomService {
 		if(o == null){
 			return ApiResponseResult.failure("该外购件清单信息不存在！");
 		}
-		o.setBsComponent(quoteBom.getBsComponent());
-		o.setBsElement(quoteBom.getBsElement());
+		o.setBsComponent(quoteBom.getBsComponent().trim());
+		o.setBsElement(quoteBom.getBsElement().trim());
 		o.setBsModel(quoteBom.getBsModel());
 		o.setPkUnit(quoteBom.getPkUnit());
 		o.setPkItemTypeWg(quoteBom.getPkItemTypeWg());
 		o.setPkBjWorkCenter(quoteBom.getPkBjWorkCenter());
 		o.setBsProQty(quoteBom.getBsProQty());
-		o.setBsMaterName(quoteBom.getBsMaterName());
+		o.setBsMaterName(quoteBom.getBsMaterName().trim());
 		o.setBsModel(quoteBom.getBsModel());
 //		o.setBsQty(quoteBom.getBsQty());
 		o.setBsRadix(quoteBom.getBsRadix());
@@ -233,9 +238,9 @@ public class QuoteBomlmpl implements QuoteBomService {
 				String bsRadix = tranCell(sheet.getRow(row).getCell(9));
 				String bsExplain = tranCell(sheet.getRow(row).getCell(10));//lst-20210107-新增采购说明字段
 				quoteBom.setPkQuote(pkQuote);
-				quoteBom.setBsElement(bsElement);
-				quoteBom.setBsComponent(bsComponent);
-				quoteBom.setBsMaterName(bsMaterName);
+				quoteBom.setBsElement(bsElement.trim());
+				quoteBom.setBsComponent(bsComponent.trim());
+				quoteBom.setBsMaterName(bsMaterName.trim());
 //				quoteBom.setBsItemCode(bsItemCode); 暂定不存，系统生成
 				quoteBom.setBsModel(bsModel);
 				quoteBom.setFmemo(fmemo);
@@ -243,8 +248,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 				if(StringUtils.isNotEmpty(bsProQty)) {
 					quoteBom.setBsProQty(new BigDecimal(bsProQty));
 				}
-				quoteBom.setBsElement(bsElement);
-				quoteBom.setBsElement(bsElement);
+
 				quoteBom.setBsRadix(bsRadix);
 				quoteBom.setCreateDate(doExcleDate);
 				quoteBom.setCreateBy(userId);

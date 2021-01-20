@@ -61,7 +61,9 @@ public class PriceCommImpl implements PriceCommService {
 		if (StringUtils.isEmpty(priceComm.getUnitId())) {
 			return ApiResponseResult.failure("单位不能为空！");
 		}
-		
+		//20210120-fyx-物料名称去掉头尾空格
+		priceComm.setItemName(priceComm.getItemName().trim());
+		//--end
 		priceComm.setCreateDate(new Date());
 		priceComm.setCreateBy(UserUtil.getSessionUser().getId());
 		priceCommDao.save(priceComm);
@@ -96,7 +98,7 @@ public class PriceCommImpl implements PriceCommService {
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		//o.setEnabled(priceComm.getEnabled());
-		o.setItemName(priceComm.getItemName());
+		o.setItemName(priceComm.getItemName().trim());
 	    o.setRangePrice(priceComm.getRangePrice());
 	    o.setPriceUn(priceComm.getPriceUn());
 	    o.setUnitId(priceComm.getUnitId());
