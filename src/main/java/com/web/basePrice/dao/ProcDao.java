@@ -19,4 +19,5 @@ public interface ProcDao extends CrudRepository<Proc, Long>,JpaSpecificationExec
     int countByDelFlagAndProcNo(Integer delFlag,String procNo);
     public List<Proc> findByDelFlagAndCheckStatus(Integer delFlag,Integer checkStatus);
     public Proc findById(long id);
+    public List<Proc> findByDelFlagAndProcNo(Integer delFlag,String procNo);
 }

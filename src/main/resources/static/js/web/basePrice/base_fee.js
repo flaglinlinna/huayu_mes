@@ -3,9 +3,9 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table', 'tableSelect' ],
+	layui.use([ 'form', 'table', 'tableSelect' ,'upload'],
 			function() {
-				var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
+				var table = layui.table, form = layui.form, tableSelect = layui.tableSelect,upload = layui.upload;
 						tableIns = table.render({
 							elem : '#colsList',
 							url : context + '/basePrice/baseFee/getList',
@@ -31,7 +31,7 @@ $(function() {
 							},
 							cols : [ [ {type : 'numbers'}, 
 							           // {field : 'enabled',title : '有效状态',templet : '#statusTpl',width : 95},
-							           {field : 'workcenter',title : '工作中心',width : 100}, 
+							           {field : 'workcenter',title : '工作中心',width : 140},
 							           {field : 'procName',title : '工序',width : 100},
 							           {field : 'mhType',title : '机台类型',width : 160},
 							           {field : 'feeLh',title : '人工费率（元/小时）',width : 150}, 
@@ -349,10 +349,39 @@ $(function() {
 												}
 											});
 						}
-						
-		
+
+				// 导入
+				upload.render({
+					elem : '#upload',
+					url : context + '/basePrice/baseFee/doExcel',
+					accept : 'file' // 普通文件
+					,
+
+					before : function(obj) { // obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+						layer.load(); // 上传loading
+					},
+					done : function(res, index, upload) {
+						layer.closeAll('loading'); // 关闭loading
+						layer.alert(res.msg, function(index) {
+							layer.close(index);
+							loadAll();
+						});
+
+					},
+					error : function(index, upload) {
+						layer.alert("操作请求错误，请您稍后再试", function() {
+						});
+						layer.closeAll('loading'); // 关闭loading
+						layer.close(index);
+					}
+				});
 	});
 });
+
+// 导出数据
+function exportExcel() {
+	location.href = "../../excelFile/人工制费维护模板.xlsx";//从文件夹内直接提取
+}
 
 // 新增编辑弹出框
 function openData(id, title) {

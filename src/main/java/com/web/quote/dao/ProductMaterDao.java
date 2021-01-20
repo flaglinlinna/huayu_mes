@@ -41,6 +41,10 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 			" AND wr.pk_sys_role IN ( SELECT ur.role_id FROM sys_user_role ur WHERE ur.del_flag = 0 AND ur.user_id = ?3 ))" ,nativeQuery = true)
 	Integer countByPkQuoteAndBsStatusPurchase(Long pkQuote,Integer bsStatusPurchase,Long userId);
 
+	//根据是否确认完成状态
+	@Query(value = "SELECT count(1) FROM PRICE_PRODUCT_MATER p WHERE p.del_flag = 0 AND p.pk_quote = ?1 and p.BS_STATUS_PURCHASE = ?2" ,nativeQuery = true)
+	Integer countByPkQuoteAndBsStatusPurchase(Long pkQuote,Integer bsStatusPurchase);
+
 	public List<ProductMater> findByDelFlagAndPkQuoteAndBsType(Integer delFlag,Long pkQuote,String bsType);
 
 	//20210116 hjj 新增外协材料价格计算
