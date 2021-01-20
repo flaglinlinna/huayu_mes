@@ -55,8 +55,8 @@
 						</div>
 						<label class="layui-form-label layui-required">管理费用</label>
 						<div class="layui-input-inline">
-							<input id="bsManageFee" autocomplete="off" name="bsManageFee" value="3.6"
-								class="layui-input" type="text" lay-verify="required|num"/> <span
+							<input id="bsManageFee" autocomplete="off" name="bsManageFee" value="3.61"
+								class="layui-input" type="text" lay-verify="required|double"/> <span
 								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
 						</div>
 
@@ -221,7 +221,8 @@
 		var QuoteType = [[${QuoteType}]];
 		var Jitai = [[${Jitai}]];
 		var Status=[[${Status}]];
-		
+		var Fee = [[${Fee}]];
+
 		</script>
 		<script th:src="@{/js/web/quote/01business/quote_add.js}"
 			src="/js/web/quote/01business/quote_add.js"></script>

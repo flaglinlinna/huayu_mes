@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.service.SysParamService;
 import com.web.basic.service.SysParamSubService;
 import com.web.quote.entity.Quote;
 import com.web.quote.service.QuoteService;
@@ -35,6 +36,8 @@ public class QuoteController extends WebController {
 	private QuoteService quoteService;
 	@Autowired
 	private SysParamSubService sysParamSubService;
+	@Autowired
+	private SysParamService sysParamService;
 
 	@ApiOperation(value = "报价信息表结构", notes = "报价信息表结构" + Quote.TABLE_NAME)
 	@RequestMapping(value = "/getQuote", method = RequestMethod.GET)
@@ -54,6 +57,7 @@ public class QuoteController extends WebController {
 			mav.addObject("prodType", prodType);
 			mav.addObject("QuoteType", sysParamSubService.getListByMCode("BJ_LIST_TYPE").getData());//报价类型
 			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_MODEL_TYPE").getData());//机台类型
+			mav.addObject("Fee", sysParamService.getValueByCodeList("BJ_MANAGE_FEERATE").getData());//20210120-fyx-管理费
 			mav.setViewName("/web/quote/01business/quote_add");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

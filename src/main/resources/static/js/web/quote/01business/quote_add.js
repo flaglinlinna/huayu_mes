@@ -95,6 +95,9 @@ $(function() {
 	}else{
 		$('#saveBtn').removeClass("layui-btn-disabled").attr("disabled",false)
 	}
+	
+	//20210120-fyx-填写管理费
+	$('#bsManageFee').val(Fee[0].paramValue);
 });
 
 // 将checkbox拼接为"value1,value2,value3"
