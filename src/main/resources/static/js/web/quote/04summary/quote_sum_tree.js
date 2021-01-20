@@ -55,6 +55,14 @@ $(function() {
 				},
 			]
 		});
+		// 全部展开
+		layui.$('.open-all').click(function(){
+			treetable.openAll(re);
+		})
+		// 全部关闭
+		layui.$('.close-all').click(function(){
+			treetable.closeAll(re);
+		})
 		/*var	re = treetable.render({
 			elem: '#tree-table',
 			//url:'/quoteSum/getQuoteTreeList?quoteId='+quoteId,
