@@ -376,9 +376,15 @@ public class ProductMaterlmpl implements ProductMaterService {
         if(o == null){
             return ApiResponseResult.failure("制造材料不存在！");
         }
-        Unit unit = unitDao.findById((long) unitId);
-        if(unit!=null) {
-            o.setBsUnit(unit.getUnitName());
+        if(unitId!=null) {
+            Unit unit = unitDao.findById((long) unitId);
+            if (unit != null) {
+                o.setBsUnit(unit.getUnitName());
+            }
+            o.setPkUnit(unitId);
+        }else {
+            o.setBsUnit(null);
+            o.setPkUnit(null);
         }
         o.setPkUnit(unitId);
         o.setLastupdateBy(UserUtil.getSessionUser().getId());

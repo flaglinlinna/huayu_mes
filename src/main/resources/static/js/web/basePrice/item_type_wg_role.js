@@ -309,7 +309,7 @@ function delData(obj, id, name) {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
-			CoreUtil.sendAjax("/basePrice/itemTypeWg/delete", JSON
+			CoreUtil.sendAjax("/basePrice/itemTypeWgRole/delete", JSON
 					.stringify(param), function(data) {
 				if (isLogin(data)) {
 					if (data.result == true) {

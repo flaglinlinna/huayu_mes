@@ -8,6 +8,8 @@ import com.web.quote.service.QuoteService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -163,7 +165,11 @@ public class ProductMaterController extends WebController {
 		String methodName = "更新单位";
 		try {
 			long id = Long.parseLong(params.get("id").toString());
-			long unitId = Long.parseLong(params.get("unitId").toString());
+			String unitIdString = params.get("unitId").toString();
+			Long unitId = null;
+			if(StringUtils.isNotEmpty(unitIdString)) {
+				 unitId = Long.parseLong(unitIdString);
+			}
 			ApiResponseResult result = productMaterService.updateUnit(id,unitId);
 			logger.debug("更新单位=updateUnit:");
 			getSysLogService().success(module,method, methodName, params);
