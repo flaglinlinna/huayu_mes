@@ -27,6 +27,10 @@ public interface QuoteItemDao extends CrudRepository<QuoteItem, Long>,JpaSpecifi
 	
 	//public List<QuoteItem> findByDelFlagAndPkQuoteAndNotBsEndTime(Integer delFlag,Long PkQuote);
 	
+	//查询某类型项目的是否完成-20210121
+    @Query(value = "select t from QuoteItem t where  t.delFlag=0 and t.pkQuote=?1 and t.bsStyle=?2 and t.bsStatus in (0,1)")
+    public List<QuoteItem> getStatusByStype(Long quoteId,String stype);
+    
 	//查询此报价的项目是否已完成
 	public int countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(Integer delFlag,Long PkQuote,String bsCode,int bsStatus);
 	

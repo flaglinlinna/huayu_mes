@@ -287,13 +287,15 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
 				}
 			}
-		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
+		 
 		 //项目状态设置-状态 2：已完成
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
 		 quoteProcessDao.saveQuoteProcessByQuoteId(Long.parseLong(quoteId));
 		 
 		//20210112-fyx-关闭待办
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "工艺流程");
+		 
+		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		 
 		 return ApiResponseResult.success("提交成功！");
 	 }

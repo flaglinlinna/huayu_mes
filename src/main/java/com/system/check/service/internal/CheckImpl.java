@@ -117,6 +117,52 @@ public class CheckImpl   implements CheckService {
 			this.sendTodo(sr);
 		}
 		checkInfoDao.saveAll(lc);
+		
+		//20210121-fyx-修改列表状态
+		if(StringUtils.equals("QUOTE_NEW", checkInfo.getBsCheckCode())){//新增报价单
+			Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
+			if(quote != null){
+				quote.setBsStatus(4);//审批中
+				quoteDao.save(quote);
+			}
+		}else if(StringUtils.equals("out", checkInfo.getBsCheckCode())){//外协
+			Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
+			if(quote != null){
+				quote.setBsStatus2Out(4);//审批中
+				quoteDao.save(quote);
+			}
+		}else if(StringUtils.equals("hardware", checkInfo.getBsCheckCode())){//五金
+			Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
+			if(quote != null){
+				quote.setBsStatus2Hardware(4);//审批中
+				quoteDao.save(quote);
+			}
+		}else if(StringUtils.equals("molding", checkInfo.getBsCheckCode())){//注塑
+			Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
+			if(quote != null){
+				quote.setBsStatus2Molding(4);//审批中
+				quoteDao.save(quote);
+			}
+		}else if(StringUtils.equals("surface", checkInfo.getBsCheckCode())){//表面处理
+			Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
+			if(quote != null){
+				quote.setBsStatus2Surface(4);//审批中
+				quoteDao.save(quote);
+			}
+		}else if(StringUtils.equals("packag", checkInfo.getBsCheckCode())){//组装
+			Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
+			if(quote != null){
+				quote.setBsStatus2Packag(4);//审批中
+				quoteDao.save(quote);
+			}
+		}else if(StringUtils.equals("QUOTE_PUR", checkInfo.getBsCheckCode())){//采购部
+			Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
+			if(quote != null){
+				quote.setBsStatus2Purchase(4);//审批中
+				quoteDao.save(quote);
+			}
+		}
+		//--end
 		return true;
 	}
 	/**
