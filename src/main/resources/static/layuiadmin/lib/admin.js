@@ -356,6 +356,7 @@ layui.define("view", function (e) {
                         r = i(s),
                         o = r.list.children("dd"),
                         u = t === r.a.attr("lay-href");
+                    
                     if (o.each(function (e, n) {
                         var s = a(n),
                             r = i(s),
@@ -398,20 +399,34 @@ layui.define("view", function (e) {
         var e = a(this),
             t = e.index();
         P.tabsPage.type = "tab", P.tabsPage.index = t, A(e);
-      //fyx-20210116-切换标签后刷新当前页面
         
+        var srcs = $(".layadmin-tabsbody-item");//.find("iframe").attr("src");
+        srcs.each(function (e, n) {
+            var src1 =$(this).find("iframe").attr("src");
+            if(src1.indexOf("/quoteProdect/toProductItem") >= 0){
+            	$(this).find("iframe").attr("src", src1);
+            }
+        });
+        
+        //fyx-20210116-切换标签后刷新当前页面
         var src = $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src");
-        if(src != '/quote/toQuoteAdd'){//fyx-20210119-新增报价单不刷新
+        if(src != '/quote/toQuoteAdd' ){//fyx-20210119-新增报价单不刷新
         	$(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
         }
-        
         //--end
+       
+        /*srcs.each(function (e, n) {
+            console.log(e)
+        });*/
+        
     }), i.on("tabDelete(" + p + ")", function (e) {
         var t = a(_ + ".layui-this");
         e.index && P.tabsBody(e.index).remove(), A(t), P.delResize();
         //fyx-20210116-关闭标签后刷新当前页面
         var src = $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src");
-        $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
+        if(src != '/quote/toQuoteAdd'){//fyx-20210119-新增报价单不刷新
+        	$(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
+        }
         //--end
     }), o.on("click", "*[lay-href]", function () {
         var e = a(this),
