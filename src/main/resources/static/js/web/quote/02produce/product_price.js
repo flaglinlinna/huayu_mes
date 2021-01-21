@@ -253,17 +253,13 @@ function addSubmit(obj) {
 	});
 }
 
-// 编辑五金材料提交
+// 编辑、提交
 function editSubmit(obj) {
 	CoreUtil.sendAjax("/productMater/edit", JSON.stringify(obj.field), function(
 			data) {
 		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				// cleanProdErr();
-				// 加载页面
-				loadAll();
-			});
+			layer.closeAll();
+			loadAll();
 		} else {
 			layer.alert(data.msg);
 		}

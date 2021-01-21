@@ -364,12 +364,8 @@ function addSubmit(obj) {
 function editSubmit(obj) {
 	CoreUtil.sendAjax("/purchase/edit", JSON.stringify(obj.field), function(data) {
 		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				// cleanProdErr();
-				// 加载页面
-				loadAll();
-			});
+			layer.closeAll();
+			loadAll();
 		} else {
 			layer.alert(data.msg);
 		}

@@ -437,9 +437,6 @@ $(function() {
 				"procOrder" : procOrder
 			};
 			CoreUtil.sendAjax("/quoteProcess/doProcOrder", JSON.stringify(param), function(data) {
-				layer.alert(data.msg, function() {
-					layer.closeAll();
-				});
 				loadAll();
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试", function() {
@@ -454,9 +451,6 @@ $(function() {
 				"fmemo" : fmemo
 			};
 			CoreUtil.sendAjax("/quoteProcess/doFmemo", JSON.stringify(param), function(data) {
-				layer.alert(data.msg, function() {
-					layer.closeAll();
-				});
 				loadAll();
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试", function() {
