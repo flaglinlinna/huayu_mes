@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface QuoteProcessService {
 
-   public ApiResponseResult getAddList()  throws Exception;
+   public ApiResponseResult getAddList(Long workcenterId,PageRequest pageRequest)  throws Exception;
 	
    public ApiResponseResult getBomList(String keyword,Long quoteId, PageRequest pageRequest)  throws Exception;//获取物料列表
 	

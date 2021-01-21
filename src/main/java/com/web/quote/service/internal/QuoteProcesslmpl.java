@@ -126,9 +126,15 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 * 获取工序列表
 	 **/
 	@Override
-	public ApiResponseResult getAddList() throws Exception {
-		// TODO Auto-generated method stub
-		List<Proc> list = procDao.findByDelFlagAndCheckStatus(0, 1);
+	public ApiResponseResult getAddList(Long workcenterId,PageRequest pageRequest) throws Exception {
+		List<SearchFilter> filters = new ArrayList<>();
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		if(workcenterId!=null){
+			filters.add(new SearchFilter("workcenterId", SearchFilter.Operator.EQ, workcenterId));
+		}
+		Specification<Proc> spec = Specification.where(BaseService.and(filters, Proc.class));
+		Page<Proc> page = procDao.findAll(spec, pageRequest);
+		List<Proc> list =  page.getContent();
 		/*return ApiResponseResult.success().data(list);*/
 		List<Map<String, Object>> lm = new ArrayList<Map<String, Object>>();
 		for(Proc proc:list){
@@ -145,8 +151,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			}
 			lm.add(map);
 		}
-
-		return ApiResponseResult.success().data(lm);
+		return ApiResponseResult.success().data(DataGrid.create(lm, (int) page.getTotalElements(),
+				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+//		return ApiResponseResult.success().data(lm);
 	}
 
 	/**

@@ -131,10 +131,11 @@ public class QuoteProcessController extends WebController {
 	@ApiOperation(value = "获取报价工艺流程-工序列表", notes = "获取报价工艺流程-工序列表",hidden = true)
     @RequestMapping(value = "/getAddList", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponseResult getAddList() {
+    public ApiResponseResult getAddList(Long pkWcId) {
         String method = "quoteProcess/getAddList";String methodName ="获取报价工艺流程-工序列表";
         try {
-            ApiResponseResult result = quoteProcessService.getAddList();
+            Sort sort =  Sort.unsorted();
+            ApiResponseResult result = quoteProcessService.getAddList(pkWcId,super.getPageRequest(sort));
             logger.debug("获取报价工艺流程列表=getAddList:");
             getSysLogService().success(module,method, methodName,"" );
             return result;
