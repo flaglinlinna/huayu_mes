@@ -209,20 +209,20 @@ public class ProductMaterlmpl implements ProductMaterService {
         List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductMater o : productMaterList) {
             if("hardware".equals(bsType)) {
-                if (o.getBsQty() == null || o.getBsRadix() == null) {
-                    return ApiResponseResult.failure("用量或基数存在空值,请检查后再确认！");
+                if (o.getBsQty() == null ) {
+                    return ApiResponseResult.failure("用量存在空值,请检查后再确认！");
                 }
             }else if("molding".equals(bsType)) {
-                if (o.getBsRadix() == null || o.getBsProQty() == null || o.getBsCave() == null || o.getBsWaterGap() == null) {
-                    return ApiResponseResult.failure("制品重、基数、穴数、水口数不能为空,请检查后再确认！");
+                if ( o.getBsProQty() == null || o.getBsCave() == null || o.getBsWaterGap() == null) {
+                    return ApiResponseResult.failure("制品重、穴数、水口数不能为空,请检查后再确认！");
                 }
             }else if("surface".equals(bsType)) {
-                if (o.getBsColor() == null || o.getBsMachiningType() == null || o.getBsQty() == null || o.getBsRadix() == null) {
-                    return ApiResponseResult.failure("配色工艺、加工类型、用量、基数不能为空,请检查后再确认！");
+                if (o.getBsColor() == null || o.getBsMachiningType() == null || o.getBsQty() == null ) {
+                    return ApiResponseResult.failure("配色工艺、加工类型、用量不能为空,请检查后再确认！");
                 }
             }else if("packag".equals(bsType)) {
-                if (o.getBsQty() == null || o.getBsRadix() == null) {
-                    return ApiResponseResult.failure("用量或基数存在空值,请检查后再确认！");
+                if (o.getBsQty() == null ) {
+                    return ApiResponseResult.failure("用量存在空值,请检查后再确认！");
                 }
             }
             o.setBsStatus(1);

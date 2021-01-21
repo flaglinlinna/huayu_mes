@@ -140,7 +140,7 @@ $(function() {
 			   {field : 'bsQty',width : 100,title : '用量',hide : true},
 			   {field : 'bsProQty',width : 100,title : '制品量',hide : true},
 			   {field : 'bsUnit',width : 80,title : '单位',},
-			   {field : 'bsRadix',width : 80,title : '基数',},
+			   //{field : 'bsRadix',width : 80,title : '基数',},
 			   {field : 'bsWaterGap',title : '水口量',width : 100,hide : true /*(注塑)*/},
 			   {field : 'bsCave',title : '穴数',width : 100,hide : true /*(注塑)*/},
 			   {field : 'bsSupplier',title : '备选供应商',width : 100},
@@ -201,13 +201,14 @@ $(function() {
 			var bsCave = obj.data.bsCave;
 			var bsProQty = obj.data.bsProQty;
 			// var bsLoss = obj.data.bsLoss;
-			if (obj.field == "bsRadix") {
+			/*if (obj.field == "bsRadix") {
 				if (/^\d+$/.test(bsRadix) == false || bsRadix <= 0) {
 					layer.msg("基数必填且只能输入整数且大于0");
 					loadAll();
 					return false;
 				}
-			} else if (obj.field == "bsQty") {
+			} else*/
+			if (obj.field == "bsQty") {
 				if (/^\d+$/.test(bsQty) == false && /^\d+\.\d+$/.test(bsQty) == false) {
 					layer.msg("用量只能输入数字");
 					loadAll();
@@ -439,13 +440,16 @@ function updateUnit(id,unitId) {
 			if (isLogin(data)) {
 				if (data.result == true) {
 					// 回调弹框
-					layer.alert("修改单位成功！", function() {
+					//layer.closeAll();
+					// 加载load方法
+					loadAll();
+					/*layer.alert("修改单位成功！", function() {
 						layer.closeAll();
 						// 加载load方法
 						loadAll();
-					});
+					});*/
 				} else {
-					layer.alert(data, function() {
+					layer.alert(data.msg, function() {
 						layer.closeAll();
 					});
 				}
