@@ -393,19 +393,20 @@ $(function() {
 		initSelect();
 
 		table.on('edit(uploadTable)',function (obj) {
-			console.log(obj.field);//当前编辑列名
-			var bsRadix = obj.data.bsRadix;
+			//console.log(obj.field);//当前编辑列名
+			//var bsRadix = obj.data.bsRadix;
 			var bsUserNum = obj.data.bsUserNum;
 			var bsYield = obj.data.bsYield;
 			var bsCave = obj.data.bsCave;
 			var bsCycle = obj.data.bsCycle;
-			if(obj.field =="bsRadix") {
+			/*if(obj.field =="bsRadix") {
 				if (/^\d+$/.test(bsRadix) == false && /^\d+\.\d+$/.test(bsRadix) == false || bsRadix <= 0) {
 					layer.msg("基数必填且只能输入数字且大于0");
 					loadAll2();
 					return false;
 				}
-			}else if(obj.field =="bsUserNum") {
+			}else*/ 
+			if(obj.field =="bsUserNum") {
 				if (/^\d+$/.test(bsUserNum) == false && /^\d+\.\d+$/.test(bsUserNum) == false && bsUserNum != "" && bsUserNum != null) {
 					layer.msg("人数只能输入数字");
 					loadAll2();
@@ -876,9 +877,8 @@ function updateModelType(id,modelCode) {
 			if (isLogin(data)) {
 				if (data.result == true) {
 					// 回调弹框
-					//layer.closeAll();
 					// 加载load方法
-					//loadAll();
+					loadAll();
 					/*layer.alert("修改机台类型成功！", function() {
 						layer.closeAll();
 						// 加载load方法
