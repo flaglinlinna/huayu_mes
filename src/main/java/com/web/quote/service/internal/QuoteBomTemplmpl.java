@@ -170,7 +170,8 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 
 				String unit = tranCell(sheet.getRow(row).getCell(11));
 				if(StringUtils.isNotEmpty(unit)) {
-					List<Unit> unitList = unitDao.findByUnitNameAndDelFlag(unit, 0);
+//					List<Unit> unitList = unitDao.findByUnitNameAndDelFlag(unit, 0);
+					List<Unit> unitList = unitDao.findByUnitCodeAndDelFlag(unit, 0);
 					if (unitList != null && unitList.size() > 0) {
 						temp.setPkUnit(unitList.get(0).getId());
 					} else {

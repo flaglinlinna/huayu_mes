@@ -166,7 +166,7 @@ public class UnitImpl implements UnitService {
                 map.put("createBy",sysUserDao.findById((long)unit.getCreateBy()).getUserName());
                 map.put("createDate",df.format(unit.getCreateDate()));
                 if(unit.getLastupdateBy()!=null){
-                    map.put("lastupdateBy",sysUserDao.findById((long)unit.getCreateBy()).getUserName());
+                    map.put("lastupdateBy",sysUserDao.findById((long)unit.getLastupdateBy()).getUserName());
                     map.put("lastupdateDate",df.format(unit.getLastupdateDate()));
                 }
                 mapList.add(map);

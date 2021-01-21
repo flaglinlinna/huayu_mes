@@ -16,6 +16,7 @@ public interface UnitDao extends CrudRepository<Unit, Long>,JpaSpecificationExec
     public List<Unit> findAll();
     public List<Unit> findByDelFlag(Integer delFlag);
     public List<Unit> findByUnitNameAndDelFlag(String unitName,Integer delFlag);
+    public List<Unit> findByUnitCodeAndDelFlag(String unitCode,Integer delFlag);
     int countByDelFlagAndUnitCode(Integer delFlag,String unitCode);
     public Unit findById(long id);
 }
