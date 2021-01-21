@@ -62,6 +62,9 @@ public class PriceCommImpl extends PrcUtils implements PriceCommService {
 		if (StringUtils.isEmpty(priceComm.getUnitId())) {
 			return ApiResponseResult.failure("单位不能为空！");
 		}
+		if(priceCommDao.countByDelFlagAndItemNo(0,priceComm.getItemNo())>0){
+			return ApiResponseResult.failure("该物料编码已经存在！");
+		}
 		//20210120-fyx-物料名称去掉头尾空格
 		priceComm.setItemName(priceComm.getItemName().trim());
 		//--end
@@ -95,6 +98,11 @@ public class PriceCommImpl extends PrcUtils implements PriceCommService {
 		PriceComm o = priceCommDao.findById((long) priceComm.getId());
 		if (o == null) {
 			return ApiResponseResult.failure("该物料通用价格不存在！");
+		}
+		if(!priceComm.getItemNo().equals(o.getItemNo())){
+			if(priceCommDao.countByDelFlagAndItemNo(0,priceComm.getItemNo())>0){
+				return ApiResponseResult.failure("该物料编码已经存在！");
+			}
 		}
 		o.setItemNo(priceComm.getItemNo());
 		o.setLastupdateDate(new Date());
@@ -162,6 +170,7 @@ public class PriceCommImpl extends PrcUtils implements PriceCommService {
 		// 查询2
 		List<SearchFilter> filters1 = new ArrayList<>();
 		if (StringUtils.isNotEmpty(keyword)) {
+			filters1.add(new SearchFilter("itemNo", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("itemName", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("rangePrice", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("alternativeSuppliers", SearchFilter.Operator.LIKE, keyword));
@@ -176,6 +185,7 @@ public class PriceCommImpl extends PrcUtils implements PriceCommService {
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", priceComm.getId());
 			map.put("itemName", priceComm.getItemName());
+			map.put("itemNo",priceComm.getItemNo());
 			map.put("rangePrice", priceComm.getRangePrice());
 			map.put("priceUn", priceComm.getPriceUn());
 			if(priceComm.getUnit()!=null){
@@ -188,7 +198,7 @@ public class PriceCommImpl extends PrcUtils implements PriceCommService {
 			map.put("createBy", sysUserDao.findById((long) priceComm.getCreateBy()).getUserName());
 			map.put("createDate", df.format(priceComm.getCreateDate()));
 			if (priceComm.getLastupdateBy() != null) {
-				map.put("lastupdateBy", sysUserDao.findById((long) priceComm.getCreateBy()).getUserName());
+				map.put("lastupdateBy", sysUserDao.findById((long) priceComm.getLastupdateBy()).getUserName());
 				map.put("lastupdateDate", df.format(priceComm.getLastupdateDate()));
 			}
 			mapList.add(map);

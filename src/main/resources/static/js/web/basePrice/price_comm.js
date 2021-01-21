@@ -143,6 +143,7 @@ $(function() {
 			form.val("itemForm", {
 				"id" : obj.id,
 				"itemName" : obj.itemName,
+				"itemNo":obj.itemNo,
 				"rangePrice" : obj.rangePrice,
 				"priceUn" : obj.priceUn,
 				"alternativeSuppliers" : obj.alternativeSuppliers,
