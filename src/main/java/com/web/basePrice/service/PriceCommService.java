@@ -22,4 +22,6 @@ public interface PriceCommService {
   
   public ApiResponseResult getUnitList()throws Exception;
 
+  //物料编码查询框
+  public ApiResponseResult getItemList(String keyword,PageRequest pageRequest) throws Exception;
 }

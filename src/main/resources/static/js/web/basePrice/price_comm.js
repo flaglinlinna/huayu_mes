@@ -3,8 +3,8 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table' ], function() {
-		var table = layui.table, form = layui.form;
+	layui.use([ 'form', 'table', 'tableSelect' ], function() {
+		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
 
 		tableIns = table.render({
 			elem : '#colsList',
@@ -31,56 +31,21 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			}, {
-				field : 'enabled',
-				title : '有效状态',
-				templet : '#statusTpl',
-				width : 95
-			}, {
-				field : 'itemName',
-				title : '物料名称',
-				width : 150
-			},  {
-				field : 'rangePrice',
-				title : '价格档位',
-				width : 100
-			}, {
-				field : 'priceUn',
-				title : '单价',
-				width : 80
-			}, {
-				field : 'unit',
-				title : '单位',
-				width : 80
-			},{
-				field : 'alternativeSuppliers',
-				title : '备选供应商',
-				width : 150
-			},{
-				field : 'createBy',
-				title : '创建人',
-				width : 80
-			}, {
-				field : 'createDate',
-				title : '创建时间',
-				width : 150
-			}, {
-				field : 'lastupdateBy',
-				title : '更新人',
-				width : 80
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间',
-				width : 150
-			}, {
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar',
-				width : 120
-			} ] ],
+			cols : [ [
+				{type : 'numbers'},
+				{field : 'enabled', title : '有效状态', templet : '#statusTpl', width : 95},
+				{field : 'itemNo', title : '物料编号', width : 150},
+				{field : 'itemName', title : '物料名称', width : 150},
+				{field : 'rangePrice', title : '价格档位', width : 100},
+				{field : 'priceUn', title : '单价', width : 80},
+				{field : 'unit', title : '单位', width : 80},
+				{field : 'alternativeSuppliers', title : '备选供应商', width : 150},
+				{field : 'createBy', title : '创建人', width : 80},
+				{field : 'createDate', title : '创建时间', width : 150},
+				{field : 'lastupdateBy', title : '更新人', width : 80},
+				{field : 'lastupdateDate', title : '更新时间', width : 150},
+				{fixed : 'right', title : '操作', align : 'center', toolbar : '#optBar', width : 120}
+				] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
@@ -92,6 +57,54 @@ $(function() {
 				pageCurr = curr;
 			}
 		});
+
+		tableSelect = tableSelect.render({
+			elem : '#itemNo',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '试着搜索',
+			table : {
+				url : context + '/basePrice/priceComm/getItemList',
+				method : 'get',
+				// width:800,
+				cols : [ [
+					{type : 'numbers', title : '序号'},
+					{type : 'radio'},
+					{field : 'ID', title : 'id', width : 0, hide : true},
+					{field : 'ITEM_NO', title : '物料编码', minWidth : 160},
+					{field : 'ITEM_NAME', title : '物料名称', minWidth : 160},
+					// {field : 'WORKCENTER_NAME', title : '工作中心', width : 160},
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+				parseData : function(res) {
+					if (res.result) {
+						// 可进行数据操作
+						return {
+							"count" : res.data.total,
+							"msg" : res.msg,
+							"data" : res.data.rows,
+							"code" : res.status
+							// code值为200表示成功
+						}
+					}
+				},
+			},
+			done : function(elem, data) {
+				var da = data.data;
+				form.val("itemForm", {
+					"itemNo" : da[0].ITEM_NO,
+					"itemName":da[0].ITEM_NAME
+				});
+				form.render();// 重新渲染
+
+			}
+		});
+
 		// 切换状态操作
 		form.on('switch(isStatusTpl)', function(obj) {
 			doStatus(obj, this.value, this.name, obj.elem.checked);

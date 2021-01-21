@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.system.user.dao.SysUserDao;
 
+import com.web.produce.service.internal.PrcUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,7 +34,7 @@ import com.web.basic.entity.Mtrial;
  */
 @Service(value = "PriceCommService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class PriceCommImpl implements PriceCommService {
+public class PriceCommImpl extends PrcUtils implements PriceCommService {
 	@Autowired
 	private PriceCommDao priceCommDao;
 
@@ -95,6 +96,7 @@ public class PriceCommImpl implements PriceCommService {
 		if (o == null) {
 			return ApiResponseResult.failure("该物料通用价格不存在！");
 		}
+		o.setItemNo(priceComm.getItemNo());
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		//o.setEnabled(priceComm.getEnabled());
@@ -203,5 +205,18 @@ public class PriceCommImpl implements PriceCommService {
 		 return ApiResponseResult.success().data(list);
 		 
 	 }
+
+	@Override
+	public ApiResponseResult getItemList(String keyword,PageRequest pageRequest) throws Exception{
+		List<Object> list = getReworkItemPrc(UserUtil.getSessionUser().getCompany()+"",
+				UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"","原材料",keyword,pageRequest);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("total", list.get(2));
+		map.put("rows", list.get(3));
+		return ApiResponseResult.success("").data(map);
+	}
 
 }

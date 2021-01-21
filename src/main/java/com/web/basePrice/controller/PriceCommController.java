@@ -157,4 +157,23 @@ public class PriceCommController extends WebController{
             return ApiResponseResult.failure("获取单位下拉列表失败！");
         }
     }
+
+    @ApiOperation(value = "获取物料下拉列表", notes = "获取物料下拉列表",hidden = true)
+    @RequestMapping(value = "/getItemList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getItemList(String keyword) {
+        String method = "basePrice/priceComm/getItemList";String methodName ="获取物料下拉列表";
+        try {
+            Sort sort = Sort.unsorted();
+            ApiResponseResult result = priceCommService.getItemList(keyword,super.getPageRequest(sort));
+            logger.debug("获取单位下拉列表=getUnitList:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取物料下拉列表失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取物料下拉列表失败！");
+        }
+    }
 }

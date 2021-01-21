@@ -48,8 +48,9 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	@Query(value = "select distinct t.bs_component from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag='0' and t.bs_component is not null", nativeQuery = true)	
 	public List<Map<String, Object>> getBomName(String quoteid);
 
-	@Query(value = " select distinct t.PK_BJ_WORK_CENTER, t.BS_ELEMENT,t.BS_COMPONENT from price_quote_bom t where t.pk_quote= ?1  and t.del_Flag= 0 ",
-			countQuery =  " select count(1) from (select distinct  t.BS_ELEMENT,t.BS_COMPONENT from price_quote_bom t" +
+	@Query(value = "select distinct t.PK_BJ_WORK_CENTER, t.BS_ELEMENT,t.BS_COMPONENT,c.WORKCENTER_NAME from price_quote_bom t " +
+			" LEFT JOIN BJ_BASE_WORKCENTER c on t.PK_BJ_WORK_CENTER = c.ID where t.pk_quote= ?1  and t.del_Flag= 0 ",
+			countQuery =  " select count(1) from (select distinct  t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT from price_quote_bom t" +
 					" where t.pk_quote= ?1  and t.del_Flag= 0)",
 			nativeQuery = true)
 	Page<Map<String, Object>> getBomNameByPage(Long quoteId, Pageable pageable);

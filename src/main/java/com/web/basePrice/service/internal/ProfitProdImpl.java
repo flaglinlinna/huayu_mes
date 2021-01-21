@@ -43,14 +43,17 @@ public class ProfitProdImpl extends BasePriceUtils implements ProfitProdService 
 		if (profitProd == null) {
 			return ApiResponseResult.failure("产品利润率信息不能为空！");
 		}
-		if (StringUtils.isEmpty(profitProd.getItemType())) {
-			return ApiResponseResult.failure("机种类型不能为空！");
-		}
+//		if (StringUtils.isEmpty(profitProd.getItemType())) {
+//			return ApiResponseResult.failure("机种类型不能为空！");
+//		}
 		if (StringUtils.isEmpty(profitProd.getProductType())) {
 			return ApiResponseResult.failure("产品类型为空！");
 		}
-		if(profitProdDao.findByDelFlagAndItemTypeAndProductTypeAndEnabled(0,profitProd.getItemType(),profitProd.getProductType(),1).size()>0){
-			return ApiResponseResult.failure("产品类型为:"+profitProd.getProductType()+",机种型号为:"+profitProd.getItemType()+" 的信息已维护,请重新选择！");
+//		if(profitProdDao.findByDelFlagAndItemTypeAndProductTypeAndEnabled(0,profitProd.getItemType(),profitProd.getProductType(),1).size()>0){
+//			return ApiResponseResult.failure("产品类型为:"+profitProd.getProductType()+",机种型号为:"+profitProd.getItemType()+" 的信息已维护,请重新选择！");
+//		}
+		if(profitProdDao.findByDelFlagAndProductTypeAndEnabled(0,profitProd.getProductType(),1).size()>0){
+			return ApiResponseResult.failure("产品类型为:"+profitProd.getProductType()+" 的信息已维护,请重新选择！");
 		}
 		profitProd.setCreateDate(new Date());
 		profitProd.setCreateBy(UserUtil.getSessionUser().getId());
@@ -70,9 +73,9 @@ public class ProfitProdImpl extends BasePriceUtils implements ProfitProdService 
 		if (profitProd.getId() == null) {
 			return ApiResponseResult.failure("产品利润率信息ID不能为空！");
 		}
-		if (StringUtils.isEmpty(profitProd.getItemType())) {
-			return ApiResponseResult.failure("机种类型不能为空！");
-		}
+//		if (StringUtils.isEmpty(profitProd.getItemType())) {
+//			return ApiResponseResult.failure("机种类型不能为空！");
+//		}
 		if (StringUtils.isEmpty(profitProd.getProductType())) {
 			return ApiResponseResult.failure("产品类型为空！");
 		}
@@ -81,9 +84,15 @@ public class ProfitProdImpl extends BasePriceUtils implements ProfitProdService 
 		if (o == null) {
 			return ApiResponseResult.failure("该产品利润率信息不存在！");
 		}
-		if(!(profitProd.getItemType().equals(o.getItemType())&&profitProd.getProductType().equals(o.getProductType()))){
-			if(profitProdDao.findByDelFlagAndItemTypeAndProductTypeAndEnabled(0,profitProd.getItemType(),profitProd.getProductType(),1).size()>0){
-				return ApiResponseResult.failure("产品类型为:"+profitProd.getProductType()+",机种型号为:"+profitProd.getItemType()+" 的信息已维护,请重新选择！");
+//		if(!(profitProd.getItemType().equals(o.getItemType())&&profitProd.getProductType().equals(o.getProductType()))){
+//			if(profitProdDao.findByDelFlagAndItemTypeAndProductTypeAndEnabled(0,profitProd.getItemType(),profitProd.getProductType(),1).size()>0){
+//				return ApiResponseResult.failure("产品类型为:"+profitProd.getProductType()+",机种型号为:"+profitProd.getItemType()+" 的信息已维护,请重新选择！");
+//			}
+//		}
+
+		if(!profitProd.getProductType().equals(o.getProductType())){
+			if(profitProdDao.findByDelFlagAndProductTypeAndEnabled(0,profitProd.getProductType(),1).size()>0){
+				return ApiResponseResult.failure("产品类型为:"+profitProd.getProductType()+" 的信息已维护,请重新选择！");
 			}
 		}
 		o.setLastupdateDate(new Date());

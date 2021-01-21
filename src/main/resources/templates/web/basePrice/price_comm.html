@@ -46,13 +46,20 @@
 			<form id="itemForm" class="layui-form layui-form-pane"
 				lay-filter="itemForm" method="post" action=""
 				style="margin-top: 20px;">
-				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
-					type="hidden" name="id" />
+				<input id="pageNum" type="hidden" name="pageNum" />
+				<input id="id" type="hidden" name="id" />
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">物料名称</label>
+					<label class="layui-form-label layui-required">物料编码</label>
 					<div class="layui-input-inline">
-						<input id="itemName" name="itemName" lay-verify="required"
-							autocomplete="off" class="layui-input" type="text" />
+						<input id="itemNo" name="itemNo" lay-verify="required" lay-filter ="itemNo"
+							   autocomplete="off" class="layui-input" type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">物料名称</label>
+					<div class="layui-input-inline">
+						<input id="itemName" name="itemName" style="background: #efefef"
+							 readonly="readonly" autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">

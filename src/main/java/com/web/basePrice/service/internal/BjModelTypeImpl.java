@@ -131,28 +131,29 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 		if (StringUtils.isNotEmpty(keyword)) {
 			filters1.add(new SearchFilter("modelCode", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("modelName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("workCenter.workcenterCode", SearchFilter.Operator.LIKE, keyword));
 		}
 		Specification<BjModelType> spec = Specification.where(BaseService.and(filters, BjModelType.class));
 		Specification<BjModelType> spec1 = spec.and(BaseService.or(filters1, BjModelType.class));
 		Page<BjModelType> page = bjModelTypeDao.findAll(spec1, pageRequest);
-		List<BjModelType> baseFeeList = page.getContent();
+		List<BjModelType> bjModelTypeList = page.getContent();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		List<Map<String, Object>> mapList = new ArrayList<>();
-		for (BjModelType baseFee : baseFeeList) {
+		for (BjModelType bjModelType : bjModelTypeList) {
 			Map<String, Object> map = new HashMap<>();
-			map.put("id", baseFee.getId());
-			map.put("workCenterId", baseFee.getPkWorkcenter());
-			if(baseFee.getWorkCenter()!=null) {
-				map.put("workCenterCode", baseFee.getWorkCenter().getWorkcenterCode());
-				map.put("workCenterName", baseFee.getWorkCenter().getWorkcenterName());
+			map.put("id", bjModelType.getId());
+			map.put("workCenterId", bjModelType.getPkWorkcenter());
+			if(bjModelType.getWorkCenter()!=null) {
+				map.put("workCenterCode", bjModelType.getWorkCenter().getWorkcenterCode());
+				map.put("workCenterName", bjModelType.getWorkCenter().getWorkcenterName());
 			}
-			map.put("modelCode", baseFee.getModelCode());
-			map.put("modelName", baseFee.getModelName());
-			map.put("createBy", sysUserDao.findById((long) baseFee.getCreateBy()).getUserName());
-			map.put("createDate", df.format(baseFee.getCreateDate()));
-			if (baseFee.getLastupdateBy() != null) {
-				map.put("lastupdateBy", sysUserDao.findById((long) baseFee.getLastupdateBy()).getUserName());
-				map.put("lastupdateDate", df.format(baseFee.getLastupdateDate()));
+			map.put("modelCode", bjModelType.getModelCode());
+			map.put("modelName", bjModelType.getModelName());
+			map.put("createBy", sysUserDao.findById((long) bjModelType.getCreateBy()).getUserName());
+			map.put("createDate", df.format(bjModelType.getCreateDate()));
+			if (bjModelType.getLastupdateBy() != null) {
+				map.put("lastupdateBy", sysUserDao.findById((long) bjModelType.getLastupdateBy()).getUserName());
+				map.put("lastupdateDate", df.format(bjModelType.getLastupdateDate()));
 			}
 			mapList.add(map);
 		}

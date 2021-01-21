@@ -90,55 +90,19 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			},  {
-				field : 'productType',
-				title : '产品类型',
-				width : 150
-			},  {
-				field : 'itemType',
-				title : '机种型号',
-				width : 150
-			}, {
-				field : 'profitRateGs',
-				title : '毛利率%',
-				width : 150
-			},
-				{
-					field : 'fmemo',
-					title : '备注',
-					width : 150,
-				},
-				{
-					field : 'enabled',
-					title : '有效状态',
-					templet : '#statusTpl',
-					width : 95
-				},
-				{
-				field : 'createBy',
-				title : '创建人',
-				width : 80
-			}, {
-				field : 'createDate',
-				title : '创建时间',
-				width : 150
-			}, {
-				field : 'lastupdateBy',
-				title : '更新人',
-				width : 80
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间',
-				width : 150
-			}, {
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar',
-				width : 120
-			} ] ],
+			cols : [ [
+				{type : 'numbers'},
+				{field : 'productType', title : '产品类型', width : 150},
+				// {field : 'itemType', title : '机种型号', width : 150},
+				{field : 'profitRateGs', title : '毛利率%', width : 150},
+				{field : 'fmemo', title : '备注', width : 150,},
+				{field : 'enabled', title : '有效状态', templet : '#statusTpl', width : 95},
+				{field : 'createBy', title : '创建人', width : 80},
+				{field : 'createDate', title : '创建时间', width : 150},
+				{field : 'lastupdateBy', title : '更新人', width : 80},
+				{field : 'lastupdateDate', title : '更新时间', width : 150},
+				{fixed : 'right', title : '操作', align : 'center', toolbar : '#optBar', width : 120}
+			] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 				merge(res.data,['productType'],[1]);

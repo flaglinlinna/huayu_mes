@@ -14,4 +14,5 @@ public interface ProfitProdDao extends CrudRepository<ProfitProd, Long>,JpaSpeci
     public ProfitProd findById(long id);
     
     public List<ProfitProd> findByDelFlagAndItemTypeAndProductTypeAndEnabled(Integer delFlag,String itemType,String productType,int enabled);
+    public List<ProfitProd> findByDelFlagAndProductTypeAndEnabled(Integer delFlag,String productType,int enabled);
 }

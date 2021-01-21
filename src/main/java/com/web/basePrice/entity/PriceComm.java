@@ -24,7 +24,14 @@ import javax.persistence.Table;
 public class PriceComm extends BaseEntity {
 	 private static final long serialVersionUID = 4625660587007894370L;
 	    public static final String TABLE_NAME = "BJ_BASE_PRICE_COMM";
-	    
+
+		/**
+		 * 物料编码
+		 */
+		@ApiModelProperty(name = "itemNo", value = "物料编码")
+		@Column(length = 50)
+		protected String itemNo;
+
 	    /**
 	     * 物料名称
 	     */
@@ -73,9 +80,17 @@ public class PriceComm extends BaseEntity {
 		@Column(length = 10)
 		protected int enabled = 1;
 
-		public String getItemName() {
-			return itemName;
+		public String getItemNo() {
+			return itemNo;
 		}
+
+		public void setItemNo(String itemNo) {
+			this.itemNo = itemNo;
+		}
+
+		public String getItemName() {
+				return itemName;
+			}
 
 		public void setItemName(String itemName) {
 			this.itemName = itemName;
