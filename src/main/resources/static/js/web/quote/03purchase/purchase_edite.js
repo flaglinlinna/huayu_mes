@@ -52,7 +52,7 @@ $(function() {
 				{field : 'bsProQty',width : 100,title : '制品重',style : 'background-color:#d2d2d2'},
 				{field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
 				{field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
-				{field : 'bsWaterGap',title : '水口量',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
+				{field : 'bsWaterGap',title : '水口量(g)',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				{field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				{field : 'bsUnit',width : 80,title : '单位',style : 'background-color:#d2d2d2'}, 
 				{field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},

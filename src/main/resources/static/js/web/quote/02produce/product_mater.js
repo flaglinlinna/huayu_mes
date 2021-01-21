@@ -45,7 +45,7 @@ $(function() {
 			  {field : 'bsProQty',width : 100,title : '制品重<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 				{field : 'bsUnit',width : 120,title : '单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
 			  /*{field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text',style : 'background-color:#ffffff'},*/
-			  {field : 'bsWaterGap',title : '水口量<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
+			  {field : 'bsWaterGap',title : '水口量(g)<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
 			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (注塑)*/}, 
 			  {field : 'bsSupplier',title : '备选供应商',edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'fmemo',title : '备注',width : 120,edit : 'text',style : 'background-color:#ffffff'},
@@ -141,7 +141,7 @@ $(function() {
 			   {field : 'bsProQty',width : 100,title : '制品量',hide : true},
 			   {field : 'bsUnit',width : 80,title : '单位',},
 			   //{field : 'bsRadix',width : 80,title : '基数',},
-			   {field : 'bsWaterGap',title : '水口量',width : 100,hide : true /*(注塑)*/},
+			   {field : 'bsWaterGap',title : '水口量(g)',width : 100,hide : true /*(注塑)*/},
 			   {field : 'bsCave',title : '穴数',width : 100,hide : true /*(注塑)*/},
 			   {field : 'bsSupplier',title : '备选供应商',width : 100},
 			   {field : 'fmemo',title : '备注',width : 120},

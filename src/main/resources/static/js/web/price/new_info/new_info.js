@@ -186,7 +186,7 @@ $(function() {
 
 							}, {
 								field : 'TIME_END',
-								title : '成型周期',
+								title : '成型周期（S）',
 								width : 100
 							} ] ],
 							done : function(res, curr, count) {

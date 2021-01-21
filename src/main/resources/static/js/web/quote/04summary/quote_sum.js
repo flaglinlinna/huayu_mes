@@ -184,7 +184,7 @@ $(function() {
 			{field : 'bsGeneral',width : 120,title : '是否通用物料'},
 			// {field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet:'#selectGear'},
 			{field : 'bsRefer',width : 110,title : '参考价格'},
-			{field : 'bsWaterGap',title : '水口量',width : 100,hide : true}, /*(注塑)*/
+			{field : 'bsWaterGap',title : '水口量(g)',width : 100,hide : true}, /*(注塑)*/
 			{field : 'bsCave',title : '穴数',width : 100,hide : true}, /*(注塑)*/
 			{field : 'bsAssess',width : 110,title : '评估价格'},
 			{field : 'bsFee',width : 110,title : '材料总价',
