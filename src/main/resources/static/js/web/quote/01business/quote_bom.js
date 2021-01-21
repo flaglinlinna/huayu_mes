@@ -173,16 +173,24 @@ $(function() {
 							}}, 
 							{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
 							{field : 'bsModel',title : '材料规格',width : 200},
-							{field : 'bsExplain',title : '采购说明',width : 200}, 
-							{field : 'fmemo',title : '工艺说明',width : 200},
+							{field : 'bsExplain',title : '采购说明',width : 200},
+							{field : 'bsAgent',title : '是否代采',width : 120,templet:function (d) {
+									if(d.bsAgent=="1"){
+										return "是"
+									}else {
+										return "否"
+									}
+								}},
+								{field : 'fmemo',title : '工艺说明',width : 200},
 							{field : 'bsQty',title : '用量',width : 90},
 							{field : 'bsProQty',title : '制品重',width : 90},
 							{field : 'unit',title : '单位',width : 80,
 								templet : function(d) {
 									if (d.unit != null) {return d.unit.unitName;} 
 									else {return "";}
-							}}, 
-							{field : 'bsRadix',title : '基数',width : 80}, 
+							}},
+							{field : 'bsCave',title : '水口重',width : 80},
+							{field : 'bsCave',title : '穴数',width : 80},
 							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
 							] ],
 							done : function(res, curr, count) {
@@ -241,14 +249,22 @@ $(function() {
 								{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
 								{field : 'bsModel',title : '材料规格',width : 200},
 								{field : 'bsExplain',title : '采购说明',width : 200},
+								{field : 'bsAgent',title : '是否代采',width : 120,templet:function (d) {
+										if(d.bsAgent=="1"){
+											return "是"
+										}else {
+											return "否"
+										}
+									}},
 								{field : 'fmemo',title : '工艺说明',width : 200},
 								{field : 'bsQty',title : '用量',width : 90},
 								{field : 'bsProQty',title : '制品量',width : 90},
 								{field : 'unit',title : '单位',width : 80,templet : function(d) {
 									if (d.unit != null) {return d.unit.unitName;} 
 									else {return "";}
-								}}, 
-								{field : 'bsRadix',title : '基数',width : 80}
+								}},
+								{field : 'bsCave',title : '水口重',width : 80},
+								{field : 'bsCave',title : '穴数',width : 80},
 							// , {fixed : 'right',title : '操作',align :'center',toolbar : '#optBar',width:120}
 							] ],
 							done : function(res, curr, count) {

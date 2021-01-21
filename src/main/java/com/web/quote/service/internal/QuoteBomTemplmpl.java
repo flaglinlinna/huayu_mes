@@ -74,16 +74,16 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 	{
 		if(object==null||object==""||("").equals(object)){
 			return null;
-		}else return object.toString();
+		}else return object.toString().trim();
 	}
 
 	//导入模板
 	@Override
 	public ApiResponseResult doExcel(MultipartFile[] file, Long pkQuote) throws Exception{
 		try {
-//			if(pkQuote ==null){
-//				return ApiResponseResult.failure("导入失败！请检查选中的报价单！");
-//			}
+			if(pkQuote ==null){
+				return ApiResponseResult.failure("导入失败！请检查选中的报价单！");
+			}
 			Long userId = UserUtil.getSessionUser().getId();
 			quoteBomTempDao.deleteByPkQuoteAndCreateBy(pkQuote,userId);
 			Date doExcleDate = new Date();
@@ -96,20 +96,14 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			//前两行为标题
 			Integer successes = 0;
 			Integer failures = 0;
-
+			//列顺序:0主表id，1工作中心，2物料类型，3是否代采，4组件名称，5零件名称，6材料名称，7材料规格，8工艺说明，
+			// 9用量，10制品重，11重量单位，12水口重(g)，13穴数，14采购说明
 			for (int row = 2; row <= maxRow; row++) {
 				String errInfo = "";
 				QuoteBomTemp temp = new QuoteBomTemp();
 				String mid = tranCell(sheet.getRow(row).getCell(0));
-				String bsElement = tranCell(sheet.getRow(row).getCell(1));
-				if(!StringUtils.isNotEmpty(bsElement)){
-					errInfo += "组件名称不能为空;";
-				}
-				String bsComponent = tranCell(sheet.getRow(row).getCell(2));
-				if(!StringUtils.isNotEmpty(bsComponent)){
-					errInfo += "零件名称不能为空;";
-				}
-				String wc = tranCell(sheet.getRow(row).getCell(3));
+
+				String wc = tranCell(sheet.getRow(row).getCell(1));
 				if(!StringUtils.isNotEmpty(wc)){
 					errInfo += "工作中心不能为空;";
 				}else {
@@ -121,9 +115,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 					}
 				}
 
-
-//				String bsItemCode = tranCell(sheet.getRow(row).getCell(3));
-				String itp = tranCell(sheet.getRow(row).getCell(4));
+				String itp = tranCell(sheet.getRow(row).getCell(2));
 				if(!StringUtils.isNotEmpty(itp)){
 					errInfo += "物料类型不能为空;";
 				}else {
@@ -134,18 +126,49 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 						errInfo +=  "没有维护:"+ itp+" 物料类型;";
 					}
 				}
-				String bsMaterName = tranCell(sheet.getRow(row).getCell(5));
+
+				String bsAgent = tranCell(sheet.getRow(row).getCell(3)); //是否代采
+				if(StringUtils.isNotEmpty(bsAgent)) {
+					if (("是").equals(bsAgent)) {
+						temp.setBsAgent(1);
+					}
+				}
+
+				String bsElement = tranCell(sheet.getRow(row).getCell(4));
+
+				if(!StringUtils.isNotEmpty(bsElement)){
+					errInfo += "组件名称不能为空;";
+				}
+				String bsComponent = tranCell(sheet.getRow(row).getCell(5));
+				if(!StringUtils.isNotEmpty(bsComponent)){
+					errInfo += "零件名称不能为空;";
+				}
+
+				String bsMaterName = tranCell(sheet.getRow(row).getCell(6));
 				if(!StringUtils.isNotEmpty(bsMaterName)){
 					errInfo += "材料名称不能为空;";
 				}
-				String bsModel = tranCell(sheet.getRow(row).getCell(6));
+				String bsModel = tranCell(sheet.getRow(row).getCell(7));
 				if(!StringUtils.isNotEmpty(bsModel)){
 					errInfo += "材料规格不能为空;";
 				}
-				String fmemo = tranCell(sheet.getRow(row).getCell(7));
-				String bsQty = tranCell(sheet.getRow(row).getCell(8)); //hjj-20210119增加用量字段
-				String bsProQty = tranCell(sheet.getRow(row).getCell(9));
-				String unit = tranCell(sheet.getRow(row).getCell(10));
+				String fmemo = tranCell(sheet.getRow(row).getCell(8));
+				String bsQty = tranCell(sheet.getRow(row).getCell(9)); //hjj-20210119增加用量字段
+				String bsProQty = tranCell(sheet.getRow(row).getCell(10));
+				if(StringUtils.isNoneEmpty(bsQty)){
+					if(!bsQty.matches("^\\d+\\.\\d+$") && !bsQty.matches("^^\\d+$")){
+						errInfo += "用量需输入数字类型";
+					}
+				}else {
+					errInfo += "用量不能为空";
+				}
+				if(StringUtils.isNotEmpty(bsProQty)) {
+					if(!bsProQty.matches("^\\d+\\.\\d+$") && !bsProQty.matches("^^\\d+$")){
+						errInfo += "制品重需输入数字类型";
+					}
+				}
+
+				String unit = tranCell(sheet.getRow(row).getCell(11));
 				if(StringUtils.isNotEmpty(unit)) {
 					List<Unit> unitList = unitDao.findByUnitNameAndDelFlag(unit, 0);
 					if (unitList != null && unitList.size() > 0) {
@@ -157,28 +180,25 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 					errInfo += "单位不能为空";
 				}
 				temp.setBsQty(bsQty);
-				if(StringUtils.isNoneEmpty(bsQty)){
-					if(!bsQty.matches("^\\d+\\.\\d+$") && !bsQty.matches("^^\\d+$")){
-						errInfo += "数量需输入数字类型";
-					}
-				}else {
-					errInfo += "数量不能为空";
-				}
 
-				String bsRadix = tranCell(sheet.getRow(row).getCell(11));
-				String bsExplain = tranCell(sheet.getRow(row).getCell(12));//lst-20210107增加采购说明字段
-				if(StringUtils.isNotEmpty(bsProQty)) {
-					if(!bsProQty.matches("^\\d+\\.\\d+$") && !bsProQty.matches("^^\\d+$")){
-						errInfo += "制品重需输入数字类型";
-					}
-				}
-				if(StringUtils.isNotEmpty(bsRadix)) {
-					if (!bsRadix.matches("^\\d+\\.\\d+$")
-							&& !bsRadix.matches("^^\\d+$")){
-						errInfo = errInfo + "基数需输入数字;";
-					}
-				}
 
+				String bsWaterGap = tranCell(sheet.getRow(row).getCell(12));
+				String bsCave = tranCell(sheet.getRow(row).getCell(13));
+				String bsExplain = tranCell(sheet.getRow(row).getCell(14));//lst-20210107增加采购说明字段
+
+
+				temp.setBsWaterGap(bsWaterGap);
+				if(StringUtils.isNotEmpty(bsWaterGap)) {
+					if(!bsWaterGap.matches("^\\d+\\.\\d+$") && !bsWaterGap.matches("^^\\d+$")){
+						errInfo += "水口重需输入数字类型";
+					}
+				}
+				temp.setBsCave(bsCave);
+				if(StringUtils.isNotEmpty(bsCave)) {
+					if(!bsCave.matches("^\\d+\\.\\d+$") && !bsCave.matches("^^\\d+$")){
+						errInfo += "穴数需输入数字类型";
+					}
+				}
 				temp.setErrorInfo(errInfo);
 				if(("").equals(errInfo)){
 					temp.setCheckStatus(0);
@@ -200,7 +220,6 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 				temp.setBsProQty(bsProQty);
 
 				temp.setBsElement(bsElement);
-				temp.setBsRadix(bsRadix);
 				temp.setBsExplain(bsExplain);
 				temp.setCreateDate(doExcleDate);
 				temp.setCreateBy(userId);
@@ -237,11 +256,18 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			if(StringUtils.isNotEmpty(temp.getBsQty())){
 				quoteBom.setBsQty(new BigDecimal(temp.getBsQty()));
 			}
+			if(StringUtils.isNotEmpty(temp.getBsCave())){
+				quoteBom.setBsCave(temp.getBsCave());
+			}
+			if(StringUtils.isNotEmpty(temp.getBsWaterGap())){
+				quoteBom.setBsWaterGap(temp.getBsWaterGap());
+			}
 			quoteBom.setPkUnit(temp.getPkUnit());
 			quoteBom.setPkQuote(temp.getPkQuote());
 			quoteBom.setPkItemTypeWg(temp.getPkItemTypeWg());
 			quoteBom.setPkBjWorkCenter(temp.getPkBjWorkCenter());
 			quoteBom.setFmemo(temp.getFmemo());
+			quoteBom.setBsAgent(temp.getBsAgent());
 			quoteBom.setBsRadix(temp.getBsRadix());
 			quoteBom.setBsExplain(temp.getBsExplain());
 			quoteBom.setCreateBy(userId);

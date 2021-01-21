@@ -160,6 +160,28 @@ public class QuoteBom extends BaseEntity {
 	protected String bsRadix;
 
 	/**
+	 * 水口重 (g)
+	 */
+	@ApiModelProperty(name = "bsWaterGap", value = "水口量(注塑)")
+	@Column(length = 150)
+	protected String bsWaterGap;
+
+	/**
+	 * 穴数
+	 */
+	@ApiModelProperty(name = "bsCave", value = "穴数(注塑)")
+	@Column(length = 150)
+	protected String bsCave;
+
+	/**
+	 * 是否代采
+	 * 0否 1是
+	 */
+	@ApiModelProperty(name = "bsAgent", value = "是否代采")
+	@Column(length = 150)
+	protected Integer bsAgent = 0;
+
+	/**
 	 * 供应商
 	 */
 	@ApiModelProperty(name = "bsSupplier", value = "供应商")
@@ -316,5 +338,29 @@ public class QuoteBom extends BaseEntity {
 
 	public void setBsExplain(String bsExplain) {
 		this.bsExplain = bsExplain;
+	}
+
+	public String getBsWaterGap() {
+		return bsWaterGap;
+	}
+
+	public void setBsWaterGap(String bsWaterGap) {
+		this.bsWaterGap = bsWaterGap;
+	}
+
+	public String getBsCave() {
+		return bsCave;
+	}
+
+	public void setBsCave(String bsCave) {
+		this.bsCave = bsCave;
+	}
+
+	public Integer getBsAgent() {
+		return bsAgent;
+	}
+
+	public void setBsAgent(Integer bsAgent) {
+		this.bsAgent = bsAgent;
 	}
 }

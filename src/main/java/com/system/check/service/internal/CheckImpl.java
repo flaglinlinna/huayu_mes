@@ -1,5 +1,6 @@
 package com.system.check.service.internal;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -393,6 +394,11 @@ public class CheckImpl   implements CheckService {
 							pm.setPkUnit(qb.getPkUnit());
 							if(qb.getUnit()!=null){
 								pm.setBsUnit(qb.getUnit().getUnitName()); //hjj-20210120-补充单位名称
+							}
+							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
+							pm.setBsWaterGap(qb.getBsWaterGap());
+							if(qb.getBsAgent()==1){
+								pm.setBsAssess(BigDecimal.ZERO);
 							}
 							pm.setBsRadix(qb.getBsRadix());
 							pm.setBsExplain(qb.getBsExplain());//lst-20210107-增采购说明字段
