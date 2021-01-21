@@ -271,7 +271,7 @@ $(function() {
 
 		// 机台类型列表
 		typeTableSelect = tableSelect3.render({
-			elem : '#bsModelType',
+			elem : '#bsModelName',
 			searchKey : 'keyword',
 			checkedKey : 'id',
 			searchPlaceholder : '试着搜索',
@@ -316,7 +316,8 @@ $(function() {
 				// elem:返回之前input对象；data:表格返回的选中的数据 []
 				var da = data.data;
 				form.val("productProcessForm", {
-					"bsModelType" : da[0].modelName
+					"bsModelName":da[0].modelName,
+					"bsModelType" : da[0].modelCode
 				});
 				form.render();// 重新渲染
 			}
@@ -364,6 +365,10 @@ $(function() {
 			}else if(obj.field =="bsYield") {
 				if (/^\d+$/.test(bsYield) == false && /^\d+\.\d+$/.test(bsYield) == false) {
 					layer.msg("工序良率只能输入数字");
+					loadAll();
+					return false;
+				}else if(Number(bsYield)>100){
+					layer.msg("工序良率不能大于100");
 					loadAll();
 					return false;
 				}
@@ -416,6 +421,10 @@ $(function() {
 				if (/^\d+$/.test(bsYield) == false && /^\d+\.\d+$/.test(bsYield) == false && bsYield != "" && bsYield != null) {
 					layer.msg("工序良率只能输入数字");
 					loadAll2();
+					return false;
+				}else if(Number(bsYield)>100){
+					layer.msg("工序良率不能大于100");
+					loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsCycle") {
@@ -471,20 +480,36 @@ $(function() {
 				if(data.field.bsCycle==""||data.field.bsYield==""||data.field.bsUserNum==""){
 					layer.msg("请输入所有带*的必填项");
 					return false;
+				}else if(Number(data.field.bsYield)>100){
+					layer.msg("工序良率不能大于100");
+					loadAll();
+					return false;
 				}
 			}else if(bsType=="molding"){
 				if(data.field.bsCycle==""||data.field.bsYield==""||data.field.bsUserNum==""||data.field.bsCave==""){
 					layer.msg("请输入所有带*的必填项");
+					return false;
+				}else if(Number(data.field.bsYield)>100){
+					layer.msg("工序良率不能大于100");
+					loadAll();
 					return false;
 				}
 			}else if(bsType=="surface"){
 				if(data.field.bsYield==""||data.field.bsUserNum==""||data.field.bsCapacity ==""){
 					layer.msg("请输入所有带*的必填项");
 					return false;
+				}else if(Number(data.field.bsYield)>100){
+					layer.msg("工序良率不能大于100");
+					loadAll();
+					return false;
 				}
 			}else if(bsType=="packag"){
 				if(data.field.bsYield==""||data.field.bsUserNum==""||data.field.bsCapacity ==""){
 					layer.msg("请输入所有带*的必填项");
+					return false;
+				}else if(Number(data.field.bsYield)>100){
+					layer.msg("工序良率不能大于100");
+					loadAll();
 					return false;
 				}
 			}else if(bsType=="out"){
@@ -517,6 +542,13 @@ $(function() {
 		});
 		// 编辑工艺
 		function getProdErr(obj, id) {
+			var modelJson = JSON.parse(obj.bsTypeList);
+			var modelName = "";
+			for(var i = 0;i<modelJson.length;i++){
+				if(modelJson[i].MODEL_CODE==obj.bsModelType){
+					modelName = modelJson[i].MODEL_NAME
+				}
+			}
 			var procName="";
 			if(obj.proc!=null){
 				procName=obj.proc.procName
@@ -527,6 +559,7 @@ $(function() {
 				"procName" : procName,
 				"pkProc":obj.pkProc,
 				"bsOrder" : obj.bsOrder,
+				"bsModelName":modelName,
 				"bsModelType" : obj.bsModelType,
 				"bsRadix" : obj.bsRadix,
 				"fmemo" : obj.fmemo,
