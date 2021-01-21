@@ -39,8 +39,10 @@ $(function() {
 							$('#in-num').text('进行中('+item.NUMS+')');
 						}else if(item.STATUS == '1'){
 							$('#over-num').text('已完成('+item.NUMS+')');
-						}else if(item.STATUS == '1'){
-							$('#over-num').text('已完成('+item.NUMS+')');
+						}else if(item.STATUS == '3'){
+							$('#unCommit-num').text('待提交审批('+item.NUMS+')');
+						}else if(item.STATUS == '4'){
+							$('#approval-num').text('审批中('+item.NUMS+')');
 						}else if(item.STATUS == '99'){
 							$('#close-num').text('已关闭('+item.NUMS+')');
 						}

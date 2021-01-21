@@ -164,7 +164,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 		}
 		Map map = new HashMap();
 
-		String sql_num = "select count(p.id) as nums,"+temp+" as status from "+Quote.TABLE_NAME+" p where p.del_flag=0 and p.bs_step =2 group by "+temp+" ";
+		String sql_num = "select count(p.id) as nums,"+temp+" as status from "+Quote.TABLE_NAME+" p where p.del_flag=0 and p.bs_step >=2 group by "+temp+" ";
 		List<Object[]>  list_num = createSQLQuery(sql_num, param);
 		List<Map<String, Object>> list_num2 = new ArrayList<Map<String, Object>>();
 		for(int i = 0;i<list_num.size();i++){
