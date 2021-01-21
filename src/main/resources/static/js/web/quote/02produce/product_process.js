@@ -931,12 +931,16 @@ function editSubmit(obj) {
 	CoreUtil.sendAjax("/productProcess/edit", JSON.stringify(obj.field), function(
 		data) {
 		if (data.result) {
-			layer.alert("操作成功", function() {
+			/*layer.alert("操作成功", function() {
 				layer.closeAll();
 				cleanProdErr();
 				// 加载页面
 				loadAll();
-			});
+			});20210121 lst删除*/
+			layer.closeAll();
+			cleanProdErr();
+			// 加载页面
+			loadAll();
 		} else {
 			layer.alert(data.msg);
 		}
