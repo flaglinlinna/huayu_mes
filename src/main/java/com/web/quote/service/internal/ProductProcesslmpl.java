@@ -36,12 +36,15 @@ import com.web.basePrice.dao.ProcDao;
 import com.web.basePrice.entity.Proc;
 import com.web.quote.dao.ProductProcessDao;
 import com.web.quote.dao.ProductProcessTempDao;
+import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductProcess;
 import com.web.quote.entity.ProductProcessTemp;
+import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.ProductProcessService;
+import com.web.quote.service.QuoteProductService;
 
 @Service(value = "ProductProcessService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -59,6 +62,10 @@ public class ProductProcesslmpl implements ProductProcessService {
     QuoteProcessDao quoteProcessDao;
     @Autowired
     private QuoteItemDao quoteItemDao;
+    @Autowired
+    private QuoteProductService quoteProductService;
+    @Autowired
+    private QuoteDao quoteDao;
 
     /**
      * 新增报价单
@@ -451,10 +458,21 @@ public class ProductProcesslmpl implements ProductProcessService {
             quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
             //增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, bsCode);
+            
+            //20210121-fyx-统一修改状态
+            quoteProductService.doItemFinish(bsCode, quoteId);
+        }else{
+        	//20210121-fyx-外协
+        	List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
+        	if(lo.size()>0){
+        		Quote o = lo.get(0);
+        		o.setBsStatus2Out(3);
+        		quoteDao.save(o);
+        	}
         }
         //20201225-fyx-计算后工序良率
         this.updateHouYield(quoteId, bsType);
-
+        
 
         return ApiResponseResult.success("确认完成成功！");
     }

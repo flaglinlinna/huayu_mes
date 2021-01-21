@@ -31,6 +31,16 @@ public interface QuoteItemDao extends CrudRepository<QuoteItem, Long>,JpaSpecifi
     @Query(value = "select t from QuoteItem t where  t.delFlag=0 and t.pkQuote=?1 and t.bsStyle=?2 and t.bsStatus in (0,1)")
     public List<QuoteItem> getStatusByStype(Long quoteId,String stype);
     
+    //查询五金项目的是否完成-20210121
+    @Query(value = "select t from QuoteItem t where  t.delFlag=0 and t.pkQuote=?1 and t.bsCode in ('B001','C001') and t.bsStatus in (0,1)")
+    public List<QuoteItem> getStatusByHardware(Long quoteId);
+    @Query(value = "select t from QuoteItem t where  t.delFlag=0 and t.pkQuote=?1 and t.bsCode in ('B002','C002') and t.bsStatus in (0,1)")
+    public List<QuoteItem> getStatusByMolding(Long quoteId);
+    @Query(value = "select t from QuoteItem t where  t.delFlag=0 and t.pkQuote=?1 and t.bsCode in ('B003','C003') and t.bsStatus in (0,1)")
+    public List<QuoteItem> getStatusBySurface(Long quoteId);
+    @Query(value = "select t from QuoteItem t where  t.delFlag=0 and t.pkQuote=?1 and t.bsCode in ('B004','C004') and t.bsStatus in (0,1)")
+    public List<QuoteItem> getStatusByPackag(Long quoteId);
+    
 	//查询此报价的项目是否已完成
 	public int countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(Integer delFlag,Long PkQuote,String bsCode,int bsStatus);
 	

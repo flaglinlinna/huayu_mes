@@ -64,7 +64,7 @@ $(function() {
 							 return "";
 						 }
 				  },sort: true},
-				{field : 'bsStatus',title : '状态',width : 80
+				{field : 'bsStatus',title : '状态',width : 100
 					,templet:function (d) {
 						if(d.bsStatus=="0"){
 							return "草稿"
@@ -72,7 +72,8 @@ $(function() {
 							return "进行中"
 						}else if(d.bsStatus=="2"){
 							return "已完成"
-						}
+						}else if (d.bsStatus == "3") {return "待提交审批"}
+						else if (d.bsStatus == "4") {return "审批中"}
 				},sort: true},
 				{field : 'bsCustName',title : '客户名称',width : 120,sort: true},
 				{field : 'bsProd',title : '产品型号',width : 120,sort: true},
@@ -103,6 +104,10 @@ $(function() {
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
 						}else if(item.bsStatus=="2"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
+						}else if(item.bsStatus=="3"){
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6495ED');
+						}else if(item.bsStatus=="4"){
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#4169E1');
 						}
 					});
 				}

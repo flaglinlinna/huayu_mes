@@ -15,6 +15,8 @@ import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.service.ProductMaterService;
+import com.web.quote.service.QuoteProductService;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -49,6 +51,8 @@ public class ProductMaterlmpl implements ProductMaterService {
     
     @Autowired
     private QuoteItemDao quoteItemDao;
+    @Autowired
+    private QuoteProductService quoteProductService;
 	
 	/**
      * 新增
@@ -236,6 +240,10 @@ public class ProductMaterlmpl implements ProductMaterService {
         quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, bsCode);
         //设置结束时间
         quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
+        
+      //20210121-fyx-统一修改状态
+        quoteProductService.doItemFinish(bsCode, quoteId);
+        
         return ApiResponseResult.success("确认完成成功！");
     }
 

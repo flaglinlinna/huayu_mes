@@ -377,6 +377,13 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			}
 			productMaterDao.saveAll(productMaterList);
 		}
+		//20210121-fyx-确认完成修改状态
+    	List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
+    	if(lo.size()>0){
+    		Quote o = lo.get(0);
+    		o.setBsStatus2Purchase(3);
+    		quoteDao.save(o);
+    	}
 		return ApiResponseResult.success("确认完成成功！");
 	}
 

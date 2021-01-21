@@ -17,4 +17,7 @@ public interface QuoteProductService {
 	
 	//20210119-fyx-审批前校验
 	public ApiResponseResult doCheckBefore(String keyword,String quoteId,String bsType)throws Exception;
+	
+	//20210121-fyx-确认完成后要调用
+	public ApiResponseResult doItemFinish(String code,Long quoteId)throws Exception;
 }
