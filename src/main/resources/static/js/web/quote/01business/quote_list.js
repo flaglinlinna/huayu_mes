@@ -39,6 +39,8 @@ $(function() {
 							$('#in-num').text('进行中('+item.NUMS+')');
 						}else if(item.STATUS == '1'){
 							$('#over-num').text('已完成('+item.NUMS+')');
+						}else if(item.STATUS == '1'){
+							$('#over-num').text('已完成('+item.NUMS+')');
 						}else if(item.STATUS == '99'){
 							$('#close-num').text('已关闭('+item.NUMS+')');
 						}
@@ -64,11 +66,15 @@ $(function() {
 							 return "";
 						 }
 					 },sort: true},
-				 {field : 'bsStatus',title : '状态',width : 80,templet:function (d) {
+				 {field : 'bsStatus',title : '状态',width : 100,templet:function (d) {
 						if(d.bsStatus=="0"){
 							return "进行中"
 						}else if(d.bsStatus=="1"){
 							return "已完成"
+						}else if(d.bsStatus=="3"){
+							return "待提交审批"
+						}else if(d.bsStatus=="4"){
+							return "审批中"
 						}else if(d.bsStatus=="99"){
 							return "已关闭"
 						}
@@ -101,6 +107,10 @@ $(function() {
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
 						}else if(item.bsStatus=="1"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
+						}else if(item.bsStatus=="3"){
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6495ED');
+						}else if(item.bsStatus=="4"){
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#4169E1');
 						}else if(item.bsStatus=="99"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');
 						}
