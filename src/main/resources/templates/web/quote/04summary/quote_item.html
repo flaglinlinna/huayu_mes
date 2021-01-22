@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='虚拟料号对应'">
+<meta charset="UTF-8">
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div style="margin: 10px">
+			<form id="infoSearch" class="layui-form layui-form-pane"
+				method="post" action="" style="margin-top: 20px;">
+				<div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+						<div class="layui-input-inline">
+							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
+								placeholder="请输入关键字" class="layui-input" type="text" />
+						</div>
+
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="searchSubmit">查询</button>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="exportbtn" onclick="exportExcel()">导出模板</button>
+						<button class="layui-btn layui-btn-sm layui-btn-normal"  type="button" id="upload">导入数据</button>
+						<button class="layui-btn layui-btn-sm" type="button" id="savebtn" onclick="save()">确认完成</button>
+					</div>
+				</div>
+			</form>
+			<!--<script type="text/html" id="toolbar">
+				<div class="layui-btn-container layui-inline">
+					<shiro:hasPermission name="prodProc-add">
+						<button class="layui-btn layui-btn-sm layui-btn-normal"
+								onclick="addProc('')">新增模具信息</button>
+					</shiro:hasPermission>
+				</div>
+			</script>-->
+
+			<table id="client_procList" lay-filter="client_procList"></table>
+
+
+		</div>
+		<script th:inline="javascript">
+			var quoteId=[[${quoteId}]];
+		</script>
+		<script th:src="@{/js/web/quote/04summary/quote_item.js}"
+			src="/js/web/quote/04summary/quote_item.js"></script>
+	</div>
+</body>
+</html>
