@@ -45,6 +45,19 @@ $(function() {
 			}
 		});
 
+		$('#ml,#gl').bind('keypress', function(event) {
+			if (event.keyCode == "13") {
+				var bj_all = Number($('#gl').val()) + Number(quoteDetail.data.p_cb) + Number($('#profitNet').val());
+				var ml_rate = Number($('#ml').val()) / bj_all * 100;
+				var profit_gs = $('#profitNet').val() / bj_all * 100;
+				form.val("itemForm", {
+					"bj_all" : bj_all.toFixed(5),
+					// "ml" : ml.toFixed(5),
+					"ml_rate" : ml_rate.toFixed(5) + "%",
+					"profit_gs" : profit_gs.toFixed(5) + "%"
+				})
+			}
+		});
 		var quote_data = quoteDetail.data.Quote;
 		form.val("itemForm", {
 			"id" : quote_data.id,
@@ -332,6 +345,15 @@ $(function() {
 		 $('#detailBtn').click(function(){
 			 parent.layui.index.openTabsPage(context+'/quoteSum/toQuoteTree?quoteId='+quoteId,'报价汇总树');
 		 })
+
+		$('#editBtn').click(function(){
+			// $(":input").attr("disabled","disabled");
+			$("#gl").removeAttr("readonly","readonly");
+			$('#gl').removeClass('layui-input grey').addClass('layui-input');
+			$("#ml").removeAttr("readonly","readonly");
+			$('#ml').removeClass('layui-input grey').addClass('layui-input');
+			layui.form.render('');
+		})
 
 	});
 });

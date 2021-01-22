@@ -76,13 +76,15 @@ public class ProductProcesslmpl implements ProductProcessService {
         if(productProcess == null){
             return ApiResponseResult.failure("制造部材料信息不能为空！");
         }
-        QuoteProcess  quoteProcess = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0,productProcess.getPkQuote(),productProcess.getPkProc(),productProcess.getBsName());
-        if(quoteProcess == null){
+        List<QuoteProcess>  quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0, productProcess.getPkQuote(), productProcess.getPkProc(), productProcess.getBsName());
+
+        if (quoteProcessList.size() == 0) {
             return ApiResponseResult.failure("该工序未维护人工制费,请维护后再选择！");
-        }else {
-            productProcess.setBsFeeMh(quoteProcess.getBsFeeMh());
-            productProcess.setBsFeeLh(quoteProcess.getBsFeeLh());
+        } else {
+            productProcess.setBsFeeMh(quoteProcessList.get(0).getBsFeeMh());
+            productProcess.setBsFeeLh(quoteProcessList.get(0).getBsFeeLh());
         }
+
         productProcess.setCreateDate(new Date());
         productProcess.setCreateBy(UserUtil.getSessionUser().getId());
 
@@ -114,12 +116,13 @@ public class ProductProcesslmpl implements ProductProcessService {
 
         //查找工序的制费信息
         o.setPkProc(productProcess.getPkProc());
-        QuoteProcess quoteProcess = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0, o.getPkQuote(), productProcess.getPkProc(), productProcess.getBsName());
-        if (quoteProcess == null) {
+        List<QuoteProcess>  quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0, o.getPkQuote(), productProcess.getPkProc(), productProcess.getBsName());
+
+        if (quoteProcessList.size() == 0) {
             return ApiResponseResult.failure("该工序未维护人工制费,请维护后再选择！");
         } else {
-            productProcess.setBsFeeMh(quoteProcess.getBsFeeMh());
-            productProcess.setBsFeeLh(quoteProcess.getBsFeeLh());
+            productProcess.setBsFeeMh(quoteProcessList.get(0).getBsFeeMh());
+            productProcess.setBsFeeLh(quoteProcessList.get(0).getBsFeeLh());
         }
 
         o.setBsModelType(productProcess.getBsModelType());
@@ -416,34 +419,34 @@ public class ProductProcesslmpl implements ProductProcessService {
                 return ApiResponseResult.failure("工序名称不能为空,请检查后再确认！");
             }
             if("hardware".equals(bsType)) {
-                if (o.getBsUserNum() == null || o.getBsRadix() == null ||o.getBsCycle()==null ||o.getBsYield()==null) {
-                    return ApiResponseResult.failure("人数、基数、成型周期和工序良率不能为空,请检查后再确认！");
+                if (o.getBsUserNum() == null ||o.getBsCycle()==null ||o.getBsYield()==null) {
+                    return ApiResponseResult.failure("人数、成型周期和工序良率不能为空,请检查后再确认！");
                 }
             } else if("molding".equals(bsType)) {
-                if (o.getBsRadix() == null || o.getBsUserNum() == null||o.getBsCycle()==null ||o.getBsYield()==null||o.getBsCave()==null) {
-                    return ApiResponseResult.failure("人数、基数、穴数、成型周期和工序良率不能为空,请检查后再确认！");
+                if ( o.getBsUserNum() == null||o.getBsCycle()==null ||o.getBsYield()==null||o.getBsCave()==null) {
+                    return ApiResponseResult.failure("人数、穴数、成型周期和工序良率不能为空,请检查后再确认！");
                 }
             } else if("surface".equals(bsType)) {
-                if (o.getBsRadix() == null || o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null) {
-                    return ApiResponseResult.failure("基数、人数、工序良率、产能不能为空,请检查后再确认！");
+                if ( o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null) {
+                    return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
                 }
             } else if("packag".equals(bsType)) {
-                if (o.getBsRadix() == null || o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null) {
-                    return ApiResponseResult.failure("基数、人数、工序良率、产能不能为空,请检查后再确认！");
+                if ( o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null) {
+                    return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
                 }
             }else if("out".equals(bsType)){
-                if(o.getBsFeeWxAll()==null||o.getBsLoss() ==null||o.getBsRadix() == null){
-                    return ApiResponseResult.failure("基数、损耗率、外协价格不能为空,请检查后再确认！");
+                if(o.getBsFeeWxAll()==null||o.getBsLoss() ==null){
+                    return ApiResponseResult.failure("损耗率、外协价格不能为空,请检查后再确认！");
                 }
             }
             if(o.getBsFeeLh()==null||o.getBsFeeMh()==null){
                 //如果存在费率为空的情况，先查询
-                QuoteProcess  quoteProcess = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0,quoteId,o.getPkProc(),o.getBsName());
-                if(quoteProcess == null){
+                List<QuoteProcess>  quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0,quoteId,o.getPkProc(),o.getBsName());
+                if(quoteProcessList.size() ==0){
                     return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
                 }else{
-                    o.setBsFeeMh(quoteProcess.getBsFeeMh());
-                    o.setBsFeeLh(quoteProcess.getBsFeeLh());
+                    o.setBsFeeMh(quoteProcessList.get(0).getBsFeeMh());
+                    o.setBsFeeLh(quoteProcessList.get(0).getBsFeeLh());
                 }
             }
             o.setBsStatus(1);
