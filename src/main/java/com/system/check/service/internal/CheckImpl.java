@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.web.basePrice.dao.PriceCommDao;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,6 +68,8 @@ public class CheckImpl   implements CheckService {
 	private ProductProcessDao productProcessDao;
 	@Autowired
 	private QuoteSumService quoteSumService;
+	@Autowired
+	private PriceCommDao priceCommDao;
 
 	@Override
 	public boolean checkFirst(Long id, String checkCode) throws Exception {
@@ -399,6 +402,9 @@ public class CheckImpl   implements CheckService {
 							pm.setBsWaterGap(qb.getBsWaterGap());
 							if(qb.getBsAgent()==1){
 								pm.setBsAssess(BigDecimal.ZERO);
+							}else {
+								//hjj-20210122 不是待采,先查询物料通用价格
+								//待确认
 							}
 							pm.setBsRadix(qb.getBsRadix());
 							pm.setBsExplain(qb.getBsExplain());//lst-20210107-增采购说明字段

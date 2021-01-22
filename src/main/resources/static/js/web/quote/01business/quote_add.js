@@ -27,14 +27,17 @@ $(function() {
 			var elem = data.elem;
 			var textId = elem.getAttribute("textId");
 			$("#bsProdType").val(this.innerText)// 保存中文字符
-			if ($("#bsDevType").val() != "") {
-				doCheckProfit()
-			}
+
+			doCheckProfit()
+			// if ($("#bsDevType").val() != "") {
+			// 	doCheckProfit()
+			// }
 		})
-		form.on('select(bsDevType)', function(data) {
-			if ($("#bsProdTypeId").val() != "") {
-				doCheckProfit()
-			}
+
+		//监听是否中标下拉选择
+		form.on('select(bsBade)', function(data) {
+				doBsBade(data.value);
+
 		})
 		form.verify({
 			num : function(value) {
@@ -67,6 +70,9 @@ $(function() {
 						"bsProdType" : data.data.bsProdType,
 						"bsProdTypeId" : data.data.bsProdTypeId,
 						"bsDevType" : data.data.bsDevType,
+						"bsProjVer":data.data.bsProjVer,
+						"bsStage":data.data.bsStage,
+						"bsLatest":data.data.bsLatest,
 						"bsCustName" : data.data.bsCustName,
 						"bsPosition" : data.data.bsPosition,
 						"bsChkOut" : data.data.bsChkOut,
@@ -78,7 +84,12 @@ $(function() {
 					setCheckboxValues('require', data.data.bsRequire)
 					setCheckboxValues('chkOutItem', data.data.bsChkOutItem)
 					setCheckboxValues('functionItem', data.data.bsFunctionItem)
-					form.render('checkbox');
+					//20210122-hjj-是否中标判断可否填写 (最终审批完)
+					if(data.data.bsStep>2&&data.data.bsEndTime3!=null){
+						$('#bsBade').removeAttr("disabled");
+					}
+					form.render();
+
 				} else {
 					layer.alert(data.msg)
 				}
@@ -98,6 +109,8 @@ $(function() {
 	
 	//20210120-fyx-填写管理费
 	$('#bsManageFee').val(Fee[0].paramValue);
+
+
 });
 
 // 将checkbox拼接为"value1,value2,value3"
@@ -135,14 +148,14 @@ function setData() {
 		}
 		$("#bsProdTypeId").append("<option value=" + data[i].id + ">" + data[i].productType + "</option>");
 	}
-	$("#bsDevType").empty();
-	var data = Jitai
-	for (var i = 0; i < data.length; i++) {
-		if (i == 0) {
-			$("#bsDevType").append("<option value=''>请点击选择</option>");
-		}
-		$("#bsDevType").append("<option value=" + data[i].subCode + ">" + data[i].subName + "</option>");
-	}
+	// $("#bsDevType").empty();
+	// var data = Jitai
+	// for (var i = 0; i < data.length; i++) {
+	// 	if (i == 0) {
+	// 		$("#bsDevType").append("<option value=''>请点击选择</option>");
+	// 	}
+	// 	$("#bsDevType").append("<option value=" + data[i].subCode + ">" + data[i].subName + "</option>");
+	// }
 	$("#bsType").empty();
 	var data = QuoteType
 	for (var i = 0; i < data.length; i++) {
@@ -182,15 +195,34 @@ function editData(obj) {
 	});
 }
 
-// 关闭报价单
+// 检查毛利率
 function doCheckProfit() {
 	var param = {
-		"bsDevType" : $("#bsDevType").val(),// code
+		// "bsDevType" : $("#bsDevType").val(),// code  hjj-20210122-毛利率查询去除机种型号
 		"bsProdType" : $("#bsProdType").val()
 	};
 	CoreUtil.sendAjax("/quote/doCheckProfit", JSON.stringify(param), function(data) {
 		if (data.result) {
 
+		} else {
+			layer.alert("利润率未维护")
+		}
+	}, "POST", false, function(res) {
+		layer.alert("操作请求错误，请您稍后再试");
+	});
+}
+
+// 修改中标状态
+function doBsBade(value) {
+	var param = {
+		"quoteId" : quoteId,
+		"bsBade": value
+	};
+	CoreUtil.sendAjax("/quote/doBsBade", JSON.stringify(param), function(data) {
+		if (data.result) {
+			layer.msg(data.msg,function (index) {
+				layer.close(index);
+			})
 		} else {
 			layer.alert("利润率未维护")
 		}

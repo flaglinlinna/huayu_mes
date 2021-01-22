@@ -233,15 +233,35 @@ public class QuoteController extends WebController {
         }
     }
 
+	@ApiOperation(value = "设置中标状态", notes = "设置中标状态", hidden = true)
+	@RequestMapping(value = "/doBsBade", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult doBsBade(@RequestBody Map<String, Object> params) throws Exception{
+		String method = "quote/doBsBade";String methodName ="设置中标状态";
+		try{
+			long id = Long.parseLong(params.get("quoteId").toString()) ;
+			Integer bsBade=Integer.parseInt(params.get("bsBade").toString());
+			ApiResponseResult result = quoteService.doBsBade(id, bsBade);
+			logger.debug("设置中标状态=doBsBade:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		}catch (Exception e){
+			e.printStackTrace();
+			logger.error("设置中标状态失败！", e);
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			return ApiResponseResult.failure("设置中标状态失败！");
+		}
+	}
+
 	@ApiOperation(value = "检验利润率信息", notes = "检验利润率信息", hidden = true)
     @RequestMapping(value = "/doCheckProfit", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult doCheckProfit(@RequestBody Map<String, Object> params) throws Exception{
         String method = "quote/doCheckProfit";String methodName ="检验利润率信息";
         try{
-        	String bsDevType=params.get("bsDevType").toString();
+//        	String bsDevType=params.get("bsDevType").toString();
         	String bsProdType=params.get("bsProdType").toString();
-            ApiResponseResult result = quoteService.doCheckProfit(bsDevType, bsProdType);
+            ApiResponseResult result = quoteService.doCheckProfit("", bsProdType);
             logger.debug("检验利润率信息=doCheckProfit:");
             getSysLogService().success(module,method, methodName, params);
             return result;

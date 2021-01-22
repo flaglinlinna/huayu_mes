@@ -312,7 +312,27 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         quoteDao.save(o);
         return ApiResponseResult.success("设置报价单状态成功！").data(o);
     }
-    
+
+    /**
+     * 变更报价单状态
+     * **/
+    @Override
+    @Transactional
+    public ApiResponseResult doBsBade(Long id, Integer bsBade) throws Exception{
+        if(id == null){
+            return ApiResponseResult.failure("报价单ID不能为空！");
+        }
+        Quote o = quoteDao.findById((long) id);
+        if(o == null){
+            return ApiResponseResult.failure("该报价单不存在！");
+        }
+        o.setLastupdateDate(new Date());
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setBsBade(bsBade);
+        quoteDao.save(o);
+        return ApiResponseResult.success("设置报价单中标状态成功！").data(o);
+    }
+
     /**
      * 编辑报价单
      * **/
@@ -357,6 +377,11 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         o.setBsRequire(quote.getBsRequire());
         o.setBsLevel(quote.getBsLevel());
         o.setBsCustRequire(quote.getBsCustRequire());
+
+        o.setBsBade(quote.getBsBade());
+        o.setBsProjVer(quote.getBsProjVer());
+        o.setBsLatest(quote.getBsLatest());
+        o.setBsStage(quote.getBsStage());
         quoteDao.save(o);
         return ApiResponseResult.success("编辑成功！");
     }
@@ -440,7 +465,10 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 	@Override
 	public ApiResponseResult doCheckProfit(String bsDevType, String bsProdType) throws Exception {
 		// TODO Auto-generated method stub
-		List<ProfitProd> lpp = profitProdDao.findByDelFlagAndItemTypeAndProductTypeAndEnabled(0,bsDevType,bsProdType,1);
+//		List<ProfitProd> lpp = profitProdDao.findByDelFlagAndItemTypeAndProductTypeAndEnabled(0,bsDevType,bsProdType,1);
+
+        //hjj-20210122-毛利率查询去除机种型号
+        List<ProfitProd> lpp = profitProdDao.findByDelFlagAndProductTypeAndEnabled(0,bsProdType,1);
 		
 		if(lpp.size() == 0){
 			return ApiResponseResult.failure();

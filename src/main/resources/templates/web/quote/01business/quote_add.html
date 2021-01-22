@@ -53,11 +53,11 @@
 								name="bsFinishTime" autocomplete="off" class="layui-input"
 								type="text" />
 						</div>
-						<label class="layui-form-label layui-required">管理费用</label>
+						<label class="layui-form-label layui-required">管理费率</label>
 						<div class="layui-input-inline">
 							<input id="bsManageFee" autocomplete="off" name="bsManageFee" value="3.61"
 								class="layui-input" type="text" lay-verify="required|double"/> <span
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
+								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">%</span>
 						</div>
 
 					</div>
@@ -85,12 +85,43 @@
 							name="bsProdTypeId" class="layui-select" lay-search>
 						</select>
 					</div>
-					<label class="layui-form-label layui-required">机种型号</label>
-					<div class="layui-input-inline" style="width: 200px;">
-						<select id="bsDevType" lay-verify="required" autocomplete="off"
-							name="bsDevType" class="layui-select" lay-filter="bsDevType" lay-search>
+					<label class="layui-form-label layui-required">报价阶段</label>
+					<div class="layui-input-inline" style="width: 180px;">
+						<select id="bsStage" lay-verify="required" autocomplete="off"
+							name="bsStage" class="layui-select" lay-filter="bsStage" lay-search>
+							<option value="初始报价">初始报价</option>
+							<option value="量产报价">量产报价</option>
 						</select>
 					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label layui-required">版本</label>
+						<div  class="layui-input-inline"  style="width: 160px;">
+						<input id="bsProjVer" autocomplete="off" name="bsProjVer"
+							   class="layui-input" type="text" lay-verify="required|number" />
+						</div>
+
+						<label class="layui-form-label">是否中标</label>
+						<div class="layui-input-inline" style="width: 180px;">
+							<select id="bsBade"  autocomplete="off"  disabled
+									name="bsBade" class="layui-select" lay-filter="bsBade" lay-search>
+								<option value=""></option>
+								<option value="0">否</option>
+								<option value="1">是</option>
+							</select>
+						</div>
+
+						<label class="layui-form-label layui-required">是否最新</label>
+						<div class="layui-input-inline" style="width: 200px;">
+							<input type="radio" name="bsLatest" lay-filter="bsLatest"
+								   value="1" title="是&#12288;" checked>
+							<input type="radio" name="bsLatest" lay-filter="bsLatest" value="0" title="否">
+
+						</div>
+
+					</div>
+
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">

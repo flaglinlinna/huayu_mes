@@ -131,8 +131,8 @@ public class QuoteBomlmpl implements QuoteBomService {
 		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuote(0,pkQuote);
 		String excelPath = "static/excelFile/";
 		String fileName = "外购件清单模板.xlsx";
-		String[] map_arr = new String[]{"id","bsElement","bsComponent","wcName","itemType","bsMaterName","bsModel",
-										"fmemo","bsProQty","unitName","bsRadix","bsExplain"};
+		String[] map_arr = new String[]{"id","wcName","itemType","bsAgent","bsElement","bsComponent","bsMaterName","bsModel",
+										"fmemo","bsQty","bsProQty","unitName","bsWaterGap","bsCave","bsExplain"};
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for(QuoteBom quoteBom :quoteBomList){
@@ -149,11 +149,15 @@ public class QuoteBomlmpl implements QuoteBomService {
 				map.put("wcName", quoteBom.getWc().getWorkcenterName());
 			}
 			if(quoteBom.getUnit()!=null){
-				map.put("unitName", quoteBom.getUnit().getUnitName());
+				map.put("unitName", quoteBom.getUnit().getUnitCode());
 			}
+			map.put("bsAgent",quoteBom.getBsAgent()==1?"是":"否");
 			map.put("fmemo",quoteBom.getFmemo());
+			map.put("bsQty",quoteBom.getBsQty());
 			map.put("bsProQty",quoteBom.getBsProQty());
-			map.put("bsRadix",quoteBom.getBsRadix());
+			map.put("bsWaterGap",quoteBom.getBsWaterGap());
+			map.put("bsCave",quoteBom.getBsCave());
+//			map.put("bsRadix",quoteBom.getBsRadix());
 			map.put("bsExplain",quoteBom.getBsExplain());//lst-20210107-增加采购说明字段
 			list.add(map);
 		}

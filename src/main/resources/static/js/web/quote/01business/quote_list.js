@@ -98,6 +98,10 @@ $(function() {
 				{field : 'bsRequire',title : '环保要求',width : 140,sort: true},
 				{field : 'bsLevel',title : '防水防尘等级',width : 140,sort: true},
 				{field : 'bsCustRequire',title : '客户其他要求',width : 200,sort: true},
+				{field : 'bsBade',title : '是否中标',width : 140,sort: true},
+				{field : 'bsProjVer',title : '版本',width : 140,sort: true},
+				{field : 'bsLatest',title : '是否最新',width : 140,sort: true},
+				{field : 'bsStage',title : '报价阶段',width : 200,sort: true},
 				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 250}
 				] ],
 				done : function(res, curr, count) {

@@ -189,6 +189,32 @@ public class Quote extends BaseEntity {
 	@ApiModelProperty(name = "bsProjVer", value = "项目版本")
 	@Column(length = 100)
 	protected String bsProjVer;
+
+	/**
+	 * 报价阶段
+	 * (初始报价 、量产报价)
+	 */
+	@ApiModelProperty(name = "bsStage", value = "报价阶段")
+	@Column(length = 100)
+	protected String bsStage;
+
+	/**
+	 * 是否最新
+	 * 0否 1是
+	 */
+	@ApiModelProperty(name = "bsLatest", value = "是否最新")
+	@Column(length = 100)
+	protected Integer bsLatest = 0;
+
+	/**
+	 * 是否中标
+	 * 0否 1是
+	 */
+	@ApiModelProperty(name = "bsBade", value = "是否中标")
+	@Column(length = 100)
+	protected Integer bsBade = 0;
+
+
 	
 	/**
 	 * 报价备注
@@ -790,5 +816,28 @@ public class Quote extends BaseEntity {
 	public void setUser(SysUser user) {
 		this.user = user;
 	}
-	
+
+	public String getBsStage() {
+		return bsStage;
+	}
+
+	public void setBsStage(String bsStage) {
+		this.bsStage = bsStage;
+	}
+
+	public Integer getBsLatest() {
+		return bsLatest;
+	}
+
+	public void setBsLatest(Integer bsLatest) {
+		this.bsLatest = bsLatest;
+	}
+
+	public Integer getBsBade() {
+		return bsBade;
+	}
+
+	public void setBsBade(Integer bsBade) {
+		this.bsBade = bsBade;
+	}
 }
