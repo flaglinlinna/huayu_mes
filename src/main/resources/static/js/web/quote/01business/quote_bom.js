@@ -186,10 +186,10 @@ $(function() {
 							{field : 'bsProQty',title : '制品重',width : 90},
 							{field : 'unit',title : '单位',width : 80,
 								templet : function(d) {
-									if (d.unit != null) {return d.unit.unitName;} 
+									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
 							}},
-							{field : 'bsCave',title : '水口重',width : 80},
+							{field : 'bsCave',title : '水口重(g)',width : 80},
 							{field : 'bsCave',title : '穴数',width : 80},
 							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
 							] ],
@@ -260,10 +260,10 @@ $(function() {
 								{field : 'bsQty',title : '用量',width : 90},
 								{field : 'bsProQty',title : '制品量',width : 90},
 								{field : 'unit',title : '单位',width : 80,templet : function(d) {
-									if (d.unit != null) {return d.unit.unitName;} 
+									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
 								}},
-								{field : 'bsCave',title : '水口重',width : 80},
+								{field : 'bsCave',title : '水口重(g)',width : 80},
 								{field : 'bsCave',title : '穴数',width : 80},
 							// , {fixed : 'right',title : '操作',align :'center',toolbar : '#optBar',width:120}
 							] ],
@@ -379,7 +379,7 @@ $(function() {
 
 							},
 							error : function(index, upload) {
-								layer.alert("操作请求错误，请您稍后再试", function() {
+								layer.alert("操作请求错误，请您稍后再试", function(index) {
 								});
 								layer.closeAll('loading'); // 关闭loading
 								layer.close(index);

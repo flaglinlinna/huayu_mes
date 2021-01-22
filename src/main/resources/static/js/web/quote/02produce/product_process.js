@@ -426,6 +426,10 @@ $(function() {
 					layer.msg("工序良率不能大于100");
 					loadAll();
 					return false;
+				}else if(Number(data.field.bsYield)<=0){
+					layer.msg("工序良率不能小于0");
+					loadAll();
+					return false;
 				}
 			}else if(obj.field =="bsCycle") {
 				if (/^\d+$/.test(bsCycle) == false && /^\d+\.\d+$/.test(bsCycle) == false && bsCycle != "" && bsCycle != null) {
@@ -484,6 +488,10 @@ $(function() {
 					layer.msg("工序良率不能大于100");
 					loadAll();
 					return false;
+				}else if(Number(data.field.bsYield)<=0){
+					layer.msg("工序良率不能小于0");
+					loadAll();
+					return false;
 				}
 			}else if(bsType=="molding"){
 				if(data.field.bsCycle==""||data.field.bsYield==""||data.field.bsUserNum==""||data.field.bsCave==""){
@@ -491,6 +499,10 @@ $(function() {
 					return false;
 				}else if(Number(data.field.bsYield)>100){
 					layer.msg("工序良率不能大于100");
+					loadAll();
+					return false;
+				}else if(Number(data.field.bsYield)<=0){
+					layer.msg("工序良率不能小于0");
 					loadAll();
 					return false;
 				}
@@ -502,6 +514,10 @@ $(function() {
 					layer.msg("工序良率不能大于100");
 					loadAll();
 					return false;
+				}else if(Number(data.field.bsYield)<=0){
+					layer.msg("工序良率不能小于0");
+					loadAll();
+					return false;
 				}
 			}else if(bsType=="packag"){
 				if(data.field.bsYield==""||data.field.bsUserNum==""||data.field.bsCapacity ==""){
@@ -509,6 +525,10 @@ $(function() {
 					return false;
 				}else if(Number(data.field.bsYield)>100){
 					layer.msg("工序良率不能大于100");
+					loadAll();
+					return false;
+				}else if(Number(data.field.bsYield)<=0){
+					layer.msg("工序良率不能小于0");
 					loadAll();
 					return false;
 				}
@@ -751,10 +771,16 @@ function selectDiv() {
 
 // 新增编辑弹出框
 function openProdErr(id, title) {
+
 	if (id == null || id == "") {
 		$("#id").val("");
+		$('#bsName').removeProp("disabled");
+		$('#procName').removeProp("disabled");
+	}else {
+		$('#bsName').prop("disabled","disabled");
+		$('#procName').prop("disabled","disabled");
 	}
-
+	layui.form.render('');
 	selectDiv();
 	var index=layer.open({
 		type : 1,

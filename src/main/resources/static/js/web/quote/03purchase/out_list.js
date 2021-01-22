@@ -173,7 +173,9 @@ $(function() {
 		                        }else{
 		                        	iframe.child(Style,data.id,'check');
 		                        }
-		                    }
+		                    },end:function () {
+								loadAll();
+							}
 		                  });
 					}
 				}
@@ -232,3 +234,12 @@ function load(obj) {
 	});
 }
 
+function loadAll() {
+	// 重新加载table
+	tableIns.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
+		}
+	});
+}

@@ -182,7 +182,9 @@ $(function() {
 		                        }else{
 		                        	iframe.child("QUOTE_NEW",data.id,'check');
 		                        }
-		                    }
+		                    },end:function () {
+								loadAll();
+							}
 		                  });
 					}else{
 						layer.msg('资料未填写完毕，不允许审批!', {

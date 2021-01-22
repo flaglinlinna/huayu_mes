@@ -179,6 +179,8 @@ $(function() {
 									iframe.child(Style, data.id, 'check');
 								}
 
+							},end:function () {
+								loadAll();
 							}
 						});
 					}else {
@@ -246,4 +248,14 @@ function open(title) {
 		}
 	});
 	layer.full(index)
+}
+
+function loadAll() {
+	// 重新加载table
+	tableIns.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
+		}
+	});
 }

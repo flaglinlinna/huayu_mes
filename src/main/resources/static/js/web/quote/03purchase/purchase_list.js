@@ -174,6 +174,8 @@ $(function() {
 								} else {
 									iframe.child("QUOTE_PUR", data.id, 'check');
 								}
+							},end:function () {
+								loadAll();
 							}
 						});
 					} else {
@@ -232,6 +234,16 @@ function load(obj) {
 		where : {
 			keyword : obj.field.keywordSearch
 		},
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
+		}
+	});
+}
+
+function loadAll() {
+	// 重新加载table
+	tableIns.reload({
 		page : {
 			curr : pageCurr
 			// 从当前页码开始

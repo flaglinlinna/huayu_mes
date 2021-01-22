@@ -419,19 +419,24 @@ public class ProductProcesslmpl implements ProductProcessService {
                 return ApiResponseResult.failure("工序名称不能为空,请检查后再确认！");
             }
             if("hardware".equals(bsType)) {
-                if (o.getBsUserNum() == null ||o.getBsCycle()==null ||o.getBsYield()==null) {
-                    return ApiResponseResult.failure("人数、成型周期和工序良率不能为空,请检查后再确认！");
+                if (o.getBsUserNum() == null ||o.getBsCycle()==null ||o.getBsYield()==null ||
+                        o.getBsUserNum()==BigDecimal.ZERO ||o.getBsCycle()==BigDecimal.ZERO ||o.getBsYield()==BigDecimal.ZERO) {
+                    return ApiResponseResult.failure("人数、成型周期和工序良率不能为空或者0,请检查后再确认！");
                 }
             } else if("molding".equals(bsType)) {
-                if ( o.getBsUserNum() == null||o.getBsCycle()==null ||o.getBsYield()==null||o.getBsCave()==null) {
+                if ( o.getBsUserNum() == null||o.getBsCycle()==null ||o.getBsYield()==null||o.getBsCave()==null||
+                        o.getBsCave()=="0"|| o.getBsUserNum()==BigDecimal.ZERO ||o.getBsCycle()==BigDecimal.ZERO
+                        ||o.getBsYield()==BigDecimal.ZERO) {
                     return ApiResponseResult.failure("人数、穴数、成型周期和工序良率不能为空,请检查后再确认！");
                 }
             } else if("surface".equals(bsType)) {
-                if ( o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null) {
+                if ( o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null
+                        || o.getBsUserNum()==BigDecimal.ZERO || o.getBsYield()==BigDecimal.ZERO || o.getBsCapacity()=="0") {
                     return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
                 }
             } else if("packag".equals(bsType)) {
-                if ( o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null) {
+                if ( o.getBsUserNum() == null||o.getBsYield()==null||o.getBsCapacity()==null
+                        || o.getBsUserNum()==BigDecimal.ZERO || o.getBsYield()==BigDecimal.ZERO || o.getBsCapacity()=="0") {
                     return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
                 }
             }else if("out".equals(bsType)){

@@ -163,7 +163,7 @@ $(function() {
 			cols : [ [ {type : 'numbers'}
 			, {field : 'checkColumn',type:"checkbox"},
 			/*{field : 'procOrder',title : '序号',width:80}, */
-			{field : 'PROC_NO',title : '工序编码', minWidth: 80}, 
+			// {field : 'PROC_NO',title : '工序编码', minWidth: 80},
 			{field : 'PROC_NAME',title : '工序名称', minWidth: 100}, 
 			// {field : 'WORKCENTER_NAME',title : '工作中心', minWidth: 120},
 			{field : 'STATUS',title : '是否维护人工制费', minWidth: 140,templet:'<div>{{d.STATUS=="0"?"否":"是"}}</div>'},
@@ -180,11 +180,11 @@ $(function() {
 				[ [
 					// {type : 'numbers'},
 				    {field : 'checkColumn',type:"checkbox"},
-			        {field : 'bsName',title : '零件名称',style:'background-color:#d2d2d2'},
+			        // {field : 'bsName',title : '零件名称',style:'background-color:#d2d2d2'},
 			        // {field : 'procNo',title : '工序编码',templet:'<div>{{d.proc.procNo}}</div>',style:'background-color:#d2d2d2'},
 			        {field : 'procName',title : '工序名称',minWidth:100,templet:'<div>{{d.proc.procName}}</div>',style:'background-color:#d2d2d2'},
 			        // {field : 'workCenter',title : '工作中心',minWidth:100,templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style:'background-color:#d2d2d2'},
-			        {field : 'bsOrder',title : '工序顺序',"edit":"number","event": "dataCol",width:80,style : 'background-color:#ffffff'},
+			        {field : 'bsOrder',title : '工序顺序',"edit":"number","event": "dataCol",minWidth:80,style : 'background-color:#ffffff'},
 			        {type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#optBar'}
 			] ],
 			data:[]
