@@ -61,6 +61,12 @@ public class QuoteSumBom extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     protected BjWorkCenter wc;
 
+    /**
+	 * 产品类型
+	 */
+	@ApiModelProperty(name = "bsProdType", value = "产品类型")
+	@Column(length = 500)
+	protected String bsProdType;
 
     /**
      * 关联单位
@@ -341,6 +347,16 @@ public class QuoteSumBom extends BaseEntity {
 
 	public void setBsFeeAll(BigDecimal bsFeeAll) {
 		this.bsFeeAll = bsFeeAll;
+	}
+
+
+	public String getBsProdType() {
+		return bsProdType;
+	}
+
+
+	public void setBsProdType(String bsProdType) {
+		this.bsProdType = bsProdType;
 	}
 	
 	

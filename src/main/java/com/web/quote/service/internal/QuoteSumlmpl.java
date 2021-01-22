@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.utils.BaseSql;
+import com.web.basePrice.dao.ProdTypDao;
+import com.web.basePrice.entity.ProdTyp;
 import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.dao.ProductProcessDao;
 import com.web.quote.dao.QuoteDao;
@@ -43,6 +45,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
     private QuoteMouldDao quoteMouldDao;
 	@Autowired
     private QuoteSumBomDao quoteSumBomDao;
+	@Autowired
+    private ProdTypDao prodTypDao;
 
 
 
@@ -511,6 +515,18 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 	
 	@Override
 	public ApiResponseResult countQuoteTreeBom(Long quoteId) throws Exception {
+		//获取产品类型
+		String prod_type = "";
+		Quote quote = quoteDao.findById((long) quoteId);
+		if(quote != null){
+			if(quote.getBsProdTypeId() != null){
+				ProdTyp pt = prodTypDao.findById((long) quote.getBsProdTypeId());
+				if(pt != null){
+					prod_type = pt.getProductType();
+				}
+			}
+			
+		}
 		
 		List<Map<String, Object>> lm1 = productMaterDao.getBomFirt(quoteId);
 		if(lm1.size()>0){
@@ -527,6 +543,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				qb1.setBsFeeAll(qb1.getBsFeeItemAll().add(qb1.getBsFeeLhAll()).add(qb1.getBsFeeMhAll()).add(qb1.getBsFeeOut()));
 				qb1.setParenId(new Long((long)0));
 				qb1.setCreateDate(new Date());
+				qb1.setBsProdType(prod_type);
 				lqb1.add(qb1);
 			}
 			quoteSumBomDao.saveAll(lqb1);
@@ -551,6 +568,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 						qb2.setBsFeeMhAll(new BigDecimal(map2.get("FEE_MH").toString()));
 						qb2.setBsFeeOut(new BigDecimal(map2.get("FEE_WX").toString()));
 						qb2.setBsFeeAll(qb2.getBsFeeItemAll().add(qb2.getBsFeeLhAll()).add(qb2.getBsFeeMhAll()).add(qb2.getBsFeeOut()));
+						qb2.setBsProdType(prod_type);
 						
 						qb2 = quoteSumBomDao.save(qb2);
 						
@@ -568,6 +586,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 								qb3.setBsMaterName(map3.get("MATER_NAME").toString());
 								qb3.setBsFeeItemAll(new BigDecimal(map3.get("FEE").toString()));//材料总费用
 								qb3.setPkBjWorkCenter(Long.valueOf(map3.get("WKC").toString()));
+								qb3.setBsProdType(prod_type);
 								String pkUnit = map3.get("PUNIT")==null?"":map3.get("PUNIT").toString();
 								if(!StringUtils.isEmpty(pkUnit)){
 									qb3.setPkUnit(Long.valueOf(pkUnit));

@@ -18,7 +18,7 @@ $(function() {
 			},
 			cols: [
 				{key: 'bsItemCode',title: '物料编码',width: '100px'},
-				{key: '',title: '机型',width: '100px',align: 'center',template: function(item){return ''}},
+				{key: '',title: '产品类型',width: '100px',align: 'center',template: function(item){return ''}},
 				{key: 'bsMaterName',title: '产品描述',width: '200px',align: 'center'},
 				{title: '工作中心',width: '100px',align: 'center',template: function(r){
 						return r.wc==null?'':r.wc.workcenterName;
