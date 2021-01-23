@@ -31,9 +31,21 @@ function setData(){
 	}
 }
 function setTable(){
-	var list = ItemList.data;
-	var header=ItemList.data.quote
-	//console.log(list)
+	var list_temp = ItemList.data;
+	var list=[];
+	var header=ItemList.data.quote	
+	for(var i=0;i<list_temp.length;i++){//项目顺序排序-2021-01-23
+		var temp=list_temp[i]
+		if(temp.bsCode=="A001"){
+			list.splice(0, 0, temp)
+		}else if(temp.bsCode=="A002"){
+			list.splice(1, 0, temp)
+		}else if(temp.bsCode=="A003"){
+			list.splice(2, 0, temp)
+		}else if(temp.bsCode=="A004"){
+			list.splice(3, 0, temp)
+		}
+	}
 	var html = "";
 	for (var j = 0; j < list.length; j++) {
 		var arr = list[j];
