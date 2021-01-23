@@ -152,7 +152,24 @@ public class QuoteSumController extends WebController {
 			return ApiResponseResult.failure(methodName+"失败！");
 		}
 	}
-
+	@ApiOperation(value="设置中标",notes="设置中标",hidden=true)
+	@RequestMapping(value="/setBade",method=RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult setBade(@RequestBody Map<String, Object> params){
+		String method = "/quoteSum/setBade";
+		String methodName = "设置中标";
+		long quoteId = Long.parseLong(params.get("quoteId").toString()) ;
+		try {
+			ApiResponseResult result = quoteSumService.setBade(Long.valueOf(quoteId));
+			logger.debug(methodName+"=setBade:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+			getSysLogService().error(module,method, methodName,quoteId);
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
 
 
 }

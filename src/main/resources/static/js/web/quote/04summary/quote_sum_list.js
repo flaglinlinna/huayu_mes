@@ -3,11 +3,11 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ,'tableFilter'], function() {
-		var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table,tableFilter = layui.tableFilter;
+	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer', 'tableFilter' ], function() {
+		var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table, tableFilter = layui.tableFilter;
 		tableIns = table.render({
 			elem : '#listTable',
-			url : context + '/quoteSum/getList?quoteId='+quoteId,
+			url : context + '/quoteSum/getList?quoteId=' + quoteId,
 			method : 'get', // 默认：get请求
 			// , toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 			cellMinWidth : 80,
@@ -17,7 +17,7 @@ $(function() {
 			// height: 'full',
 			page : true,
 			request : {
-				pageName : 'page' ,// 页码的参数名称，默认：page
+				pageName : 'page',// 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
 			parseData : function(res) {
@@ -51,12 +51,18 @@ $(function() {
 					"code" : res.status
 				}
 			},
-			cols :
-			[ [ 
-			{type : 'numbers'},
-			{field : 'bsCode',title : '报价单编号',width : 150,sort : true},
-			{field : 'bsType',title : '报价类型',width : 100,
-			    templet : function(d) {
+			cols : [ [ {
+				type : 'numbers'
+			}, {
+				field : 'bsCode',
+				title : '报价单编号',
+				width : 150,
+				sort : true
+			}, {
+				field : 'bsType',
+				title : '报价类型',
+				width : 100,
+				templet : function(d) {
 					if (d.bsType == "YSBJ") {
 						return "衍生报价";
 					} else if (d.bsType == "XPBJ") {
@@ -64,8 +70,11 @@ $(function() {
 					} else {
 						return "";
 					}
-			}}, 
-			{field : 'bsStatus',title : '状态',width : 80,
+				}
+			}, {
+				field : 'bsStatus',
+				title : '状态',
+				width : 80,
 				templet : function(d) {
 					if (d.bsStatus == "0") {
 						return "草稿"
@@ -74,25 +83,93 @@ $(function() {
 					} else if (d.bsStatus == "2") {
 						return "已完成"
 					}
-			}},
-			{field : 'bsCustName',title : '客户名称',width : 120},
-			{field : 'bsProd',title : '产品型号',width : 120},
-			{field : 'bsProdType',title : '产品类型',width : 140, sort: true},
-			{field : 'bsDevType',title : '机种型号',width : 140, sort: true},
-			{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140},
-			{field : 'bsSimilarProd',title : '相似型号',width : 150},
-			{field : 'bsRemarks',title : '报价备注',width : 170},
-			{field : 'bsPosition',title : '市场定位',width : 150},
-			{field : 'bsMaterial',title : '客户提供资料',width : 140,sort : true},
-			{field : 'bsChkOutItem',title : '外观检验项',width : 140,sort : true},
-			{field : 'bsChkOut',title : '外观检验',width : 150},
-			{field : 'bsFunctionItem',title : '功能性能项',width : 140},
-			{field : 'bsFunction',title : '功能性能',width : 140},
-			{field : 'bsRequire',title : '环保要求',width : 140},
-			{field : 'bsLevel',title : '防水防尘等级',width : 140},
-			{field : 'bsCustRequire',title : '客户其他要求',width : 200},
-			{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150}
-			] ],
+				}
+			}, {
+				field : 'bsBade',
+				title : '中标状态',
+				width : 80,
+				templet : function(d) {
+					if (d.bsBade == "1") {
+						return "<div class='green'>是</div>"
+					} else {
+						return "否"
+					}
+				}
+			}, {
+				field : 'bsCustName',
+				title : '客户名称',
+				width : 120
+			}, {
+				field : 'bsProd',
+				title : '产品型号',
+				width : 120
+			}, {
+				field : 'bsProdType',
+				title : '产品类型',
+				width : 140,
+				sort : true
+			}, {
+				field : 'bsDevType',
+				title : '机种型号',
+				width : 140,
+				sort : true
+			}, {
+				field : 'bsFinishTime',
+				title : '完成日期',
+				sort : true,
+				width : 140
+			}, {
+				field : 'bsSimilarProd',
+				title : '相似型号',
+				width : 150
+			}, {
+				field : 'bsRemarks',
+				title : '报价备注',
+				width : 170
+			}, {
+				field : 'bsPosition',
+				title : '市场定位',
+				width : 150
+			}, {
+				field : 'bsMaterial',
+				title : '客户提供资料',
+				width : 140,
+				sort : true
+			}, {
+				field : 'bsChkOutItem',
+				title : '外观检验项',
+				width : 140,
+				sort : true
+			}, {
+				field : 'bsChkOut',
+				title : '外观检验',
+				width : 150
+			}, {
+				field : 'bsFunctionItem',
+				title : '功能性能项',
+				width : 140
+			}, {
+				field : 'bsFunction',
+				title : '功能性能',
+				width : 140
+			}, {
+				field : 'bsRequire',
+				title : '环保要求',
+				width : 140
+			}, {
+				field : 'bsLevel',
+				title : '防水防尘等级',
+				width : 140
+			}, {
+				field : 'bsCustRequire',
+				title : '客户其他要求',
+				width : 200
+			}, {
+				fixed : 'right',
+				title : '操作',
+				toolbar : '#optBar',
+				width : 210
+			} ] ],
 			done : function(res, curr, count) {
 				//
 				pageCurr = curr;
@@ -112,28 +189,85 @@ $(function() {
 
 		var localtableFilterIns = tableFilter.render({
 			'elem' : '#listTable',
-			'mode' : 'api',//服务端过滤
-			'filters' : [
-				{field: 'bsCode', type:'input'},
-				{field: 'bsType', type:'checkbox', data:[{ "key":"YSBJ", "value":"衍生报价"},{ "key":"XPBJ", "value":"新品报价"}]},
-				// {field: 'bsStatus', type:'checkbox', data:[{ "key":"0", "value":"进行中"},{ "key":"1", "value":"已完成"},{ "key":"99", "value":"已关闭"}]},
-				{field: 'bsRemarks', type:'input'},
-				{field: 'bsProd', type:'input'},
-				{field: 'bsSimilarProd', type:'input'},
-				{field: 'bsFinishTime', type:'date'},
-				{field: 'bsDevType', type:'checkbox'},
-				{field: 'bsProdType', type:'checkbox'},
-				{field: 'bsCustName', type:'input'},
-				{field: 'bsPosition', type:'checkbox'},
-				{field: 'bsLevel', type:'checkbox'},
-				{field: 'bsRequire', type:'checkbox', data:[{ "key":"RoHS", "value":"RoHS"},
-						{ "key":"RECAH", "value":"RECAH"},
-						{ "key":"PAHS", "value":"PAHS"},{ "key":"CA65", "value":"CA65"}
-						,{ "key":"3BPA", "value":"3BPA"},{ "key":"HFS", "value":"HFS"}
-						,{ "key":"无卤", "value":"无卤"},{ "key":"其他", "value":"其他"}]},
-				{field: 'bsCustRequire', type:'input'}
-			],
-			'done': function(filters){}
+			'mode' : 'api',// 服务端过滤
+			'filters' : [ {
+				field : 'bsCode',
+				type : 'input'
+			}, {
+				field : 'bsType',
+				type : 'checkbox',
+				data : [ {
+					"key" : "YSBJ",
+					"value" : "衍生报价"
+				}, {
+					"key" : "XPBJ",
+					"value" : "新品报价"
+				} ]
+			},
+			// {field: 'bsStatus', type:'checkbox', data:[{ "key":"0",
+			// "value":"进行中"},{ "key":"1", "value":"已完成"},{ "key":"99",
+			// "value":"已关闭"}]},
+			{
+				field : 'bsRemarks',
+				type : 'input'
+			}, {
+				field : 'bsProd',
+				type : 'input'
+			}, {
+				field : 'bsSimilarProd',
+				type : 'input'
+			}, {
+				field : 'bsFinishTime',
+				type : 'date'
+			}, {
+				field : 'bsDevType',
+				type : 'checkbox'
+			}, {
+				field : 'bsProdType',
+				type : 'checkbox'
+			}, {
+				field : 'bsCustName',
+				type : 'input'
+			}, {
+				field : 'bsPosition',
+				type : 'checkbox'
+			}, {
+				field : 'bsLevel',
+				type : 'checkbox'
+			}, {
+				field : 'bsRequire',
+				type : 'checkbox',
+				data : [ {
+					"key" : "RoHS",
+					"value" : "RoHS"
+				}, {
+					"key" : "RECAH",
+					"value" : "RECAH"
+				}, {
+					"key" : "PAHS",
+					"value" : "PAHS"
+				}, {
+					"key" : "CA65",
+					"value" : "CA65"
+				}, {
+					"key" : "3BPA",
+					"value" : "3BPA"
+				}, {
+					"key" : "HFS",
+					"value" : "HFS"
+				}, {
+					"key" : "无卤",
+					"value" : "无卤"
+				}, {
+					"key" : "其他",
+					"value" : "其他"
+				} ]
+			}, {
+				field : 'bsCustRequire',
+				type : 'input'
+			} ],
+			'done' : function(filters) {
+			}
 		})
 
 		// 监听工具条
@@ -169,6 +303,14 @@ $(function() {
 						}
 					});
 				}
+			} else if (obj.event === 'bade') {
+				console.log(obj)
+				layer.confirm('一经设置则不得再修改，确定要设置中标吗？', {
+					btn : [ '确认', '返回' ]
+				}, function() {
+					setBade(obj.data.id)
+				})
+				
 			}
 		});
 
@@ -194,6 +336,23 @@ $(function() {
 		})
 	});
 });
+
+function setBade(quoteId) {
+	var params = {
+		"quoteId" : quoteId,
+	};
+	CoreUtil.sendAjax("/quoteSum/setBade", JSON.stringify(params), function(data) {
+		if (data.result) {
+			layer.alert("提交成功！");
+			loadAll();
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
 // 编辑项目弹出框
 function open(title) {
 
@@ -221,8 +380,16 @@ function load(obj) {
 		},
 		page : {
 			curr : pageCurr
-			// 从当前页码开始
+		// 从当前页码开始
 		}
 	});
 }
-
+function loadAll() {
+	// 重新加载table
+	tableIns.reload({
+		page : {
+			curr : pageCurr
+		// 从当前页码开始
+		}
+	});
+}
