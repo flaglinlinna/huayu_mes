@@ -39,6 +39,7 @@
 					<legend class="legend-font" style="font-size: 14px;">报价基础信息</legend>
 				</fieldset>
 				<input id="id" type="hidden" name="id" />
+				<input id="bsCopyId" type="hidden" name="bsCopyId" />
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">报价类型</label>
@@ -102,15 +103,15 @@
 							   class="layui-input" type="text" lay-verify="required|number" />
 						</div>
 
-						<label class="layui-form-label">是否中标</label>
-						<div class="layui-input-inline" style="width: 180px;">
-							<select id="bsBade"  autocomplete="off"  disabled
-									name="bsBade" class="layui-select" lay-filter="bsBade" lay-search>
-								<option value=""></option>
-								<option value="0">否</option>
-								<option value="1">是</option>
-							</select>
-						</div>
+						<!--<label class="layui-form-label">是否中标</label>-->
+						<!--<div class="layui-input-inline" style="width: 180px;">-->
+							<!--<select id="bsBade"  autocomplete="off"  disabled-->
+									<!--name="bsBade" class="layui-select" lay-filter="bsBade" lay-search>-->
+								<!--<option value=""></option>-->
+								<!--<option value="0">否</option>-->
+								<!--<option value="1">是</option>-->
+							<!--</select>-->
+						<!--</div>-->
 
 						<label class="layui-form-label layui-required">是否最新</label>
 						<div class="layui-input-inline" style="width: 200px;">
@@ -244,6 +245,8 @@
 							lay-filter="saveData">确认提交</button>
 					</div>
 				</div>
+
+
 			</form>
 		</div>
 		<script th:inline="javascript">
@@ -253,7 +256,7 @@
 		var Jitai = [[${Jitai}]];
 		var Status=[[${Status}]];
 		var Fee = [[${Fee}]];
-
+		var bsCopyId=[[${bsCopyId}]];
 		</script>
 		<script th:src="@{/js/web/quote/01business/quote_add.js}"
 			src="/js/web/quote/01business/quote_add.js"></script>

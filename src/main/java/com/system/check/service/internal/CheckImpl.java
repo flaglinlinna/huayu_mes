@@ -405,6 +405,7 @@ public class CheckImpl   implements CheckService {
 							}else {
 								//hjj-20210122 不是待采,先查询物料通用价格
 								//待确认
+
 							}
 							pm.setBsRadix(qb.getBsRadix());
 							pm.setBsExplain(qb.getBsExplain());//lst-20210107-增采购说明字段

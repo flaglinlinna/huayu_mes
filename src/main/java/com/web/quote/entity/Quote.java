@@ -447,6 +447,13 @@ public class Quote extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     protected SysUser user;
 
+	/**
+	 * 复制报价单的Id
+	 * **/
+	@ApiModelProperty(name="bsCopyId",value="复制报价单的Id")
+	@Column
+	protected Long bsCopyId;
+
 
 	public BigDecimal getBsProfitNet() {
 		return bsProfitNet;
@@ -839,5 +846,13 @@ public class Quote extends BaseEntity {
 
 	public void setBsBade(Integer bsBade) {
 		this.bsBade = bsBade;
+	}
+
+	public Long getBsCopyId() {
+		return bsCopyId;
+	}
+
+	public void setBsCopyId(Long bsCopyId) {
+		this.bsCopyId = bsCopyId;
 	}
 }

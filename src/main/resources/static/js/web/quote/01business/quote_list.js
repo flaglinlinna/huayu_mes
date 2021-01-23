@@ -102,7 +102,7 @@ $(function() {
 				{field : 'bsProjVer',title : '版本',width : 140,sort: true},
 				{field : 'bsLatest',title : '是否最新',width : 140,sort: true},
 				{field : 'bsStage',title : '报价阶段',width : 200,sort: true},
-				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 250}
+				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 300}
 				] ],
 				done : function(res, curr, count) {
 					localtableFilterIns.reload();
@@ -192,6 +192,9 @@ $(function() {
 	   	   	                    btn: ['知道了']
 	   	   	                });
 					}
+				}else if(obj.event ==='copy'){
+					//复制报价单
+					parent.layui.index.openTabsPage(context+'/quote/toQuoteAdd?quoteId='+data.id+'&bsCopyId='+data.id,'复制报价单');
 				}
 			});
 			

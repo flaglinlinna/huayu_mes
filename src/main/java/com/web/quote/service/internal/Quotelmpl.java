@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.utils.BaseSql;
+import com.web.quote.dao.*;
+import com.web.quote.entity.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,12 +35,6 @@ import com.web.basePrice.dao.ProdTypDao;
 import com.web.basePrice.dao.ProfitProdDao;
 import com.web.basePrice.entity.ProdTyp;
 import com.web.basePrice.entity.ProfitProd;
-import com.web.quote.dao.QuoteDao;
-import com.web.quote.dao.QuoteItemBaseDao;
-import com.web.quote.dao.QuoteItemDao;
-import com.web.quote.entity.Quote;
-import com.web.quote.entity.QuoteItem;
-import com.web.quote.entity.QuoteItemBase;
 import com.web.quote.service.QuoteService;
 
 @Service(value = "QuoteService")
@@ -46,8 +43,16 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 	
 	@Autowired
     private QuoteDao quoteDao;
+    @Autowired
+    private QuoteBomDao quoteBomDao;
+    @Autowired
+    private QuoteFileDao quoteFileDao;
+    @Autowired
+    private QuoteProcessDao quoteProcessDao;
 	@Autowired
     private QuoteItemDao quoteItemDao;
+    @Autowired
+    private QuoteMouldDao quoteMouldDao;
 	@Autowired
 	private ProfitProdDao profitProdDao;
 	@Autowired
@@ -122,6 +127,71 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     	
         return ApiResponseResult.success("报价单新增成功！").data(lqi);
 	}
+
+    /**
+     * 新增报价单
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult copy(Quote quote)throws Exception{
+        if(quote==null){
+            return ApiResponseResult.failure("报价单复制内容不能为空！");
+        }
+        //1.新建报价单
+        quote.setBsCopyId(quote.getId());
+        quote.setId(null);
+        this.add(quote);
+        //2.复制报价项目清单 (1 bom,2产品资料 3模具清单 4.工艺流程)
+        List<QuoteBom> copyQuoteBomList =  quoteBomDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
+        List<QuoteBom> newQuoteBomList = new ArrayList<>();
+        for (QuoteBom o: copyQuoteBomList){
+            QuoteBom quoteBom = new QuoteBom();
+            BeanUtils.copyProperties(o,quoteBom);
+            quoteBom.setPkQuote(quote.getId());
+            quoteBom.setId(null);
+            quoteBom.setBsStatus(0);
+            newQuoteBomList.add(quoteBom);
+        }
+        quoteBomDao.saveAll(newQuoteBomList);
+
+        List<QuoteFile> copyQuoteFileList =  quoteFileDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
+        List<QuoteFile> newQuoteFileList = new ArrayList<>();
+        for (QuoteFile o: copyQuoteFileList){
+            QuoteFile quoteFile = new QuoteFile();
+            BeanUtils.copyProperties(o,quoteFile);
+            quoteFile.setId(null);
+            quoteFile.setPkQuote(quote.getId());
+            quoteFile.setBsStatus(0);
+            newQuoteFileList.add(quoteFile);
+        }
+        quoteFileDao.saveAll(newQuoteFileList);
+
+        List<QuoteProcess> copyQuoteProcessList = quoteProcessDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
+        List<QuoteProcess> newQuoteProcessList = new ArrayList<>();
+        for (QuoteProcess o: copyQuoteProcessList){
+            QuoteProcess quoteProcess = new QuoteProcess();
+            BeanUtils.copyProperties(o,quoteProcess);
+
+            quoteProcess.setId(null);
+            quoteProcess.setPkQuote(quote.getId());
+            quoteProcess.setBsStatus(0);
+            newQuoteProcessList.add(quoteProcess);
+        }
+        quoteProcessDao.saveAll(newQuoteProcessList);
+
+        List<QuoteMould> copyQuoteMouldList = quoteMouldDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
+        List<QuoteMould> newQuoteMouldList = new ArrayList<>();
+        for (QuoteMould o: copyQuoteMouldList){
+            QuoteMould quoteMould = new QuoteMould();
+            BeanUtils.copyProperties(o,quoteMould);
+            quoteMould.setId(null);
+            quoteMould.setPkQuote(quote.getId());
+            quoteMould.setBsStatus(0);
+            newQuoteMouldList.add(quoteMould);
+        }
+        quoteMouldDao.saveAll(newQuoteMouldList);
+        return ApiResponseResult.success("报价单复制成功！");
+    }
     /**
      * 获取产品类型表
      * **/

@@ -48,12 +48,13 @@ public class QuoteController extends WebController {
 
 	@ApiOperation(value = "报价新增信息列表页", notes = "报价新增信息列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteAdd")
-	public ModelAndView toQuoteAdd(String quoteId,String status) {
+	public ModelAndView toQuoteAdd(String quoteId,String status,String bsCopyId) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult prodType = quoteService.getProdType();
 			mav.addObject("Status", status);
 			mav.addObject("quoteId", quoteId);
+			mav.addObject("bsCopyId", bsCopyId);
 			mav.addObject("prodType", prodType);
 			mav.addObject("QuoteType", sysParamSubService.getListByMCode("BJ_LIST_TYPE").getData());//报价类型
 			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_MODEL_TYPE").getData());//机台类型
@@ -134,7 +135,26 @@ public class QuoteController extends WebController {
 			return ApiResponseResult.failure("报价单新增失败！");
 		}
 	}
-	
+
+	@ApiOperation(value = "复制报价单", notes = "复制报价单", hidden = true)
+	@RequestMapping(value = "/copy", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult copy(@RequestBody Quote quote) {
+		String method = "quote/copy";
+		String methodName = "复制报价单";
+		try {
+			ApiResponseResult result = quoteService.copy(quote);
+			logger.debug("复制报价单=copy:");
+			getSysLogService().success(module, method, methodName, quote.toString());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("报价单复制失败！", e);
+			getSysLogService().error(module, method, methodName, quote.toString() + "," + e.toString());
+			return ApiResponseResult.failure("报价单复制失败！");
+		}
+	}
+
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表",hidden = true)
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @ResponseBody
