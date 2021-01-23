@@ -88,6 +88,7 @@ public class QuoteController extends WebController {
 		try {
 			ApiResponseResult info = quoteService.getSingle( Long.parseLong(quoteId));
 			ApiResponseResult ItemList = quoteService.getItemPage( Long.parseLong(quoteId),style);
+			mav.addObject("QuoteType", sysParamSubService.getListByMCode("BJ_LIST_TYPE").getData());//报价类型
 			mav.addObject("ItemList", ItemList);
 			mav.addObject("info", info);
 			mav.setViewName("/web/quote/01business/quote_items");// 返回路径

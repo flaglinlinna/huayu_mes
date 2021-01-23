@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.web.basic.service.SysParamSubService;
 import com.web.quote.service.QuoteProductService;
 import com.web.quote.service.QuoteService;
 
@@ -34,6 +35,8 @@ public class QuoteProductController extends WebController {
 	private QuoteProductService quoteProductService;
 	@Autowired
 	private QuoteService quoteService;
+	@Autowired
+	private SysParamSubService sysParamSubService;
 
 	@ApiOperation(value = "报价信息列表页", notes = "报价信息列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteProdect")
@@ -57,6 +60,7 @@ public class QuoteProductController extends WebController {
 		try {
 			ApiResponseResult info = quoteService.getSingle( Long.parseLong(quoteId));
 			ApiResponseResult ItemList = quoteProductService.getItemPage(Long.parseLong(quoteId),style);
+			mav.addObject("QuoteType", sysParamSubService.getListByMCode("BJ_LIST_TYPE").getData());//报价类型
 			mav.addObject("ItemList", ItemList);
 			mav.addObject("info", info);
 			mav.addObject("Style", style);

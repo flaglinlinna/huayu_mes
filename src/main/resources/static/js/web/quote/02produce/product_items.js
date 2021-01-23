@@ -21,10 +21,14 @@ function setData(){
 	var data_info=info.data;
 	var create=checkNull(data_info.createDate)
 	$("#header1").text("报价单号："+data_info.bsCode)
-	$("#header2").text("报价类型："+data_info.bsType)
 	$("#header3").text("产品型号："+data_info.bsProd)
 	$("#header4").text("创建人："+data_info.createBy)
 	$("#header5").text("创建时间："+create)
+	for(var i=0;i<QuoteType.length;i++){
+		if(QuoteType[i].subCode==data_info.bsType){
+			$("#header2").text("报价类型："+QuoteType[i].subName)//取文字
+		}
+	}
 }
 function setTable(){
 	var list = ItemList.data;
