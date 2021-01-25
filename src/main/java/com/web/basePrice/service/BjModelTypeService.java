@@ -19,7 +19,7 @@ public interface BjModelTypeService {
 
   public ApiResponseResult delete(Long id) throws Exception;
 
-  public ApiResponseResult getList(String keyword,String bsType, PageRequest pageRequest) throws Exception;
+  public ApiResponseResult getList(String keyword,String bsType,String workCenterId, PageRequest pageRequest) throws Exception;
 
   public ApiResponseResult getProcList(String type, String condition, PageRequest pageRequest)throws Exception;//工序
 

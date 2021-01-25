@@ -48,7 +48,10 @@ $(function() {
 			}
 		});
 
+		//判断是否为复制
 		if(bsCopyId !=null){
+			$('#bsProd').attr("readonly","readonly");
+			$('#bsProd').css("background","#efefef")
 			$('#saveBtn').html("确认复制");
 		}
 
@@ -94,6 +97,10 @@ $(function() {
 					// if(data.data.bsStep>2&&data.data.bsEndTime3!=null){
 					// 	$('#bsBade').removeAttr("disabled");
 					// }
+					if(data.data.bsCopyId!=null){
+						$('#bsProd').attr("readonly","readonly");
+						$('#bsProd').css("background","#efefef")
+					}
 					form.render();
 
 				} else {

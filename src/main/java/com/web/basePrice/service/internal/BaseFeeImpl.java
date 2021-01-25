@@ -171,6 +171,8 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		if (StringUtils.isNotEmpty(keyword)) {
 			filters1.add(new SearchFilter("procName", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("mhType", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("workCenter.workcenterName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("workCenter.workcenterCode", SearchFilter.Operator.LIKE, keyword));
 		}
 		Specification<BaseFee> spec = Specification.where(BaseService.and(filters, BaseFee.class));
 		Specification<BaseFee> spec1 = spec.and(BaseService.or(filters1, BaseFee.class));
