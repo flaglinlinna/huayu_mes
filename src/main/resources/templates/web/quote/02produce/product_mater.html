@@ -57,7 +57,7 @@
 				<select name="selectUnit" lay-filter="selectUnit" lay-search>
 					<option value="">请选择</option>
 					{{# layui.each($.parseJSON( d.bsUnitList ), function(index, item){     }}
-					<option value="{{ item.id }}"  {{ d.pkUnit==item.id?'selected':''}}>{{ item.unitName }}</option>
+					<option value="{{ item.id }}"  {{ d.pkUnit==item.id?'selected':''}}>{{ item.unitCode }}</option>
 					{{# });  }}
 				</select>
 			</script>

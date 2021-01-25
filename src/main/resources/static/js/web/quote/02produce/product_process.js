@@ -247,9 +247,16 @@ $(function() {
 					{ type: 'radio' },//单选  radio
 					{field : 'id', title : 'id', width : 0,hide:true},
 					{type : 'numbers'},
-					{field : 'procNo', title : '工序编号' },
-					{field : 'procName', title : '工序名称' },
-					{field : 'workCenter', title : '工作中心名称' }
+					{field : 'PROC_NO', title : '工序编号' },
+					{field : 'PROC_NAME', title : '工序名称' },
+					{field : 'WORKCENTER_NAME', title : '工作中心名称' },
+					{field : 'STATUS', title : '人工制费',templet:function (d){
+							if(d.STATUS=="1"){
+								return "已维护";
+							}else {
+								return "未维护"
+							}
+						} },
 				] ],
 				page : false,
 				request : {
@@ -262,8 +269,8 @@ $(function() {
 				var da=data.data;
 				//选择完后的回调，包含2个返回值 elem:返回之前input对象；data:表格返回的选中的数据 []
 				form.val("productProcessForm", {
-					"pkProc":da[0].id,
-					"procName":da[0].procName
+					"pkProc":da[0].ID,
+					"procName":da[0].PROC_NAME
 				});
 				form.render();// 重新渲染
 			}
@@ -283,7 +290,7 @@ $(function() {
 					{field : 'ID', title : 'ID', width : 0, hide : true},
 					{field : 'modelCode', title : '机台编码'},
 					{field : 'modelName', title : '机台描述'},
-					{field : 'workCenterCode', title : '工作中心编码'}
+					{field : 'workCenterName', title : '工作中心'}
 				] ],
 				page : true,
 				request : {

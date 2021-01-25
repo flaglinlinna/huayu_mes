@@ -247,7 +247,9 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
                 + "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_position,p.bs_Manage_fee,  " +
                 "p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
-                "p.bs_Cust_Require,i.bs_status bs_status_check  from "+Quote.TABLE_NAME+" p  left join (select t.pk_quote,min(t.bs_status)bs_status from "+QuoteItem.TABLE_NAME+" t where  t.bs_style='item' group by t.pk_quote) i on i.pk_quote=p.id"
+                "p.bs_Cust_Require,i.bs_status bs_status_check,p.bs_proj_ver,p.bs_bade,p.bs_latest,p.bs_stage  from "+Quote.TABLE_NAME+" p " +
+                " left join (select t.pk_quote,min(t.bs_status)bs_status from "+QuoteItem.TABLE_NAME+" t where " +
+                " t.bs_style='item' group by t.pk_quote) i on i.pk_quote=p.id"
                 + "  where p.del_flag=0";
 
         if(StringUtils.isNotEmpty(quoteId)&&!("null").equals(quoteId)){
@@ -340,6 +342,11 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             map1.put("bsLevel", object[19]);
             map1.put("bsCustRequire", object[20]);
             map1.put("bsStatusCheck", object[21]);
+
+            map1.put("bsProjVer",object[22]);
+            map1.put("bsBade",object[23]);
+            map1.put("bsLatest",object[24]);
+            map1.put("bsStage",object[25]);
             list_new.add(map1);
         }
 
