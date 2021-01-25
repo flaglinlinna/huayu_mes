@@ -5,7 +5,7 @@ var pageCurr;
 var totalCount = 0;// 表格记录数
 $(function() {
 	layui.use([ 'form', 'table', 'tableSelect' ], function() {
-		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
+		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect;
 		isComplete()
 		tableIns = table.render({
 			elem : '#client_procList',
@@ -108,6 +108,61 @@ $(function() {
 						data:[]
 					});
 				}
+			}
+		});
+
+		// 工作中心列表
+		cTableSelect = tableSelect1.render({
+			elem : '#wcName',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '试着搜索',
+			table : {
+				// width : 220,
+				url : context
+					+ '/basePrice/workCenter/getList',
+				method : 'get',
+				cols : [ [ {
+					type : 'radio'
+				},// 多选 radio
+					, {field : 'ID', title : 'ID', width : 0, hide : true},
+					{field : 'workcenterCode', title : '工作中心编码',},
+					{field : 'workcenterName', title : '工作中心',}
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+				parseData : function(res) {
+					if (!res.result) {
+						// 可进行数据操作
+						return {
+							"count" : 0,
+							"msg" : res.msg,
+							"data" : [],
+							"code" : res.status
+							// code值为200表示成功
+						}
+					}
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+			},
+			done : function(elem, data) {
+				// 选择完后的回调，包含2个返回值
+				// elem:返回之前input对象；data:表格返回的选中的数据 []
+				var da = data.data;
+				form.val("clientProcForm", {
+					"wcName" : da[0].workcenterName,
+				});
+				form.render();// 重新渲染
 			}
 		});
 

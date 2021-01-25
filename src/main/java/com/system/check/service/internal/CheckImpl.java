@@ -400,7 +400,7 @@ public class CheckImpl   implements CheckService {
 							}
 							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
 							pm.setBsWaterGap(qb.getBsWaterGap());
-							if(("1").equals(qb.getBsAgent())){
+							if((qb.getBsAgent()==1)){
 								pm.setBsAssess(BigDecimal.ZERO);
 							}else {
 								//hjj-20210122 不是待采,先查询物料通用价格

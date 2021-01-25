@@ -403,15 +403,22 @@ layui.define("view", function (e) {
         var srcs = $(".layadmin-tabsbody-item");//.find("iframe").attr("src");
         srcs.each(function (e, n) {
             var src1 =$(this).find("iframe").attr("src");
-            if(src1.indexOf("/quoteProdect/toProductItem") >= 0){
+            if(src1.indexOf("quoteProdect/toProductItem") >= 0){
             	$(this).find("iframe").attr("src", src1);
             }
         });
         
         //fyx-20210116-切换标签后刷新当前页面
         var src = $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src");
-        if(src != '/quote/toQuoteAdd' ){//fyx-20210119-新增报价单不刷新
-        	$(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
+        // if(src != '/quote/toQuoteAdd' ){//fyx-20210119-新增报价单不刷新
+        // 	$(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
+        // }
+
+        //hjj-20210125-只针对指定界面进行切换标签后刷新
+        if(src =='/quote/toQuoteList' ||src.indexOf('quote/toQuoteItem')!=-1
+            ||src =='/out/toOutList' ||src=="/quoteSum/toQuoteSumList" ||src =="/quoteAll/toQuoteList"
+            ||src.indexOf("quoteProdect/toProductItem")!=-1){
+            $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
         }
         //--end
        
@@ -424,8 +431,15 @@ layui.define("view", function (e) {
         e.index && P.tabsBody(e.index).remove(), A(t), P.delResize();
         //fyx-20210116-关闭标签后刷新当前页面
         var src = $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src");
-        if(src != '/quote/toQuoteAdd'){//fyx-20210119-新增报价单不刷新
-        	$(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
+        // if(src != '/quote/toQuoteAdd'){//fyx-20210119-新增报价单不刷新
+        // 	$(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
+        // }
+
+        //hjj-20210125-只针对指定界面进行关闭标签后刷新
+        if(src =='/quote/toQuoteList' ||src.indexOf('quote/toQuoteItem')!=-1
+            ||src =='/out/toOutList' ||src=="/quoteSum/toQuoteSumList" ||src =="/quoteAll/toQuoteList"
+            ||src.indexOf("quoteProdect/toProductItem")|| src.indexOf("quoteProdect/toQuoteProdect")!=-1){
+            $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
         }
         //--end
     }), o.on("click", "*[lay-href]", function () {

@@ -332,7 +332,10 @@
             var Jitai = [[${Jitai}]];
             var bsCode=[[${bsCode}]];
             var nowStatus=[[${nowStatus}]];
-            var iStatus=nowStatus.data[0].BS_STATUS
+			var iStatus = 0;
+			if(bsType!="out") {
+				 iStatus = nowStatus.data[0].BS_STATUS;
+			}
             var bomNameList=[[${bomNameList}]];
         </script>
 

@@ -12,6 +12,9 @@
 	.layui-form-select .layui-input {
 		height: 30px;
 	}
+	.layui-select-disabled .layui-disabled{
+		background: #efefef !important;
+	}
 </style>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -31,8 +34,9 @@
 							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
 							<i class="layui-icon">&#xe669;</i>重置
 						</button>
-						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button"
-							id="addbtn" onclick="addHardware()">添加信息</button>
+						<!--<button class="layui-btn layui-btn-sm layui-btn-normal" type="button"-->
+							<!--id="addbtn" onclick="addHardware()">添加信息</button>-->
+						<!--hjj-20210125-暂定关闭新增的按钮 -->
 						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button"
 							id="exportbtn" onclick="exportExcel()">导出模板</button>
 						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button"
@@ -86,7 +90,8 @@
 					<label class="layui-form-label layui-required">零件名称</label>
 					<div class="layui-input-block">
 						<select id="bsComponent" name="bsComponent" lay-verify="required"
-							lay-filter="bsComponent" lay-search>
+								disabled="disabled"
+							lay-filter="bsComponent" >
 						</select>
 					</div>
 				</div>
@@ -94,7 +99,8 @@
 					<label class="layui-form-label layui-required">材料名称</label>
 					<div class="layui-input-block">
 						<input id="bsMaterName" name="bsMaterName" placeholder="请输入材料名称"
-							lay-verify="required" autocomplete="off" class="layui-input"
+							   style="background: #efefef"
+							lay-verify="required" autocomplete="off" class="layui-input" readonly="readonly"
 							type="text" />
 					</div>
 				</div>
@@ -102,6 +108,7 @@
 					<label class="layui-form-label layui-required">材料规格</label>
 					<div class="layui-input-block">
 						<input id="bsModel" name="bsModel" placeholder="请输入材料规格"
+							   readonly="readonly" style="background: #efefef"
 							lay-verify="required" autocomplete="off" class="layui-input"
 							type="text" />
 					</div>

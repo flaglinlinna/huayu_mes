@@ -170,7 +170,19 @@ $(function() {
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteAdd?quoteId='+data.id+'&status='+data.bsStatus,'修改报价单');
 				}else if(obj.event === 'view'){
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item','报价项目清单');
-				}else if(obj.event === 'check'){
+					// var a = document.createElement('a');
+					// a.setAttribute('lay-href', context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item');
+					// a.setAttribute('lay-text', '报价项目清单');
+					// a.setAttribute('id', 'js_a');
+					// if(document.getElementById('js_a')) {//防止反复添加
+					// 	document.body.removeChild(document.getElementById('js_a'));
+					// }
+					// document.body.appendChild(a);//创建
+					// console.log(a);
+					// a.click();//点击
+					// return false;
+				}
+				else if(obj.event === 'check'){
 					//先判断是否填写完成资料-fyx-20210105
 					if(data.bsStatusCheck>1){
 						layer.open({
