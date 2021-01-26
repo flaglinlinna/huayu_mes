@@ -13,6 +13,7 @@ public interface QuoteFileDao extends CrudRepository<QuoteFile, Long>,JpaSpecifi
 
 	public List<QuoteFile> findAll();
 	public List<QuoteFile> findByDelFlag(Integer delFlag);
+	public List<QuoteFile> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 	public QuoteFile findById(long id);
 	
 	@Modifying

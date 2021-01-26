@@ -68,6 +68,8 @@ $(function() {
 							 return "";
 						 }
 					 },sort: true},
+					{field : 'bsStage',title : '报价阶段',width : 120,sort: true},
+					{field : 'bsProjVer',title : '版本',width : 100,sort: true},
 				 {field : 'bsStatus',title : '状态',width : 100,templet:function (d) {
 						if(d.bsStatus=="0"){
 							return "进行中"
@@ -98,11 +100,17 @@ $(function() {
 				{field : 'bsRequire',title : '环保要求',width : 140,sort: true},
 				{field : 'bsLevel',title : '防水防尘等级',width : 140,sort: true},
 				{field : 'bsCustRequire',title : '客户其他要求',width : 200,sort: true},
-				{field : 'bsBade',title : '是否中标',width : 140,sort: true},
-				{field : 'bsProjVer',title : '版本',width : 140,sort: true},
-				{field : 'bsLatest',title : '是否最新',width : 140,sort: true},
-				{field : 'bsStage',title : '报价阶段',width : 200,sort: true},
-				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 250}
+				// {field : 'bsBade',title : '是否中标',width : 140,sort: true},
+				// {field : 'bsProjVer',title : '版本',width : 140,sort: true},
+				{field : 'bsLatest',title : '是否最新',width : 100,sort: true,templet:function (d) {
+						if(d.bsLatest == "1"){
+							return "是";
+						}else {
+							return "否";
+						}
+					}},
+				// {field : 'bsStage',title : '报价阶段',width : 200,sort: true},
+				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 300}
 				] ],
 				done : function(res, curr, count) {
 					localtableFilterIns.reload();
@@ -162,7 +170,19 @@ $(function() {
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteAdd?quoteId='+data.id+'&status='+data.bsStatus,'修改报价单');
 				}else if(obj.event === 'view'){
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item','报价项目清单');
-				}else if(obj.event === 'check'){
+					// var a = document.createElement('a');
+					// a.setAttribute('lay-href', context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item');
+					// a.setAttribute('lay-text', '报价项目清单');
+					// a.setAttribute('id', 'js_a');
+					// if(document.getElementById('js_a')) {//防止反复添加
+					// 	document.body.removeChild(document.getElementById('js_a'));
+					// }
+					// document.body.appendChild(a);//创建
+					// console.log(a);
+					// a.click();//点击
+					// return false;
+				}
+				else if(obj.event === 'check'){
 					//先判断是否填写完成资料-fyx-20210105
 					if(data.bsStatusCheck>1){
 						layer.open({
@@ -192,6 +212,9 @@ $(function() {
 	   	   	                    btn: ['知道了']
 	   	   	                });
 					}
+				}else if(obj.event ==='copy'){
+					//复制报价单
+					parent.layui.index.openTabsPage(context+'/quote/toQuoteAdd?quoteId='+data.id+'&bsCopyId='+data.id,'复制报价单');
 				}
 			});
 			

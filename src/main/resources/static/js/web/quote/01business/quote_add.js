@@ -17,8 +17,9 @@ $(function() {
 			if (paramlist.id == null || paramlist.id == "") {
 				// 新增
 				saveData(paramlist);
+			}else if(bsCopyId !=null){
+				copyData(paramlist);
 			} else {
-				console.log(paramlist)
 				editData(paramlist);
 			}
 			return false;
@@ -47,6 +48,13 @@ $(function() {
 			}
 		});
 
+		//判断是否为复制
+		if(bsCopyId !=null){
+			$('#bsProd').attr("readonly","readonly");
+			$('#bsProd').css("background","#efefef")
+			$('#saveBtn').html("确认复制");
+		}
+
 		// 日期选择器
 		laydate.render({// 完成日期
 			elem : '#bsFinishTime',
@@ -62,6 +70,7 @@ $(function() {
 				if (data.result) {
 					form.val("itemForm", {
 						"id" : data.data.id,
+						"bsCopyId":bsCopyId,
 						"bsType" : data.data.bsType,
 						"bsFinishTime" : data.data.bsFinishTime,
 						"bsRemarks" : data.data.bsRemarks,
@@ -84,9 +93,13 @@ $(function() {
 					setCheckboxValues('require', data.data.bsRequire)
 					setCheckboxValues('chkOutItem', data.data.bsChkOutItem)
 					setCheckboxValues('functionItem', data.data.bsFunctionItem)
-					//20210122-hjj-是否中标判断可否填写 (最终审批完)
-					if(data.data.bsStep>2&&data.data.bsEndTime3!=null){
-						$('#bsBade').removeAttr("disabled");
+					// //20210122-hjj-是否中标判断可否填写 (最终审批完)
+					// if(data.data.bsStep>2&&data.data.bsEndTime3!=null){
+					// 	$('#bsBade').removeAttr("disabled");
+					// }
+					if(data.data.bsCopyId!=null){
+						$('#bsProd').attr("readonly","readonly");
+						$('#bsProd').css("background","#efefef")
 					}
 					form.render();
 
@@ -106,6 +119,8 @@ $(function() {
 	}else{
 		$('#saveBtn').removeClass("layui-btn-disabled").attr("disabled",false)
 	}
+
+
 	
 	//20210120-fyx-填写管理费
 	$('#bsManageFee').val(Fee[0].paramValue);
@@ -168,6 +183,22 @@ function setData() {
 
 function saveData(obj) {
 	CoreUtil.sendAjax("/quote/add", JSON.stringify(obj), function(data) {
+		if (data.result) {
+			layer.alert("操作成功", function() {
+				clean();
+				layer.closeAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
+
+function copyData(obj) {
+	CoreUtil.sendAjax("/quote/copy", JSON.stringify(obj), function(data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				clean();

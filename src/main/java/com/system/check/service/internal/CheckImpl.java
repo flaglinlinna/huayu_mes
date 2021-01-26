@@ -400,11 +400,20 @@ public class CheckImpl   implements CheckService {
 							}
 							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
 							pm.setBsWaterGap(qb.getBsWaterGap());
-							if(qb.getBsAgent()==1){
+							if((qb.getBsAgent()==1)){
 								pm.setBsAssess(BigDecimal.ZERO);
 							}else {
 								//hjj-20210122 不是待采,先查询物料通用价格
-								//待确认
+								List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(qb.getBsMaterName());
+								if(lm.size()>0){
+									String priceUn = lm.get(0).get("PRICE_UN").toString();
+									String rangePrice = lm.get(0).get("RANGE_PRICE").toString();
+									if(StringUtils.isNotEmpty(priceUn)){
+										pm.setBsGear(rangePrice);
+										pm.setBsRefer(new BigDecimal(priceUn));
+										pm.setBsAssess(new BigDecimal(priceUn));
+									}
+								}
 							}
 							pm.setBsRadix(qb.getBsRadix());
 							pm.setBsExplain(qb.getBsExplain());//lst-20210107-增采购说明字段

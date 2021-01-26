@@ -153,8 +153,28 @@ public class QuoteItemController extends WebController {
 			e.printStackTrace();
 			logger.error("虚拟料号对应导入模板导入失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
-			return null;
+			return ApiResponseResult.failure("虚拟料号对应导入模板导入失败");
 		}
 	}
+
+	//实际料号对应确认完成
+//	@ApiOperation(value="确认完成", notes="确认完成", hidden = true)
+//	@RequestMapping(value = "/confirm", method = RequestMethod.POST)
+//	@ResponseBody
+//	public ApiResponseResult confirm(@RequestBody Map<String, Object> params) {
+//		Long quoteId = Long.parseLong(params.get("quoteId").toString()) ;
+//		String method = "/quoteItem/confirm";String methodName ="确认完成";
+//		try {
+//			logger.debug("确认完成=confirm:");
+//			getSysLogService().success(module,method, methodName, "");
+//			return null;
+////			return quoteSumBomService.confirm(id,bsItemCodeReal);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error("确认完成失败！", e);
+//			getSysLogService().error(module,method, methodName, e.toString());
+//			return null;
+//		}
+//	}
 
 }

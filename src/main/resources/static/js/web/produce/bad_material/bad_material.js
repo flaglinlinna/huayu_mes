@@ -489,15 +489,19 @@ function getInfoBarcode(barcode){
         if (data.result) {
         	//console.log(data.data[0])
             playSaoMiaoMusic();
-            $( "input[name='itemNo']").val(data.data[0].ITEM_NO);
-            $( "input[name='procDate']").val(data.data[0].PROD_DATE);
-            $( "input[name='mtrdescr']").val(data.data[0].ITEM_NAME);
-            $("#org").val(data.data[0].DEPID);
-            $( "input[name='supplier']").val(data.data[0].VENDER); 
-            $( "input[name='supplierId']").val(data.data[0].VENDERID);
-            $( "input[name='lotNo']").val(data.data[0].BATCHNO);
-            layui.form.render('select');
-            $('#itemNo').focus();
+            if(data.data.length>0) {
+                // playSaoMiaoMusic();
+                $("input[name='itemNo']").val(data.data[0].ITEM_NO);
+                $("input[name='procDate']").val(data.data[0].PROD_DATE);
+                $("input[name='mtrdescr']").val(data.data[0].ITEM_NAME);
+                $("#org").val(data.data[0].DEPID);
+                $("input[name='supplier']").val(data.data[0].VENDER);
+                $("input[name='supplierId']").val(data.data[0].VENDERID);
+                $("input[name='lotNo']").val(data.data[0].BATCHNO);
+                layui.form.render('select');
+                $('#itemNo').focus();
+                getNgItem(data.data[0].ITEM_NO);
+            }
             // supplier
         }else{
             playMusic();

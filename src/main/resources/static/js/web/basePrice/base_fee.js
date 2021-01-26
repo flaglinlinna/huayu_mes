@@ -5,7 +5,8 @@ var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table', 'tableSelect' ,'upload'],
 			function() {
-				var table = layui.table, form = layui.form, tableSelect = layui.tableSelect,upload = layui.upload;
+				var table = layui.table, form = layui.form, tableSelect = layui.tableSelect,
+					tableSelect1 = layui.tableSelect,upload = layui.upload;
 						tableIns = table.render({
 							elem : '#colsList',
 							url : context + '/basePrice/baseFee/getList',
@@ -114,134 +115,137 @@ $(function() {
 									"workcenterName" : da[0].WORKCENTER_NAME
 								});
 								form.render();// 重新渲染
-							}
-						});
-						// 工作中心列表
-						// cTableSelect = tableSelect.render({
-						// 	elem : '#workcenterName',
-						// 	searchKey : 'keyword',
-						// 	checkedKey : 'id',
-						// 	searchPlaceholder : '试着搜索',
-						// 	table : {
-						// 		// width : 220,
-						// 		url : context
-						// 				+ '/basePrice/baseFee/getWorkCenterList',
-						// 		method : 'get',
-						//
-						// 		cols : [ [ {
-						// 			type : 'radio'
-						// 		},// 多选 radio
-						// 		, {
-						// 			field : 'ID',
-						// 			title : 'ID',
-						// 			width : 0,
-						// 			hide : true
-						// 		},
-						//
-						// 		{
-						// 			field : 'WORKCENTER_CODE',
-						// 			title : '工作中心编码',
-						//
-						// 		},
-						//
-						// 		{
-						// 			field : 'WORKCENTER_NAME',
-						// 			title : '工作中心',
-						// 		}
-						//
-						// 		] ],
-						// 		page : true,
-						// 		request : {
-						// 			pageName : 'page' // 页码的参数名称，默认：page
-						// 			,
-						// 			limitName : 'rows' // 每页数据量的参数名，默认：limit
-						// 		},
-						// 		parseData : function(res) {
-						// 			if (!res.result) {
-						// 				// 可进行数据操作
-						// 				return {
-						// 					"count" : 0,
-						// 					"msg" : res.msg,
-						// 					"data" : [],
-						// 					"code" : res.status
-						// 				// code值为200表示成功
-						// 				}
-						// 			}
-						// 			return {
-						// 				"count" : res.data.Total,
-						// 				"msg" : res.msg,
-						// 				"data" : res.data.List,
-						// 				"code" : res.status
-						// 			// code值为200表示成功
-						// 			}
-						// 		},
-						// 	},
-						// 	done : function(elem, data) {
-						// 		// 选择完后的回调，包含2个返回值
-						// 		// elem:返回之前input对象；data:表格返回的选中的数据 []
-						// 		var da = data.data;
-						// 		form.val("itemForm", {
-						// 			"workcenterId" : da[0].ID,
-						// 			"workcenterName" : da[0].WORKCENTER_NAME,
-						// 		});
-						// 		form.render();// 重新渲染
-						// 	}
-						// });
-						// 机台类型列表
-						typeTableSelect = tableSelect.render({
-							elem : '#mhType',
-							searchKey : 'keyword',
-							checkedKey : 'id',
-							searchPlaceholder : '试着搜索',
-							table : {
-								// width : 220,
-								url : context + '/basePrice/modelType/getList',
-								method : 'get',
-								cols : [ [ {type : 'radio'},
-									{field : 'ID', title : 'ID', width : 0, hide : true},
-									{field : 'modelCode', title : '机台编码'},
-									{field : 'modelName', title : '机台描述'},
-									{field : 'workCenterCode', title : '工作中心编码'},
-									{field : 'workCenterName', title : '工作中心名称'},
-								] ],
-								page : true,
-								request : {
-									pageName : 'page' // 页码的参数名称，默认：page
-									,
-									limitName : 'rows' // 每页数据量的参数名，默认：limit
-								},
-								parseData : function(res) {
-									if (!res.result) {
-										// 可进行数据操作
-										return {
-											"count" : 0,
-											"msg" : res.msg,
-											"data" : [],
-											"code" : res.status
-										// code值为200表示成功
-										}
+
+								// 工作中心列表
+								// cTableSelect = tableSelect.render({
+								// 	elem : '#workcenterName',
+								// 	searchKey : 'keyword',
+								// 	checkedKey : 'id',
+								// 	searchPlaceholder : '试着搜索',
+								// 	table : {
+								// 		// width : 220,
+								// 		url : context
+								// 				+ '/basePrice/baseFee/getWorkCenterList',
+								// 		method : 'get',
+								//
+								// 		cols : [ [ {
+								// 			type : 'radio'
+								// 		},// 多选 radio
+								// 		, {
+								// 			field : 'ID',
+								// 			title : 'ID',
+								// 			width : 0,
+								// 			hide : true
+								// 		},
+								//
+								// 		{
+								// 			field : 'WORKCENTER_CODE',
+								// 			title : '工作中心编码',
+								//
+								// 		},
+								//
+								// 		{
+								// 			field : 'WORKCENTER_NAME',
+								// 			title : '工作中心',
+								// 		}
+								//
+								// 		] ],
+								// 		page : true,
+								// 		request : {
+								// 			pageName : 'page' // 页码的参数名称，默认：page
+								// 			,
+								// 			limitName : 'rows' // 每页数据量的参数名，默认：limit
+								// 		},
+								// 		parseData : function(res) {
+								// 			if (!res.result) {
+								// 				// 可进行数据操作
+								// 				return {
+								// 					"count" : 0,
+								// 					"msg" : res.msg,
+								// 					"data" : [],
+								// 					"code" : res.status
+								// 				// code值为200表示成功
+								// 				}
+								// 			}
+								// 			return {
+								// 				"count" : res.data.Total,
+								// 				"msg" : res.msg,
+								// 				"data" : res.data.List,
+								// 				"code" : res.status
+								// 			// code值为200表示成功
+								// 			}
+								// 		},
+								// 	},
+								// 	done : function(elem, data) {
+								// 		// 选择完后的回调，包含2个返回值
+								// 		// elem:返回之前input对象；data:表格返回的选中的数据 []
+								// 		var da = data.data;
+								// 		form.val("itemForm", {
+								// 			"workcenterId" : da[0].ID,
+								// 			"workcenterName" : da[0].WORKCENTER_NAME,
+								// 		});
+								// 		form.render();// 重新渲染
+								// 	}
+								// });
+								// 机台类型列表
+								typeTableSelect = tableSelect1.render({
+									elem : '#mhType',
+									searchKey : 'keyword',
+									checkedKey : 'id',
+									searchPlaceholder : '试着搜索',
+									table : {
+										url :getModelTypeUrl(),
+										method : 'get',
+										cols : [ [ {type : 'radio'},
+											{field : 'ID', title : 'ID', width : 0, hide : true},
+											{field : 'modelCode', title : '机台编码'},
+											{field : 'modelName', title : '机台描述'},
+											{field : 'workCenterCode', title : '工作中心编码'},
+											{field : 'workCenterName', title : '工作中心名称'},
+										] ],
+										page : true,
+										request : {
+											pageName : 'page' // 页码的参数名称，默认：page
+											,
+											limitName : 'rows' // 每页数据量的参数名，默认：limit
+										},
+										parseData : function(res) {
+											if (!res.result) {
+												// 可进行数据操作
+												return {
+													"count" : 0,
+													"msg" : res.msg,
+													"data" : [],
+													"code" : res.status
+													// code值为200表示成功
+												}
+											}
+											return {
+												"count" : res.data.total,
+												"msg" : res.msg,
+												"data" : res.data.rows,
+												"code" : res.status
+												// code值为200表示成功
+											}
+										},
+									},
+									done : function(elem, data) {
+										// 选择完后的回调，包含2个返回值
+										// elem:返回之前input对象；data:表格返回的选中的数据 []
+										var da = data.data;
+										form.val("itemForm", {
+											"mhType" : da[0].modelName,
+											"workcenterId":da[0].workCenterId,
+											"workcenterName":da[0].workCenterName,
+										});
+										form.render();// 重新渲染
 									}
-									return {
-										"count" : res.data.total,
-										"msg" : res.msg,
-										"data" : res.data.rows,
-										"code" : res.status
-										// code值为200表示成功
-									}
-								},
-							},
-							done : function(elem, data) {
-								// 选择完后的回调，包含2个返回值
-								// elem:返回之前input对象；data:表格返回的选中的数据 []
-								var da = data.data;
-								form.val("itemForm", {
-									"mhType" : da[0].modelName,
-									"workcenterId":da[0].workCenterId,
-									"workcenterName":da[0].workCenterName,
 								});
-								form.render();// 重新渲染
 							}
 						});
+
+
+
 						// 切换状态操作
 						form.on('switch(isStatusTpl)', function(obj) {
 							doStatus(obj, this.value, this.name,
@@ -381,6 +385,11 @@ $(function() {
 // 导出数据
 function exportExcel() {
 	location.href = "../../excelFile/人工制费维护模板.xlsx";//从文件夹内直接提取
+}
+
+function  getModelTypeUrl() {
+	console.log($('#workcenterId').val());
+	return context + '/basePrice/modelType/getList?workCenterId='+$('#workcenterId').val();
 }
 
 // 新增编辑弹出框

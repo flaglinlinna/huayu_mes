@@ -254,12 +254,12 @@ public class ProductProcessController extends WebController {
 		}
 	}
 	
-	@ApiOperation(value = "根据大类获取工序中心", notes = "根据大类获取工序中心", hidden = true)
+	@ApiOperation(value = "根据大类获取工序", notes = "根据大类获取工序", hidden = true)
 	@RequestMapping(value = "/getProcListByType", method = RequestMethod.GET)
 	@ResponseBody
 	public ApiResponseResult getProcListByType(String bsType) {
 		String method = "productProcess/getProcListByType";
-		String methodName = "根据大类获取工序中心";
+		String methodName = "根据大类获取工序";
 		try {
 			ApiResponseResult result = productProcessService.getProcListByType(bsType);
 			logger.debug(methodName+"=getProcListByType:");

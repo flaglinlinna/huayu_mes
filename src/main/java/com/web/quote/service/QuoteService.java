@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 public interface QuoteService {
 
 	public ApiResponseResult add(Quote quote)throws Exception;
+
+	public ApiResponseResult copy(Quote quote)throws Exception;
 	
 	public ApiResponseResult getProdType()throws Exception;//获取产品类型
 	

@@ -91,8 +91,10 @@ $(function() {
 				templet : function(d) {
 					if (d.bsBade == "1") {
 						return "<div class='green'>是</div>"
-					} else {
+					} else if(d.bsBade == "0") {
 						return "否"
+					}else {
+						return "";
 					}
 				}
 			}, {

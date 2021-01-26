@@ -93,7 +93,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			//获取最后一行的num，即总行数。此处从0开始计数
 			int maxRow = sheet.getLastRowNum();
 			List<QuoteBomTemp> quoteBomList = new ArrayList<>();
-			//前两行为标题
+			//前一行为标题
 			Integer successes = 0;
 			Integer failures = 0;
 			//列顺序:0主表id，1工作中心，2物料类型，3是否代采，4组件名称，5零件名称，6材料名称，7材料规格，8工艺说明，

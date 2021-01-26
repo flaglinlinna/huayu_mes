@@ -119,12 +119,15 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getList(String keyword,String bsType, PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getList(String keyword,String bsType,String workCenterId ,PageRequest pageRequest) throws Exception {
 		// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
 		if(StringUtils.isNotEmpty(bsType)){
 			filters.add(new SearchFilter("workCenter.bsCode", SearchFilter.Operator.EQ, bsType));
+		}
+		if(StringUtils.isNotEmpty(workCenterId)){
+			filters.add(new SearchFilter("pkWorkcenter", SearchFilter.Operator.EQ, workCenterId));
 		}
 		// 查询2
 		List<SearchFilter> filters1 = new ArrayList<>();

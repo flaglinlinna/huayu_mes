@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.web.basePrice.dao.BaseFeeDao;
+import com.web.basePrice.entity.BaseFee;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -66,6 +68,8 @@ public class ProductProcesslmpl implements ProductProcessService {
     private QuoteProductService quoteProductService;
     @Autowired
     private QuoteDao quoteDao;
+    @Autowired
+    private BaseFeeDao baseFeeDao;
 
     /**
      * 新增报价单
@@ -76,13 +80,14 @@ public class ProductProcesslmpl implements ProductProcessService {
         if(productProcess == null){
             return ApiResponseResult.failure("制造部材料信息不能为空！");
         }
-        List<QuoteProcess>  quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0, productProcess.getPkQuote(), productProcess.getPkProc(), productProcess.getBsName());
+//        List<QuoteProcess>  quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0, productProcess.getPkQuote(), productProcess.getPkProc(), productProcess.getBsName());
 
-        if (quoteProcessList.size() == 0) {
+        List<BaseFee> baseFeeList = baseFeeDao.findByDelFlagAndProcId(0,productProcess.getPkProc());
+        if(baseFeeList.size()==0){
             return ApiResponseResult.failure("该工序未维护人工制费,请维护后再选择！");
-        } else {
-            productProcess.setBsFeeMh(quoteProcessList.get(0).getBsFeeMh());
-            productProcess.setBsFeeLh(quoteProcessList.get(0).getBsFeeLh());
+        }else {
+            productProcess.setBsFeeMh(new BigDecimal(baseFeeList.get(0).getFeeMh()));
+            productProcess.setBsFeeLh(new BigDecimal(baseFeeList.get(0).getFeeLh()));
         }
 
         productProcess.setCreateDate(new Date());
@@ -116,13 +121,14 @@ public class ProductProcesslmpl implements ProductProcessService {
 
         //查找工序的制费信息
         o.setPkProc(productProcess.getPkProc());
-        List<QuoteProcess>  quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0, o.getPkQuote(), productProcess.getPkProc(), productProcess.getBsName());
+//        List<QuoteProcess>  quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0, o.getPkQuote(), productProcess.getPkProc(), productProcess.getBsName());
 
-        if (quoteProcessList.size() == 0) {
+        List<BaseFee> baseFeeList = baseFeeDao.findByDelFlagAndProcId(0,productProcess.getPkProc());
+        if(baseFeeList.size()==0){
             return ApiResponseResult.failure("该工序未维护人工制费,请维护后再选择！");
-        } else {
-            productProcess.setBsFeeMh(quoteProcessList.get(0).getBsFeeMh());
-            productProcess.setBsFeeLh(quoteProcessList.get(0).getBsFeeLh());
+        }else {
+            productProcess.setBsFeeMh(new BigDecimal(baseFeeList.get(0).getFeeMh()));
+            productProcess.setBsFeeLh(new BigDecimal(baseFeeList.get(0).getFeeLh()));
         }
 
         o.setBsModelType(productProcess.getBsModelType());
@@ -446,13 +452,22 @@ public class ProductProcesslmpl implements ProductProcessService {
             }
             if(o.getBsFeeLh()==null||o.getBsFeeMh()==null){
                 //如果存在费率为空的情况，先查询
-                List<QuoteProcess>  quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0,quoteId,o.getPkProc(),o.getBsName());
-                if(quoteProcessList.size() ==0){
+//                List<QuoteProcess>  quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0,quoteId,o.getPkProc(),o.getBsName());
+//                if(quoteProcessList.size() ==0){
+//                    return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
+//                }else{
+//                    o.setBsFeeMh(quoteProcessList.get(0).getBsFeeMh());
+//                    o.setBsFeeLh(quoteProcessList.get(0).getBsFeeLh());
+//                }
+
+                List<BaseFee> baseFeeList = baseFeeDao.findByDelFlagAndProcId(0,o.getPkProc());
+                if(baseFeeList.size()==0){
                     return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
-                }else{
-                    o.setBsFeeMh(quoteProcessList.get(0).getBsFeeMh());
-                    o.setBsFeeLh(quoteProcessList.get(0).getBsFeeLh());
+                }else {
+                    o.setBsFeeMh(new BigDecimal(baseFeeList.get(0).getFeeMh()));
+                    o.setBsFeeLh(new BigDecimal(baseFeeList.get(0).getFeeLh()));
                 }
+
             }
             o.setBsStatus(1);
             o.setLastupdateDate(new Date());
@@ -574,12 +589,51 @@ public class ProductProcesslmpl implements ProductProcessService {
         return ApiResponseResult.success();
     }
 
+    /**
+     * 根据工作中心id和工序id查询人工和制费
+     * @param w_id
+     * @param p_id
+     * @return
+     */
+    private String[] getLhBy(Long w_id,Long p_id ){
+        String[] strs = new String[2];
+        strs[0]="";strs[1]="";
+        List<BaseFee> lbl = baseFeeDao.findByDelFlagAndWorkcenterIdAndProcId(0, w_id, p_id);
+        if(lbl.size() == 0){
+            lbl = baseFeeDao.findByDelFlagAndWorkcenterIdAndProcIdIsNull(0, w_id);
+            if(lbl.size()>0){
+                strs[0] = lbl.get(0).getFeeLh();
+                strs[1] = lbl.get(0).getFeeMh();
+            }
+        }else{
+            strs[0] = lbl.get(0).getFeeLh();
+            strs[1] = lbl.get(0).getFeeMh();
+        }
+        return strs;
+    }
+
 	@Override
 	public ApiResponseResult getProcListByType(String bsType) throws Exception {
 		// TODO Auto-generated method stub
 		if(StringUtils.isEmpty(bsType)){
 			return ApiResponseResult.failure("查询类型为空!");
 		}
-		return ApiResponseResult.success().data(productProcessDao.getListByType(bsType));
+        List<Map<String, Object>> lm = new ArrayList<Map<String, Object>>();
+        List<Proc> list = productProcessDao.getListByType(bsType);
+        for(Proc proc:list){
+            String[] strs = this.getLhBy(proc.getWorkcenterId(), Long.valueOf(proc.getId()));
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("ID", proc.getId());
+            map.put("PROC_NO", proc.getProcNo());
+            map.put("PROC_NAME", proc.getProcName());
+            map.put("WORKCENTER_NAME", proc.getBjWorkCenter().getWorkcenterName());
+            if(strs[0]==""||strs[1]==""){//判断人工制费是否有维护
+                map.put("STATUS", "0");
+            }else{
+                map.put("STATUS", "1");
+            }
+            lm.add(map);
+        }
+		return ApiResponseResult.success().data(lm);
 	}
 }
