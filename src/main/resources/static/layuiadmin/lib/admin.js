@@ -401,9 +401,13 @@ layui.define("view", function (e) {
         P.tabsPage.type = "tab", P.tabsPage.index = t, A(e);
         
         var srcs = $(".layadmin-tabsbody-item");//.find("iframe").attr("src");
+        
         srcs.each(function (e, n) {
             var src1 =$(this).find("iframe").attr("src");
             if(src1.indexOf("quoteProdect/toProductItem") >= 0){
+            	$(this).find("iframe").attr("src", src1);
+            }
+            if(src1.indexOf("/quote/toQuoteItem") >= 0){
             	$(this).find("iframe").attr("src", src1);
             }
         });
