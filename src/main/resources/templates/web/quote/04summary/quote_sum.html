@@ -59,51 +59,94 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">项目版本</label>
+						<label class="layui-form-label">版本</label>
 						<div class="layui-input-inline" style="width: 130px;">
 							<input id="bsProjVer" lay-verify="required" name="bsProjVer"
+								   readonly="readonly" autocomplete="off" class="layui-input grey" type="text" />
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">是否最新</label>
+						<div class="layui-input-inline" style="width: 130px;">
+							<input id="bsLatest" lay-verify="required" name="bsLatest"
 								   readonly="readonly" autocomplete="off" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<input id="createBy" type="hidden" name="createBy" />
 					<div class="layui-inline">
 						<label class="layui-form-label">业务员</label>
-						<div class="layui-input-inline" style="width: 100px;">
+						<div class="layui-input-inline" style="width: 130px;">
 							<input id="createBy_name" autocomplete="off" name="createBy_name"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">需求日期</label>
-						<div class="layui-input-inline" style="width: 150px;">
-							<input id="bsFinishTime" autocomplete="off" name="bsFinishTime"
-								   readonly="readonly" class="layui-input grey" type="text" />
-						</div>
-					</div>
+
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label">机种型号</label>
+						<label class="layui-form-label">产品型号</label>
 						<div class="layui-input-block" style="width: 130px;">
-							<input id="bsDevType" lay-verify="required" name="bsDevType"
+							<input id="bsProd" lay-verify="required" name="bsProd"
 								   readonly="readonly"	autocomplete="off" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">客户名</label>
+						<label class="layui-form-label">产品类型</label>
+						<div class="layui-input-inline" style="width: 130px;">
+							<input id="bsProdType" lay-verify="required" name="bsProdType"
+								   readonly="readonly"	autocomplete="off" class="layui-input grey" type="text" />
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">报价阶段</label>
+						<div class="layui-input-inline" style="width: 130px;">
+							<input id="bsStage" lay-verify="required" name="bsStage"
+								   readonly="readonly"	autocomplete="off" class="layui-input grey" type="text" />
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">需求日期</label>
+						<div class="layui-input-inline" style="width: 130px;">
+							<input id="bsFinishTime" autocomplete="off" name="bsFinishTime"
+								   readonly="readonly" class="layui-input grey" type="text" />
+						</div>
+					</div>
+
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">管理费率%</label>
+						<div class="layui-input-block" style="width: 130px;">
+							<input id="bsManageFee" lay-verify="required" name="bsManageFee"
+								   readonly="readonly" autocomplete="off" class="layui-input grey" type="text" />
+						</div>
+					</div>
+
+					<div class="layui-inline">
+						<label class="layui-form-label">保底毛利率%</label>
+						<div class="layui-input-inline" style="width: 130px;">
+							<input id="bsProfitProd" lay-verify="required" name="bsProfitProd"
+								   readonly="readonly" autocomplete="off" class="layui-input grey" type="text" />
+						</div>
+					</div>
+
+					<div class="layui-inline">
+						<label class="layui-form-label">客户名称</label>
 						<div class="layui-input-inline" style="width: 130px;">
 							<input id="bsCustName" lay-verify="required" name="bsCustName"
 								   readonly="readonly" autocomplete="off" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">报价说明</label>
-						<div class="layui-input-inline" style="width: 375px;">
-							<input id="bsRemarks" autocomplete="off" name="bsRemarks"
-								   readonly="readonly" class="layui-input grey" type="text" />
+						<label class="layui-form-label">是否中标</label>
+						<div class="layui-input-inline" style="width: 130px;">
+							<input id="bsBade" lay-verify="required" name="bsBade"
+								   readonly="readonly" autocomplete="off" class="layui-input grey" type="text" />
 						</div>
 					</div>
 				</div>
+
 				<fieldset class="layui-elem-field layui-field-title"
 					style="margin: 10px 0 10px;">
 					<legend class="legend-font" style="font-size: 14px;">报价结构</legend>
@@ -111,70 +154,69 @@
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label">系统报价</label>
-						<div class="layui-input-block" style="width: 130px;">
-							<input id="" name ="bj_all" autocomplete="off" class="layui-input grey"
+						<div class="layui-input-block" style="width: 160px;">
+							<input id="bj_all" name ="bj_all" autocomplete="off" class="layui-input grey"
 								   readonly="readonly" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">生产成本</label>
-						<div class="layui-input-inline" style="width: 130px;">
-							<input id="" name="p_cb" autocomplete="off"
+						<div class="layui-input-block" style="width: 160px;">
+							<input id="p_cb" name="p_cb" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
-							<span
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
+							<span id="p_cb_rate"
+								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>
 						</div>
 					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">净利润</label>
-						<div class="layui-input-inline" style="width: 130px;">
-							<input id="profitNet" name ="profitNet" lay-filter="profitNet" lay-verify="num"
-								   autocomplete="off" class="layui-input" type="text" />
-							<span
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
-						</div>
-					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">净利率</label>
-						<div class="layui-input-inline" style="width: 130px;">
-							<input id="profit_gs" name="profit_gs" autocomplete="off"
-								   readonly="readonly" class="layui-input grey" type="text" />
-						</div>
-					</div>
-				</div>
-				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="mould_all">模具费用</a></label>
-						<div class="layui-input-block" style="width: 130px;">
+						<div class="layui-input-block" style="width: 160px;">
 							<input id="mould_all" name="mould_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
+					<!--<div class="layui-inline">-->
+						<!--<label class="layui-form-label">净利率</label>-->
+						<!--<div class="layui-input-inline" style="width: 130px;">-->
+							<!--<input id="profit_gs" name="profit_gs" autocomplete="off"-->
+								   <!--readonly="readonly" class="layui-input grey" type="text" />-->
+						<!--</div>-->
+					<!--</div>-->
+				</div>
+				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label">管理费用</label>
-						<div class="layui-input-inline" style="width: 130px;">
+						<div class="layui-input-block" style="width: 160px;">
 							<input id="gl" name="gl" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
-							<span
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
+							<span id ="gl_rate"
+								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">净利润</label>
+						<div class="layui-input-block" style="width: 160px;">
+							<input id="profitNet" name ="profitNet" lay-filter="profitNet" lay-verify="num"
+								   autocomplete="off" class="layui-input" type="text" />
+							<span id ="profit_gs" style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">毛利</label>
-						<div class="layui-input-inline" style="width: 130px;">
+						<div class="layui-input-block" style="width: 160px;">
 							<input id="ml" name="ml" autocomplete="off" readonly="readonly"
 								   class="layui-input grey" type="text" />
-							<span
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 5px;">15.8%</span>
+							<span id="ml_rate"
+								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>
 						</div>
 					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">毛利率</label>
-						<div class="layui-input-inline" style="width: 130px;">
-							<input id="ml_rate" name="ml_rate" autocomplete="off"
-								    readonly="readonly" class="layui-input grey" type="text" />
-						</div>
-					</div>
+					<!--<div class="layui-inline">-->
+						<!--<label class="layui-form-label">毛利率</label>-->
+						<!--<div class="layui-input-inline" style="width: 130px;">-->
+							<!--<input id="ml_rate" name="ml_rate" autocomplete="off"-->
+								    <!--readonly="readonly" class="layui-input grey" type="text" />-->
+						<!--</div>-->
+					<!--</div>-->
 				</div>
 
 
@@ -185,35 +227,35 @@
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="cl_hardware">五金材料</a></label>
-						<div class="layui-input-block" style="width: 110px;">
+						<div class="layui-input-block" style="width: 95px;">
 							<input id="cl_hardware" name="cl_hardware" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="cl_molding">注塑材料</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="cl_molding" name="cl_molding" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="cl_surface">表面处理材料</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="cl_surface" name="cl_surface" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="cl_packag">组装材料</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="cl_packag" name="cl_packag" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="wx_all">外协加工</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="wx_all" name="wx_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
@@ -222,35 +264,35 @@
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="lh_hardware">五金人工</a></label>
-						<div class="layui-input-block" style="width: 110px;">
+						<div class="layui-input-block" style="width: 95px;">
 							<input id="lh_hardware" name="lh_hardware" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="lh_molding">注塑人工</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="lh_molding" name="lh_molding" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="lh_surface">表面处理人工</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="lh_surface" name="lh_surface" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="lh_packag">组装人工</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="lh_packag" name="lh_packag" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="hou_loss_all">后工序损料</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width:95px;">
 							<input id="hou_loss_all" name="hou_loss_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
@@ -259,28 +301,28 @@
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="lw_hardware">五金制费</a></label>
-						<div class="layui-input-block" style="width: 110px;">
+						<div class="layui-input-block" style="width:95px;">
 							<input id="lw_hardware" name="lw_hardware" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="lw_molding">注塑制费</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width:95px;">
 							<input id="lw_molding" name="lw_molding" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="lw_surface">表面处理制费</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="lw_surface" name="lw_surface" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label"><a data-type="lw_packag">组装制费</a></label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width:95px;">
 							<input id="lw_packag" name="lw_packag" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
@@ -289,38 +331,38 @@
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label">五金小计</label>
-						<div class="layui-input-block" style="width: 110px;">
+						<div class="layui-input-block" style="width: 95px;">
 							<input id="hardware_all" name="hardware_all" autocomplete="off" readonly="readonly"
 								   class="layui-input grey" type="text" />
-							<span
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
+							<!--<span id="hardware_all_rate"-->
+								<!--style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>-->
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">注塑小计</label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="molding_all" name="molding_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
-							<span
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
+							<!--<span id="molding_all_rate"-->
+								<!--style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>-->
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">表面处理小计</label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="surface_all" name="surface_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
-							<span
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
+							<!--<span id="surface_all_rate"-->
+								<!--style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>-->
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">组装小计</label>
-						<div class="layui-input-inline" style="width: 110px;">
+						<div class="layui-input-inline" style="width: 95px;">
 							<input id="packag_all" name="packag_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
-							<span
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>
+							<!--<span id="packag_all_rate"-->
+								<!--style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 10px;">10%</span>-->
 						</div>
 					</div>
 				</div>

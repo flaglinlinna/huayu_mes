@@ -168,19 +168,31 @@ $(function() {
 					});	
 				} else if (obj.event === 'edit') {// 编辑
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteAdd?quoteId='+data.id+'&status='+data.bsStatus,'修改报价单');
-				}else if(obj.event === 'view'){
-					parent.layui.index.openTabsPage(context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item','报价项目清单');
-					// var a = document.createElement('a');
-					// a.setAttribute('lay-href', context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item');
-					// a.setAttribute('lay-text', '报价项目清单');
-					// a.setAttribute('id', 'js_a');
-					// if(document.getElementById('js_a')) {//防止反复添加
-					// 	document.body.removeChild(document.getElementById('js_a'));
+				}else if(obj.event === 'view') {
+
+					// var srcUrl = context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item';
+					// var src1 = $('iframe[src= srcUrl]').attr('src');
+					// console.log(src1);
+					// $('iframe[src= srcUrl]').attr('src',srcUrl);
+					// var src2 = $('iframe[src=  "'+srcUrl+'"]').attr('src');
+					// console.log(src2);
+					// 	setTimeout (function (){
+					// 		// $('iframe[src= srcUrl]').attr('src',srcUrl);
+					// 		$('iframe[src= "'+srcUrl+'"]').attr('src',srcUrl);
+					// 		console.log(srcUrl);
+					// 	},2000);
+					parent.layui.index.openTabsPage(context + '/quote/toQuoteItem?quoteId=' + data.id + '&style=item', '报价项目清单');
+
+					// $('iframe[src="/quote/toQuoteItem?quoteId=7452&style=item"]').attr('src',"/quote/toQuoteItem?quoteId=7452&style=item");
+
+					// $($.parseHTML("#LAY_app_tabs li[lay-id=" + srcUrl + "]"));
+					// 	console.log(srcUrl);
+					// 	setTimeout (function (){
+					// 		$('iframe[src= srcUrl]').attr('src',srcUrl);
+					// 		console.log(srcUrl);
+					// 	},2000);
+					// 	$('iframe[src= "'+srcUrl+'"]').attr('src',srcUrl);
 					// }
-					// document.body.appendChild(a);//创建
-					// console.log(a);
-					// a.click();//点击
-					// return false;
 				}
 				else if(obj.event === 'check'){
 					//先判断是否填写完成资料-fyx-20210105

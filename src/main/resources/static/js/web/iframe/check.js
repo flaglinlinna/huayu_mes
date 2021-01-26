@@ -21,7 +21,7 @@ layui.use('layer', function(){
                         	     btn: [ '知道了']
                         	     ,yes: function(index1, layero){
                         	         layer.close(index1);
-                        	    	 parent.layer.clqsTypeose(index);
+                        	    	 parent.layer.close(index);
                         	     }
                         	});
 

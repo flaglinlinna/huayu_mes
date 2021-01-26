@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Api(description = "报价工艺流程信息模块")
@@ -146,7 +148,12 @@ public class ProductProcessController extends WebController {
 		String method = "/productProcess/getList";
 		String methodName = "获取报价工艺流程列表";
 		try {
-			Sort sort = new Sort(Sort.Direction.DESC, "id");
+			Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "bsName");
+			Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "bsOrder");
+			List<Sort.Order> list = new ArrayList<>();
+			list.add(order1);
+			list.add(order2);
+			Sort sort = new Sort(list);
 			ApiResponseResult result = productProcessService.getList(keyword,bsType,quoteId, super.getPageRequest(sort));
 			logger.debug("获取报价工艺流程列表=getList:");
 			return result;
@@ -165,7 +172,13 @@ public class ProductProcessController extends WebController {
 		String method = "productProcess/getListByPkQuote";
 		String methodName = "获取报价单下报价工艺流程列表";
 		try {
-			Sort sort = new Sort(Sort.Direction.DESC, "id");
+//			Sort sort = new Sort(Sort.Direction.DESC, "id");
+			Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "bsName");
+			Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "bsOrder");
+			List<Sort.Order> list = new ArrayList<>();
+			list.add(order1);
+			list.add(order2);
+			Sort sort = new Sort(list);
 			ApiResponseResult result = productProcessService.getListByPkQuote(pkQuote, super.getPageRequest(sort));
 			logger.debug("获取报价单下报价工艺流程列表=getList:");
 			return result;

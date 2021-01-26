@@ -239,7 +239,7 @@ $(function() {
 			        // {field : 'bsName',title : '零件名称',style:'background-color:#d2d2d2'},
 			        // {field : 'procNo',title : '工序编码',templet:'<div>{{d.proc.procNo}}</div>',style:'background-color:#d2d2d2'},
 			        {field : 'procName',title : '工序名称',minWidth:100,templet:'<div>{{d.proc.procName}}</div>',style:'background-color:#d2d2d2'},
-			        // {field : 'workCenter',title : '工作中心',minWidth:100,templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style:'background-color:#d2d2d2'},
+			        {field : 'workCenter',title : '工作中心',minWidth:100,templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style:'background-color:#d2d2d2'},
 			        {field : 'bsOrder',title : '工序顺序',"edit":"number","event": "dataCol",minWidth:80,style : 'background-color:#ffffff'},
 			        {type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#optBar'}
 			] ],

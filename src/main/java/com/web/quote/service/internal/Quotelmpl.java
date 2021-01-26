@@ -83,7 +83,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     	//1:生成报价编号
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String dateStr = sdf.format(new Date());
-        quote.setBsCode("EQ-" + dateStr);  //编号格式：EQ-年月日时分秒
+        quote.setBsCode("EQ" + dateStr);  //编号格式：EQ-年月日时分秒
         
     	quote.setCreateDate(new Date());
     	quote.setCreateBy(UserUtil.getSessionUser().getId());

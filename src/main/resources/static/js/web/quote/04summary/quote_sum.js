@@ -6,6 +6,7 @@ $(function() {
 	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ], function() {
 		var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table, table1 = layui.table, table2 = layui.table;
 
+		initRate();
 		form.verify({
 			num : function(value) {
 				if (/^\d+$/.test(value) == false && /^\d+\.\d+$/.test(value) == false) {
@@ -29,12 +30,18 @@ $(function() {
 					var ml = Number(quoteDetail.data.gl) + Number($('#profitNet').val());
 					var ml_rate = ml / bj_all * 100;
 					var profit_gs = $('#profitNet').val() / bj_all * 100;
+					var gl_rate = Number($('#gl').val()) / bj_all *100;
+					var p_cb_rate = Number($('#p_cb').val()) / bj_all *100;
 					form.val("itemForm", {
 						"bj_all" : bj_all.toFixed(5),
 						"ml" : ml.toFixed(5),
-						"ml_rate" : ml_rate.toFixed(5) + "%",
-						"profit_gs" : profit_gs.toFixed(5) + "%"
+						// "ml_rate" : ml_rate.toFixed(5) + "%",
+						// "profit_gs" : profit_gs.toFixed(5) + "%"
 					})
+					$('#ml_rate').html(ml_rate.toFixed(2) + "%");
+					$('#profit_gs').html(profit_gs.toFixed(2) + "%");
+					$("#gl_rate").html(gl_rate.toFixed(2) + "%");
+					$("#p_cb_rate").html(p_cb_rate.toFixed(2) + "%");
 					layui.form.render('select');
 				} else {
 					layer.alert("请输入净利润!", function() {
@@ -53,17 +60,32 @@ $(function() {
 				form.val("itemForm", {
 					"bj_all" : bj_all.toFixed(5),
 					// "ml" : ml.toFixed(5),
-					"ml_rate" : ml_rate.toFixed(5) + "%",
-					"profit_gs" : profit_gs.toFixed(5) + "%"
+					// "ml_rate" : ml_rate.toFixed(5) + "%",
+					// "profit_gs" : profit_gs.toFixed(5) + "%"
 				})
+				$('#ml_rate').html(ml_rate.toFixed(2) + "%");
+				$('#profit_gs').html(profit_gs.toFixed(2) + "%");
+				layui.form.render('');
 			}
+
 		});
 		var quote_data = quoteDetail.data.Quote;
+		var bsBade = "";
+		if(quote_data.bsBade!=null){
+			bsBade=quote_data.bsBade==1?"是":"否"
+		}
 		form.val("itemForm", {
 			"id" : quote_data.id,
 			"bsCode" : quote_data.bsCode,
 			"bsProjVer" : quote_data.bsProjVer,
+			"bsProd":quote_data.bsProd,
+			"bsProdType":quote_data.bsProdType,
+			"bsStage":quote_data.bsStage,
+			"bsLatest":quote_data.bsLatest==0?"否":"是",
 			"createBy" : quote_data.createBy,
+			"bsBade":bsBade,
+			"bsManageFee":quote_data.bsManageFee,
+			"bsProfitProd":quote_data.bsProfitProd,
 			"createBy_name" : quote_data.user.userName,
 			"bsFinishTime" : quote_data.bsFinishTime,
 			"bsDevType" : quote_data.bsDevType,
@@ -97,11 +119,15 @@ $(function() {
 			"ml" : quoteDetail.data.ml,
 			"profitNet" : quoteDetail.data.profitNet,
 			"p_cb" : quoteDetail.data.p_cb,
-			"ml_rate" : quoteDetail.data.ml_rate,
-			"profit_gs" : quoteDetail.data.profit_gs,
+			// "ml_rate" : quoteDetail.data.ml_rate,
+			// "profit_gs" : quoteDetail.data.profit_gs,
 
 		});
-		layui.form.render('select');
+		// $('#ml_rate').html(quoteDetail.data.ml_rate.toFixed(2) + "%");
+		// $('#profit_gs').html(quoteDetail.data.profit_gs.toFixed(2) + "%");
+		// $('#p_cb_rate').html(quoteDetail.data.ml_rate.toFixed(2) + "%");
+		// $('#gl_rate').html(quoteDetail.data.profit_gs.toFixed(2) + "%");
+		layui.form.render('');
 
 		$("a").click(function(obj) {
 			getUrl($(this).attr("data-type"))
@@ -243,7 +269,7 @@ $(function() {
 			cols : [ [ 
 			   {type : 'numbers'},
 			   {field : 'bsName',width : 150,title : '零件名称',sort : true,totalRowText : "合计"},
-			   {field : 'bsOrder',width : 150,title : '工艺顺序',sort : true},
+			   {field : 'bsOrder',width : 110,title : '工艺顺序',sort : true},
 			   {field : 'proc',width : 150,title : '工序名称',
 				  templet : function(d) {
 					if (d.proc != null) {
@@ -252,15 +278,15 @@ $(function() {
 						return "";
 					}
 				}},
-			   {field : 'procfmemo',width : 100,title : '工序说明',
-				  templet : function(d) {
-					if (d.proc != null) {
-						return d.proc.fmemo == null || undefined ? "" : d.proc.fmemo;
-					} else {
-						return "";
-					}
-				}},
-				{field : 'workcenterName',width : 100,title : '工作中心',
+			   // {field : 'procfmemo',width : 100,title : '工序说明',
+				//   templet : function(d) {
+				// 	if (d.proc != null) {
+				// 		return d.proc.fmemo == null || undefined ? "" : d.proc.fmemo;
+				// 	} else {
+				// 		return "";
+				// 	}
+				// }},
+				{field : 'workcenterName',width : 150,title : '工作中心',
 				   templet : function(d) {
 					if (d.proc != null) {
 						if (d.proc.bjWorkCenter != null) {
@@ -358,6 +384,24 @@ $(function() {
 	});
 });
 
+//初始化比例
+function initRate() {
+	var bj_all = Number(quoteDetail.data.gl) + Number(quoteDetail.data.p_cb) + Number(quoteDetail.data.profitNet);
+	var ml = Number(quoteDetail.data.gl) + Number(quoteDetail.data.profitNet);
+	var ml_rate = ml / bj_all * 100;
+	var profit_gs = Number(quoteDetail.data.profitNet) / bj_all * 100;
+	var gl_rate = Number(quoteDetail.data.gl) / bj_all *100;
+	var p_cb_rate = Number(quoteDetail.data.p_cb) / bj_all *100;
+	$('#ml_rate').html(ml_rate.toFixed(2) + "%");
+	$('#profit_gs').html(profit_gs.toFixed(2) + "%");
+	$("#gl_rate").html(gl_rate.toFixed(2) + "%");
+	$("#p_cb_rate").html(p_cb_rate.toFixed(2) + "%");
+	// $('#hardware_all_rate').html((Number(quoteDetail.data.hardware_all)/Number(quoteDetail.data.p_cb)*100).toFixed(2)+"%");
+	// $('#molding_all_rate').html((Number(quoteDetail.data.molding_all)/Number(quoteDetail.data.p_cb)*100).toFixed(2)+"%");
+	// $('#surface_all_rate').html((Number(quoteDetail.data.surface_all)/Number(quoteDetail.data.p_cb)*100).toFixed(2)+"%");
+	// $('#packag_all_rate').html((Number(quoteDetail.data.packag_all)/Number(quoteDetail.data.p_cb)*100).toFixed(2)+"%");
+}
+
 function getMouldDetail(title) {
 	tableIns2.reload({
 		url : context + '/quoteMould/getList?pkQuote=' + quoteId,
@@ -442,7 +486,7 @@ function getProcessDetail(bsType, title) {
 	tableIns1.reload({
 		url : context + '/productProcess/getList?bsType=' + bsType + '&quoteId=' + quoteId,
 		done : function(res, curr, count) {
-			pageCurr = curr;var onwanceTotal=0;//统计结算后余额
+			pageCurr = curr;var onwanceTotal=0;
 			res.data.forEach(function(item, index) {
 				if(bsType == ''){
 					/*$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
