@@ -92,8 +92,6 @@ function dealXlpmData(kanbanList) {
 					: kanbanData_t[0].FROWNUM;// 排名
 			var onlineEmp = kanbanData_t[0].NUM_EMP_ON == null ? "0"
 					: kanbanData_t[0].NUM_EMP_ON;// 在线人数
-			var card_all = kanbanData_t[0].NUM_CARD_ALL == null ? "0"
-					: kanbanData_t[0].NUM_CARD_ALL;// 组长
 			var card_ass = kanbanData_t[0].NUM_CARD_ASS == null ? "0"
 					: kanbanData_t[0].NUM_CARD_ASS;// 排名
 			var card_unass = kanbanData_t[0].NUM_CARD_UNASS == null ? "0"
@@ -106,7 +104,6 @@ function dealXlpmData(kanbanList) {
 				$("#rownum").removeClass("redword");
 			}
 			$("#onlineEmp").text(onlineEmp)
-			$("#card_all").text(card_all)
 			$("#card_ass").text(card_ass)
 			$("#card_unass").text(card_unass)
 		} else {
@@ -371,8 +368,8 @@ function setCxdzTable(kanbanData) {
 		+ '</td><td>' + arr.QTY_ITEM_NG
 		+ '</td><td>' + arr.MANPOWER + '</td><td>' + arr.CAPACITY
 		+ '</td><td>' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT
-		+ '</td><td>' + arr.HOUR_ABN +'</td><td>' + arr.RATE_OK + '%</td><td>' + arr.RATE_DONE
-		+ '%</td><td>' + arr.RATE_EFF + '%</td></tr> ';
+		+ '</td><td>' + arr.HOUR_ABN +'</td><td>' + arr.RATE_OK + '%</td><td style="color:#CC0033">' + arr.RATE_DONE
+		+ '%</td><td style="color:#CC0033">' + arr.RATE_EFF + '%</td></tr> ';
 
 	}
 	$("#tableCxdzList").empty();
