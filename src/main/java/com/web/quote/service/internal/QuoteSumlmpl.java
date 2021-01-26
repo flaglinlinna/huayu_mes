@@ -642,7 +642,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 	 * 设置中标-lst 
 	 * 2021-01-23
 	 **/
-	public ApiResponseResult setBade(Long quoteId) throws Exception {
+	public ApiResponseResult setBade(Long quoteId,Integer bsBade) throws Exception {
 		if (quoteId == null) {
 			return ApiResponseResult.failure("报价单为空");
 		}
@@ -650,7 +650,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		if (o == null) {
 			return ApiResponseResult.failure("该报价单不存在！");
 		}
-		o.setBsBade(1);//是否中标(0:否 /1:是)
+//		o.setBsBade(1);//是否中标(0:否 /1:是)
+		o.setBsBade(bsBade);
 		o.setLastupdateDate(new Date());//修改人
 	    o.setLastupdateBy(UserUtil.getSessionUser().getId());//修改时间	
 	    quoteDao.save(o);

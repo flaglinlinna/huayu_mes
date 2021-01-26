@@ -44,7 +44,7 @@
 			<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看汇总</a>
             <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="check">审批</a>
-            {{# if(d.bsBade==1){ }}
+            {{# if(d.bsStatus!=2||d.bsBade!=null){ }}
             <a class="layui-btn layui-btn-xs layui-btn-disabled" disabled lay-event="bade">设置中标</a>
             {{# } else { }} 
             <a class="layui-btn layui-btn-xs" lay-event="bade">设置中标</a>

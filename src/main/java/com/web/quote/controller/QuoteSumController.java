@@ -159,8 +159,9 @@ public class QuoteSumController extends WebController {
 		String method = "/quoteSum/setBade";
 		String methodName = "设置中标";
 		long quoteId = Long.parseLong(params.get("quoteId").toString()) ;
+		Integer bsBade = Integer.parseInt(params.get("bsBade").toString());
 		try {
-			ApiResponseResult result = quoteSumService.setBade(Long.valueOf(quoteId));
+			ApiResponseResult result = quoteSumService.setBade(Long.valueOf(quoteId),bsBade);
 			logger.debug(methodName+"=setBade:");
 			return result;
 		} catch (Exception e) {

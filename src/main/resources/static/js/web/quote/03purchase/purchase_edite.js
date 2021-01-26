@@ -3,6 +3,8 @@ $(function() {
 	layui.use([ 'form', 'table', 'upload', 'tableSelect' ], function() {
 		var table = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect;
 
+
+
 		tableIns = table.render({
 			elem : '#productPriceList',
 			url : context + '/purchase/getQuoteList?quoteId=' + quoteId,
@@ -71,6 +73,8 @@ $(function() {
 				  });
 			}
 		});
+
+
 
 		tableIns2 = table.render({
 			elem : '#uploadList',
@@ -406,6 +410,18 @@ function delProdErr(obj, id, name) {
 
 // 重新加载表格（搜索）
 function load(obj) {
+	var scrollTop;
+	var scrollLeft;
+	var layuitable = null;
+	var dev_obj = $("#table_and_page_div_id")//定位到表格
+	if (dev_obj != null) {//防止未获取到表格对象
+		layuitable =dev_obj[0].getElementsByClassName("layui-table-main");//定位到layui-table-main对象
+	}
+	if (layuitable != null && layuitable.length > 0) {
+		scrollTop =layuitable[0].scrollTop; //layuitable获取到的是class=layui-table-main的集合，所以直接获取其中的scrollTop属性。
+		scrollLeft=layuitable[0].scrollLeft;
+	}
+
 	// 重新加载table
 	tableIns.reload({
 		where : {
@@ -414,18 +430,50 @@ function load(obj) {
 		page : {
 			curr : pageCurr
 			// 从当前页码开始
+		},done: function (res, curr, count) {
+			//滚轮控制
+			 dev_obj = $("#table_and_page_div_id")//定位到表格
+			if (dev_obj != null) {
+				layuitable =dev_obj[0].getElementsByClassName("layui-table-main");
+			}
+			if (layuitable != null && layuitable.length > 0) {//将属性放回去
+				layuitable[0].scrollTop = scrollTop;
+				layuitable[0].scrollLeft = scrollLeft;
+			}
 		}
 	});
+	// console.log(tableIns);
 }
 
 // 重新加载表格（全部）
 function loadAll() {
+	var scrollTop;
+	var scrollLeft;
+	var layuitable = null;
+	var dev_obj = $("#table_and_page_div_id")//定位到表格
+	if (dev_obj != null) {//防止未获取到表格对象
+		layuitable =dev_obj[0].getElementsByClassName("layui-table-main");//定位到layui-table-main对象
+	}
+	if (layuitable != null && layuitable.length > 0) {
+		scrollTop =layuitable[0].scrollTop; //layuitable获取到的是class=layui-table-main的集合，所以直接获取其中的scrollTop属性。
+		scrollLeft=layuitable[0].scrollLeft;
+	}
 	// 重新加载table
 	tableIns.reload({
 		page : {
 			curr : pageCurr
 			// 从当前页码开始
+		},done: function (res, curr, count) {
+		//滚轮控制
+		dev_obj = $("#table_and_page_div_id")//定位到表格
+		if (dev_obj != null) {
+			layuitable =dev_obj[0].getElementsByClassName("layui-table-main");
 		}
+		if (layuitable != null && layuitable.length > 0) {//将属性放回去
+			layuitable[0].scrollTop = scrollTop;
+			layuitable[0].scrollLeft = scrollLeft;
+		}
+	}
 	});
 }
 // 重新加载表格（全部）

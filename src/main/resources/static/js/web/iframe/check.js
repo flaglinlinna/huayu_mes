@@ -19,8 +19,9 @@ layui.use('layer', function(){
                         if(res.result===true){
                         	layer.msg(res.msg, {
                         	     btn: [ '知道了']
-                        	     ,yes: function(index, layero){
-                        	    	 parent.layer.close(index);
+                        	     ,yes: function(index1, layero){
+                        	         layer.close(index1);
+                        	    	 parent.layer.clqsTypeose(index);
                         	     }
                         	});
 

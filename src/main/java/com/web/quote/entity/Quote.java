@@ -275,14 +275,14 @@ public class Quote extends BaseEntity {
 	 * 产品利润率
 	 */
 	@ApiModelProperty(name = "bsProfitProd", value = "产品利润率")
-	@Column(length = 20)
+	@Column(precision = 15,scale = 5)
 	protected BigDecimal bsProfitProd;
 
 	/**
 	 * 净利润(手工录入)
 	 */
 	@ApiModelProperty(name = "bsProfitNet", value = "净利润")
-	@Column(length = 20)
+	@Column(precision = 15,scale = 5)
 	protected BigDecimal bsProfitNet;
 	
 	
@@ -325,7 +325,7 @@ public class Quote extends BaseEntity {
 	 * 管理费用
 	 */
 	@ApiModelProperty(name = "bsManageFee", value = "管理费用")
-	@Column(length = 20)
+	@Column(precision = 15,scale = 5)
 	protected BigDecimal bsManageFee;
 	
 	/**

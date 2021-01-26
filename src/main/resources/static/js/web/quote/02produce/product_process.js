@@ -1075,10 +1075,83 @@ function load(obj) {
 // 重新加载表格（全部）
 function loadAll() {
 	// 重新加载table
+	var scrollTop=0;
+	var scrollLeft=0;
+	var layuitable = null;
+	var dev_obj = $("#table_and_page_div_id")//定位到表格
+	if (dev_obj != null) {//防止未获取到表格对象
+		layuitable =dev_obj[0].getElementsByClassName("layui-table-main");//定位到layui-table-main对象
+	}
+	if (layuitable != null && layuitable.length > 0) {
+		scrollTop =layuitable[0].scrollTop; //layuitable获取到的是class=layui-table-main的集合，所以直接获取其中的scrollTop属性。
+		scrollLeft=layuitable[0].scrollLeft;
+	}
 	tableIns.reload({
 		page : {
 			curr : pageCurr
 			// 从当前页码开始
+		},done: function (res, curr, count) {
+			//滚轮控制
+
+			pageCurr = curr;
+
+			var tableIns = this.elem.next(); // 当前表格渲染之后的视图
+			layui.each(res.data, function(i, item){
+				if(item.bsStatus=="1"){
+					tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
+					$("select[name='selectModelType']").attr("disabled","disabled");
+					form.render('select');
+				}
+			});
+
+			//根据不同的类型显示不同的字段
+			res.data.forEach(function (item, index) {
+				if(bsType == 'out'){//外协
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+				}else if(bsType == 'hardware'){//五金
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+				}else if(bsType == 'molding'){//注塑
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+				}else if(bsType == 'surface'){
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+				}else if(bsType == 'packag'){
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+				}
+			});
+
+			dev_obj = $("#table_and_page_div_id")//定位到表格
+			if (dev_obj != null) {
+				layuitable =dev_obj[0].getElementsByClassName("layui-table-main");
+			}
+			if (layuitable != null && layuitable.length > 0) {//将属性放回去
+				layuitable[0].scrollTop = scrollTop;
+				layuitable[0].scrollLeft = scrollLeft;
+			}
 		}
 	});
 	tableIns2.reload({

@@ -125,7 +125,7 @@ $(function() {
 				cols : [ [ {
 					type : 'radio'
 				},// 多选 radio
-					, {field : 'ID', title : 'ID', width : 0, hide : true},
+					, {field : 'id', title : 'ID', width : 0, hide : true},
 					{field : 'workcenterCode', title : '工作中心编码',},
 					{field : 'workcenterName', title : '工作中心',}
 				] ],
@@ -162,6 +162,7 @@ $(function() {
 				form.val("clientProcForm", {
 					"wcName" : da[0].workcenterName,
 				});
+				getAddList(da[0].id);
 				form.render();// 重新渲染
 			}
 		});

@@ -26,5 +26,5 @@ public interface QuoteSumService {
 	
 	public ApiResponseResult countQuoteTreeBom(Long quoteId) throws Exception;//计算总费用
 	
-	public ApiResponseResult setBade(Long quoteId) throws Exception;//设置中标
+	public ApiResponseResult setBade(Long quoteId,Integer bsBade) throws Exception;//设置中标
 }

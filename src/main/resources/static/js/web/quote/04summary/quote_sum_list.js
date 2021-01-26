@@ -307,11 +307,14 @@ $(function() {
 				}
 			} else if (obj.event === 'bade') {
 				console.log(obj)
-				layer.confirm('一经设置则不得再修改，确定要设置中标吗？', {
-					btn : [ '确认', '返回' ]
+				layer.confirm('请设置中标状态，设置后不得修改！', {
+					btn : [ '中标', '没中标' ]
 				}, function() {
-					setBade(obj.data.id)
-				})
+					setBade(obj.data.id,1);
+				},function () {
+					setBade(obj.data.id,0);
+					}
+				)
 				
 			}
 		});
@@ -339,9 +342,10 @@ $(function() {
 	});
 });
 
-function setBade(quoteId) {
+function setBade(quoteId,bsBade) {
 	var params = {
 		"quoteId" : quoteId,
+		"bsBade":bsBade
 	};
 	CoreUtil.sendAjax("/quoteSum/setBade", JSON.stringify(params), function(data) {
 		if (data.result) {
