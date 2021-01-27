@@ -42,10 +42,10 @@ public class WorkflowStepImpl implements WorkflowStepService {
         if(StringUtils.isEmpty(workflowStep.getBsStepName())){
             return ApiResponseResult.failure("步骤名称不能为空！");
         }
-//        int count = workflowDao.countByDelFlagAndBsFlowCode(0, workflow.getBsFlowCode());
-//        if(count > 0){
-//            return ApiResponseResult.failure("该流程编码已存在，请填写其他流程编码！");
-//        }
+        int count = workflowStepDao.countByBsFlowIdAndDelFlagAndBsCheckGrade(workflowStep.getBsFlowId(),0, workflowStep.getBsCheckGrade());
+        if(count > 0){
+            return ApiResponseResult.failure("该流程序号已存在，请填写其他流程序号！");
+        }
         workflowStep.setCreateDate(new Date());
         workflowStep.setCreateBy(UserUtil.getSessionUser().getId());
         workflowStepDao.save(workflowStep);

@@ -166,6 +166,8 @@ $(function() {
 					titel = "包装"+titel;
 				}
 				parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel);
+				var srcUrl = context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style;
+				($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 			} else if (obj.event === 'check') {
 				// 先判断是否填写完成资料-暂时未校验-20201218-fyx
 				CoreUtil.sendAjax("/quoteProdect/doCheckBefore", {'quoteId':data.id,'bsType':Style}, function(data1) {

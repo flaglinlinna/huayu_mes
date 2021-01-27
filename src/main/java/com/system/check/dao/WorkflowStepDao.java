@@ -17,6 +17,7 @@ public interface WorkflowStepDao extends CrudRepository<WorkflowStep, Long>, Jpa
 
 	Integer countByBsFlowIdAndDelFlag(Long bsFlowId,Integer delFlag);
 
+	Integer countByBsFlowIdAndDelFlagAndBsCheckGrade(Long bsFlowId,Integer delFlag,Integer bsCheckGrade);
 	
 	@Query(value = "select p.*  from "+ WorkflowStep.TABLE_NAME +" p  left join "+Workflow.TABLE_NAME+" w on w.id = p.bs_Flow_Id "+
 			" where p.bs_Check_Grade = (?1)  and p.del_flag=0 and w.bs_Flow_Code=(?2) ", nativeQuery = true)
