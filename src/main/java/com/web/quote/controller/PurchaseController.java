@@ -75,7 +75,7 @@ public class PurchaseController extends WebController {
 									 String bsFinishTime,String bsRemarks,String bsProd,String bsProdType,String bsSimilarProd,
 									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
 									 String bsDevType,String bsCustName) {
-		String method = "/purchase/getQuoteList";
+		String method = "/purchase/getList";
 		String methodName = "获取报价单列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");

@@ -46,8 +46,8 @@ layui.use('layer', function(){
                         if(res.result===true){
                         	layer.msg(res.msg, {
                         	     btn: [ '知道了']
-                        	     ,yes: function(index, layero){
-                        	    	 console.log(index)
+                        	     ,yes: function(index1, layero){
+                        	    	 layer.close(index1);
                         	    	 parent.layer.close(index);
                         	     }
                         	});
@@ -89,7 +89,16 @@ layui.use('layer', function(){
             success: function (res) {
                 console.log(res);
                 if(res.result===true){
-
+                    var workFlow = res.data.Lw;
+                    for(var i =0;i<res.data.Lw.length;i++){
+                        if(workFlow[i].bsCheckGrade ==1){
+                            $("#span-1").html(workFlow[i].bsStepName)
+                        }else if(workFlow[i].bsCheckGrade ==2){
+                            $("#span-2").html(workFlow[i].bsStepName+"("+workFlow[i].bsCheckName+")")
+                        }else if(workFlow[i].bsCheckGrade ==3){
+                            $("#span-3").html(workFlow[i].bsStepName+"("+workFlow[i].bsCheckName+")")
+                        }
+                    }
                     var list = res.data;
                     step = list.grade;
                     if(list.grade == '1'){

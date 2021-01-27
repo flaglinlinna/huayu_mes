@@ -65,7 +65,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
 				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(p.bs_end_time3,null,'1','2') col ,p.bs_position,"
 				+ "p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level,"
-				+ "p.bs_Cust_Require,p.bs_Bade from " + Quote.TABLE_NAME + " p " + " where p.del_flag=0 and p.bs_step>2 "
+				+ "p.bs_Cust_Require,p.bs_Bade,p.bs_proj_ver,p.bs_latest,p.bs_stage from " + Quote.TABLE_NAME + " p " + " where p.del_flag=0 and p.bs_step>2 "
 				+ statusTemp;
 		if (StringUtils.isNotEmpty(quoteId) && !("null").equals(quoteId)) {
 			sql += "and p.id = " + quoteId + "";
@@ -156,8 +156,12 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			map1.put("bsRequire", object[18]);
 			map1.put("bsLevel", object[19]);
 			map1.put("bsCustRequire", object[20]);
+
 			map1.put("bsBade", object[21]);
-			
+			map1.put("bsProjVer",object[22]);
+			map1.put("bsLatest",object[23]);
+			map1.put("bsStage",object[24]);
+
 			list_new.add(map1);
 		}
 		HashMap map = new HashMap();

@@ -178,7 +178,7 @@ public class ProductMater extends BaseEntity {
 	protected String bsColor;
 
 	/**
-	 * 是否通用物料
+	 * 是否通用物料  1是 0否
 	 */
 	@ApiModelProperty(name = "bsGeneral", value = "是否通用物料")
 	@Column(length = 10)

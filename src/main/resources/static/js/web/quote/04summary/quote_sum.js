@@ -303,7 +303,7 @@ $(function() {
 				{field : 'bsUserNum',title : '人数',width : 90,hide : true},
 				{field : 'bsCycle',title : '成型周期(S)',width : 150,hide : true},
 				{field : 'bsYield',title : '工序良率%',width : 120,hide : true},
-				{field : 'bsLoss',title : '损耗率',width : 100,hide : true},
+				{field : 'bsLoss',title : '外协损耗率%',width : 100,hide : true},
 				{field : 'bsCave',title : '穴数',width : 90,hide : true},
 				{field : 'bsCapacity',title : '产能',width : 90,hide : true},
 				{field : 'bsFeeLh',title : '人工费率',width : 90,hide : true},
@@ -499,7 +499,11 @@ function getProcessDetail(bsType, title) {
 					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
 					$(".layui-table-total").find('tr').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
 					/*$(".layui-table-total").find('tr').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");*/
-					
+
+					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
+					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+
 					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossTheMh"]').removeClass("layui-hide");
 					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossTheMh"]').removeClass("layui-hide");
 					$(".layui-table-total").find('tr').find('td[data-field="bsLossTheMh"]').removeClass("layui-hide");

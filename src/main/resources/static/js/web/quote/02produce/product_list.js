@@ -75,7 +75,7 @@ $(function() {
 				{field : 'bsCustName',title : '客户名称',width : 120,sort: true},
 				{field : 'bsProd',title : '产品型号',width : 120,sort: true},
 				{field : 'bsProdType',title : '产品类型',width : 140, sort: true,sort: true},
-				{field : 'bsDevType',title : '机种型号',width : 140, sort: true,sort: true},
+				// {field : 'bsDevType',title : '机种型号',width : 140, sort: true,sort: true},
 				{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140,sort: true},
 				{field : 'bsSimilarProd',title : '相似型号',width : 150,sort: true},
 				{field : 'bsRemarks',title : '报价备注',width : 170,sort: true},

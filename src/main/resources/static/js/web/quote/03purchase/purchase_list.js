@@ -68,6 +68,8 @@ $(function() {
 							return "";
 						}
 				},sort: true},
+				{field : 'bsStage',title : '报价阶段',width : 120,sort: true},
+				{field : 'bsProjVer',title : '版本',width : 100,sort: true},
 				{field : 'bsStatus',title : '状态',width : 100,
 					templet : function(d) {
 						if (d.bsStatus == "0") {
@@ -82,7 +84,7 @@ $(function() {
 				{field : 'bsCustName',title : '客户名称',width : 120,sort: true},
 				{field : 'bsProd',title : '产品型号',width : 120,sort: true},
 				{field : 'bsProdType',title : '产品类型',width : 140, sort: true,sort: true},
-				{field : 'bsDevType',title : '机种型号',width : 140, sort: true,sort: true},
+				// {field : 'bsDevType',title : '机种型号',width : 140, sort: true,sort: true},
 				{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140},
 				{field : 'bsSimilarProd',title : '相似型号',width : 150,sort: true},
 				{field : 'bsRemarks',title : '报价备注',width : 170,sort: true},
@@ -95,6 +97,13 @@ $(function() {
 				{field : 'bsRequire',title : '环保要求',width : 140,sort: true},
 				{field : 'bsLevel',title : '防水防尘等级',width : 140,sort: true},
 				{field : 'bsCustRequire',title : '客户其他要求',width : 200,sort: true},
+				{field : 'bsLatest',title : '是否最新',width : 100,sort: true,templet:function (d) {
+					if(d.bsLatest == "1"){
+						return "是";
+					}else {
+						return "否";
+					}
+				}},
 				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150}
 				] ],
 			done : function(res, curr, count) {

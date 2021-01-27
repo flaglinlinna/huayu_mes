@@ -57,8 +57,19 @@ $(function() {
 				{field : 'bsWaterGap',title : '水口量(g)',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				{field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				{field : 'bsUnit',width : 80,title : '单位',style : 'background-color:#d2d2d2'}, 
-				{field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},
-				{field : 'bsGeneral',width : 120,title : '是否通用物料',style : 'background-color:#d2d2d2'},
+				// {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},
+				{
+					field: 'bsGeneral', width: 120, title: '是否通用物料', style: 'background-color:#d2d2d2',
+					templet: function (d) {
+						if (d.bsGeneral == 1) {
+							return '是'
+						} else if (d.bsGeneral == 0) {
+							return '注塑'
+						} else  {
+							return ''
+						}
+					}
+				},
 				{field : 'bsExplain',width : 110,title : '采购说明',style : 'background-color:#d2d2d2'},
 				{field : 'fmemo',width : 110,title : '备注',edit : 'text',style : 'background-color:#ffffff'},
 				{field : 'bsSupplier',width : 110,title : '供应商',edit : 'text',style : 'background-color:#ffffff'}

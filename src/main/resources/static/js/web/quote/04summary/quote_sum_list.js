@@ -71,7 +71,10 @@ $(function() {
 						return "";
 					}
 				}
-			}, {
+			},
+				{field : 'bsStage',title : '报价阶段',width : 120,sort: true},
+				{field : 'bsProjVer',title : '版本',width : 100,sort: true},
+				{
 				field : 'bsStatus',
 				title : '状态',
 				width : 80,
@@ -110,67 +113,29 @@ $(function() {
 				title : '产品类型',
 				width : 140,
 				sort : true
-			}, {
-				field : 'bsDevType',
-				title : '机种型号',
-				width : 140,
-				sort : true
-			}, {
-				field : 'bsFinishTime',
-				title : '完成日期',
-				sort : true,
-				width : 140
-			}, {
-				field : 'bsSimilarProd',
-				title : '相似型号',
-				width : 150
-			}, {
-				field : 'bsRemarks',
-				title : '报价备注',
-				width : 170
-			}, {
-				field : 'bsPosition',
-				title : '市场定位',
-				width : 150
-			}, {
-				field : 'bsMaterial',
-				title : '客户提供资料',
-				width : 140,
-				sort : true
-			}, {
-				field : 'bsChkOutItem',
-				title : '外观检验项',
-				width : 140,
-				sort : true
-			}, {
-				field : 'bsChkOut',
-				title : '外观检验',
-				width : 150
-			}, {
-				field : 'bsFunctionItem',
-				title : '功能性能项',
-				width : 140
-			}, {
-				field : 'bsFunction',
-				title : '功能性能',
-				width : 140
-			}, {
-				field : 'bsRequire',
-				title : '环保要求',
-				width : 140
-			}, {
-				field : 'bsLevel',
-				title : '防水防尘等级',
-				width : 140
-			}, {
-				field : 'bsCustRequire',
-				title : '客户其他要求',
-				width : 200
-			}, {
-				fixed : 'right',
-				title : '操作',
-				toolbar : '#optBar',
-				width : 210
+			},
+				// {field : 'bsDevType', title : '机种型号', width : 140, sort : true},
+				{field : 'bsFinishTime', title : '完成日期', sort : true, width : 140},
+				{field : 'bsSimilarProd', title : '相似型号', width : 150},
+				{field : 'bsRemarks', title : '报价备注', width : 170},
+				{field : 'bsPosition', title : '市场定位', width : 150},
+				{field : 'bsMaterial', title : '客户提供资料', width : 140, sort : true},
+				{field : 'bsChkOutItem', title : '外观检验项', width : 140, sort : true},
+				{field : 'bsChkOut', title : '外观检验', width : 150},
+				{field : 'bsFunctionItem', title : '功能性能项', width : 140},
+				{field : 'bsFunction', title : '功能性能', width : 140
+			}, {field : 'bsRequire', title : '环保要求', width : 140
+			}, {field : 'bsLevel', title : '防水防尘等级', width : 140
+			}, {field : 'bsCustRequire', title : '客户其他要求', width : 200
+			},
+				{field : 'bsLatest',title : '是否最新',width : 100,sort: true,templet:function (d) {
+						if(d.bsLatest == "1"){
+							return "是";
+						}else {
+							return "否";
+						}
+					}},
+				{fixed : 'right', title : '操作', toolbar : '#optBar', width : 210
 			} ] ],
 			done : function(res, curr, count) {
 				//
@@ -306,7 +271,6 @@ $(function() {
 					});
 				}
 			} else if (obj.event === 'bade') {
-				console.log(obj)
 				layer.confirm('请设置中标状态，设置后不得修改！', {
 					btn : [ '中标', '没中标' ]
 				}, function() {
@@ -315,7 +279,6 @@ $(function() {
 					setBade(obj.data.id,0);
 					}
 				)
-				
 			}
 		});
 

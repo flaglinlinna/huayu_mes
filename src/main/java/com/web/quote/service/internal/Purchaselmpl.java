@@ -62,7 +62,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
 				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_status2purchase col ,p.bs_position," +
 				"p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
-				" p.bs_Cust_Require from "+Quote.TABLE_NAME+" p "
+				" p.bs_Cust_Require,p.bs_proj_ver,p.bs_bade,p.bs_latest,p.bs_stage from "+Quote.TABLE_NAME+" p "
 				+ " where p.del_flag=0 and p.bs_step>=2  "+statusTemp;
 		if(StringUtils.isNotEmpty(quoteId)&&!("null").equals(quoteId)){
 			sql += "and p.id = " + quoteId + "";
@@ -155,6 +155,11 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			map1.put("bsLevel", object[19]);
 			map1.put("bsCustRequire", object[20]);
 
+			map1.put("bsProjVer",object[21]);
+			map1.put("bsBade",object[22]);
+			map1.put("bsLatest",object[23]);
+			map1.put("bsStage",object[24]);
+
 			list_new.add(map1);
 		}
 		Map map = new HashMap();
@@ -173,6 +178,12 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
 		//20210113-fyx-去掉外协--?
 		//hql += " and p.bs_Type <> 'out' " ;
+
+		if (StringUtils.isNotEmpty(keyword)) {
+			hql += "  and INSTR((p.bs_component || p.bs_mater_name ||p.bs_model ||p.fmemo ||p.bs_unit" +
+					"||p.bs_color ||p.bs_machining_type || p.bs_supplier ), '"
+					+ keyword + "') > 0 ";
+		}
 
 		//根据角色过滤可以查看的物料类型
 		//1：如果设置了角色过滤的则过滤物料，否则认为是管理员可以查看全部方便测试

@@ -514,7 +514,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             purchase.setBsUnit(temp.getBsUnit());
             purchase.setPkUnit(temp.getPkUnit());
             purchase.setBsRadix(temp.getBsRadix());
-            purchase.setBsGeneral(temp.getBsPurchase());
+            purchase.setBsGeneral((temp.getBsGeneral()+"").equals("是")?1:0);
             purchase.setBsGear(temp.getBsGear());
             if(temp.getBsRefer()!=null) {
                 purchase.setBsRefer(new BigDecimal(temp.getBsRefer()));

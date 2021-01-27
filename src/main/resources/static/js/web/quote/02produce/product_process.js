@@ -47,14 +47,14 @@ $(function() {
 							return "";
 						}
 					}},
-				{field : 'procfmemo', width:100, title : '工序说明',style:'background-color:#d2d2d2',
-					templet:function (d) {
-						if(d.proc!=null){
-							return d.proc.fmemo==null||undefined?"":d.proc.fmemo;
-						}else {
-							return "";
-						}
-					}},
+				// {field : 'procfmemo', width:100, title : '工序说明',style:'background-color:#d2d2d2',
+				// 	templet:function (d) {
+				// 		if(d.proc!=null){
+				// 			return d.proc.fmemo==null||undefined?"":d.proc.fmemo;
+				// 		}else {
+				// 			return "";
+				// 		}
+				// 	}},
 				{field : 'workcenterName', width:100, title : '工作中心',style:'background-color:#d2d2d2'
 					,templet:function (d) {
 						if(d.proc!=null){
