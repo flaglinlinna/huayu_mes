@@ -64,7 +64,7 @@ $(function() {
 						if (d.bsGeneral == 1) {
 							return '是'
 						} else if (d.bsGeneral == 0) {
-							return '注塑'
+							return '否'
 						} else  {
 							return ''
 						}

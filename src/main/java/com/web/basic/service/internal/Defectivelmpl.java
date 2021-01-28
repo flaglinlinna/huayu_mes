@@ -88,6 +88,7 @@ public class Defectivelmpl implements DefectiveService {
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setDefectTypeName(defective.getDefectTypeName());
+        o.setDefectClass(defective.getDefectClass());
         defectiveDao.save(o);
         return ApiResponseResult.success("编辑成功！");
 	}

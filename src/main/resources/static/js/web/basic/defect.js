@@ -41,7 +41,18 @@ $(function() {
 			}, {
 				field : 'defectTypeName',
 				title : '名称',sort:true
-			}, {
+			},
+				{
+					field : 'defectClass',
+					title : '类别',sort:true,templet: function (d) {
+						if(d.defectClass==0){
+							return "品质问题";
+						}else  if(d.defectClass==1){
+							return "制程问题";
+						}else return "";
+					}
+				},
+				{
 				field : 'checkStatus',
 				title : '状态',
 				width : 95,
@@ -113,6 +124,7 @@ $(function() {
 								"id" : data.data.id,
 								"defectTypeCode" : data.data.defectTypeCode,
 								"defectTypeName" : data.data.defectTypeName,
+								"defectClass" : data.data.defectClass,
 							});
 							openDefect(id, "编辑不良类别")
 						} else {

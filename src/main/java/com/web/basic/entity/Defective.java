@@ -36,6 +36,13 @@ public class Defective extends BaseEntity {
 	    @ApiModelProperty(name = "defectTypeName", value = "不良类别名称")
 	    @Column(length = 50)
 	    protected String defectTypeName;
+
+		/**
+		 * 不良类别类型
+		 */
+		@ApiModelProperty(name = "defectClass", value = "不良类别类型")
+		@Column
+		protected Integer defectClass;
 	    
 	    /**
 	     * 状态（1：正常 / 0：禁用）
@@ -68,11 +75,20 @@ public class Defective extends BaseEntity {
 			this.checkStatus = checkStatus;
 		}
 
+		public Integer getDefectClass() {
+			return defectClass;
+		}
+
+		public void setDefectClass(Integer defectClass) {
+			this.defectClass = defectClass;
+		}
+
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
 		sb.append("不良类别编码:").append(this.defectTypeCode);
 		sb.append("不良类别名称:").append(this.defectTypeName);
+		sb.append("类型:").append(this.defectClass==0?"品质问题":"制程问题");
 		sb.append("状态:").append(this.checkStatus==0?"禁用":"正常");
 		return sb.toString();
 	}

@@ -62,15 +62,16 @@ public class BadEntrylmpl extends PrcUtils implements BadEntryService {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call  PRC_QC_NG_TXT_GET(?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call  PRC_QC_NG_TXT_GET(?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
 				cs.setString(2, company);
 				cs.setString(3, user_id);
 				cs.setString(4, keyword);
-				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
-				cs.registerOutParameter(7, -10);// 输出参数 追溯数据
+				cs.setInt(5, 1);
+				cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(8, -10);// 输出参数 追溯数据
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -78,11 +79,11 @@ public class BadEntrylmpl extends PrcUtils implements BadEntryService {
 				List<Object> result = new ArrayList<>();
 				List<Map<String, Object>> l = new ArrayList();
 				cs.execute();
-				result.add(cs.getInt(5));
-				result.add(cs.getString(6));
-				if (cs.getString(5).toString().equals("0")) {
+				result.add(cs.getInt(6));
+				result.add(cs.getString(7));
+				if (cs.getString(6).toString().equals("0")) {
 					// 游标处理
-					ResultSet rs = (ResultSet) cs.getObject(7);
+					ResultSet rs = (ResultSet) cs.getObject(8);
 
 					try {
 						l = fitMap(rs);

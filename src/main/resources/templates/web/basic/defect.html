@@ -71,6 +71,16 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">不良类别类型</label>
+                <div class="layui-input-inline">
+                    <select id="defectClass" name="defectClass"  lay-filter="defectClass" >
+                        <option value="">请选择</option>
+                        <option value="0">品质问题</option>
+                        <option value="1">制程问题</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <div class="layui-input-block" style="margin-left: 10px;">
                     <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit">提交</button>
                     <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
