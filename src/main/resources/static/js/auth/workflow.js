@@ -4,7 +4,7 @@
 var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table','tableSelect' ], function() {
-		var table = layui.table, form = layui.form,tableSelect = layui.tableSelect;
+		var table = layui.table, form = layui.form,tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect;
 
 		tableIns = table.render({
 			elem : '#workflowList',
@@ -207,6 +207,50 @@ $(function() {
 			}
 		});
 
+		tableSelect1 = tableSelect1.render({
+			elem : '#bsCheckName1',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '试着搜索',
+			table : {
+				url : context + '/sysUser/getList',
+				method : 'get',
+				cols : [ [ {type : 'numbers', title : '序号'},
+					{type : 'radio'},
+					{field : 'ID', title : 'id', width : 0, hide : true},
+					{field : 'userName', title : '姓名', width : 120},
+					{field : 'roles', title : '角色', width : 120},
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+				parseData : function(res) {
+					if (res.result) {
+						// 可进行数据操作
+						return {
+							"count" : res.data.total,
+							"msg" : res.msg,
+							"data" : res.data.rows,
+							"code" : res.status
+							// code值为200表示成功
+						}
+					}
+				},
+			},
+			done : function(elem, data) {
+				var da = data.data;
+				form.val("workflowStepForm", {
+					"bsCheckBy" : da[0].userCode,
+					"bsCheckId" : da[0].id,
+					"bsCheckName":da[0].userName,
+				});
+				form.render();// 重新渲染
+			}
+		});
+
 		// 监听在职操作
 		form.on('switch(isStatusTpl)', function(obj) {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
@@ -243,7 +287,7 @@ $(function() {
 				delFlowStep(data, data.id, data.bsStepName);
 			} else if (obj.event === 'edit') {
 				// 编辑
-				getDefect(data, data.id);
+				getStep(data, data.id);
 			}
 		});
 		// 监听提交
@@ -286,8 +330,8 @@ $(function() {
 		}
 		//编辑步骤
 		function getStep(obj, id) {
-			console.log(obj)
-			form.val("workflowStep", {
+			// console.log(obj)
+			form.val("workflowStepForm", {
 				"id" : obj.id,
 				"bsCheckGrade" : obj.bsCheckGrade,
 				"bsStepName" : obj.bsStepName,
@@ -388,7 +432,19 @@ function openDefect(id, title) {
 
 //编辑步骤信息
 function openWorkflowStep(id ,title) {
-
+	var index=layer.open({
+		type : 1,
+		title : title,
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#editWorkflowStep'),
+		end : function() {
+			cleanDefect();
+		}
+	});
+	layer.full(index);
 }
 
 // 添加不良类别
@@ -398,7 +454,7 @@ function addWorkflow() {
 	// 打开弹出框
 	openDefect(null, "添加流程信息");
 }
-// 新增不良类别提交
+// 新增流程提交
 function addSubmit(obj) {
 	CoreUtil.sendAjax("/check/Workflow/add", JSON.stringify(obj.field), function(
 			data) {
@@ -419,7 +475,7 @@ function addSubmit(obj) {
 	});
 }
 
-// 编辑不良类别提交
+// 编辑流程提交
 function editSubmit(obj) {
 	CoreUtil.sendAjax("/check/Workflow/edit", JSON.stringify(obj.field), function(
 			data) {
@@ -440,7 +496,7 @@ function editSubmit(obj) {
 	});
 }
 
-// 新增不良类别提交
+// 新增流程步骤提交
 function addSubmit1(obj) {
 	CoreUtil.sendAjax("/check/WorkflowStep/add", JSON.stringify(obj.field), function(
 		data) {
@@ -452,8 +508,8 @@ function addSubmit1(obj) {
 				loadStep();
 			});
 		} else {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
+			layer.alert(data.msg, function(index) {
+				layer.close(index);
 			});
 		}
 	}, "POST", false, function(res) {
@@ -461,20 +517,21 @@ function addSubmit1(obj) {
 	});
 }
 
-// 编辑不良类别提交
+// 编辑流程步骤提交
 function editSubmit1(obj) {
 	CoreUtil.sendAjax("/check/WorkflowStep/edit", JSON.stringify(obj.field), function(
 		data) {
 		if (data.result) {
-			layer.alert("操作成功", function() {
-				layer.closeAll();
-				cleanDefect();
+			layer.alert("操作成功", function(index) {
+				layer.close(index);
+				// parent.layer.close(index+1);
+				loadStep();
 				// 加载页面
-				loadAll();
+				// loadAll();
 			});
 		} else {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
+			layer.alert(data.msg, function(index) {
+				layer.close(index);
 			});
 		}
 	}, "POST", false, function(res) {

@@ -73,6 +73,7 @@ public class WorkflowStepImpl implements WorkflowStepService {
         }
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setBsCheckName(workflowStep.getBsCheckName());
         o.setBsStepName(workflowStep.getBsStepName());
         o.setBsCheckBy(workflowStep.getBsCheckBy());
         o.setBsCheckGrade(workflowStep.getBsCheckGrade());

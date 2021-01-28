@@ -412,6 +412,7 @@ public class CheckImpl   implements CheckService {
 										pm.setBsGear(rangePrice);
 										pm.setBsRefer(new BigDecimal(priceUn));
 										pm.setBsAssess(new BigDecimal(priceUn));
+										pm.setBsGeneral(1);
 									}
 								}
 							}

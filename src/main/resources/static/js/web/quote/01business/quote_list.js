@@ -91,7 +91,7 @@ $(function() {
 				{field : 'bsSimilarProd',title : '相似型号',width : 150,sort: true},
 				{field : 'bsRemarks',title : '报价备注',width : 170,sort: true},
 				{field : 'bsPosition',title : '市场定位',width : 150,sort: true},
-				{field : 'bsManageFee',title : '管理费用(%)',width : 140,sort: true},
+				{field : 'bsManageFee',title : '管理费率(%)',width : 140,sort: true},
 				{field : 'bsMaterial',title : '客户提供资料',width : 140, sort: true},
 				{field : 'bsChkOutItem',title : '外观检验项',width : 140, sort: true},
 				{field : 'bsChkOut',title : '外观检验',width : 150,sort: true},

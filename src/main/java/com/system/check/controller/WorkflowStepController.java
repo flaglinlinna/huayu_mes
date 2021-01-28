@@ -78,7 +78,7 @@ public class WorkflowStepController extends WebController{
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult edit(@RequestBody WorkflowStep workflowStep){
-	        String method = "check/WorkflowStep/edit";String methodName ="编辑生产异常原因";
+	        String method = "check/WorkflowStep/edit";String methodName ="编辑流程步骤信息";
 	        try{
 	            ApiResponseResult result = workflowStepService.edit(workflowStep);
 	            logger.debug("编辑流程步骤信息=edit:");

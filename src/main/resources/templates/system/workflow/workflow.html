@@ -49,6 +49,7 @@
 
          <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
          <script type="text/html" id="optBar1">
+             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
              <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
          </script>
 
@@ -114,6 +115,41 @@
             </div>
             </form>
         </div>
+
+
+        <div id="editWorkflowStep" class="layer_self_wrap" style="display:none;margin-left: 10px;">
+            <form id="workflowStepForm" class="layui-form layui-form-pane" lay-filter="workflowStepForm" method="post" action="" style="margin-top: 20px;">
+                <input id="stepId1" type="hidden" name="id"/>
+                <input id="bsFlowId1" type="hidden" name="bsFlowId"/>
+                <input id="bsCheckBy1" type="hidden" name="bsCheckBy"/>
+                <input id="bsCheckId1" type="hidden" name="bsCheckId"/>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label layui-required">步骤序号</label>
+                        <div class="layui-input-inline">
+                            <input id="bsCheckGrade1" name="bsCheckGrade" placeholder="请输入流程编号" lay-verify="required"
+                                   readonly="readonly" style="background: #efefef" autocomplete="off" class="layui-input" type="text"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label layui-required">步骤名称</label>
+                        <div class="layui-input-inline">
+                            <input id="bsStepName1" name="bsStepName" placeholder="请输入流程名称"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">审批人</label>
+                        <div class="layui-input-inline">
+                            <input id="bsCheckName1" name="bsCheckName" placeholder="请选择审批人"  autocomplete="off" class="layui-input" type="text"/>
+                        </div>
+                    </div>
+                    <div class="layui-input-block" style="margin-left: 10px;">
+                        <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit1">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     <script th:src="@{/js/auth/workflow.js}" src="/js/auth/workflow.js"></script>
 	</div>
 </body>

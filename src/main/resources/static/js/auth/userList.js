@@ -286,6 +286,11 @@ function submitAjax(obj,currentUser){
 function openUser(id,title){
     if(id==null || id==""){
         $("#id").val("");
+        $("#userCode").removeAttr("readonly");
+        $("#userCode").css("background","");
+    }else {
+        $("#userCode").attr("readonly","readonly");
+        $("#userCode").css("background","#efefef");
     }
     var index =layer.open({
         type:1,
@@ -383,7 +388,6 @@ function getUserAndRoles(obj,id) {
         $.get(context+"/sysUser/getUserAndRoles",{"id":id},function(data){
             if(isLogin(data)){
                 if(data.result==true && data.data.user!=null){
-
                     $("#id").val(data.data.user.id==null?'':data.data.user.id);
                     $("#userCode").val(data.data.user.userCode==null?'':data.data.user.userCode);
                     $("#userName").val(data.data.user.userName==null?'':data.data.user.userName);

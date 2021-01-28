@@ -455,7 +455,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         o.setBsLevel(quote.getBsLevel());
         o.setBsCustRequire(quote.getBsCustRequire());
 
-        o.setBsBade(quote.getBsBade());
+//        o.setBsBade(quote.getBsBade());
         o.setBsProjVer(quote.getBsProjVer());
         o.setBsLatest(quote.getBsLatest());
         o.setBsStage(quote.getBsStage());

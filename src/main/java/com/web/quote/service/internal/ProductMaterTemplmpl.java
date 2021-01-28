@@ -372,14 +372,14 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 String bsModel = tranCell(sheet.getRow(row).getCell(4));
                 String bsQty = tranCell(sheet.getRow(row).getCell(5));
                 String BsUnit = tranCell(sheet.getRow(row).getCell(6));
-                String bsRadix = tranCell(sheet.getRow(row).getCell(7));
-                String bsGeneral = tranCell(sheet.getRow(row).getCell(8));
-                String bsGear = tranCell(sheet.getRow(row).getCell(9));
-                String bsRefer = tranCell(sheet.getRow(row).getCell(10));
-                String bsAssess = tranCell(sheet.getRow(row).getCell(11));
-                String fmemo = tranCell(sheet.getRow(row).getCell(12));
-                String bsSupplier = tranCell(sheet.getRow(row).getCell(13));
-                String bsExplain = tranCell(sheet.getRow(row).getCell(14));
+//                String bsRadix = tranCell(sheet.getRow(row).getCell(7));
+                String bsGeneral = tranCell(sheet.getRow(row).getCell(7));
+                String bsGear = tranCell(sheet.getRow(row).getCell(8));
+                String bsRefer = tranCell(sheet.getRow(row).getCell(9));
+                String bsAssess = tranCell(sheet.getRow(row).getCell(10));
+                String fmemo = tranCell(sheet.getRow(row).getCell(11));
+                String bsSupplier = tranCell(sheet.getRow(row).getCell(12));
+                String bsExplain = tranCell(sheet.getRow(row).getCell(13));
                 ProductMaterTemp temp = new ProductMaterTemp();
                 temp.setBsPurchase(0);
                 temp.setCreateBy(userId);
@@ -401,14 +401,14 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 if(unitList!=null&& unitList.size()>0){
                     temp.setPkUnit(unitList.get(0).getId());
                 }
-                if(StringUtils.isNotEmpty(bsRadix)) {
-                    if (!bsRadix.matches("^\\d+\\.\\d+$")
-                            && !bsRadix.matches("^^\\d+$")){
-                        errInfo = errInfo + "基数需输入数字;";
-                    }
-                }else {
-                    errInfo = errInfo + "基数不能为空;";
-                }
+//                if(StringUtils.isNotEmpty(bsRadix)) {
+//                    if (!bsRadix.matches("^\\d+\\.\\d+$")
+//                            && !bsRadix.matches("^^\\d+$")){
+//                        errInfo = errInfo + "基数需输入数字;";
+//                    }
+//                }else {
+//                    errInfo = errInfo + "基数不能为空;";
+//                }
 
                 if(StringUtils.isNotEmpty(bsAssess)) {
                     if (!bsAssess.matches("^\\d+\\.\\d+$")
@@ -427,7 +427,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 }
 
 
-                temp.setBsRadix(bsRadix);
+//                temp.setBsRadix(bsRadix);
                 temp.setBsGeneral(bsGeneral);
                 temp.setBsGear(bsGear);
                 temp.setBsRefer(bsRefer);
@@ -513,7 +513,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             }
             purchase.setBsUnit(temp.getBsUnit());
             purchase.setPkUnit(temp.getPkUnit());
-            purchase.setBsRadix(temp.getBsRadix());
+//            purchase.setBsRadix(temp.getBsRadix());
             purchase.setBsGeneral((temp.getBsGeneral()+"").equals("是")?1:0);
             purchase.setBsGear(temp.getBsGear());
             if(temp.getBsRefer()!=null) {
