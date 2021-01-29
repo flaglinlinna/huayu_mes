@@ -75,10 +75,10 @@ $(function() {
 				{field : 'bsSupplier',width : 110,title : '供应商',edit : 'text',style : 'background-color:#ffffff'}
 				] ],
 			done : function(res, curr, count) {
-				pageCurr = curr;
+				// pageCurr = curr;
 				 var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				  layui.each(res.data, function(i, item){
-				    if(item.bsStatusPurchase=="1"){
+				    if(item.bsStatusPurchase==1){
 				    	tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
 				    }
 				  });
@@ -443,6 +443,7 @@ function load(obj) {
 			// 从当前页码开始
 		},done: function (res, curr, count) {
 			//滚轮控制
+			pageCurr=curr;
 			 dev_obj = $("#table_and_page_div_id")//定位到表格
 			if (dev_obj != null) {
 				layuitable =dev_obj[0].getElementsByClassName("layui-table-main");

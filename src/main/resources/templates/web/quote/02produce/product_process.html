@@ -107,6 +107,7 @@
 					<label class="layui-form-label layui-required">工序</label>
 					<div class="layui-input-block">
 						<input id="procName" name="procName" lay-verify="required"
+							   readonly="readonly"
 							placeholder="请选择工序" autocomplete="off" class="layui-input"
 							type="text" /> <input id="pkProc" name="pkProc" type="hidden" />
 					</div>
@@ -163,7 +164,7 @@
 				</div>
 
 				<div class="layui-form-item" id="bsLossDiv">
-					<label class="layui-form-label">损耗率</label>
+					<label class="layui-form-label layui-required">损耗率</label>
 					<div class="layui-input-block">
 						<input id="bsLoss" name="bsLoss" lay-verify="double"
 							placeholder="请输入损耗率" autocomplete="off" class="layui-input"
@@ -337,6 +338,8 @@
 			var iStatus = 0;
 			if(bsType!="out") {
 				 iStatus = nowStatus.data[0].BS_STATUS;
+			}else {
+				iStatus = nowStatus.data;
 			}
             var bomNameList=[[${bomNameList}]];
         </script>

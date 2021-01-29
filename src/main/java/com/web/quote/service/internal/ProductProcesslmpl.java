@@ -215,6 +215,9 @@ public class ProductProcesslmpl implements ProductProcessService {
         }else if(("packag").equals(bsType)){
             fileName = "组装工艺模板.xlsx";
             map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsRadix","bsUserNum","bsCapacity","bsYield","fmemo"};
+        }else if(("out").equals(bsType)){
+            fileName = "外协填报价格模板.xlsx";
+            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsLoss","bsFeeWxAll","fmemo"};
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
         Resource resource = new ClassPathResource(excelPath+fileName);
@@ -247,6 +250,8 @@ public class ProductProcesslmpl implements ProductProcessService {
             map.put("fmemo", bs.getFmemo());
             map.put("bsCave", bs.getBsCave());
             map.put("bsCapacity", bs.getBsCapacity());
+            map.put("bsLoss",bs.getBsLoss());
+            map.put("bsFeeWxAll",bs.getBsFeeWxAll());
             list.add(map);
         }
         ExcelExport.export(response,list,workbook,map_arr,excelPath+fileName,fileName);
@@ -269,6 +274,7 @@ public class ProductProcesslmpl implements ProductProcessService {
             //注塑工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、穴数、成型周期(S)、加工人数、工序良率、备注
             //组装工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
             //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
+            //外协报价导入顺序:零件名称、工序顺序、工序名称、机台类型、损耗率、外协价格 、备注
             for (int row = 2; row <= maxRow; row++) {
                 String id = tranCell(sheet.getRow(row).getCell(0));
                 String bsName = tranCell(sheet.getRow(row).getCell(1));
@@ -484,6 +490,8 @@ public class ProductProcesslmpl implements ProductProcessService {
             
             //20210121-fyx-统一修改状态
             quoteProductService.doItemFinish(bsCode, quoteId);
+            //20201225-fyx-计算后工序良率
+            this.updateHouYield(quoteId, bsType);
         }else{
         	//20210121-fyx-外协
         	List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
@@ -493,8 +501,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         		quoteDao.save(o);
         	}
         }
-        //20201225-fyx-计算后工序良率
-        this.updateHouYield(quoteId, bsType);
+
         
 
         return ApiResponseResult.success("确认完成成功！");

@@ -84,10 +84,18 @@ $(function() {
 
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				layui.each(res.data, function(i, item){
-					if(item.bsStatus=="1"){
-						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
-						$("select[name='selectModelType']").attr("disabled","disabled");
-						form.render('select');
+					if(bsType!="out") {
+						if (item.bsStatus == 1) {
+							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
+							$("select[name='selectModelType']").attr("disabled", "disabled");
+							form.render('select');
+						}
+					}else {
+						if(iStatus>=2){
+							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
+							$("select[name='selectModelType']").attr("disabled", "disabled");
+							form.render('select');
+						}
 					}
 				});
 
@@ -192,14 +200,15 @@ $(function() {
 						}
 					}},
 				{field : 'bsModelType', width:100, title : '机台类型',edit:'text'},
-				{field : 'bsRadix', title : '基数',width:80,edit:'text'},
+				// {field : 'bsRadix', title : '基数',width:80,edit:'text'},
 				{field : 'bsUserNum', title : '人数',width:80,edit:'text'},
 				{field : 'bsCycle', title : '成型周期(S)', width:120,edit:'text', hide:true},
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
 				{field : 'bsCave', title : '穴数',edit:'text', width:80, hide:true},
 				{field : 'bsCapacity', title : '产能',edit:'text', width:80, hide:true},
 				{field : 'fmemo', title : '备注',width:120,edit:'text'},
-				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
+				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
+				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 				// if(bsType == 'out'){//外协
@@ -571,9 +580,11 @@ $(function() {
 		function getProdErr(obj, id) {
 			var modelJson = JSON.parse(obj.bsTypeList);
 			var modelName = "";
-			for(var i = 0;i<modelJson.length;i++){
-				if(modelJson[i].MODEL_CODE==obj.bsModelType){
-					modelName = modelJson[i].MODEL_NAME
+			if(modelJson!=null&&modelJson!="") {
+				for (var i = 0; i < modelJson.length; i++) {
+					if (modelJson[i].MODEL_CODE == obj.bsModelType) {
+						modelName = modelJson[i].MODEL_NAME
+					}
 				}
 			}
 			var procName="";
@@ -669,7 +680,7 @@ $(function() {
 	});
 });
 function isComplete() {
-	if (iStatus == 2) {
+	if (iStatus >= 2) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
@@ -771,6 +782,7 @@ function selectDiv() {
 		$("#bsYieldDiv").hide();
 		$("#bsCycleDiv").hide();
 		$("#bsCaveDiv").hide();
+		$("#bsCapacityDiv").hide();
 		$("#bsUserNumDiv").hide();
 	}
 }
@@ -895,6 +907,8 @@ function openUpload() {
 				}else if(bsType == 'packag'){
 					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
+				}else if(bsType == 'out'){
+
 				}
 			});
 		}

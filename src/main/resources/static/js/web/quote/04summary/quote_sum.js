@@ -15,6 +15,19 @@ $(function() {
 			}
 		});
 
+		$('#bsManageFee').bind('keypress', function(event) {
+			if (event.keyCode == "13") {
+				if (/^\d+$/.test($('#bsManageFee').val()) == false && /^\d+\.\d+$/.test($('#bsManageFee').val()) == false) {
+					layer.msg("请输入数字类型的管理费率");
+					return false;
+				}
+				if($('#bsManageFee').val()){
+					updateBsManageFee($('#bsManageFee').val());
+				}
+			}
+
+		});
+
 		$('#profitNet').bind('keypress', function(event) {
 			if (event.keyCode == "13") {
 				// alert('你输入的内容为：' + $('#barcode').val());
@@ -372,14 +385,14 @@ $(function() {
 			 parent.layui.index.openTabsPage(context+'/quoteSum/toQuoteTree?quoteId='+quoteId,'报价汇总树');
 		 })
 
-		$('#editBtn').click(function(){
-			// $(":input").attr("disabled","disabled");
-			$("#gl").removeAttr("readonly","readonly");
-			$('#gl').removeClass('layui-input grey').addClass('layui-input');
-			$("#ml").removeAttr("readonly","readonly");
-			$('#ml').removeClass('layui-input grey').addClass('layui-input');
-			layui.form.render('');
-		})
+		// $('#editBtn').click(function(){
+		// 	// $(":input").attr("disabled","disabled");
+		// 	$("#gl").removeAttr("readonly","readonly");
+		// 	$('#gl').removeClass('layui-input grey').addClass('layui-input');
+		// 	$("#ml").removeAttr("readonly","readonly");
+		// 	$('#ml').removeClass('layui-input grey').addClass('layui-input');
+		// 	layui.form.render('');
+		// })
 
 	});
 });
@@ -658,6 +671,29 @@ function updateProfitNet(value) {
 		if (data.result) {
 			layer.alert(data.msg, function(index) {
 				layer.close(index);
+				// cleanProdErr();
+				// 加载页面
+				// loadAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
+//修改管理费率
+function updateBsManageFee(value) {
+	var params = {
+		"pkQuote" : quoteId,
+		"bsManageFee" : value
+	};
+	CoreUtil.sendAjax("/quoteSum/updateBsManageFee", JSON.stringify(params), function(data) {
+		if (data.result) {
+			layer.alert(data.msg, function(index) {
+				layer.close(index);
+				window.location.reload();
 				// cleanProdErr();
 				// 加载页面
 				// loadAll();

@@ -20,4 +20,8 @@ public interface SysParamService {
 	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
 	
 	public ApiResponseResult getValueByCodeList(String keyword) throws Exception;
+
+	public ApiResponseResult getTitle() throws Exception;
+
+	public ApiResponseResult getConsoleTitle() throws Exception;
 }

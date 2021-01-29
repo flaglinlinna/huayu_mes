@@ -526,6 +526,18 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 	}
 
 	@Override
+	public ApiResponseResult updateBsManageFee(long quoteId, BigDecimal bsManageFee) throws Exception {
+		Quote o = quoteDao.findById(quoteId);
+		if (o == null) {
+			return ApiResponseResult.failure("没有这个报价单");
+		} else {
+			o.setBsManageFee(bsManageFee);
+			quoteDao.save(o);
+		}
+		return ApiResponseResult.success("修改管理费率成功!");
+	}
+
+	@Override
 	public ApiResponseResult getQuoteBomByQuote(String quoteId) throws Exception {
 		// TODO Auto-generated method stub
 		if (StringUtils.isEmpty(quoteId)) {

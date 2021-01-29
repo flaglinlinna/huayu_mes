@@ -414,6 +414,11 @@ function openSetStep(id,title) {
 function openDefect(id, title) {
 	if (id == null || id == "") {
 		$("#id").val("");
+		$('#bsFlowCode').removeAttr("readonly");
+		$('#bsFlowCode').css("background","");
+	}else {
+		$('#bsFlowCode').attr("readonly","readonly");
+		$('#bsFlowCode').css("background","#efefef");
 	}
 	var index=layer.open({
 		type : 1,

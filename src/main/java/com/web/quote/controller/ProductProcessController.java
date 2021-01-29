@@ -49,11 +49,17 @@ public class ProductProcessController extends WebController {
 	public ModelAndView toProductProcess(String bsType,String quoteId,String bsCode) {
 		ModelAndView mav = new ModelAndView();
 		try {
-			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),bsCode);
+
+			quoteService.getItemStatus(Long.parseLong(quoteId),bsCode);
+			quoteService.getOutStatus(Long.parseLong(quoteId));
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("bsCode", bsCode);
-			mav.addObject("nowStatus", iStatus);
+			if(!bsType.equals("out")){
+				mav.addObject("nowStatus",quoteService.getItemStatus(Long.parseLong(quoteId),bsCode));
+			}else {
+				mav.addObject("nowStatus", quoteService.getOutStatus(Long.parseLong(quoteId)));
+			}
 			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());
 			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径

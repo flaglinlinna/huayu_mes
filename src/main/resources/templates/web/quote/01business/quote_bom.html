@@ -105,18 +105,26 @@
 				</div>
 				
 				<div class="layui-form-item">
-					<div class="layui-inline">
 					    <label class="layui-form-label layui-required">材料名称</label>
-					    <div class="layui-input-block" style="width:200px">
+					    <div class="layui-input-block" style="width:530px">
 						<input id="bsMaterName" name="bsMaterName" lay-verify="required"
 							placeholder="请输入材料名称" autocomplete="off" class="layui-input"
 							type="text" />
-				    	</div>	
+				    	</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label ">用量</label>
+						<div class="layui-input-block" style="width:200px">
+							<input id="bsQty" name="bsQty" placeholder="请输入用量"
+								   lay-verify="double" autocomplete="off" class="layui-input"
+								   type="text" />
+						</div>
 					</div>
 					<div class="layui-inline">
-					    <label class="layui-form-label ">制品量</label>
+					    <label class="layui-form-label ">制品重</label>
 					    <div class="layui-input-block" style="width:200px">
-						<input id="bsProQty" name="bsProQty" placeholder="请输入制品量"
+						<input id="bsProQty" name="bsProQty" placeholder="请输入制品重"
 							lay-verify="double" autocomplete="off" class="layui-input"
 							type="text" />
 				    	</div>
@@ -134,12 +142,14 @@
 					    </div>	
 					</div>
 					<div class="layui-inline">
-					    <label class="layui-form-label ">基数</label>
-					    <div class="layui-input-block" style="width:200px">
-						<input id="bsRadix" name="bsRadix" placeholder="请输入基数"
-							lay-verify="double" autocomplete="off" class="layui-input"
-							type="text" />
-					    </div>
+					    <label class="layui-form-label ">是否代采</label>
+						<div class="layui-input-block" style="width:200px">
+							<select id="bsAgent" name="bsAgent"  lay-filter="bsAgent" >
+								<option value="">请选择</option>
+								<option value="0">否</option>
+								<option value="1">是</option>
+							</select>
+						</div>
 					</div>
 				</div>
 
@@ -149,6 +159,25 @@
 				<!--<input id="bsModel" name="bsModel" placeholder="请输入材料规格"  lay-verify="required" autocomplete="off" class="layui-input" type="text"/>-->
 				<!--</div>-->
 				<!--</div>-->
+
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">水口重(g)</label>
+						<div class="layui-input-block" style="width:200px">
+							<input id="bsWaterGap" name="bsWaterGap" lay-verify="double"
+								   placeholder="请输入水口重(g)" autocomplete="off" class="layui-input"
+								   type="text" />
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label ">穴数</label>
+						<div class="layui-input-block" style="width:200px">
+							<input id="bsCave" name="bsCave" placeholder="请输入穴数"
+								   lay-verify="double" autocomplete="off" class="layui-input"
+								   type="text" />
+						</div>
+					</div>
+				</div>
 
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">材料规格</label>

@@ -158,4 +158,36 @@ public class SysParamController extends WebController{
 	        }
 	    }
 
+	@ApiOperation(value = "获取系统标题信息", notes = "获取系统标题信息",hidden = true)
+	@RequestMapping(value = "/getTitle", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getTitle() {
+//		String method = "sysParam/getTitle";
+		String methodName ="获取系统标题信息";
+		try {
+			ApiResponseResult result = paramService.getTitle();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取系统参数信息列表失败！", e);
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
+
+	@ApiOperation(value = "获取系统标题信息", notes = "获取系统标题信息",hidden = true)
+	@RequestMapping(value = "/getConsoleTitle", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getConsoleTitle() {
+//		String method = "sysParam/getTitle";
+		String methodName ="获取系统标题信息";
+		try {
+			ApiResponseResult result = paramService.getConsoleTitle();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取系统参数信息列表失败！", e);
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
+
 }

@@ -581,7 +581,11 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             }  
         }  
         return ret;  
-    }  
+    }
 
-
+    @Override
+    public ApiResponseResult getOutStatus(Long id) throws Exception {
+        Quote o = quoteDao.findById((long) id);
+        return ApiResponseResult.success().data(o.getBsStatus2Out());
+    }
 }

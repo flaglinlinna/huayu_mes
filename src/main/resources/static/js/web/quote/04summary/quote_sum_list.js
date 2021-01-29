@@ -254,7 +254,7 @@ $(function() {
 					layer.open({
 						type : 2,
 						title : '审批',
-						area : [ '750px', '550px' ],
+						area : [ '750px', '480px' ],
 						fixed : false,
 						maxmin : true,
 						// content: '../../views/iframe/check.html',

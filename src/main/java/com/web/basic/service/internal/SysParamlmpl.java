@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,6 +30,8 @@ import com.web.basic.service.SysParamService;
 public class SysParamlmpl implements SysParamService {
 	@Autowired
     private SysParamDao sysParamDao;
+    @Autowired
+    private Environment env;
 
 	 /**
      * 新增系统参数
@@ -168,5 +171,15 @@ public class SysParamlmpl implements SysParamService {
 		return ApiResponseResult.success().data(sysParamDao.findByDelFlagAndParamCode(0, paramCode));
 	}
 
+    @Override
+    public ApiResponseResult getTitle() throws Exception {
+        String environment = this.env.getProperty("system-environment");
+        return ApiResponseResult.success().data(sysParamDao.findByDelFlagAndParamCode(0, environment));
+    }
 
+    @Override
+    public ApiResponseResult getConsoleTitle() throws Exception {
+        String environment = this.env.getProperty("system-environment-console");
+        return ApiResponseResult.success().data(sysParamDao.findByDelFlagAndParamCode(0, environment));
+    }
 }

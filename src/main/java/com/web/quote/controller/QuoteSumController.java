@@ -152,6 +152,28 @@ public class QuoteSumController extends WebController {
 			return ApiResponseResult.failure(methodName+"失败！");
 		}
 	}
+
+	@ApiOperation(value = "修改管理费率", notes = "修改管理费率", hidden = true)
+	@RequestMapping(value = "/updateBsManageFee", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult updateBsManageFee(@RequestBody Map<String, Object> params) {
+		long pkQuote = Long.parseLong(params.get("pkQuote").toString()) ;
+		BigDecimal bsManageFee = new BigDecimal(params.get("bsManageFee").toString());
+		String method = "/quoteSum/updateBsManageFee";
+		String methodName = "修改管理费率";
+		try {
+			ApiResponseResult result = quoteSumService.updateBsManageFee(pkQuote,bsManageFee);
+			logger.debug(methodName+"=getQuoteList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+//			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
+
+
 	@ApiOperation(value="设置中标",notes="设置中标",hidden=true)
 	@RequestMapping(value="/setBade",method=RequestMethod.POST)
 	@ResponseBody

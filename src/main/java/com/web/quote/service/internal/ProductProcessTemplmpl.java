@@ -179,6 +179,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
             //注塑工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、穴数、成型周期(S)、加工人数、工序良率、备注
             //组装工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
             //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
+            //外协报价导入顺序: 零件名称、工序顺序、工序名称、机台类型、损耗率、外协价格 、备注
             Integer successes = 0;
             Integer failures = 0;
             for (int row = 2; row <= maxRow; row++) {
@@ -189,7 +190,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 String procName = tranCell(tranCell(sheet.getRow(row).getCell(3)));
                 String bsModelType = tranCell(tranCell(sheet.getRow(row).getCell(4)));
 
-                String bsRadix = tranCell(sheet.getRow(row).getCell(5));
+                String bsLoss = tranCell(sheet.getRow(row).getCell(5));
                 String row6 = tranCell(sheet.getRow(row).getCell(6));
                 String row7 = tranCell(sheet.getRow(row).getCell(7));
                 String row8 = tranCell(sheet.getRow(row).getCell(8));
@@ -204,21 +205,21 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 }else {
                     errInfo += "零件名称不能为空;";
                 }
-                process.setBsRadix(bsRadix);
+//                process.setBsRadix(bsRadix);
 
 
-                if(StringUtils.isNotEmpty(bsRadix)) {
-                    if (!bsRadix.matches("^\\d+\\.\\d+$")
-                            && !bsRadix.matches("^^\\d+$")){
-                        errInfo = errInfo + "基数需输入数字;";
-                    }else if(("0").equals(bsRadix)){
-                        errInfo = errInfo + "基数不能为0;";
-                     }else {
-                        process.setBsRadix(nf.format(new BigDecimal(bsRadix)));
-                    }
-                }else {
-                    errInfo = errInfo + "基数不能为空;";
-                }
+//                if(StringUtils.isNotEmpty(bsRadix)) {
+//                    if (!bsRadix.matches("^\\d+\\.\\d+$")
+//                            && !bsRadix.matches("^^\\d+$")){
+//                        errInfo = errInfo + "基数需输入数字;";
+//                    }else if(("0").equals(bsRadix)){
+//                        errInfo = errInfo + "基数不能为0;";
+//                     }else {
+//                        process.setBsRadix(nf.format(new BigDecimal(bsRadix)));
+//                    }
+//                }else {
+//                    errInfo = errInfo + "基数不能为空;";
+//                }
 
                 if(StringUtils.isNotEmpty(id)){
                     process.setMid(Long.parseLong(id));
@@ -293,7 +294,32 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                         errInfo = errInfo + "工序良率必须是数字类型;";
                     }
                     process.setFmemo(row9);
-                }else {
+                }else if(("out").equals(bsType)){
+                    if(StringUtils.isNotEmpty(bsLoss)) {
+                        if (!bsLoss.matches("^\\d+\\.\\d+$")
+                                && !bsLoss.matches("^^\\d+$")){
+                            errInfo = errInfo + "损耗率需输入数字;";
+                        }else if(("0").equals(bsLoss)){
+                            errInfo = errInfo + "损耗率不能为0;";
+                        }else {
+                            process.setBsLoss(nf.format(new BigDecimal(bsLoss)));
+                        }
+                    }else {
+                        errInfo = errInfo + "损耗率不能为空;";
+                    }
+
+                    if(StringUtils.isNotEmpty(row6)) {
+                        if (!row6.matches("^\\d+\\.\\d+$")
+                                && !row6.matches("^^\\d+$")){
+                            errInfo = errInfo + "外协价格需输入数字;";
+                        }else {
+                            process.setBsFeeWxAll(nf.format(new BigDecimal(row6)));
+                        }
+                    }else {
+                        errInfo = errInfo + "外协价格不能为空;";
+                }
+//                    process.setBsLoss(bsLoss);
+                } else {
                     //组装和表面
 //                    process.setBsUserNum(row6);
                     process.setBsCapacity(row7);

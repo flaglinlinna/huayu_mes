@@ -18,7 +18,7 @@
   
 <div class="layui-col-md12 " id="main-div" style="display:none">
             <div class="layui-card">
-              <div class="layui-card-header" style="text-align:center;"><h1>东莞华誉组装MES系统</h1></div>
+              <div class="layui-card-header" style="text-align:center;"><h1 id="console_title">东莞华誉组装MES系统</h1></div>
               <div class="layui-card-body" style="text-align: center;margin: 0 auto; ">
                   <img src="/images/huayu_bg.jpg" th:src="@{/images/huayu_bg.jpg}" style="margin: 0 auto;height:100%;width:100%;"/>
               </div>
@@ -31,7 +31,7 @@
 	                  <div carousel-item="">
 	                    <ul class="layui-row layui-col-space10 layui-this">
 	                      <li class="layui-col-xs6">
-	                      <a lay-href="app/forum/list.html" class="layadmin-backlog-body" style="height:62px;">
+	                      <a class="layadmin-backlog-body" style="height:62px;">
 	                          <img src="/img/touxiang.png" th:src="@{/images/touxiang.png}" class="layui-nav-img">
 	                                                          你好,<shiro:principal property="userName"></shiro:principal>
 	                        </a>
@@ -131,6 +131,7 @@
 							$("#main-div").hide();//隐藏div
 							$("#daiban-div").show();//显示div
 						}else{
+							getConsoleTitle();
 							$("#daiban-div").hide();//隐藏div
 							$("#main-div").show();//显示div
 						}
@@ -234,6 +235,8 @@
 				}, "GET", false, function(res) {
 					layer.alert(res.msg);
 				}); */
+
+
 		
 	});
   function set_show(title,url,t){
@@ -262,7 +265,19 @@
 							layer.alert(res.msg);
 			}); 			
 		})  	
-  } 
+  }
+
+  function getConsoleTitle() {
+	  $.get(context+"/sysParam/getConsoleTitle",function(data){
+		  if(data.result){
+			  console.log(data.data);
+			  if(data.data[0].paramValue){
+				  $('#console_title').html(data.data[0].paramValue)
+			  }
+
+		  }
+	  });
+  }
   </script>
 </body>
 </html>

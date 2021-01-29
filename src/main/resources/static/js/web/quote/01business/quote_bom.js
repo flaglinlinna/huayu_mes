@@ -189,7 +189,7 @@ $(function() {
 									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
 							}},
-							{field : 'bsCave',title : '水口重(g)',width : 80},
+							{field : 'bsWaterGap',title : '水口重(g)',width : 90},
 							{field : 'bsCave',title : '穴数',width : 80},
 							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
 							] ],
@@ -263,7 +263,7 @@ $(function() {
 									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
 								}},
-								{field : 'bsCave',title : '水口重(g)',width : 80},
+								{field : 'bsWaterGap',title : '水口重(g)',width : 80},
 								{field : 'bsCave',title : '穴数',width : 80},
 							// , {fixed : 'right',title : '操作',align :'center',toolbar : '#optBar',width:120}
 							] ],
@@ -350,6 +350,10 @@ $(function() {
 								"pkUnit" : obj.pkUnit,
 								"Unit" : unitName,
 								"bsRadix" : obj.bsRadix,
+								"bsCave":obj.bsCave,
+								"bsWaterGap":obj.bsWaterGap,
+								"bsAgent":obj.bsAgent,
+								"bsQty":obj.bsQty,
 							});
 							openProdErr(id, "编辑外购件清单信息")
 						}

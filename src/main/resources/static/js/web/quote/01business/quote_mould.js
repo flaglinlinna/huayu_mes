@@ -225,7 +225,7 @@ function isComplete() {
 	}
 }
 
-// 添加工艺流程
+// 添加模具清单
 function add() {
 
 	if (bomNameList.data < 1) {
@@ -235,7 +235,7 @@ function add() {
 	// 获取初始化信息
 	getAddList();
 	// 打开弹出框
-	openProc(null, "添加工艺流程");
+	openProc(null, "添加模具清单");
 }
 function save() {
 	if (totalCount == 0) {

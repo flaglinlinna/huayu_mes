@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -264,13 +266,22 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	 * 导出数据
 	 */
 	public void exportExcel(HttpServletResponse response, Long quoteId) throws Exception{
-		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
-		Map<String, Object> param = new HashMap<String, Object>();
-		List<ProductMater> list = createSQLQuery(hql, param, ProductMater.class);
+//		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
+//		Map<String, Object> param = new HashMap<String, Object>();
+//		List<ProductMater> list = createSQLQuery(hql, param, ProductMater.class);
+
+		List<ProductMater> list = new ArrayList<>();
+		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(UserUtil.getSessionUser().getId());
+		if(lmp.size()>0){
+			list =productMaterDao.findByPkQuoteAndUser(quoteId,UserUtil.getSessionUser().getId());
+		}else {
+			list = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+		}
+
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		String filePath = "static/excelFile/采购填报价格模板.xlsx";
-//		Resource resource = new ClassPathResource("static/excelFile/采购填报价格模板.xlsx");
-//		InputStream in = resource.getInputStream();
+		Resource resource = new ClassPathResource("static/excelFile/采购填报价格模板.xlsx");
+		InputStream in = resource.getInputStream();
 		String[] map_arr = new String[]{"id","bsType","bsComponent","bsMaterName","bsModel","bsQty","bsUnit",
 				"bsGeneral","bsGear","bsRefer","bsAssess","fmemo","bsSupplier","bsExplain"};
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();

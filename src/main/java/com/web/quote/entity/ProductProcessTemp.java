@@ -156,6 +156,21 @@ public class ProductProcessTemp extends BaseEntity {
 	protected String bsCapacity;
 
 
+	/**
+	 * 损耗率
+	 */
+	@ApiModelProperty(name = "bsLoss", value = "损耗率")
+	@Column(length = 100)
+	protected String bsLoss;
+
+	/**
+	 * 外协价格
+	 */
+	@ApiModelProperty(name = "bsFeeWxAll", value = "外协价格")
+	@Column(length = 100)
+	protected String bsFeeWxAll;
+
+
 	public Long getMid() {
 		return mid;
 	}
@@ -298,5 +313,21 @@ public class ProductProcessTemp extends BaseEntity {
 
 	public void setBsCapacity(String bsCapacity) {
 		this.bsCapacity = bsCapacity;
+	}
+
+	public String getBsLoss() {
+		return bsLoss;
+	}
+
+	public void setBsLoss(String bsLoss) {
+		this.bsLoss = bsLoss;
+	}
+
+	public String getBsFeeWxAll() {
+		return bsFeeWxAll;
+	}
+
+	public void setBsFeeWxAll(String bsFeeWxAll) {
+		this.bsFeeWxAll = bsFeeWxAll;
 	}
 }
