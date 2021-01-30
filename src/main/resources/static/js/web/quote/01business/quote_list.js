@@ -180,7 +180,7 @@ $(function() {
 						layer.open({
 		                    type: 2,
 		                    title:'报价单核查审批',
-		                    area: ['600px', '550px'],
+		                    area: ['600px', '480px'],
 		                    fixed: false,
 		                    maxmin: true,
 		                    //content: '../../views/iframe/check.html',

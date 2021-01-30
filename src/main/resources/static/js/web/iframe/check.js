@@ -121,7 +121,8 @@ layui.use('layer', function(){
                     	var info = "审批:";
                     	for(var i=0; i<list.Lw.length; i++){
                     		if( i == 0){
-                    			info += list.Lw[i].bsStepName+"("+list.curBy+")>";
+                    			// info += list.Lw[i].bsStepName+"("+list.curBy+")>";
+                                info += list.Lw[i].bsStepName+" >";
                     		}else{
                     			info += list.Lw[i].bsStepName+"("+list.Lw[i].bsCheckName+")>";
                     		}	

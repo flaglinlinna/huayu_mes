@@ -302,7 +302,9 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			map.put("bsMaterName", productMater.getBsMaterName());
 			map.put("bsModel", productMater.getBsModel());
 			map.put("bsQty", productMater.getBsQty());
-			map.put("bsUnit", productMater.getBsUnit());
+			if(productMater.getUnit()!=null){
+				map.put("bsUnit", productMater.getUnit().getUnitCode());
+			}
 //			map.put("bsRadix", productMater.getBsRadix());
 			map.put("bsExplain", productMater.getBsExplain());
 			if(productMater.getBsGeneral()!=null){

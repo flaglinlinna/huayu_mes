@@ -397,7 +397,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 temp.setBsModel(bsModel);
                 temp.setBsQty(bsQty);
                 temp.setBsUnit(BsUnit);
-                List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(bsSupplier,0);
+                List<Unit> unitList =unitDao.findByUnitCodeAndDelFlag(BsUnit,0);
                 if(unitList!=null&& unitList.size()>0){
                     temp.setPkUnit(unitList.get(0).getId());
                 }

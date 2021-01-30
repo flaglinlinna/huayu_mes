@@ -165,18 +165,29 @@ $(function() {
 				getMaterDetail("packag", "组装材料价格明细  (价格=单价*用量/基数)")
 			}
 			// 人工和制费
-			else if (inputId == "lh_hardware" || inputId == "lw_hardware") {
-				getProcessDetail("hardware", "五金人工/制费明细  (总人工费=人工工时费（元/H）*人数*成型周期(S）/3600 /基数)")
-			} else if (inputId == "lh_molding" || inputId == "lw_molding") {
-				getProcessDetail("molding", "注塑人工/制费明细   (总人工费=人工费率（元/H）*人数*成型周期(S）/3600/ 穴数/基数)")
-			} else if (inputId == "lh_surface" || inputId == "lw_surface") {
-				getProcessDetail("surface", "表面处理人工/制费明细   (总人工费=人数*费率/产能/基数)")
-			} else if (inputId == "lh_packag" || inputId == "lw_packag") {
-				getProcessDetail("packag", "组装人工/制费明细   (总人工费=人数*费率/产能/基数)")
-			} else if (inputId == "wx_all" || inputId == "hou_lose_all") {
+			else if (inputId == "lh_hardware" ) {
+				getProcessDetail("hardware", "五金人工/制费明细  (总人工费=人工工时费（元/H）*人数*成型周期(S）/3600 )")
+			} else if (inputId == "lh_molding" ) {
+				getProcessDetail("molding", "注塑人工/制费明细   (总人工费=人工费率（元/H）*人数*成型周期(S）/3600/ 穴数)")
+			} else if (inputId == "lh_surface" ) {
+				getProcessDetail("surface", "表面处理人工/制费明细   (总人工费=人数*费率/产能)")
+			} else if (inputId == "lh_packag" ) {
+				getProcessDetail("packag", "组装人工/制费明细   (总人工费=人数*费率/产能)")
+			}
+			else if (inputId == "wx_all") {
 				getProcessDetail("out", "外协加工费用明细 ")
-			} else if (inputId == "mould_all") {
+			}
+			else if (inputId == "mould_all") {
 				getMouldDetail("模具费用明细");
+			}
+			else if(inputId == "lw_hardware") {
+				getProcessDetail("hardware", "五金制费明细  (总制费=制费工时费（元/H）*成型周期(S）/3600 )")
+			} else if(inputId == "lw_molding") {
+				getProcessDetail("molding", "注塑制费明细  (总制费=制费工时费（元/H）*成型周期(S）/3600/穴数 )")
+			} else if(inputId == "lw_surface") {
+				getProcessDetail("surface", "表面处理制费明细  (费率/产能(PCS/H))")
+			} else if(inputId == "lw_packag") {
+				getProcessDetail("packag", "组装制费明细  (总制费=制费工时费（元/H）*/产能(PCS/H) )")
 			}
 			
 			//20210120-fyx-后工序损料

@@ -3,10 +3,7 @@ package com.web.quote.service.internal;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.system.todo.service.TodoInfoService;
-import com.utils.BaseService;
-import com.utils.ExcelExport;
-import com.utils.SearchFilter;
-import com.utils.UserUtil;
+import com.utils.*;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.BjWorkCenterDao;
 import com.web.basePrice.dao.ItemTypeWgDao;
@@ -128,7 +125,9 @@ public class QuoteBomlmpl implements QuoteBomService {
 
 	@Override
 	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception {
+//		long startTime=System.currentTimeMillis();   //获取开始时间
 		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuote(0,pkQuote);
+//		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlag(0);
 		String excelPath = "static/excelFile/";
 		String fileName = "外购件清单模板.xlsx";
 		String[] map_arr = new String[]{"id","wcName","itemType","bsAgent","bsElement","bsComponent","bsMaterName","bsModel",
@@ -162,6 +161,9 @@ public class QuoteBomlmpl implements QuoteBomService {
 			list.add(map);
 		}
 		ExcelExport.export(response,list,workbook,map_arr,excelPath+fileName,fileName);
+//		EasyExcelUtils.download(excelPath+fileName,map_arr,map_arr,list);
+//		long endTime=System.currentTimeMillis(); //获取结束时间
+//		System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
 	}
 
 	/**

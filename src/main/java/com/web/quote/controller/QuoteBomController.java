@@ -168,7 +168,6 @@ public class QuoteBomController extends WebController {
 
 	@ApiOperation(value="导出数据", notes="导出数据", hidden = true)
 	@RequestMapping(value = "/exportExcel", method = RequestMethod.GET)
-	@ResponseBody
 	public void exportExcel(HttpServletResponse response, Long pkQuote) {
 		String method = "/quoteBom/exportExcel";String methodName ="导出数据";
 		try {

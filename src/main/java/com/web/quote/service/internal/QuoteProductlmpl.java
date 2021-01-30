@@ -230,8 +230,8 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 			m = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"B003",1);
 			p = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"C003",1);
 		}else if(bsType.equals("packag")){
-			m = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"B004",0);
-			p = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"C004",0);
+			m = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"B004",1);
+			p = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.valueOf(quoteId),"C004",1);
 		}
 		if((m+p) == 0){
 			return ApiResponseResult.success();
