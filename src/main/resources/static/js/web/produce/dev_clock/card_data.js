@@ -6,6 +6,7 @@ $(function() {
 	layui.use([ 'form', 'table','laydate'], function() {
 		var table = layui.table, form = layui.form, laydate = layui.laydate;
 
+		layui.form.render('select');
 		tableIns = table.render({
 			elem : '#cardList',
 			url : context + '/produce/card_data/getList',

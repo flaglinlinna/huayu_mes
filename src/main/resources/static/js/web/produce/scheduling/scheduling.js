@@ -10,6 +10,7 @@ $(function () {
             ,laydate = layui.laydate
             ,upload = layui.upload;
 
+        layui.form.render('select');
         tableIns=table.render({
             elem: '#iList'
             ,url:context+'/produce/scheduling/getList'
