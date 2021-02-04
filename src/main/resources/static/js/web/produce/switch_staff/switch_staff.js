@@ -12,6 +12,7 @@ $(function() {
 							'layer' ],
 					function() {
 						var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table, tableSelect = layui.tableSelect;
+						form.render();
 						tableIns = table.render({
 							elem : '#colTable',
 							// ,url:context+'/interfaces/getRequestList'

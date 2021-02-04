@@ -102,10 +102,10 @@ public class TodoInfoController extends WebController {
 			@ApiImplicitParam(name = "keyword", value = "查询关键字", dataType = "String", paramType="query",defaultValue=""),
 	})
 	@RequestMapping(value = "/getlist2", method = RequestMethod.GET)
-	public ApiResponseResult getlist2(String keyword) {
+	public ApiResponseResult getlist2(String keyword,String status) {
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC,"id");
-			return todoInfoService.getlist2(keyword, super.getPageRequest(sort));
+			return todoInfoService.getlist2(keyword,status, super.getPageRequest(sort));
 		} catch (Exception e) {
 			return ApiResponseResult.failure(e.getMessage());
 		}

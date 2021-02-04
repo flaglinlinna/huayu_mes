@@ -15,6 +15,15 @@
 							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
 								class="layui-input" type="text" />
 						</div>
+						<label class="layui-form-label">状态</label>
+						<div class="layui-input-inline">
+							<!--<input id="statusSearch" name="statusSearch" autocomplete="off" class="layui-input" type="text"/>-->
+							<select id="statusSearch" name="statusSearch" class="layui-input">
+								<option value=""></option>
+								<option value="0">未完成</option>
+								<option value="1">已完成</option>
+							</select>
+						</div>
 						<button type="reset" class="layui-btn layui-btn-primary layui-btn-sm"
 							title="重置">
 							<i class="layui-icon">&#xe669;</i>重置
@@ -35,13 +44,16 @@
         </script>
 	 </div>
       <script th:inline="javascript">
+	  var bsStatus = [[${bsStatus}]];
       var pageCurr;var tableIns;
       $(function() {
     		layui.use([ 'form', 'table' ], function() {
     			var table = layui.table, form = layui.form;
+    			$('#statusSearch').val(bsStatus);
+    			form.render();
     			tableIns = table.render({
     				elem : '#iList',
-    				url:context + '/todoInfo/getlist2',
+					url:context + '/todoInfo/getlist2?status='+$('#statusSearch').val(),
     				method : 'get' ,// 默认：get请求
     				cellMinWidth : 80,
     				height:'full-70',//固定表头&full-查询框高度
@@ -130,8 +142,10 @@
       function load(obj) {
       	// 重新加载table
       	tableIns.reload({
+			url:context + '/todoInfo/getlist2',
       		where : {
-      			keyword : obj.field.keywordSearch
+      			keyword : obj.field.keywordSearch,
+				status:obj.field.statusSearch
       		},
       		page : {
       			curr : pageCurr

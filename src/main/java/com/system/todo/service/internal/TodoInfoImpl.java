@@ -199,14 +199,16 @@ public class TodoInfoImpl  implements TodoInfoService {
      * 获取登陆人所有待办事项
      * **/
     @Transactional(readOnly = true)
-    public ApiResponseResult getlist2(String keyword,PageRequest pageRequest) throws Exception {
+    public ApiResponseResult getlist2(String keyword,String bsStatus,PageRequest pageRequest) throws Exception {
     	
     	Long uid = UserUtil.getSessionUser().getId();
     	
         List<SearchFilter> filters = new ArrayList<SearchFilter>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         filters.add(new SearchFilter("bsUserId", SearchFilter.Operator.EQ, uid));
-        
+        if(StringUtils.isNotEmpty(bsStatus)){
+            filters.add(new SearchFilter("bsStatus", SearchFilter.Operator.EQ, bsStatus));
+        }
         List<SearchFilter> filters1 = new ArrayList<>();
 		if (StringUtils.isNotEmpty(keyword)) {
 			filters1.add(new SearchFilter("bsTitle", SearchFilter.Operator.LIKE, keyword));

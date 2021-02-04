@@ -28,7 +28,7 @@ public interface TodoInfoService {
 
 	public ApiResponseResult getlist(int bsStatus, PageRequest pageRequest) throws Exception;
 	
-	public ApiResponseResult getlist2(String keyword,PageRequest pageRequest)throws Exception;//20210114-lst
+	public ApiResponseResult getlist2(String keyword,String bsStatus,PageRequest pageRequest)throws Exception;//20210114-lst
 	
 	public ApiResponseResult closeByIdAndModel(Long bsReferId,String model) throws Exception;
 }
