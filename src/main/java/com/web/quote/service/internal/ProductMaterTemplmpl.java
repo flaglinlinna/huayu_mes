@@ -372,14 +372,14 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 String bsModel = tranCell(sheet.getRow(row).getCell(4));
                 String bsQty = tranCell(sheet.getRow(row).getCell(5));
                 String BsUnit = tranCell(sheet.getRow(row).getCell(6));
-//                String bsRadix = tranCell(sheet.getRow(row).getCell(7));
-                String bsGeneral = tranCell(sheet.getRow(row).getCell(7));
-                String bsGear = tranCell(sheet.getRow(row).getCell(8));
-                String bsRefer = tranCell(sheet.getRow(row).getCell(9));
-                String bsAssess = tranCell(sheet.getRow(row).getCell(10));
-                String fmemo = tranCell(sheet.getRow(row).getCell(11));
-                String bsSupplier = tranCell(sheet.getRow(row).getCell(12));
-                String bsExplain = tranCell(sheet.getRow(row).getCell(13));
+                String purchaseUnit = tranCell(sheet.getRow(row).getCell(7));
+                String bsGeneral = tranCell(sheet.getRow(row).getCell(8));
+                String bsGear = tranCell(sheet.getRow(row).getCell(9));
+                String bsRefer = tranCell(sheet.getRow(row).getCell(10));
+                String bsAssess = tranCell(sheet.getRow(row).getCell(11));
+                String fmemo = tranCell(sheet.getRow(row).getCell(12));
+                String bsSupplier = tranCell(sheet.getRow(row).getCell(13));
+                String bsExplain = tranCell(sheet.getRow(row).getCell(14));
                 ProductMaterTemp temp = new ProductMaterTemp();
                 temp.setBsPurchase(0);
                 temp.setCreateBy(userId);
@@ -387,6 +387,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 if(StringUtils.isNotEmpty(id)){
                     temp.setMid(Long.parseLong(id));
                 }
+                temp.setPurchaseUnit(purchaseUnit);
                 temp.setPkQuote(quoteId);
                 temp.setBsGear(bsGear);
                 temp.setBsAssess(bsAssess);
@@ -513,7 +514,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             }
             purchase.setBsUnit(temp.getBsUnit());
             purchase.setPkUnit(temp.getPkUnit());
-//            purchase.setBsRadix(temp.getBsRadix());
+            purchase.setPurchaseUnit(temp.getPurchaseUnit());
             purchase.setBsGeneral((temp.getBsGeneral()+"").equals("是")?1:0);
             purchase.setBsGear(temp.getBsGear());
             if(temp.getBsRefer()!=null) {

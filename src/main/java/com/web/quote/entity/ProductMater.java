@@ -118,9 +118,16 @@ public class ProductMater extends BaseEntity {
 	/**
 	 * 单位
 	 */
-	@ApiModelProperty(name = "unit", value = "单位")
+	@ApiModelProperty(name = "unit", value = "用量单位")
 	@Column(length = 50)
 	protected String bsUnit;
+
+	/**
+	 * 单位
+	 */
+	@ApiModelProperty(name = "purchaseUnit", value = "采购单位")
+	@Column(length = 50)
+	protected String purchaseUnit;
 	
 	/**
      * 关联单位
@@ -455,7 +462,12 @@ public class ProductMater extends BaseEntity {
 	public void setBsElement(String bsElement) {
 		this.bsElement = bsElement;
 	}
-	
-	
-	
+
+	public String getPurchaseUnit() {
+		return purchaseUnit;
+	}
+
+	public void setPurchaseUnit(String purchaseUnit) {
+		this.purchaseUnit = purchaseUnit;
+	}
 }

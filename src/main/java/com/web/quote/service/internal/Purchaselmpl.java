@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.web.basePrice.entity.Unit;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -244,6 +245,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		o.setFmemo(productMater.getFmemo());
 		o.setBsGear(productMater.getBsGear());
 		o.setBsSupplier(productMater.getBsSupplier());
+		o.setPurchaseUnit(productMater.getPurchaseUnit());
 		o.setBsAssess(productMater.getBsAssess());
 		productMaterDao.save(o);
 		return ApiResponseResult.success("编辑成功！");
@@ -282,7 +284,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		String filePath = "static/excelFile/采购填报价格模板.xlsx";
 		Resource resource = new ClassPathResource("static/excelFile/采购填报价格模板.xlsx");
 		InputStream in = resource.getInputStream();
-		String[] map_arr = new String[]{"id","bsType","bsComponent","bsMaterName","bsModel","bsQty","bsUnit",
+		String[] map_arr = new String[]{"id","bsType","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","purchaseUnit",
 				"bsGeneral","bsGear","bsRefer","bsAssess","fmemo","bsSupplier","bsExplain"};
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		for(ProductMater productMater : list){
@@ -298,6 +300,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			}else if(("packag").equals(bsType)){
 				map.put("bsType", "组装");
 			}
+			map.put("purchaseUnit",productMater.getPurchaseUnit());
 			map.put("bsComponent", productMater.getBsComponent());
 			map.put("bsMaterName", productMater.getBsMaterName());
 			map.put("bsModel", productMater.getBsModel());
@@ -339,9 +342,10 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			//获取最后一行的num，即总行数。此处从0开始计数
 			int maxRow = sheet.getLastRowNum();
 			List<ProductMater> hardwareMaterList = new ArrayList<>();
-			//五金工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、成型周期(S)、工序良率、备注
+
 			for (int row = 2; row <= maxRow; row++) {
 				String id = tranCell(sheet.getRow(row).getCell(0));
+				String purchaseUnit = tranCell(sheet.getRow(row).getCell(7));
 				String bsGear = tranCell(sheet.getRow(row).getCell(9));
 				String bsAssess = tranCell(sheet.getRow(row).getCell(11));
 				String fmemo = tranCell(sheet.getRow(row).getCell(12));
@@ -356,6 +360,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 					productMater.setCreateBy(userId);
 					productMater.setCreateDate(doExcleDate);
 				}
+				productMater.setPurchaseUnit(purchaseUnit);
 				productMater.setPkQuote(quoteId);
 				productMater.setBsGear(bsGear);
 				productMater.setBsAssess(new BigDecimal(bsAssess));
@@ -448,5 +453,25 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		}else{
 			return ApiResponseResult.success();
 		}
+	}
+
+	/**
+	 * 修改单位
+	 */
+	@Override
+	@Transactional
+	public ApiResponseResult updateUnit(Long id,String unitCode) throws Exception{
+		if(id == null){
+			return ApiResponseResult.failure("制造材料ID不能为空！");
+		}
+		ProductMater o = productMaterDao.findById((long) id);
+		if(o == null){
+			return ApiResponseResult.failure("制造材料不存在！");
+		}
+		o.setPurchaseUnit(unitCode);
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
+		o.setLastupdateDate(new Date());
+		productMaterDao.save(o);
+		return ApiResponseResult.success("更新单位成功！");
 	}
 }

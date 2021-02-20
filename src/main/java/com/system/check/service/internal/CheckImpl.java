@@ -398,8 +398,9 @@ public class CheckImpl   implements CheckService {
 							if(qb.getUnit()!=null){
 								pm.setBsUnit(qb.getUnit().getUnitName()); //hjj-20210120-补充单位名称
 							}
-							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
-							pm.setBsWaterGap(qb.getBsWaterGap());
+							pm.setPurchaseUnit(qb.getPurchaseUnit());
+//							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
+//							pm.setBsWaterGap(qb.getBsWaterGap()); hjj-20210220 去掉水口和穴数，
 							if((qb.getBsAgent()==1)){
 								pm.setBsAssess(BigDecimal.ZERO);
 							}else {

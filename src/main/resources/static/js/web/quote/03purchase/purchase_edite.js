@@ -51,16 +51,17 @@ $(function() {
 				{field : 'bsGear',width : 120,title : '价格挡位',templet : '#selectGear',style : 'background-color:#ffffff'},
 				{field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'},
 				{field : 'bsAssess',width : 110,title : '评估价格<span style="color:red;font-size:12px;">*</span>',edit : 'number',style : 'background-color:#ffffff'},
-				{field : 'bsProQty',width : 100,title : '制品重',style : 'background-color:#d2d2d2'},
+				// {field : 'bsProQty',width : 100,title : '制品重',style : 'background-color:#d2d2d2'},
 				{field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
 				{field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
-				{field : 'bsWaterGap',title : '水口量(g)',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
-				{field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
-				{field : 'bsUnit',width : 80,title : '单位',style : 'background-color:#d2d2d2',templet:function (d){
+				// {field : 'bsWaterGap',title : '水口量(g)',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
+				// {field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
+				{field : 'bsUnit',width : 80,title : '用量单位',style : 'background-color:#d2d2d2',templet:function (d){
 					if(d.unit!=null){
 						return d.unit.unitCode;
 					}
 					}},
+				{field : 'purchaseUnit',width : 110,title : '采购单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
 				// {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},
 				{
 					field: 'bsGeneral', width: 120, title: '是否通用物料', style: 'background-color:#d2d2d2',
@@ -88,6 +89,19 @@ $(function() {
 				  });
 			}
 		});
+
+		//监听机台类型下拉选择 并修改
+		form.on('select(selectUnit)', function (data) {
+			//获取当前行tr对象
+			var elem = data.othis.parents('tr');
+			//第一列的值是Guid，取guid来判断
+			var Guid= elem.first().find('td').eq(1).text();
+			// var bsStatus= elem.first().find('td').eq(2).text();
+			//选择的select对象值；
+			var selectValue = data.value;
+			updateUnit(Guid,selectValue);
+
+		})
 
 
 
@@ -123,12 +137,13 @@ $(function() {
 				  {field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
 				  {field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'},
 				  {field : 'bsQty',width : 80,title : '用量',style : 'background-color:#d2d2d2'},
-				  {field : 'bsUnit',width : 80,title : '单位',style : 'background-color:#d2d2d2',templet:function (d){
+				  {field : 'bsUnit',width : 80,title : '用量单位',style : 'background-color:#d2d2d2',templet:function (d){
 						  if(d.unit!=null){
 							  return d.unit.unitCode;
 						  }
 					  }},
-				  {field : 'bsRadix',width : 80,title : '基数',style : 'background-color:#d2d2d2'},
+					{field : 'purchaseUnit',width : 110,title : '采购单位',style : 'background-color:#d2d2d2'},
+				  // {field : 'bsRadix',width : 80,title : '基数',style : 'background-color:#d2d2d2'},
 				  {field : 'bsGeneral',width : 120,title : '是否通用物料',style : 'background-color:#d2d2d2'},
 				  {field : 'bsGear',width : 80,title : '价格挡位',edit : 'text',style : 'background-color:#ffffff'},
 				  {field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'},
@@ -268,6 +283,26 @@ function isComplete() {
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
 	}
+}
+
+//更新单位
+function updateUnit(id,unitId) {
+	var param = {
+		"id":id,
+		"unitId":unitId
+	}
+	CoreUtil.sendAjax("/purchase/updateUnit", JSON.stringify(param),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+					});
+				}
+			}
+		});
 }
 
 function uploadChecked() {

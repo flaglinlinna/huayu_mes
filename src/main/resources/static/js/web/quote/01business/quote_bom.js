@@ -7,7 +7,8 @@ $(function() {
 			.use(
 					[ 'form', 'table', 'upload', 'tableSelect' ],
 					function() {
-						var table = layui.table, table1 = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect, tableSelect2 = layui.tableSelect;
+						var table = layui.table, table1 = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect
+							, tableSelect2 = layui.tableSelect, tableSelect3 = layui.tableSelect;
 						isComplete()
 						tableSelect = tableSelect.render({
 							elem : '#BjWorkCenter',
@@ -131,6 +132,46 @@ $(function() {
 							}
 						});
 
+						tableSelect3 = tableSelect3.render({
+							elem : '#purchaseUnit',
+							searchKey : 'keyword',
+							checkedKey : 'id',
+							searchPlaceholder : '关键字搜索',
+							table : {
+								url : context + '/basePrice/unit/getList',
+								method : 'get',
+								parseData : function(res) {
+									// 可进行数据操作
+									return {
+										"count" : res.data.total,
+										"msg" : res.msg,
+										"data" : res.data.rows,
+										"code" : res.status
+										// code值为200表示成功
+									}
+								},
+								cols : [ [ {type : 'radio'},// 单选 radio
+									{field : 'id',title : 'id',width : 0,hide : true},
+									{type : 'numbers'},
+									{field : 'unitCode',title : '单位编码'},
+									{field : 'unitName',title : '单位名称',} ] ],
+								page : true,
+								request : {
+									pageName : 'page', // 页码的参数名称，默认：page
+									limitName : 'rows' // 每页数据量的参数名，默认：limit
+								},
+							},
+							done : function(elem, data) {
+								var da = data.data;
+								// 选择完后的回调，包含2个返回值
+								// elem:返回之前input对象；data:表格返回的选中的数据 []
+								form.val("quoteBomForm", {
+									"purchaseUnit" : da[0].unitCode
+								});
+								form.render();// 重新渲染
+							}
+						});
+
 						tableIns = table.render({
 							elem : '#quoteBomList',
 							url : context + '/quoteBom/getQuoteBomList?pkQuote=' + quoteId,
@@ -183,14 +224,15 @@ $(function() {
 								}},
 								{field : 'fmemo',title : '工艺说明',width : 200},
 							{field : 'bsQty',title : '用量',width : 90},
-							{field : 'bsProQty',title : '制品重',width : 90},
-							{field : 'unit',title : '单位',width : 80,
+							// {field : 'bsProQty',title : '制品重',width : 90},
+							{field : 'unit',title : '用量单位',width : 80,
 								templet : function(d) {
 									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
 							}},
-							{field : 'bsWaterGap',title : '水口重(g)',width : 90},
-							{field : 'bsCave',title : '穴数',width : 80},
+							// {field : 'bsWaterGap',title : '水口重(g)',width : 90},
+							// {field : 'bsCave',title : '穴数',width : 80},
+							{field : 'purchaseUnit',title : '采购单位',width : 80},
 							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
 							] ],
 							done : function(res, curr, count) {
@@ -258,13 +300,14 @@ $(function() {
 									}},
 								{field : 'fmemo',title : '工艺说明',width : 200},
 								{field : 'bsQty',title : '用量',width : 90},
-								{field : 'bsProQty',title : '制品量',width : 90},
-								{field : 'unit',title : '单位',width : 80,templet : function(d) {
+								// {field : 'bsProQty',title : '制品量',width : 90},
+								{field : 'unit',title : '用量单位',width : 80,templet : function(d) {
 									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
 								}},
-								{field : 'bsWaterGap',title : '水口重(g)',width : 80},
-								{field : 'bsCave',title : '穴数',width : 80},
+								{field : 'purchaseUnit',title : '采购单位',width : 80},
+								// {field : 'bsWaterGap',title : '水口重(g)',width : 80},
+								// {field : 'bsCave',title : '穴数',width : 80},
 							// , {fixed : 'right',title : '操作',align :'center',toolbar : '#optBar',width:120}
 							] ],
 							done : function(res, curr, count) {
@@ -349,9 +392,10 @@ $(function() {
 								"bsProQty" : obj.bsProQty,
 								"pkUnit" : obj.pkUnit,
 								"Unit" : unitName,
-								"bsRadix" : obj.bsRadix,
-								"bsCave":obj.bsCave,
-								"bsWaterGap":obj.bsWaterGap,
+								"purchaseUnit": obj.purchaseUnit,
+								// "bsRadix" : obj.bsRadix,
+								// "bsCave":obj.bsCave,
+								// "bsWaterGap":obj.bsWaterGap,
 								"bsAgent":obj.bsAgent,
 								"bsQty":obj.bsQty,
 							});

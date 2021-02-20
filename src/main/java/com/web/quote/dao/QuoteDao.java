@@ -27,10 +27,10 @@ public interface QuoteDao extends CrudRepository<Quote, Long>,JpaSpecificationEx
 	 public List<Map<String, Object>> getNumByStatus4();
 
 
-	@Query(value = "select count(p.id) as nums,bs_status2purchase as status from "+Quote.TABLE_NAME+" p where p.del_flag=0 and p.bs_step =?1 group by bs_status2purchase ", nativeQuery = true)
+	@Query(value = "select count(p.id) as nums,bs_status2purchase as status from "+Quote.TABLE_NAME+" p where p.del_flag=0 and p.bs_step >=?1 group by bs_status2purchase ", nativeQuery = true)
 	public List<Map<String, Object>> getNumByPurchaseAndBsStep(int bsStep);
 
-	@Query(value = "select count(p.id) as nums,bs_status2out as status from "+Quote.TABLE_NAME+" p where p.del_flag=0 and p.bs_step =?1 group by bs_status2out ", nativeQuery = true)
+	@Query(value = "select count(p.id) as nums,bs_status2out as status from "+Quote.TABLE_NAME+" p where p.del_flag=0 and p.bs_step >=?1 group by bs_status2out ", nativeQuery = true)
 	public List<Map<String, Object>> getNumByOutAndBsStep(int bsStep);
 
 	@Query(value = "select count(p.id) as nums,decode(p.bs_end_time3,null,'1','2') as status from  price_quote p where p.del_flag=0 and p.bs_step >2 group by decode(p.bs_end_time3,null,'1','2')", nativeQuery = true)

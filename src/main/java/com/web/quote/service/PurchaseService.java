@@ -31,5 +31,6 @@ public interface PurchaseService {
 	public ApiResponseResult doGear(String id,String gear,String price) throws Exception;//添加价格档位
 	
 	public ApiResponseResult doCheckBefore(String keyword,String quoteId) throws Exception;//采购部发起审批前校验
-	
+
+	public ApiResponseResult updateUnit(Long id,String unitCode) throws Exception;
 }

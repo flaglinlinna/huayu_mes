@@ -98,6 +98,9 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			Integer failures = 0;
 			//列顺序:0主表id，1工作中心，2物料类型，3是否代采，4组件名称，5零件名称，6材料名称，7材料规格，8工艺说明，
 			// 9用量，10制品重，11重量单位，12水口重(g)，13穴数，14采购说明
+
+			//列顺序:0主表id，1工作中心，2物料类型，3是否代采，4组件名称，5零件名称，6材料名称，7材料规格，8工艺说明，
+			// 9用量，10用量单位，11采购单位，12采购说明  20200220-hjj
 			for (int row = 2; row <= maxRow; row++) {
 				String errInfo = "";
 				QuoteBomTemp temp = new QuoteBomTemp();
@@ -154,21 +157,21 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 				}
 				String fmemo = tranCell(sheet.getRow(row).getCell(8));
 				String bsQty = tranCell(sheet.getRow(row).getCell(9)); //hjj-20210119增加用量字段
-				String bsProQty = tranCell(sheet.getRow(row).getCell(10));
-				if(StringUtils.isNoneEmpty(bsQty)){
-					if(!bsQty.matches("^\\d+\\.\\d+$") && !bsQty.matches("^^\\d+$")){
-						errInfo += "用量需输入数字类型";
-					}
-				}else {
-					errInfo += "用量不能为空";
-				}
-				if(StringUtils.isNotEmpty(bsProQty)) {
-					if(!bsProQty.matches("^\\d+\\.\\d+$") && !bsProQty.matches("^^\\d+$")){
-						errInfo += "制品重需输入数字类型";
-					}
-				}
+//				String bsProQty = tranCell(sheet.getRow(row).getCell(10));
+//				if(StringUtils.isNoneEmpty(bsQty)){
+//					if(!bsQty.matches("^\\d+\\.\\d+$") && !bsQty.matches("^^\\d+$")){
+//						errInfo += "用量需输入数字类型";
+//					}
+//				}else {
+//					errInfo += "用量不能为空";
+//				}
+//				if(StringUtils.isNotEmpty(bsProQty)) {
+//					if(!bsProQty.matches("^\\d+\\.\\d+$") && !bsProQty.matches("^^\\d+$")){
+//						errInfo += "制品重需输入数字类型";
+//					}
+//				}
 
-				String unit = tranCell(sheet.getRow(row).getCell(11));
+				String unit = tranCell(sheet.getRow(row).getCell(10));
 				if(StringUtils.isNotEmpty(unit)) {
 //					List<Unit> unitList = unitDao.findByUnitNameAndDelFlag(unit, 0);
 					List<Unit> unitList = unitDao.findByUnitCodeAndDelFlag(unit, 0);
@@ -181,25 +184,32 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 					errInfo += "单位不能为空";
 				}
 				temp.setBsQty(bsQty);
-
-
-				String bsWaterGap = tranCell(sheet.getRow(row).getCell(12));
-				String bsCave = tranCell(sheet.getRow(row).getCell(13));
-				String bsExplain = tranCell(sheet.getRow(row).getCell(14));//lst-20210107增加采购说明字段
-
-
-				temp.setBsWaterGap(bsWaterGap);
-				if(StringUtils.isNotEmpty(bsWaterGap)) {
-					if(!bsWaterGap.matches("^\\d+\\.\\d+$") && !bsWaterGap.matches("^^\\d+$")){
-						errInfo += "水口重需输入数字类型";
+				String purchaseUnit = tranCell(sheet.getRow(row).getCell(11));
+				if(StringUtils.isNotEmpty(purchaseUnit)){
+					List<Unit> unitList = unitDao.findByUnitCodeAndDelFlag(purchaseUnit, 0);
+					if(unitList.size()==0) {
+						errInfo += "没有维护:" + purchaseUnit + " 采购单位;";
 					}
 				}
-				temp.setBsCave(bsCave);
-				if(StringUtils.isNotEmpty(bsCave)) {
-					if(!bsCave.matches("^\\d+\\.\\d+$") && !bsCave.matches("^^\\d+$")){
-						errInfo += "穴数需输入数字类型";
-					}
-				}
+				temp.setPurchaseUnit(purchaseUnit);
+
+//				String bsWaterGap = tranCell(sheet.getRow(row).getCell(12));
+//				String bsCave = tranCell(sheet.getRow(row).getCell(13));
+				String bsExplain = tranCell(sheet.getRow(row).getCell(12));//lst-20210107增加采购说明字段
+
+
+//				temp.setBsWaterGap(bsWaterGap);
+//				if(StringUtils.isNotEmpty(bsWaterGap)) {
+//					if(!bsWaterGap.matches("^\\d+\\.\\d+$") && !bsWaterGap.matches("^^\\d+$")){
+//						errInfo += "水口重需输入数字类型";
+//					}
+//				}
+//				temp.setBsCave(bsCave);
+//				if(StringUtils.isNotEmpty(bsCave)) {
+//					if(!bsCave.matches("^\\d+\\.\\d+$") && !bsCave.matches("^^\\d+$")){
+//						errInfo += "穴数需输入数字类型";
+//					}
+//				}
 				temp.setErrorInfo(errInfo);
 				if(("").equals(errInfo)){
 					temp.setCheckStatus(0);
@@ -218,7 +228,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 //				quoteBom.setBsItemCode(bsItemCode); 暂定不存，系统生成
 				temp.setBsModel(bsModel);
 				temp.setFmemo(fmemo);
-				temp.setBsProQty(bsProQty);
+//				temp.setBsProQty(bsProQty);
 
 				temp.setBsElement(bsElement);
 				temp.setBsExplain(bsExplain);
@@ -251,18 +261,19 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			quoteBom.setBsMaterName(temp.getBsMaterName());
 			quoteBom.setBsElement(temp.getBsElement());
 			quoteBom.setBsModel(temp.getBsModel());
-			if(StringUtils.isNotEmpty(temp.getBsProQty())){
-				quoteBom.setBsProQty(new BigDecimal(temp.getBsProQty()));
-			}
+//			if(StringUtils.isNotEmpty(temp.getBsProQty())){
+//				quoteBom.setBsProQty(new BigDecimal(temp.getBsProQty()));
+//			}
 			if(StringUtils.isNotEmpty(temp.getBsQty())){
 				quoteBom.setBsQty(new BigDecimal(temp.getBsQty()));
 			}
-			if(StringUtils.isNotEmpty(temp.getBsCave())){
-				quoteBom.setBsCave(temp.getBsCave());
-			}
-			if(StringUtils.isNotEmpty(temp.getBsWaterGap())){
-				quoteBom.setBsWaterGap(temp.getBsWaterGap());
-			}
+			quoteBom.setPurchaseUnit(temp.getPurchaseUnit());
+//			if(StringUtils.isNotEmpty(temp.getBsCave())){
+//				quoteBom.setBsCave(temp.getBsCave());
+//			}
+//			if(StringUtils.isNotEmpty(temp.getBsWaterGap())){
+//				quoteBom.setBsWaterGap(temp.getBsWaterGap());
+//			}
 			quoteBom.setPkUnit(temp.getPkUnit());
 			quoteBom.setPkQuote(temp.getPkQuote());
 			quoteBom.setPkItemTypeWg(temp.getPkItemTypeWg());

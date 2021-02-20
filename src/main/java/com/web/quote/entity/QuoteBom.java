@@ -83,7 +83,7 @@ public class QuoteBom extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     protected ItemTypeWg itp;
     /**
-     * 关联单位
+     * 关联单位(用量单位)
      */
     @ApiModelProperty(name="pkUnit",value="关联单位")
     @Column
@@ -94,6 +94,13 @@ public class QuoteBom extends BaseEntity {
     @JoinColumn(name = "pkUnit", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     protected Unit unit;
+
+	/**
+	 * 采购单位
+	 */
+	@ApiModelProperty(name="purchaseUnit",value="采购单位")
+	@Column
+    protected String purchaseUnit;
 
     /**
 	 * 物料编码
@@ -362,5 +369,13 @@ public class QuoteBom extends BaseEntity {
 
 	public void setBsAgent(Integer bsAgent) {
 		this.bsAgent = bsAgent;
+	}
+
+	public String getPurchaseUnit() {
+		return purchaseUnit;
+	}
+
+	public void setPurchaseUnit(String purchaseUnit) {
+		this.purchaseUnit = purchaseUnit;
 	}
 }

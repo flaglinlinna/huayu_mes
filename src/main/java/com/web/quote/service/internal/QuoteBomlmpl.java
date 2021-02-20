@@ -90,9 +90,10 @@ public class QuoteBomlmpl implements QuoteBomService {
 		o.setPkUnit(quoteBom.getPkUnit());
 		o.setPkItemTypeWg(quoteBom.getPkItemTypeWg());
 		o.setPkBjWorkCenter(quoteBom.getPkBjWorkCenter());
-		o.setBsProQty(quoteBom.getBsProQty());
+//		o.setBsProQty(quoteBom.getBsProQty());
 		o.setBsMaterName(quoteBom.getBsMaterName().trim());
 		o.setBsModel(quoteBom.getBsModel());
+		o.setPurchaseUnit(quoteBom.getPurchaseUnit());
 //		o.setBsQty(quoteBom.getBsQty());
 		o.setBsRadix(quoteBom.getBsRadix());
 		o.setBsExplain(quoteBom.getBsExplain());
@@ -131,7 +132,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 		String excelPath = "static/excelFile/";
 		String fileName = "外购件清单模板.xlsx";
 		String[] map_arr = new String[]{"id","wcName","itemType","bsAgent","bsElement","bsComponent","bsMaterName","bsModel",
-										"fmemo","bsQty","bsProQty","unitName","bsWaterGap","bsCave","bsExplain"};
+										"fmemo","bsQty","unitName","purchaseUnit","bsExplain"};
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for(QuoteBom quoteBom :quoteBomList){
@@ -153,9 +154,10 @@ public class QuoteBomlmpl implements QuoteBomService {
 			map.put("bsAgent",quoteBom.getBsAgent()==1?"是":"否");
 			map.put("fmemo",quoteBom.getFmemo());
 			map.put("bsQty",quoteBom.getBsQty());
-			map.put("bsProQty",quoteBom.getBsProQty());
-			map.put("bsWaterGap",quoteBom.getBsWaterGap());
-			map.put("bsCave",quoteBom.getBsCave());
+			map.put("purchaseUnit",quoteBom.getPurchaseUnit());
+//			map.put("bsProQty",quoteBom.getBsProQty());
+//			map.put("bsWaterGap",quoteBom.getBsWaterGap());
+//			map.put("bsCave",quoteBom.getBsCave());
 //			map.put("bsRadix",quoteBom.getBsRadix());
 			map.put("bsExplain",quoteBom.getBsExplain());//lst-20210107-增加采购说明字段
 			list.add(map);
@@ -276,6 +278,10 @@ public class QuoteBomlmpl implements QuoteBomService {
 		int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
 		if(i>0){
 			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
+		}
+		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuote(0,Long.parseLong(quoteId));
+		if(quoteBomList.size()<=0){
+			return ApiResponseResult.failure("外购件清单信息为空，请先填写后确认提交。");
 		}
 		//设置该报价单下的bom状态
 		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId));

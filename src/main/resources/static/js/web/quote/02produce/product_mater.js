@@ -439,15 +439,7 @@ function updateUnit(id,unitId) {
 		function(data) {
 			if (isLogin(data)) {
 				if (data.result == true) {
-					// 回调弹框
-					//layer.closeAll();
-					// 加载load方法
 					loadAll();
-					/*layer.alert("修改单位成功！", function() {
-						layer.closeAll();
-						// 加载load方法
-						loadAll();
-					});*/
 				} else {
 					layer.alert(data.msg, function() {
 						layer.closeAll();

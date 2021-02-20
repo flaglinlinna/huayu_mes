@@ -68,6 +68,15 @@ height: 30px;
 			 {{#  } }}
 		 </script>
 
+		 <script type="text/html" id="selectUnit" >
+			 <select name="selectUnit" lay-filter="selectUnit" lay-search>
+				 <option value="">请选择</option>
+				 {{# layui.each($.parseJSON( d.bsUnitList ), function(index, item){     }}
+				 <option value="{{ item.unitCode }}"  {{ d.purchaseUnit==item.unitCode?'selected':''}}>{{ item.unitCode }}</option>
+				 {{# });  }}
+			 </select>
+		 </script>
+
          <!--<script type="text/html" id="optBar">-->
                  <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
                  <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->

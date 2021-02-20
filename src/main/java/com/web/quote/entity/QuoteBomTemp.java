@@ -111,6 +111,13 @@ public class QuoteBomTemp extends BaseEntity {
     protected Long pkUnit;
 
 	/**
+	 * 采购单位
+	 */
+	@ApiModelProperty(name="purchaseUnit",value="采购单位")
+	@Column
+	protected String purchaseUnit;
+
+	/**
 	 * 关联单位名称 //上传时的名称
 	 */
 	@ApiModelProperty(name="pkUnit",value="关联单位")
@@ -431,5 +438,13 @@ public class QuoteBomTemp extends BaseEntity {
 
 	public void setBsAgent(Integer bsAgent) {
 		this.bsAgent = bsAgent;
+	}
+
+	public String getPurchaseUnit() {
+		return purchaseUnit;
+	}
+
+	public void setPurchaseUnit(String purchaseUnit) {
+		this.purchaseUnit = purchaseUnit;
 	}
 }

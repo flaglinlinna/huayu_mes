@@ -91,7 +91,7 @@ function isComplete() {
 
 // 上传控件
 function InitUpload() {
-	layui.upload.render({
+	var InitUpload = layui.upload.render({
 		elem : '#upload',
 		url : context + '/file/upload',
 		accept : 'file' // 普通文件
@@ -122,6 +122,8 @@ function InitUpload() {
 	$('#upload').click();
 }
 
+
+
 // 新增五金材料提交
 function addSubmit(obj) {
 	obj.pkQuote = quoteId;
@@ -130,7 +132,7 @@ function addSubmit(obj) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
 				// 加载页面
-				loadAll();
+				window.location.reload();
 			});
 		} else {
 			layer.alert(data.msg);
