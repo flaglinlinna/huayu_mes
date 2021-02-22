@@ -18,6 +18,8 @@ import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteBomTemp;
 import com.web.quote.service.QuoteBomTempService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,11 +72,21 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 	}
 
 	//防止读取Excel为null转String 报空指针异常
-	public String tranCell(Object object)
+	public String tranCell(XSSFCell xssfCell)
 	{
-		if(object==null||object==""||("").equals(object)){
+		if(xssfCell==null||("").equals(xssfCell.getRawValue())){
 			return null;
-		}else return object.toString().trim();
+		}else {
+			if(xssfCell.getCellType()== Cell.CELL_TYPE_FORMULA){
+				try {
+					return String.valueOf(xssfCell.getNumericCellValue());
+				} catch (IllegalStateException e) {
+					return String.valueOf(xssfCell.getRichStringCellValue());
+				}
+			}else {
+				return xssfCell.toString().trim();
+			}
+		}
 	}
 
 	//导入模板
