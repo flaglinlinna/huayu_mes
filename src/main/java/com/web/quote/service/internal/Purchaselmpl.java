@@ -196,16 +196,20 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			hql += " and p.pk_item_type_wg in (select wr.pk_item_type_wg from "+ItemTypeWgRole.TABLE_NAME+" wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from "+UserRoleMap.TABLE_NAME+" ur where ur.del_flag=0 and ur.user_id="+user.getId()+")) ";
 		}
 
+
+
+		Map<String, Object> param = new HashMap<String, Object>();
+		long count = createSQLQuery(hql, param, null).size();
+
+		//List<Map<String, Object>> list = super.findBySql(sql, param);
+
 		int pn = pageRequest.getPageNumber() + 1;
+		hql +="order by bs_Assess desc";
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
 				+ pageRequest.getPageSize() + " ";
-
-		Map<String, Object> param = new HashMap<String, Object>();
-
-		//List<Map<String, Object>> list = super.findBySql(sql, param);
 		List<ProductMater> list = createSQLQuery(sql, param, ProductMater.class);
-		long count = createSQLQuery(hql, param, null).size();
+
 
 		for(ProductMater pm:list){
 			List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(pm.getBsMaterName());
