@@ -18,6 +18,8 @@ import com.system.report.service.SysReportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.Date;
+
 @Api(description = "通用报表")
 @CrossOrigin
 @ControllerAdvice
@@ -77,5 +79,13 @@ public class SysReportController extends WebController {
             return ApiResponseResult.failure("获取配置列表失败！");
         }
     }
-    
+
+	@ApiOperation(value = "获取服务端时间", notes = "获取服务端时间", hidden = true)
+	@RequestMapping(value = "/getServerTime", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getServerTime() {
+		return ApiResponseResult.success().data(new Date());
+	}
+
+
 }

@@ -134,7 +134,7 @@ public class ProductProcess extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "bsCycle", value = "成型周期")
 	@Column(length = 50)
-	protected BigDecimal bsCycle = new BigDecimal("1");
+	protected BigDecimal bsCycle;
 	
 	/**
 	 * 工序良率(%)

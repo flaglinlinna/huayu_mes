@@ -7,7 +7,7 @@ $(function() {
 
 	var intervaldata = interval.data;
 	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间
-	
+	getServerTime();
 	dealScdzData(scdz_data);
 	dealCjbgData(cjbg_data);
 	interval_do = setInterval(getList, intervaldata * 1000); // 启动,执行默认方法
@@ -105,6 +105,17 @@ function dealCjbgData(kanbanList) {
 function toClean() {
 	$("#showLine").text("总开线数：0");
 	chartCjbgDiv([], 0, 0, 0);
+}
+
+function getServerTime() {
+	CoreUtil.sendAjax("/sys/report", "",
+		function(data) {
+				if (data.result) {
+					console.log(data);
+				}
+		}, "GET", false, function(res) {
+			layer.alert(res.msg);
+		});
 }
 
 function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {

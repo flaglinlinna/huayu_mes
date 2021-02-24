@@ -52,7 +52,7 @@ public class BaseFeeController extends WebController{
         String method = "basePrice/baseFee/getList";String methodName ="获取人工制费维护列表";
         try {
             System.out.println(keyword);
-            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            Sort sort = new Sort(Sort.Direction.DESC, "workcenterId","procId");
             ApiResponseResult result = baseFeeService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取人工制费维护列表=getList:");
             getSysLogService().success(module,method, methodName, null);

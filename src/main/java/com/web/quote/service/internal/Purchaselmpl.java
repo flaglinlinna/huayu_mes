@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.web.basePrice.dao.UnitDao;
 import com.web.basePrice.entity.Unit;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -47,6 +48,8 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	private ProductMaterDao productMaterDao;
 	@Autowired
 	private QuoteDao quoteDao;
+	@Autowired
+	private UnitDao unitDao;
 	@Autowired
 	private PriceCommDao priceCommDao;
 	/**
@@ -209,7 +212,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
 				+ pageRequest.getPageSize() + " ";
 		List<ProductMater> list = createSQLQuery(sql, param, ProductMater.class);
-
+		List<Unit> unitList = unitDao.findByDelFlag(0);
 
 		for(ProductMater pm:list){
 			List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(pm.getBsMaterName());
@@ -221,6 +224,10 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 				}
 				str = str.substring(0, str.length()-1);
 				pm.setBsPriceList(str1);
+			}
+			if(unitList.size()>0){
+				String str1 = JSON.toJSONString(unitList); //此行转换
+				pm.setBsUnitList(str1);
 			}
 		}
 

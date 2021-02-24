@@ -192,7 +192,7 @@ $(function() {
 			
 			//20210120-fyx-后工序损料
 			else if(inputId == "hou_loss_all"){
-				getProcessDetail("", "后工序损料(后工序损料 = 后工序损料+本工序损料) ")
+				getProcessDetail("", "后工序损料 = 后工序损料(人工)+后工序损料(制费) ")
 			}
 		}
 
@@ -293,7 +293,7 @@ $(function() {
 			cols : [ [ 
 			   {type : 'numbers'},
 			   {field : 'bsName',width : 150,title : '零件名称',sort : true,totalRowText : "合计"},
-			   {field : 'bsOrder',width : 110,title : '工艺顺序',sort : true},
+			   {field : 'bsOrder',width : 100,title : '工艺顺序',sort : true},
 			   {field : 'proc',width : 150,title : '工序名称',
 				  templet : function(d) {
 					if (d.proc != null) {
@@ -322,12 +322,13 @@ $(function() {
 						return "";
 					}
 				}},
-				{field : 'bsModelType',width : 100,title : '机台类型',width : 90},
+				{field : 'bsModelType',width : 100,title : '机台类型',width : 105},
 				//{field : 'bsRadix',title : '基数',width : 90,hide : true},
 				{field : 'bsUserNum',title : '人数',width : 90,hide : true},
 				{field : 'bsCycle',title : '成型周期(S)',width : 150,hide : true},
 				{field : 'bsYield',title : '工序良率%',width : 120,hide : true},
-				{field : 'bsLoss',title : '外协损耗率%',width : 100,hide : true},
+				{field : 'bsHouYield',title : '后工序良率%',width : 120,hide : true},
+				{field : 'bsLoss',title : '外协损耗率%',width : 130,hide : true},
 				{field : 'bsCave',title : '穴数',width : 90,hide : true},
 				{field : 'bsCapacity',title : '产能',width : 90,hide : true},
 				{field : 'bsFeeLh',title : '人工费率',width : 90,hide : true},
@@ -335,10 +336,16 @@ $(function() {
 				{field : 'bsFeeLhAll',title : '总人工费',width : 90,totalRow : true,hide : true},
 				{field : 'bsFeeMhAll',title : '总制费',width : 90,totalRow : true,hide : true},
 				{field : 'bsFeeWxAll',title : '外协加工',width : 120,totalRow : true,hide : true},
-				{field : 'bsLossHouLh',title : '后工序损料',width : 120,totalRow : true,hide : true},
-				{field : 'bsLossTheMh',title : '本工序损料',width : 120,totalRow : true,hide : true},
+
+				// {field : 'bsFeeLhAll',title : '人工总费用',width : 130,totalRow : true,hide : true},
+				// {field : 'bsFeeMhAll',title : '制费总费用',width : 130,totalRow : true,hide : true},
+
+				{field : 'bsLossTheLh',title : '本工序损料(人工)',width : 150,totalRow : true,hide : true},
+				{field : 'bsLossTheMh',title : '本工序损料(制费)',width : 150,totalRow : true,hide : true},
+				{field : 'bsLossHouLh',title : '后工序损料(人工)',width : 150,totalRow : true,hide : true},
+				{field : 'bsLossHouMh',title : '后工序损料(制费)',width : 150,totalRow : true,hide : true},
 				{field : 'bsHeji',title : '工序损料合计',width : 120,totalRow : true,hide : true,templet: function (d) {
-					   return Number(d.bsLossHouLh)+Number(d.bsLossTheMh);
+					   return (Number(d.bsLossTheLh)+Number(d.bsLossTheMh)+Number(d.bsLossHouLh)+Number(d.bsLossHouMh)).toFixed(4);
 				      }
                  },
 				//{field : 'bsHeji',title : '工序损料合计',width : 120,totalRow : true,hide : false},
@@ -522,22 +529,44 @@ function getProcessDetail(bsType, title) {
 					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossHouLh"]').removeClass("layui-hide");
 					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
 					$(".layui-table-total").find('tr').find('td[data-field="bsLossHouLh"]').removeClass("layui-hide");
+
+					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossHouMh"]').removeClass("layui-hide");
+					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossHouMh"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsLossHouMh"]').removeClass("layui-hide");
+
 					/*$(".layui-table-total").find('tr').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");*/
 
 					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
 					$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
 
+					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsHouYield"]').removeClass("layui-hide");
+					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsHouYield"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsHouYield"]').removeClass("layui-hide");
+
+					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossTheLh"]').removeClass("layui-hide");
+					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossTheLh"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsLossTheLh"]').removeClass("layui-hide");
+
 					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossTheMh"]').removeClass("layui-hide");
 					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossTheMh"]').removeClass("layui-hide");
 					$(".layui-table-total").find('tr').find('td[data-field="bsLossTheMh"]').removeClass("layui-hide");
-					
+
+
+					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+
+					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+
 					$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsHeji"]').removeClass("layui-hide");
 					$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsHeji"]').removeClass("layui-hide");
 					$(".layui-table-total").find('tr').find('td[data-field="bsHeji"]').removeClass("layui-hide");
 					
 					
-					onwanceTotal += Number(item.bsLossHouLh)+Number(item.bsLossTheMh)
+					onwanceTotal += Number(item.bsLossHouLh)+Number(item.bsLossTheMh)+Number(item.bsLossTheLh)+Number(item.bsLossHouMh);
 				}else{
 					if (item.bsType == 'out' ) {// 外协
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
@@ -654,7 +683,7 @@ function getProcessDetail(bsType, title) {
 				
 			});
 			if(bsType == ''){
-				this.elem.next().find('.layui-table-total td[data-field="bsHeji"] .layui-table-cell').text(onwanceTotal);
+				this.elem.next().find('.layui-table-total td[data-field="bsHeji"] .layui-table-cell').text(onwanceTotal.toFixed(4));
 			}
 			
 			

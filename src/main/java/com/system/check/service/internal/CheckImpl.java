@@ -399,12 +399,13 @@ public class CheckImpl   implements CheckService {
 								pm.setBsUnit(qb.getUnit().getUnitName()); //hjj-20210120-补充单位名称
 							}
 							pm.setPurchaseUnit(qb.getPurchaseUnit());
+//							pm.setBsGeneral();
 //							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
 //							pm.setBsWaterGap(qb.getBsWaterGap()); hjj-20210220 去掉水口和穴数，
 							if((qb.getBsAgent()==1)){
 								pm.setBsAssess(BigDecimal.ZERO);
 							}else {
-								//hjj-20210122 不是待采,先查询物料通用价格
+								//hjj-20210122 不是代采,先查询物料通用价格
 								List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(qb.getBsMaterName());
 								if(lm.size()>0){
 									String priceUn = lm.get(0).get("PRICE_UN").toString();
@@ -415,6 +416,8 @@ public class CheckImpl   implements CheckService {
 										pm.setBsAssess(new BigDecimal(priceUn));
 										pm.setBsGeneral(1);
 									}
+								}else {
+									pm.setBsGeneral(0);
 								}
 							}
 							pm.setBsRadix(qb.getBsRadix());

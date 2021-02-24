@@ -258,10 +258,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				wx_all = wx_all.add(pp.getBsFeeWxAll());
 			}
 
-			lh_the_loss = lh_the_loss.add(pp.getBsLossTheLh());
-			wh_the_loss = wh_the_loss.add(pp.getBsLossTheMh());
-			lh_hou_loss = lh_hou_loss.add(pp.getBsLossHouLh());
-			wh_hou_loss = wh_hou_loss.add(pp.getBsLossTheMh());
+//			lh_the_loss = lh_the_loss.add(pp.getBsLossTheLh());
+//			wh_the_loss = wh_the_loss.add(pp.getBsLossTheMh());
+			lh_hou_loss = lh_hou_loss.add(pp.getBsLossHouLh()); //后工序损耗(人工)
+			wh_hou_loss = wh_hou_loss.add(pp.getBsLossHouMh()); //后工序损耗(制费)
 		}
 		// 3：小计
 		BigDecimal hardware_all = cl_hardware.add(lh_hardware).add(lw_hardware);// 五金小计
