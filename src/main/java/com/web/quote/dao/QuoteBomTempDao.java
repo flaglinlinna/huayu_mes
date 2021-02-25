@@ -20,4 +20,6 @@ public interface QuoteBomTempDao extends CrudRepository<QuoteBomTemp, Long>,JpaS
 
 	public List<QuoteBomTemp> findByCheckStatusAndDelFlagAndCreateByAndPkQuote(Integer checkStatus,Integer delFlag,Long createBy,Long pkQuote);
 	public List<QuoteBom> findByDelFlagAndPkQuote(Integer delFlag, Long pkQuote);
+
+	Integer deleteByIdIn(long[] ids);
 }

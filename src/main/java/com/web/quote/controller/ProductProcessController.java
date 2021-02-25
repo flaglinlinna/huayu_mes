@@ -317,4 +317,23 @@ public class ProductProcessController extends WebController {
 	}
 
 
+	@ApiOperation(value = "删除附件", notes = "删除附件",hidden = true)
+	@RequestMapping(value = "/delFile", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult delFile(Long recordId, Long fileId){
+		String method = "/productProcess/delFile";String methodName ="删除附件";
+		try{
+			ApiResponseResult result = productProcessService.delFile(recordId,fileId);
+			logger.debug("删除附件=delete:");
+			getSysLogService().success(module,method, methodName, null);
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("删除附件失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("删除附件失败！");
+		}
+	}
+
+
 }

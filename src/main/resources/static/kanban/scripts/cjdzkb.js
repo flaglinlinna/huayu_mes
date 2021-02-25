@@ -7,7 +7,6 @@ $(function() {
 
 	var intervaldata = interval.data;
 	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间
-	getServerTime();
 	dealScdzData(scdz_data);
 	dealCjbgData(cjbg_data);
 	interval_do = setInterval(getList, intervaldata * 1000); // 启动,执行默认方法
@@ -53,10 +52,19 @@ function dealScdzData(kanbanList) {
 		var done = parseInt(kanbanList.data.PRD_NUM_DONE);
 		var plan = parseInt(kanbanList.data.PRD_NUM_PLN);
 		var doneRate = kanbanList.data.PRD_RATE_DONE;
-		
-		$("#done").text(done);
+
+
+		if(done<plan||done ==0) {
+			$("#done").html('<span style="color: #CC0033;">' + done + '</span>')
+		}else {
+			$("#done").text(done);
+		}
 		$("#plan").text(plan);
-		$("#done_rate").text(doneRate+"%");
+		if(doneRate<100){
+			$("#done_rate").html('<span style="color: #CC0033;">' + doneRate+"%" + '</span>')
+		}else {
+			$("#done_rate").text(doneRate+"%");
+		}
 		//getChart3(done, plan, doneRate);
 		
 
@@ -87,7 +95,11 @@ function dealCjbgData(kanbanList) {
 			if(kanbanData[i].LINER_NAME=="总体"){
 				$("#stdtime").text(kanbanData[i].HOUR_ST);
 				$("#facttime").text(kanbanData[i].HOUR_ACT);
-				$("#prd_eff").text(kanbanData[i].EFFICIENCY_RATE+"%");
+				if(kanbanData[i].EFFICIENCY_RATE<90){
+					$("#prd_eff").html('<span style="color: #CC0033;">' + kanbanData[i].EFFICIENCY_RATE+"%" + '</span>');
+				}else {
+					$("#prd_eff").text(kanbanData[i].EFFICIENCY_RATE + "%");
+				}
 				continue;
 			}
 			xAxis.push(kanbanData[i].LINER_NAME+"\n"+"第"+kanbanData[i].FROWNUM+"名");
@@ -107,16 +119,6 @@ function toClean() {
 	chartCjbgDiv([], 0, 0, 0);
 }
 
-function getServerTime() {
-	CoreUtil.sendAjax("/sys/report", "",
-		function(data) {
-				if (data.result) {
-					console.log(data);
-				}
-		}, "GET", false, function(res) {
-			layer.alert(res.msg);
-		});
-}
 
 function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 	option = {

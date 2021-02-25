@@ -156,7 +156,7 @@ $(function() {
 		function getUrl(inputId) {
 			// 材料成本
 			if (inputId == "cl_hardware") {
-				getMaterDetail("hardware", "五金材料价格明细 (价格=单价*用量/基数)")
+				getMaterDetail("hardware", "五金材料价格明细  (价格=单价*(制品重+水口重/穴数)")
 			} else if (inputId == "cl_molding") {
 				getMaterDetail("molding", "注塑材料价格明细  (价格=单价*(制品重+水口重/穴数)/基数)")
 			} else if (inputId == "cl_surface") {
@@ -467,12 +467,13 @@ function getMaterDetail(bsType, title) {
 		done : function(res1, curr, count) {
 			pageCurr = curr;
 			res1.data.forEach(function(item, index) {
-				if (bsType == 'hardware') {// 五金
-					$('div[lay-id="materTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
-					$('div[lay-id="materTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
-					$(".layui-table-total").find('tr').find('td[data-field="bsQty"]').removeClass("layui-hide");
-
-				} else if (bsType == 'molding') {// 注塑
+				// if (bsType == 'hardware') {// 五金
+				// 	$('div[lay-id="materTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+				// 	$('div[lay-id="materTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+				// 	$(".layui-table-total").find('tr').find('td[data-field="bsQty"]').removeClass("layui-hide");
+				//
+				// } else
+				if (bsType == 'molding' ||bsType =='hardware') {// 注塑
 					$('div[lay-id="materTable"]').find('thead').find('th[data-field="bsWaterGap"]').removeClass("layui-hide");
 					$('div[lay-id="materTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
 					$('div[lay-id="materTable"]').find('thead').find('th[data-field="bsProQty"]').removeClass("layui-hide");

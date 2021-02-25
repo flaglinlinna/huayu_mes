@@ -84,6 +84,20 @@ public class BaseFee extends BaseEntity {
 		@Column(length = 10)
 		protected String feeMh;
 
+		/**
+		 * 附件id
+		 */
+		@ApiModelProperty(name = "fileId", value = "附件id")
+		@Column(length = 200)
+		protected String fileId;
+
+		public String getFileId() {
+			return fileId;
+		}
+
+		public void setFileId(String fileId) {
+			this.fileId = fileId;
+		}
 
 		public Long getWorkcenterId() {
 			return workcenterId;

@@ -16,6 +16,9 @@ public interface QuoteBomTempService {
 //	//临时表导入正式表
 	public ApiResponseResult importByTemp(Long pkQuote) throws Exception;
 
+	//批量删除选中的临时导入数据
+	public ApiResponseResult deleteTemp(String ids) throws Exception;
+
 
 
 }

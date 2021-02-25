@@ -162,7 +162,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 if(!StringUtils.isNotEmpty(row1)){
                     errInfo += errInfo + "零件名称不能为空";
                 }
-                if(("molding").equals(bsType)){
+                if(("molding").equals(bsType)||("hardware").equals(bsType)){
                     temp.setBsMaterName(row2);
                     if(!StringUtils.isNotEmpty(row2)){
                         errInfo = errInfo + "材料名称不能为空";
@@ -226,7 +226,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         errInfo = errInfo + "穴数不能为空;";
                     }
 
-                } else if(("surface").equals(bsType)){
+                }
+                else if(("surface").equals(bsType)){
                     temp.setBsMachiningType(row2);
                     if(!StringUtils.isNotEmpty(row2)) {
                         errInfo = errInfo + "加工类型不能为空;";
@@ -273,7 +274,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         errInfo = errInfo + "基数不能为空;";
                     }
                     temp.setFmemo(row9);
-                }else {
+                }
+                else {
                     temp.setBsComponent(row1);
                     temp.setBsMaterName(row2);
                     temp.setBsModel(row3);

@@ -46,12 +46,13 @@
 		</div>
 		<!--添加或编辑人工制费维护-->
 		<div id="setForm" class="layer_self_wrap"
-			style="width: 500px; display: none; margin-left: 10px;">
+			style="width: 1000px; display: none; margin-left: 10px;">
 			<form id="itemForm" class="layui-form layui-form-pane"
 				lay-filter="itemForm" method="post" action=""
 				style="margin-top: 20px;">
-				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
-					type="hidden" name="id" />
+				<input id="pageNum" type="hidden" name="pageNum" />
+				<input id="fileId" type="hidden" name="fileId" />
+				<input id="id" type="hidden" name="id" />
 				<div class="layui-form-item">
 					<label class="layui-form-label">工序</label>
 					<div class="layui-input-inline">
@@ -77,7 +78,7 @@
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">人工费率</label>
+					<label class="layui-form-label layui-required">人工费用</label>
 					<div class="layui-input-inline">
 						<input id="feeLh" name="feeLh" lay-verify="number"
 							autocomplete="off" class="layui-input" type="text" />
@@ -85,13 +86,36 @@
 					<div class="layui-word-aux" style="line-height: 20px;">（元/小时）</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">制费费率</label>
+					<label class="layui-form-label layui-required">制费费用</label>
 					<div class="layui-input-inline">
 						<input id="feeMh" name="feeMh" lay-verify="number"
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 					<div class="layui-word-aux" style="line-height: 20px;">（元/小时）</div>
 				</div>
+
+				<div class="layui-form-item">
+					<div id="itemDiv1" class="layui-form-item" >
+						<label class="layui-form-label">附件上传</label>
+						<div class="layui-input-inline" style="width:70%;">
+							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload2">
+								<i class="layui-icon layui-icon-upload-circle"></i>上传
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div id="itemDiv2" class="layui-form-item">
+						<label class="layui-form-label">附件</label>
+						<div class="layui-input-inline" style="width:70%;">
+							<!--<div style="position:relative;padding:10px 30px;width:90%">-->
+							<div  id="filelist" name="fftp">
+							</div>
+							<!--</div>-->
+						</div>
+					</div>
+				</div>
+
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 10px;">
 						<button class="layui-btn layui-btn-sm" lay-submit=""
@@ -102,6 +126,11 @@
 				</div>
 			</form>
 		</div>
+
+<!--		<script th:inline="javascript">-->
+<!--			var Fee = [[${Fee}]];-->
+<!--		</script>-->
+
 		<script th:src="@{/js/web/basePrice/base_fee.js}"
 			src="/js/web/basePrice/base_fee.js"></script>
 	</div>

@@ -342,11 +342,12 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 
 	/**
 	 * 第二步全部审批通过后，计算物料的价格，工序的人工费和制费
+	 * 五金计算公式修改成和注塑一样 20210225-hjj
 	 */
 	@Override
 	public ApiResponseResult countMeterAndProcess(String quoteId) throws Exception {
 		// TODO Auto-generated method stub
-		// 五金，表面，组装的材料总价格(未税)计算公式-单价*用量/基数
+		// 五金，表面，组装的材料总价格(未税)计算公式-单价*用量/基数 20210225去除了五金
 		List<ProductMater> lpm3 = productMaterDao.findByDelFlagAnd3Tyle(Long.valueOf(quoteId));
 		for (ProductMater pm : lpm3) {
 			BigDecimal bsRadix = new BigDecimal("1");// 基数
@@ -362,7 +363,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			pm.setBsFee(bsAssess.multiply(pm.getBsQty().divide(bsRadix, 5, 5)));
 		}
 		productMaterDao.saveAll(lpm3);
-		// 注塑的材料总价格(未税)计算公式-材料单价*(制品重+水口重/穴数)/基数
+		// 注塑的材料总价格(未税)计算公式-材料单价*(制品重+水口重/穴数)/基数  20210225增加了五金
 		List<ProductMater> lpm1 = productMaterDao.findByDelFlagAndMolding(Long.valueOf(quoteId));
 		for (ProductMater pm : lpm1) {
 			BigDecimal bsRadix = new BigDecimal("1");// 基数

@@ -7,10 +7,12 @@
  * 外协:out
  */
 var pageCurr;
+var _index = 0;
+var fileId = "";
 $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
 		var table = layui.table, table2 = layui.table,form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect,
-			tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect,tableSelect3 = layui.tableSelect;
+			tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect,tableSelect3 = layui.tableSelect,upload2 =layui.upload;
 		isComplete()
 		tableIns = table.render({
 			elem : '#listTable',
@@ -75,7 +77,7 @@ $(function() {
 				{field : 'bsYield', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:120,edit:'text',hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsLoss', title : '损耗率<span style="color:red;font-size:12px;">*</span>', width:100,edit:'text',hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCave', title : '穴数<span style="color:red;font-size:12px;">*</span>',edit:'text',width:90, hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsCapacity', title : '产能<span style="color:red;font-size:12px;">*</span>',edit:'text',width:90, hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsCapacity', title : '产能(个/小时)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:105, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsFeeWxAll', title : '外协价格<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
 				{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff'},
 				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
@@ -205,7 +207,7 @@ $(function() {
 				{field : 'bsCycle', title : '成型周期(S)', width:120,edit:'text', hide:true},
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
 				{field : 'bsCave', title : '穴数',edit:'text', width:80, hide:true},
-				{field : 'bsCapacity', title : '产能',edit:'text', width:80, hide:true},
+				{field : 'bsCapacity', title : '产能(个/小时)',edit:'text', width:105, hide:true},
 				{field : 'fmemo', title : '备注',width:120,edit:'text'},
 				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
 				] ],
@@ -231,6 +233,30 @@ $(function() {
 				// 	$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
 				// }
 
+			}
+		});
+
+		//上传控件
+		upload2.render({
+			elem: '#upload2'
+			,url: context+'/file/upload'
+			,accept: 'file' //普通文件
+			,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致。
+				layer.load(); //上传loading
+			}
+			,done: function(res,index, upload){
+				layer.closeAll('loading'); //关闭loading
+				if(res.result == true){
+					document.getElementById("filelist").innerHTML = "";
+					document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data);
+					_index++;
+					fileId +=res.data.id;
+				}
+				$('#fileId').val(fileId);
+				$('#fileName').val(res.data.bsName);
+			}
+			,error: function(index, upload){
+				layer.closeAll('loading'); //关闭loading
 			}
 		});
 
@@ -609,6 +635,26 @@ $(function() {
 				"bsLoss":obj.bsLoss,
 				"bsFeeWxAll":obj.bsFeeWxAll
 			});
+			if(obj.fileId!=null) {
+				var params = {
+					"id": obj.fileId,
+					"bsName": obj.fileName,
+					"qsFileId": obj.id,
+					"bsContentType": "stp"
+				}
+				document.getElementById("filelist").innerHTML = $("#filelist").html() + getExcFieldBefore(params, params.qsFileId, "/productProcess/delFile");
+			}
+			//获取附件文件
+			// CoreUtil.sendAjax("/productProcess/getFileList?customId="+obj.id,"",
+			// 	function(data) {
+			// 		console.log(data);
+			// 		for(var i =0;i<data.data.length; i++){
+			// 			document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcFieldBefore(data.data[i],data.data[i].qsFileId,"/productProcess/delFile");
+			// 		}
+			// 	}, "GET", false, function(res) {
+			// 		layer.alert(res.msg);
+			// 	});
+
 			openProdErr(id, "编辑工艺信息")
 		};
 
@@ -799,6 +845,11 @@ function openProdErr(id, title) {
 		$('#bsName').prop("disabled","disabled");
 		$('#procName').prop("disabled","disabled");
 	}
+	if(bsType =="surface"){
+		console.log("111111111");
+		$('#fileDiv1').show();
+		$('#fileDiv2').show();
+	}
 	layui.form.render('');
 	selectDiv();
 	var index=layer.open({
@@ -870,10 +921,11 @@ function Confirm(){
 			if (data.result) {
 				layer.alert("确认完成成功", function() {
 					layer.closeAll();
-					//刷新页面
-					iStatus=2;
-					isComplete();
-					loadAll()
+					// //刷新页面
+					// iStatus=2;
+					// isComplete();
+					// loadAll()
+					window.location.reload();
 				});
 			} else {
 				layer.alert(data.msg);
@@ -1189,6 +1241,8 @@ function loadAll2() {
 // 清空新增表单数据
 function cleanProdErr() {
 	$('#productProcessForm')[0].reset();
+	_index = 0;
+	document.getElementById("filelist").innerHTML = "";
 	layui.form.render();// 必须写
 }
 

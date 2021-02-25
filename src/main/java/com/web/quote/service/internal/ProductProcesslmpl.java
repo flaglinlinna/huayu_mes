@@ -10,8 +10,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.system.file.entity.FsFile;
 import com.web.basePrice.dao.BaseFeeDao;
 import com.web.basePrice.entity.BaseFee;
+import com.web.basePrice.entity.BaseFeeFile;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -143,6 +145,8 @@ public class ProductProcesslmpl implements ProductProcessService {
         o.setFmemo(productProcess.getFmemo());
         o.setBsLoss(productProcess.getBsLoss());
         o.setBsFeeWxAll(productProcess.getBsFeeWxAll());
+        o.setFileId(productProcess.getFileId());
+        o.setFileName(productProcess.getFileName());
         productProcessDao.save(o);
         return ApiResponseResult.success("编辑成功！");
     }
@@ -593,7 +597,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         //删除临时表数据
         productProcessTempDao.deleteByPkQuoteAndBsTypeAndCreateBy(pkQuote,bsType,userId);
         productProcessDao.saveAll(productProcessList);
-        return ApiResponseResult.success();
+        return ApiResponseResult.success().data("导入成功! 导入总数:" +productProcessList.size());
     }
 
     /**
@@ -643,4 +647,22 @@ public class ProductProcesslmpl implements ProductProcessService {
         }
 		return ApiResponseResult.success().data(lm);
 	}
+
+    /**
+     * 删除附件
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult delFile(Long id,Long fileId) throws Exception {
+        if (id == null) {
+            return ApiResponseResult.failure("ID不能为空！");
+        }
+        ProductProcess o = productProcessDao.findById((long) id);
+        if (o == null) {
+            return ApiResponseResult.failure("附件信息不存在！");
+        }
+        o.setFileId(null);
+        productProcessDao.save(o);
+        return ApiResponseResult.success("删除附件成功！");
+    }
 }

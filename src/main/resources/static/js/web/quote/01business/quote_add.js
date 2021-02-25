@@ -185,8 +185,12 @@ function saveData(obj) {
 	CoreUtil.sendAjax("/quote/add", JSON.stringify(obj), function(data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
-				clean();
+				// clean();
 				layer.closeAll();
+				top.layui.element.tabDelete("tab", top.jQuery(".layui-tab-title .layui-this").attr("lay-id"));
+				parent.layui.index.openTabsPage(context + '/quote/toQuoteList' , '报价单查询');
+				var srcUrl = context + '/quote/toQuoteList';
+				($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 			});
 		} else {
 			layer.alert(data.msg);
@@ -201,8 +205,11 @@ function copyData(obj) {
 	CoreUtil.sendAjax("/quote/copy", JSON.stringify(obj), function(data) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
-				clean();
 				layer.closeAll();
+				top.layui.element.tabDelete("tab", top.jQuery(".layui-tab-title .layui-this").attr("lay-id"));
+				parent.layui.index.openTabsPage(context + '/quote/toQuoteList' , '报价单查询');
+				var srcUrl = context + '/quote/toQuoteList';
+				($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 			});
 		} else {
 			layer.alert(data.msg);

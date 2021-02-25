@@ -240,6 +240,19 @@ public class ProductProcess extends BaseEntity {
 	@Transient
     private String bsTypeList;
 
+	/**
+	 * 附件id
+	 */
+	@ApiModelProperty(name = "fileId", value = "附件id")
+	protected Long fileId;
+
+	/**
+	 * 附件名称
+	 */
+	@ApiModelProperty(name = "fileName", value = "附件名称")
+	@Column(length = 100)
+	protected String fileName;
+
 	public Long getPkQuote() {
 		return pkQuote;
 	}
@@ -473,7 +486,20 @@ public class ProductProcess extends BaseEntity {
 	public void setBsTypeList(String bsTypeList) {
 		this.bsTypeList = bsTypeList;
 	}
-	
-	
-	
+
+	public Long getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(Long fileId) {
+		this.fileId = fileId;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 }

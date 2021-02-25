@@ -30,4 +30,8 @@ public interface BaseFeeService {
   public ApiResponseResult getWorkCenterList(String type,String condition,PageRequest pageRequest)throws Exception;//工作中心
   
   public ApiResponseResult doCheckInfo(String type,String input1,String input2,String input3,String input4)throws Exception;//检验工序&工作中心
+
+  public ApiResponseResult getFileList(Long customId) throws Exception;
+
+  public ApiResponseResult delFile(Long id,Long fileId) throws Exception;
 }

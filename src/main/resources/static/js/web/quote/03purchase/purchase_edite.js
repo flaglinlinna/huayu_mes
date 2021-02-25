@@ -47,7 +47,7 @@ $(function() {
 				{field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'},
 				{field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
 				{field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'},
-				{field : 'bsQty',width : 80,title : '用量',style : 'background-color:#d2d2d2'},
+				{field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
 				{field : 'bsGear',width : 120,title : '价格挡位',templet : '#selectGear',style : 'background-color:#ffffff'},
 				{field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'},
 				{field : 'bsAssess',width : 110,title : '评估价格<span style="color:red;font-size:12px;">*</span>',edit : 'number',style : 'background-color:#ffffff'},
@@ -56,7 +56,7 @@ $(function() {
 				{field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
 				// {field : 'bsWaterGap',title : '水口量(g)',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				// {field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
-				{field : 'bsUnit',width : 80,title : '用量单位',style : 'background-color:#d2d2d2',templet:function (d){
+				{field : 'bsUnit',width : 100,title : 'BOM用量单位',style : 'background-color:#d2d2d2',templet:function (d){
 					if(d.unit!=null){
 						return d.unit.unitCode;
 					}
@@ -136,8 +136,8 @@ $(function() {
 				  {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'},
 				  {field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
 				  {field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'},
-				  {field : 'bsQty',width : 80,title : '用量',style : 'background-color:#d2d2d2'},
-				  {field : 'bsUnit',width : 80,title : '用量单位',style : 'background-color:#d2d2d2',templet:function (d){
+				  {field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
+				  {field : 'bsUnit',width : 100,title : 'BOM用量单位',style : 'background-color:#d2d2d2',templet:function (d){
 						  if(d.unit!=null){
 							  return d.unit.unitCode;
 						  }
@@ -175,7 +175,7 @@ $(function() {
 		form.verify({
 			double : function(value) {
 				if (/^\d+$/.test(value) == false && /^\d+\.\d+$/.test(value) == false && value != "" && value != null) {
-					return '用量/制品量 只能输入数字';
+					return 'BOM用量/制品量 只能输入数字';
 				}
 			}
 		});

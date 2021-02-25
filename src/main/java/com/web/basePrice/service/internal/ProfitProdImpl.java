@@ -190,8 +190,10 @@ public class ProfitProdImpl extends BasePriceUtils implements ProfitProdService 
 			map.put("itemType", profitProd.getItemType());
 			map.put("fmemo",profitProd.getFmemo());
 			map.put("enabled", profitProd.getEnabled());
-			map.put("createBy", sysUserDao.findById((long) profitProd.getCreateBy()).getUserName());
-			map.put("createDate", df.format(profitProd.getCreateDate()));
+			if (profitProd.getCreateBy() != null) {
+				map.put("createBy", sysUserDao.findById((long) profitProd.getCreateBy()).getUserName());
+				map.put("createDate", df.format(profitProd.getCreateDate()));
+			}
 			if (profitProd.getLastupdateBy() != null) {
 				map.put("lastupdateBy", sysUserDao.findById((long) profitProd.getLastupdateBy()).getUserName());
 				map.put("lastupdateDate", df.format(profitProd.getLastupdateDate()));

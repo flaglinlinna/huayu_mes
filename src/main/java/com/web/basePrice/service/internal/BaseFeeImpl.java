@@ -4,12 +4,12 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.system.file.dao.FsFileDao;
+import com.system.file.entity.FsFile;
 import com.system.user.dao.SysUserDao;
 
-import com.web.basePrice.dao.BjModelTypeDao;
-import com.web.basePrice.dao.ProcDao;
-import com.web.basePrice.entity.BjModelType;
-import com.web.basePrice.entity.Proc;
+import com.web.basePrice.dao.*;
+import com.web.basePrice.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -27,10 +27,6 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
-import com.web.basePrice.dao.BaseFeeDao;
-import com.web.basePrice.dao.UnitDao;
-import com.web.basePrice.entity.BaseFee;
-import com.web.basePrice.entity.Unit;
 import com.web.basePrice.service.BaseFeeService;
 import com.web.basic.dao.WorkCenterDao;
 import com.web.basic.entity.Mtrial;
@@ -48,8 +44,13 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 	private BaseFeeDao baseFeeDao;
 
 	@Autowired
+	private BaseFeeFileDao baseFeeFileDao;
+
+	@Autowired
 	private BjModelTypeDao bjModelTypeDao;
 
+	@Autowired
+	private FsFileDao fsFileDao;
 
 	@Autowired
 	private ProcDao procDao;
@@ -78,6 +79,25 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		baseFee.setCreateDate(new Date());
 		baseFee.setCreateBy(UserUtil.getSessionUser().getId());
 		baseFeeDao.save(baseFee);
+
+		String[] fileIds =  baseFee.getFileId().split(",");
+		List<BaseFeeFile> fileList = new ArrayList<>();
+		for(String fileId :fileIds){
+			if(StringUtils.isNotEmpty(fileId)){
+				FsFile fsFile = fsFileDao.findById(Long.parseLong(fileId));
+				if(fsFile.getDelFlag()==0) {
+					BaseFeeFile baseFeeFile = new BaseFeeFile();
+					baseFeeFile.setmId(baseFee.getId());
+					baseFeeFile.setFileId(fsFile.getId());
+					baseFeeFile.setFileName(fsFile.getBsName());
+					baseFeeFile.setCreateDate(new Date());
+					baseFeeFile.setCreateBy(UserUtil.getSessionUser().getId());
+					fileList.add(baseFeeFile);
+				}
+			}
+		}
+		baseFeeFileDao.saveAll(fileList);
+
 		return ApiResponseResult.success("人工制费信息添加成功！").data(baseFee);
 	}
 
@@ -113,6 +133,25 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 	    o.setFeeLh(baseFee.getFeeLh());
 	    o.setFeeMh(baseFee.getFeeMh());
 		baseFeeDao.save(o);
+
+		String[] fileIds =  baseFee.getFileId().split(",");
+		List<BaseFeeFile> fileList = new ArrayList<>();
+		for(String fileId :fileIds){
+			if(StringUtils.isNotEmpty(fileId)){
+				FsFile fsFile = fsFileDao.findById(Long.parseLong(fileId));
+				if(fsFile.getDelFlag()==0) {
+					BaseFeeFile baseFeeFile = new BaseFeeFile();
+					baseFeeFile.setmId(baseFee.getId());
+					baseFeeFile.setFileId(fsFile.getId());
+					baseFeeFile.setFileName(fsFile.getBsName());
+					baseFeeFile.setCreateDate(new Date());
+					baseFeeFile.setCreateBy(UserUtil.getSessionUser().getId());
+					fileList.add(baseFeeFile);
+				}
+			}
+		}
+		baseFeeFileDao.saveAll(fileList);
+
 		return ApiResponseResult.success("编辑成功！");
 	}
 
@@ -331,4 +370,51 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
 		}
 	}
+
+	/**
+	 *
+	 * @param mId 主表id
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public ApiResponseResult getFileList(Long mId) throws Exception {
+		List<BaseFeeFile> customQsFiles =  baseFeeFileDao.findByDelFlagAndMId(0,mId);
+		List<Map<String, Object>> mapList = new ArrayList<>();
+		for(BaseFeeFile qsFile :customQsFiles){
+			Map<String, Object> map = new HashMap<>();
+			map.put("id",qsFile.getFileId());
+			map.put("qsFileId",qsFile.getId());
+			map.put("bsName",qsFile.getFileName());
+			map.put("bsContentType","stp");
+			mapList.add(map);
+		}
+		return ApiResponseResult.success().data(mapList);
+	}
+
+	/**
+	 * 删除客户品质标准附件
+	 */
+	@Override
+	@Transactional
+	public ApiResponseResult delFile(Long id,Long fileId) throws Exception {
+		if (id == null) {
+			return ApiResponseResult.failure("ID不能为空！");
+		}
+		BaseFeeFile o = baseFeeFileDao.findById((long) id);
+		if (o == null) {
+			return ApiResponseResult.failure("附件信息不存在！");
+		}
+		o.setDelFlag(1);
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
+		o.setLastupdateDate(new Date());
+		baseFeeFileDao.save(o);
+
+		FsFile fsFile = fsFileDao.findById((long) fileId);
+		fsFile.setDelFlag(1);
+		fsFileDao.save(fsFile);
+
+		return ApiResponseResult.success("删除附件成功！");
+	}
+
 }

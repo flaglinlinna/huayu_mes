@@ -143,7 +143,8 @@ public class ProductMaterlmpl implements ProductMaterService {
         //表面处理导入顺序: 零件名称、加工类型、配色工艺、材料名称、规格、用料、单位、基数、备注
         if(("hardware").equals(bsType)){
             fileName = "五金材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
+//            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsRadix","bsWaterGap","bsCave","fmemo"};
         }else if(("molding").equals(bsType)){
             fileName = "注塑材料模板.xlsx";
             map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsRadix","bsWaterGap","bsCave","fmemo"};

@@ -41,11 +41,11 @@ $(function() {
 			  {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
 			  {field : 'bsMaterName',title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
 			  {field : 'bsModel',title : '规格',style : 'background-color:#d2d2d2'},
-			  {field : 'bsQty',width : 100,title : '用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
+			  {field : 'bsQty',width : 100,title : 'BOM用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'bsProQty',width : 100,title : '制品重<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
-				{field : 'bsUnit',width : 120,title : '单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
+				{field : 'bsUnit',width : 120,title : 'BOM用量单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
 			  /*{field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text',style : 'background-color:#ffffff'},*/
-			  {field : 'bsWaterGap',title : '水口量(g)<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
+			  {field : 'bsWaterGap',title : '水口重(g)<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
 			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (注塑)*/}, 
 			  {field : 'bsSupplier',title : '备选供应商',edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'fmemo',title : '备注',width : 120,edit : 'text',style : 'background-color:#ffffff'},
@@ -64,10 +64,11 @@ $(function() {
 				});
 
 				res.data.forEach(function(item, index) {
-					if (bsType == 'hardware') {// 五金
-						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
-					} else if (bsType == 'molding') {// 注塑
+					// if (bsType == 'hardware') {// 五金
+					// 	$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+					// 	$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+					// } else
+					if (bsType == 'molding' ||bsType == 'hardware') {// 注塑 20210225-hjj-五金材料更改计算方式
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsWaterGap"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsProQty"]').removeClass("layui-hide");
@@ -137,11 +138,11 @@ $(function() {
 			   {field : 'bsColor',title : '配色工艺',width : 100,hide : true /*(表面处理)*/},
 			   {field : 'bsMaterName',width : 140,title : '材料名称',sort : true},
 			   {field : 'bsModel',width : 160,title : '规格'},
-			   {field : 'bsQty',width : 100,title : '用量',hide : true},
+			   {field : 'bsQty',width : 100,title : 'BOM用量',hide : true},
 			   {field : 'bsProQty',width : 100,title : '制品量',hide : true},
-			   {field : 'bsUnit',width : 80,title : '单位',},
+			   {field : 'bsUnit',width : 80,title : 'BOM用量单位',},
 			   //{field : 'bsRadix',width : 80,title : '基数',},
-			   {field : 'bsWaterGap',title : '水口量(g)',width : 100,hide : true /*(注塑)*/},
+			   {field : 'bsWaterGap',title : '水口重(g)',width : 100,hide : true /*(注塑)*/},
 			   {field : 'bsCave',title : '穴数',width : 100,hide : true /*(注塑)*/},
 			   {field : 'bsSupplier',title : '备选供应商',width : 100},
 			   {field : 'fmemo',title : '备注',width : 120},
@@ -210,13 +211,13 @@ $(function() {
 			} else*/
 			if (obj.field == "bsQty") {
 				if (/^\d+$/.test(bsQty) == false && /^\d+\.\d+$/.test(bsQty) == false) {
-					layer.msg("用量只能输入数字");
+					layer.msg("BOM用量只能输入数字");
 					loadAll();
 					return false;
 				}
 			} else if (obj.field == "bsWaterGap") {
 				if (/^\d+$/.test(bsWaterGap) == false && /^\d+\.\d+$/.test(bsWaterGap) == false) {
-					layer.msg("水口量只能输入数字");
+					layer.msg("水口重只能输入数字");
 					loadAll();
 					return false;
 				}
@@ -275,7 +276,11 @@ $(function() {
 		form.on('submit(addSubmit)', function(data) {
 
 			if (bsType == "hardware") {
-				if (data.field.bsQty == "") {
+				// if (data.field.bsQty == "") {
+				// 	layer.msg("请输入所有带*的必填项");
+				// 	return false;
+				// }
+				if (data.field.bsProQty == "" || data.field.bsCave == "" || data.field.bsWaterGap == "") {
 					layer.msg("请输入所有带*的必填项");
 					return false;
 				}
@@ -416,9 +421,10 @@ function Confirm() {
 				layer.alert("确认完成成功", function() {
 					layer.closeAll();
 					// 刷新页面
-					iStatus=2;
-					isComplete();
-					loadAll()
+					// iStatus=2;
+					// isComplete();
+					// loadAll()
+					window.location.reload();
 				});
 			} else {
 				layer.alert(data.msg);
@@ -456,10 +462,11 @@ function openUpload() {
 		done : function(res1, curr, count) {
 			pageCurr = curr;
 			res1.data.forEach(function(item, index) {
-				if (bsType == 'hardware') {// 五金
-					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
-					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
-				} else if (bsType == 'molding') {// 注塑
+				// if (bsType == 'hardware') {// 五金
+				// 	$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+				// 	$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+				// } else
+				if (bsType == 'molding'|| bsType == 'hardware') {// 注塑
 					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsWaterGap"]').removeClass("layui-hide");
 					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
 					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsProQty"]').removeClass("layui-hide");
@@ -508,14 +515,15 @@ function downloadExcel() {
 }
 
 function selectDiv() {
-	if (bsType == "hardware") {
-		$("#bsProQtyDiv").hide();
-		$("#bsWaterGapDiv").hide();
-		$("#bsCaveDiv").hide();
-		$("#bsColorDiv").hide();
-		$("#bsMachiningTypeDiv").hide();
-
-	} else if (bsType == "molding") {
+	// if (bsType == "hardware") {
+	// 	$("#bsProQtyDiv").hide();
+	// 	$("#bsWaterGapDiv").hide();
+	// 	$("#bsCaveDiv").hide();
+	// 	$("#bsColorDiv").hide();
+	// 	$("#bsMachiningTypeDiv").hide();
+	//
+	// } else
+	if (bsType == "molding" || bsType == "hardware") {
 		$("#bsQtyDiv").hide();
 		$("#bsColorDiv").hide();
 		$("#bsMachiningTypeDiv").hide();

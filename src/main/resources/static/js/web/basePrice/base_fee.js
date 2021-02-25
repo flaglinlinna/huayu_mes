@@ -2,11 +2,13 @@
  * 人工制费维护管理
  */
 var pageCurr;
+var _index = 0;
+var fileId = "";
 $(function() {
 	layui.use([ 'form', 'table', 'tableSelect' ,'upload'],
 			function() {
 				var table = layui.table, form = layui.form, tableSelect = layui.tableSelect,
-					tableSelect1 = layui.tableSelect,upload = layui.upload;
+					tableSelect1 = layui.tableSelect,upload = layui.upload,upload2 = layui.upload;
 						tableIns = table.render({
 							elem : '#colsList',
 							url : context + '/basePrice/baseFee/getList',
@@ -35,8 +37,8 @@ $(function() {
 							           {field : 'workcenter',title : '工作中心',width : 140},
 							           {field : 'procName',title : '工序',width : 100},
 							           {field : 'mhType',title : '机台类型',width : 160},
-							           {field : 'feeLh',title : '人工费率（元/小时）',width : 150}, 
-							           {field : 'feeMh',title : '制费费率（元/小时）',width : 150}, 
+							           {field : 'feeLh',title : '人工费用（元/小时）',width : 150}, 
+							           {field : 'feeMh',title : '制费费用（元/小时）',width : 150},
 							           {field : 'createBy',title : '创建人',width : 80}, 
 							           {field : 'createDate',title : '创建时间',width : 150}, 
 							           {field : 'lastupdateBy',title : '更新人',width : 80}, 
@@ -305,11 +307,46 @@ $(function() {
 								"procId" : obj.procId,
 								"mhType" : obj.mhType,
 								"feeLh" : obj.feeLh,
-								"feeMh" : obj.feeMh
+								"feeMh" : obj.feeMh,
+								"fileId" : obj.fileId
 							});
+
+							//获取附件文件
+							CoreUtil.sendAjax("/basePrice/baseFee/getFileList?customId="+obj.id,"",
+								function(data) {
+									console.log(data);
+									for(var i =0;i<data.data.length; i++){
+										document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcFieldBefore(data.data[i],data.data[i].qsFileId,"/basePrice/baseFee/delFile");
+									}
+								}, "GET", false, function(res) {
+									layer.alert(res.msg);
+								});
 
 							openData(obj.id, "编辑价格信息")
 						}
+
+				//上传控件
+				upload2.render({
+					elem: '#upload2'
+					,url: context+'/file/upload'
+					,accept: 'file' //普通文件
+					,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致。
+						layer.load(); //上传loading
+					}
+					,done: function(res,index, upload){
+						layer.closeAll('loading'); //关闭loading
+						if(res.result == true){
+							document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data);
+							_index++;
+							fileId +=res.data.id +",";
+
+						}
+						$('#fileId').val(fileId);
+					}
+					,error: function(index, upload){
+						layer.closeAll('loading'); //关闭loading
+					}
+				});
 
 						// 设置正常/禁用
 						function doStatus(obj, id, name, checked) {
@@ -394,9 +431,18 @@ function  getModelTypeUrl() {
 
 // 新增编辑弹出框
 function openData(id, title) {
-
+	// console.log(Fee);
 	if (id == null || id == "") {
 		$("#id").val("");
+		CoreUtil.sendAjax("/basePrice/baseFee/getFeeParam", "",
+			function(data) {
+				if (data.result) {
+					$('#feeLh').val(data.data[0].paramValue);
+				}
+			}, "POST", false, function(res) {
+				layer.alert(res.msg);
+			});
+
 	}
 	var index = layer.open({
 		type : 1,
@@ -521,7 +567,11 @@ function loadAll() {
 // 清空新增表单数据
 function cleanData() {
 	$('#itemForm')[0].reset();
+	_index = 0;
+	document.getElementById("filelist").innerHTML = "";
 	layui.form.render();// 必须写
 }
+
+
 
 

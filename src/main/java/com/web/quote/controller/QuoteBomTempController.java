@@ -80,4 +80,22 @@ public class QuoteBomTempController extends WebController {
 			return ApiResponseResult.failure("确定导入失败！");
 		}
 	}
+
+	@ApiOperation(value="批量删除选中的临时导入数据", notes="批量删除选中的临时导入数据", hidden = true)
+	@RequestMapping(value = "/deleteTemp", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult deleteTemp(@RequestBody Map<String, Object> params) {
+		String method = "/quoteBomTemp/deleteTemp";String methodName ="批量删除选中的临时导入数据";
+		try {
+			String ids = params.get("ids").toString();
+			logger.debug("确定导入正式表=uploadCheck:");
+			getSysLogService().success(module,method, methodName, "");
+			return  quoteBomTempService.deleteTemp(ids);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("确定导入正式表失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("删除失败！");
+		}
+	}
 }

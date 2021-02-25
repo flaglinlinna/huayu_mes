@@ -223,9 +223,9 @@ $(function() {
 									}
 								}},
 								{field : 'fmemo',title : '工艺说明',width : 200},
-							{field : 'bsQty',title : '用量',width : 90},
+							{field : 'bsQty',title : 'BOM用量',width : 90},
 							// {field : 'bsProQty',title : '制品重',width : 90},
-							{field : 'unit',title : '用量单位',width : 80,
+							{field : 'unit',title : 'BOM用量单位',width : 100,
 								templet : function(d) {
 									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
@@ -272,7 +272,8 @@ $(function() {
 								}
 							},
 							cols : [ [
-							    {type : 'numbers'}, 
+							    {type : 'numbers'},
+								{type:'checkbox'},
 							    {field : 'checkStatus',width : 100,title : '状态',sort : true,style : 'background-color:#d2d2d2',templet : '#checkStatus'},
 								{field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'},
 								{field : 'bsElement',title : '组件名称',sort : true,width : 120}, 
@@ -299,9 +300,9 @@ $(function() {
 										}
 									}},
 								{field : 'fmemo',title : '工艺说明',width : 200},
-								{field : 'bsQty',title : '用量',width : 90},
+								{field : 'bsQty',title : 'BOM用量',width : 90},
 								// {field : 'bsProQty',title : '制品量',width : 90},
-								{field : 'unit',title : '用量单位',width : 80,templet : function(d) {
+								{field : 'unit',title : 'BOM用量单位',width : 100,templet : function(d) {
 									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
 								}},
@@ -561,6 +562,34 @@ function editSubmit(obj) {
 		layer.alert(res.msg);
 	});
 }
+
+// 删除选中的临时表
+function deleteTemp() {
+	var checkStatus = layui.table.checkStatus('uploadList').data;
+	var ids ="";
+	for(var i = 0;i<checkStatus.length;i++){
+		ids+=checkStatus[i].id+","
+	}
+	console.log(checkStatus);
+	var params={
+		"ids":ids
+	}
+	CoreUtil.sendAjax("/quoteBomTemp/deleteTemp", JSON.stringify(params), function(data) {
+		if (data.result) {
+			layer.alert("删除成功", function() {
+				// layer.closeAll();
+				// cleanProdErr();
+				// 加载页面
+				loadAll2();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
 
 // 删除五金材料
 function delProdErr(obj, id, name) {

@@ -33,4 +33,6 @@ public interface ProductProcessService {
 	
 	//20210119-fyx-根据大类过滤工序
 	public ApiResponseResult getProcListByType(String bsType) throws  Exception;
+
+	public ApiResponseResult delFile(Long id,Long fileId) throws Exception;
 }

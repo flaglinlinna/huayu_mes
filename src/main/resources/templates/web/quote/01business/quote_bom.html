@@ -114,9 +114,9 @@
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label ">用量</label>
+						<label class="layui-form-label ">BOM用量</label>
 						<div class="layui-input-block" style="width:200px">
-							<input id="bsQty" name="bsQty" placeholder="请输入用量"
+							<input id="bsQty" name="bsQty" placeholder="请输入BOM用量"
 								   lay-verify="double" autocomplete="off" class="layui-input"
 								   type="text" />
 						</div>
@@ -135,7 +135,7 @@
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-					    <label class="layui-form-label">用量单位</label>
+					    <label class="layui-form-label">BOM用量单位</label>
 					    <div class="layui-input-block" style="width:200px">
 						<!--<select id="pkUnit" name="pkUnit" placeholder="请选择单位" lay-filter="pkUnit"   autocomplete="off">-->
 						<!--</select>-->
@@ -219,8 +219,9 @@
 		<div id="uploadDiv" class="layer_self_wrap"
 			style="display: none; margin-left: 10px;">
 			<button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">选择文件</button>
+			<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadChecked()">确认导入</button>
 			<button class="layui-btn layui-btn-sm layui-btn-normal"
-				onclick="uploadChecked()">确认导入</button>
+					onclick="deleteTemp()">批量删除</button>
 			<table id="uploadList" lay-filter="uploadTable"></table>
 		</div>
 

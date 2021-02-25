@@ -17,6 +17,7 @@ import com.web.quote.dao.QuoteBomTempDao;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteBomTemp;
 import com.web.quote.service.QuoteBomTempService;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -301,5 +302,17 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 		quoteBomDao.saveAll(quoteBomList);
 		quoteBomTempDao.deleteByPkQuoteAndCreateBy(pkQuote,userId);
 		return ApiResponseResult.success().message("确认导入成功!共导入:"+quoteBomList.size()+"条");
+	}
+
+	@Override
+	public ApiResponseResult deleteTemp(String ids) throws Exception {
+		if(StringUtils.isNoneEmpty(ids)){
+			long[] idsArray = (long[]) ConvertUtils.convert(ids.split(","),long.class);
+			quoteBomTempDao.deleteByIdIn(idsArray);
+			return ApiResponseResult.success().message("删除成功");
+		}else {
+			return ApiResponseResult.failure().message("请选中需要删除的数据");
+		}
+
 	}
 }

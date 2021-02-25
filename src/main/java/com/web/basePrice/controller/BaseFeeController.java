@@ -2,6 +2,7 @@ package com.web.basePrice.controller;
 
 import java.util.Map;
 
+import com.web.basic.service.SysParamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import com.web.basePrice.service.BaseFeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @Api("人工制费维护模块")
 @CrossOrigin
@@ -31,6 +33,8 @@ public class BaseFeeController extends WebController{
     private String module = "人工制费维护";
     @Autowired
     private BaseFeeService baseFeeService;
+    @Autowired
+    private SysParamService sysParamService;
 
     @ApiOperation(value = "人工制费维护表结构", notes = "人工制费维护结构"+ BaseFee.TABLE_NAME)
     @RequestMapping(value = "/getBaseFee", method = RequestMethod.GET)
@@ -41,8 +45,30 @@ public class BaseFeeController extends WebController{
 
     @ApiOperation(value = "人工制费维护列表页", notes = "人工制费维护列表页", hidden = true)
     @RequestMapping(value = "/toBaseFee")
-    public String toBaseFee(){
-        return "/web/basePrice/base_fee";
+    public ModelAndView toBaseFee(){
+        ModelAndView mav = new ModelAndView();
+        try {
+//            mav.addObject("Fee", sysParamService.getValueByCodeList("BJ_LABOUR_COST").getData());//20210225-hjj-人工费
+            mav.setViewName("/web/basePrice/base_fee");// 返回路径
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("获取报价基础数据失败！", e);
+        }
+        return  mav;
+    }
+
+    @ApiOperation(value = "人工制费系统参数获取", notes = "人工制费系统参数获取", hidden = true)
+    @RequestMapping(value = "/getFeeParam")
+    @ResponseBody
+    public ApiResponseResult getFeeParam(){
+        try {
+         return ApiResponseResult.success().data(sysParamService.getValueByCodeList("BJ_LABOUR_COST").getData());//20210225-hjj-人工费
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("人工制费系统参数获取失败！", e);
+//            ApiResponseResult result = ApiResponseResult.failure().message("查询失败");
+            return ApiResponseResult.failure().message("查询失败");
+        }
     }
 
     @ApiOperation(value = "获取人工制费维护列表", notes = "获取人工制费维护列表",hidden = true)
@@ -237,6 +263,43 @@ public class BaseFeeController extends WebController{
             logger.error("导入失败！", e);
             getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("导入失败！");
+        }
+    }
+
+    @ApiOperation(value = "获取文件列表", notes = "获取文件列表",hidden = true)
+    @RequestMapping(value = "/getFileList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getFileList(Long customId) {
+        String method = "basePrice/customQs/getFileList";String methodName ="获取文件列表";
+        try {
+            System.out.println(customId);
+//            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = baseFeeService.getFileList(customId);
+            logger.debug("获取附件列表=getList:");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取附件列表失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取附件列表失败！");
+        }
+    }
+
+    @ApiOperation(value = "删除客户品质标准附件", notes = "删除客户品质标准信息",hidden = true)
+    @RequestMapping(value = "/delFile", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult delFile(Long recordId, Long fileId){
+        String method = "basePrice/customQs/delFile";String methodName ="删除客户品质标准附件";
+        try{
+            ApiResponseResult result = baseFeeService.delFile(recordId,fileId);
+            logger.debug("删除客户品质标准附件=delete:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("删除客户品质标准附件失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("删除客户品质标准附件失败！");
         }
     }
 }

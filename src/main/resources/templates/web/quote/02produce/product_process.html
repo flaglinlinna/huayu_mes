@@ -89,12 +89,13 @@
 
 		<!--添加或编辑异常类别-->
 		<div id="setProdErr" class="layer_self_wrap"
-			style="width: 500px; display: none; margin-left: 10px;">
+			style="width: 1000px; display: none; margin-left: 10px;">
 			<form id="productProcessForm" class="layui-form layui-form-pane"
 				lay-filter="productProcessForm" method="post" action=""
 				style="margin-top: 20px;">
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
-					type="hidden" name="id" />
+					type="hidden" name="id" /><input id="fileId"  type="hidden" name="fileId" />
+				<input id="fileName"  type="hidden" name="fileName" />
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">零件名称</label>
 					<div class="layui-input-block">
@@ -181,7 +182,7 @@
 					</div>
 				</div>
 				<div class="layui-form-item" id="bsCapacityDiv">
-					<label class="layui-form-label layui-required">产能</label>
+					<label class="layui-form-label layui-required">产能(个/小时)</label>
 					<div class="layui-input-block">
 						<input id="bsCapacity" name="bsCapacity" lay-verify="double"
 							placeholder="请输入产能" autocomplete="off" class="layui-input"
@@ -205,6 +206,29 @@
 							autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
+
+				<div class="layui-form-item" style="display: none" id ="fileDiv1">
+					<div id="itemDiv1" class="layui-form-item" >
+						<label class="layui-form-label">附件上传</label>
+						<div class="layui-input-inline" style="width:70%;">
+							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload2">
+								<i class="layui-icon layui-icon-upload-circle"></i>上传
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item" style="display: none"  id ="fileDiv2">
+					<div id="itemDiv2" class="layui-form-item">
+						<label class="layui-form-label">附件</label>
+						<div class="layui-input-inline" style="width:70%;">
+							<!--<div style="position:relative;padding:10px 30px;width:90%">-->
+							<div  id="filelist" name="fftp">
+							</div>
+							<!--</div>-->
+						</div>
+					</div>
+				</div>
+
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 10px;">
 						<button class="layui-btn layui-btn-sm" lay-submit=""
@@ -296,7 +320,7 @@
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">产能</label>
+					<label class="layui-form-label">产能(个/小时)</label>
 					<div class="layui-input-block">
 						<input id="bsCapacity1" name="bsCapacity" placeholder="请输入产能"
 							lay-verify="double" autocomplete="off" class="layui-input"
