@@ -2,9 +2,11 @@
  * 模具成本维护
  */
 var pageCurr;
+var _index = 0;
+var fileId = "";
 $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect','upload' ], function() {
-		var table = layui.table, form = layui.form,upload = layui.upload,
+		var table = layui.table, form = layui.form,upload = layui.upload,upload2 = layui.upload,
 			tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,
 			tableSelect2 = layui.tableSelect,upload = layui.upload;
 
@@ -48,16 +50,16 @@ $(function() {
 			  {field : 'productName',title : '产品',sort:true,width:100},
 			  {field : 'numHole',title : '穴数',sort:true,width:100},
 			  {field : 'structureMj',title : '模具结构',width:100},
-			  {field : 'mjPrice',title : '模具报价价格',sort:true,width:120},
-			  {field : 'feeType1',title : '钢料+配件+热处理费用',width:160},
-			  {field : 'feeType2',title : '铜公材料费用',width:120},
-			  {field : 'feeType3',title : '模胚价格+加工费用',width:140},
-			  {field : 'feeType4',title : '热流道费用',width:130},
-			  {field : 'feeProc',title : '工序成本',width:100},
+			  {field : 'mjPrice',title : '模具报价价格(未税)',sort:true,width:160},
+			  {field : 'feeType1',title : '材料成本(未税)',width:160},
+			  {field : 'feeType2',title : '制造成本(未税)',width:160},
+			  {field : 'feeType3',title : '外发纹理费用(未税)',width:140},
+			  // {field : 'feeType4',title : '热流道费用',width:130},
+			  // {field : 'feeProc',title : '评估总费用(未税)',width:100},
 			  {field : 'stQuote',title : '参考报价',width:130},
-			  {field : 'feeAll',title : '评估总费用(含税)',width:130},
+			  {field : 'feeAll',title : '评估总费用(未税)',width:130},
 			  {field : 'fmemo',title : '备注',width:100},
-			  {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width:120,}
+			  {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width:120}
 			] ],
 			done : function(res, curr, count) {
 				console.log(res)
@@ -108,6 +110,30 @@ $(function() {
 				demoText.find('.demo-reload').on('click', function(){
 					uploadInst.upload();
 				});
+			}
+		});
+
+
+		//上传控件
+		upload.render({
+			elem: '#upload'
+			,url: context+'/file/upload'
+			,accept: 'file' //普通文件
+			,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致。
+				layer.load(); //上传loading
+			}
+			,done: function(res,index, upload){
+				layer.closeAll('loading'); //关闭loading
+				if(res.result == true){
+					document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data);
+					_index++;
+					fileId +=res.data.id +",";
+
+				}
+				$('#fileId').val(fileId);
+			}
+			,error: function(index, upload){
+				layer.closeAll('loading'); //关闭loading
 			}
 		});
 
@@ -170,6 +196,18 @@ $(function() {
 			if(obj.fimg){
 				$('#demo1').attr('src',  context + "/file/view?fsFileId="+obj.fimg);
 			}
+
+			//获取客户品质标准文件
+			CoreUtil.sendAjax("/basePrice/procFee/getFileList?customId="+obj.id,"",
+				function(data) {
+					console.log(data);
+					for(var i =0;i<data.data.length; i++){
+						document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcFieldBefore(data.data[i],data.data[i].qsFileId,"/basePrice/procFee/delFile");
+					}
+				}, "GET", false, function(res) {
+					layer.alert(res.msg);
+				});
+
 			openPage(id, "编辑模具成本信息")
 		};	
 	});
@@ -321,13 +359,17 @@ function calAll(){
 	var fee1=$("#feeType1").val()==""?0:parseFloat($("#feeType1").val())
 	var fee2=$("#feeType2").val()==""?0:parseFloat($("#feeType2").val())
 	var fee3=$("#feeType3").val()==""?0:parseFloat($("#feeType3").val())
-	var fee4=$("#feeType4").val()==""?0:parseFloat($("#feeType4").val())
-	var fee_proc=$("#feeProc").val()==""?0:parseFloat($("#feeProc").val())
+	// var fee4=$("#feeType4").val()==""?0:parseFloat($("#feeType4").val())
+	var fee4=0
+	// var fee_proc=$("#feeProc").val()==""?0:parseFloat($("#feeProc").val())
+	var fee_proc = 0
 	var all= fee1+fee2+fee3+fee4+fee_proc
 	$("#feeAll").val(all)
 }
 // 清空新增表单数据
 function clean() {
 	$('#itemForm')[0].reset();
+	_index = 0;
+	document.getElementById("filelist").innerHTML = "";
 	layui.form.render();// 必须写
 }

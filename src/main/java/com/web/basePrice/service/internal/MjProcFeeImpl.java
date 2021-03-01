@@ -3,8 +3,13 @@ package com.web.basePrice.service.internal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.system.file.dao.CommonFileDao;
+import com.system.file.dao.FsFileDao;
+import com.system.file.entity.CommonFile;
+import com.system.file.entity.FsFile;
 import com.system.user.dao.SysUserDao;
 import com.system.user.entity.SysUser;
+//import com.web.basePrice.entity.CustomQsFile;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +42,12 @@ public class MjProcFeeImpl implements MjProcFeeService {
 
     @Autowired
     private SysUserDao sysUserDao;
+
+    @Autowired
+    private FsFileDao fsFileDao;
+
+    @Autowired
+    private CommonFileDao commonFileDao;
    
     
     @Override
@@ -54,6 +65,25 @@ public class MjProcFeeImpl implements MjProcFeeService {
     mjProcFee.setCreateDate(new Date());
     mjProcFee.setCreateBy(UserUtil.getSessionUser().getId());
     mjProcFeeDao.save(mjProcFee);
+
+        String[] fileIds =  mjProcFee.getFileId().split(",");
+        List<CommonFile> fileList = new ArrayList<>();
+        for(String fileId :fileIds){
+            if(StringUtils.isNotEmpty(fileId)){
+                FsFile fsFile = fsFileDao.findById(Long.parseLong(fileId));
+                if(fsFile.getDelFlag()==0) {
+                    CommonFile qsFile = new CommonFile();
+                    qsFile.setmId(mjProcFee.getId());
+                    qsFile.setFileId(fsFile.getId());
+                    qsFile.setFileName(fsFile.getBsName());
+                    qsFile.setCreateDate(new Date());
+                    qsFile.setCreateBy(UserUtil.getSessionUser().getId());
+                    qsFile.setBsType("ProcFee");
+                    fileList.add(qsFile);
+                }
+            }
+        }
+        commonFileDao.saveAll(fileList);
     return ApiResponseResult.success("添加模具成本信息成功").data(mjProcFee);
     }
 
@@ -87,6 +117,24 @@ public class MjProcFeeImpl implements MjProcFeeService {
 	o.setFeeAll(mjProcFee.getFeeAll());//评估总费用（含税）
     
     mjProcFeeDao.save(o);
+        String[] fileIds =  mjProcFee.getFileId().split(",");
+        List<CommonFile> fileList = new ArrayList<>();
+        for(String fileId :fileIds){
+            if(StringUtils.isNotEmpty(fileId)){
+                FsFile fsFile = fsFileDao.findById(Long.parseLong(fileId));
+                if(fsFile.getDelFlag()==0) {
+                    CommonFile qsFile = new CommonFile();
+                    qsFile.setmId(mjProcFee.getId());
+                    qsFile.setFileId(fsFile.getId());
+                    qsFile.setFileName(fsFile.getBsName());
+                    qsFile.setCreateDate(new Date());
+                    qsFile.setCreateBy(UserUtil.getSessionUser().getId());
+                    qsFile.setBsType("ProcFee");
+                    fileList.add(qsFile);
+                }
+            }
+        }
+        commonFileDao.saveAll(fileList);
     return ApiResponseResult.success("编辑成功！");
 }
 
@@ -158,4 +206,50 @@ public class MjProcFeeImpl implements MjProcFeeService {
             return ApiResponseResult.success().data(DataGrid.create(mapList, (int) page.getTotalElements(),
             pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
         }
+
+    /**
+     *
+     * @param customId 主表id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public ApiResponseResult getFileList(Long customId) throws Exception {
+        List<CommonFile> customQsFiles = commonFileDao.findByDelFlagAndMIdAndBsType(0,customId,"ProcFee");
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        for(CommonFile qsFile :customQsFiles){
+            Map<String, Object> map = new HashMap<>();
+            map.put("id",qsFile.getFileId());
+            map.put("qsFileId",qsFile.getId());
+            map.put("bsName",qsFile.getFileName());
+            map.put("bsContentType","stp");
+            mapList.add(map);
+        }
+        return ApiResponseResult.success().data(mapList);
+    }
+
+    /**
+     * 删除客户品质标准附件
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult delFile(Long id,Long fileId) throws Exception {
+        if (id == null) {
+            return ApiResponseResult.failure("客户品质标准信息ID不能为空！");
+        }
+        CommonFile o = commonFileDao.findById((long) id);
+        if (o == null) {
+            return ApiResponseResult.failure("客户品质标准信息不存在！");
+        }
+        o.setDelFlag(1);
+        o.setLastupdateBy(UserUtil.getSessionUser().getId());
+        o.setLastupdateDate(new Date());
+        commonFileDao.save(o);
+
+        FsFile fsFile = fsFileDao.findById((long) fileId);
+        fsFile.setDelFlag(1);
+        fsFileDao.save(fsFile);
+
+        return ApiResponseResult.success("删除附件成功！");
+    }
 }

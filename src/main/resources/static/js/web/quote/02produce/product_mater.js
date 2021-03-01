@@ -42,7 +42,7 @@ $(function() {
 			  {field : 'bsMaterName',title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
 			  {field : 'bsModel',title : '规格',style : 'background-color:#d2d2d2'},
 			  {field : 'bsQty',width : 100,title : 'BOM用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
-			  {field : 'bsProQty',width : 100,title : '制品重<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
+			  {field : 'bsProQty',width : 100,title : '制品重(g)<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 				{field : 'bsUnit',width : 120,title : 'BOM用量单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
 			  /*{field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text',style : 'background-color:#ffffff'},*/
 			  {field : 'bsWaterGap',title : '水口重(g)<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
@@ -217,13 +217,13 @@ $(function() {
 				}
 			} else if (obj.field == "bsWaterGap") {
 				if (/^\d+$/.test(bsWaterGap) == false && /^\d+\.\d+$/.test(bsWaterGap) == false) {
-					layer.msg("水口重只能输入数字");
+					layer.msg("水口重(g)只能输入数字");
 					loadAll();
 					return false;
 				}
 			} else if (obj.field == "bsProQty") {
 				if (/^\d+$/.test(bsProQty) == false && /^\d+\.\d+$/.test(bsProQty) == false && bsProQty != "" && bsProQty != null) {
-					layer.msg("制品重只能输入数字");
+					layer.msg("制品重(g)只能输入数字");
 					loadAll();
 					return false;
 				}

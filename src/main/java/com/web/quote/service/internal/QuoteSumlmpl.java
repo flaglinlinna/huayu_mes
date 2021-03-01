@@ -363,7 +363,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			pm.setBsFee(bsAssess.multiply(pm.getBsQty().divide(bsRadix, 5, 5)));
 		}
 		productMaterDao.saveAll(lpm3);
-		// 注塑的材料总价格(未税)计算公式-材料单价*(制品重+水口重/穴数)/基数  20210225增加了五金
+		// 注塑的材料总价格(未税)计算公式-材料单价*(制品重(g)+水口重/穴数)/基数  20210225增加了五金
 		List<ProductMater> lpm1 = productMaterDao.findByDelFlagAndMolding(Long.valueOf(quoteId));
 		for (ProductMater pm : lpm1) {
 			BigDecimal bsRadix = new BigDecimal("1");// 基数
@@ -378,7 +378,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			if (pm.getBsWaterGap() != null) {
 				bsWaterGap = new BigDecimal(pm.getBsWaterGap());
 			}
-			BigDecimal qty = bsWaterGap.divide(bsCave, 5, 5).add(pm.getBsProQty());// 水口重/穴数+制品重
+			BigDecimal qty = bsWaterGap.divide(bsCave, 5, 5).add(pm.getBsProQty());// 水口重/穴数+制品重(g)
 			BigDecimal bsAssess = new BigDecimal("0");// 采购价
 			if (pm.getBsAssess() != null) {
 				bsAssess = pm.getBsAssess();

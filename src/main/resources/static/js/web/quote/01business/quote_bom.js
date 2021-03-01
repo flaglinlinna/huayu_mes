@@ -224,7 +224,7 @@ $(function() {
 								}},
 								{field : 'fmemo',title : '工艺说明',width : 200},
 							{field : 'bsQty',title : 'BOM用量',width : 90},
-							// {field : 'bsProQty',title : '制品重',width : 90},
+							// {field : 'bsProQty',title : '制品重(g)',width : 90},
 							{field : 'unit',title : 'BOM用量单位',width : 100,
 								templet : function(d) {
 									if (d.unit != null) {return d.unit.unitCode;}

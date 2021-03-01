@@ -135,6 +135,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             //组装材料导入顺序: 零件名称1、材料名称2、规格3、用量4、单位5、基数6、供应商7、备注8
             //注塑材料导入顺序: 零件名称1、材料名称2、规格3、制品量4、单位5、基数6、水口量7、穴数8、备注9
             //表面处理导入顺序: 零件名称1、加工类型2、配色工艺3、材料名称4、规格5、用料6、单位7、基数8、备注9
+            //20210226-hjj-导入模板中去除基数
             Integer successes = 0;
             Integer failures = 0;
             for (int row = 2; row <= maxRow; row++) {
@@ -149,7 +150,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 String row7 = tranCell(sheet.getRow(row).getCell(7));
                 String row8 = tranCell(sheet.getRow(row).getCell(8));
                 String row9 = tranCell(sheet.getRow(row).getCell(9));
-                String row10 = tranCell(sheet.getRow(row).getCell(10));
+//                String row10 = tranCell(sheet.getRow(row).getCell(10));
                 ProductMaterTemp temp = new ProductMaterTemp();
 
                 if(StringUtils.isNotEmpty(mid)){
@@ -172,11 +173,11 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         errInfo = errInfo + "材料规格不能为空";
                     }
 
-                    temp.setBsRadix(row6);
-                    temp.setBsWaterGap(row7);
-                    temp.setBsCave(row8);
-                    temp.setBsSupplier(row9);
-                    temp.setFmemo(row10);
+//                    temp.setBsRadix(row6);
+                    temp.setBsWaterGap(row6);
+                    temp.setBsCave(row7);
+                    temp.setBsSupplier(row8);
+                    temp.setFmemo(row9);
 
                     if(StringUtils.isNotEmpty(row4)) {
                         temp.setBsProQty(row4);
@@ -198,28 +199,28 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         errInfo = errInfo + "单位不能为空;";
                     }
 
+//                    if(StringUtils.isNotEmpty(row6)) {
+//                        if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
+//                            errInfo = errInfo + "基数必须是数字类型;";
+//                        }
+//                    }else {
+//                        errInfo = errInfo + "基数不能为空;";
+//                    }
+
                     if(StringUtils.isNotEmpty(row6)) {
                         if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
-                            errInfo = errInfo + "基数必须是数字类型;";
-                        }
-                    }else {
-                        errInfo = errInfo + "基数不能为空;";
-                    }
-
-                    if(StringUtils.isNotEmpty(row7)) {
-                        if (!row7.matches("^\\d+\\.\\d+$") && !row7.matches("^\\d+$")) {
                             errInfo = errInfo + "水口数必须是数字类型;";
-                        }else if(row7 == "0.0"){
+                        }else if(row6 == "0.0"){
                             errInfo = errInfo + "水口数不能是0;";
                         }
                     }else {
                         errInfo = errInfo + "水口数不能为空;";
                     }
 
-                    if(StringUtils.isNotEmpty(row8)) {
-                        if (!row8.matches("^\\d+\\.\\d+$") && !row8.matches("^\\d+$")) {
+                    if(StringUtils.isNotEmpty(row7)) {
+                        if (!row7.matches("^\\d+\\.\\d+$") && !row7.matches("^\\d+$")) {
                             errInfo = errInfo + "穴数必须是数字类型;";
-                        }else if("0.0".equals(row8)){
+                        }else if("0.0".equals(row7)){
                             errInfo = errInfo + "穴数不能是0;";
                         }
                     }else {
@@ -265,15 +266,15 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         errInfo = errInfo + "单位不能为空;";
                     }
 
-                    temp.setBsRadix(row8);
-                    if(StringUtils.isNotEmpty(row8)) {
-                        if (!row8.matches("^\\d+\\.\\d+$") && !row8.matches("^\\d+$")) {
-                            errInfo = errInfo + "基数必须是数字类型;";
-                        }
-                    }else {
-                        errInfo = errInfo + "基数不能为空;";
-                    }
-                    temp.setFmemo(row9);
+//                    temp.setBsRadix(row8);
+//                    if(StringUtils.isNotEmpty(row8)) {
+//                        if (!row8.matches("^\\d+\\.\\d+$") && !row8.matches("^\\d+$")) {
+//                            errInfo = errInfo + "基数必须是数字类型;";
+//                        }
+//                    }else {
+//                        errInfo = errInfo + "基数不能为空;";
+//                    }
+                    temp.setFmemo(row8);
                 }
                 else {
                     temp.setBsComponent(row1);
@@ -310,15 +311,15 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         errInfo = errInfo + "用量不能为空;";
                     }
 
-                    if(StringUtils.isNotEmpty(row6)) {
-                        if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
-                            errInfo = errInfo + "基数必须是数字类型;";
-                        }
-                    }else {
-                        errInfo = errInfo + "基数不能为空;";
-                    }
-                    temp.setBsSupplier(row7);
-                    temp.setFmemo(row8);
+//                    if(StringUtils.isNotEmpty(row6)) {
+//                        if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
+//                            errInfo = errInfo + "基数必须是数字类型;";
+//                        }
+//                    }else {
+//                        errInfo = errInfo + "基数不能为空;";
+//                    }
+                    temp.setBsSupplier(row6);
+                    temp.setFmemo(row7);
                 }
                 temp.setCreateBy(userId);
                 temp.setCreateDate(doExcleDate);

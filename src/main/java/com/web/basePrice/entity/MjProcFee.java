@@ -127,6 +127,13 @@ public class MjProcFee extends BaseEntity {
 		@Column(length = 20)
 		protected BigDecimal feeAll;
 
+		/**
+		 * 附件id
+		 */
+		@ApiModelProperty(name = "fileId", value = "附件id")
+		@Column(length = 200)
+		protected String fileId;
+
 	public Long getProductTypeId() {
 		return productTypeId;
 	}
@@ -247,4 +254,11 @@ public class MjProcFee extends BaseEntity {
 		this.stQuote = stQuote;
 	}
 
+	public String getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
+	}
 }

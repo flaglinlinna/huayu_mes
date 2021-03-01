@@ -14,6 +14,8 @@ import com.web.basePrice.entity.ItemTypeWg;
 import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.QuoteBomDao;
 import com.web.quote.dao.QuoteBomTempDao;
+import com.web.quote.dao.QuoteDao;
+import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteBomTemp;
 import com.web.quote.service.QuoteBomTempService;
@@ -47,6 +49,9 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 
 	@Autowired
 	private QuoteBomDao quoteBomDao;
+
+	@Autowired
+	private QuoteDao quoteDao;
 
 	@Autowired
 	private ItemTypeWgDao itemTypeWgDao;
@@ -110,7 +115,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			Integer successes = 0;
 			Integer failures = 0;
 			//列顺序:0主表id，1工作中心，2物料类型，3是否代采，4组件名称，5零件名称，6材料名称，7材料规格，8工艺说明，
-			// 9用量，10制品重，11重量单位，12水口重(g)，13穴数，14采购说明
+			// 9用量，10制品重(g)，11重量单位，12水口重(g)，13穴数，14采购说明
 
 			//列顺序:0主表id，1工作中心，2物料类型，3是否代采，4组件名称，5零件名称，6材料名称，7材料规格，8工艺说明，
 			// 9用量，10用量单位，11采购单位，12采购说明  20200220-hjj
@@ -180,7 +185,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 //				}
 //				if(StringUtils.isNotEmpty(bsProQty)) {
 //					if(!bsProQty.matches("^\\d+\\.\\d+$") && !bsProQty.matches("^^\\d+$")){
-//						errInfo += "制品重需输入数字类型";
+//						errInfo += "制品重(g)需输入数字类型";
 //					}
 //				}
 
@@ -233,6 +238,14 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 				}
 				if(StringUtils.isNotEmpty(mid)) {
 					temp.setMid(Long.parseLong(mid));
+					QuoteBom quoteBom = quoteBomDao.findById((Long.parseLong(mid)));
+					if(quoteBom!=null) {
+						if (quoteBom.getPkQuote() != pkQuote) {
+							Quote quote = quoteDao.findById((long) quoteBom.getPkQuote());
+							return ApiResponseResult.failure("导入失败！导入的信息中包含报价单编号为:"+quote.getBsCode()+"的外购件清单信息数据," +
+									"请在当前页面导出后再导入导出的文件");
+						}
+					}
 				}
 				temp.setPkQuote(pkQuote);
 				temp.setBsElement(bsElement);

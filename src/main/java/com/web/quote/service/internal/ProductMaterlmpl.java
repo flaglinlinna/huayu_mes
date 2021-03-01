@@ -141,19 +141,21 @@ public class ProductMaterlmpl implements ProductMaterService {
         //组装材料导入顺序: 零件名称、材料名称、规格、用量、单位、基数、供应商、备注
         //注塑材料导入顺序: 零件名称、材料名称、规格、制品量、单位、基数、水口数、穴数、备注
         //表面处理导入顺序: 零件名称、加工类型、配色工艺、材料名称、规格、用料、单位、基数、备注
+
+        //20210226-hjj-导出去除基数
         if(("hardware").equals(bsType)){
             fileName = "五金材料模板.xlsx";
 //            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsRadix","bsWaterGap","bsCave","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsWaterGap","bsCave","fmemo"};
         }else if(("molding").equals(bsType)){
             fileName = "注塑材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsRadix","bsWaterGap","bsCave","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsWaterGap","bsCave","fmemo"};
         }else if(("surface").equals(bsType)){
             fileName = "表面处理材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMachiningType","bsColor","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMachiningType","bsColor","bsMaterName","bsModel","bsQty","bsUnit","fmemo"};
         }else if(("packag").equals(bsType)){
             fileName = "组装材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsSupplier","fmemo"};
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
 //        Resource resource = new ClassPathResource(excelPath+fileName);
@@ -183,7 +185,7 @@ public class ProductMaterlmpl implements ProductMaterService {
             map.put("bsComponent", bs.getBsComponent());
             map.put("bsMaterName", bs.getBsMaterName());
             map.put("bsModel", bs.getBsModel());
-            map.put("bsRadix", bs.getBsRadix());
+//            map.put("bsRadix", bs.getBsRadix());
             map.put("bsQty", bs.getBsQty());
             map.put("bsProQty", bs.getBsProQty());
             map.put("bsUnit", bs.getBsUnit());
@@ -219,7 +221,7 @@ public class ProductMaterlmpl implements ProductMaterService {
                 }
             }else if("molding".equals(bsType)) {
                 if ( o.getBsProQty() == null || o.getBsCave() == null || o.getBsWaterGap() == null) {
-                    return ApiResponseResult.failure("制品重、穴数、水口数不能为空,请检查后再确认！");
+                    return ApiResponseResult.failure("制品重(g)、穴数、水口数不能为空,请检查后再确认！");
                 }
             }else if("surface".equals(bsType)) {
                 if (o.getBsColor() == null || o.getBsMachiningType() == null || o.getBsQty() == null ) {
@@ -429,7 +431,7 @@ public class ProductMaterlmpl implements ProductMaterService {
 	public ApiResponseResult doSumFee(Long pkQuote) throws Exception {
 		// TODO Auto-generated method stub
 		//五金材料,表面处理,组装-材料单价*材料用量/基数
-		//注塑-材料单价*(制品重+水口重/穴数)/基数
+		//注塑-材料单价*(制品重(g)+水口重/穴数)/基数
 		return null;
 	}
 }

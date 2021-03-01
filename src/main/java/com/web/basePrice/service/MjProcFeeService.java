@@ -17,4 +17,8 @@ public interface MjProcFeeService {
 	public ApiResponseResult edit(MjProcFee mjProcFee) throws Exception;
 
 	public ApiResponseResult delete(Long id) throws Exception;
+
+	public ApiResponseResult getFileList(Long customId) throws Exception;
+
+	public ApiResponseResult delFile(Long id,Long fileId) throws Exception;
 }

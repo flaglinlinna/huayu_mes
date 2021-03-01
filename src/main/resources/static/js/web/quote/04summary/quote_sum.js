@@ -156,9 +156,9 @@ $(function() {
 		function getUrl(inputId) {
 			// 材料成本
 			if (inputId == "cl_hardware") {
-				getMaterDetail("hardware", "五金材料价格明细  (价格=单价*(制品重+水口重/穴数)")
+				getMaterDetail("hardware", "五金材料价格明细  (价格=单价*(制品重(g)+水口重/穴数)")
 			} else if (inputId == "cl_molding") {
-				getMaterDetail("molding", "注塑材料价格明细  (价格=单价*(制品重+水口重/穴数)/基数)")
+				getMaterDetail("molding", "注塑材料价格明细  (价格=单价*(制品重(g)+水口重/穴数)/基数)")
 			} else if (inputId == "cl_surface") {
 				getMaterDetail("surface", "表面处理材料价格明细  (价格=单价*用量/基数)")
 			} else if (inputId == "cl_packag") {
@@ -241,7 +241,7 @@ $(function() {
 			{field : 'bsMaterName',width : 120,title : '材料名称',sort : true},
 			{field : 'bsModel',width : 150,title : '材料规格'},
 			{field : 'bsQty',width : 80,title : '用量',totalRow : true,hide : true},
-			{field : 'bsProQty',width : 80,title : '制品重',totalRow : true,hide : true},
+			{field : 'bsProQty',width : 80,title : '制品重(g)',totalRow : true,hide : true},
 			{field : 'bsUnit',width : 80,title : '单位'},
 			{field : 'bsRadix',width : 80,title : '基数'},
 			{field : 'bsGeneral',width : 120,title : '是否通用物料'},

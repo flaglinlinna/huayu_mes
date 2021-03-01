@@ -374,7 +374,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         Page<ProductProcess> page = productProcessDao.findAll(spec1, pageRequest);
 
         for(ProductProcess pm:page.getContent()){
-            List<Map<String, Object>> lm = productProcessDao.findByDelFlagAndWorkcenter( pm.getProc().getBjWorkCenter().getId());
+            List<Map<String, Object>> lm = productProcessDao.findByWorkcenter( pm.getProc().getId(),pm.getProc().getBjWorkCenter().getId());
             if(lm.size()>0){
                 String str1 = JSON.toJSONString(lm); //此行转换
                 pm.setBsTypeList(str1);
@@ -405,7 +405,8 @@ public class ProductProcesslmpl implements ProductProcessService {
         
         
         for(ProductProcess pm:page.getContent()){
-        	List<Map<String, Object>> lm = productProcessDao.findByDelFlagAndWorkcenter( pm.getProc().getBjWorkCenter().getId());
+//        	List<Map<String, Object>> lm = productProcessDao.findByDelFlagAndWorkcenter( pm.getProc().getBjWorkCenter().getId());
+            List<Map<String, Object>> lm = productProcessDao.findByWorkcenter( pm.getProc().getId(),pm.getProc().getBjWorkCenter().getId());
 			if(lm.size()>0){
 				String str1 = JSON.toJSONString(lm); //此行转换
 				pm.setBsTypeList(str1);

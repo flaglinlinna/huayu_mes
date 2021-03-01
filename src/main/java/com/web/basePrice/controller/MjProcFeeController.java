@@ -65,9 +65,47 @@ public class MjProcFeeController extends WebController {
             getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
             return ApiResponseResult.failure("获取模具成本维护列表失败！");
         }
-    }		
-	
-	@ApiOperation(value = "新增报价-模具成本信息", notes = "新增报价-模具成本信息",hidden = true)
+    }
+
+    @ApiOperation(value = "获取客户品质标准文件列表", notes = "获取客户品质标准文件列表",hidden = true)
+    @RequestMapping(value = "/getFileList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getFileList(Long customId) {
+        String method = "basePrice/customQs/getFileList";String methodName ="获取客户品质标准文件列表";
+        try {
+            System.out.println(customId);
+            Sort sort = new Sort(Sort.Direction.DESC, "id");
+            ApiResponseResult result = mjProcFeeService.getFileList(customId);
+            logger.debug("获取客户品质标准列表=getList:");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取客户品质标准列表失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("获取客户品质标准列表失败！");
+        }
+    }
+
+    @ApiOperation(value = "删除客户品质标准附件", notes = "删除客户品质标准信息",hidden = true)
+    @RequestMapping(value = "/delFile", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult delFile(Long recordId, Long fileId){
+        String method = "basePrice/customQs/delFile";String methodName ="删除客户品质标准附件";
+        try{
+            ApiResponseResult result = mjProcFeeService.delFile(recordId,fileId);
+            logger.debug("删除客户品质标准附件=delete:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("删除客户品质标准附件失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("删除客户品质标准附件失败！");
+        }
+    }
+
+
+    @ApiOperation(value = "新增报价-模具成本信息", notes = "新增报价-模具成本信息",hidden = true)
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult add(@RequestBody MjProcFee mjProcFee) {   	

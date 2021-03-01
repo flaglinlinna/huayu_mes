@@ -253,7 +253,7 @@ $(document).ready(function(){
 			<span id="showTime"></span>
 		</div>
 
-		<script>
+		<script type="text/javascript">
 			var t = null;
 			var dt =null;
 			$.ajax({
@@ -263,6 +263,7 @@ $(document).ready(function(){
 				async: false,
 				dataType : "json",
 				success : function(res) {
+
 					if (res.result) {
 						dt = new Date(res.data);
 					}

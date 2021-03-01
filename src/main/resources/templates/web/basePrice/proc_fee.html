@@ -41,7 +41,7 @@
 				lay-filter="itemForm" method="post" action=""
 				style="margin-top: 20px;">
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
-					type="hidden" name="id" />
+					type="hidden" name="id" /><input id="fileId" type="hidden" name="fileId" />
 					<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required" style="width: 150px;">产品名称</label>
@@ -49,7 +49,7 @@
 							<input id="productName" name="productName" placeholder="请输入产品名称"
 								autocomplete="off" class="layui-input" type="text" lay-verify="required" />
 						</div>
-						<label class="layui-form-label layui-required" style="width: 150px;">模具报价价格(未税销售价)</label>
+						<label class="layui-form-label layui-required" style="width: 150px;">模具报价价格(未税)</label>
 						<div class="layui-input-inline">
 							<input id="mjPrice" name="mjPrice" placeholder="请输入模具报价价格"
 								autocomplete="off" class="layui-input" type="text" lay-verify="required|double" />
@@ -108,31 +108,37 @@
 								lay-verify="required|num" autocomplete="off" class="layui-input"
 								type="text" />
 						</div>
-					</div>
-					<label class="layui-form-label layui-required" style="width: 150px;">热流道费用</label>
-					<div class="layui-input-inline">
-						<input id="feeType4" name="feeType4" th:value=0  placeholder="请输入费用"
-							lay-verify="required|num" autocomplete="off" class="layui-input"
-							type="text" />
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<div class="layui-inline">
-						<label class="layui-form-label layui-required" style="width: 150px;">评估总费用(未税)</label>
-						<div class="layui-input-inline">
-							<input id="feeProc" name="feeProc" placeholder="请输入工序成本"
-								lay-verify="required|num" autocomplete="off" class="layui-input"
-								type="text" />
-						</div>
-						<label class="layui-form-label" style="width: 150px;">参考报价</label>
+<!--					<label class="layui-form-label layui-required" style="width: 150px;">热流道费用</label>-->
+<!--					<div class="layui-input-inline">-->
+<!--						<input id="feeType4" name="feeType4" th:value=0  placeholder="请输入费用"-->
+<!--							lay-verify="required|num" autocomplete="off" class="layui-input"-->
+<!--							type="text" />-->
+<!--					</div>-->
+						<label class="layui-form-label layui-required" style="width: 150px;">参考报价</label>
 						<div class="layui-input-inline">
 							<input id="stQuote" name="stQuote" placeholder="请输入参考报价"
-								lay-verify="num" autocomplete="off" class="layui-input"
-								type="text" value="0" />
+								   lay-verify="required|num" autocomplete="off" class="layui-input"
+								   type="text" value="0" />
 						</div>
-						
 					</div>
 				</div>
+<!--				<div class="layui-form-item">-->
+<!--					<div class="layui-inline">-->
+<!--&lt;!&ndash;						<label class="layui-form-label layui-required" style="width: 150px;">评估总费用(未税)</label>&ndash;&gt;-->
+<!--&lt;!&ndash;						<div class="layui-input-inline">&ndash;&gt;-->
+<!--&lt;!&ndash;							<input id="feeProc" name="feeProc" placeholder="请输入工序成本"&ndash;&gt;-->
+<!--&lt;!&ndash;								lay-verify="required|num" autocomplete="off" class="layui-input"&ndash;&gt;-->
+<!--&lt;!&ndash;								type="text" />&ndash;&gt;-->
+<!--&lt;!&ndash;						</div>&ndash;&gt;-->
+<!--						<label class="layui-form-label" style="width: 150px;">参考报价</label>-->
+<!--						<div class="layui-input-inline">-->
+<!--							<input id="stQuote" name="stQuote" placeholder="请输入参考报价"-->
+<!--								lay-verify="num" autocomplete="off" class="layui-input"-->
+<!--								type="text" value="0" />-->
+<!--						</div>-->
+<!--						-->
+<!--					</div>-->
+<!--				</div>-->
 				<div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label" style="width: 150px;">评估总费用(含税)</label>
@@ -147,6 +153,28 @@
 					<div class="layui-input-inline" style="width: 540px;">
 						<textarea id="fmemo" name="fmemo" placeholder="请输入备注"
 							class="layui-textarea"></textarea>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div id="itemDiv1" class="layui-form-item" >
+						<label class="layui-form-label">附件上传</label>
+						<div class="layui-input-inline" style="width:70%;">
+							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload">
+								<i class="layui-icon layui-icon-upload-circle"></i>上传
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div id="itemDiv2" class="layui-form-item">
+						<label class="layui-form-label">品质标准附件</label>
+						<div class="layui-input-inline" style="width:70%;">
+							<!--<div style="position:relative;padding:10px 30px;width:90%">-->
+							<div  id="filelist" name="fftp">
+							</div>
+							<!--</div>-->
+						</div>
 					</div>
 				</div>
 
