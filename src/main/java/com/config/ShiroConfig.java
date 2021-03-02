@@ -109,6 +109,7 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/kanban/*/*/**", "anon");
 		filterChainDefinitionMap.put("/kanban/*/*/*/**", "anon");
 		filterChainDefinitionMap.put("/kanban/*/*/*/*/**", "anon");
+		filterChainDefinitionMap.put("/sys/report/getServerTime", "anon");
 		filterChainDefinitionMap.put("/gantt/*", "anon");
 		filterChainDefinitionMap.put("/gantt/*/**", "anon");
 		filterChainDefinitionMap.put("/gantt/*/*/**", "anon");

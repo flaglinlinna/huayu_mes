@@ -22,4 +22,8 @@ public interface PriceCommDao extends CrudRepository<PriceComm, Long>,JpaSpecifi
     
     @Query(value = "select p.item_Name,p.range_Price,p.price_Un from "+PriceComm.TABLE_NAME+" p  where p.del_Flag=0 and p.item_Name=?1",nativeQuery = true)
 	 public  List<Map<String, Object>> findByDelFlagAndItemName(String itemName);
+
+
+    @Query(value = "select p.ITEM_NO,p.ITEM_NAME from v_mes_base_items p  where p.ITEM_NO=?1",nativeQuery = true)
+    public  List<Map<String, Object>> findItemByItemNo(String ITEM_NO);
 }

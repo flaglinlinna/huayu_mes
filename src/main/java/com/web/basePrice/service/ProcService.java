@@ -3,6 +3,9 @@ package com.web.basePrice.service;
 import org.springframework.data.domain.PageRequest;
 import com.app.base.data.ApiResponseResult;
 import com.web.basePrice.entity.Proc;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**s
  *
@@ -25,4 +28,7 @@ public interface ProcService {
   
   public ApiResponseResult getWorkCenterList(String type,String condition,PageRequest pageRequest)throws Exception;//工作中心
 
+  public ApiResponseResult doExcel(MultipartFile[] file) throws Exception;
+
+  public void exportExcel(HttpServletResponse response, String keyword) throws Exception;
 }

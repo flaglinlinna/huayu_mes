@@ -157,11 +157,11 @@ public class ProductMater extends BaseEntity {
 	protected String bsSupplier;
 
 	/**
-	 * 水口量(注塑)
+	 * 水口重(注塑)
 	 */
 	@ApiModelProperty(name = "bsWaterGap", value = "水口量(注塑)")
 	@Column(length = 150)
-	protected String bsWaterGap;
+	protected String bsWaterGap = "0";
 
 	/**
 	 * 穴数(注塑)

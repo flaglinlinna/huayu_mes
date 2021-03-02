@@ -352,6 +352,7 @@ function getChartXlpm3(done, plan, doneRate) {
 //中层的产线电子表格
 function setCxdzTable(kanbanData) {
 	var html = "";
+	console.log(kanbanData);
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
 	/*	html += '<tr><td>' + arr.TASK_NO + '</td><td>' + arr.ITEM_NAME+ '</td><td>' + arr.ITEM_NAME1
@@ -362,15 +363,21 @@ function setCxdzTable(kanbanData) {
 				+ '</td><td>' + arr.HOUR_ABN +'</td><td>' + arr.RATE_OK + '%</td><td>' + arr.RATE_DONE
 				+ '%</td><td>' + arr.RATE_EFF + '%</td></tr> ';
 	*/
+		var style1 = "";
 		var style = "";
 		if(arr.QTY_DONE==0){
-			style = "style=\"color:#CC0033\"";
+			style = "style='color:#CC0033'";
 		}
-		html += '<tr><td>' + arr.TASK_NO + '</td><td>' + arr.ITEM_NAME+ '</td><td>' + arr.ITEM_NAME1
-		+ '</td><td>' + arr.QTY_PLAN+ '</td><td>' + arr.QTY_MAIN + '</td><td>' + arr.QTY_ITEM_NG
-		+ '</td><td'+ style +'>' + arr.QTY_DONE+ '</td><td>' + arr.QTY_OK
+		if(arr.QTY_ITEM_NG ==0){
+			style1 = "style='color:#CC0033'";
+		}
+		html += '<tr><td >' + arr.TASK_NO + '</td><td>' + arr.ITEM_NAME+ '</td><td>' + arr.ITEM_NAME1
+		+ '</td><td>' + arr.QTY_PLAN+ '</td><td>' + arr.QTY_MAIN + '</td>'
+		+ '<td '+style1+' >' + arr.QTY_ITEM_NG
+		+ '</td><td '+style+' >' + arr.QTY_DONE+ '</td><td>'
+		+ arr.QTY_OK
 		+ '</td><td>' + arr.MANPOWER + '</td><td>' + arr.CAPACITY
-		+ '</td><td>' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT
+		+ '</td><td >' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT
 		+ '</td><td>' + arr.HOUR_ABN +'</td><td>' + arr.RATE_OK + '%</td><td style="color:#CC0033">' + arr.RATE_DONE
 		+ '%</td><td style="color:#CC0033">' + arr.RATE_EFF + '%</td></tr> ';
 

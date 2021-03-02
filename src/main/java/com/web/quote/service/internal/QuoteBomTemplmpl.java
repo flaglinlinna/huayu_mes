@@ -241,9 +241,11 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 					QuoteBom quoteBom = quoteBomDao.findById((Long.parseLong(mid)));
 					if(quoteBom!=null) {
 						if (quoteBom.getPkQuote() != pkQuote) {
-							Quote quote = quoteDao.findById((long) quoteBom.getPkQuote());
-							return ApiResponseResult.failure("导入失败！导入的信息中包含报价单编号为:"+quote.getBsCode()+"的外购件清单信息数据," +
-									"请在当前页面导出后再导入导出的文件");
+//							Quote quote = quoteDao.findById((long) quoteBom.getPkQuote());
+//							return ApiResponseResult.failure("导入失败！导入的信息中包含报价单编号为:"+quote.getBsCode()+"的外购件清单信息数据," +
+//									"请在当前页面导出后再导入导出的文件");
+							return ApiResponseResult.failure("请在当前页面导出后再导入导出的文件  ->  导入的文件必须是从当前页面导出的。");
+
 						}
 					}
 				}

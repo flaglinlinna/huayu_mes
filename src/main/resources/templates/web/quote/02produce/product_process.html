@@ -121,16 +121,28 @@
 							type="text" />
 					</div>
 				</div>
+<!--				<div class="layui-form-item">-->
+<!--					<label class="layui-form-label">机台类型</label>-->
+<!--					<div class="layui-input-block">-->
+<!--						<input id="bsModelName" name="bsModelName" placeholder="请输入机台类型"  lay-filter="bsModelName"  autocomplete="off" class="layui-input" type="text"/>-->
+<!--						<input id="bsModelType" name="bsModelType" placeholder="请输入机台类型"  lay-filter="bsModelType"  autocomplete="off" class="layui-input" type="hidden"/>-->
+<!--						&lt;!&ndash;<select id="bsModelType" name="bsModelType"&ndash;&gt;-->
+<!--							&lt;!&ndash;lay-filter="bsModelType" placeholder="请输入机台类型">&ndash;&gt;-->
+<!--						&lt;!&ndash;</select>&ndash;&gt;-->
+<!--					</div>-->
+<!--				</div>-->
+
+
 				<div class="layui-form-item">
-					<label class="layui-form-label">机台类型</label>
+					<label class="layui-form-label layui-required">机台类型</label>
 					<div class="layui-input-block">
-						<input id="bsModelName" name="bsModelName" placeholder="请输入机台类型"  lay-filter="bsModelName"  autocomplete="off" class="layui-input" type="text"/>
-						<input id="bsModelType" name="bsModelType" placeholder="请输入机台类型"  lay-filter="bsModelType"  autocomplete="off" class="layui-input" type="hidden"/>
-						<!--<select id="bsModelType" name="bsModelType"-->
-							<!--lay-filter="bsModelType" placeholder="请输入机台类型">-->
-						<!--</select>-->
+						<select id="bsModelType" name="bsModelType" lay-verify="required"
+								lay-filter="bsModelType" lay-search>
+						</select>
 					</div>
 				</div>
+
+
 				<!-- <div class="layui-form-item ">
 					<label class="layui-form-label layui-required">基数</label>
 					<div class="layui-input-block">
@@ -219,7 +231,7 @@
 				</div>
 				<div class="layui-form-item" style="display: none"  id ="fileDiv2">
 					<div id="itemDiv2" class="layui-form-item">
-						<label class="layui-form-label">附件</label>
+						<label class="layui-form-label">附件列表</label>
 						<div class="layui-input-inline" style="width:70%;">
 							<!--<div style="position:relative;padding:10px 30px;width:90%">-->
 							<div  id="filelist" name="fftp">

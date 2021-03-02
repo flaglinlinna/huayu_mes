@@ -1,11 +1,17 @@
 package com.web.basePrice.service.internal;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.system.user.dao.SysUserDao;
 
+import com.utils.ExcelExport;
+import com.web.basePrice.dao.BjWorkCenterDao;
+import com.web.basePrice.entity.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,10 +27,11 @@ import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.ProcDao;
-import com.web.basePrice.entity.Proc;
-import com.web.basePrice.entity.Unit;
 import com.web.basePrice.service.ProcService;
 import com.web.basic.entity.Mtrial;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -35,6 +42,9 @@ import com.web.basic.entity.Mtrial;
 public class ProcImpl extends BasePriceUtils implements ProcService {
 	@Autowired
 	private ProcDao procDao;
+
+	@Autowired
+	private BjWorkCenterDao bjWorkCenterDao;
 
 	@Autowired
 	private SysUserDao sysUserDao;
@@ -220,4 +230,118 @@ public class ProcImpl extends BasePriceUtils implements ProcService {
 				map.put("List", list.get(3));
 				return ApiResponseResult.success().data(map);
 	}
+
+	//防止读取Excel为null转String 报空指针异常
+	public String tranCell(Object object)
+	{
+		if(object==null||object==""||("").equals(object)){
+			return null;
+		}else return object.toString().trim();
+	}
+
+	@Override
+	public ApiResponseResult doExcel(MultipartFile[] file) throws Exception {
+		try {
+			Date doExcleDate = new Date();
+			Long userId = UserUtil.getSessionUser().getId();
+			InputStream fin = file[0].getInputStream();
+			XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			//获取最后一行的num，即总行数。此处从0开始计数
+			int maxRow = sheet.getLastRowNum();
+//			Integer successes = 0;
+			Integer failures = 0;
+			List<Proc> procArrayList = new ArrayList<>();
+			for (int row = 2; row <= maxRow; row++) {
+//				String errInfo = "";
+				String id = tranCell(sheet.getRow(row).getCell(0)); //id
+				String procNo = tranCell(sheet.getRow(row).getCell(1));
+				String procName = tranCell(sheet.getRow(row).getCell(2));
+				String centerName = tranCell(sheet.getRow(row).getCell(3));
+				Proc proc = new Proc();
+				if(StringUtils.isNotEmpty(id)){
+					proc = procDao.findById(Long.parseLong(id));
+					if(proc!=null){
+						if(proc.getProcNo()!=procNo){
+							List<Proc> procList = procDao.findByDelFlagAndProcNo(0,procNo);
+							if(procList.size()>0){
+								failures++;
+								continue;
+							}else {
+								proc.setProcNo(procNo);
+							}
+						}
+					}
+				}
+				else {
+					List<Proc> procList = procDao.findByDelFlagAndProcNo(0,procNo);
+					if(procList.size()>0){
+						failures++;
+						continue;
+					}else {
+						proc.setProcNo(procNo);
+					}
+				}
+				proc.setProcName(procName);
+				List<BjWorkCenter> bjWorkCenterList = bjWorkCenterDao.findByWorkcenterNameAndDelFlag(centerName,0);
+				if(bjWorkCenterList.size()>0){
+					proc.setWorkcenterId(bjWorkCenterList.get(0).getId());
+				}else {
+					failures++;
+					continue;
+				}
+				proc.setCreateBy(userId);
+				proc.setCreateDate(doExcleDate);
+				procArrayList.add(proc);
+			}
+			procDao.saveAll(procArrayList);
+			return ApiResponseResult.success("导入成功!,共导入:"+procArrayList.size()+";不通过:"+failures);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
+		}
+	}
+
+	/**
+	 * 查询工序基础信息维护列表
+	 */
+	@Override
+	@Transactional
+	public void exportExcel(HttpServletResponse response, String keyword) throws Exception {
+		// 查询条件1
+		List<SearchFilter> filters = new ArrayList<>();
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		// 查询2
+		List<SearchFilter> filters1 = new ArrayList<>();
+		if (StringUtils.isNotEmpty(keyword)) {
+			filters1.add(new SearchFilter("procNo", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("procName", SearchFilter.Operator.LIKE, keyword));
+		}
+		Specification<Proc> spec = Specification.where(BaseService.and(filters, Proc.class));
+		Specification<Proc> spec1 = spec.and(BaseService.or(filters1, Proc.class));
+		List<Proc> procList = procDao.findAll(spec1);
+
+		String excelPath = "static/excelFile/";
+		String fileName = "工序基础信息维护模板.xlsx";
+		String[] map_arr = new String[]{"id","procNo","procName","workCenter"};
+		XSSFWorkbook workbook = new XSSFWorkbook();
+//		List<Proc> procList = page.getContent();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<Map<String, Object>> mapList = new ArrayList<>();
+		for (Proc proc : procList) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", proc.getId());
+			map.put("procNo", proc.getProcNo());
+			map.put("procName", proc.getProcName());
+			if(proc.getBjWorkCenter()!=null){
+//				map.put("workCenterId", proc.getBjWorkCenter().getId());
+				map.put("workCenter", proc.getBjWorkCenter().getWorkcenterName());
+			}
+			mapList.add(map);
+		}
+		ExcelExport.export(response,mapList,workbook,map_arr,excelPath+fileName,fileName);
+
+	}
+
 }

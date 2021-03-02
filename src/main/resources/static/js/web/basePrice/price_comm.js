@@ -3,8 +3,9 @@
  */
 var pageCurr;
 $(function() {
-	layui.use([ 'form', 'table', 'tableSelect' ], function() {
-		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
+	layui.use([ 'form', 'table', 'tableSelect','upload'  ], function() {
+		var table = layui.table, form = layui.form,
+			tableSelect = layui.tableSelect,upload = layui.upload;
 
 		tableIns = table.render({
 			elem : '#colsList',
@@ -197,9 +198,43 @@ $(function() {
 					});
 		}
 
+		// 导入
+		upload.render({
+			elem : '#upload',
+			url : context + '/basePrice/priceComm/doExcel',
+			accept : 'file' // 普通文件
+			,
+
+			before : function(obj) { // obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+				layer.load(); // 上传loading
+			},
+			done : function(res, index, upload) {
+				layer.closeAll('loading'); // 关闭loading
+				layer.alert(res.msg, function(index) {
+					layer.close(index);
+					loadAll();
+				});
+
+			},
+			error : function(index, upload) {
+				layer.alert("操作请求错误，请您稍后再试", function() {
+				});
+				layer.closeAll('loading'); // 关闭loading
+				layer.close(index);
+			}
+		});
+
 	});
 
 });
+
+//导出
+function exportExcel(){
+	//导出模板
+	location.href = context + "/basePrice/priceComm/export";
+	// location.href = "../../excelFile/排产导入模板.xlsx";//从文件夹内直接提取
+	return false;
+}
 
 // 新增编辑弹出框
 function openData(id, title) {

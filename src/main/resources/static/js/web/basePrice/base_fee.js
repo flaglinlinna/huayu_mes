@@ -38,7 +38,7 @@ $(function() {
 							           {field : 'procName',title : '工序',width : 100},
 							           {field : 'mhType',title : '机台类型',width : 160},
 							           {field : 'feeLh',title : '人工费用（元/小时）',width : 150}, 
-							           {field : 'feeMh',title : '制费费用（元/小时）',width : 150},
+							           {field : 'feeMh',title : '制造费用（元/小时）',width : 150},
 							           {field : 'createBy',title : '创建人',width : 80}, 
 							           {field : 'createDate',title : '创建时间',width : 150}, 
 							           {field : 'lastupdateBy',title : '更新人',width : 80}, 

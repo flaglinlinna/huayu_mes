@@ -69,9 +69,9 @@
 					   autocomplete="off" class="layui-input" type="hidden" />
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label" style="width: 150px;">穴数</label>
+						<label class="layui-form-label layui-required" style="width: 150px;">穴数</label>
 						<div class="layui-input-inline">
-							<input id="numHole" name="numHole" 
+							<input id="numHole" name="numHole"  lay-verify="required|num"
 								placeholder="请输入穴数" class="layui-input" type="text"
 								autocomplete="off" />
 						</div>
@@ -168,7 +168,7 @@
 				</div>
 				<div class="layui-form-item">
 					<div id="itemDiv2" class="layui-form-item">
-						<label class="layui-form-label">品质标准附件</label>
+						<label class="layui-form-label">附件列表</label>
 						<div class="layui-input-inline" style="width:70%;">
 							<!--<div style="position:relative;padding:10px 30px;width:90%">-->
 							<div  id="filelist" name="fftp">

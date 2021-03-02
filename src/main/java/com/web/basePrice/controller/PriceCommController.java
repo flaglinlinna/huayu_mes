@@ -19,6 +19,9 @@ import com.web.basePrice.service.PriceCommService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Api("物料通用价格维护模块")
 @CrossOrigin
@@ -174,6 +177,37 @@ public class PriceCommController extends WebController{
             logger.error("获取物料下拉列表失败！", e);
             getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("获取物料下拉列表失败！");
+        }
+    }
+
+    @ApiOperation(value = "导入", notes = "导入", hidden = true)
+    @RequestMapping(value = "/doExcel", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doExcel(MultipartFile[] file) throws Exception{
+        String method = "/basePrice/priceComm/doExcel";String methodName ="导入";
+        try{
+            ApiResponseResult result = priceCommService.doExcel(file);
+            logger.debug("导入=doExcel:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导入失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("导入失败！");
+        }
+    }
+
+    @ApiOperation(value = "导出", notes = "导出", hidden = true)
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @ResponseBody
+    public void export(HttpServletResponse response, String keyword) throws Exception{
+        String method = "/basePrice/priceComm/export";String methodName ="导出";
+        try{
+            priceCommService.exportExcel(response,keyword);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导出失败！", e);
         }
     }
 }

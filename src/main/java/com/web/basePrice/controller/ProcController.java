@@ -19,6 +19,9 @@ import com.web.basePrice.service.ProcService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Api("工序信息维护模块")
 @CrossOrigin
@@ -178,4 +181,38 @@ public class ProcController extends WebController{
             return ApiResponseResult.failure("获取工作中心信息失败！");
         }
     }
+
+    @ApiOperation(value = "导入", notes = "导入", hidden = true)
+    @RequestMapping(value = "/doExcel", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doExcel(MultipartFile[] file) throws Exception{
+        String method = "/basePrice/baseFee/doExcel";String methodName ="导入";
+        try{
+            ApiResponseResult result = procService.doExcel(file);
+            logger.debug("导入=doExcel:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导入失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("导入失败！");
+        }
+    }
+
+    @ApiOperation(value = "导出", notes = "导出", hidden = true)
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @ResponseBody
+    public void export(HttpServletResponse response, String keyword) throws Exception{
+        String method = "/basePrice/baseFee/export";String methodName ="导出";
+        try{
+             procService.exportExcel(response,keyword);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导出失败！", e);
+        }
+    }
+
+
+
 }

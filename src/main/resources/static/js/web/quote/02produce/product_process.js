@@ -365,6 +365,8 @@ $(function() {
 			}
 		});
 
+
+
 		// setData();
 		// positiveNum
 		//自定义验证规则
@@ -606,13 +608,21 @@ $(function() {
 		function getProdErr(obj, id) {
 			var modelJson = JSON.parse(obj.bsTypeList);
 			var modelName = "";
+			$("#bsModelType").empty();
 			if(modelJson!=null&&modelJson!="") {
 				for (var i = 0; i < modelJson.length; i++) {
+					$("#bsModelType").append(
+						"<option value=" + modelJson[i].MODEL_CODE + ">" + modelJson[i].MODEL_NAME + "</option>")
 					if (modelJson[i].MODEL_CODE == obj.bsModelType) {
-						modelName = modelJson[i].MODEL_NAME
+						// modelName = modelJson[i].MODEL_NAME
+						$("#bsModelType").val(modelJson[i].MODEL_CODE);
 					}
+
 				}
 			}
+
+			layui.form.render('select');
+
 			var procName="";
 			if(obj.proc!=null){
 				procName=obj.proc.procName

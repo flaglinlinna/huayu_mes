@@ -1,12 +1,18 @@
 package com.web.basePrice.service.internal;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.system.user.dao.SysUserDao;
 
+import com.utils.ExcelExport;
+import com.web.basePrice.entity.BjWorkCenter;
+import com.web.basePrice.entity.Proc;
 import com.web.produce.service.internal.PrcUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +33,9 @@ import com.web.basePrice.entity.PriceComm;
 import com.web.basePrice.entity.Unit;
 import com.web.basePrice.service.PriceCommService;
 import com.web.basic.entity.Mtrial;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -227,6 +236,128 @@ public class PriceCommImpl extends PrcUtils implements PriceCommService {
 		map.put("total", list.get(2));
 		map.put("rows", list.get(3));
 		return ApiResponseResult.success("").data(map);
+	}
+
+	//防止读取Excel为null转String 报空指针异常
+	public String tranCell(Object object)
+	{
+		if(object==null||object==""||("").equals(object)){
+			return null;
+		}else return object.toString().trim();
+	}
+
+	@Override
+	public ApiResponseResult doExcel(MultipartFile[] file) throws Exception {
+		try {
+			Date doExcleDate = new Date();
+			Long userId = UserUtil.getSessionUser().getId();
+			InputStream fin = file[0].getInputStream();
+			XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			//获取最后一行的num，即总行数。此处从0开始计数
+			int maxRow = sheet.getLastRowNum();
+//			Integer successes = 0;
+			Integer failures = 0;
+			List<PriceComm> priceCommList = new ArrayList<>();
+			for (int row = 2; row <= maxRow; row++) {
+//				String errInfo = "";
+				String id = tranCell(sheet.getRow(row).getCell(0)); //id
+				String itemNo = tranCell(sheet.getRow(row).getCell(1));
+				String rangePrice = tranCell(sheet.getRow(row).getCell(2));
+				String priceUn = tranCell(sheet.getRow(row).getCell(3));
+				String unitCode = tranCell(sheet.getRow(row).getCell(4));
+				String suppliers = tranCell(sheet.getRow(row).getCell(5));
+				PriceComm priceComm = new PriceComm();
+				if(StringUtils.isNotEmpty(id)){
+					priceComm = priceCommDao.findById(Long.parseLong(id));
+					if(priceComm!=null){
+						if(!(priceComm.getItemNo()+"").equals(itemNo)){
+							if(priceCommDao.countByDelFlagAndItemNo(0,itemNo)>0){
+//								return ApiResponseResult.failure("该物料编码已经存在！");
+								failures++;
+								continue;
+							}
+							List<Map<String,Object>> mapList  = priceCommDao.findItemByItemNo(itemNo);
+							if(mapList.size()>0){
+								Map map = mapList.get(0);
+								priceComm.setItemNo(map.get("ITEM_NO").toString());
+								priceComm.setItemName(map.get("ITEM_NAME").toString());
+								priceComm.setLastupdateBy(userId);
+								priceComm.setLastupdateDate(doExcleDate);
+							}else {
+								failures++;
+								continue;
+							}
+						}
+					}
+				}
+				else {
+					priceComm.setCreateBy(userId);
+					priceComm.setCreateDate(doExcleDate);
+				}
+
+				List<Unit> unitList = unitDao.findByUnitCodeAndDelFlag(unitCode,0);
+				if(unitList.size()>0){
+					priceComm.setUnitId(unitList.get(0).getId().toString());
+				}else {
+					failures++;
+					continue;
+				}
+				priceComm.setPriceUn(priceUn);
+				priceComm.setRangePrice(rangePrice);
+				priceComm.setAlternativeSuppliers(suppliers);
+				priceCommList.add(priceComm);
+			}
+			priceCommDao.saveAll(priceCommList);
+			return ApiResponseResult.success("导入成功!,共导入:"+priceCommList.size()+";不通过:"+failures);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
+		}
+	}
+
+	/**
+	 * 查询工序基础信息维护列表
+	 */
+	@Override
+	@Transactional
+	public void exportExcel(HttpServletResponse response, String keyword) throws Exception {
+		// 查询条件1
+		List<SearchFilter> filters = new ArrayList<>();
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		// 查询2
+		List<SearchFilter> filters1 = new ArrayList<>();
+		if (StringUtils.isNotEmpty(keyword)) {
+			filters1.add(new SearchFilter("procNo", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("procName", SearchFilter.Operator.LIKE, keyword));
+		}
+		Specification<PriceComm> spec = Specification.where(BaseService.and(filters, PriceComm.class));
+		Specification<PriceComm> spec1 = spec.and(BaseService.or(filters1, PriceComm.class));
+		List<PriceComm> procList = priceCommDao.findAll(spec1);
+
+		String excelPath = "static/excelFile/";
+		String fileName = "物料通用价格维护模板.xlsx";
+		String[] map_arr = new String[]{"id","itemNo","rangePrice","priceUn","unitCode","suppliers"};
+		XSSFWorkbook workbook = new XSSFWorkbook();
+//		List<Proc> procList = page.getContent();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<Map<String, Object>> mapList = new ArrayList<>();
+		for (PriceComm priceComm : procList) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", priceComm.getId());
+			map.put("itemNo", priceComm.getItemNo());
+			map.put("priceUn", priceComm.getPriceUn());
+			if(priceComm.getUnit()!=null){
+//				map.put("workCenterId", proc.getBjWorkCenter().getId());
+				map.put("unitCode", priceComm.getUnit().getUnitCode());
+			}
+			map.put("rangePrice",priceComm.getRangePrice());
+			map.put("suppliers",priceComm.getAlternativeSuppliers());
+			mapList.add(map);
+		}
+		ExcelExport.export(response,mapList,workbook,map_arr,excelPath+fileName,fileName);
+
 	}
 
 }
