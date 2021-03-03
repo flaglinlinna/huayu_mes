@@ -1,5 +1,6 @@
 package com.web.basePrice.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.web.basic.service.SysParamService;
@@ -62,7 +63,11 @@ public class BaseFeeController extends WebController{
     @ResponseBody
     public ApiResponseResult getFeeParam(){
         try {
-         return ApiResponseResult.success().data(sysParamService.getValueByCodeList("BJ_LABOUR_COST").getData());//20210225-hjj-人工费
+            //增加失效时间系统参数
+            Map<String,Object> map = new HashMap<>();
+            map.put("feeParam",sysParamService.getValueByCodeList("BJ_LABOUR_COST").getData());
+            map.put("expiresTime",sysParamService.getValueByCodeList("BJ_EXPIRES_TIME").getData());
+         return ApiResponseResult.success().data(map);//20210225-hjj-人工费
         }catch (Exception e){
             e.printStackTrace();
             logger.error("人工制费系统参数获取失败！", e);

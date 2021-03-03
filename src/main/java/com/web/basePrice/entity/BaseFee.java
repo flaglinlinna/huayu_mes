@@ -1,6 +1,7 @@
 package com.web.basePrice.entity;
 
 import com.app.base.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.web.basic.entity.WorkCenter;
 
 import io.swagger.annotations.ApiModel;
@@ -11,11 +12,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 人工制费维护
@@ -91,6 +89,15 @@ public class BaseFee extends BaseEntity {
 		@Column(length = 200)
 		protected String fileId;
 
+		/**
+		 * 失效时间
+		 */
+		@Column
+//		@Temporal(TemporalType.TIMESTAMP)
+//		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+		@ApiModelProperty(name="delTime",value="失效时间")
+		protected String expiresTime;
+
 		public String getFileId() {
 			return fileId;
 		}
@@ -162,5 +169,12 @@ public class BaseFee extends BaseEntity {
 		public void setProcId(Long procId) {
 			this.procId = procId;
 		}
-		
+
+		public String getExpiresTime() {
+			return expiresTime;
+		}
+
+		public void setExpiresTime(String expiresTime) {
+			this.expiresTime = expiresTime;
+		}
 }

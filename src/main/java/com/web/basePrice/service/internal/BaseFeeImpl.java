@@ -132,6 +132,7 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 	    o.setMhType(baseFee.getMhType());
 	    o.setFeeLh(baseFee.getFeeLh());
 	    o.setFeeMh(baseFee.getFeeMh());
+	    o.setExpiresTime(baseFee.getExpiresTime());
 		baseFeeDao.save(o);
 
 		String[] fileIds =  baseFee.getFileId().split(",");
@@ -228,7 +229,7 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 			map.put("procName", baseFee.getProcName());
 			map.put("procId", baseFee.getProcId());
 			map.put("mhType", baseFee.getMhType());
-			
+			map.put("expiresTime",baseFee.getExpiresTime());
 			map.put("feeLh", baseFee.getFeeLh());
 			map.put("feeMh", baseFee.getFeeMh());
 			
