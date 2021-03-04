@@ -2,6 +2,7 @@ package com.web.quote.service.internal;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -461,24 +462,34 @@ public class ProductProcesslmpl implements ProductProcessService {
                     return ApiResponseResult.failure("损耗率、外协价格不能为空,请检查后再确认！");
                 }
             }
-            if(o.getBsFeeLh()==null||o.getBsFeeMh()==null){
-                //如果存在费率为空的情况，先查询
-//                List<QuoteProcess>  quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkProcAndBsName(0,quoteId,o.getPkProc(),o.getBsName());
-//                if(quoteProcessList.size() ==0){
-//                    return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
-//                }else{
-//                    o.setBsFeeMh(quoteProcessList.get(0).getBsFeeMh());
-//                    o.setBsFeeLh(quoteProcessList.get(0).getBsFeeLh());
-//                }
-
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String currentTime = sdf.format(new Date());
+            if(StringUtils.isNotEmpty(o.getBsModelType())){
+                List<BaseFee> baseFeeList =  baseFeeDao.findByDelFlagAndProcIdAndMhTypeAndWorkCenterId(0,o.getPkProc(),o.getBsModelType(),o.getProc().getWorkcenterId());
+                if(baseFeeList.size()==0){
+                    return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
+                }else {
+                    if((sdf.parse(baseFeeList.get(0).getExpiresTime())).compareTo(sdf.parse(currentTime))>=0) {
+                        //失效日期大于今天
+                        o.setBsFeeMh(new BigDecimal(baseFeeList.get(0).getFeeMh()));
+                        o.setBsFeeLh(new BigDecimal(baseFeeList.get(0).getFeeLh()));
+                    }else {
+                        return ApiResponseResult.failure("存在工序维护的人工制费已失效,请检查后再确认！");
+                    }
+                }
+            }else {
                 List<BaseFee> baseFeeList = baseFeeDao.findByDelFlagAndProcId(0,o.getPkProc());
                 if(baseFeeList.size()==0){
                     return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
                 }else {
-                    o.setBsFeeMh(new BigDecimal(baseFeeList.get(0).getFeeMh()));
-                    o.setBsFeeLh(new BigDecimal(baseFeeList.get(0).getFeeLh()));
+                    if((sdf.parse(baseFeeList.get(0).getExpiresTime())).compareTo(sdf.parse(currentTime))>=0) {
+                        //失效日期大于今天
+                        o.setBsFeeMh(BigDecimal.ZERO);
+                        o.setBsFeeLh(new BigDecimal(baseFeeList.get(0).getFeeLh()));
+                    }else {
+                        return ApiResponseResult.failure("存在工序维护的人工制费已失效,请检查后再确认！");
+                    }
                 }
-
             }
             o.setBsStatus(1);
             o.setLastupdateDate(new Date());
@@ -494,7 +505,7 @@ public class ProductProcesslmpl implements ProductProcessService {
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, bsCode);
             
             //20210121-fyx-统一修改状态
-            quoteProductService.doItemFinish(bsCode, quoteId);
+            quoteProductService.doItemFinish(bsCode, quoteId,3);
             //20201225-fyx-计算后工序良率
             this.updateHouYield(quoteId, bsType);
         }else{
@@ -506,12 +517,46 @@ public class ProductProcesslmpl implements ProductProcessService {
         		quoteDao.save(o);
         	}
         }
-
-        
-
         return ApiResponseResult.success("确认完成成功！");
     }
-    private ApiResponseResult updateHouYield(Long quoteId,String bsType) throws Exception{
+
+    //取消完成
+    @Override
+    public ApiResponseResult cancelStatus(Long quoteId, String bsType, String bsCode) throws Exception {
+        Quote quote = quoteDao.findById((long) quoteId);
+        Integer quoteStatus = 0; //判断当前报价单是否已经发起审核
+        if(bsType.equals("hardware")){
+            quoteStatus = quote.getBsStatus2Hardware();
+        }else if(bsType.equals("molding")){
+            quoteStatus = quote.getBsStatus2Molding();
+        }else if(bsType.equals("surface")){
+            quoteStatus = quote.getBsStatus2Surface();
+        }else if(bsType.equals("packag")){
+            quoteStatus = quote.getBsStatus2Packag();
+        }
+            if(quoteStatus ==4) {
+                return ApiResponseResult.failure("发起审批后不能取消确认");
+            } else {
+                //项目状态设置-状态 1：未完成
+                quoteItemDao.switchStatus(1, quoteId, bsCode);
+                //设置结束时间
+                quoteItemDao.setEndTime(null, quoteId, bsCode);
+                //取消报价单对应类别的完成状态
+                quoteProductService.doItemFinish(bsCode, quoteId,1);
+                List<ProductProcess> productProcessList  = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
+                for(ProductProcess o : productProcessList){
+                    //修改所有工艺为未完成
+                    o.setBsStatus(0);
+                    o.setLastupdateDate(new Date());
+                    o.setLastupdateBy(UserUtil.getSessionUser().getId());
+                }
+                productProcessDao.saveAll(productProcessList);
+                return ApiResponseResult.failure("取消完成成功");
+            }
+
+    }
+
+    private ApiResponseResult updateHouYield(Long quoteId, String bsType) throws Exception{
         //20201225-fyx-计算后工序良率
         //1.先查询有多少个零件名称 
         //2.根据零件名称,工艺顺序倒叙获取信息

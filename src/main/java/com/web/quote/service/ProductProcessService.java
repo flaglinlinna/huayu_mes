@@ -17,6 +17,8 @@ public interface ProductProcessService {
 
 	public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception;
 
+	public ApiResponseResult cancelStatus(Long quoteId,String bsType,String bsCode) throws Exception;
+
 	public ApiResponseResult updateModelType(Long quoteId,String bsModelType) throws Exception;
 
 	public ApiResponseResult doExcel(MultipartFile[] file, String bsType, Long quoteId) throws Exception;

@@ -241,58 +241,94 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 	}
 
 	@Override
-	public ApiResponseResult doItemFinish(String code, Long quoteId) throws Exception {
+	public ApiResponseResult doItemFinish(String code, Long quoteId,Integer status) throws Exception {
 		// TODO Auto-generated method stub
 		//2.1 查询大类是否都已经全部提交
+		List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
 		if(code.equals("B001") || code.equals("C001")){//五金
-			List<QuoteItem> lqii = quoteItemDao.getStatusByHardware(quoteId);
-	        if(lqii.size()== 0){
-				//2.2 全部完成审批
-	        	List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
-	        	if(lo.size()>0){
-	        		Quote o = lo.get(0);
-	        		o.setBsStatus2Hardware(3);
-	        		quoteDao.save(o);
-	        	}
+			if(status==3) {
+				List<QuoteItem> lqii = quoteItemDao.getStatusByHardware(quoteId);
+				if (lqii.size() == 0) {
+					//2.2 全部完成审批
+					if (lo.size() > 0) {
+						Quote o = lo.get(0);
+						o.setBsStatus2Hardware(status);
+						quoteDao.save(o);
+					}
+				}
+			}else {
+				if (lo.size() > 0) {
+					Quote o = lo.get(0);
+					o.setBsStatus2Hardware(status);
+					quoteDao.save(o);
+				}
 			}
 		}else if(code.equals("B002") || code.equals("C002")){//注塑
-			List<QuoteItem> lqii = quoteItemDao.getStatusByMolding(quoteId);
-	        if(lqii.size()== 0){
-				//2.2 全部完成审批
-	        	List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
-	        	if(lo.size()>0){
-	        		Quote o = lo.get(0);
-	        		o.setBsStatus2Molding(3);
-	        		o.setLastupdateDate(new Date());
-	        		o.setLastupdateBy(UserUtil.getSessionUser().getId());
-	        		quoteDao.save(o);
-	        	}
+			if(status==3) {
+				List<QuoteItem> lqii = quoteItemDao.getStatusByMolding(quoteId);
+				if(lqii.size()== 0){
+					//2.2 全部完成审批
+					if(lo.size()>0){
+						Quote o = lo.get(0);
+						o.setBsStatus2Molding(status);
+						o.setLastupdateDate(new Date());
+						o.setLastupdateBy(UserUtil.getSessionUser().getId());
+						quoteDao.save(o);
+					}
+				}
+			}else {
+				if(lo.size()>0){
+					Quote o = lo.get(0);
+					o.setBsStatus2Molding(status);
+					o.setLastupdateDate(new Date());
+					o.setLastupdateBy(UserUtil.getSessionUser().getId());
+					quoteDao.save(o);
+				}
 			}
 		}else if(code.equals("B003") || code.equals("C003")){//表面处理
-			List<QuoteItem> lqii = quoteItemDao.getStatusBySurface(quoteId);
-	        if(lqii.size()== 0){
-				//2.2 全部完成审批
-	        	List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
-	        	if(lo.size()>0){
-	        		Quote o = lo.get(0);
-	        		o.setBsStatus2Surface(3);
-	        		o.setLastupdateDate(new Date());
-	        		o.setLastupdateBy(UserUtil.getSessionUser().getId());
-	        		quoteDao.save(o);
-	        	}
-			}
-		}else if(code.equals("B004") || code.equals("C004")){//表面处理
-			List<QuoteItem> lqii = quoteItemDao.getStatusByPackag(quoteId);
-	        if(lqii.size()== 0){
-				//2.2 全部完成审批
-	        	List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
-	        	if(lo.size()>0){
-	        		Quote o = lo.get(0);
-	        		o.setBsStatus2Packag(3);
-	        		o.setLastupdateDate(new Date());
-	        		o.setLastupdateBy(UserUtil.getSessionUser().getId());
-	        		quoteDao.save(o);
-	        	}
+				if(status==3) {
+					List<QuoteItem> lqii = quoteItemDao.getStatusBySurface(quoteId);
+					if (lqii.size() == 0) {
+						//2.2 全部完成审批
+						if (lo.size() > 0) {
+							Quote o = lo.get(0);
+							o.setBsStatus2Surface(status);
+							o.setLastupdateDate(new Date());
+							o.setLastupdateBy(UserUtil.getSessionUser().getId());
+							quoteDao.save(o);
+						}
+					}
+				}
+				else {
+					if (lo.size() > 0) {
+						Quote o = lo.get(0);
+						o.setBsStatus2Surface(status);
+						o.setLastupdateDate(new Date());
+						o.setLastupdateBy(UserUtil.getSessionUser().getId());
+						quoteDao.save(o);
+					}
+				}
+		}else if(code.equals("B004") || code.equals("C004")){//组装
+			if(status==3) {
+				List<QuoteItem> lqii = quoteItemDao.getStatusByPackag(quoteId);
+				if (lqii.size() == 0) {
+					//2.2 全部完成审批
+					if (lo.size() > 0) {
+						Quote o = lo.get(0);
+						o.setBsStatus2Packag(status);
+						o.setLastupdateDate(new Date());
+						o.setLastupdateBy(UserUtil.getSessionUser().getId());
+						quoteDao.save(o);
+					}
+				}
+			}else {
+				if (lo.size() > 0) {
+					Quote o = lo.get(0);
+					o.setBsStatus2Packag(status);
+					o.setLastupdateDate(new Date());
+					o.setLastupdateBy(UserUtil.getSessionUser().getId());
+					quoteDao.save(o);
+				}
 			}
 		}
 		return ApiResponseResult.success();

@@ -178,7 +178,7 @@ $(function() {
 
 					laydate.render({
 						elem: '#expiresTime',
-						rigger: 'click'
+						trigger: 'click'
 					});
 
 
@@ -364,6 +364,7 @@ function  getModelTypeUrl() {
 	console.log($('#workcenterId').val());
 	return context + '/basePrice/modelType/getList?workCenterId='+$('#workcenterId').val();
 }
+
 
 function getCurDate(month) {
 	var dd = new Date();

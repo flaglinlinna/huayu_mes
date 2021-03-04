@@ -3,6 +3,9 @@
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="layout :: htmlhead" th:with="title='报价工艺流程信息'">
 <meta charset="UTF-8">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<META HTTP-EQUIV="expires" CONTENT="0">
 </head>
 <style>
 	.layui-table-cell, .layui-table-tool-panel li {
@@ -39,6 +42,8 @@
 							id="loadbtn" onclick="openUpload()">导入数据</button>
 						<button class="layui-btn layui-btn-sm" type="button" 
 						    id="savebtn" onclick="Confirm()">确认完成</button>
+						<button class="layui-btn layui-btn-sm" type="button"
+								id="cancelbtn" onclick="cancelConfirm()">取消完成</button>
 					</div>
 				</div>
 			</form>

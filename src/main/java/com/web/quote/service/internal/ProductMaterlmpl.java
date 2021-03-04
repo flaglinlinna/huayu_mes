@@ -245,7 +245,7 @@ public class ProductMaterlmpl implements ProductMaterService {
         quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
         
       //20210121-fyx-统一修改状态
-        quoteProductService.doItemFinish(bsCode, quoteId);
+        quoteProductService.doItemFinish(bsCode, quoteId,3);
         
         return ApiResponseResult.success("确认完成成功！");
     }

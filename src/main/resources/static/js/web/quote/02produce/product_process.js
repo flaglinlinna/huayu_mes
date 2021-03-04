@@ -946,6 +946,35 @@ function Confirm(){
 	});
 }
 
+function cancelConfirm(){
+	var params = {
+		"id" : quoteId,
+		"bsType":bsType,
+		"bsCode":bsCode
+	};
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/productProcess/cancelStatus", JSON.stringify(params), function(
+			data) {
+			if (data.result) {
+				layer.alert("确认完成成功", function() {
+					layer.closeAll();
+					// //刷新页面
+					// iStatus=2;
+					// isComplete();
+					// loadAll()
+					window.location.reload();
+				});
+			} else {
+				layer.alert(data.msg);
+			}
+		}, "POST", false, function(res) {
+			layer.alert(res.msg);
+		});
+	});
+}
+
 // 添加导入页
 function openUpload() {
 	tableIns2.reload({
