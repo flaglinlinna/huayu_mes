@@ -1647,4 +1647,60 @@ public class PrcUtils {
         });
         return resultList;
     }
+
+    //prc_batch_del_ng_barcode
+    public List delNgBarcode(String company, String factory,String ids, String user_id, String prc_name){
+        List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call "+prc_name+"(?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setString(1, company);
+                cs.setString(2, factory);
+                cs.setString(3, ids);
+                cs.setString(4, user_id);
+                cs.registerOutParameter(5, Types.INTEGER);// 注册输出参数 返回标志
+                cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                cs.registerOutParameter(7, Types.INTEGER);// 注册输出参数 返回数据集合
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<String> result = new ArrayList<String>();
+                cs.execute();
+                result.add(cs.getString(5));
+                result.add(cs.getString(6));
+                result.add(cs.getString(7));
+                return result;
+            }
+        });
+
+        return resultList;
+    }
+
+    public List updateOrderQty(Long qty, String taskNo){
+        List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call prc_mes_update_orderqty(?,?,?,?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setLong(1, qty);
+                cs.setString(2, taskNo);
+                cs.registerOutParameter(3, Types.INTEGER);// 注册输出参数 返回标志
+                cs.registerOutParameter(4, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<String> result = new ArrayList<String>();
+                cs.execute();
+                result.add(cs.getString(3));
+                result.add(cs.getString(4));
+                return result;
+            }
+        });
+
+        return resultList;
+    }
+
 }

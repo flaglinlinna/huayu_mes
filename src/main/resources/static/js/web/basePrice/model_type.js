@@ -241,7 +241,7 @@ $(function() {
 						layer.closeAll('loading'); // 关闭loading
 						layer.alert(res.msg, function(index) {
 							layer.close(index);
-							loadAll2();
+							loadAll();
 						});
 
 					},
@@ -308,8 +308,8 @@ function addSubmit(obj) {
 
 // 导出数据
 function exportExcel() {
-	// location.href = context + "/quoteBom/exportExcel?pkQuote=" + quoteId;
-	location.href = "../../excelFile/机台类型维护模板.xlsx";//从文件夹内直接提取
+	location.href = context + "/basePrice/modelType/export";
+	// location.href = "../../excelFile/机台类型维护模板.xlsx";//从文件夹内直接提取
 }
 
 // 编辑价格维护的提交

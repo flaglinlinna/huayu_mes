@@ -48,50 +48,17 @@ $(function() {
                     }
                 },
                 cols : [ [
-                    {
-                        type : 'numbers'
-                    },  {
-                        field : 'ITEM_NO',
-                        title : '物料料号',
-                        width : 160
-                    },
-                    {
-                        field : 'ITEM_NAME',
-                        title : '物料名称',
-                        width : 230
-                    } ,
-                    {
-                        field : 'DEFECT_NAME',
-                        title : '不良内容',
-                        width : 120
-                    },
-                    {
-                        field : 'DEFECT_DET_QTY',
-                        title : '不良数量',
-                        width : 100
-                    }, {
-                        field : 'USER_NAME',
-                        title : '录入人姓名',
-                        width : 100
-                    }, {
-                        field : 'CREATE_DATE',
-                        title : '录入时间',
-                        width : 150
-                    },
-                    {
-                        field : 'DEPT_NAME',
-                        title : '来料部门',
-                        width : 120,sort: true
-                    },
-                    {
-                        field : 'VENDER_NAME',
-                        title : '供应商名称',
-                        width : 200
-                    },{
-                        field : 'TASK_NO',
-                        title : '制令单',
-                        width : 200
-                    }
+                    {type : 'numbers'},
+                    {field : 'ITEM_NO', title : '物料料号', width : 160},
+                    {field : 'ITEM_NAME', title : '物料名称', width : 230} ,
+                    {field : 'DEFECT_NAME', title : '不良内容', width : 120},
+                    {field : 'DEFECT_DET_QTY', title : '不良数量', width : 100},
+                    {field : 'USER_NAME', title : '录入人姓名', width : 100},
+                    {field : 'CREATE_DATE', title : '录入时间', width : 150},
+                    {field : 'DEPT_NAME', title : '来料部门', width : 120,sort: true},
+                    {field : 'VENDER_NAME', title : '供应商名称', width : 200},
+                    {field : 'TASK_NO', title : '制令单', width : 200},
+                    {fixed : 'right', title : '操作', align : 'center', toolbar : '#optBar'}
                 ] ],
                 done : function(res, curr, count) {
                     pageCurr = curr;
@@ -111,23 +78,10 @@ $(function() {
                     // width:800,
                     cols : [ [
                         { type: 'radio' },//多选  radio
-                        , {
-                            field : 'id',
-                            title : 'id',
-                            width : 0,hide:true
-                        },  {
-                            field : 'ITEM_NO',
-                            title : '物料编码',
-                            width : 170
-                        },{
-                            field : 'ITEM_NAME',
-                            title : '物料名称',
-                            width : 240
-                        }, {
-                            field : 'ITEM_NAME_S',
-                            title : '物料简称',
-                            width : 240
-                        },
+                        {field : 'id', title : 'id', width : 0,hide:true},
+                        {field : 'ITEM_NO', title : '物料编码', width : 170},
+                        {field : 'ITEM_NAME', title : '物料名称', width : 240},
+                        {field : 'ITEM_NAME_S', title : '物料简称',width : 240},
                     ] ],
                     page : false,
                     request : {
@@ -318,7 +272,8 @@ $(function() {
                 //console.log(data)
                 if (obj.event === 'del') {
                     // 删除
-                    del(obj,data.ID, data.ITEM_BARCODE);
+                    console.log(obj);
+                    del(obj,data.ID, data.DEPT_NAME);
                 }
             });
 
@@ -556,9 +511,10 @@ function addPut(obj){
     CoreUtil.sendAjax("/produce/badMaterial/saveMaterial", params, function(data) {
         if (data.result) {
             // layer.alert("保存成功！");
-            tableIns.reload({
-                data:data.data
-            });
+            getNgItem(obj.itemNo);
+            // tableIns.reload({
+            //     data:data.data
+            // });
         }else{
             // playMusic();
             layer.alert(data.msg,function () {
@@ -575,20 +531,21 @@ function addPut(obj){
 }
 
 //删除
-function del(obj,id, barcode) {
+function del(obj,id, deptName) {
     if (id != null) {
-        var params={"barcode":id};
-        layer.confirm('您确定要删除条码' + barcode + '吗？', {
+        var params={"id":id};
+        layer.confirm('您确定要删除来料部门为:' + deptName + '的信息吗？', {
             btn : [ '确认', '返回' ]
             // 按钮
         }, function() {
-            CoreUtil.sendAjax("/inputCheck/delete", params, function(data) {
+            CoreUtil.sendAjax("/produce/badMaterial/delNgBarcode", params, function(data) {
                // console.log(data)
                 if (data.result == true) {
                     // 回调弹框
                     layer.alert("删除成功！", function() {
-                        $("#inqty").val(data.data);
-                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        // $("#inqty").val(data.data);
+                        // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        getNgItem(obj.data.ITEM_NO);
                         layer.closeAll();
                     });
                 } else {

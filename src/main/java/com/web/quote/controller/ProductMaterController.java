@@ -157,6 +157,31 @@ public class ProductMaterController extends WebController {
 		}
 	}
 
+	@ApiOperation(value = "取消完成", notes = "取消完成", hidden = true)
+	@RequestMapping(value = "/cancelStatus", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult cancelStatus(@RequestBody Map<String, Object> params) {
+		String method = "/productMater/cancelStatus";
+		String methodName = "取消完成";
+		try {
+			long id = Long.parseLong(params.get("id").toString());
+			String bsType = params.get("bsType").toString();
+			String bsCode = "";
+			if(!("out").equals(bsType)){
+				bsCode = params.get("bsCode").toString();
+			}
+			ApiResponseResult result = productMaterService.cancelStatus(id,bsType,bsCode);
+			logger.debug("取消确认完成=Confirm:");
+			getSysLogService().success(module,method, methodName, params);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("取消确认完成失败！", e);
+			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			return ApiResponseResult.failure("取消确认完成失败！");
+		}
+	}
+
 	@ApiOperation(value = "更新单位", notes = "更新单位", hidden = true)
 	@RequestMapping(value = "/updateUnit", method = RequestMethod.POST)
 	@ResponseBody

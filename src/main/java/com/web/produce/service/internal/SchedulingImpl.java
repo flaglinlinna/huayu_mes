@@ -889,6 +889,86 @@ public class SchedulingImpl implements SchedulingService {
     }
 
 
+    @Override
+    @Transactional
+    public ApiResponseResult changeQtyPlan(String taskNo,Long qty) throws Exception{
+        List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
+            @Override
+            public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                String storedProc = "{call prc_mes_update_orderqty(?,?,?,?)}";// 调用的sql
+                CallableStatement cs = con.prepareCall(storedProc);
+                cs.setLong(1, qty);
+                cs.setString(2, taskNo);
+                cs.registerOutParameter(3, Types.INTEGER);// 注册输出参数 返回标志
+                cs.registerOutParameter(4, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                return cs;
+            }
+        }, new CallableStatementCallback() {
+            public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                List<String> result = new ArrayList<String>();
+                cs.execute();
+                result.add(cs.getString(3));
+                result.add(cs.getString(4));
+                return result;
+            }
+        });
+
+        if(resultList.size() > 0){
+            String flag = resultList.get(0);
+            if(StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")){
+                return ApiResponseResult.success("修改成功！");
+            }else{
+                return ApiResponseResult.failure(resultList.get(1));
+            }
+        }
+        return ApiResponseResult.failure("修改失败").data(resultList);
+
+    }
+
+    @Override
+    @Transactional
+    public ApiResponseResult delProdOrder(String taskNo) throws Exception{
+        try {
+            String factoryId = UserUtil.getSessionUser().getFactory();
+            String companyId = UserUtil.getSessionUser().getCompany();
+            String userId  = UserUtil.getSessionUser().getId()+"";
+            List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
+                @Override
+                public CallableStatement createCallableStatement(Connection con) throws SQLException {
+                    String storedProc = "{call prc_mes_delete_prod_order(?,?,?,?,?,?)}";// 调用的sql
+                    CallableStatement cs = con.prepareCall(storedProc);
+                    cs.setString(1, factoryId);
+                    cs.setString(2, companyId);
+                    cs.setString(3,userId);
+                    cs.setString(4,taskNo);
+                    cs.registerOutParameter(5, Types.INTEGER);// 注册输出参数 返回标志
+                    cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    return cs;
+                }
+            }, new CallableStatementCallback() {
+                public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+                    List<String> result = new ArrayList<String>();
+                    cs.execute();
+                    result.add(cs.getString(5));
+                    result.add(cs.getString(6));
+                    return result;
+                }
+            });
+
+            if (resultList.size() > 0) {
+                String flag = resultList.get(0);
+                if (StringUtils.isNotEmpty(flag) && StringUtils.equals(flag, "0")) {
+                    return ApiResponseResult.success("删除成功！");
+                } else {
+                    return ApiResponseResult.failure(resultList.get(1));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseResult.failure("修改失败");
+    }
+
     /**
      * 获取临时表数据
      * @param pageRequest

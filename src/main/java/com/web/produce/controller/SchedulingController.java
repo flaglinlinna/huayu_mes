@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
 
@@ -246,6 +247,47 @@ public class SchedulingController extends WebController {
             return ApiResponseResult.failure("更改状态失败！");
         }
     }
+
+    @ApiOperation(value = "更改计划数量", notes = "更改计划数量", hidden = true)
+    @RequestMapping(value = "/updateOrderQty", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult updateOrderQty(@RequestBody Map<String, Object> param){
+        String taskNo= param.get("taskNo").toString();
+        Long qtyPlan = Long.parseLong(param.get("qtyPlan").toString());
+        String method = "/produce/scheduling/updateOrderQty";String methodName ="更改计划数量";
+        try{
+            ApiResponseResult result = schedulingService.changeQtyPlan(taskNo,qtyPlan);
+            logger.debug("更改计划数量=updateOrderQty:");
+            getSysLogService().success(module,method, methodName, "制令单号:"+taskNo+";修改数量:"+qtyPlan);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("更改数量失败！", e);
+            getSysLogService().error(module,method, methodName, "制令单号:"+taskNo+";修改数量:"+qtyPlan+";"+e.toString());
+            return ApiResponseResult.failure("更改数量失败！");
+        }
+    }
+
+    @ApiOperation(value = "删除", notes = "删除", hidden = true)
+    @RequestMapping(value = "/delProdOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult delProdOrder(@RequestBody Map<String, Object> param){
+        String taskNo = param.get("taskNo").toString();
+        String method = "/produce/scheduling/delProdOrder";String methodName ="删除";
+        try{
+            ApiResponseResult result = schedulingService.delProdOrder(taskNo);
+            logger.debug("删除=updateOrderQty:");
+            getSysLogService().success(module,method, methodName, "制令单号:"+taskNo);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("删除失败！", e);
+            getSysLogService().error(module,method, methodName, "制令单号:"+taskNo);
+            return ApiResponseResult.failure("删除失败！");
+        }
+    }
+
+//    updateOrderQty
 
     @ApiOperation(value = "获取导入临时数据列表", notes = "获取导入临时数据列表", hidden = true)
     @RequestMapping(value = "/getTempList", method = RequestMethod.GET)

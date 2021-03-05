@@ -31,6 +31,8 @@
             <shiro:hasPermission name="scheduling-changeStatue">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="openChange()">更改状态</button>
             </shiro:hasPermission>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="openPlan()">更改计划数量</button>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="delProdOrder()">删除</button>
 		</div>
         </script>
 
@@ -60,6 +62,30 @@
         </div>
         <button type="button" class="layui-btn layui-btn-sm" style="position: fixed;" onclick="changeSubmit()">确定修改</button>
     </div>
+
+    <form id="changeQtyDiv" lay-filter="changeQtyDiv" class="layui-form layui-form-pane" style="display:none;padding: 10px;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">指令单号</label>
+                <div class="layui-input-inline" style="width: 175px;">
+                    <input id="taskNo" name="taskNo" placeholder="" disabled="disabled" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">计划数量</label>
+                <div class="layui-input-inline" style="width: 175px;">
+                    <input id="qtyPlan" name="qtyPlan" placeholder="" disabled="disabled" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">新数量</label>
+                <div class="layui-input-inline" style="width: 175px;">
+                    <input id="newQty" name="newQty" placeholder="" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="layui-btn layui-btn-sm" style="position: fixed;" lay-submit="" lay-filter="submitQty">确定修改</button>
+    </form>
     <!--导入-->
     <div id="uploadDiv" class="layer_self_wrap" style="display:none;padding: 10px;">
         <button type="button" class="layui-btn layui-btn-sm" id="upload">上传文件</button>

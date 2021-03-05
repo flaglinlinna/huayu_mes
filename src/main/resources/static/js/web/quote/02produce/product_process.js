@@ -958,7 +958,7 @@ function cancelConfirm(){
 		CoreUtil.sendAjax("/productProcess/cancelStatus", JSON.stringify(params), function(
 			data) {
 			if (data.result) {
-				layer.alert("确认完成成功", function() {
+				layer.alert(data.msg, function() {
 					layer.closeAll();
 					// //刷新页面
 					// iStatus=2;

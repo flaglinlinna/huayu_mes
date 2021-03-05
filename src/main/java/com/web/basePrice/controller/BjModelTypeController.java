@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -197,6 +198,19 @@ public class BjModelTypeController extends WebController{
             logger.error("导入失败！", e);
             getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("导入失败！");
+        }
+    }
+
+    @ApiOperation(value = "导出", notes = "导出", hidden = true)
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @ResponseBody
+    public void export(HttpServletResponse response, String keyword) throws Exception{
+        String method = "/basePrice/bjModelType/export";String methodName ="导出";
+        try{
+            bjModelTypeService.exportExcel(response,keyword);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导出失败！", e);
         }
     }
 }

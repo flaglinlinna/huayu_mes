@@ -37,4 +37,6 @@ public interface BadMaterialService {
     public ApiResponseResult getDetailByTask(String taskNo) throws Exception;
 
     public ApiResponseResult getHistoryList(String keyword, String hStartTime, String hEndTime, PageRequest pageRequest) throws Exception;
+
+    public ApiResponseResult delNgBarcode(String ids) throws Exception;
 }

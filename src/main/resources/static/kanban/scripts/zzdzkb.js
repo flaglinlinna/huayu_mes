@@ -160,7 +160,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 		title : {
 			text : '效率:' + eff_rate + '%',
 			textStyle : {
-				color : '#FFFFFF' ,// 图例文字颜色
+				color : '#CC0033' ,// 图例文字颜色
 				fontSize : 17,// 字体大小
 			},
 			left : '5px',
@@ -262,7 +262,7 @@ function getChartXlpm3(done, plan, doneRate) {
 		title : {
 			text : '完工率:' + doneRate + '%',
 			textStyle : {
-				color : '#FFFFFF', // 图例文字颜色
+				color : '#CC0033', // 图例文字颜色
 				fontSize : 17,// 字体大小
 			},
 			left : '5px',
@@ -363,17 +363,14 @@ function setCxdzTable(kanbanData) {
 				+ '</td><td>' + arr.HOUR_ABN +'</td><td>' + arr.RATE_OK + '%</td><td>' + arr.RATE_DONE
 				+ '%</td><td>' + arr.RATE_EFF + '%</td></tr> ';
 	*/
-		var style1 = "";
 		var style = "";
 		if(arr.QTY_DONE==0){
 			style = "style='color:#CC0033'";
 		}
-		if(arr.QTY_ITEM_NG ==0){
-			style1 = "style='color:#CC0033'";
-		}
+
 		html += '<tr><td >' + arr.TASK_NO + '</td><td>' + arr.ITEM_NAME+ '</td><td>' + arr.ITEM_NAME1
 		+ '</td><td>' + arr.QTY_PLAN+ '</td><td>' + arr.QTY_MAIN + '</td>'
-		+ '<td '+style1+' >' + arr.QTY_ITEM_NG
+		+ '<td style="color:#CC0033" >' + arr.QTY_ITEM_NG
 		+ '</td><td '+style+' >' + arr.QTY_DONE+ '</td><td>'
 		+ arr.QTY_OK
 		+ '</td><td>' + arr.MANPOWER + '</td><td>' + arr.CAPACITY
@@ -394,7 +391,7 @@ function setCxdzTable(kanbanData) {
 	// clearInterval(MyMarhq);
 	var item = $('.tbl-body-cxdz tbody tr').length
 	//console.log(item)
-	if (item > 2) {
+	if (item >= 2) {
 		$('.tbl-body-cxdz tbody').html(
 				$('.tbl-body-cxdz tbody').html() + $('.tbl-body-cxdz tbody').html());
 		$('.tbl-body-cxdz').css('top', '0');

@@ -19,6 +19,8 @@ public interface ProductMaterService {
 
 	public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception;
 
+	public ApiResponseResult cancelStatus(Long quoteId,String bsType,String bsCode) throws Exception;
+
 	public ApiResponseResult getBomSelect(String pkQuote) throws Exception;
 
 	public ApiResponseResult doExcel(MultipartFile[] file,String bsType,Long quoteId) throws Exception;

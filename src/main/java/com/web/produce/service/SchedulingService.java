@@ -34,6 +34,10 @@ public interface SchedulingService {
 
     public ApiResponseResult changeStatue(String taskNos,String statue) throws Exception;
 
+    public ApiResponseResult changeQtyPlan(String taskNos,Long qtyPlan) throws Exception;
+
+    public ApiResponseResult delProdOrder(String taskNo) throws Exception;
+
     public ApiResponseResult getTempList(PageRequest pageRequest) throws Exception;
 
     public ApiResponseResult deleteTempAll() throws Exception;
@@ -76,4 +80,6 @@ public interface SchedulingService {
     public ApiResponseResult getProdOrderErrList(String mid, PageRequest pageRequest) throws Exception;
 
     public ApiResponseResult editItem(SchedulingItem schedulingItem) throws Exception;
+
+
 }

@@ -155,6 +155,66 @@ public final class ExcelExport {
         }
     }
 
+    public static void exportByRow(HttpServletResponse response, List<Map<String, Object>> importlist,XSSFWorkbook workbook, String[] mapNames,String filePath, String file_name,Integer titleRow) throws Exception {
+        //获取数据集
+        List<Map<String, Object>> datalist = importlist;
+        //获取第一页
+        Resource resource = new ClassPathResource(filePath);
+        InputStream in = resource.getInputStream();
+        workbook = new XSSFWorkbook(in);
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        //循环字段名数组，创建标题行-16
+        Row row = sheet.getRow(0);
+
+        //创建普通行
+        for (int i = 0;i<datalist.size();i++){
+            //因为前两行已经用于创建标题行，故从第二行开始创建
+            row = sheet.createRow(i+titleRow);
+            //如果是第一行就让其为标题行
+            Object targetObj = datalist.get(i);
+            for (int j = 0;j<mapNames.length;j++){
+                //创建列
+                Cell cell = row.createCell(j);
+                cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                //
+                //try {
+                Object value = datalist.get(i).get(mapNames[j]);//methodList.get(j).invoke(targetObj, new Object[]{});
+                cell.setCellValue(transCellType(value));
+                /*} catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }*/
+            }
+        }
+
+//        XSSFSheet lastSheet = workbook.getSheetAt(0);
+//        int lastRowNum = lastSheet.getLastRowNum();
+//        Row lastRow = lastSheet.getRow(lastRowNum);
+//        lastRow.getCell(0).setCellValue("");
+//
+        response.setContentType("application/octet-stream");
+        //默认Excel名称
+        // response.setHeader("Content-Disposition", "attachment;fileName="+file_name);
+        response.setHeader("Content-Disposition", "attachment; filename=" + java.net.URLEncoder.encode(file_name, "UTF-8"));
+        OutputStream outputStream = response.getOutputStream();
+        try {
+            response.flushBuffer();
+            workbook.write(outputStream);
+//            response.getOutputStream().close();
+//            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.flush();
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     private static String transCellType(Object value){
         String str = null;
         if (value instanceof Date){

@@ -4,6 +4,7 @@ import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.system.user.dao.SysUserDao;
 import com.utils.BaseService;
+import com.utils.ExcelExport;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
@@ -12,6 +13,7 @@ import com.web.basePrice.dao.BjModelTypeDao;
 import com.web.basePrice.dao.BjWorkCenterDao;
 import com.web.basePrice.entity.BjModelType;
 import com.web.basePrice.entity.BjWorkCenter;
+import com.web.basePrice.entity.PriceComm;
 import com.web.basePrice.service.BjModelTypeService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -237,7 +240,7 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 			List<BjModelType> bjModelTypeList = new ArrayList<>();
 			for (int row = 1; row <= maxRow; row++) {
 //				String errInfo = "";
-				String workCenterCode = tranCell(sheet.getRow(row).getCell(0));
+				String workCenterName = tranCell(sheet.getRow(row).getCell(0));
 				String modelCode = tranCell(sheet.getRow(row).getCell(1));
 				String modelName = tranCell(sheet.getRow(row).getCell(2));
 				BjModelType bjModelType = new BjModelType();
@@ -252,8 +255,8 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 						bjModelType.setCreateDate(doExcleDate);
 					}
 				}
-				if(StringUtils.isNotEmpty(workCenterCode)){
-					List<BjWorkCenter> bjWorkCenterList = bjWorkCenterDao.findByDelFlagAndWorkcenterCode(0,workCenterCode);
+				if(StringUtils.isNotEmpty(workCenterName)){
+					List<BjWorkCenter> bjWorkCenterList = bjWorkCenterDao.findByWorkcenterNameAndDelFlag(workCenterName,0);
 					if(bjWorkCenterList.size()>0){
 						bjModelType.setPkWorkcenter(bjWorkCenterList.get(0).getId());
 					}else {
@@ -273,5 +276,44 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 			e.printStackTrace();
 			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
 		}
+	}
+
+	/**
+	 * 查询工序基础信息维护列表
+	 */
+	@Override
+	@Transactional
+	public void exportExcel(HttpServletResponse response, String keyword) throws Exception {
+		// 查询条件1
+		List<SearchFilter> filters = new ArrayList<>();
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		// 查询2
+		List<SearchFilter> filters1 = new ArrayList<>();
+		if (StringUtils.isNotEmpty(keyword)) {
+			filters1.add(new SearchFilter("procNo", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("procName", SearchFilter.Operator.LIKE, keyword));
+		}
+		Specification<BjModelType> spec = Specification.where(BaseService.and(filters, BjModelType.class));
+		Specification<BjModelType> spec1 = spec.and(BaseService.or(filters1, BjModelType.class));
+		List<BjModelType> procList = bjModelTypeDao.findAll(spec1);
+
+		String excelPath = "static/excelFile/";
+		String fileName = "机台类型维护模板.xlsx";
+		String[] map_arr = new String[]{"wcName","modelCode","modelName"};
+		XSSFWorkbook workbook = new XSSFWorkbook();
+//		List<Proc> procList = page.getContent();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<Map<String, Object>> mapList = new ArrayList<>();
+		for (BjModelType bjModelType : procList) {
+			Map<String, Object> map = new HashMap<>();
+			if(bjModelType.getWorkCenter()!=null) {
+				map.put("wcName", bjModelType.getWorkCenter().getWorkcenterName());
+			}
+			map.put("modelCode",bjModelType.getModelCode());
+			map.put("modelName",bjModelType.getModelName());
+			mapList.add(map);
+		}
+		ExcelExport.exportByRow(response,mapList,workbook,map_arr,excelPath+fileName,fileName,1);
+
 	}
 }

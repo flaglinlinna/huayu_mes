@@ -469,7 +469,8 @@ public class ProductProcesslmpl implements ProductProcessService {
                 if(baseFeeList.size()==0){
                     return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
                 }else {
-                    if((sdf.parse(baseFeeList.get(0).getExpiresTime())).compareTo(sdf.parse(currentTime))>=0) {
+                    String expiresTime = sdf.format(baseFeeList.get(0).getExpiresTime());
+                    if((sdf.parse(expiresTime)).compareTo(sdf.parse(currentTime))>=0) {
                         //失效日期大于今天
                         o.setBsFeeMh(new BigDecimal(baseFeeList.get(0).getFeeMh()));
                         o.setBsFeeLh(new BigDecimal(baseFeeList.get(0).getFeeLh()));
@@ -482,7 +483,8 @@ public class ProductProcesslmpl implements ProductProcessService {
                 if(baseFeeList.size()==0){
                     return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
                 }else {
-                    if((sdf.parse(baseFeeList.get(0).getExpiresTime())).compareTo(sdf.parse(currentTime))>=0) {
+                    String expiresTime = sdf.format(baseFeeList.get(0).getExpiresTime());
+                    if((sdf.parse(expiresTime)).compareTo(sdf.parse(currentTime))>=0) {
                         //失效日期大于今天
                         o.setBsFeeMh(BigDecimal.ZERO);
                         o.setBsFeeLh(new BigDecimal(baseFeeList.get(0).getFeeLh()));
@@ -534,7 +536,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         }else if(bsType.equals("packag")){
             quoteStatus = quote.getBsStatus2Packag();
         }
-            if(quoteStatus ==4) {
+            if(quoteStatus ==4 ||quoteStatus==2) {
                 return ApiResponseResult.failure("发起审批后不能取消确认");
             } else {
                 //项目状态设置-状态 1：未完成
@@ -551,7 +553,7 @@ public class ProductProcesslmpl implements ProductProcessService {
                     o.setLastupdateBy(UserUtil.getSessionUser().getId());
                 }
                 productProcessDao.saveAll(productProcessList);
-                return ApiResponseResult.failure("取消完成成功");
+                return ApiResponseResult.success("取消完成成功");
             }
 
     }

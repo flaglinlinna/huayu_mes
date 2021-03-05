@@ -11,9 +11,12 @@ import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.UnitDao;
 import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.ProductMaterDao;
+import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductMater;
+import com.web.quote.entity.ProductProcess;
+import com.web.quote.entity.Quote;
 import com.web.quote.service.ProductMaterService;
 import com.web.quote.service.QuoteProductService;
 
@@ -45,6 +48,9 @@ public class ProductMaterlmpl implements ProductMaterService {
 
     @Autowired
     private UnitDao unitDao;
+
+    @Autowired
+    private QuoteDao quoteDao;
 
     @Autowired
     QuoteProcessDao quoteProcessDao;
@@ -248,6 +254,42 @@ public class ProductMaterlmpl implements ProductMaterService {
         quoteProductService.doItemFinish(bsCode, quoteId,3);
         
         return ApiResponseResult.success("确认完成成功！");
+    }
+
+    //取消完成
+    @Override
+    public ApiResponseResult cancelStatus(Long quoteId, String bsType, String bsCode) throws Exception {
+        Quote quote = quoteDao.findById((long) quoteId);
+        Integer quoteStatus = 0; //判断当前报价单是否已经发起审核
+        if(bsType.equals("hardware")){
+            quoteStatus = quote.getBsStatus2Hardware();
+        }else if(bsType.equals("molding")){
+            quoteStatus = quote.getBsStatus2Molding();
+        }else if(bsType.equals("surface")){
+            quoteStatus = quote.getBsStatus2Surface();
+        }else if(bsType.equals("packag")){
+            quoteStatus = quote.getBsStatus2Packag();
+        }
+        if(quoteStatus ==4||quoteStatus==2) {
+            return ApiResponseResult.failure("发起审批后不能取消确认");
+        } else {
+            //项目状态设置-状态 1：未完成
+            quoteItemDao.switchStatus(1, quoteId, bsCode);
+            //设置结束时间
+            quoteItemDao.setEndTime(null, quoteId, bsCode);
+            //取消报价单对应类别的完成状态
+            quoteProductService.doItemFinish(bsCode, quoteId,1);
+            List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
+            for(ProductMater o : productMaterList){
+                //修改所有工艺为未完成
+                o.setBsStatus(0);
+                o.setLastupdateDate(new Date());
+                o.setLastupdateBy(UserUtil.getSessionUser().getId());
+            }
+            productMaterDao.saveAll(productMaterList);
+            return ApiResponseResult.success("取消完成成功");
+        }
+
     }
 
     //防止读取Excel为null转String 报空指针异常

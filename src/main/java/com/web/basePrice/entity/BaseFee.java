@@ -93,10 +93,10 @@ public class BaseFee extends BaseEntity {
 		 * 失效时间
 		 */
 		@Column
-//		@Temporal(TemporalType.TIMESTAMP)
-//		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+		@Temporal(TemporalType.DATE)
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 		@ApiModelProperty(name="delTime",value="失效时间")
-		protected String expiresTime;
+		protected Date expiresTime;
 
 		public String getFileId() {
 			return fileId;
@@ -170,11 +170,11 @@ public class BaseFee extends BaseEntity {
 			this.procId = procId;
 		}
 
-		public String getExpiresTime() {
+		public Date getExpiresTime() {
 			return expiresTime;
 		}
 
-		public void setExpiresTime(String expiresTime) {
+		public void setExpiresTime(Date expiresTime) {
 			this.expiresTime = expiresTime;
 		}
 }

@@ -166,6 +166,16 @@ $(function () {
             load(data);
             return false;
         });
+
+        //监听提交按钮
+        form.on('submit(submitQty)', function(data){
+            //重新加载table
+            console.log(data);
+            updateQty(data);
+            return false;
+        });
+
+
         //监听导入按钮
         form.on('submit(importBtn)', function(data){
             //导入弹出框
@@ -294,6 +304,62 @@ function changeSubmit() {
 
 }
 
+
+function delProdOrder() {
+    var checkdata = layui.table.checkStatus("iList").data;
+    console.log(checkdata[0]);
+    if(checkdata.length ==0){
+        layer.msg("请选中制令单");
+        return  false;
+    }else if(checkdata.length >=2){
+        layer.msg("只能选中一个制令单");
+        return false
+    }
+    var taskNo = checkdata[0].TASK_NO;
+    var param = {
+        "taskNo" : taskNo,
+    };
+    CoreUtil.sendAjax("/produce/scheduling/delProdOrder", JSON.stringify(param),
+        function(data) {
+            if (data.result) {
+                layer.alert("删除成功",function () {
+                    loadAll();
+                    layer.closeAll();
+                })
+            } else {
+                layer.alert(data.msg)
+            }
+        }, "POST", false, function(res) {
+            layer.alert("操作请求错误，请您稍后再试");
+        });
+
+}
+
+
+function updateQty(obj) {
+    var param = {
+        "taskNo" : obj.field.taskNo,
+        "qtyPlan":obj.field.newQty,
+    };
+    CoreUtil.sendAjax("/produce/scheduling/updateOrderQty", JSON.stringify(param), function(
+        data) {
+        if (data.result) {
+            layer.alert("操作成功", function() {
+                layer.closeAll();
+                // cleanMtrial();
+                // 加载页面
+                loadAll();
+            });
+        } else {
+            layer.alert(data.msg, function() {
+                layer.closeAll();
+            });
+        }
+    }, "POST", false, function(res) {
+        layer.alert(res.msg);
+    });
+}
+
 //导出
 function exportExcel(){
     //导出模板
@@ -303,6 +369,11 @@ function exportExcel(){
 }
 
 function openChange() {
+    var checkdata = layui.table.checkStatus("iList").data;
+    if(checkdata.length == 0){
+        layer.msg('请先选中需要修改的制令单');
+        return false;
+    }
     var index = layer.open({
         type:1,
         title: "修改制令单状态",
@@ -312,6 +383,37 @@ function openChange() {
         area: ['400px','300px'],
         content:$('#changeStateDiv'),
         end:function(){
+        }
+    });
+}
+
+function openPlan() {
+    var checkdata = layui.table.checkStatus("iList").data;
+    if(checkdata.length == 0){
+        layer.msg('请先选中需要修改的制令单');
+        return false;
+    }
+    if(checkdata.length > 1){
+        layer.msg('只能选中一条指令单进行修改');
+        return false;
+    }
+    // console.log(checkdata[0]);
+    layui.form.val("changeQtyDiv", {
+        "taskNo":checkdata[0].TASK_NO,
+        "qtyPlan" : checkdata[0].QTY_PLAN,
+    });
+    layui.form.render();// 重新渲染
+    var index = layer.open({
+        type:1,
+        title: "修改制令单计划数量",
+        // fixed:false,
+        // resize :false,
+        shadeClose: false,//是否点击遮罩关闭
+        area: ['400px','300px'],
+        content:$('#changeQtyDiv'),
+        end:function(){
+            $('#changeQtyDiv')[0].reset();
+            layui.form.render();// 必须写
         }
     });
 }

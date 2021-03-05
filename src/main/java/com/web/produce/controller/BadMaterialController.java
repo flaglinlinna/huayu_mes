@@ -198,4 +198,22 @@ public class BadMaterialController extends WebController {
         }
     }
 
+    @ApiOperation(value="删除不良内容的录入", notes="删除不良内容的录入", hidden = true)
+    @RequestMapping(value = "/delNgBarcode", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult delNgBarcode(String id) {
+        String method = "/badMaterial/delNgBarcode";String methodName ="删除不良内容的录入";
+        String params = "id:"+id;
+        try {
+            ApiResponseResult result = badMaterialService.delNgBarcode(id);
+            logger.debug("删除不良内容的录入信息=delNgBarcode:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("根据条码获取物料信息失败！", e);
+            getSysLogService().error(module,method, methodName,params+";"+ e.toString());
+            return ApiResponseResult.failure("根据条码获取物料信息失败！");
+        }
+    }
 }

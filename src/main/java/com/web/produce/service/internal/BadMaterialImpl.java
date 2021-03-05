@@ -148,4 +148,13 @@ public class BadMaterialImpl extends PrcUtils implements BadMaterialService {
         map.put("rows", list.get(3));
         return ApiResponseResult.success("").data(map);
     }
+
+    @Override
+    public ApiResponseResult delNgBarcode(String ids) throws Exception {
+        List<Object> list = delNgBarcode(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",ids,UserUtil.getSessionUser().getId()+"","prc_batch_del_ng_barcode");
+        if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        return ApiResponseResult.success().data(list.get(2));
+    }
 }
