@@ -78,9 +78,10 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">新数量</label>
+                <label class="layui-form-label layui-required">新数量</label>
                 <div class="layui-input-inline" style="width: 175px;">
-                    <input id="newQty" name="newQty" placeholder="" autocomplete="off" class="layui-input" type="text"/>
+                    <input id="newQty" name="newQty" placeholder=""  autocomplete="off"
+                           lay-verify="required|number" class="layui-input" type="text"/>
                 </div>
             </div>
         </div>

@@ -8,8 +8,10 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteFileDao;
 import com.web.quote.dao.QuoteItemDao;
+import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteFile;
 import com.web.quote.service.QuoteFileService;
 import com.web.quote.service.QuoteService;
@@ -40,7 +42,8 @@ public class QuoteFilelmpl implements QuoteFileService {
 	private QuoteItemDao quoteItemDao;
 	@Autowired
 	TodoInfoService todoInfoService;
-
+	@Autowired
+	private QuoteDao quoteDao;
 
 	@Override
 	public ApiResponseResult add(QuoteFile productFile) throws Exception {
@@ -120,7 +123,7 @@ public class QuoteFilelmpl implements QuoteFileService {
 		 if(i>0){
 			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
 		 }
-		 quoteFileDao.saveQuoteFileByQuoteId(Long.parseLong(quoteId));
+		 quoteFileDao.saveQuoteFileByQuoteId(1,Long.parseLong(quoteId));
 		 //项目状态设置-状态 2：已完成
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
 		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
@@ -129,4 +132,29 @@ public class QuoteFilelmpl implements QuoteFileService {
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "产品资料");
 		 return ApiResponseResult.success("提交成功！");
 	 }
+
+
+	/**
+	 * 取消完成
+	 * **/
+	public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception{
+		//判断状态是否已执行过确认提交
+//		int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
+//		if(i==0){
+//			return ApiResponseResult.failure("此项目未完成，请不要重复确认提交。");
+//		}
+		Quote quote = quoteDao.findById(Long.parseLong(quoteId));
+		if(quote.getBsStatus()==1||quote.getBsStatus()==4){
+			return ApiResponseResult.failure("报价单已提交审批，不能取消完成。");
+		}
+		//修改取消状态
+		quoteFileDao.saveQuoteFileByQuoteId(0,Long.parseLong(quoteId));
+		//项目状态设置-状态 2：已完成，1未完成
+		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), code);
+		quoteService.doItemFinish(code, Long.parseLong(quoteId));
+
+
+		todoInfoService.openByIdAndModel(Long.parseLong(quoteId), "产品资料");
+		return ApiResponseResult.success("提交成功！");
+	}
 }

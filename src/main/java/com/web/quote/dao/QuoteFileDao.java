@@ -17,6 +17,6 @@ public interface QuoteFileDao extends CrudRepository<QuoteFile, Long>,JpaSpecifi
 	public QuoteFile findById(long id);
 	
 	@Modifying
-    @Query("update QuoteFile t set t.bsStatus=1 where t.pkQuote=?1 and t.delFlag=0")
-    public void saveQuoteFileByQuoteId(Long  quoteId);//变更字段状态
+    @Query("update QuoteFile t set t.bsStatus=?1 where t.pkQuote=?2 and t.delFlag=0")
+    public void saveQuoteFileByQuoteId(Integer bsStatus,Long  quoteId);//变更字段状态
 }

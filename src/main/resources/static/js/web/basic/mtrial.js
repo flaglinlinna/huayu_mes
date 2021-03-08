@@ -31,36 +31,17 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			}
-			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
-				field : 'itemNo',
-				title : '物料编码',
-				sort: true
-			}, {
-				field : 'itemName',
-				title : '物料名称',
-				width : '30%',
-			}, {
-				field : 'itemType',
-				title : '物料类别',
-			}, {
-				field : 'itemUnit',
-				title : '物料单位'
-			}, {
-				field : 'checkStatus',
-				title : '状态',
-				width : 95,
-				templet : '#statusTpl'
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间'
-			}, {
-				field : 'createDate',
-				title : '添加时间',
-			},
+			cols : [ [ {type : 'numbers'},
+			 	{field : 'itemNo', title : '物料编码', width : 150, sort: true},
+				{field : 'itemName', title : '物料名称', width : 180,},
+				{field : 'itemType', title : '物料类别', width : 90,},
+				{field : 'itemUnit', title : '物料单位', width : 90},
+				{field : 'checkStatus', title : '状态', width : 95, templet : '#statusTpl'},
+				{field : 'capacity', title : '产能(PCS/H)', width : 120},
+				{field : 'manpower', title : '人力(人)', width : 95},
+				{field : 'capacityUnit', title : '单人产能(H/人)', width : 120},
+				{field : 'lastupdateDate', title : '更新时间', width : 120},
+				{field : 'createDate', title : '添加时间', width : 130},
 			// 	{
 			// 	fixed : 'right',
 			// 	title : '操作',

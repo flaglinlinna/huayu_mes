@@ -45,6 +45,10 @@ public interface TodoInfoDao extends CrudRepository<TodoInfo, Long>, JpaSpecific
     @Modifying
     @Query("update TodoInfo t set t.bsStatus='1' where t.bsReferId=?1 and t.bsModel=?2")
     public void closeByBsReferIdAndModel(Long bsReferId,String model);
+
+    @Modifying
+    @Query("update TodoInfo t set t.bsStatus='0' where t.bsReferId=?1 and t.bsModel=?2")
+    public void openByBsReferIdAndModel(Long bsReferId,String model);
     
 
     public int countByDelFlagAndBsUserId(Integer isDel, Long bsUserId);

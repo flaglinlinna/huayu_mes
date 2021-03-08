@@ -253,7 +253,7 @@ public class SchedulingController extends WebController {
     @ResponseBody
     public ApiResponseResult updateOrderQty(@RequestBody Map<String, Object> param){
         String taskNo= param.get("taskNo").toString();
-        Long qtyPlan = Long.parseLong(param.get("qtyPlan").toString());
+        String qtyPlan = param.get("qtyPlan").toString();
         String method = "/produce/scheduling/updateOrderQty";String methodName ="更改计划数量";
         try{
             ApiResponseResult result = schedulingService.changeQtyPlan(taskNo,qtyPlan);

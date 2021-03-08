@@ -10,6 +10,9 @@ import com.app.base.entity.BaseEntity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.math.BigDecimal;
+
 /**
  * 物料基础信息表
  *
@@ -73,6 +76,27 @@ public class Mtrial extends BaseEntity {
 	    @Column
 	    protected Integer checkStatus = 1;
 
+		/**
+		 * 产能(PCS/H)
+		 */
+		@ApiModelProperty(name = "产能(PCS/H)", value = "1")
+		@Column(length = 20)
+		protected BigDecimal  capacity;
+
+		/**
+		 * 人力(人)
+		 */
+		@ApiModelProperty(name = "人力(人)", value = "1")
+		@Column(length = 20)
+		protected BigDecimal manpower;
+
+		/**
+		 * 单人产能(H/人)
+		 */
+		@ApiModelProperty(name = "单人产能(H/人) ", value = "0")
+		@Column(length = 20)
+		protected BigDecimal capacityUnit;
+
 		public String getItemNo() {
 			return itemNo;
 		}
@@ -127,6 +151,30 @@ public class Mtrial extends BaseEntity {
 
 		public void setCheckStatus(Integer checkStatus) {
 			this.checkStatus = checkStatus;
+		}
+
+		public BigDecimal getCapacity() {
+			return capacity;
+		}
+
+		public void setCapacity(BigDecimal capacity) {
+			this.capacity = capacity;
+		}
+
+		public BigDecimal getManpower() {
+			return manpower;
+		}
+
+		public void setManpower(BigDecimal manpower) {
+			this.manpower = manpower;
+		}
+
+		public BigDecimal getCapacityUnit() {
+			return capacityUnit;
+		}
+
+		public void setCapacityUnit(BigDecimal capacityUnit) {
+			this.capacityUnit = capacityUnit;
 		}
 
 	@Override

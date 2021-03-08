@@ -232,4 +232,10 @@ public class TodoInfoImpl  implements TodoInfoService {
 		return ApiResponseResult.success();
 	}
 
+    @Override
+    public ApiResponseResult openByIdAndModel(Long bsReferId,String model) throws Exception {
+        // TODO Auto-generated method stub
+        todoInfoDao.openByBsReferIdAndModel(bsReferId,model);
+        return ApiResponseResult.success();
+    }
 }

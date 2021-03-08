@@ -34,7 +34,7 @@ public interface SchedulingService {
 
     public ApiResponseResult changeStatue(String taskNos,String statue) throws Exception;
 
-    public ApiResponseResult changeQtyPlan(String taskNos,Long qtyPlan) throws Exception;
+    public ApiResponseResult changeQtyPlan(String taskNos,String qtyPlan) throws Exception;
 
     public ApiResponseResult delProdOrder(String taskNo) throws Exception;
 

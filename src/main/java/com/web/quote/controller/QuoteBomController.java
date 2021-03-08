@@ -166,6 +166,27 @@ public class QuoteBomController extends WebController {
         }
     }
 
+	@ApiOperation(value = "取消完成-外购件信息", notes = "取消完成-外购件信息",hidden = true)
+	@RequestMapping(value = "/cancelStatus", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult cancelStatus(@RequestBody Map<String, Object> param) {
+		String method = "quoteBom/cancelStatus";String methodName ="取消完成-外购件信息";
+		String pkQuote = param.get("quoteId").toString();
+		String code = param.get("code").toString();
+		try{
+			ApiResponseResult result = quoteBomService.cancelStatus(pkQuote,code);
+			logger.debug("取消完成-外购件信息=cancelStatus:");
+			getSysLogService().success(module,method, methodName,
+					"报价单id:"+pkQuote);
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("取消完成-外购件信息失败！", e);
+			getSysLogService().error(module,method, methodName,"报价单id:"+pkQuote+ e.toString());
+			return ApiResponseResult.failure("取消完成-外购件信息失败！");
+		}
+	}
+
 	@ApiOperation(value="导出数据", notes="导出数据", hidden = true)
 	@RequestMapping(value = "/exportExcel", method = RequestMethod.GET)
 	public void exportExcel(HttpServletResponse response, Long pkQuote) {

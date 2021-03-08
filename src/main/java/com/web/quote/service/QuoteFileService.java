@@ -18,4 +18,7 @@ public interface QuoteFileService {
 
 	//确认完成（变更状态bsStatus字段）
 	public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
+
+	//取消完成
+	public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception;
 }

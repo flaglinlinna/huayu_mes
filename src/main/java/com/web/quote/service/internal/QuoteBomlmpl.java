@@ -13,8 +13,11 @@ import com.web.basePrice.entity.BjWorkCenter;
 import com.web.basePrice.entity.ItemTypeWg;
 import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.QuoteBomDao;
+import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemDao;
+import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteBom;
+import com.web.quote.entity.QuoteItem;
 import com.web.quote.service.QuoteBomService;
 import com.web.quote.service.QuoteService;
 
@@ -56,6 +59,8 @@ public class QuoteBomlmpl implements QuoteBomService {
 	private QuoteService quoteService;
 	@Autowired
 	TodoInfoService todoInfoService;
+	@Autowired
+	private QuoteDao quoteDao;
 	
 	@Override
 	public ApiResponseResult add(QuoteBom quoteBom) throws Exception {
@@ -284,19 +289,57 @@ public class QuoteBomlmpl implements QuoteBomService {
 			return ApiResponseResult.failure("外购件清单信息为空，请先填写后确认提交。");
 		}
 		//设置该报价单下的bom状态
-		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId));
+		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId),1);
 		//项目状态设置-状态 2：已完成
 		quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
 		//模具清单、工艺流程增加开始时间+状态变更：进行中
-		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A003");
-		quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A003");
-		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A004");
-		quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A004");
-		
+
+		List<QuoteItem> quoteItemList =quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,Long.parseLong(quoteId),"A003");
+		if(quoteItemList.size()>0){
+			QuoteItem o = quoteItemList.get(0);
+			if(o.getBsStatus()==0){
+				quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A003");
+				quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A003");
+				quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A004");
+				quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A004");
+			}
+		}
+
 		quoteService.doItemFinish(code, Long.parseLong(quoteId));
 		
 		//20210112-fyx-关闭待办
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "外购件清单");
 		return ApiResponseResult.success("提交成功！");
+	}
+
+	/**
+	 * 取消确认完成外购件清单
+	 * **/
+	public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception{
+		//判断状态是否已执行过确认提交
+		int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
+		if(i==0){
+			return ApiResponseResult.failure("此项目未完成，不需要取消完成。");
+		}
+		Quote quote = quoteDao.findById(Long.parseLong(quoteId));
+		if(quote.getBsStatus()==1||quote.getBsStatus()==4){
+			return ApiResponseResult.failure("报价单已提交审批，不能取消完成。");
+		}
+
+		//设置该报价单下的bom状态
+		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId),0);
+		//项目状态设置-状态 2：已完成,1进行中
+		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), code);
+//		//模具清单、工艺流程增加开始时间+状态变更：进行中
+//		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A003");
+//		quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A003");
+//		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A004");
+//		quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A004");
+
+		quoteService.doItemFinish(code, Long.parseLong(quoteId));
+
+		//20210305-hjj-打开待办
+		todoInfoService.openByIdAndModel(Long.parseLong(quoteId), "外购件清单");
+		return ApiResponseResult.success("取消完成成功！");
 	}
 }

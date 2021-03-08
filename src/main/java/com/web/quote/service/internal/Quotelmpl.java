@@ -530,7 +530,17 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         		o.setLastupdateBy(UserUtil.getSessionUser().getId());
         		quoteDao.save(o);
         	}
-		}
+		}else {
+            //取消完成修改状态
+            List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
+            if (lo.size() > 0) {
+                Quote o = lo.get(0);
+                o.setBsStatus(0);
+                o.setLastupdateDate(new Date());
+                o.setLastupdateBy(UserUtil.getSessionUser().getId());
+                quoteDao.save(o);
+            }
+        }
 		//2.3修改报价单状态（如果要自动发起审批则在这个地方触发，目前还未）
 		/*List<QuoteItem> lqii = quoteItemDao.findByDelFlagAndPkQuoteAndNotBsEndTime(0,quoteId);
 		if(lqii.size()>0){

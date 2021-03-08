@@ -29,4 +29,7 @@ public interface QuoteBomService {
 	//确认完成外购件清单 （修改项目状态）
 	public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
 
+	//取消确认完成外购件清单 （修改项目状态）
+	public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception;
+
 }

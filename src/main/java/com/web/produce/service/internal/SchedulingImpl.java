@@ -891,13 +891,13 @@ public class SchedulingImpl implements SchedulingService {
 
     @Override
     @Transactional
-    public ApiResponseResult changeQtyPlan(String taskNo,Long qty) throws Exception{
+    public ApiResponseResult changeQtyPlan(String taskNo,String qty) throws Exception{
         List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
                 String storedProc = "{call prc_mes_update_orderqty(?,?,?,?)}";// 调用的sql
                 CallableStatement cs = con.prepareCall(storedProc);
-                cs.setLong(1, qty);
+                cs.setString(1, qty);
                 cs.setString(2, taskNo);
                 cs.registerOutParameter(3, Types.INTEGER);// 注册输出参数 返回标志
                 cs.registerOutParameter(4, java.sql.Types.VARCHAR);// 注册输出参数 返回信息

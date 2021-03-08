@@ -168,7 +168,32 @@ function save() {
 		});
 	});
 }
-
+//取消完成
+function cancelStatus() {
+	var param = {
+		"quoteId" : quoteId,
+		"code" : code
+	};
+	layer.confirm('确认取消确认完成吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/quoteFile/cancelStatus", JSON.stringify(param), function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						window.location.reload();
+					});
+				} else {
+					layer.msg(data.msg, {
+						time : 2000, // 2s后自动关闭
+						btn : [ '知道了' ]
+					});
+				}
+			}
+		});
+	});
+}
 // 删除五金材料
 function delProdErr(obj, id, name) {
 	if (id != null) {
