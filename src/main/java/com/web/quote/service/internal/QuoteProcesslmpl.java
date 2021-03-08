@@ -116,8 +116,12 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,pkQuote,0);
 		for(QuoteProcess qp:lqp){
 			String[] strs = this.getLhBy(qp.getProc().getWorkcenterId(), qp.getPkProc());
-			if(!StringUtils.isEmpty(strs[0]))qp.setBsFeeLh(new BigDecimal(strs[0]));
-			if(!StringUtils.isEmpty(strs[1]))qp.setBsFeeMh(new BigDecimal(strs[1]));
+			if(!StringUtils.isEmpty(strs[0])){
+				qp.setBsFeeLh(new BigDecimal(strs[0]));
+			}
+			if(!StringUtils.isEmpty(strs[1])){
+				qp.setBsFeeMh(new BigDecimal(strs[1]));
+			}
 		}
 		quoteProcessDao.saveAll(lqp);
 	}
@@ -297,7 +301,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 
 		 //项目状态设置-状态 2：已完成
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
-		 quoteProcessDao.saveQuoteProcessByQuoteId(Long.parseLong(quoteId));
+		 quoteProcessDao.saveQuoteProcessByQuoteId(1,Long.parseLong(quoteId));
 		 
 		//20210112-fyx-关闭待办
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "工艺流程");
@@ -306,6 +310,37 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 
 		 return ApiResponseResult.success("提交成功！");
 	 }
+
+	/**
+	 * 取消完成
+	 * **/
+	public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception{
+		//判断状态是否已执行过确认提交-lst-20210112
+//		int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
+//		if(i>0){
+//			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
+//		}
+		//20201223-fyx-先判断是否维护了人工和制费
+		//获取该报价单的所有的未提交的数据，更新一下 人工和制费
+//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,Long.valueOf(quoteId),0);
+//		for(QuoteProcess qp:lqp){
+//			if(qp.getBsFeeLh() == null || qp.getBsFeeMh() == null){
+//				return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
+//			}
+//		}
+
+		//项目状态设置-状态 2：已完成,1 未完成
+		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), code);
+		quoteProcessDao.saveQuoteProcessByQuoteId(0,Long.parseLong(quoteId));
+
+
+		todoInfoService.openByIdAndModel(Long.parseLong(quoteId), "工艺流程");
+
+		quoteService.doItemFinish(code, Long.parseLong(quoteId));
+
+		return ApiResponseResult.success("提交成功！");
+	}
+
 	 /**
 	  * 根据工作中心id和工序id查询人工和制费
 	  * @param w_id

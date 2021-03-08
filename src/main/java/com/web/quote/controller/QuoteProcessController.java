@@ -249,6 +249,27 @@ public class QuoteProcessController extends WebController {
             return ApiResponseResult.failure("提交报价-工艺流程失败！");
         }
     }
+
+    @ApiOperation(value = "取消提交-工艺流程", notes = "取消提交-工艺流程",hidden = true)
+    @RequestMapping(value = "/cancelStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult cancelStatus(@RequestBody Map<String, Object> param) {
+        String method = "quoteProcess/doStatus";String methodName ="取消提交-工艺流程";
+        String pkQuote = param.get("quoteId").toString();
+        String code = param.get("code").toString();
+        try{
+            ApiResponseResult result = quoteProcessService.cancelStatus(pkQuote,code);
+            logger.debug("取消提交-工艺流程=doStatus:");
+            getSysLogService().success(module,method, methodName,
+                    "报价单id:"+pkQuote);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("取消提交-工艺流程失败！", e);
+            getSysLogService().error(module,method, methodName,"报价单id:"+pkQuote+ e.toString());
+            return ApiResponseResult.failure("取消提交-工艺流程失败！");
+        }
+    }
 	
 	@ApiOperation(value = "获取报价工艺流程-工序列表", notes = "获取报价工艺流程-工序列表",hidden = true)
     @RequestMapping(value = "/getListByQuoteAndName", method = RequestMethod.GET)

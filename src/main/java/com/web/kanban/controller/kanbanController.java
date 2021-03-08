@@ -124,7 +124,7 @@ public class kanbanController extends WebController {
 				ApiResponseResult interval =kanbanService.getIntervalTime();
 				ApiResponseResult linerList=kanbanService.getLiner();
 				ApiResponseResult xlpm_data = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner);
-				ApiResponseResult cxdz_data = kanbanService.getCxdzList("","","",this.getIpAddr(),liner);
+				ApiResponseResult cxdz_data = kanbanService.getCxdzList("999","","",this.getIpAddr(),liner);
 				//制令单切换单独获取
 				ApiResponseResult cxsc_data = kanbanService.getCxscList2("","",liner,this.getIpAddr(),"1");
 				ApiResponseResult rotation =kanbanService.getRotationTime();

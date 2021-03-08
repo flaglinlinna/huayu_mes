@@ -61,6 +61,12 @@ public class BaseFee extends BaseEntity {
 	    @Column(length = 50)
 	    protected String procName;
 
+		@ApiModelProperty(name = "proc", hidden = true, value = "工序")
+		@ManyToOne
+		@JoinColumn(name = "procId", insertable = false, updatable = false)
+		@NotFound(action = NotFoundAction.IGNORE)
+		protected Proc proc;
+
 		/**
 		 * 机台类型
 		 */
@@ -176,5 +182,13 @@ public class BaseFee extends BaseEntity {
 
 		public void setExpiresTime(Date expiresTime) {
 			this.expiresTime = expiresTime;
+		}
+
+		public Proc getProc() {
+			return proc;
+		}
+
+		public void setProc(Proc proc) {
+			this.proc = proc;
 		}
 }

@@ -146,8 +146,15 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	}
 	
 	@Override
-	public ApiResponseResult getXlpmList( String class_id,String dep_id, String sdata, String dev_ip,String liner) throws Exception{	
-		List<Object> list = getXlpmListPrc("","","",class_id,dep_id,sdata,dev_ip,liner);
+	public ApiResponseResult getXlpmList( String class_id,String dep_id, String sdata, String dev_ip,String liner) throws Exception{
+		SysUser sysUser = UserUtil.getSessionUser();
+		String userId = "";
+		if(sysUser!=null){
+			userId = sysUser.getId().toString();
+		}else {
+			userId = "1";
+		}
+		List<Object> list = getXlpmListPrc("","",userId,class_id,dep_id,sdata,dev_ip,liner);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

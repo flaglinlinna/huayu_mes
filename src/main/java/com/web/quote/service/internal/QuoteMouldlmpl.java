@@ -189,7 +189,7 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 		 if(count>0){
 			 return ApiResponseResult.failure("提交失败：实际报价不可为空，请检查数据");
 		 }
-		 quoteMouldDao.saveQuoteMouldByQuoteId(Long.parseLong(quoteId));
+		 quoteMouldDao.saveQuoteMouldByQuoteId(1,Long.parseLong(quoteId));
 		 //项目状态设置-状态 2：已完成
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
 		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
@@ -217,4 +217,27 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "模具清单");
 		 return ApiResponseResult.success("操作成功！");
 	 }
+
+
+	/**
+	 * 取消完成 模具维护清单
+	 * **/
+	public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception{
+		//判断状态是否已执行过确认提交-lst-20210112
+//		int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
+//		if(i>0){
+//			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
+//		}
+//		int count =quoteMouldDao.countByDelFlagAndPkQuoteAndBsActQuote(0,Long.parseLong(quoteId),null);
+//		if(count>0){
+//			return ApiResponseResult.failure("提交失败：实际报价不可为空，请检查数据");
+//		}
+		quoteMouldDao.saveQuoteMouldByQuoteId(0,Long.parseLong(quoteId));
+		//项目状态设置-状态 2：已完成,1 未完成
+		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), code);
+		quoteService.doItemFinish(code, Long.parseLong(quoteId));
+
+		todoInfoService.openByIdAndModel(Long.parseLong(quoteId), "模具清单");
+		return ApiResponseResult.success("提交成功！");
+	}
 }

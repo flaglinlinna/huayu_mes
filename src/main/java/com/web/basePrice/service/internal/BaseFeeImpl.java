@@ -8,6 +8,7 @@ import com.system.file.dao.FsFileDao;
 import com.system.file.entity.FsFile;
 import com.system.user.dao.SysUserDao;
 
+import com.utils.ExcelExport;
 import com.web.basePrice.dao.*;
 import com.web.basePrice.entity.*;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +33,8 @@ import com.web.basic.dao.WorkCenterDao;
 import com.web.basic.entity.Mtrial;
 import com.web.basic.entity.WorkCenter;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -232,11 +235,13 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 			map.put("expiresTime",baseFee.getExpiresTime());
 			map.put("feeLh", baseFee.getFeeLh());
 			map.put("feeMh", baseFee.getFeeMh());
-			
-			map.put("createBy", sysUserDao.findById((long) baseFee.getCreateBy()).getUserName());
-			map.put("createDate", df.format(baseFee.getCreateDate()));
+
+			if(baseFee.getCreateBy()!=null) {
+				map.put("createBy", sysUserDao.findById((long) baseFee.getCreateBy()).getUserName());
+				map.put("createDate", df.format(baseFee.getCreateDate()));
+			}
 			if (baseFee.getLastupdateBy() != null) {
-				map.put("lastupdateBy", sysUserDao.findById((long) baseFee.getCreateBy()).getUserName());
+				map.put("lastupdateBy", sysUserDao.findById((long) baseFee.getLastupdateBy()).getUserName());
 				map.put("lastupdateDate", df.format(baseFee.getLastupdateDate()));
 			}
 			mapList.add(map);
@@ -323,7 +328,7 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 				String feeLh = tranCell(sheet.getRow(row).getCell(2));//人工费率（元/小时）
 				String feeMh = tranCell(sheet.getRow(row).getCell(3));//制费费率（元/小时）
 				BaseFee baseFee = new BaseFee();
-					List<Proc> procList = procDao.findByDelFlagAndProcNo(0,procNo);
+					List<Proc> procList = procDao.findByDelFlagAndProcNo(1,procNo);
 					if(procList.size()>0){
 						Proc proc = procList.get(0);
 						baseFee.setProcId(proc.getId());
@@ -342,7 +347,7 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 					}
 					List<BaseFee> baseFeeList1 =baseFeeDao.findByDelFlagAndWorkcenterIdAndProcId(0,baseFee.getWorkcenterId(),baseFee.getProcId());
 					if(baseFeeList1.size()>0){
-						baseFee = baseFeeList1.get(0);
+						baseFee.setId(baseFeeList1.get(0).getId());
 						baseFee.setLastupdateBy(userId);
 						baseFee.setLastupdateDate(doExcleDate);
 					}else {
@@ -416,6 +421,46 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		fsFileDao.save(fsFile);
 
 		return ApiResponseResult.success("删除附件成功！");
+	}
+
+	/**
+	 * 查询工序基础信息维护列表
+	 */
+	@Override
+	@Transactional
+	public void exportExcel(HttpServletResponse response, String keyword) throws Exception {
+		// 查询条件1
+		List<SearchFilter> filters = new ArrayList<>();
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		// 查询2
+		List<SearchFilter> filters1 = new ArrayList<>();
+		if (StringUtils.isNotEmpty(keyword)) {
+			filters1.add(new SearchFilter("procName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("mhType", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("workCenter.workcenterName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("workCenter.workcenterCode", SearchFilter.Operator.LIKE, keyword));
+		}
+		Specification<BaseFee> spec = Specification.where(BaseService.and(filters, BaseFee.class));
+		Specification<BaseFee> spec1 = spec.and(BaseService.or(filters1, BaseFee.class));
+		List<BaseFee> baseFeeList = baseFeeDao.findAll(spec1);
+
+		String excelPath = "static/excelFile/";
+		String fileName = "人工制费维护模板.xlsx";
+		String[] map_arr = new String[]{"procNo","modelCode","feeLh","feeMh"};
+		XSSFWorkbook workbook = new XSSFWorkbook();
+//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<Map<String, Object>> mapList = new ArrayList<>();
+		for (BaseFee baseFee: baseFeeList) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("procNo", baseFee.getProc()!=null?baseFee.getProc().getProcNo():"");
+			List<BjModelType> bjModelTypeList = bjModelTypeDao.findByDelFlagAndModelName (0,baseFee.getMhType());
+			map.put("modelCode", bjModelTypeList.size()>0?bjModelTypeList.get(0).getModelCode():"");
+			map.put("feeLh", baseFee.getFeeLh());
+			map.put("feeMh",baseFee.getFeeMh());
+			mapList.add(map);
+		}
+		ExcelExport.exportByRow(response,mapList,workbook,map_arr,excelPath+fileName,fileName,1);
+
 	}
 
 }

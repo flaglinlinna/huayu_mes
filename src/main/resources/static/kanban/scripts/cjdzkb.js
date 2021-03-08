@@ -34,15 +34,21 @@ function dealScdzData(kanbanList) {
 			var series1 = [];
 			var series2 = [];
 			var series3 = [];
+			var color = [];
 			for (var i = 0; i < kanbanData.length; i++) {
 				xAxis.push(kanbanData[i].LINER_NAME);
 				series1.push(kanbanData[i].QTY_PLAN);// 计划数量
 				series2.push(kanbanData[i].QTY_DONE);// 完成数量
+				if(kanbanData[i].QTY_DONE<kanbanData[i].QTY_PLAN){
+					color.push("#CC0033");
+				}else {
+					color.push("#FFFFFF");
+				}
 				series3.push(kanbanData[i].RATE_DONE);// 完工率
 			}
-			chartScdzDiv(xAxis, series1, series2, series3);
+			chartScdzDiv(xAxis, series1, series2, series3,color);
 		} else {
-			chartScdzDiv([], 0, 0, 0);
+			chartScdzDiv([], 0, 0, 0,0);
 		}
 		var emp_plan = parseInt(kanbanList.data.EMP_NUM_PLN);
 		var emp_now = parseInt(kanbanList.data.EMP_NUM_NOW);
@@ -120,7 +126,8 @@ function toClean() {
 }
 
 
-function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
+function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color_data) {
+	// console.log(color_data);
 	option = {
 		tooltip : {
 			trigger : 'axis',
@@ -230,6 +237,18 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data) {
 				position : 'top',
 				textStyle : {
 					fontSize : fontSize(0.24),// 字体大小
+					// color:getcolor(series2_data)
+					// color:"#CC0033"
+					// color : color_data
+					// color:function(params){
+					// 	console.log(params.value);
+					// 	var d=params.value;
+					// 	if(d<100){
+					// 		return '#fe4365';
+					// 	}else{
+					// 		return '#99FFCC';
+					// 	}
+					// },
 				}
 			},
 		}, {
@@ -598,6 +617,11 @@ function fontSize(res){
 	  if (!clientWidth) return;
 	  var fontSize = 100 * (clientWidth / 2880);//原：1920/2400/2880
 	  return res*fontSize;
+}
+
+function getcolor(value){
+	console.log(value);
+		// return value[1];
 }
 
 function getDepList(deptList) {

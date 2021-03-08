@@ -207,4 +207,26 @@ public class QuoteMouldController extends WebController {
             return ApiResponseResult.failure("设置-不需要报价状态失败！");
         }
     }
+
+
+    @ApiOperation(value = "取消完成-模具清单", notes = "取消完成-模具清单",hidden = true)
+    @RequestMapping(value = "/cancelStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult cancelStatus(@RequestBody Map<String, Object> param) {
+        String method = "quoteMould/cancelStatus";String methodName ="取消完成-模具清单";
+        String pkQuote = param.get("quoteId").toString();
+        String code = param.get("code").toString();
+        try{
+            ApiResponseResult result = quoteMouldService.cancelStatus(pkQuote,code);
+            logger.debug("取消完成-模具清单=doStatus:");
+            getSysLogService().success(module,method, methodName,
+                    "报价单id:"+pkQuote);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("取消完成-模具清单失败！", e);
+            getSysLogService().error(module,method, methodName,"报价单id:"+pkQuote+ e.toString());
+            return ApiResponseResult.failure("取消完成-模具清单失败！");
+        }
+    }
 }

@@ -17,7 +17,6 @@ $(function() {
 	
 	 var rotationdata = rotation.data;
 	 rotationdata = rotationdata[0].R;// 获取系统设置的刷新间隔时间 -页面更新
-	 
 	dealXlpmData(xlpm_data);
 	dealCxdzData(cxdz_data);
 	dealCxscData(cxsc_data);
@@ -121,6 +120,7 @@ function dealCxdzData(kanbanList){
 		return false;
 	}
 	var kanbanData = kanbanList.data.List_table;
+	console.log(kanbanData);
 	if (kanbanData.length > 0) {//无数据时要初始化
 		setCxdzTable(kanbanData);// 表格数据
 	}else{

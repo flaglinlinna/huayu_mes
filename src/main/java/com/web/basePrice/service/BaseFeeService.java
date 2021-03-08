@@ -5,6 +5,8 @@ import com.app.base.data.ApiResponseResult;
 import com.web.basePrice.entity.BaseFee;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  *
  * @date Dec 8, 2020 11:27:53 AM
@@ -20,6 +22,8 @@ public interface BaseFeeService {
   public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception;
 
   public ApiResponseResult doExcel(MultipartFile[] file) throws Exception;
+
+  public void exportExcel(HttpServletResponse response, String keyword) throws Exception;
   
   public ApiResponseResult doStatus(Long id, Integer bsStatus) throws Exception;// 状态改变
   

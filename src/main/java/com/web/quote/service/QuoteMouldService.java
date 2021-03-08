@@ -27,4 +27,6 @@ public interface QuoteMouldService {
    public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
    
    public ApiResponseResult doNoNeed(String quoteId ,String bsCode)throws Exception;
+
+   public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception;
 }

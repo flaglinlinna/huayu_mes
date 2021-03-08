@@ -24,6 +24,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Api("人工制费维护模块")
 @CrossOrigin
 @ControllerAdvice
@@ -275,7 +277,7 @@ public class BaseFeeController extends WebController{
     @RequestMapping(value = "/getFileList", method = RequestMethod.GET)
     @ResponseBody
     public ApiResponseResult getFileList(Long customId) {
-        String method = "basePrice/customQs/getFileList";String methodName ="获取文件列表";
+        String method = "basePrice/baseFee/getFileList";String methodName ="获取文件列表";
         try {
             System.out.println(customId);
 //            Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -294,7 +296,7 @@ public class BaseFeeController extends WebController{
     @RequestMapping(value = "/delFile", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult delFile(Long recordId, Long fileId){
-        String method = "basePrice/customQs/delFile";String methodName ="删除客户品质标准附件";
+        String method = "basePrice/baseFee/delFile";String methodName ="删除客户品质标准附件";
         try{
             ApiResponseResult result = baseFeeService.delFile(recordId,fileId);
             logger.debug("删除客户品质标准附件=delete:");
@@ -305,6 +307,19 @@ public class BaseFeeController extends WebController{
             logger.error("删除客户品质标准附件失败！", e);
             getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("删除客户品质标准附件失败！");
+        }
+    }
+
+    @ApiOperation(value = "导出", notes = "导出", hidden = true)
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @ResponseBody
+    public void export(HttpServletResponse response, String keyword) throws Exception{
+        String method = "/basePrice/baseFee/export";String methodName ="导出";
+        try{
+            baseFeeService.exportExcel(response,keyword);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导出失败！", e);
         }
     }
 }

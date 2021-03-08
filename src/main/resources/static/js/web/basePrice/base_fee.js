@@ -357,7 +357,8 @@ $(function() {
 
 // 导出数据
 function exportExcel() {
-	location.href = "../../excelFile/人工制费维护模板.xlsx";//从文件夹内直接提取
+	location.href = context + "/basePrice/baseFee/export";
+	//location.href = "../../excelFile/人工制费维护模板.xlsx";//从文件夹内直接提取
 }
 
 function  getModelTypeUrl() {

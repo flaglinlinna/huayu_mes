@@ -31,8 +31,8 @@ public interface QuoteMouldDao extends CrudRepository<QuoteMould, Long>,JpaSpeci
 	public List<Map<String, Object>> getBomName(String quoteid);//获取组件列表
 	
 	@Modifying
-    @Query("update QuoteMould t set t.bsStatus=1 where t.pkQuote=?1 and t.delFlag=0")
-    public void saveQuoteMouldByQuoteId(Long  quoteId);//变更字段状态
+    @Query("update QuoteMould t set t.bsStatus=?1 where t.pkQuote=?2 and t.delFlag=0")
+    public void saveQuoteMouldByQuoteId(Integer bsStatus,Long  quoteId);//变更字段状态
 	
 	public int countByDelFlagAndPkQuoteAndBsActQuote(Integer delFlag,Long pkQuote, BigDecimal bsActQuote);//删除同报价单下的同名记录
 

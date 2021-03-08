@@ -56,7 +56,7 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	Page<Map<String, Object>> getBomNameByPage(Long quoteId, Pageable pageable);
 	
 	@Modifying
-    @Query("update QuoteProcess t set t.bsStatus=1 where t.pkQuote=?1 and t.delFlag=0")
-    public void saveQuoteProcessByQuoteId(Long  quoteId);//变更字段状态
+    @Query("update QuoteProcess t set t.bsStatus=?1 where t.pkQuote=?2 and t.delFlag=0")
+    public void saveQuoteProcessByQuoteId(Integer bsStatus,Long  quoteId);//变更字段状态
 
 }
