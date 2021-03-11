@@ -156,11 +156,12 @@ function save() {
 			if (isLogin(data)) {
 				if (data.result == true) {
 					// 回调弹框
-					layer.alert("提交成功！");
-					//刷新页面
-					iStatus=2;
-					isComplete();
-					loadAll()
+					// layer.alert("提交成功！");
+					// //刷新页面
+					// iStatus=2;
+					// isComplete();
+					// loadAll()
+					parent.layui.admin.events.closeThisTabs();
 				} else {
 					layer.alert(data);
 				}

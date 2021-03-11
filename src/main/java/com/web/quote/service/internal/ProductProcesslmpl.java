@@ -462,9 +462,9 @@ public class ProductProcesslmpl implements ProductProcessService {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String currentTime = sdf.format(new Date());
             if(StringUtils.isNotEmpty(o.getBsModelType())){
-                List<BaseFee> baseFeeList =  baseFeeDao.findByDelFlagAndProcIdAndMhTypeAndWorkCenterId(0,o.getPkProc(),o.getBsModelType(),o.getProc().getWorkcenterId());
+                List<BaseFee> baseFeeList =  baseFeeDao.findByDelFlagAndProcIdAndModelCodeAndWorkCenterId(0,o.getPkProc(),o.getBsModelType(),o.getProc().getWorkcenterId());
                 if(baseFeeList.size()==0){
-                    return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
+                    return ApiResponseResult.failure("存在工序:"+o.getProc().getProcName()+"未维护人工制费,请检查后再确认！");
                 }else {
                     String expiresTime = sdf.format(baseFeeList.get(0).getExpiresTime());
                     if((sdf.parse(expiresTime)).compareTo(sdf.parse(currentTime))>=0) {

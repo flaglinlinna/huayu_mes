@@ -68,11 +68,19 @@ public class BaseFee extends BaseEntity {
 		protected Proc proc;
 
 		/**
-		 * 机台类型
+		 * 机台名称
 		 */
-		@ApiModelProperty(name = "mhType", value = "机台类型")
+		@ApiModelProperty(name = "mhType", value = "机台名称")
 		@Column(length = 20)
 		protected String mhType;
+
+		/**
+		 * 机台编码
+		 */
+		@ApiModelProperty(name = "modelCode", value = "机台编码")
+		@Column(length = 20)
+		protected String modelCode;
+
 
 		/**
 		 * 人工费率（元/小时）
@@ -190,5 +198,13 @@ public class BaseFee extends BaseEntity {
 
 		public void setProc(Proc proc) {
 			this.proc = proc;
+		}
+
+		public String getModelCode() {
+			return modelCode;
+		}
+
+		public void setModelCode(String modelCode) {
+			this.modelCode = modelCode;
 		}
 }

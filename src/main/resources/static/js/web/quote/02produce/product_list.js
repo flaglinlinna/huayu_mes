@@ -66,11 +66,21 @@ $(function() {
 				{field : 'bsStage',title : '报价阶段',width : 120,sort: true},
 				{field : 'bsProjVer',title : '版本',width : 100,sort: true},
 				{field : 'bsStatus',title : '状态',width : 100,templet : function(d) {
-					if (d.bsStatus == "0") {return "草稿"
-					} else if (d.bsStatus == "1") {return "进行中"} 
-					else if (d.bsStatus == "2") {return "已完成"}
-					else if (d.bsStatus == "3") {return "待提交审批"}
-					else if (d.bsStatus == "4") {return "审批中"}
+					if(d.bsQuoteStatus !="99") {
+						if (d.bsStatus == "0") {
+							return "草稿"
+						} else if (d.bsStatus == "1") {
+							return "进行中"
+						} else if (d.bsStatus == "2") {
+							return "已完成"
+						} else if (d.bsStatus == "3") {
+							return "待提交审批"
+						} else if (d.bsStatus == "4") {
+							return "审批中"
+						}
+					}else {
+						return "已关闭"
+					}
 				},sort: true},
 				{field : 'bsCustName',title : '客户名称',width : 120,sort: true},
 				{field : 'bsProd',title : '产品型号',width : 120,sort: true},
@@ -102,16 +112,20 @@ $(function() {
 				pageCurr = curr;
 				res.data.forEach(function(item, index) {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
-					if (item.bsStatus == 0) {
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6699CC');
-					} else if (item.bsStatus == "1") {
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
-					} else if (item.bsStatus == "2") {
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
-					}else if(item.bsStatus=="3"){
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6495ED');
-					}else if(item.bsStatus=="4"){
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#4169E1');
+					if(item.bsQuoteStatus !="99") {
+						if (item.bsStatus == 0) {
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6699CC');
+						} else if (item.bsStatus == "1") {
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
+						} else if (item.bsStatus == "2") {
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
+						} else if (item.bsStatus == "3") {
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6495ED');
+						} else if (item.bsStatus == "4") {
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#4169E1');
+						}
+					}else {
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');
 					}
 				});
 			}
@@ -170,36 +184,43 @@ $(function() {
 				($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 			} else if (obj.event === 'check') {
 				// 先判断是否填写完成资料-暂时未校验-20201218-fyx
-				CoreUtil.sendAjax("/quoteProdect/doCheckBefore", {'quoteId':data.id,'bsType':Style}, function(data1) {
-					if (data1.result) {
-						layer.open({
-							type : 2,
-							title : '审批',
-							area : [ '600px', '480px' ],
-							fixed : false,
-							maxmin : true,
-							// content: '../../views/iframe/check.html',
-							content : context + '/check/toCheck',
-							success : function(layero, index) {
-								// 获取子页面的iframe
-								var iframe = window['layui-layer-iframe' + index];
-								// 向子页面的全局函数child传参，流程编码
-								if (data.bsStatus == '2') {
-									iframe.child(Style, data.id, 'end');
-								} else {
-									iframe.child(Style, data.id, 'check');
-								}
+				if(data.bsQuoteStatus !="99") {
+					CoreUtil.sendAjax("/quoteProdect/doCheckBefore", {
+						'quoteId': data.id,
+						'bsType': Style
+					}, function (data1) {
+						if (data1.result) {
+							layer.open({
+								type: 2,
+								title: '审批',
+								area: ['600px', '480px'],
+								fixed: false,
+								maxmin: true,
+								// content: '../../views/iframe/check.html',
+								content: context + '/check/toCheck',
+								success: function (layero, index) {
+									// 获取子页面的iframe
+									var iframe = window['layui-layer-iframe' + index];
+									// 向子页面的全局函数child传参，流程编码
+									if (data.bsStatus == '2') {
+										iframe.child(Style, data.id, 'end');
+									} else {
+										iframe.child(Style, data.id, 'check');
+									}
 
-							},end:function () {
-								loadAll();
-							}
-						});
-					}else {
-						layer.alert(data1.msg);
-					}
-				}, "GET", false, function(res) {
-					layer.alert(res.msg);
-				});
+								}, end: function () {
+									loadAll();
+								}
+							});
+						} else {
+							layer.alert(data1.msg);
+						}
+					}, "GET", false, function (res) {
+						layer.alert(res.msg);
+					});
+				}else {
+					layer.alert("已关闭的报价单不能审批！");
+				}
 				if (true) {
 					
 				}

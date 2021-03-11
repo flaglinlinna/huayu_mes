@@ -79,8 +79,14 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		if (StringUtils.isEmpty(baseFee.getFeeMh())) {
 			return ApiResponseResult.failure("制费费率不能为空！");
 		}
+		List<BaseFee> baseFeeList =baseFeeDao.findByDelFlagAndProcIdAndMhTypeAndWorkCenterId(0,baseFee.getProcId(),baseFee.getMhType(),baseFee.getWorkcenterId());
+		if(baseFeeList.size()>0){
+			return ApiResponseResult.failure("该人工制费信息已存在，请重新选择！");
+		}
 		baseFee.setCreateDate(new Date());
 		baseFee.setCreateBy(UserUtil.getSessionUser().getId());
+		baseFee.setFeeLh(baseFee.getFeeLh().trim());
+		baseFee.setFeeMh(baseFee.getFeeMh().trim());
 		baseFeeDao.save(baseFee);
 
 		String[] fileIds =  baseFee.getFileId().split(",");
@@ -126,6 +132,12 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		if (o == null) {
 			return ApiResponseResult.failure("该人工制费不存在！");
 		}
+		List<BaseFee> baseFeeList =baseFeeDao.findByDelFlagAndProcIdAndMhTypeAndWorkCenterId(0,baseFee.getProcId(),baseFee.getMhType(),baseFee.getWorkcenterId());
+		if(baseFeeList.size()>0){
+			if(!baseFeeList.get(0).getId().equals(baseFee.getId())) {
+				return ApiResponseResult.failure("该人工制费信息已存在，请重新选择！");
+			}
+		}
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		//o.setEnabled(baseFee.getEnabled());
@@ -133,8 +145,9 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		o.setProcId(baseFee.getProcId());
 	    o.setProcName(baseFee.getProcName());
 	    o.setMhType(baseFee.getMhType());
-	    o.setFeeLh(baseFee.getFeeLh());
-	    o.setFeeMh(baseFee.getFeeMh());
+	    o.setModelCode(baseFee.getModelCode());
+	    o.setFeeLh(baseFee.getFeeLh().trim());
+	    o.setFeeMh(baseFee.getFeeMh().trim());
 	    o.setExpiresTime(baseFee.getExpiresTime());
 		baseFeeDao.save(o);
 
@@ -230,6 +243,7 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 			map.put("workcenter", baseFee.getWorkCenter().getWorkcenterName());
 			map.put("enabled", baseFee.getEnabled());
 			map.put("procName", baseFee.getProcName());
+			map.put("modelCode",baseFee.getModelCode());
 			map.put("procId", baseFee.getProcId());
 			map.put("mhType", baseFee.getMhType());
 			map.put("expiresTime",baseFee.getExpiresTime());
@@ -341,11 +355,12 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 					List<BjModelType> bjModelTypeList = bjModelTypeDao.findByDelFlagAndModelCode(0,modelCode);
 					if(bjModelTypeList.size()>0){
 						baseFee.setMhType(bjModelTypeList.get(0).getModelName());
+						baseFee.setModelCode(modelCode.trim());
 					}else {
 						failures++;
 						continue;
 					}
-					List<BaseFee> baseFeeList1 =baseFeeDao.findByDelFlagAndWorkcenterIdAndProcId(0,baseFee.getWorkcenterId(),baseFee.getProcId());
+					List<BaseFee> baseFeeList1 =baseFeeDao.findByDelFlagAndProcIdAndMhTypeAndWorkCenterId(0,baseFee.getProcId(),baseFee.getMhType(),baseFee.getWorkcenterId());
 					if(baseFeeList1.size()>0){
 						baseFee.setId(baseFeeList1.get(0).getId());
 						baseFee.setLastupdateBy(userId);

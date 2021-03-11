@@ -33,6 +33,7 @@ import java.sql.*;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * 排产信息 主
@@ -658,6 +659,12 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 det.setCreateDate(new Date());
                 det.setCreateBy(currUser != null ? currUser.getId() : null);
                 det.setMid(mid);
+                if(StringUtils.isNotEmpty(section)){
+                    Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+                    if(!pattern.matcher(section).matches()){
+                        return ApiResponseResult.failure("导入失败！请查看分段顺序是否是整数！");
+                    }
+                }
                 det.setWsSection(section);
                 det.setGroupNo(groupNo);
                 det.setCustName(custName);

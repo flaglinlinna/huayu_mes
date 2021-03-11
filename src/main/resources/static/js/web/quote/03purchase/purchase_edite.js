@@ -358,10 +358,11 @@ function confirm() {
 			if (data.result) {
 				layer.alert("确认完成成功", function() {
 					layer.closeAll();
-					$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
-					$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
-					// 加载页面
-					loadAll();
+					// $("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
+					// $("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
+					// // 加载页面
+					// loadAll();
+					parent.layui.admin.events.closeThisTabs();
 				});
 			} else {
 				layer.alert(data.msg);

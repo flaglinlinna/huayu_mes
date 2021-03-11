@@ -169,6 +169,7 @@ $(function() {
 											"mhType" : da[0].modelName,
 											"workcenterId":da[0].workCenterId,
 											"workcenterName":da[0].workCenterName,
+											"modelCode":da[0].modelCode,
 										});
 										form.render();// 重新渲染
 									}
@@ -238,6 +239,7 @@ $(function() {
 								"id" : obj.id,
 								"workcenterId" : obj.workcenterId,
 								"workcenterName" : obj.workcenter,
+								"modelCode":obj.modelCode,
 								"procName" : obj.procName,
 								"procId" : obj.procId,
 								"mhType" : obj.mhType,

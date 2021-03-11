@@ -634,11 +634,12 @@ function save() {
 			if (isLogin(data)) {
 				if (data.result == true) {
 					// 回调弹框
-					layer.alert("提交成功！");
-					//刷新页面
-					iStatus=2;
-					isComplete();
-					loadAll()
+					// layer.alert("提交成功！");
+					// //刷新页面
+					// iStatus=2;
+					// isComplete();
+					// loadAll()
+					parent.layui.admin.events.closeThisTabs();
 				} else {
 					layer.msg(data.msg, {
 						time : 2000, // 2s后自动关闭

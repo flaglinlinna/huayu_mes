@@ -935,7 +935,8 @@ function Confirm(){
 					// iStatus=2;
 					// isComplete();
 					// loadAll()
-					window.location.reload();
+					// window.location.reload();
+					parent.layui.admin.events.closeThisTabs();
 				});
 			} else {
 				layer.alert(data.msg);

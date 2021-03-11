@@ -54,12 +54,17 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 	@Transactional
 	public ApiResponseResult add(BjModelType bjModelType) throws Exception {
 		if (bjModelType == null) {
-			return ApiResponseResult.failure("人工制费信息不能为空！");
+			return ApiResponseResult.failure("机台类型不能为空！");
 		}
 		if (StringUtils.isEmpty(bjModelType.getPkWorkcenter().toString())) {
 			return ApiResponseResult.failure("工作中心不能为空！");
 		}
-
+		if(bjModelTypeDao.findByDelFlagAndModelCode(0,bjModelType.getModelCode()).size()>0){
+			return ApiResponseResult.failure("该机台编码已存在,请重新输入！");
+		}
+		if(bjModelTypeDao.findByDelFlagAndModelName(0,bjModelType.getModelName()).size()>0){
+			return ApiResponseResult.failure("该机台名称已存在,请重新输入！");
+		}
 		bjModelType.setCreateDate(new Date());
 		bjModelType.setCreateBy(UserUtil.getSessionUser().getId());
 		bjModelTypeDao.save(bjModelType);
@@ -73,7 +78,7 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 	@Transactional
 	public ApiResponseResult edit(BjModelType bjModelType) throws Exception {
 		if (bjModelType == null) {
-			return ApiResponseResult.failure("人工制费信息不能为空！");
+			return ApiResponseResult.failure("机台类型信息不能为空！");
 		}
 		if (StringUtils.isEmpty(bjModelType.getPkWorkcenter().toString())) {
 			return ApiResponseResult.failure("工作中心不能为空！");
@@ -86,6 +91,11 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 		if (!o.getModelCode().equals(bjModelType.getModelCode())){
 			if(bjModelTypeDao.findByDelFlagAndModelCode(0,bjModelType.getModelCode()).size()>0){
 				return ApiResponseResult.failure("该机台编码已存在,请重新输入！");
+			}
+		}
+		if (!o.getModelName().equals(bjModelType.getModelName())){
+			if(bjModelTypeDao.findByDelFlagAndModelName(0,bjModelType.getModelName()).size()>0){
+				return ApiResponseResult.failure("该机台名称已存在,请重新输入！");
 			}
 		}
 		o.setLastupdateDate(new Date());

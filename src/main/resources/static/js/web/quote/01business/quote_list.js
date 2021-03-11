@@ -175,34 +175,42 @@ $(function() {
 					($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 				}
 				else if(obj.event === 'check'){
-					//先判断是否填写完成资料-fyx-20210105
-					if(data.bsStatusCheck>1){
-						layer.open({
-		                    type: 2,
-		                    title:'报价单核查审批',
-		                    area: ['600px', '480px'],
-		                    fixed: false,
-		                    maxmin: true,
-		                    //content: '../../views/iframe/check.html',
-		                    content: context+'/check/toCheck',
-		                    success: function (layero, index) {
-		                    	 // 获取子页面的iframe
-		                        var iframe = window['layui-layer-iframe' + index];
-		                       // 向子页面的全局函数child传参，流程编码
-		                        if(data.bsStatus=='1'){
-		                        	iframe.child("QUOTE_NEW",data.id,'end');
-		                        }else{
-		                        	iframe.child("QUOTE_NEW",data.id,'check');
-		                        }
-		                    },end:function () {
-								loadAll();
-							}
-		                  });
-					}else{
-						layer.msg('资料未填写完毕，不允许审批!', {
-	   	   	                    time: 5000, //2s后自动关闭
-	   	   	                    btn: ['知道了']
-	   	   	                });
+					//先判断报价单是否被关闭
+					if(data.bsStatus == "99"){
+						layer.msg('报价单已关闭，不允许审批!', {
+							time: 5000, //2s后自动关闭
+							btn: ['知道了']
+						});
+					}else {
+						//先判断是否填写完成资料-fyx-20210105
+						if (data.bsStatusCheck > 1) {
+							layer.open({
+								type: 2,
+								title: '报价单核查审批',
+								area: ['600px', '480px'],
+								fixed: false,
+								maxmin: true,
+								//content: '../../views/iframe/check.html',
+								content: context + '/check/toCheck',
+								success: function (layero, index) {
+									// 获取子页面的iframe
+									var iframe = window['layui-layer-iframe' + index];
+									// 向子页面的全局函数child传参，流程编码
+									if (data.bsStatus == '1') {
+										iframe.child("QUOTE_NEW", data.id, 'end');
+									} else {
+										iframe.child("QUOTE_NEW", data.id, 'check');
+									}
+								}, end: function () {
+									loadAll();
+								}
+							});
+						} else {
+							layer.msg('资料未填写完毕，不允许审批!', {
+								time: 5000, //2s后自动关闭
+								btn: ['知道了']
+							});
+						}
 					}
 				}else if(obj.event ==='copy'){
 					//复制报价单

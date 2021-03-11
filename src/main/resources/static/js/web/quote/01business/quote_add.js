@@ -206,7 +206,8 @@ function copyData(obj) {
 		if (data.result) {
 			layer.alert("操作成功", function() {
 				layer.closeAll();
-				top.layui.element.tabDelete("tab", top.jQuery(".layui-tab-title .layui-this").attr("lay-id"));
+				parent.layui.admin.events.closeThisTabs();
+				// top.layui.element.tabDelete("tab", top.jQuery(".layui-tab-title .layui-this").attr("lay-id"));
 				parent.layui.index.openTabsPage(context + '/quote/toQuoteList' , '报价单查询');
 				var srcUrl = context + '/quote/toQuoteList';
 				($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);

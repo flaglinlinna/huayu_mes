@@ -138,7 +138,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 			map1.put("id", object[0]);
 			map1.put("bsCode", object[1]);
 			map1.put("bsType", object[2]);
-			//map1.put("bsStatus", object[3]);
+			map1.put("bsQuoteStatus", object[3]);
 			map1.put("bsFinishTime", object[4]);
 			map1.put("bsRemarks", object[5]);
 			map1.put("bsProd", object[6]);
