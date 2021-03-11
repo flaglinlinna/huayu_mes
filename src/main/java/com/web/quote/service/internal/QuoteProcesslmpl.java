@@ -153,6 +153,11 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			}else{
 				map.put("STATUS", "1");
 			}
+
+			if(("out").equals(proc.getBjWorkCenter().getBsCode())){
+				//如果是外协
+				map.put("STATUS", "out");
+			}
 			lm.add(map);
 		}
 		return ApiResponseResult.success().data(DataGrid.create(lm, (int) page.getTotalElements(),
@@ -189,14 +194,17 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				pd.setPkQuote(Long.valueOf(quoteId));//报价单主表
 				//--20201222-fyx-获取人工和制费
 				Proc pp1 = procDao.findById(Long.parseLong(pro));
-				if(pp1!=null){			
-					String[] strs = this.getLhBy(pp1.getWorkcenterId(), Long.valueOf(pro));
-					
-					if(strs[0]==""||strs[1]==""){//--20201228-lst-判断人工制费是否有维护	
-						return ApiResponseResult.failure("有未维护的人工制费,请先维护");
+				// 外协不查询人工制费信息
+				if(!("out").equals(pp1.getBjWorkCenter().getBsCode())) {
+					if (pp1 != null) {
+						String[] strs = this.getLhBy(pp1.getWorkcenterId(), Long.valueOf(pro));
+
+						if (strs[0] == "" || strs[1] == "") {//--20201228-lst-判断人工制费是否有维护
+							return ApiResponseResult.failure("有未维护的人工制费,请先维护");
+						}
+						pd.setBsFeeLh(new BigDecimal(strs[0]));
+						pd.setBsFeeMh(new BigDecimal(strs[1]));
 					}
-					pd.setBsFeeLh(new BigDecimal(strs[0]));
-					pd.setBsFeeMh(new BigDecimal(strs[1]));
 				}
 				//--end
 				lp.add(pd);
@@ -294,8 +302,10 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		//获取该报价单的所有的未提交的数据，更新一下 人工和制费
 			List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,Long.valueOf(quoteId),0);
 			for(QuoteProcess qp:lqp){
-				if(qp.getBsFeeLh() == null || qp.getBsFeeMh() == null){
-					return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
+				if(!("out").equals(qp.getProc().getBjWorkCenter().getBsCode())){
+					if(qp.getBsFeeLh() == null || qp.getBsFeeMh() == null){
+						return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
+					}
 				}
 			}
 		 

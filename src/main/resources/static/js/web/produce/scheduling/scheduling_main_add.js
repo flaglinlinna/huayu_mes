@@ -197,11 +197,11 @@ $(function () {
             }
             ,done: function(res,index, upload){
                 layer.closeAll('loading'); //关闭loading
-                var ids = "";
-                for(var i = 0;i<res.data.length;i++){
-                    ids += res.data[i].id +",";
-                }
                 if(res.result){
+                    var ids = "";
+                    for(var i = 0;i<res.data.length;i++){
+                        ids += res.data[i].id +",";
+                    }
                     $.ajax({
                         type: "POST",
                         data: {},

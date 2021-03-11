@@ -71,19 +71,51 @@
                     <input id="taskNo" name="taskNo" placeholder="" disabled="disabled" autocomplete="off" class="layui-input" type="text"/>
                 </div>
             </div>
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">计划数量</label>-->
+<!--                <div class="layui-input-inline" style="width: 175px;">-->
+<!--                    <input id="qtyPlan" name="qtyPlan" placeholder="" disabled="disabled" autocomplete="off" class="layui-input" type="text"/>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="layui-inline">
-                <label class="layui-form-label">计划数量</label>
-                <div class="layui-input-inline" style="width: 175px;">
-                    <input id="qtyPlan" name="qtyPlan" placeholder="" disabled="disabled" autocomplete="off" class="layui-input" type="text"/>
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label layui-required">新数量</label>
+                <label class="layui-form-label layui-required">计划数量</label>
                 <div class="layui-input-inline" style="width: 175px;">
                     <input id="newQty" name="newQty" placeholder=""  autocomplete="off"
                            lay-verify="required|number" class="layui-input" type="text"/>
                 </div>
             </div>
+            <shiro:hasPermission name="scheduling-changeCapacity">
+            <div class="layui-inline">
+                <label class="layui-form-label layui-required">标准人力</label>
+                <div class="layui-input-inline" style="width: 175px;">
+                    <input id="manpower" name="manpower" placeholder=""  autocomplete="off"
+                           lay-verify="required|number" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label layui-required">标准产能</label>
+                <div class="layui-input-inline" style="width: 175px;">
+                    <input id="capacity" name="capacity" placeholder=""  autocomplete="off"
+                           lay-verify="required|number" class="layui-input" type="text"/>
+                </div>
+            </div>
+            </shiro:hasPermission>
+            <shiro:lacksPermission name="scheduling-changeCapacity">
+                <div class="layui-inline">
+                    <label class="layui-form-label">标准人力</label>
+                    <div class="layui-input-inline" style="width: 175px;">
+                        <input id="manpower" name="manpower" placeholder=""  autocomplete="off"
+                               style="background:#efefef;"   readonly="readonly"  class="layui-input" type="text"/>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">标准产能</label>
+                    <div class="layui-input-inline" style="width: 175px;">
+                        <input id="capacity" name="capacity" placeholder=""  autocomplete="off"
+                               style="background:#efefef;" readonly="readonly"   class="layui-input" type="text"/>
+                    </div>
+                </div>
+            </shiro:lacksPermission>
         </div>
         <button type="button" class="layui-btn layui-btn-sm" style="position: fixed;" lay-submit="" lay-filter="submitQty">确定修改</button>
     </form>

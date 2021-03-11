@@ -15,6 +15,7 @@ import com.system.file.entity.FsFile;
 import com.web.basePrice.dao.BaseFeeDao;
 import com.web.basePrice.entity.BaseFee;
 import com.web.basePrice.entity.BaseFeeFile;
+import com.web.quote.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -44,10 +45,6 @@ import com.web.quote.dao.ProductProcessTempDao;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteProcessDao;
-import com.web.quote.entity.ProductProcess;
-import com.web.quote.entity.ProductProcessTemp;
-import com.web.quote.entity.Quote;
-import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.ProductProcessService;
 import com.web.quote.service.QuoteProductService;
 
@@ -536,13 +533,20 @@ public class ProductProcesslmpl implements ProductProcessService {
         }else if(bsType.equals("packag")){
             quoteStatus = quote.getBsStatus2Packag();
         }
+        
             if(quoteStatus ==4 ||quoteStatus==2) {
                 return ApiResponseResult.failure("发起审批后不能取消确认");
             } else {
+                List<QuoteItem> quoteItemList = quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,quoteId,bsCode);
+                if(quoteItemList.size()>0){
+                    if(quoteItemList.get(0).getBsEndTime()==null){
+                        return ApiResponseResult.failure("自动确认完成的项目不能取消完成");
+                    }
+                }
                 //项目状态设置-状态 1：未完成
                 quoteItemDao.switchStatus(1, quoteId, bsCode);
                 //设置结束时间
-                quoteItemDao.setEndTime(null, quoteId, bsCode);
+                //quoteItemDao.setEndTime(null, quoteId, bsCode);
                 //取消报价单对应类别的完成状态
                 quoteProductService.doItemFinish(bsCode, quoteId,1);
                 List<ProductProcess> productProcessList  = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);

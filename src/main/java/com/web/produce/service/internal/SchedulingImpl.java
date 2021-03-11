@@ -275,8 +275,8 @@ public class SchedulingImpl implements SchedulingService {
 				cs.setString(2, factory);
 				cs.setString(3, "");
 				cs.setString(4, "组长");
-				cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(5, Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(6, Types.VARCHAR);// 输出参数 返回标识
 				cs.registerOutParameter(7, -10);// 输出参数 追溯数据
 				return cs;
 			}
@@ -807,7 +807,7 @@ public class SchedulingImpl implements SchedulingService {
                     CallableStatement cs = con.prepareCall(storedProc);
                     cs.setString(1, userId.toString());
                     cs.registerOutParameter(2,Types.INTEGER);// 注册输出参数 返回标志
-                    cs.registerOutParameter(3,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(3, Types.VARCHAR);// 注册输出参数 返回信息
                     cs.registerOutParameter(4,-10);// 注册输出参数 返回数据集合
                     return cs;
                 }
@@ -861,7 +861,7 @@ public class SchedulingImpl implements SchedulingService {
                     cs.setString(4, taskNos);
                     cs.setString(5, statue);
                     cs.registerOutParameter(6,Types.INTEGER);// 注册输出参数 返回标志
-                    cs.registerOutParameter(7,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(7, Types.VARCHAR);// 注册输出参数 返回信息
                     cs.registerOutParameter(8,-10);// 注册输出参数 返回数据集合
                     return cs;
                 }
@@ -891,24 +891,26 @@ public class SchedulingImpl implements SchedulingService {
 
     @Override
     @Transactional
-    public ApiResponseResult changeQtyPlan(String taskNo,String qty) throws Exception{
+    public ApiResponseResult changeQtyPlan(String taskNo,String qty,String manpower,String capacity) throws Exception{
         List<String> resultList = (List<String>) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
-                String storedProc = "{call prc_mes_update_orderqty(?,?,?,?)}";// 调用的sql
+                String storedProc = "{call prc_mes_update_orderqty(?,?,?,?,?,?)}";// 调用的sql
                 CallableStatement cs = con.prepareCall(storedProc);
                 cs.setString(1, qty);
-                cs.setString(2, taskNo);
-                cs.registerOutParameter(3, Types.INTEGER);// 注册输出参数 返回标志
-                cs.registerOutParameter(4, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                cs.setString(2, manpower);
+                cs.setString(3, capacity);
+                cs.setString(4, taskNo);
+                cs.registerOutParameter(5, Types.INTEGER);// 注册输出参数 返回标志
+                cs.registerOutParameter(6, Types.VARCHAR);// 注册输出参数 返回信息
                 return cs;
             }
         }, new CallableStatementCallback() {
             public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
                 List<String> result = new ArrayList<String>();
                 cs.execute();
-                result.add(cs.getString(3));
-                result.add(cs.getString(4));
+                result.add(cs.getString(5));
+                result.add(cs.getString(6));
                 return result;
             }
         });
@@ -942,7 +944,7 @@ public class SchedulingImpl implements SchedulingService {
                     cs.setString(3,userId);
                     cs.setString(4,taskNo);
                     cs.registerOutParameter(5, Types.INTEGER);// 注册输出参数 返回标志
-                    cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(6, Types.VARCHAR);// 注册输出参数 返回信息
                     return cs;
                 }
             }, new CallableStatementCallback() {
@@ -1075,7 +1077,7 @@ public class SchedulingImpl implements SchedulingService {
                     cs.setString(2, factory);
                     cs.setString(3, userId.toString());
                     cs.registerOutParameter(4, Types.INTEGER);// 注册输出参数 返回标志
-                    cs.registerOutParameter(5, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(5, Types.VARCHAR);// 注册输出参数 返回信息
                     cs.registerOutParameter(6, -10);// 注册输出参数 返回数据集合
                     return cs;
                 }
@@ -1118,7 +1120,7 @@ public class SchedulingImpl implements SchedulingService {
                     cs.setString(2, factory);
                     cs.setString(3, userId.toString());
                     cs.registerOutParameter(4,Types.INTEGER);// 注册输出参数 返回标志
-                    cs.registerOutParameter(5,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(5, Types.VARCHAR);// 注册输出参数 返回信息
                     cs.registerOutParameter(6,-10);// 注册输出参数 返回数据集合
                     return cs;
                 }
@@ -1318,7 +1320,7 @@ public class SchedulingImpl implements SchedulingService {
                     cs.setString(4, processIds);
                     cs.setString(5, userId.toString());
                     cs.registerOutParameter(6,Types.INTEGER);// 注册输出参数 返回标志
-                    cs.registerOutParameter(7,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(7, Types.VARCHAR);// 注册输出参数 返回信息
                     return cs;
                 }
             }, new CallableStatementCallback() {
@@ -1378,7 +1380,7 @@ public class SchedulingImpl implements SchedulingService {
                     cs.setString(4, fname);
                     cs.setString(5, userId.toString());
                     cs.registerOutParameter(6, Types.INTEGER);// 注册输出参数 返回标志
-                    cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(7, Types.VARCHAR);// 注册输出参数 返回信息
                     cs.registerOutParameter(8, -10);
                     return cs;
                 }
@@ -1510,9 +1512,9 @@ public class SchedulingImpl implements SchedulingService {
                 cs.setString(6, keyword);
                 cs.setInt(7, rows);
                 cs.setInt(8, page);
-                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
-                cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 总记录数
+                cs.registerOutParameter(9, Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(10, Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(11, Types.INTEGER);// 输出参数 总记录数
                 cs.registerOutParameter(12, -10);// 输出参数 返回数据集合
                 return cs;
             }
@@ -1665,9 +1667,9 @@ public class SchedulingImpl implements SchedulingService {
                 cs.setString(5,keyword);
                 cs.setInt(6, rows);
                 cs.setInt(7, page);
-                cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 总记录数
-                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回信息
+                cs.registerOutParameter(8, Types.INTEGER);// 输出参数 总记录数
+                cs.registerOutParameter(9, Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(10, Types.VARCHAR);// 输出参数 返回信息
                 cs.registerOutParameter(11, -10);// 输出参数 返回数据集合
                 return cs;
             }
@@ -1714,8 +1716,8 @@ public class SchedulingImpl implements SchedulingService {
                 cs.setString(3, user_id);
                 cs.setString(4, mid);
                 cs.setString(5, keyword);
-                cs.registerOutParameter(6, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(7, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(6, Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(7, Types.VARCHAR);// 输出参数 返回标识
                 cs.registerOutParameter(8, -10);// 输出参数 返回数据集合
                 return cs;
             }

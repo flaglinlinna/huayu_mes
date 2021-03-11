@@ -130,6 +130,15 @@ public class SchedulingDet extends BaseEntity {
     @Column
     protected Long taskId;
 
+
+    /**
+     * 工段
+     */
+    @ApiModelProperty(name = "wsSection", value = "1")
+    @Column
+    protected String wsSection;
+
+
     public Long getMid() {
         return mid;
     }
@@ -256,6 +265,14 @@ public class SchedulingDet extends BaseEntity {
 
     public void setTaskId(Long taskId) {
         this.taskId = taskId;
+    }
+
+    public String getWsSection() {
+        return wsSection;
+    }
+
+    public void setWsSection(String wsSection) {
+        this.wsSection = wsSection;
     }
 
     @Override

@@ -38,8 +38,15 @@ $(function() {
 			{field : 'bsOrder',title : '工序顺序',"edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
 			{field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,style : 'background-color:#d2d2d2',align : 'center',
 				templet : function(d) {
-					if (d.bsFeeLh == null || d.bsFeeLh == '') {return "<div class='orange'>否</div>"} 
-					else {return "<div class='green'>是</div>"}
+					if(d.proc.bjWorkCenter.bsCode !="out") {
+						if (d.bsFeeLh == null || d.bsFeeLh == '') {
+							return "<div class='orange'>否</div>"
+						} else {
+							return "<div class='green'>是</div>"
+						}
+					}else {
+						return "<div class='green'>一</div>"
+					}
 			}}, 
 			{field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
 				templet : function(d) {
@@ -222,7 +229,15 @@ $(function() {
 			// {field : 'PROC_NO',title : '工序编码', minWidth: 80},
 			{field : 'PROC_NAME',title : '工序名称', minWidth: 100}, 
 			// {field : 'WORKCENTER_NAME',title : '工作中心', minWidth: 120},
-			{field : 'STATUS',title : '是否维护人工制费', minWidth: 140,templet:'<div>{{d.STATUS=="0"?"否":"是"}}</div>'},
+			{field : 'STATUS',title : '是否维护人工制费', minWidth: 140,templet:function (d){
+			if(d.STATUS=="0"){
+				return "否"
+			}else if(d.STATUS=="1"){
+				return "是"
+			}else {
+				return "一"
+			}
+			}},
 			{type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#clickBar'
 	        }] ],
 			data:[]

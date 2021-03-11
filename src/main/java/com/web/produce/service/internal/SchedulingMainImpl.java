@@ -194,8 +194,8 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 cs.setString(2, company);
                 cs.setString(3, mid);
                 cs.setString(4, keyword);
-                cs.registerOutParameter(5, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(5, Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(6, Types.VARCHAR);// 输出参数 返回标识
 //                cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 总记录数
                 cs.registerOutParameter(7, -10);// 输出参数 返回数据集合
                 return cs;
@@ -309,9 +309,9 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 cs.setString(5, keyword);
                 cs.setInt(6, pageRequst.getPageSize());//每页指定有多少元素
                 cs.setInt(7, pageRequst.getPageNumber()+1);//获取当前页码
-                cs.registerOutParameter(8, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(9, java.sql.Types.VARCHAR);// 输出参数 返回标识
-                cs.registerOutParameter(10, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(8, Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(9, Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(10, Types.INTEGER);// 输出参数 返回标识
                 cs.registerOutParameter(11, -10);// 输出参数 追溯数据
                 return cs;
             }
@@ -359,9 +359,9 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 cs.setString(6, keyword);
                 cs.setInt(7, rows);
                 cs.setInt(8, page);
-                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
-                cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 总记录数
+                cs.registerOutParameter(9, Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(10, Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(11, Types.INTEGER);// 输出参数 总记录数
                 cs.registerOutParameter(12, -10);// 输出参数 返回数据集合
                 return cs;
             }
@@ -478,9 +478,9 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 cs.setString(6, keyword);
                 cs.setInt(7, rows);
                 cs.setInt(8, page);
-                cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
-                cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 总记录数
+                cs.registerOutParameter(9, Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(10, Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(11, Types.INTEGER);// 输出参数 总记录数
                 cs.registerOutParameter(12, -10);// 输出参数 返回数据集合
                 return cs;
             }
@@ -583,13 +583,17 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 }
 
                 //3.判断各数值是否为空和是否填写错误
+                //顺序:组合、分段顺序、备注、客户、组长、工单号、物料编码、物料描述、计划生产数量
                 Integer groupNo = null;//组合
+                String section = ""; //分段顺序
+                String fmemo = "";//备注
                 String custName = "";//客户名称
+                String linerName = "";//线长名称
                 String prodNo = "";//工单号
                 String itemNo = "";//物料编码
                 String itemName = "";//物料描述
                 Integer qtyPlan = null;//计划数量
-                String linerName = "";//线长名称
+
 
                 //组合
                 try{
@@ -598,39 +602,53 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 }catch (Exception e){
                 }
 
+                //工段
+                try{
+                    section = this.readExcelCell(sheet, le, 2);
+                }catch (Exception e){
+                }
+
+                //备注
+                try{
+                    fmemo = this.readExcelCell(sheet, le, 3);
+                }catch (Exception e){
+                }
+
                 //客户
                 try{
-                    custName = this.readExcelCell(sheet, le, 2);
+                    custName = this.readExcelCell(sheet, le, 4);
                 }catch (Exception e){
                 }
 
                 //线别->组长
                 try{
-                    linerName = this.readExcelCell(sheet, le, 3);
+                    linerName = this.readExcelCell(sheet, le, 5);
                 }catch (Exception e){
                 }
 
                 //工单号
                 try{
-                    prodNo = this.readExcelCell(sheet, le, 4);
+                    prodNo = this.readExcelCell(sheet, le, 6);
                 }catch (Exception e){
                 }
 
+
+
                 //物料编码
                 try{
-                    itemNo = this.readExcelCell(sheet, le, 5);
+                    itemNo = this.readExcelCell(sheet, le, 7);
                 }catch (Exception e){
                 }
 
                 //物料描述
                 try{
-                    itemName = this.readExcelCell(sheet, le, 6);
+                    itemName = this.readExcelCell(sheet, le, 8);
                 }catch (Exception e){
                 }
 
                 //计划生产数量
                 try{
-                    String qtyPlanStr = this.readExcelNumberCell(sheet, le, 7);
+                    String qtyPlanStr = this.readExcelNumberCell(sheet, le, 9);
                     qtyPlan = Double.valueOf(qtyPlanStr).intValue();
                 }catch (Exception e){
                 }
@@ -640,8 +658,10 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 det.setCreateDate(new Date());
                 det.setCreateBy(currUser != null ? currUser.getId() : null);
                 det.setMid(mid);
+                det.setWsSection(section);
                 det.setGroupNo(groupNo);
                 det.setCustName(custName);
+                det.setFmemo(fmemo);
                 det.setProdNo(prodNo);
                 det.setItemNo(itemNo);
                 det.setItemName(itemName);
@@ -748,7 +768,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 cs.setString(1, user_id);
                 cs.setString(2, ids);
                 cs.registerOutParameter(3,Types.INTEGER);// 注册输出参数 返回标志
-                cs.registerOutParameter(4,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                cs.registerOutParameter(4, Types.VARCHAR);// 注册输出参数 返回信息
                 cs.registerOutParameter(5,-10);// 注册输出参数 返回数据集合
                 return cs;
             }
@@ -793,7 +813,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
                     cs.setString(1, userId.toString());
                     cs.setString(2, ids);
                     cs.registerOutParameter(3,Types.INTEGER);// 注册输出参数 返回标志
-                    cs.registerOutParameter(4,java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                    cs.registerOutParameter(4, Types.VARCHAR);// 注册输出参数 返回信息
                     return cs;
                 }
             }, new CallableStatementCallback() {
@@ -869,7 +889,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
                 cs.setString(3, ids);
                 cs.setString(4, user_id);
                 cs.registerOutParameter(5, Types.INTEGER);// 注册输出参数 返回标志
-                cs.registerOutParameter(6, java.sql.Types.VARCHAR);// 注册输出参数 返回信息
+                cs.registerOutParameter(6, Types.VARCHAR);// 注册输出参数 返回信息
                 cs.registerOutParameter(7, -10);// 注册输出参数 返回数据集合
                 return cs;
             }

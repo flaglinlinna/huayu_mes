@@ -53,6 +53,8 @@ $(function () {
                 ,{field:'QUANTITY', title:'投料总数', width:80,align: 'center'}//2020-12-08新增
                 ,{field:'RATE_DONE', title:'完工率(%)', width:100,align: 'center'}
                 // ,{field:'deptName', title:'部门', width:70}
+                ,{field:'STD_MANPOWER', title:'标准人力', width:80,align: 'center'}
+                ,{field:'STD_CAPACITY', title:'标准产能', width:80,align: 'center'}
                ,{field:'DEPT_NAME', title:'部门名称', width:80,align: 'center'}
                 ,{field:'PROD_NO', title:'工单号', width:130,align: 'center'}
                 ,{field:'GROUP_NO', title:'组合', width:55,align: 'center'}
@@ -340,6 +342,8 @@ function updateQty(obj) {
     var param = {
         "taskNo" : obj.field.taskNo,
         "qtyPlan":obj.field.newQty,
+        "manpower": obj.field.manpower,
+        "capacity": obj.field.capacity,
     };
     CoreUtil.sendAjax("/produce/scheduling/updateOrderQty", JSON.stringify(param), function(
         data) {
@@ -400,7 +404,9 @@ function openPlan() {
     // console.log(checkdata[0]);
     layui.form.val("changeQtyDiv", {
         "taskNo":checkdata[0].TASK_NO,
-        "qtyPlan" : checkdata[0].QTY_PLAN,
+        "newQty" : checkdata[0].QTY_PLAN,
+        "manpower":checkdata[0].STD_MANPOWER,
+        "capacity":checkdata[0].STD_CAPACITY,
     });
     layui.form.render();// 重新渲染
     var index = layer.open({

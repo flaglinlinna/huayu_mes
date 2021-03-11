@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.web.basePrice.dao.PriceCommDao;
+import com.web.basic.dao.SysParamDao;
+import com.web.basic.entity.SysParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,6 +72,8 @@ public class CheckImpl   implements CheckService {
 	private QuoteSumService quoteSumService;
 	@Autowired
 	private PriceCommDao priceCommDao;
+	@Autowired
+	private SysParamDao sysParamDao;
 
 	@Override
 	public boolean checkFirst(Long id, String checkCode) throws Exception {
@@ -349,6 +353,7 @@ public class CheckImpl   implements CheckService {
 			}else{
 				//流程结束
 				//1.如果是“QUOTE_NEW”第一步，业务部流程审批
+				//2021-03-09-hjj- 新增默认确认完成
 				if(c.getBsCheckCode().equals("QUOTE_NEW") && c.getBsRecordId() != null){
 					//1.1获取报价单，修改状态为“已完成”
 					Quote quote = quoteDao.findById((long) c.getBsRecordId());
@@ -447,6 +452,12 @@ public class CheckImpl   implements CheckService {
 							lpp.add(pp);
 						}
 						productProcessDao.saveAll(lpp);
+					}
+					//2021-03-09-hjj- 制造部和外协自动确认完成
+					List<SysParam> sysParams = sysParamDao.findByDelFlagAndParamCode(0, "BJ_AUTO_COMPLETE");
+					String isAuto =  sysParams.size()>0?sysParams.get(0).getParamValue():"0";
+					if(("1").equals(isAuto)||("是").equals(isAuto)){
+						autoDoStatus(quote.getId());
 					}
 					//4。发送待办消息--fyx-?
 
@@ -716,6 +727,38 @@ public class CheckImpl   implements CheckService {
 		}
 		
 		quoteSumService.countQuoteTreeBom(Long.valueOf(c.getBsRecordId()));
+	}
+
+	public void autoDoStatus(Long quoteId)throws  Exception{
+		List<Map<String,Object>> mapList = quoteProcessDao.countByBsType(quoteId);
+		HashMap hashMap = new HashMap();
+		for(Map map :mapList){
+			hashMap.put(map.get("TYPE"),map.get("num"));
+		}
+		//项目状态设置-状态 2：已完成
+		//增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
+		// 不设置结束时间,为空则为自动完成
+		if(!hashMap.containsKey("hardware")){
+			quoteItemDao.switchStatus(2, quoteId, "C001");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
+		}if(!hashMap.containsKey("surface")){
+			quoteItemDao.switchStatus(2, quoteId, "C003");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
+		}if(!hashMap.containsKey("packag")){
+			quoteItemDao.switchStatus(2, quoteId, "C004");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
+		}if(!hashMap.containsKey("molding")){
+			quoteItemDao.switchStatus(2, quoteId, "C002");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
+		}if(!hashMap.containsKey("out")){
+			List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Out(3);
+				quoteDao.save(o);
+			}
+		}
+
 	}
 
 

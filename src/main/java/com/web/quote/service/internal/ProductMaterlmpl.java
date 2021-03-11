@@ -17,6 +17,7 @@ import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.ProductProcess;
 import com.web.quote.entity.Quote;
+import com.web.quote.entity.QuoteItem;
 import com.web.quote.service.ProductMaterService;
 import com.web.quote.service.QuoteProductService;
 
@@ -273,10 +274,16 @@ public class ProductMaterlmpl implements ProductMaterService {
         if(quoteStatus ==4||quoteStatus==2) {
             return ApiResponseResult.failure("发起审批后不能取消确认");
         } else {
+            List<QuoteItem> quoteItemList = quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,quoteId,bsCode);
+            if(quoteItemList.size()>0){
+                if(quoteItemList.get(0).getBsEndTime()==null){
+                    return ApiResponseResult.failure("自动确认完成的项目不能取消完成");
+                }
+            }
             //项目状态设置-状态 1：未完成
             quoteItemDao.switchStatus(1, quoteId, bsCode);
             //设置结束时间
-            quoteItemDao.setEndTime(null, quoteId, bsCode);
+//            quoteItemDao.setEndTime(null, quoteId, bsCode);
             //取消报价单对应类别的完成状态
             quoteProductService.doItemFinish(bsCode, quoteId,1);
             List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
