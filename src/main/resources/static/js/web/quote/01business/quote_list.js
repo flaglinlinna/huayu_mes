@@ -17,6 +17,7 @@ $(function() {
 				data : [],
 				// height: 'full',
 				page : true,
+				limit:20,
 				request : {
 					pageName : 'page', // 页码的参数名称，默认：page
 					limitName : 'rows' // 每页数据量的参数名，默认：limit

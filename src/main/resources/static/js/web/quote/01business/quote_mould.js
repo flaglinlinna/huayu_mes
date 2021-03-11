@@ -16,6 +16,7 @@ $(function() {
 			height : 'full-65',
 			even : true,// 条纹样式
 			page : true,
+			limit:20,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
