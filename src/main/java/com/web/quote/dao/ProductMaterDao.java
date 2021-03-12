@@ -51,7 +51,7 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 	@Query(value = "select map from ProductMater map  where map.delFlag=0 and map.pkQuote=?1 and ( map.bsType='surface' or map.bsType='packag' or map.bsType ='out') ")
 	public  List<ProductMater> findByDelFlagAnd3Tyle(Long pkQuote);
 
-	@Query(value = "select map from ProductMater map  where map.delFlag=0 and map.pkQuote=?1 and  map.bsType='molding' or map.bsType='hardware' ")
+	@Query(value = "select map from ProductMater map  where map.delFlag=0 and map.pkQuote=?1 and  (map.bsType='molding' or map.bsType='hardware' )")
 	public  List<ProductMater> findByDelFlagAndMolding(Long pkQuote);
 
 

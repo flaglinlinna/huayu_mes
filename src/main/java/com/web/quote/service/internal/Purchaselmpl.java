@@ -339,7 +339,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	{
 		if(object==null||object==""||("").equals(object)){
 			return null;
-		}else return object.toString();
+		}else return object.toString().trim();
 	}
 
 	//    导入模板

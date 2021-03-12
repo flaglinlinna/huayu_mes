@@ -156,7 +156,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
     {
         if(object==null||object==""||("").equals(object)){
             return "";
-        }else return object.toString();
+        }else return object.toString().trim();
     }
 
 

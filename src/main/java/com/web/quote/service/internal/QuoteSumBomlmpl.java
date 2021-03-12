@@ -195,7 +195,7 @@ public class QuoteSumBomlmpl extends BaseSql implements QuoteSumBomService {
 	{
 		if(object==null||object==""||("").equals(object)){
 			return null;
-		}else return object.toString().trim();
+		}else return object.toString().trim().trim();
 	}
 
 	//导入模板

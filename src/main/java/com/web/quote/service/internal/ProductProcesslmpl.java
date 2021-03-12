@@ -194,7 +194,7 @@ public class ProductProcesslmpl implements ProductProcessService {
     {
         if(object==null||object==""||("").equals(object)){
             return null;
-        }else return object.toString();
+        }else return object.toString().trim();
     }
 
     public void exportExcel(HttpServletResponse response, String bsType, Long quoteId) throws Exception{
