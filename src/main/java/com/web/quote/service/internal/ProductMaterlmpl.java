@@ -251,10 +251,10 @@ public class ProductMaterlmpl implements ProductMaterService {
         //设置结束时间
         quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
         
-      //20210121-fyx-统一修改状态
-        quoteProductService.doItemFinish(bsCode, quoteId,3);
-        
-        return ApiResponseResult.success("确认完成成功！");
+      //20210121-fyx-统一修改状态,返回是否全部完成 0否1是
+        Object data = quoteProductService.doItemFinish(bsCode, quoteId,3).getData();
+//        quoteDao.findById(quoteId);
+        return ApiResponseResult.success("确认完成成功！").data(data);
     }
 
     //取消完成

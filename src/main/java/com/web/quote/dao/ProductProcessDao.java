@@ -30,7 +30,7 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	 @Query(value = "select p.model_Code,p.model_Name  from "+BjModelType.TABLE_NAME+" p  where p.del_Flag=0 and p.pk_Workcenter=?1",nativeQuery = true)
 	 public  List<Map<String, Object>> findByDelFlagAndWorkcenter(Long pkWorkcenter);
 
-	@Query(value = "select DISTINCT f.model_Code,f.MH_TYPE as MODEL_NAME from BJ_BASE_FEE f  where f.DEL_FLAG = 0  and f.PROC_ID = ?1 and  f.WORKCENTER_ID = ?2  ORDER BY MODEL_NAME ",nativeQuery = true)
+	@Query(value = "select DISTINCT f.model_Code,f.MH_TYPE as MODEL_NAME from BJ_BASE_FEE f  where f.DEL_FLAG = 0 and f.MH_TYPE is not null and f.PROC_ID = ?1 and  f.WORKCENTER_ID = ?2  ORDER BY MODEL_NAME ",nativeQuery = true)
 	public  List<Map<String, Object>> findByWorkcenter(Long procId,Long pkWorkcenter);
 	 
 	 @Query(value = "select p from Proc p  where p.delFlag=0 and p.workcenterId in (select bj.id from BjWorkCenter bj where bj.delFlag=0 and bj.bsCode=?1)")

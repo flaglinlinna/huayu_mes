@@ -305,11 +305,11 @@ public class QuoteBomlmpl implements QuoteBomService {
 			}
 		}
 
-		quoteService.doItemFinish(code, Long.parseLong(quoteId));
+		Object data = quoteService.doItemFinish(code, Long.parseLong(quoteId)).getData();
 		
 		//20210112-fyx-关闭待办
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "外购件清单");
-		return ApiResponseResult.success("提交成功！");
+		return ApiResponseResult.success("提交成功！").data(data);
 	}
 
 	/**

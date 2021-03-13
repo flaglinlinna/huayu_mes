@@ -510,6 +510,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 	public ApiResponseResult doItemFinish(String code, Long quoteId) throws Exception {
 		// TODO Auto-generated method stub
 		//单个项目完成后，执行
+        Integer completed = 0;
 		//1.1 修改状态
 		List<QuoteItem> lqi = quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,quoteId,code);
 		if(lqi.size() == 0){
@@ -529,6 +530,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         		o.setLastupdateDate(new Date());
         		o.setLastupdateBy(UserUtil.getSessionUser().getId());
         		quoteDao.save(o);
+                completed=1;
         	}
 		}else {
             //取消完成修改状态
@@ -547,7 +549,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 			
 		}*/
 		
-		return ApiResponseResult.success();
+		return ApiResponseResult.success().data(completed);
 	}
 	@Override
 	public ApiResponseResult doCheckProfit(String bsDevType, String bsProdType) throws Exception {

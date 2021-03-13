@@ -739,7 +739,7 @@ $(function() {
 function isComplete() {
 	if (iStatus >= 2) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
-		$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
 	}
@@ -931,13 +931,13 @@ function Confirm(){
 			data) {
 			if (data.result) {
 				layer.alert("确认完成成功", function() {
-					layer.closeAll();
-					// //刷新页面
-					// iStatus=2;
-					// isComplete();
-					// loadAll()
-					// window.location.reload();
+					// layer.closeAll();
+					//项目完成，关闭上一级项目标签页
+					var srcUrl = context + '/quoteProdect/toProductItem?quoteId='+quoteId+"&style="+bsType;
+					console.log(srcUrl);
+					($(window.parent.document).find(('li[lay-id="'+srcUrl+'"]'))).find(".layui-tab-close").trigger("click")
 					parent.layui.admin.events.closeThisTabs();
+					layer.closeAll();
 				});
 			} else {
 				layer.alert(data.msg);

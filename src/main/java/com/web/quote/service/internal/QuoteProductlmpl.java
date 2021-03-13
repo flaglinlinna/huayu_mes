@@ -245,6 +245,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 		// TODO Auto-generated method stub
 		//2.1 查询大类是否都已经全部提交
 		List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
+		Integer completed = 0;
 		if(code.equals("B001") || code.equals("C001")){//五金
 			if(status==3) {
 				List<QuoteItem> lqii = quoteItemDao.getStatusByHardware(quoteId);
@@ -253,6 +254,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 					if (lo.size() > 0) {
 						Quote o = lo.get(0);
 						o.setBsStatus2Hardware(status);
+						completed =1;
 						quoteDao.save(o);
 					}
 				}
@@ -271,6 +273,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 					if(lo.size()>0){
 						Quote o = lo.get(0);
 						o.setBsStatus2Molding(status);
+						completed =1;
 						o.setLastupdateDate(new Date());
 						o.setLastupdateBy(UserUtil.getSessionUser().getId());
 						quoteDao.save(o);
@@ -293,6 +296,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 						if (lo.size() > 0) {
 							Quote o = lo.get(0);
 							o.setBsStatus2Surface(status);
+							completed =1;
 							o.setLastupdateDate(new Date());
 							o.setLastupdateBy(UserUtil.getSessionUser().getId());
 							quoteDao.save(o);
@@ -316,6 +320,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 					if (lo.size() > 0) {
 						Quote o = lo.get(0);
 						o.setBsStatus2Packag(status);
+						completed =1;
 						o.setLastupdateDate(new Date());
 						o.setLastupdateBy(UserUtil.getSessionUser().getId());
 						quoteDao.save(o);
@@ -331,7 +336,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 				}
 			}
 		}
-		return ApiResponseResult.success();
+		return ApiResponseResult.success().data(completed);
 	}
 
 }

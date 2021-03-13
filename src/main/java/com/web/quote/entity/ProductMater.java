@@ -226,6 +226,14 @@ public class ProductMater extends BaseEntity {
 	@ApiModelProperty(name = "bsFee", value = "总价格(未税)")
 	@Column(length = 50)
 	protected BigDecimal bsFee;
+
+	/**
+	 * 是否代采
+	 * 0否 1是
+	 */
+	@ApiModelProperty(name = "bsAgent", value = "是否代采")
+	@Column(length = 150)
+	protected Integer bsAgent = 0;
 	
 	/**
 	 * 
@@ -469,5 +477,13 @@ public class ProductMater extends BaseEntity {
 
 	public void setPurchaseUnit(String purchaseUnit) {
 		this.purchaseUnit = purchaseUnit;
+	}
+
+	public Integer getBsAgent() {
+		return bsAgent;
+	}
+
+	public void setBsAgent(Integer bsAgent) {
+		this.bsAgent = bsAgent;
 	}
 }

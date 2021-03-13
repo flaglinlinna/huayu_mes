@@ -315,10 +315,10 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 
 		//20210112-fyx-关闭待办
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "工艺流程");
+
+		 Object data = quoteService.doItemFinish(code, Long.parseLong(quoteId)).getData();
 		 
-		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
-		 
-		 return ApiResponseResult.success("提交成功！");
+		 return ApiResponseResult.success("提交成功！").data(data);
 	 }
 
 	/**

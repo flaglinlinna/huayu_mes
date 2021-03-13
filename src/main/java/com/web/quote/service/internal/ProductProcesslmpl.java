@@ -376,6 +376,8 @@ public class ProductProcesslmpl implements ProductProcessService {
             if(lm.size()>0){
                 String str1 = JSON.toJSONString(lm); //此行转换
                 pm.setBsTypeList(str1);
+            }else {
+                pm.setBsTypeList(null);
             }
         }
 
@@ -504,9 +506,10 @@ public class ProductProcesslmpl implements ProductProcessService {
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, bsCode);
             
             //20210121-fyx-统一修改状态
-            quoteProductService.doItemFinish(bsCode, quoteId,3);
+            Object data = quoteProductService.doItemFinish(bsCode, quoteId,3).getData();
             //20201225-fyx-计算后工序良率
             this.updateHouYield(quoteId, bsType);
+            return ApiResponseResult.success("确认完成成功！").data(data);
         }else{
         	//20210121-fyx-外协
         	List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);

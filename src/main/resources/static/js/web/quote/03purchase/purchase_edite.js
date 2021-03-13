@@ -73,7 +73,7 @@ $(function() {
 						} else if (d.bsGeneral == 0) {
 							return '否'
 						} else  {
-							return ''
+							return '否'
 						}
 					}
 				},

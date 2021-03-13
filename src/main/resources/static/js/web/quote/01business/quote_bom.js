@@ -216,7 +216,7 @@ $(function() {
 							{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
 							{field : 'bsModel',title : '材料规格',width : 200},
 							{field : 'bsExplain',title : '采购说明',width : 200},
-							{field : 'bsAgent',title : '是否代采',width : 120,templet:function (d) {
+							{field : 'bsAgent',title : '是否客户代采',width : 120,templet:function (d) {
 									if(d.bsAgent=="1"){
 										return "是"
 									}else {
@@ -293,7 +293,7 @@ $(function() {
 								{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
 								{field : 'bsModel',title : '材料规格',width : 200},
 								{field : 'bsExplain',title : '采购说明',width : 200},
-								{field : 'bsAgent',title : '是否代采',width : 120,templet:function (d) {
+								{field : 'bsAgent',title : '是否客户代采',width : 120,templet:function (d) {
 										if(d.bsAgent=="1"){
 											return "是"
 										}else {
@@ -442,7 +442,7 @@ $(function() {
 function isComplete() {
 	if (iStatus == 2) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
-		$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
 	}

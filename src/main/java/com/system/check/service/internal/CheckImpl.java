@@ -201,7 +201,12 @@ public class CheckImpl   implements CheckService {
 	private void sendTodo(CheckInfo ci) throws Exception{
 		TodoInfo tf = new TodoInfo();
 		tf.setBsUserId(ci.getBsCheckId());
-		tf.setBsTitle("您有"+ci.getBsStepName()+"待审批");
+		Quote quote = quoteDao.findById((long) ci.getBsRecordId());
+		String bsCode = "";
+		if(quote!=null){
+			bsCode = "(" +quote.getBsCode() +")";
+		}
+		tf.setBsTitle("您有"+ci.getBsStepName()+"待审批"+bsCode);
 		tf.setBsReferId(ci.getBsRecordId());
 		tf.setBsStartTime(new Date());
 		tf.setBsType(2);//审批类型
@@ -404,11 +409,14 @@ public class CheckImpl   implements CheckService {
 								pm.setBsUnit(qb.getUnit().getUnitName()); //hjj-20210120-补充单位名称
 							}
 							pm.setPurchaseUnit(qb.getPurchaseUnit());
+							pm.setBsAgent(qb.getBsAgent());
 //							pm.setBsGeneral();
 //							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
 //							pm.setBsWaterGap(qb.getBsWaterGap()); hjj-20210220 去掉水口和穴数，
 							if((qb.getBsAgent()==1)){
+								//客户代采的评估价格为0
 								pm.setBsAssess(BigDecimal.ZERO);
+								pm.setBsGeneral(0);
 							}else {
 								//hjj-20210122 不是代采,先查询物料通用价格
 								List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(qb.getBsMaterName());
@@ -460,8 +468,6 @@ public class CheckImpl   implements CheckService {
 						autoDoStatus(quote.getId());
 					}
 					//4。发送待办消息--fyx-?
-
-
 				}
 
 				//2.制造部-审批完成
@@ -731,6 +737,7 @@ public class CheckImpl   implements CheckService {
 
 	public void autoDoStatus(Long quoteId)throws  Exception{
 		List<Map<String,Object>> mapList = quoteProcessDao.countByBsType(quoteId);
+		List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
 		HashMap hashMap = new HashMap();
 		for(Map map :mapList){
 			hashMap.put(map.get("TYPE"),map.get("num"));
@@ -740,25 +747,92 @@ public class CheckImpl   implements CheckService {
 		// 不设置结束时间,为空则为自动完成
 		if(!hashMap.containsKey("hardware")){
 			quoteItemDao.switchStatus(2, quoteId, "C001");
+			quoteItemDao.switchStatus(2, quoteId, "B001");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
+			autoCheck(quoteId,"hardware");
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Hardware(2);
+				quoteDao.save(o);
+			}
 		}if(!hashMap.containsKey("surface")){
 			quoteItemDao.switchStatus(2, quoteId, "C003");
+			quoteItemDao.switchStatus(2, quoteId, "B003");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Surface(2);
+				quoteDao.save(o);
+			}
+			autoCheck(quoteId,"surface");
 		}if(!hashMap.containsKey("packag")){
 			quoteItemDao.switchStatus(2, quoteId, "C004");
+			quoteItemDao.switchStatus(2, quoteId, "B004");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Packag(2);
+				quoteDao.save(o);
+			}
+			autoCheck(quoteId,"packag");
 		}if(!hashMap.containsKey("molding")){
 			quoteItemDao.switchStatus(2, quoteId, "C002");
+			quoteItemDao.switchStatus(2, quoteId, "B002");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Molding(2);
+				quoteDao.save(o);
+			}
+			autoCheck(quoteId,"molding");
 		}if(!hashMap.containsKey("out")){
-			List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
 			if(lo.size()>0){
 				Quote o = lo.get(0);
 				o.setBsStatus2Out(3);
 				quoteDao.save(o);
 			}
+			autoCheck(quoteId,"out");
 		}
 
+	}
+
+	//自动审批
+	public void autoCheck(Long bsRecordId,String checkCode)throws  Exception {
+		List<WorkflowStep> lw = workflowStepDao.findAllByCheckCode(1, checkCode);
+		SysUser user = UserUtil.getSessionUser();
+		List<CheckInfo> lce = new ArrayList<CheckInfo>();
+		if (lw.size() > 0) {
+			CheckInfo sr1 = new CheckInfo();
+			WorkflowStep w = lw.get(0);
+			sr1.setBsCheckGrade(w.getBsCheckGrade());
+			sr1.setBsStepName(w.getBsStepName());
+			sr1.setBsCheckBy(user.getUserCode());
+			sr1.setBsCheckId(user.getId());
+			sr1.setBsRecordId(bsRecordId);
+			sr1.setBsCheckName(user.getUserName());
+			sr1.setCreateDate(new Date());
+			sr1.setLastupdateDate(new Date());
+			sr1.setBsCheckCode(checkCode);
+			sr1.setBsCheckComments("自动审批");
+			sr1.setLastupdateDate(new Date());
+			lce.add(sr1);
+		}
+		List<WorkflowStep> workflowSteps2 = workflowStepDao.findAllByCheckCode(2, checkCode);
+		if (workflowSteps2.size() > 0) {
+			WorkflowStep w2 = workflowSteps2.get(0);
+			CheckInfo sr = new CheckInfo();
+			sr.setBsCheckGrade(w2.getBsCheckGrade());
+			sr.setBsStepName(w2.getBsStepName());
+			sr.setBsCheckCode(checkCode);
+			sr.setBsCheckComments("自动审批");
+			sr.setBsCheckDes("");
+			sr.setBsRecordId(bsRecordId);
+			sr.setLastupdateDate(new Date());
+			sr.setBsCheckBy("");
+			sr.setBsCheckId(w2.getBsCheckId());
+			lce.add(sr);
+		}
+		checkInfoDao.saveAll(lce);
 	}
 
 

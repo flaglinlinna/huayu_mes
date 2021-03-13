@@ -126,11 +126,11 @@ public class QuoteFilelmpl implements QuoteFileService {
 		 quoteFileDao.saveQuoteFileByQuoteId(1,Long.parseLong(quoteId));
 		 //项目状态设置-状态 2：已完成
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
-		 quoteService.doItemFinish(code, Long.parseLong(quoteId));
+		 Object data =  quoteService.doItemFinish(code, Long.parseLong(quoteId)).getData();
 		 
 		//20210112-fyx-关闭待办
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "产品资料");
-		 return ApiResponseResult.success("提交成功！");
+		 return ApiResponseResult.success("提交成功！").data(data);
 	 }
 
 

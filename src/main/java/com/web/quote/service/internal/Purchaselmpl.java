@@ -181,7 +181,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	public ApiResponseResult getQuoteList(String keyword, String quoteId, PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
 
-		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
+		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.bs_agent = 0 and p.pk_quote="+quoteId;
 		//20210113-fyx-去掉外协--?
 		//hql += " and p.bs_Type <> 'out' " ;
 
@@ -321,9 +321,9 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			}
 //			map.put("bsRadix", productMater.getBsRadix());
 			map.put("bsExplain", productMater.getBsExplain());
-			if(productMater.getBsGeneral()!=null){
+//			if(productMater.getBsGeneral()!=null){
 				map.put("bsGeneral", productMater.getBsGeneral()==1?"是":"否");
-			}
+
 			map.put("bsGear", productMater.getBsGear());
 			map.put("bsRefer", productMater.getBsRefer());
 			map.put("bsAssess", productMater.getBsAssess());
