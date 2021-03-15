@@ -933,11 +933,15 @@ function Confirm(){
 				layer.alert("确认完成成功", function() {
 					// layer.closeAll();
 					//项目完成，关闭上一级项目标签页
-					var srcUrl = context + '/quoteProdect/toProductItem?quoteId='+quoteId+"&style="+bsType;
-					console.log(srcUrl);
-					($(window.parent.document).find(('li[lay-id="'+srcUrl+'"]'))).find(".layui-tab-close").trigger("click")
-					parent.layui.admin.events.closeThisTabs();
 					layer.closeAll();
+					// parent.layui.admin.events.closeThisTabs();
+					if(data.data =="1") {
+						var srcUrl = context + '/quoteProdect/toProductItem?quoteId=' + quoteId + "&style=" + bsType;
+						console.log(srcUrl);
+						($(window.parent.document).find(('li[lay-id="' + srcUrl + '"]'))).find(".layui-tab-close").trigger("click")
+					}
+					var thisUrl= context +"/productProcess/toProductProcess?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
+					($(window.parent.document).find(('li[lay-id="'+thisUrl+'"]'))).find(".layui-tab-close").trigger("click")
 				});
 			} else {
 				layer.alert(data.msg);

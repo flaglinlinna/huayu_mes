@@ -570,13 +570,18 @@ function saveProc() {
 	}, function() {
 		CoreUtil.sendAjax("/quoteProcess/doStatus", JSON.stringify(param), function(data) {
 			if (data.result == true) {
-				// 回调弹框
-				// layer.alert("提交成功！");
-				//刷新页面
-				// iStatus=2;
-				// isComplete();
-				// loadAll()
-				parent.layui.admin.events.closeThisTabs();
+				layer.alert("确认完成成功", function() {
+					layer.closeAll();
+					if(data.data =="1"){
+						//项目完成，关闭上一级项目标签页
+						// var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
+						var srcUrl = context + '/quote/toQuoteItem?quoteId='+quoteId+"&style=item";
+						console.log(srcUrl);
+						($(window.parent.document).find(('li[lay-id="'+srcUrl+'"]'))).find(".layui-tab-close").trigger("click")
+					}
+					var thisUrl= context +"/quoteProcess/toQuoteProcess?quoteId="+quoteId+"&code="+code;
+					($(window.parent.document).find(('li[lay-id="'+thisUrl+'"]'))).find(".layui-tab-close").trigger("click")
+				});
 			} else {
 				layer.msg(data.msg, {
 					time : 2000, // 2s后自动关闭
