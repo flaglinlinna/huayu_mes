@@ -346,7 +346,7 @@ public class PrcKanbanUtils {
 			return resultList;
 		}
 		/*
-		 * 获取线长
+		 * 获取线长/部门
 		 * */
 		public List getOrgListPrc(String company,String facoty,String type,String keyword) throws Exception {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {

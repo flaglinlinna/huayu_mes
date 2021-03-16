@@ -109,7 +109,10 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		}
 		return ApiResponseResult.success().data(list.get(2));
 	}
-	
+	/**
+	 * 制程不良看板
+	 * 车间看板、拉头看板的的部门获取
+	 * **/
 	@Override
 	public ApiResponseResult getZcblDepList() throws Exception {
 		// TODO Auto-generated method stub

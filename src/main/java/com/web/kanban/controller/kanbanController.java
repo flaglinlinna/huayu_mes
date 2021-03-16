@@ -126,11 +126,11 @@ public class kanbanController extends WebController {
 				ApiResponseResult xlpm_data = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner);
 				ApiResponseResult cxdz_data = kanbanService.getCxdzList("999","","",this.getIpAddr(),liner);
 				//制令单切换单独获取
-				ApiResponseResult cxsc_data = kanbanService.getCxscList2("","",liner,this.getIpAddr(),"1");
+				//ApiResponseResult cxsc_data = kanbanService.getCxscList2("","",liner,this.getIpAddr(),"1");
 				ApiResponseResult rotation =kanbanService.getRotationTime();
 				mav.addObject("xlpm_data",xlpm_data);//效率排名看板数据
 				mav.addObject("cxdz_data",cxdz_data);//产线电子看板数据
-				mav.addObject("cxsc_data",cxsc_data);//产线生产数据
+				//mav.addObject("cxsc_data",cxsc_data);//产线生产数据
 				mav.addObject("linerList",linerList);//组长列表
 				mav.addObject("nowLiner",liner);//当前被选择的组长
 				mav.addObject("deptList",deptList);//部门列表
