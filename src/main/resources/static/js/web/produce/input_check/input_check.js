@@ -110,43 +110,22 @@ $(function() {
                             title : 'id',
                             width : 0,hide:true
                         },
-                        {
-                            field : 'LINER_NAME',
-                            title : '组长',
-                            width : 70
-                        },
-                        {
-                            field : 'PROD_DATE',
-                            title : '计划日期',
-                            width : 100,
+                        {field : 'WS_SECTION', title : '工段', width : 70},
+                        {field : 'LINER_NAME', title : '组长', width : 70},
+                        {field : 'PROD_DATE', title : '计划日期', width : 100,
                             templet:function (d) {
                                 if(d.PROD_DATE!=null){
                                     return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
                                 }
                             }
                         },
-                         {
-                            field : 'ITEM_NO',
-                            title : '物料编码',
-                            width : 190
-                        },{
-                            field : 'ITEM_NAME',
-                            title : '物料描述',
-                            width : 240
-                        }, {
-                            field : 'QTY_PLAN',
-                            title : '数量',
-                            width : 80
-                        },{
-                            field : 'QUANTITY',
-                            title : '投入数量',
-                            width : 80
-                        },
-                        {
-                            field : 'TASK_NO',
-                            title : '制令单号',
-                            width : 175,sort: true
-                        },] ],
+                         {field : 'ITEM_NO', title : '物料编码', width : 190},
+                        {field : 'ITEM_NAME', title : '物料描述', width : 240},
+                        {field : 'FMEMO', title : '备注', width : 120},
+                        {field : 'QTY_PLAN',title : '数量', width : 80
+                        },{field : 'QUANTITY', title : '投入数量', width : 80},
+                        {field : 'TASK_NO', title : '制令单号', width : 175,sort: true}
+                        ] ],
                     page : false,
                     request : {
                         pageName : 'page' // 页码的参数名称，默认：page

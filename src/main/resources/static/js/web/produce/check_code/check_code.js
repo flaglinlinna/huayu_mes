@@ -78,51 +78,22 @@ $(function() {
 												+ '/produce/check_code/getTaskNo',
 										method : 'get',
 										
-										cols : [ [ {
-											type : 'radio'
-										},// 多选 radio
-										, {
-											field : 'id',
-											title : 'id',
-											width : 0,
-											hide : true
-										},
-											{
-												field : 'LINER_NAME',
-												title : '组长',
-												width : 70
-											},
-											{
-												field : 'PROD_DATE',
-												title : '计划日期',
-												width : 100,
+										cols : [ [ {type : 'radio'},// 多选 radio
+										 {field : 'id', title : 'id', width : 0, hide : true},
+											{field : 'WS_SECTION', title : '工段', width : 70},
+											{field : 'LINER_NAME', title : '组长', width : 70},
+											{field : 'PROD_DATE', title : '计划日期', width : 100,
 												templet:function (d) {
 													if(d.PROD_DATE!=null){
 														return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
 													}
 												}
 											},
-											 {
-											field : 'ITEM_NO',
-											title : '物料编码',
-											width : 170
-										},
-											{
-												field : 'ITEM_NAME',
-												title : '物料描述',
-												width : 240
-											},
-											{
-											field : 'CUST_NAME_S',
-											title : '客户(简称)',
-											width : 100
-										},
-											{
-												field : 'TASK_NO',
-												title : '制令单号',
-												width : 180,
-												sort : true
-											},
+											 {field : 'ITEM_NO', title : '物料编码', width : 170},
+											{field : 'ITEM_NAME', title : '物料描述', width : 240},
+											{field : 'FMEMO', title : '备注', width : 120},
+											{field : 'CUST_NAME_S', title : '客户(简称)', width : 100},
+											{field : 'TASK_NO', title : '制令单号', width : 180, sort : true},
 										] ],
 										page : false,
 										request : {

@@ -97,52 +97,23 @@ $(function() {
 						cols : [ [
 						{ type: 'radio' },//多选  radio
 							{type :'numbers'},
-						, {
-							field : 'id',
-							title : 'id',
-							width : 0,hide:true
-						},
-							{
-								field : 'LINER_NAME',
-								title : '组长',
-								width : 70,sort: true
-							},
-							{
-								field : 'PROD_DATE',
-								title : '计划日期',
-								width : 100,
+						{field : 'id', title : 'id', width : 0,hide:true},
+							{field : 'WS_SECTION', title : '工段', width : 70},
+							{field : 'LINER_NAME', title : '组长', width : 70,sort: true},
+							{field : 'PROD_DATE', title : '计划日期', width : 100,
 								templet:function (d) {
 									if(d.PROD_DATE!=null){
 										return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
 									}
 								}
 							},
-							 {
-							field : 'ITEM_NO',
-							title : '物料编码',
-							width : 170,sort: true
-						},{
-							field : 'ITEM_NAME',
-							title : '物料描述',
-							width : 240,sort: true
-						}, {
-							field : 'QTY_PLAN',
-							title : '制单数量',
-							width : 95,sort: true
-						},{
-							field : 'OTPT_QTY',
-							title : '产出数量',
-							width : 95,sort: true
-						},{
-							field : 'ORDER_RATE',
-							title : '达成率',
-							width : 85,sort: true
-						} ,
-							{
-								field : 'TASK_NO',
-								title : '制令单号',
-								width : 150,sort: true
-							},
+							 {field : 'ITEM_NO', title : '物料编码', width : 170,sort: true},
+							{field : 'ITEM_NAME', title : '物料描述', width : 240,sort: true},
+							{field : 'FMEMO', title : '备注', width : 120},
+							{field : 'QTY_PLAN', title : '制单数量', width : 95,sort: true},
+							{field : 'OTPT_QTY', title : '产出数量', width : 95,sort: true},
+							{field : 'ORDER_RATE', title : '达成率', width : 85,sort: true} ,
+							{field : 'TASK_NO', title : '制令单号', width : 150,sort: true},
 						] ],
 						page : false,
 						request : {
