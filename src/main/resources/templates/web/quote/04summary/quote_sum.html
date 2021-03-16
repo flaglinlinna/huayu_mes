@@ -28,11 +28,11 @@
 }
 
 .quote-from .layui-form-pane .layui-form-label {
-	width: 98px;
+	width: 100px;
 }
 
 .quote-from .layui-form-pane .layui-input-block {
-	margin-left: 98px;
+	margin-left: 100px;
 }
 </style>
 <body class="layui-layout-body">
@@ -44,15 +44,15 @@
 				lay-filter="itemForm" method="post" action="">
 				<h3 style="text-align: center;">华誉精密产品-报价汇总单</h3>
 				<button type="button" class="layui-btn layui-btn-xs" id="detailBtn" style="float:right;margin-right:30px;margin-top:-20px;">查看详情</button>
-				<button type="button" class="layui-btn layui-btn-xs" id="editBtn" style="float:right;margin-right:10px;margin-top:-20px;">编辑</button>
+<!--				<button type="button" class="layui-btn layui-btn-xs" id="editBtn" style="float:right;margin-right:10px;margin-top:-20px;">编辑</button>-->
 				<fieldset class="layui-elem-field layui-field-title"
 					style="margin: 10px 0 10px;">
 					<legend class="legend-font" style="font-size: 14px;">报价基础信息</legend>
 				</fieldset>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label">项目编号</label>
-						<div class="layui-input-block" style="width: 130px;">
+						<label class="layui-form-label" style="width: 140px">项目编号</label>
+						<div class="layui-input-block" style="margin-left:140px;width: 130px;">
 							<input id="bsCode" lay-verify="required" name="bsCode"
 								   readonly="readonly"
 								autocomplete="off" class="layui-input grey" type="text" />
@@ -84,8 +84,8 @@
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label">产品型号</label>
-						<div class="layui-input-block" style="width: 130px;">
+						<label class="layui-form-label" style="width: 140px">产品型号</label>
+						<div class="layui-input-block" style="margin-left:140px;width: 130px;">
 							<input id="bsProd" lay-verify="required" name="bsProd"
 								   readonly="readonly"	autocomplete="off" class="layui-input grey" type="text" />
 						</div>
@@ -116,8 +116,8 @@
 
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label">管理费率%</label>
-						<div class="layui-input-block" style="width: 130px;">
+						<label class="layui-form-label" style="width: 140px">管理费率%(D)</label>
+						<div class="layui-input-block" style="margin-left:140px;width: 130px;">
 							<input id="bsManageFee" lay-verify="required" name="bsManageFee"
 								    autocomplete="off" class="layui-input" type="text" />
 						</div>
@@ -153,14 +153,14 @@
 				</fieldset>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label">系统报价</label>
-						<div class="layui-input-block" style="width: 160px;">
+						<label class="layui-form-label" style="width: 150px">系统报价(X=A+B+C)</label>
+						<div class="layui-input-block" style="margin-left: 150px;width: 160px;">
 							<input id="bj_all" name ="bj_all" autocomplete="off" class="layui-input grey"
 								   readonly="readonly" type="text" />
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">生产成本</label>
+						<label class="layui-form-label">生产成本(A)</label>
 						<div class="layui-input-block" style="width: 160px;">
 							<input id="p_cb" name="p_cb" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
@@ -185,8 +185,8 @@
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label">管理费用</label>
-						<div class="layui-input-block" style="width: 160px;">
+						<label class="layui-form-label" style="width: 150px">管理费用(B=A*D/100)</label>
+						<div class="layui-input-block" style="margin-left:150px;width: 160px;">
 							<input id="gl" name="gl" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 							<span id ="gl_rate"
@@ -194,7 +194,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">净利润</label>
+						<label class="layui-form-label">净利润(C)</label>
 						<div class="layui-input-block" style="width: 160px;">
 							<input id="profitNet" name ="profitNet" lay-filter="profitNet" lay-verify="num"
 								   autocomplete="off" class="layui-input" type="text" />
@@ -202,7 +202,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">毛利</label>
+						<label class="layui-form-label">毛利(Y=B+C)</label>
 						<div class="layui-input-block" style="width: 160px;">
 							<input id="ml" name="ml" autocomplete="off" readonly="readonly"
 								   class="layui-input grey" type="text" />
@@ -222,7 +222,7 @@
 
 				<fieldset class="layui-elem-field layui-field-title"
 					style="margin: 10px 0 10px;">
-					<legend class="legend-font" style="font-size: 14px;">生产成本构成</legend>
+					<legend class="legend-font" style="font-size: 14px;">生产成本构成(A=A1+A2+A3+A4+A5+A6)</legend>
 				</fieldset>
 				<div class="layui-form-item">
 					<div class="layui-inline">
@@ -240,7 +240,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label"><a data-type="cl_surface">表面处理材料</a></label>
+						<label class="layui-form-label" style="width: 140px"><a data-type="cl_surface">表面处理材料</a></label>
 						<div class="layui-input-inline" style="width: 95px;">
 							<input id="cl_surface" name="cl_surface" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
@@ -254,7 +254,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label"><a data-type="wx_all">外协加工</a></label>
+						<label class="layui-form-label" style="width: 140px;"><a data-type="wx_all">外协加工(A5)</a></label>
 						<div class="layui-input-inline" style="width: 95px;">
 							<input id="wx_all" name="wx_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
@@ -277,7 +277,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label"><a data-type="lh_surface">表面处理人工</a></label>
+						<label class="layui-form-label" style="width: 140px"><a data-type="lh_surface">表面处理人工</a></label>
 						<div class="layui-input-inline" style="width: 95px;">
 							<input id="lh_surface" name="lh_surface" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
@@ -291,7 +291,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label"><a data-type="hou_loss_all">后工序损料</a></label>
+						<label class="layui-form-label" style="width: 140px"><a data-type="hou_loss_all">后工序损料(A6)</a></label>
 						<div class="layui-input-inline" style="width:95px;">
 							<input id="hou_loss_all" name="hou_loss_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
@@ -314,7 +314,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label"><a data-type="lw_surface">表面处理制费</a></label>
+						<label class="layui-form-label" style="width: 140px"><a data-type="lw_surface">表面处理制费</a></label>
 						<div class="layui-input-inline" style="width: 95px;">
 							<input id="lw_surface" name="lw_surface" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
@@ -330,7 +330,7 @@
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label">五金小计</label>
+						<label class="layui-form-label">五金小计(A1)</label>
 						<div class="layui-input-block" style="width: 95px;">
 							<input id="hardware_all" name="hardware_all" autocomplete="off" readonly="readonly"
 								   class="layui-input grey" type="text" />
@@ -339,7 +339,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">注塑小计</label>
+						<label class="layui-form-label">注塑小计(A2)</label>
 						<div class="layui-input-inline" style="width: 95px;">
 							<input id="molding_all" name="molding_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
@@ -348,7 +348,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">表面处理小计</label>
+						<label class="layui-form-label" style="width: 140px">表面处理小计(A3)</label>
 						<div class="layui-input-inline" style="width: 95px;">
 							<input id="surface_all" name="surface_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
@@ -357,7 +357,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">组装小计</label>
+						<label class="layui-form-label">组装小计(A4)</label>
 						<div class="layui-input-inline" style="width: 95px;">
 							<input id="packag_all" name="packag_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />

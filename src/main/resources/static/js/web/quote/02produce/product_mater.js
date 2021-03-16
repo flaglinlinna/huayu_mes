@@ -416,20 +416,26 @@ function Confirm() {
 		"bsType" : bsType,
 		"bsCode" : bsCode
 	};
-	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+	layer.confirm('一经提交则不得再修改，确定要提交吗1？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
 		CoreUtil.sendAjax("/productMater/doStatus", JSON.stringify(params), function(data) {
 			if (data.result) {
-				if(data.data =="1"){
-					//项目完成，关闭上一级项目标签页
-					var srcUrl = context + '/quoteProdect/toProductItem?quoteId='+quoteId+"&style="+bsType;
-					console.log(srcUrl);
-					($(window.parent.document).find(('li[lay-id="'+srcUrl+'"]'))).find(".layui-tab-close").trigger("click")
-				}
-				setTimeout(parent.layui.admin.events.closeThisTabs(),100);
+				// parent.layui.admin.events.closeThisTabs(); 先关闭执行不了js
+				layer.alert("确认完成成功", function() {
+					layer.closeAll();
+					if(data.data =="1"){
+						//项目完成，关闭上一级项目标签页
+						// var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
+						var srcUrl = context + '/quoteProdect/toProductItem?quoteId='+quoteId+"&style="+bsType;
+						console.log(srcUrl);
+						($(window.parent.document).find(('li[lay-id="'+srcUrl+'"]'))).find(".layui-tab-close").trigger("click")
+					}
+					var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
+					($(window.parent.document).find(('li[lay-id="'+thisUrl+'"]'))).find(".layui-tab-close").trigger("click")
+				});
 			} else {
-				layer.alert(data.msg);
+					layer.alert(data.msg);
 			}
 		}, "POST", false, function(res) {
 			layer.alert(res.msg);

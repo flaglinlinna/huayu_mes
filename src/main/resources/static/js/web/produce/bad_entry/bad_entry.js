@@ -101,17 +101,9 @@ $(function() {
 								cols : [ [ {
 									type : 'radio'
 								},// 多选 radio
-								, {
-									field : 'id',
-									title : 'id',
-									width : 0,
-									hide : true
-								},
-									{
-										field : 'LINER_NAME',
-										title : '组长',
-										width : 70
-									},
+								{field : 'id', title : 'id', width : 0, hide : true},
+									{field : 'WS_SECTION', title : '工段', width : 70},
+									{field : 'LINER_NAME', title : '组长', width : 70},
 									{
 										field : 'PROD_DATE',
 										title : '计划日期',
@@ -122,21 +114,11 @@ $(function() {
 											}
 										}
 									},
-									{
-										field : 'ITEM_NO',
-										title : '物料编码',
-										width : 170
-									},
-									{
-										field : 'ITEM_NAME',
-										title : '物料描述',
-										width : 250
-									},
-									{
-									field : 'TASK_NO',
-									title : '制令单号',
-									width : 180
-								},  ] ],
+									{field : 'ITEM_NO', title : '物料编码', width : 170},
+									{field : 'ITEM_NAME', title : '物料描述', width : 250},
+									{field : 'FMEMO', title : '备注', width : 120},
+									{field : 'TASK_NO', title : '制令单号', width : 180},
+								] ],
 								parseData : function(res) {
 									// console.log(res)
 									if (res.result) {

@@ -737,63 +737,92 @@ public class CheckImpl   implements CheckService {
 
 	public void autoDoStatus(Long quoteId)throws  Exception{
 		List<Map<String,Object>> mapList = quoteProcessDao.countByBsType(quoteId);
+		List<Map<String,Object>> materList = productMaterDao.countByBsType(quoteId);
 		List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
 		HashMap hashMap = new HashMap();
+		HashMap materMap = new HashMap();
 		for(Map map :mapList){
 			hashMap.put(map.get("TYPE"),map.get("num"));
+		}
+		for(Map map : materList){
+			materMap.put(map.get("TYPE"),map.get("num"));
 		}
 		//项目状态设置-状态 2：已完成
 		//增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
 		// 不设置结束时间,为空则为自动完成
+
+		//工艺自动完成
 		if(!hashMap.containsKey("hardware")){
 			quoteItemDao.switchStatus(2, quoteId, "C001");
-			quoteItemDao.switchStatus(2, quoteId, "B001");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
+		}if(!hashMap.containsKey("surface")){
+			quoteItemDao.switchStatus(2, quoteId, "C003");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
+		}if(!hashMap.containsKey("packag")){
+			quoteItemDao.switchStatus(2, quoteId, "C004");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
+		}if(!hashMap.containsKey("molding")){
+			quoteItemDao.switchStatus(2, quoteId, "C002");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
+		}
+		//外协为工艺
+		if(!hashMap.containsKey("out")){
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Out(2);
+				quoteDao.save(o);
+			}
+			autoCheck(quoteId,"out");
+		}
+
+		//材料自动完成
+		if(!materMap.containsKey("hardware")){
+			quoteItemDao.switchStatus(2, quoteId, "B001");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B001");
+		}if(!materMap.containsKey("surface")){
+			quoteItemDao.switchStatus(2, quoteId, "B003");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B003");
+		}if(!materMap.containsKey("packag")){
+			quoteItemDao.switchStatus(2, quoteId, "B004");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B004");
+		}if(!materMap.containsKey("molding")){
+			quoteItemDao.switchStatus(2, quoteId, "B002");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B002");
+		}
+
+		//材料和工艺自动完成情况下则自动审批
+		if(!materMap.containsKey("hardware")&&!hashMap.containsKey("hardware")){
 			autoCheck(quoteId,"hardware");
 			if(lo.size()>0){
 				Quote o = lo.get(0);
 				o.setBsStatus2Hardware(2);
 				quoteDao.save(o);
 			}
-		}if(!hashMap.containsKey("surface")){
-			quoteItemDao.switchStatus(2, quoteId, "C003");
-			quoteItemDao.switchStatus(2, quoteId, "B003");
-			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
+		}
+		if(!materMap.containsKey("surface")&&!hashMap.containsKey("surface")){
 			if(lo.size()>0){
 				Quote o = lo.get(0);
 				o.setBsStatus2Surface(2);
 				quoteDao.save(o);
 			}
 			autoCheck(quoteId,"surface");
-		}if(!hashMap.containsKey("packag")){
-			quoteItemDao.switchStatus(2, quoteId, "C004");
-			quoteItemDao.switchStatus(2, quoteId, "B004");
-			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
+		}
+		if(!materMap.containsKey("packag")&&!hashMap.containsKey("packag")){
 			if(lo.size()>0){
 				Quote o = lo.get(0);
 				o.setBsStatus2Packag(2);
 				quoteDao.save(o);
 			}
 			autoCheck(quoteId,"packag");
-		}if(!hashMap.containsKey("molding")){
-			quoteItemDao.switchStatus(2, quoteId, "C002");
-			quoteItemDao.switchStatus(2, quoteId, "B002");
-			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
+		}
+		if(!materMap.containsKey("molding")&&!hashMap.containsKey("molding")){
 			if(lo.size()>0){
 				Quote o = lo.get(0);
 				o.setBsStatus2Molding(2);
 				quoteDao.save(o);
 			}
 			autoCheck(quoteId,"molding");
-		}if(!hashMap.containsKey("out")){
-			if(lo.size()>0){
-				Quote o = lo.get(0);
-				o.setBsStatus2Out(3);
-				quoteDao.save(o);
-			}
-			autoCheck(quoteId,"out");
 		}
-
 	}
 
 	//自动审批
@@ -807,6 +836,7 @@ public class CheckImpl   implements CheckService {
 			sr1.setBsCheckGrade(w.getBsCheckGrade());
 			sr1.setBsStepName(w.getBsStepName());
 			sr1.setBsCheckBy(user.getUserCode());
+			sr1.setBsStepCheckStatus(1); //同意
 			sr1.setBsCheckId(user.getId());
 			sr1.setBsRecordId(bsRecordId);
 			sr1.setBsCheckName(user.getUserName());
@@ -826,9 +856,11 @@ public class CheckImpl   implements CheckService {
 			sr.setBsCheckCode(checkCode);
 			sr.setBsCheckComments("自动审批");
 			sr.setBsCheckDes("");
+			sr.setBsStepCheckStatus(1); //同意
 			sr.setBsRecordId(bsRecordId);
 			sr.setLastupdateDate(new Date());
-			sr.setBsCheckBy("");
+			sr.setBsCheckBy(user.getUserCode());
+			sr.setBsCheckName(user.getUserName());
 			sr.setBsCheckId(w2.getBsCheckId());
 			lce.add(sr);
 		}

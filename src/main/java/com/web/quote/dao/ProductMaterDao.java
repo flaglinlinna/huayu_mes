@@ -89,5 +89,6 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 					"order by a.bs_element,A.bs_component", nativeQuery = true)	
 public List<Map<String, Object>> getBomThree(Long quoteId,String element,String compent);
 
-
+	@Query(value = "select BS_TYPE as type,count(1) as num from PRICE_PRODUCT_MATER where PK_QUOTE = ?1 and DEL_FLAG = 0 GROUP BY  BS_TYPE", nativeQuery = true)
+	public List<Map<String, Object>> countByBsType(Long quoteId);
 }
