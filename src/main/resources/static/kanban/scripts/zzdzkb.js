@@ -21,7 +21,7 @@ $(function() {
 
 	rotationdata = rotation.data;
 	rotationdata = rotationdata[0].R;// 获取系统设置的刷新间隔时间 -页面数据更新
-	dealXlpmData(xlpm_data);//上层数据装载
+	//dealXlpmData(xlpm_data);//上层数据装载
 	dealCxdzData(cxdz_data);//中层数据装载
 
 	interval_do = setInterval(getList, rotationdata * 1000); // 定时器启动,执行数据更新
@@ -370,6 +370,7 @@ function setCxdzTable(kanbanData) {
 			+ arr.RATE_DONE + '%</td><td style="color:#CC0033">' + arr.RATE_EFF + '%</td></tr> ';
 
 	getTaskNoList(arr.TASK_NO)//请求获取制令单对应的详细数据
+	getXlpmList(arr.TASK_NO) //请求获取产线信息
 
 	$("#tableCxdzList").empty();
 	$("#tableCxdzList").append(html);
@@ -472,7 +473,7 @@ function getTaskNoList(task) {
 		}
 	});
 }
-// 刷新整个页面的数据
+// 刷新工单的数据
 function getList() {
 	var date = $("#date").val();
 	// var sdata = date.substring(0, date.indexOf(" "))
@@ -497,11 +498,40 @@ function getList() {
 			if (res.result) {
 				var data = res.data;
 				action = true;
-				dealXlpmData(data.xlpm_data);
+				//dealXlpmData(data.xlpm_data);
 				dealCxdzData(data.cxdz_data);
 			} else {
 				action = false;
 				clearInterval(interval_do);// 错误-关闭定时器
+				alert(res.msg);
+			}
+		}
+	});
+}
+// 更新效率排名的数据
+function getXlpmList(taskno) {
+	var date = $("#date").val();
+	var class_no = $("#class_select").val();
+	var liner = $("#liner_select").val();
+	var params = {
+		"class_nos" : class_no,
+		"dep_id" : "",
+		"sdata" : date,
+		"liner" : liner,
+		"taskno":taskno
+	};
+	console.log(params)
+	$.ajax({
+		type : "GET",
+		url : context + "kanban/getXlpmList",
+		data : params,
+		dataType : "json",
+		success : function(res) {
+			console.log(res)
+			if (res.result) {
+				//var data = res.data;
+				dealXlpmData(res);
+			} else {
 				alert(res.msg);
 			}
 		}

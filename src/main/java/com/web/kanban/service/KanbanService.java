@@ -32,7 +32,7 @@ public interface KanbanService {
 	public ApiResponseResult getZcblList(String class_no, String dep_id, String sdata,String dev_ip)throws Exception;
 	
 	//获取效率排名看板
-	public ApiResponseResult getXlpmList(String class_id,String dep_id, String sdata, String dev_ip,String liner)throws Exception;
+	public ApiResponseResult getXlpmList(String class_id,String dep_id, String sdata, String dev_ip,String liner,String taskno)throws Exception;
 
 	//获取待返工看板
 	public ApiResponseResult getDfgList(String class_id,String dep_id, String sdata,String usr_id,String dev_ip)throws Exception;

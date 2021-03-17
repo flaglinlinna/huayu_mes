@@ -285,11 +285,11 @@ public class PrcKanbanUtils {
 		
 		//获取效率排名看板
 		public List getXlpmListPrc(String company,String facoty,String user_id, String class_id,
-				String dep_id, String sdata, String dev_ip,String liner) throws Exception {
+				String dep_id, String sdata, String dev_ip,String liner,String taskno) throws Exception {
 			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 				@Override
 				public CallableStatement createCallableStatement(Connection con) throws SQLException {
-					String storedProc = "{call  PRC_MES_RPT_XLPM(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+					String storedProc = "{call  PRC_MES_RPT_XLPM(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 					CallableStatement cs = con.prepareCall(storedProc);
 					cs.setString(1, company);//-公司
 					cs.setString(2, facoty);//工厂
@@ -299,13 +299,14 @@ public class PrcKanbanUtils {
 					cs.setString(6, sdata);//日期*
 					cs.setString(7, dev_ip);//电视IP或mac*
 					cs.setString(8, user_id);//用户id
-					cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
-					cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
-					cs.registerOutParameter(11, -10);// 输出参数 追溯数据
+					cs.setString(9, taskno);//用户id
+					cs.registerOutParameter(10, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(11, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					cs.registerOutParameter(12, -10);// 输出参数 追溯数据
-					cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(13, -10);// 输出参数 追溯数据
 					cs.registerOutParameter(14, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					cs.registerOutParameter(15, java.sql.Types.VARCHAR);// 输出参数 返回标识
+					cs.registerOutParameter(16, java.sql.Types.VARCHAR);// 输出参数 返回标识
 					return cs;
 				}
 			}, new CallableStatementCallback() {
@@ -314,11 +315,11 @@ public class PrcKanbanUtils {
 					List<Map<String, Object>> l = new ArrayList();
 					List<Map<String, Object>> l_2 = new ArrayList();
 					cs.execute();
-					result.add(cs.getInt(9));
-					result.add(cs.getString(10));
-					if (cs.getString(9).toString().equals("0")) {
+					result.add(cs.getInt(10));
+					result.add(cs.getString(11));
+					if (cs.getString(10).toString().equals("0")) {
 						// 游标处理
-						ResultSet rs = (ResultSet) cs.getObject(11);
+						ResultSet rs = (ResultSet) cs.getObject(12);
 						try {
 							l = fitMap(rs);
 						} catch (Exception e) {
@@ -327,7 +328,7 @@ public class PrcKanbanUtils {
 						}
 						result.add(l);
 						
-						ResultSet rs_2 = (ResultSet) cs.getObject(12);
+						ResultSet rs_2 = (ResultSet) cs.getObject(13);
 						try {
 							l_2 = fitMap(rs_2);
 						} catch (Exception e) {
@@ -335,9 +336,9 @@ public class PrcKanbanUtils {
 							e.printStackTrace();
 						}
 						result.add(l_2);
-						result.add(cs.getString(13));
 						result.add(cs.getString(14));
 						result.add(cs.getString(15));
+						result.add(cs.getString(16));
 					}
 					System.out.println(l);
 					return result;

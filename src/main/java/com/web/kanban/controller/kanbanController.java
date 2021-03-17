@@ -123,12 +123,12 @@ public class kanbanController extends WebController {
 				ApiResponseResult deptList = kanbanService.getCjbgDepList();
 				ApiResponseResult interval =kanbanService.getIntervalTime();
 				ApiResponseResult linerList=kanbanService.getLiner();
-				ApiResponseResult xlpm_data = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner);
+				//ApiResponseResult xlpm_data = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner);
 				ApiResponseResult cxdz_data = kanbanService.getCxdzList("999","","",this.getIpAddr(),liner);
 				//制令单切换单独获取
 				//ApiResponseResult cxsc_data = kanbanService.getCxscList2("","",liner,this.getIpAddr(),"1");
 				ApiResponseResult rotation =kanbanService.getRotationTime();
-				mav.addObject("xlpm_data",xlpm_data);//效率排名看板数据
+				//mav.addObject("xlpm_data",xlpm_data);//效率排名看板数据
 				mav.addObject("cxdz_data",cxdz_data);//产线电子看板数据
 				//mav.addObject("cxsc_data",cxsc_data);//产线生产数据
 				mav.addObject("linerList",linerList);//组长列表
@@ -345,7 +345,7 @@ public class kanbanController extends WebController {
 		String method = "kanban/toXlpm";
 		String methodName = "效率排名看板";
 		try {	
-			ApiResponseResult result = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner);
+			ApiResponseResult result = kanbanService.getXlpmList("999","","",this.getIpAddr(),liner,"");
 			ApiResponseResult deptList=kanbanService.getCjbgDepList();
 			ApiResponseResult linerList=kanbanService.getLiner();
 			ApiResponseResult interval =kanbanService.getIntervalTime();
@@ -557,11 +557,11 @@ public class kanbanController extends WebController {
 	@ApiOperation(value = "获取效率排名看板信息", notes = "获取效率排名看板信息", hidden = true)
 	@RequestMapping(value = "/getXlpmList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getXlpmList(String class_nos, String dep_id, String sdata ,String liner) {
+	public ApiResponseResult getXlpmList(String class_nos, String dep_id, String sdata ,String liner,String taskno) {
 		String method = "/kanban/getXlpmList";
 		String methodName = "获取效率排名看板信息";
 		try {
-			ApiResponseResult result = kanbanService.getXlpmList(class_nos, dep_id, sdata,  this.getIpAddr(),liner);
+			ApiResponseResult result = kanbanService.getXlpmList(class_nos, dep_id, sdata,  this.getIpAddr(),liner,taskno);
 			logger.debug("获取效率排名看板信息=getXlpmList:" + result);
 //			getSysLogService().success(module,method, methodName, null);
 			return result;
@@ -690,12 +690,12 @@ public class kanbanController extends WebController {
 		String method = "/kanban/toZzdzkbList"; 
 		String methodName = "获取组长详细电子看板数据";
 		try {
-			ApiResponseResult xlpm_data = kanbanService.getXlpmList(class_nos, dep_id, sdata,  this.getIpAddr(),liner);
+			//ApiResponseResult xlpm_data = kanbanService.getXlpmList(class_nos, dep_id, sdata,this.getIpAddr(),liner);
 			ApiResponseResult cxdz_data = kanbanService.getCxdzList(class_nos, dep_id, sdata,this.getIpAddr(),liner);
 			//制令单切换他处获取
 			//ApiResponseResult cxsc_data = kanbanService.getCxscList(taskNo, deptId, liner,this.getIpAddr(),"1");
 			Map map = new HashMap();
-			map.put("xlpm_data", xlpm_data);
+			//map.put("xlpm_data", xlpm_data);
 			map.put("cxdz_data", cxdz_data);
 			//map.put("cxsc_data", cxsc_data);
 			return ApiResponseResult.success().data(map);
