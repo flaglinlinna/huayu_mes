@@ -48,8 +48,8 @@ function dealXlpmData(kanbanList) {
 	console.log(kanbanList)
 	if (kanbanList.result) {
 		var kanbanData_t = kanbanList.data.List_line;
-		var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
-		$("#title").text(title + "•" + nowLiner + "线电子看板");
+//		var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
+//		$("#title").text(title + "•" + nowLiner + "线电子看板");
 
 		if (kanbanData_t.length > 0) {
 			// 图片路径
@@ -106,7 +106,11 @@ function dealXlpmData(kanbanList) {
 }
 
 function dealCxdzData(kanbanList) {
+	
 	console.log(kanbanList)
+	var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
+	$("#title").text(title + "•" + nowLiner + "线电子看板");
+		
 	if (!kanbanList.result) {// 报错时的初始化
 		$("#tableCxdzList").empty();
 		return false;
@@ -515,7 +519,7 @@ function getXlpmList(taskno) {
 	var liner = $("#liner_select").val();
 	var params = {
 		"class_nos" : class_no,
-		"dep_id" : "",
+		"dep_id" : deptId,
 		"sdata" : date,
 		"liner" : liner,
 		"taskno":taskno

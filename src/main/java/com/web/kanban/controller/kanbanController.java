@@ -136,6 +136,7 @@ public class kanbanController extends WebController {
 			mav.addObject("linerList", linerList);// 组长列表
 			mav.addObject("nowLiner", liner);// 当前被选择的组长
 			mav.addObject("deptList", deptList);// 部门列表
+			mav.addObject("deptId", deptId);// 部门
 			mav.addObject("rotation", rotation);// 整体页面刷新间隔
 			mav.addObject("interval", interval);// 制令单刷新间隔
 			mav.addObject("inType", inType);// 显示类型
