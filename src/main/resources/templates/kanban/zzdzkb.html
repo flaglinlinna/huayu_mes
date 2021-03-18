@@ -175,6 +175,10 @@ li {
 	color: #ffffff;
 	font-size: 15px;
 }
+
+.rowHeight{
+    line-height:0.55rem
+}
 /*显示排名数字样式*/
 .num_h1 {
 	text-align: center;
@@ -294,11 +298,11 @@ $(document).ready(function(){
 				<div style="width: 45%; height: 170px; float: left; color: #ffffff;">
 					<h2>产线信息</h2>
 					<ul class="list_ul">
-						<li>组长:<span class="span_li" id="liner"></span></li>
+						<li class="rowHeight">组长:<span class="span_li" id="liner"></span></li>
 						<!-- <li>排名:<span class="span_li" id="rownum"></span></li> -->
-						<li>在线人数:<span class="span_li" id="onlineEmp"></span></li>
-						<li>已分人数:<span class="span_li" id="card_ass"></span></li>
-						<li>未分人数:<span class="span_li" id="card_unass"></span></li>
+						<!-- <li>在线人数:<span class="span_li" id="onlineEmp"></span></li>-->
+						<li class="rowHeight">已分人数:<span class="span_li" id="card_ass"></span></li>
+						<li class="rowHeight">未分人数:<span class="span_li" id="card_unass"></span></li>
 					</ul>
 				</div>
 				<div style="width: 55%; height: 170px; float: left; color: #ffffff;">

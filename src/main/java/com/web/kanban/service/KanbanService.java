@@ -18,7 +18,7 @@ public interface KanbanService {
 	public ApiResponseResult getCjbgDepList()throws Exception;
 	
 	//获取线长信息
-	public ApiResponseResult getLiner()throws Exception;
+	public ApiResponseResult getLiner(String deptId)throws Exception;
 	
 	//获取生产电子看板
 	public ApiResponseResult getScdzList(String class_no,String dep_id,String sdata,String dev_ip)throws Exception;

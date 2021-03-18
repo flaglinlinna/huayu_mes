@@ -641,7 +641,7 @@ function getList() {
 	var date = $("#date").val();
 	var params = {
 		"class_nos" : class_no,
-		"dep_id" : "",
+		"dep_id" : deptId,
 		"sdata" : date
 	};
 	$.ajax({

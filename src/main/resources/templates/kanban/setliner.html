@@ -48,38 +48,39 @@ li {
 	<script th:inline="javascript">
 	var res=[[${linerList}]];
 	var pageType=[[${pageType}]];//跟据页面类型变更指向
+	var deptId=[[${deptId}]];//当前部门
 	console.log(pageType)
 	if(pageType=="xlpm"){
 		res.data.forEach(function(element) {
-	       	var html = '<a href=/kanban/toXlpm?liner='+element.LEAD_BY+'&inType=apk'+
+	       	var html = '<a href=/kanban/toXlpm?liner='+element.LEAD_BY+'&inType=apk&deptId='+deptId+
 	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
 	       			element.LEAD_BY+'</a>'
 	       	$("#list").append(html)	
 	       	 }); 
 	}else if(pageType=="cxdz"){
 		res.data.forEach(function(element) {
-	       	var html = '<a href=/kanban/toCxdz?liner='+element.LEAD_BY+'&inType=apk'+
+	       	var html = '<a href=/kanban/toCxdz?liner='+element.LEAD_BY+'&inType=apk&deptId='+deptId+
 	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
 	       			element.LEAD_BY+'</a>'
 	       	$("#list").append(html)	
 	       	 }); 
 	}else if(pageType=="cxsc"){
 		res.data.forEach(function(element) {
-	       	var html = '<a href=/kanban/toCxsc?liner='+element.LEAD_BY+'&inType=apk'+
+	       	var html = '<a href=/kanban/toCxsc?liner='+element.LEAD_BY+'&inType=apk&deptId='+deptId+
 	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
 	       			element.LEAD_BY+'</a>'
 	       	$("#list").append(html)	
 	       	 }); 
 	}else if(pageType=="zzdzkb"){
 		res.data.forEach(function(element) {
-	       	var html = '<a href=/kanban/toZzdzkb?liner='+element.LEAD_BY+'&inType=apk'+
+	       	var html = '<a href=/kanban/toZzdzkb?liner='+element.LEAD_BY+'&inType=apk&deptId='+deptId+
 	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
 	       			element.LEAD_BY+'</a>'
 	       	$("#list").append(html)	
 	       	 }); 
 	}else{
 		res.data.forEach(function(element) {
-	       	var html = '<a href=/kanban/toLtkbs?liner='+element.LEAD_BY+'&inType=apk'+
+	       	var html = '<a href=/kanban/toLtkbs?liner='+element.LEAD_BY+'&inType=apk&deptId='+deptId+
 	       			'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
 	       			element.LEAD_BY+'</a>'
 	       	$("#list").append(html)	

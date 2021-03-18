@@ -50,6 +50,7 @@ body {
 		<script th:inline="javascript">
 		    var liner=[[${liner}]];
 		    var inType=[[${inType}]];
+		    var deptId=[[${deptId}]];
 		    var rotation=[[${rotation}]];
 		    var rotationdata = rotation.data;
 		    rotationdata = rotationdata[0].R;// 获取系统设置的刷新间隔时间
@@ -57,7 +58,7 @@ body {
 			
 			if(inType=="apk"){
 				$("#page").attr({
-					"src" : "toXlpm?liner="+liner+"&inType=apk" //设置默认页
+					"src" : "toXlpm?liner="+liner+"&inType=apk&deptId="+deptId //设置默认页
 				});
 				interval_kb = setInterval(switchApkPage,rotationdata * 1000);  // 启动
 			}else{
@@ -68,17 +69,17 @@ body {
 			}
 			function switchApkPage() {//切换列表
 				var src = $("#page").attr('src'); 
-					if(src=="toXlpm?liner="+liner+"&inType=apk"){
+					if(src=="toXlpm?liner="+liner+"&inType=apk&deptId="+deptId){
 						$("#page").attr({
-							"src" : "toCxdz?liner="+liner+"&inType=apk"
+							"src" : "toCxdz?liner="+liner+"&inType=apk&deptId="+deptId
 						});
-					}else if(src=="toCxdz?liner="+liner+"&inType=apk") {
+					}else if(src=="toCxdz?liner="+liner+"&inType=apk&deptId="+deptId) {
 						$("#page").attr({
-							"src" : "toCxsc?liner="+liner+"&inType=apk"
+							"src" : "toCxsc?liner="+liner+"&inType=apk&deptId="+deptId
 						});
-					}else if(src=="toCxsc?liner="+liner+"&inType=apk"){
+					}else if(src=="toCxsc?liner="+liner+"&inType=apk&deptId="+deptId){
 						$("#page").attr({
-							"src" : "toXlpm?liner="+liner+"&inType=apk"
+							"src" : "toXlpm?liner="+liner+"&inType=apk&deptId="+deptId
 						});
 					}	
 			}

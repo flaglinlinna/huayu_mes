@@ -84,7 +84,7 @@ function dealXlpmData(kanbanList) {
 
 			var liner = kanbanData_t[0].FLINER;// 组长
 			var rownum = kanbanData_t[0].FROWNUM == null ? "无" : kanbanData_t[0].FROWNUM;// 排名
-			var onlineEmp = kanbanData_t[0].NUM_EMP_ON == null ? "0" : kanbanData_t[0].NUM_EMP_ON;// 在线人数
+			//var onlineEmp = kanbanData_t[0].NUM_EMP_ON == null ? "0" : kanbanData_t[0].NUM_EMP_ON;// 在线人数
 			var card_ass = kanbanData_t[0].NUM_CARD_ASS == null ? "0" : kanbanData_t[0].NUM_CARD_ASS;// 排名
 			var card_unass = kanbanData_t[0].NUM_CARD_UNASS == null ? "0" : kanbanData_t[0].NUM_CARD_UNASS;// 在线人数
 			$("#liner").text(liner)
@@ -94,7 +94,7 @@ function dealXlpmData(kanbanList) {
 			} else {
 				$("#rownum").removeClass("redword");
 			}
-			$("#onlineEmp").text(onlineEmp)
+			//$("#onlineEmp").text(onlineEmp)
 			$("#card_ass").text(card_ass)
 			$("#card_unass").text(card_unass)
 		} else {
@@ -154,7 +154,7 @@ function toCleanXlpm() {
 	getChartXlpm2(0, 0, 0, 0);
 	$("#liner").text("")
 	$("#rownum").text("")
-	$("#onlineEmp").text("")
+	//$("#onlineEmp").text("")
 	$("#card_all").text("")
 	$("#card_ass").text("")
 	$("#card_unass").text("")

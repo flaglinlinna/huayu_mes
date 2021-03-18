@@ -188,8 +188,8 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		return ApiResponseResult.success().data(map);
 	}
 	
-	public ApiResponseResult getLiner ()throws Exception{
-		List<Object> list = getOrgListPrc("","","","组长");
+	public ApiResponseResult getLiner (String deptId)throws Exception{
+		List<Object> list = getOrgListPrc("","",deptId,"部门组长");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}	
