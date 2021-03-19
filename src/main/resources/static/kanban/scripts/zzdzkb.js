@@ -35,10 +35,6 @@ $(function() {
 		if (action) {// action 为 fasle 不调用定时器
 			interval_do = setInterval(getList, rotationdata * 1000); // 重新新循环-启动
 		}
-		// if(action_task){//2020-12-03废除
-		// interval_do_task = setInterval(getTaskNoList, intervaldata * 1000);
-		// // 重新新循环-启动
-		// }
 	});
 
 })
@@ -107,14 +103,15 @@ function dealXlpmData(kanbanList) {
 
 function dealCxdzData(kanbanList) {
 	
-	console.log(kanbanList)
-	var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
-	$("#title").text(title + "•" + nowLiner + "线电子看板");
-		
+	console.log(kanbanList)		
 	if (!kanbanList.result) {// 报错时的初始化
 		$("#tableCxdzList").empty();
+		alert(kanbanList.msg)
 		return false;
 	}
+	var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
+			$("#title").text(title + "•" + nowLiner + "线电子看板");
+	
 	refreshData = kanbanList.data.List_table;
 	if (refreshData.length > 0) {// 无数据时要初始化
 		setCxdzTable(refreshData);// 表格数据

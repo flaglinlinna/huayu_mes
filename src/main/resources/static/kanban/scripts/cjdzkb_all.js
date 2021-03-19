@@ -1,6 +1,7 @@
 var action = true;// 请求结果，fasle 不执行定时器
 var interval_do = null;// 页面刷新定时器
 
+var dept_index=1;//部门切换的下标
 $(function() {
 
 	getDepList(deptList)
@@ -21,17 +22,6 @@ $(function() {
 			interval_do = setInterval(getList, intervaldata * 1000); // 重新新循环-启动
 		}
 	});
-	
-
-	//监听库房选择事件
-	$("#dep_select").change(function(){
-		if($("#dep_select").val()=="allData"){
-			window.open("/kanban/toCjdzkbAll");   
-			$("#dep_select").val("")
-		}
-	})
-	   
-
 })
 
 function dealScdzData(kanbanList) {
@@ -637,18 +627,34 @@ function getcolor(value){
 
 function getDepList(deptList) {
 	var res = deptList;
-	console.log(res)
+	//console.log(res)
 	$("#dep_select").empty();
 	var html = "<option value=''>请选择部门</option>";
 	for (j = 0, len = res.data.length; j < len; j++) {
 		var arr = res.data[j];
 		html += "<option value='" + arr.ID + "'>" + arr.LEAD_BY + "</option>";
 	}
-	html += "<option value='allData'>全部轮播</option>";
 	$("#dep_select").append(html);
-	$("#dep_select").val(deptId)
 }
+
+//更新新的数据
+function refresh() {
+	var value=deptList.data 
+	if (dept_index < value.length) {
+		if (dept_index == value.length - 1) {
+			dept_index = 0;
+		} else {
+			dept_index++;
+		}
+	}
+	
+	//console.log(value[dept_index].ID)
+	$("#dep_select").val(value[dept_index].ID)
+	//console.log($("#dep_select").val())
+}
+
 function getList() {
+	refresh();
 	var class_no = $("#class_select").val();
 	var dep_id=$("#dep_select").val();
 	var date = $("#date").val();

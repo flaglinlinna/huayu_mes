@@ -61,32 +61,31 @@ public class kanbanController extends WebController {
 		String method = "/kanban/toDemo";
 		String methodName = "看板demo";
 		ModelAndView mav = new ModelAndView();
-		// mav.addObject("pname", p);
 		mav.setViewName("/kanban/demo");// 返回路径
 		return mav;
 	}
-
+	
+	//看板apk指向此路径-隐藏了部分看板
 	@RequestMapping(value = "/toIndex", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toIndex() {// 看板apk指向此路径-隐藏了部分看板
+	public ModelAndView toIndex() {
 		String method = "/kanban/toIndex";
 		String methodName = "看板demo";
 		ModelAndView mav = new ModelAndView();
-		// mav.addObject("pname", p);
 		mav.setViewName("/kanban/index_apk");// 返回路径
 		return mav;
 	}
-
+	// 显示所有看板
 	@RequestMapping(value = "/toIndexAll", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toIndexAll() {// 所有看板
+	public ModelAndView toIndexAll() {
 		String method = "/kanban/toIndexAll";
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/kanban/index1");// 返回路径
 		return mav;
 	}
 
-	// 复合看板（多个看板部分数据组装拼接合成
+	//复合看板（多个看板部分数据组装拼接合成
 	@RequestMapping(value = "/toCjdzkb", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView toCjdzkb(String inType,String deptId) {
@@ -94,7 +93,7 @@ public class kanbanController extends WebController {
 		String method = "/kanban/toCjdzkb";
 		String methodName = "车间电子看板";
 		try {
-			ApiResponseResult deptList = kanbanService.getCjbgDepList();
+			ApiResponseResult deptList = kanbanService.getZcblDepList();
 			ApiResponseResult interval = kanbanService.getIntervalTime();
 			ApiResponseResult cjbg_data = kanbanService.getCjbgList("999", deptId, "", this.getIpAddr());
 			ApiResponseResult scdz_data = kanbanService.getScdzList("999", deptId, "", this.getIpAddr());
@@ -105,6 +104,32 @@ public class kanbanController extends WebController {
 			mav.addObject("deptId", deptId);// 部门
 			mav.addObject("inType", inType);// 显示类型
 			mav.setViewName("/kanban/cjdzkb");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("车间电子看板异常！", e);
+			getSysLogService().error(module, method, methodName, e.toString());
+		}
+		return mav;
+	}
+	//内容同上-多个部门轮播
+	@RequestMapping(value = "/toCjdzkbAll", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView toCjdzkbAll(String inType,String deptId) {
+		ModelAndView mav = new ModelAndView();
+		String method = "/kanban/toCjdzkbAll";
+		String methodName = "车间电子看板";
+		try {
+			ApiResponseResult deptList = kanbanService.getZcblDepList();
+			ApiResponseResult interval = kanbanService.getIntervalTime();
+			ApiResponseResult cjbg_data = kanbanService.getCjbgList("999", deptId, "", this.getIpAddr());
+			ApiResponseResult scdz_data = kanbanService.getScdzList("999", deptId, "", this.getIpAddr());
+			mav.addObject("cjbg_data", cjbg_data);// 车间看板数据
+			mav.addObject("scdz_data", scdz_data);// 生产电子数据
+			mav.addObject("deptList", deptList);// 部门列表
+			mav.addObject("interval", interval);// 刷新间隔
+			mav.addObject("deptId", deptId);// 部门
+			mav.addObject("inType", inType);// 显示类型
+			mav.setViewName("/kanban/cjdzkb_all");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("车间电子看板异常！", e);
@@ -149,7 +174,7 @@ public class kanbanController extends WebController {
 		return mav;
 	}
 
-	// （复数看板）轮播页面
+	//（复数看板）轮播页面
 	@RequestMapping(value = "/toCjkbs", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView toCjkbs(String inType) {
@@ -168,7 +193,7 @@ public class kanbanController extends WebController {
 		}
 		return mav;
 	}
-
+	//暂时废弃
 	@RequestMapping(value = "/toLtkbs", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView toLtkbs(String liner, String inType,String deptId) {
@@ -195,7 +220,7 @@ public class kanbanController extends WebController {
 	public ModelAndView toSetLiner(String inType, String pageType,String deptId) {
 		ModelAndView mav = new ModelAndView();
 		String method = "/kanban/toSetLiner";
-		String methodName = "获取组长数据-拉头看板";
+		String methodName = "获取组长数据";
 		try {
 			ApiResponseResult linerList = kanbanService.getLiner(deptId);
 			mav.addObject("linerList", linerList);
@@ -205,7 +230,7 @@ public class kanbanController extends WebController {
 			mav.setViewName("/kanban/setliner");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("获取组长数据-拉头看板异常！", e);
+			logger.error("获取组长数据！", e);
 			getSysLogService().error(module, method, methodName, e.toString());
 		}
 		return mav;
@@ -233,7 +258,6 @@ public class kanbanController extends WebController {
 	
 
 	// 不带参数的默认获取
-
 	@RequestMapping(value = "/toCjbg", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView toCjbg() {
@@ -480,9 +504,9 @@ public class kanbanController extends WebController {
 		}
 		return mav;
 	}
-
+	
+	//更新页面数据调用的方法
 	// --------------getList-------------------
-
 	@ApiOperation(value = "获取车间报工看板信息", notes = "获取车间报工看板信息", hidden = true)
 	@RequestMapping(value = "/getCjbgList", method = RequestMethod.GET)
 	@ResponseBody
@@ -522,7 +546,6 @@ public class kanbanController extends WebController {
 	}
 
 	// 带参数的二次获取
-
 	@ApiOperation(value = "获取制程不良看板信息", notes = "获取制程不良看板信息", hidden = true)
 	@RequestMapping(value = "/getZcblList", method = RequestMethod.GET)
 	@ResponseBody
@@ -690,7 +713,6 @@ public class kanbanController extends WebController {
 		}
 	}
 	// 复合看板（多个看板部分数据组装拼接合成
-
 	/**
 	 * 获取看板数据
 	 */

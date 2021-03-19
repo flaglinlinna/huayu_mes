@@ -55,8 +55,12 @@ li {
 		      var html = '<a href=/kanban/toCjdzkb?deptId='+element.ID+'&inType=apk'+
 		       		'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >'+
 		       		element.LEAD_BY+'</a>'
-		      $("#list").append(html)	
-		    }); 
+		      $("#list").append(html)
+		   }); 
+		//增加部门轮播选项
+		var html = '<a href=/kanban/toCjdzkbAll'+
+   		'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >全部轮播</a>'
+        $("#list").append(html)
 	}else if(pageType=="zzdzkb"){
 		res.data.forEach(function(element) {
 		      var html = '<a href=/kanban/toSetLiner?deptId='+element.ID+'&inType=apk&pageType=zzdzkb'+
