@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -114,21 +115,24 @@ public class kanbanController extends WebController {
 	//内容同上-多个部门轮播
 	@RequestMapping(value = "/toCjdzkbAll", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView toCjdzkbAll(String inType,String deptId) {
+	public ModelAndView toCjdzkbAll() {
 		ModelAndView mav = new ModelAndView();
 		String method = "/kanban/toCjdzkbAll";
 		String methodName = "车间电子看板";
 		try {
 			ApiResponseResult deptList = kanbanService.getZcblDepList();
+			
+			Object deptList1 = kanbanService.getZcblDepList().getData();//取首页部门ID数据
+			List<Map<String, Object>> lm = (List<Map<String, Object>>) deptList1;
+			String tString=lm.get(0).get("ID").toString();
+			
 			ApiResponseResult interval = kanbanService.getIntervalTime();
-			ApiResponseResult cjbg_data = kanbanService.getCjbgList("999", deptId, "", this.getIpAddr());
-			ApiResponseResult scdz_data = kanbanService.getScdzList("999", deptId, "", this.getIpAddr());
+			ApiResponseResult cjbg_data = kanbanService.getCjbgList("999", tString, "", this.getIpAddr());
+			ApiResponseResult scdz_data = kanbanService.getScdzList("999", tString, "", this.getIpAddr());
 			mav.addObject("cjbg_data", cjbg_data);// 车间看板数据
 			mav.addObject("scdz_data", scdz_data);// 生产电子数据
 			mav.addObject("deptList", deptList);// 部门列表
 			mav.addObject("interval", interval);// 刷新间隔
-			mav.addObject("deptId", deptId);// 部门
-			mav.addObject("inType", inType);// 显示类型
 			mav.setViewName("/kanban/cjdzkb_all");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
