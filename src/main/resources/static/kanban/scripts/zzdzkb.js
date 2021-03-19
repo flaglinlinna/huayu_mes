@@ -451,7 +451,7 @@ function getLinerList(linerList) {
 }
 // 刷新制令单
 function getTaskNoList(task) {
-	var deptId = "";
+	//var deptId = "";
 	var liner = nowLiner;
 	var interval = "1";
 	var params = {
@@ -487,7 +487,7 @@ function getList() {
 	var liner = $("#liner_select").val();
 	var params = {
 		"class_nos" : class_no,
-		"dep_id" : "",
+		"dep_id" : deptId,
 		"sdata" : date,
 		"liner" : liner
 	};
