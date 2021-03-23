@@ -21,9 +21,7 @@ $(function() {
 			interval_do = setInterval(getList, intervaldata * 1000); // 重新新循环-启动
 		}
 	});
-	
-
-	//监听库房选择事件
+	//监听部门轮播选择事件
 	$("#dep_select").change(function(){
 		if($("#dep_select").val()=="allData"){
 			window.open("/kanban/toCjdzkbAll");   
@@ -90,7 +88,7 @@ function dealScdzData(kanbanList) {
 
 	} else {
 		getChart2(0, 0, 0)
-		getChart3(0, 0, 0);
+		//getChart3(0, 0, 0);
 		$("#showLine").text("开线数：0");
 		$("#showLine1").text("总线体数：0");
 	}
@@ -644,7 +642,8 @@ function getDepList(deptList) {
 		var arr = res.data[j];
 		html += "<option value='" + arr.ID + "'>" + arr.LEAD_BY + "</option>";
 	}
-	html += "<option value='allData'>全部轮播</option>";
+	html += "<option value='88'>部门汇总</option>";
+	html += "<option value='allData'>部门轮播</option>";
 	$("#dep_select").append(html);
 	$("#dep_select").val(deptId)
 }
