@@ -59,7 +59,7 @@ $(function () {
                 ,{field:'PROD_DATE', title:'生产日期', width:140}
                 ,{field:'CLASS_NAME', title:'班次名称', width:140}
                 ,{field:'FENABLE', title:'是否生效', width:120,align:'center',templet:'#statusTp1'}
-                ,{field:'FENABLE_BY', title:'生效人',width:120, widstatusth:140}
+                ,{field:'FENABLE_BY', title:'生效人',width:120}
                 ,{field:'FENABLE_DATE', title:'生效时间', width:150}
                 ,{field:'CREATE_DATE', title:'创建时间', width:150}
                 ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}

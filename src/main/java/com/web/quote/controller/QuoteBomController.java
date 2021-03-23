@@ -89,6 +89,29 @@ public class QuoteBomController extends WebController {
 		}
 	}
 
+	@ApiOperation(value = "编辑外购件清单信息重审状态", notes = "编辑外购件清单信息", hidden = true)
+	@RequestMapping(value = "/updateRetrial", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult updateRetrial(@RequestBody Map<String, Object> params) {
+		String method = "quoteBom/updateRetrial";
+		String methodName = "编辑外购件清单信息重审状态";
+		long id = Long.parseLong(params.get("id").toString());
+		Integer productRetrial = Integer.parseInt(params.get("productRetrial")==null?"0":params.get("productRetrial").toString());
+		Integer purchaseRetrial = Integer.parseInt(params.get("purchaseRetrial")==null?"0":params.get("purchaseRetrial").toString());
+		Integer outRetrial = Integer.parseInt(params.get("outRetrial")==null?"0":params.get("outRetrial").toString());
+		try {
+			ApiResponseResult result = quoteBomService.updateRetrial(id,productRetrial,purchaseRetrial,outRetrial);
+			logger.debug("编辑外购件清单信息重审状态=edit:");
+			getSysLogService().success(module, method, methodName,"");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("编辑外购件清单信息重审状态失败！", e);
+			getSysLogService().error(module, method, methodName,  e.toString());
+			return ApiResponseResult.failure("编辑外购件清单信息重审状态失败！");
+		}
+	}
+
 
 	@ApiOperation(value = "获取报价BOM清单列表", notes = "获取报价BOM清单列表",hidden = true)
 	@RequestMapping(value = "/getQuoteBomList", method = RequestMethod.GET)

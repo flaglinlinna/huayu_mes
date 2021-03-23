@@ -63,6 +63,10 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 	private SysUserDao sysUserDao;
 	@Autowired
 	private ProdTypDao prodTypDao;
+    @Autowired
+    private ProductMaterDao productMaterDao;
+    @Autowired
+    private ProductProcessDao productProcessDao;
 	/**
      * 新增报价单
      */
@@ -147,6 +151,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         for (QuoteBom o: copyQuoteBomList){
             QuoteBom quoteBom = new QuoteBom();
             BeanUtils.copyProperties(o,quoteBom);
+            quoteBom.setPkBomId(o.getPkBomId()!=null?o.getPkBomId():o.getId());
             quoteBom.setPkQuote(quote.getId());
             quoteBom.setId(null);
             quoteBom.setBsStatus(0);
@@ -190,6 +195,30 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             newQuoteMouldList.add(quoteMould);
         }
         quoteMouldDao.saveAll(newQuoteMouldList);
+
+        //2 复制制造部材料，采购部内容(无需重审条件下自动审批及完成)
+        List<ProductMater> productMaterList = productMaterDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
+        List<ProductMater> newProductMaterList = new ArrayList<>();
+        for(ProductMater o:productMaterList){
+            ProductMater productMater = new ProductMater();
+            BeanUtils.copyProperties(o,productMater);
+            productMater.setId(null);
+            productMater.setPkQuote(quote.getId());
+            productMater.setBsStatus(0);
+            newProductMaterList.add(productMater);
+        }
+        productMaterDao.saveAll(newProductMaterList);
+        List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
+        List<ProductProcess> newProductProcess = new ArrayList<>();
+        for(ProductProcess o:productProcessList){
+            ProductProcess productProcess = new ProductProcess();
+            BeanUtils.copyProperties(o,productProcess);
+            productProcess.setId(null);
+            productProcess.setPkQuote(quote.getId());
+            productProcess.setBsStatus(0);
+            newProductProcess.add(productProcess);
+        }
+        productProcessDao.saveAll(newProductProcess);
         return ApiResponseResult.success("报价单复制成功！");
     }
     /**

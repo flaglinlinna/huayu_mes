@@ -58,7 +58,7 @@ public class SchedulingMain extends BaseEntity {
      */
     @ApiModelProperty(name = "fenableBy", value = "生效人")
     @Column(length = 50)
-    protected String fenableBy;
+    protected Long fenableBy;
 
     /**
      * 生效时间
@@ -116,11 +116,11 @@ public class SchedulingMain extends BaseEntity {
         this.fenable = fenable;
     }
 
-    public String getFenableBy() {
+    public Long getFenableBy() {
         return fenableBy;
     }
 
-    public void setFenableBy(String fenableBy) {
+    public void setFenableBy(Long fenableBy) {
         this.fenableBy = fenableBy;
     }
 

@@ -18,6 +18,8 @@ public interface QuoteBomService {
 	//删除BOM 外购件清单列表
 	public ApiResponseResult deleteQuoteBom(Long id) throws Exception;
 
+	public ApiResponseResult updateRetrial(Long id,Integer productRetrial,Integer purchaseRetrial,Integer outRetrial)throws Exception;
+
 	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception;
 
 	//导入BOM Excel

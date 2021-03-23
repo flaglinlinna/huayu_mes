@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecificationExecutor<QuoteBom>{
@@ -20,4 +21,12 @@ public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecifica
 	public void saveQuoteBomByQuoteId(Long quoteId,Integer bsStatus);
 	
 	public List<QuoteBom> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
+
+	@Query(value = " select c.BS_CODE as bsCode, count(m.PRODUCT_RETRIAL) as RETRIAL from PRICE_QUOTE_BOM  m LEFT JOIN " +
+			" BJ_BASE_WORKCENTER c on c.id = m.PK_BJ_WORK_CENTER  where m.PK_QUOTE = ?1 GROUP BY c.BS_CODE",nativeQuery = true)
+	public List<Map<String, Object>> getRetrial(Long quoteId);
+
+	public List<QuoteBom> findByDelFlagAndOutRetrial(Integer delFlag,Integer retrial);
+
+	public List<QuoteBom> findByDelFlagAndPurchaseRetrial(Integer delFlag,Integer retrial);
 }

@@ -129,6 +129,24 @@ public class QuoteBomlmpl implements QuoteBomService {
 		return ApiResponseResult.success("删除成功！");
 	}
 
+	/**
+	 * 外购件清单列表修改重审状态
+	 * **/
+	public ApiResponseResult updateRetrial(Long id,Integer productRetrial,Integer purchaseRetrial,Integer outRetrial) throws Exception{
+		if(id == null){
+			return ApiResponseResult.failure("外购件信息ID不能为空！");
+		}
+		QuoteBom o  = quoteBomDao.findById((long) id);
+		if(o == null){
+			return ApiResponseResult.failure("外购件信息不存在！");
+		}
+		o.setProductRetrial(productRetrial);
+		o.setPurchaseRetrial(purchaseRetrial);
+		o.setOutRetrial(outRetrial);
+		quoteBomDao.save(o);
+		return ApiResponseResult.success("外购件清单列表修改重审状态重构！");
+	}
+
 	@Override
 	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception {
 //		long startTime=System.currentTimeMillis();   //获取开始时间

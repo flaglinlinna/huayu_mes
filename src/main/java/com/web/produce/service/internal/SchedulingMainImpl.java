@@ -63,7 +63,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
         schedulingMain.setCreateDate(new Date());
         schedulingMain.setCreateBy(currUser!=null ? currUser.getId() : null);
         if(schedulingMain.getFenable() == 1){
-            schedulingMain.setFenableBy(currUser!=null ? currUser.getUserName() : null);
+            schedulingMain.setFenableBy(currUser!=null ? currUser.getId() : null);
             schedulingMain.setFenableDate(new Date());
         }
         schedulingMainDao.save(schedulingMain);
@@ -91,7 +91,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
         o.setClassName(schedulingMain.getClassName());
         o.setFenable(schedulingMain.getFenable());
         if(schedulingMain.getFenable() == 1){
-            o.setFenableBy(currUser!=null ? currUser.getUserName() : null);
+            o.setFenableBy(currUser!=null ? currUser.getId() : null);
             o.setFenableDate(new Date());
         }
         return ApiResponseResult.success("编辑成功！").data(o);
@@ -421,7 +421,7 @@ public class SchedulingMainImpl implements SchedulingMainService {
         o.setLastupdateBy(currUser!=null ? currUser.getId() : null);
         o.setFenable(status);
         if(status == 1){
-            o.setFenableBy(currUser!=null ? currUser.getUserName() : null);
+            o.setFenableBy(currUser!=null ? currUser.getId() : null);
             o.setFenableDate(new Date());
         }
         schedulingMainDao.save(o);

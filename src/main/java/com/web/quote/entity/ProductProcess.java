@@ -253,6 +253,13 @@ public class ProductProcess extends BaseEntity {
 	@Column(length = 100)
 	protected String fileName;
 
+	/**
+	 * 复制的bomId
+	 */
+	@ApiModelProperty(name = "pkBomId", value = "复制的bomId")
+	@Column(length = 20)
+	protected Long pkBomId;
+
 	public Long getPkQuote() {
 		return pkQuote;
 	}
@@ -501,5 +508,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public Long getPkBomId() {
+		return pkBomId;
+	}
+
+	public void setPkBomId(Long pkBomId) {
+		this.pkBomId = pkBomId;
 	}
 }

@@ -394,55 +394,66 @@ public class CheckImpl   implements CheckService {
 					}
 					quoteItemDao.saveAll(lqi);
 					//2.2根据工作中心下发BOM-材料
+					//先判断是否为复制单，复制单情况更新，非复制单新增
 					List<QuoteBom> lql = quoteBomDao.findByDelFlagAndPkQuote(0, c.getBsRecordId());
-					if(lql.size() > 0){
-						List<ProductMater> lpm = new ArrayList<ProductMater>();
-						for(QuoteBom qb:lql){
-							ProductMater pm = new ProductMater();
-							pm.setBsType(qb.getWc().getBsCode());//类型
-							pm.setBsComponent(qb.getBsComponent());
-							pm.setBsMaterName(qb.getBsMaterName());
-							pm.setBsModel(qb.getBsModel());
-							pm.setBsQty(qb.getBsQty());
-							pm.setPkUnit(qb.getPkUnit());
-							if(qb.getUnit()!=null){
-								pm.setBsUnit(qb.getUnit().getUnitName()); //hjj-20210120-补充单位名称
-							}
-							pm.setPurchaseUnit(qb.getPurchaseUnit());
-							pm.setBsAgent(qb.getBsAgent());
+					if (lql.size() > 0) {
+							List<ProductMater> lpm = new ArrayList<ProductMater>();
+							for (QuoteBom qb : lql) {
+								ProductMater pm = new ProductMater();
+								if (qb.getPkBomId() != null) {
+									List<ProductMater> productMaterList = productMaterDao.findByPkQuoteAndPkBomId(quote.getId(), qb.getPkBomId());
+									if (productMaterList.size() > 0) {
+										pm = productMaterList.get(0);
+									}
+								}
+								pm.setBsType(qb.getWc().getBsCode());//类型
+								pm.setBsComponent(qb.getBsComponent());
+								pm.setBsMaterName(qb.getBsMaterName());
+								pm.setBsModel(qb.getBsModel());
+								pm.setPkBomId(quote.getBsCopyId()==null?qb.getId():qb.getPkBomId());
+								pm.setBsQty(qb.getBsQty());
+								pm.setRetrial(qb.getProductRetrial());
+								pm.setPkUnit(qb.getPkUnit());
+								if (qb.getUnit() != null) {
+									pm.setBsUnit(qb.getUnit().getUnitName()); //hjj-20210120-补充单位名称
+								}
+								pm.setPurchaseUnit(qb.getPurchaseUnit());
+								pm.setBsAgent(qb.getBsAgent());
 //							pm.setBsGeneral();
 //							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
 //							pm.setBsWaterGap(qb.getBsWaterGap()); hjj-20210220 去掉水口和穴数，
-							if((qb.getBsAgent()==1)){
-								//客户代采的评估价格为0
-								pm.setBsAssess(BigDecimal.ZERO);
-								pm.setBsGeneral(0);
-							}else {
-								//hjj-20210122 不是代采,先查询物料通用价格
-								List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(qb.getBsMaterName());
-								if(lm.size()>0){
-									String priceUn = lm.get(0).get("PRICE_UN").toString();
-									String rangePrice = lm.get(0).get("RANGE_PRICE").toString();
-									if(StringUtils.isNotEmpty(priceUn)){
-										pm.setBsGear(rangePrice);
-										pm.setBsRefer(new BigDecimal(priceUn));
-										pm.setBsAssess(new BigDecimal(priceUn));
-										pm.setBsGeneral(1);
-									}
-								}else {
+								if ((qb.getBsAgent() == 1)) {
+									//客户代采的评估价格为0
+									pm.setBsAssess(BigDecimal.ZERO);
 									pm.setBsGeneral(0);
+								} else {
+									//hjj-20210122 不是代采,先查询物料通用价格
+									List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(qb.getBsMaterName());
+									if (lm.size() > 0) {
+										String priceUn = lm.get(0).get("PRICE_UN").toString();
+										String rangePrice = lm.get(0).get("RANGE_PRICE").toString();
+										if (StringUtils.isNotEmpty(priceUn)) {
+											pm.setBsGear(rangePrice);
+											pm.setBsRefer(new BigDecimal(priceUn));
+											pm.setBsAssess(new BigDecimal(priceUn));
+											pm.setBsGeneral(1);
+										}
+									} else {
+										pm.setBsGeneral(0);
+									}
 								}
+								pm.setBsRadix(qb.getBsRadix());
+								pm.setBsExplain(qb.getBsExplain());//lst-20210107-增采购说明字段
+								pm.setBsProQty(qb.getBsProQty());
+								pm.setPkQuote(c.getBsRecordId());
+								pm.setPkItemTypeWg(qb.getPkItemTypeWg());//fyx-20210114-物料类型
+								pm.setBsElement(qb.getBsElement());//fyx-20210115-组件名称
+								lpm.add(pm);
 							}
-							pm.setBsRadix(qb.getBsRadix());
-							pm.setBsExplain(qb.getBsExplain());//lst-20210107-增采购说明字段
-							pm.setBsProQty(qb.getBsProQty());
-							pm.setPkQuote(c.getBsRecordId());
-							pm.setPkItemTypeWg(qb.getPkItemTypeWg());//fyx-20210114-物料类型
-							pm.setBsElement(qb.getBsElement());//fyx-20210115-组件名称
-							lpm.add(pm);
+							productMaterDao.saveAll(lpm);
 						}
-						productMaterDao.saveAll(lpm);
-					}
+
+
 					//2.3根据工作中心下发BOM-工序
 					List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuote(0, c.getBsRecordId());
 					if(lpd.size() > 0){
@@ -454,6 +465,7 @@ public class CheckImpl   implements CheckService {
 							pp.setBsType(qb.getProc().getBjWorkCenter().getBsCode());//类型
 							pp.setBsOrder(qb.getBsOrder());
 							pp.setPkProc(qb.getPkProc());
+							pp.setPkBomId(qb.getPkQuoteBom());
 							pp.setPkQuote(c.getBsRecordId());
 							pp.setBsFeeMh(qb.getBsFeeMh());
 							pp.setBsFeeLh(qb.getBsFeeLh());
@@ -461,7 +473,8 @@ public class CheckImpl   implements CheckService {
 						}
 						productProcessDao.saveAll(lpp);
 					}
-					//2021-03-09-hjj- 制造部和外协自动确认完成
+
+					//2021-03-09-hjj- 制造部和外协自动确认完成及自动审批
 					List<SysParam> sysParams = sysParamDao.findByDelFlagAndParamCode(0, "BJ_AUTO_COMPLETE");
 					String isAuto =  sysParams.size()>0?sysParams.get(0).getParamValue():"0";
 					if(("1").equals(isAuto)||("是").equals(isAuto)){
@@ -738,14 +751,25 @@ public class CheckImpl   implements CheckService {
 	public void autoDoStatus(Long quoteId)throws  Exception{
 		List<Map<String,Object>> mapList = quoteProcessDao.countByBsType(quoteId);
 		List<Map<String,Object>> materList = productMaterDao.countByBsType(quoteId);
+		List<Map<String,Object>> retrialList = quoteBomDao.getRetrial(quoteId);
 		List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
+		//判断是否为复制单审批
+		Boolean isCopy = false;
+		if(lo.size()>0){
+			Quote o = lo.get(0);
+			isCopy = (o.getBsCopyId()!=null);
+		}
 		HashMap hashMap = new HashMap();
 		HashMap materMap = new HashMap();
+		HashMap retrialMap = new HashMap();
 		for(Map map :mapList){
-			hashMap.put(map.get("TYPE"),map.get("num"));
+			hashMap.put(map.get("TYPE"),map.get("NUM"));
 		}
 		for(Map map : materList){
-			materMap.put(map.get("TYPE"),map.get("num"));
+			materMap.put(map.get("TYPE"),map.get("NUM"));
+		}
+		for(Map map : retrialList){
+			retrialMap.put(map.get("BSCODE"),map.get("RETRIAL"));
 		}
 		//项目状态设置-状态 2：已完成
 		//增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
@@ -765,8 +789,8 @@ public class CheckImpl   implements CheckService {
 			quoteItemDao.switchStatus(2, quoteId, "C002");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
 		}
-		//外协为工艺
-		if(!hashMap.containsKey("out")){
+		//外协为工艺  1.无外协的，2.外协不需要重审 自动完成及审批
+		if(!hashMap.containsKey("out")||quoteBomDao.findByDelFlagAndOutRetrial(0,1).size()<0){
 			if(lo.size()>0){
 				Quote o = lo.get(0);
 				o.setBsStatus2Out(2);
@@ -774,6 +798,10 @@ public class CheckImpl   implements CheckService {
 			}
 			autoCheck(quoteId,"out");
 		}
+
+//		if(quoteBomDao.findByDelFlagAndPurchaseRetrial(0,1).size()<0){
+//
+//		}
 
 		//材料自动完成
 		if(!materMap.containsKey("hardware")){
@@ -790,8 +818,17 @@ public class CheckImpl   implements CheckService {
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B002");
 		}
 
-		//材料和工艺自动完成情况下则自动审批
-		if(!materMap.containsKey("hardware")&&!hashMap.containsKey("hardware")){
+		//材料和工艺自动完成情况下(即是该工作中心下无需填写的数据)则自动审批
+		if((!materMap.containsKey("hardware")&&!hashMap.containsKey("hardware"))||(!("0").equals(retrialMap.get("hardware"))&&isCopy)){
+			quoteItemDao.switchStatus(2, quoteId, "C001");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
+			quoteItemDao.switchStatus(2, quoteId, "B001");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B001");
+			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"hardware",1);
+			for(ProductMater o : productMaterList) {
+				o.setBsStatus(1);
+			}
+			productMaterDao.saveAll(productMaterList);
 			autoCheck(quoteId,"hardware");
 			if(lo.size()>0){
 				Quote o = lo.get(0);
@@ -799,7 +836,16 @@ public class CheckImpl   implements CheckService {
 				quoteDao.save(o);
 			}
 		}
-		if(!materMap.containsKey("surface")&&!hashMap.containsKey("surface")){
+		if((!materMap.containsKey("surface")&&!hashMap.containsKey("surface"))||(!("0").equals(retrialMap.get("surface"))&&isCopy)){
+			quoteItemDao.switchStatus(2, quoteId, "B003");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B003");
+			quoteItemDao.switchStatus(2, quoteId, "C003");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
+			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"surface",1);
+			for(ProductMater o : productMaterList) {
+				o.setBsStatus(1);
+			}
+			productMaterDao.saveAll(productMaterList);
 			if(lo.size()>0){
 				Quote o = lo.get(0);
 				o.setBsStatus2Surface(2);
@@ -807,7 +853,16 @@ public class CheckImpl   implements CheckService {
 			}
 			autoCheck(quoteId,"surface");
 		}
-		if(!materMap.containsKey("packag")&&!hashMap.containsKey("packag")){
+		if((!materMap.containsKey("packag")&&!hashMap.containsKey("packag"))||(!("0").equals(retrialMap.get("packag"))&isCopy)){
+			quoteItemDao.switchStatus(2, quoteId, "B004");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B004");
+			quoteItemDao.switchStatus(2, quoteId, "C004");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
+			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"packag",1);
+			for(ProductMater o : productMaterList) {
+				o.setBsStatus(1);
+			}
+			productMaterDao.saveAll(productMaterList);
 			if(lo.size()>0){
 				Quote o = lo.get(0);
 				o.setBsStatus2Packag(2);
@@ -815,7 +870,16 @@ public class CheckImpl   implements CheckService {
 			}
 			autoCheck(quoteId,"packag");
 		}
-		if(!materMap.containsKey("molding")&&!hashMap.containsKey("molding")){
+		if((!materMap.containsKey("molding")&&!hashMap.containsKey("molding"))||(!("0").equals(retrialMap.get("molding"))&&isCopy)){
+			quoteItemDao.switchStatus(2, quoteId, "B002");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B002");
+			quoteItemDao.switchStatus(2, quoteId, "C002");
+			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
+			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"molding",1);
+			for(ProductMater o : productMaterList) {
+				o.setBsStatus(1);
+			}
+			productMaterDao.saveAll(productMaterList);
 			if(lo.size()>0){
 				Quote o = lo.get(0);
 				o.setBsStatus2Molding(2);
