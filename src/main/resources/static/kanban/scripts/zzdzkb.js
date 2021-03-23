@@ -80,7 +80,7 @@ function dealXlpmData(kanbanList) {
 
 			var liner = kanbanData_t[0].FLINER;// 组长
 			var rownum = kanbanData_t[0].FROWNUM == null ? "无" : kanbanData_t[0].FROWNUM;// 排名
-			//var onlineEmp = kanbanData_t[0].NUM_EMP_ON == null ? "0" : kanbanData_t[0].NUM_EMP_ON;// 在线人数
+			var onlineEmp = kanbanData_t[0].NUM_EMP_ON == null ? "0" : kanbanData_t[0].NUM_EMP_ON;// 在线人数
 			var card_ass = kanbanData_t[0].NUM_CARD_ASS == null ? "0" : kanbanData_t[0].NUM_CARD_ASS;// 排名
 			var card_unass = kanbanData_t[0].NUM_CARD_UNASS == null ? "0" : kanbanData_t[0].NUM_CARD_UNASS;// 在线人数
 			$("#liner").text(liner)
@@ -382,7 +382,14 @@ function setCxscTable(kanbanData) {
 	var html = "";
 	for (var j = 0; j < kanbanData.length; j++) {
 		var arr = kanbanData[j];
-		html += '<tr><td>' + arr.FTIME + '</td><td>' + arr.QTY_NPT + '</td><td>' + arr.QTY_DONE + '</td><td>' + arr.QTY_OK + '</td><td>' + arr.QTY_NG + '</td></tr> ';
+		
+		var style = "";
+		if (arr.QTY_NG > 0) {
+			style = "style='color:#CC0033'";
+		}
+		
+		html += '<tr><td>' + arr.FTIME + '</td><td>' + arr.QTY_NPT + '</td><td>' + arr.QTY_DONE +
+		'</td><td>' + arr.QTY_OK + '</td><td ' + style + '>' + arr.QTY_NG + '</td></tr> ';
 		if (j == kanbanData.length - 1) {
 			html += '<tr height=25></tr>'
 		}

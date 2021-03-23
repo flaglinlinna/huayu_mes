@@ -57,9 +57,13 @@ li {
 		       		element.LEAD_BY+'</a>'
 		      $("#list").append(html)
 		   }); 
+		//增加部门汇总选项
+		var html = '<a href=/kanban/toCjdzkb?deptId=88&inType=apk'+
+   		'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >部门汇总</a>'
+        $("#list").append(html)
 		//增加部门轮播选项
 		var html = '<a href=/kanban/toCjdzkbAll'+
-   		'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >全部轮播</a>'
+   		'  data-role="button" target="_blank" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child ui-last-child" role="button" >部门轮播</a>'
         $("#list").append(html)
 	}else if(pageType=="zzdzkb"){
 		res.data.forEach(function(element) {
