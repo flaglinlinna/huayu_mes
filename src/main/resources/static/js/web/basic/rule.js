@@ -516,10 +516,10 @@ function openBarcodeRule(id, title,item_id) {
 		$("#id").val("");
 		$('#itemId').attr('disabled',false);
 		$('#itemId').css('background','');
-		// style="background: #efefef;"
+		// style="background: #bfbfbf;"
 	}else {
 		$('#itemId').attr('disabled','disabled');
-		$('#itemId').css('background'," #efefef");
+		$('#itemId').css('background'," #bfbfbf");
 	}
 	// getMtrial(item_id);
 	var index=layer.open({

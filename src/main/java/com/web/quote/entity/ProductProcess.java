@@ -82,11 +82,11 @@ public class ProductProcess extends BaseEntity {
 	@Column(length = 500)
 	protected String bsName;
 	 /**
-		 * 组件名称
-		 */
-		@ApiModelProperty(name = "bsElement", value = "组件名称")
-		@Column(length = 500)
-		protected String bsElement;
+	 * 组件名称
+	 */
+	@ApiModelProperty(name = "bsElement", value = "组件名称")
+	@Column(length = 500)
+	protected String bsElement;
     
     /**
      * 关联工序表
@@ -259,6 +259,22 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "pkBomId", value = "复制的bomId")
 	@Column(length = 20)
 	protected Long pkBomId;
+
+	/**
+	 * * 2021-03-18 hjj 修改损耗计算方式
+	 * 成本 bsCost
+	 */
+	@ApiModelProperty(name = "bsCost", value = "成本")
+	@Column( precision=21, scale=5)
+	protected BigDecimal bsCost;
+
+	@ApiModelProperty(name = "bsTheLoss", value = "本工序损耗")
+	@Column( precision=21, scale=5)
+	protected BigDecimal bsTheLoss;
+
+	@ApiModelProperty(name = "bsAllLoss", value = "成本累计(含损耗)")
+	@Column( precision=21, scale=5)
+	protected BigDecimal bsAllLoss;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -516,5 +532,29 @@ public class ProductProcess extends BaseEntity {
 
 	public void setPkBomId(Long pkBomId) {
 		this.pkBomId = pkBomId;
+	}
+
+	public BigDecimal getBsCost() {
+		return bsCost;
+	}
+
+	public void setBsCost(BigDecimal bsCost) {
+		this.bsCost = bsCost;
+	}
+
+	public BigDecimal getBsTheLoss() {
+		return bsTheLoss;
+	}
+
+	public void setBsTheLoss(BigDecimal bsTheLoss) {
+		this.bsTheLoss = bsTheLoss;
+	}
+
+	public BigDecimal getBsAllLoss() {
+		return bsAllLoss;
+	}
+
+	public void setBsAllLoss(BigDecimal bsAllLoss) {
+		this.bsAllLoss = bsAllLoss;
 	}
 }

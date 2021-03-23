@@ -418,7 +418,7 @@ function openDefect(id, title) {
 		$('#bsFlowCode').css("background","");
 	}else {
 		$('#bsFlowCode').attr("readonly","readonly");
-		$('#bsFlowCode').css("background","#efefef");
+		$('#bsFlowCode').css("background","#bfbfbf");
 	}
 	var index=layer.open({
 		type : 1,

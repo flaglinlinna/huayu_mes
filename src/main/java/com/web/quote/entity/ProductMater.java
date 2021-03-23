@@ -250,6 +250,13 @@ public class ProductMater extends BaseEntity {
 	@Column(length = 20)
 	protected Long pkBomId;
 
+	/**
+	 * 工序良率(%)
+	 */
+	@ApiModelProperty(name = "bsYield", value = "工序良率(%)")
+	@Column(length = 50)
+	protected BigDecimal bsYield=BigDecimal.ZERO;
+
 
 	/**
 	 * 
@@ -517,5 +524,13 @@ public class ProductMater extends BaseEntity {
 
 	public void setPkBomId(Long pkBomId) {
 		this.pkBomId = pkBomId;
+	}
+
+	public BigDecimal getBsYield() {
+		return bsYield;
+	}
+
+	public void setBsYield(BigDecimal bsYield) {
+		this.bsYield = bsYield;
 	}
 }

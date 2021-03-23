@@ -99,6 +99,7 @@ $(function() {
 							{type :'numbers'},
 						{field : 'id', title : 'id', width : 0,hide:true},
 							{field : 'WS_SECTION', title : '工段', width : 70},
+							{field : 'FMEMO', title : '备注', width : 120},
 							{field : 'LINER_NAME', title : '组长', width : 70,sort: true},
 							{field : 'PROD_DATE', title : '计划日期', width : 100,
 								templet:function (d) {
@@ -109,7 +110,6 @@ $(function() {
 							},
 							 {field : 'ITEM_NO', title : '物料编码', width : 170,sort: true},
 							{field : 'ITEM_NAME', title : '物料描述', width : 240,sort: true},
-							{field : 'FMEMO', title : '备注', width : 120},
 							{field : 'QTY_PLAN', title : '制单数量', width : 95,sort: true},
 							{field : 'OTPT_QTY', title : '产出数量', width : 95,sort: true},
 							{field : 'ORDER_RATE', title : '达成率', width : 85,sort: true} ,
@@ -165,7 +165,7 @@ $(function() {
 								method : 'get',
 								cols : [ [
 								{ type: 'checkbox' },//多选  radio
-								, {
+								 {
 									field : 'ID',
 									title : 'id',
 									width : 10,hide:true
