@@ -96,11 +96,11 @@ public class QuoteBomController extends WebController {
 		String method = "quoteBom/updateRetrial";
 		String methodName = "编辑外购件清单信息重审状态";
 		long id = Long.parseLong(params.get("id").toString());
-		Integer productRetrial = Integer.parseInt(params.get("productRetrial")==null?"0":params.get("productRetrial").toString());
-		Integer purchaseRetrial = Integer.parseInt(params.get("purchaseRetrial")==null?"0":params.get("purchaseRetrial").toString());
-		Integer outRetrial = Integer.parseInt(params.get("outRetrial")==null?"0":params.get("outRetrial").toString());
+		String type = params.get("type").toString();
+//		Integer purchaseRetrial = Integer.parseInt(params.get("purchaseRetrial")==null?"0":params.get("purchaseRetrial").toString());
+		Integer value = Integer.parseInt(params.get("value")==null?"0":params.get("outRetrial").toString());
 		try {
-			ApiResponseResult result = quoteBomService.updateRetrial(id,productRetrial,purchaseRetrial,outRetrial);
+			ApiResponseResult result = quoteBomService.updateRetrial(id,type,value);
 			logger.debug("编辑外购件清单信息重审状态=edit:");
 			getSysLogService().success(module, method, methodName,"");
 			return result;

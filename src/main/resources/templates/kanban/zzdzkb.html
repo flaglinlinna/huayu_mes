@@ -457,8 +457,13 @@ $(document).ready(function(){
     	//}
     	$("#inSearch").hide();//默认不显示
     </script>
-		<script src="/kanban/scripts/zzdzkb.js"
-			th:src="@{/kanban/scripts/zzdzkb.js}"></script>
+<!--		<script src="/kanban/scripts/zzdzkb.js"-->
+<!--			th:src="@{/kanban/scripts/zzdzkb.js}"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/kanban/scripts/zzdzkb.js?ver="+Math.random()+"'><\/script>");
+		</script>
 
 	</div>
 </body>

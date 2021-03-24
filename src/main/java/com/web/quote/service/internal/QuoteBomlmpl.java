@@ -132,7 +132,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 	/**
 	 * 外购件清单列表修改重审状态
 	 * **/
-	public ApiResponseResult updateRetrial(Long id,Integer productRetrial,Integer purchaseRetrial,Integer outRetrial) throws Exception{
+	public ApiResponseResult updateRetrial(Long id,String type,Integer value) throws Exception{
 		if(id == null){
 			return ApiResponseResult.failure("外购件信息ID不能为空！");
 		}
@@ -140,11 +140,18 @@ public class QuoteBomlmpl implements QuoteBomService {
 		if(o == null){
 			return ApiResponseResult.failure("外购件信息不存在！");
 		}
-		o.setProductRetrial(productRetrial);
-		o.setPurchaseRetrial(purchaseRetrial);
-		o.setOutRetrial(outRetrial);
+		if(("productRetrial").equals(type)){
+			o.setProductRetrial(value);
+		}
+		if(("purchaseRetrial").equals(type)){
+			o.setPurchaseRetrial(value);
+		}
+		if(("outRetrial").equals(type)){
+			o.setOutRetrial(value);
+		}
+
 		quoteBomDao.save(o);
-		return ApiResponseResult.success("外购件清单列表修改重审状态重构！");
+		return ApiResponseResult.success("外购件清单列表修改重审状态成功！");
 	}
 
 	@Override

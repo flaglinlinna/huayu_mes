@@ -290,7 +290,7 @@ function openUser(id,title){
         $("#userCode").css("background","");
     }else {
         $("#userCode").attr("readonly","readonly");
-        $("#userCode").css("background","#bfbfbf");
+        $("#userCode").css("background","#d7d7d7");
     }
     var index =layer.open({
         type:1,

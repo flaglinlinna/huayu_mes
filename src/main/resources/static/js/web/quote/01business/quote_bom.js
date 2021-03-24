@@ -234,9 +234,9 @@ $(function() {
 							// {field : 'bsWaterGap',title : '水口重(g)',width : 90},
 							// {field : 'bsCave',title : '穴数',width : 80},
 							{field : 'purchaseUnit',title : '采购单位',width : 80,style : 'background-color:#ffffff'},
-							{field : 'productRetrial',title : '制造评估重审',templet : '#selectRetrial',width : 120,style : 'background-color:#ffffff'},
-							{field : 'purchaseRetrial',title : '采购重申',templet : '#selectRetrial',width : 120,style : 'background-color:#ffffff'},
-							{field : 'outRetrial',title : '外协重审',templet : '#selectRetrial',width : 120,style : 'background-color:#ffffff'},
+							{field : 'productRetrial',title : '制造评估重审',templet : '#statusTpl',width : 120,style : 'background-color:#ffffff'},
+							{field : 'purchaseRetrial',title : '采购重申',templet : '#statusTpl1',width : 120,style : 'background-color:#ffffff'},
+							{field : 'outRetrial',title : '外协重审',templet : '#statusTpl2',width : 120,style : 'background-color:#ffffff'},
 							{field : 'fmemo',title : '工艺说明',width : 200,style : 'background-color:#ffffff'},
 							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
 							] ],
@@ -249,7 +249,7 @@ $(function() {
 								// console.log(curr);
 								// 得到数据总量
 								// console.log(count);
-								form.render('select');
+								// form.render('select');
 								pageCurr = curr;
 							}
 						});
@@ -273,6 +273,12 @@ $(function() {
 							// console.log(Guid,selectValue);
 							// updateRetrial(id,product,purchase,out);
 						})
+
+						form.on('switch()', function(obj) {
+							// console.log(this.name);
+							var checked = obj.elem.checked ? "0" : "1";
+							updateRetrial(this.value, this.name, checked);
+						});
 
 						tableIns1 = table1.render({
 							elem : '#uploadList',
@@ -359,10 +365,7 @@ $(function() {
 							}
 						});
 
-						// 监听在职操作
-						form.on('switch(isStatusTpl)', function(obj) {
-							setStatus(obj, this.value, this.name, obj.elem.checked);
-						});
+
 						// 监听工具条
 						table.on('tool(quoteBomTable)', function(obj) {
 							var data = obj.data;
@@ -483,12 +486,12 @@ function exportExcel() {
 	location.href = context + "/quoteBom/exportExcel?pkQuote=" + quoteId;
 }
 
-function updateRetrial(id,productRetrial,purchaseRetrial,outRetrial){
+function updateRetrial(id,type,value){
 	var params = {
 		"id" : id,
-		"productRetrial":productRetrial,
-		"purchaseRetrial":purchaseRetrial,
-		"outRetrial":outRetrial,
+		"type":type,
+		"value":value,
+		// "outRetrial":outRetrial,
 	};
 	CoreUtil.sendAjax("/quoteBom/updateRetrial", JSON.stringify(params), function(data) {
 		if (data.result) {

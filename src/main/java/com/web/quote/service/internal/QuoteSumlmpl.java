@@ -538,7 +538,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			//成本 = 人工制费 + 制造费用 + 材料费用
 			if(o.getBsType().equals("out")){
 				o.setBsCost(o.getBsLossTheLh());
-				o.setBsYield(BigDecimal.ONE.subtract(o.getBsLoss()));
+				o.setBsYield(new BigDecimal("100").subtract(o.getBsLoss()));
 			}else {
 				o.setBsCost(o.getBsFeeLhAll().add(o.getBsFeeMhAll()));
 			}

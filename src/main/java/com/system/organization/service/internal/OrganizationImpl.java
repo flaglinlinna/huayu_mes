@@ -72,6 +72,9 @@ public class OrganizationImpl implements OrganizationService {
 			if(organizationDao.countByLeadByAndDelFlag(perm.getLeadBy(),0)>0){
 				return ApiResponseResult.failure("负责人已存在，请重新选择负责人");
 			}
+			if(organizationDao.countByOrgCodeAndDelFlag(perm.getOrgCode(),0)>0){
+				return ApiResponseResult.failure("组织编码已存在，请重新输入组织编码");
+			}
 			organizationDao.save(perm);
 		}else{
 			//修改
@@ -80,6 +83,11 @@ public class OrganizationImpl implements OrganizationService {
 			if(!s.getLeadBy().equals(perm.getLeadBy())){
 				if(organizationDao.countByLeadByAndDelFlag(perm.getLeadBy(),0)>0){
 					return ApiResponseResult.failure("负责人已存在，请重新选择负责人");
+				}
+			}
+			if(!s.getOrgCode().equals(perm.getOrgCode())){
+				if(organizationDao.countByOrgCodeAndDelFlag(perm.getOrgCode(),0)>0){
+					return ApiResponseResult.failure("组织编码已存在，请重新输入组织编码");
 				}
 			}
 			s.setOrgCode(perm.getOrgCode());
