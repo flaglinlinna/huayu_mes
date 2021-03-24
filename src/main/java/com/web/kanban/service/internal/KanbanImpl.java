@@ -24,8 +24,13 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 
 	@Override
 	public ApiResponseResult getCjbgList(String class_no, String dep_id, String sdata, String dev_ip) throws Exception {
+		String usr_id = "1";
+		SysUser su = UserUtil.getSessionUser();
+		if(su != null){
+			usr_id = su.getId()+"";
+		}
 		// TODO Auto-generated method stub
-		List<Object> list = getCjbgListPrc("","","",class_no,  dep_id,  sdata,  dev_ip);
+		List<Object> list = getCjbgListPrc("","",usr_id,class_no,  dep_id,  sdata,  dev_ip);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}

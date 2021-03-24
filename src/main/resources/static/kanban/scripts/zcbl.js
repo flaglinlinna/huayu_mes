@@ -60,6 +60,9 @@ function setTable(kanbanData) {
 				+ '</td><td>' + arr.KJ1_RATE + '</td><td>' + arr.KJ2_SJ
 				+ '</td><td>' + arr.KJ2_OK + '</td><td>' + arr.KJ2_NG
 				+ '</td><td>' + arr.KJ2_RATE + '</td></tr>';
+		if (j == kanbanData.length - 1) {
+			html += '<tr height=29></tr>'
+		}
 	}
 	$("#tableList").empty();
 	$("#tableList").append(html);
@@ -79,7 +82,7 @@ function setTable(kanbanData) {
 				$('.tbl-body tbody').html() + $('.tbl-body tbody').html());
 		$('.tbl-body').css('top', '0');
 		var tblTop = 0;
-		var speedhq = 50; // 数值越大越慢
+		var speedhq = 60; // 数值越大越慢
 		var outerHeight = $('.tbl-body tbody').find("tr").outerHeight();
 		function Marqueehq() {
 			if (tblTop <= -outerHeight * item) {
@@ -109,11 +112,11 @@ function getDepList(deptList) {
 
 }
 function getList() {
-	var class_no = $("#class_select").val();
+	//var class_no = $("#class_select").val();
 	// var dep_id=$("#dep_select").val();
 	var date = $("#date").val();
 	var params = {
-		"class_nos" : class_no,
+		"class_nos" : "999",
 		"dep_id" : "",
 		"sdata" : date
 	};

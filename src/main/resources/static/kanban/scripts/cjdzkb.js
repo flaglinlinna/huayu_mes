@@ -90,12 +90,12 @@ function dealScdzData(kanbanList) {
 		}
 		//getChart3(done, plan, doneRate);
 		
-
 		$("#showLine").text("开线数：" + kanbanList.data.LINE_NUM_NOW);
 		$("#showLine1").text("总线体数：" + kanbanList.data.LINE_NUM_PLN);
 
 	} else {
 		getChart2(0, 0, 0)
+		chartScdzDiv([], 0, 0, 0,0);
 		//getChart3(0, 0, 0);
 		$("#showLine").text("开线数：0");
 		$("#showLine1").text("总线体数：0");
@@ -182,6 +182,7 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 			},
 			axisLabel : {
 				show : true,
+				interval:0,
 				textStyle : {
 					color : '#ffffff',
 					fontSize:fontSize(0.23),
@@ -421,6 +422,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			},
 			axisLabel : {
 				show : true,
+				interval:0,
 				textStyle : {
 					color : '#ffffff',
 					fontSize:fontSize(0.23)
@@ -577,6 +579,7 @@ function getChart3(done, plan, doneRate) {
 			},
 			axisLabel : {
 				show : true,
+				interval:0,
 				textStyle : {
 					color : '#ffffff'
 				}
@@ -656,7 +659,7 @@ function getDepList(deptList) {
 	$("#dep_select").val(deptId)
 }
 function getList() {
-	var class_no = $("#class_select").val();
+	var class_no = "999";
 	var dep_id=$("#dep_select").val();
 	var date = $("#date").val();
 	var params = {

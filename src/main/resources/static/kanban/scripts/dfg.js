@@ -52,6 +52,9 @@ function setTable(kanbanData) {
 				+ '</td><td>' + arr.DEPT_NAME + '</td><td>' + arr.LINER_NAME
 				+ '</td><td>' + arr.DEFECT_NAME + '</td><td>' + arr.FQTY
 				+ '</td></tr>';
+		if (j == kanbanData.length - 1) {
+			html += '<tr height=29></tr>'
+		}
 	}
 	// console.log(html)
 	$("#tableList").empty();
@@ -67,7 +70,7 @@ function setTable(kanbanData) {
 	var item = $('.tbl-body tbody tr').length
 	console.log(item)
 
-	if (item > 4) {
+	if (item > 15) {
 		$('.tbl-body tbody').html(
 				$('.tbl-body tbody').html() + $('.tbl-body tbody').html());
 		$('.tbl-body').css('top', '0');
@@ -102,11 +105,11 @@ function getDepList(deptList) {
 	$("#dep_select").append(html);
 }
 function getList() {
-	var class_no = $("#class_select").val();
+	//var class_no = $("#class_select").val();
 	// var dep_id=$("#dep_select").val();
 	var date = $("#date").val();
 	var params = {
-		"class_id" : class_no,
+		"class_id" : "999",
 		"dep_id" : "",
 		"sdata" : date
 	};
