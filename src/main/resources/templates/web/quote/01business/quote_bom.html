@@ -5,13 +5,30 @@
 <meta charset="UTF-8">
 </head>
 <style>
-	.layui-table-cell, .layui-table-tool-panel li {
-		overflow: visible !important;
-	}
 
-	.layui-form-select .layui-input {
-		height: 30px;
-	}
+
+	/*.layui-table-body, .layui-table-box, .layui-table-cell{*/
+	/*	overflow: visible;*/
+	/*}*/
+		/*设置下拉框高度和表格单元格相同*/
+	/*td .layui-form-select{*/
+	/*	!*margin-top:-10px;*!*/
+	/*	margin-left:-15px;*/
+	/*	margin-right:-15px;*/
+	/*}*/
+	/*.layui-table-cell, .layui-table-tool-panel li {*/
+	/*	overflow: visible !important;*/
+	/*}*/
+	/*.layui-table-cell{*/
+	/*	overflow:visible;*/
+	/*}*/
+	/*.layui-table-box{*/
+	/*	overflow:visible;*/
+	/*}*/
+	/*.layui-table-body{*/
+	/*	overflow:visible;*/
+	/*}*/
+
 </style>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -66,6 +83,31 @@
 				<option value="1">是</option>
 			</select>
 		</script>
+
+		<script type="text/html" id="statusTpl">
+			{{#  if(d.productRetrial){ }}
+			<input type="checkbox" name="productRetrial" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="isStatusTpl" checked="checked" />
+			{{#  } else { }}
+			<input type="checkbox" name="productRetrial" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="isStatusTpl"/>
+			{{#  } }}
+		</script>
+
+		<script type="text/html" id="statusTpl1">
+			{{#  if(d.purchaseRetrial){ }}
+			<input type="checkbox" name="purchaseRetrial" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="isStatusTpl1" checked="checked" />
+			{{#  } else { }}
+			<input type="checkbox" name="purchaseRetrial" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="isStatusTpl1"/>
+			{{#  } }}
+		</script>
+
+		<script type="text/html" id="statusTpl2">
+			{{#  if(d.outRetrial){ }}
+			<input type="checkbox" name="outRetrial" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="isStatusTpl2" checked="checked" />
+			{{#  } else { }}
+			<input type="checkbox" name="outRetrial" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="isStatusTpl2"/>
+			{{#  } }}
+		</script>
+
 		</div>
 		<!--添加或编辑外购件清单信息-->
 		<div id="setQuoteBom" class="layer_self_wrap"
@@ -250,8 +292,13 @@
             var iStatus=nowStatus.data[0].BS_STATUS
         </script>
 
-		<script th:src="@{/js/web/quote/01business/quote_bom.js}"
-			src="/js/web/quote/01business/quote_bom.js"></script>
+<!--		<script th:src="@{/js/web/quote/01business/quote_bom.js}"-->
+<!--			src="/js/web/quote/01business/quote_bom.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/01business/quote_bom.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>
