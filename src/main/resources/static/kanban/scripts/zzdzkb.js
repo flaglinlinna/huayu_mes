@@ -35,6 +35,14 @@ $(function() {
 		if (action) {// action 为 fasle 不调用定时器
 			interval_do = setInterval(getList, rotationdata * 1000); // 重新新循环-启动
 		}
+		//更改按钮样式
+		$("#searchBtn").removeClass("chose_enter")
+		$("#searchBtn").addClass("btn_clicked")
+		//200毫秒后复原
+		setTimeout(function(){
+			$("#searchBtn").removeClass("btn_clicked")
+			$("#searchBtn").addClass("chose_enter")
+		}, 200);
 	});
 
 })

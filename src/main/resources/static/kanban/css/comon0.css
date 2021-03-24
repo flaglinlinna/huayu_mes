@@ -242,3 +242,13 @@ to {transform: rotate(-359deg);}
     margin-left: 20px;
 }
 
+.btn_clicked {
+    background-color: #8080c0;
+    color: white;
+    border: #00cdff 2px solid;
+    width: 50px;
+    border-radius: 5px;
+    float: left;
+    margin-left: 20px;
+}
+
