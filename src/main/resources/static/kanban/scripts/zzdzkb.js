@@ -90,7 +90,7 @@ function dealXlpmData(kanbanList) {
 			} else {
 				$("#rownum").removeClass("redword");
 			}
-			//$("#onlineEmp").text(onlineEmp)
+			$("#onlineEmp").text(onlineEmp)
 			$("#card_ass").text(card_ass)
 			$("#card_unass").text(card_unass)
 		} else {
