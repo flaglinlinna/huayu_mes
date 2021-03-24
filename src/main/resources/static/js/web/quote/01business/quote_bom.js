@@ -197,43 +197,47 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {type : 'numbers'},
-							// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-							{field : 'bsElement',title : '组件名称',sort : true,width : 120},
-							{field : 'bsComponent',title : '零件名称',sort : true,width : 200},
+							cols : [ [
+							{type : 'numbers'},
+							{field:'id', title:'ID', width:80,hide:true},
+							{field : 'bsElement',title : '组件名称',sort : true,width : 120,style : 'background-color:#ffffff'},
+							{field : 'bsComponent',title : '零件名称',sort : true,width : 200,style : 'background-color:#ffffff'},
 							{field : 'wc',title : '材料耗用工作中心',sort : true,width : 145,
 								templet : function(d) {
 									if (d.wc != null) {return d.wc.workcenterName;} 
 									else {return "";}
-								}
+								},style : 'background-color:#ffffff'
 							},
 							// {field : 'bsItemCode',title : '材料编码',sort:true,width:120},
 							{field : 'itp',title : '物料类型',sort : true,width : 120,
 								templet : function(d) {
 									if (d.itp != null) {return d.itp.itemType;} 
 									else {return "";}
-							}}, 
-							{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
-							{field : 'bsModel',title : '材料规格',width : 200},
-							{field : 'bsExplain',title : '采购说明',width : 200},
+							},style : 'background-color:#ffffff'},
+							{field : 'bsMaterName',title : '材料名称',sort : true,width : 150,style : 'background-color:#ffffff'},
+							{field : 'bsModel',title : '材料规格',width : 200,style : 'background-color:#ffffff'},
+							{field : 'bsExplain',title : '采购说明',width : 200,style : 'background-color:#ffffff'},
 							{field : 'bsAgent',title : '是否客户代采',width : 120,templet:function (d) {
 									if(d.bsAgent=="1"){
 										return "是"
 									}else {
 										return "否"
 									}
-								}},
-								{field : 'fmemo',title : '工艺说明',width : 200},
-							{field : 'bsQty',title : 'BOM用量',width : 90},
+								},style : 'background-color:#ffffff'},
+							{field : 'bsQty',title : 'BOM用量',width : 90,style : 'background-color:#ffffff'},
 							// {field : 'bsProQty',title : '制品重(g)',width : 90},
 							{field : 'unit',title : 'BOM用量单位',width : 100,
 								templet : function(d) {
 									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
-							}},
+							},style : 'background-color:#ffffff'},
 							// {field : 'bsWaterGap',title : '水口重(g)',width : 90},
 							// {field : 'bsCave',title : '穴数',width : 80},
-							{field : 'purchaseUnit',title : '采购单位',width : 80},
+							{field : 'purchaseUnit',title : '采购单位',width : 80,style : 'background-color:#ffffff'},
+							{field : 'productRetrial',title : '制造评估重审',templet : '#selectRetrial',width : 120,style : 'background-color:#ffffff'},
+							{field : 'purchaseRetrial',title : '采购重申',templet : '#selectRetrial',width : 120,style : 'background-color:#ffffff'},
+							{field : 'outRetrial',title : '外协重审',templet : '#selectRetrial',width : 120,style : 'background-color:#ffffff'},
+							{field : 'fmemo',title : '工艺说明',width : 200,style : 'background-color:#ffffff'},
 							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
 							] ],
 							done : function(res, curr, count) {
@@ -245,9 +249,30 @@ $(function() {
 								// console.log(curr);
 								// 得到数据总量
 								// console.log(count);
+								form.render('select');
 								pageCurr = curr;
 							}
 						});
+
+
+						//监听机台类型下拉选择 并修改
+						form.on('select(selectRetrial)', function (data) {
+							//获取当前行tr对象
+							var elem = data.othis.parents('tr');
+							//第一列的值是Guid，取guid来判断
+							var id= elem.first().find('td').eq(1).text();
+							var product= elem.first().find('td').eq(13).text();
+							var purchase= elem.first().find('td').eq(14).text();
+							var out= elem.first().find('td').eq(15).text();
+
+							console.log(elem.first().find('td'));
+							// console.log(elem.first().find('td').eq(13).value());
+
+							//选择的select对象值；
+							var selectValue = data.value;
+							// console.log(Guid,selectValue);
+							// updateRetrial(id,product,purchase,out);
+						})
 
 						tableIns1 = table1.render({
 							elem : '#uploadList',
@@ -456,6 +481,29 @@ function downloadExcel() {
 // 导出数据
 function exportExcel() {
 	location.href = context + "/quoteBom/exportExcel?pkQuote=" + quoteId;
+}
+
+function updateRetrial(id,productRetrial,purchaseRetrial,outRetrial){
+	var params = {
+		"id" : id,
+		"productRetrial":productRetrial,
+		"purchaseRetrial":purchaseRetrial,
+		"outRetrial":outRetrial,
+	};
+	CoreUtil.sendAjax("/quoteBom/updateRetrial", JSON.stringify(params), function(data) {
+		if (data.result) {
+			// layer.alert(data.msg, function() {
+			// 	layer.closeAll();
+			// 	cleanProdErr();
+				// 加载页面
+				loadAll();
+			// });
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 
 // 打开导入页

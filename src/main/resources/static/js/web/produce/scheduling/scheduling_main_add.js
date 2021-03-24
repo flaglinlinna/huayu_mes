@@ -157,6 +157,8 @@ $(function () {
                     , {field: 'ENABLED', title: '生效状态', width: 80, templet: '#enabledTpl'}
                     , {field: 'ERROR_INFO', title: '错误信息', width: 160}
                     , {field: 'PROD_NO', title: '工单号', width: 130}
+                    , {field: 'WS_SECTION', title: '工段', width: 130}
+                    , {field: 'FMEMO', title: '备注', width: 130}
                     , {
                         field: 'TASK_NO', title: '生产制令单', width: 150,
                         templet: '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO==null?"":d.TASK_NO }}</a></div>'

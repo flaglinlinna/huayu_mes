@@ -195,6 +195,40 @@ public class QuoteBom extends BaseEntity {
 	@Column(length = 50)
 	protected String bsSupplier;
 
+	/**
+	 * 是否制造评估重审
+	 * 0否 1是
+	 */
+	@ApiModelProperty(name = "productRetrial", value = "是否代采")
+	@Column(length = 20)
+	protected Integer productRetrial = 0;
+
+
+	/**
+	 * 是否采购重申
+	 * 0否 1是
+	 */
+	@ApiModelProperty(name = "purchaseRetrial", value = "是否代采")
+	@Column(length = 20)
+	protected Integer purchaseRetrial = 0;
+
+
+	/**
+	 * 是否外协重审
+	 * 0否 1是
+	 */
+	@ApiModelProperty(name = "outRetrial", value = "是否代采")
+	@Column(length = 20)
+	protected Integer outRetrial = 0;
+
+	/**
+	 * 复制的bomId
+	 *
+	 */
+	@ApiModelProperty(name = "pkBomId", value = "复制的bomId")
+	@Column(length = 20)
+	protected Long pkBomId;
+
 	public String getBsElement() {
 		return bsElement;
 	}
@@ -377,5 +411,37 @@ public class QuoteBom extends BaseEntity {
 
 	public void setPurchaseUnit(String purchaseUnit) {
 		this.purchaseUnit = purchaseUnit;
+	}
+
+	public Integer getProductRetrial() {
+		return productRetrial;
+	}
+
+	public void setProductRetrial(Integer productRetrial) {
+		this.productRetrial = productRetrial;
+	}
+
+	public Integer getPurchaseRetrial() {
+		return purchaseRetrial;
+	}
+
+	public void setPurchaseRetrial(Integer purchaseRetrial) {
+		this.purchaseRetrial = purchaseRetrial;
+	}
+
+	public Integer getOutRetrial() {
+		return outRetrial;
+	}
+
+	public void setOutRetrial(Integer outRetrial) {
+		this.outRetrial = outRetrial;
+	}
+
+	public Long getPkBomId() {
+		return pkBomId;
+	}
+
+	public void setPkBomId(Long pkBomId) {
+		this.pkBomId = pkBomId;
 	}
 }

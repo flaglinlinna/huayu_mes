@@ -4,6 +4,15 @@
 <head th:include="layout :: htmlhead" th:with="title='外购件清单'">
 <meta charset="UTF-8">
 </head>
+<style>
+	.layui-table-cell, .layui-table-tool-panel li {
+		overflow: visible !important;
+	}
+
+	.layui-form-select .layui-input {
+		height: 30px;
+	}
+</style>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div style="margin: 10px">
@@ -50,6 +59,13 @@
                  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
                  {{# } }}              
          </script>
+
+		<script type="text/html" id="selectRetrial" >
+			<select name="selectRetrial" lay-filter="selectRetrial" lay-search>
+				<option value="">否</option>
+				<option value="1">是</option>
+			</select>
+		</script>
 		</div>
 		<!--添加或编辑外购件清单信息-->
 		<div id="setQuoteBom" class="layer_self_wrap"

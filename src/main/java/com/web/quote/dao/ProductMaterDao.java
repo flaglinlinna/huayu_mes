@@ -26,6 +26,8 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 
 	public List<ProductMater> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 
+	public List<ProductMater> findByPkQuoteAndPkBomId(Long pkQuote,Long pkBomId);
+
 	Integer countByDelFlagAndPkQuoteAndBsAssessIsNull(Integer delFlag,Long pkQuote);
 
 	public List<ProductMater> findByDelFlagAndPkQuoteAndBsStatusPurchase(Integer delFlag,Long pkQuote,int bsStatus);
@@ -46,6 +48,8 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 	Integer countByPkQuoteAndBsStatusPurchase(Long pkQuote,Integer bsStatusPurchase);
 
 	public List<ProductMater> findByDelFlagAndPkQuoteAndBsType(Integer delFlag,Long pkQuote,String bsType);
+
+	public List<ProductMater> findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(Integer delFlag,Long pkQuote,String bsType,Integer retrial);
 
 	//20210116 hjj 新增外协材料价格计算 ，20210225 hjj 修改五金计算的方式
 	@Query(value = "select map from ProductMater map  where map.delFlag=0 and map.pkQuote=?1 and ( map.bsType='surface' or map.bsType='packag' or map.bsType ='out') ")

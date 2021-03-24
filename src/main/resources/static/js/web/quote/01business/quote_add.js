@@ -51,7 +51,7 @@ $(function() {
 		//判断是否为复制
 		if(bsCopyId !=null){
 			$('#bsProd').attr("readonly","readonly");
-			$('#bsProd').css("background","#efefef")
+			$('#bsProd').css("background","#bfbfbf")
 			$('#saveBtn').html("确认复制");
 		}
 
@@ -99,7 +99,7 @@ $(function() {
 					// }
 					if(data.data.bsCopyId!=null){
 						$('#bsProd').attr("readonly","readonly");
-						$('#bsProd').css("background","#efefef")
+						$('#bsProd').css("background","#bfbfbf")
 					}
 					form.render();
 

@@ -234,7 +234,30 @@ public class ProductMater extends BaseEntity {
 	@ApiModelProperty(name = "bsAgent", value = "是否代采")
 	@Column(length = 150)
 	protected Integer bsAgent = 0;
-	
+
+	/**
+	 * 是否重审
+	 * 0否 1是
+	 */
+	@ApiModelProperty(name = "retrial", value = "是否重审")
+	@Column(length = 150)
+	protected Integer retrial = 0;
+
+	/**
+	 * 复制的bomId
+	 */
+	@ApiModelProperty(name = "pkBomId", value = "复制的bomId")
+	@Column(length = 20)
+	protected Long pkBomId;
+
+	/**
+	 * 工序良率(%)
+	 */
+	@ApiModelProperty(name = "bsYield", value = "工序良率(%)")
+	@Column(length = 50)
+	protected BigDecimal bsYield=BigDecimal.ZERO;
+
+
 	/**
 	 * 
 	 */
@@ -485,5 +508,29 @@ public class ProductMater extends BaseEntity {
 
 	public void setBsAgent(Integer bsAgent) {
 		this.bsAgent = bsAgent;
+	}
+
+	public Integer getRetrial() {
+		return retrial;
+	}
+
+	public void setRetrial(Integer retrial) {
+		this.retrial = retrial;
+	}
+
+	public Long getPkBomId() {
+		return pkBomId;
+	}
+
+	public void setPkBomId(Long pkBomId) {
+		this.pkBomId = pkBomId;
+	}
+
+	public BigDecimal getBsYield() {
+		return bsYield;
+	}
+
+	public void setBsYield(BigDecimal bsYield) {
+		this.bsYield = bsYield;
 	}
 }

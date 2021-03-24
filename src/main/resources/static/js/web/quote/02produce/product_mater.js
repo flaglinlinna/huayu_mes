@@ -62,6 +62,9 @@ $(function() {
 						 $("select[name='selectUnit']").attr("disabled","disabled");
 						form.render('select');
 					}
+					if(item.retrial =="1"){
+						tableIns.find('tr[data-index=' + i + ']').find('td').css("background-color", "#fd5822");
+					}
 				});
 
 				res.data.forEach(function(item, index) {
