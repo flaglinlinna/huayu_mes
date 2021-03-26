@@ -13,7 +13,8 @@ public interface OnlineStaffService {
 	
 	public ApiResponseResult deleteMain(String ids)throws Exception;//删除主表数据
 	
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest)throws Exception;
+	public ApiResponseResult getList(String keyword,String taskNo,String linerName,String classId,String workDate
+			,String hourType,String lineName,String lastupdateDate,String createDate, PageRequest pageRequest)throws Exception;
 	
 	public ApiResponseResult getMain(Long id)throws Exception;//获取主表单条记录
 	

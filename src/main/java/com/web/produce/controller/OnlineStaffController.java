@@ -51,12 +51,14 @@ public class OnlineStaffController extends WebController{
 	    @ApiOperation(value = "获取上线人员列表", notes = "获取上线人员列表",hidden = true)
 	    @RequestMapping(value = "/getList", method = RequestMethod.GET)
 	    @ResponseBody
-	    public ApiResponseResult getList(String keyword) {
+	    public ApiResponseResult getList(String keyword,String taskNo,String linerName,String classId,String workDate
+				,String hourType,String lineName,String lastupdateDate,String createDate) {
 	        String method = "produce/online/getList";String methodName ="获取上线人员列表";
 	        try {
 	        	System.out.println(keyword);
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result = onlineStaffService.getList(keyword, super.getPageRequest(sort));
+	            ApiResponseResult result = onlineStaffService.getList(keyword,taskNo, linerName,classId,workDate,
+						hourType,lineName,lastupdateDate,createDate,super.getPageRequest(sort));
 	            logger.debug("获取上线人员列表=getList:");
 //	            getSysLogService().success(module,method, methodName, null);
 	            return result;

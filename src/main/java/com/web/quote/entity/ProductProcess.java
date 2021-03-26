@@ -268,6 +268,10 @@ public class ProductProcess extends BaseEntity {
 	@Column( precision=21, scale=5)
 	protected BigDecimal bsCost;
 
+	@ApiModelProperty(name = "bsMaterCost", value = "材料成本")
+	@Column( precision=21, scale=5)
+	protected BigDecimal bsMaterCost;
+
 	@ApiModelProperty(name = "bsTheLoss", value = "本工序损耗")
 	@Column( precision=21, scale=5)
 	protected BigDecimal bsTheLoss;
@@ -556,5 +560,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsAllLoss(BigDecimal bsAllLoss) {
 		this.bsAllLoss = bsAllLoss;
+	}
+
+	public BigDecimal getBsMaterCost() {
+		return bsMaterCost;
+	}
+
+	public void setBsMaterCost(BigDecimal bsMaterCost) {
+		this.bsMaterCost = bsMaterCost;
 	}
 }

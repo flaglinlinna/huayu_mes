@@ -146,12 +146,12 @@ public class IssueController extends WebController{
 		@ApiOperation(value = "获取人员信息列表", notes = "获取人员信息列表", hidden = true)
 	    @RequestMapping(value = "/getEmp", method = RequestMethod.POST)
 	    @ResponseBody
-	    public ApiResponseResult getEmp(String empKeyword,String create_time,String dept_name) {
+	    public ApiResponseResult getEmp(String empKeyword,String create_time,String dept_name,String type) {
 	        String method = "produce/issue/getEmp";String methodName ="获取人员信息列表";
 	        String param = "关键词:"+empKeyword;
 	        try {
 	        	Sort sort = new Sort(Sort.Direction.DESC, "create_date");
-	            ApiResponseResult result = issueService.getEmp(empKeyword,create_time,dept_name, super.getPageRequest(sort));
+	            ApiResponseResult result = issueService.getEmp(empKeyword,create_time,dept_name,type, super.getPageRequest(sort));
 	            logger.debug("获取人员信息列表=getEmp:");
 //	            getSysLogService().success(module,method, methodName, param);
 	            return result;

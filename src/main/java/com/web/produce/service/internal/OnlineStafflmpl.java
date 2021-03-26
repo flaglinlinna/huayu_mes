@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.utils.BaseSql;
+import com.web.quote.entity.Quote;
+import com.web.quote.entity.QuoteItem;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -43,50 +46,148 @@ import com.web.produce.service.OnlineStaffService;
  */
 @Service(value = "OnlineStaffService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class OnlineStafflmpl implements OnlineStaffService {
+public class OnlineStafflmpl extends BaseSql implements OnlineStaffService {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	OnlineStaffDao onlineStaffDao;
+//
+//	/**
+//	 * 查询列表
+//	 */
+//	@Override
+//	@Transactional
+//	public ApiResponseResult getList(String keyword,String taskNo,String linerName,String classId,String workDate
+//			,String hourType,String lineName,String lastupdateDate,String createDate, PageRequest pageRequest) throws Exception {
+//		// 查询条件1
+//		List<SearchFilter> filters = new ArrayList<>();
+//		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+//		List<SearchFilter> filters1 = new ArrayList<>();
+//		if (StringUtils.isNotEmpty(keyword)) {
+//			filters1.add(new SearchFilter("taskNo", SearchFilter.Operator.LIKE, keyword));
+//			filters1.add(new SearchFilter("line.lineName", SearchFilter.Operator.LIKE, keyword));
+//			filters1.add(new SearchFilter("hourType", SearchFilter.Operator.LIKE, keyword));
+//		}
+//		if (StringUtils.isNotEmpty(taskNo)) {
+//			filters1.add(new SearchFilter("taskNo", SearchFilter.Operator.LIKE, taskNo));
+//		}
+//		if (StringUtils.isNotEmpty(classId)) {
+//			filters1.add(new SearchFilter("classId", SearchFilter.Operator.EQ, classId));
+//		}
+//		if (StringUtils.isNotEmpty(lineName)) {
+//			filters1.add(new SearchFilter("line.lineName", SearchFilter.Operator.LIKE, lineName));
+//		}
+//		if (StringUtils.isNotEmpty(hourType)) {
+//			filters1.add(new SearchFilter("hourType", SearchFilter.Operator.LIKE, hourType));
+//		}
+//
+//		Specification<OnlineStaff> spec = Specification.where(BaseService.and(filters, OnlineStaff.class));
+//		Specification<OnlineStaff> spec1 = spec.and(BaseService.or(filters1, OnlineStaff.class));
+//		Page<OnlineStaff> page = onlineStaffDao.findAll(spec1, pageRequest);
+//
+//		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+//		for(OnlineStaff bs:page.getContent()){
+//			Map<String, Object> map = new HashMap<>();
+//			map.put("id", bs.getId());
+//			map.put("taskNo", bs.getTaskNo());
+//			map.put("hourType", bs.getHourType());
+//			map.put("classId", bs.getClassId());
+//			map.put("workDate", bs.getWorkDate());
+//			map.put("lineName", bs.getLine().getLineName());
+//			map.put("linerName", onlineStaffDao.queryLinerName(bs.getTaskNo()));
+//			map.put("lastupdateDate", bs.getLastupdateDate());
+//			map.put("createDate", bs.getCreateDate());
+//			list.add(map);
+//		}
+//		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
+//				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+//	}
+
 
 	/**
 	 * 查询列表
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getList(String keyword, PageRequest pageRequest) throws Exception {
-		// 查询条件1
-		List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-		List<SearchFilter> filters1 = new ArrayList<>();
+	public ApiResponseResult getList(String keyword,String taskNo,String linerName,String classId,String workDate
+			,String hourType,String lineName,String lastupdateDate,String createDate, PageRequest pageRequest) throws Exception {
+
+		String sql = "select *from (select distinct p.id,p.task_no,p.hour_type,p.class_id,p.work_date," +
+				"(select distinct t1.liner_name from MES_LINE_AFFIRM t left join  MES_PROD_ORDER t1 on t.task_no=t1.task_no where t.task_no=p.TASK_NO ) as LINER_NAME," +
+				"(select DISTINCT t2.line_name from MES_base_LINE t2 where p.LINE_ID =t2.id  ) as LINE_NAME,"
+				+ "p.lastupdate_Date,p.create_Date from "+OnlineStaff.TABLE_NAME+ " p where p.del_flag=0) s where 1=1";
+
+		if(StringUtils.isNotEmpty(taskNo)){
+			sql += "and s.task_No like '%" + taskNo + "%'";
+		}
+		if(StringUtils.isNotEmpty(hourType)){
+			sql += "and s.hour_type like '%" + hourType + "%'";
+		}
+		if(StringUtils.isNotEmpty(lineName)){
+			sql += "and s.LINE_NAME like '%" + lineName + "%'";
+		}
+		if(StringUtils.isNotEmpty(linerName)){
+			sql += "and s.LINER_NAME like '%" + linerName + "%'";
+		}
+		if(StringUtils.isNotEmpty(classId)){
+			sql += "and s.class_id = " + classId + "";
+		}
+		if(StringUtils.isNotEmpty(workDate)){
+			String[] dates = workDate.split(" - ");
+			sql += " and to_char(s.work_date,'yyyy-MM-dd') >= "+dates[0];
+			sql += " and to_char(s.work_date,'yyyy-MM-dd') <= "+dates[1];
+		}
+		if(StringUtils.isNotEmpty(lastupdateDate)){
+			String[] dates = lastupdateDate.split(" - ");
+			sql += " and to_char(s.lastupdate_Date,'yyyy-MM-dd') >= "+dates[0];
+			sql += " and to_char(s.lastupdate_Date,'yyyy-MM-dd') <= "+dates[1];
+		}
+		if(StringUtils.isNotEmpty(createDate)){
+			String[] dates = createDate.split(" - ");
+			sql += " and to_char(s.create_Date,'yyyy-MM-dd') >= "+dates[0];
+			sql += " and to_char(s.create_Date,'yyyy-MM-dd') <= "+dates[1];
+		}
 		if (StringUtils.isNotEmpty(keyword)) {
-			filters1.add(new SearchFilter("taskNo", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("line.lineName", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("hourType", SearchFilter.Operator.LIKE, keyword));
+			sql += "  and INSTR((s.task_No || s.hour_type ||s.LINE_NAME ||s.LINER_NAME), '"
+					+ keyword + "') > 0 ";
 		}
-		Specification<OnlineStaff> spec = Specification.where(BaseService.and(filters, OnlineStaff.class));
-		Specification<OnlineStaff> spec1 = spec.and(BaseService.or(filters1, OnlineStaff.class));
-		Page<OnlineStaff> page = onlineStaffDao.findAll(spec1, pageRequest);
-		
-		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
-		for(OnlineStaff bs:page.getContent()){ 
-			Map<String, Object> map = new HashMap<>();
-			map.put("id", bs.getId());
-			map.put("taskNo", bs.getTaskNo());
-			map.put("hourType", bs.getHourType());
-			map.put("classId", bs.getClassId());
-			map.put("workDate", bs.getWorkDate());
-			map.put("lineName", bs.getLine().getLineName());
-			map.put("linerName", onlineStaffDao.queryLinerName(bs.getTaskNo()));
-			map.put("lastupdateDate", bs.getLastupdateDate());
-			map.put("createDate", bs.getCreateDate());
-			list.add(map);
+
+		int pn = pageRequest.getPageNumber() + 1;
+		String sql_page = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + sql + " ) A  WHERE ROWNUM <= ("
+				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
+				+ pageRequest.getPageSize() + " ";
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		List<Object[]>  list = createSQLQuery(sql_page, param);
+		long count = createSQLQuery(sql, param, null).size();
+
+		List<Map<String,Object>> list_new =new ArrayList<Map<String,Object>>();
+		for (int i=0;i<list.size();i++) {
+			Object[] object=(Object[]) list.get(i);
+			Map<String, Object> map1 = new HashMap<>();
+			map1.put("id", object[0]);
+			map1.put("taskNo", object[1]);
+			map1.put("hourType", object[2]);
+			map1.put("classId", object[3]);
+			map1.put("workDate", object[4]);
+			map1.put("linerName", object[5]);
+			map1.put("lineName", object[6]);
+			map1.put("lastupdateDate", object[7]);
+			map1.put("createDate", object[8]);
+			list_new.add(map1);
 		}
-		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
+
+		Map map = new HashMap();
+		map.put("rows", DataGrid.create(list_new,  (int) count,
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+		map.put("total", count);
+		return ApiResponseResult.success().data(map);
+
 	}
+
+
 	
 	/**
 	 * 获取班次

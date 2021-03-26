@@ -443,7 +443,11 @@ $(function() {
 					}},
 
 				{field : 'bsYield',title : '工序良率%',width : 120},
-				{field : 'bsCost',title : '成本',width : 120,totalRow : true},
+				{field : 'bsMaterCost',title : '材料成本',width : 120,totalRow : true},
+				{field : 'bsFeeLhAll',title : '人工成本',width : 120,totalRow : true},
+				{field : 'bsFeeMhAll',title : '制造成本',width : 120,totalRow : true},
+				{field : 'bsFeeWxAll',title : '外协',width : 120,totalRow : true},
+				{field : 'bsCost',title : '成本合计',width : 120,totalRow : true},
 				{field : 'bsTheLoss',title : '本工序损耗',width : 120,totalRow : true},
 				{field : 'bsCostLoss',title : '本工序成本(含损耗)',width : 150,totalRow : true,templet: function (d) {
 						return (Number(d.bsCost)+Number(d.bsTheLoss)).toFixed(4);
@@ -781,11 +785,13 @@ function getLossDetail(title){
 		done : function(res, curr, count) {
 			pageCurr = curr;
 			var onwanceTotal=0;
+			var yieldTotal = 100;
 			res.data.forEach(function(item, index) {
 				onwanceTotal += Number(item.bsCost)+Number(item.bsTheLoss);
+				yieldTotal *= Number(item.bsYield)/100
 			});
 			this.elem.next().find('.layui-table-total td[data-field="bsCostLoss"] .layui-table-cell').text(onwanceTotal.toFixed(4));
-
+			this.elem.next().find('.layui-table-total td[data-field="bsYield"] .layui-table-cell').text(yieldTotal.toFixed(2)+"%");
 		}
 	})
 	var index = layer.open({

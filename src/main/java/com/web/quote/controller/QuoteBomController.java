@@ -98,7 +98,7 @@ public class QuoteBomController extends WebController {
 		long id = Long.parseLong(params.get("id").toString());
 		String type = params.get("type").toString();
 //		Integer purchaseRetrial = Integer.parseInt(params.get("purchaseRetrial")==null?"0":params.get("purchaseRetrial").toString());
-		Integer value = Integer.parseInt(params.get("value")==null?"0":params.get("outRetrial").toString());
+		Integer value = Integer.parseInt(params.get("value")==null?"0":params.get("value").toString());
 		try {
 			ApiResponseResult result = quoteBomService.updateRetrial(id,type,value);
 			logger.debug("编辑外购件清单信息重审状态=edit:");

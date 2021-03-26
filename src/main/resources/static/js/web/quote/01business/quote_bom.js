@@ -200,44 +200,44 @@ $(function() {
 							cols : [ [
 							{type : 'numbers'},
 							{field:'id', title:'ID', width:80,hide:true},
-							{field : 'bsElement',title : '组件名称',sort : true,width : 120,style : 'background-color:#ffffff'},
-							{field : 'bsComponent',title : '零件名称',sort : true,width : 200,style : 'background-color:#ffffff'},
+							{field : 'bsElement',title : '组件名称',sort : true,width : 120},
+							{field : 'bsComponent',title : '零件名称',sort : true,width : 200},
 							{field : 'wc',title : '材料耗用工作中心',sort : true,width : 145,
 								templet : function(d) {
 									if (d.wc != null) {return d.wc.workcenterName;} 
 									else {return "";}
-								},style : 'background-color:#ffffff'
+								}
 							},
 							// {field : 'bsItemCode',title : '材料编码',sort:true,width:120},
 							{field : 'itp',title : '物料类型',sort : true,width : 120,
 								templet : function(d) {
 									if (d.itp != null) {return d.itp.itemType;} 
 									else {return "";}
-							},style : 'background-color:#ffffff'},
-							{field : 'bsMaterName',title : '材料名称',sort : true,width : 150,style : 'background-color:#ffffff'},
-							{field : 'bsModel',title : '材料规格',width : 200,style : 'background-color:#ffffff'},
-							{field : 'bsExplain',title : '采购说明',width : 200,style : 'background-color:#ffffff'},
+							}},
+							{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
+							{field : 'bsModel',title : '材料规格',width : 200},
+							{field : 'fmemo',title : '工艺说明',width : 200},
+							{field : 'bsExplain',title : '采购说明',width : 200},
 							{field : 'bsAgent',title : '是否客户代采',width : 120,templet:function (d) {
 									if(d.bsAgent=="1"){
 										return "是"
 									}else {
 										return "否"
 									}
-								},style : 'background-color:#ffffff'},
-							{field : 'bsQty',title : 'BOM用量',width : 90,style : 'background-color:#ffffff'},
+								}},
+							{field : 'bsQty',title : 'BOM用量',width : 90},
 							// {field : 'bsProQty',title : '制品重(g)',width : 90},
-							{field : 'unit',title : 'BOM用量单位',width : 100,
+							{field : 'unit',title : 'BOM用量单位',width : 110,
 								templet : function(d) {
 									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
-							},style : 'background-color:#ffffff'},
+							}},
 							// {field : 'bsWaterGap',title : '水口重(g)',width : 90},
 							// {field : 'bsCave',title : '穴数',width : 80},
-							{field : 'purchaseUnit',title : '采购单位',width : 80,style : 'background-color:#ffffff'},
-							{field : 'productRetrial',title : '制造评估重审',templet : '#statusTpl',width : 120,style : 'background-color:#ffffff'},
-							{field : 'purchaseRetrial',title : '采购重申',templet : '#statusTpl1',width : 120,style : 'background-color:#ffffff'},
-							{field : 'outRetrial',title : '外协重审',templet : '#statusTpl2',width : 120,style : 'background-color:#ffffff'},
-							{field : 'fmemo',title : '工艺说明',width : 200,style : 'background-color:#ffffff'},
+							{field : 'purchaseUnit',title : '采购单位',width : 80},
+							{field : 'productRetrial',title : '制造评估重审',templet : '#statusTpl',width : 120},
+							{field : 'purchaseRetrial',title : '采购重申',templet : '#statusTpl1',width : 120},
+							{field : 'outRetrial',title : '外协重审',templet : '#statusTpl2',width : 120},
 							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
 							] ],
 							done : function(res, curr, count) {
@@ -276,7 +276,7 @@ $(function() {
 
 						form.on('switch()', function(obj) {
 							// console.log(this.name);
-							var checked = obj.elem.checked ? "0" : "1";
+							var checked = obj.elem.checked ? "1" : "0";
 							updateRetrial(this.value, this.name, checked);
 						});
 
@@ -495,12 +495,10 @@ function updateRetrial(id,type,value){
 	};
 	CoreUtil.sendAjax("/quoteBom/updateRetrial", JSON.stringify(params), function(data) {
 		if (data.result) {
-			// layer.alert(data.msg, function() {
-			// 	layer.closeAll();
-			// 	cleanProdErr();
-				// 加载页面
-				loadAll();
-			// });
+				layer.alert("修改成功",function () {
+					layer.closeAll();
+					loadAll();
+				});
 		} else {
 			layer.alert(data.msg);
 		}

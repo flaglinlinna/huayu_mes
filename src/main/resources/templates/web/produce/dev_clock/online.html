@@ -134,8 +134,13 @@
 
 			</div>
 		</div>
-		<script th:src="@{/js/web/produce/dev_clock/online.js}"
-			src="/js/web/produce/dev_clock/online.js"></script>
+<!--		<script th:src="@{/js/web/produce/dev_clock/online.js}"-->
+<!--			src="/js/web/produce/dev_clock/online.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/produce/dev_clock/online.js?ver="+Math.random()+"'><\/script>");
+		</script>
 
 	</div>
 </body>

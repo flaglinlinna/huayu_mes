@@ -385,8 +385,13 @@
             var bomNameList=[[${bomNameList}]];
         </script>
 
-		<script th:src="@{/js/web/quote/02produce/product_process.js}"
-			src="/js/web/quote/02produce/product_process.js"></script>
+<!--		<script th:src="@{/js/web/quote/02produce/product_process.js}"-->
+<!--			src="/js/web/quote/02produce/product_process.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/02produce/product_process.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

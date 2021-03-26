@@ -208,17 +208,17 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             newProductMaterList.add(productMater);
         }
         productMaterDao.saveAll(newProductMaterList);
-        List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
-        List<ProductProcess> newProductProcess = new ArrayList<>();
-        for(ProductProcess o:productProcessList){
-            ProductProcess productProcess = new ProductProcess();
-            BeanUtils.copyProperties(o,productProcess);
-            productProcess.setId(null);
-            productProcess.setPkQuote(quote.getId());
-            productProcess.setBsStatus(0);
-            newProductProcess.add(productProcess);
-        }
-        productProcessDao.saveAll(newProductProcess);
+//        List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
+//        List<ProductProcess> newProductProcess = new ArrayList<>();
+//        for(ProductProcess o:productProcessList){
+//            ProductProcess productProcess = new ProductProcess();
+//            BeanUtils.copyProperties(o,productProcess);
+//            productProcess.setId(null);
+//            productProcess.setPkQuote(quote.getId());
+//            productProcess.setBsStatus(0);
+//            newProductProcess.add(productProcess);
+//        }
+//        productProcessDao.saveAll(newProductProcess);
         return ApiResponseResult.success("报价单复制成功！");
     }
     /**

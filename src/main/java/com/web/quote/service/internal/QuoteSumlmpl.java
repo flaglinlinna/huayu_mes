@@ -532,15 +532,22 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //			pp.setBsLossHouMh(new BigDecimal("0"));
 		}
 		productProcessDao.saveAll(lpp_out);
-		List<ProductProcess> processList = productProcessDao.findByDelFlagAndPkQuoteOrderByBsNameDescBsOrderAsc(0,Long.parseLong(quoteId));
+		List<ProductProcess> processList = productProcessDao.findByDelFlagAndPkQuoteOrderByBsNameDescBsTypeDescBsOrderAsc(0,Long.parseLong(quoteId));
 		for(Integer i=0;i<processList.size();i++){
 			ProductProcess o = processList.get(i);
 			//成本 = 人工制费 + 制造费用 + 材料费用
 			if(o.getBsType().equals("out")){
-				o.setBsCost(o.getBsLossTheLh());
+				o.setBsCost(o.getBsFeeWxAll());
 				o.setBsYield(new BigDecimal("100").subtract(o.getBsLoss()));
 			}else {
-				o.setBsCost(o.getBsFeeLhAll().add(o.getBsFeeMhAll()));
+				List<ProductMater> pmList = productMaterDao.findByBsElementAndBsComponentAndPkQuoteAndBsTypeAndDelFlag(
+						o.getBsElement(),o.getBsName(),o.getPkQuote(),o.getBsType(),0);
+				BigDecimal materCost = BigDecimal.ZERO;
+				for(ProductMater pm:pmList){
+					materCost = materCost.add(pm.getBsFee());
+				}
+				o.setBsMaterCost(materCost);
+				o.setBsCost(o.getBsFeeLhAll().add(o.getBsFeeMhAll()).add(o.getBsMaterCost()));
 			}
 			if(i==0) {
 				//本工序损耗

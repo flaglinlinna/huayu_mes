@@ -235,6 +235,13 @@ $(function() {
 			loadEmp(data);
 			return false;
 		});
+
+		form.on('submit(searchLeave)', function(data) {
+			// 重新加载table
+			searchLeave();
+			return false;
+		});
+
 		// 监听工具条
 		table.on('tool(issueTable)', function(obj) {
 			var data = obj.data;
@@ -404,6 +411,19 @@ function loadEmp(obj) {
 		page : {
 			curr : pageCurr
 		// 从当前页码开始
+		}
+	});
+}
+
+function  searchLeave (){
+	tableEmp.reload({
+		//url : context + '/produce/issue/getEmp',
+		where : {
+			type : 1
+		},
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
 		}
 	});
 }

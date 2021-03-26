@@ -341,7 +341,7 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getEmp(String keyword,String create_time,String dept_name, PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getEmp(String keyword,String create_time,String dept_name,String type, PageRequest pageRequest) throws Exception {
 
 		/*// 排序方式
         Sort sort = pageRequest.getSort();  // 记住一定要是实体类的属性，而不能是数据库的字段
@@ -377,6 +377,27 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME,a.DEPT_NAME1 order by  max(f.create_date) desc ";
 
 		int pn = pageRequest.getPageNumber() + 1;
+
+		if(StringUtils.isNotEmpty(type)){
+			hql = "select t.id," +
+					"       c.emp_code," +
+					"       c.emp_name," +
+					"       c.emp_type," +
+					"       t.create_date," +
+					"       c.dept_name1" +
+					"  from mes_base_emp_finger t" +
+					"  join mes_base_employee c" +
+					"    on c.id = t.emp_id" +
+					"   and c.del_flag = 0" +
+					" where t.emp_id in (select b.id" +
+					"                      from mes_base_employee b" +
+					"                     where b.id = t.emp_id" +
+					"                       and b.emp_status = 0" +
+					"                    )" +
+					"   and t.del_flag = 0" +
+					" order by c.emp_name, c.emp_id_no, c.join_date";
+		}
+
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
 				+ pageRequest.getPageSize() + " ";
@@ -386,7 +407,8 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 		//List<Map<String, Object>> list = super.findBySql(sql, param);
 		List<Object[]>  list = createSQLQuery(sql, param);
 		long count = createSQLQuery(hql, param, null).size();
-		
+
+
 		List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//注意月份是MM
        

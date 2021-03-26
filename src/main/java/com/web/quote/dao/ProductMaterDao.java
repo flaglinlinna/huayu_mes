@@ -28,6 +28,8 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 
 	public List<ProductMater> findByPkQuoteAndPkBomId(Long pkQuote,Long pkBomId);
 
+	public List<ProductMater> findByBsElementAndBsComponentAndPkQuoteAndBsTypeAndDelFlag(String element,String component, Long pkQuote,String bsType,Integer delFlag);
+
 	Integer countByDelFlagAndPkQuoteAndBsAssessIsNull(Integer delFlag,Long pkQuote);
 
 	public List<ProductMater> findByDelFlagAndPkQuoteAndBsStatusPurchase(Integer delFlag,Long pkQuote,int bsStatus);

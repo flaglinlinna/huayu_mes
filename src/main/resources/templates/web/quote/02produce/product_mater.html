@@ -12,9 +12,9 @@
 	.layui-form-select .layui-input {
 		height: 30px;
 	}
-	.layui-select-disabled .layui-disabled{
-		background: #d7d7d7 !important;
-	}
+	/*.layui-select-disabled .layui-disabled{*/
+	/*	background: #d7d7d7 !important;*/
+	/*}*/
 </style>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -227,8 +227,13 @@
             var bomNameList=[[${bomNameList}]];
         </script>
 
-		<script th:src="@{/js/web/quote/02produce/product_mater.js}"
-			src="/js/web/quote/02produce/product_mater.js"></script>
+<!--		<script th:src="@{/js/web/quote/02produce/product_mater.js}"-->
+<!--			src="/js/web/quote/02produce/product_mater.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/02produce/product_mater.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

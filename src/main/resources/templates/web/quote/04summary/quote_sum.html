@@ -399,8 +399,13 @@
 		var quoteDetail=[[${quoteDetail}]];
 		
 		</script>
-		<script th:src="@{/js/web/quote/04summary/quote_sum.js}"
-			src="/js/web/quote/04summary/quote_sum.js"></script>
+<!--		<script th:src="@{/js/web/quote/04summary/quote_sum.js}"-->
+<!--			src="/js/web/quote/04summary/quote_sum.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/04summary/quote_sum.js?ver="+Math.random()+"'><\/script>");
+		</script>
 
 		<style type="text/css">
 			.grey {
