@@ -278,6 +278,8 @@ public class AttPushProccesor {
             logger.error("AttPushProcessor类的onLineTimer定时器执行失败" + e);
         }
     }
+
+
     //计算相差秒数
     public long getSeconds(Date start, Date end) {
         try{

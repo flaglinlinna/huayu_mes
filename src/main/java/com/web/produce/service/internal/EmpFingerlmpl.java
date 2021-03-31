@@ -169,6 +169,7 @@ public class EmpFingerlmpl  implements EmpFingerService {
 		List<SearchFilter> filters1 = new ArrayList<>();
 		if (StringUtils.isNotEmpty(keyword)) {
 			filters1.add(new SearchFilter("emp.empName", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("emp.empCode", SearchFilter.Operator.LIKE, keyword));
 		}
 		Specification<EmpFinger> spec = Specification.where(BaseService.and(filters, EmpFinger.class));
 		Specification<EmpFinger> spec1 = spec.and(BaseService.or(filters1, EmpFinger.class));

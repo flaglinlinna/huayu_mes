@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -52,6 +55,8 @@ import com.web.produce.service.IssueService;
 @Service(value = "IssueService")
 @Transactional(propagation = Propagation.REQUIRED)
 public class Issuelmpl extends BaseSql  implements IssueService {
+
+	public final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	IssueDao issueDao;
@@ -341,7 +346,7 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 	 */
 	@Override
 	@Transactional
-	public ApiResponseResult getEmp(String keyword,String create_time,String dept_name,String type, PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getEmp(String keyword,String create_time,String dept_name,String type,String type1, PageRequest pageRequest) throws Exception {
 
 		/*// 排序方式
         Sort sort = pageRequest.getSort();  // 记住一定要是实体类的属性，而不能是数据库的字段
@@ -354,7 +359,7 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 		}
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));*/
-		String hql = "select distinct f.emp_id id,a.emp_code,a.emp_name,a.emp_type, max(f.create_date) create_date,a.DEPT_NAME,a.DEPT_NAME1 from MES_BASE_EMP_FINGER f left join MES_BASE_EMPLOYEE a on a.id = f.emp_id and a.del_flag=0 where f.del_flag=0   ";
+		String hql = "select distinct f.emp_id id,a.emp_code,a.emp_name,a.emp_type, max(f.create_date) create_date,a.DEPT_NAME,a.DEPT_NAME1,a.emp_status from MES_BASE_EMP_FINGER f left join MES_BASE_EMPLOYEE a on a.id = f.emp_id and a.del_flag=0 where f.del_flag=0   ";
 		
 		//SQLParameter<Parameter> params = SQLParameter.newInstance(Parameter.class);
 		//params.add(Parameter.build("bsIsDel", 0));// 删除标识
@@ -373,30 +378,18 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 		if (StringUtils.isNotEmpty(dept_name)) {
 			hql += " and a.DEPT_NAME like '%"+dept_name+"%' or a.DEPT_NAME1 like '%"+dept_name+"%' ";
 		}
+		if(StringUtils.isNotEmpty(type1)){
+			Integer a ="在职".equals(type1)||"1".equals(type1)?1:0;
+			hql += " and a.emp_status = '"+a+"'";
+		}else if(StringUtils.isNotEmpty(type)) {
+			Integer a ="在职".equals(type)||"1".equals(type)?1:0;
+			hql += " and a.emp_status = '"+a+"'";
+		}
 
-		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME,a.DEPT_NAME1 order by  max(f.create_date) desc ";
+		hql += " group by f.emp_id ,a.emp_code,a.emp_name,a.emp_type,a.DEPT_NAME,a.DEPT_NAME1,a.emp_status order by  max(f.create_date) desc ";
 
 		int pn = pageRequest.getPageNumber() + 1;
 
-		if(StringUtils.isNotEmpty(type)){
-			hql = "select t.id," +
-					"       c.emp_code," +
-					"       c.emp_name," +
-					"       c.emp_type," +
-					"       t.create_date," +
-					"       c.dept_name1" +
-					"  from mes_base_emp_finger t" +
-					"  join mes_base_employee c" +
-					"    on c.id = t.emp_id" +
-					"   and c.del_flag = 0" +
-					" where t.emp_id in (select b.id" +
-					"                      from mes_base_employee b" +
-					"                     where b.id = t.emp_id" +
-					"                       and b.emp_status = 0" +
-					"                    )" +
-					"   and t.del_flag = 0" +
-					" order by c.emp_name, c.emp_id_no, c.join_date";
-		}
 
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
@@ -426,6 +419,7 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 			}else {
 				map1.put("dept_name", object[6]);
 			}
+			map1.put("EMP_STATUS",object[7]);
 			list_new.add(map1);
 		}
 		/*for (Map<String, Object> map : list) {
@@ -554,6 +548,8 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 		if (dev == null || emp == null) {
 			return ApiResponseResult.failure("删除记录必须含有卡机和员工信息！");
 		}
+		Long userId = UserUtil.getSessionUser().getId();
+		Date now = new Date();
 		// 数据格式转换-卡机设备
 		String[] devIdArray = dev.split(";");
 		List<Long> devList = new ArrayList<Long>();
@@ -594,11 +590,15 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 									devLog.setEmpId(em.getId());
 									devLog.setDescription("指纹删除");
 									devLog.setFmemo("操作中");
-									if( env.getProperty("envi").equals("windows")){
-										if(deleteTmpByUser(devClock.getDevIp(),devId,le)){
+									if( env.getProperty("envi").equals("linux")) {
+										if (deleteTmpByUser(devClock.getDevIp(), devId, le)) {
 											devLog.setFmemo("成功");
-											int count =issueDao.countByDelFlagAndEmpIdAndDevClockId(0,empId,devId);
-											if(count==0){
+											if (em.getEmpStatus() == 0) {
+												//如果是离职则更新
+												issueDao.updateDelFlagByClear(userId, em.getId());
+											}
+											int count = issueDao.countByDelFlagAndEmpIdAndDevClockId(0, empId, devId);
+											if (count == 0) {
 												Issue item = new Issue();
 												item.setCreateDate(new Date());
 												item.setCreateBy(UserUtil.getSessionUser().getId());
@@ -606,16 +606,17 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 												item.setEmpId(empId);
 												listNew.add(item);
 											}
-										}else{
-											msg += em.getEmpName()+"，但删除指纹失败"+",";
+										} else {
+											msg += em.getEmpName() + "，但删除指纹失败" + ",";
 										}
 									}
+
 									listLog.add(devLog);
 								}
 							}
 						}
 						devLogDao.saveAll(listLog);
-						issueDao.saveAll(listNew);
+//						issueDao.saveAll(listNew);
 					}
 				}
 
@@ -623,6 +624,26 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 		}
 		return ApiResponseResult.success("删除记录操作成功！"+msg);
 	}
+
+	/*
+  	定时清理离职员工信息
+   */
+//	@Scheduled(cron = "0 */5 *  * * ?")
+//	public void clearLeave() {
+//		try{
+//			//查询出所有在线的设备
+//			List<DevClock> devClockList = devClockDao.findByDelFlagAndIsOnline(0,1);
+//			boolean flag = true;
+//			if(flag){
+//				logger.info("定时清除离职员工指纹信息执行成功");
+//			}else{
+//				logger.error("定时清除离职员工指纹信息执行失败");
+//			}
+//		}catch (Exception e){
+//			e.printStackTrace();
+//			logger.error("定时清除离职员工指纹信息" + e);
+//		}
+//	}
 
 	public ApiResponseResult clear_bak(String dev, String emp) throws Exception {
 		// TODO Auto-generated method stub

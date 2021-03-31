@@ -6,6 +6,7 @@ $(function() {
 	layui.use([ 'form', 'table','tableFilter'  ], function() {
 		var table = layui.table, form = layui.form,tableFilter = layui.tableFilter;
 
+
 		tableIns = table.render({
 			elem : '#issueList',
 			url : context + '/produce/issue/getList',
@@ -85,7 +86,7 @@ $(function() {
 		tableEmp = table.render({
 			elem : '#empList',
 			method : 'post',// 默认：get请求
-			url : context + '/produce/issue/getEmp',
+			url : context + '/produce/issue/getEmp?EMP_STATUS='+ptype,
 			page : true,
 			height: 'full-220',
 			limit:20,
@@ -111,6 +112,18 @@ $(function() {
 				type : 'checkbox',
 				width:40
 			},
+				{
+					field : 'EMP_STATUS',
+					title : '状态',
+					width:90,
+					templet:function (d){
+						if (d.EMP_STATUS=="1"){
+							return  '在职'
+						}else {
+							return  '离职'
+						}
+					}
+				},
 			{
 				field : 'EMP_CODE',
 				title : '员工工号',
@@ -119,7 +132,8 @@ $(function() {
 				field : 'EMP_NAME',
 				title : '员工姓名',
 					width:90
-			}, {
+			},
+				{
 					field : 'dept_name',
 					title : '部门名称',
 					width:110
@@ -138,6 +152,7 @@ $(function() {
 				localtableFilterIns.reload();
 				pageCurr = curr;
 				if(ptype == '1'){
+					// searchLeave(0);
 					for(j = 0,len=res.data.length; j < len; j++) {
 						res.data[j]["LAY_CHECKED"]='true';
 				        //下面三句是通过更改css来实现选中的效果
@@ -153,6 +168,7 @@ $(function() {
 			'parent' : '#setIssue',
 			'mode' : 'api',//服务端过滤
 			'filters' : [
+				{field: 'EMP_STATUS', type:'checkbox'},
 				{field: 'dept_name', type:'checkbox'},
 				{field: 'create_time', type:'date'}
 			],
@@ -163,6 +179,7 @@ $(function() {
 			elem : '#devList',
 			method : 'post',// 
 			height: 'full-220',
+			limit:20,
 			page : true,
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
@@ -236,10 +253,16 @@ $(function() {
 			return false;
 		});
 
-		form.on('submit(searchLeave)', function(data) {
-			// 重新加载table
-			searchLeave();
-			return false;
+		// form.on('submit(searchLeave)', function(data) {
+		// 	// 重新加载table
+		// 	searchLeave(1);
+		// 	return false;
+		// });
+
+		// 切换状态操作
+		form.on('switch(searchLeave)', function(obj) {
+			searchLeave(obj.elem.checked?"0":"1");
+			// doStatus(obj, this.value, this.name, obj.elem.checked);
 		});
 
 		// 监听工具条
@@ -260,6 +283,9 @@ $(function() {
 				// 新增
 				var devList = "";
 				var empList = "";
+
+				var statusOn = 0;
+				var statusLeave = 0;
 				var dList = table.checkStatus('devList').data;// 被选中行的数据 id
 				// 对应的值
 				var eList = table.checkStatus('empList').data;// 被选中行的数据 id
@@ -275,9 +301,15 @@ $(function() {
 					}
 					for (var i = 0; i < eList.length; i++) {// 获取被选中的行
 						empList += eList[i].ID + ";"// 用“；”分隔
+						console.log(eList[i].EMP_STATUS);
+						if(eList[i].EMP_STATUS ==1){
+							statusOn ++;
+						}else if(eList[i].EMP_STATUS ==0){
+							statusLeave ++;
+						}
 					}
 					
-					addSubmit(devList, empList);
+					addSubmit(devList, empList,statusOn,statusLeave);
 				}
 				
 			} else {
@@ -295,7 +327,6 @@ $(function() {
 });
 // 新增编辑弹出框
 function openIssue( title) {
-	
 	var index = layer.open({
 		type : 1,
 		title : title,
@@ -306,6 +337,7 @@ function openIssue( title) {
 		content : $('#setIssue'),
 		macmin : true,// 弹出框全屏
 		end : function() {
+			// searchLeave(2);
 		}
 	});
 	layer.full(index);// 弹出框全屏
@@ -318,6 +350,7 @@ function addIssue(title) {
 
 	// 打开弹出框
 	if(ptype == '1'){
+		// $('#searchLeave').hide();
 		openIssue("添加指纹下发信息");
     }else{
     	openIssue("删除指纹信息");
@@ -327,7 +360,7 @@ function addIssue(title) {
 
 
 // 新增指纹下发信息提交
-function addSubmit(devList, empList) {
+function addSubmit(devList, empList,statusOn,statusLeave) {
 	console.log(devList)
 	console.log(empList)
 	var params = {
@@ -335,27 +368,40 @@ function addSubmit(devList, empList) {
 		"empList" : empList
 	};
 	var url = "/produce/issue/clear";
+	var msgTip = "是否要清除指纹？"
+	if(statusOn>0){
+		msgTip ="是否要清除指纹？注意：包含在职员工。"
+	}
 	if(ptype == '1'){
 		url = "/produce/issue/add"
+		msgTip = "是否要下发指纹？"
+		if(statusLeave>0){
+			msgTip ="是否要下发指纹？注意：包含离职员工。"
+		}
 	}
 
-	CoreUtil.sendAjax(url, JSON.stringify(params), function(
+	layer.confirm(msgTip, {
+		btn : [ '确认', '返回' ]
+		// 按钮
+	}, function() {
+		CoreUtil.sendAjax(url, JSON.stringify(params), function (
 			data) {
-		if (data.result) {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
-				cleanIssue();
-				// 加载页面
-				loadAll();
-			});
-		} else {
-			layer.alert(data.msg, function() {
-				layer.closeAll();
-			});
-		}
-	}, "POST", false, function(res) {
-		layer.alert(res.msg);
-	});
+			if (data.result) {
+				layer.alert(data.msg, function () {
+					layer.closeAll();
+					cleanIssue();
+					// 加载页面
+					loadAll();
+				});
+			} else {
+				layer.alert(data.msg, function () {
+					layer.closeAll();
+				});
+			}
+		}, "POST", false, function (res) {
+			layer.alert(res.msg);
+		});
+	})
 }
 function delIssue(obj, id) {
 	if (id != null) {
@@ -406,7 +452,7 @@ function loadEmp(obj) {
 	tableEmp.reload({
 		//url : context + '/produce/issue/getEmp',
 		where : {
-			empKeyword : obj.field.empKeyword
+			empKeyword : obj.field.empKeyword,
 		},
 		page : {
 			curr : pageCurr
@@ -415,11 +461,11 @@ function loadEmp(obj) {
 	});
 }
 
-function  searchLeave (){
+function  searchLeave (type){
 	tableEmp.reload({
 		//url : context + '/produce/issue/getEmp',
 		where : {
-			type : 1
+			EMP_STATUS1 : type
 		},
 		page : {
 			curr : pageCurr
@@ -434,7 +480,7 @@ function loadAll() {
 		page : {
 			curr : pageCurr
 		// 从当前页码开始
-		}
+		},
 	});
 }
 

@@ -56,7 +56,8 @@ public class OnlineStaffController extends WebController{
 	        String method = "produce/online/getList";String methodName ="获取上线人员列表";
 	        try {
 	        	System.out.println(keyword);
-	            Sort sort = new Sort(Sort.Direction.DESC, "id");
+	            Sort sort =new Sort(Sort.Direction.DESC, "workDate");
+	            sort.and(new Sort(Sort.Direction.DESC, "line.linerName"));
 	            ApiResponseResult result = onlineStaffService.getList(keyword,taskNo, linerName,classId,workDate,
 						hourType,lineName,lastupdateDate,createDate,super.getPageRequest(sort));
 	            logger.debug("获取上线人员列表=getList:");

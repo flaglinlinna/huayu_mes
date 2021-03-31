@@ -835,6 +835,11 @@ public class CheckImpl   implements CheckService {
 			quoteItemDao.switchStatus(2, quoteId, "B001");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B001");
 			autoCheck(quoteId,"hardware");
+			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,"hardware");
+			for(ProductMater o : productMaterList) {
+				o.setBsStatus(1);
+			}
+			productMaterDao.saveAll(productMaterList);
 			if(lo.size()>0){
 				Quote o = lo.get(0);
 				o.setBsStatus2Hardware(2);
@@ -858,6 +863,10 @@ public class CheckImpl   implements CheckService {
 				quoteDao.save(o);
 			}
 			autoCheck(quoteId,"surface");
+			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,"surface");
+			for(ProductMater o : productMaterList) {
+				o.setBsStatus(1);
+			}
 		}else if(isCopy) {
 			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"surface",1);
 			for(ProductMater o : productMaterList) {
@@ -876,6 +885,10 @@ public class CheckImpl   implements CheckService {
 				quoteDao.save(o);
 			}
 			autoCheck(quoteId,"packag");
+			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,"packag");
+			for(ProductMater o : productMaterList) {
+				o.setBsStatus(1);
+			}
 		}else if(isCopy) {
 			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"packag",1);
 			for(ProductMater o : productMaterList) {
@@ -894,6 +907,10 @@ public class CheckImpl   implements CheckService {
 				quoteDao.save(o);
 			}
 			autoCheck(quoteId,"molding");
+			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,"molding");
+			for(ProductMater o : productMaterList) {
+				o.setBsStatus(1);
+			}
 		}else if(isCopy) {
 			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"molding",1);
 			for(ProductMater o : productMaterList) {

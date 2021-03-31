@@ -109,9 +109,12 @@
 								</button>
 								<button class="layui-btn layui-btn-sm" lay-submit=""
 									lay-filter="searchEmp">查询</button>
-								<button class="layui-btn layui-btn-sm" lay-submit=""
-										lay-filter="searchLeave">离职清单</button>
-							</div>
+<!--								<button class="layui-btn layui-btn-sm" lay-submit=""-->
+<!--										lay-filter="searchLeave">离职清单</button>-->
+									<div id = "searchLeave" class="layui-inline">
+										<input type="checkbox" id = "checkStatus"   lay-skin="switch"  lay-text="离职|在职" lay-filter="searchLeave"/>
+									</div>
+								</div>
 						</div>
 					</form>
 						<table id="empList" lay-filter="empList" style="margin-top: -5px;"></table>

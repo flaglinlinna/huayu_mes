@@ -193,8 +193,14 @@
 			</fieldset>
 			<table id="empTable" lay-filter="empTable" style="margin-top: -20px;"></table>
 		</div>
-		<script th:src="@{/js/web/produce/switch_staff/switch_staff.js}"
-			src="/js/web/produce/switch_staff/switch_staff.js"></script>
+<!--		<script th:src="@{/js/web/produce/switch_staff/switch_staff.js}"-->
+<!--			src="/js/web/produce/switch_staff/switch_staff.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/produce/switch_staff/switch_staff.js?ver="+Math.random()+"'><\/script>");
+		</script>
+
 	</div>
 </body>
 </html>

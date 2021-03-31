@@ -6,9 +6,9 @@ var set_main_id;
 $(function() {
 	layui
 			.use(
-					[ 'form', 'table', 'laydate' ,'tableFilter' ],
+					[ 'form', 'table', 'laydate' ],
 					function() {
-						var table = layui.table, form = layui.form, laydate = layui.laydate,tableFilter = layui.tableFilter;
+						var table = layui.table, form = layui.form, laydate = layui.laydate;
 
 						tableIns = table
 								.render({
@@ -30,17 +30,38 @@ $(function() {
 										return {
 											"count" : res.data.total,
 											"msg" : res.msg,
-											"data" : res.data.rows.rows,
+											"data" : res.data.rows,
 											"code" : res.status
 										// code值为200表示成功
 										}
 									},
 									cols : [ [
-											{type : 'numbers'},
-											{type:'checkbox' },
-											{field : 'taskNo', title : '制令单号', width : 175},
-											{field : 'linerName', title : '组长', width : 75},
-											{field : 'classId', title : '班次', width : 80,
+											{
+												type : 'numbers'
+											},
+										{type:'checkbox' },
+											// ,{field:'id', title:'ID',
+											// width:80, unresize:true,
+											// sort:true}
+
+											{
+												field : 'taskNo',
+												title : '制令单号',
+												width : 175
+											},
+											{
+												field : 'linerName',
+												title : '组长',
+												width : 75,
+												templet:function (d){	
+								                	var list=d.linerName;
+								                	return list[0].LINER_NAME;
+								                }
+											},
+											{
+												field : 'classId',
+												title : '班次',
+												width : 80,
 												templet:function (d){	
 								                	if(d.classId=="1"){
 								                		return "白班"
@@ -49,46 +70,49 @@ $(function() {
 								                	}else{
 								                		return "其他"
 								                	}
-								                }},
-											{field : 'workDate', title : '生产时间', width : 100,
-												templet : '<div>{{d.workDate?DateUtils.formatterDate(d.workDate):""}}</div>',},
-											{field : 'hourType', title : '工时类型', width : 100},
-											{field : 'lineName', title : '线体', width : 100},
-											{field : 'lastupdateDate', title : '更新时间', width : 180,
-												templet : '<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',},
-											{field : 'createDate', title : '创建时间', width : 180,
-												templet : '<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
+								                }
 											},
-											{fixed : 'right', title : '操作', align : 'center', toolbar : '#optBar', width : 150} ] ],
+											{
+												field : 'workDate',
+												title : '生产时间',
+												width : 100,
+												templet : '<div>{{d.workDate?DateUtils.formatterDate(d.workDate):""}}</div>',
+											},
+											{
+												field : 'hourType',
+												title : '工时类型',
+												width : 100
+											},
+											{
+												field : 'lineName',
+												title : '线体',
+												width : 100
+											},
+											{
+												field : 'lastupdateDate',
+												title : '更新时间',
+												width : 180,
+												templet : '<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
+											},
+											{
+												field : 'createDate',
+												title : '创建时间',
+												width : 180,
+												templet : '<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
+											}, {
+												fixed : 'right',
+												title : '操作',
+												align : 'center',
+												toolbar : '#optBar',
+												width : 150
+											} ] ],
 									done : function(res, curr, count) {
 										// 如果是异步请求数据方式，res即为你接口返回的信息。
 										// 如果是直接赋值的方式，res即为：{data: [], count:
 										// 99} data为当前页数据、count为数据总长度
-										localtableFilterIns.reload();
 										pageCurr = curr;
 									}
 								});
-
-						var localtableFilterIns = tableFilter.render({
-							'elem' : '#onlineList',
-							'mode' : 'api',//服务端过滤
-							'filters' : [
-								{field: 'taskNo', type:'input'},
-								{field: 'linerName', type:'input'},
-								{field: 'classId', type:'checkbox',data:[{ "key":"1", "value":"白班"},{ "key":"2", "value":"晚班"}]},
-								// {field: 'taskNo', type:'input'},
-								// {field: 'bsType', type:'checkbox', data:[{ "key":"YSBJ", "value":"衍生报价"},{ "key":"XPBJ", "value":"新品报价"}]},
-								// {field: 'bsStatus', type:'checkbox', data:[{ "key":"0", "value":"进行中"},{ "key":"1", "value":"已完成"},{ "key":"99", "value":"已关闭"}]},
-								{field: 'workDate', type:'date'},
-								{field: 'hourType', type:'input'},
-								{field: 'lineName', type:'input'},
-								{field: 'lastupdateDate', type:'date'},
-								{field: 'createDate', type:'date'}
-							],
-							'done': function(filters){
-							}
-						})
-
 						tableEmp = table.render({
 							elem : '#empList',
 							method : 'post',// 默认：get请求

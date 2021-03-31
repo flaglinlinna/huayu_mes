@@ -544,6 +544,7 @@ function save(params, emp_ids) {
 		}else {
 			playMusic();
 			layer.alert(data.msg, function() {
+				getUserByLine(params.pline);
 				layer.closeAll();
 			});
 		}

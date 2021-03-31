@@ -21,7 +21,7 @@ public interface IssueService {
 
 	public ApiResponseResult getList(String keyword,String ptype, PageRequest pageRequest) throws Exception;
 
-	public ApiResponseResult getEmp(String empKeyword,String create_time,String dept_name,String type, PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getEmp(String empKeyword,String create_time,String dept_name,String type,String type1, PageRequest pageRequest) throws Exception;
 
 	public ApiResponseResult getDev(String devKeyword, PageRequest pageRequest) throws Exception;
 
