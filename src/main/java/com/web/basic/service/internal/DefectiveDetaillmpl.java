@@ -186,6 +186,7 @@ public class DefectiveDetaillmpl implements DefectiveDetailService {
 				for(DefectiveDetail bs:page.getContent()){
 					Map<String, Object> map = new HashMap<>();
 					map.put("defectTypeCode",bs.getDefective().getDefectTypeCode());//获取关联表的数据
+                    map.put("defectClass",bs.getDefective().getDefectClass());
 					map.put("defectTypeName", bs.getDefective().getDefectTypeName());
 					map.put("id", bs.getId());
 					map.put("defectCode", bs.getDefectCode());

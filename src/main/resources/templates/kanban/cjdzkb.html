@@ -201,7 +201,7 @@ $(document).ready(function(){
 			<div id="echart_1"
 				style="width: 15%; height: 100%; float: left; color: #ffffff;">
 				<ul class="small_ul">
-					<li style="color: #CCCCFF;" class="small_li">标准工时:<span
+					<li style="color: #CCCCFF;" class="small_li">产出工时:<span
 						class="span_li" style="color: #CCCCFF;" id="stdtime"></span></li>
 					<li style="color: #FFCC99;" class="small_li">实际工时:<span
 						class="span_li" style="color: #FFCC99;" id="facttime"></span></li>
@@ -251,8 +251,13 @@ $(document).ready(function(){
     		$("#inSearch").hide();
     	}
     </script>
-		<script src="/kanban/scripts/cjdzkb.js"
-			th:src="@{/kanban/scripts/cjdzkb.js}"></script>
+<!--		<script src="/kanban/scripts/cjdzkb.js"-->
+<!--			th:src="@{/kanban/scripts/cjdzkb.js}"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/kanban/scripts/cjdzkb.js?ver="+Math.random()+"'><\/script>");
+		</script>
 
 	</div>
 </body>

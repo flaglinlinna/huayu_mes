@@ -254,11 +254,11 @@ public class SchedulingController extends WebController {
     public ApiResponseResult updateOrderQty(@RequestBody Map<String, Object> param){
         String taskNo= param.get("taskNo").toString();
         String qtyPlan = param.get("qtyPlan").toString();
-        String manpower = param.get("manpower").toString();
+        String manNumber = param.get("manNumber").toString();
         String capacity = param.get("capacity").toString();
         String method = "/produce/scheduling/updateOrderQty";String methodName ="更改计划数量";
         try{
-            ApiResponseResult result = schedulingService.changeQtyPlan(taskNo,qtyPlan,manpower,capacity);
+            ApiResponseResult result = schedulingService.changeQtyPlan(taskNo,qtyPlan,manNumber,capacity);
             logger.debug("更改计划数量=updateOrderQty:");
             getSysLogService().success(module,method, methodName, "制令单号:"+taskNo+";修改数量:"+qtyPlan);
             return result;

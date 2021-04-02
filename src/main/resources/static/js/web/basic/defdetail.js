@@ -31,41 +31,25 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			}
+			cols : [ [ {type : 'numbers'},
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			,{
-				field : 'defectTypeCode',
-				title : '不良类别编号'
-			},{
-				field : 'defectTypeName',
-				title : '不良类别名称'
-			}, {
-				field : 'defectCode',
-				title : '不良内容编码'
-			}, {
-				field : 'defectName',
-				title : '不良内容名称'
-			}, {
-				field : 'checkStatus',
-				title : '状态',
-				width : 95,
-				templet : '#statusTpl'
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间',width : 130,
-				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>'
-			}, {
-				field : 'createDate',
-				title : '添加时间',width : 130,
-				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>'
-			}, {
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar'
-			} ] ],
+			// 	{field : 'defectTypeCode', title : '不良类别编号'},
+				{field : 'defectClass', title : '检验时点',templet: function (d) {
+						if(d.defectClass==0){
+							return "品质检验";
+						}else  if(d.defectClass==1){
+							return "在线检验";
+						}else return "";
+					}},
+				{field : 'defectTypeName', title : '不良类别名称'},
+				{field : 'defectCode', title : '不良内容编码'},
+				{field : 'defectName', title : '不良内容名称'},
+				{field : 'checkStatus', title : '状态', width : 95, templet : '#statusTpl'},
+				{field : 'lastupdateDate', title : '更新时间',width : 150, templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>'},
+				{field : 'createDate', title : '添加时间',width : 150,
+				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>'},
+				{fixed : 'right', title : '操作', align : 'center', toolbar : '#optBar'}
+			] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度

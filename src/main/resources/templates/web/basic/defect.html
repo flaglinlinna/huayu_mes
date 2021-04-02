@@ -71,12 +71,12 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">不良类别类型</label>
+                <label class="layui-form-label">检验时点</label>
                 <div class="layui-input-inline">
                     <select id="defectClass" name="defectClass"  lay-filter="defectClass" >
                         <option value="">请选择</option>
-                        <option value="0">品质问题</option>
-                        <option value="1">制程问题</option>
+                        <option value="0">品质检验</option>
+                        <option value="1">在线检验</option>
                     </select>
                 </div>
             </div>
@@ -88,7 +88,12 @@
             </div>
         </form>
     </div>
-    <script th:src="@{/js/web/basic/defect.js}" src="/js/basic/web/defect.js"></script>
+<!--    <script th:src="@{/js/web/basic/defect.js}" src="/js/basic/web/defect.js"></script>-->
+
 	</div>
+    <script>
+        document.write("<script type='text/javascript' " +
+            "src='/js/web/basic/defect.js?ver="+Math.random()+"'><\/script>");
+    </script>
 </body>
 </html>

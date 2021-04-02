@@ -590,7 +590,7 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 									devLog.setEmpId(em.getId());
 									devLog.setDescription("指纹删除");
 									devLog.setFmemo("操作中");
-									if( env.getProperty("envi").equals("linux")) {
+									if( env.getProperty("envi").equals("windows")) {
 										if (deleteTmpByUser(devClock.getDevIp(), devId, le)) {
 											devLog.setFmemo("成功");
 											if (em.getEmpStatus() == 0) {
@@ -768,6 +768,14 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 					fmemo = "成功";
 				}
 				try{
+					DevLog devLog = devLogDao.findById(Long.parseLong(id));
+					Employee em = employeeDao.findById((long) devLog.getEmpId());
+					if(em!=null) {
+						if (em.getEmpStatus() == 0 && ("指纹删除").equals(devLog.getDescription())) {
+							//如果是离职则更新
+							issueDao.updateDelFlagByClear(devLog.getCreateBy(),em.getId());
+						}
+					}
 					devLogDao.updateDelFlagBySn(fmemo,sn,Long.valueOf(id));
 				}catch(Exception e){
 					System.out.println(e.toString());

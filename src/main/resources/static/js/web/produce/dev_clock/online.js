@@ -30,7 +30,7 @@ $(function() {
 										return {
 											"count" : res.data.total,
 											"msg" : res.msg,
-											"data" : res.data.rows,
+											"data" : res.data.rows.rows,
 											"code" : res.status
 										// code值为200表示成功
 										}
@@ -53,10 +53,10 @@ $(function() {
 												field : 'linerName',
 												title : '组长',
 												width : 75,
-												templet:function (d){	
-								                	var list=d.linerName;
-								                	return list[0].LINER_NAME;
-								                }
+												// templet:function (d){
+								                // 	var list=d.linerName;
+								                // 	return list[0].LINER_NAME;
+								                // }
 											},
 											{
 												field : 'classId',

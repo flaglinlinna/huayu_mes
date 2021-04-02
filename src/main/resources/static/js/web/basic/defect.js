@@ -31,44 +31,23 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
-				type : 'numbers'
-			}
+			cols : [ [ {type : 'numbers'},
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
-				field : 'defectTypeCode',
-				title : '编码',sort:true
-			}, {
-				field : 'defectTypeName',
-				title : '名称',sort:true
-			},
-				{
-					field : 'defectClass',
-					title : '类别',sort:true,templet: function (d) {
+			 {field : 'defectTypeCode', title : '编码',sort:true},
+				{field : 'defectTypeName', title : '名称',sort:true},
+				{field : 'defectClass', title : '检验时点',sort:true,templet: function (d) {
 						if(d.defectClass==0){
-							return "品质问题";
+							return "品质检验";
 						}else  if(d.defectClass==1){
-							return "制程问题";
+							return "在线检验";
 						}else return "";
 					}
 				},
-				{
-				field : 'checkStatus',
-				title : '状态',
-				width : 95,
-				templet : '#statusTpl'
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间'
-			}, {
-				field : 'createDate',
-				title : '添加时间',
-			}, {
-				fixed : 'right',
-				title : '操作',
-				align : 'center',
-				toolbar : '#optBar'
-			} ] ],
+				{field : 'checkStatus', title : '状态', width : 95, templet : '#statusTpl'},
+				{field : 'lastupdateDate', title : '更新时间'},
+				{field : 'createDate', title : '添加时间',},
+				{fixed : 'right', title : '操作', align : 'center', toolbar : '#optBar'}
+			] ],
 			done : function(res, curr, count) {
 				// 如果是异步请求数据方式，res即为你接口返回的信息。
 				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度

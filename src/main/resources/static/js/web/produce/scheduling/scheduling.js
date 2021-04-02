@@ -55,6 +55,7 @@ $(function () {
                 // ,{field:'deptName', title:'部门', width:70}
                 ,{field:'MANPOWER', title:'标准人力', width:80,align: 'center'}
                 ,{field:'CAPACITY', title:'标准产能', width:80,align: 'center'}
+                ,{field:'MAN_ACT', title:'实际用人', width:80,align: 'center'}
                ,{field:'DEPT_NAME', title:'部门名称', width:80,align: 'center'}
                 ,{field:'PROD_NO', title:'工单号', width:130,align: 'center'}
                 ,{field:'GROUP_NO', title:'组合', width:55,align: 'center'}
@@ -342,7 +343,7 @@ function updateQty(obj) {
     var param = {
         "taskNo" : obj.field.taskNo,
         "qtyPlan":obj.field.newQty,
-        "manpower": obj.field.manpower,
+        "manNumber": obj.field.manNumber,
         "capacity": obj.field.capacity,
     };
     CoreUtil.sendAjax("/produce/scheduling/updateOrderQty", JSON.stringify(param), function(
@@ -401,12 +402,13 @@ function openPlan() {
         layer.msg('只能选中一条指令单进行修改');
         return false;
     }
-    // console.log(checkdata[0]);
+    console.log(checkdata[0]);
     layui.form.val("changeQtyDiv", {
         "taskNo":checkdata[0].TASK_NO,
         "newQty" : checkdata[0].QTY_PLAN,
         "manpower":checkdata[0].MANPOWER,
         "capacity":checkdata[0].CAPACITY,
+        "manNumber":checkdata[0].MAN_ACT,
     });
     layui.form.render();// 重新渲染
     var index = layer.open({

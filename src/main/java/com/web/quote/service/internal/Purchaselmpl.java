@@ -207,7 +207,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		//List<Map<String, Object>> list = super.findBySql(sql, param);
 
 		int pn = pageRequest.getPageNumber() + 1;
-		hql +="order by bs_Assess desc";
+		hql +="order by id desc";
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
 				+ pageRequest.getPageSize() + " ";

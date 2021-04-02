@@ -10,6 +10,7 @@ import com.web.basic.entity.Employee;
 
 public interface EmployeeDao extends CrudRepository<Employee, Long>,JpaSpecificationExecutor<Employee>{
 
+
 	public List<Employee> findAll();
 	
 	public List<Employee> findByDelFlag(Integer delFlag);

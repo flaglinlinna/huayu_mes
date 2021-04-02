@@ -318,7 +318,7 @@ function getChart2(emp_plan, emp_now, emp_off) {
 			left : "center",
 			top : "40%",
 			style : {
-				text : "应到人数",
+				text : "实际人数",
 				textAlign : "center",
 				fill : "#ffffff",
 				fontSize : fontSize(0.31),
@@ -363,10 +363,10 @@ function getChart2(emp_plan, emp_now, emp_off) {
 			},
 			data : [ {
 				value : emp_off,
-				name : '缺勤人数'
+				name : '差异人数'
 			}, {
 				value : emp_now,
-				name : '在线人数',
+				name : '已分人数',
 				url : "toScdzDetail?liner=&fieldword=PO_EMP_NUM_NOW"
 			},
 			]
@@ -405,7 +405,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			//orient: 'vertical',
 	        x:'center',      //可设定图例在左、右、居中
 	        top:15,   
-			data : [ '标准工时', '实际工时', '生产效率' ],
+			data : [ '产出工时', '实际工时', '生产效率' ],
 			textStyle : {
 				fontSize : fontSize(0.24),// 字体大小
 				color : '#ffffff'// 字体颜色
@@ -476,7 +476,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 			},
 		} ],
 		series : [ {
-			name : '标准工时',
+			name : '产出工时',
 			type : 'bar',
 			data : series1_data,
 			label : {

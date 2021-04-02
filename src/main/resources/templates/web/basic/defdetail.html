@@ -99,7 +99,11 @@
 			</form>
 		</div>
 		<script th:src="@{/js/dateUtils.js}" src="/js/dateUtils.js" type="text/javascript"></script>
-		<script th:src="@{/js/web/basic/defdetail.js}" src="/js/web/basic/defdetail.js"></script>
+<!--		<script th:src="@{/js/web/basic/defdetail.js}" src="/js/web/basic/defdetail.js"></script>-->
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/basic/defdetail.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

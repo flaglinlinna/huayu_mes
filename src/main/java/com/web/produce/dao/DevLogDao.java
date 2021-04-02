@@ -15,6 +15,8 @@ import java.util.Map;
 
 public interface DevLogDao extends CrudRepository<DevLog, Long>,JpaSpecificationExecutor<DevLog>{
 
+    DevLog findById(long id);
+
 	@Modifying
     @Query(value ="update DevLog t set t.cmdFlag=1,t.fmemo=?1 where  t.delFlag=0 and t.cmdFlag=0 and t.devCode=?2 and t.id=?3  ")
     public void updateDelFlagBySn( String fmemo,String sn,Long id);
