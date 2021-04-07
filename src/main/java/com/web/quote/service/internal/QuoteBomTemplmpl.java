@@ -278,13 +278,16 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 	public ApiResponseResult importByTemp(Long pkQuote) throws Exception {
 		Long userId = UserUtil.getSessionUser().getId();
 		Date doExcelDate = new Date();
+		//hjj 2021/04/02 临时表导入正式表时 删除原数据
+		quoteBomDao.deleteAllByPkQuote(pkQuote);
+
 		List<QuoteBomTemp> tempList = quoteBomTempDao.findByCheckStatusAndDelFlagAndCreateByAndPkQuote(0,0,userId,pkQuote);
 		List<QuoteBom> quoteBomList =  new ArrayList<>();
 		for(QuoteBomTemp temp:tempList){
 			QuoteBom quoteBom = new QuoteBom();
-			if(temp.getMid()!=null){
-				quoteBom = quoteBomDao.findById((long) temp.getMid());
-			}
+//			if(temp.getMid()!=null){
+//				quoteBom = quoteBomDao.findById((long) temp.getMid());
+//			}
 			quoteBom.setBsComponent(temp.getBsComponent());
 			quoteBom.setBsMaterName(temp.getBsMaterName());
 			quoteBom.setBsElement(temp.getBsElement());

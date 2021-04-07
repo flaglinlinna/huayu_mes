@@ -8,6 +8,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  *
  */
 @EnableScheduling
+@EnableAsync
 @SpringBootApplication
 public class WYApplication extends SpringBootServletInitializer{
 	

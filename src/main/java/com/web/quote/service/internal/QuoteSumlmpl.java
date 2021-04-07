@@ -360,15 +360,15 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		// TODO Auto-generated method stub
 		List<SysParam> sysParams = sysParamDao.findByDelFlagAndParamCode(0, "BJ_YIELD");
 		BigDecimal bsYield =  sysParams.size()>0?new BigDecimal(sysParams.get(0).getParamValue()):new BigDecimal("100");
-		// 五金，表面，组装的材料总价格(未税)计算公式-单价*用量/基数 20210225去除了五金
+		// 表面，组装的材料总价格(未税)计算公式-单价*用量/基数 20210225去除了五金
 		List<ProductMater> lpm3 = productMaterDao.findByDelFlagAnd3Tyle(Long.valueOf(quoteId));
 		for (ProductMater pm : lpm3) {
-			BigDecimal bsRadix = new BigDecimal("1");// 基数
-			if (!StringUtils.isEmpty(pm.getBsRadix())) {
-				if (!"1".equals(pm.getBsRadix())) {
-					bsRadix = new BigDecimal(pm.getBsRadix());
-				}
-			}
+//			BigDecimal bsRadix = new BigDecimal("1");// 基数
+//			if (!StringUtils.isEmpty(pm.getBsRadix())) {
+//				if (!"1".equals(pm.getBsRadix())) {
+//					bsRadix = new BigDecimal(pm.getBsRadix());
+//				}
+//			}
 			BigDecimal bsAssess = new BigDecimal("0");// 采购价
 			if (pm.getBsAssess() != null) {
 				bsAssess = pm.getBsAssess();
@@ -379,6 +379,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 
 			pm.setBsFee(bsAssess.multiply(pm.getBsQty()));
 			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5));
+			if(("surface").equals(pm.getBsType())){
+				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"),5,5));
+			}
 		}
 		productMaterDao.saveAll(lpm3);
 		// 注塑的材料总价格(未税)计算公式-材料单价*(制品重(g)+水口重/穴数)/基数  20210225增加了五金
@@ -405,7 +408,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0);
 			pm.setBsYield(processList.size()>0?processList.get(0).getBsYield():bsYield);
 			pm.setBsFee(bsAssess.multiply(qty).divide(bsRadix, 5, 5));
-			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5));
+			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5).divide(new BigDecimal("1000"),5,5));
 		}
 		productMaterDao.saveAll(lpm1);
 		// 五金-人工工时费（元/H）*人数*成型周期(S）/3600 /基数；制费工时费（元/H）*成型周期(S）/3600/ /基数

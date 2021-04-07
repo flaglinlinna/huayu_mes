@@ -71,7 +71,12 @@
             </div>
         </form>
     </div>
-    <script th:src="@{/js/web/basePrice/proc.js}" src="/js/web/basePrice/proc.js"></script>
+<!--    <script th:src="@{/js/web/basePrice/proc.js}" src="/js/web/basePrice/proc.js"></script>-->
+
+        <script>
+            document.write("<script type='text/javascript' " +
+                "src='/js/web/basePrice/proc.js?ver="+Math.random()+"'><\/script>");
+        </script>
 	</div>
 </body>
 </html>

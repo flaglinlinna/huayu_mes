@@ -372,7 +372,7 @@ function delProc(obj, id, name) {
 							loadAll();
 						});
 					} else {
-						layer.alert(data, function() {
+						layer.alert(data.msg, function() {
 							layer.closeAll();
 						});
 					}

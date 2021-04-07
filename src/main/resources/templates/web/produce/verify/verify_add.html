@@ -131,8 +131,10 @@
 						<fieldset class="layui-elem-field layui-field-title">
 							<legend style="font-size: 14px;">上线人员列表</legend>
 						</fieldset>
+						<div class="table-responsive" id="table_and_page_div_id" >
 						<table id="colTable" lay-filter="colTable"
 							style="margin-top: -20px;"></table>
+						</div>
 						<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
@@ -235,8 +237,13 @@
 		<script th:inline="javascript">
 			var openType = 0; //菜单栏点击进入建在线返工单
 		</script>
-		<script th:src="@{/js/web/produce/verify/verify_add.js}"
-			src="/js/web/produce/verify/verify_add.js"></script>
+<!--		<script th:src="@{/js/web/produce/verify/verify_add.js}"-->
+<!--			src="/js/web/produce/verify/verify_add.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/produce/verify/verify_add.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 	<style type="text/css">
 .grey {

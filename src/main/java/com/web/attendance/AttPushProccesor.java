@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.*;
+
 
 /**
  * 所有的设备请求都会在url参数里携带SN，这是设备序列号(serial number的缩写)，每个设备唯一标识
@@ -32,6 +34,7 @@ public class AttPushProccesor {
     private static String cmd_info = "C:1:CHECK";
 
     private static Map<String, Date> snMap = new HashMap<>();//存放卡机心跳请求时间
+
     /**
      * 1，设备通完电以后第一个发送到后台的请求
      * 格式为 /iclock/cdata?options=all&language=xxxx&pushver=xxxx
@@ -91,11 +94,11 @@ public class AttPushProccesor {
             cmds.stream().forEach(cmd->sb.append(cmd).append("\r\n\r\n"));
 
         }
-        System.out.println("心跳命令为...."+sb);
+//        System.out.println("心跳命令为...."+sb);
         try {
             //cmdMap.get(SN).clear();//处理完以后立刻将集合清空，实际开发中应该是在/devicecmd这个请求里完成
             response.setCharacterEncoding("gbk");
-            System.out.println("返回的命令...."+sb.toString());
+//            System.out.println("返回的命令...."+sb.toString());
             response.getWriter().write(sb.toString());
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,7 +125,7 @@ public class AttPushProccesor {
      */
     @RequestMapping("/devicecmd")
     public void handleCmd(String SN,@RequestBody  String data,HttpServletResponse response){
-        System.out.println("设备处理完命令以后的返回结果..."+data);
+        System.out.println("设备处理完命令以后的返回结果..."+SN+";"+data);
         try {
             issueService.updateDevicecmd(SN, data);
             response.getWriter().write("OK");

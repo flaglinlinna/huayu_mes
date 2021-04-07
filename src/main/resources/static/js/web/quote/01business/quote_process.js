@@ -710,6 +710,10 @@ function getAddList(val) {
 		where : {
 			"pkWcId" :val
 		},
+		page : {
+			curr : 0
+			// 从当前页码开始
+		},
 		done : function(res, curr, count) {
 			// cleanProc();// 清空之前的选中
 		}

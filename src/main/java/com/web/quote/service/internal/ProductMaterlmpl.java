@@ -222,12 +222,13 @@ public class ProductMaterlmpl implements ProductMaterService {
     	
         List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductMater o : productMaterList) {
-            if("hardware".equals(bsType)) {
-                if (o.getBsQty() == null ) {
-                    return ApiResponseResult.failure("用量存在空值,请检查后再确认！");
-                }
-            }else if("molding".equals(bsType)) {
-                if ( o.getBsProQty() == null || o.getBsCave() == null || o.getBsWaterGap() == null) {
+//            if("hardware".equals(bsType)) {
+//                if (o.getBsQty() == null ) {
+//                    return ApiResponseResult.failure("用量存在空值,请检查后再确认！");
+//                }
+//            }else
+            if("molding".equals(bsType)||"hardware".equals(bsType)) {
+                if ( o.getBsProQty() == null || o.getBsCave() == null ||("0").equals(o.getBsCave()) || o.getBsWaterGap() == null) {
                     return ApiResponseResult.failure("制品重(g)、穴数、水口数不能为空,请检查后再确认！");
                 }
             }else if("surface".equals(bsType)) {
@@ -274,12 +275,12 @@ public class ProductMaterlmpl implements ProductMaterService {
         if(quoteStatus ==4||quoteStatus==2) {
             return ApiResponseResult.failure("发起审批后不能取消确认");
         } else {
-            List<QuoteItem> quoteItemList = quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,quoteId,bsCode);
-            if(quoteItemList.size()>0){
-                if(quoteItemList.get(0).getBsEndTime()==null){
-                    return ApiResponseResult.failure("自动确认完成的项目不能取消完成");
-                }
-            }
+//            List<QuoteItem> quoteItemList = quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,quoteId,bsCode);
+//            if(quoteItemList.size()>0){
+//                if(quoteItemList.get(0).getBsEndTime()==null){
+//                    return ApiResponseResult.failure("自动确认完成的项目不能取消完成");
+//                }
+//            }
             //项目状态设置-状态 1：未完成
             quoteItemDao.switchStatus(1, quoteId, bsCode);
             //设置结束时间
@@ -288,7 +289,7 @@ public class ProductMaterlmpl implements ProductMaterService {
             quoteProductService.doItemFinish(bsCode, quoteId,1);
             List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
             for(ProductMater o : productMaterList){
-                //修改所有工艺为未完成
+                //修改所有材料为未完成
                 o.setBsStatus(0);
                 o.setLastupdateDate(new Date());
                 o.setLastupdateBy(UserUtil.getSessionUser().getId());

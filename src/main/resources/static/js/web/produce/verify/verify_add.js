@@ -556,8 +556,32 @@ function save(params, emp_ids) {
 
 function getUserByLine(lineId) {
 
+	var scrollTop;
+	var scrollLeft;
+	var layuitable = null;
+	var dev_obj = $("#table_and_page_div_id")//定位到表格
+	if (dev_obj != null) {//防止未获取到表格对象
+		layuitable =dev_obj[0].getElementsByClassName("layui-table-main");//定位到layui-table-main对象
+	}
+	if (layuitable != null && layuitable.length > 0) {
+		scrollTop =layuitable[0].scrollTop; //layuitable获取到的是class=layui-table-main的集合，所以直接获取其中的scrollTop属性。
+		// scrollLeft=layuitable[0].scrollLeft;
+	}
+
 	tableIns.reload({
-		url : context + '/verify/getUserByLine?lineId=' + lineId,
+		url : context + '/verify/getUserByLine?lineId=' + lineId
+		,done: function (res, curr, count) {
+			//滚轮控制
+			// pageCurr=curr;
+			dev_obj = $("#table_and_page_div_id")//定位到表格
+			if (dev_obj != null) {
+				layuitable =dev_obj[0].getElementsByClassName("layui-table-main");
+			}
+			if (layuitable != null && layuitable.length > 0) {//将属性放回去
+				layuitable[0].scrollTop = scrollTop;
+				// layuitable[0].scrollLeft = scrollLeft;
+			}
+		}
 
 	});
 

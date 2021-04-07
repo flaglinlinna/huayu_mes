@@ -56,7 +56,7 @@ $(function() {
 					}},
 				{field : 'bsGear',width : 120,title : '价格挡位',templet : '#selectGear',style : 'background-color:#ffffff'},
 				{field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'},
-				{field : 'bsAssess',width : 110,title : '评估价格<span style="color:red;font-size:12px;">*</span>',edit : 'number',style : 'background-color:#ffffff'},
+				{field : 'bsAssess',width : 120,title : '含税价格(元/KG)<span style="color:red;font-size:12px;">*</span>',edit : 'number',style : 'background-color:#ffffff'},
 				// {field : 'bsProQty',width : 100,title : '制品重(g)',style : 'background-color:#d2d2d2'},
 				{field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
 				{field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
@@ -279,6 +279,30 @@ $(function() {
 	});
 
 });
+
+
+function cancelConfirm(){
+	var params = {
+		"id" : quoteId
+	};
+	layer.confirm('确定要取消完成吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/purchase/cancelStatus", JSON.stringify(params), function(
+			data) {
+			if (data.result) {
+				layer.alert("取消完成成功", function() {
+					layer.closeAll();
+					window.location.reload();
+				});
+			} else {
+				layer.alert(data.msg);
+			}
+		}, "POST", false, function(res) {
+			layer.alert(res.msg);
+		});
+	});
+}
 
 function isComplete() {
 	if (nowStatus.data == 0) {

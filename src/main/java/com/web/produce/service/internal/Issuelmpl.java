@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.system.log.service.SysLogService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +33,6 @@ import com.utils.enumeration.BasicStateEnum;
 import com.web.attendance.ZkemSDKUtils;
 import com.web.basic.dao.EmployeeDao;
 import com.web.basic.entity.Employee;
-import com.web.basic.entity.Line;
 import com.web.produce.dao.CardDataDao;
 import com.web.produce.dao.DevClockDao;
 import com.web.produce.dao.DevLogDao;
@@ -75,6 +72,9 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 
 	@Autowired
 	DevLogDao devLogDao;
+
+	@Autowired
+	SysLogService sysLogService;
 
 	 @Autowired
 	 private Environment env;
@@ -755,33 +755,40 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 	}
 
 	@Override
+	@Async
 	public void updateDevicecmd(String sn, String data) {
 		// TODO Auto-generated method stub
+//		getSysLogService().error(module,method, methodName, params+";"+e.toString());
+//		System.out.println("devCode");
 		if(!StringUtils.isEmpty(data)){
 			String[] list = data.split("\n");
 			for(String da:list){
-				String[] das = da.split("&");
-				String id = das[0].replace("ID=", "");
-				String res = das[1].replace("Return=", "");
-				String fmemo = "失败";
-				if(res.equals("0")){
-					fmemo = "成功";
-				}
-				try{
-					DevLog devLog = devLogDao.findById(Long.parseLong(id));
-					Employee em = employeeDao.findById((long) devLog.getEmpId());
-					if(em!=null) {
-						if (em.getEmpStatus() == 0 && ("指纹删除").equals(devLog.getDescription())) {
-							//如果是离职则更新
-							issueDao.updateDelFlagByClear(devLog.getCreateBy(),em.getId());
-						}
+				if(!StringUtils.isEmpty(da)) {
+					String[] das = da.split("&");
+					String id = das[0].replace("ID=", "");
+					String res = das[1].replace("Return=", "");
+					String fmemo = "失败";
+					if (res.equals("0")) {
+						fmemo = "成功";
 					}
-					devLogDao.updateDelFlagBySn(fmemo,sn,Long.valueOf(id));
-				}catch(Exception e){
-					System.out.println(e.toString());
+					try {
+						DevLog devLog = devLogDao.findById(Long.parseLong(id));
+						Employee em = employeeDao.findById((long) devLog.getEmpId());
+						if (em != null) {
+							if (em.getEmpStatus() == 0 && ("指纹删除").equals(devLog.getDescription())) {
+								//如果是离职则更新
+								issueDao.updateDelFlagByClear(devLog.getCreateBy(), devLog.getEmpId());
+							}
+						}
+						devLogDao.updateDelFlagBySn(fmemo, sn, Long.valueOf(id));
+					} catch (Exception e) {
+						System.out.println(e.toString());
+					}
 				}
 			}
-			cmdMap.get(sn).clear();
+			if(cmdMap.get(sn)!=null) {
+				cmdMap.get(sn).clear();
+			}
 		}
 	}
 

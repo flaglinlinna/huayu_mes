@@ -16,12 +16,12 @@ layui.use('layer', function(){
                     dataType: "json",
                     success: function (res) {
                         console.log(res)
+                        parent.layer.close(index);
                         if(res.result===true){
                         	layer.msg(res.msg, {
                         	     btn: [ '知道了']
                         	     ,yes: function(index1, layero){
                         	         layer.close(index1);
-                        	    	 parent.layer.close(index);
                         	     }
                         	});
 

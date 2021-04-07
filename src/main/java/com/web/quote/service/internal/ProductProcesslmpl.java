@@ -442,7 +442,7 @@ public class ProductProcesslmpl implements ProductProcessService {
                 }
             } else if("molding".equals(bsType)) {
                 if ( o.getBsUserNum() == null||o.getBsCycle()==null ||o.getBsYield()==null||o.getBsCave()==null||
-                        o.getBsCave()=="0"|| o.getBsUserNum()==BigDecimal.ZERO ||o.getBsCycle()==BigDecimal.ZERO
+                        "0".equals(o.getBsCave())|| o.getBsUserNum()==BigDecimal.ZERO ||o.getBsCycle()==BigDecimal.ZERO
                         ||o.getBsYield()==BigDecimal.ZERO) {
                     return ApiResponseResult.failure("人数、穴数、成型周期和工序良率不能为空,请检查后再确认！");
                 }
@@ -492,11 +492,12 @@ public class ProductProcesslmpl implements ProductProcessService {
                     }
                 }
             }
-            o.setBsStatus(1);
-            o.setLastupdateDate(new Date());
-            o.setLastupdateBy(UserUtil.getSessionUser().getId());
+//            o.setBsStatus(1);
+//            o.setLastupdateDate(new Date());
+//            o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
-        productProcessDao.saveAll(productMaterList);
+//        productProcessDao.saveAll(productMaterList);
+        productProcessDao.doProcessStatusByType(UserUtil.getSessionUser().getId(),new Date(),quoteId,bsType);
         if(!("out").equals(bsType)) {
             //项目状态设置-状态 2：已完成
             quoteItemDao.switchStatus(2, quoteId, bsCode);
@@ -540,12 +541,12 @@ public class ProductProcesslmpl implements ProductProcessService {
             if(quoteStatus ==4 ||quoteStatus==2) {
                 return ApiResponseResult.failure("发起审批后不能取消确认");
             } else {
-                List<QuoteItem> quoteItemList = quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,quoteId,bsCode);
-                if(quoteItemList.size()>0){
-                    if(quoteItemList.get(0).getBsEndTime()==null){
-                        return ApiResponseResult.failure("自动确认完成的项目不能取消完成");
-                    }
-                }
+//                List<QuoteItem> quoteItemList = quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,quoteId,bsCode);
+//                if(quoteItemList.size()>0){
+//                    if(quoteItemList.get(0).getBsEndTime()==null){
+//                        return ApiResponseResult.failure("自动确认完成的项目不能取消完成");
+//                    }
+//                }
                 //项目状态设置-状态 1：未完成
                 quoteItemDao.switchStatus(1, quoteId, bsCode);
                 //设置结束时间

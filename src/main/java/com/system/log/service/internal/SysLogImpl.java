@@ -70,6 +70,7 @@ public class SysLogImpl implements SysLogService {
             filters1.add(new SearchFilter("method", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("methodName", SearchFilter.Operator.LIKE, keyword));
             filters1.add(new SearchFilter("operation", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("params", SearchFilter.Operator.LIKE, keyword));
         }
         Specification<SysLog> spec = Specification.where(BaseService.and(filters, SysLog.class));
         Specification<SysLog> spec1 =  spec.and(BaseService.or(filters1, SysLog.class));

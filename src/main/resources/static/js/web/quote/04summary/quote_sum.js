@@ -156,13 +156,13 @@ $(function() {
 		function getUrl(inputId) {
 			// 材料成本
 			if (inputId == "cl_hardware") {
-				getMaterDetail("hardware", "五金材料价格明细  (价格=单价*(制品重(g)+水口重/穴数)")
+				getMaterDetail("hardware", "五金材料价格明细  (价格=材料单价(KG)/1000*(制品重(g)+水口重/穴数/工序良率)")
 			} else if (inputId == "cl_molding") {
-				getMaterDetail("molding", "注塑材料价格明细  (价格=单价*(制品重(g)+水口重/穴数)/基数)")
+				getMaterDetail("molding", "注塑材料价格明细  (价格=材料单价(KG)/1000*(制品重(g)+水口重/穴数/工序良率)")
 			} else if (inputId == "cl_surface") {
-				getMaterDetail("surface", "表面处理材料价格明细  (价格=单价*用量/基数)")
+				getMaterDetail("surface", "表面处理材料价格明细  (价格=材料料单价(KG)/1000*材料用量/工序良率)")
 			} else if (inputId == "cl_packag") {
-				getMaterDetail("packag", "组装材料价格明细  (价格=单价*用量/基数)")
+				getMaterDetail("packag", "组装材料价格明细  (价格=材料单价(PCS)*材料用量/工序良率)")
 			}
 			// 人工和制费
 			// else if (inputId == "lh_hardware" ) {

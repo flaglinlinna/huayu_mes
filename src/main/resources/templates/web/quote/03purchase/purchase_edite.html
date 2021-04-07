@@ -35,6 +35,7 @@ height: 30px;
 						<button class="layui-btn layui-btn-sm layui-btn-normal"  type="button" 	id="exportbtn"  onclick="exportExcel()">导出模板</button>
 						<button class="layui-btn layui-btn-sm layui-btn-normal"  type="button" id="loadbtn" onclick="openUpload()">导入数据</button>
 						<button class="layui-btn layui-btn-sm" id="savebtn"  type="button"  onclick="confirm()">确认完成</button>
+						<button class="layui-btn layui-btn-sm" type="button" id="cancelbtn" onclick="cancelConfirm()">取消完成</button>
 					</div>
 				</div>
         </form>
@@ -98,7 +99,12 @@ height: 30px;
 			var iStatus=nowStatus.data[0];
         </script>
 
-    <script th:src="@{/js/web/quote/03purchase/purchase_edite.js}" src="/js/web/quote/03purchase/purchase_edite.js"></script>
+<!--    <script th:src="@{/js/web/quote/03purchase/purchase_edite.js}" src="/js/web/quote/03purchase/purchase_edite.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/03purchase/purchase_edite.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

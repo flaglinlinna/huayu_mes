@@ -1,9 +1,11 @@
 package com.web.quote.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -19,6 +21,10 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	public List<ProductProcess> findByDelFlag(Integer delFlag);
 	
 	public List<ProductProcess> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
+
+	@Modifying
+	@Query(value = "update ProductProcess p set p.bsStatus = 1 ,p.lastupdateBy =?1 ,p.lastupdateDate =?2 where p.pkQuote =?3 and p.bsType =?4 and p.delFlag = 0 ")
+	Integer doProcessStatusByType(Long userId, Date date,Long pkQuote,String bsType);
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsType(Integer delFlag,Long pkQuote,String bsType);
 	

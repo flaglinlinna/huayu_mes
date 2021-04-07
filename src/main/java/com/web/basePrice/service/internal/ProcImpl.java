@@ -7,6 +7,7 @@ import java.util.*;
 import com.system.user.dao.SysUserDao;
 
 import com.utils.ExcelExport;
+import com.web.basePrice.dao.BaseFeeDao;
 import com.web.basePrice.dao.BjWorkCenterDao;
 import com.web.basePrice.entity.*;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +41,10 @@ import javax.servlet.http.HttpServletResponse;
 @Service(value = "ProcService")
 @Transactional(propagation = Propagation.REQUIRED)
 public class ProcImpl extends BasePriceUtils implements ProcService {
+
+	@Autowired
+	private BaseFeeDao baseFeeDao;
+
 	@Autowired
 	private ProcDao procDao;
 
@@ -144,6 +149,10 @@ public class ProcImpl extends BasePriceUtils implements ProcService {
 			return ApiResponseResult.failure("工序信息ID不能为空！");
 		}
 		Proc o = procDao.findById((long) id);
+		Integer num = baseFeeDao.findByDelFlagAndProcId(0,id).size();
+		if(num>0){
+			return ApiResponseResult.failure("该工序信息存在"+num +"条人工制费信息,请先删除后操作");
+		}
 		if (o == null) {
 			return ApiResponseResult.failure("工序信息不存在！");
 		}

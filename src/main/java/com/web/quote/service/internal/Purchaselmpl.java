@@ -207,7 +207,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		//List<Map<String, Object>> list = super.findBySql(sql, param);
 
 		int pn = pageRequest.getPageNumber() + 1;
-		hql +="order by id desc";
+		hql +="order by id";
 		String sql = "SELECT * FROM  (  SELECT A.*, ROWNUM RN  FROM ( " + hql + " ) A  WHERE ROWNUM <= ("
 				+ pn + ")*" + pageRequest.getPageSize() + "  )  WHERE RN > (" + pageRequest.getPageNumber() + ")*"
 				+ pageRequest.getPageSize() + " ";
@@ -260,6 +260,24 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		o.setBsAssess(productMater.getBsAssess());
 		productMaterDao.save(o);
 		return ApiResponseResult.success("编辑成功！");
+	}
+
+
+	@Override
+	public ApiResponseResult cancelStatus(Long quoteId) throws Exception {
+		Quote quote = quoteDao.findById((long) quoteId);
+		if(quote.getBsStatus2Purchase() ==2 ||quote.getBsStatus2Purchase() ==4){
+			return ApiResponseResult.failure("发起审批后不能取消确认");
+		}
+		List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+		for(ProductMater o : productMaterList){
+			//修改所有材料为未完成
+			o.setBsStatusPurchase(0);
+			o.setLastupdateDate(new Date());
+			o.setLastupdateBy(UserUtil.getSessionUser().getId());
+		}
+		productMaterDao.saveAll(productMaterList);
+		return ApiResponseResult.success("取消完成成功");
 	}
 
 	@Override
