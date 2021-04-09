@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -103,10 +104,20 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		Specification<QuoteProcess> spec = Specification.where(BaseService.and(filters, QuoteProcess.class));
 		Specification<QuoteProcess> spec1 = spec.and(BaseService.or(filters1, QuoteProcess.class));
 		Page<QuoteProcess> page = quoteProcessDao.findAll(spec1, pageRequest);
+		List<QuoteProcess> quoteProcessList = page.getContent();
+		for(QuoteProcess o:quoteProcessList){
+			List<Map<String,Object>> mapList =quoteBomDao.getBsMaterName(o.getPkQuote(),o.getBsElement(),o.getBsName(),o.getProc().getWorkcenterId());
+//			if(mapList.size()==1){
+//				o.setBsMaterName(mapList.get(0).get("BSMATERNAME").toString());
+//			}
+			if(mapList.size()>0){
+				o.setBsMaterNameList(JSON.toJSONString(mapList));
+			}
+		}
 		//20201222-fyx
 		updateLwAndHw(Long.valueOf(pkQuote));
 		//--end
-		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+		return ApiResponseResult.success().data(DataGrid.create(quoteProcessList, (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 
 	}
@@ -184,6 +195,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			if (!StringUtils.isEmpty(pro)) {
 				// Proc procItem = procDao.findById(Long.parseLong(pro));
 				QuoteProcess pd = new QuoteProcess();
+				Proc proc1 = procDao.findById((long) Long.valueOf(pro));
 				//pd.setPkQuoteBom(Long.valueOf(itemId));//bomID
 				pd.setBsName(itemId);//bom零件名称
 				pd.setBsElement(bsElement);
@@ -194,6 +206,12 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				pd.setPkQuote(Long.valueOf(quoteId));//报价单主表
 				//--20201222-fyx-获取人工和制费
 				Proc pp1 = procDao.findById(Long.parseLong(pro));
+
+				List<Map<String,Object>> mapList =quoteBomDao.getBsMaterName(pd.getPkQuote(),pd.getBsElement(),pd.getBsName(),proc1.getWorkcenterId());
+				if(mapList.size()==1){
+					pd.setBsMaterName(mapList.get(0).get("BSMATERNAME").toString());
+				}
+
 				// 外协不查询人工制费信息
 				if(!("out").equals(pp1.getBjWorkCenter().getBsCode())) {
 					if (pp1 != null) {
@@ -263,6 +281,31 @@ public class QuoteProcesslmpl implements QuoteProcessService {
         o.setFmemo(fmemo);
         quoteProcessDao.save(o);
         return ApiResponseResult.success("修改备注成功！").data(o);
+	}
+
+	/**
+	 * 增加备注
+	 * **/
+	@Override
+	public ApiResponseResult doBsMaterName(Long id, String  bsMaterName) throws Exception {
+		// TODO Auto-generated method stub
+		if(id == null){
+			return ApiResponseResult.failure("工序ID不能为空！");
+		}
+		QuoteProcess o = quoteProcessDao.findById((long) id);
+		if(o == null){
+			return ApiResponseResult.failure("工序记录不存在！");
+		}
+		if(!bsMaterName.equals(o.getBsMaterName())&&StringUtils.isNotEmpty(bsMaterName)){
+			if(quoteProcessDao.countByDelFlagAndBsMaterNameAndPkQuote(0,bsMaterName,o.getPkQuote())>0){
+				return ApiResponseResult.failure("该工艺流程下已存在该材料！");
+			}
+		}
+		o.setLastupdateDate(new Date());
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
+		o.setBsMaterName(bsMaterName);
+		quoteProcessDao.save(o);
+		return ApiResponseResult.success("修改材料成功！").data(o);
 	}
 	
 	/**

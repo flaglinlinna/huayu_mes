@@ -38,8 +38,8 @@ $(function() {
 			  {field:"id",title:"ID",hide:true},
 			  // {field:"bsStatus",title:"bsStatus",hide:true},
 			  {field : 'bsComponent',title : '零件名称',sort : true,style : 'background-color:#d2d2d2'},
-			  {field : 'bsMachiningType',title : '加工类型<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
-			  {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
+			  // {field : 'bsMachiningType',title : '加工类型<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
+			  // {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
 			  {field : 'bsMaterName',title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
 			  {field : 'bsModel',title : '规格',style : 'background-color:#d2d2d2'},
 			  {field : 'bsQty',width : 100,title : 'BOM用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
@@ -83,10 +83,10 @@ $(function() {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsProQty"]').removeClass("layui-hide");
 
 					} else if (bsType == 'surface') {
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
+						// $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
+						// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
+						// $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
+						// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
 					} else if (bsType == 'packag') {

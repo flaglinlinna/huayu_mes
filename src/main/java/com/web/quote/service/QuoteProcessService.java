@@ -23,6 +23,8 @@ public interface QuoteProcessService {
    public ApiResponseResult doProcOrder(Long id,Integer bsOrder)  throws Exception;
 
    public ApiResponseResult doFmemo(Long id,String  fmemo)throws Exception;
+
+   public ApiResponseResult doBsMaterName(Long id,String  bsMaterName)throws Exception;
    
    public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
 

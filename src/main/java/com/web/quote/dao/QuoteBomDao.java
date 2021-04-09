@@ -26,6 +26,9 @@ public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecifica
 	
 	public List<QuoteBom> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 
+	@Query(value = "select distinct t.bs_mater_name as bsMaterName from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag=0 and t.bs_element = ?2 and t.bs_component =?3 and t.pk_bj_work_center = ?4", nativeQuery = true)
+	public List<Map<String, Object>> getBsMaterName(Long quoteId,String bsElement,String component,Long pkWorkCenterId);
+
 	@Query(value = " select c.BS_CODE as bsCode, sum(m.PRODUCT_RETRIAL) as RETRIAL from PRICE_QUOTE_BOM  m LEFT JOIN " +
 			" BJ_BASE_WORKCENTER c on c.id = m.PK_BJ_WORK_CENTER  where m.PK_QUOTE = ?1 GROUP BY c.BS_CODE",nativeQuery = true)
 	public List<Map<String, Object>> getRetrial(Long quoteId);

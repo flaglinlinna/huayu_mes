@@ -87,6 +87,13 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsElement", value = "组件名称")
 	@Column(length = 500)
 	protected String bsElement;
+
+	/**
+	 * 组件名称
+	 */
+	@ApiModelProperty(name = "bsElement", value = "组件名称")
+	@Column(length = 500)
+	protected String bsMaterName;
     
     /**
      * 关联工序表
@@ -568,5 +575,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsMaterCost(BigDecimal bsMaterCost) {
 		this.bsMaterCost = bsMaterCost;
+	}
+
+	public String getBsMaterName() {
+		return bsMaterName;
+	}
+
+	public void setBsMaterName(String bsMaterName) {
+		this.bsMaterName = bsMaterName;
 	}
 }

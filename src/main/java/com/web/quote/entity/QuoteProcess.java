@@ -121,6 +121,20 @@ public class QuoteProcess extends BaseEntity {
 	@Column(length = 50)
 	protected BigDecimal bsFeeMh;
 
+	/**
+	 * 材料名称
+	 */
+	@ApiModelProperty(name = "bsMaterName", value = "材料名称")
+	@Column(length = 200)
+	protected String bsMaterName;
+
+	/**
+	 * 材料名称列表
+	 */
+	@ApiModelProperty(name = "bsMaterNameList", value = "材料名称列表")
+	@Column(length = 200)
+	protected String bsMaterNameList;
+
 	public Long getPkQuote() {
 		return pkQuote;
 	}
@@ -225,5 +239,21 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setBsElement(String bsElement) {
 		this.bsElement = bsElement;
+	}
+
+	public String getBsMaterName() {
+		return bsMaterName;
+	}
+
+	public void setBsMaterName(String bsMaterName) {
+		this.bsMaterName = bsMaterName;
+	}
+
+	public String getBsMaterNameList() {
+		return bsMaterNameList;
+	}
+
+	public void setBsMaterNameList(String bsMaterNameList) {
+		this.bsMaterNameList = bsMaterNameList;
 	}
 }

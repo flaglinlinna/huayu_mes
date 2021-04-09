@@ -248,7 +248,7 @@ $(function() {
 				// 		return '组装'
 				// 	}
 				// },totalRowText : "合计"},
-			// {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,totalRowText : "合计"},
+			{field : 'bsComponent',width : 150,title : '组件名称',sort : true},
 			{field : 'bsMaterName',width : 150,title : '材料名称',sort : true,totalRowText : "合计"},
 			{field : 'bsMachiningType',title : '加工类型',width : 100,hide : true},/*(表面处理)*/
 			{field : 'bsColor',title : '配色工艺',width : 100,hide : true},/*(表面处理)*/

@@ -373,8 +373,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			if (pm.getBsAssess() != null) {
 				bsAssess = pm.getBsAssess();
 			}
-			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagOrderByBsOrderDesc(
-					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0);
+			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
+					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0,pm.getBsMaterName());
 			pm.setBsYield(processList.size()>0?processList.get(0).getBsYield():bsYield);
 
 			pm.setBsFee(bsAssess.multiply(pm.getBsQty()));
@@ -404,8 +404,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			if (pm.getBsAssess() != null) {
 				bsAssess = pm.getBsAssess();
 			}
-			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagOrderByBsOrderDesc(
-					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0);
+			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
+					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0,pm.getBsMaterName());
 			pm.setBsYield(processList.size()>0?processList.get(0).getBsYield():bsYield);
 			pm.setBsFee(bsAssess.multiply(qty).divide(bsRadix, 5, 5));
 			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5).divide(new BigDecimal("1000"),5,5));

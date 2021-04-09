@@ -198,11 +198,11 @@ $(function() {
 								}
 							},
 							cols : [ [
-							{type : 'numbers'},
+							{fixed : 'left',type : 'numbers'},
 							{field:'id', title:'ID', width:80,hide:true},
-							{field : 'bsElement',title : '组件名称',sort : true,width : 120},
-							{field : 'bsComponent',title : '零件名称',sort : true,width : 200},
-							{field : 'wc',title : '材料耗用工作中心',sort : true,width : 145,
+							{fixed : 'left',field : 'bsElement',title : '组件名称',sort : true,width : 120},
+							{fixed : 'left',field : 'bsComponent',title : '零件名称',sort : true,width : 160},
+							{fixed : 'left',field : 'wc',title : '材料耗用工作中心',sort : true,width : 145,
 								templet : function(d) {
 									if (d.wc != null) {return d.wc.workcenterName;} 
 									else {return "";}

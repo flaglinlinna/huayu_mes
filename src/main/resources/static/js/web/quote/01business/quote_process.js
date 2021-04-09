@@ -31,9 +31,9 @@ $(function() {
 				}
 			},
 			cols : [ [ {type : 'numbers'},
-			// {field:'id', title:'ID', width:80, unresize:true, sort:true},
+			{field:'id', title:'ID', width:80, unresize:true, hide:true},
 			{field : 'bsName',title : '零件名称',style : 'background-color:#d2d2d2'},
-			{field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
+			// {field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'procName',title : '工序名称',templet : '<div>{{d.proc.procName}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'workCenter',title : '工作中心',templet : '<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'bsOrder',title : '工序顺序',"edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
@@ -48,18 +48,20 @@ $(function() {
 					}else {
 						return "<div class='green'>一</div>"
 					}
-			}}, 
+			}},
+
+			{field : 'bsMaterName',width : 200,title : '材料名称',templet : '#selectBsMaterName',style : 'background-color:#ffffff'},
 			{field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
 				templet : function(d) {
 					if (d.fmemo == null) {return ""} else {return d.fmemo}
-			}}, 
+				}},
 			{fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar'
 			} ] ],
 			done : function(res, curr, count) {
 				// console.log(res)
 				totalCount = res.count
 				pageCurr = curr;
-				merge(res.data, [ 'bsName', ], [ 1, 1 ]);
+				merge(res.data, [ 'bsName', ], [ 2, 2 ]);
 			}
 		});
 
@@ -118,6 +120,17 @@ $(function() {
 				}
 			}
 		});
+
+		//监听机台类型下拉选择 并修改
+		form.on('select(selectBsMaterName)', function (data) {
+			//获取当前行tr对象
+			var elem = data.othis.parents('tr');
+			//第一列的值是Guid，取guid来判断
+			var Guid= elem.first().find('td').eq(1).text();
+			//选择的select对象值；
+			var selectValue = data.value;
+			updateBsMaterName(Guid,selectValue);
+		})
 
 		// 工作中心列表
 		cTableSelect = tableSelect1.render({
@@ -532,6 +545,27 @@ $(function() {
 		}
 	});
 });
+
+//更新材料名称
+function updateBsMaterName(id,bsMaterName) {
+	var param = {
+		"id":id,
+		"bsMaterName":bsMaterName
+	}
+	CoreUtil.sendAjax("/quoteProcess/doBsMaterName", JSON.stringify(param),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
+}
 
 function isComplete() {
 	if (iStatus == 2) {
