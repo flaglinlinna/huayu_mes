@@ -178,7 +178,7 @@ $(function() {
 				}else if(Style == 'surface'){
 					titel = "表面处理"+titel;
 				}else if(Style == 'packag'){
-					titel = "包装"+titel;
+					titel = "组装"+titel;
 				}
 				parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel);
 				var srcUrl = context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style;

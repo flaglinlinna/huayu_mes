@@ -72,7 +72,7 @@ $(function() {
 								cols : [ [ {type : 'radio'},// 单选 radio
 								{type : 'numbers'},
 								{field : 'id',title : 'id',width : 0,hide : true},
-								{field : 'itemType',title : '物料类型',width : 150}, 
+								{field : 'itemType',title : '物料类型',width : 150},
 								{field : 'fmemo',title : '备注',width : 150} ] ],
 								page : true,
 								request : {
@@ -201,30 +201,22 @@ $(function() {
 							{fixed : 'left',type : 'numbers'},
 							{field:'id', title:'ID', width:80,hide:true},
 							{fixed : 'left',field : 'bsElement',title : '组件名称',sort : true,width : 120},
-							{fixed : 'left',field : 'bsComponent',title : '零件名称',sort : true,width : 160},
-							{fixed : 'left',field : 'wc',title : '材料耗用工作中心',sort : true,width : 145,
+							{fixed : 'left',field : 'bsComponent',title : '零件名称',sort : true,width : 150},
+							{fixed : 'left',field : 'wc',title : '工作中心',sort : true,width : 120,
 								templet : function(d) {
 									if (d.wc != null) {return d.wc.workcenterName;} 
 									else {return "";}
 								}
 							},
 							// {field : 'bsItemCode',title : '材料编码',sort:true,width:120},
-							{field : 'itp',title : '物料类型',sort : true,width : 120,
+							{field : 'itp',title : '物料类型',sort : true,width : 100,
 								templet : function(d) {
 									if (d.itp != null) {return d.itp.itemType;} 
 									else {return "";}
 							}},
-							{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
+							{field : 'bsMaterName',title : '材料名称',sort : true,width : 200},
 							{field : 'bsModel',title : '材料规格',width : 200},
-							{field : 'fmemo',title : '工艺说明',width : 200},
-							{field : 'bsExplain',title : '采购说明',width : 200},
-							{field : 'bsAgent',title : '是否客户代采',width : 120,templet:function (d) {
-									if(d.bsAgent=="1"){
-										return "是"
-									}else {
-										return "否"
-									}
-								}},
+							// {field : 'bsExplain',title : '采购说明',width : 200},
 							{field : 'bsQty',title : 'BOM用量',width : 90},
 							// {field : 'bsProQty',title : '制品重(g)',width : 90},
 							{field : 'unit',title : 'BOM用量单位',width : 110,
@@ -235,10 +227,18 @@ $(function() {
 							// {field : 'bsWaterGap',title : '水口重(g)',width : 90},
 							// {field : 'bsCave',title : '穴数',width : 80},
 							{field : 'purchaseUnit',title : '采购单位',width : 80},
-							{field : 'productRetrial',title : '制造评估重审',templet : '#statusTpl',width : 120},
-							{field : 'purchaseRetrial',title : '采购重申',templet : '#statusTpl1',width : 120},
-							{field : 'outRetrial',title : '外协重审',templet : '#statusTpl2',width : 120},
-							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
+								{field : 'bsAgent',title : '客户代采',width : 80,templet:function (d) {
+										if(d.bsAgent=="1"){
+											return "是"
+										}else {
+											return "否"
+										}
+									}},
+							{field : 'productRetrial',title : '制造评估重审',templet : '#statusTpl',width : 110},
+							// {field : 'purchaseRetrial',title : '采购重申',templet : '#statusTpl1',width : 120},
+							// {field : 'outRetrial',title : '外协重审',templet : '#statusTpl2',width : 120},
+								{field : 'fmemo',title : '工艺说明',width : 200},
+								{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
 							] ],
 							done : function(res, curr, count) {
 								// 如果是异步请求数据方式，res即为你接口返回的信息。
@@ -626,10 +626,11 @@ function deleteTemp() {
 	}
 	CoreUtil.sendAjax("/quoteBomTemp/deleteTemp", JSON.stringify(params), function(data) {
 		if (data.result) {
-			layer.alert("删除成功", function() {
+			layer.alert("删除成功", function(index) {
 				// layer.closeAll();
 				// cleanProdErr();
 				// 加载页面
+				layer.close(index);
 				loadAll2();
 			});
 		} else {

@@ -46,27 +46,23 @@ $(function() {
 						}
 				}}, 
 				{field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'},
-				{field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
-				{field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'},
+				{field : 'bsMaterName',width : 200,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
+				{field : 'bsModel',width : 200,title : '材料规格',style : 'background-color:#d2d2d2'},
 				{field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
 				{field : 'bsUnit',width : 100,title : 'BOM用量单位',style : 'background-color:#d2d2d2',templet:function (d){
 						if(d.unit!=null){
 							return d.unit.unitCode;
 						}
 					}},
-				{field : 'bsGear',width : 120,title : '价格挡位',templet : '#selectGear',style : 'background-color:#ffffff'},
-				{field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'},
 				{field : 'bsAssess',width : 120,title : '含税价格(元/KG)<span style="color:red;font-size:12px;">*</span>',edit : 'number',style : 'background-color:#ffffff'},
 				// {field : 'bsProQty',width : 100,title : '制品重(g)',style : 'background-color:#d2d2d2'},
-				{field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
-				{field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
+				//{field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
+				//{field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
 				// {field : 'bsWaterGap',title : '水口量(g)',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				// {field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
-
 				{field : 'purchaseUnit',width : 110,title : '采购单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
-				// {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},
 				{
-					field: 'bsGeneral', width: 120, title: '是否通用物料', style: 'background-color:#d2d2d2',
+					field: 'bsGeneral', width: 80, title: '通用物料', style: 'background-color:#d2d2d2',
 					templet: function (d) {
 						if (d.bsGeneral == 1) {
 							return '是'
@@ -77,9 +73,14 @@ $(function() {
 						}
 					}
 				},
-				{field : 'bsExplain',width : 110,title : '采购说明',style : 'background-color:#d2d2d2'},
-				{field : 'fmemo',width : 110,title : '备注',edit : 'text',style : 'background-color:#ffffff'},
-				{field : 'bsSupplier',width : 110,title : '供应商',edit : 'text',style : 'background-color:#ffffff'}
+				{field : 'bsRefer',width : 90,title : '参考价格',style : 'background-color:#d2d2d2'},
+				{field : 'bsGear',width : 120,title : '价格挡位',templet : '#selectGear',style : 'background-color:#ffffff'},
+
+				// {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},
+
+				//{field : 'bsExplain',width : 110,title : '采购说明',style : 'background-color:#d2d2d2'},
+				//{field : 'fmemo',width : 110,title : '备注',edit : 'text',style : 'background-color:#ffffff'},
+				//{field : 'bsSupplier',width : 110,title : '供应商',edit : 'text',style : 'background-color:#ffffff'}
 				] ],
 			done : function(res, curr, count) {
 				// pageCurr = curr;
@@ -136,7 +137,7 @@ $(function() {
 				  {field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'},
 				  {field : 'bsType',width : 100,title : '类型',sort : true,style : 'background-color:#d2d2d2'},
 				  {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'},
-				  {field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
+				  {field : 'bsMaterName',width : 210,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
 				  {field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'},
 				  {field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
 				  {field : 'bsUnit',width : 100,title : 'BOM用量单位',style : 'background-color:#d2d2d2',templet:function (d){

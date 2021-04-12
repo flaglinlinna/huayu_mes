@@ -181,6 +181,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	public ApiResponseResult getQuoteList(String keyword, String quoteId, PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
 
+		//代采的材料不显示  bs_agent = 0
 		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.bs_agent = 0 and p.pk_quote="+quoteId;
 		//20210113-fyx-去掉外协--?
 		//hql += " and p.bs_Type <> 'out' " ;
@@ -306,7 +307,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		if(lmp.size()>0){
 			list =productMaterDao.findByPkQuoteAndUser(quoteId,UserUtil.getSessionUser().getId());
 		}else {
-			list = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+			list = productMaterDao.findByBsAgentAndDelFlagAndPkQuote(0,0,quoteId);
 		}
 
 		XSSFWorkbook workbook = new XSSFWorkbook();

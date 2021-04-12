@@ -28,9 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service(value = "ProductMaterTempService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -123,6 +121,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
 
             //删除临时表数据
             productMaterTempDao.deleteByPkQuoteAndBsTypeAndCreateBy(quoteId,bsType,userId);
+            List<Long> idList = productMaterDao.getIdByTypeAndPkQuote(bsType,quoteId);
 
             InputStream fin = file[0].getInputStream();
             XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
@@ -130,6 +129,9 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             NumberFormat nf = NumberFormat.getInstance();
             //获取最后一行的num，即总行数。此处从0开始计数
             int maxRow = sheet.getLastRowNum();
+            if(idList.size()!=maxRow-1){
+                return ApiResponseResult.failure("导入失败！导入的数量与实际材料信息数量不符！");
+            }
             List<ProductMaterTemp> hardwareMaterList = new ArrayList<>();
             //五金材料导入顺序: 零件名称1、材料名称2、规格3、用量4、单位5、基数6、供应商7、备注8
             //组装材料导入顺序: 零件名称1、材料名称2、规格3、用量4、单位5、基数6、供应商7、备注8
@@ -138,6 +140,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             //20210226-hjj-导入模板中去除基数
             Integer successes = 0;
             Integer failures = 0;
+            Set<Long> improtIdList = new HashSet<Long>();
             for (int row = 2; row <= maxRow; row++) {
                 String errInfo = "";
                 String mid = tranCell(sheet.getRow(row).getCell(0));
@@ -155,7 +158,11 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
 
                 if(StringUtils.isNotEmpty(mid)){
                     temp.setMid(Long.parseLong(mid));
+                    improtIdList.add(Long.parseLong(mid)) ;
+                }else {
+                    errInfo = errInfo + "非本界面导出的材料";
                 }
+//                idList.containsAll()
                 //设置类型
                 temp.setBsType(bsType);
                 temp.setPkQuote(quoteId);
@@ -230,12 +237,12 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 }
                 else if(("surface").equals(bsType)){
                     temp.setBsMachiningType(row2);
-                    if(!StringUtils.isNotEmpty(row2)) {
-                        errInfo = errInfo + "加工类型不能为空;";
-                    }
-                    if(!StringUtils.isNotEmpty(row3)) {
-                        errInfo = errInfo + "配色工艺不能为空;";
-                    }
+//                    if(!StringUtils.isNotEmpty(row2)) {
+//                        errInfo = errInfo + "加工类型不能为空;";
+//                    }
+//                    if(!StringUtils.isNotEmpty(row3)) {
+//                        errInfo = errInfo + "配色工艺不能为空;";
+//                    }
                     temp.setBsColor(row3);
                     temp.setBsMaterName(row4);
                     temp.setBsModel(row5);
@@ -333,8 +340,14 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 }
                 hardwareMaterList.add(temp);
             }
-            productMaterTempDao.saveAll(hardwareMaterList);
             Integer all = maxRow -1;
+            if(successes ==maxRow-1){
+                    Set idSet = new HashSet(idList);
+                    if(!idSet.removeAll(improtIdList)){
+                        return ApiResponseResult.success("导入的id与实际材料信息id不符,请在本界面导出修改后导入");
+                    }
+            }
+            productMaterTempDao.saveAll(hardwareMaterList);
             return ApiResponseResult.success("导入成功! 导入总数:" +all+" :校验通过数:"+successes+" ;不通过数: "+failures);
 
         }

@@ -28,7 +28,9 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	public List<QuoteProcess> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 
 	Integer countByDelFlagAndBsMaterNameAndPkQuote(Integer delFlag,String bsMaterName,Long pkQuote);
-	
+
+	Integer countByDelFlagAndPkQuoteAndPkQuoteBom(Integer delFlag,Long bsMaterName,Long pkQuote);
+
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(Integer delFlag,Long pkQuote,String name);
 	
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsNameAndBsOrder(Integer delFlag,Long pkQuote,String name,int order);
@@ -44,6 +46,10 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	@Modifying
     @Query("update QuoteProcess t set t.delFlag=1 where t.bsName=?1 and t.pkQuote=?2 and t.delFlag=0")
     public void delteQuoteProcessByBsNameAndPkQuote(String  bsName,Long pkQuote);//根据零件名称修改表数据
+
+	@Modifying
+	@Query("update QuoteProcess t set t.delFlag=1 where t.pkQuote=?1")
+	Integer delteQuoteProcessByPkQuote(Long pkQuote);
 	
 	public List<QuoteProcess> findByDelFlagAndPkQuoteBomAndBsOrder(Integer delFlag,Long pkQuoteBom,Integer bsOrder);
 	

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -217,8 +218,9 @@ public class QuoteProcessController extends WebController {
         String method = "quoteProcess/doBsMaterName";String methodName ="修改材料名称";
         try{
             Long id = Long.parseLong(params.get("id").toString()) ;
-            String bsMaterName=params.get("bsMaterName").toString();
-            ApiResponseResult result = quoteProcessService.doBsMaterName(id, bsMaterName);
+            String bomIds = params.get("bomId").toString();
+            Long bomId =StringUtils.isNotEmpty(bomIds)?Long.parseLong(bomIds):null;
+            ApiResponseResult result = quoteProcessService.doBsMaterName(id, bomId);
             logger.debug("修改材料名称=doBsMaterName:");
             getSysLogService().success(module,method, methodName, params);
             return result;

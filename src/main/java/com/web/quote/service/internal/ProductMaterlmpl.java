@@ -232,8 +232,9 @@ public class ProductMaterlmpl implements ProductMaterService {
                     return ApiResponseResult.failure("制品重(g)、穴数、水口数不能为空,请检查后再确认！");
                 }
             }else if("surface".equals(bsType)) {
-                if (o.getBsColor() == null || o.getBsMachiningType() == null || o.getBsQty() == null ) {
-                    return ApiResponseResult.failure("配色工艺、加工类型、用量不能为空,请检查后再确认！");
+//                o.getBsColor() == null || o.getBsMachiningType() == null || 配色工艺、加工类型、
+                if ( o.getBsQty() == null ) {
+                    return ApiResponseResult.failure("用量不能为空,请检查后再确认！");
                 }
             }else if("packag".equals(bsType)) {
                 if (o.getBsQty() == null ) {

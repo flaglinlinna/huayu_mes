@@ -59,19 +59,18 @@ $(function() {
 					}
 				},
 				cols : [ [ {type : 'numbers'},		 
-				 {field : 'bsCode',title : '报价单编号',width : 150,sort: true}, 
-				 {field : 'bsType',title : '报价类型', width : 120,templet:function (d) {
-						 if(d.bsType=="YSBJ"){
-							 return "衍生报价";
-						 }else if(d.bsType =="XPBJ"){
-							 return "新品报价"
-						 }else {
-							 return "";
-						 }
-					 },sort: true},
-					{field : 'bsStage',title : '报价阶段',width : 120,sort: true},
-					{field : 'bsProjVer',title : '版本',width : 100,sort: true},
-				 {field : 'bsStatus',title : '状态',width : 100,templet:function (d) {
+				 {field : 'bsCode',title : '报价单编号',width : 150,sort: true},
+					{field : 'bsProd',title : '产品型号',width : 120,sort: true},
+
+					{field : 'bsProjVer',title : '版本',width : 80,sort: true},
+					{field : 'bsLatest',title : '是否最新',width : 100,sort: true,templet:function (d) {
+							if(d.bsLatest == "1"){
+								return "是";
+							}else {
+								return "否";
+							}
+						}},
+				 {field : 'bsStatus',title : '状态',width : 90,templet:function (d) {
 						if(d.bsStatus=="0"){
 							return "进行中"
 						}else if(d.bsStatus=="1"){
@@ -84,15 +83,25 @@ $(function() {
 							return "已关闭"
 						}
 				},sort: true},
+					{field : 'bsProdType',title : '产品类型',width : 120, sort: true},
 				{field : 'bsCustName',title : '客户名称',width : 120,sort: true},
-				{field : 'bsProd',title : '产品型号',width : 120,sort: true},
-				{field : 'bsProdType',title : '产品类型',width : 140, sort: true},
+					{field : 'bsType',title : '报价类型', width : 120,templet:function (d) {
+							if(d.bsType=="YSBJ"){
+								return "衍生报价";
+							}else if(d.bsType =="XPBJ"){
+								return "新品报价"
+							}else {
+								return "";
+							}
+						},sort: true},
+					{field : 'bsStage',title : '报价阶段',width : 100,sort: true},
 				// {field : 'bsDevType',title : '机种型号',width : 140, sort: true},
 				{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140,sort: true},
+					{field : 'bsPosition',title : '市场定位',width : 120,sort: true},
+					{field : 'bsManageFee',title : '管理费率(%)',width : 120,sort: true},
 				{field : 'bsSimilarProd',title : '相似型号',width : 150,sort: true},
 				{field : 'bsRemarks',title : '报价备注',width : 170,sort: true},
-				{field : 'bsPosition',title : '市场定位',width : 150,sort: true},
-				{field : 'bsManageFee',title : '管理费率(%)',width : 140,sort: true},
+
 				{field : 'bsMaterial',title : '客户提供资料',width : 140, sort: true},
 				{field : 'bsChkOutItem',title : '外观检验项',width : 140, sort: true},
 				{field : 'bsChkOut',title : '外观检验',width : 150,sort: true},
@@ -103,13 +112,7 @@ $(function() {
 				{field : 'bsCustRequire',title : '客户其他要求',width : 200,sort: true},
 				// {field : 'bsBade',title : '是否中标',width : 140,sort: true},
 				// {field : 'bsProjVer',title : '版本',width : 140,sort: true},
-				{field : 'bsLatest',title : '是否最新',width : 100,sort: true,templet:function (d) {
-						if(d.bsLatest == "1"){
-							return "是";
-						}else {
-							return "否";
-						}
-					}},
+
 				// {field : 'bsStage',title : '报价阶段',width : 200,sort: true},
 				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 300}
 				] ],

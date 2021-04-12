@@ -41,8 +41,8 @@ $(function() {
 			cols : [ [ {type : 'numbers',style:'background-color:#d2d2d2'},
 				{field:"id",title:"ID",hide:true},
 				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
-				{field : 'bsOrder',width:150, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
-				{field : 'proc', width:150, title : '工序名称',style:'background-color:#d2d2d2',
+				{field : 'bsOrder',width:90, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'proc', width:120, title : '工序名称',style:'background-color:#d2d2d2',
 					templet:function (d) {
 						if(d.proc!=null){
 							return d.proc.procName==null||undefined?"":d.proc.procName;
@@ -58,7 +58,7 @@ $(function() {
 				// 			return "";
 				// 		}
 				// 	}},
-				{field : 'workcenterName', width:100, title : '工作中心',style:'background-color:#d2d2d2'
+				{field : 'workcenterName', width:120, title : '工作中心',style:'background-color:#d2d2d2'
 					,templet:function (d) {
 						if(d.proc!=null){
 							if(d.proc.bjWorkCenter!=null){
@@ -71,16 +71,16 @@ $(function() {
 						}
 					}},
 				/*{field : 'bsModelType', width:100, title : '机台类型',width:90,},*/
-				{field : 'bsModelType',width : 160,title : '机台类型',templet : '#selectModelType',style : 'background-color:#ffffff'},
+				{field : 'bsModelType',width : 200,title : '机台类型',templet : '#selectModelType',style : 'background-color:#ffffff'},
 				/*{field : 'bsRadix', title : '基数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',style : 'background-color:#ffffff'},*/
-				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsCycle', title : '成型周期(S)<span style="color:red;font-size:12px;">*</span>', width:150,edit:'text', hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsYield', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:120,edit:'text',hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsLoss', title : '损耗率<span style="color:red;font-size:12px;">*</span>', width:100,edit:'text',hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsCave', title : '穴数<span style="color:red;font-size:12px;">*</span>',edit:'text',width:90, hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:60,edit:'text',hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsCycle', title : '成型周期(S)<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text', hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsYield', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsLoss', title : '损耗率<span style="color:red;font-size:12px;">*</span>', width:80,edit:'text',hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsCave', title : '穴数<span style="color:red;font-size:12px;">*</span>',edit:'text',width:50, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCapacity', title : '产能(个/小时)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:105, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsFeeWxAll', title : '外协价格<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
-				{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff'},
+				//{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff'},
 				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;

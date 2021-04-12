@@ -71,8 +71,13 @@
             
             
         </script>
-		<script th:src="@{/js/web/quote/01business/quote_list.js}"
-			src="/js/web/quote/01business/quote_list.js"></script>
+<!--		<script th:src="@{/js/web/quote/01business/quote_list.js}"-->
+<!--			src="/js/web/quote/01business/quote_list.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/01business/quote_list.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

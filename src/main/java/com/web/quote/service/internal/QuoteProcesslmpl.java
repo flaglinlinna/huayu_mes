@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.web.quote.entity.QuoteBom;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -110,7 +111,16 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //			if(mapList.size()==1){
 //				o.setBsMaterName(mapList.get(0).get("BSMATERNAME").toString());
 //			}
-			if(mapList.size()>0){
+			if(StringUtils.isNotEmpty(o.getBsMaterName())){
+				if(o.getPkQuoteBom()==null){
+					for(Map<String,Object> map:mapList){
+						if(o.getBsMaterName().equals(map.get("BSMATERNAME"))){
+							o.setPkQuoteBom(Long.parseLong(map.get("ID").toString()));
+						}
+					}
+				}
+			}
+				if(mapList.size()>0){
 				o.setBsMaterNameList(JSON.toJSONString(mapList));
 			}
 		}
@@ -287,7 +297,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 * 增加备注
 	 * **/
 	@Override
-	public ApiResponseResult doBsMaterName(Long id, String  bsMaterName) throws Exception {
+	public ApiResponseResult doBsMaterName(Long id, Long  bomId) throws Exception {
 		// TODO Auto-generated method stub
 		if(id == null){
 			return ApiResponseResult.failure("工序ID不能为空！");
@@ -296,14 +306,24 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		if(o == null){
 			return ApiResponseResult.failure("工序记录不存在！");
 		}
-		if(!bsMaterName.equals(o.getBsMaterName())&&StringUtils.isNotEmpty(bsMaterName)){
-			if(quoteProcessDao.countByDelFlagAndBsMaterNameAndPkQuote(0,bsMaterName,o.getPkQuote())>0){
-				return ApiResponseResult.failure("该工艺流程下已存在该材料！");
+		if(bomId!=null) {
+			QuoteBom quoteBom = quoteBomDao.findById((long) bomId);
+			if (quoteBom == null) {
+				return ApiResponseResult.failure("外购件清单中不存在此材料！");
 			}
+			if (!bomId.equals(o.getPkQuoteBom()) && bomId != null) {
+				if (quoteProcessDao.countByDelFlagAndPkQuoteAndPkQuoteBom(0, o.getPkQuote(), bomId) > 0) {
+					return ApiResponseResult.failure("该工艺流程下已存在该材料！");
+				}
+			}
+			o.setBsMaterName(quoteBom.getBsMaterName());
+			o.setPkQuoteBom(bomId);
+		}else {
+			o.setBsMaterName(null);
+			o.setPkQuoteBom(null);
 		}
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
-		o.setBsMaterName(bsMaterName);
 		quoteProcessDao.save(o);
 		return ApiResponseResult.success("修改材料成功！").data(o);
 	}

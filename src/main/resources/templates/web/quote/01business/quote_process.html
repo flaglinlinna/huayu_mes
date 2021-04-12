@@ -50,7 +50,9 @@
 				</div>
 			</script>-->
 
-			<table id="client_procList" lay-filter="client_procTable"></table>
+			<div class="table-responsive" id="table_and_page_div_id" >
+				<table id="client_procList" lay-filter="client_procTable"></table>
+			</div>
 			<script type="text/html" id="moveBar">
                 <a class="layui-btn layui-btn-xs" lay-event="moveUp"><i class="layui-icon layui-icon-up"></i>上移</a>
                 <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="moveDown"><i class="layui-icon layui-icon-down"></i>下移</a>
@@ -137,7 +139,7 @@
 			<select name="selectBsMaterName" lay-filter="selectBsMaterName" lay-search>
 				<option value="">请选择</option>
 				{{# layui.each($.parseJSON( d.bsMaterNameList ), function(index, item){     }}
-				<option value="{{ item.BSMATERNAME }}"  {{ d.bsMaterName==item.BSMATERNAME?'selected':''}}>{{ item.BSMATERNAME }}</option>
+				<option value="{{ item.ID }}"  {{ d.bsMaterName==item.BSMATERNAME?'selected':''}}>{{ item.BSMATERNAME }}</option>
 				{{# });  }}
 			</select>
 		</script>

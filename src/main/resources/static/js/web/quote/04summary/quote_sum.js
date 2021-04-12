@@ -248,30 +248,31 @@ $(function() {
 				// 		return '组装'
 				// 	}
 				// },totalRowText : "合计"},
-			{field : 'bsComponent',width : 150,title : '组件名称',sort : true},
-			{field : 'bsMaterName',width : 150,title : '材料名称',sort : true,totalRowText : "合计"},
-			{field : 'bsMachiningType',title : '加工类型',width : 100,hide : true},/*(表面处理)*/
-			{field : 'bsColor',title : '配色工艺',width : 100,hide : true},/*(表面处理)*/
-			{field : 'bsModel',width : 150,title : '材料规格'},
-			{field : 'bsAssess',width : 110,title : '评估价格'},
-			{field : 'bsGeneral',width : 120,title : '是否通用物料',	 templet:function(d){
-					return d.bsGeneral =="0"?"否":"是";
-				}},
-			{field : 'bsQty',width : 100,title : 'BOM用量',totalRow : true,hide : true},
-			{field : 'bsProQty',width : 100,title : '制品重(g)',totalRow : true,hide : true},
+			{field : 'bsComponent',width : 120,title : '组件名称',sort : true},
+			{field : 'bsMaterName',width : 200,title : '材料名称',sort : true,totalRowText : "合计"},
+			//{field : 'bsMachiningType',title : '加工类型',width : 100,hide : true},/*(表面处理)*/
+			//{field : 'bsColor',title : '配色工艺',width : 100,hide : true},/*(表面处理)*/
+			{field : 'bsModel',width : 200,title : '材料规格'},
+			{field : 'bsAssess',width : 80,title : '评估价格'},
+			{field : 'bsProQty',width : 90,title : '制品重(g)',totalRow : true,hide : true},
+				{field : 'bsWaterGap',title : '水口量(g)',width : 90,hide : true}, /*(注塑)*/
+				{field : 'bsCave',title : '穴数',width : 60,hide : true}, /*(注塑)*/
+				{field : 'bsYield',width : 90,title : '工序良率%'},
+				{field : 'bsFee',width : 90,title : '材料总价',
+					// templet:function(d){
+					// return Number(d.bsQty)*Number(d.bsAssess)/Number(d.bsRadix);
+					// },
+					totalRow : true},
+				{field : 'bsQty',width : 100,title : 'BOM用量',totalRow : true},
 			{field : 'bsUnit',width : 120,title : 'BOM用量单位'},
-			{field : 'purchaseUnit',width : 110,title : '采购单位'},
+			{field : 'purchaseUnit',width : 80,title : '采购单位'},
+				{field : 'bsGeneral',width : 80,title : '通用物料',	 templet:function(d){
+						return d.bsGeneral =="0"?"否":"是";
+					}},
 			// {field : 'bsRadix',width : 80,title : '基数'},
 			// {field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet:'#selectGear'},
 			// {field : 'bsRefer',width : 110,title : '参考价格'},
-			{field : 'bsWaterGap',title : '水口量(g)',width : 120,hide : true}, /*(注塑)*/
-			{field : 'bsCave',title : '穴数',width : 100,hide : true}, /*(注塑)*/
-			{field : 'bsYield',width : 150,title : '工序良率'},
-			{field : 'bsFee',width : 110,title : '材料总价',
-				// templet:function(d){
-				// return Number(d.bsQty)*Number(d.bsAssess)/Number(d.bsRadix);
-				// },
-			 totalRow : true},
+
 			// {field : 'bsExplain',width : 110,title : '采购说明'},
 			// {field : 'fmemo',width : 110,title : '备注'},
 			// {field : 'bsSupplier',width : 110,title : '供应商'}
@@ -340,7 +341,7 @@ $(function() {
 				// 		return "";
 				// 	}
 				// }},
-				{field : 'bsModelType',width : 150,title : '机台类型',width : 105,templet:function (d) {
+				{field : 'bsModelType',title : '机台类型',width : 160,templet:function (d) {
 						if (d.bsTypeList != null) {
 							var modelJson = JSON.parse(d.bsTypeList);
 							if (modelJson != null && modelJson != "") {
@@ -357,17 +358,18 @@ $(function() {
 						}
 					}},
 				//{field : 'bsRadix',title : '基数',width : 90,hide : true},
-				{field : 'bsUserNum',title : '人数',width : 90,hide : true},
-				{field : 'bsCycle',title : '成型周期(S)',width : 150,hide : true},
-				{field : 'bsYield',title : '工序良率%',width : 120,hide : true},
-				{field : 'bsHouYield',title : '后工序良率%',width : 120,hide : true},
-				{field : 'bsLoss',title : '损耗率%',width : 130,hide : true},
-				{field : 'bsCave',title : '穴数',width : 90,hide : true},
+				{field : 'bsUserNum',title : '人数',width : 70,hide : true},
+				{field : 'bsFeeLh',title : '人工费(元/小时)',width : 120,hide : true},
+				{field : 'bsFeeMh',title : '制造费(元/小时)',width : 120,hide : true},
+				{field : 'bsCycle',title : '成型周期(S)',width : 100,hide : true},
+				{field : 'bsCave',title : '穴数',width : 60,hide : true},
 				{field : 'bsCapacity',title : '产能(个/小时)',width : 120,hide : true},
-				{field : 'bsFeeLh',title : '人工费用(元/小时)',width : 130,hide : true},
-				{field : 'bsFeeMh',title : '制造费用(元/小时)',width : 130,hide : true},
-				{field : 'bsFeeLhAll',title : '人工总费用',width : 120,totalRow : true,hide : true},
-				{field : 'bsFeeMhAll',title : '制造总费用',width : 120,totalRow : true,hide : true},
+				{field : 'bsYield',title : '工序良率%',width : 100,hide : true},
+				{field : 'bsHouYield',title : '后工序良率%',width : 100,hide : true},
+				{field : 'bsLoss',title : '损耗率%',width : 90,hide : true},
+
+				{field : 'bsFeeLhAll',title : '人工总费用',width : 90,totalRow : true,hide : true},
+				{field : 'bsFeeMhAll',title : '制造总费用',width : 90,totalRow : true,hide : true},
 				{field : 'bsFeeWxAll',title : '加工费(含损耗)',width : 120,totalRow : true,hide : true},
 
 				// {field : 'bsFeeLhAll',title : '人工总费用',width : 130,totalRow : true,hide : true},
@@ -418,9 +420,9 @@ $(function() {
 			},
 			cols : [ [
 				{type : 'numbers'},
-				{field : 'bsElement',width : 160,title : '组件名称',sort : true,totalRowText : "合计"},
-				{field : 'bsName',width : 160,title : '零件名称',sort : true},
-				{field : 'workcenterName',width : 150,title : '工作中心',
+				{field : 'bsElement',width : 120,title : '组件名称',sort : true,totalRowText : "合计"},
+				{field : 'bsName',width : 150,title : '零件名称',sort : true},
+				{field : 'workcenterName',width : 120,title : '工作中心',
 					templet : function(d) {
 						if (d.proc != null) {
 							if (d.proc.bjWorkCenter != null) {
@@ -433,7 +435,7 @@ $(function() {
 						}
 					}},
 				{field : 'bsOrder',width : 100,title : '工艺顺序',sort : true},
-				{field : 'proc',width : 150,title : '工序名称',
+				{field : 'proc',width : 120,title : '工序名称',
 					templet : function(d) {
 						if (d.proc != null) {
 							return d.proc.procName == null || undefined ? "" : d.proc.procName;
@@ -442,17 +444,18 @@ $(function() {
 						}
 					}},
 
-				{field : 'bsYield',title : '工序良率%',width : 120},
-				{field : 'bsMaterCost',title : '材料成本',width : 120,totalRow : true},
-				{field : 'bsFeeLhAll',title : '人工成本',width : 120,totalRow : true},
-				{field : 'bsFeeMhAll',title : '制造成本',width : 120,totalRow : true},
-				{field : 'bsFeeWxAll',title : '外协',width : 120,totalRow : true},
-				{field : 'bsCost',title : '成本合计',width : 120,totalRow : true},
-				{field : 'bsTheLoss',title : '本工序损耗',width : 120,totalRow : true},
-				{field : 'bsCostLoss',title : '本工序成本(含损耗)',width : 150,totalRow : true,templet: function (d) {
+
+				{field : 'bsMaterCost',title : '材料成本',width : 80,totalRow : true},
+				{field : 'bsFeeLhAll',title : '人工成本',width : 80,totalRow : true},
+				{field : 'bsFeeMhAll',title : '制造成本',width : 80,totalRow : true},
+				{field : 'bsFeeWxAll',title : '外协成本',width : 80,totalRow : true},
+				{field : 'bsCost',title : '成本合计',width : 100,totalRow : true},
+				{field : 'bsYield',title : '工序良率%',width : 90},
+				{field : 'bsTheLoss',title : '工序损耗',width : 100,totalRow : true},
+				{field : 'bsCostLoss',title : '工序成本(含损耗)',width : 130,totalRow : true,templet: function (d) {
 						return (Number(d.bsCost)+Number(d.bsTheLoss)).toFixed(4);
 					}},
-				{field : 'bsAllLoss',title : '成本累计(含损耗)',width : 150},
+				{field : 'bsAllLoss',title : '成本累计(含损耗)',width : 130},
 
 			] ],
 			done : function(res, curr, count) {

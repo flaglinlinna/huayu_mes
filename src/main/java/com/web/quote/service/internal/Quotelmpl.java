@@ -179,6 +179,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 
             quoteProcess.setId(null);
             quoteProcess.setPkQuote(quote.getId());
+            quoteProcess.setPkQuoteBom(null);
             quoteProcess.setBsStatus(0);
             newQuoteProcessList.add(quoteProcess);
         }
@@ -205,6 +206,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             productMater.setId(null);
             productMater.setPkQuote(quote.getId());
             productMater.setBsStatus(0);
+            productMater.setBsStatusPurchase(0);
             newProductMaterList.add(productMater);
         }
         productMaterDao.saveAll(newProductMaterList);

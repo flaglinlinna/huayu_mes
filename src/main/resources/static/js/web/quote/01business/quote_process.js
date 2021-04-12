@@ -32,36 +32,53 @@ $(function() {
 			},
 			cols : [ [ {type : 'numbers'},
 			{field:'id', title:'ID', width:80, unresize:true, hide:true},
-			{field : 'bsName',title : '零件名称',style : 'background-color:#d2d2d2'},
+			{field : 'bsName',width : 120,title : '零件名称',style : 'background-color:#d2d2d2'},
 			// {field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'procName',title : '工序名称',templet : '<div>{{d.proc.procName}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'workCenter',title : '工作中心',templet : '<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'bsOrder',title : '工序顺序',"edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
-			{field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,style : 'background-color:#d2d2d2',align : 'center',
-				templet : function(d) {
-					if(d.proc.bjWorkCenter.bsCode !="out") {
-						if (d.bsFeeLh == null || d.bsFeeLh == '') {
-							return "<div class='orange'>否</div>"
-						} else {
-							return "<div class='green'>是</div>"
-						}
-					}else {
-						return "<div class='green'>一</div>"
-					}
-			}},
+			{field : 'procName',title : '工序名称',width : 120,templet : '<div>{{d.proc.procName}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'workCenter',title : '工作中心',width : 120,templet : '<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'bsOrder',title : '工序顺序',width : 80,"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff'},
+			// {field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,style : 'background-color:#d2d2d2',align : 'center',
+			// 	templet : function(d) {
+			// 		if(d.proc.bjWorkCenter.bsCode !="out") {
+			// 			if (d.bsFeeLh == null || d.bsFeeLh == '') {
+			// 				return "<div class='orange'>否</div>"
+			// 			} else {
+			// 				return "<div class='green'>是</div>"
+			// 			}
+			// 		}else {
+			// 			return "<div class='green'>一</div>"
+			// 		}
+			// }},
 
-			{field : 'bsMaterName',width : 200,title : '材料名称',templet : '#selectBsMaterName',style : 'background-color:#ffffff'},
-			{field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
-				templet : function(d) {
-					if (d.fmemo == null) {return ""} else {return d.fmemo}
-				}},
-			{fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar'
-			} ] ],
+				// ,templet : '#selectBsMaterName'
+			{field : 'bsMaterName',width : 240,title : '材料名称',templet : '#selectBsMaterName',style : 'background-color:#ffffff'},
+			// {field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
+			// 	templet : function(d) {
+			// 		if (d.fmemo == null) {return ""} else {return d.fmemo}
+			// 	}},
+			{field : 'bsModel',title : '规格',width : 240,sort : true,style : 'background-color:#d2d2d2;overflow:hidden !important',
+					templet : function(d) {
+						if (d.quoteBom == null) {return ""}
+						else {
+							return  "<div>"+d.quoteBom.bsModel+"</div>"
+						}}
+			},
+			{fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar',style : 'background-color:#ffffff'}
+			] ],
 			done : function(res, curr, count) {
 				// console.log(res)
 				totalCount = res.count
 				pageCurr = curr;
 				merge(res.data, [ 'bsName', ], [ 2, 2 ]);
+				// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
+
+				res.data.forEach(function (item, index) {
+
+						var tr = $(".layui-table").find("tbody tr[data-index='" + index + "']").find("td[data-field ='bsModel']");
+						tr.css('overflow', 'hidden !important');
+				});
+				form.render();//刷新表单
+
 			}
 		});
 
@@ -547,10 +564,10 @@ $(function() {
 });
 
 //更新材料名称
-function updateBsMaterName(id,bsMaterName) {
+function updateBsMaterName(id,bomId) {
 	var param = {
 		"id":id,
-		"bsMaterName":bsMaterName
+		"bomId":bomId
 	}
 	CoreUtil.sendAjax("/quoteProcess/doBsMaterName", JSON.stringify(param),
 		function(data) {
@@ -818,11 +835,33 @@ function load(obj) {
 
 // 重新加载表格（全部）
 function loadAll() {
+	var scrollTop;
+	var scrollLeft;
+	var layuitable = null;
+	var dev_obj = $("#table_and_page_div_id")//定位到表格
+	if (dev_obj != null) {//防止未获取到表格对象
+		layuitable =dev_obj[0].getElementsByClassName("layui-table-main");//定位到layui-table-main对象
+	}
+	if (layuitable != null && layuitable.length > 0) {
+		scrollTop =layuitable[0].scrollTop; //layuitable获取到的是class=layui-table-main的集合，所以直接获取其中的scrollTop属性。
+		scrollLeft=layuitable[0].scrollLeft;
+	}
 	// 重新加载table
 	tableIns.reload({
 		page : {
 			curr : pageCurr
 		// 从当前页码开始
+		},done: function (res, curr, count) {
+			//滚轮控制
+			pageCurr=curr;
+			dev_obj = $("#table_and_page_div_id")//定位到表格
+			if (dev_obj != null) {
+				layuitable =dev_obj[0].getElementsByClassName("layui-table-main");
+			}
+			if (layuitable != null && layuitable.length > 0) {//将属性放回去
+				layuitable[0].scrollTop = scrollTop;
+				layuitable[0].scrollLeft = scrollLeft;
+			}
 		}
 	});
 }

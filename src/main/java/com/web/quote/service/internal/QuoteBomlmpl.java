@@ -71,6 +71,10 @@ public class QuoteBomlmpl implements QuoteBomService {
 		quoteBom.setBsElement(quoteBom.getBsElement().trim());
 		quoteBom.setBsComponent(quoteBom.getBsComponent().trim());
 		quoteBom.setBsMaterName(quoteBom.getBsMaterName().trim());
+//		BjWorkCenter bjWorkCenter = bjWorkCenterDao.findById((long) quoteBom.getPkBjWorkCenter());
+//		if(("out").equals(bjWorkCenter.getBsCode())){
+//			return ApiResponseResult.failure("外协不允许在清单中,请到“工艺流程”中选择外协。");
+//		}
 		//--end
 		quoteBomDao.save(quoteBom);
 		return ApiResponseResult.success("外购件清单信息新增成功！").data(quoteBom);
@@ -95,6 +99,10 @@ public class QuoteBomlmpl implements QuoteBomService {
 		o.setPkUnit(quoteBom.getPkUnit());
 		o.setPkItemTypeWg(quoteBom.getPkItemTypeWg());
 		o.setPkBjWorkCenter(quoteBom.getPkBjWorkCenter());
+//		BjWorkCenter bjWorkCenter = bjWorkCenterDao.findById((long) quoteBom.getPkBjWorkCenter());
+//		if(("out").equals(bjWorkCenter.getBsCode())){
+//			return ApiResponseResult.failure("外协不允许在清单中,请到“工艺流程”中选择外协。");
+//		}
 //		o.setBsProQty(quoteBom.getBsProQty());
 		o.setBsMaterName(quoteBom.getBsMaterName().trim());
 		o.setBsModel(quoteBom.getBsModel());
@@ -167,7 +175,8 @@ public class QuoteBomlmpl implements QuoteBomService {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for(QuoteBom quoteBom :quoteBomList){
 			Map<String, Object> map = new HashMap<>();
-			map.put("id", quoteBom.getId());
+//			map.put("id", quoteBom.getId());
+			map.put("id", "");
 			map.put("bsElement",quoteBom.getBsElement());
 			map.put("bsComponent",quoteBom.getBsComponent());
 			map.put("bsMaterName",quoteBom.getBsMaterName());
