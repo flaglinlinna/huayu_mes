@@ -195,13 +195,12 @@ public class QuoteSumController extends WebController {
 	}
 
 
-	@ApiOperation(value="设置中标",notes="设置中标",hidden=true)
-	@RequestMapping(value="/testSum",method=RequestMethod.POST)
+	@ApiOperation(value="价格计算",notes="价格计算",hidden=true)
+	@RequestMapping(value="/testSum",method=RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult testSum(@RequestBody Map<String, Object> params){
+	public ApiResponseResult testSum(String quoteId){
 		String method = "/quoteSum/testSum";
-		String methodName = "设置中标";
-		String quoteId = params.get("quoteId").toString() ;
+		String methodName = "价格计算";
 		try {
 			ApiResponseResult result = quoteSumService.countMeterAndProcess(quoteId);
 			logger.debug(methodName+"=setBade:");

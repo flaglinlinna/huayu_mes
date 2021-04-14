@@ -15,7 +15,7 @@ $(function() {
 			height : 'full-65',
 			even : true,// 条纹样式
 			page : true,
-			limit:20,
+			limit:50,
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -66,16 +66,20 @@ $(function() {
 			{fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar',style : 'background-color:#ffffff'}
 			] ],
 			done : function(res, curr, count) {
-				// console.log(res)
+
 				totalCount = res.count
 				pageCurr = curr;
-				merge(res.data, [ 'bsName', ], [ 2, 2 ]);
+				var tableView = this.elem.next(); // 当前表格渲染之后的视图
+				merge(res.data, [ 'bsName'], [1,2]);
 				// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
 
 				res.data.forEach(function (item, index) {
-
-						var tr = $(".layui-table").find("tbody tr[data-index='" + index + "']").find("td[data-field ='bsModel']");
-						tr.css('overflow', 'hidden !important');
+					console.log(item);
+					if(item.bsStatus =='1'){
+						tableView.find('tr[data-index=' + index + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
+						$("select[name='selectBsMaterName']").attr("disabled","disabled");
+						form.render('select');
+					}
 				});
 				form.render();//刷新表单
 
@@ -228,7 +232,7 @@ $(function() {
 
 		tableProc = table.render({
 			elem : '#procList',
-			limit : 20,
+			limit : 50,
 			page:true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -539,7 +543,13 @@ $(function() {
 				"procOrder" : procOrder
 			};
 			CoreUtil.sendAjax("/quoteProcess/doProcOrder", JSON.stringify(param), function(data) {
-				loadAll();
+				if(data.result ==false){
+					layer.alert(data.msg, function(index) {
+						layer.close(index);
+					});
+				}else {
+					loadSelected();
+				}
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试", function() {
 					layer.closeAll();
@@ -553,7 +563,14 @@ $(function() {
 				"fmemo" : fmemo
 			};
 			CoreUtil.sendAjax("/quoteProcess/doFmemo", JSON.stringify(param), function(data) {
-				loadAll();
+				if(data.result ==false){
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}else {
+					loadAll();
+				}
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试", function() {
 					layer.closeAll();
@@ -829,6 +846,15 @@ function load(obj) {
 		page : {
 			curr : pageCurr
 		// 从当前页码开始
+		}
+	});
+}
+
+function loadSelected(){
+	tableProcCheck.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
 		}
 	});
 }

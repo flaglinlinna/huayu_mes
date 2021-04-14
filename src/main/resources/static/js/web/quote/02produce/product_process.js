@@ -940,8 +940,15 @@ function Confirm(){
 						console.log(srcUrl);
 						($(window.parent.document).find(('li[lay-id="' + srcUrl + '"]'))).find(".layui-tab-close").trigger("click")
 					}
-					var thisUrl= context +"/productProcess/toProductProcess?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
-					($(window.parent.document).find(('li[lay-id="'+thisUrl+'"]'))).find(".layui-tab-close").trigger("click")
+					var thisUrl = "";
+					if(bsType!="out") {
+						 thisUrl = context + "/productProcess/toProductProcess?bsType=" + bsType + "&quoteId=" + quoteId + "&bsCode=" + bsCode;
+					}else{
+						thisUrl = context + "/productProcess/toProductProcess?bsType=" + bsType + "&quoteId=" + quoteId;
+					}
+					($(window.parent.document).find(('li[lay-id="' + thisUrl + '"]'))).find(".layui-tab-close").trigger("click")
+
+
 				});
 			} else {
 				layer.alert(data.msg);

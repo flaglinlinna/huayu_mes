@@ -210,12 +210,12 @@ public class ProductMaterController extends WebController {
 	@ApiOperation(value = "获取五金材料列表", notes = "获取五金材料列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getList(String keyword,String bsType,String quoteId) {
+	public ApiResponseResult getList(String keyword,String bsType,String quoteId,String bsAgent) {
 		String method = "/productMater/getList";
 		String methodName = "获取五金材料列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = productMaterService.getList(keyword,bsType,quoteId, super.getPageRequest(sort));
+			ApiResponseResult result = productMaterService.getList(keyword,bsType,quoteId,bsAgent, super.getPageRequest(sort));
 			logger.debug("获取五金材料列表=getList:");
 			return result;
 		} catch (Exception e) {

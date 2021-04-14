@@ -32,6 +32,8 @@ public interface EmpFingerDao extends CrudRepository<EmpFinger, Long>,JpaSpecifi
 	public int countByDelFlagAndEmpId(Integer delFlag, Long empId);//查询员工指纹记录数
 	
 	public int countByDelFlagAndEmpIdAndFingerIdx(Integer delFlag, Long empId,String fingerIdx);//员工+手指序号保证唯一
-	
+
+
+//	public List<Map<String,Object>> findByEmpStatus(Integer status);
 
 }

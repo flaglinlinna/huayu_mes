@@ -156,9 +156,9 @@ $(function() {
 		function getUrl(inputId) {
 			// 材料成本
 			if (inputId == "cl_hardware") {
-				getMaterDetail("hardware", "五金材料价格明细  (价格=材料单价(KG)/1000*(制品重(g)+水口重/穴数/工序良率)")
+				getMaterDetail("hardware", "五金材料价格明细  (价格=材料单价(KG)/1000*(制品重(g)+水口重/穴数)/工序良率")
 			} else if (inputId == "cl_molding") {
-				getMaterDetail("molding", "注塑材料价格明细  (价格=材料单价(KG)/1000*(制品重(g)+水口重/穴数/工序良率)")
+				getMaterDetail("molding", "注塑材料价格明细  (价格=材料单价(KG)/1000*(制品重(g)+水口重/穴数)/工序良率")
 			} else if (inputId == "cl_surface") {
 				getMaterDetail("surface", "表面处理材料价格明细  (价格=材料料单价(KG)/1000*材料用量/工序良率)")
 			} else if (inputId == "cl_packag") {
@@ -183,24 +183,24 @@ $(function() {
 
 			//人工明细
 			else if(inputId == "lh_hardware") {
-				getProcessDetail("hardware", "五金人工明细  (人工总费用=人工费用（元/H）*成型周期(S）/3600 )*人数","lh")
+				getProcessDetail("hardware", "五金人工明细  (人工总费用=人工费用（元/H）*成型周期(S）/3600 *人数/工序良率）","lh")
 			} else if(inputId == "lh_molding") {
-				getProcessDetail("molding", "注塑人工明细  (人工总费用=人工费用（元/H）*成型周期(S）/3600/穴数 )","lh")
+				getProcessDetail("molding", "注塑人工明细  (人工总费用=人工费用(元/H)*人数*成型周期(S)/3600/穴数/工序良率）","lh")
 			} else if(inputId == "lh_surface") {
-				getProcessDetail("surface", "表面处理人工明细  (人工总费用=人数*人工费用（元/H）/产能(个/小时))","lh")
+				getProcessDetail("surface", "表面处理人工明细  (人工总费用=人数*人工费用（元/H）/产能(个/小时)/工序良率)","lh")
 			} else if(inputId == "lh_packag") {
-				getProcessDetail("packag", "组装人工明细   (人工总费用=人数*人工费用（元/H）/产能(个/小时))","lh")
+				getProcessDetail("packag", "组装人工明细   (人工总费用=人数*人工费用（元/H）/产能(个/小时)/工序良率)","lh")
 			}
 
 			//制费明细
 			else if(inputId == "lw_hardware") {
-				getProcessDetail("hardware", "五金制费明细  (制造总费用=制费工时费（元/H）*成型周期(S）/3600 )","mh")
+				getProcessDetail("hardware", "五金制费明细  (制造总费用=制费工时费（元/H）*成型周期(S）/3600/工序良率 )","mh")
 			} else if(inputId == "lw_molding") {
-				getProcessDetail("molding", "注塑制费明细  (制造总费用=总制费=制费工时费（元/H）*成型周期(S）/3600/穴数 )","mh")
+				getProcessDetail("molding", "注塑制费明细  (制造总费用=总制费=制费工时费（元/H）*成型周期(S）/3600/穴数/工序良率 )","mh")
 			} else if(inputId == "lw_surface") {
-				getProcessDetail("surface", "表面处理制费明细  (制造总费用=费率/产能(个/小时))","mh")
+				getProcessDetail("surface", "表面处理制费明细  (制造总费用=费率/产能(个/小时)/工序良率)","mh")
 			} else if(inputId == "lw_packag") {
-				getProcessDetail("packag", "组装制费明细  (制造总费用=制费工时费（元/H）*/产能(个/小时) )","mh")
+				getProcessDetail("packag", "组装制费明细  (制造总费用=制费工时费（元/H）*/产能(个/小时)/工序良率 )","mh")
 			}
 			
 			//20210318-hjj-损料修改
@@ -341,15 +341,13 @@ $(function() {
 				// 		return "";
 				// 	}
 				// }},
-				{field : 'bsModelType',title : '机台类型',width : 160,templet:function (d) {
+				{field : 'bsModelType',title : '机台类型',width : 160,hide : true,templet:function (d) {
 						if (d.bsTypeList != null) {
 							var modelJson = JSON.parse(d.bsTypeList);
 							if (modelJson != null && modelJson != "") {
 								for (var i = 0; i < modelJson.length; i++) {
 									if (d.bsModelType == modelJson[i].MODEL_CODE) {
 										return modelJson[i].MODEL_NAME;
-									}else {
-										return "";
 									}
 								}
 							}
@@ -570,7 +568,7 @@ function getMouldDetail(title) {
 
 function getMaterDetail(bsType, title) {
 	tableIns.reload({
-		url : context + '/productMater/getList?quoteId=' + quoteId + '&bsType=' + bsType,
+		url : context + '/productMater/getList?quoteId=' + quoteId + '&bsType=' + bsType +'&bsAgent=0',
 		done : function(res1, curr, count) {
 			pageCurr = curr;
 			res1.data.forEach(function(item, index) {
@@ -684,6 +682,9 @@ function getProcessDetail(bsType, title,lhType) {
 						$(".layui-table-total").find('tr').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeLhAll"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeLhAll"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 					} else if(lhType =="mh"&&item.bsType != 'out'){
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
@@ -691,6 +692,10 @@ function getProcessDetail(bsType, title,lhType) {
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMhAll"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsFeeMhAll"]').removeClass("layui-hide");
+
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsModelType"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsModelType"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsModelType"]').removeClass("layui-hide");
 					}
 
 					if (item.bsType == 'out' ) {// 外协
@@ -719,17 +724,17 @@ function getProcessDetail(bsType, title,lhType) {
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
 
 						$(".layui-table-total").find('tr').find('td[data-field="bsCave"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
-						$(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
-						$(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
+						// $(".layui-table-total").find('tr').find('td[data-field="bsFeeLh"]').removeClass("layui-hide");
+						// $(".layui-table-total").find('tr').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
 
 
 

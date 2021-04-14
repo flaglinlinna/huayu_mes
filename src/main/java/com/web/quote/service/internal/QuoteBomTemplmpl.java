@@ -331,6 +331,10 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			quoteBomList.add(quoteBom);
 		}
 		quoteBomDao.saveAll(quoteBomList);
+		for(QuoteBom o :quoteBomList){
+			o.setPkBomId(o.getId());
+		}
+//		quoteBomDao.saveAll(quoteBomList);
 		quoteBomTempDao.deleteByPkQuoteAndCreateBy(pkQuote,userId);
 		return ApiResponseResult.success().message("确认导入成功!共导入:"+quoteBomList.size()+"条");
 	}

@@ -25,7 +25,7 @@ public interface ProductMaterService {
 
 	public ApiResponseResult doExcel(MultipartFile[] file,String bsType,Long quoteId) throws Exception;
 
-	public ApiResponseResult getList(String keyword,String bsType, String quoteId,PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getList(String keyword,String bsType, String quoteId,String bsAgent,PageRequest pageRequest) throws Exception;
 
     public ApiResponseResult getListByPkQuote(Long pkQuote, PageRequest pageRequest) throws Exception;
 

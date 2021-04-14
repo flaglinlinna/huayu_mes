@@ -31,9 +31,14 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 
 	Integer countByDelFlagAndPkQuoteAndPkQuoteBom(Integer delFlag,Long bsMaterName,Long pkQuote);
 
+	@Query(value = "select max(b.bs_order) from PRICE_QUOTE_PROCESS b where b.DEL_FLAG = ?1 and b.PK_QUOTE = ?2  " ,nativeQuery = true)
+	Integer findMaxBsOrder(Integer delFlag,Long pkQuote);
+
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(Integer delFlag,Long pkQuote,String name);
 	
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsNameAndBsOrder(Integer delFlag,Long pkQuote,String name,int order);
+
+	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsOrderAndIdIsNot(Integer delFlag,Long pkQuote,int order,Long id);
 	
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsStatus(Integer delFlag,Long pkQuote,int bsStatus);
 
@@ -69,4 +74,7 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 
 	@Query(value = "select BS_TYPE as type,count(1) as num from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 GROUP BY  BS_TYPE", nativeQuery = true)
 	public List<Map<String, Object>> countByBsType(Long quoteId);
+
+	@Query(value = "SELECT p.PK_QUOTE_BOM,COUNT(p.PK_QUOTE_BOM)  FROM PRICE_QUOTE_PROCESS p where p.PK_QUOTE =?1 and p.DEL_FLAG = 0 GROUP BY p.PK_QUOTE_BOM HAVING  COUNT( p.PK_QUOTE_BOM ) >1",nativeQuery = true)
+	public List<Map<String, Object>> getPkQuoteBomNum(Long quoteId);
 }

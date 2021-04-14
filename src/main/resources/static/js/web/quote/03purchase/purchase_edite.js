@@ -86,8 +86,11 @@ $(function() {
 				// pageCurr = curr;
 				 var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				  layui.each(res.data, function(i, item){
-				    if(item.bsStatusPurchase==1){
+				    if(item.bsStatusPurchase=='1'){
 				    	tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
+						$("select[name='selectUnit']").attr("disabled","disabled");
+						$("select[name='selectGear']").attr("disabled","disabled");
+						form.render('select');
 				    }
 				  });
 			}
@@ -306,6 +309,7 @@ function cancelConfirm(){
 }
 
 function isComplete() {
+	console.log(nowStatus);
 	if (nowStatus.data == 0) {
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);

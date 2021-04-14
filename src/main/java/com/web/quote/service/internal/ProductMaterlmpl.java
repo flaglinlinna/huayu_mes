@@ -391,12 +391,15 @@ public class ProductMaterlmpl implements ProductMaterService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword,String bsType, String quoteId,PageRequest pageRequest) throws Exception {
+    public ApiResponseResult getList(String keyword,String bsType, String quoteId,String bsAgent,PageRequest pageRequest) throws Exception {
         // 查询条件1
         List<SearchFilter> filters = new ArrayList<>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         if (StringUtils.isNotEmpty(bsType)) {
             filters.add(new SearchFilter("bsType", SearchFilter.Operator.EQ, bsType));
+        }
+        if(StringUtils.isNotEmpty(bsAgent)){
+            filters.add(new SearchFilter("bsAgent", SearchFilter.Operator.EQ, bsAgent));
         }
         if (!"null".equals(quoteId)&&quoteId!=null) {
             filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));

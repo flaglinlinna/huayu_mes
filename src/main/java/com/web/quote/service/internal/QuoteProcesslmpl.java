@@ -198,9 +198,11 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		//quoteProcessDao.delteQuoteProcessByPkQuoteBom(Long.parseLong(itemId));//使用id
 		//20210113-fyx-先不删除
 		//quoteProcessDao.delteQuoteProcessByBsNameAndPkQuote(itemId,Long.valueOf(quoteId));//使用零件名字
-		int j = 1;
-		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),itemId);
-		j += lqp.size() ;
+//		int j = 1;
+		Integer a = quoteProcessDao.findMaxBsOrder(0,Long.valueOf(quoteId));
+		int j = (a==null?0:a)+10;
+//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),itemId);
+//		j += lqp.size() ;
 		for (String pro : procs) {
 			if (!StringUtils.isEmpty(pro)) {
 				// Proc procItem = procDao.findById(Long.parseLong(pro));
@@ -210,7 +212,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				pd.setBsName(itemId);//bom零件名称
 				pd.setBsElement(bsElement);
 				pd.setPkProc(Long.valueOf(pro));//工序id
-				pd.setBsOrder((j) * 10);//工序顺序
+				pd.setBsOrder(j);//工序顺序
 				pd.setCreateBy(UserUtil.getSessionUser().getId());
 				pd.setCreateDate(new Date());
 				pd.setPkQuote(Long.valueOf(quoteId));//报价单主表
@@ -220,6 +222,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				List<Map<String,Object>> mapList =quoteBomDao.getBsMaterName(pd.getPkQuote(),pd.getBsElement(),pd.getBsName(),proc1.getWorkcenterId());
 				if(mapList.size()==1){
 					pd.setBsMaterName(mapList.get(0).get("BSMATERNAME").toString());
+					pd.setPkQuoteBom(Long.parseLong(mapList.get(0).get("ID").toString()));
 				}
 
 				// 外协不查询人工制费信息
@@ -261,7 +264,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
             return ApiResponseResult.failure("工序记录不存在！");
         }
         //判断顺序是否存在
-        List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameAndBsOrder(0, o.getPkQuote(),o.getBsName(), procOrder);
+        List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuoteAndBsOrderAndIdIsNot(0, o.getPkQuote(), procOrder,o.getId());
         if(lpd.size()>0){
         	 return ApiResponseResult.failure("工序序号重复,请重新填写！");
         }
@@ -361,6 +364,10 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 if(i>0){
 			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
 		 }
+		 if(quoteProcessDao.getPkQuoteBomNum(Long.parseLong(quoteId)).size()>0){
+			 return ApiResponseResult.failure("存在相同的零件名称,请检查。");
+
+		 }
 		 //20201223-fyx-先判断是否维护了人工和制费
 		//获取该报价单的所有的未提交的数据，更新一下 人工和制费
 			List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,Long.valueOf(quoteId),0);
@@ -371,6 +378,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					}
 				}
 			}
+
+
 		 
 		 //项目状态设置-状态 2：已完成
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);

@@ -15,15 +15,17 @@ layui.use('layer', function(){
                     data: json,
                     dataType: "json",
                     success: function (res) {
-                        console.log(res)
-                        parent.layer.close(index);
+                        // console.log(res)
                         if(res.result===true){
+                            parent.layer.close(index);
                         	layer.msg(res.msg, {
                         	     btn: [ '知道了']
                         	     ,yes: function(index1, layero){
                         	         layer.close(index1);
                         	     }
                         	});
+                            // var srcUrl = context + '/console';
+                            // ($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 
                         }else{
                             layer.msg(res.msg);

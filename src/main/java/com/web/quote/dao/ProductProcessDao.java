@@ -42,7 +42,7 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	 @Query(value = "select p from Proc p  where p.delFlag=0 and p.workcenterId in (select bj.id from BjWorkCenter bj where bj.delFlag=0 and bj.bsCode=?1)")
 	 public  List<Proc> getListByType(String code);
 
-	public List<ProductProcess> findByDelFlagAndPkQuoteOrderByBsNameDescBsTypeDescBsOrderAsc(Integer delFlag,Long pkQuote);
+	public List<ProductProcess> findByDelFlagAndPkQuoteOrderByBsOrderAsc(Integer delFlag,Long pkQuote);
 
 	public List<ProductProcess> findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(String bsName,String element,Long pkQuote,String bsType,Integer delFlag,String bsMaterName);
 }

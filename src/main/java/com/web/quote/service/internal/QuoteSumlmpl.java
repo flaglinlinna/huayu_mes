@@ -423,10 +423,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				}
 			}
 			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle())
-					.divide(new BigDecimal("3600"), 5, 5).divide(bsRadix, 5, 5));
+					.divide(new BigDecimal("3600"), 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 
 			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600"), 5, 5)
-					.divide(bsRadix, 5, 5));
+					.divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 
 			// 本工序损耗
 //			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(), 5, 5)
@@ -452,10 +452,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}
 			BigDecimal bsCave = new BigDecimal(pp.getBsCave());// 穴数
 			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle())
-					.divide(new BigDecimal("3600"), 5, 5).divide(bsCave, 5, 5).divide(bsRadix, 5, 5));
+					.divide(new BigDecimal("3600"), 5, 5).divide(bsCave, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 
 			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600"), 5, 5)
-					.divide(bsCave, 5, 5).divide(bsRadix, 5, 5));
+					.divide(bsCave, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 			// 本工序损耗
 //			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(), 5, 5)
 //					.subtract(pp.getBsFeeLhAll()));
@@ -480,9 +480,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}
 			BigDecimal bsCapacity = new BigDecimal(pp.getBsCapacity());// 产能
 			pp.setBsFeeLhAll(
-					pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5));
+					pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 
-			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5));
+			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 			// 本工序损耗
 //			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(), 5, 5)
 //					.subtract(pp.getBsFeeLhAll()));
@@ -507,9 +507,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}
 			BigDecimal bsCapacity = new BigDecimal(pp.getBsCapacity());// 产能
 			pp.setBsFeeLhAll(
-					pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5));
+					pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 
-			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5));
+			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 			// 本工序损耗
 //			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(), 5, 5)
 //					.subtract(pp.getBsFeeLhAll()));
@@ -535,7 +535,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //			pp.setBsLossHouMh(new BigDecimal("0"));
 		}
 		productProcessDao.saveAll(lpp_out);
-		List<ProductProcess> processList = productProcessDao.findByDelFlagAndPkQuoteOrderByBsNameDescBsTypeDescBsOrderAsc(0,Long.parseLong(quoteId));
+		List<ProductProcess> processList = productProcessDao.findByDelFlagAndPkQuoteOrderByBsOrderAsc(0,Long.parseLong(quoteId));
 		for(Integer i=0;i<processList.size();i++){
 			ProductProcess o = processList.get(i);
 			//成本 = 人工制费 + 制造费用 + 材料费用
@@ -554,11 +554,11 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}
 			if(i==0) {
 				//本工序损耗
-				o.setBsTheLoss(o.getBsCost().divide(o.getBsYield(),4).multiply(new BigDecimal("100")).subtract(o.getBsCost()));
+				o.setBsTheLoss(o.getBsCost().divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract(o.getBsCost()));
 				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()));
 			}else {
-				o.setBsTheLoss((processList.get(i-1).getBsAllLoss().add(o.getBsCost())).divide(o.getBsYield(),4).multiply(new BigDecimal("100")).subtract((processList.get(i-1).getBsAllLoss().add(o.getBsCost()))));
-				//成本累计(含损耗)
+				o.setBsTheLoss((processList.get(i-1).getBsAllLoss()).divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract((processList.get(i-1).getBsAllLoss())));
+				//成本累计(含损耗
 				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()).add(processList.get(i-1).getBsAllLoss()));
 			}
 //			processList.add(o);

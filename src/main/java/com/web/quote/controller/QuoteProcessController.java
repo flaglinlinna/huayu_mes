@@ -94,10 +94,10 @@ public class QuoteProcessController extends WebController {
         String method = "quoteProcess/getList";String methodName ="获取报价工艺流程列表";
         try {
             //Sort sort = new Sort(Sort.Direction.ASC, "id");
-        	 Sort.Order order1 = new Sort.Order(Sort.Direction.ASC, "bsName");
+//        	 Sort.Order order1 = new Sort.Order(Sort.Direction.ASC, "bsName");
         	 Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "BsOrder");
         	 List<Sort.Order> list = new ArrayList<>();
-        	 list.add(order1);
+//        	 list.add(order1);
         	 list.add(order2);
         	 Sort sort = new Sort(list);
             ApiResponseResult result = quoteProcessService.getList(keyword,pkQuote, super.getPageRequest(sort));
