@@ -40,7 +40,7 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsOrderAndIdIsNot(Integer delFlag,Long pkQuote,int order,Long id);
 	
-	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsStatus(Integer delFlag,Long pkQuote,int bsStatus);
+	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsStatusOrderByBsOrder(Integer delFlag,Long pkQuote,int bsStatus);
 
 	List<QuoteProcess> findByDelFlagAndPkQuoteAndPkProcAndBsName(Integer delFlag,Long pkQuote,Long pkProc,String bsName);
 	
@@ -77,4 +77,7 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 
 	@Query(value = "SELECT p.PK_QUOTE_BOM,COUNT(p.PK_QUOTE_BOM)  FROM PRICE_QUOTE_PROCESS p where p.PK_QUOTE =?1 and p.DEL_FLAG = 0 GROUP BY p.PK_QUOTE_BOM HAVING  COUNT( p.PK_QUOTE_BOM ) >1",nativeQuery = true)
 	public List<Map<String, Object>> getPkQuoteBomNum(Long quoteId);
+
+	@Query(value = "SELECT p.bs_Groups,COUNT(p.bs_Groups)  FROM PRICE_QUOTE_PROCESS p where p.PK_QUOTE =?1 and p.DEL_FLAG = 0 GROUP BY p.bs_Groups HAVING  COUNT( p.bs_Groups ) >1",nativeQuery = true)
+	public List<Map<String, Object>> getBsGroupsNum(Long quoteId);
 }

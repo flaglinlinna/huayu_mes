@@ -34,17 +34,18 @@ $(function() {
 				}
 			},
 			cols : [ [
-			  {type : 'numbers'},
+			  {fixed:'left',type : 'numbers'},
 			  {field:"id",title:"ID",hide:true},
 			  // {field:"bsStatus",title:"bsStatus",hide:true},
-			  {field : 'bsComponent',title : '零件名称',width : 150,sort : true,style : 'background-color:#d2d2d2'},
+			  {fixed:'left',field : 'bsComponent',title : '零件名称',width : 150,sort : true,style : 'background-color:#d2d2d2'},
 			  // {field : 'bsMachiningType',title : '加工类型<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
 			  // {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
-			  {field : 'bsMaterName',title : '材料名称',width : 230,sort : true,style : 'background-color:#d2d2d2'},
-			  {field : 'bsModel',title : '材料规格',width : 230,style : 'background-color:#d2d2d2;overflow:hidden !important'},
+			  {fixed:'left',field : 'bsMaterName',title : '材料名称',width : 200,sort : true,style : 'background-color:#d2d2d2'},
+			  {fixed:'left',field : 'bsModel',title : '材料规格',width : 200,style : 'background-color:#d2d2d2;overflow:hidden !important'},
 			  {field : 'bsQty',width : 100,title : 'BOM用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'bsProQty',width : 100,title : '制品重(g)<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'bsUnit',width : 120,title : 'BOM用量单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
+			  {field : 'bsGroups',width : 120,title : '损耗分组',style : 'background-color:#ffffff',hide : true},
 			  /*{field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text',style : 'background-color:#ffffff'},*/
 			  {field : 'bsWaterGap',title : '水口重(g)<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
 			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 60,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (注塑)*/},
@@ -89,9 +90,13 @@ $(function() {
 						// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 					} else if (bsType == 'packag') {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 					}
 				});
 			}

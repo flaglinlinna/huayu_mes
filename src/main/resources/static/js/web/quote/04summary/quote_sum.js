@@ -156,13 +156,13 @@ $(function() {
 		function getUrl(inputId) {
 			// 材料成本
 			if (inputId == "cl_hardware") {
-				getMaterDetail("hardware", "五金材料价格明细  (价格=材料单价(KG)/1000*(制品重(g)+水口重/穴数)/工序良率")
+				getMaterDetail("hardware", "五金材料成本=材料单价(KG)/1000*(制品重(g)+水口重/穴数)/工序良率")
 			} else if (inputId == "cl_molding") {
-				getMaterDetail("molding", "注塑材料价格明细  (价格=材料单价(KG)/1000*(制品重(g)+水口重/穴数)/工序良率")
+				getMaterDetail("molding", "注塑材料成本=材料单价(KG)/1000*(制品重(g)+水口重/穴数)/工序良率")
 			} else if (inputId == "cl_surface") {
-				getMaterDetail("surface", "表面处理材料价格明细  (价格=材料料单价(KG)/1000*材料用量/工序良率)")
+				getMaterDetail("surface", "表面处理材料成本=材料料单价(KG)/1000*材料用量/工序良率")
 			} else if (inputId == "cl_packag") {
-				getMaterDetail("packag", "组装材料价格明细  (价格=材料单价(PCS)*材料用量/工序良率)")
+				getMaterDetail("packag", "组装材料成本=材料单价(PCS)*材料用量/工序良率")
 			}
 			// 人工和制费
 			// else if (inputId == "lh_hardware" ) {
@@ -183,29 +183,29 @@ $(function() {
 
 			//人工明细
 			else if(inputId == "lh_hardware") {
-				getProcessDetail("hardware", "五金人工明细  (人工总费用=人工费用（元/H）*成型周期(S）/3600 *人数/工序良率）","lh")
+				getProcessDetail("hardware", "五金人工成本=人工费用(元/H)*成型周期(S）/3600 *人数/工序良率","lh")
 			} else if(inputId == "lh_molding") {
-				getProcessDetail("molding", "注塑人工明细  (人工总费用=人工费用(元/H)*人数*成型周期(S)/3600/穴数/工序良率）","lh")
+				getProcessDetail("molding", "注塑人工成本=人工费用(元/H)*人数*成型周期(S)/3600/穴数/工序良率","lh")
 			} else if(inputId == "lh_surface") {
-				getProcessDetail("surface", "表面处理人工明细  (人工总费用=人数*人工费用（元/H）/产能(个/小时)/工序良率)","lh")
+				getProcessDetail("surface", "表面处理人工成本=人数*人工费用(元/H)/产能(PCS/H)/工序良率","lh")
 			} else if(inputId == "lh_packag") {
-				getProcessDetail("packag", "组装人工明细   (人工总费用=人数*人工费用（元/H）/产能(个/小时)/工序良率)","lh")
+				getProcessDetail("packag", "组装人工成本=人数*人工费用(元/H)/产能(PCS/H)/工序良率","lh")
 			}
 
 			//制费明细
 			else if(inputId == "lw_hardware") {
-				getProcessDetail("hardware", "五金制费明细  (制造总费用=制费工时费（元/H）*成型周期(S）/3600/工序良率 )","mh")
+				getProcessDetail("hardware", "五金制费成本=制费工时费(元/H)*成型周期(S）/3600/工序良率","mh")
 			} else if(inputId == "lw_molding") {
-				getProcessDetail("molding", "注塑制费明细  (制造总费用=总制费=制费工时费（元/H）*成型周期(S）/3600/穴数/工序良率 )","mh")
+				getProcessDetail("molding", "注塑制费成本=总制费=制费工时费(元/H)*成型周期(S）/3600/穴数/工序良率","mh")
 			} else if(inputId == "lw_surface") {
-				getProcessDetail("surface", "表面处理制费明细  (制造总费用=费率/产能(个/小时)/工序良率)","mh")
+				getProcessDetail("surface", "表面处理制费成本=费率/产能(PCS/H)/工序良率","mh")
 			} else if(inputId == "lw_packag") {
-				getProcessDetail("packag", "组装制费明细  (制造总费用=制费工时费（元/H）*/产能(个/小时)/工序良率 )","mh")
+				getProcessDetail("packag", "组装制费成本=制费工时费(元/H)*/产能(PCS/H)/工序良率","mh")
 			}
 			
 			//20210318-hjj-损料修改
 			else if(inputId == "hou_loss_all"){
-				getLossDetail( "损耗明细查看 ")
+				getLossDetail( "损耗明细")
 			}
 		}
 
@@ -235,7 +235,7 @@ $(function() {
 				}
 			},
 			cols : [ [ 
-			 {type : 'numbers'},
+			 {fixed:'left',type : 'numbers'},
 			 // {field : 'bsType',width : 100,title : '类型',sort : true,
 				//  templet : function(d) {
 				// 	if (d.bsType == 'hardware') {// * 五金:hardware
@@ -248,12 +248,12 @@ $(function() {
 				// 		return '组装'
 				// 	}
 				// },totalRowText : "合计"},
-			{field : 'bsComponent',width : 120,title : '组件名称',sort : true},
-			{field : 'bsMaterName',width : 200,title : '材料名称',sort : true,totalRowText : "合计"},
+			//{field : 'bsComponent',width : 120,title : '组件名称',sort : true},
+			{fixed:'left',field : 'bsMaterName',width : 200,title : '材料名称',totalRowText : "合计"},
 			//{field : 'bsMachiningType',title : '加工类型',width : 100,hide : true},/*(表面处理)*/
 			//{field : 'bsColor',title : '配色工艺',width : 100,hide : true},/*(表面处理)*/
-			{field : 'bsModel',width : 200,title : '材料规格'},
-			{field : 'bsAssess',width : 80,title : '评估价格'},
+			{fixed:'left',field : 'bsModel',width : 200,title : '材料规格'},
+			{field : 'bsAssess',width : 80,title : '材料单价'},
 			{field : 'bsProQty',width : 90,title : '制品重(g)',totalRow : true,hide : true},
 				{field : 'bsWaterGap',title : '水口量(g)',width : 90,hide : true}, /*(注塑)*/
 				{field : 'bsCave',title : '穴数',width : 60,hide : true}, /*(注塑)*/
@@ -310,9 +310,9 @@ $(function() {
 				}
 			},
 			cols : [ [ 
-			   {type : 'numbers'},
-			   {field : 'bsName',width : 150,title : '零件名称',sort : true,totalRowText : "合计"},
-			   {field : 'workcenterName',width : 150,title : '工作中心',
+			   {fixed:'left',type : 'numbers'},
+			   {fixed:'left',field : 'bsName',width : 150,title : '零件名称',totalRowText : "合计"},
+			   {fixed:'left',field : 'workcenterName',width : 150,title : '工作中心',
 					templet : function(d) {
 						if (d.proc != null) {
 							if (d.proc.bjWorkCenter != null) {
@@ -324,8 +324,8 @@ $(function() {
 							return "";
 						}
 					}},
-			   {field : 'bsOrder',width : 100,title : '工艺顺序',sort : true},
-			   {field : 'proc',width : 150,title : '工序名称',
+
+			   {fixed:'left',field : 'proc',width : 100,title : '工序名称',
 				  templet : function(d) {
 					if (d.proc != null) {
 						return d.proc.procName == null || undefined ? "" : d.proc.procName;
@@ -333,6 +333,7 @@ $(function() {
 						return "";
 					}
 				}},
+				{fixed:'left',field : 'bsOrder',width : 60,title : '顺序'},
 			   // {field : 'procfmemo',width : 100,title : '工序说明',
 				//   templet : function(d) {
 				// 	if (d.proc != null) {
@@ -341,6 +342,7 @@ $(function() {
 				// 		return "";
 				// 	}
 				// }},
+				{fixed:'left',field : 'bsGroups',title : '损耗分组',width : 80},
 				{field : 'bsModelType',title : '机台类型',width : 160,hide : true,templet:function (d) {
 						if (d.bsTypeList != null) {
 							var modelJson = JSON.parse(d.bsTypeList);
@@ -356,8 +358,9 @@ $(function() {
 						}
 					}},
 				//{field : 'bsRadix',title : '基数',width : 90,hide : true},
-				{field : 'bsUserNum',title : '人数',width : 70,hide : true},
+
 				{field : 'bsFeeLh',title : '人工费(元/小时)',width : 120,hide : true},
+				{field : 'bsUserNum',title : '人数',width : 70,hide : true},
 				{field : 'bsFeeMh',title : '制造费(元/小时)',width : 120,hide : true},
 				{field : 'bsCycle',title : '成型周期(S)',width : 100,hide : true},
 				{field : 'bsCave',title : '穴数',width : 60,hide : true},
@@ -395,7 +398,7 @@ $(function() {
 			// url : context +
 			// '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
 			method : 'get', // 默认：get请求
-			cellMinWidth : 80,
+			// cellMinWidth : 80,
 			totalRow : true,
 			limit:200,
 			limits: [200,50,100,500,1000,2000,5000],
@@ -417,43 +420,44 @@ $(function() {
 				}
 			},
 			cols : [ [
-				{type : 'numbers'},
-				{field : 'bsElement',width : 120,title : '组件名称',sort : true,totalRowText : "合计"},
-				{field : 'bsName',width : 150,title : '零件名称',sort : true},
-				{field : 'workcenterName',width : 120,title : '工作中心',
-					templet : function(d) {
-						if (d.proc != null) {
-							if (d.proc.bjWorkCenter != null) {
-								return d.proc.bjWorkCenter.workcenterName == null || undefined ? "" : d.proc.bjWorkCenter.workcenterName;
-							} else {
-								return "";
-							}
-						} else {
-							return "";
-						}
-					}},
-				{field : 'bsOrder',width : 100,title : '工艺顺序',sort : true},
-				{field : 'proc',width : 120,title : '工序名称',
-					templet : function(d) {
-						if (d.proc != null) {
-							return d.proc.procName == null || undefined ? "" : d.proc.procName;
-						} else {
-							return "";
-						}
-					}},
-
-
-				{field : 'bsMaterCost',title : '材料成本',width : 80,totalRow : true},
-				{field : 'bsFeeLhAll',title : '人工成本',width : 80,totalRow : true},
-				{field : 'bsFeeMhAll',title : '制造成本',width : 80,totalRow : true},
-				{field : 'bsFeeWxAll',title : '外协成本',width : 80,totalRow : true},
-				{field : 'bsCost',title : '成本合计',width : 100,totalRow : true},
-				{field : 'bsYield',title : '工序良率%',width : 90},
-				{field : 'bsTheLoss',title : '工序损耗',width : 100,totalRow : true},
+				{fixed:'left',type : 'numbers'},
+				//{field : 'BS_ELEMENT',width : 120,title : '组件名称',sort : true,totalRowText : "合计"},
+				{fixed:'left',field : 'BS_NAME',width : 150,title : '零件名称'},
+				{fixed:'left',field : 'WORKCENTER_NAME',width : 110,title : '工作中心'
+					// templet : function(d) {
+					// 	if (d.proc != null) {
+					// 		if (d.proc.bjWorkCenter != null) {
+					// 			return d.proc.bjWorkCenter.workcenterName == null || undefined ? "" : d.proc.bjWorkCenter.workcenterName;
+					// 		} else {
+					// 			return "";
+					// 		}
+					// 	} else {
+					// 		return "";
+					// 	}
+					// }
+					},
+				{fixed:'left',field : 'PROC_NAME',width : 100,title : '工序名称'
+					// templet : function(d) {
+					// 	if (d.proc != null) {
+					// 		return d.proc.procName == null || undefined ? "" : d.proc.procName;
+					// 	} else {
+					// 		return "";
+					// 	}
+					// }
+					},
+				{fixed:'left',field : 'BS_ORDER',width : 60,title : '顺序'},
+				{fixed:'left',field : 'BS_GROUPS',title : '损耗分组',width : 80},
+				{field : 'BS_MATER_COST',title : '材料成本',width : 80,totalRow : true},
+				{field : 'BS_FEE_LH_ALL',title : '人工成本',width : 80,totalRow : true},
+				{field : 'BS_FEE_MH_ALL',title : '制造成本',width : 80,totalRow : true},
+				{field : 'BS_FEE_WX_ALL',title : '外协成本',width : 80,totalRow : true},
+				{field : 'BS_COST',title : '成本合计',width : 90,totalRow : true},
+				{field : 'BS_YIELD',title : '工序良率%',width : 90},
+				{field : 'BS_THE_LOSS',title : '工序损耗',width : 90,totalRow : true},
 				{field : 'bsCostLoss',title : '工序成本(含损耗)',width : 130,totalRow : true,templet: function (d) {
-						return (Number(d.bsCost)+Number(d.bsTheLoss)).toFixed(4);
+						return (Number(d.BS_COST)+Number(d.BS_THE_LOSS)).toFixed(4);
 					}},
-				{field : 'bsAllLoss',title : '成本累计(含损耗)',width : 130},
+				{field : 'BS_ALL_LOSS',title : '成本累计(含损耗)',width : 130},
 
 			] ],
 			done : function(res, curr, count) {
@@ -712,9 +716,9 @@ function getProcessDetail(bsType, title,lhType) {
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
-						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
-						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
@@ -741,24 +745,24 @@ function getProcessDetail(bsType, title,lhType) {
 					} else if (item.bsType == 'surface') {
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
-						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
-						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
 
 
 					} else if (item.bsType == 'packag') {
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
-						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
-						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
-						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						// $(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
 
 
@@ -789,17 +793,17 @@ function getProcessDetail(bsType, title,lhType) {
 
 function getLossDetail(title){
 	tableIns3.reload({
-		url : context + '/productProcess/getList?bsType=' + "" + '&quoteId=' + quoteId,
+		url : context + '/quoteSum/getSumList?quoteId=' + quoteId,
 		done : function(res, curr, count) {
 			pageCurr = curr;
 			var onwanceTotal=0;
 			var yieldTotal = 100;
 			res.data.forEach(function(item, index) {
-				onwanceTotal += Number(item.bsCost)+Number(item.bsTheLoss);
-				yieldTotal *= Number(item.bsYield)/100
+				onwanceTotal += Number(item.BS_COST)+Number(item.BS_THE_LOSS);
+				yieldTotal *= Number(item.BS_YIELD)/100
 			});
 			this.elem.next().find('.layui-table-total td[data-field="bsCostLoss"] .layui-table-cell').text(onwanceTotal.toFixed(4));
-			this.elem.next().find('.layui-table-total td[data-field="bsYield"] .layui-table-cell').text(yieldTotal.toFixed(2)+"%");
+			this.elem.next().find('.layui-table-total td[data-field="BS_YIELD"] .layui-table-cell').text(yieldTotal.toFixed(2)+"%");
 		}
 	})
 	var index = layer.open({

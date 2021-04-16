@@ -89,9 +89,9 @@ public class ProductProcess extends BaseEntity {
 	protected String bsElement;
 
 	/**
-	 * 组件名称
+	 * 材料名称
 	 */
-	@ApiModelProperty(name = "bsElement", value = "组件名称")
+	@ApiModelProperty(name = "bsMaterName", value = "材料名称")
 	@Column(length = 500)
 	protected String bsMaterName;
     
@@ -286,6 +286,17 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsAllLoss", value = "成本累计(含损耗)")
 	@Column( precision=21, scale=5)
 	protected BigDecimal bsAllLoss;
+
+	/**
+	 * * 2021-04-14 hjj 增加损耗分组计算
+	 * bsGroups分组名称
+	 */
+	/**
+	 * 分组名称
+	 */
+	@ApiModelProperty(name = "bsGroups", value = "分组名称")
+	@Column(length = 100)
+	protected String bsGroups;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -583,5 +594,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsMaterName(String bsMaterName) {
 		this.bsMaterName = bsMaterName;
+	}
+
+	public String getBsGroups() {
+		return bsGroups;
+	}
+
+	public void setBsGroups(String bsGroups) {
+		this.bsGroups = bsGroups;
 	}
 }

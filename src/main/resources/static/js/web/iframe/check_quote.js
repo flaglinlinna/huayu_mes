@@ -44,6 +44,7 @@ layui.use('layer', function(){
                     dataType: "json",
                     success: function (res) {
                         if(res.result===true){
+                            parent.layer.close(index);
                         	layer.msg(res.msg, {
                         	     btn: [ '知道了']
                         	     ,yes: function(index1, layero){

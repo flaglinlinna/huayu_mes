@@ -148,6 +148,7 @@ public class BjModelTypeImpl extends BasePriceUtils implements BjModelTypeServic
 			filters1.add(new SearchFilter("modelCode", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("modelName", SearchFilter.Operator.LIKE, keyword));
 			filters1.add(new SearchFilter("workCenter.workcenterCode", SearchFilter.Operator.LIKE, keyword));
+			filters1.add(new SearchFilter("workCenter.workcenterName", SearchFilter.Operator.LIKE, keyword));
 		}
 		Specification<BjModelType> spec = Specification.where(BaseService.and(filters, BjModelType.class));
 		Specification<BjModelType> spec1 = spec.and(BaseService.or(filters1, BjModelType.class));

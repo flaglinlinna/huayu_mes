@@ -1,16 +1,14 @@
 package com.web.quote.service.internal;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.web.basic.dao.SysParamDao;
 import com.web.basic.entity.SysParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -535,7 +533,20 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //			pp.setBsLossHouMh(new BigDecimal("0"));
 		}
 		productProcessDao.saveAll(lpp_out);
-		List<ProductProcess> processList = productProcessDao.findByDelFlagAndPkQuoteOrderByBsOrderAsc(0,Long.parseLong(quoteId));
+		List<ProductProcess> processAllList = productProcessDao.findByDelFlagAndPkQuoteOrderByBsOrderDesc(0,Long.parseLong(quoteId));
+		List<ProductProcess> processList = new ArrayList<>();
+		HashSet<String> groupSet = new HashSet<>();
+		for(ProductProcess o :processAllList){
+			if(StringUtils.isNotEmpty(o.getBsGroups())){
+				if(groupSet.add(o.getBsGroups())){
+					processList.add(o);
+				}
+			}else {
+				processList.add(o);
+			}
+		}
+//		processList = processList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ProductProcess::getBsGroups))), ArrayList::new));
+		Collections.reverse(processList);
 		for(Integer i=0;i<processList.size();i++){
 			ProductProcess o = processList.get(i);
 			//成本 = 人工制费 + 制造费用 + 材料费用
@@ -543,8 +554,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				o.setBsCost(o.getBsFeeWxAll());
 				o.setBsYield(new BigDecimal("100").subtract(o.getBsLoss()));
 			}else {
-				List<ProductMater> pmList = productMaterDao.findByBsElementAndBsComponentAndPkQuoteAndBsTypeAndDelFlag(
-						o.getBsElement(),o.getBsName(),o.getPkQuote(),o.getBsType(),0);
+				List<ProductMater> pmList = new ArrayList<>();
+				if(StringUtils.isNotEmpty(o.getBsGroups())){
+					pmList= productMaterDao.findByPkQuoteAndDelFlagAndBsGroups(o.getPkQuote(),0,o.getBsGroups());
+				}else {
+//					pmList = productMaterDao.findByBsElementAndBsComponentAndPkQuoteAndBsTypeAndDelFlag(
+//							o.getBsElement(), o.getBsName(), o.getPkQuote(), o.getBsType(), 0);
+					pmList = productMaterDao.findByPkQuoteAndDelFlagAndBsMaterName(o.getPkQuote(),0,o.getBsMaterName());
+				}
 				BigDecimal materCost = BigDecimal.ZERO;
 				for(ProductMater pm:pmList){
 					materCost = materCost.add(pm.getBsFee());
@@ -558,7 +575,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()));
 			}else {
 				o.setBsTheLoss((processList.get(i-1).getBsAllLoss()).divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract((processList.get(i-1).getBsAllLoss())));
-				//成本累计(含损耗
+				//成本累计(含损耗)
 				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()).add(processList.get(i-1).getBsAllLoss()));
 			}
 //			processList.add(o);
@@ -726,5 +743,28 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());//修改时间
 		quoteDao.save(o);
 		return ApiResponseResult.success("设置中标成功！");
+	}
+
+	public ApiResponseResult getSumList(Long quoteId,PageRequest pageRequest) throws Exception {
+		Page<Map<String, Object>> mapList= productProcessDao.getSumList(quoteId,pageRequest);
+//		DataGrid.create(mapList.getContent(), (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize())
+		List<Map<String,Object>> maps =  new ArrayList<>();
+		List<Map<String,Object>> mapOld = mapList.getContent();
+		for (int i = 0; i < mapOld.size(); i++) {
+		  Map<String, Object> one = mapOld.get(i);
+		  Map<String, Object> deepCopy = new HashMap<>();
+		  deepCopy.putAll(one);
+		  maps.add(deepCopy);
+		}
+		for(Map<String,Object> map :maps){
+			if(map.get("BS_GROUPS")!=null){
+				List<Map<String,Object>> sumList = productProcessDao.getSumByBsGroups(quoteId,map.get("BS_GROUPS").toString());
+//				map.put("BS_MATER_COST",sumList.get(0).get("BS_MATER_COST"));
+				map.put("BS_FEE_LH_ALL",sumList.get(0).get("BS_FEE_LH_ALL"));
+				map.put("BS_FEE_MH_ALL",sumList.get(0).get("BS_FEE_MH_ALL"));
+				map.put("BS_FEE_WX_ALL",sumList.get(0).get("BS_FEE_WX_ALL"));
+			}
+		}
+		return ApiResponseResult.success().data(DataGrid.create(maps, (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 }

@@ -448,6 +448,7 @@ public class CheckImpl   implements CheckService {
 								pm.setPkQuote(c.getBsRecordId());
 								pm.setPkItemTypeWg(qb.getPkItemTypeWg());//fyx-20210114-物料类型
 								pm.setBsElement(qb.getBsElement());//fyx-20210115-组件名称
+								pm.setBsGroups(qb.getBsGroups());//hjj-20210415-损耗分组
 								lpm.add(pm);
 							}
 							productMaterDao.saveAll(lpm);
@@ -470,6 +471,7 @@ public class CheckImpl   implements CheckService {
 							pp.setBsMaterName(qb.getBsMaterName());
 							pp.setBsFeeMh(qb.getBsFeeMh());
 							pp.setBsFeeLh(qb.getBsFeeLh());
+							pp.setBsGroups(qb.getBsGroups());
 							lpp.add(pp);
 						}
 						productProcessDao.saveAll(lpp);

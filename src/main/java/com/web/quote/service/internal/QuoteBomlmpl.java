@@ -99,6 +99,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 		o.setPkUnit(quoteBom.getPkUnit());
 		o.setPkItemTypeWg(quoteBom.getPkItemTypeWg());
 		o.setPkBjWorkCenter(quoteBom.getPkBjWorkCenter());
+		o.setBsGroups(quoteBom.getBsGroups());
 //		BjWorkCenter bjWorkCenter = bjWorkCenterDao.findById((long) quoteBom.getPkBjWorkCenter());
 //		if(("out").equals(bjWorkCenter.getBsCode())){
 //			return ApiResponseResult.failure("外协不允许在清单中,请到“工艺流程”中选择外协。");

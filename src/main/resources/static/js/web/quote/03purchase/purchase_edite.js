@@ -29,9 +29,9 @@ $(function() {
 				}
 			},
 			cols :[ [
-			    {type : 'numbers',style : 'background-color:#d2d2d2'},
+			    {fixed:'left',type : 'numbers',style : 'background-color:#d2d2d2'},
 			    {field : 'id',title : 'ID',hide : true},
-			    {field : 'bsType',width : 100,title : '类型',sort : true,style : 'background-color:#d2d2d2',
+			    {fixed:'left',field : 'bsType',width : 90,title : '工作中心大类',style : 'background-color:#d2d2d2',
 					templet : function(d) {
 						if (d.bsType == 'hardware') {// * 五金:hardware
 							return '五金'
@@ -45,9 +45,9 @@ $(function() {
 							return '外协'
 						}
 				}}, 
-				{field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'},
-				{field : 'bsMaterName',width : 200,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
-				{field : 'bsModel',width : 200,title : '材料规格',style : 'background-color:#d2d2d2'},
+				//{field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'},
+				{fixed:'left',field : 'bsMaterName',width : 200,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
+				{fixed:'left',field : 'bsModel',width : 200,title : '材料规格',style : 'background-color:#d2d2d2'},
 				{field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
 				{field : 'bsUnit',width : 100,title : 'BOM用量单位',style : 'background-color:#d2d2d2',templet:function (d){
 						if(d.unit!=null){

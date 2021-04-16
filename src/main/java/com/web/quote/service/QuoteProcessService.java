@@ -25,7 +25,9 @@ public interface QuoteProcessService {
    public ApiResponseResult doFmemo(Long id,String  fmemo)throws Exception;
 
    public ApiResponseResult doBsMaterName(Long id,Long  bomId)throws Exception;
-   
+
+   public ApiResponseResult doBsGroups(Long id,String  bsGroups)throws Exception;
+
    public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
 
    public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception;

@@ -196,6 +196,13 @@ public class QuoteBom extends BaseEntity {
 	protected String bsSupplier;
 
 	/**
+	 * 损耗合并计算分组
+	 */
+	@ApiModelProperty(name = "bsGroups", value = "损耗合并计算分组")
+	@Column(length = 50)
+	protected String bsGroups;
+
+	/**
 	 * 是否制造评估重审
 	 * 0否 1是
 	 */
@@ -443,5 +450,13 @@ public class QuoteBom extends BaseEntity {
 
 	public void setPkBomId(Long pkBomId) {
 		this.pkBomId = pkBomId;
+	}
+
+	public String getBsGroups() {
+		return bsGroups;
+	}
+
+	public void setBsGroups(String bsGroups) {
+		this.bsGroups = bsGroups;
 	}
 }

@@ -144,6 +144,15 @@
 			</select>
 		</script>
 
+		<script type="text/html" id="selectBsGroups" >
+			<select name="selectBsGroups" lay-filter="selectBsGroups" lay-search>
+				<option value="">请选择</option>
+				{{# layui.each($.parseJSON( d.bsGroupsList ), function(index, item){     }}
+				<option value="{{ item.BSGROUPS }}"  {{ d.bsGroups==item.BSGROUPS?'selected':''}}>{{ item.BSGROUPS }}</option>
+				{{# });  }}
+			</select>
+		</script>
+
 		<script th:inline="javascript">
             var quoteId=[[${quoteId}]];
             var code=[[${code}]];

@@ -30,13 +30,13 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {type : 'numbers'},
+			cols : [ [ {fixed:'left',type : 'numbers'},
 			{field:'id', title:'ID', width:80, unresize:true, hide:true},
-			{field : 'bsName',width : 120,title : '零件名称',style : 'background-color:#d2d2d2'},
+			{fixed:'left',field : 'bsName',width : 120,title : '零件名称',style : 'background-color:#d2d2d2'},
 			// {field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'procName',title : '工序名称',width : 120,templet : '<div>{{d.proc.procName}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'workCenter',title : '工作中心',width : 120,templet : '<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'bsOrder',title : '工序顺序',width : 80,"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff'},
+			{fixed:'left',field : 'workCenter',title : '工作中心',width : 120,templet : '<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style : 'background-color:#d2d2d2'},
+				{fixed:'left',field : 'procName',title : '工序名称',width : 120,templet : '<div>{{d.proc.procName}}</div>',style : 'background-color:#d2d2d2'},
+				{fixed:'left',field : 'bsOrder',title : '顺序',width : 60,"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff'},
 			// {field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,style : 'background-color:#d2d2d2',align : 'center',
 			// 	templet : function(d) {
 			// 		if(d.proc.bjWorkCenter.bsCode !="out") {
@@ -52,11 +52,13 @@ $(function() {
 
 				// ,templet : '#selectBsMaterName'
 			{field : 'bsMaterName',width : 240,title : '材料名称',templet : '#selectBsMaterName',style : 'background-color:#ffffff'},
-			// {field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
+			{field : 'bsGroups',width : 150,title : '损耗分组',templet : '#selectBsGroups',style : 'background-color:#ffffff'},
+
+				// {field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
 			// 	templet : function(d) {
 			// 		if (d.fmemo == null) {return ""} else {return d.fmemo}
 			// 	}},
-			{field : 'bsModel',title : '规格',width : 240,sort : true,style : 'background-color:#d2d2d2;overflow:hidden !important',
+			{field : 'bsModel',title : '材料规格',width : 240,style : 'background-color:#d2d2d2;overflow:hidden !important',
 					templet : function(d) {
 						if (d.quoteBom == null) {return ""}
 						else {
@@ -78,6 +80,7 @@ $(function() {
 					if(item.bsStatus =='1'){
 						tableView.find('tr[data-index=' + index + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
 						$("select[name='selectBsMaterName']").attr("disabled","disabled");
+						$("select[name='selectBsGroups']").attr("disabled","disabled");
 						form.render('select');
 					}
 				});
@@ -151,6 +154,16 @@ $(function() {
 			//选择的select对象值；
 			var selectValue = data.value;
 			updateBsMaterName(Guid,selectValue);
+		})
+
+		form.on('select(selectBsGroups)', function (data) {
+			//获取当前行tr对象
+			var elem = data.othis.parents('tr');
+			//第一列的值是Guid，取guid来判断
+			var Guid= elem.first().find('td').eq(1).text();
+			//选择的select对象值；
+			var selectValue = data.value;
+			updateBsGroups(Guid,selectValue);
 		})
 
 		// 工作中心列表
@@ -548,7 +561,7 @@ $(function() {
 						layer.close(index);
 					});
 				}else {
-					loadSelected();
+					loadAll();
 				}
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试", function() {
@@ -587,6 +600,26 @@ function updateBsMaterName(id,bomId) {
 		"bomId":bomId
 	}
 	CoreUtil.sendAjax("/quoteProcess/doBsMaterName", JSON.stringify(param),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
+}
+
+function updateBsGroups(id,bsGroups) {
+	var param = {
+		"id":id,
+		"bsGroups":bsGroups
+	}
+	CoreUtil.sendAjax("/quoteProcess/doBsGroups", JSON.stringify(param),
 		function(data) {
 			if (isLogin(data)) {
 				if (data.result == true) {
@@ -651,9 +684,10 @@ function saveProc() {
 					($(window.parent.document).find(('li[lay-id="'+thisUrl+'"]'))).find(".layui-tab-close").trigger("click")
 				});
 			} else {
-				layer.msg(data.msg, {
-					time : 2000, // 2s后自动关闭
-					btn : [ '知道了' ]
+				layer.alert(data.msg, function(index){
+					layer.close(index);
+					// time : 2000, // 2s后自动关闭
+					// btn : [ '知道了' ]
 				});
 			}
 		});
@@ -877,8 +911,10 @@ function loadAll() {
 		page : {
 			curr : pageCurr
 		// 从当前页码开始
-		},done: function (res, curr, count) {
+		}
+		,done: function (res, curr, count) {
 			//滚轮控制
+			totalCount = res.count;
 			pageCurr=curr;
 			dev_obj = $("#table_and_page_div_id")//定位到表格
 			if (dev_obj != null) {

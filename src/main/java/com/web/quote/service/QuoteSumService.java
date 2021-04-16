@@ -29,4 +29,6 @@ public interface QuoteSumService {
 	public ApiResponseResult countQuoteTreeBom(Long quoteId) throws Exception;//计算总费用
 	
 	public ApiResponseResult setBade(Long quoteId,Integer bsBade) throws Exception;//设置中标
+
+	public ApiResponseResult getSumList(Long quoteId,PageRequest pageRequest)throws Exception; //获取损耗明细
 }

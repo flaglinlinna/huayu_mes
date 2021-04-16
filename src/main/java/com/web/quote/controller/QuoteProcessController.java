@@ -231,6 +231,26 @@ public class QuoteProcessController extends WebController {
             return ApiResponseResult.failure("修改材料名称失败！");
         }
     }
+
+    @ApiOperation(value = "修改损耗分组", notes = "修改损耗分组", hidden = true)
+    @RequestMapping(value = "/doBsGroups", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doBsGroups(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "quoteProcess/doBsGroups";String methodName ="修改损耗分组";
+        try{
+            Long id = Long.parseLong(params.get("id").toString()) ;
+            String bsGroups = params.get("bsGroups").toString();
+            ApiResponseResult result = quoteProcessService.doBsGroups(id, bsGroups);
+            logger.debug("修改损耗分组=doBsGroups:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("修改损耗分组失败！", e);
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            return ApiResponseResult.failure("修改损耗分组失败！");
+        }
+    }
 	
 	@ApiOperation(value = "删除", notes = "删除",hidden = true)
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
