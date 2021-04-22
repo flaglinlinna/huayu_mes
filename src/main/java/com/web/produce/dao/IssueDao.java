@@ -35,4 +35,7 @@ public interface IssueDao extends CrudRepository<Issue, Long>,JpaSpecificationEx
 	@Modifying
 	@Query(value = "update mes_base_emp_finger f set f.del_flag = 1, f.del_by =?1 where f.emp_id =?2 ",nativeQuery = true)
 	Integer updateDelFlagByClear(Long userId,Long empId);
+
+	@Query(value = "select distinct f.emp_id id from MES_BASE_EMP_FINGER f left join MES_BASE_EMPLOYEE a on a.id = f.emp_id and a.del_flag=0 where f.del_flag=0 and a.emp_status = 0 and f.EMP_ID not in(select op.EMP_ID from MES_DEV_OPER_LOG op where op.DESCRIPTION = '指纹删除' and op.CMD_FLAG = 0)",nativeQuery = true)
+	List<Map<String,Object>> getLeaveEmpId();
 }

@@ -42,9 +42,9 @@ $(function() {
 			  // {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
 			  {fixed:'left',field : 'bsMaterName',title : '材料名称',width : 200,sort : true,style : 'background-color:#d2d2d2'},
 			  {fixed:'left',field : 'bsModel',title : '材料规格',width : 200,style : 'background-color:#d2d2d2;overflow:hidden !important'},
-			  {field : 'bsQty',width : 100,title : 'BOM用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
+			  {field : 'bsQty',width : 100,title : '材料用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'bsProQty',width : 100,title : '制品重(g)<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
-			  {field : 'bsUnit',width : 120,title : 'BOM用量单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
+			  {field : 'bsUnit',width : 120,title : '材料用量单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
 			  {field : 'bsGroups',width : 120,title : '损耗分组',style : 'background-color:#ffffff',hide : true},
 			  /*{field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text',style : 'background-color:#ffffff'},*/
 			  {field : 'bsWaterGap',title : '水口重(g)<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
@@ -149,9 +149,9 @@ $(function() {
 			   // {field : 'bsColor',title : '配色工艺',width : 100,hide : true /*(表面处理)*/},
 			   {field : 'bsMaterName',width : 140,title : '材料名称',sort : true},
 			   {field : 'bsModel',width : 160,title : '规格'},
-			   {field : 'bsQty',width : 100,title : 'BOM用量',hide : true},
+			   {field : 'bsQty',width : 100,title : '材料用量',hide : true},
 			   {field : 'bsProQty',width : 100,title : '制品量',hide : true},
-			   {field : 'bsUnit',width : 80,title : 'BOM用量单位',},
+			   {field : 'bsUnit',width : 80,title : '材料用量单位',},
 			   //{field : 'bsRadix',width : 80,title : '基数',},
 			   {field : 'bsWaterGap',title : '水口重(g)',width : 100,hide : true /*(注塑)*/},
 			   {field : 'bsCave',title : '穴数',width : 100,hide : true /*(注塑)*/},
@@ -222,7 +222,7 @@ $(function() {
 			} else*/
 			if (obj.field == "bsQty") {
 				if (/^\d+$/.test(bsQty) == false && /^\d+\.\d+$/.test(bsQty) == false) {
-					layer.msg("BOM用量只能输入数字");
+					layer.msg("材料用量只能输入数字");
 					loadAll();
 					return false;
 				}
@@ -428,7 +428,7 @@ function Confirm() {
 		"bsType" : bsType,
 		"bsCode" : bsCode
 	};
-	layer.confirm('一经提交则不得再修改，确定要提交吗1？', {
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
 		CoreUtil.sendAjax("/productMater/doStatus", JSON.stringify(params), function(data) {

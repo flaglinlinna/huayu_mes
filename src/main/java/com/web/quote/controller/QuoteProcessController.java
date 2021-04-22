@@ -251,6 +251,26 @@ public class QuoteProcessController extends WebController {
             return ApiResponseResult.failure("修改损耗分组失败！");
         }
     }
+
+    @ApiOperation(value = "修改工艺", notes = "修改工艺", hidden = true)
+    @RequestMapping(value = "/doProc", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doProc(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "quoteProcess/doProc";String methodName ="修改工艺";
+        try{
+            Long id = Long.parseLong(params.get("id").toString()) ;
+            Long bsGroups = params.get("prodId")==null?null:Long.parseLong(params.get("prodId").toString());
+            ApiResponseResult result = quoteProcessService.doProc(id, bsGroups);
+            logger.debug("修改工艺=doProc:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("修改工艺失败！", e);
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            return ApiResponseResult.failure("修改工艺失败！");
+        }
+    }
 	
 	@ApiOperation(value = "删除", notes = "删除",hidden = true)
     @RequestMapping(value = "/delete", method = RequestMethod.POST)

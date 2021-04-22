@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.web.basePrice.entity.BjWorkCenter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -79,6 +80,19 @@ public class QuoteProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsName", value = "Bom零件名称")
 	@Column(length = 100)
 	protected String bsName;
+
+	/**
+	 * 工作中心
+	 */
+	@ApiModelProperty(name="pkWorkCenter",value="工作中心")
+	@Column
+	protected Long pkWorkCenter;
+
+	@ApiModelProperty(name="bjWorkCenter",hidden=true,value="报价主表")
+	@ManyToOne
+	@JoinColumn(name = "pkWorkCenter", insertable = false, updatable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
+	protected BjWorkCenter bjWorkCenter;
     
     /**
      * 关联工序表
@@ -149,6 +163,13 @@ public class QuoteProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsGroupsList", value = "分组名称列表")
 	@Column(length = 1000)
 	protected String bsGroupsList;
+
+	/**
+	 * 已维护人工制费工序列表
+	 */
+	@ApiModelProperty(name = "bsProcList", value = "已维护人工制费工序列表")
+	@Column(length = 1000)
+	protected String bsProcList;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -286,5 +307,29 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setBsGroupsList(String bsGroupsList) {
 		this.bsGroupsList = bsGroupsList;
+	}
+
+	public Long getPkWorkCenter() {
+		return pkWorkCenter;
+	}
+
+	public void setPkWorkCenter(Long pkWorkCenter) {
+		this.pkWorkCenter = pkWorkCenter;
+	}
+
+	public String getBsProcList() {
+		return bsProcList;
+	}
+
+	public void setBsProcList(String bsProcList) {
+		this.bsProcList = bsProcList;
+	}
+
+	public BjWorkCenter getBjWorkCenter() {
+		return bjWorkCenter;
+	}
+
+	public void setBjWorkCenter(BjWorkCenter bjWorkCenter) {
+		this.bjWorkCenter = bjWorkCenter;
 	}
 }

@@ -417,6 +417,10 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setBsStatus(bsStatus);
+        if(99==bsStatus){
+            //关闭报价单时 关闭待办事项
+            todoInfoService.close(null,null,null,o.getId());
+        }
         quoteDao.save(o);
         return ApiResponseResult.success("设置报价单状态成功！").data(o);
     }

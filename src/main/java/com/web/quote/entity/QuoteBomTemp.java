@@ -179,6 +179,13 @@ public class QuoteBomTemp extends BaseEntity {
 	@ApiModelProperty(name = "bsProQty", value = "制品量")
 	@Column(length = 50)
 	protected String bsProQty;
+
+	/**
+	 * 损耗分组
+	 */
+	@ApiModelProperty(name = "bsGroups", value = "bsGroups")
+	@Column(length = 100)
+	protected String bsGroups;
 	
 	/**
 	 * 基数
@@ -446,5 +453,13 @@ public class QuoteBomTemp extends BaseEntity {
 
 	public void setPurchaseUnit(String purchaseUnit) {
 		this.purchaseUnit = purchaseUnit;
+	}
+
+	public String getBsGroups() {
+		return bsGroups;
+	}
+
+	public void setBsGroups(String bsGroups) {
+		this.bsGroups = bsGroups;
 	}
 }

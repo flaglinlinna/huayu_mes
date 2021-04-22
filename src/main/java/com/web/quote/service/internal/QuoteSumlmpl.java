@@ -243,6 +243,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		BigDecimal wh_hou_loss = new BigDecimal(0);// 五金+注塑+表面处理+组装+外协-制费-后工序损耗
 
 		BigDecimal all_lose = new BigDecimal(0);
+		BigDecimal the_lose = new BigDecimal(0);
 
 		List<ProductProcess> lpp = productProcessDao.findByDelFlagAndPkQuote(0, Long.valueOf(quoteId));
 		for (ProductProcess pp : lpp) {
@@ -268,7 +269,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //			wh_hou_loss = wh_hou_loss.add(pp.getBsLossHouMh()); //后工序损耗(制费)
 
 			//20210318-hjj工序损耗
-			all_lose = all_lose.add(pp.getBsTheLoss());
+			all_lose = all_lose.add(pp.getBsTheLoss()==null?the_lose:pp.getBsTheLoss());
 
 		}
 		// 3：小计
@@ -676,7 +677,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 						qb2.setBsMaterName(map2.get("COMPONENT").toString());
 						qb2.setParenId(qsb.getId());
 						qb2.setBsComponent(map2.get("COMPONENT").toString());
-						qb2.setBsFeeItemAll(new BigDecimal(map2.get("FEE").toString()));// 材料总费用
+						qb2.setBsFeeItemAll(new BigDecimal(map2.get("FEE")==null?"0":map2.get("FEE").toString()));// 材料总费用
 						qb2.setBsFeeLhAll(new BigDecimal(map2.get("FEE_LH").toString()));
 						qb2.setBsFeeMhAll(new BigDecimal(map2.get("FEE_MH").toString()));
 						qb2.setBsFeeOut(new BigDecimal(map2.get("FEE_WX").toString()));

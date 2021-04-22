@@ -144,9 +144,20 @@
 			</select>
 		</script>
 
-		<script type="text/html" id="selectBsGroups" >
-			<select name="selectBsGroups" lay-filter="selectBsGroups" lay-search>
+
+		<script type="text/html" id="selectProc" >
+			<select name="selectProc" lay-filter="selectProc" lay-search>
 				<option value="">请选择</option>
+				{{# layui.each($.parseJSON( d.bsProcList ), function(index, item){     }}
+				<option value="{{ item.ID }}"  {{ d.pkProc==item.ID?'selected':''}}>{{ item.NAME }}</option>
+				{{# });  }}
+			</select>
+		</script>
+
+		<script type="text/html" id="selectBsGroups" >
+			<select name="selectBsGroups" 	lay-filter="selectBsGroups" lay-search>
+				<option value="">请选择</option>
+<!--				<option value="{{d.bsGroups!=null?d.bsGroups:''}}">{{d.bsGroups!=null?d.bsGroups:''}}</option>-->
 				{{# layui.each($.parseJSON( d.bsGroupsList ), function(index, item){     }}
 				<option value="{{ item.BSGROUPS }}"  {{ d.bsGroups==item.BSGROUPS?'selected':''}}>{{ item.BSGROUPS }}</option>
 				{{# });  }}

@@ -75,6 +75,9 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 	@Query(value = "update ProductMater map set  map.delFlag = 1 where map.pkQuote = ?1")
 	Integer deleteByPkQuote(Long pkQuote);
 
+	@Modifying
+	@Query(value = "UPDATE PRICE_PRODUCT_MATER m set m.DEL_FLAG = 1 where m.PK_QUOTE  = ?1 and m.PK_BOM_ID in (select b.PK_BOM_ID from PRICE_QUOTE_BOM b where b.DEL_FLAG = 1 and b.PK_QUOTE = ?1)",nativeQuery = true)
+	Integer deleteByPkQuoteBom(Long pkQuote);
 
 	@Modifying
 	@Query("update ProductMater t set t.bsStatus=?3 where t.pkQuote=?1 and t.bsType=?2 and t.delFlag=0")

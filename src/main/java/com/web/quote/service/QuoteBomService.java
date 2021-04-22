@@ -20,6 +20,9 @@ public interface QuoteBomService {
 
 	public ApiResponseResult updateRetrial(Long id,String type,Integer value)throws Exception;
 
+	public ApiResponseResult updateBsGroups(Long id,String bsGroups)throws Exception;
+
+
 	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception;
 
 	//导入BOM Excel

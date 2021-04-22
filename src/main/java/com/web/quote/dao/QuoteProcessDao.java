@@ -34,6 +34,8 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	@Query(value = "select max(b.bs_order) from PRICE_QUOTE_PROCESS b where b.DEL_FLAG = ?1 and b.PK_QUOTE = ?2  " ,nativeQuery = true)
 	Integer findMaxBsOrder(Integer delFlag,Long pkQuote);
 
+	Integer countByDelFlagAndPkQuoteAndPkProcIsNull(Integer delFlag,Long pkQuote);
+
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(Integer delFlag,Long pkQuote,String name);
 	
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsNameAndBsOrder(Integer delFlag,Long pkQuote,String name,int order);
@@ -60,6 +62,9 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	
 	@Query(value = "select distinct t.bs_component from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag='0' and t.bs_component is not null", nativeQuery = true)	
 	public List<Map<String, Object>> getBomName(String quoteid);
+
+	@Query(value = "SELECT DISTINCT f.PROC_ID id , f.PROC_NAME name FROM BJ_BASE_FEE f where  f.FEE_LH is not NULL and DEL_FLAG = 0 and f.PROC_ID is not null and f.WORKCENTER_ID = ?1", nativeQuery = true)
+	public List<Map<String, Object>> getProcByWorkCenter(Long pkWorkCenter);
 
 	@Query(value = "select distinct t.PK_BJ_WORK_CENTER, t.BS_ELEMENT,t.BS_COMPONENT,c.WORKCENTER_NAME from price_quote_bom t " +
 			" LEFT JOIN BJ_BASE_WORKCENTER c on t.PK_BJ_WORK_CENTER = c.ID where t.pk_quote= ?1  and t.del_Flag= 0 ",

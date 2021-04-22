@@ -15,10 +15,12 @@ import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.QuoteBomDao;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemDao;
+import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteItem;
 import com.web.quote.service.QuoteBomService;
+import com.web.quote.service.QuoteProcessService;
 import com.web.quote.service.QuoteService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -59,6 +61,10 @@ public class QuoteBomlmpl implements QuoteBomService {
 	private QuoteService quoteService;
 	@Autowired
 	TodoInfoService todoInfoService;
+	@Autowired
+	QuoteProcessService quoteProcessService;
+	@Autowired
+	QuoteProcessDao quoteProcessDao;
 	@Autowired
 	private QuoteDao quoteDao;
 	
@@ -163,6 +169,22 @@ public class QuoteBomlmpl implements QuoteBomService {
 		return ApiResponseResult.success("外购件清单列表修改重审状态成功！");
 	}
 
+	/**
+	 * 外购件清单列表修改重审状态
+	 * **/
+	public ApiResponseResult updateBsGroups(Long id,String bsGroups) throws Exception{
+		if(id == null){
+			return ApiResponseResult.failure("外购件信息ID不能为空！");
+		}
+		QuoteBom o  = quoteBomDao.findById((long) id);
+		if(o == null){
+			return ApiResponseResult.failure("外购件信息不存在！");
+		}
+		o.setBsGroups(bsGroups);
+		quoteBomDao.save(o);
+		return ApiResponseResult.success("外购件清单列表修改损耗分组成功！");
+	}
+
 	@Override
 	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception {
 //		long startTime=System.currentTimeMillis();   //获取开始时间
@@ -171,7 +193,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 		String excelPath = "static/excelFile/";
 		String fileName = "外购件清单模板.xlsx";
 		String[] map_arr = new String[]{"id","wcName","itemType","bsAgent","bsElement","bsComponent","bsMaterName","bsModel",
-										"fmemo","bsQty","unitName","purchaseUnit","bsExplain"};
+										"bsGroups","fmemo","bsQty","unitName","purchaseUnit","bsExplain"};
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for(QuoteBom quoteBom :quoteBomList){
@@ -182,6 +204,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 			map.put("bsComponent",quoteBom.getBsComponent());
 			map.put("bsMaterName",quoteBom.getBsMaterName());
 			map.put("bsModel",quoteBom.getBsModel());
+			map.put("bsGroups",quoteBom.getBsGroups());
 			if(quoteBom.getItp()!=null) {
 				map.put("itemType", quoteBom.getItp().getItemType());
 			}
@@ -344,6 +367,9 @@ public class QuoteBomlmpl implements QuoteBomService {
 		
 		//20210112-fyx-关闭待办
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "外购件清单");
+
+		 //20210420-hjj-下发工艺流程
+		quoteProcessService.addProcessByBom(Long.parseLong(quoteId));
 		return ApiResponseResult.success("提交成功！").data(data);
 	}
 
@@ -360,6 +386,9 @@ public class QuoteBomlmpl implements QuoteBomService {
 		if(quote.getBsStatus()==1||quote.getBsStatus()==4){
 			return ApiResponseResult.failure("报价单已提交审批，不能取消完成。");
 		}
+
+		//删除已添加的工艺流程信息
+		quoteProcessDao.delteQuoteProcessByPkQuote(Long.parseLong(quoteId));
 
 		//设置该报价单下的bom状态
 		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId),0);

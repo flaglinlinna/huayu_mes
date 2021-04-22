@@ -205,6 +205,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 				sql += "  and a.bs_code in ('B004','C004') ";
 			}
 		}
+    	sql += "order by a.bs_code ";
     	Map<String, Object> param = new HashMap<String, Object>();
     	List<QuoteItem> list = createSQLQuery(sql, param, QuoteItem.class);
     	return ApiResponseResult.success().data(list);

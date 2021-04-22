@@ -26,6 +26,8 @@ public interface QuoteProcessService {
 
    public ApiResponseResult doBsMaterName(Long id,Long  bomId)throws Exception;
 
+   public ApiResponseResult doProc(Long id,Long  procId)throws Exception;
+
    public ApiResponseResult doBsGroups(Long id,String  bsGroups)throws Exception;
 
    public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
@@ -33,5 +35,7 @@ public interface QuoteProcessService {
    public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception;
    
    public ApiResponseResult getListByQuoteAndName(String quoteId,String name)throws Exception;
+
+   public ApiResponseResult addProcessByBom(Long quoteId);
    
 }

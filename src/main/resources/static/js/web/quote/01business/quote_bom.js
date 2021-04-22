@@ -216,7 +216,7 @@ $(function() {
 							}},
 							{field : 'bsMaterName',title : '材料名称',sort : true,width : 200},
 							{field : 'bsModel',title : '材料规格',width : 200},
-							{field : 'bsGroups',title : '损耗分组',width : 120},
+							{field : 'bsGroups',title : '损耗分组',width : 120,"edit" : "text"},
 							{field : 'bsQty',title : 'BOM用量',width : 90},
 							// {field : 'bsProQty',title : '制品重(g)',width : 90},
 							{field : 'unit',title : 'BOM用量单位',width : 110,
@@ -250,10 +250,26 @@ $(function() {
 								// 得到数据总量
 								// console.log(count);
 								// form.render('select');
+								// var tableView = this.elem.next();
+								// tableView.find('tr[data-index=' + index + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
 								pageCurr = curr;
 							}
 						});
 
+
+						//监听单元格编辑
+						table.on('edit(quoteBomTable)', function(obj){
+							var value = obj.value //得到修改后的值
+								,data = obj.data //得到所在行所有键值
+								,field = obj.field; //得到字段
+							var tr = obj.tr;
+							// 单元格编辑之前的值
+							// var oldtext = $(tr).find("td[data-field='"+obj.field+"'] div").text();
+							if(field == 'bsGroups'){
+								//console.log(data.id,value)
+								dobsGroups(data.id,value)
+							}
+						});
 
 						//监听机台类型下拉选择 并修改
 						form.on('select(selectRetrial)', function (data) {
@@ -487,6 +503,26 @@ function exportExcel() {
 	location.href = context + "/quoteBom/exportExcel?pkQuote=" + quoteId;
 }
 
+function  dobsGroups(id,value){
+	var params = {
+		"id" : id,
+		"bsGroups":value,
+		// "outRetrial":outRetrial,
+	};
+	CoreUtil.sendAjax("/quoteBom/updateBsGroups", JSON.stringify(params), function(data) {
+		if (data.result) {
+			// layer.alert("修改成功",function () {
+			// 	layer.closeAll();
+				loadAll();
+			// });
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
 function updateRetrial(id,type,value){
 	var params = {
 		"id" : id,
@@ -714,7 +750,7 @@ function cancelStatus() {
 		"quoteId" : quoteId,
 		"code" : code
 	};
-	layer.confirm('确认取消确认完成吗？', {
+	layer.confirm('取消完成会清除工艺流程,确认取消确认完成吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
 		CoreUtil.sendAjax("/quoteBom/cancelStatus", JSON.stringify(param), function(data) {
