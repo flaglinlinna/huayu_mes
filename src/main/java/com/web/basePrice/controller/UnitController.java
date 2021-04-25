@@ -1,6 +1,7 @@
 package com.web.basePrice.controller;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,24 @@ public class UnitController extends WebController{
         String method = "basePrice/unit/add";String methodName ="新增基本单位维护";
         try{
             ApiResponseResult result = unitService.add(unit);
+            logger.debug("新增基本单位维护=add:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("基本单位维护新增失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("基本单位维护新增失败！");
+        }
+    }
+
+    @ApiOperation(value = "新增基本单位维护", notes = "新增基本单位维护",hidden = true)
+    @RequestMapping(value = "/editList", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult editList(@RequestBody List<Unit> unitList) {
+        String method = "basePrice/unit/editList";String methodName ="新增基本单位维护";
+        try{
+            ApiResponseResult result = unitService.editList(unitList);
             logger.debug("新增基本单位维护=add:");
             getSysLogService().success(module,method, methodName, null);
             return result;

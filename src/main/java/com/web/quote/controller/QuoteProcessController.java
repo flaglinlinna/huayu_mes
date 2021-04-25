@@ -332,6 +332,25 @@ public class QuoteProcessController extends WebController {
             return ApiResponseResult.failure("取消提交-工艺流程失败！");
         }
     }
+
+    @ApiOperation(value = "页面编辑保存", notes = "页面编辑保存",hidden = true)
+    @RequestMapping(value = "/saveTable", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult saveTable(@RequestBody List<QuoteProcess> quoteProcessList) {
+        String method = "quoteProcess/saveTable";String methodName ="页面编辑保存";
+        try{
+            ApiResponseResult result = quoteProcessService.editProcessList(quoteProcessList);
+            logger.debug("页面编辑保存=saveTable:");
+            getSysLogService().success(module,method, methodName,
+                    "");
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("页面编辑保存失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("页面编辑保存失败！");
+        }
+    }
 	
 	@ApiOperation(value = "获取报价工艺流程-工序列表", notes = "获取报价工艺流程-工序列表",hidden = true)
     @RequestMapping(value = "/getListByQuoteAndName", method = RequestMethod.GET)

@@ -4,6 +4,7 @@ import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 
 import com.web.quote.entity.QuoteBom;
+import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.QuoteBomService;
 import com.web.quote.service.QuoteService;
 
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 @Api(description = "外购件清单模块")
@@ -245,6 +247,25 @@ public class QuoteBomController extends WebController {
 			e.printStackTrace();
 			logger.error("导出数据失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
+		}
+	}
+
+	@ApiOperation(value = "Bom页面编辑保存", notes = "页面编辑保存",hidden = true)
+	@RequestMapping(value = "/saveTable", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult saveTable(@RequestBody List<QuoteBom> quoteBomList) {
+		String method = "quoteBom/saveTable";String methodName ="Bom页面编辑保存";
+		try{
+			ApiResponseResult result = quoteBomService.editBomList(quoteBomList);
+			logger.debug("Bom页面编辑保存=saveTable:");
+			getSysLogService().success(module,method, methodName,
+					"");
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("页面编辑保存失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("页面编辑保存失败！");
 		}
 	}
 }

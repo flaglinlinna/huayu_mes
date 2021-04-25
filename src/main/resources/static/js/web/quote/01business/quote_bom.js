@@ -180,7 +180,7 @@ $(function() {
 							cellMinWidth : 80,
 							// toolbar: '#toolbar',
 							height : 'full-65',// 固定表头&full-查询框高度
-							even : true,// 条纹样式
+							// even : true,// 条纹样式
 							page : true,
 							limit:20,
 							request : {
@@ -200,45 +200,45 @@ $(function() {
 							cols : [ [
 							{fixed : 'left',type : 'numbers'},
 							{field:'id', title:'ID', width:80,hide:true},
-							{fixed : 'left',field : 'bsElement',title : '组件名称',sort : true,width : 120},
-							{fixed : 'left',field : 'bsComponent',title : '零件名称',sort : true,width : 150},
+							{fixed : 'left',field : 'bsElement',title : '组件名称',sort : true,width : 120,edit: "text"},
+							{fixed : 'left',field : 'bsComponent',title : '零件名称',sort : true,width : 150,edit: "text"},
 							{fixed : 'left',field : 'wc',title : '工作中心',sort : true,width : 120,
 								templet : function(d) {
 									if (d.wc != null) {return d.wc.workcenterName;} 
 									else {return "";}
-								}
+								},style : 'background-color:#d2d2d2'
 							},
 							// {field : 'bsItemCode',title : '材料编码',sort:true,width:120},
 							{field : 'itp',title : '物料类型',sort : true,width : 100,
 								templet : function(d) {
 									if (d.itp != null) {return d.itp.itemType;} 
 									else {return "";}
-							}},
-							{field : 'bsMaterName',title : '材料名称',sort : true,width : 200},
-							{field : 'bsModel',title : '材料规格',width : 200},
+							},style : 'background-color:#d2d2d2'},
+							{field : 'bsMaterName',title : '材料名称',sort : true,width : 200,edit: "text"},
+							{field : 'bsModel',title : '材料规格',width : 200,edit: "text"},
 							{field : 'bsGroups',title : '损耗分组',width : 120,"edit" : "text"},
-							{field : 'bsQty',title : 'BOM用量',width : 90},
+							{field : 'bsQty',title : 'BOM用量',width : 90,edit: "text"},
 							// {field : 'bsProQty',title : '制品重(g)',width : 90},
 							{field : 'unit',title : 'BOM用量单位',width : 110,
 								templet : function(d) {
 									if (d.unit != null) {return d.unit.unitCode;}
 									else {return "";}
-							}},
+							},style : 'background-color:#d2d2d2'},
 							// {field : 'bsWaterGap',title : '水口重(g)',width : 90},
 							// {field : 'bsCave',title : '穴数',width : 80},
-							{field : 'purchaseUnit',title : '采购单位',width : 80},
-								{field : 'bsAgent',title : '客户代采',width : 80,templet:function (d) {
-										if(d.bsAgent=="1"){
-											return "是"
-										}else {
-											return "否"
-										}
-									}},
+							{field : 'purchaseUnit',title : '采购单位',width : 80,style : 'background-color:#d2d2d2'},
+							{field : 'bsAgent',title : '客户代采',width : 80,templet:function (d) {
+									if(d.bsAgent=="1"){
+										return "是"
+									}else {
+										return "否"
+									}
+								},style : 'background-color:#d2d2d2'},
 							{field : 'productRetrial',title : '制造评估重审',templet : '#statusTpl',width : 110},
 							// {field : 'purchaseRetrial',title : '采购重申',templet : '#statusTpl1',width : 120},
 							// {field : 'outRetrial',title : '外协重审',templet : '#statusTpl2',width : 120},
-								{field : 'fmemo',title : '工艺说明',width : 200},
-								{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
+							{field : 'fmemo',title : '工艺说明',width : 200,edit: "text"},
+							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
 							] ],
 							done : function(res, curr, count) {
 								// 如果是异步请求数据方式，res即为你接口返回的信息。
@@ -253,6 +253,12 @@ $(function() {
 								// var tableView = this.elem.next();
 								// tableView.find('tr[data-index=' + index + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
 								pageCurr = curr;
+								var tableIns = this.elem.next(); // 当前表格渲染之后的视图
+								layui.each(res.data, function(i, item){
+								if(item.bsStatus=='1') {
+									tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2")
+								}
+								});
 							}
 						});
 
@@ -263,11 +269,16 @@ $(function() {
 								,data = obj.data //得到所在行所有键值
 								,field = obj.field; //得到字段
 							var tr = obj.tr;
-							// 单元格编辑之前的值
-							// var oldtext = $(tr).find("td[data-field='"+obj.field+"'] div").text();
-							if(field == 'bsGroups'){
+						// 	// 单元格编辑之前的值
+						// 	// var oldtext = $(tr).find("td[data-field='"+obj.field+"'] div").text();
+							if(field == 'bsQty'){
 								//console.log(data.id,value)
-								dobsGroups(data.id,value)
+								// dobsGroups(data.id,value)
+								var bsQty = data.bsQty;
+								if (/^\d+$/.test(bsQty) == false && /^\d+\.\d+$/.test(bsQty) == false) {
+									layer.msg("Bom用量只能输入数字");
+									return false;
+								}
 							}
 						});
 
@@ -292,8 +303,11 @@ $(function() {
 
 						form.on('switch()', function(obj) {
 							// console.log(this.name);
+							var elem = obj.othis.parents('tr').attr('data-index');
+							console.log(elem);
 							var checked = obj.elem.checked ? "1" : "0";
-							updateRetrial(this.value, this.name, checked);
+							layui.table.cache['quoteBomList'][elem].productRetrial = checked;
+							// updateRetrial(this.value, this.name, checked);
 						});
 
 						tableIns1 = table1.render({
@@ -490,6 +504,8 @@ function isComplete() {
 		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
+
 	}
 }
 
@@ -521,6 +537,24 @@ function  dobsGroups(id,value){
 	}, "POST", false, function(res) {
 		layer.alert(res.msg);
 	});
+}
+
+function saveTable() {
+	var dates = layui.table.cache['quoteBomList'];
+	console.log(dates);
+	CoreUtil.sendAjax("/quoteBom/saveTable", JSON.stringify(dates),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
 }
 
 function updateRetrial(id,type,value){

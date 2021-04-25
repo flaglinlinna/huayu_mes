@@ -39,6 +39,7 @@ $(function() {
 				{
 					field : 'unitName',
 					title : '单位名称',
+					// 'edit':'text'
 				},
 				{
 				field : 'createBy',
@@ -47,6 +48,7 @@ $(function() {
 				{
 				field : 'createDate',
 				title : '创建时间',
+					// 'edit':'text'
 				},
 				{
 				field : 'lastupdateBy',
@@ -153,6 +155,33 @@ function addUnit() {
 	cleanUnit();
 	// 打开弹出框
 	openUnit(null, "添加基本单位信息");
+}
+
+function  saveThis(){
+	// tableIns.reload({
+	// 	done : function(res, curr, count) {
+	// 		console.log(res);
+	// 	}
+	// });
+	var dates = layui.table.cache['unitList'];
+	console.log(dates);
+	CoreUtil.sendAjax("/basePrice/unit/editList", JSON.stringify(dates), function(
+		data) {
+		if (data.result) {
+			layer.alert("操作成功", function() {
+				layer.closeAll();
+				cleanUnit();
+				// 加载页面
+				loadAll();
+			});
+		} else {
+			layer.alert(data.msg, function() {
+				layer.closeAll();
+			});
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
 }
 // 新增基本单位维护的提交
 function addSubmit(obj) {

@@ -3,6 +3,7 @@ package com.web.quote.controller;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.ProductMater;
+import com.web.quote.entity.QuoteBom;
 import com.web.quote.service.ProductMaterService;
 import com.web.quote.service.QuoteService;
 
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 @Api(description = "制造部材料信息模块")
@@ -275,6 +277,25 @@ public class ProductMaterController extends WebController {
 			e.printStackTrace();
 			logger.error("导出数据失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
+		}
+	}
+
+	@ApiOperation(value = "制造材料页面编辑保存", notes = "制造材料页面编辑保存",hidden = true)
+	@RequestMapping(value = "/saveTable", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult saveTable(@RequestBody List<ProductMater> productMaterList) {
+		String method = "quoteBom/saveTable";String methodName ="制造材料页面编辑保存";
+		try{
+			ApiResponseResult result = productMaterService.editMaterList(productMaterList);
+			logger.debug("制造材料页面编辑保存=saveTable:");
+			getSysLogService().success(module,method, methodName,
+					"");
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("制造材料页面编辑保存失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("制造材料页面编辑保存失败！");
 		}
 	}
 

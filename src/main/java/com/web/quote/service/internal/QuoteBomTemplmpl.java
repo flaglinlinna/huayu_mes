@@ -115,6 +115,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			//获取最后一行的num，即总行数。此处从0开始计数
 			int maxRow = sheet.getLastRowNum();
 			List<QuoteBomTemp> quoteBomList = new ArrayList<>();
+			String[] bsGroupsArray = new String[maxRow+1];
 			//前一行为标题
 			Integer successes = 0;
 			Integer failures = 0;
@@ -185,6 +186,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 //				}
 				String bsGroups = tranCell(sheet.getRow(row).getCell(8));
 				temp.setBsGroups(bsGroups);
+				bsGroupsArray[row]= bsGroups;
 				String fmemo = tranCell(sheet.getRow(row).getCell(9));
 				String bsQty = tranCell(sheet.getRow(row).getCell(10)); //hjj-20210119增加用量字段
 //				String bsProQty = tranCell(sheet.getRow(row).getCell(10));
@@ -276,6 +278,26 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 				temp.setCreateDate(doExcleDate);
 				temp.setCreateBy(userId);
 				quoteBomList.add(temp);
+			}
+			for(Integer k = 0;k<= bsGroupsArray.length-1;k++){
+				List<Integer> list = new ArrayList<>();
+				List<String> bsGroupsString = new ArrayList<>();
+				for(Integer j = 0;j<=bsGroupsArray.length-1;j++){
+					if(StringUtils.isNotEmpty(bsGroupsArray[k])){
+						if(bsGroupsArray[k].equals(bsGroupsArray[j])){
+							list.add(j);
+							bsGroupsString.add(bsGroupsArray[k]);
+						}
+					}
+				}
+//		 	if(list.size()==1){
+//				return ApiResponseResult.failure("损耗分组不能只存在一条!");
+//			}
+				for(int m = 0;m<list.size()-1;m++){
+					if(list.get(m+1)-list.get(m)!=1){
+						return ApiResponseResult.failure("相同的损耗分组("+bsGroupsString.get(m)+")必须相邻!");
+					}
+				}
 			}
 			quoteBomTempDao.saveAll(quoteBomList);
 			Integer all = maxRow -1;

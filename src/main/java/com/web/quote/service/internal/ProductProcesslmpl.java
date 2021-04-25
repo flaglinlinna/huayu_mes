@@ -721,4 +721,12 @@ public class ProductProcesslmpl implements ProductProcessService {
         productProcessDao.save(o);
         return ApiResponseResult.success("删除附件成功！");
     }
+
+    @Override
+    public ApiResponseResult editProcessList(List<ProductProcess> productProcessList) throws Exception {
+        // TODO Auto-generated method stub
+//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
+        productProcessDao.saveAll(productProcessList);
+        return ApiResponseResult.success();
+    }
 }

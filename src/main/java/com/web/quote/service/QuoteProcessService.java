@@ -1,10 +1,13 @@
 package com.web.quote.service;
 
+import com.web.quote.entity.QuoteProcess;
 import org.springframework.data.domain.PageRequest;
 
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.Quote;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface QuoteProcessService {
 
@@ -37,5 +40,7 @@ public interface QuoteProcessService {
    public ApiResponseResult getListByQuoteAndName(String quoteId,String name)throws Exception;
 
    public ApiResponseResult addProcessByBom(Long quoteId);
+
+   public ApiResponseResult editProcessList(List<QuoteProcess> quoteProcessList) throws Exception;
    
 }

@@ -21,7 +21,9 @@
 						</button>
 						<button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
 						<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addUnit()">添加基本单位维护</button>
-					</div>
+<!--                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="saveThis()">界面保存</button>-->
+
+                    </div>
 				</div>
         </form>      
         <table id="unitList" lay-filter="unitTable"></table>
@@ -55,7 +57,10 @@
             </div>
         </form>
     </div>
-    <script th:src="@{/js/web/basePrice/unit.js}" src="/js/web/basePrice/unit.js"></script>
+        <script>
+            document.write("<script type='text/javascript' " +
+                "src='/js/web/basePrice/unit.js?ver="+Math.random()+"'><\/script>");
+        </script>
 	</div>
 </body>
 </html>

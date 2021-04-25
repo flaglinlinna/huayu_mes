@@ -2,11 +2,7 @@ package com.web.quote.entity;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.web.basePrice.entity.BjWorkCenter;
 import org.hibernate.annotations.DynamicUpdate;
@@ -145,8 +141,9 @@ public class QuoteProcess extends BaseEntity {
 	/**
 	 * 材料名称列表
 	 */
-	@ApiModelProperty(name = "bsMaterNameList", value = "材料名称列表")
-	@Column(length = 200)
+//	@ApiModelProperty(name = "bsMaterNameList", value = "材料名称列表")
+//	@Column(length = 200)
+	@Transient
 	protected String bsMaterNameList;
 
 	/**
@@ -160,15 +157,17 @@ public class QuoteProcess extends BaseEntity {
 	/**
 	 * 分组名称列表
 	 */
-	@ApiModelProperty(name = "bsGroupsList", value = "分组名称列表")
-	@Column(length = 1000)
+//	@ApiModelProperty(name = "bsGroupsList", value = "分组名称列表")
+//	@Column(length = 1000)
+	@Transient
 	protected String bsGroupsList;
 
-	/**
-	 * 已维护人工制费工序列表
-	 */
-	@ApiModelProperty(name = "bsProcList", value = "已维护人工制费工序列表")
-	@Column(length = 1000)
+//	/**
+//	 * 已维护人工制费工序列表
+//	 */
+//	@ApiModelProperty(name = "bsProcList", value = "已维护人工制费工序列表")
+//	@Column(length = 1000)
+	@Transient
 	protected String bsProcList;
 
 	public Long getPkQuote() {

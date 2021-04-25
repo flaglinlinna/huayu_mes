@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface ProductMaterService {
 
@@ -33,4 +34,6 @@ public interface ProductMaterService {
     
     //20201222-fyx-计算报价汇总
     public ApiResponseResult doSumFee(Long pkQuote) throws Exception;
+
+	public ApiResponseResult editMaterList(List<ProductMater> productMaterList) throws Exception;
 }

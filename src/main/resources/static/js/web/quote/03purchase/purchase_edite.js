@@ -99,13 +99,17 @@ $(function() {
 		//监听机台类型下拉选择 并修改
 		form.on('select(selectUnit)', function (data) {
 			//获取当前行tr对象
-			var elem = data.othis.parents('tr');
+			// var elem = data.othis.parents('tr');
 			//第一列的值是Guid，取guid来判断
-			var Guid= elem.first().find('td').eq(1).text();
+			// var Guid= elem.first().find('td').eq(1).text();
 			// var bsStatus= elem.first().find('td').eq(2).text();
 			//选择的select对象值；
-			var selectValue = data.value;
-			updateUnit(Guid,selectValue);
+			// var selectValue = data.value;
+			// updateUnit(Guid,selectValue);
+
+			//获得所在行数
+			var elem = data.othis.parents('tr').attr('data-index');
+			layui.table.cache['productPriceList'][elem].purchaseUnit = data.value;
 
 		})
 
@@ -190,11 +194,11 @@ $(function() {
 			var bsAssess = obj.data.bsAssess;
 			if (/^\d+$/.test(bsAssess) == false && /^\d+\.\d+$/.test(bsAssess) == false && bsAssess != "" && bsAssess != null) {
 				layer.msg("评估价格只能输入数字");
-				loadAll();
+				// loadAll();
 				return false;
 			}
-			obj.field = obj.data;
-			editSubmit(obj);
+			// obj.field = obj.data;
+			// editSubmit(obj);
 		})
 
 		// 监听在职操作
@@ -313,6 +317,7 @@ function isComplete() {
 	if (nowStatus.data == 0) {
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
+		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true);
 	}
 }
 
@@ -330,6 +335,24 @@ function updateUnit(id,unitId) {
 				} else {
 					layer.alert(data.msg, function() {
 						layer.closeAll();
+					});
+				}
+			}
+		});
+}
+
+function saveTable() {
+	var dates = layui.table.cache['productPriceList'];
+	console.log(dates);
+	CoreUtil.sendAjax("/productMater/saveTable", JSON.stringify(dates),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
 					});
 				}
 			}

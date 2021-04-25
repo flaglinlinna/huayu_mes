@@ -14,10 +14,7 @@ import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteProcessDao;
-import com.web.quote.entity.ProductMater;
-import com.web.quote.entity.ProductProcess;
-import com.web.quote.entity.Quote;
-import com.web.quote.entity.QuoteItem;
+import com.web.quote.entity.*;
 import com.web.quote.service.ProductMaterService;
 import com.web.quote.service.QuoteProductService;
 
@@ -488,4 +485,12 @@ public class ProductMaterlmpl implements ProductMaterService {
 		//注塑-材料单价*(制品重(g)+水口重/穴数)/基数
 		return null;
 	}
+
+    @Override
+    public ApiResponseResult editMaterList(List<ProductMater> productMaterList) throws Exception {
+        // TODO Auto-generated method stub
+//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
+        productMaterDao.saveAll(productMaterList);
+        return ApiResponseResult.success();
+    }
 }

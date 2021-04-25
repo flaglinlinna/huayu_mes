@@ -19,6 +19,7 @@ import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteItem;
+import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.QuoteBomService;
 import com.web.quote.service.QuoteProcessService;
 import com.web.quote.service.QuoteService;
@@ -253,6 +254,10 @@ public class QuoteBomlmpl implements QuoteBomService {
 		Specification<QuoteBom> spec = Specification.where(BaseService.and(filters, QuoteBom.class));
 		Specification<QuoteBom> spec1 = spec.and(BaseService.or(filters1, QuoteBom.class));
 		Page<QuoteBom> page = quoteBomDao.findAll(spec1, pageRequest);
+//		for(QuoteBom o:page.getContent()){
+//			Map<String,Object> map = new HashMap<>();
+////			map
+//		}
 
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
@@ -405,5 +410,13 @@ public class QuoteBomlmpl implements QuoteBomService {
 		//20210305-hjj-打开待办
 		todoInfoService.openByIdAndModel(Long.parseLong(quoteId), "外购件清单");
 		return ApiResponseResult.success("取消完成成功！");
+	}
+
+	@Override
+	public ApiResponseResult editBomList(List<QuoteBom> quoteBomList) throws Exception {
+		// TODO Auto-generated method stub
+//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
+		quoteBomDao.saveAll(quoteBomList);
+		return ApiResponseResult.success();
 	}
 }

@@ -105,13 +105,16 @@ $(function() {
 		//监听机台类型下拉选择 并修改
 		form.on('select(selectUnit)', function (data) {
 			//获取当前行tr对象
-			var elem = data.othis.parents('tr');
+			// var elem = data.othis.parents('tr');
 			//第一列的值是Guid，取guid来判断
-			var Guid= elem.first().find('td').eq(1).text();
+			// var Guid= elem.first().find('td').eq(1).text();
 			// var bsStatus= elem.first().find('td').eq(2).text();
 			//选择的select对象值；
-			var selectValue = data.value;
-			updateUnit(Guid,selectValue);
+			//当前行的
+			var elem = data.othis.parents('tr').attr('data-index');
+			layui.table.cache['listTable'][elem].pkUnit = data.value;
+			// var selectValue = data.value;
+			// updateUnit(Guid,selectValue);
 
 		})
 
@@ -223,36 +226,36 @@ $(function() {
 			if (obj.field == "bsQty") {
 				if (/^\d+$/.test(bsQty) == false && /^\d+\.\d+$/.test(bsQty) == false) {
 					layer.msg("材料用量只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			} else if (obj.field == "bsWaterGap") {
 				if (/^\d+$/.test(bsWaterGap) == false && /^\d+\.\d+$/.test(bsWaterGap) == false) {
 					layer.msg("水口重(g)只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			} else if (obj.field == "bsProQty") {
 				if (/^\d+$/.test(bsProQty) == false && /^\d+\.\d+$/.test(bsProQty) == false && bsProQty != "" && bsProQty != null) {
 					layer.msg("制品重(g)只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			} else if (obj.field == "bsCave") {
 				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false || bsCave == 0) {
 					layer.msg("穴数只能输入数字且不能为0");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			} else if (obj.field == "bsLoss") {
 				if (/^\d+$/.test(bsLoss) == false && /^\d+\.\d+$/.test(bsLoss) == false && bsLoss != "" && bsLoss != null) {
 					layer.msg("损耗率只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}
-			obj.field = obj.data;
-			editSubmit(obj);
+			// obj.field = obj.data;
+			// editSubmit(obj);
 		})
 
 		initSelect();
@@ -393,7 +396,26 @@ function isComplete() {
 		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
 	}
+}
+
+function saveTable() {
+	var dates = layui.table.cache['listTable'];
+	console.log(dates);
+	CoreUtil.sendAjax("/productMater/saveTable", JSON.stringify(dates),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
 }
 
 function uploadChecked() {
@@ -763,9 +785,13 @@ function loadAll() {
 					// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 				} else if (bsType == 'packag') {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 				}
 			});
 

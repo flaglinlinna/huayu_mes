@@ -100,6 +100,12 @@ public class UnitImpl implements UnitService {
     return ApiResponseResult.success("编辑成功！");
 }
 
+    @Override
+    public ApiResponseResult editList(List<Unit> unitList) throws Exception {
+        System.out.println(unitList);
+        return null;
+    }
+
     /**
     * 根据ID获取基本单位维护详情
     * @param id
@@ -164,9 +170,11 @@ public class UnitImpl implements UnitService {
                 map.put("unitCode",unit.getUnitCode());
                 map.put("unitName",unit.getUnitName());
                 map.put("createBy",sysUserDao.findById((long)unit.getCreateBy()).getUserName());
+//                map.put("createBy",unit.getCreateBy());
                 map.put("createDate",df.format(unit.getCreateDate()));
                 if(unit.getLastupdateBy()!=null){
                     map.put("lastupdateBy",sysUserDao.findById((long)unit.getLastupdateBy()).getUserName());
+//                    map.put("lastupdateBy",unit.getLastupdateBy());
                     map.put("lastupdateDate",df.format(unit.getLastupdateDate()));
                 }
                 mapList.add(map);

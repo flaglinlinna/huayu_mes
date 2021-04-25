@@ -227,6 +227,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				pd.setPkProc(Long.valueOf(pro));//工序id
 				pd.setBsOrder(j);//工序顺序
 				pd.setCreateBy(UserUtil.getSessionUser().getId());
+				pd.setPkWorkCenter(proc1.getWorkcenterId());
 				pd.setCreateDate(new Date());
 				pd.setPkQuote(Long.valueOf(quoteId));//报价单主表
 				//--20201222-fyx-获取人工和制费
@@ -419,7 +420,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
 		 }
 		 if(quoteProcessDao.getPkQuoteBomNum(Long.parseLong(quoteId)).size()>0){
-			 return ApiResponseResult.failure("存在相同的零件名称,请检查。");
+			 return ApiResponseResult.failure("存在相同的材料名称,请检查。");
 		 }
 		 if(quoteProcessDao.countByDelFlagAndPkQuoteAndPkProcIsNull(0,Long.parseLong(quoteId))>0){
 			 return ApiResponseResult.failure("请填写完所有工序");
@@ -527,6 +528,14 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		// TODO Auto-generated method stub
 		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
 		return ApiResponseResult.success().data(lqp);
+	}
+
+	@Override
+	public ApiResponseResult editProcessList(List<QuoteProcess> quoteProcessList) throws Exception {
+		// TODO Auto-generated method stub
+//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
+		quoteProcessDao.saveAll(quoteProcessList);
+		return ApiResponseResult.success();
 	}
 
 	@Override

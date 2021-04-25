@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface QuoteBomService {
 
@@ -36,5 +37,8 @@ public interface QuoteBomService {
 
 	//取消确认完成外购件清单 （修改项目状态）
 	public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception;
+
+	public ApiResponseResult editBomList(List<QuoteBom> quoteProcessList) throws Exception;
+
 
 }

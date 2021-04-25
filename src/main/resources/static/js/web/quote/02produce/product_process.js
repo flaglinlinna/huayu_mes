@@ -398,19 +398,19 @@ $(function() {
 			if(obj.field =="bsRadix") {
 				if (/^\d+$/.test(bsRadix) == false && /^\d+\.\d+$/.test(bsRadix) == false || bsRadix <= 0) {
 					layer.msg("基数必填且只能输入数字且大于0");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsUserNum") {
 				if (/^\d+$/.test(bsUserNum) == false && /^\d+\.\d+$/.test(bsUserNum) == false) {
 					layer.msg("人数只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsYield") {
 				if (/^\d+$/.test(bsYield) == false && /^\d+\.\d+$/.test(bsYield) == false) {
 					layer.msg("工序良率只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}else if(Number(bsYield)>100){
 					layer.msg("工序良率不能大于100");
@@ -420,24 +420,25 @@ $(function() {
 			}else if(obj.field =="bsCycle") {
 				if (/^\d+$/.test(bsCycle) == false && /^\d+\.\d+$/.test(bsCycle) == false) {
 					layer.msg("成型周期只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsCave") {
 				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false) {
 					layer.msg("穴数只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsLoss") {
 				if (/^\d+$/.test(bsLoss) == false && /^\d+\.\d+$/.test(bsLoss) == false && bsLoss != "" && bsLoss != null) {
 					layer.msg("损耗率只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}
-			obj.field = obj.data;
-			editSubmit(obj);
+			//20210423 去除编辑刷新，统一按钮保存
+			// obj.field = obj.data;
+			// editSubmit(obj);
 		})
 
 		initSelect();
@@ -727,12 +728,15 @@ $(function() {
 		//监听机台类型下拉选择 并修改
 		form.on('select(selectModelType)', function (data) {
 			//获取当前行tr对象
-			var elem = data.othis.parents('tr');
+			// var elem = data.othis.parents('tr');
 			//第一列的值是Guid，取guid来判断
-			var Guid= elem.first().find('td').eq(1).text();
+			// var Guid= elem.first().find('td').eq(1).text();
 			//选择的select对象值；
-			var selectValue = data.value;
-			updateModelType(Guid,selectValue);
+			// var selectValue = data.value;
+			// updateModelType(Guid,selectValue);
+
+			var elem = data.othis.parents('tr').attr('data-index');
+			layui.table.cache['listTable'][elem].bsModelType = data.value;
 		})
 	});
 });
@@ -742,6 +746,7 @@ function isComplete() {
 		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
 	}
 }
 
@@ -757,6 +762,24 @@ function initSelect() {
 			+ bomlist[i].BS_COMPONENT +"</option>");
 	}
 	layui.form.render();
+}
+
+function saveTable() {
+	var dates = layui.table.cache['listTable'];
+	console.log(dates);
+	CoreUtil.sendAjax("/productProcess/saveTable", JSON.stringify(dates),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
 }
 
 function initSelectTemp() {
