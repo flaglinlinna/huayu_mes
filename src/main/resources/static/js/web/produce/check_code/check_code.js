@@ -10,6 +10,18 @@ $(function() {
 					function() {
 						var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table,
 							table1 = layui.table, tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect;
+						var laydate = layui.laydate;
+						layui.form.render();
+						// 日期选择器
+						laydate.render({
+							elem : '#hStartTime',
+							type : 'date' // 默认，可不填
+						});
+						laydate.render({
+							elem : '#hEndTime',
+							type : 'date' // 默认，可不填
+						});
+
 
 						tableIns = table.render({
 							elem : '#colTable'
@@ -40,28 +52,16 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {
-								type : 'numbers'
-							}, {
-								field : 'taskNo',
-								title : '制令单号',
-								width : 200,
-								sort : true
-							}, {
-								field : 'barcode1',
-								title : '条码1',
-								width : 240,
-								sort : true
-							}, {
-								field : 'barcode2',
-								title : '条码2',
-								width : 240,
-								sort : true
-							}, {
-								field : 'result',
-								title : '校验结果',
-								sort : true
-							} ] ],
+							cols : [ [
+								{fixed: "left", type : 'numbers'},
+								{fixed: "left", field : 'itemCode', title : '产品编码', width : 150},
+								{fixed: "left", field : 'linerName', title : '组长', width : 70, sort : true},
+								{fixed: "left", field : 'barcode1', title : '条码1', width : 230, sort : true},
+								{fixed: "left", field : 'taskNo', title : '制令单号', width : 150, sort : true},
+								{field : 'scanTime', title : '扫描时间', width : 150, sort : true},
+								{field : 'result', title : '扫描结果', width : 90},
+								{field : 'barcode2', title : '条码2', width : 230, sort : true}
+								] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}
@@ -193,10 +193,20 @@ $(function() {
 
 						// 监听提交
 						form.on('submit(hsearchSubmit)', function(data) {
+							data.field.errorFlag = $("#errorFlag").prop('checked')?1:0
 							hTableIns.reload({
 								url : context
 										+ '/produce/check_code/getHistoryList',
-								where : data.field
+								where : data.field,
+								done : function(res, curr, count) {
+									pageCurr = curr;
+									if(data.field.errorFlag ==1){
+										res.data.forEach(function (item, index) {
+											$('div[lay-id="hcolTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="FMEMO"]').removeClass("layui-hide");
+											$('div[lay-id="hcolTable"]').find('thead').find('th[data-field="FMEMO"]').removeClass("layui-hide");
+										});
+										}
+								}
 							});
 							return false;
 						});
@@ -222,33 +232,18 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {
-								type : 'numbers'
-							}, {
-								field : 'TASK_NO',
-								title : '制令单号',
-								width : 175
-							}, {
-								field : 'BARCODE_S_1',
-								title : '条码1',
-								width : 240
-							}, {
-								field : 'BARCODE_S_2',
-								title : '条码2',
-								width : 240
-							}, {
-								field : 'CHK_RESULT',
-								title : '校验结果',
-								width : 100
-							}, {
-								field : 'USER_NAME',
-								title : '操作人',
-								width : 90
-							}, {
-								field : 'CREATE_DATE',
-								title : '操作时间',
-								width : 150
-							} ] ],
+							cols : [ [
+								{fixed:'left', type : 'numbers'},
+								{fixed : 'left', field:"ITEM_NO", title : '产品编码', width : 140},
+								{fixed : 'left', field : 'LINER_NAME', title : '组长', width : 70},
+								{fixed : 'left', field : 'BARCODE_S_1', title : '条码1', width : 220},
+								{fixed : 'left', field : 'TASK_NO', title : '制令单号', width : 150},
+								{field : 'CHK_RESULT', title : '扫描结果', width : 100},
+								{field : 'CREATE_DATE', title : '扫描时间', width : 145},
+								{field : 'USER_NAME', title : '扫描人', width : 70},
+								{field:"FMEMO", title : '备注', width : 300,hide: true},
+								{field : 'BARCODE_S_2', title : '条码2', width : 200}
+								] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}
@@ -337,6 +332,8 @@ function subCode(taskNo, barcode1, barcode2) {
 		"itemCode":itemCode,
 		"linerName":linerName
 	}
+	var nowTime = new Date().format('yyyy-MM-dd hh:mm:ss');
+	// nowTime.format('yyyy-MM-dd HH:mm:ss');
 	CoreUtil.sendAjax("/produce/check_code/subCode", JSON.stringify(params),
 			function(data) {
 				//console.log(data)
@@ -346,9 +343,12 @@ function subCode(taskNo, barcode1, barcode2) {
 						taskNo : taskNo,
 						barcode1 : barcode1,
 						barcode2 : barcode2,
-						result : "校验成功"
+						itemCode:itemCode,
+						linerName:linerName,
+						scanTime:nowTime,
+						result : "扫描成功"
 					}
-					
+					$("#barNum").val(data.data);
 					tabledata.push(dataT);
 					tableIns.reload({
 						data : tabledata
@@ -374,4 +374,25 @@ function subCode(taskNo, barcode1, barcode2) {
 				layer.alert(res.msg);
 			});
 
+}
+
+Date.prototype.format = function(fmt) {
+	var o = {
+		"M+" : this.getMonth()+1,                 //月份
+		"d+" : this.getDate(),                    //日
+		"h+" : this.getHours(),                   //小时
+		"m+" : this.getMinutes(),                 //分
+		"s+" : this.getSeconds(),                 //秒
+		"q+" : Math.floor((this.getMonth()+3)/3), //季度
+		"S"  : this.getMilliseconds()             //毫秒
+	};
+	if(/(y+)/.test(fmt)) {
+		fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+	}
+	for(var k in o) {
+		if(new RegExp("("+ k +")").test(fmt)){
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+		}
+	}
+	return fmt;
 }

@@ -24,6 +24,9 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	
 	public List<ProductProcess> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 
+	@Query(value = "select map.id from ProductProcess map where map.delFlag=0 and map.pkQuote =?2 and map.bsType = ?1")
+	public List<Long> getIdByTypeAndPkQuote(String bsType,Long pkQuote);
+
 	@Modifying
 	@Query(value = "update ProductProcess p set p.bsStatus = 1 ,p.lastupdateBy =?1 ,p.lastupdateDate =?2 where p.pkQuote =?3 and p.bsType =?4 and p.delFlag = 0 ")
 	Integer doProcessStatusByType(Long userId, Date date,Long pkQuote,String bsType);

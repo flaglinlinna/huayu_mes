@@ -74,7 +74,7 @@ $(function() {
 					}
 				},
 				{field : 'bsRefer',width : 90,title : '参考价格',style : 'background-color:#d2d2d2'},
-				{field : 'bsGear',width : 120,title : '价格挡位',templet : '#selectGear',style : 'background-color:#ffffff'},
+				{field : 'bsGear',width : 120,title : '价格挡位',style : 'background-color:#d2d2d2'},
 
 				// {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},
 
@@ -343,7 +343,7 @@ function updateUnit(id,unitId) {
 
 function saveTable() {
 	var dates = layui.table.cache['productPriceList'];
-	console.log(dates);
+	// console.log(dates);
 	CoreUtil.sendAjax("/productMater/saveTable", JSON.stringify(dates),
 		function(data) {
 			if (isLogin(data)) {
@@ -407,6 +407,7 @@ function confirm() {
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
+		saveTable();
 		CoreUtil.sendAjax("/purchase/doStatus", JSON.stringify(params), function(data) {
 			if (data.result) {
 				layer.alert("确认完成成功", function() {

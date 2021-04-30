@@ -146,20 +146,22 @@ public class ProductMaterlmpl implements ProductMaterService {
         //注塑材料导入顺序: 零件名称、材料名称、规格、制品量、单位、基数、水口数、穴数、备注
         //表面处理导入顺序: 零件名称、加工类型、配色工艺、材料名称、规格、用料、单位、基数、备注
 
+        //2021-04-29 五金和注塑 零件名称1、材料名称2、规格3、材料用量4、制品重5、材料用量单位6、水口数7、穴数8
+        //2021-04-29 表面和组装 零件名称1、材料名称2、规格3、材料用量4、材料用量单位5
         //20210226-hjj-导出去除基数
         if(("hardware").equals(bsType)){
             fileName = "五金材料模板.xlsx";
 //            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsWaterGap","bsCave","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsProQty","bsUnit","bsWaterGap","bsCave"};
         }else if(("molding").equals(bsType)){
             fileName = "注塑材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsWaterGap","bsCave","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsProQty","bsUnit","bsWaterGap","bsCave"};
         }else if(("surface").equals(bsType)){
             fileName = "表面处理材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMachiningType","bsColor","bsMaterName","bsModel","bsQty","bsUnit","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit"};
         }else if(("packag").equals(bsType)){
             fileName = "组装材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsSupplier","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit"};
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
 //        Resource resource = new ClassPathResource(excelPath+fileName);
@@ -193,12 +195,12 @@ public class ProductMaterlmpl implements ProductMaterService {
             map.put("bsQty", bs.getBsQty());
             map.put("bsProQty", bs.getBsProQty());
             map.put("bsUnit", bs.getBsUnit());
-            map.put("fmemo", bs.getFmemo());
-            map.put("bsSupplier", bs.getBsSupplier());
+//            map.put("fmemo", bs.getFmemo());
+//            map.put("bsSupplier", bs.getBsSupplier());
             map.put("bsWaterGap", bs.getBsWaterGap());
             map.put("bsCave", bs.getBsCave());
-            map.put("bsMachiningType", bs.getBsMachiningType());
-            map.put("bsColor", bs.getBsColor());
+//            map.put("bsMachiningType", bs.getBsMachiningType());
+//            map.put("bsColor", bs.getBsColor());
             list.add(map);
         }
         ExcelExport.export(response,list,workbook,map_arr,excelPath+fileName,fileName);

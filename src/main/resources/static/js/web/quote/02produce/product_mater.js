@@ -51,7 +51,7 @@ $(function() {
 			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 60,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (注塑)*/},
 			  //{field : 'bsSupplier',title : '备选供应商',edit : 'text',style : 'background-color:#ffffff'},
 			  //{field : 'fmemo',title : '备注',width : 120,edit : 'text',style : 'background-color:#ffffff'},
-			  {fixed : 'right',title : '操作',align : 'center',width : 120,toolbar : '#optBar'} 
+			  // {fixed : 'right',title : '操作',align : 'center',width : 120,toolbar : '#optBar'}
 			  ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
@@ -158,8 +158,8 @@ $(function() {
 			   //{field : 'bsRadix',width : 80,title : '基数',},
 			   {field : 'bsWaterGap',title : '水口重(g)',width : 100,hide : true /*(注塑)*/},
 			   {field : 'bsCave',title : '穴数',width : 100,hide : true /*(注塑)*/},
-			   {field : 'bsSupplier',title : '备选供应商',width : 100},
-			   {field : 'fmemo',title : '备注',width : 120},
+			   // {field : 'bsSupplier',title : '备选供应商',width : 100},
+			   // {field : 'fmemo',title : '备注',width : 120},
 			// {fixed : 'right', title : '操作', align : 'center', width:120, toolbar : '#optBar'}
 			] ],
 			done : function(res1, curr, count) {
@@ -402,7 +402,7 @@ function isComplete() {
 
 function saveTable() {
 	var dates = layui.table.cache['listTable'];
-	console.log(dates);
+	// console.log(dates);
 	CoreUtil.sendAjax("/productMater/saveTable", JSON.stringify(dates),
 		function(data) {
 			if (isLogin(data)) {
@@ -453,6 +453,7 @@ function Confirm() {
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
+		saveTable();
 		CoreUtil.sendAjax("/productMater/doStatus", JSON.stringify(params), function(data) {
 			if (data.result) {
 				// parent.layui.admin.events.closeThisTabs(); 先关闭执行不了js

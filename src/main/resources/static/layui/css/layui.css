@@ -3852,7 +3852,8 @@ body .layui-table-tips .layui-layer-content {
 }
 
 .layui-tab-title .layui-this {
-	color: #000
+	color: #000;
+	background-color: #B0C4DE!important;
 }
 
 .layui-tab-title .layui-this:after {
@@ -3934,7 +3935,8 @@ body .layui-table-tips .layui-layer-content {
 	top: 1px;
 	text-align: center;
 	font-size: 14px;
-	color: #c2c2c2;
+	/*color: #c2c2c2;*/
+	color:#000;
 	transition: all .2s;
 	-webkit-transition: all .2s
 }

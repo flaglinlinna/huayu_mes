@@ -81,7 +81,8 @@ $(function() {
 				{field : 'bsCapacity', title : '产能(个/小时)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:105, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsFeeWxAll', title : '外协价格<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
 				//{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff'},
-				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
+				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
+				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 
@@ -182,14 +183,14 @@ $(function() {
 							return "";
 						}
 					}},
-				{field : 'procfmemo', width:100, title : '工序说明',style:'background-color:#d2d2d2',
-					templet:function (d) {
-						if(d.proc!=null){
-							return d.proc.fmemo==null||undefined?"":d.proc.fmemo;
-						}else {
-							return "";
-						}
-					}},
+				// {field : 'procfmemo', width:100, title : '工序说明',style:'background-color:#d2d2d2',
+				// 	templet:function (d) {
+				// 		if(d.proc!=null){
+				// 			return d.proc.fmemo==null||undefined?"":d.proc.fmemo;
+				// 		}else {
+				// 			return "";
+				// 		}
+				// 	}},
 				{field : 'workcenterName', width:100, title : '工作中心',style:'background-color:#d2d2d2'
 					,templet:function (d) {
 						if(d.proc!=null){
@@ -209,7 +210,10 @@ $(function() {
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
 				{field : 'bsCave', title : '穴数',edit:'text', width:80, hide:true},
 				{field : 'bsCapacity', title : '产能(个/小时)',edit:'text', width:105, hide:true},
-				{field : 'fmemo', title : '备注',width:120,edit:'text'},
+				{field : 'bsLoss', title : '损耗率<span style="color:red;font-size:12px;">*</span>', width:80,edit:'text',hide:true},
+				{field : 'bsFeeWxAll', title : '外协价格<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true},
+
+				// {field : 'fmemo', title : '备注',width:120,edit:'text'},
 				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
 				] ],
 			done : function(res, curr, count) {
@@ -766,7 +770,7 @@ function initSelect() {
 
 function saveTable() {
 	var dates = layui.table.cache['listTable'];
-	console.log(dates);
+	// console.log(dates);
 	CoreUtil.sendAjax("/productProcess/saveTable", JSON.stringify(dates),
 		function(data) {
 			if (isLogin(data)) {
@@ -805,7 +809,7 @@ function uploadChecked() {
 	CoreUtil.sendAjax("/productProcess/uploadCheck", JSON.stringify(params), function(
 		data) {
 		if (data.result) {
-			layer.alert(data.msg, function() {
+			layer.alert(data.data, function() {
 				layer.closeAll();
 				cleanProdErr();
 				// 加载页面
@@ -950,6 +954,7 @@ function Confirm(){
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
+		saveTable();
 		CoreUtil.sendAjax("/productProcess/doStatus", JSON.stringify(params), function(
 			data) {
 			if (data.result) {
@@ -1035,6 +1040,15 @@ function openUpload() {
 					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
 				}else if(bsType == 'out'){
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').addClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsUserNum"]').addClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').addClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsYield"]').addClass("layui-hide");
+
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
 
 				}
 			});

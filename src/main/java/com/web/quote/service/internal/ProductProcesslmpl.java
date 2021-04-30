@@ -205,18 +205,26 @@ public class ProductProcesslmpl implements ProductProcessService {
         //注塑工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、穴数、成型周期(S)、加工人数、工序良率、备注
         //组装工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
         //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
+
+        //2021-04-29 模板变更
+        // 五金  零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7
+        //注塑 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7、穴数8
+        //组装 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
+        //表面 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
+        //外协:零件名称1、工序顺序2、工序名称3、机台类型4、损耗率5、外协价格6 、备注7
+
         if(("hardware").equals(bsType)){
             fileName = "五金工艺模板.xlsx";
-            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsRadix","bsUserNum","bsCycle","bsYield","fmemo"};
+            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsUserNum","bsCycle","bsYield"};
         }else if(("molding").equals(bsType)){
             fileName = "注塑工艺模板.xlsx";
-            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsRadix","bsCave","bsCycle","bsUserNum","bsYield","fmemo"};
+            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsUserNum","bsCycle","bsYield","bsCave"};
         }else if(("surface").equals(bsType)){
             fileName = "表面处理工艺模板.xlsx";
-            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsRadix","bsUserNum","bsCapacity","bsYield","fmemo"};
+            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsUserNum","bsYield","bsCapacity"};
         }else if(("packag").equals(bsType)){
             fileName = "组装工艺模板.xlsx";
-            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsRadix","bsUserNum","bsCapacity","bsYield","fmemo"};
+            map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsUserNum","bsYield","bsCapacity"};
         }else if(("out").equals(bsType)){
             fileName = "外协填报价格模板.xlsx";
             map_arr = new String[]{"id","bsName","bsOrder","procName","bsModelType","bsLoss","bsFeeWxAll","fmemo"};
@@ -244,8 +252,10 @@ public class ProductProcesslmpl implements ProductProcessService {
             }else {
                 map.put("procName", "");
             }
-            map.put("bsModelType", bs.getBsModelType());
-            map.put("bsRadix", bs.getBsRadix());
+//            map.put("bsModelType", bs.getBsModelType());
+            if(bs.getBjModelType()!=null) {
+                map.put("bsModelType", bs.getBjModelType().getModelName());
+            }
             map.put("bsUserNum", bs.getBsUserNum());
             map.put("bsCycle", bs.getBsCycle());
             map.put("bsYield", bs.getBsYield());
@@ -611,38 +621,40 @@ public class ProductProcesslmpl implements ProductProcessService {
         List<ProductProcess> productProcessList = new ArrayList<>();
         for(ProductProcessTemp processTemp : productProcessTempList){
             ProductProcess process = new ProductProcess();
-            process.setPkProc(processTemp.getPkProc());
-            process.setPkQuote(processTemp.getPkQuote());
-            process.setBsName(processTemp.getBsName());
-            process.setBsModelType(processTemp.getBsModelType());
-            process.setFmemo(processTemp.getFmemo());
-            process.setBsType(processTemp.getBsType());
-            process.setBsCapacity(processTemp.getBsCapacity());
-            process.setBsCave(processTemp.getBsCave());
-            if(StringUtils.isNotEmpty(processTemp.getBsCycle())){
-                process.setBsCycle(new BigDecimal(processTemp.getBsCycle()));
-            }
-            if(StringUtils.isNotEmpty(processTemp.getBsUserNum())){
-                process.setBsUserNum(new BigDecimal(processTemp.getBsUserNum()));
-            }
-            if(StringUtils.isNotEmpty(processTemp.getBsRadix())){
-                process.setBsRadix(new BigDecimal(processTemp.getBsRadix()));
-            }
-            if(StringUtils.isNotEmpty(processTemp.getBsYield())){
-                process.setBsYield(new BigDecimal(processTemp.getBsYield()));
-            }
-            if(StringUtils.isNotEmpty(processTemp.getBsOrder())){
-                process.setBsOrder(Integer.parseInt(processTemp.getBsOrder()));
-            }
-            //有则更新
             if(processTemp.getMid()!=null){
-                process.setId(processTemp.getMid());
+                process = productProcessDao.findById((long) processTemp.getMid());
                 process.setLastupdateBy(userId);
                 process.setLastupdateDate(doDate);
             }else {
                 process.setCreateDate(doDate);
                 process.setCreateBy(userId);
             }
+//            process.setPkProc(processTemp.getPkProc());
+//            process.setPkQuote(processTemp.getPkQuote());
+//            process.setBsName(processTemp.getBsName());
+            process.setBsModelType(processTemp.getBsModelType());
+            process.setFmemo(processTemp.getFmemo());
+            process.setBsType(processTemp.getBsType());
+            process.setBsCapacity(processTemp.getBsCapacity());
+            process.setBsCave(processTemp.getBsCave());
+            process.setBsFeeWxAll(new BigDecimal(processTemp.getBsFeeWxAll()));
+            process.setBsLoss(new BigDecimal(processTemp.getBsLoss()));
+            if(StringUtils.isNotEmpty(processTemp.getBsCycle())){
+                process.setBsCycle(new BigDecimal(processTemp.getBsCycle()));
+            }
+            if(StringUtils.isNotEmpty(processTemp.getBsUserNum())){
+                process.setBsUserNum(new BigDecimal(processTemp.getBsUserNum()));
+            }
+//            if(StringUtils.isNotEmpty(processTemp.getBsRadix())){
+//                process.setBsRadix(new BigDecimal(processTemp.getBsRadix()));
+//            }
+            if(StringUtils.isNotEmpty(processTemp.getBsYield())){
+                process.setBsYield(new BigDecimal(processTemp.getBsYield()));
+            }
+//            if(StringUtils.isNotEmpty(processTemp.getBsOrder())){
+//                process.setBsOrder(Integer.parseInt(processTemp.getBsOrder()));
+//            }
+
             productProcessList.add(process);
 
             //标记已导入

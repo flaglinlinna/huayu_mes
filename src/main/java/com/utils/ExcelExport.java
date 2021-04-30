@@ -9,10 +9,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
@@ -105,6 +107,11 @@ public final class ExcelExport {
         XSSFSheet sheet = workbook.getSheetAt(0);
         //循环字段名数组，创建标题行-16
         Row row = sheet.getRow(0);
+        XSSFCellStyle cellStyle =  sheet.getWorkbook().createCellStyle();
+        cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
+        cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
+        cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
+        cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
 
         //创建普通行
         for (int i = 0;i<datalist.size();i++){
@@ -115,7 +122,9 @@ public final class ExcelExport {
             for (int j = 0;j<mapNames.length;j++){
                 //创建列
                 Cell cell = row.createCell(j);
+                cell.setCellStyle(cellStyle);
                 cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+
                 //
                 //try {
                 Object value = datalist.get(i).get(mapNames[j]);//methodList.get(j).invoke(targetObj, new Object[]{});

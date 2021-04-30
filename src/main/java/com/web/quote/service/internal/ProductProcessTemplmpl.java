@@ -6,13 +6,17 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.basePrice.dao.BjModelTypeDao;
 import com.web.basePrice.dao.ProcDao;
+import com.web.basePrice.entity.BjModelType;
 import com.web.basePrice.entity.Proc;
+import com.web.quote.dao.ProductProcessDao;
 import com.web.quote.dao.ProductProcessTempDao;
 import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.ProductProcessTemp;
 import com.web.quote.service.ProductProcessTempService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,10 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
 	
 	@Autowired
     private ProductProcessTempDao productProcessTempDao;
+    @Autowired
+    private ProductProcessDao productProcessDao;
+    @Autowired
+    private BjModelTypeDao bjModelTypeDao;
     @Autowired
     private ProcDao procDao;
     @Autowired
@@ -166,6 +174,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
             Long userId = UserUtil.getSessionUser().getId();
 
             //先删除临时表中存在的数据
+            List<Long> idList = productProcessDao.getIdByTypeAndPkQuote(bsType,quoteId);
             productProcessTempDao.deleteByPkQuoteAndBsTypeAndCreateBy(quoteId,bsType,userId);
             Date doExcleDate = new Date();
             InputStream fin = file[0].getInputStream();
@@ -173,6 +182,9 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
             XSSFSheet sheet = workbook.getSheetAt(0);
             //获取最后一行的num，即总行数。此处从0开始计数
             int maxRow = sheet.getLastRowNum();
+            if(idList.size()!=maxRow-1){
+                return ApiResponseResult.failure("导入失败！导入的行数与原工艺信息行量不符！");
+            }
             List<ProductProcessTemp> tempList = new ArrayList<>();
             NumberFormat nf = NumberFormat.getInstance();
             //五金工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、成型周期(S)、工序良率、备注
@@ -180,17 +192,26 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
             //组装工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
             //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
             //外协报价导入顺序: 零件名称、工序顺序、工序名称、机台类型、损耗率、外协价格 、备注
+
+            //2021-04-29 模板变更 五金  零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7
+                                //注塑 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7、穴数8
+                                //组装 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
+                                //表面 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
+                                //外协:零件名称1、工序顺序2、工序名称3、机台类型4、损耗率5、外协价格6 、备注7
             Integer successes = 0;
             Integer failures = 0;
+            Set<Long> improtIdList = new HashSet<Long>();
             for (int row = 2; row <= maxRow; row++) {
                 String errInfo = "";
-                String id = tranCell(sheet.getRow(row).getCell(0));
+                XSSFCell midCell = sheet.getRow(row).getCell(0);
+                midCell.setCellType(midCell.CELL_TYPE_STRING);
+                String id = tranCell(midCell);
                 String bsName = tranCell(sheet.getRow(row).getCell(1));
                 String bsOrder = tranCell(sheet.getRow(row).getCell(2));
                 String procName = tranCell(tranCell(sheet.getRow(row).getCell(3)));
                 String bsModelType = tranCell(tranCell(sheet.getRow(row).getCell(4)));
 
-                String bsLoss = tranCell(sheet.getRow(row).getCell(5));
+                String row5 = tranCell(sheet.getRow(row).getCell(5));
                 String row6 = tranCell(sheet.getRow(row).getCell(6));
                 String row7 = tranCell(sheet.getRow(row).getCell(7));
                 String row8 = tranCell(sheet.getRow(row).getCell(8));
@@ -223,6 +244,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
 
                 if(StringUtils.isNotEmpty(id)){
                     process.setMid(Long.parseLong(id));
+                    improtIdList.add(Long.parseLong(id)) ;
 //                    process.setLastupdateBy(userId);
 //                    process.setLastupdateDate(doExcleDate);
                 }
@@ -246,63 +268,75 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 }else {
                     errInfo += "工序名称不能为空;";
                 }
-                process.setBsModelType(bsModelType);
+//                process.setBsModelType(bsModelType);
+                if(StringUtils.isNotEmpty(bsModelType)) {
+                    List<BjModelType> bjModelTypesList = bjModelTypeDao.findByDelFlagAndModelName(0, bsModelType);
+                    if (bjModelTypesList.size() == 0) {
+                        errInfo = errInfo + "没有维护" + bsModelType + " 机台类型;";
+                    } else {
+                        process.setBsModelType(bjModelTypesList.get(0).getModelCode());
+                    }
+                }
+
+
                 if(("molding").equals(bsType)){
                     //注塑
-                    if(StringUtils.isNotEmpty(row6)){
-                        if(!row6.matches("^\\d+\\.\\d+$")&&!row6.matches("^\\d+$")){
+                    if(StringUtils.isNotEmpty(row8)){
+                        if(!row8.matches("^\\d+\\.\\d+$")&&!row8.matches("^\\d+$")){
                             errInfo = errInfo + "穴数必须是数字类型;";
                         }else {
-                            process.setBsCave(nf.format(new BigDecimal(row6)));
+                            process.setBsCave(nf.format(new BigDecimal(row8)));
                         }
                     }else {
                         errInfo = errInfo + "穴数不能为空;";
                     }
 
 
-                    process.setBsYield(row9);
+                    process.setBsYield(row7);
 //                    if(!row6.matches("^\\d+$")){
 //                        errInfo = errInfo + "穴数数字类型;";
 //                    }
-                    if(!row7.matches("^\\d+\\.\\d+$")&&!row7.matches("^\\d+$")){
+                    if(!row6.matches("^\\d+\\.\\d+$")&&!row6.matches("^\\d+$")){
                         errInfo = errInfo + "成型周期必须是数字类型;";
                     }else {
-                        process.setBsCycle(nf.format(new BigDecimal(row7)));
+                        process.setBsCycle(nf.format(new BigDecimal(row6)));
                     }
-                    if(!row8.matches("^\\d+\\.\\d+$")&&!row8.matches("^\\d+$")){
+                    if(!row5.matches("^\\d+\\.\\d+$")&&!row5.matches("^\\d+$")){
                         errInfo = errInfo + "人数必须是数字类型;";
                     }else {
-                        process.setBsUserNum(nf.format(new BigDecimal(row8)));
+                        process.setBsUserNum(nf.format(new BigDecimal(row5)));
                     }
-                    if(!row9.matches("^\\d+\\.\\d+$")&&!row9.matches("^\\d+$")){
+                    if(!row7.matches("^\\d+\\.\\d+$")&&!row7.matches("^\\d+$")){
                         errInfo = errInfo + "工序良率必须是数字类型;";
                     }
-                    process.setFmemo(row10);
-                }else if(("hardware").equals(bsType)){
+//                    process.setFmemo(row10);
+                }
+                else if(("hardware").equals(bsType)){
                     //五金
 //                    process.setBsUserNum(row6);
-                    process.setBsCycle(row7);
-                    process.setBsYield(row8);
-                    if(!row6.matches("^\\d+$")&&!row6.matches("^\\d+\\.\\d+$")){
+                    process.setBsCycle(row6);
+                    process.setBsYield(row7);
+                    if(!row5.matches("^\\d+$")&&!row5.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "人数必须是数字类型;";
                     }else {
-                        process.setBsUserNum(nf.format(new BigDecimal(row6)));
+                        process.setBsUserNum(nf.format(new BigDecimal(row5)));
                     }
-                    if(!row7.matches("^\\d+$")&&!row7.matches("^\\d+\\.\\d+$")){
+                    if(!row6.matches("^\\d+$")&&!row6.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "成型周期必须是数字类型;";
-                    }if(!row8.matches("^\\d+$")&&!row8.matches("^\\d+\\.\\d+$")){
+                    }if(!row7.matches("^\\d+$")&&!row7.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "工序良率必须是数字类型;";
                     }
-                    process.setFmemo(row9);
-                }else if(("out").equals(bsType)){
-                    if(StringUtils.isNotEmpty(bsLoss)) {
-                        if (!bsLoss.matches("^\\d+\\.\\d+$")
-                                && !bsLoss.matches("^^\\d+$")){
+//                    process.setFmemo(row9);
+                }
+                else if(("out").equals(bsType)){
+                    if(StringUtils.isNotEmpty(row5)) {
+                        if (!row5.matches("^\\d+\\.\\d+$")
+                                && !row5.matches("^^\\d+$")){
                             errInfo = errInfo + "损耗率需输入数字;";
-                        }else if(("0").equals(bsLoss)){
+                        }else if(("0").equals(row5)){
                             errInfo = errInfo + "损耗率不能为0;";
                         }else {
-                            process.setBsLoss(nf.format(new BigDecimal(bsLoss)));
+                            process.setBsLoss(nf.format(new BigDecimal(row5)));
                         }
                     }else {
                         errInfo = errInfo + "损耗率不能为空;";
@@ -319,22 +353,23 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                         errInfo = errInfo + "外协价格不能为空;";
                 }
 //                    process.setBsLoss(bsLoss);
-                } else {
+                }
+                else {
                     //组装和表面
 //                    process.setBsUserNum(row6);
                     process.setBsCapacity(row7);
-                    process.setBsYield(row8);
-                    if(!row6.matches("^\\d+$")&&!row6.matches("^\\d+\\.\\d+$")){
+                    process.setBsYield(row6);
+                    if(!row5.matches("^\\d+$")&&!row5.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "人数必须是数字类型;";
                     }else {
-                        process.setBsUserNum(nf.format(new BigDecimal(row6)));
+                        process.setBsUserNum(nf.format(new BigDecimal(row5)));
                     }
                     if(!row7.matches("^\\d+$")&&!row7.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "产能必须是数字类型;";
-                    }if(!row8.matches("^\\d+$")&&!row8.matches("^\\d+\\.\\d+$")){
+                    }if(!row6.matches("^\\d+$")&&!row6.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "工序良率必须数字类型;";
                     }
-                    process.setFmemo(row9);
+//                    process.setFmemo(row9);
                 }
                 process.setErrorInfo(errInfo);
                 if(errInfo ==""){
@@ -346,6 +381,12 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 }
                 tempList.add(process);
             }
+
+            Set idSet = new HashSet(idList);
+            if(!idSet.removeAll(improtIdList)){
+                return ApiResponseResult.success("导入的id与实际工艺信息id不符,请在本界面导出修改后导入");
+            }
+
             productProcessTempDao.saveAll(tempList);
             Integer all = maxRow -1;
             return ApiResponseResult.success("导入成功! 导入总数:" +all+" :校验通过数:"+successes+" ;不通过数: "+failures);

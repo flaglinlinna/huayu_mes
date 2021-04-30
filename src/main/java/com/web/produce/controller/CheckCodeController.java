@@ -119,12 +119,13 @@ public class CheckCodeController extends WebController {
 	    @ResponseBody
 		public ApiResponseResult getHistoryList(
 				@RequestParam(value = "hkeywork", required = false) String hkeywork,
+				@RequestParam(value = "errorFlag", required = false) Integer errorFlag,
 				@RequestParam(value = "hStartTime", required = false) String hStartTime,
 				@RequestParam(value = "hEndTime", required = false) String hEndTime){
 		  String method = "/product/check_code/getHistoryList";String methodName ="获取历史列表";
 	        try {
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result =checkCodeService.getHistoryList(hkeywork,hStartTime,hEndTime, super.getPageRequest(sort));
+	            ApiResponseResult result =checkCodeService.getHistoryList(hkeywork,errorFlag,hStartTime,hEndTime, super.getPageRequest(sort));
 	            logger.debug(methodName+"=getList:");
 //	            getSysLogService().success(module,method, methodName, null);
 	            return result;

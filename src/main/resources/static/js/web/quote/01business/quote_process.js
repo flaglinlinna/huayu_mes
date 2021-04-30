@@ -777,10 +777,11 @@ function saveProc() {
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
+		saveTable();
 		CoreUtil.sendAjax("/quoteProcess/doStatus", JSON.stringify(param), function(data) {
 			if (data.result == true) {
 				layer.alert("确认完成成功", function() {
-					layer.closeAll();
+					// layer.closeAll();
 					if(data.data =="1"){
 						//项目完成，关闭上一级项目标签页
 						// var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;

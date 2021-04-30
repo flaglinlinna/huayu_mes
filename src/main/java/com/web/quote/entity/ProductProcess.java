@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.web.basePrice.entity.BjModelType;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -116,12 +117,18 @@ public class ProductProcess extends BaseEntity {
 	protected int bsOrder;
 	
 	/**
-	 * 机台类型
+	 * 机台类型编码
 	 */
-	@ApiModelProperty(name = "bsModelType", value = "机台类型")
+	@ApiModelProperty(name = "bsModelType", value = "机台类型编码")
 	@Column(length = 100)
 	protected String bsModelType;
-	
+
+	@ApiModelProperty(name="bjModelType",hidden=true,value="机台类型")
+	@ManyToOne
+	@JoinColumn(name = "bsModelType",referencedColumnName = "modelCode", insertable = false, updatable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
+	protected BjModelType bjModelType;
+
 	/**
 	 * 基数
 	 */
@@ -148,7 +155,7 @@ public class ProductProcess extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "bsYield", value = "工序良率(%)")
 	@Column(length = 50)
-	protected BigDecimal bsYield=BigDecimal.ZERO;
+	protected BigDecimal bsYield;
 	
 	
 	/**
@@ -602,5 +609,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsGroups(String bsGroups) {
 		this.bsGroups = bsGroups;
+	}
+
+	public BjModelType getBjModelType() {
+		return bjModelType;
+	}
+
+	public void setBjModelType(BjModelType bjModelType) {
+		this.bjModelType = bjModelType;
 	}
 }

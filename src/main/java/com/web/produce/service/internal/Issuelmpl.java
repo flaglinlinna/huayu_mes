@@ -636,8 +636,8 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 			//查询出所有设备
 			//查询出所有离职员工
 			//仅在报工环境下执行
-			String environment = this.env.getProperty("system-environment");
-			if(!("SYSTEM_TITLE").equals(environment)){
+			String environment = this.env.getProperty("server.port");
+			if(!("8081").equals(environment)){
 				return ;
 			}
 			List<DevClock> devClockList = devClockDao.findByDelFlag(0);
