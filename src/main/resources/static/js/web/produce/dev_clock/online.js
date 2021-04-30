@@ -36,32 +36,32 @@ $(function() {
 										}
 									},
 									cols : [ [
-											{
+											{fixed:'left',
 												type : 'numbers'
 											},
-										{type:'checkbox' },
+										{fixed:'left',type:'checkbox' },
 											// ,{field:'id', title:'ID',
 											// width:80, unresize:true,
 											// sort:true}
-
-											{
+										{fixed:'left',
+											field : 'linerName',
+											title : '组长',
+											width : 80,
+											// templet:function (d){
+											// 	var list=d.linerName;
+											// 	return list[0].LINER_NAME;
+											// }
+										},
+											{fixed:'left',
 												field : 'taskNo',
 												title : '制令单号',
-												width : 175
+												width : 160
 											},
-											{
-												field : 'linerName',
-												title : '组长',
-												width : 75,
-												// templet:function (d){
-								                // 	var list=d.linerName;
-								                // 	return list[0].LINER_NAME;
-								                // }
-											},
-											{
+
+											{fixed:'left',
 												field : 'classId',
 												title : '班次',
-												width : 80,
+												width : 70,
 												templet:function (d){	
 								                	if(d.classId=="1"){
 								                		return "白班"
@@ -72,7 +72,7 @@ $(function() {
 								                	}
 								                }
 											},
-											{
+											{fixed:'left',
 												field : 'workDate',
 												title : '生产时间',
 												width : 100,
@@ -81,25 +81,25 @@ $(function() {
 											{
 												field : 'hourType',
 												title : '工时类型',
-												width : 100
+												width : 90
 											},
 											{
 												field : 'lineName',
 												title : '线体',
-												width : 100
+												width : 90
 											},
-											{
+										{
+											field : 'createDate',
+											title : '创建时间',
+											width : 150,
+											templet : '<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
+										},{
 												field : 'lastupdateDate',
 												title : '更新时间',
-												width : 180,
+												width : 150,
 												templet : '<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
 											},
-											{
-												field : 'createDate',
-												title : '创建时间',
-												width : 180,
-												templet : '<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
-											}, {
+											 {
 												fixed : 'right',
 												title : '操作',
 												align : 'center',

@@ -70,7 +70,7 @@ $(function() {
 					},{
 						field : 'ITEM_NO',
 						title : '物料编号',
-						width : 160,sort: true
+						width : 150,sort: true
 					},{
 						field : 'CREATE_BY',
 						title : '操作人',sort: true,
@@ -172,19 +172,19 @@ $(function() {
 								}, {
 									field : 'TASK_NO',
 									title : '制令单号',
-									width : 180,sort: true
+									width : 150,sort: true
 								}, {
 									field : 'ITEM_NO',
 									title : '物料编码',
-									width : 170,sort: true
+									width : 150,sort: true
 								},{
 									field : 'ITEM_NAME',
 									title : '物料描述',
-									width : 240,sort: true
+									width : 200,sort: true
 								}, {
 									field : 'LINER_NAME',
 									title : '组长',
-									width : 100,sort: true
+									width : 90,sort: true
 								},{
 									field : 'QTY_PLAN',
 									title : '数量',sort: true,
@@ -373,49 +373,41 @@ $(function() {
 						// code值为200表示成功
 						}
 					},
-					cols : [ [ {
+					cols : [ [ {fixed:'left',
 						type : 'numbers'
-					},{
+					},{fixed:'left',
 						field : 'TASK_NO',
 						title : '制令单号',
-						width : 175,sort: true
-					}, {
+						width : 150,sort: true
+					}, {fixed:'left',
 						field : 'LINE_NO',
 						title : '组长',
-						width : 70,sort: true
-					}, {
-						field : 'ITEM_BARCODE',
-						title : '产品条码',
-						width : 175,sort: true
-					}, {
+						width : 80,sort: true
+					}, {fixed:'left',
 						field : 'ITEM_NO',
 						title : '产品编码',
-						width : 175,sort: true
+						width : 150,sort: true
+					}, {fixed:'left',
+						field : 'ITEM_BARCODE',
+						title : '产品条码',
+						width : 160,sort: true
 					}, {
 						field : 'QUANTITY',
-						title : '投入数量',
-						width : 95,sort: true
+						title : '产出数量',
+						width : 100,sort: true
 					},{
 						field : 'SCAN_TYPE',
 						title : '扫描类型',
 						width : 100,sort: true
 					},{
-						field : 'RESULT',
-						title : '结果',
-						width : 80,sort: true
-					},{
 						field : 'USER_NAME',
 						title : '操作人',
-						width : 100,sort: true
+						width : 90,sort: true
 					} ,{
 						field : 'CREATE_DATE',
-						title : '过站时间',
+						title : '操作时间',
 						width : 150,sort: true
-					} ,{
-						field : 'FMEMO',
-						title : '备注',
-						width : 150
-					}] ],
+					} ] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;
 					}

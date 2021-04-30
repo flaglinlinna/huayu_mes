@@ -30,55 +30,55 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
+			cols : [ [ {fixed:'left',
 				type : 'numbers'
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
+			, {fixed:'left',
+					field : 'taskNo',
+					title : '制令单',
+					width:150
+				}, {fixed:'left',
 				field : 'empCode',
 				title : '员工工号',
 				width:80
-			},{
+			},{fixed:'left',
 				field : 'empName',
 				title : '员工姓名',
-				width:100
-			}, {
+				width:90
+			}, {fixed:'left',
 				field : 'className',
 				title : '班次',
-				width:80
-			}, {
+				width:70
+			}, {fixed:'left',
 				field : 'cardType',
 				title : '卡点类型',
 				width:80
-			}, {
-				field : 'taskNo',
-				title : '制令单',
-				width:170
-			}, {
+			}, {fixed:'left',
 				field : 'hourType',
 				title : '工时类型',
 				width:80
 			},{
+					field : 'signDate',
+					title : '签卡日期',
+					width:100
+				},{
 				field : 'signTime',
 				title : '签卡时间',
-				width:100
-			},{
-				field : 'signDate',
-				title : '签卡日期',
-				width:100
+				width:80
 			},{
 				field : 'lineName',
 				title : '线体',
-				width:120
+				width:80
 			},{
+					field : 'createDate',
+					title : '添加时间',
+					templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
+					width : 150,
+				}, {
 				field : 'lastupdateDate',
 				title : '更新时间',
 				templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
-				width : 150,
-			}, {
-				field : 'createDate',
-				title : '添加时间',
-				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
 				width : 150,
 			}, {
 				fixed : 'right',

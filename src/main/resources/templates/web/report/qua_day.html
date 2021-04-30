@@ -60,8 +60,12 @@
 		<script type="text/html" id="optBar">
             <a class="layui-btn layui-btn-xs" lay-event="detail">详细</a>
         </script>
-		<script th:src="@{/js/web/report/qua_day.js}"
-			src="/js/web/report/qua_day.js"></script>
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/report/qua_day.js?ver="+Math.random()+"'><\/script>");
+		</script>
+
 			<script th:inline="javascript">
 		        var departList=[[${Depart}]];
 		        var depart_select = document.getElementById("depart");

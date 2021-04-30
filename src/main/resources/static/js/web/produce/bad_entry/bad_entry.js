@@ -241,15 +241,15 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '物料条码',
-								width : 220
+								width : 160
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
-								width : 175
+								width : 150
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 175
+								width : 150
 							}, {
 								field : 'CLASS_NO',
 								title : '班次',
@@ -259,17 +259,9 @@ $(function() {
 								title : '不良信息',
 								width : 100
 							}, {
-								field : 'DEFECT_CODE',
-								title : '不良代码',
-								width : 80
-							}, {
 								field : 'DEFECT_NUM',
 								title : '不良数量',
 								width : 80
-							},  {
-								field : 'CREATE_BY',
-								title : '录入人工号',
-								width : 90
 							}, {
 								field : 'USER_NAME',
 								title : '录入人姓名',
@@ -278,11 +270,7 @@ $(function() {
 								field : 'CREATE_DATE',
 								title : '录入时间',
 								width : 150
-							},   {
-								field : 'FMEMO',
-								title : '备注',
-								width : 100
-							} ] ],
+							}] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}

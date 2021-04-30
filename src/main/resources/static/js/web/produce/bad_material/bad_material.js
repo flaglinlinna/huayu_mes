@@ -292,51 +292,50 @@ $(function() {
                     }
                 },
                 cols : [ [
-                    {
+                    {fixed:'left',
                     type : 'numbers'
-                },  {
-                    field : 'ITEM_NO',
-                    title : '物料料号',
-                    width : 160
                 },
-                    {
+                    {fixed:'left',
+                        field : 'TASK_NO',
+                        title : '制令单',
+                        width : 150
+                    },  {fixed:'left',
+                    field : 'ITEM_NO',
+                    title : '物料编码',
+                    width : 150
+                },
+                    {fixed:'left',
                     field : 'ITEM_NAME',
                     title : '物料名称',
-                    width : 230
+                    width : 250
                 } ,
-                    {
+                    /*{
                         field : 'DEFECT_NAME',
                         title : '不良内容',
-                        width : 120
-                    },
+                        width : 90
+                    }, */
                     {
+                        field : 'DEPT_NAME',
+                        title : '来料部门',
+                        width : 120,sort: true
+                    },{
                     field : 'DEFECT_DET_QTY',
                     title : '不良数量',
-                    width : 100
+                    width : 80
                 }, {
                     field : 'USER_NAME',
-                    title : '录入人姓名',
-                    width : 100
+                    title : '录入人',
+                    width : 90
                 }, {
                     field : 'CREATE_DATE',
                     title : '录入时间',
                     width : 150
                 },
-                    {
-                        field : 'DEPT_NAME',
-                        title : '来料部门',
-                        width : 120,sort: true
-                    },
-                    {
+                    /*{
                         field : 'VENDER_NAME',
                         title : '供应商名称',
                         width : 200
-                    },
-                    {
-                        field : 'TASK_NO',
-                        title : '制令单',
-                        width : 200
-                    }
+                    } */
                 ] ],
                 done : function(res, curr, count) {
                     pageCurr = curr;

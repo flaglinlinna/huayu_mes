@@ -1176,7 +1176,7 @@ public class PrcUtils {
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
-                String storedProc = "{call  "+prc_name+" (?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                String storedProc = "{call  "+prc_name+" (?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
                 CallableStatement cs = con.prepareCall(storedProc);
                 cs.setString(1, company);
                 cs.setString(2, facoty);

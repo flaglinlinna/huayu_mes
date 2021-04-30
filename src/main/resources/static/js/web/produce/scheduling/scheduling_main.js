@@ -54,14 +54,14 @@ $(function () {
             cols: [[
                 {type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-                ,{field:'ID_NO', title:'表单号', width:120}
-                ,{field:'DEPT_NAME', title:'部门名称', width:120}
-                ,{field:'PROD_DATE', title:'生产日期', width:140}
-                ,{field:'CLASS_NAME', title:'班次名称', width:140}
-                ,{field:'FENABLE', title:'是否生效', width:120,align:'center',templet:'#statusTp1'}
-                ,{field:'FENABLE_BY', title:'生效人',width:120}
-                ,{field:'FENABLE_DATE', title:'生效时间', width:150}
-                ,{field:'CREATE_DATE', title:'创建时间', width:150}
+                ,{field:'ID_NO', title:'表单号', width:110}
+                ,{field:'DEPT_NAME', title:'部门名称', width:110}
+                ,{field:'PROD_DATE', title:'生产日期', width:100}
+                ,{field:'CLASS_NAME', title:'班次名称', width:90}
+                ,{field:'FENABLE', title:'是否生效', width:90,align:'center',templet:'#statusTp1'}
+                ,{field:'FENABLE_BY', title:'生效人',width:90}
+                ,{field:'FENABLE_DATE', title:'生效时间', width:145}
+                ,{field:'CREATE_DATE', title:'创建时间', width:145}
                 ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}
             ]]
             ,done: function(res, curr, count){

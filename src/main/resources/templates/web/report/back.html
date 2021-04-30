@@ -31,8 +31,10 @@
 			</form>
 			<table id="listTable" lay-filter="listTable"></table>
 		</div>
-		<script th:src="@{/js/web/report/back.js}"
-			src="/js/web/report/back.js"></script>
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/report/back.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

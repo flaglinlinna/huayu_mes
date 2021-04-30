@@ -47,27 +47,27 @@ $(function() {
 				type : 'numbers'
 			}, {
 				field : 'FDATE',
-				title : '检验日期',width : 150,sort: true,
+				title : '检验日期',width : 110,sort: true,
 				totalRowText:"合计"
 			}, {
 				field : 'PROC_NAME',
 				title : '工序名称',width : 130, sort: true
 			},{
 				field : 'QTY_OK',
-				title : '合格数', width : 130, sort: true,totalRow: true
+				title : '合格数', width : 110, totalRow: true
 			}, {
 				field : 'LOT_OK',
-				title : '合格批次',width : 130,  sort: true,totalRow: true
+				title : '合格批次',width : 110,  totalRow: true
 			},{
 				field : 'QTY_NG',
-				title : '不合格数',width : 130,sort: true,totalRow: true
+				title : '不合格数',width : 110,totalRow: true
 			}, {
 				field : 'LOT_NG',
 				title : '不合格批次',
-				width : 130, sort: true,totalRow: true
+				width : 110, totalRow: true
 			},{
 				field : 'QTY_SJ',
-				title : '送检数', width : 130,sort: true,totalRow: true
+				title : '送检数', width : 110,totalRow: true
 			}, {
 				fixed : 'right',
 				title : '操作',
@@ -111,6 +111,7 @@ $(function() {
 				data : [],
 				height : 'full-90',
 				page : true,
+			    totalRow :true,
 				limit:50,
 				limits:[50,100,200,500,1000,5000],
 				request : {
@@ -135,38 +136,38 @@ $(function() {
 					// code值为200表示成功
 					}
 				},
-				cols : [ [  {
+				cols : [ [  {fixed:'left',
 					type : 'numbers'
 				}, {
-					field : 'FDATE',
-					title : '检验日期',width : 130,sort: true,
-				}, {
+					fixed:'left',field : 'FDATE',
+					title : '检验日期',width : 110,sort: true,
+					totalRowText:"合计"
+				}, {fixed:'left',
 					field : 'PROC_NAME',
-					title : '工序名称',width : 120, sort: true
-				},{
+					title : '工序名称',width : 130, sort: true
+				},{fixed:'left',
+					field : 'ITEM_NAME_S',
+					title : '物料简称',width : 100, sort: true
+				},
+					{fixed:'left',
 					field : 'ITEM_NO',
-					title : '产品编码',width : 180, sort: true
+					title : '产品编码',width : 150, sort: true
 				},
 					{
-						field : 'ITEM_NAME_S',
-						title : '物料简称',width : 110, sort: true
-					},
-					{
 					field : 'QTY_OK',
-					title : '合格数', width : 130, sort: true
+					title : '合格数', width : 100,totalRow: true
 				}, {
 					field : 'LOT_OK',
-					title : '合格批次',width : 130,  sort: true
+					title : '合格批次',width : 100,totalRow: true
 				},{
 					field : 'QTY_NG',
-					title : '不合格数',width : 130,sort: true
+					title : '不合格数',width : 100,totalRow: true
 				}, {
 					field : 'LOT_NG',
-					title : '不合格批次',
-					width : 130, sort: true
+					title : '不合格批次',width : 100,totalRow: true
 				},{
 					field : 'QTY_SJ',
-					title : '送检数', width : 130,sort: true
+					title : '送检数', width : 100,totalRow: true
 				} ] ],
 				done : function(res, curr, count) {
 					//

@@ -56,8 +56,10 @@
 			</form>
 			<table id="listTable" lay-filter="listTable"></table>
 		</div>
-		<script th:src="@{/js/web/report/abnormal_r.js}"
-			src="/js/web/report/abnormal_r.js"></script>
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/report/abnormal_r.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

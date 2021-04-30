@@ -48,8 +48,10 @@
 			</form>
 			<table id="listTable" lay-filter="listTable"></table>
 		</div>
-		<script th:src="@{/js/web/report/check_batch.js}"
-			src="/js/web/report/check_batch.js"></script>
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/report/check_batch.js?ver="+Math.random()+"'><\/script>");
+		</script>
 			<script th:inline="javascript">
 		        var departList=[[${Depart}]];
 		        var depart_select = document.getElementById("depart");

@@ -1,5 +1,5 @@
 /**
- * 工时统计表（hr）
+ * 工时统计表(HR)
  */
 var pageCurr;
 var localtableFilterIns;

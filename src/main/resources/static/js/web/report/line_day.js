@@ -41,24 +41,24 @@ $(function() {
 				// code值为200表示成功
 				}
 			},*/
-			cols : [ [ {
+			cols : [ [ {fixed:'left',
 				type : 'numbers'
 			},
-				{
+				{fixed:'left',
 					field : 'DEPT_NAME',
 					title : '部门', width : 100,sort: true,totalRowText:"合计"
 				},
-				{
+				{fixed:'left',
 					field : 'LINER_NAME',
 					title : '组长',width : 80, sort: true
 				},
-				{
+				{fixed:'left',
 					field : 'TASK_NO',
 					title : '制令单号', width : 150,sort: true
 				},
-				{
+				{fixed:'left',
 					field : 'ITEM_NO',
-					title : '物料编码',width : 160,sort: true
+					title : '物料编码',width : 150,sort: true
 				},
 				{
 					field : 'PROD_DATE',
@@ -107,12 +107,9 @@ $(function() {
 				title : '实际工时',width : 90,totalRow: true
 			},{
 				field : 'PROD_NO',
-				title : '工单号',width : 120
+				title : '工单号',width : 130
 			},
-				{
-					field : 'GROUP_NO',
-					title : '组合',width : 80
-				},
+
 				{
 					field : 'CUST_NAME',
 					title : '客户名称',width : 120
@@ -145,7 +142,7 @@ $(function() {
 				{field: 'DEFECT_NUM', type:'input'},
 				{field: 'DEFECT_NAME', type:'input'},
 				{field: 'USER_NAME', type:'input'},
-				{field: 'LINER_NAME', type:'input'},
+				//{field: 'LINER_NAME', type:'input'},
 			],
 			'done': function(filters){}
 		})

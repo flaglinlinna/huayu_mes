@@ -46,11 +46,11 @@ $(function() {
 							}, {
 								field : 'ITEM_BARCODE',
 								title : '箱号条码',
-								width : 175,sort: true
+								width : 160,sort: true
 							}, {
 								field : 'PROD_DATE',
 								title : '生产日期',
-								width : 130,sort: true
+								width : 100,sort: true
 							}, {
 								field : 'LINE_MAN',
 								title : '组长',
@@ -58,7 +58,7 @@ $(function() {
 							}, {
 								field : 'ITEM_MODEL',
 								title : '机型',
-								width : 120,sort: true
+								width : 100,sort: true
 							}, {
 								field : 'QTY',
 								title : '数量',
@@ -74,7 +74,7 @@ $(function() {
 							}, {
 								field : 'TASK_NO',
 								title : '生产制令单',
-								width : 300,sort: true
+								width : 150,sort: true
 							}, {
 								field : 'USER_NAME',
 								title : '送检人',
@@ -120,20 +120,24 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {
+							cols : [ [ {fixed:'left',
 								type : 'numbers'
-							},{
+							}, {fixed:'left',
+								field : 'LINE_NO',
+								title : '组长',
+								width : 80,sort: true
+							},{fixed:'left',
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 175,sort: true
+								width : 150,sort: true
 							},
-								{
+								{fixed:'left',
+									field : 'ITEM_NO',
+									title : '物料编码',width : 150,sort: true
+								},{fixed:'left',
 									field : 'ITEM_BARCODE',
 									title : '条码',
-									width : 175,sort: true
-								},{
-									field : 'ITEM_NO',
-									title : '物料编码',width : 170,sort: true
+									width : 160,sort: true
 								},
 								{
 									field : 'ITEM_NAME',
@@ -141,21 +145,11 @@ $(function() {
 									width : 180,
 									sort: true
 								},
-
 								{
-								field : 'PROC_NO',
-								title : '工序编码',
-								width : 100,sort: true
-							}, {
 								field : 'PROC_NAME',
 								title : '工序名称',
-								width : 130,sort: true
-							},  {
-								field : 'LINE_NO',
-								title : '组长',
-								width : 70,sort: true
+								width : 120,sort: true
 							},
-
 								{
 								field : 'INSP_NAME',
 								title : '送检类型',

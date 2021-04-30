@@ -92,9 +92,11 @@
 				</div>
 			</div>
 		</div>
-		
-		<script th:src="@{/js/web/produce/transit/transit.js}"
-			src="/js/web/produce/transit/transit.js"></script>
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/produce/transit/transit.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

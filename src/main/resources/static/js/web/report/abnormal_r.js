@@ -41,31 +41,31 @@ $(function() {
 					"code" : res.status
 				}
 			},
-			cols : [ [ {
+			cols : [ [ {fixed:'left',
 				type : 'numbers'
 			},
 			//,{type:'checkbox'}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			 {
-				field : 'EMP_CODE',
-				title : '工号',width : 100, sort: true
-			},
-			 {
-				field : 'EMP_NAME',
-				title : '员工姓名',width : 100,
-				sort: true
-			}, {
+			 {fixed:'left',
 				field : 'LINER_NAME',
-				title : '组长姓名', width : 100,sort: true
+				title : '组长', width : 80,sort: true
 			}
-			, {
+			, {fixed:'left',
 				field : 'TASK_NO',
-				title : '制令单号',
+				title : '制令单',
 				 sort: true
-					, width : 170
-			}, {
+					, width : 150
+			}, {fixed:'left',
+					field : 'EMP_CODE',
+					title : '工号',width : 80, sort: true
+				},
+				{fixed:'left',
+					field : 'EMP_NAME',
+					title : '员工姓名',width : 100,
+					sort: true
+				}, {
 				field : 'WORK_DATE',
-				title : '工作日期',width : 140, sort: true
+				title : '工作日期',width : 100, sort: true
 			},
 				{
 					field : 'TIME_BEGIN',
@@ -81,7 +81,7 @@ $(function() {
 				},
 				{
 					field : 'ITEM_NAME',
-					title : '物料名称',width : 140, sort: true
+					title : '物料名称',width : 180, sort: true
 				},
 
 

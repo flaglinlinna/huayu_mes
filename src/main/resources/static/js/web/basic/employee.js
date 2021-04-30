@@ -33,28 +33,28 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
+			cols : [ [ {fixed:'left',
 				type : 'numbers'
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
+			, {fixed:'left',
 				field : 'empCode',
 				title : '员工工号',
-				width:100,
+				width:90,
 				sort: true,
-			}, {
+			}, {fixed:'left',
 				field : 'empName',
 				title : '员工姓名',
-				width:120,
+				width:100,
 				sort: true,
-			}, {
+			}, {fixed:'left',
 				field : 'empType',
 				title : '员工类型',
 				width:120
-			}, {
+			}, {fixed:'left',
 				field : 'empIdNo',
 				title : '身份证',
-				width:170
+				width:160
 			}, {
 				field : 'empStatus',
 				title : '员工状态',

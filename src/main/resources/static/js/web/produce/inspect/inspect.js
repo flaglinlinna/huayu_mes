@@ -41,27 +41,27 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {
+							cols : [ [ {fixed:'left',
 								type : 'numbers'
-							}, {
+							}, {fixed:'left',
+								field : 'LINE_NO',
+								title : '组长',
+								width : 70,sort: true
+							},{fixed:'left',
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 175,sort: true
+								width : 150,sort: true
 							},
-								{
-									field : 'LINE_NO',
-									title : '组长',
-									width : 70,sort: true
+								{fixed:'left',
+									field : 'ITEM_NO',
+									title : '物料编码',
+									width : 150,sort: true
 								},
-								{
+								{fixed:'left',
 								field : 'ITEM_BARCODE',
 								title : '物料条码',
-								width : 175,sort: true
-							}, {
-								field : 'ITEM_NO',
-								title : '物料编码',
-								width : 170,sort: true
-							}, , {
+								width : 160,sort: true
+							},, {
 								field : 'ITEM_NAME',
 								title : '物料描述',
 								width : 180,sort: true
@@ -72,19 +72,19 @@ $(function() {
 							}, {
 								field : 'SAMPLE_QTY',
 								title : '抽检总量',
-								width : 110,sort: true
+								width : 100,sort: true
 							}, {
 								field : 'QTY_DONE',
 								title : '合格数量',
-								width : 110,sort: true
+								width : 100,sort: true
 							}, {
 								field : 'DEFECT_NUM',
 								title : '不良数量',
-								width : 110,sort: true
+								width : 100,sort: true
 							}, {
 								field : 'CHK_RESULT',
 								title : '检验结果',
-								width : 100,sort: true
+								width : 90,sort: true
 							}, {
 								field : 'ORG_NAME',
 								title : '责任部门',

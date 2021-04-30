@@ -273,11 +273,11 @@ $(function () {
                     cols: [[
                         {type:'numbers'}
                         ,{field:'itemNo', title:'物料编号', width:150}
-                        ,{field:'itemName', title:'物料描述',width:400, templet:'<span>{{d.mtrial ? d.mtrial.itemName : ""}}</span>'}
-                        ,{field:'itemQty', title:'组件用量', width:100}
-                        ,{field:'itemUnit', title:'组件单位', width:100}
-                        ,{field:'itemQtyPr', title:'单位用量', width:100}
-                        ,{field:'fokRate', title:'良率', width:80}
+                        ,{field:'itemName', title:'物料描述',width:300, templet:'<span>{{d.mtrial ? d.mtrial.itemName : ""}}</span>'}
+                        ,{field:'itemQty', title:'组件用量', width:90}
+                        ,{field:'itemUnit', title:'组件单位', width:90}
+                        ,{field:'itemQtyPr', title:'单位用量', width:90}
+                        ,{field:'fokRate', title:'良率%', width:90}
                         ,{field:'empNames', title:'作业员', width:90}
                         ,{fixed:'right', title:'操作',width:90, align:'center', toolbar:'#optBar2'}
                     ]]
@@ -315,14 +315,14 @@ $(function () {
                     },
                     cols: [[
                         {type:'numbers'}
-                        ,{field:'EMP_CODE', title:'员工工号', width:150}
-                        ,{field:'EMP_NAME', title:'员工姓名', width:150,}
-                        ,{field:'EMP_TYPE', title:'员工类型', width:150}
+                        ,{field:'EMP_CODE', title:'员工工号', width:90}
+                        ,{field:'EMP_NAME', title:'员工姓名', width:90,}
+                        ,{field:'EMP_TYPE', title:'员工类型', width:120}
                         ,{field:'DEPT_NAME', title:'部门名称', width:100}
-                        ,{field:'TIME_BEGIN', title:'上线时间', width:180,}
-                        ,{field:'TIME_END', title:'下线时间', width:180,}
-                        ,{field:'CREATE_DATE', title:'分配时间', width:180,}
-                        ,{field:'FTIMES', title:'上线时长(小时)', width:180,}
+                        ,{field:'TIME_BEGIN', title:'上线时间', width:150,}
+                        ,{field:'TIME_END', title:'下线时间', width:150,}
+                        ,{field:'CREATE_DATE', title:'分配时间', width:150,}
+                        ,{field:'FTIMES', title:'上线时长(小时)', width:120,}
                         // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
                     ]]
                     ,done: function(res, curr, count){
@@ -412,14 +412,14 @@ $(function () {
                     cols: [[
                         {type:'numbers'}
                         ,{field:'PROC_ORDER', title:'工序顺序', width:80,align:'center',}
-                        ,{field:'PROC_NAME', title:'工序名称', width:120,align:'center',}
-                        ,{field:'SCAN_TYPE', title:'产出类型', width:100,align:'center',}
-                        ,{field:'ITEM_BARCODE', title:'产品条码', width:165,align:'center',}
-                        ,{field:'ITEM_NO', title:'产品编码', width:180,align:'center',}
-                        ,{field:'QUANTITY', title:'产出/送检数', width:120,align:'center',}
-                        ,{field:'USER_NAME', title:'操作人', width:100,align:'center',}
-                        ,{field:'CREATE_DATE', title:'操作时间', width:160,align:'center',}
-                        ,{field:'ITEM_NAME', title:'产品名称', width:200,align:'center',}
+                        ,{field:'PROC_NAME', title:'工序名称', width:90,align:'center',}
+                        ,{field:'SCAN_TYPE', title:'产出类型', width:90,align:'center',}
+                        ,{field:'ITEM_BARCODE', title:'产品条码', width:160,align:'center',}
+                        ,{field:'ITEM_NO', title:'产品编码', width:140,align:'center',}
+                        ,{field:'QUANTITY', title:'产出/送检数', width:100,align:'center',}
+                        ,{field:'USER_NAME', title:'操作人', width:80,align:'center',}
+                        ,{field:'CREATE_DATE', title:'操作时间', width:150,align:'center',}
+                        ,{field:'ITEM_NAME', title:'产品名称', width:140,align:'center',}
                         // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
                     ]]
                     ,done: function(res, curr, count){
@@ -461,19 +461,19 @@ $(function () {
                         }
                     },
                     cols: [[
-                        {type:'numbers'}
-                        ,{field:'PROC_ORDER', title:'工序顺序', width:100,align:'center',}
-                        ,{field:'PROC_NAME', title:'工序名称', width:100,}
-                        ,{field:'LOT_NO', title:'虚拟批次', width:100,}
-                        ,{field:'ITEM_BARCODE', title:'产品条码', width:175}
-                        ,{field:'ITEM_NAME', title:'产品名称', width:160,align:'center',}
-                        ,{field:'ITEM_NO', title:'产品编码', width:150,align:'center',}
+                        {fixed:'left',type:'numbers'}
+                        ,{fixed:'left',field:'PROC_ORDER', title:'工序顺序', width:80,align:'center',}
+                        ,{fixed:'left',field:'PROC_NAME', title:'工序名称', width:90,}
+                        ,{fixed:'left',field:'LOT_NO', title:'虚拟批次', width:80,}
+                        ,{fixed:'left',field:'ITEM_BARCODE', title:'产品条码', width:160}
+                        ,{field:'ITEM_NO', title:'产品编码', width:140,align:'center',}
+                        ,{field:'ITEM_NAME', title:'产品名称', width:150,align:'center',}
                         ,{field:'QUANTITY', title:'检验数', width:80,align:'center',}
                         ,{field:'QTY_PROC', title:'检验总数', width:80,align:'center',}
-                        ,{field:'SAMPLE_QTY', title:'抽检总数', width:120,align:'center',}
-                        ,{field:'QTY_DONE', title:'抽检合格数', width:120,align:'center',}
-                        ,{field:'USER_NAME', title:'抽检人', width:100,align:'center',}
-                        ,{field:'CREATE_DATE', title:'操作时间', width:160,align:'center',}
+                        ,{field:'SAMPLE_QTY', title:'抽检总数', width:80,align:'center',}
+                        ,{field:'QTY_DONE', title:'抽检合格数', width:90,align:'center',}
+                        ,{field:'USER_NAME', title:'抽检人', width:80,align:'center',}
+                        ,{field:'CREATE_DATE', title:'操作时间', width:150,align:'center',}
                         // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
                     ]]
                     ,done: function(res, curr, count){
@@ -517,16 +517,16 @@ $(function () {
                     cols: [[
                         {type:'numbers'}
                         // ,{field:'FTYPE', title:'登记类型', width:100,align:'center',}
-                        ,{field:'ITEM_NO', title:'物料编码', width:180,}
-                        ,{field:'ITEM_NAME', title:'物料名称', width:190,}
-                        ,{field:'CUST_NAME', title:'客户名称', width:145}
+                        ,{field:'ITEM_NO', title:'物料编码', width:140,}
+                        ,{field:'ITEM_NAME', title:'物料名称', width:150,}
+                        ,{field:'CUST_NAME', title:'客户名称', width:90}
                         ,{field:'DEPT_NAME', title:'部门名称', width:80,align:'center',}
-                        ,{field:'FTIME', title:'登记时间', width:120,align:'center',}
+                        ,{field:'FTIME', title:'登记时间', width:100,align:'center',}
                         ,{field:'DESCRIPTION', title:'异常描述', width:145}
                         ,{field:'FOR_REASON', title:'异常原因', width:80,align:'center',}
-                        ,{field:'FTIME_LONG', title:'异常时长', width:120,align:'center',}
-                        ,{field:'CREATE_DATE', title:'创建时间', width:160,align:'center',}
-                        ,{field:'RELEASE_TIME', title:'解除时间', width:160,align:'center',}
+                        ,{field:'FTIME_LONG', title:'异常时长', width:80,align:'center',}
+                        ,{field:'CREATE_DATE', title:'创建时间', width:150,align:'center',}
+                        ,{field:'RELEASE_TIME', title:'解除时间', width:150,align:'center',}
                         // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
                     ]]
                     ,done: function(res, curr, count){
