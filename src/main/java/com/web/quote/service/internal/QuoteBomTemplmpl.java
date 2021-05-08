@@ -319,7 +319,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 		productMaterDao.deleteByPkQuote(pkQuote);
 		quoteProcessDao.delteQuoteProcessByPkQuote(pkQuote);
 
-		List<QuoteBomTemp> tempList = quoteBomTempDao.findByCheckStatusAndDelFlagAndCreateByAndPkQuote(0,0,userId,pkQuote);
+		List<QuoteBomTemp> tempList = quoteBomTempDao.findByCheckStatusAndDelFlagAndCreateByAndPkQuoteOrderById(0,0,userId,pkQuote);
 		List<QuoteBom> quoteBomList =  new ArrayList<>();
 		for(QuoteBomTemp temp:tempList){
 			QuoteBom quoteBom = new QuoteBom();

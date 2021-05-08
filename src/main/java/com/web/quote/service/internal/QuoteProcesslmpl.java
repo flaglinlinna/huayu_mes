@@ -107,7 +107,12 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		Page<QuoteProcess> page = quoteProcessDao.findAll(spec1, pageRequest);
 		List<QuoteProcess> quoteProcessList = page.getContent();
 		for(QuoteProcess o:quoteProcessList) {
-			List<Map<String, Object>> procList = quoteProcessDao.getProcByWorkCenter(o.getPkWorkCenter());
+			List<Map<String, Object>> procList = new ArrayList<>();
+			if(!("out").equals(o.getBjWorkCenter().getBsCode())){
+				procList = quoteProcessDao.getProcByWorkCenter(o.getPkWorkCenter());
+			}else {
+				procList = quoteProcessDao.getProcByWorkCenterAndOut(o.getPkWorkCenter());
+			}
 			List<Map<String, Object>> mapList = quoteBomDao.getBsMaterName(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
 //			if(mapList.size()==1){
 //				o.setBsMaterName(mapList.get(0).get("BSMATERNAME").toString());
@@ -419,9 +424,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 if(i>0){
 			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
 		 }
-		 if(quoteProcessDao.getPkQuoteBomNum(Long.parseLong(quoteId)).size()>0){
-			 return ApiResponseResult.failure("存在相同的材料名称,请检查。");
-		 }
+//		 if(quoteProcessDao.getPkQuoteBomNum(Long.parseLong(quoteId)).size()>0){
+//			 return ApiResponseResult.failure("存在相同的材料名称,请检查。");
+//		 }
 		 if(quoteProcessDao.countByDelFlagAndPkQuoteAndPkProcIsNull(0,Long.parseLong(quoteId))>0){
 			 return ApiResponseResult.failure("请填写完所有工序");
 		 }
@@ -540,7 +545,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 
 	@Override
 	public ApiResponseResult addProcessByBom(Long quoteId) {
-	 	List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuote(0,quoteId);
+	 	List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuoteOrderById(0,quoteId);
 	 	List<QuoteProcess> quoteProcessList = new ArrayList<>();
 	 	try {
 			Long userId = UserUtil.getSessionUser().getId();

@@ -26,6 +26,8 @@ public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecifica
 	
 	public List<QuoteBom> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 
+	public List<QuoteBom> findByDelFlagAndPkQuoteOrderById(Integer delFlag,Long pkQuote);
+
 	public List<QuoteBom> findByDelFlagAndPkQuoteAndBsMaterNameIsNotNull(Integer delFlag,Long pkQuote);
 
 	@Query(value = "select distinct t.id id,t.bs_mater_name as bsMaterName,t.bs_groups as bsgroups from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag=0 and t.bs_element = ?2 and t.bs_component =?3 and t.pk_bj_work_center = ?4", nativeQuery = true)

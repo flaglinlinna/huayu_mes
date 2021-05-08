@@ -47,17 +47,17 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '条码',
-								width : 220,
+								width : 180,
 								sort: true
 							}, {
 								field : 'DEFECT_NUM',
 								title : '数量',
-								width : 70
+								width : 90
 								,sort: true
 							}, {
 								field : 'TASK_NO',
 								title : '制令单',
-								width : 200,sort: true
+								width : 180,sort: true
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',

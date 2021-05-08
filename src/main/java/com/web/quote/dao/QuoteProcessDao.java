@@ -66,6 +66,9 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	@Query(value = "SELECT DISTINCT f.PROC_ID id , f.PROC_NAME name FROM BJ_BASE_FEE f where  f.FEE_LH is not NULL and DEL_FLAG = 0 and f.PROC_ID is not null and f.WORKCENTER_ID = ?1", nativeQuery = true)
 	public List<Map<String, Object>> getProcByWorkCenter(Long pkWorkCenter);
 
+	@Query(value = "SELECT DISTINCT f.id id , f.PROC_NAME name FROM bj_base_proc f where DEL_FLAG = 0 and f.WORKCENTER_ID = ?1", nativeQuery = true)
+	public List<Map<String, Object>> getProcByWorkCenterAndOut(Long pkWorkCenter);
+
 	@Query(value = "select distinct t.PK_BJ_WORK_CENTER, t.BS_ELEMENT,t.BS_COMPONENT,c.WORKCENTER_NAME from price_quote_bom t " +
 			" LEFT JOIN BJ_BASE_WORKCENTER c on t.PK_BJ_WORK_CENTER = c.ID where t.pk_quote= ?1  and t.del_Flag= 0 ",
 			countQuery =  " select count(1) from (select distinct  t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT from price_quote_bom t" +
