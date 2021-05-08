@@ -38,14 +38,14 @@
 					<input  name="hkeywork" autocomplete="off"
 						placeholder="请输入关键字" class="layui-input" type="text"/>
 				</div>
-				<label class="layui-form-label">开始日期</label>
+				<label class="layui-form-label layui-required">开始日期</label>
 				<div class="layui-input-inline" style="width:120px;">
-					<input type="text" name="hStartTime" autocomplete="off"
+					<input type="text" name="hStartTime" autocomplete="off" lay-verify="required"
 						placeholder="请选择开始日期" class="layui-input" readonly="readonly"id="hStartTime">
 				</div>
-				<label class="layui-form-label">结束日期</label>
+				<label class="layui-form-label layui-required">结束日期</label>
 				<div class="layui-input-inline" style="width:120px;">
-					<input type="text" name="hEndTime" autocomplete="off"
+					<input type="text" name="hEndTime" autocomplete="off" lay-verify="required"
 						placeholder="请选择结束日期" class="layui-input" readonly="readonly" id="hEndTime">
 				</div>
 				<button class="layui-btn layui-btn-sm" lay-submit=""

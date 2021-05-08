@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='小码校验'"></head>
+<head th:include="layout :: htmlhead" th:with="title='小码扫描'"></head>
 <style th:inline="text">
 .layui-form-label {
 	text-align: right;
@@ -34,7 +34,7 @@
 		<!--<div th:replace="fragments/head :: header"></div>-->
 <div class="layui-tab layui-tab-card">
 			<ul class="layui-tab-title">
-				<li class="layui-this">小码校验</li>
+				<li class="layui-this">小码扫描</li>
 				<li>历史查询</li>
 			</ul>
 			<div class="layui-tab-content">
@@ -83,7 +83,7 @@
 								</div>
 								<div class="layui-form-mid layui-word-aux">请输入或者扫描条码后回车</div>
 
-								<label class="layui-form-label">当日已扫描数</label>
+								<label class="layui-form-label">今天已扫描数</label>
 								<div class="layui-input-inline">
 									<input id="barNum" name="barNum" autocomplete="off"
 										   placeholder="根据产品编码+组长统计" class="layui-input" type="text"

@@ -16,7 +16,7 @@ $(function() {
 							where : {},
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
-							height:'full-390'//固定表头&full-查询框高度
+							height:'full-300'//固定表头&full-查询框高度
 							,even:true,//条纹样式
 							page : true,
 							data : [],
@@ -47,37 +47,28 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '小条码',
-								width : 180,
+								width : 300,
 								sort: true
-							}, {
-								field : 'DEFECT_NUM',
-								title : '数量',
-								width : 90
-								,sort: true
-							}, {
-								field : 'TASK_NO',
-								title : '制令单',
-								width : 180,sort: true
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
-								width : 170,sort: true
+								width : 140
 							}, {
-								field : 'DEFECT_TYPE_NAME',
-								title : '不良类型',
-								width : 100,sort: true
+								field : 'TASK_NO',
+								title : '制令单',
+								width : 150
 							}, {
-								field : 'DEFECT_CODE',
-								title : '不良代码',
-								width : 100,sort: true
+								field : 'DEFECT_NUM',
+								title : '数量',
+								width : 55
 							}, {
 								field : 'DEFECT_NAME',
 								title : '不良现象',
-								width : 180,sort: true
+								width : 110,sort: true
 							}, {
 								field : 'CREATE_DATE',
 								title : '创建时间',
-								width : 160,sort: true
+								width : 145
 							}, {
 								fixed : 'right',
 								title : '操作',
@@ -236,36 +227,32 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {
+							cols : [ [ {fixed:'left',
 								type : 'numbers'
-							}, {
+							}, {fixed:'left',
 								field : 'BOARD_BARCODE',
 								title : '小条码',
-								width : 180
-							}, {
+								width : 300
+							}, {fixed:'left',
 								field : 'BOARD_ITEM',
 								title : '物料编码',
 								width : 150
-							}, {
+							}, {fixed:'left',
 								field : 'TASK_NO',
 								title : '制令单号',
 								width : 150
-							}, {
-								field : 'CLASS_NO',
-								title : '班次',
-								width : 80
-							}, {
+							},{
 								field : 'DEFECT_NAME',
-								title : '不良信息',
-								width : 100
+								title : '不良现象',
+								width : 110
 							}, {
 								field : 'DEFECT_NUM',
-								title : '不良数量',
-								width : 80
+								title : '数量',
+								width : 60
 							}, {
 								field : 'USER_NAME',
-								title : '录入人姓名',
-								width : 90
+								title : '录入人',
+								width : 80
 							},  {
 								field : 'CREATE_DATE',
 								title : '录入时间',

@@ -1,5 +1,5 @@
 /**
- * 生产投入
+ * 产出报工
  */
 var pageCurr;
 var tabledata=[];
@@ -20,7 +20,7 @@ $(function() {
 					,
 					defaultToolbar : [],
 					cellMinWidth : 80,
-					height:'full-380'//固定表头&full-查询框高度
+					height:'full-300'//固定表头&full-查询框高度
 					,even:true,//条纹样式
 					page : true,
 					limit:20,
@@ -49,19 +49,19 @@ $(function() {
 					{
 						field : 'ITEM_BARCODE',
 						title : '箱内条码',
-						width : 180,sort: true
+						width : 160,sort: true
 					},{
 						field : 'ITEM_BARCODE',
 						title : '箱外条码',
-						width : 180,sort: true
+						width : 160,sort: true
 					}, {
 						field : 'TYPE',
 						title : '类型',
-						width : 90,
+						width : 80,
 					}, {
 						field : 'QUANTITY',
 						title : '数量',
-						width : 80,sort: true
+						width : 70,sort: true
 					},{
 						field : 'TASK_NO',
 						title : '制令单号',
@@ -73,12 +73,12 @@ $(function() {
 						width : 150,sort: true
 					},{
 						field : 'CREATE_BY',
-						title : '操作人',sort: true,
+						title : '操作人',
 						width : 80
 					},{
 						field : 'CREATE_DATE',
 						title : '操作时间',
-						width : 145,sort: true
+						width : 145
 					}] ],
 					done : function(res, curr, count) {
 						pageCurr = curr;
@@ -95,25 +95,25 @@ $(function() {
 						method : 'get',
 						width:800,
 						cols : [ [
-						{ type: 'radio' },//多选  radio
-							{type :'numbers'},
-						{field : 'id', title : 'id', width : 0,hide:true},
-							{field : 'WS_SECTION', title : '工段', width : 70},
-							{field : 'FMEMO', title : '备注', width : 120},
-							{field : 'LINER_NAME', title : '组长', width : 70,sort: true},
-							{field : 'PROD_DATE', title : '计划日期', width : 100,
+						{ fixed:'left',type: 'radio' },//多选  radio
+							{fixed:'left',type :'numbers'},
+						{fixed:'left',field : 'id', title : 'id', width : 0,hide:true},
+							{fixed:'left',field : 'LINER_NAME', title : '组长', width : 70,sort: true},
+							{fixed:'left',field : 'PROD_DATE', title : '生产日期', width : 95,
 								templet:function (d) {
 									if(d.PROD_DATE!=null){
 										return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
 									}
 								}
 							},
-							 {field : 'ITEM_NO', title : '物料编码', width : 170,sort: true},
-							{field : 'ITEM_NAME', title : '物料描述', width : 240,sort: true},
-							{field : 'QTY_PLAN', title : '制单数量', width : 95,sort: true},
-							{field : 'OTPT_QTY', title : '产出数量', width : 95,sort: true},
-							{field : 'ORDER_RATE', title : '达成率', width : 85,sort: true} ,
+							{fixed:'left',field : 'ITEM_NO', title : '物料编码', width : 140,sort: true},
+							{field : 'WS_SECTION', title : '工段', width : 70},
+							{field : 'FMEMO', title : '备注', width : 80},
 							{field : 'TASK_NO', title : '制令单号', width : 150,sort: true},
+							{field : 'ITEM_NAME', title : '物料描述', width : 240,sort: true},
+							{field : 'QTY_PLAN', title : '制单数量', width : 80},
+							{field : 'OTPT_QTY', title : '包装数量', width : 80},
+							{field : 'ORDER_RATE', title : '包装完成率', width : 90} ,
 						] ],
 						page : false,
 						request : {
@@ -393,7 +393,7 @@ $(function() {
 						width : 160,sort: true
 					}, {
 						field : 'QUANTITY',
-						title : '产出数量',
+						title : '包装数量',
 						width : 100,sort: true
 					},{
 						field : 'SCAN_TYPE',
