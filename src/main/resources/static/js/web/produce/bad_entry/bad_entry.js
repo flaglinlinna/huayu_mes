@@ -46,7 +46,7 @@ $(function() {
 								hide : true
 							}, {
 								field : 'BOARD_BARCODE',
-								title : '条码',
+								title : '小条码',
 								width : 180,
 								sort: true
 							}, {
@@ -240,8 +240,8 @@ $(function() {
 								type : 'numbers'
 							}, {
 								field : 'BOARD_BARCODE',
-								title : '物料条码',
-								width : 160
+								title : '小条码',
+								width : 180
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
