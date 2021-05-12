@@ -182,7 +182,7 @@ $(function() {
 							height : 'full-65',// 固定表头&full-查询框高度
 							// even : true,// 条纹样式
 							page : true,
-							limit:20,
+							limit:50,
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -214,9 +214,10 @@ $(function() {
 									if (d.itp != null) {return d.itp.itemType;} 
 									else {return "";}
 							},style : 'background-color:#d2d2d2'},
+							{field : 'bsGroups',title : '损耗分组',width : 120,"edit" : "text"},
 							{field : 'bsMaterName',title : '材料名称',sort : true,width : 200,edit: "text"},
 							{field : 'bsModel',title : '材料规格',width : 200,edit: "text"},
-							{field : 'bsGroups',title : '损耗分组',width : 120,"edit" : "text"},
+
 							{field : 'bsQty',title : 'BOM用量',width : 90,edit: "text"},
 							// {field : 'bsProQty',title : '制品重(g)',width : 90},
 							{field : 'unit',title : 'BOM用量单位',width : 110,
