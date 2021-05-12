@@ -82,6 +82,15 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsName", value = "Bom零件名称")
 	@Column(length = 500)
 	protected String bsName;
+
+	/**
+	 * 关联零件
+	 */
+	@ApiModelProperty(name = "bsLinkName", value = "关联零件")
+	@Column(length = 100)
+	protected String bsLinkName;
+
+
 	 /**
 	 * 组件名称
 	 */
@@ -617,5 +626,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBjModelType(BjModelType bjModelType) {
 		this.bjModelType = bjModelType;
+	}
+
+	public String getBsLinkName() {
+		return bsLinkName;
+	}
+
+	public void setBsLinkName(String bsLinkName) {
+		this.bsLinkName = bsLinkName;
 	}
 }

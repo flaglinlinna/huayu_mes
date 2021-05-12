@@ -78,6 +78,17 @@ public class QuoteProcess extends BaseEntity {
 	protected String bsName;
 
 	/**
+	 * 关联零件
+	 */
+	@ApiModelProperty(name = "bsLinkName", value = "关联零件")
+	@Column(length = 100)
+	protected String bsLinkName;
+
+	@Transient
+	protected String bsComponentList;
+
+
+	/**
 	 * 工作中心
 	 */
 	@ApiModelProperty(name="pkWorkCenter",value="工作中心")
@@ -109,6 +120,7 @@ public class QuoteProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsElement", value = "组件名称")
 	@Column(length = 500)
 	protected String bsElement;
+
     
 	
 	/**
@@ -330,5 +342,21 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setBjWorkCenter(BjWorkCenter bjWorkCenter) {
 		this.bjWorkCenter = bjWorkCenter;
+	}
+
+	public String getBsLinkName() {
+		return bsLinkName;
+	}
+
+	public void setBsLinkName(String bsLinkName) {
+		this.bsLinkName = bsLinkName;
+	}
+
+	public String getBsComponentList() {
+		return bsComponentList;
+	}
+
+	public void setBsComponentList(String bsComponentList) {
+		this.bsComponentList = bsComponentList;
 	}
 }

@@ -420,10 +420,12 @@ $(function() {
 				}
 			},
 			cols : [ [
-				{fixed:'left',type : 'numbers'},
+				{type : 'numbers'},
 				//{field : 'BS_ELEMENT',width : 120,title : '组件名称',sort : true,totalRowText : "合计"},
-				{fixed:'left',field : 'BS_NAME',width : 150,title : '零件名称'},
-				{fixed:'left',field : 'WORKCENTER_NAME',width : 110,title : '工作中心'
+				{field : 'BS_ELEMENT',width : 130,title : '组件名称'},
+				{field : 'BS_NAME',width : 150,title : '零件名称'},
+				{field : 'BS_LINK_NAME',width : 150,title : '所属零件'},
+				{field : 'WORKCENTER_NAME',width : 110,title : '工作中心'
 					// templet : function(d) {
 					// 	if (d.proc != null) {
 					// 		if (d.proc.bjWorkCenter != null) {
@@ -436,7 +438,7 @@ $(function() {
 					// 	}
 					// }
 					},
-				{fixed:'left',field : 'PROC_NAME',width : 100,title : '工序名称'
+				{field : 'PROC_NAME',width : 105,title : '工序名称'
 					// templet : function(d) {
 					// 	if (d.proc != null) {
 					// 		return d.proc.procName == null || undefined ? "" : d.proc.procName;
@@ -445,9 +447,9 @@ $(function() {
 					// 	}
 					// }
 					},
-				{fixed:'left',field : 'BS_ORDER',width : 60,title : '顺序'},
-				{fixed:'left',field : 'BS_GROUPS',title : '损耗分组',width : 90},
-				{field : 'BS_MATER_COST',title : '材料成本',width : 80,totalRow : true},
+				{field : 'BS_ORDER',width : 60,title : '顺序'},
+				{field : 'BS_GROUPS',title : '损耗分组',width : 90},
+				{field : 'BS_MATER_COST',title : '材料成本',width : 88,totalRow : true},
 				{field : 'BS_FEE_LH_ALL',title : '人工成本',width : 80,totalRow : true},
 				{field : 'BS_FEE_MH_ALL',title : '制造成本',width : 80,totalRow : true},
 				{field : 'BS_FEE_WX_ALL',title : '外协成本',width : 80,totalRow : true},
@@ -795,6 +797,8 @@ function getLossDetail(title){
 	tableIns3.reload({
 		url : context + '/quoteSum/getSumList?quoteId=' + quoteId,
 		done : function(res, curr, count) {
+			merge(res.data, [ 'BS_ELEMENT' ], [ 1,1]);
+			merge(res.data, [ 'BS_LINK_NAME' ], [ 3,3]);
 			pageCurr = curr;
 			var onwanceTotal=0;
 			var yieldTotal = 100;

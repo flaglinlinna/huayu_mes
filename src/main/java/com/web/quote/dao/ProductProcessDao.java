@@ -49,28 +49,30 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteOrderByBsOrderDesc(Integer delFlag,Long pkQuote);
 
+	public List<ProductProcess> findByDelFlagAndPkQuoteOrderByBsElementDescBsLinkNameDescBsOrderDesc(Integer delFlag,Long pkQuote);
+
 //	@Query(value = "select a.* from (select p from ProductProcess p  where p.delFlag=0 and p.pkQuote =?1 and p.bsGroups is empty " +
 //			"UNION select c from ProductProcess c where c.id in (select max(d.id) from ProductProcess d  where  d.defFlag=0  and d.pkQuote =?1 and d.bsGroups is not null group by d.bsGroups)) a")
 //	public List<ProductProcess> findSumList2(Long pkQuote);
 
 	public List<ProductProcess> findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(String bsName,String element,Long pkQuote,String bsType,Integer delFlag,String bsMaterName);
 
-	@Query(value = "select * from (select pp.id,pp.bs_groups,pp.BS_ELEMENT,pp.BS_ORDER,bs_Name,bs_Mater_Cost,bs_Fee_Lh_All,bs_Fee_Mh_All,bs_Fee_Wx_All,bs_Yield," +
+	@Query(value = "select * from (select pp.id,pp.bs_linK_name,pp.bs_groups,pp.BS_ELEMENT,pp.BS_ORDER,bs_Name,bs_Mater_Cost,bs_Fee_Lh_All,bs_Fee_Mh_All,bs_Fee_Wx_All,bs_Yield," +
 			"bs_The_Loss,pp.BS_COST,pp.BS_ALL_LOSS,bp.PROC_NAME,bw.workcenter_Name from PRICE_PRODUCT_PROCESS pp left join BJ_BASE_PROC bp on pp.PK_PROC = bp.id" +
 			" LEFT JOIN BJ_BASE_WORKCENTER bw on bw.id = bp.workcenter_Id  where pp.PK_QUOTE = ?1 and pp.BS_GROUPS is null  and pp.DEL_FLAG = 0 " +
 			"UNION" +
-			" select pp.id,pp.bs_groups,pp.BS_ELEMENT,pp.BS_ORDER,bs_Name,bs_Mater_Cost,bs_Fee_Lh_All,bs_Fee_Mh_All,bs_Fee_Wx_All,bs_Yield,bs_The_Loss,pp.BS_COST,pp.BS_ALL_LOSS,bp.PROC_NAME," +
+			" select pp.id,pp.bs_linK_name,pp.bs_groups,pp.BS_ELEMENT,pp.BS_ORDER,bs_Name,bs_Mater_Cost,bs_Fee_Lh_All,bs_Fee_Mh_All,bs_Fee_Wx_All,bs_Yield,bs_The_Loss,pp.BS_COST,pp.BS_ALL_LOSS,bp.PROC_NAME," +
 			"bw.workcenter_Name from PRICE_PRODUCT_PROCESS pp  left join BJ_BASE_PROC bp on pp.PK_PROC = bp.id LEFT JOIN BJ_BASE_WORKCENTER bw on bw.id = bp.workcenter_Id  where pp.PK_QUOTE = ?1" +
 			" and pp.BS_GROUPS is not null and pp.DEL_FLAG = 0 and pp.bs_order in (select max(p.bs_order) from PRICE_PRODUCT_PROCESS p " +
-			" where p.PK_QUOTE = ?1 and p.BS_GROUPS is not null and p.DEL_FLAG = 0 GROUP BY p.BS_GROUPS)  " +
-			" ) ORDER BY BS_ORDER" +
+			" where p.PK_QUOTE = ?1 and p.BS_GROUPS is not null and p.DEL_FLAG = 0 GROUP BY p.BS_ELEMENT,p.bs_link_name,p.BS_GROUPS)  " +
+			" ) ORDER BY  BS_ELEMENT,bs_linK_name,BS_ORDER" +
 			" ",nativeQuery = true,
 			countQuery = "select count(id) from (select pp.id from PRICE_PRODUCT_PROCESS pp left join BJ_BASE_PROC bp on pp.PK_PROC = bp.id" +
 					" LEFT JOIN BJ_BASE_WORKCENTER bw on bw.id = bp.workcenter_Id  where pp.PK_QUOTE = ?1 and pp.BS_GROUPS is null  and pp.DEL_FLAG = 0" +
 					" UNION"  +
 					" select max(pp.id) from PRICE_PRODUCT_PROCESS pp" +
 					" left join BJ_BASE_PROC bp on pp.PK_PROC = bp.id LEFT JOIN BJ_BASE_WORKCENTER bw on bw.id = bp.workcenter_Id where pp.PK_QUOTE = ?1" +
-					" and pp.BS_GROUPS is not null  and pp.DEL_FLAG = 0 GROUP BY pp.BS_GROUPS)")
+					" and pp.BS_GROUPS is not null  and pp.DEL_FLAG = 0 GROUP BY pp.BS_ELEMENT,pp.bs_link_name,pp.BS_GROUPS)")
 	public  Page<Map<String, Object>> getSumList(Long pkQuote,Pageable pageable);
 
 	@Query(value = "select" +
@@ -78,6 +80,6 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 			" sum(bs_Fee_Lh_All) as bs_Fee_Lh_All," +
 			" sum(bs_Fee_Mh_All) as bs_Fee_Mh_All," +
 			" sum(bs_Fee_Wx_All) as bs_Fee_Wx_All" +
-			" from PRICE_PRODUCT_PROCESS pp  where pp.PK_QUOTE = ?1 and pp.BS_GROUPS =?2 and pp.DEL_FLAG = 0",nativeQuery = true)
-	public List<Map<String,Object>> getSumByBsGroups(Long pkQuote,String bsGroups);
+			" from PRICE_PRODUCT_PROCESS pp  where pp.PK_QUOTE = ?1 and pp.BS_GROUPS =?2 and pp.bs_element = ?3 and pp.bs_name =?4 and pp.DEL_FLAG = 0",nativeQuery = true)
+	public List<Map<String,Object>> getSumByBsGroups(Long pkQuote,String bsGroups,String bsElement,String bsLinkName);
 }

@@ -34,8 +34,10 @@ $(function() {
 				{type:'checkbox'},
 				{type : 'numbers'},
 			{field:'id',title:'ID', width:80, hide:true},
+			{field : 'bsElement',width : 190,title : '组件名称',style : 'background-color:#d2d2d2'},
 			{field : 'bsName',width : 190,title : '零件名称',style : 'background-color:#d2d2d2'},
-			// {field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'bsLinkName',width : 190,title : '关联零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
+				// {field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'workCenter',title : '工作中心',width : 120,templet :
 				function(d){if(d.bjWorkCenter!=null){
 					return d.bjWorkCenter.workcenterName
@@ -85,7 +87,7 @@ $(function() {
 				totalCount = res.count
 				pageCurr = curr;
 				var tableView = this.elem.next(); // 当前表格渲染之后的视图
-				merge(res.data, [ 'bsName'], [2,3]);
+				merge(res.data, [ 'bsName'], [3,4]);
 				// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
 
 				res.data.forEach(function (item, index) {
@@ -1035,7 +1037,7 @@ function loadAll() {
 			}
 
 			var tableView = this.elem.next(); // 当前表格渲染之后的视图
-			merge(res.data, [ 'bsName'], [2,3]);
+			merge(res.data, [ 'bsName'], [3,4]);
 			// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
 
 			res.data.forEach(function (item, index) {

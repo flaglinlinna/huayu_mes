@@ -157,6 +157,19 @@
 			</select>
 		</script>
 
+		<script type="text/html" id="selectLink" >
+			<select name="selectLink" lay-filter="selectLink" lay-search>
+				{{# if(d.bsComponentList!=null){ }}
+				<option value="">请选择</option>
+				{{# layui.each($.parseJSON( d.bsComponentList ), function(index, item){     }}
+				<option value="{{ item.BSCOMPONENT }}"  {{ d.bsLinkName==item.BSCOMPONENT?'selected':''}}>{{ item.BSCOMPONENT }}</option>
+				{{# });  }}
+				{{# } else { }}
+				<option value="{{ d.bsName }}" selected>{{ d.bsName  }}</option>
+				{{# } }}
+			</select>
+		</script>
+
 		<script type="text/html" id="selectBsGroups" >
 			<select name="selectBsGroups" 	lay-filter="selectBsGroups" lay-search>
 				<option value="">请选择</option>

@@ -534,12 +534,13 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //			pp.setBsLossHouMh(new BigDecimal("0"));
 		}
 		productProcessDao.saveAll(lpp_out);
-		List<ProductProcess> processAllList = productProcessDao.findByDelFlagAndPkQuoteOrderByBsOrderDesc(0,Long.parseLong(quoteId));
+		List<ProductProcess> processAllList = productProcessDao.findByDelFlagAndPkQuoteOrderByBsElementDescBsLinkNameDescBsOrderDesc(0,Long.parseLong(quoteId));
 		List<ProductProcess> processList = new ArrayList<>();
 		HashSet<String> groupSet = new HashSet<>();
 		for(ProductProcess o :processAllList){
 			if(StringUtils.isNotEmpty(o.getBsGroups())){
-				if(groupSet.add(o.getBsGroups())){
+				//根据分组和零件名称和组件判断是否加入损耗计算
+				if(groupSet.add(o.getBsGroups()+o.getBsLinkName()+o.getBsElement())){
 					processList.add(o);
 				}
 			}else {
@@ -759,7 +760,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		for(Map<String,Object> map :maps){
 			if(map.get("BS_GROUPS")!=null){
-				List<Map<String,Object>> sumList = productProcessDao.getSumByBsGroups(quoteId,map.get("BS_GROUPS").toString());
+				List<Map<String,Object>> sumList = productProcessDao.getSumByBsGroups(quoteId,map.get("BS_GROUPS").toString()
+						,map.get("BS_ELEMENT").toString(),map.get("BS_LINK_NAME").toString());
 //				map.put("BS_MATER_COST",sumList.get(0).get("BS_MATER_COST"));
 				map.put("BS_FEE_LH_ALL",sumList.get(0).get("BS_FEE_LH_ALL"));
 				map.put("BS_FEE_MH_ALL",sumList.get(0).get("BS_FEE_MH_ALL"));

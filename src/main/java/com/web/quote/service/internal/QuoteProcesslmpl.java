@@ -106,6 +106,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		Specification<QuoteProcess> spec1 = spec.and(BaseService.or(filters1, QuoteProcess.class));
 		Page<QuoteProcess> page = quoteProcessDao.findAll(spec1, pageRequest);
 		List<QuoteProcess> quoteProcessList = page.getContent();
+		List<Map<String, Object>> elementList = quoteBomDao.getBsComponent(Long.parseLong(pkQuote));
 		for(QuoteProcess o:quoteProcessList) {
 			List<Map<String, Object>> procList = new ArrayList<>();
 			if(!("out").equals(o.getBjWorkCenter().getBsCode())){
@@ -117,24 +118,35 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //			if(mapList.size()==1){
 //				o.setBsMaterName(mapList.get(0).get("BSMATERNAME").toString());
 //			}
-			List<Map<String, Object>> groupsList = quoteBomDao.getBsGroups(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
+//			List<Map<String, Object>> groupsList = quoteBomDao.getBsGroups(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
 
-				if (StringUtils.isNotEmpty(o.getBsMaterName())) {
-					if (o.getPkQuoteBom() == null) {
-						for (Map<String, Object> map : mapList) {
-							if (o.getBsMaterName().equals(map.get("BSMATERNAME"))) {
-								o.setPkQuoteBom(Long.parseLong(map.get("ID").toString()));
-								o.setBsGroups(map.get("BSGROUPS") == null ? "" : map.get("BSGROUPS").toString());
-							}
+			if (StringUtils.isNotEmpty(o.getBsMaterName())) {
+				if (o.getPkQuoteBom() == null) {
+					for (Map<String, Object> map : mapList) {
+						if (o.getBsMaterName().equals(map.get("BSMATERNAME"))) {
+							o.setPkQuoteBom(Long.parseLong(map.get("ID").toString()));
+							o.setBsGroups(map.get("BSGROUPS") == null ? "" : map.get("BSGROUPS").toString());
 						}
 					}
 				}
-				if (mapList.size() > 0) {
-					o.setBsMaterNameList(JSON.toJSONString(mapList));
+			}
+//			if (mapList.size() > 0) {
+//				o.setBsMaterNameList(JSON.toJSONString(mapList));
+//			}
+//			if (groupsList.size() > 0) {
+//				o.setBsGroupsList(JSON.toJSONString(groupsList));
+//			}
+
+			if(o.getQuoteBom()!=null) {
+				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
+					if(elementList.size()>0){
+						o.setBsComponentList(JSON.toJSONString(elementList));
+						o.setBsLinkName(elementList.get(0).get("BSCOMPONENT").toString());
+					}
+				}else {
+					o.setBsLinkName(o.getBsName());
 				}
-				if (groupsList.size() > 0) {
-					o.setBsGroupsList(JSON.toJSONString(groupsList));
-				}
+			}
 
 			if(procList.size() >0){
 				o.setBsProcList(JSON.toJSONString(procList));
