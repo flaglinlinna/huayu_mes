@@ -112,7 +112,7 @@ $(function() {
 							{field : 'TASK_NO', title : '制令单号', width : 150,sort: true},
 							{field : 'ITEM_NAME', title : '物料描述', width : 240,sort: true},
 							{field : 'QTY_PLAN', title : '制单数量', width : 80},
-							{field : 'OTPT_QTY', title : '包装数量', width : 80},
+							{field : 'OTPT_QTY', title : '已包装数量', width : 80},
 							{field : 'ORDER_RATE', title : '包装完成率', width : 90} ,
 						] ],
 						page : false,

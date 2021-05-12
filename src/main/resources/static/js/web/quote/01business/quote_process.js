@@ -31,12 +31,12 @@ $(function() {
 				}
 			},
 			cols : [ [
-				{type:'checkbox'},
-				{type : 'numbers'},
-			{field:'id',title:'ID', width:80, hide:true},
-			{field : 'bsElement',width : 190,title : '组件名称',style : 'background-color:#d2d2d2'},
-			{field : 'bsName',width : 190,title : '零件名称',style : 'background-color:#d2d2d2'},
-			{field : 'bsLinkName',width : 190,title : '关联零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
+				{fixed:'left',type:'checkbox'},
+				{fixed:'left',type : 'numbers'},
+			{fixed:'left',field:'id',title:'ID', width:80, hide:true},
+			{fixed:'left',field : 'bsElement',width : 90,title : '组件名称',style : 'background-color:#d2d2d2'},
+			{fixed:'left',field : 'bsName',width : 150,title : '零件名称',style : 'background-color:#d2d2d2'},
+			{fixed:'left',field : 'bsLinkName',width : 150,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
 				// {field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'workCenter',title : '工作中心',width : 120,templet :
 				function(d){if(d.bjWorkCenter!=null){
@@ -87,7 +87,8 @@ $(function() {
 				totalCount = res.count
 				pageCurr = curr;
 				var tableView = this.elem.next(); // 当前表格渲染之后的视图
-				merge(res.data, [ 'bsName'], [3,4]);
+				//merge(res.data, [ 'bsElement'], [3,3]);
+				//merge(res.data, [ 'bsName'], [4,4]);
 				// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
 
 				res.data.forEach(function (item, index) {
@@ -1037,7 +1038,8 @@ function loadAll() {
 			}
 
 			var tableView = this.elem.next(); // 当前表格渲染之后的视图
-			merge(res.data, [ 'bsName'], [3,4]);
+			//erge(res.data, [ 'bsElement'], [3,3]);
+			//merge(res.data, [ 'bsName'], [4,4]);
 			// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
 
 			res.data.forEach(function (item, index) {
