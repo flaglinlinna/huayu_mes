@@ -42,6 +42,7 @@ $(function () {
                     ,
                     limitName : 'rows' // 每页数据量的参数名，默认：limit
                 },
+
                 parseData : function(res) {
                     if(res.result){
                         // 可进行数据操作
@@ -135,6 +136,10 @@ $(function () {
                     }}
                 , cellMinWidth: 80
                 , page: true,
+            height:'full-200'//固定表头&full-查询框高度
+            ,even:true,//条纹样式
+            limit:30,
+            limits:[30,50,100,200,300],
                 request: {
                     pageName: 'page' //页码的参数名称，默认：page
                     , limitName: 'rows' //每页数据量的参数名，默认：limit
@@ -149,26 +154,27 @@ $(function () {
                     }
                 },
                 cols: [[
-                    {type: 'numbers'}
-                    , {type: 'checkbox'}
+                    {fixed:'left',type: 'numbers'}
+                    , {fixed:'left',type: 'checkbox'}
                     // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
                     // ,{field:'departName', title:'部门', width:60, templet:'<span>{{d.department ? d.department.bsName : ""}}<span>'}
-                    , {field: 'CHECK_STATUS', title: '校验结果', width: 90, templet: '#statusTpl'}
-                    , {field: 'ENABLED', title: '生效状态', width: 80, templet: '#enabledTpl'}
-                    , {field: 'ERROR_INFO', title: '错误信息', width: 160}
+                    , {fixed:'left',field: 'CHECK_STATUS', title: '校验结果', width: 80, templet: '#statusTpl'}
+                    , {fixed:'left',field: 'ENABLED', title: '生效状态', width: 80, templet: '#enabledTpl'}
+                    , {fixed:'left',field: 'ERROR_INFO', title: '错误信息', width: 160}
+                    , {fixed:'left',field: 'LINER_NAME', title: '组长', width: 70}
+                    , {fixed:'left',field: 'ITEM_NO', title: '物料编码', width: 145}
                     , {field: 'PROD_NO', title: '工单号', width: 130}
-                    , {field: 'WS_SECTION', title: '工段', width: 130}
-                    , {field: 'FMEMO', title: '备注', width: 130}
+                    , {field: 'WS_SECTION', title: '工段', width: 60}
+                    , {field: 'FMEMO', title: '备注', width: 80}
                     , {
                         field: 'TASK_NO', title: '生产制令单', width: 150,
                         templet: '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" onclick="toSchedulingEdit({{d.TASK_ID}})">{{ d.TASK_NO==null?"":d.TASK_NO }}</a></div>'
                     }
-                    , {field: 'GROUP_NO', title: '组合', width: 70}
-                    , {field: 'CUST_NAME', title: '客户', width: 120}
-                    , {field: 'LINER_NAME', title: '组长', width: 70}
-                    , {field: 'ITEM_NO', title: '物料编码', width: 150}
+                    //, {field: 'GROUP_NO', title: '组合', width: 70}
+
                     , {field: 'ITEM_NAME', title: '物料描述', width: 150}
-                    , {field: 'QTY_PLAN', title: '计划数量', width: 100}
+                    , {field: 'QTY_PLAN', title: '计划数量', width: 80}
+                    , {field: 'CUST_NAME', title: '客户', width: 160}
                     , {fixed: 'right', title: '操作', width: 80, align: 'center', toolbar: '#optBar'}
                 ]]
                 , done: function (res, curr, count) {

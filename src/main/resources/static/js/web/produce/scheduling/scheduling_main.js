@@ -36,8 +36,10 @@ $(function () {
             ,cellMinWidth: 80
             ,page: true
             , toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-            ,height:'full-130'//固定表头&full-查询框高度
+            ,height:'full-80'//固定表头&full-查询框高度
             ,even:true,//条纹样式
+            limit:30,
+            limits:[30,50,100,200,300],
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit

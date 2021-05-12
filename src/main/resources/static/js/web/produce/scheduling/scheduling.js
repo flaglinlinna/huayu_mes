@@ -18,8 +18,10 @@ $(function () {
             // ,cellMinWidth: 80
             ,page: true
             , toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-            ,height:'full-130'//固定表头&full-查询框高度
+            ,height:'full-80'//固定表头&full-查询框高度
             ,even:true,//条纹样式
+            limit:30,
+            limits:[30,50,100,200,300],
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit
@@ -47,7 +49,7 @@ $(function () {
                 ,{field:'LINER_NAME', title:'组长', width:70,align: 'center',fixed:'left'}
                 ,{field:'FMODEL', title:'产品型号', width:90,align: 'center',fixed:'left'}
                 ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center',fixed:'left'}
-                ,{field:'TASK_NO', title:'制令单号', width:170,align: 'center'}
+                ,{field:'TASK_NO', title:'制令单号', width:150,align: 'center'}
                 ,{field:'CLASS_NO', title:'班次', width:60,align: 'center'}
                 ,{field:'QTY_PLAN', title:'计划数量', width:80,align: 'center'}
                 ,{field:'QTY_DONE', title:'完工数', width:80,align: 'center'}

@@ -446,7 +446,7 @@ $(function() {
 					// }
 					},
 				{fixed:'left',field : 'BS_ORDER',width : 60,title : '顺序'},
-				{fixed:'left',field : 'BS_GROUPS',title : '损耗分组',width : 80},
+				{fixed:'left',field : 'BS_GROUPS',title : '损耗分组',width : 90},
 				{field : 'BS_MATER_COST',title : '材料成本',width : 80,totalRow : true},
 				{field : 'BS_FEE_LH_ALL',title : '人工成本',width : 80,totalRow : true},
 				{field : 'BS_FEE_MH_ALL',title : '制造成本',width : 80,totalRow : true},

@@ -182,7 +182,10 @@
         var schedulingMain = mapData ? mapData.schedulingMain : null;
         var deptList = mapData ? mapData.deptList : null;
     </script>
-    <script th:src="@{/js/web/produce/scheduling/scheduling_main_add.js}" src="/js/web/produce/scheduling/scheduling_main_add.js"></script>
+    <script>
+        document.write("<script type='text/javascript' " +
+            "src='/js/web/produce/scheduling/scheduling_main_add.js?ver="+Math.random()+"'><\/script>");
+    </script>
 </div>
 </body>
 </html>
