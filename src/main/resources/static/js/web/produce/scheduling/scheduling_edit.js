@@ -209,7 +209,9 @@ $(function () {
                         }
                     }
                     ,cellMinWidth: 80
+                    ,height:'full-150'//固定表头&full-查询框高度
                     ,page: false,
+
                     request: {
                         pageName: 'page' //页码的参数名称，默认：page
                         ,limitName: 'rows' //每页数据量的参数名，默认：limit
@@ -256,6 +258,7 @@ $(function () {
                     ,method: 'get' //默认：get请求
                     ,where:{ mid:id }
                     ,cellMinWidth: 80
+                    ,height:'full-150'//固定表头&full-查询框高度
                     ,page: true,
                     request: {
                         pageName: 'page' //页码的参数名称，默认：page
@@ -299,6 +302,7 @@ $(function () {
                     ,method: 'get' //默认：get请求
                     ,where:{ mid:id }
                     ,cellMinWidth: 80
+                    ,height:'full-150'//固定表头&full-查询框高度
                     ,page: true,
                     request: {
                         pageName: 'page' //页码的参数名称，默认：page
@@ -343,6 +347,7 @@ $(function () {
                     ,method: 'get' //默认：get请求
                     ,where:{ mid:id }
                     ,cellMinWidth: 80
+                    ,height:'full-150'//固定表头&full-查询框高度
                     ,page: true,
                     align:'center',
                     request: {
@@ -392,8 +397,9 @@ $(function () {
                             return  $("#taskNo").val();
                         }
                     }
-                    ,cellMinWidth: 80,
-                    limit:50,
+                    ,cellMinWidth: 80
+                    ,height:'full-150'//固定表头&full-查询框高度
+                    , limit:50,
                     // ,page: true,
                     align:'center',
                     request: {
@@ -443,8 +449,9 @@ $(function () {
                             return  $("#taskNo").val();
                         }
                     }
-                    ,cellMinWidth: 80,
-                    limit:50,
+                    ,cellMinWidth: 80
+                    ,height:'full-150'//固定表头&full-查询框高度
+                    , limit:50,
                     // ,page: true,
                     align:'center',
                     request: {
@@ -497,7 +504,9 @@ $(function () {
                             return  $("#taskNo").val();
                         }
                     }
-                    ,cellMinWidth: 80,
+                    ,cellMinWidth: 80
+                    ,height:'full-150'//固定表头&full-查询框高度
+                    ,
                     // limit:50,
                     page: true,
                     align:'center',
