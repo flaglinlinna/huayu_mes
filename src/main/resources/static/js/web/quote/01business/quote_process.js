@@ -15,7 +15,7 @@ $(function() {
 			height : 'full-65',
 			even : true,// 条纹样式
 			page : true,
-			limit:20,
+			limit:50,
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -30,36 +30,78 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {type : 'numbers'},
-			// {field:'id', title:'ID', width:80, unresize:true, sort:true},
-			{field : 'bsName',title : '零件名称',style : 'background-color:#d2d2d2'},
-			{field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'procName',title : '工序名称',templet : '<div>{{d.proc.procName}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'workCenter',title : '工作中心',templet : '<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'bsOrder',title : '工序顺序',"edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
-			{field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,style : 'background-color:#d2d2d2',align : 'center',
-				templet : function(d) {
-					if(d.proc.bjWorkCenter.bsCode !="out") {
-						if (d.bsFeeLh == null || d.bsFeeLh == '') {
-							return "<div class='orange'>否</div>"
-						} else {
-							return "<div class='green'>是</div>"
-						}
-					}else {
-						return "<div class='green'>一</div>"
-					}
-			}}, 
-			{field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
-				templet : function(d) {
-					if (d.fmemo == null) {return ""} else {return d.fmemo}
-			}}, 
-			{fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar'
-			} ] ],
+			cols : [ [
+				{fixed:'left',type:'checkbox'},
+				{fixed:'left',type : 'numbers'},
+			{fixed:'left',field:'id',title:'ID', width:80, hide:true},
+			{fixed:'left',field : 'bsElement',width : 90,title : '组件名称',style : 'background-color:#d2d2d2'},
+			{fixed:'left',field : 'bsName',width : 150,title : '零件名称',style : 'background-color:#d2d2d2'},
+			{fixed:'left',field : 'bsLinkName',width : 150,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
+				// {field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'workCenter',title : '工作中心',width : 100,templet :
+				function(d){if(d.bjWorkCenter!=null){
+					return d.bjWorkCenter.workcenterName
+						}else {
+					return "";
+				}
+					},
+				style : 'background-color:#d2d2d2'},
+				{field : 'pkProc',title : '工序名称',width : 180,templet :  '#selectProc',style : 'background-color:#ffffff'},
+				{field : 'bsOrder',title : '顺序',width : 60,"edit" : "number","event" : "dataCol",sort:true,style : 'background-color:#ffffff'},
+			// {field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,style : 'background-color:#d2d2d2',align : 'center',
+			// 	templet : function(d) {
+			// 		if(d.proc.bjWorkCenter.bsCode !="out") {
+			// 			if (d.bsFeeLh == null || d.bsFeeLh == '') {
+			// 				return "<div class='orange'>否</div>"
+			// 			} else {
+			// 				return "<div class='green'>是</div>"
+			// 			}
+			// 		}else {
+			// 			return "<div class='green'>一</div>"
+			// 		}
+			// }},
+
+				// ,templet : '#selectBsMaterName'
+				{field : 'bsGroups',width : 130,title : '损耗分组',style : 'background-color:#d2d2d2'},
+				{field : 'bsMaterName',width : 220,title : '材料名称',style : 'background-color:#d2d2d2'},
+				// ,templet : '#selectBsMaterName',,templet : '#selectBsGroups'
+				// {field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
+			// 	templet : function(d) {
+			// 		if (d.fmemo == null) {return ""} else {return d.fmemo}
+			// 	}},
+			{field : 'bsModel',title : '材料规格',width : 240,style : 'background-color:#d2d2d2;overflow:hidden !important',
+					templet : function(d) {
+						if (d.quoteBom == null) {
+							return ""
+						}else if(d.quoteBom.bsModel != null) {
+							return  "<div>"+d.quoteBom.bsModel+"</div>"
+						}else {
+							return ""
+						}}
+			},
+			// {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar',style : 'background-color:#ffffff'}
+			] ],
 			done : function(res, curr, count) {
-				// console.log(res)
+
 				totalCount = res.count
 				pageCurr = curr;
-				merge(res.data, [ 'bsName', ], [ 1, 1 ]);
+				var tableView = this.elem.next(); // 当前表格渲染之后的视图
+				//merge(res.data, [ 'bsElement'], [3,3]);
+				//merge(res.data, [ 'bsName'], [4,4]);
+				// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
+
+				res.data.forEach(function (item, index) {
+					// console.log(item);
+					if(item.bsStatus =='1'){
+						tableView.find('tr[data-index=' + index + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
+						$("select[name='selectBsMaterName']").attr("disabled","disabled");
+						$("select[name='selectBsGroups']").attr("disabled","disabled");
+						$("select[name='selectProc']").attr("disabled","disabled");
+						form.render('select');
+					}
+				});
+				form.render();//刷新表单
+
 			}
 		});
 
@@ -118,6 +160,38 @@ $(function() {
 				}
 			}
 		});
+
+		//监听机台类型下拉选择 并修改
+		form.on('select(selectBsMaterName)', function (data) {
+			//获取当前行tr对象
+			var elem = data.othis.parents('tr');
+			//第一列的值是Guid，取guid来判断
+			var Guid= elem.first().find('td').eq(1).text();
+			//选择的select对象值；
+			var selectValue = data.value;
+			updateBsMaterName(Guid,selectValue);
+		})
+
+		form.on('select(selectProc)', function (data) {
+			//获取当前行tr对象
+			var elem = data.othis.parents('tr').attr('data-index');
+			//第一列的值是Guid，取guid来判断
+			// var Guid= elem.first().find('td').eq(1).text();
+			//选择的select对象值；
+			// var selectValue = data.value;
+			layui.table.cache['client_procList'][elem].pkProc = data.value;
+			// updateProc(Guid,selectValue);
+		})
+
+		form.on('select(selectBsGroups)', function (data) {
+			//获取当前行tr对象
+			var elem = data.othis.parents('tr');
+			//第一列的值是Guid，取guid来判断
+			var Guid= elem.first().find('td').eq(1).text();
+			//选择的select对象值；
+			var selectValue = data.value;
+			updateBsGroups(Guid,selectValue);
+		})
 
 		// 工作中心列表
 		cTableSelect = tableSelect1.render({
@@ -198,7 +272,8 @@ $(function() {
 
 		tableProc = table.render({
 			elem : '#procList',
-			limit : 20,
+			limit : 50,
+			height : 'full-65',
 			page:true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -254,8 +329,22 @@ $(function() {
 				    {field : 'checkColumn',type:"checkbox"},
 			        // {field : 'bsName',title : '零件名称',style:'background-color:#d2d2d2'},
 			        // {field : 'procNo',title : '工序编码',templet:'<div>{{d.proc.procNo}}</div>',style:'background-color:#d2d2d2'},
-			        {field : 'procName',title : '工序名称',minWidth:100,templet:'<div>{{d.proc.procName}}</div>',style:'background-color:#d2d2d2'},
-			        {field : 'workCenter',title : '工作中心',minWidth:100,templet:'<div>{{d.proc.bjWorkCenter.workcenterName}}</div>',style:'background-color:#d2d2d2'},
+			        {field : 'procName',title : '工序名称',minWidth:100,templet:function (d){
+			        	if(d.proc!=null){
+			        		return d.proc.procName
+						}else {
+			        		return  "";
+						}
+							// '<div>{{d.proc.procName}}</div>'
+						},style:'background-color:#d2d2d2'},
+			        {field : 'workCenter',title : '工作中心',minWidth:100,templet:function (d){
+							if(d.pkWorkCenter!=null){
+								return d.bjWorkCenter.workcenterName
+							}else {
+								return  "";
+							}
+							// '<div>{{d.proc.procName}}</div>'
+						},style:'background-color:#d2d2d2'},
 			        {field : 'bsOrder',title : '工序顺序',"edit":"number","event": "dataCol",minWidth:80,style : 'background-color:#ffffff'},
 			        {type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#optBar'}
 			] ],
@@ -264,28 +353,28 @@ $(function() {
 		
 		
 		//监听单元格编辑
-		  table.on('edit(client_procTable)', function(obj){
-		    var value = obj.value //得到修改后的值
-		    ,data = obj.data //得到所在行所有键值
-		    ,field = obj.field; //得到字段
-		   // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
-		    var tr = obj.tr;
-	        // 单元格编辑之前的值
-	        var oldtext = $(tr).find("td[data-field='"+obj.field+"'] div").text();
-		    if(field == 'bsOrder'){
-		    	//判断是否为数字
-		    	if(isRealNum(value)){
-		    		doProcOrder(data.id,value);
-		    	}else{
-		    		layer.msg('请填写数字!');
-		    		loadAll();
-		    	}
-		    }
-		    if(field == 'fmemo'){
-		    	//console.log(data.id,value)
-		    	doFmemo(data.id,value)
-		    }
-		  });
+		//   table.on('edit(client_procTable)', function(obj){
+		//     var value = obj.value //得到修改后的值
+		//     ,data = obj.data //得到所在行所有键值
+		//     ,field = obj.field; //得到字段
+		//    // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+		//     var tr = obj.tr;
+	    //     // 单元格编辑之前的值
+	    //     var oldtext = $(tr).find("td[data-field='"+obj.field+"'] div").text();
+		//     if(field == 'bsOrder'){
+		//     	//判断是否为数字
+		//     	if(isRealNum(value)){
+		//     		doProcOrder(data.id,value);
+		//     	}else{
+		//     		layer.msg('请填写数字!');
+		//     		loadAll();
+		//     	}
+		//     }
+		//     if(field == 'fmemo'){
+		//     	//console.log(data.id,value)
+		//     	doFmemo(data.id,value)
+		//     }
+		//   });
 		  table.on('edit(procListCheck)', function(obj){
 			    var value = obj.value //得到修改后的值
 			    ,data = obj.data //得到所在行所有键值
@@ -307,28 +396,28 @@ $(function() {
 
 
 		// 监听单元格编辑
-		table.on('edit(client_procTable)', function(obj) {
-			var value = obj.value // 得到修改后的值
-			, data = obj.data // 得到所在行所有键值
-			, field = obj.field; // 得到字段
-			// layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
-			var tr = obj.tr;
-			// 单元格编辑之前的值
-			var oldtext = $(tr).find("td[data-field='" + obj.field + "'] div").text();
-			if (field == 'bsOrder') {
-				// 判断是否为数字
-				if (isRealNum(value)) {
-					doProcOrder(data.id, value);
-				} else {
-					layer.msg('请填写数字!');
-					loadAll();
-				}
-			}
-			if (field == 'fmemo') {
-				// console.log(data.id,value)
-				doFmemo(data.id, value)
-			}
-		});
+		// table.on('edit(client_procTable)', function(obj) {
+		// 	var value = obj.value // 得到修改后的值
+		// 	, data = obj.data // 得到所在行所有键值
+		// 	, field = obj.field; // 得到字段
+		// 	// layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+		// 	var tr = obj.tr;
+		// 	// 单元格编辑之前的值
+		// 	var oldtext = $(tr).find("td[data-field='" + obj.field + "'] div").text();
+		// 	if (field == 'bsOrder') {
+		// 		// 判断是否为数字
+		// 		if (isRealNum(value)) {
+		// 			doProcOrder(data.id, value);
+		// 		} else {
+		// 			layer.msg('请填写数字!');
+		// 			loadAll();
+		// 		}
+		// 	}
+		// 	if (field == 'fmemo') {
+		// 		// console.log(data.id,value)
+		// 		doFmemo(data.id, value)
+		// 	}
+		// });
 
 
 		// 监听工具条
@@ -509,7 +598,13 @@ $(function() {
 				"procOrder" : procOrder
 			};
 			CoreUtil.sendAjax("/quoteProcess/doProcOrder", JSON.stringify(param), function(data) {
-				loadAll();
+				if(data.result ==false){
+					layer.alert(data.msg, function(index) {
+						layer.close(index);
+					});
+				}else {
+					loadAll();
+				}
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试", function() {
 					layer.closeAll();
@@ -523,7 +618,14 @@ $(function() {
 				"fmemo" : fmemo
 			};
 			CoreUtil.sendAjax("/quoteProcess/doFmemo", JSON.stringify(param), function(data) {
-				loadAll();
+				if(data.result ==false){
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}else {
+					loadAll();
+				}
 			}, "POST", false, function(res) {
 				layer.alert("操作请求错误，请您稍后再试", function() {
 					layer.closeAll();
@@ -533,10 +635,119 @@ $(function() {
 	});
 });
 
+//更新材料名称
+function updateBsMaterName(id,bomId) {
+	var param = {
+		"id":id,
+		"bomId":bomId
+	}
+	CoreUtil.sendAjax("/quoteProcess/doBsMaterName", JSON.stringify(param),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
+}
+
+function saveTable() {
+	var dates = layui.table.cache['client_procList'];
+	// var tableList = new Array();
+	// console.log(dates);
+	// for(var i=0;i<dates.length;i++){
+	// 	tableList.push({"id":dates[i].id,
+	// 		"pkQuoteBom": dates[i].pkQuoteBom})
+	// }
+	// let tableList = dates.map(items=>{
+	// 	return {
+	// 		id: items.id,
+	// 		pkProc: items.pkProc,
+	// 		bsOrder:items.bsOrder
+	// 	}
+	// })
+	// console.log(tableList);
+	CoreUtil.sendAjax("/quoteProcess/saveTable", JSON.stringify(dates),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
+}
+
+function delTable(){
+	// var dates = layui.table.cache['client_procList'];
+	var data = layui.table.checkStatus('client_procList').data;
+	if(data.length == 0){
+		layer.msg("请先勾选数据!");
+	}else{
+		var id="";
+		for(var i = 0; i < data.length; i++) {
+			id += data[i].id+",";
+		}
+		// delLine(id);
+		delClientProc(id,"list",null);
+	}
+}
+
+function updateProc(id,prodId) {
+	var param = {
+		"id":id,
+		"prodId":prodId
+	}
+	CoreUtil.sendAjax("/quoteProcess/doProc", JSON.stringify(param),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
+}
+
+function updateBsGroups(id,bsGroups) {
+	var param = {
+		"id":id,
+		"bsGroups":bsGroups
+	}
+	CoreUtil.sendAjax("/quoteProcess/doBsGroups", JSON.stringify(param),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
+}
+
 function isComplete() {
 	if (iStatus == 2) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#delListBtn").addClass("layui-btn-disabled").attr("disabled", true)
 	}
 }
 
@@ -568,10 +779,11 @@ function saveProc() {
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
+		saveTable();
 		CoreUtil.sendAjax("/quoteProcess/doStatus", JSON.stringify(param), function(data) {
 			if (data.result == true) {
 				layer.alert("确认完成成功", function() {
-					layer.closeAll();
+					// layer.closeAll();
 					if(data.data =="1"){
 						//项目完成，关闭上一级项目标签页
 						// var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
@@ -583,9 +795,10 @@ function saveProc() {
 					($(window.parent.document).find(('li[lay-id="'+thisUrl+'"]'))).find(".layui-tab-close").trigger("click")
 				});
 			} else {
-				layer.msg(data.msg, {
-					time : 2000, // 2s后自动关闭
-					btn : [ '知道了' ]
+				layer.alert(data.msg, function(index){
+					layer.close(index);
+					// time : 2000, // 2s后自动关闭
+					// btn : [ '知道了' ]
 				});
 			}
 		});
@@ -782,13 +995,64 @@ function load(obj) {
 	});
 }
 
+function loadSelected(){
+	tableProcCheck.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
+		}
+	});
+}
+
 // 重新加载表格（全部）
 function loadAll() {
+	var scrollTop;
+	var scrollLeft;
+	var layuitable = null;
+	var dev_obj = $("#table_and_page_div_id")//定位到表格
+	if (dev_obj != null) {//防止未获取到表格对象
+		layuitable =dev_obj[0].getElementsByClassName("layui-table-main");//定位到layui-table-main对象
+	}
+	if (layuitable != null && layuitable.length > 0) {
+		scrollTop =layuitable[0].scrollTop; //layuitable获取到的是class=layui-table-main的集合，所以直接获取其中的scrollTop属性。
+		scrollLeft=layuitable[0].scrollLeft;
+	}
 	// 重新加载table
 	tableIns.reload({
 		page : {
 			curr : pageCurr
 		// 从当前页码开始
+		}
+		,done: function (res, curr, count) {
+			//滚轮控制
+			totalCount = res.count;
+			pageCurr=curr;
+			dev_obj = $("#table_and_page_div_id")//定位到表格
+			if (dev_obj != null) {
+				layuitable =dev_obj[0].getElementsByClassName("layui-table-main");
+			}
+			if (layuitable != null && layuitable.length > 0) {//将属性放回去
+				layuitable[0].scrollTop = scrollTop;
+				layuitable[0].scrollLeft = scrollLeft;
+			}
+
+			var tableView = this.elem.next(); // 当前表格渲染之后的视图
+			//erge(res.data, [ 'bsElement'], [3,3]);
+			//merge(res.data, [ 'bsName'], [4,4]);
+			// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
+
+			res.data.forEach(function (item, index) {
+				// console.log(item);
+				if(item.bsStatus =='1'){
+					tableView.find('tr[data-index=' + index + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
+					$("select[name='selectBsMaterName']").attr("disabled","disabled");
+					$("select[name='selectBsGroups']").attr("disabled","disabled");
+					$("select[name='selectProc']").attr("disabled","disabled");
+					layui.form.render('select');
+				}
+			});
+			layui.form.render();//刷新表单
+
 		}
 	});
 }

@@ -27,17 +27,17 @@ $(function() {
 					}
 				},
 				cols : [ [
-					{ type: 'radio' },//单选  radio
-					{
+					{ fixed:'left',type: 'radio' },//单选  radio
+					{fixed:'left',
 						field : 'ID',
 						title : 'id',
 						width : 0,hide:true
 					},
-					{
+					{fixed:'left',
 						field : 'ITEM_NO',
 						title : '物料编码'
 					},
-					{
+					{fixed:'left',
 						field : 'ITEM_NAME',
 						title : '物料名称'
 					},

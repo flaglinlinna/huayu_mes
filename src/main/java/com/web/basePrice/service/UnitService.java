@@ -4,6 +4,8 @@ import org.springframework.data.domain.PageRequest;
 import com.app.base.data.ApiResponseResult;
 import com.web.basePrice.entity.Unit;
 
+import java.util.List;
+
 /**
  *
  * @date Nov 4, 2020 4:27:53 PM
@@ -11,6 +13,8 @@ import com.web.basePrice.entity.Unit;
 public interface UnitService {
 
   public ApiResponseResult add(Unit unit) throws Exception;
+
+  public ApiResponseResult editList(List<Unit> unitList) throws Exception;
 
   public ApiResponseResult edit(Unit unit) throws Exception;
 

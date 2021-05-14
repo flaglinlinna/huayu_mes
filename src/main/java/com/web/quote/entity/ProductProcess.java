@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.web.basePrice.entity.BjModelType;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -81,12 +82,28 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsName", value = "Bom零件名称")
 	@Column(length = 500)
 	protected String bsName;
+
+	/**
+	 * 关联零件
+	 */
+	@ApiModelProperty(name = "bsLinkName", value = "关联零件")
+	@Column(length = 100)
+	protected String bsLinkName;
+
+
 	 /**
 	 * 组件名称
 	 */
 	@ApiModelProperty(name = "bsElement", value = "组件名称")
 	@Column(length = 500)
 	protected String bsElement;
+
+	/**
+	 * 材料名称
+	 */
+	@ApiModelProperty(name = "bsMaterName", value = "材料名称")
+	@Column(length = 500)
+	protected String bsMaterName;
     
     /**
      * 关联工序表
@@ -109,12 +126,18 @@ public class ProductProcess extends BaseEntity {
 	protected int bsOrder;
 	
 	/**
-	 * 机台类型
+	 * 机台类型编码
 	 */
-	@ApiModelProperty(name = "bsModelType", value = "机台类型")
+	@ApiModelProperty(name = "bsModelType", value = "机台类型编码")
 	@Column(length = 100)
 	protected String bsModelType;
-	
+
+	@ApiModelProperty(name="bjModelType",hidden=true,value="机台类型")
+	@ManyToOne
+	@JoinColumn(name = "bsModelType",referencedColumnName = "modelCode", insertable = false, updatable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
+	protected BjModelType bjModelType;
+
 	/**
 	 * 基数
 	 */
@@ -141,7 +164,7 @@ public class ProductProcess extends BaseEntity {
 	 */
 	@ApiModelProperty(name = "bsYield", value = "工序良率(%)")
 	@Column(length = 50)
-	protected BigDecimal bsYield=BigDecimal.ZERO;
+	protected BigDecimal bsYield;
 	
 	
 	/**
@@ -279,6 +302,17 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsAllLoss", value = "成本累计(含损耗)")
 	@Column( precision=21, scale=5)
 	protected BigDecimal bsAllLoss;
+
+	/**
+	 * * 2021-04-14 hjj 增加损耗分组计算
+	 * bsGroups分组名称
+	 */
+	/**
+	 * 分组名称
+	 */
+	@ApiModelProperty(name = "bsGroups", value = "分组名称")
+	@Column(length = 100)
+	protected String bsGroups;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -568,5 +602,37 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsMaterCost(BigDecimal bsMaterCost) {
 		this.bsMaterCost = bsMaterCost;
+	}
+
+	public String getBsMaterName() {
+		return bsMaterName;
+	}
+
+	public void setBsMaterName(String bsMaterName) {
+		this.bsMaterName = bsMaterName;
+	}
+
+	public String getBsGroups() {
+		return bsGroups;
+	}
+
+	public void setBsGroups(String bsGroups) {
+		this.bsGroups = bsGroups;
+	}
+
+	public BjModelType getBjModelType() {
+		return bjModelType;
+	}
+
+	public void setBjModelType(BjModelType bjModelType) {
+		this.bjModelType = bjModelType;
+	}
+
+	public String getBsLinkName() {
+		return bsLinkName;
+	}
+
+	public void setBsLinkName(String bsLinkName) {
+		this.bsLinkName = bsLinkName;
 	}
 }

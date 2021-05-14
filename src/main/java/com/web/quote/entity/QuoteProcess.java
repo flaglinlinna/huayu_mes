@@ -2,12 +2,9 @@ package com.web.quote.entity;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.web.basePrice.entity.BjWorkCenter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -79,6 +76,30 @@ public class QuoteProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsName", value = "Bom零件名称")
 	@Column(length = 100)
 	protected String bsName;
+
+	/**
+	 * 关联零件
+	 */
+	@ApiModelProperty(name = "bsLinkName", value = "关联零件")
+	@Column(length = 100)
+	protected String bsLinkName;
+
+	@Transient
+	protected String bsComponentList;
+
+
+	/**
+	 * 工作中心
+	 */
+	@ApiModelProperty(name="pkWorkCenter",value="工作中心")
+	@Column
+	protected Long pkWorkCenter;
+
+	@ApiModelProperty(name="bjWorkCenter",hidden=true,value="报价主表")
+	@ManyToOne
+	@JoinColumn(name = "pkWorkCenter", insertable = false, updatable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
+	protected BjWorkCenter bjWorkCenter;
     
     /**
      * 关联工序表
@@ -99,6 +120,7 @@ public class QuoteProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsElement", value = "组件名称")
 	@Column(length = 500)
 	protected String bsElement;
+
     
 	
 	/**
@@ -120,6 +142,45 @@ public class QuoteProcess extends BaseEntity {
 	@ApiModelProperty(name = "feeMh", value = "制费费率（元/小时）")
 	@Column(length = 50)
 	protected BigDecimal bsFeeMh;
+
+	/**
+	 * 材料名称
+	 */
+	@ApiModelProperty(name = "bsMaterName", value = "材料名称")
+	@Column(length = 200)
+	protected String bsMaterName;
+
+	/**
+	 * 材料名称列表
+	 */
+//	@ApiModelProperty(name = "bsMaterNameList", value = "材料名称列表")
+//	@Column(length = 200)
+	@Transient
+	protected String bsMaterNameList;
+
+	/**
+	 * 分组名称
+	 */
+	@ApiModelProperty(name = "bsGroups", value = "分组名称")
+	@Column(length = 100)
+	protected String bsGroups;
+
+
+	/**
+	 * 分组名称列表
+	 */
+//	@ApiModelProperty(name = "bsGroupsList", value = "分组名称列表")
+//	@Column(length = 1000)
+	@Transient
+	protected String bsGroupsList;
+
+//	/**
+//	 * 已维护人工制费工序列表
+//	 */
+//	@ApiModelProperty(name = "bsProcList", value = "已维护人工制费工序列表")
+//	@Column(length = 1000)
+	@Transient
+	protected String bsProcList;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -225,5 +286,77 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setBsElement(String bsElement) {
 		this.bsElement = bsElement;
+	}
+
+	public String getBsMaterName() {
+		return bsMaterName;
+	}
+
+	public void setBsMaterName(String bsMaterName) {
+		this.bsMaterName = bsMaterName;
+	}
+
+	public String getBsMaterNameList() {
+		return bsMaterNameList;
+	}
+
+	public void setBsMaterNameList(String bsMaterNameList) {
+		this.bsMaterNameList = bsMaterNameList;
+	}
+
+	public String getBsGroups() {
+		return bsGroups;
+	}
+
+	public void setBsGroups(String bsGroups) {
+		this.bsGroups = bsGroups;
+	}
+
+	public String getBsGroupsList() {
+		return bsGroupsList;
+	}
+
+	public void setBsGroupsList(String bsGroupsList) {
+		this.bsGroupsList = bsGroupsList;
+	}
+
+	public Long getPkWorkCenter() {
+		return pkWorkCenter;
+	}
+
+	public void setPkWorkCenter(Long pkWorkCenter) {
+		this.pkWorkCenter = pkWorkCenter;
+	}
+
+	public String getBsProcList() {
+		return bsProcList;
+	}
+
+	public void setBsProcList(String bsProcList) {
+		this.bsProcList = bsProcList;
+	}
+
+	public BjWorkCenter getBjWorkCenter() {
+		return bjWorkCenter;
+	}
+
+	public void setBjWorkCenter(BjWorkCenter bjWorkCenter) {
+		this.bjWorkCenter = bjWorkCenter;
+	}
+
+	public String getBsLinkName() {
+		return bsLinkName;
+	}
+
+	public void setBsLinkName(String bsLinkName) {
+		this.bsLinkName = bsLinkName;
+	}
+
+	public String getBsComponentList() {
+		return bsComponentList;
+	}
+
+	public void setBsComponentList(String bsComponentList) {
+		this.bsComponentList = bsComponentList;
 	}
 }

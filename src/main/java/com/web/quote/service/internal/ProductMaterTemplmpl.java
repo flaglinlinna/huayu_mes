@@ -14,6 +14,7 @@ import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.ProductMaterTemp;
 import com.web.quote.service.ProductMaterTempService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service(value = "ProductMaterTempService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -123,6 +122,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
 
             //删除临时表数据
             productMaterTempDao.deleteByPkQuoteAndBsTypeAndCreateBy(quoteId,bsType,userId);
+            List<Long> idList = productMaterDao.getIdByTypeAndPkQuote(bsType,quoteId);
 
             InputStream fin = file[0].getInputStream();
             XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
@@ -130,17 +130,27 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             NumberFormat nf = NumberFormat.getInstance();
             //获取最后一行的num，即总行数。此处从0开始计数
             int maxRow = sheet.getLastRowNum();
+            if(idList.size()!=maxRow-1){
+                return ApiResponseResult.failure("导入失败！导入的行数与原材料信息行数不符！");
+            }
             List<ProductMaterTemp> hardwareMaterList = new ArrayList<>();
             //五金材料导入顺序: 零件名称1、材料名称2、规格3、用量4、单位5、基数6、供应商7、备注8
             //组装材料导入顺序: 零件名称1、材料名称2、规格3、用量4、单位5、基数6、供应商7、备注8
             //注塑材料导入顺序: 零件名称1、材料名称2、规格3、制品量4、单位5、基数6、水口量7、穴数8、备注9
             //表面处理导入顺序: 零件名称1、加工类型2、配色工艺3、材料名称4、规格5、用料6、单位7、基数8、备注9
             //20210226-hjj-导入模板中去除基数
+
+            //2021-04-29 五金和注塑 零件名称1、材料名称2、规格3、材料用量4、制品重5、材料用量单位6、水口数7、穴数8
+            //2021-04-29 表面和组装 零件名称1、材料名称2、规格3、材料用量4、材料用量单位5
+
             Integer successes = 0;
             Integer failures = 0;
+            Set<Long> improtIdList = new HashSet<Long>();
             for (int row = 2; row <= maxRow; row++) {
                 String errInfo = "";
-                String mid = tranCell(sheet.getRow(row).getCell(0));
+                XSSFCell midCell = sheet.getRow(row).getCell(0);
+                midCell.setCellType(midCell.CELL_TYPE_STRING);
+                String mid = tranCell(midCell);
                 String row1 = tranCell(sheet.getRow(row).getCell(1));
                 String row2 = tranCell(sheet.getRow(row).getCell(2));
                 String row3 = tranCell(sheet.getRow(row).getCell(3));
@@ -149,78 +159,74 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 String row6 = tranCell(sheet.getRow(row).getCell(6));
                 String row7 = tranCell(sheet.getRow(row).getCell(7));
                 String row8 = tranCell(sheet.getRow(row).getCell(8));
-                String row9 = tranCell(sheet.getRow(row).getCell(9));
-//                String row10 = tranCell(sheet.getRow(row).getCell(10));
                 ProductMaterTemp temp = new ProductMaterTemp();
 
                 if(StringUtils.isNotEmpty(mid)){
                     temp.setMid(Long.parseLong(mid));
+                    improtIdList.add(Long.parseLong(mid)) ;
+                }else {
+                    errInfo = errInfo + "非本界面导出的材料";
                 }
                 //设置类型
                 temp.setBsType(bsType);
                 temp.setPkQuote(quoteId);
                 temp.setBsComponent(row1);
-                if(!StringUtils.isNotEmpty(row1)){
-                    errInfo += errInfo + "零件名称不能为空";
+//                if(!StringUtils.isNotEmpty(row1)){
+//                    errInfo += errInfo + "零件名称不能为空";
+//                }
+                temp.setBsMaterName(row2);
+//                if(!StringUtils.isNotEmpty(row2)){
+//                    errInfo = errInfo + "材料名称不能为空";
+//                }
+                temp.setBsModel(row3);
+//                if(!StringUtils.isNotEmpty(row3)){
+//                    errInfo = errInfo + "材料规格不能为空";
+//                }
+                temp.setBsQty(row4);
+                if(StringUtils.isNotEmpty(row4)) {
+                    if (!row4.matches("^\\d+\\.\\d+$") && !row4.matches("^\\d+$")) {
+                        errInfo = errInfo + "材料用量必须是数字类型;";
+                    }
+                }else {
+                    errInfo = errInfo + "材料用量不能为空;";
                 }
                 if(("molding").equals(bsType)||("hardware").equals(bsType)){
-                    temp.setBsMaterName(row2);
-                    if(!StringUtils.isNotEmpty(row2)){
-                        errInfo = errInfo + "材料名称不能为空";
-                    }
-                    temp.setBsModel(row3);
-                    if(!StringUtils.isNotEmpty(row3)){
-                        errInfo = errInfo + "材料规格不能为空";
-                    }
-
-//                    temp.setBsRadix(row6);
-                    temp.setBsWaterGap(row6);
-                    temp.setBsCave(row7);
-                    temp.setBsSupplier(row8);
-                    temp.setFmemo(row9);
-
-                    if(StringUtils.isNotEmpty(row4)) {
-                        temp.setBsProQty(row4);
-                        if (!row4.matches("^\\d+\\.\\d+$") && !row4.matches("^\\d+$")) {
+                    temp.setBsProQty(row5);
+                    temp.setBsUnit(row6);
+                    temp.setBsWaterGap(row7);
+                    temp.setBsCave(row8);
+                    if(StringUtils.isNotEmpty(row5)) {
+                        if (!row5.matches("^\\d+\\.\\d+$") && !row5.matches("^\\d+$")) {
                             errInfo = errInfo + "制品量必须是数字类型;";
                         }
                     }else {
                         errInfo = errInfo + "制品量不能为空;";
                     }
-                    if(StringUtils.isNotEmpty(row5)){
-                        temp.setBsUnit(row5);
-                        List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row5,0);
+                    if(StringUtils.isNotEmpty(row6)){
+                        List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row6,0);
                         if(unitList!=null&& unitList.size()>0){
                             temp.setPkUnit(unitList.get(0).getId());
                         }else {
-                            errInfo = errInfo +"没有维护:"+ row5 + " 单位;";
+                            errInfo = errInfo +"没有维护:"+ row6 + " 单位;";
                         }
                     }else {
                         errInfo = errInfo + "单位不能为空;";
                     }
 
-//                    if(StringUtils.isNotEmpty(row6)) {
-//                        if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
-//                            errInfo = errInfo + "基数必须是数字类型;";
-//                        }
-//                    }else {
-//                        errInfo = errInfo + "基数不能为空;";
-//                    }
-
-                    if(StringUtils.isNotEmpty(row6)) {
-                        if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
+                    if(StringUtils.isNotEmpty(row7)) {
+                        if (!row7.matches("^\\d+\\.\\d+$") && !row7.matches("^\\d+$")) {
                             errInfo = errInfo + "水口数必须是数字类型;";
-                        }else if(row6 == "0.0"){
+                        }else if(row7 == "0.0"){
                             errInfo = errInfo + "水口数不能是0;";
                         }
                     }else {
                         errInfo = errInfo + "水口数不能为空;";
                     }
 
-                    if(StringUtils.isNotEmpty(row7)) {
-                        if (!row7.matches("^\\d+\\.\\d+$") && !row7.matches("^\\d+$")) {
+                    if(StringUtils.isNotEmpty(row8)) {
+                        if (!row8.matches("^\\d+\\.\\d+$") && !row8.matches("^\\d+$")) {
                             errInfo = errInfo + "穴数必须是数字类型;";
-                        }else if("0.0".equals(row7)){
+                        }else if("0.0".equals(row8)){
                             errInfo = errInfo + "穴数不能是0;";
                         }
                     }else {
@@ -228,68 +234,9 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                     }
 
                 }
-                else if(("surface").equals(bsType)){
-                    temp.setBsMachiningType(row2);
-                    if(!StringUtils.isNotEmpty(row2)) {
-                        errInfo = errInfo + "加工类型不能为空;";
-                    }
-                    if(!StringUtils.isNotEmpty(row3)) {
-                        errInfo = errInfo + "配色工艺不能为空;";
-                    }
-                    temp.setBsColor(row3);
-                    temp.setBsMaterName(row4);
-                    temp.setBsModel(row5);
-                    if(!StringUtils.isNotEmpty(row4)){
-                        errInfo = errInfo + "材料名称不能为空";
-                    }
-                    if(!StringUtils.isNotEmpty(row5)){
-                        errInfo = errInfo + "材料规格不能为空";
-                    }
-                    temp.setBsQty(row6);
-                    if(StringUtils.isNotEmpty(row6)) {
-                        if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
-                            errInfo = errInfo + "用量必须是数字类型;";
-                        }
-                    }else {
-                        errInfo = errInfo + "用量不能为空;";
-                    }
 
-                    if(StringUtils.isNotEmpty(row7)){
-                        temp.setBsUnit(row7);
-                        List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row7,0);
-                        if(unitList!=null&& unitList.size()>0){
-                            temp.setPkUnit(unitList.get(0).getId());
-                        }else {
-                            errInfo = errInfo +"没有维护:"+ row7 + " 单位;";
-                        }
-                    }else {
-                        errInfo = errInfo + "单位不能为空;";
-                    }
+                else if(("surface").equals(bsType)||("packag").equals(bsType)){
 
-//                    temp.setBsRadix(row8);
-//                    if(StringUtils.isNotEmpty(row8)) {
-//                        if (!row8.matches("^\\d+\\.\\d+$") && !row8.matches("^\\d+$")) {
-//                            errInfo = errInfo + "基数必须是数字类型;";
-//                        }
-//                    }else {
-//                        errInfo = errInfo + "基数不能为空;";
-//                    }
-                    temp.setFmemo(row8);
-                }
-                else {
-                    temp.setBsComponent(row1);
-                    temp.setBsMaterName(row2);
-                    temp.setBsModel(row3);
-                    if(!StringUtils.isNotEmpty(row1)){
-                        errInfo = errInfo + "零件名称不能为空";
-                    }
-                    if(!StringUtils.isNotEmpty(row2)){
-                        errInfo = errInfo + "材料名称不能为空";
-                    }
-                    if(!StringUtils.isNotEmpty(row3)){
-                        errInfo = errInfo + "材料规格不能为空";
-                    }
-                    temp.setBsQty(row4);
                     if(StringUtils.isNotEmpty(row5)){
                         temp.setBsUnit(row5);
                         List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row5,0);
@@ -301,26 +248,9 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                     }else {
                         errInfo = errInfo + "单位不能为空;";
                     }
-                    temp.setBsRadix(row6);
 
-                    if(StringUtils.isNotEmpty(row4)) {
-                        if (!row4.matches("^\\d+\\.\\d+$") && !row4.matches("^\\d+$")) {
-                            errInfo = errInfo + "用量必须是数字类型;";
-                        }
-                    }else {
-                        errInfo = errInfo + "用量不能为空;";
-                    }
-
-//                    if(StringUtils.isNotEmpty(row6)) {
-//                        if (!row6.matches("^\\d+\\.\\d+$") && !row6.matches("^\\d+$")) {
-//                            errInfo = errInfo + "基数必须是数字类型;";
-//                        }
-//                    }else {
-//                        errInfo = errInfo + "基数不能为空;";
-//                    }
-                    temp.setBsSupplier(row6);
-                    temp.setFmemo(row7);
                 }
+
                 temp.setCreateBy(userId);
                 temp.setCreateDate(doExcleDate);
                 if("".equals(errInfo)){
@@ -333,8 +263,12 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 }
                 hardwareMaterList.add(temp);
             }
-            productMaterTempDao.saveAll(hardwareMaterList);
             Integer all = maxRow -1;
+            Set idSet = new HashSet(idList);
+            if(!idSet.removeAll(improtIdList)){
+                return ApiResponseResult.success("导入的id与实际材料信息id不符,请在本界面导出修改后导入");
+            }
+            productMaterTempDao.saveAll(hardwareMaterList);
             return ApiResponseResult.success("导入成功! 导入总数:" +all+" :校验通过数:"+successes+" ;不通过数: "+failures);
 
         }
@@ -500,35 +434,34 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             if(temp.getMid()!=null){
                 purchase = productMaterDao.findById( (long)temp.getMid());
             }
-            if("五金".equals(temp.getBsType())){
-                purchase.setBsType("hardware");
-            }else if("组装".equals(temp.getBsType())){
-                purchase.setBsType("packag");
-            }else if("注塑".equals(temp.getBsType())){
-                purchase.setBsType("molding");
-            }else if("表面处理".equals(temp.getBsType())){
-                purchase.setBsType("surface");
-            }
-            purchase.setBsComponent(temp.getBsComponent());
-            purchase.setBsMaterName(temp.getBsMaterName());
-            purchase.setBsModel(temp.getBsModel());
-            if(temp.getBsQty()!=null) {
-                purchase.setBsQty(new BigDecimal(temp.getBsQty()));
-            }
-            purchase.setBsUnit(temp.getBsUnit());
-            purchase.setPkUnit(temp.getPkUnit());
+//            if("五金".equals(temp.getBsType())){
+//                purchase.setBsType("hardware");
+//            }else if("组装".equals(temp.getBsType())){
+//                purchase.setBsType("packag");
+//            }else if("注塑".equals(temp.getBsType())){
+//                purchase.setBsType("molding");
+//            }else if("表面处理".equals(temp.getBsType())){
+//                purchase.setBsType("surface");
+//            }
+//            purchase.setBsComponent(temp.getBsComponent());
+//            purchase.setBsMaterName(temp.getBsMaterName());
+//            purchase.setBsModel(temp.getBsModel());
+//            if(temp.getBsQty()!=null) {
+//                purchase.setBsQty(new BigDecimal(temp.getBsQty()));
+//            }
+//            purchase.setBsUnit(temp.getBsUnit());
+//            purchase.setPkUnit(temp.getPkUnit());
             purchase.setPurchaseUnit(temp.getPurchaseUnit());
-            purchase.setBsGeneral((temp.getBsGeneral()+"").equals("是")?1:0);
-            purchase.setBsGear(temp.getBsGear());
-            if(temp.getBsRefer()!=null) {
-                purchase.setBsRefer(new BigDecimal(temp.getBsRefer()));
-            }
+//            purchase.setBsGeneral((temp.getBsGeneral()+"").equals("是")?1:0);
+//            purchase.setBsGear(temp.getBsGear());
+//            if(temp.getBsRefer()!=null) {
+//                purchase.setBsRefer(new BigDecimal(temp.getBsRefer()));
+//            }
             purchase.setBsAssess(new BigDecimal(temp.getBsAssess()));
-            purchase.setPkQuote(temp.getPkQuote());
-            purchase.setBsAssess(new BigDecimal(temp.getBsAssess()));
-            purchase.setFmemo(temp.getFmemo());
-            purchase.setBsSupplier(temp.getBsSupplier());
-            purchase.setBsExplain(temp.getBsExplain());//lst-202107
+//            purchase.setPkQuote(temp.getPkQuote());
+//            purchase.setFmemo(temp.getFmemo());
+//            purchase.setBsSupplier(temp.getBsSupplier());
+//            purchase.setBsExplain(temp.getBsExplain());//lst-202107
             productMaterList.add(purchase);
         }
         productMaterDao.saveAll(productMaterList);
@@ -572,21 +505,21 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
             if(StringUtils.isNotEmpty(temp.getBsCave())){
                 mater.setBsCave(temp.getBsCave());
             }
-            mater.setBsComponent(temp.getBsComponent());
-            mater.setBsMaterName(temp.getBsMaterName());
-            mater.setBsModel(temp.getBsModel());
+//            mater.setBsComponent(temp.getBsComponent());
+//            mater.setBsMaterName(temp.getBsMaterName());
+//            mater.setBsModel(temp.getBsModel());
             if(temp.getBsQty()!=null) {
                 mater.setBsQty(new BigDecimal(temp.getBsQty()));
             }
             mater.setBsUnit(temp.getBsUnit());
             mater.setPkUnit(temp.getPkUnit());
-            mater.setBsRadix(temp.getBsRadix());
+//            mater.setBsRadix(temp.getBsRadix());
 //            mater.setBsGeneral(temp.getBsPurchase());
 //            mater.setBsGear(temp.getBsGear());
 
             mater.setPkQuote(temp.getPkQuote());
-            mater.setFmemo(temp.getFmemo());
-            mater.setBsSupplier(temp.getBsSupplier());
+//            mater.setFmemo(temp.getFmemo());
+//            mater.setBsSupplier(temp.getBsSupplier());
             productMaterList.add(mater);
         }
         productMaterDao.saveAll(productMaterList);

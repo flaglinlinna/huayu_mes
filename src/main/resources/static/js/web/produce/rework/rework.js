@@ -36,32 +36,33 @@ $(function() {
 							}, {
 								field : 'BOARD_BARCODE',
 								title : '条码',
-								width : 175,sort: true
+								width : 160,sort: true
 							}, {
 								field : 'FTYPE',
 								title : '类型',
 								width : 150,sort: true
 							}, {
 								field : 'LINER_NAME',
-								title : '线长',
+								title : '组长',
 								width : 80,sort: true
 							}, {
 								field : 'BOARD_ITEM',
 								title : '物料编码',
-								width : 170,sort: true
+								width : 150,sort: true
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 200,sort: true
-							}, {
-								field : 'FMEMO',
-								title : '备注',
-								width : 200
+								width : 150,sort: true
 							}, {
 								field : 'CREATE_DATE',
 								title : '创建时间',
-								width : 170,sort: true
-							} ] ],
+								width : 160,sort: true
+							},
+								{
+									field : 'FMEMO',
+									title : '备注',
+									width : 200
+								}] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}
@@ -91,35 +92,36 @@ $(function() {
 							},
 							cols : [ [ {
 								type : 'numbers'
-							}, {
-								field : 'BOARD_BARCODE',
-								title : '条码',
-								width : 175,sort: true
-							}, {
-								field : 'FTYPE',
-								title : '类型',
-								width : 150,sort: true
-							}, {
+							},  {
 								field : 'LINER_NAME',
-								title : '线长',
+								title : '组长',
 								width : 80,sort: true
-							}, {
-								field : 'BOARD_ITEM',
-								title : '物料编码',
-								width : 170,sort: true
 							}, {
 								field : 'TASK_NO',
 								title : '制令单号',
-								width : 200,sort: true
+								width : 150,sort: true
+							},{
+								field : 'BOARD_BARCODE',
+								title : '条码',
+								width : 160,sort: true
 							}, {
-								field : 'FMEMO',
-								title : '备注',
-								width : 200
+								field : 'FTYPE',
+								title : '类型',
+								width : 140,sort: true
+							},{
+								field : 'BOARD_ITEM',
+								title : '物料编码',
+								width : 140,sort: true
 							}, {
 								field : 'CREATE_DATE',
 								title : '创建时间',
-								width : 170,sort: true
-							} ] ],
+								width : 150,sort: true
+							} ,
+								{
+									field : 'FMEMO',
+									title : '备注',
+									width : 180
+								}] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}

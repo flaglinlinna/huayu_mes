@@ -179,6 +179,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 
             quoteProcess.setId(null);
             quoteProcess.setPkQuote(quote.getId());
+            quoteProcess.setPkQuoteBom(null);
             quoteProcess.setBsStatus(0);
             newQuoteProcessList.add(quoteProcess);
         }
@@ -205,6 +206,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             productMater.setId(null);
             productMater.setPkQuote(quote.getId());
             productMater.setBsStatus(0);
+            productMater.setBsStatusPurchase(0);
             newProductMaterList.add(productMater);
         }
         productMaterDao.saveAll(newProductMaterList);
@@ -415,6 +417,10 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         o.setLastupdateDate(new Date());
         o.setLastupdateBy(UserUtil.getSessionUser().getId());
         o.setBsStatus(bsStatus);
+        if(99==bsStatus){
+            //关闭报价单时 关闭待办事项
+            todoInfoService.close(null,null,null,o.getId());
+        }
         quoteDao.save(o);
         return ApiResponseResult.success("设置报价单状态成功！").data(o);
     }

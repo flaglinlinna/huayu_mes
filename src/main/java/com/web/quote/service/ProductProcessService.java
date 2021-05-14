@@ -2,10 +2,13 @@ package com.web.quote.service;
 
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.ProductProcess;
+import com.web.quote.entity.QuoteBom;
+import com.web.quote.entity.QuoteProcess;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface ProductProcessService {
 
@@ -37,4 +40,8 @@ public interface ProductProcessService {
 	public ApiResponseResult getProcListByType(String bsType) throws  Exception;
 
 	public ApiResponseResult delFile(Long id,Long fileId) throws Exception;
+
+	public ApiResponseResult editProcessList(List<ProductProcess> productProcessList) throws Exception;
+
+
 }

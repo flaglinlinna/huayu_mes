@@ -16,7 +16,7 @@ $(function() {
 			data : [],
 			// height: 'full',
 			page : true,
-			limit:20,
+			limit:50,
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -57,21 +57,11 @@ $(function() {
 				}
 			},
 			cols :[ [ 
-			    {type : 'numbers'},
-			    {field : 'bsCode',title : '报价单编号',width : 150,sort : true,sort: true},
-			    {field : 'bsType',title : '报价类型',width : 120,
-			    	templet : function(d) {
-						if (d.bsType == "YSBJ") {
-							return "衍生报价";
-						} else if (d.bsType == "XPBJ") {
-							return "新品报价"
-						} else {
-							return "";
-						}
-				},sort: true},
-				{field : 'bsStage',title : '报价阶段',width : 120,sort: true},
-				{field : 'bsProjVer',title : '版本',width : 100,sort: true},
-				{field : 'bsStatus',title : '状态',width : 100,
+			    {fixed:'left',type : 'numbers'},
+			    {fixed:'left',field : 'bsCode',title : '报价单编号',width : 150,sort : true,sort: true},
+				{fixed:'left',field : 'bsProd',title : '产品型号',width : 120,sort: true},
+				{fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true},
+				{fixed:'left',field : 'bsStatus',title : '状态',width : 100,
 					templet : function(d) {
 						if(d.bsQuoteStatus !="99") {
 							if (d.bsStatus == "0") {
@@ -89,8 +79,20 @@ $(function() {
 							return "已关闭"
 						}
 					},sort: true},
+			    {field : 'bsType',title : '报价类型',width : 120,
+			    	templet : function(d) {
+						if (d.bsType == "YSBJ") {
+							return "衍生报价";
+						} else if (d.bsType == "XPBJ") {
+							return "新品报价"
+						} else {
+							return "";
+						}
+				},sort: true},
+				{field : 'bsStage',title : '报价阶段',width : 120,sort: true},
+
 				{field : 'bsCustName',title : '客户名称',width : 120,sort: true},
-				{field : 'bsProd',title : '产品型号',width : 120,sort: true},
+
 				{field : 'bsProdType',title : '产品类型',width : 140, sort: true,sort: true},
 				// {field : 'bsDevType',title : '机种型号',width : 140, sort: true,sort: true},
 				{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140},

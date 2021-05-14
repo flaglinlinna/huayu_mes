@@ -4,6 +4,7 @@ import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 
 import com.web.quote.entity.QuoteBom;
+import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.QuoteBomService;
 import com.web.quote.service.QuoteService;
 
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 @Api(description = "外购件清单模块")
@@ -101,6 +103,29 @@ public class QuoteBomController extends WebController {
 		Integer value = Integer.parseInt(params.get("value")==null?"0":params.get("value").toString());
 		try {
 			ApiResponseResult result = quoteBomService.updateRetrial(id,type,value);
+			logger.debug("编辑外购件清单信息重审状态=edit:");
+			getSysLogService().success(module, method, methodName,"");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("编辑外购件清单信息重审状态失败！", e);
+			getSysLogService().error(module, method, methodName,  e.toString());
+			return ApiResponseResult.failure("编辑外购件清单信息重审状态失败！");
+		}
+	}
+
+	@ApiOperation(value = "编辑外购件清单损耗分组", notes = "编辑外购件清单损耗分组", hidden = true)
+	@RequestMapping(value = "/updateBsGroups", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult updateBsGroups(@RequestBody Map<String, Object> params) {
+		String method = "quoteBom/updateRetrial";
+		String methodName = "编辑外购件清单信息编辑外购件清单损耗分组";
+		long id = Long.parseLong(params.get("id").toString());
+		String bsGroups = params.get("bsGroups").toString();
+//		Integer purchaseRetrial = Integer.parseInt(params.get("purchaseRetrial")==null?"0":params.get("purchaseRetrial").toString());
+//		Integer value = Integer.parseInt(params.get("value")==null?"0":params.get("value").toString());
+		try {
+			ApiResponseResult result = quoteBomService.updateBsGroups(id,bsGroups);
 			logger.debug("编辑外购件清单信息重审状态=edit:");
 			getSysLogService().success(module, method, methodName,"");
 			return result;
@@ -222,6 +247,25 @@ public class QuoteBomController extends WebController {
 			e.printStackTrace();
 			logger.error("导出数据失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
+		}
+	}
+
+	@ApiOperation(value = "Bom页面编辑保存", notes = "页面编辑保存",hidden = true)
+	@RequestMapping(value = "/saveTable", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult saveTable(@RequestBody List<QuoteBom> quoteBomList) {
+		String method = "quoteBom/saveTable";String methodName ="Bom页面编辑保存";
+		try{
+			ApiResponseResult result = quoteBomService.editBomList(quoteBomList);
+			logger.debug("Bom页面编辑保存=saveTable:");
+			getSysLogService().success(module,method, methodName,
+					"");
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("页面编辑保存失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("页面编辑保存失败！");
 		}
 	}
 }

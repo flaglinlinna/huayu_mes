@@ -1,12 +1,12 @@
 package com.web.quote.service.internal;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.alibaba.fastjson.JSON;
+import com.web.quote.dao.QuoteDao;
+import com.web.quote.entity.Quote;
+import com.web.quote.entity.QuoteBom;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -60,6 +60,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	BaseFeeDao baseFeeDao;
 	@Autowired
 	TodoInfoService todoInfoService;
+	@Autowired
+	private QuoteDao quoteDao;
 
 	/**
 	 * 获取bom列表-下拉选择
@@ -103,24 +105,73 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		Specification<QuoteProcess> spec = Specification.where(BaseService.and(filters, QuoteProcess.class));
 		Specification<QuoteProcess> spec1 = spec.and(BaseService.or(filters1, QuoteProcess.class));
 		Page<QuoteProcess> page = quoteProcessDao.findAll(spec1, pageRequest);
+		List<QuoteProcess> quoteProcessList = page.getContent();
+		List<Map<String, Object>> elementList = quoteBomDao.getBsComponent(Long.parseLong(pkQuote));
+		for(QuoteProcess o:quoteProcessList) {
+			List<Map<String, Object>> procList = new ArrayList<>();
+			if(!("out").equals(o.getBjWorkCenter().getBsCode())){
+				procList = quoteProcessDao.getProcByWorkCenter(o.getPkWorkCenter());
+			}else {
+				procList = quoteProcessDao.getProcByWorkCenterAndOut(o.getPkWorkCenter());
+			}
+			List<Map<String, Object>> mapList = quoteBomDao.getBsMaterName(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
+//			if(mapList.size()==1){
+//				o.setBsMaterName(mapList.get(0).get("BSMATERNAME").toString());
+//			}
+//			List<Map<String, Object>> groupsList = quoteBomDao.getBsGroups(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
+
+			if (StringUtils.isNotEmpty(o.getBsMaterName())) {
+				if (o.getPkQuoteBom() == null) {
+					for (Map<String, Object> map : mapList) {
+						if (o.getBsMaterName().equals(map.get("BSMATERNAME"))) {
+							o.setPkQuoteBom(Long.parseLong(map.get("ID").toString()));
+							o.setBsGroups(map.get("BSGROUPS") == null ? "" : map.get("BSGROUPS").toString());
+						}
+					}
+				}
+			}
+//			if (mapList.size() > 0) {
+//				o.setBsMaterNameList(JSON.toJSONString(mapList));
+//			}
+//			if (groupsList.size() > 0) {
+//				o.setBsGroupsList(JSON.toJSONString(groupsList));
+//			}
+
+			if(o.getQuoteBom()!=null) {
+				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
+					if(elementList.size()>0){
+						o.setBsComponentList(JSON.toJSONString(elementList));
+						o.setBsLinkName(elementList.get(0).get("BSCOMPONENT").toString());
+					}
+				}else {
+					o.setBsLinkName(o.getBsName());
+				}
+			}
+
+			if(procList.size() >0){
+				o.setBsProcList(JSON.toJSONString(procList));
+			}
+		}
 		//20201222-fyx
 		updateLwAndHw(Long.valueOf(pkQuote));
 		//--end
-		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+		return ApiResponseResult.success().data(DataGrid.create(quoteProcessList, (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 
 	}
 	
 	private void updateLwAndHw(Long pkQuote){
 		//获取该报价单的所有的未提交的数据，更新一下 人工和制费
-		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,pkQuote,0);
+		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatusOrderByBsOrder(0,pkQuote,0);
 		for(QuoteProcess qp:lqp){
-			String[] strs = this.getLhBy(qp.getProc().getWorkcenterId(), qp.getPkProc());
-			if(!StringUtils.isEmpty(strs[0])){
-				qp.setBsFeeLh(new BigDecimal(strs[0]));
-			}
-			if(!StringUtils.isEmpty(strs[1])){
-				qp.setBsFeeMh(new BigDecimal(strs[1]));
+			if(qp.getProc()!=null) {
+				String[] strs = this.getLhBy(qp.getProc().getWorkcenterId(), qp.getPkProc());
+				if (!StringUtils.isEmpty(strs[0])) {
+					qp.setBsFeeLh(new BigDecimal(strs[0]));
+				}
+				if (!StringUtils.isEmpty(strs[1])) {
+					qp.setBsFeeMh(new BigDecimal(strs[1]));
+				}
 			}
 		}
 		quoteProcessDao.saveAll(lqp);
@@ -177,23 +228,35 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		//quoteProcessDao.delteQuoteProcessByPkQuoteBom(Long.parseLong(itemId));//使用id
 		//20210113-fyx-先不删除
 		//quoteProcessDao.delteQuoteProcessByBsNameAndPkQuote(itemId,Long.valueOf(quoteId));//使用零件名字
-		int j = 1;
-		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),itemId);
-		j += lqp.size() ;
+//		int j = 1;
+		Integer a = quoteProcessDao.findMaxBsOrder(0,Long.valueOf(quoteId));
+		int j = (a==null?0:a)+10;
+//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),itemId);
+//		j += lqp.size() ;
 		for (String pro : procs) {
 			if (!StringUtils.isEmpty(pro)) {
 				// Proc procItem = procDao.findById(Long.parseLong(pro));
 				QuoteProcess pd = new QuoteProcess();
+				Proc proc1 = procDao.findById((long) Long.valueOf(pro));
 				//pd.setPkQuoteBom(Long.valueOf(itemId));//bomID
 				pd.setBsName(itemId);//bom零件名称
 				pd.setBsElement(bsElement);
 				pd.setPkProc(Long.valueOf(pro));//工序id
-				pd.setBsOrder((j) * 10);//工序顺序
+				pd.setBsOrder(j);//工序顺序
 				pd.setCreateBy(UserUtil.getSessionUser().getId());
+				pd.setPkWorkCenter(proc1.getWorkcenterId());
 				pd.setCreateDate(new Date());
 				pd.setPkQuote(Long.valueOf(quoteId));//报价单主表
 				//--20201222-fyx-获取人工和制费
 				Proc pp1 = procDao.findById(Long.parseLong(pro));
+
+				List<Map<String,Object>> mapList =quoteBomDao.getBsMaterName(pd.getPkQuote(),pd.getBsElement(),pd.getBsName(),proc1.getWorkcenterId());
+				if(mapList.size()==1){
+					pd.setBsMaterName(mapList.get(0).get("BSMATERNAME")==null?"":mapList.get(0).get("BSMATERNAME").toString());
+					pd.setBsGroups(mapList.get(0).get("BSGROUPS")==null?"":mapList.get(0).get("BSGROUPS").toString());
+					pd.setPkQuoteBom(Long.parseLong(mapList.get(0).get("ID").toString()));
+				}
+
 				// 外协不查询人工制费信息
 				if(!("out").equals(pp1.getBjWorkCenter().getBsCode())) {
 					if (pp1 != null) {
@@ -233,7 +296,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
             return ApiResponseResult.failure("工序记录不存在！");
         }
         //判断顺序是否存在
-        List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameAndBsOrder(0, o.getPkQuote(),o.getBsName(), procOrder);
+        List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuoteAndBsOrderAndIdIsNot(0, o.getPkQuote(), procOrder,o.getId());
         if(lpd.size()>0){
         	 return ApiResponseResult.failure("工序序号重复,请重新填写！");
         }
@@ -264,7 +327,82 @@ public class QuoteProcesslmpl implements QuoteProcessService {
         quoteProcessDao.save(o);
         return ApiResponseResult.success("修改备注成功！").data(o);
 	}
-	
+
+	/**
+	 * 增加备注
+	 * **/
+	@Override
+	public ApiResponseResult doBsMaterName(Long id, Long  bomId) throws Exception {
+		// TODO Auto-generated method stub
+		if(id == null){
+			return ApiResponseResult.failure("工序ID不能为空！");
+		}
+		QuoteProcess o = quoteProcessDao.findById((long) id);
+		if(o == null){
+			return ApiResponseResult.failure("工序记录不存在！");
+		}
+		if(bomId!=null) {
+			QuoteBom quoteBom = quoteBomDao.findById((long) bomId);
+			if (quoteBom == null) {
+				return ApiResponseResult.failure("外购件清单中不存在此材料！");
+			}
+			if (!bomId.equals(o.getPkQuoteBom()) && bomId != null) {
+				if (quoteProcessDao.countByDelFlagAndPkQuoteAndPkQuoteBom(0, o.getPkQuote(), bomId) > 0) {
+					return ApiResponseResult.failure("该工艺流程下已存在该材料！");
+				}
+			}
+			o.setBsMaterName(quoteBom.getBsMaterName());
+			o.setPkQuoteBom(bomId);
+		}else {
+			o.setBsMaterName(null);
+			o.setPkQuoteBom(null);
+		}
+		o.setLastupdateDate(new Date());
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
+		quoteProcessDao.save(o);
+		return ApiResponseResult.success("修改材料成功！").data(o);
+	}
+
+	/**
+	 * 设置损耗分组
+	 * **/
+	@Override
+	public ApiResponseResult doBsGroups(Long id, String bsGroups) throws Exception {
+		// TODO Auto-generated method stub
+		if(id == null){
+			return ApiResponseResult.failure("工序ID不能为空！");
+		}
+		QuoteProcess o = quoteProcessDao.findById((long) id);
+		if(o == null){
+			return ApiResponseResult.failure("工序记录不存在！");
+		}
+		o.setLastupdateDate(new Date());
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
+		o.setBsGroups(bsGroups);
+		quoteProcessDao.save(o);
+		return ApiResponseResult.success("修改损耗分组成功！").data(o);
+	}
+
+	/**
+	 * 设置损耗分组
+	 * **/
+	@Override
+	public ApiResponseResult doProc(Long id, Long procId) throws Exception {
+		// TODO Auto-generated method stub
+		if(id == null){
+			return ApiResponseResult.failure("工序ID不能为空！");
+		}
+		QuoteProcess o = quoteProcessDao.findById((long) id);
+		if(o == null){
+			return ApiResponseResult.failure("工序记录不存在！");
+		}
+		o.setLastupdateDate(new Date());
+		o.setLastupdateBy(UserUtil.getSessionUser().getId());
+		o.setPkProc(procId);
+		quoteProcessDao.save(o);
+		return ApiResponseResult.success("修改工艺成功！").data(o);
+	}
+
 	/**
 	 * 删除
 	 * **/
@@ -298,16 +436,51 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 if(i>0){
 			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
 		 }
+//		 if(quoteProcessDao.getPkQuoteBomNum(Long.parseLong(quoteId)).size()>0){
+//			 return ApiResponseResult.failure("存在相同的材料名称,请检查。");
+//		 }
+		 if(quoteProcessDao.countByDelFlagAndPkQuoteAndPkProcIsNull(0,Long.parseLong(quoteId))>0){
+			 return ApiResponseResult.failure("请填写完所有工序");
+		 }
+//		 if(quoteProcessDao.getBsGroupsNum(Long.parseLong(quoteId)).size()>0){
+//			 return ApiResponseResult.failure("存在相同损耗合计分组名称,请检查。");
+//		 }
 		 //20201223-fyx-先判断是否维护了人工和制费
 		//获取该报价单的所有的未提交的数据，更新一下 人工和制费
-			List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,Long.valueOf(quoteId),0);
-			for(QuoteProcess qp:lqp){
+		 List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatusOrderByBsOrder(0,Long.valueOf(quoteId),0);
+		 String[] bsGroupsArray = new String[lqp.size()];
+		 for(Integer q = 0;q<=lqp.size()-1;q++){
+		 		QuoteProcess qp = lqp.get(q);
 				if(!("out").equals(qp.getProc().getBjWorkCenter().getBsCode())){
 					if(qp.getBsFeeLh() == null || qp.getBsFeeMh() == null){
 						return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
 					}
 				}
+				bsGroupsArray[q]= qp.getBsGroups();
 			}
+
+		 for(Integer k = 0;k<= bsGroupsArray.length-1;k++){
+			 List<Integer> list = new ArrayList<>();
+			 List<String> bsGroupsString = new ArrayList<>();
+		 	for(Integer j = 0;j<=bsGroupsArray.length-1;j++){
+		 		if(StringUtils.isNotEmpty(bsGroupsArray[k])){
+		 			if(bsGroupsArray[k].equals(bsGroupsArray[j])){
+						list.add(j);
+						bsGroupsString.add(bsGroupsArray[k]);
+					}
+				}
+			}
+//		 	if(list.size()==1){
+//				return ApiResponseResult.failure("损耗分组不能只存在一条!");
+//			}
+			for(int m = 0;m<list.size()-1;m++){
+				if(list.get(m+1)-list.get(m)!=1){
+					return ApiResponseResult.failure("相同的损耗分组("+bsGroupsString.get(m)+")必须相邻!");
+				}
+			}
+		 }
+
+
 		 
 		 //项目状态设置-状态 2：已完成
 		 quoteItemDao.switchStatus(2, Long.parseLong(quoteId), code);
@@ -321,23 +494,16 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 return ApiResponseResult.success("提交成功！").data(data);
 	 }
 
+
+
 	/**
 	 * 取消完成
 	 * **/
 	public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception{
-		//判断状态是否已执行过确认提交-lst-20210112
-//		int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
-//		if(i>0){
-//			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
-//		}
-		//20201223-fyx-先判断是否维护了人工和制费
-		//获取该报价单的所有的未提交的数据，更新一下 人工和制费
-//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatus(0,Long.valueOf(quoteId),0);
-//		for(QuoteProcess qp:lqp){
-//			if(qp.getBsFeeLh() == null || qp.getBsFeeMh() == null){
-//				return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
-//			}
-//		}
+		Quote quote = quoteDao.findById(Long.parseLong(quoteId));
+		if(quote.getBsStatus()==1||quote.getBsStatus()==4){
+			return ApiResponseResult.failure("报价单已提交审批，不能取消完成。");
+		}
 
 		//项目状态设置-状态 2：已完成,1 未完成
 		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), code);
@@ -379,5 +545,42 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		// TODO Auto-generated method stub
 		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
 		return ApiResponseResult.success().data(lqp);
+	}
+
+	@Override
+	public ApiResponseResult editProcessList(List<QuoteProcess> quoteProcessList) throws Exception {
+		// TODO Auto-generated method stub
+//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
+		quoteProcessDao.saveAll(quoteProcessList);
+		return ApiResponseResult.success();
+	}
+
+	@Override
+	public ApiResponseResult addProcessByBom(Long quoteId) {
+	 	List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuoteOrderById(0,quoteId);
+	 	List<QuoteProcess> quoteProcessList = new ArrayList<>();
+	 	try {
+			Long userId = UserUtil.getSessionUser().getId();
+			Date date = new Date();
+			for(Integer i  =0;i<quoteBomList.size();i++){
+				QuoteBom o = quoteBomList.get(i);
+				QuoteProcess quoteProcess = new QuoteProcess();
+				quoteProcess.setBsGroups(o.getBsGroups());
+				quoteProcess.setPkQuote(quoteId);
+				quoteProcess.setPkQuoteBom(o.getId());
+				quoteProcess.setBsMaterName(o.getBsMaterName());
+				quoteProcess.setBsElement(o.getBsElement());
+				quoteProcess.setBsName(o.getBsComponent());
+				quoteProcess.setCreateBy(userId);
+				quoteProcess.setCreateDate(date);
+				quoteProcess.setPkWorkCenter(o.getPkBjWorkCenter());
+				quoteProcess.setBsOrder((i+1)*10);
+				quoteProcessList.add(quoteProcess);
+			}
+			quoteProcessDao.saveAll(quoteProcessList);
+		}catch (Exception e){
+	 		e.printStackTrace();
+		}
+		return ApiResponseResult.success();
 	}
 }

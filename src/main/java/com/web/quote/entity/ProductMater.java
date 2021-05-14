@@ -270,6 +270,13 @@ public class ProductMater extends BaseEntity {
 	@Transient
 	private String bsUnitList;
 
+	/**
+	 * 损耗分组
+	 */
+	@ApiModelProperty(name = "bsGroups", value = "损耗分组")
+	@Column(length = 200)
+	protected String bsGroups;
+
 	public int getBsStatus() {
 		return bsStatus;
 	}
@@ -532,5 +539,13 @@ public class ProductMater extends BaseEntity {
 
 	public void setBsYield(BigDecimal bsYield) {
 		this.bsYield = bsYield;
+	}
+
+	public String getBsGroups() {
+		return bsGroups;
+	}
+
+	public void setBsGroups(String bsGroups) {
+		this.bsGroups = bsGroups;
 	}
 }

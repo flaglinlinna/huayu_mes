@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -626,24 +627,43 @@ public class Issuelmpl extends BaseSql  implements IssueService {
 	}
 
 	/*
-  	定时清理离职员工信息
+  	定时清理离职员工信息 每天中午和晚上12点
    */
-//	@Scheduled(cron = "0 */5 *  * * ?")
-//	public void clearLeave() {
-//		try{
-//			//查询出所有在线的设备
-//			List<DevClock> devClockList = devClockDao.findByDelFlagAndIsOnline(0,1);
-//			boolean flag = true;
-//			if(flag){
-//				logger.info("定时清除离职员工指纹信息执行成功");
-//			}else{
-//				logger.error("定时清除离职员工指纹信息执行失败");
-//			}
-//		}catch (Exception e){
-//			e.printStackTrace();
-//			logger.error("定时清除离职员工指纹信息" + e);
-//		}
-//	}
+	@Scheduled(cron = "0 0 0,12 * * ?")
+	@Async
+	public void clearLeave() {
+		try{
+			//查询出所有设备
+			//查询出所有离职员工
+			//仅在报工环境下执行
+			String environment = this.env.getProperty("server.port");
+			if(!("8081").equals(environment)){
+				return ;
+			}
+			List<DevClock> devClockList = devClockDao.findByDelFlag(0);
+			List<Map<String,Object>> empIdList = issueDao.getLeaveEmpId();
+			List<DevLog> listLog = new ArrayList<DevLog>();
+			for(DevClock o:devClockList){
+				for(Map empMap:empIdList){
+					DevLog devLog = new DevLog();
+//					devLog.setCreateBy(UserUtil.getSessionUser().getId());
+					devLog.setCreateDate(new Date());
+					devLog.setDevId(o.getId());
+					devLog.setDevIp(o.getDevIp());
+					devLog.setDevCode(o.getDevCode());
+					devLog.setEmpId(Long.parseLong(empMap.get("ID").toString()));
+					devLog.setDescription("指纹删除");
+					devLog.setFmemo("操作中");
+					listLog.add(devLog);
+				}
+			}
+			devLogDao.saveAll(listLog);
+			logger.info("定时清除离职员工指纹信息成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			logger.error("定时清除离职员工指纹信息" + e);
+		}
+	}
 
 	public ApiResponseResult clear_bak(String dev, String emp) throws Exception {
 		// TODO Auto-generated method stub

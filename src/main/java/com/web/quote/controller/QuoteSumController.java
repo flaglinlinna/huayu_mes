@@ -14,6 +14,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Api(description = "报价单汇总模块")
@@ -195,13 +197,12 @@ public class QuoteSumController extends WebController {
 	}
 
 
-	@ApiOperation(value="设置中标",notes="设置中标",hidden=true)
-	@RequestMapping(value="/testSum",method=RequestMethod.POST)
+	@ApiOperation(value="价格计算",notes="价格计算",hidden=true)
+	@RequestMapping(value="/testSum",method=RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult testSum(@RequestBody Map<String, Object> params){
+	public ApiResponseResult testSum(String quoteId){
 		String method = "/quoteSum/testSum";
-		String methodName = "设置中标";
-		String quoteId = params.get("quoteId").toString() ;
+		String methodName = "价格计算";
 		try {
 			ApiResponseResult result = quoteSumService.countMeterAndProcess(quoteId);
 			logger.debug(methodName+"=setBade:");
@@ -211,6 +212,24 @@ public class QuoteSumController extends WebController {
 			logger.error(methodName+"失败！", e);
 			getSysLogService().error(module,method, methodName,quoteId);
 			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
+
+	@ApiOperation(value = "获取损耗明细列表", notes = "获取损耗明细列表", hidden = true)
+	@RequestMapping(value = "/getSumList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getSumList(String quoteId) {
+		String method = "/quoteSum/getSumList";
+		String methodName = "获取损耗明细列表";
+		try {
+			ApiResponseResult result = quoteSumService.getSumList(Long.parseLong(quoteId),super.getPageRequest(Sort.unsorted()));
+			logger.debug("获取损耗明细列表列表=getList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取损耗明细列表失败！", e);
+//			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure("获取损耗明细列表失败！");
 		}
 	}
 }

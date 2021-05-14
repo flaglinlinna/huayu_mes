@@ -4,6 +4,7 @@ import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.basic.service.SysParamSubService;
 import com.web.quote.entity.ProductProcess;
+import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.ProductProcessService;
 import com.web.quote.service.QuoteService;
 
@@ -154,12 +155,12 @@ public class ProductProcessController extends WebController {
 		String method = "/productProcess/getList";
 		String methodName = "获取报价工艺流程列表";
 		try {
-			Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "bsName");
-			Sort.Order order2 = new Sort.Order(Sort.Direction.DESC, "bsType");
+//			Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "bsName");
+//			Sort.Order order2 = new Sort.Order(Sort.Direction.DESC, "bsType");
 			Sort.Order order3 = new Sort.Order(Sort.Direction.ASC, "bsOrder");
 			List<Sort.Order> list = new ArrayList<>();
-			list.add(order1);
-			list.add(order2);
+//			list.add(order1);
+//			list.add(order2);
 			list.add(order3);
 			Sort sort = new Sort(list);
 			ApiResponseResult result = productProcessService.getList(keyword,bsType,quoteId, super.getPageRequest(sort));
@@ -357,6 +358,25 @@ public class ProductProcessController extends WebController {
 			logger.error("删除附件失败！", e);
 			getSysLogService().error(module,method, methodName, e.toString());
 			return ApiResponseResult.failure("删除附件失败！");
+		}
+	}
+
+	@ApiOperation(value = "页面编辑保存", notes = "页面编辑保存",hidden = true)
+	@RequestMapping(value = "/saveTable", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult saveTable(@RequestBody List<ProductProcess> productProcessList) {
+		String method = "quoteProcess/saveTable";String methodName ="页面编辑保存";
+		try{
+			ApiResponseResult result = productProcessService.editProcessList(productProcessList);
+			logger.debug("页面编辑保存=saveTable:");
+			getSysLogService().success(module,method, methodName,
+					"");
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("页面编辑保存失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+			return ApiResponseResult.failure("页面编辑保存失败！");
 		}
 	}
 

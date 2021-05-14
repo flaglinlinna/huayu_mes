@@ -41,6 +41,7 @@ public class Quote extends BaseEntity {
      * 1:进行中
      * 2:已完成
 	 * 3:待发起
+	 * 4:审批中
      * 99:关闭
      */
 	@Column

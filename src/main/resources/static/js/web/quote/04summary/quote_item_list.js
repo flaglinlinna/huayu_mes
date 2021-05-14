@@ -52,9 +52,20 @@ $(function() {
 			},
 			cols :
 			[ [ 
-			{type : 'numbers'},
-			{field : 'bsCode',title : '报价单编号',width : 150,sort : true},
-			{field : 'bsType',title : '报价类型',width : 100,
+			{fixed:'left',type : 'numbers'},
+			{fixed:'left',field : 'bsCode',title : '报价单编号',width : 150,sort : true},
+				{fixed:'left',field : 'bsProd',title : '产品型号',width : 120},
+				{fixed:'left',field : 'bsStatus',title : '状态',width : 80,
+					templet : function(d) {
+						if (d.bsStatus == "0") {
+							return "草稿"
+						} else if (d.bsStatus == "1") {
+							return "进行中"
+						} else if (d.bsStatus == "2") {
+							return "已完成"
+						}
+					}},
+				{field : 'bsType',title : '报价类型',width : 100,
 			    templet : function(d) {
 					if (d.bsType == "YSBJ") {
 						return "衍生报价";
@@ -64,19 +75,10 @@ $(function() {
 						return "";
 					}
 			}}, 
-			{field : 'bsStatus',title : '状态',width : 80,
-				templet : function(d) {
-					if (d.bsStatus == "0") {
-						return "草稿"
-					} else if (d.bsStatus == "1") {
-						return "进行中"
-					} else if (d.bsStatus == "2") {
-						return "已完成"
-					}
-			}}, 
+
 			{field : 'bsFinishTime',title : '完成日期',sort : true,width : 140},
 			{field : 'bsRemarks',title : '报价备注',width : 170},
-			{field : 'bsProd',title : '产品型号',width : 120},
+
 			{field : 'bsSimilarProd',title : '相似型号',width : 150},
 			{field : 'bsDevType',title : '机种型号',width : 140,sort : true},
 			{field : 'bsProdType',title : '产品类型',width : 140,sort : true},

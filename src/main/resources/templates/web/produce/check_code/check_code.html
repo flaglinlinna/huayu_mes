@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='小码校验'"></head>
+<head th:include="layout :: htmlhead" th:with="title='小码扫描'"></head>
 <style th:inline="text">
 .layui-form-label {
 	text-align: right;
@@ -22,6 +22,9 @@
 .long-item .layui-input-block {
 	margin-left: 160px;
 }
+.layui-layer-dialog .layui-layer-content {
+	background-color: red;
+}
 </style>
 <body class="layui-layout-body">
 <div th:replace="audio/fragment/audio :: audio"></div>
@@ -31,7 +34,7 @@
 		<!--<div th:replace="fragments/head :: header"></div>-->
 <div class="layui-tab layui-tab-card">
 			<ul class="layui-tab-title">
-				<li class="layui-this">小码校验</li>
+				<li class="layui-this">小码扫描</li>
 				<li>历史查询</li>
 			</ul>
 			<div class="layui-tab-content">
@@ -79,6 +82,13 @@
 										placeholder="请输入或扫描条码" class="layui-input" type="text" />
 								</div>
 								<div class="layui-form-mid layui-word-aux">请输入或者扫描条码后回车</div>
+
+								<label class="layui-form-label">今天已扫描数</label>
+								<div class="layui-input-inline">
+									<input id="barNum" name="barNum" autocomplete="off"
+										   placeholder="根据产品编码+组长统计" class="layui-input" type="text"
+										   style="background: #d7d7d7;" disabled="disabled"/>
+								</div>
 							</div>
 							<div class="layui-form-item">
 								<div class="layui-word-aux" style="margin:5px;">两个条码，请在此操作</div>
@@ -112,7 +122,56 @@
 				<div class="layui-tab-item">
 					<div style="margin: 5px">
 					<!--查询面板-->
-        <div th:replace="web/fragment/search_history :: searcher"></div> 
+<!--       			 <div th:replace="web/fragment/search_history :: searcher"></div> -->
+
+						<div class="layui-collapse">
+							<div class="layui-colla-item">
+								<h2 class="layui-colla-title">查询条件</h2>
+								<div class="layui-colla-content layui-show">
+									<div id="hsearchParam" >
+										<form class="layui-form layui-form-pane" action="" id="hsearch_item_form" lay-filter="hsearch_item_form">
+
+											<div class="layui-form-item">
+												<label class="layui-form-label" style="width: 100px">关键字</label>
+												<div class="layui-input-inline"  style="width:140px;">
+													<input  name="hkeywork" autocomplete="off"
+															placeholder="请输入关键字" class="layui-input" type="text"/>
+												</div>
+												<label class="layui-form-label"  style="width: 100px">开始日期</label>
+												<div class="layui-input-inline" style="width:120px;">
+													<input type="text" name="hStartTime" autocomplete="off"
+														   placeholder="请选择开始日期" lay-verify="required" class="layui-input" readonly="readonly"id="hStartTime">
+												</div>
+												<label class="layui-form-label"  style="width: 100px">结束日期</label>
+												<div class="layui-input-inline" style="width:120px;">
+													<input type="text" name="hEndTime" autocomplete="off"
+														   placeholder="请选择结束日期" lay-verify="required" class="layui-input" readonly="readonly" id="hEndTime">
+												</div>
+
+<!--												<label class="layui-form-label">查询错误</label>-->
+												<div class="layui-input-inline"  style="width:120px;">
+													<input type="checkbox" name="errorFlag"  id= "errorFlag" title="显示错误">
+<!--													<input type="checkbox" name="like[read]" title="阅读" checked="">-->
+<!--													<input type="checkbox" name="like[game]" title="游戏">-->
+												</div>
+
+												<div class="layui-input-inline">
+												<button class="layui-btn layui-btn-sm" lay-submit=""
+														type="button" lay-filter="hsearchSubmit" >查询</button>
+												<button type="reset"
+														class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+													<i class="layui-icon">&#xe669;</i>重置
+												</button>
+												</div>
+
+											</div>
+										</form>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<fieldset class="layui-elem-field layui-field-title">
 							<legend style="font-size: 14px;">条码列表</legend>
 						</fieldset>
@@ -123,8 +182,11 @@
 			</div>
 		</div>
 		
-		<script th:src="@{/js/web/produce/check_code/check_code.js}"
-			src="/js/web/produce/check_code/check_code.js"></script>
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/produce/check_code/check_code.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

@@ -153,8 +153,10 @@
 				</div>
 			</div>
 		</div>
-		<script th:src="@{/js/web/produce/rework/rework.js}"
-			src="/js/web/produce/rework/rework.js"></script>
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/produce/rework/rework.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 
 	<style type="text/css">

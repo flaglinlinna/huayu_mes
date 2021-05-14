@@ -12,12 +12,11 @@ import com.web.basePrice.dao.UnitDao;
 import com.web.basePrice.entity.BjWorkCenter;
 import com.web.basePrice.entity.ItemTypeWg;
 import com.web.basePrice.entity.Unit;
-import com.web.quote.dao.QuoteBomDao;
-import com.web.quote.dao.QuoteBomTempDao;
-import com.web.quote.dao.QuoteDao;
+import com.web.quote.dao.*;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteBomTemp;
+import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.QuoteBomTempService;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +58,12 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 	private UnitDao unitDao;
 	@Autowired
 	private BjWorkCenterDao bjWorkCenterDao;
-	
+
+	@Autowired
+	private ProductMaterDao productMaterDao;
+
+	@Autowired
+	private QuoteProcessDao quoteProcessDao;
 
 	/**
 	 * 获取报价单列表
@@ -111,18 +115,19 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			//获取最后一行的num，即总行数。此处从0开始计数
 			int maxRow = sheet.getLastRowNum();
 			List<QuoteBomTemp> quoteBomList = new ArrayList<>();
+			String[] bsGroupsArray = new String[maxRow+1];
 			//前一行为标题
 			Integer successes = 0;
 			Integer failures = 0;
 			//列顺序:0主表id，1工作中心，2物料类型，3是否代采，4组件名称，5零件名称，6材料名称，7材料规格，8工艺说明，
 			// 9用量，10制品重(g)，11重量单位，12水口重(g)，13穴数，14采购说明
 
-			//列顺序:0主表id，1工作中心，2物料类型，3是否代采，4组件名称，5零件名称，6材料名称，7材料规格，8工艺说明，
+			//列顺序:0主表id，1工作中心，2物料类型，3是否代采，4组件名称，5零件名称，6材料名称，7材料规格，8损耗分组，8工艺说明，
 			// 9用量，10用量单位，11采购单位，12采购说明  20200220-hjj
 			for (int row = 2; row <= maxRow; row++) {
 				String errInfo = "";
 				QuoteBomTemp temp = new QuoteBomTemp();
-				String mid = tranCell(sheet.getRow(row).getCell(0));
+				String mid = tranCell(sheet.getRow(row).getCell(0)); //2021-04-09 去除id ，excel暂时不去除
 
 				String wc = tranCell(sheet.getRow(row).getCell(1));
 				if(!StringUtils.isNotEmpty(wc)){
@@ -130,7 +135,13 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 				}else {
 					List<BjWorkCenter> bjWorkCenterList = bjWorkCenterDao.findByWorkcenterNameAndDelFlag(wc, 0);
 					if (bjWorkCenterList != null && bjWorkCenterList.size() > 0) {
-						temp.setPkBjWorkCenter(bjWorkCenterList.get(0).getId());
+						BjWorkCenter bjWorkCenter = bjWorkCenterList.get(0);
+//						if(("out").equals(bjWorkCenter.getBsCode())){
+//							errInfo += "外协不允许在清单中,请到“工艺流程”中选择外协。";
+//						}
+//						else {
+							temp.setPkBjWorkCenter(bjWorkCenterList.get(0).getId());
+//						}
 					} else {
 						errInfo += "没有维护:"+ wc +" 工作中心;";
 					}
@@ -166,15 +177,18 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 				}
 
 				String bsMaterName = tranCell(sheet.getRow(row).getCell(6));
-				if(!StringUtils.isNotEmpty(bsMaterName)){
-					errInfo += "材料名称不能为空;";
-				}
+//				if(!StringUtils.isNotEmpty(bsMaterName)){
+//					errInfo += "材料名称不能为空;";
+//				}
 				String bsModel = tranCell(sheet.getRow(row).getCell(7));
-				if(!StringUtils.isNotEmpty(bsModel)){
-					errInfo += "材料规格不能为空;";
-				}
-				String fmemo = tranCell(sheet.getRow(row).getCell(8));
-				String bsQty = tranCell(sheet.getRow(row).getCell(9)); //hjj-20210119增加用量字段
+//				if(!StringUtils.isNotEmpty(bsModel)){
+//					errInfo += "材料规格不能为空;";
+//				}
+				String bsGroups = tranCell(sheet.getRow(row).getCell(8));
+				temp.setBsGroups(bsGroups);
+				bsGroupsArray[row]= bsGroups;
+				String fmemo = tranCell(sheet.getRow(row).getCell(9));
+				String bsQty = tranCell(sheet.getRow(row).getCell(10)); //hjj-20210119增加用量字段
 //				String bsProQty = tranCell(sheet.getRow(row).getCell(10));
 //				if(StringUtils.isNoneEmpty(bsQty)){
 //					if(!bsQty.matches("^\\d+\\.\\d+$") && !bsQty.matches("^^\\d+$")){
@@ -189,7 +203,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 //					}
 //				}
 
-				String unit = tranCell(sheet.getRow(row).getCell(10));
+				String unit = tranCell(sheet.getRow(row).getCell(11));
 				if(StringUtils.isNotEmpty(unit)) {
 //					List<Unit> unitList = unitDao.findByUnitNameAndDelFlag(unit, 0);
 					List<Unit> unitList = unitDao.findByUnitCodeAndDelFlag(unit, 0);
@@ -198,11 +212,12 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 					} else {
 						errInfo += "没有维护:"+ unit +" 单位;";
 					}
-				}else {
-					errInfo += "单位不能为空";
 				}
+//				else {
+//					errInfo += "单位不能为空";
+//				}
 				temp.setBsQty(bsQty);
-				String purchaseUnit = tranCell(sheet.getRow(row).getCell(11));
+				String purchaseUnit = tranCell(sheet.getRow(row).getCell(12));
 				if(StringUtils.isNotEmpty(purchaseUnit)){
 					List<Unit> unitList = unitDao.findByUnitCodeAndDelFlag(purchaseUnit, 0);
 					if(unitList.size()==0) {
@@ -213,7 +228,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 
 //				String bsWaterGap = tranCell(sheet.getRow(row).getCell(12));
 //				String bsCave = tranCell(sheet.getRow(row).getCell(13));
-				String bsExplain = tranCell(sheet.getRow(row).getCell(12));//lst-20210107增加采购说明字段
+				String bsExplain = tranCell(sheet.getRow(row).getCell(13));//lst-20210107增加采购说明字段
 
 
 //				temp.setBsWaterGap(bsWaterGap);
@@ -236,19 +251,19 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 					temp.setCheckStatus(1);
 					failures ++;
 				}
-				if(StringUtils.isNotEmpty(mid)) {
-					temp.setMid(Long.parseLong(mid));
-					QuoteBom quoteBom = quoteBomDao.findById((Long.parseLong(mid)));
-					if(quoteBom!=null) {
-						if (quoteBom.getPkQuote() != pkQuote) {
-//							Quote quote = quoteDao.findById((long) quoteBom.getPkQuote());
-//							return ApiResponseResult.failure("导入失败！导入的信息中包含报价单编号为:"+quote.getBsCode()+"的外购件清单信息数据," +
-//									"请在当前页面导出后再导入导出的文件");
-							return ApiResponseResult.failure("请在当前页面导出后再导入导出的文件  ->  导入的文件必须是从当前页面导出的。");
-
-						}
-					}
-				}
+//				if(StringUtils.isNotEmpty(mid)) {
+//					temp.setMid(Long.parseLong(mid));
+//					QuoteBom quoteBom = quoteBomDao.findById((Long.parseLong(mid)));
+//					if(quoteBom!=null) {
+//						if (quoteBom.getPkQuote() != pkQuote) {
+////							Quote quote = quoteDao.findById((long) quoteBom.getPkQuote());
+////							return ApiResponseResult.failure("导入失败！导入的信息中包含报价单编号为:"+quote.getBsCode()+"的外购件清单信息数据," +
+////									"请在当前页面导出后再导入导出的文件");
+//							return ApiResponseResult.failure("请在当前页面导出后再导入导出的文件  ->  导入的文件必须是从当前页面导出的。");
+//
+//						}
+//					}
+//				}
 				temp.setPkQuote(pkQuote);
 				temp.setBsElement(bsElement);
 				temp.setBsComponent(bsComponent);
@@ -263,6 +278,26 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 				temp.setCreateDate(doExcleDate);
 				temp.setCreateBy(userId);
 				quoteBomList.add(temp);
+			}
+			for(Integer k = 0;k<= bsGroupsArray.length-1;k++){
+				List<Integer> list = new ArrayList<>();
+				List<String> bsGroupsString = new ArrayList<>();
+				for(Integer j = 0;j<=bsGroupsArray.length-1;j++){
+					if(StringUtils.isNotEmpty(bsGroupsArray[k])){
+						if(bsGroupsArray[k].equals(bsGroupsArray[j])){
+							list.add(j);
+							bsGroupsString.add(bsGroupsArray[k]);
+						}
+					}
+				}
+//		 	if(list.size()==1){
+//				return ApiResponseResult.failure("损耗分组不能只存在一条!");
+//			}
+				for(int m = 0;m<list.size()-1;m++){
+					if(list.get(m+1)-list.get(m)!=1){
+						return ApiResponseResult.failure("相同的损耗分组("+bsGroupsString.get(m)+")必须相邻!");
+					}
+				}
 			}
 			quoteBomTempDao.saveAll(quoteBomList);
 			Integer all = maxRow -1;
@@ -279,9 +314,12 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 		Long userId = UserUtil.getSessionUser().getId();
 		Date doExcelDate = new Date();
 		//hjj 2021/04/02 临时表导入正式表时 删除原数据
+		//hjj 2021/04/09 删除复制的制造部材料,删除工艺流程
 		quoteBomDao.deleteAllByPkQuote(pkQuote);
+		productMaterDao.deleteByPkQuote(pkQuote);
+		quoteProcessDao.delteQuoteProcessByPkQuote(pkQuote);
 
-		List<QuoteBomTemp> tempList = quoteBomTempDao.findByCheckStatusAndDelFlagAndCreateByAndPkQuote(0,0,userId,pkQuote);
+		List<QuoteBomTemp> tempList = quoteBomTempDao.findByCheckStatusAndDelFlagAndCreateByAndPkQuoteOrderById(0,0,userId,pkQuote);
 		List<QuoteBom> quoteBomList =  new ArrayList<>();
 		for(QuoteBomTemp temp:tempList){
 			QuoteBom quoteBom = new QuoteBom();
@@ -309,6 +347,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			quoteBom.setPkQuote(temp.getPkQuote());
 			quoteBom.setPkItemTypeWg(temp.getPkItemTypeWg());
 			quoteBom.setPkBjWorkCenter(temp.getPkBjWorkCenter());
+			quoteBom.setBsGroups(temp.getBsGroups());
 			quoteBom.setFmemo(temp.getFmemo());
 			quoteBom.setBsAgent(temp.getBsAgent());
 			quoteBom.setBsRadix(temp.getBsRadix());
@@ -318,6 +357,10 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			quoteBomList.add(quoteBom);
 		}
 		quoteBomDao.saveAll(quoteBomList);
+		for(QuoteBom o :quoteBomList){
+			o.setPkBomId(o.getId());
+		}
+//		quoteBomDao.saveAll(quoteBomList);
 		quoteBomTempDao.deleteByPkQuoteAndCreateBy(pkQuote,userId);
 		return ApiResponseResult.success().message("确认导入成功!共导入:"+quoteBomList.size()+"条");
 	}

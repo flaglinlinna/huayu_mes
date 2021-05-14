@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface QuoteBomService {
 
@@ -20,6 +21,9 @@ public interface QuoteBomService {
 
 	public ApiResponseResult updateRetrial(Long id,String type,Integer value)throws Exception;
 
+	public ApiResponseResult updateBsGroups(Long id,String bsGroups)throws Exception;
+
+
 	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception;
 
 	//导入BOM Excel
@@ -33,5 +37,8 @@ public interface QuoteBomService {
 
 	//取消确认完成外购件清单 （修改项目状态）
 	public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception;
+
+	public ApiResponseResult editBomList(List<QuoteBom> quoteProcessList) throws Exception;
+
 
 }

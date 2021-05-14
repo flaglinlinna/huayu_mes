@@ -158,13 +158,13 @@ $(function() {
 				}
 			},
 			cols : [ [
-				{type : 'numbers'},
-				{type:'checkbox'},
+				{fixed:'left',type : 'numbers'},
+				{fixed:'left',type:'checkbox'},
 				// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-				 {field : 'ITEM_NO', title : '物料编号', width : 140, sort: true},
+				 {fixed:'left',field : 'ITEM_NO', title : '物料编号', width : 140, sort: true},
 				// {field : 'CUST_NAME', title : '客户名称', width : 140,},
 				{field : 'ITEM_NAME', title : '物料描述', sort: true, width : 240},
-				{field : 'ITEM_NO_CUS', title : '客户物料编码', width : 120 ,sort: true},
+				{field : 'ITEM_NO_CUS', title : '客户物料编码', width : 140 ,sort: true},
 				{field : 'FSAMPLE', title : '条码样例', width : 440 ,sort: true},
 				// {field : 'FIX_VALUE', title : '固定值', width : 80},
 				// {field : 'YEAR_NAME', title : '年', width : 80},

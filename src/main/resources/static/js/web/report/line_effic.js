@@ -44,26 +44,28 @@ $(function() {
 			cols : [ [ /*{
 				type : 'numbers'
 			},*/
-			 {
+				{fixed:'left',
+					field : 'LINER_NAME',
+					title : '组长',width : 100,  sort: true
+				},
+				/*{fixed:'left',
 				field : 'WORK_TYPE',
-				title : '班别',width : 120, sort: true,
-			}, {
+				title : '班别',width : 100, sort: true,
+			}, */
+				{fixed:'left',
+					field : 'ITEM_TYPE',
+					title : '产品型号',width : 120, sort: true
+				}, {fixed:'left',
 				field : 'ITEM_NO',
-				title : '物料编码',width : 160, sort: true
+				title : '物料编码',width : 150, sort: true
 			},
 			{
-				field : 'ITEM_TYPE',
-				title : '机型',width : 160, sort: true
-			}, {
-				field : 'LINER_NAME',
-				title : '组线', sort: true
-			}, {
 				field : 'QTY_PLAN',
 				title : '计划生产数',
-				width : 130, sort: true
+				width : 110, sort: true
 			}, {
 				field : 'QTY_ACT',
-				title : '实际生产数',width : 120, sort: true
+				title : '实际生产数',width : 110, sort: true
 			}, {
 				field : 'STD_CAPACITY',
 				title : '标准产能', width : 100,sort: true
@@ -72,37 +74,37 @@ $(function() {
 				title : '标准人力', width : 100,sort: true
 			}, {
 				field : 'STD_HOURS',
-				title : '标准工时',width : 120, sort: true
+				title : '标准工时',width : 100, sort: true
 			}, {
 				field : 'STD_UPPH',
-				title : '标准upph',width : 120, sort: true
+				title : '标准UPPH',width : 110, sort: true
 			}, {
 				field : 'ACT_MANPOWER',
 				title : '实际用人', width : 100,sort: true
 			}, {
 				field : 'ACT_HOURS_H',
-				title : '实际工时(H)',width : 120, sort: true
+				title : '实际工时',width : 100, sort: true
 			}, {
 				field : 'ACT_CAPACITY',
-				title : '实际产能',width : 120, sort: true
+				title : '实际产能',width : 100, sort: true
 			}, {
 				field : 'ACT_UPPH',
-				title : '实际upph',width : 120, sort: true
+				title : '实际UPPH',width : 110, sort: true
 			}, {
 				field : 'ABNORMAL_HOURS',
-				title : '异常工时',width : 120, sort: true
+				title : '异常工时',width : 100, sort: true
 			}, {
 				field : 'ACT_HOURS',
 				title : '实际生产工时',width : 120, sort: true
 			}, {
 				field : 'YK_HOURS',
-				title : '盈亏工时 ',width : 120, sort: true
+				title : '盈亏工时 ',width : 100, sort: true
 			}, {
 				field : 'EFFICIENCY',
-				title : '效率',width : 120, sort: true
+				title : '效率',width : 90, sort: true
 			}, {
 				field : 'LAR_VALUE',
-				title : 'LAR值',width : 120, sort: true
+				title : 'LAR值',width : 90, sort: true
 			}] ],
 			done : function(res, curr, count) {
 				//
@@ -117,13 +119,13 @@ $(function() {
 			'filters' : [
 				{field: 'ITEM_NO', type:'input'},
 				{field: 'LINER_NAME', type:'input'},
-				{field: 'QTY_PLAN', type:'input'},
-				{field: 'QTY_DONE', type:'input'},
-				{field: 'QTY_PROC', type:'input'},
-				{field: 'CAPACITY', type:'input'},
-				{field: 'MANPOWER', type:'input'},
-				{field: 'HOUR_SDD', type:'input'},
-				{field: 'QTY_EMP', type:'input'},
+				//{field: 'WORK_TYPE', type:'input'},
+				{field: 'ITEM_TYPE', type:'input'},
+				//{field: 'QTY_PROC', type:'input'},
+				//{field: 'CAPACITY', type:'input'},
+				//{field: 'MANPOWER', type:'input'},
+				//{field: 'HOUR_SDD', type:'input'},
+				//{field: 'QTY_EMP', type:'input'},
 			],
 			'done': function(filters){}
 		})

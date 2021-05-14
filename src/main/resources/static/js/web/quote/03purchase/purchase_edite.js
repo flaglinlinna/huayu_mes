@@ -14,7 +14,7 @@ $(function() {
 			height : 'full-65',// 固定表头&full-查询框高度
 			//even:true,//条纹样式
 			page : true,
-			limit:20,
+			limit:50,
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -29,9 +29,9 @@ $(function() {
 				}
 			},
 			cols :[ [
-			    {type : 'numbers',style : 'background-color:#d2d2d2'},
+			    {fixed:'left',type : 'numbers',style : 'background-color:#d2d2d2'},
 			    {field : 'id',title : 'ID',hide : true},
-			    {field : 'bsType',width : 100,title : '类型',sort : true,style : 'background-color:#d2d2d2',
+			    {fixed:'left',field : 'bsType',width : 90,title : '工作中心大类',style : 'background-color:#d2d2d2',
 					templet : function(d) {
 						if (d.bsType == 'hardware') {// * 五金:hardware
 							return '五金'
@@ -45,28 +45,24 @@ $(function() {
 							return '外协'
 						}
 				}}, 
-				{field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'},
-				{field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
-				{field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'},
+				//{field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'},
+				{fixed:'left',field : 'bsMaterName',width : 200,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
+				{fixed:'left',field : 'bsModel',width : 200,title : '材料规格',style : 'background-color:#d2d2d2'},
 				{field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
 				{field : 'bsUnit',width : 100,title : 'BOM用量单位',style : 'background-color:#d2d2d2',templet:function (d){
 						if(d.unit!=null){
 							return d.unit.unitCode;
 						}
 					}},
-				{field : 'bsGear',width : 120,title : '价格挡位',templet : '#selectGear',style : 'background-color:#ffffff'},
-				{field : 'bsRefer',width : 110,title : '参考价格',style : 'background-color:#d2d2d2'},
 				{field : 'bsAssess',width : 120,title : '含税价格(元/KG)<span style="color:red;font-size:12px;">*</span>',edit : 'number',style : 'background-color:#ffffff'},
 				// {field : 'bsProQty',width : 100,title : '制品重(g)',style : 'background-color:#d2d2d2'},
-				{field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
-				{field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
+				//{field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
+				//{field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
 				// {field : 'bsWaterGap',title : '水口量(g)',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				// {field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
-
 				{field : 'purchaseUnit',width : 110,title : '采购单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
-				// {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},
 				{
-					field: 'bsGeneral', width: 120, title: '是否通用物料', style: 'background-color:#d2d2d2',
+					field: 'bsGeneral', width: 80, title: '通用物料', style: 'background-color:#d2d2d2',
 					templet: function (d) {
 						if (d.bsGeneral == 1) {
 							return '是'
@@ -77,16 +73,24 @@ $(function() {
 						}
 					}
 				},
-				{field : 'bsExplain',width : 110,title : '采购说明',style : 'background-color:#d2d2d2'},
-				{field : 'fmemo',width : 110,title : '备注',edit : 'text',style : 'background-color:#ffffff'},
-				{field : 'bsSupplier',width : 110,title : '供应商',edit : 'text',style : 'background-color:#ffffff'}
+				{field : 'bsRefer',width : 90,title : '参考价格',style : 'background-color:#d2d2d2'},
+				{field : 'bsGear',width : 120,title : '价格挡位',style : 'background-color:#d2d2d2'},
+
+				// {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},
+
+				//{field : 'bsExplain',width : 110,title : '采购说明',style : 'background-color:#d2d2d2'},
+				//{field : 'fmemo',width : 110,title : '备注',edit : 'text',style : 'background-color:#ffffff'},
+				//{field : 'bsSupplier',width : 110,title : '供应商',edit : 'text',style : 'background-color:#ffffff'}
 				] ],
 			done : function(res, curr, count) {
 				// pageCurr = curr;
 				 var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				  layui.each(res.data, function(i, item){
-				    if(item.bsStatusPurchase==1){
+				    if(item.bsStatusPurchase=='1'){
 				    	tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
+						$("select[name='selectUnit']").attr("disabled","disabled");
+						$("select[name='selectGear']").attr("disabled","disabled");
+						form.render('select');
 				    }
 				  });
 			}
@@ -95,13 +99,17 @@ $(function() {
 		//监听机台类型下拉选择 并修改
 		form.on('select(selectUnit)', function (data) {
 			//获取当前行tr对象
-			var elem = data.othis.parents('tr');
+			// var elem = data.othis.parents('tr');
 			//第一列的值是Guid，取guid来判断
-			var Guid= elem.first().find('td').eq(1).text();
+			// var Guid= elem.first().find('td').eq(1).text();
 			// var bsStatus= elem.first().find('td').eq(2).text();
 			//选择的select对象值；
-			var selectValue = data.value;
-			updateUnit(Guid,selectValue);
+			// var selectValue = data.value;
+			// updateUnit(Guid,selectValue);
+
+			//获得所在行数
+			var elem = data.othis.parents('tr').attr('data-index');
+			layui.table.cache['productPriceList'][elem].purchaseUnit = data.value;
 
 		})
 
@@ -136,7 +144,7 @@ $(function() {
 				  {field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'},
 				  {field : 'bsType',width : 100,title : '类型',sort : true,style : 'background-color:#d2d2d2'},
 				  {field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'},
-				  {field : 'bsMaterName',width : 120,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
+				  {field : 'bsMaterName',width : 210,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
 				  {field : 'bsModel',width : 150,title : '材料规格',style : 'background-color:#d2d2d2'},
 				  {field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
 				  {field : 'bsUnit',width : 100,title : 'BOM用量单位',style : 'background-color:#d2d2d2',templet:function (d){
@@ -186,11 +194,11 @@ $(function() {
 			var bsAssess = obj.data.bsAssess;
 			if (/^\d+$/.test(bsAssess) == false && /^\d+\.\d+$/.test(bsAssess) == false && bsAssess != "" && bsAssess != null) {
 				layer.msg("评估价格只能输入数字");
-				loadAll();
+				// loadAll();
 				return false;
 			}
-			obj.field = obj.data;
-			editSubmit(obj);
+			// obj.field = obj.data;
+			// editSubmit(obj);
 		})
 
 		// 监听在职操作
@@ -305,9 +313,11 @@ function cancelConfirm(){
 }
 
 function isComplete() {
+	console.log(nowStatus);
 	if (nowStatus.data == 0) {
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
+		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true);
 	}
 }
 
@@ -325,6 +335,24 @@ function updateUnit(id,unitId) {
 				} else {
 					layer.alert(data.msg, function() {
 						layer.closeAll();
+					});
+				}
+			}
+		});
+}
+
+function saveTable() {
+	var dates = layui.table.cache['productPriceList'];
+	// console.log(dates);
+	CoreUtil.sendAjax("/productMater/saveTable", JSON.stringify(dates),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
 					});
 				}
 			}
@@ -379,6 +407,7 @@ function confirm() {
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
+		saveTable();
 		CoreUtil.sendAjax("/purchase/doStatus", JSON.stringify(params), function(data) {
 			if (data.result) {
 				layer.alert("确认完成成功", function() {

@@ -18,8 +18,10 @@ $(function () {
             // ,cellMinWidth: 80
             ,page: true
             , toolbar: '#toolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-            ,height:'full-130'//固定表头&full-查询框高度
+            ,height:'full-80'//固定表头&full-查询框高度
             ,even:true,//条纹样式
+            limit:30,
+            limits:[30,50,100,200,300],
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit
@@ -35,18 +37,19 @@ $(function () {
                 }
             },
             cols: [[
-                {type:'numbers' ,align: 'center'},
-                {type:'checkbox' ,width:60,align: 'center'}
-                ,{field:'PRODUCE_STATE', title:'状态', width:60,align: 'center'}
-                ,{field:'TASK_NO', title:'制令单号', width:170,align: 'center'}
-                ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center'}
-                ,{field:'LINER_NAME', title:'组长', width:70,align: 'center'}
-                ,{field:'PROD_DATE', title:'日期',templet:function (d) {
+                {type:'numbers' ,align: 'center',fixed:'left'},
+                {type:'checkbox' ,width:60,align: 'center',fixed:'left'}
+                ,{field:'PRODUCE_STATE', title:'状态', width:60,align: 'center',fixed:'left'}
+                ,{field:'PROD_DATE', title:'生产日期',templet:function (d) {
                         if(d.PROD_DATE!=null){
                             return d.PROD_DATE.slice(0,4)+"-"+ d.PROD_DATE.slice(4,6)+"-"+d.PROD_DATE.slice(6,8)
                         }
                     },
-                    width:100,align: 'center'}
+                    width:100,align: 'center',fixed:'left'}
+                ,{field:'LINER_NAME', title:'组长', width:70,align: 'center',fixed:'left'}
+                ,{field:'FMODEL', title:'产品型号', width:90,align: 'center',fixed:'left'}
+                ,{field:'ITEM_NO', title:'物料编码', width:150,align: 'center',fixed:'left'}
+                ,{field:'TASK_NO', title:'制令单号', width:150,align: 'center'}
                 ,{field:'CLASS_NO', title:'班次', width:60,align: 'center'}
                 ,{field:'QTY_PLAN', title:'计划数量', width:80,align: 'center'}
                 ,{field:'QTY_DONE', title:'完工数', width:80,align: 'center'}
@@ -58,7 +61,7 @@ $(function () {
                 ,{field:'MAN_ACT', title:'实际用人', width:80,align: 'center'}
                ,{field:'DEPT_NAME', title:'部门名称', width:80,align: 'center'}
                 ,{field:'PROD_NO', title:'工单号', width:130,align: 'center'}
-                ,{field:'GROUP_NO', title:'组合', width:55,align: 'center'}
+                // ,{field:'FMODEL', title:'产品型号', width:55,align: 'center'}
                 ,{field:'CUST_NAME_S', title:'客户', width:150,align: 'center'}
                 ,{field:'ITEM_NAME', title:'物料描述', width:200,align: 'center'},
                 // ,{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#optBar'}

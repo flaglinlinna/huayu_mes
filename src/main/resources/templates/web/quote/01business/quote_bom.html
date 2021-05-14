@@ -54,6 +54,8 @@
                          <button class="layui-btn layui-btn-sm" id="savebtn" type="button" onclick="save()">确认完成</button>
 						 <button class="layui-btn layui-btn-sm" type="button"
 								id="cancelbtn" onclick="cancelStatus()">取消完成</button>
+						<button class="layui-btn layui-btn-sm" type="button"
+								id="editListBtn" onclick="saveTable()">保存</button>
 					</div>
 				</div>
 			</form>	
@@ -165,7 +167,7 @@
 				</div>
 				
 				<div class="layui-form-item">
-					    <label class="layui-form-label layui-required">材料名称</label>
+					    <label class="layui-form-label">材料名称</label>
 					    <div class="layui-input-block" style="width:530px">
 						<input id="bsMaterName" name="bsMaterName" lay-verify="required"
 							placeholder="请输入材料名称" autocomplete="off" class="layui-input"
@@ -265,6 +267,16 @@
 							type="text" />
 					</div>
 				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label ">损耗合计分组</label>
+					<div class="layui-input-block" style="width:530px">
+						<input id="bsGroups" name="bsGroups" placeholder="请输入损耗合计分组名称"
+							   autocomplete="off" class="layui-input"
+							   type="text" />
+					</div>
+				</div>
+
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 10px;">
 						<button class="layui-btn layui-btn-sm" lay-submit=""

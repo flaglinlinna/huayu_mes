@@ -18,7 +18,7 @@ $(function() {
 			height : 'full-65',// 固定表头&full-查询框高度
 			even : true,// 条纹样式
 			page : true,
-			limit:20,
+			limit:50,
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -34,23 +34,24 @@ $(function() {
 				}
 			},
 			cols : [ [
-			  {type : 'numbers'},
+			  {fixed:'left',type : 'numbers'},
 			  {field:"id",title:"ID",hide:true},
 			  // {field:"bsStatus",title:"bsStatus",hide:true},
-			  {field : 'bsComponent',title : '零件名称',sort : true,style : 'background-color:#d2d2d2'},
-			  {field : 'bsMachiningType',title : '加工类型<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
-			  {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
-			  {field : 'bsMaterName',title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
-			  {field : 'bsModel',title : '规格',style : 'background-color:#d2d2d2'},
-			  {field : 'bsQty',width : 100,title : 'BOM用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
+			  {fixed:'left',field : 'bsComponent',title : '零件名称',width : 150,sort : true,style : 'background-color:#d2d2d2'},
+			  // {field : 'bsMachiningType',title : '加工类型<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
+			  // {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
+			  {fixed:'left',field : 'bsMaterName',title : '材料名称',width : 200,sort : true,style : 'background-color:#d2d2d2'},
+			  {fixed:'left',field : 'bsModel',title : '材料规格',width : 200,style : 'background-color:#d2d2d2;overflow:hidden !important'},
+			  {field : 'bsQty',width : 100,title : '材料用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'bsProQty',width : 100,title : '制品重(g)<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
-			  {field : 'bsUnit',width : 120,title : 'BOM用量单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
+			  {field : 'bsUnit',width : 120,title : '材料用量单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
+			  {field : 'bsGroups',width : 120,title : '损耗分组',style : 'background-color:#ffffff',hide : true},
 			  /*{field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text',style : 'background-color:#ffffff'},*/
 			  {field : 'bsWaterGap',title : '水口重(g)<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
-			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (注塑)*/}, 
-			  {field : 'bsSupplier',title : '备选供应商',edit : 'text',style : 'background-color:#ffffff'},
-			  {field : 'fmemo',title : '备注',width : 120,edit : 'text',style : 'background-color:#ffffff'},
-			  {fixed : 'right',title : '操作',align : 'center',width : 120,toolbar : '#optBar'} 
+			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 60,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (注塑)*/},
+			  //{field : 'bsSupplier',title : '备选供应商',edit : 'text',style : 'background-color:#ffffff'},
+			  //{field : 'fmemo',title : '备注',width : 120,edit : 'text',style : 'background-color:#ffffff'},
+			  // {fixed : 'right',title : '操作',align : 'center',width : 120,toolbar : '#optBar'}
 			  ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
@@ -83,15 +84,19 @@ $(function() {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsProQty"]').removeClass("layui-hide");
 
 					} else if (bsType == 'surface') {
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
+						// $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
+						// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
+						// $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
+						// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 					} else if (bsType == 'packag') {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 					}
 				});
 			}
@@ -100,13 +105,16 @@ $(function() {
 		//监听机台类型下拉选择 并修改
 		form.on('select(selectUnit)', function (data) {
 			//获取当前行tr对象
-			var elem = data.othis.parents('tr');
+			// var elem = data.othis.parents('tr');
 			//第一列的值是Guid，取guid来判断
-			var Guid= elem.first().find('td').eq(1).text();
+			// var Guid= elem.first().find('td').eq(1).text();
 			// var bsStatus= elem.first().find('td').eq(2).text();
 			//选择的select对象值；
-			var selectValue = data.value;
-			updateUnit(Guid,selectValue);
+			//当前行的
+			var elem = data.othis.parents('tr').attr('data-index');
+			layui.table.cache['listTable'][elem].pkUnit = data.value;
+			// var selectValue = data.value;
+			// updateUnit(Guid,selectValue);
 
 		})
 
@@ -140,18 +148,18 @@ $(function() {
 			// {field : 'enabled', width:100, title :'是否导入',sort:true,style:'background-color:#d2d2d2', templet: '#enabledTpl'},
 			   {field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'},
 			   {field : 'bsComponent',width : 140,title : '零件名称',sort : true},
-			   {field : 'bsMachiningType',title : '加工类型',width : 100,hide : true /*(表面处理)*/},
-			   {field : 'bsColor',title : '配色工艺',width : 100,hide : true /*(表面处理)*/},
+			   // {field : 'bsMachiningType',title : '加工类型',width : 100,hide : true /*(表面处理)*/},
+			   // {field : 'bsColor',title : '配色工艺',width : 100,hide : true /*(表面处理)*/},
 			   {field : 'bsMaterName',width : 140,title : '材料名称',sort : true},
 			   {field : 'bsModel',width : 160,title : '规格'},
-			   {field : 'bsQty',width : 100,title : 'BOM用量',hide : true},
+			   {field : 'bsQty',width : 100,title : '材料用量',hide : true},
 			   {field : 'bsProQty',width : 100,title : '制品量',hide : true},
-			   {field : 'bsUnit',width : 80,title : 'BOM用量单位',},
+			   {field : 'bsUnit',width : 80,title : '材料用量单位',},
 			   //{field : 'bsRadix',width : 80,title : '基数',},
 			   {field : 'bsWaterGap',title : '水口重(g)',width : 100,hide : true /*(注塑)*/},
 			   {field : 'bsCave',title : '穴数',width : 100,hide : true /*(注塑)*/},
-			   {field : 'bsSupplier',title : '备选供应商',width : 100},
-			   {field : 'fmemo',title : '备注',width : 120},
+			   // {field : 'bsSupplier',title : '备选供应商',width : 100},
+			   // {field : 'fmemo',title : '备注',width : 120},
 			// {fixed : 'right', title : '操作', align : 'center', width:120, toolbar : '#optBar'}
 			] ],
 			done : function(res1, curr, count) {
@@ -217,37 +225,37 @@ $(function() {
 			} else*/
 			if (obj.field == "bsQty") {
 				if (/^\d+$/.test(bsQty) == false && /^\d+\.\d+$/.test(bsQty) == false) {
-					layer.msg("BOM用量只能输入数字");
-					loadAll();
+					layer.msg("材料用量只能输入数字");
+					// loadAll();
 					return false;
 				}
 			} else if (obj.field == "bsWaterGap") {
 				if (/^\d+$/.test(bsWaterGap) == false && /^\d+\.\d+$/.test(bsWaterGap) == false) {
 					layer.msg("水口重(g)只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			} else if (obj.field == "bsProQty") {
 				if (/^\d+$/.test(bsProQty) == false && /^\d+\.\d+$/.test(bsProQty) == false && bsProQty != "" && bsProQty != null) {
 					layer.msg("制品重(g)只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			} else if (obj.field == "bsCave") {
 				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false || bsCave == 0) {
 					layer.msg("穴数只能输入数字且不能为0");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			} else if (obj.field == "bsLoss") {
 				if (/^\d+$/.test(bsLoss) == false && /^\d+\.\d+$/.test(bsLoss) == false && bsLoss != "" && bsLoss != null) {
 					layer.msg("损耗率只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}
-			obj.field = obj.data;
-			editSubmit(obj);
+			// obj.field = obj.data;
+			// editSubmit(obj);
 		})
 
 		initSelect();
@@ -296,7 +304,11 @@ $(function() {
 					return false;
 				}
 			} else if (bsType == "surface") {
-				if (data.field.bsColor == "" || data.field.bsMachiningType == "") {
+				// if (data.field.bsColor == "" || data.field.bsMachiningType == "") {
+				// 	layer.msg("请输入所有带*的必填项");
+				// 	return false;
+				// }
+				if (data.field.bsQty == "") {
 					layer.msg("请输入所有带*的必填项");
 					return false;
 				}
@@ -384,7 +396,26 @@ function isComplete() {
 		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
 	}
+}
+
+function saveTable() {
+	var dates = layui.table.cache['listTable'];
+	// console.log(dates);
+	CoreUtil.sendAjax("/productMater/saveTable", JSON.stringify(dates),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
 }
 
 function uploadChecked() {
@@ -419,9 +450,10 @@ function Confirm() {
 		"bsType" : bsType,
 		"bsCode" : bsCode
 	};
-	layer.confirm('一经提交则不得再修改，确定要提交吗1？', {
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
+		saveTable();
 		CoreUtil.sendAjax("/productMater/doStatus", JSON.stringify(params), function(data) {
 			if (data.result) {
 				// parent.layui.admin.events.closeThisTabs(); 先关闭执行不了js
@@ -515,10 +547,10 @@ function openUpload() {
 					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsProQty"]').removeClass("layui-hide");
 
 				} else if (bsType == 'surface') {
-					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
-					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
-					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
-					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
+					// $('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
+					// $('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
+					// $('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
+					// $('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
 					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
 				} else if (bsType == 'packag') {
@@ -748,15 +780,19 @@ function loadAll() {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsProQty"]').removeClass("layui-hide");
 
 				} else if (bsType == 'surface') {
-					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
-					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
-					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
-					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
+					// $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
+					// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");
+					// $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsColor"]').removeClass("layui-hide");
+					// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 				} else if (bsType == 'packag') {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 				}
 			});
 

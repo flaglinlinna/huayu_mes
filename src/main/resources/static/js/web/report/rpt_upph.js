@@ -50,29 +50,25 @@ $(function() {
 				],
 				[ {
 				type : 'numbers'
-			},
+			},{
+					field : 'LINER_NAME',
+					title : '组长',width : 90,  sort: true
+				},
 					{
 						field : 'PROD_DATE',
-						title : '产出时间', width : 150,sort: true
+						title : '产出时间', width : 110,sort: true
 					},
 					{
-
 				field : 'ITEM_NO',
 				title : '物料编码',width : 150,sort: true,totalRowText:"合计"
-			},
-				{
-				field : 'ITEM_NAME',
-				title : '物料名称',width : 130, sort: true
-			},
-				{
-
-				field : 'CLASS_NO',
-				title : '班别', width : 130, sort: true
-			}, {
-
-				field : 'LINER_NAME',
-				title : '组长',width : 130,  sort: true
 			},{
+					field : 'ITEM_NAME',
+					title : '物料名称',width : 150, sort: true
+				},
+				{
+				field : 'CLASS_NO',
+				title : '班别', width : 90, sort: true
+			}, {
 				field : 'CAPACITY',
 				title : '标准UPH',width : 100,sort: true,
 			},
@@ -90,64 +86,64 @@ $(function() {
 				},
 				{
 					field : 'EMP_QTY',
-					title : '投入人力', width : 130,sort: true,totalRow: true
+					title : '投入人力', width : 110,sort: true,totalRow: true
 				},
 				{
 					field : 'ACT_HOURS',
-					title : '投入工时', width : 130,sort: true,totalRow: true
+					title : '投入工时', width : 110,sort: true,totalRow: true
 				},
 				{
 					field : 'ABNORMAL_HOURS',
-					title : '损失工时', width : 130,sort: true,totalRow: true
+					title : '损失工时', width : 110,sort: true,totalRow: true
 				},
 				{
 					field : 'NT_HOURS',
-					title : '有效工时', width : 130,sort: true,totalRow: true
+					title : '有效工时', width : 110,sort: true,totalRow: true
 				},
 				{
 					field : 'YK_HOURS',
-					title : '亏赚工时', width : 130,sort: true,totalRow: true
+					title : '亏赚工时', width : 110,sort: true,totalRow: true
 				},
 					{
 						field : 'PLAN_IN_QTY',
-						title : '计划投入', width : 130,sort: true,totalRow: true
+						title : '计划投入', width : 110,sort: true,totalRow: true
 					},
 					{
 						field : 'ACT_IN_QTY',
-						title : '实际投入', width : 130,sort: true,totalRow: true
+						title : '实际投入', width : 110,sort: true,totalRow: true
 					},
 					{
 						field : 'IN_RATE',
-						title : '投入达标率', width : 130,sort: true
+						title : '投入达标率', width : 120,sort: true
 					},
 				{
 					field : 'QTY_PLAN',
-					title : '计划产出', width : 130,sort: true,totalRow: true
+					title : '计划产出', width : 110,sort: true,totalRow: true
 				},
 				{
 					field : 'QTY_DONE',
-					title : '实际产出', width : 130,sort: true,totalRow: true
+					title : '实际产出', width : 110,sort: true,totalRow: true
 				},
 					{
 						field : 'OUT_RATE',
-						title : '产出达标率', width : 130,sort: true
+						title : '产出达标率', width : 120,sort: true
 					},
 
 				{
 					field : 'NG_QTY_A',
-					title : '来料不良数', width : 130,sort: true,totalRow: true
+					title : '来料不良数', width : 120,sort: true,totalRow: true
 				},
 				{
 					field : 'NG_QTY_B',
-					title : '制程不良数', width : 130,sort: true,totalRow: true
+					title : '制程不良数', width : 120,sort: true,totalRow: true
 				},
 				{
 					field : 'NG_QTY_C',
-					title : '首备测数', width : 130,sort: true,totalRow: true
+					title : '首备测数', width : 110,sort: true,totalRow: true
 				},
 				{
 					field : 'NG_QTY',
-					title : '总不良数', width : 130,sort: true,totalRow: true
+					title : '总不良数', width : 110,sort: true,totalRow: true
 				},
 					// {
 					// 	field : 'PROD_DATE',

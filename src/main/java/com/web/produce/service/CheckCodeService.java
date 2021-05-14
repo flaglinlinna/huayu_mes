@@ -14,6 +14,6 @@ public interface CheckCodeService {
 
 	public ApiResponseResult subCode(String taskNo,String itemCode,String linerName, String barcode1, String barcode2) throws Exception;
 	
-	public ApiResponseResult getHistoryList(String keyword, String hStartTime,String hEndTime,PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getHistoryList(String keyword,Integer errFlag, String hStartTime,String hEndTime,PageRequest pageRequest) throws Exception;
 	
 }

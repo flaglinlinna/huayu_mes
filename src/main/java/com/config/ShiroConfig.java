@@ -150,6 +150,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/v2/**", "anon");
         filterChainDefinitionMap.put("/webjars/**", "anon");
 
+		filterChainDefinitionMap.put("/getMACAddress", "anon");
+		filterChainDefinitionMap.put("/getCPUSerial", "anon");
+
 
 		filterChainDefinitionMap.put("/user/delUser", "authc,perms[usermanage]");
 //		//add操作，该用户必须有【addOperation】权限
@@ -160,6 +163,7 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/*/*", "authc");
 		filterChainDefinitionMap.put("/*/*/*", "authc");
 		filterChainDefinitionMap.put("/*/*/*/**", "authc");
+
 
 		shiroFilterFactoryBean
 				.setFilterChainDefinitionMap(filterChainDefinitionMap);

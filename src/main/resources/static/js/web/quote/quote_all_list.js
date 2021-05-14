@@ -52,8 +52,11 @@ $(function() {
 					}
 				},
 				cols : [ [ 
-				{type : 'numbers'},			 
-				{field : 'bsCode',title : '报价单编号',width : 150,sort: true}, 
+				{fixed:'left',type : 'numbers'},
+				{fixed:'left',field : 'bsCode',title : '报价单编号',width : 150,sort: true},
+					{fixed:'left',field : 'bsProd',title : '产品型号',width : 120,sort: true},
+					{fixed:'left',fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true},
+					{field : 'bsStatus',title : '状态',width : 341,templet:'#statusTpl',sort: true},
 				{field : 'bsType',title : '报价类型', width : 120,templet:function (d) {
 						 if(d.bsType=="YSBJ"){
 							 return "衍生报价";
@@ -63,9 +66,9 @@ $(function() {
 							 return "";
 						 }
 				},sort: true},
-				{field : 'bsStatus',title : '状态',width : 341,templet:'#statusTpl',sort: true},
+
 				{field : 'bsCustName',title : '客户名称',width : 120,sort: true},
-				{field : 'bsProd',title : '产品型号',width : 120,sort: true},
+
 				{field : 'bsProdType',title : '产品类型',width : 140, sort: true},
 				{field : 'bsDevType',title : '机种型号',width : 140, sort: true},
 				{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140},

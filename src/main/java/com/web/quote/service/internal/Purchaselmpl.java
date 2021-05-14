@@ -181,9 +181,10 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	public ApiResponseResult getQuoteList(String keyword, String quoteId, PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
 
+		//代采的材料不显示  bs_agent = 0
 		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.bs_agent = 0 and p.pk_quote="+quoteId;
 		//20210113-fyx-去掉外协--?
-		//hql += " and p.bs_Type <> 'out' " ;
+		hql += " and p.bs_Type <> 'out' " ;
 
 		if (StringUtils.isNotEmpty(keyword)) {
 			hql += "  and INSTR((p.bs_component || p.bs_mater_name ||p.bs_model ||p.fmemo ||p.bs_unit" +
@@ -306,7 +307,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		if(lmp.size()>0){
 			list =productMaterDao.findByPkQuoteAndUser(quoteId,UserUtil.getSessionUser().getId());
 		}else {
-			list = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+			list = productMaterDao.findByBsAgentAndDelFlagAndPkQuote(0,0,quoteId);
 		}
 
 		XSSFWorkbook workbook = new XSSFWorkbook();
@@ -418,8 +419,8 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			notFilled = productMaterDao.countByPkQuoteAndUserId(quoteId,UserUtil.getSessionUser().getId());
 			productMaterList =productMaterDao.findByPkQuoteAndUser(quoteId,UserUtil.getSessionUser().getId());
 		}else {
-			notFilled =productMaterDao.countByDelFlagAndPkQuoteAndBsAssessIsNull(0,quoteId);
-			productMaterList = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+			notFilled =productMaterDao.countByDelFlagAndPkQuoteAndBsAssessIsNullAndBsTypeIsNotAndBsAgent(0,quoteId,"out",0);
+			productMaterList = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeIsNotAndBsAgent(0,quoteId,"out",0);
 		}
 		if(productMaterList.size()==0){
 			return ApiResponseResult.failure("确认完成失败！当前报价单无采购信息！");
@@ -476,7 +477,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			return ApiResponseResult.failure("报价单ID为空!");
 		}
 		//查询未完成的价格
-		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuoteAndBsStatusPurchase(0, Long.parseLong(quoteId), 0);
+		List<ProductMater> lpm = productMaterDao.findByDelFlagAndPkQuoteAndBsStatusPurchaseAndBsAgentAndBsTypeIsNot(0, Long.parseLong(quoteId), 0,0,"out");
 		if(lpm.size()>0){
 			return ApiResponseResult.failure("存在未报价的物料信息，不能发起审批!");
 		}else{

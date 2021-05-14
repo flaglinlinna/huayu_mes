@@ -23,7 +23,7 @@ $(function() {
 			height:'full-65',//固定表头&full-查询框高度
 			even:true,//条纹样式
 			page : true,
-			limit:20,
+			limit:50,
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -41,8 +41,8 @@ $(function() {
 			cols : [ [ {type : 'numbers',style:'background-color:#d2d2d2'},
 				{field:"id",title:"ID",hide:true},
 				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
-				{field : 'bsOrder',width:150, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
-				{field : 'proc', width:150, title : '工序名称',style:'background-color:#d2d2d2',
+				{field : 'bsOrder',width:90, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'proc', width:120, title : '工序名称',style:'background-color:#d2d2d2',
 					templet:function (d) {
 						if(d.proc!=null){
 							return d.proc.procName==null||undefined?"":d.proc.procName;
@@ -58,7 +58,7 @@ $(function() {
 				// 			return "";
 				// 		}
 				// 	}},
-				{field : 'workcenterName', width:100, title : '工作中心',style:'background-color:#d2d2d2'
+				{field : 'workcenterName', width:120, title : '工作中心',style:'background-color:#d2d2d2'
 					,templet:function (d) {
 						if(d.proc!=null){
 							if(d.proc.bjWorkCenter!=null){
@@ -71,17 +71,18 @@ $(function() {
 						}
 					}},
 				/*{field : 'bsModelType', width:100, title : '机台类型',width:90,},*/
-				{field : 'bsModelType',width : 160,title : '机台类型',templet : '#selectModelType',style : 'background-color:#ffffff'},
+				{field : 'bsModelType',width : 200,title : '机台类型',templet : '#selectModelType',style : 'background-color:#ffffff'},
 				/*{field : 'bsRadix', title : '基数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',style : 'background-color:#ffffff'},*/
-				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsCycle', title : '成型周期(S)<span style="color:red;font-size:12px;">*</span>', width:150,edit:'text', hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsYield', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:120,edit:'text',hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsLoss', title : '损耗率<span style="color:red;font-size:12px;">*</span>', width:100,edit:'text',hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsCave', title : '穴数<span style="color:red;font-size:12px;">*</span>',edit:'text',width:90, hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:60,edit:'text',hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsCycle', title : '成型周期(S)<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text', hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsYield', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsLoss', title : '损耗率<span style="color:red;font-size:12px;">*</span>', width:80,edit:'text',hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsCave', title : '穴数<span style="color:red;font-size:12px;">*</span>',edit:'text',width:50, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCapacity', title : '产能(个/小时)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:105, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsFeeWxAll', title : '外协价格<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
-				{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff'},
-				{fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'} ] ],
+				//{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff'},
+				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
+				] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
 
@@ -182,14 +183,14 @@ $(function() {
 							return "";
 						}
 					}},
-				{field : 'procfmemo', width:100, title : '工序说明',style:'background-color:#d2d2d2',
-					templet:function (d) {
-						if(d.proc!=null){
-							return d.proc.fmemo==null||undefined?"":d.proc.fmemo;
-						}else {
-							return "";
-						}
-					}},
+				// {field : 'procfmemo', width:100, title : '工序说明',style:'background-color:#d2d2d2',
+				// 	templet:function (d) {
+				// 		if(d.proc!=null){
+				// 			return d.proc.fmemo==null||undefined?"":d.proc.fmemo;
+				// 		}else {
+				// 			return "";
+				// 		}
+				// 	}},
 				{field : 'workcenterName', width:100, title : '工作中心',style:'background-color:#d2d2d2'
 					,templet:function (d) {
 						if(d.proc!=null){
@@ -209,7 +210,10 @@ $(function() {
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
 				{field : 'bsCave', title : '穴数',edit:'text', width:80, hide:true},
 				{field : 'bsCapacity', title : '产能(个/小时)',edit:'text', width:105, hide:true},
-				{field : 'fmemo', title : '备注',width:120,edit:'text'},
+				{field : 'bsLoss', title : '损耗率<span style="color:red;font-size:12px;">*</span>', width:80,edit:'text',hide:true},
+				{field : 'bsFeeWxAll', title : '外协价格<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true},
+
+				// {field : 'fmemo', title : '备注',width:120,edit:'text'},
 				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
 				] ],
 			done : function(res, curr, count) {
@@ -398,19 +402,19 @@ $(function() {
 			if(obj.field =="bsRadix") {
 				if (/^\d+$/.test(bsRadix) == false && /^\d+\.\d+$/.test(bsRadix) == false || bsRadix <= 0) {
 					layer.msg("基数必填且只能输入数字且大于0");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsUserNum") {
 				if (/^\d+$/.test(bsUserNum) == false && /^\d+\.\d+$/.test(bsUserNum) == false) {
 					layer.msg("人数只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsYield") {
 				if (/^\d+$/.test(bsYield) == false && /^\d+\.\d+$/.test(bsYield) == false) {
 					layer.msg("工序良率只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}else if(Number(bsYield)>100){
 					layer.msg("工序良率不能大于100");
@@ -420,24 +424,25 @@ $(function() {
 			}else if(obj.field =="bsCycle") {
 				if (/^\d+$/.test(bsCycle) == false && /^\d+\.\d+$/.test(bsCycle) == false) {
 					layer.msg("成型周期只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsCave") {
 				if (/^\d+$/.test(bsCave) == false && /^\d+\.\d+$/.test(bsCave) == false) {
 					layer.msg("穴数只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}else if(obj.field =="bsLoss") {
 				if (/^\d+$/.test(bsLoss) == false && /^\d+\.\d+$/.test(bsLoss) == false && bsLoss != "" && bsLoss != null) {
 					layer.msg("损耗率只能输入数字");
-					loadAll();
+					// loadAll();
 					return false;
 				}
 			}
-			obj.field = obj.data;
-			editSubmit(obj);
+			//20210423 去除编辑刷新，统一按钮保存
+			// obj.field = obj.data;
+			// editSubmit(obj);
 		})
 
 		initSelect();
@@ -727,12 +732,15 @@ $(function() {
 		//监听机台类型下拉选择 并修改
 		form.on('select(selectModelType)', function (data) {
 			//获取当前行tr对象
-			var elem = data.othis.parents('tr');
+			// var elem = data.othis.parents('tr');
 			//第一列的值是Guid，取guid来判断
-			var Guid= elem.first().find('td').eq(1).text();
+			// var Guid= elem.first().find('td').eq(1).text();
 			//选择的select对象值；
-			var selectValue = data.value;
-			updateModelType(Guid,selectValue);
+			// var selectValue = data.value;
+			// updateModelType(Guid,selectValue);
+
+			var elem = data.othis.parents('tr').attr('data-index');
+			layui.table.cache['listTable'][elem].bsModelType = data.value;
 		})
 	});
 });
@@ -742,6 +750,7 @@ function isComplete() {
 		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
 	}
 }
 
@@ -757,6 +766,24 @@ function initSelect() {
 			+ bomlist[i].BS_COMPONENT +"</option>");
 	}
 	layui.form.render();
+}
+
+function saveTable() {
+	var dates = layui.table.cache['listTable'];
+	// console.log(dates);
+	CoreUtil.sendAjax("/productProcess/saveTable", JSON.stringify(dates),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					loadAll();
+				} else {
+					layer.alert(data.msg, function() {
+						layer.closeAll();
+						loadAll();
+					});
+				}
+			}
+		});
 }
 
 function initSelectTemp() {
@@ -782,7 +809,7 @@ function uploadChecked() {
 	CoreUtil.sendAjax("/productProcess/uploadCheck", JSON.stringify(params), function(
 		data) {
 		if (data.result) {
-			layer.alert(data.msg, function() {
+			layer.alert(data.data, function() {
 				layer.closeAll();
 				cleanProdErr();
 				// 加载页面
@@ -927,6 +954,7 @@ function Confirm(){
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
+		saveTable();
 		CoreUtil.sendAjax("/productProcess/doStatus", JSON.stringify(params), function(
 			data) {
 			if (data.result) {
@@ -940,8 +968,15 @@ function Confirm(){
 						console.log(srcUrl);
 						($(window.parent.document).find(('li[lay-id="' + srcUrl + '"]'))).find(".layui-tab-close").trigger("click")
 					}
-					var thisUrl= context +"/productProcess/toProductProcess?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
-					($(window.parent.document).find(('li[lay-id="'+thisUrl+'"]'))).find(".layui-tab-close").trigger("click")
+					var thisUrl = "";
+					if(bsType!="out") {
+						 thisUrl = context + "/productProcess/toProductProcess?bsType=" + bsType + "&quoteId=" + quoteId + "&bsCode=" + bsCode;
+					}else{
+						thisUrl = context + "/productProcess/toProductProcess?bsType=" + bsType + "&quoteId=" + quoteId;
+					}
+					($(window.parent.document).find(('li[lay-id="' + thisUrl + '"]'))).find(".layui-tab-close").trigger("click")
+
+
 				});
 			} else {
 				layer.alert(data.msg);
@@ -1005,6 +1040,15 @@ function openUpload() {
 					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
 				}else if(bsType == 'out'){
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').addClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsUserNum"]').addClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').addClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsYield"]').addClass("layui-hide");
+
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+					$('div[lay-id="uploadList"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
 
 				}
 			});

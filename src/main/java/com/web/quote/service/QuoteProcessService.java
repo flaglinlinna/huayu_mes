@@ -1,10 +1,13 @@
 package com.web.quote.service;
 
+import com.web.quote.entity.QuoteProcess;
 import org.springframework.data.domain.PageRequest;
 
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.Quote;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface QuoteProcessService {
 
@@ -23,11 +26,21 @@ public interface QuoteProcessService {
    public ApiResponseResult doProcOrder(Long id,Integer bsOrder)  throws Exception;
 
    public ApiResponseResult doFmemo(Long id,String  fmemo)throws Exception;
-   
+
+   public ApiResponseResult doBsMaterName(Long id,Long  bomId)throws Exception;
+
+   public ApiResponseResult doProc(Long id,Long  procId)throws Exception;
+
+   public ApiResponseResult doBsGroups(Long id,String  bsGroups)throws Exception;
+
    public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
 
    public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception;
    
    public ApiResponseResult getListByQuoteAndName(String quoteId,String name)throws Exception;
+
+   public ApiResponseResult addProcessByBom(Long quoteId);
+
+   public ApiResponseResult editProcessList(List<QuoteProcess> quoteProcessList) throws Exception;
    
 }

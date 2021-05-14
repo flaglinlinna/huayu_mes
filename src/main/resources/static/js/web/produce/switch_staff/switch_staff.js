@@ -50,7 +50,7 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {
+							cols : [ [ {fixed:'left',
 								type : 'numbers'
 							},
 
@@ -66,12 +66,12 @@ $(function() {
 							// f.LINER_NAME LINER_off,--下线组长
 							// b.hour_type hour_type_off,--下线工时类型
 							// H.Class_Name class_OFF--下线班次
-							{
+							{fixed:'left',
 								field : 'TASK_NO_ON',
 								title : '新制令单',
 								width : 150,
 								sort : true
-							}, {
+							}, {fixed:'left',
 								field : 'TASK_NO_OFF',
 								title : '原制令单',
 								width : 150
@@ -87,27 +87,27 @@ $(function() {
 							}, {
 								field : 'LINE_NAM_ON',
 								title : '上线线体',
-								width : 100
+								width : 90
 							}, {
 								field : 'LINE_NAM_OFF',
 								title : '下线线体',
-								width : 100
+								width : 90
 							}, {
 								field : 'LINER_ON',
 								title : '上线组长',
-								width : 100
+								width : 90
 							}, {
 								field : 'LINER_OFF',
 								title : '下线组长',
-								width : 100
+								width : 90
 							}, {
 								field : 'HOUR_TYPE_ON',
 								title : '上线工时类型',
-								width : 120
+								width : 110
 							}, {
 								field : 'HOUR_TYPE_OFF',
 								title : '下线工时类型',
-								width : 120
+								width : 110
 							}, {
 								field : 'CLASS_ON',
 								title : '上线班次',

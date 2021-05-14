@@ -30,55 +30,57 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
+			cols : [ [ {fixed:'left',
 				type : 'numbers'
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
+			, {fixed:'left',
 				field : 'devCode',
 				title : '卡机编码',
-				width : 140,
-			}, {
+				width : 120,
+			}, {fixed:'left',
 				field : 'devName',
 				title : '卡机名称',
-				width : 120,
-			}, {
+				width : 100,
+			}, {fixed:'left',
 				field : 'devIp',
 				title : '卡机IP',
 				width : 120,
-			}, {
+			},{fixed:'left',
+					field : 'isOnline',
+					title : '卡机状态',
+					templet:'#statusTp2',
+					width : 80,
+				},
+				/*{
 				field : 'devSeries',
 				title : '卡机序列',
-				width : 120,
-			}, {
+				width : 110,
+			}, */
+			{fixed:'left',
 				field : 'lineId',
 				title : '线别',
-				width : 120,
-			}, {
+				width : 90,
+			}, {fixed:'left',
 				field : 'devType',
 				title : '卡机类型',
-				width : 100,
+				width : 80,
 			}, {
 				field : 'enabled',
 				title : '是否有效',
 				width : 95,
 				templet : '#statusTpl'
 			}, {
-				field : 'isOnline',
-				title : '在线状态',
-				templet:'#statusTp2',
-				width : 80,
-			}, {
+					field : 'createDate',
+					title : '添加时间',
+					templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
+					width : 150,
+				}, {
 			    field : 'lastupdateDate',
                 title : '更新时间',
                 templet:'<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
                 width : 150,
-            }, {
-				field : 'createDate',
-				title : '添加时间',
-				templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
-				width : 150,
-			}, {
+            },{
 				fixed : 'right',
 				title : '操作',
 				align : 'center',

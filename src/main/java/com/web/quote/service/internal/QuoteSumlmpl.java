@@ -1,16 +1,14 @@
 package com.web.quote.service.internal;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.web.basic.dao.SysParamDao;
 import com.web.basic.entity.SysParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -245,6 +243,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		BigDecimal wh_hou_loss = new BigDecimal(0);// 五金+注塑+表面处理+组装+外协-制费-后工序损耗
 
 		BigDecimal all_lose = new BigDecimal(0);
+		BigDecimal the_lose = new BigDecimal(0);
 
 		List<ProductProcess> lpp = productProcessDao.findByDelFlagAndPkQuote(0, Long.valueOf(quoteId));
 		for (ProductProcess pp : lpp) {
@@ -270,7 +269,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //			wh_hou_loss = wh_hou_loss.add(pp.getBsLossHouMh()); //后工序损耗(制费)
 
 			//20210318-hjj工序损耗
-			all_lose = all_lose.add(pp.getBsTheLoss());
+			all_lose = all_lose.add(pp.getBsTheLoss()==null?the_lose:pp.getBsTheLoss());
 
 		}
 		// 3：小计
@@ -373,8 +372,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			if (pm.getBsAssess() != null) {
 				bsAssess = pm.getBsAssess();
 			}
-			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagOrderByBsOrderDesc(
-					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0);
+			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
+					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0,pm.getBsMaterName());
 			pm.setBsYield(processList.size()>0?processList.get(0).getBsYield():bsYield);
 
 			pm.setBsFee(bsAssess.multiply(pm.getBsQty()));
@@ -404,8 +403,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			if (pm.getBsAssess() != null) {
 				bsAssess = pm.getBsAssess();
 			}
-			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagOrderByBsOrderDesc(
-					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0);
+			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
+					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0,pm.getBsMaterName());
 			pm.setBsYield(processList.size()>0?processList.get(0).getBsYield():bsYield);
 			pm.setBsFee(bsAssess.multiply(qty).divide(bsRadix, 5, 5));
 			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5).divide(new BigDecimal("1000"),5,5));
@@ -423,10 +422,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				}
 			}
 			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle())
-					.divide(new BigDecimal("3600"), 5, 5).divide(bsRadix, 5, 5));
+					.divide(new BigDecimal("3600"), 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 
 			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600"), 5, 5)
-					.divide(bsRadix, 5, 5));
+					.divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 
 			// 本工序损耗
 //			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(), 5, 5)
@@ -452,10 +451,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}
 			BigDecimal bsCave = new BigDecimal(pp.getBsCave());// 穴数
 			pp.setBsFeeLhAll(pp.getBsFeeLh().multiply(pp.getBsUserNum()).multiply(pp.getBsCycle())
-					.divide(new BigDecimal("3600"), 5, 5).divide(bsCave, 5, 5).divide(bsRadix, 5, 5));
+					.divide(new BigDecimal("3600"), 5, 5).divide(bsCave, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 
 			pp.setBsFeeMhAll(pp.getBsFeeMh().multiply(pp.getBsCycle()).divide(new BigDecimal("3600"), 5, 5)
-					.divide(bsCave, 5, 5).divide(bsRadix, 5, 5));
+					.divide(bsCave, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 			// 本工序损耗
 //			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(), 5, 5)
 //					.subtract(pp.getBsFeeLhAll()));
@@ -480,9 +479,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}
 			BigDecimal bsCapacity = new BigDecimal(pp.getBsCapacity());// 产能
 			pp.setBsFeeLhAll(
-					pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5));
+					pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 
-			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5));
+			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 			// 本工序损耗
 //			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(), 5, 5)
 //					.subtract(pp.getBsFeeLhAll()));
@@ -507,9 +506,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}
 			BigDecimal bsCapacity = new BigDecimal(pp.getBsCapacity());// 产能
 			pp.setBsFeeLhAll(
-					pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5));
+					pp.getBsFeeLh().multiply(pp.getBsUserNum()).divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 
-			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5));
+			pp.setBsFeeMhAll(pp.getBsFeeMh().divide(bsCapacity, 5, 5).divide(bsRadix, 5, 5).multiply(new BigDecimal("100")).divide(pp.getBsYield(),5,5));
 			// 本工序损耗
 //			pp.setBsLossTheLh(pp.getBsFeeLhAll().multiply(new BigDecimal("100")).divide(pp.getBsYield(), 5, 5)
 //					.subtract(pp.getBsFeeLhAll()));
@@ -535,7 +534,21 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //			pp.setBsLossHouMh(new BigDecimal("0"));
 		}
 		productProcessDao.saveAll(lpp_out);
-		List<ProductProcess> processList = productProcessDao.findByDelFlagAndPkQuoteOrderByBsNameDescBsTypeDescBsOrderAsc(0,Long.parseLong(quoteId));
+		List<ProductProcess> processAllList = productProcessDao.findByDelFlagAndPkQuoteOrderByBsElementDescBsLinkNameDescBsOrderDesc(0,Long.parseLong(quoteId));
+		List<ProductProcess> processList = new ArrayList<>();
+		HashSet<String> groupSet = new HashSet<>();
+		for(ProductProcess o :processAllList){
+			if(StringUtils.isNotEmpty(o.getBsGroups())){
+				//根据分组和零件名称和组件判断是否加入损耗计算
+				if(groupSet.add(o.getBsGroups()+o.getBsLinkName()+o.getBsElement())){
+					processList.add(o);
+				}
+			}else {
+				processList.add(o);
+			}
+		}
+//		processList = processList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ProductProcess::getBsGroups))), ArrayList::new));
+		Collections.reverse(processList);
 		for(Integer i=0;i<processList.size();i++){
 			ProductProcess o = processList.get(i);
 			//成本 = 人工制费 + 制造费用 + 材料费用
@@ -543,8 +556,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				o.setBsCost(o.getBsFeeWxAll());
 				o.setBsYield(new BigDecimal("100").subtract(o.getBsLoss()));
 			}else {
-				List<ProductMater> pmList = productMaterDao.findByBsElementAndBsComponentAndPkQuoteAndBsTypeAndDelFlag(
-						o.getBsElement(),o.getBsName(),o.getPkQuote(),o.getBsType(),0);
+				List<ProductMater> pmList = new ArrayList<>();
+				if(StringUtils.isNotEmpty(o.getBsGroups())){
+					pmList= productMaterDao.findByPkQuoteAndDelFlagAndBsGroups(o.getPkQuote(),0,o.getBsGroups());
+				}else {
+//					pmList = productMaterDao.findByBsElementAndBsComponentAndPkQuoteAndBsTypeAndDelFlag(
+//							o.getBsElement(), o.getBsName(), o.getPkQuote(), o.getBsType(), 0);
+					pmList = productMaterDao.findByPkQuoteAndDelFlagAndBsMaterName(o.getPkQuote(),0,o.getBsMaterName());
+				}
 				BigDecimal materCost = BigDecimal.ZERO;
 				for(ProductMater pm:pmList){
 					materCost = materCost.add(pm.getBsFee());
@@ -554,10 +573,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}
 			if(i==0) {
 				//本工序损耗
-				o.setBsTheLoss(o.getBsCost().divide(o.getBsYield(),4).multiply(new BigDecimal("100")).subtract(o.getBsCost()));
+				o.setBsTheLoss(o.getBsCost().divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract(o.getBsCost()));
 				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()));
 			}else {
-				o.setBsTheLoss((processList.get(i-1).getBsAllLoss().add(o.getBsCost())).divide(o.getBsYield(),4).multiply(new BigDecimal("100")).subtract((processList.get(i-1).getBsAllLoss().add(o.getBsCost()))));
+				o.setBsTheLoss((processList.get(i-1).getBsAllLoss()).divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract((processList.get(i-1).getBsAllLoss())));
 				//成本累计(含损耗)
 				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()).add(processList.get(i-1).getBsAllLoss()));
 			}
@@ -659,7 +678,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 						qb2.setBsMaterName(map2.get("COMPONENT").toString());
 						qb2.setParenId(qsb.getId());
 						qb2.setBsComponent(map2.get("COMPONENT").toString());
-						qb2.setBsFeeItemAll(new BigDecimal(map2.get("FEE").toString()));// 材料总费用
+						qb2.setBsFeeItemAll(new BigDecimal(map2.get("FEE")==null?"0":map2.get("FEE").toString()));// 材料总费用
 						qb2.setBsFeeLhAll(new BigDecimal(map2.get("FEE_LH").toString()));
 						qb2.setBsFeeMhAll(new BigDecimal(map2.get("FEE_MH").toString()));
 						qb2.setBsFeeOut(new BigDecimal(map2.get("FEE_WX").toString()));
@@ -726,5 +745,66 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());//修改时间
 		quoteDao.save(o);
 		return ApiResponseResult.success("设置中标成功！");
+	}
+
+	public ApiResponseResult getSumList(Long quoteId,PageRequest pageRequest) throws Exception {
+		Page<Map<String, Object>> mapList= productProcessDao.getSumList(quoteId,pageRequest);
+//		DataGrid.create(mapList.getContent(), (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize())
+		List<Map<String,Object>> maps =  new ArrayList<>();
+		List<Map<String,Object>> mapOld = mapList.getContent();
+		HashSet<String> groupSet = new HashSet<>();
+		for (int i = mapOld.size()-1; i >= 0; i--) {
+		  Map<String, Object> subtotal = new HashMap<>();
+		  Map<String, Object> one = mapOld.get(i);
+		  Map<String, Object> deepCopy = new HashMap<>();
+		  if(groupSet.add(one.get("BS_ELEMENT").toString()+one.get("BS_LINK_NAME"))){
+		  	subtotal.put("BS_ELEMENT",one.get("BS_ELEMENT"));
+		  	subtotal.put("BS_LINK_NAME",one.get("BS_LINK_NAME"));
+			maps.add(subtotal);
+		  }
+		  deepCopy.putAll(one);
+		  maps.add(deepCopy);
+		  //根据组件和所属零件判断是否新增小计计算
+		}
+		Collections.reverse(maps);
+		for(Map<String,Object> map :maps){
+			if(map.get("BS_GROUPS")!=null){
+				List<Map<String,Object>> sumList = productProcessDao.getSumByBsGroups(quoteId,map.get("BS_GROUPS").toString()
+						,map.get("BS_ELEMENT").toString(),map.get("BS_LINK_NAME").toString());
+//				map.put("BS_MATER_COST",sumList.get(0).get("BS_MATER_COST"));
+				map.put("BS_FEE_LH_ALL",sumList.get(0).get("BS_FEE_LH_ALL"));
+				map.put("BS_FEE_MH_ALL",sumList.get(0).get("BS_FEE_MH_ALL"));
+				map.put("BS_FEE_WX_ALL",sumList.get(0).get("BS_FEE_WX_ALL"));
+			}
+			else if(map.get("BS_ORDER")==null){
+				BigDecimal BS_MATER_COST = BigDecimal.ZERO;
+				BigDecimal BS_FEE_LH_ALL = BigDecimal.ZERO;
+				BigDecimal BS_FEE_MH_ALL = BigDecimal.ZERO;
+				BigDecimal BS_FEE_WX_ALL = BigDecimal.ZERO;
+				BigDecimal BS_COST = BigDecimal.ZERO;
+				BigDecimal BS_YIELD = new BigDecimal(100);
+				BigDecimal BS_THE_LOSS = BigDecimal.ZERO;
+//				BigDecimal bsCostLoss = BigDecimal.ZERO;
+				for(Map<String,Object> map2 :maps){
+					if(map2.get("BS_ELEMENT").equals(map.get("BS_ELEMENT"))&&map2.get("BS_LINK_NAME").equals(map.get("BS_LINK_NAME"))){
+						BS_MATER_COST = BS_MATER_COST.add(map2.get("BS_MATER_COST")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_MATER_COST").toString()));
+						BS_FEE_LH_ALL = BS_FEE_LH_ALL.add(map2.get("BS_FEE_LH_ALL")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_FEE_LH_ALL").toString()));
+						BS_FEE_MH_ALL = BS_FEE_MH_ALL.add(map2.get("BS_FEE_MH_ALL")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_FEE_MH_ALL").toString()));
+						BS_FEE_WX_ALL = BS_FEE_WX_ALL.add(map2.get("BS_FEE_WX_ALL")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_FEE_WX_ALL").toString()));
+						BS_COST = BS_COST.add(map2.get("BS_COST")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_COST").toString()));
+						BS_THE_LOSS = BS_THE_LOSS.add(map2.get("BS_THE_LOSS")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_THE_LOSS").toString()));
+						BS_YIELD = BS_YIELD.multiply(map2.get("BS_YIELD")==null?new BigDecimal(100):new BigDecimal(map2.get("BS_YIELD").toString())).divide(new BigDecimal(100));
+					}
+				}
+				map.put("BS_MATER_COST",BS_MATER_COST);
+				map.put("BS_FEE_LH_ALL",BS_FEE_LH_ALL);
+				map.put("BS_FEE_MH_ALL",BS_FEE_MH_ALL);
+				map.put("BS_FEE_WX_ALL",BS_FEE_WX_ALL);
+				map.put("BS_COST",BS_COST);
+				map.put("BS_THE_LOSS",BS_THE_LOSS);
+				map.put("BS_YIELD",BS_YIELD);
+			}
+		}
+		return ApiResponseResult.success().data(DataGrid.create(maps, (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 	}
 }

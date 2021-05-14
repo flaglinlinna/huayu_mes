@@ -77,7 +77,13 @@ $(function() {
 				field : 'userCode',
 				title : '操作人',
 					width:100,
-				templet: function (d) {return d.createUser.userCode}
+				templet: function (d) {
+					if(d.createUser==null){
+						return ""
+					}else {
+						return d.createUser.userCode
+					}
+				}
 			}] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;

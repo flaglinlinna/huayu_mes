@@ -181,7 +181,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 		},
 		color : [ '#993300', '#0066FF', '#66CCCC' ],
 		legend : {
-			data : [ '异常工时', '标准工时', '实际工时' ],
+			data : [ '异常工时', '产出工时', '实际工时' ],
 			textStyle : {
 				color : '#FFFFFF', // 图例文字颜色
 				fontSize : 13,// 字体大小
@@ -256,7 +256,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 				color : '#FFFFFF',
 			},
 		}, {
-			name : '标准工时',
+			name : '产出工时',
 			type : 'bar',
 			data : [ hr_st ],
 			label : {
@@ -275,7 +275,7 @@ function getChartXlpm3(done, plan, doneRate) {
 		title : {
 			text : '完工率:' + doneRate + '%',
 			textStyle : {
-				color : '#CC0033', // 图例文字颜色
+				color : '#FFFFFF', // 图例文字颜色
 				fontSize : 17,// 字体大小
 			},
 			left : '5px',
@@ -369,13 +369,25 @@ function setCxdzTable(kanbanData) {
 
 	var arr = kanbanData[taskNoIndex];
 	var style = "";
+	var style1 = "";
+	var style2 = "";
+	var style3 = "";
+	if (arr.QTY_MAIN != 0) {
+		style1 = "style='color:#CC0033'";
+	}
+	if (arr.QTY_ITEM_NG != 0) {
+		style2 = "style='color:#CC0033'";
+	}
+	if (arr.HOUR_ABN != 0) {
+		style3 = "style='color:#CC0033'";
+	}
 	if (arr.QTY_DONE == 0) {
 		style = "style='color:#CC0033'";
 	}
 
-	html += '<tr><td >' + arr.TASK_NO + '</td><td>' + arr.ITEM_NAME + '</td><td>' + arr.ITEM_NAME1 + '</td><td>' + arr.QTY_PLAN + '</td><td>' + arr.QTY_MAIN + '</td>'
-			+ '<td style="color:#CC0033" >' + arr.QTY_ITEM_NG + '</td><td ' + style + ' >' + arr.QTY_DONE + '</td><td>' + arr.QTY_OK + '</td><td>' + arr.MANPOWER + '</td><td>'
-			+ arr.CAPACITY + '</td><td >' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT + '</td><td>' + arr.HOUR_ABN + '</td><td>' + arr.RATE_OK + '%</td><td style="color:#CC0033">'
+	html += '<tr><td >' + arr.TASK_NO + '</td><td>' + arr.ITEM_NAME + '</td><td>' + arr.ITEM_NAME1 + '</td><td>' + arr.QTY_PLAN + '</td><td ' + style1 + '>' + arr.QTY_MAIN + '</td>'
+			+ '<td ' + style2 + '>' + arr.QTY_ITEM_NG + '</td><td ' + style + ' >' + arr.QTY_DONE + '</td><td>' + arr.QTY_OK + '</td><td>' + arr.MANPOWER + '</td><td>'
+			+ arr.CAPACITY + '</td><td >' + arr.HOUR_ST + '</td><td>' + arr.HOUR_ACT + '</td><td ' + style3 + '  >' + arr.HOUR_ABN + '</td><td>' + arr.RATE_OK + '%</td><td>'
 			+ arr.RATE_DONE + '%</td><td style="color:#CC0033">' + arr.RATE_EFF + '%</td></tr> ';
 
 	getTaskNoList(arr.TASK_NO)//请求获取制令单对应的详细数据

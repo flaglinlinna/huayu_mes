@@ -111,14 +111,18 @@ public class ProdProclmpl implements ProdProcService {
 		for(int i=0;i<itemIds.length;i++){
 			String it = itemIds[i];
 			if(!StringUtils.isEmpty(it)){
-				//20201102-fyx-先删除后在新增
-				prodProcDetailDao.delteProdProcDetailByItemIdAnd(Long.parseLong(it));
 				//--end
 				int j=1;
+				boolean isExists = false;
 				for(String pro:procs){
 					if(!StringUtils.isEmpty(pro)){
 						String[] pros =  pro.split("\\@");
 						Process process = processDao.findById(Long.parseLong(pros[0]));
+						if(process.getProcNo().equals("A001")){
+							if(("1").equals(pros[1])){
+								isExists = true;
+							}
+						}
 						ProdProcDetail pd = new ProdProcDetail();
 						pd.setItemId(Long.valueOf(it));
 						pd.setItemNo(itemNos[i]);
@@ -134,9 +138,13 @@ public class ProdProclmpl implements ProdProcService {
 						j++;
 					}
 				}
-				
+				if(!isExists){
+					return ApiResponseResult.failure("必须存在包装报工及其过程属性!");
+				}
+				//20201102-fyx-先删除后在新增
+				prodProcDetailDao.delteProdProcDetailByItemIdAnd(Long.parseLong(it));
 			}
-			
+
 		}
 		prodProcDetailDao.saveAll(lp);
 		return ApiResponseResult.success("新增成功!");

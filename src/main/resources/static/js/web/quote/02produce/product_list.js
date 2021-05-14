@@ -56,8 +56,27 @@ $(function() {
 				}
 			},
 			cols :[ [ 
-			    {type : 'numbers'},
-			    {field : 'bsCode',title : '报价单编号',width : 150,sort : true,sort: true},
+			    {fixed:'left',type : 'numbers'},
+			    {fixed:'left',field : 'bsCode',title : '报价单编号',width : 150,sort : true,sort: true},
+				{fixed:'left',field : 'bsProd',title : '产品型号',width : 120,sort: true},
+				{fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true},
+				{fixed:'left',field : 'bsStatus',title : '状态',width : 100,templet : function(d) {
+						if(d.bsQuoteStatus !="99") {
+							if (d.bsStatus == "0") {
+								return "草稿"
+							} else if (d.bsStatus == "1") {
+								return "进行中"
+							} else if (d.bsStatus == "2") {
+								return "已完成"
+							} else if (d.bsStatus == "3") {
+								return "待提交审批"
+							} else if (d.bsStatus == "4") {
+								return "审批中"
+							}
+						}else {
+							return "已关闭"
+						}
+					},sort: true},
 				{field : 'bsType',title : '报价类型',width : 120,
 				    	templet : function(d) {
 					if (d.bsType == "YSBJ") {return "衍生报价";} 
@@ -65,26 +84,8 @@ $(function() {
 					else {return "";}
 				},sort: true},
 				{field : 'bsStage',title : '报价阶段',width : 120,sort: true},
-				{field : 'bsProjVer',title : '版本',width : 100,sort: true},
-				{field : 'bsStatus',title : '状态',width : 100,templet : function(d) {
-					if(d.bsQuoteStatus !="99") {
-						if (d.bsStatus == "0") {
-							return "草稿"
-						} else if (d.bsStatus == "1") {
-							return "进行中"
-						} else if (d.bsStatus == "2") {
-							return "已完成"
-						} else if (d.bsStatus == "3") {
-							return "待提交审批"
-						} else if (d.bsStatus == "4") {
-							return "审批中"
-						}
-					}else {
-						return "已关闭"
-					}
-				},sort: true},
 				{field : 'bsCustName',title : '客户名称',width : 120,sort: true},
-				{field : 'bsProd',title : '产品型号',width : 120,sort: true},
+
 				{field : 'bsProdType',title : '产品类型',width : 140, sort: true,sort: true},
 				// {field : 'bsDevType',title : '机种型号',width : 140, sort: true,sort: true},
 				{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140,sort: true},
@@ -178,7 +179,7 @@ $(function() {
 				}else if(Style == 'surface'){
 					titel = "表面处理"+titel;
 				}else if(Style == 'packag'){
-					titel = "包装"+titel;
+					titel = "组装"+titel;
 				}
 				parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel);
 				var srcUrl = context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style;

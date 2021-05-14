@@ -152,8 +152,10 @@
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 
-		<script th:src="@{/js/web/produce/input/input_add.js}"
-			src="/js/web/produce/input/input_add.js"></script>
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/produce/input/input_add.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

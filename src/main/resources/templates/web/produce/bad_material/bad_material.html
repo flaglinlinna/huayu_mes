@@ -172,8 +172,13 @@
 <!--		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
 <!--		</script>-->
 
-		<script th:src="@{/js/web/produce/bad_material/bad_material.js}"
-			src="/js/web/produce/bad_material/bad_material.js"></script>
+<!--		<script th:src="@{/js/web/produce/bad_material/bad_material.js}"-->
+<!--			src="/js/web/produce/bad_material/bad_material.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/produce/bad_material/bad_material.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

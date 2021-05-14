@@ -49,111 +49,111 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {
+							cols : [ [ {fixed:'left',
 								type : 'numbers'
 							},
 							// ,{type:'checkbox'}
 							// ,{field:'id', title:'ID', width:80,
 							// unresize:true, sort:true}
-							{
+							{fixed:'left',
 								field : 'ISERROR',
 								title : '是否异常',
 								width : 80,
 								templet:'#statusTpl'
-							}, {
+							}, {fixed:'left',
 								field : 'WORK_DATE',
 								title : '日期',
-								width : 110,
+								width : 100,
 								sort : true
-							}, {
+							}, {fixed:'left',
 								field : 'EMP_CODE',
 								title : '工号',
-							}, {
+							}, {fixed:'left',
 								field : 'EMP_NAME',
 								title : '姓名',
-							}, {
+							}, {fixed:'left',
 								field : 'DEPT_ID',
 								title : '部门',
 								width : 90,
 							}, {
 								field : 'HR_CARD1',
-								title : '上班一（hr）',
-								width : 120,
+								title : '上班一(HR)',
+								width : 110,
 							}, {
 								field : 'MES_CARD1',
-								title : '上班一（mes）',
-								width : 120,
+								title : '上班一(MES)',
+								width : 110,
 							}, {
 								field : 'HR_CARD2',
-								title : '下班一（hr）',
-								width : 120,
+								title : '下班一(HR)',
+								width : 110,
 							}, {
 								field : 'MES_CARD2',
-								title : '下班一（mes）',
-								width : 120,
+								title : '下班一(MES)',
+								width : 110,
 							}, {
 								field : 'HR_CARD3',
-								title : '上班二（hr）',
-								width : 120,
+								title : '上班二(HR)',
+								width : 110,
 							}, {
 								field : 'MES_CARD3',
-								title : '上班二（mes）',
-								width : 120,
+								title : '上班二(MES)',
+								width : 110,
 							}, {
 								field : 'HR_CARD4',
-								title : '下班二（hr）',
-								width : 120,
+								title : '下班二(HR)',
+								width : 110,
 							}, {
 								field : 'MES_CARD4',
-								title : '下班二（mes）',
-								width : 120,
+								title : '下班二(MES)',
+								width : 110,
 							}, {
 								field : 'HR_CARD5',
-								title : '上班三（hr）',
-								width : 120,
+								title : '上班三(HR)',
+								width : 110,
 							}, {
 								field : 'MES_CARD5',
-								title : '上班三（mes）',
-								width : 120,
+								title : '上班三(MES)',
+								width : 110,
 							} , {
 								field : 'HR_CARD6',
-								title : '下班三（hr）',
-								width : 120,
+								title : '下班三(HR)',
+								width : 110,
 							}, {
 								field : 'MES_CARD6',
-								title : '下班三（mes）',
-								width : 120,
+								title : '下班三(MES)',
+								width : 110,
 							}, {
 								field : 'HR_ACT_HOURS',
-								title : '正班时数（hr）',
+								title : '正班时数(HR)',
 								width : 120,
 							}, {
 								field : 'MES_ACT_HOURS',
-								title : '正班时数（mes）',
+								title : '正班时数(MES)',
 								width : 120,
 							} , {
 								field : 'HR_OVERTIME_COMM',
-								title : '平时加班（hr）',
+								title : '平时加班(HR)',
 								width : 120,
 							}, {
 								field : 'MES_OVERTIME_COMM',
-								title : '平时加班（mes）',
+								title : '平时加班(MES)',
 								width : 120,
 							} , {
 								field : 'HR_OVERTIME_HOLIDAY',
-								title : '假日加班（hr）',
+								title : '假日加班(HR)',
 								width : 120,
 							}, {
 								field : 'MES_OVERTIME_HOLIDAY',
-								title : '假日加班（mes）',
+								title : '假日加班(MES)',
 								width : 120,
 							} , {
 								field : 'HR_OVERTIME_YEAR',
-								title : '法定加班（hr）',
+								title : '法定加班(HR)',
 								width : 120,
 							}, {
 								field : 'MES_OVERTIME_YEAR',
-								title : '法定加班（mes）',
+								title : '法定加班(MES)',
 								width : 120,
 							}  ] ],
 							done : function(res, curr, count) {

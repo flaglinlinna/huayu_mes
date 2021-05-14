@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -93,10 +94,10 @@ public class QuoteProcessController extends WebController {
         String method = "quoteProcess/getList";String methodName ="获取报价工艺流程列表";
         try {
             //Sort sort = new Sort(Sort.Direction.ASC, "id");
-        	 Sort.Order order1 = new Sort.Order(Sort.Direction.ASC, "bsName");
+//        	 Sort.Order order1 = new Sort.Order(Sort.Direction.ASC, "bsName");
         	 Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "BsOrder");
         	 List<Sort.Order> list = new ArrayList<>();
-        	 list.add(order1);
+//        	 list.add(order1);
         	 list.add(order2);
         	 Sort sort = new Sort(list);
             ApiResponseResult result = quoteProcessService.getList(keyword,pkQuote, super.getPageRequest(sort));
@@ -209,6 +210,67 @@ public class QuoteProcessController extends WebController {
             return ApiResponseResult.failure("修改备注失败！");
         }
     }
+
+    @ApiOperation(value = "修改材料名称", notes = "修改材料名称", hidden = true)
+    @RequestMapping(value = "/doBsMaterName", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doBsMaterName(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "quoteProcess/doBsMaterName";String methodName ="修改材料名称";
+        try{
+            Long id = Long.parseLong(params.get("id").toString()) ;
+            String bomIds = params.get("bomId").toString();
+            Long bomId =StringUtils.isNotEmpty(bomIds)?Long.parseLong(bomIds):null;
+            ApiResponseResult result = quoteProcessService.doBsMaterName(id, bomId);
+            logger.debug("修改材料名称=doBsMaterName:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("修改材料名称失败！", e);
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            return ApiResponseResult.failure("修改材料名称失败！");
+        }
+    }
+
+    @ApiOperation(value = "修改损耗分组", notes = "修改损耗分组", hidden = true)
+    @RequestMapping(value = "/doBsGroups", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doBsGroups(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "quoteProcess/doBsGroups";String methodName ="修改损耗分组";
+        try{
+            Long id = Long.parseLong(params.get("id").toString()) ;
+            String bsGroups = params.get("bsGroups").toString();
+            ApiResponseResult result = quoteProcessService.doBsGroups(id, bsGroups);
+            logger.debug("修改损耗分组=doBsGroups:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("修改损耗分组失败！", e);
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            return ApiResponseResult.failure("修改损耗分组失败！");
+        }
+    }
+
+    @ApiOperation(value = "修改工艺", notes = "修改工艺", hidden = true)
+    @RequestMapping(value = "/doProc", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doProc(@RequestBody Map<String, Object> params) throws Exception{
+        String method = "quoteProcess/doProc";String methodName ="修改工艺";
+        try{
+            Long id = Long.parseLong(params.get("id").toString()) ;
+            Long bsGroups = params.get("prodId")==null?null:Long.parseLong(params.get("prodId").toString());
+            ApiResponseResult result = quoteProcessService.doProc(id, bsGroups);
+            logger.debug("修改工艺=doProc:");
+            getSysLogService().success(module,method, methodName, params);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("修改工艺失败！", e);
+            getSysLogService().error(module,method, methodName, params+";"+e.toString());
+            return ApiResponseResult.failure("修改工艺失败！");
+        }
+    }
 	
 	@ApiOperation(value = "删除", notes = "删除",hidden = true)
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
@@ -268,6 +330,25 @@ public class QuoteProcessController extends WebController {
             logger.error("取消提交-工艺流程失败！", e);
             getSysLogService().error(module,method, methodName,"报价单id:"+pkQuote+ e.toString());
             return ApiResponseResult.failure("取消提交-工艺流程失败！");
+        }
+    }
+
+    @ApiOperation(value = "页面编辑保存", notes = "页面编辑保存",hidden = true)
+    @RequestMapping(value = "/saveTable", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult saveTable(@RequestBody List<QuoteProcess> quoteProcessList) {
+        String method = "quoteProcess/saveTable";String methodName ="页面编辑保存";
+        try{
+            ApiResponseResult result = quoteProcessService.editProcessList(quoteProcessList);
+            logger.debug("页面编辑保存=saveTable:");
+            getSysLogService().success(module,method, methodName,
+                    "");
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("页面编辑保存失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("页面编辑保存失败！");
         }
     }
 	

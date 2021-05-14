@@ -14,10 +14,7 @@ import com.web.quote.dao.ProductMaterDao;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.dao.QuoteItemDao;
 import com.web.quote.dao.QuoteProcessDao;
-import com.web.quote.entity.ProductMater;
-import com.web.quote.entity.ProductProcess;
-import com.web.quote.entity.Quote;
-import com.web.quote.entity.QuoteItem;
+import com.web.quote.entity.*;
 import com.web.quote.service.ProductMaterService;
 import com.web.quote.service.QuoteProductService;
 
@@ -149,20 +146,22 @@ public class ProductMaterlmpl implements ProductMaterService {
         //注塑材料导入顺序: 零件名称、材料名称、规格、制品量、单位、基数、水口数、穴数、备注
         //表面处理导入顺序: 零件名称、加工类型、配色工艺、材料名称、规格、用料、单位、基数、备注
 
+        //2021-04-29 五金和注塑 零件名称1、材料名称2、规格3、材料用量4、制品重5、材料用量单位6、水口数7、穴数8
+        //2021-04-29 表面和组装 零件名称1、材料名称2、规格3、材料用量4、材料用量单位5
         //20210226-hjj-导出去除基数
         if(("hardware").equals(bsType)){
             fileName = "五金材料模板.xlsx";
 //            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsWaterGap","bsCave","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsProQty","bsUnit","bsWaterGap","bsCave"};
         }else if(("molding").equals(bsType)){
             fileName = "注塑材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsProQty","bsUnit","bsWaterGap","bsCave","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsProQty","bsUnit","bsWaterGap","bsCave"};
         }else if(("surface").equals(bsType)){
             fileName = "表面处理材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMachiningType","bsColor","bsMaterName","bsModel","bsQty","bsUnit","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit"};
         }else if(("packag").equals(bsType)){
             fileName = "组装材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsSupplier","fmemo"};
+            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit"};
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
 //        Resource resource = new ClassPathResource(excelPath+fileName);
@@ -196,12 +195,12 @@ public class ProductMaterlmpl implements ProductMaterService {
             map.put("bsQty", bs.getBsQty());
             map.put("bsProQty", bs.getBsProQty());
             map.put("bsUnit", bs.getBsUnit());
-            map.put("fmemo", bs.getFmemo());
-            map.put("bsSupplier", bs.getBsSupplier());
+//            map.put("fmemo", bs.getFmemo());
+//            map.put("bsSupplier", bs.getBsSupplier());
             map.put("bsWaterGap", bs.getBsWaterGap());
             map.put("bsCave", bs.getBsCave());
-            map.put("bsMachiningType", bs.getBsMachiningType());
-            map.put("bsColor", bs.getBsColor());
+//            map.put("bsMachiningType", bs.getBsMachiningType());
+//            map.put("bsColor", bs.getBsColor());
             list.add(map);
         }
         ExcelExport.export(response,list,workbook,map_arr,excelPath+fileName,fileName);
@@ -232,8 +231,9 @@ public class ProductMaterlmpl implements ProductMaterService {
                     return ApiResponseResult.failure("制品重(g)、穴数、水口数不能为空,请检查后再确认！");
                 }
             }else if("surface".equals(bsType)) {
-                if (o.getBsColor() == null || o.getBsMachiningType() == null || o.getBsQty() == null ) {
-                    return ApiResponseResult.failure("配色工艺、加工类型、用量不能为空,请检查后再确认！");
+//                o.getBsColor() == null || o.getBsMachiningType() == null || 配色工艺、加工类型、
+                if ( o.getBsQty() == null ) {
+                    return ApiResponseResult.failure("用量不能为空,请检查后再确认！");
                 }
             }else if("packag".equals(bsType)) {
                 if (o.getBsQty() == null ) {
@@ -390,12 +390,15 @@ public class ProductMaterlmpl implements ProductMaterService {
      */
     @Override
     @Transactional
-    public ApiResponseResult getList(String keyword,String bsType, String quoteId,PageRequest pageRequest) throws Exception {
+    public ApiResponseResult getList(String keyword,String bsType, String quoteId,String bsAgent,PageRequest pageRequest) throws Exception {
         // 查询条件1
         List<SearchFilter> filters = new ArrayList<>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         if (StringUtils.isNotEmpty(bsType)) {
             filters.add(new SearchFilter("bsType", SearchFilter.Operator.EQ, bsType));
+        }
+        if(StringUtils.isNotEmpty(bsAgent)){
+            filters.add(new SearchFilter("bsAgent", SearchFilter.Operator.EQ, bsAgent));
         }
         if (!"null".equals(quoteId)&&quoteId!=null) {
             filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));
@@ -484,4 +487,12 @@ public class ProductMaterlmpl implements ProductMaterService {
 		//注塑-材料单价*(制品重(g)+水口重/穴数)/基数
 		return null;
 	}
+
+    @Override
+    public ApiResponseResult editMaterList(List<ProductMater> productMaterList) throws Exception {
+        // TODO Auto-generated method stub
+//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
+        productMaterDao.saveAll(productMaterList);
+        return ApiResponseResult.success();
+    }
 }

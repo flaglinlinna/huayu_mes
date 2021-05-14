@@ -50,12 +50,12 @@ $(function() {
                     {
                         field : 'ITEM_BARCODE',
                         title : '条码',
-                        width : 175,sort: true
+                        width : 160,sort: true
                     },{
                         field : 'ITEM_NO',
                         title : '物料编号',
                         align:	'center',
-                        width : 170,sort: true
+                        width : 150,sort: true
                     }, {
                         field : 'ITEM_NAME',
                         align:	'center',
@@ -66,21 +66,22 @@ $(function() {
                         field : 'FEED_TYPE',
                         title : '类型',
                         align:	'center',
-                        width : 90,sort: true
+                        width : 70,sort: true
+                    },
+
+                    {
+                        field : 'QUANTITY',
+                        title : '数量',
+                        width : 80,sort: true
                     },
                     {
                         field : 'USER_NAME',
                         title : '操作人',
                         align:	'center',
-                        width : 110,sort: true
-                    },
-                    {
-                        field : 'QUANTITY',
-                        title : '数量',
                         width : 90,sort: true
                     },{
                         field : 'CREATE_DATE',
-                        title : '创建时间',
+                        title : '操作时间',
                         width : 150,sort: true
                     },  {
                         fixed : 'right',
@@ -217,15 +218,15 @@ $(function() {
                 },{
                     field : 'TASK_NO',
                     title : '制令单号',
-                    width : 175,sort: true
+                    width : 150,sort: true
                 }, {
                     field : 'ITEM_BARCODE',
                     title : '物料条码',
-                    width : 175
+                    width : 160
                 }, {
                     field : 'ITEM_NO',
                     title : '物料料号',
-                    width : 175
+                    width : 140
                 }, {
                     field : 'ITEM_NAME',
                     title : '物料名称',
@@ -233,7 +234,7 @@ $(function() {
                 } , {
                     field : 'QUANTITY',
                     title : '上料数量',
-                    width : 120
+                    width : 80
                 }, {
                     field : 'USER_NAME',
                     title : '上料人姓名',

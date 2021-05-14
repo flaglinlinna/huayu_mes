@@ -1,5 +1,5 @@
 /**
- * 工时统计表（Mes）
+ * 工时统计表(MES)
  */
 var pageCurr;
 var localtableFilterIns;

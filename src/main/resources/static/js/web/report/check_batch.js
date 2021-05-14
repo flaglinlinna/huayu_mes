@@ -45,23 +45,26 @@ $(function() {
 			},
 			cols : [
 				[
-					{
+					{fixed:'left',
 				type : 'numbers'
 			},
 
-			 {
+			 {fixed:'left',
 				field : 'CREATE_DATE',
-				title : '检查日期',width : 110, sort: true,totalRowText:"合计"
-			}, {
+				title : '检验日期',width : 100, sort: true,totalRowText:"合计"
+			}, {fixed:'left',
+					field : 'ITEM_MODEL',
+					title : '机型',width : 110, sort: true
+				}, {fixed:'left',
+					field : 'LINER_NAME',
+					title : '组长',width : 90, sort: true
+				},{fixed:'left',
+					field : 'PROC_NAME',
+					title : '工序名称',width : 100, sort: true
+				},
+					{
 				field : 'CUST_NAME_S',
-				title : '客户',width : 110, sort: true
-			},
-			{
-				field : 'ITEM_MODEL',
-				title : '机型',width : 110, sort: true
-			}, {
-				field : 'PROC_NAME',
-				title : '工序名称',width : 100, sort: true
+				title : '客户',width : 100, sort: true
 			},
 				{
 					field : 'ITEM_NAME_S',
@@ -76,7 +79,7 @@ $(function() {
 			},
 				{
 					field : 'LOT_NO',
-					title : '虚拟批次', width : 90,sort: true
+					title : '虚拟批次', width : 100,sort: true
 				},
 				{
 				field : 'QTY_PROC',
@@ -89,16 +92,13 @@ $(function() {
 				title : '不良数', width : 100,sort: true,totalRow: true
 			}, {
 				field : 'NG_RATE',
-				title : '不良率(%)',width : 120, sort: true
+				title : '不良率',width : 120, sort: true
 			}, {
 				field : 'DEFECT_NAME',
 				title : '不良原因',width : 140, sort: true
 			}, {
 				field : 'USER_NAME',
 				title : '检验员', width : 100,sort: true
-			}, {
-				field : 'LINER_NAME',
-				title : '组长',width : 120, sort: true
 			},
 			] ],
 			done : function(res, curr, count) {

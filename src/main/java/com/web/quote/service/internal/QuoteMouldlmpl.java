@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.web.quote.dao.QuoteDao;
+import com.web.quote.entity.Quote;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -51,6 +53,8 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 	QuoteService quoteService;
 	@Autowired
 	TodoInfoService todoInfoService;
+	@Autowired
+	private QuoteDao quoteDao;
 	
 	/**
 	 * 获取Bom清单的组件下拉列表
@@ -232,6 +236,10 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 //		if(count>0){
 //			return ApiResponseResult.failure("提交失败：实际报价不可为空，请检查数据");
 //		}
+		Quote quote = quoteDao.findById(Long.parseLong(quoteId));
+		if(quote.getBsStatus()==1||quote.getBsStatus()==4){
+			return ApiResponseResult.failure("报价单已提交审批，不能取消完成。");
+		}
 		quoteMouldDao.saveQuoteMouldByQuoteId(0,Long.parseLong(quoteId));
 		//项目状态设置-状态 2：已完成,1 未完成
 		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), code);
