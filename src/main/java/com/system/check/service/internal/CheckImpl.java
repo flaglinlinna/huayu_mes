@@ -436,7 +436,7 @@ public class CheckImpl   implements CheckService {
 					quoteItemDao.saveAll(lqi);
 					//2.2根据工作中心下发BOM-材料
 					//先判断是否为复制单，复制单情况更新，非复制单新增
-					List<QuoteBom> lql = quoteBomDao.findByDelFlagAndPkQuoteAndBsMaterNameIsNotNull(0, c.getBsRecordId());
+					List<QuoteBom> lql = quoteBomDao.findByDelFlagAndPkQuoteAndBsMaterNameIsNotNullOrderById(0, c.getBsRecordId());
 					productMaterDao.deleteByPkQuoteBom(c.getBsRecordId());
 					if (lql.size() > 0) {
 							List<ProductMater> lpm = new ArrayList<ProductMater>();

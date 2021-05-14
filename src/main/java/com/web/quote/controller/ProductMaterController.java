@@ -216,7 +216,7 @@ public class ProductMaterController extends WebController {
 		String method = "/productMater/getList";
 		String methodName = "获取五金材料列表";
 		try {
-			Sort sort = new Sort(Sort.Direction.DESC, "id");
+			Sort sort = new Sort(Sort.Direction.ASC, "id");
 			ApiResponseResult result = productMaterService.getList(keyword,bsType,quoteId,bsAgent, super.getPageRequest(sort));
 			logger.debug("获取五金材料列表=getList:");
 			return result;
