@@ -38,7 +38,7 @@ $(function() {
 			{fixed:'left',field : 'bsName',width : 150,title : '零件名称',style : 'background-color:#d2d2d2'},
 			{fixed:'left',field : 'bsLinkName',width : 150,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
 				// {field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'workCenter',title : '工作中心',width : 120,templet :
+			{field : 'workCenter',title : '工作中心',width : 100,templet :
 				function(d){if(d.bjWorkCenter!=null){
 					return d.bjWorkCenter.workcenterName
 						}else {
@@ -46,7 +46,7 @@ $(function() {
 				}
 					},
 				style : 'background-color:#d2d2d2'},
-				{field : 'pkProc',title : '工序名称',width : 195,templet :  '#selectProc',style : 'background-color:#ffffff'},
+				{field : 'pkProc',title : '工序名称',width : 180,templet :  '#selectProc',style : 'background-color:#ffffff'},
 				{field : 'bsOrder',title : '顺序',width : 60,"edit" : "number","event" : "dataCol",sort:true,style : 'background-color:#ffffff'},
 			// {field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,style : 'background-color:#d2d2d2',align : 'center',
 			// 	templet : function(d) {
@@ -62,10 +62,9 @@ $(function() {
 			// }},
 
 				// ,templet : '#selectBsMaterName'
-			{field : 'bsMaterName',width : 220,title : '材料名称',style : 'background-color:#d2d2d2'},
+				{field : 'bsGroups',width : 130,title : '损耗分组',style : 'background-color:#d2d2d2'},
+				{field : 'bsMaterName',width : 220,title : '材料名称',style : 'background-color:#d2d2d2'},
 				// ,templet : '#selectBsMaterName',,templet : '#selectBsGroups'
-			{field : 'bsGroups',width : 130,title : '损耗分组',style : 'background-color:#d2d2d2'},
-
 				// {field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
 			// 	templet : function(d) {
 			// 		if (d.fmemo == null) {return ""} else {return d.fmemo}
