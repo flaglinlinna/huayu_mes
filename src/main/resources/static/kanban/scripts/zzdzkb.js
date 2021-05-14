@@ -14,7 +14,7 @@ var rotationdata = 0;// 获取系统设置的刷新间隔时间 -页面数据更
 
 $(function() {
 	// getDepList(deptList);
-	getLinerList(linerList);//获取组长-废弃
+	//getLinerList(linerList);//获取组长-废弃
 
 	intervaldata = interval.data;
 	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间-制令单切换
