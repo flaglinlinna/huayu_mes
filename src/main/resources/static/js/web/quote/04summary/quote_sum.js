@@ -424,7 +424,13 @@ $(function() {
 			cols : [ [
 				{fixed:'left',type : 'numbers'},
 				//{field : 'BS_ELEMENT',width : 120,title : '组件名称',sort : true,totalRowText : "合计"},
-				{fixed:'left',field : 'BS_ELEMENT',width : 90,title : '组件名称'},
+				{fixed:'left',field : 'BS_ELEMENT',width : 90,title : '组件名称',templet:function (d) {
+						if(d.BS_ORDER!=null){
+							return d.BS_ELEMENT
+						}else {
+							return '小计'
+						}
+					}},
 				{fixed:'left',field : 'BS_NAME',width : 150,title : '零件名称'},
 				{fixed:'left',field : 'BS_LINK_NAME',width : 150,title : '所属零件'},
 				{fixed:'left',field : 'WORKCENTER_NAME',width : 110,title : '工作中心'
@@ -802,13 +808,43 @@ function getLossDetail(title){
 			merge(res.data, [ 'BS_ELEMENT' ], [ 1,1]);
 			merge(res.data, [ 'BS_LINK_NAME' ], [ 3,3]);
 			pageCurr = curr;
-			var onwanceTotal=0;
+			var onwanceTotal = 0
+			var bsTheLostTotal=0;
+			var bsMaterTotal = 0;
+			var bsLhAll = 0;
+			var bsMhAll = 0;
+			var bsWXAll = 0;
+			var bsCost = 0; //成本合计
 			var yieldTotal = 100;
+			var tableIns3 = this.elem.next();
 			res.data.forEach(function(item, index) {
-				onwanceTotal += Number(item.BS_COST)+Number(item.BS_THE_LOSS);
-				yieldTotal *= Number(item.BS_YIELD)/100
+				if(item.BS_ORDER!=null) {
+					onwanceTotal += Number(item.BS_COST) + Number(item.BS_THE_LOSS);
+					yieldTotal *= Number(item.BS_YIELD) / 100;
+					bsCost += Number(item.BS_COST);
+					bsTheLostTotal += Number(item.BS_THE_LOSS);
+					bsMaterTotal +=Number(item.BS_MATER_COST);
+					bsLhAll +=Number(item.BS_FEE_LH_ALL);
+					bsMhAll +=Number(item.BS_FEE_MH_ALL);
+					bsWXAll +=Number(item.BS_FEE_WX_ALL);
+
+				}else {
+
+				}
+
+				if(item.BS_ORDER==null){
+					tableIns3.find('tr[data-index=' + index + ']').find('td').css("background-color", "#FFFF00");
+				}
+				// console.log(onwanceTotal);
 			});
 			this.elem.next().find('.layui-table-total td[data-field="bsCostLoss"] .layui-table-cell').text(onwanceTotal.toFixed(4));
+			this.elem.next().find('.layui-table-total td[data-field="BS_MATER_COST"] .layui-table-cell').text(bsMaterTotal.toFixed(4));
+			this.elem.next().find('.layui-table-total td[data-field="BS_THE_LOSS"] .layui-table-cell').text(bsTheLostTotal.toFixed(4));
+			this.elem.next().find('.layui-table-total td[data-field="BS_FEE_LH_ALL"] .layui-table-cell').text(bsLhAll.toFixed(2));
+			this.elem.next().find('.layui-table-total td[data-field="BS_FEE_MH_ALL"] .layui-table-cell').text(bsMhAll.toFixed(2));
+			this.elem.next().find('.layui-table-total td[data-field="BS_FEE_WX_ALL"] .layui-table-cell').text(bsWXAll.toFixed(2));
+			this.elem.next().find('.layui-table-total td[data-field="BS_COST"] .layui-table-cell').text(bsCost.toFixed(2));
+
 			this.elem.next().find('.layui-table-total td[data-field="BS_YIELD"] .layui-table-cell').text(yieldTotal.toFixed(2)+"%");
 		}
 	})

@@ -36,7 +36,7 @@ public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecifica
 	@Query(value = "select distinct t.bs_groups as bsGroups from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag=0 and t.bs_element = ?2 and t.bs_component =?3 and t.pk_bj_work_center = ?4 and t.bs_groups is not null ", nativeQuery = true)
 	public List<Map<String, Object>> getBsGroups(Long quoteId,String bsElement,String component,Long pkWorkCenterId);
 
-	@Query(value = "SELECT DISTINCT b.BS_COMPONENT as bsComponent FROM PRICE_QUOTE_BOM b left JOIN BJ_BASE_ITEM_TYPE_WG t on b.PK_ITEM_TYPE_WG = t.id where b.PK_QUOTE = ?1 and t.ITEM_TYPE !='辅料' and b.del_flag = 0 ", nativeQuery = true)
+	@Query(value = "select b.BS_COMPONENT as bsComponent from PRICE_QUOTE_BOM b where b.id in( select max(b.id) FROM PRICE_QUOTE_BOM b left JOIN BJ_BASE_ITEM_TYPE_WG t on b.PK_ITEM_TYPE_WG = t.id where b.PK_QUOTE = ?1 and t.ITEM_TYPE !='辅料' and b.del_flag = 0 GROUP BY  b.BS_COMPONENT ) and  b.PK_QUOTE = ?1 and b.del_flag = 0 order by b.id ", nativeQuery = true)
 	List<Map<String, Object>> getBsComponent(Long quoteId);
 
 

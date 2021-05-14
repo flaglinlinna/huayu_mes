@@ -752,12 +752,21 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //		DataGrid.create(mapList.getContent(), (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize())
 		List<Map<String,Object>> maps =  new ArrayList<>();
 		List<Map<String,Object>> mapOld = mapList.getContent();
-		for (int i = 0; i < mapOld.size(); i++) {
+		HashSet<String> groupSet = new HashSet<>();
+		for (int i = mapOld.size()-1; i >= 0; i--) {
+		  Map<String, Object> subtotal = new HashMap<>();
 		  Map<String, Object> one = mapOld.get(i);
 		  Map<String, Object> deepCopy = new HashMap<>();
+		  if(groupSet.add(one.get("BS_ELEMENT").toString()+one.get("BS_LINK_NAME"))){
+		  	subtotal.put("BS_ELEMENT",one.get("BS_ELEMENT"));
+		  	subtotal.put("BS_LINK_NAME",one.get("BS_LINK_NAME"));
+			maps.add(subtotal);
+		  }
 		  deepCopy.putAll(one);
 		  maps.add(deepCopy);
+		  //根据组件和所属零件判断是否新增小计计算
 		}
+		Collections.reverse(maps);
 		for(Map<String,Object> map :maps){
 			if(map.get("BS_GROUPS")!=null){
 				List<Map<String,Object>> sumList = productProcessDao.getSumByBsGroups(quoteId,map.get("BS_GROUPS").toString()
@@ -766,6 +775,34 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				map.put("BS_FEE_LH_ALL",sumList.get(0).get("BS_FEE_LH_ALL"));
 				map.put("BS_FEE_MH_ALL",sumList.get(0).get("BS_FEE_MH_ALL"));
 				map.put("BS_FEE_WX_ALL",sumList.get(0).get("BS_FEE_WX_ALL"));
+			}
+			else if(map.get("BS_ORDER")==null){
+				BigDecimal BS_MATER_COST = BigDecimal.ZERO;
+				BigDecimal BS_FEE_LH_ALL = BigDecimal.ZERO;
+				BigDecimal BS_FEE_MH_ALL = BigDecimal.ZERO;
+				BigDecimal BS_FEE_WX_ALL = BigDecimal.ZERO;
+				BigDecimal BS_COST = BigDecimal.ZERO;
+				BigDecimal BS_YIELD = new BigDecimal(100);
+				BigDecimal BS_THE_LOSS = BigDecimal.ZERO;
+//				BigDecimal bsCostLoss = BigDecimal.ZERO;
+				for(Map<String,Object> map2 :maps){
+					if(map2.get("BS_ELEMENT").equals(map.get("BS_ELEMENT"))&&map2.get("BS_LINK_NAME").equals(map.get("BS_LINK_NAME"))){
+						BS_MATER_COST = BS_MATER_COST.add(map2.get("BS_MATER_COST")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_MATER_COST").toString()));
+						BS_FEE_LH_ALL = BS_FEE_LH_ALL.add(map2.get("BS_FEE_LH_ALL")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_FEE_LH_ALL").toString()));
+						BS_FEE_MH_ALL = BS_FEE_MH_ALL.add(map2.get("BS_FEE_MH_ALL")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_FEE_MH_ALL").toString()));
+						BS_FEE_WX_ALL = BS_FEE_WX_ALL.add(map2.get("BS_FEE_WX_ALL")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_FEE_WX_ALL").toString()));
+						BS_COST = BS_COST.add(map2.get("BS_COST")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_COST").toString()));
+						BS_THE_LOSS = BS_THE_LOSS.add(map2.get("BS_THE_LOSS")==null?BigDecimal.ZERO:new BigDecimal(map2.get("BS_THE_LOSS").toString()));
+						BS_YIELD = BS_YIELD.multiply(map2.get("BS_YIELD")==null?new BigDecimal(100):new BigDecimal(map2.get("BS_YIELD").toString())).divide(new BigDecimal(100));
+					}
+				}
+				map.put("BS_MATER_COST",BS_MATER_COST);
+				map.put("BS_FEE_LH_ALL",BS_FEE_LH_ALL);
+				map.put("BS_FEE_MH_ALL",BS_FEE_MH_ALL);
+				map.put("BS_FEE_WX_ALL",BS_FEE_WX_ALL);
+				map.put("BS_COST",BS_COST);
+				map.put("BS_THE_LOSS",BS_THE_LOSS);
+				map.put("BS_YIELD",BS_YIELD);
 			}
 		}
 		return ApiResponseResult.success().data(DataGrid.create(maps, (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
