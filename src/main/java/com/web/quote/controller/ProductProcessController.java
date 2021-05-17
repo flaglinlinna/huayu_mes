@@ -182,10 +182,10 @@ public class ProductProcessController extends WebController {
 		String methodName = "获取报价单下报价工艺流程列表";
 		try {
 //			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "bsName");
+//			Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "bsName");
 			Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "bsOrder");
 			List<Sort.Order> list = new ArrayList<>();
-			list.add(order1);
+//			list.add(order1);
 			list.add(order2);
 			Sort sort = new Sort(list);
 			ApiResponseResult result = productProcessService.getListByPkQuote(pkQuote, super.getPageRequest(sort));
