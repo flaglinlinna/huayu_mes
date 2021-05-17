@@ -274,7 +274,7 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 	myCharts1.on('click', function (params) {	
 		if(params.componentType=="xAxis"){			
 			var liner=params.value
-			var url="toZzdzkb?inType=apk&liner="+liner;
+			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+$("#dep_select").val();
 			window.open(url);
 		}
 	});
@@ -285,8 +285,8 @@ function getChart2(emp_plan, emp_now, emp_off) {
 	var option = {
 		color : [ '#6699FF', '#66FFCC' ],
 		title : {
-			text : emp_plan + "\n" + "￣￣",// 手动增加下划线
-			link : 'toScdzDetail?liner=&fieldword=PO_EMP_NUM_PLN',// 主标题文本超链接,默认值true
+			text : emp_plan + "\n",// 手动增加下划线
+			//link : 'toScdzDetail?liner=&fieldword=PO_EMP_NUM_PLN',// 主标题文本超链接,默认值true
 			target : 'blank',// 指定窗口打开主标题超链接，'self' | 'blank'，不指定为'blank'
 			left : "center",
 			top : "50%",
@@ -350,7 +350,7 @@ function getChart2(emp_plan, emp_now, emp_off) {
 			}, {
 				value : emp_now,
 				name : '在线人数',
-				url : "toScdzDetail?liner=&fieldword=PO_EMP_NUM_NOW"
+				//url : "toScdzDetail?liner=&fieldword=PO_EMP_NUM_NOW"
 			},
 			]
 		} ]
@@ -361,9 +361,9 @@ function getChart2(emp_plan, emp_now, emp_off) {
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
 	// 饼图点击跳转到指定页面
-	myCharts1.on('click', function(param) {
-		window.open(param.data.url);
-	});
+//	myCharts1.on('click', function(param) {
+//		window.open(param.data.url);
+//	});
 }
 
 function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
@@ -518,7 +518,7 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 		if(params.componentType=="xAxis"){			
 			var liner=params.value
 			liner=liner.substring(0,liner.indexOf("\n"))
-			var url="toZzdzkb?inType=apk&liner="+liner;
+			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+$("#dep_select").val();
 			window.open(url);
 		}
 	});

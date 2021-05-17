@@ -111,6 +111,7 @@ function dealCjbgData(kanbanList) {
 	var kanbanData = kanbanList.data.List;
 	if (kanbanData.length > 0) {
 		var xAxis = [];
+		var deptAxis=[];
 		var series1 = [];
 		var series2 = [];
 		var series3 = [];
@@ -126,12 +127,13 @@ function dealCjbgData(kanbanList) {
 				continue;
 			}
 			xAxis.push(kanbanData[i].LINER_NAME+"\n"+"第"+kanbanData[i].FROWNUM+"名");
+			deptAxis.push(kanbanData[i].DEPT_ID)
 			series1.push(kanbanData[i].HOUR_ST);// 标准工时
 			series2.push(kanbanData[i].HOUR_ACT);// 实际工时
 			series3.push(kanbanData[i].EFFICIENCY_RATE);// 生产效率
 		}
 		$("#showLine").text("总开线数：" + kanbanList.data.LineNum);
-		chartCjbgDiv(xAxis, series1, series2, series3);
+		chartCjbgDiv(xAxis, series1, series2, series3,deptAxis);
 	} else {
 		toClean();
 	}
@@ -139,7 +141,7 @@ function dealCjbgData(kanbanList) {
 
 function toClean() {
 	$("#showLine").text("总开线数：0");
-	chartCjbgDiv([], 0, 0, 0);
+	chartCjbgDiv([], 0, 0, 0,[]);
 }
 
 
@@ -288,13 +290,13 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 	var myCharts1 = echarts.init(document.getElementById('echart_scdz'));
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
-	myCharts1.on('click', function (params) {	
-		if(params.componentType=="xAxis"){			
-			var liner=params.value
-			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
-			window.open(url);
-		}
-	});
+//	myCharts1.on('click', function (params) {	
+//		if(params.componentType=="xAxis"){			
+//			var liner=params.value
+//			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
+//			window.open(url);
+//		}
+//	});
 }
 
 function getChart2(emp_plan, emp_now, emp_off) {
@@ -378,12 +380,12 @@ function getChart2(emp_plan, emp_now, emp_off) {
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
 	// 饼图点击跳转到指定页面
-	myCharts1.on('click', function(param) {
-		window.open(param.data.url);
-	});
+//	myCharts1.on('click', function(param) {
+//		window.open(param.data.url);
+//	});
 }
 
-function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
+function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data,deptAxis) {
 	option = {
 		tooltip : {
 			trigger : 'axis',
@@ -536,7 +538,18 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 		if(params.componentType=="xAxis"){			
 			var liner=params.value
 			liner=liner.substring(0,liner.indexOf("\n"))
-			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
+			var url=''
+			if(deptId=='88'){
+				var  index=params.value
+				index=index.substring(index.indexOf("第")+1,index.indexOf("名"))
+				index=index-1
+				if(deptAxis.length==0){
+					return false
+				}
+				url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptAxis[index];
+			}else{
+				url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
+			}
 			window.open(url);
 		}
 	});
@@ -659,12 +672,13 @@ function getDepList(deptList) {
 	$("#dep_select").val(deptId)
 }
 function getList() {
+	deptId=$("#dep_select").val()
 	var class_no = "999";
-	var dep_id=$("#dep_select").val();
+	//var dep_id=$("#dep_select").val();
 	var date = $("#date").val();
 	var params = {
 		"class_nos" : class_no,
-		"dep_id" : dep_id,
+		"dep_id" : deptId,
 		"sdata" : date
 	};
 	$.ajax({
