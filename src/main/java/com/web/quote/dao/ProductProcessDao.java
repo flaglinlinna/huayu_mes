@@ -32,7 +32,9 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	Integer doProcessStatusByType(Long userId, Date date,Long pkQuote,String bsType);
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsType(Integer delFlag,Long pkQuote,String bsType);
-	
+
+	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsTypeOrderByBsOrder(Integer delFlag,Long pkQuote,String bsType);
+
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsTypeAndBsNameOrderByBsOrderDesc(Integer delFlag,Long pkQuote,String bsType,String bsname);
 	
 	@Query(value = "select DISTINCT M.BS_NAME from price_product_process M WHERE M.DEL_FLAG=0 AND M.BS_TYPE=?1 AND M.PK_QUOTE=?2 AND M.BS_NAME IS NOT NULL", nativeQuery = true)	

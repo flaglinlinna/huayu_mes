@@ -239,7 +239,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));
         Specification<ProductProcess> spec = Specification.where(BaseService.and(filters, ProductProcess.class));
-        List<ProductProcess> productProcessesList = productProcessDao.findAll(spec);
+        List<ProductProcess> productProcessesList = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeOrderByBsOrder(0,quoteId,bsType);
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (ProductProcess bs : productProcessesList) {
             Map<String, Object> map = new HashMap<>();
@@ -636,8 +636,10 @@ public class ProductProcesslmpl implements ProductProcessService {
             process.setBsType(processTemp.getBsType());
             process.setBsCapacity(processTemp.getBsCapacity());
             process.setBsCave(processTemp.getBsCave());
-            process.setBsFeeWxAll(new BigDecimal(processTemp.getBsFeeWxAll()));
-            process.setBsLoss(new BigDecimal(processTemp.getBsLoss()));
+            if("out".equals(bsType)){
+                process.setBsFeeWxAll(new BigDecimal(processTemp.getBsFeeWxAll()));
+                process.setBsLoss(new BigDecimal(processTemp.getBsLoss()));
+            }
             if (StringUtils.isNotEmpty(processTemp.getBsCycle())) {
                 process.setBsCycle(new BigDecimal(processTemp.getBsCycle()));
             }
