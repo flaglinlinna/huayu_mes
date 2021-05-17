@@ -354,6 +354,7 @@ $(function() {
 										return modelJson[i].MODEL_NAME;
 									}
 								}
+								return "";
 							}
 						}else {
 							return "";

@@ -527,7 +527,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				"out");
 		for (ProductProcess pp : lpp_out) {
 			// 本工序损耗
-			pp.setBsLossTheLh(pp.getBsFeeWxAll().multiply(new BigDecimal("100")).divide(pp.getBsLoss()));
+			pp.setBsLossTheLh(pp.getBsFeeWxAll().multiply(new BigDecimal("100")).subtract(pp.getBsLoss()));
 			pp.setBsLossTheMh(new BigDecimal("0"));
 			// 后工序损耗
 //			pp.setBsLossHouLh(new BigDecimal("0"));

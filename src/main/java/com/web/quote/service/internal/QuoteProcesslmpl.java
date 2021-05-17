@@ -137,6 +137,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //				o.setBsGroupsList(JSON.toJSONString(groupsList));
 //			}
 
+			//关联到bom，如果材料是辅料，则查询关联的零件名称
 			if(o.getQuoteBom()!=null) {
 				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
 					if(elementList.size()>0){
@@ -146,6 +147,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				}else {
 					o.setBsLinkName(o.getBsName());
 				}
+			}else {
+				//关联不到bom，则未外协工艺，默认非辅料
+				o.setBsLinkName(o.getBsName());
 			}
 
 			if(procList.size() >0){
