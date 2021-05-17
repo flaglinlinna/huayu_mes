@@ -41,6 +41,8 @@ public interface QuoteProcessService {
 
    public ApiResponseResult addProcessByBom(Long quoteId);
 
+   public ApiResponseResult editProcessByBom(Long quoteId);
+
    public ApiResponseResult editProcessList(List<QuoteProcess> quoteProcessList) throws Exception;
    
 }

@@ -376,6 +376,8 @@ public class QuoteBomlmpl implements QuoteBomService {
 		 //20210420-hjj-下发工艺流程(先判断工艺是否为空)
 		if(quoteProcessDao.findByDelFlagAndPkQuote(0,Long.parseLong(quoteId)).size()==0){
 			quoteProcessService.addProcessByBom(Long.parseLong(quoteId));
+		}else {
+			quoteProcessService.editProcessByBom(Long.parseLong(quoteId));
 		}
 		return ApiResponseResult.success("提交成功！").data(data);
 	}

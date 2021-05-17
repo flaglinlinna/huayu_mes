@@ -138,7 +138,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //			}
 
 			//关联到bom，如果材料是辅料，则查询关联的零件名称
-			if(o.getQuoteBom()!=null) {
+			if(o.getPkQuoteBom()!=null) {
 				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
 					if(elementList.size()>0){
 						o.setBsComponentList(JSON.toJSONString(elementList));
@@ -572,6 +572,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				quoteProcess.setBsGroups(o.getBsGroups());
 				quoteProcess.setPkQuote(quoteId);
 				quoteProcess.setPkQuoteBom(o.getId());
+//				quoteProcess.setQuoteBom(o);
 				quoteProcess.setBsMaterName(o.getBsMaterName());
 				quoteProcess.setBsElement(o.getBsElement());
 				quoteProcess.setBsName(o.getBsComponent());
@@ -584,6 +585,26 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			quoteProcessDao.saveAll(quoteProcessList);
 		}catch (Exception e){
 	 		e.printStackTrace();
+		}
+		return ApiResponseResult.success();
+	}
+
+	@Override
+	public ApiResponseResult editProcessByBom(Long quoteId) {
+//		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuoteOrderById(0,quoteId);
+		List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuote(0,quoteId);
+		for(QuoteProcess o :quoteProcessList){
+			List<Map<String, Object>> mapList = quoteBomDao.getBsMaterName(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
+			if (StringUtils.isNotEmpty(o.getBsMaterName())) {
+				if (o.getPkQuoteBom() == null) {
+					for (Map<String, Object> map : mapList) {
+						if (o.getBsMaterName().equals(map.get("BSMATERNAME"))) {
+							o.setPkQuoteBom(Long.parseLong(map.get("ID").toString()));
+							o.setBsGroups(map.get("BSGROUPS") == null ? "" : map.get("BSGROUPS").toString());
+						}
+					}
+				}
+			}
 		}
 		return ApiResponseResult.success();
 	}

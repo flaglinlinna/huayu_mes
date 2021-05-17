@@ -146,7 +146,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         quote.setId(null);
         this.add(quote);
         //2.复制报价项目清单 (1 bom,2产品资料 3模具清单 4.工艺流程)
-        List<QuoteBom> copyQuoteBomList =  quoteBomDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
+        List<QuoteBom> copyQuoteBomList =  quoteBomDao.findByDelFlagAndPkQuoteOrderById(0,quote.getBsCopyId());
         List<QuoteBom> newQuoteBomList = new ArrayList<>();
         for (QuoteBom o: copyQuoteBomList){
             QuoteBom quoteBom = new QuoteBom();
@@ -181,6 +181,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             quoteProcess.setPkQuote(quote.getId());
             quoteProcess.setPkQuoteBom(null);
             quoteProcess.setBsStatus(0);
+            quoteProcess.setBsLinkName(null);
             newQuoteProcessList.add(quoteProcess);
         }
         quoteProcessDao.saveAll(newQuoteProcessList);
@@ -198,7 +199,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         quoteMouldDao.saveAll(newQuoteMouldList);
 
         //2 复制制造部材料，采购部内容(无需重审条件下自动审批及完成)
-        List<ProductMater> productMaterList = productMaterDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
+        List<ProductMater> productMaterList = productMaterDao.findByDelFlagAndPkQuoteOrderById(0,quote.getBsCopyId());
         List<ProductMater> newProductMaterList = new ArrayList<>();
         for(ProductMater o:productMaterList){
             ProductMater productMater = new ProductMater();
