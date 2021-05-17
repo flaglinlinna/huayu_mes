@@ -527,7 +527,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				"out");
 		for (ProductProcess pp : lpp_out) {
 			// 本工序损耗
-			pp.setBsLossTheLh(pp.getBsFeeWxAll().multiply(pp.getBsLoss()));
+			pp.setBsLossTheLh(pp.getBsFeeWxAll().multiply(new BigDecimal("100")).divide(pp.getBsLoss()));
 			pp.setBsLossTheMh(new BigDecimal("0"));
 			// 后工序损耗
 //			pp.setBsLossHouLh(new BigDecimal("0"));
@@ -552,9 +552,11 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for(Integer i=0;i<processList.size();i++){
 			ProductProcess o = processList.get(i);
 			//成本 = 人工制费 + 制造费用 + 材料费用
+			// 外协损耗改成工序良率计算
 			if(o.getBsType().equals("out")){
 				o.setBsCost(o.getBsFeeWxAll());
-				o.setBsYield(new BigDecimal("100").subtract(o.getBsLoss()));
+//				o.setBsYield(new BigDecimal("100").subtract(o.getBsLoss()));
+				o.setBsYield(o.getBsLoss());
 			}else {
 				List<ProductMater> pmList = new ArrayList<>();
 				if(StringUtils.isNotEmpty(o.getBsGroups())){

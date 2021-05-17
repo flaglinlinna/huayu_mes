@@ -369,7 +369,7 @@ $(function() {
 				{field : 'bsCapacity',title : '产能(个/小时)',width : 120,hide : true},
 				{field : 'bsYield',title : '工序良率%',width : 100,hide : true},
 				{field : 'bsHouYield',title : '后工序良率%',width : 100,hide : true},
-				{field : 'bsLoss',title : '损耗率%',width : 90,hide : true},
+				{field : 'bsLoss',title : '工序良率%',width : 90,hide : true},
 
 				{field : 'bsFeeLhAll',title : '人工总费用',width : 90,totalRow : true,hide : true},
 				{field : 'bsFeeMhAll',title : '制造总费用',width : 90,totalRow : true,hide : true},
