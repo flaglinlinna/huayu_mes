@@ -446,7 +446,11 @@
         var orgList = mapData ? mapData.orgList : null;
         var employeeList = mapData ? mapData.employeeList : null;
     </script>
-    <script th:src="@{/js/web/produce/scheduling/scheduling_edit.js}" src="/js/web/produce/scheduling/scheduling_edit.js"></script>
+
+    <script>
+        document.write("<script type='text/javascript' " +
+            "src='/js/web/produce/scheduling/scheduling_edit.js?ver="+Math.random()+"'><\/script>");
+    </script>
 </div>
 </body>
 </html>
