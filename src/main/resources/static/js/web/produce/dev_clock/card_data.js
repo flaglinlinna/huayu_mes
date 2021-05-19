@@ -16,6 +16,8 @@ $(function() {
 			height:'full-110'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,
+			limit: 30,
+			limits: [30,50,100,200],
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,

@@ -504,7 +504,7 @@ $(function() {
 			cols : [ [
 			{type : 'numbers'},
 			// {field:'id', title:'ID', width:80, unresize:true, sort:true},
-			{field : 'bsName',title : '组件名称',width : 200,totalRowText : "合计:"},
+			{field : 'bsName',title : '零件名称',width : 200,totalRowText : "合计:"},
 			{field : 'bsMoCode',title : '模具编码',width : 200,templet : '<div>{{d.mjProcFee.productCode}}</div>'},
 			{field : 'bsMoName',title : '模具名称',width : 200,templet : '<div>{{d.mjProcFee.productName}}</div>'},
 			{field : 'bsMoFee',title : '模具成本',width : 120,templet : '<div>{{d.mjProcFee.feeAll}}</div>',totalRow : true},

@@ -134,8 +134,12 @@
 				<table id="devTable" lay-filter="devTable"></table>
 			</form>
 		</div>
-		<script th:src="@{/js/web/produce/dev_clock/card_data.js}"
-			src="/js/web/produce/dev_clock/card_data.js"></script>
+<!--		<script th:src="@{/js/web/produce/dev_clock/card_data.js}"-->
+<!--			src="/js/web/produce/dev_clock/card_data.js"></script>-->
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/produce/dev_clock/card_data.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

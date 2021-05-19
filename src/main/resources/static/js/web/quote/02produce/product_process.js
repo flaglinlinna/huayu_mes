@@ -210,7 +210,7 @@ $(function() {
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
 				{field : 'bsCave', title : '穴数',edit:'text', width:80, hide:true},
 				{field : 'bsCapacity', title : '产能(个/小时)',edit:'text', width:105, hide:true},
-				{field : 'bsLoss', title : '损耗率<span style="color:red;font-size:12px;">*</span>', width:80,edit:'text',hide:true},
+				{field : 'bsLoss', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:80,edit:'text',hide:true},
 				{field : 'bsFeeWxAll', title : '外协价格<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true},
 
 				// {field : 'fmemo', title : '备注',width:120,edit:'text'},
