@@ -45,7 +45,7 @@ $(function() {
 							return '外协'
 						}
 				}}, 
-				//{field : 'bsComponent',width : 150,title : '零/组件名称',sort : true,style : 'background-color:#d2d2d2'},
+				{fixed:'left',field : 'bsComponent',width : 150,title : '零件名称',sort : true,style : 'background-color:#d2d2d2'},
 				{fixed:'left',field : 'bsMaterName',width : 200,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
 				{fixed:'left',field : 'bsModel',width : 200,title : '材料规格',style : 'background-color:#d2d2d2'},
 				{field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
@@ -401,13 +401,13 @@ function openUpload() {
 }
 
 function confirm() {
+	saveTable();
 	var params = {
 		"id" : quoteId,
 	};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
-		saveTable();
 		CoreUtil.sendAjax("/purchase/doStatus", JSON.stringify(params), function(data) {
 			if (data.result) {
 				layer.alert("确认完成成功", function() {

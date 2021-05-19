@@ -745,6 +745,7 @@ function delProdErr(obj, id, name) {
 }
 
 function save() {
+	saveTable();
 	// console.log(quoteId,code)
 	var param = {
 		"quoteId" : quoteId,
@@ -753,7 +754,7 @@ function save() {
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
-		saveTable();
+		// saveTable();
 		CoreUtil.sendAjax("/quoteBom/doStatus", JSON.stringify(param), function(data) {
 			if (isLogin(data)) {
 				if (data.result == true) {

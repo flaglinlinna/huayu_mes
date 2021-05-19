@@ -29,6 +29,9 @@ public interface QuoteMouldDao extends CrudRepository<QuoteMould, Long>,JpaSpeci
 	
 	@Query(value = "select distinct t.bs_Element from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag='0' and t.bs_component is not null", nativeQuery = true)	
 	public List<Map<String, Object>> getBomName(String quoteid);//获取组件列表
+
+	@Query(value = "select distinct t.bs_component from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag='0' and t.bs_component is not null", nativeQuery = true)
+	public List<Map<String, Object>> getComponentName(String quoteid);//获取组件列表
 	
 	@Modifying
     @Query("update QuoteMould t set t.bsStatus=?1 where t.pkQuote=?2 and t.delFlag=0")

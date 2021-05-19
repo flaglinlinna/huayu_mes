@@ -545,6 +545,8 @@ public class ProductProcesslmpl implements ProductProcessService {
             quoteStatus = quote.getBsStatus2Surface();
         } else if (bsType.equals("packag")) {
             quoteStatus = quote.getBsStatus2Packag();
+        }else if(bsType.equals("out")){
+            quoteStatus = quote.getBsStatus2Out();
         }
 
         if (quoteStatus == 4 || quoteStatus == 2) {

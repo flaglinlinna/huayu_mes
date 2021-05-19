@@ -60,7 +60,8 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 	 * 获取Bom清单的组件下拉列表
 	 * **/
 	public ApiResponseResult getBomList(String quoteId)throws Exception{
-		List<Map<String, Object>> list=quoteMouldDao.getBomName(quoteId);
+		//修改获取零件下拉列表
+		List<Map<String, Object>> list=quoteMouldDao.getComponentName(quoteId);
 		return ApiResponseResult.success().data(list);
 	}
 	

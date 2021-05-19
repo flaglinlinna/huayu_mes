@@ -445,6 +445,7 @@ function exportExcel() {
 }
 
 function Confirm() {
+	saveTable();
 	var params = {
 		"id" : quoteId,
 		"bsType" : bsType,
@@ -453,7 +454,6 @@ function Confirm() {
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
-		saveTable();
 		CoreUtil.sendAjax("/productMater/doStatus", JSON.stringify(params), function(data) {
 			if (data.result) {
 				// parent.layui.admin.events.closeThisTabs(); 先关闭执行不了js

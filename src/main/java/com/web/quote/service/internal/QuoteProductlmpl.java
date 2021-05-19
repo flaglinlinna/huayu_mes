@@ -336,6 +336,16 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 					quoteDao.save(o);
 				}
 			}
+		}else if(code.equals("C005")){
+			if(status ==1){
+				if (lo.size() > 0) {
+					Quote o = lo.get(0);
+					o.setBsStatus2Out(status);
+					o.setLastupdateDate(new Date());
+					o.setLastupdateBy(UserUtil.getSessionUser().getId());
+					quoteDao.save(o);
+				}
+			}
 		}
 		return ApiResponseResult.success().data(completed);
 	}

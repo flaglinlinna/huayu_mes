@@ -266,7 +266,7 @@ public class ProductProcessController extends WebController {
 		try {
 			long id = Long.parseLong(params.get("id").toString());
 			String bsType = params.get("bsType").toString();
-			String bsCode = "";
+			String bsCode = "C005";
 			if(!("out").equals(bsType)){
 				bsCode = params.get("bsCode").toString();
 			}

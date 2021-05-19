@@ -573,11 +573,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				o.setBsMaterCost(materCost);
 				o.setBsCost(o.getBsFeeLhAll().add(o.getBsFeeMhAll()).add(o.getBsMaterCost()));
 			}
-			if(i==0) {
+			//第一条不用加上成本累计(含损耗) //2021-5-18-hjj 各小计分组的损耗独立计算
+			if(i==0||!(o.getBsGroups()+o.getBsLinkName()+o.getBsElement()).equals(processList.get(i-1).getBsGroups()+processList.get(i-1).getBsLinkName()+processList.get(i-1).getBsElement())) {
 				//本工序损耗
 				o.setBsTheLoss(o.getBsCost().divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract(o.getBsCost()));
+				//成本累计(含损耗)
 				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()));
 			}else {
+				//本工序损耗
 				o.setBsTheLoss((processList.get(i-1).getBsAllLoss()).divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract((processList.get(i-1).getBsAllLoss())));
 				//成本累计(含损耗)
 				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()).add(processList.get(i-1).getBsAllLoss()));
@@ -702,7 +705,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 								QuoteSumBom qb3 = new QuoteSumBom();
 								qb3.setPkQuote(quoteId);
 								qb3.setCreateDate(new Date());
-								qb3.setBsMaterName(map3.get("MATER_NAME")==null?"":map3.get("MATER_NAME").toString());
+								qb3.setBsMaterName(map3.get("MATER_NAME")==null?"null":map3.get("MATER_NAME").toString());
 								qb3.setBsFeeItemAll(new BigDecimal(map3.get("FEE").toString()));// 材料总费用
 								qb3.setPkBjWorkCenter(Long.valueOf(map3.get("WKC").toString()));
 								qb3.setBsProdType(prod_type);
@@ -759,9 +762,12 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		  Map<String, Object> subtotal = new HashMap<>();
 		  Map<String, Object> one = mapOld.get(i);
 		  Map<String, Object> deepCopy = new HashMap<>();
-		  if(groupSet.add(one.get("BS_ELEMENT").toString()+one.get("BS_LINK_NAME"))){
+		  //根据组件和所属零件判断是否有小结
+		  if(groupSet.add(one.get("BS_ELEMENT").toString()+one.get("BS_LINK_NAME")+one.get("BS_ORDERS"))){
+		  	//新增小结
 		  	subtotal.put("BS_ELEMENT",one.get("BS_ELEMENT"));
 		  	subtotal.put("BS_LINK_NAME",one.get("BS_LINK_NAME"));
+//			  subtotal.put("BS_ORDERS",one.get("BS_ORDERS"));
 			maps.add(subtotal);
 		  }
 		  deepCopy.putAll(one);
@@ -770,6 +776,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		Collections.reverse(maps);
 		for(Map<String,Object> map :maps){
+			//分组统计
 			if(map.get("BS_GROUPS")!=null){
 				List<Map<String,Object>> sumList = productProcessDao.getSumByBsGroups(quoteId,map.get("BS_GROUPS").toString()
 						,map.get("BS_ELEMENT").toString(),map.get("BS_LINK_NAME").toString());
@@ -779,6 +786,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				map.put("BS_FEE_WX_ALL",sumList.get(0).get("BS_FEE_WX_ALL"));
 			}
 			else if(map.get("BS_ORDER")==null){
+				//根据所属零件统计
 				BigDecimal BS_MATER_COST = BigDecimal.ZERO;
 				BigDecimal BS_FEE_LH_ALL = BigDecimal.ZERO;
 				BigDecimal BS_FEE_MH_ALL = BigDecimal.ZERO;

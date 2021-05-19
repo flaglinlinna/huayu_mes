@@ -107,6 +107,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		Page<QuoteProcess> page = quoteProcessDao.findAll(spec1, pageRequest);
 		List<QuoteProcess> quoteProcessList = page.getContent();
 		List<Map<String, Object>> elementList = quoteBomDao.getBsComponent(Long.parseLong(pkQuote));
+		List<Proc> packagList = procDao.findByDelFlagAndProcName(0,"组装");
 		for(QuoteProcess o:quoteProcessList) {
 			List<Map<String, Object>> procList = new ArrayList<>();
 			if(!("out").equals(o.getBjWorkCenter().getBsCode())){
@@ -121,6 +122,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //			List<Map<String, Object>> groupsList = quoteBomDao.getBsGroups(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
 
 			if (StringUtils.isNotEmpty(o.getBsMaterName())) {
+				//根据材料名称找到所属分组及对应的bom
 				if (o.getPkQuoteBom() == null) {
 					for (Map<String, Object> map : mapList) {
 						if (o.getBsMaterName().equals(map.get("BSMATERNAME"))) {
@@ -140,19 +142,27 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			//关联到bom，如果材料是辅料，则查询关联的零件名称
 			if(o.getPkQuoteBom()!=null) {
 				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
+					//2021-05-19 物料类型为 辅料 的，工序名称默认为 组装（如果存在组装工序）
+					if(o.getPkProc()==null&&packagList.size()>0){
+						o.setPkProc(packagList.get(0).getId());
+					}
+
+					//关联第一个关联零件并返回下拉选择
 					if(elementList.size()>0){
 						o.setBsComponentList(JSON.toJSONString(elementList));
 						o.setBsLinkName(elementList.get(0).get("BSCOMPONENT").toString());
 					}
 				}else {
+					//非辅料(关联零件为自身零件)
 					o.setBsLinkName(o.getBsName());
 				}
 			}else {
-				//关联不到bom，则未外协工艺，默认非辅料
+				//关联不到bom，则是外协工艺，默认非辅料(关联零件为自身零件)
 				o.setBsLinkName(o.getBsName());
 			}
 
 			if(procList.size() >0){
+				//工序下拉框
 				o.setBsProcList(JSON.toJSONString(procList));
 			}
 		}

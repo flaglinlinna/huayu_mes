@@ -34,7 +34,7 @@ $(function() {
 			},
 			cols : [ [ {type : 'numbers'}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {field : 'bsName',title : '组件名称',style : 'background-color:#d2d2d2'}, 
+			, {field : 'bsName',title : '零件名称',style : 'background-color:#d2d2d2'},
 			{field : 'bsMoCode',title : '模具编码',templet : '<div>{{d.mjProcFee.productCode}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'bsMoName',title : '模具名称',templet : '<div>{{d.mjProcFee.productName}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'bsMoFee',title : '模具成本',templet : '<div>{{d.mjProcFee.feeAll}}</div>',style : 'background-color:#d2d2d2'},
@@ -425,7 +425,8 @@ function getAddList() {
 			$("#num").append("<option value=''> 请选择</option>");
 		}
 		if (bomlist[i]) {// 为空的不显示
-			$("#num").append("<option value='" + bomlist[i].BS_ELEMENT + "'>" + bomlist[i].BS_ELEMENT + "</option>");
+			console.log(bomlist[i]);
+			$("#num").append("<option value='" + bomlist[i].BS_COMPONENT + "'>" + bomlist[i].BS_COMPONENT + "</option>");
 		}
 	}
 	layui.form.render('select');
