@@ -37,10 +37,10 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {
 				field : 'bsFlowCode',
-				title : '编码',sort:true,width : 95
+				title : '编码',sort:true,width : 120
 			}, {
 				field : 'bsFlowName',
-				title : '名称',width : 140,sort:true
+				title : '名称',width : 160,sort:true
 			},
 				{
 					field : 'bsFlowDescribe',
@@ -55,10 +55,12 @@ $(function() {
 			}, {
 				field : 'lastupdateDate',
 				title : '更新时间',width : 145
-			}, {
-				field : 'createDate',
-				title : '添加时间',width : 145,
-			}, {
+			},
+			// 	{
+			// 	field : 'createDate',
+			// 	title : '添加时间',width : 145,
+			// },
+				{
 				fixed : 'right',
 				title : '操作',
 				align : 'center',

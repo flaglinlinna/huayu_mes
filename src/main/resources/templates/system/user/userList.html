@@ -215,8 +215,11 @@
 			src="/layuiadmin/layui-formSelects/formSelects-v4.js"
 			th:src="@{/layuiadmin/layui-formSelects/formSelects-v4.js}"></script>
 		<script src="/js/dateUtils.js" th:src="@{/js/dateUtils.js}"></script>
-		<script src="/js/auth/userList.js" th:src="@{/js/auth/userList.js}"></script>
-
+		//<script src="/js/auth/userList.js" th:src="@{/js/auth/userList.js}"></script>
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/auth/userList.js?ver="+Math.random()+"'><\/script>");
+		</script>
 		<script th:inline="javascript">
     var formSelects = layui.formSelects;
     formSelects.btns('roleType', ['select', 'remove'], {show: 'name', space: '10px'}); 

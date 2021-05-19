@@ -138,7 +138,11 @@
     <link  th:href="@{/ztree/css/zTreeStyle/zTreeStyle.css}" href="/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
     <script th:src="@{/ztree/js/jquery.ztree.all.min.js}" src="/ztree/js/jquery.ztree.all.min.js" type="text/javascript"></script>
     <script th:src="@{/js/dateUtils.js}" src="/js/dateUtils.js"></script>
-    <script th:src="@{/js/auth/roleList.js}" src="/js/auth/roleList.js"></script>
+    //<script th:src="@{/js/auth/roleList.js}" src="/js/auth/roleList.js"></script>
+    <script>
+        document.write("<script type='text/javascript' " +
+            "src='/js/auth/roleList.js?ver="+Math.random()+"'><\/script>");
+    </script>
 </div>
 </body>
 </html>

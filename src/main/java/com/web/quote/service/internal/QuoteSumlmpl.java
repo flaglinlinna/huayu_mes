@@ -702,7 +702,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 								QuoteSumBom qb3 = new QuoteSumBom();
 								qb3.setPkQuote(quoteId);
 								qb3.setCreateDate(new Date());
-								qb3.setBsMaterName(map3.get("MATER_NAME").toString());
+								qb3.setBsMaterName(map3.get("MATER_NAME")==null?"":map3.get("MATER_NAME").toString());
 								qb3.setBsFeeItemAll(new BigDecimal(map3.get("FEE").toString()));// 材料总费用
 								qb3.setPkBjWorkCenter(Long.valueOf(map3.get("WKC").toString()));
 								qb3.setBsProdType(prod_type);

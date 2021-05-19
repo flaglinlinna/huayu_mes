@@ -18,6 +18,8 @@ $(function() {
 			,height:'full-110'//固定表头&full-查询框高度
 		    ,even:true//条纹样式
 			,page : true,
+			limit: 30,
+			limits: [30,50,100,200],
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -35,45 +37,47 @@ $(function() {
 			},
 			cols : [ [ {
 				type : 'numbers'
-			}
+			},
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {
-				field : 'paramType',
-				title : '系统参数类型',
-				templet: function(d){
-					if(d.paramType=="1"){
-						 return  "用户级"
-					}else if(d.paramType==0){
-						return  "系统级"
-					}  
-			      }
-			},  {
+			// , {
+			// 	field : 'paramType',
+			// 	title : '系统参数类型',
+			// 	templet: function(d){
+			// 		if(d.paramType=="1"){
+			// 			 return  "用户级"
+			// 		}else if(d.paramType==0){
+			// 			return  "系统级"
+			// 		}
+			//       }
+			// },
+				{
 				field : 'paramCode',
-				title : '参数编码'
+				title : '参数编码',width:180
 			}, {
 				field : 'paramName',
-				title : '参数名称'
+				title : '参数名称',width:200
 			}, {
 				field : 'paramValue',
-				title : '参数值'
+				title : '参数值',width:150
 			},
 				{
 					field : 'paramSort',
-					title : '功能模块'
+					title : '功能模块',width:150
 				},
 				{
 				field : 'fmemo',
-				title : '备注',
-			}, {
-				field : 'lastupdateDate',
-				title : '更新时间'
-			}, {
-				field : 'createDate',
-				title : '添加时间',
-			}, {
+				title : '备注',width:150},
+			//  {
+			// 	field : 'lastupdateDate',
+			// 	title : '更新时间'
+			// }, {
+			// 	field : 'createDate',
+			// 	title : '添加时间',
+			// },
+				{
 				fixed : 'right',
 				title : '操作',
-					width : 180,
+					width : 200,
 				align : 'center',
 				toolbar : '#optBar'
 			} ] ],

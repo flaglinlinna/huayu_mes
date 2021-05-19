@@ -12,7 +12,7 @@ $(function() {
             ,url:context+'/sysLog/getlist'
             ,method: 'get' //默认：get请求
             ,cellMinWidth: 80
-            ,page: true,limit:20,
+            ,page: true,limit:30,
             height: 'full-80',//full-查询框高度
             even: true,//条纹样式
             request: {
@@ -32,11 +32,11 @@ $(function() {
                 {type:'numbers', width:'3%'}
                 ,{field:'username', title:'操作账号', width:'9%', sort: true}
                 ,{field:'moduleName', title:'模块', width:'12%', sort: true}
-                ,{field:'methodName', title:'操作', width:'16%', sort: true}
-                ,{field:'ip', title: '登录IP', width:'12%', sort: true}
-                ,{field:'operation', title: '结果', width:'10%', sort: true}
+                ,{field:'methodName', title:'操作', width:'14%', sort: true}
+                ,{field:'ip', title: '登录IP', width:'10%', sort: true}
+                ,{field:'operation', title: '结果', width:'8%', sort: true}
                 ,{field:'createDate', title: '时间', width:'14%', sort: true}
-                ,{field:'params', title: '参数', width:'26%', sort: true}
+                ,{field:'params', title: '参数', width:'30%', sort: true}
             ]]
             ,  done: function(res, curr, count){
             	$("[data-field='id']").css('display','none');

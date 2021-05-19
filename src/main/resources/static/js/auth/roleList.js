@@ -23,6 +23,8 @@ $(function() {
             ,height:'full-160'//固定表头&full-查询框高度
             ,even:true//条纹样式
             ,page: true,
+            limit: 30,
+            limits: [30,50,100,200],
             request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'rows' //每页数据量的参数名，默认：limit
@@ -43,15 +45,15 @@ $(function() {
             //     ,dataName: 'data' //数据列表的字段名称，默认：data
             // },
             cols: [[
-                {type:'numbers'}
+                {fixed:'left',type:'numbers'}
                 // ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-                ,{field:'roleCode', title:'编号',align:'center', width:120,sort:true}
-                ,{field:'roleName', title:'名称',align:'center', width:140,sort:true}
-                ,{field:'description', title: '描述',align:'center', minWidth:140,sort:true}
-                ,{field:'userCount', title: '用户数量',align:'center', width:120,sort:true,
+                ,{fixed:'left',field:'roleCode', title:'编号',align:'center', width:120,sort:true}
+                ,{fixed:'left',field:'roleName', title:'名称',align:'center', width:140,sort:true}
+                ,{fixed:'left',field:'description', title: '描述',align:'center', minWidth:200,sort:true}
+                ,{field:'userCount', title: '用户数量',align:'center', width:100,sort:true,
                  templet: '<div><a  style="text-decoration:underline;color:blue;cursor: pointer;"; onclick="showUser({{d.id}})">{{ d.userCount }}</a></div>'}
                 ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
-                ,{field:'lastupdateDate', title: '更新时间', align:'center',width:150}
+                //,{field:'lastupdateDate', title: '更新时间', align:'center',width:150}
                 ,{field:'createDate', title: '添加时间',align:'center', width:150}
                 ,{fixed:'right', title:'操作', width:200, align:'center', toolbar:'#optBar'}
             ]]

@@ -34,7 +34,7 @@ $(function() {
                 ,{field:'sessionId', title:'sessionId', width:120}
                 ,{field:'bsCode', title:'账号', width:'8%'}
                 ,{field:'bsName', title:'用户名称', width:'12%'}
-                ,{field:'mobile', title:'手机号', width:'15%'}
+                //,{field:'mobile', title:'手机号', width:'15%'}
                 ,{field:'host', title: '登录IP', width:'15%'}
                 ,{field:'startTimestamp', title: '登录时间', width:'18%'}
                 ,{field:'startTimestamp', title: '在线时长', width:'18%',templet: function (d) {return getMinusTime(d)}}
