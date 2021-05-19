@@ -48,12 +48,14 @@ function dealScdzData(kanbanList) {
 		$("#title").text(title + "•车间电子看板");
 		if (kanbanData.length > 0) {
 			var xAxis = [];
+			var deptAxis=[];
 			var series1 = [];
 			var series2 = [];
 			var series3 = [];
 			var color = [];
 			for (var i = 0; i < kanbanData.length; i++) {
-				xAxis.push(kanbanData[i].LINER_NAME);
+				xAxis.push(kanbanData[i].LINER_NAME+"\n"+"第"+kanbanData[i].FROWNUM+"名");
+				deptAxis.push(kanbanData[i].DEPT_ID);//部门
 				series1.push(kanbanData[i].QTY_PLAN);// 计划数量
 				series2.push(kanbanData[i].QTY_DONE);// 完成数量
 				if(kanbanData[i].QTY_DONE<kanbanData[i].QTY_PLAN){
@@ -63,9 +65,9 @@ function dealScdzData(kanbanList) {
 				}
 				series3.push(kanbanData[i].RATE_DONE);// 完工率
 			}
-			chartScdzDiv(xAxis, series1, series2, series3,color);
+			chartScdzDiv(xAxis, series1, series2, series3,color,deptAxis);
 		} else {
-			chartScdzDiv([], 0, 0, 0,0);
+			chartScdzDiv([], 0, 0, 0,0,[]);
 		}
 		var emp_plan = parseInt(kanbanList.data.EMP_NUM_PLN);
 		var emp_now = parseInt(kanbanList.data.EMP_NUM_NOW);
@@ -95,7 +97,7 @@ function dealScdzData(kanbanList) {
 
 	} else {
 		getChart2(0, 0, 0)
-		chartScdzDiv([], 0, 0, 0,0);
+		chartScdzDiv([], 0, 0, 0,0,[]);
 		//getChart3(0, 0, 0);
 		$("#showLine").text("开线数：0");
 		$("#showLine1").text("总线体数：0");
@@ -145,7 +147,7 @@ function toClean() {
 }
 
 
-function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color_data) {
+function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color_data,deptAxis) {
 	// console.log(color_data);
 	option = {
 		tooltip : {
@@ -290,13 +292,26 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 	var myCharts1 = echarts.init(document.getElementById('echart_scdz'));
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
-//	myCharts1.on('click', function (params) {	
-//		if(params.componentType=="xAxis"){			
-//			var liner=params.value
-//			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
-//			window.open(url);
-//		}
-//	});
+	myCharts1.on('click', function (params) {
+		if(params.componentType=="xAxis"){			
+			var liner=params.value
+			liner=liner.substring(0,liner.indexOf("\n"))
+			//var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
+			var url=''
+				if(deptAxis.length==0||deptAxis.length!=xAxis_data.length){
+					return false
+				}
+				if(deptId=='88'){
+					var  index=params.value
+					index=index.substring(index.indexOf("第")+1,index.indexOf("名"))
+					index=index-1
+					url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptAxis[index];
+				}else{
+					url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
+				}
+			window.open(url);
+		}
+	});
 }
 
 function getChart2(emp_plan, emp_now, emp_off) {
@@ -539,13 +554,13 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data,deptA
 			var liner=params.value
 			liner=liner.substring(0,liner.indexOf("\n"))
 			var url=''
+			if(deptAxis.length==0||deptAxis.length!=xAxis_data.length){
+					return false
+			}
 			if(deptId=='88'){
 				var  index=params.value
 				index=index.substring(index.indexOf("第")+1,index.indexOf("名"))
 				index=index-1
-				if(deptAxis.length==0){
-					return false
-				}
 				url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptAxis[index];
 			}else{
 				url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
