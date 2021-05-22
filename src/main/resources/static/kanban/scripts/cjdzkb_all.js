@@ -238,18 +238,6 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 				position : 'top',
 				textStyle : {
 					fontSize : fontSize(0.24),// 字体大小
-					// color:getcolor(series2_data)
-					// color:"#CC0033"
-					// color : color_data
-					// color:function(params){
-					// 	console.log(params.value);
-					// 	var d=params.value;
-					// 	if(d<100){
-					// 		return '#fe4365';
-					// 	}else{
-					// 		return '#99FFCC';
-					// 	}
-					// },
 				}
 			},
 		}, {
@@ -271,13 +259,13 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 	var myCharts1 = echarts.init(document.getElementById('echart_scdz'));
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
-	myCharts1.on('click', function (params) {	
-		if(params.componentType=="xAxis"){			
-			var liner=params.value
-			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+$("#dep_select").val();
-			window.open(url);
-		}
-	});
+//	myCharts1.on('click', function (params) {	
+//		if(params.componentType=="xAxis"){			
+//			var liner=params.value
+//			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+$("#dep_select").val();
+//			window.open(url);
+//		}
+//	});
 }
 
 function getChart2(emp_plan, emp_now, emp_off) {
@@ -514,14 +502,14 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data) {
 	var myCharts1 = echarts.init(document.getElementById('echart_cjbg'));
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
-	myCharts1.on('click', function (params) {	
-		if(params.componentType=="xAxis"){			
-			var liner=params.value
-			liner=liner.substring(0,liner.indexOf("\n"))
-			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+$("#dep_select").val();
-			window.open(url);
-		}
-	});
+//	myCharts1.on('click', function (params) {	
+//		if(params.componentType=="xAxis"){			
+//			var liner=params.value
+//			liner=liner.substring(0,liner.indexOf("\n"))
+//			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+$("#dep_select").val();
+//			window.open(url);
+//		}
+//	});
 }
 //此echart暂时未使用
 function getChart3(done, plan, doneRate) {

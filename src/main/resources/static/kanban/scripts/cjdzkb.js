@@ -9,6 +9,7 @@ $(function() {
 	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间
 	dealScdzData(scdz_data);
 	dealCjbgData(cjbg_data);
+	dealQualData();
 	interval_do = setInterval(getList, intervaldata * 1000); // 启动,执行默认方法
 
 	$("#searchBtn").click(function() {
@@ -20,52 +21,53 @@ $(function() {
 		if (action) {// action 为 fasle 不调用定时器
 			interval_do = setInterval(getList, intervaldata * 1000); // 重新新循环-启动
 		}
-		//更改按钮样式
+		// 更改按钮样式
 		$("#searchBtn").removeClass("chose_enter")
 		$("#searchBtn").addClass("btn_clicked")
-		//200毫秒后复原
-		setTimeout(function(){
+		// 200毫秒后复原
+		setTimeout(function() {
 			$("#searchBtn").removeClass("btn_clicked")
 			$("#searchBtn").addClass("chose_enter")
 		}, 200);
 	});
-	//监听部门轮播选择事件
-	$("#dep_select").change(function(){
-		if($("#dep_select").val()=="allData"){
-			window.open("/kanban/toCjdzkbAll");   
+	// 监听部门轮播选择事件
+	$("#dep_select").change(function() {
+		if ($("#dep_select").val() == "allData") {
+			window.open("/kanban/toCjdzkbAll");
 			$("#dep_select").val("")
 		}
 	})
-	   
 
 })
 
 function dealScdzData(kanbanList) {
-	console.log(kanbanList)
+	// console.log(kanbanList)
 	if (kanbanList.data != null) {
 		var kanbanData = kanbanList.data.List;
 		var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
 		$("#title").text(title + "•车间电子看板");
 		if (kanbanData.length > 0) {
 			var xAxis = [];
+			var deptAxis = [];
 			var series1 = [];
 			var series2 = [];
 			var series3 = [];
 			var color = [];
 			for (var i = 0; i < kanbanData.length; i++) {
-				xAxis.push(kanbanData[i].LINER_NAME);
+				xAxis.push(kanbanData[i].LINER_NAME + "\n" + "第" + kanbanData[i].FROWNUM + "名");
+				deptAxis.push(kanbanData[i].DEPT_ID);// 部门
 				series1.push(kanbanData[i].QTY_PLAN);// 计划数量
 				series2.push(kanbanData[i].QTY_DONE);// 完成数量
-				if(kanbanData[i].QTY_DONE<kanbanData[i].QTY_PLAN){
+				if (kanbanData[i].QTY_DONE < kanbanData[i].QTY_PLAN) {
 					color.push("#CC0033");
-				}else {
+				} else {
 					color.push("#FFFFFF");
 				}
 				series3.push(kanbanData[i].RATE_DONE);// 完工率
 			}
-			chartScdzDiv(xAxis, series1, series2, series3,color);
+			chartScdzDiv(xAxis, series1, series2, series3, color, deptAxis);
 		} else {
-			chartScdzDiv([], 0, 0, 0,0);
+			chartScdzDiv([], 0, 0, 0, 0, []);
 		}
 		var emp_plan = parseInt(kanbanList.data.EMP_NUM_PLN);
 		var emp_now = parseInt(kanbanList.data.EMP_NUM_NOW);
@@ -76,76 +78,185 @@ function dealScdzData(kanbanList) {
 		var plan = parseInt(kanbanList.data.PRD_NUM_PLN);
 		var doneRate = kanbanList.data.PRD_RATE_DONE;
 
-
-		if(done<plan||done ==0) {
+		if (done < plan || done == 0) {
 			$("#done").html('<span style="color: #CC0033;">' + done + '</span>')
-		}else {
+		} else {
 			$("#done").text(done);
 		}
 		$("#plan").text(plan);
-		if(doneRate<100){
-			$("#done_rate").html('<span style="color: #CC0033;">' + doneRate+"%" + '</span>')
-		}else {
-			$("#done_rate").text(doneRate+"%");
+		if (doneRate < 100) {
+			$("#done_rate").html('<span style="color: #CC0033;">' + doneRate + "%" + '</span>')
+		} else {
+			$("#done_rate").text(doneRate + "%");
 		}
-		//getChart3(done, plan, doneRate);
-		
+		// getChart3(done, plan, doneRate);
+
 		$("#showLine").text("开线数：" + kanbanList.data.LINE_NUM_NOW);
 		$("#showLine1").text("总线体数：" + kanbanList.data.LINE_NUM_PLN);
 
 	} else {
 		getChart2(0, 0, 0)
-		chartScdzDiv([], 0, 0, 0,0);
-		//getChart3(0, 0, 0);
+		chartScdzDiv([], 0, 0, 0, 0, []);
+		// getChart3(0, 0, 0);
 		$("#showLine").text("开线数：0");
 		$("#showLine1").text("总线体数：0");
 	}
 }
 function dealCjbgData(kanbanList) {
-	console.log(kanbanList)
+	// console.log(kanbanList)
 	if (!kanbanList.result) {// 报错时的初始化
 		toClean();
-		
+
 		return false;
 	}
 	var kanbanData = kanbanList.data.List;
 	if (kanbanData.length > 0) {
 		var xAxis = [];
-		var deptAxis=[];
+		var deptAxis = [];
 		var series1 = [];
 		var series2 = [];
 		var series3 = [];
-		for (var i = 0; i < kanbanData.length ; i++) {
-			if(kanbanData[i].LINER_NAME=="总体"){
+		for (var i = 0; i < kanbanData.length; i++) {
+			if (kanbanData[i].LINER_NAME == "总体") {
 				$("#stdtime").text(kanbanData[i].HOUR_ST);
 				$("#facttime").text(kanbanData[i].HOUR_ACT);
-				if(kanbanData[i].EFFICIENCY_RATE<90){
-					$("#prd_eff").html('<span style="color: #CC0033;">' + kanbanData[i].EFFICIENCY_RATE+"%" + '</span>');
-				}else {
+				if (kanbanData[i].EFFICIENCY_RATE < 90) {
+					$("#prd_eff").html('<span style="color: #CC0033;">' + kanbanData[i].EFFICIENCY_RATE + "%" + '</span>');
+				} else {
 					$("#prd_eff").text(kanbanData[i].EFFICIENCY_RATE + "%");
 				}
 				continue;
 			}
-			xAxis.push(kanbanData[i].LINER_NAME+"\n"+"第"+kanbanData[i].FROWNUM+"名");
+			xAxis.push(kanbanData[i].LINER_NAME + "\n" + "第" + kanbanData[i].FROWNUM + "名");
 			deptAxis.push(kanbanData[i].DEPT_ID)
 			series1.push(kanbanData[i].HOUR_ST);// 标准工时
 			series2.push(kanbanData[i].HOUR_ACT);// 实际工时
 			series3.push(kanbanData[i].EFFICIENCY_RATE);// 生产效率
 		}
 		$("#showLine").text("总开线数：" + kanbanList.data.LineNum);
-		chartCjbgDiv(xAxis, series1, series2, series3,deptAxis);
+		chartCjbgDiv(xAxis, series1, series2, series3, deptAxis);
 	} else {
 		toClean();
 	}
 }
 
-function toClean() {
-	$("#showLine").text("总开线数：0");
-	chartCjbgDiv([], 0, 0, 0,[]);
+function dealQualData() {
+	var done = [ 98.9, 95.3, 61.5, 66.4, 55.9, 88.6 ]
+	var plan = [ 98.8, 98.8, 98.8, 98.8, 98.8, 98.8 ]
+	var xData = [ '张珊珊', '李思思', '王青青', '萧火火', '刘秋秋', '易平平' ]
+	chartQualDiv(done, plan, xData)
 }
 
+function toClean() {
+	$("#showLine").text("总开线数：0");
+	chartCjbgDiv([], 0, 0, 0, []);
+}
 
-function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color_data) {
+function chartQualDiv(done, plan, xData) {
+	option={
+			tooltip : {
+				trigger : 'axis',
+				axisPointer : {
+					type : 'cross',
+					crossStyle : {
+						color : '#999'
+					}
+				}
+			},
+			grid : {
+				x : 50,// 左边距
+				y : 55,// 上边距
+				x2 : 10,// 右边距
+				y2 : 50,// 下边距
+				borderWidth : 10
+			},
+			legend : {
+				data : [ '实际良率', '目标良率' ],
+				// orient: 'vertical',
+				x : 'center', // 可设定图例在左、右、居中
+				top : 10,
+				textStyle : {
+					fontSize : fontSize(0.24),// 字体大小
+					color : '#ffffff'// 字体颜色
+				},
+			},
+			color : ['#CC0033', '#66CCCC'  ],
+			xAxis : [ {
+				type : 'category',
+				data : xData,
+				triggerEvent : true,// 横坐标点击事件
+				axisPointer : {
+					type : 'shadow'
+				},
+				axisLabel : {
+					show : true,
+					interval : 0,
+					textStyle : {
+						color : '#ffffff',
+						fontSize : fontSize(0.23),
+					}
+				},
+				axisLine : {
+					lineStyle : {
+						color : '#FFFFFF'
+					}
+				},
+			} ],
+			yAxis : [ {
+				type : 'value',
+				name : '(%)',
+				nameTextStyle : {
+					fontSize : fontSize(0.23)
+				},
+				splitLine : {
+					show : false
+				},
+				axisLabel : {
+					// formatter : '{value} ',
+					textStyle : {
+						color : '#ffffff',
+						fontSize : fontSize(0.23),// 字体大小
+					}
+				},
+				axisLine : {
+					lineStyle : {
+						color : '#FFFFFF'
+					}
+				},
+			}],
+			series : [ {
+				name : '实际良率',
+				type : 'line',
+				data :  done ,
+				label : {
+					show : true,
+					position : 'top',
+					formatter : '{c}%',
+					textStyle : {
+						fontSize : fontSize(0.24),// 字体大小
+					}
+				},
+			}, {
+				name : '目标良率',
+				type : 'line',
+				data :  plan ,
+				label : {
+					show : true,
+					position : 'top',
+					formatter : '{c}%',
+					textStyle : {
+						fontSize : fontSize(0.24),// 字体大小
+					}
+				},
+			} ]
+	}
+	// 创建echarts对象在哪个节点上
+	var myCharts1 = echarts.init(document.getElementById('echart_qual'));
+	// 将选项对象赋值给echarts对象。
+	myCharts1.setOption(option, true);
+}
+
+function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data, color_data, deptAxis) {
 	// console.log(color_data);
 	option = {
 		tooltip : {
@@ -158,16 +269,20 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 			}
 		},
 		grid : {
-			x : 80,// 左边距
-			y : 60,// 上边距
-			x2 : 80,// 右边距
+			// x : 80,// 左边距
+			// y : 60,// 上边距
+			// x2 : 80,// 右边距
+			// y2 : 50,// 下边距
+			x : 50,// 左边距
+			y : 55,// 上边距
+			x2 : 30,// 右边距
 			y2 : 50,// 下边距
 			borderWidth : 10
 		},
 		legend : {
-			//orient: 'vertical',
-	        x:'center',      //可设定图例在左、右、居中
-	        top:15,   
+			// orient: 'vertical',
+			x : 'center', // 可设定图例在左、右、居中
+			top : 10,
 			data : [ '计划产量', '达成产量', '完工率' ],
 			textStyle : {
 				fontSize : fontSize(0.24),// 字体大小
@@ -178,18 +293,19 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 		xAxis : [ {
 			type : 'category',
 			data : xAxis_data,
-			triggerEvent: true,//横坐标点击事件
+			triggerEvent : true,// 横坐标点击事件
 			axisPointer : {
 				type : 'shadow'
 			},
 			axisLabel : {
 				show : true,
-				interval:0,
+				interval : 0,
 				textStyle : {
 					color : '#ffffff',
-					fontSize:fontSize(0.23),
+					fontSize : fontSize(0.23),
 				}
-			},axisLine : {
+			},
+			axisLine : {
 				lineStyle : {
 					color : '#FFFFFF'
 				}
@@ -197,41 +313,43 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 		} ],
 		yAxis : [ {
 			type : 'value',
-			name:'(个)',
-			nameTextStyle:{
-				 fontSize :fontSize(0.23)
-			 },
+			name : '(个)',
+			nameTextStyle : {
+				fontSize : fontSize(0.23)
+			},
 			splitLine : {
 				show : false
 			},
 			axisLabel : {
-				//formatter : '{value} ',
+				// formatter : '{value} ',
 				textStyle : {
 					color : '#ffffff',
 					fontSize : fontSize(0.23),// 字体大小
 				}
-			},axisLine : {
+			},
+			axisLine : {
 				lineStyle : {
 					color : '#FFFFFF'
 				}
 			},
 		}, {
 			type : 'value',
-			name:'(%)',
-			nameTextStyle:{
-				 fontSize :fontSize(0.23)
-			 },
+			name : '(%)',
+			nameTextStyle : {
+				fontSize : fontSize(0.23)
+			},
 			fontSize : fontSize(0.23),// 字体大小
 			splitLine : {
 				show : false
 			},
 			axisLabel : {
-				//formatter : '{value} %',
+				// formatter : '{value} %',
 				textStyle : {
 					color : '#ffffff',
 					fontSize : fontSize(0.23),// 字体大小
 				}
-			},axisLine : {
+			},
+			axisLine : {
 				lineStyle : {
 					color : '#FFFFFF'
 				}
@@ -257,18 +375,6 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 				position : 'top',
 				textStyle : {
 					fontSize : fontSize(0.24),// 字体大小
-					// color:getcolor(series2_data)
-					// color:"#CC0033"
-					// color : color_data
-					// color:function(params){
-					// 	console.log(params.value);
-					// 	var d=params.value;
-					// 	if(d<100){
-					// 		return '#fe4365';
-					// 	}else{
-					// 		return '#99FFCC';
-					// 	}
-					// },
 				}
 			},
 		}, {
@@ -290,13 +396,30 @@ function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color
 	var myCharts1 = echarts.init(document.getElementById('echart_scdz'));
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
-//	myCharts1.on('click', function (params) {	
-//		if(params.componentType=="xAxis"){			
-//			var liner=params.value
-//			var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
-//			window.open(url);
-//		}
-//	});
+	myCharts1.on('click', function(params) {
+		if (params.componentType == "xAxis") {
+			var liner = params.value
+			liner = liner.substring(0, liner.indexOf("\n"))
+			// var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
+			var url = ''
+			if (deptAxis.length == 0) {
+				return false
+			}
+			if (deptId == '88') {
+				var index = params.value
+				index = index.substring(index.indexOf("第") + 1, index.indexOf("名"))
+				index = index - 1
+				if (deptAxis[index]) {
+					url = "toZzdzkb?inType=apk&liner=" + liner + "&deptId=" + deptAxis[index];
+				} else {
+					return false
+				}
+			} else {
+				url = "toZzdzkb?inType=apk&liner=" + liner + "&deptId=" + deptId;
+			}
+			window.open(url);
+		}
+	});
 }
 
 function getChart2(emp_plan, emp_now, emp_off) {
@@ -304,8 +427,9 @@ function getChart2(emp_plan, emp_now, emp_off) {
 	var option = {
 		color : [ '#6699FF', '#66FFCC' ],
 		title : {
-			text : emp_plan + "\n" ,// 手动增加下划线
-			//link : 'toScdzDetail?liner=&fieldword=PO_EMP_NUM_PLN',// 主标题文本超链接,默认值true
+			text : emp_plan + "\n",// 手动增加下划线
+			// link : 'toScdzDetail?liner=&fieldword=PO_EMP_NUM_PLN',//
+			// 主标题文本超链接,默认值true
 			target : 'blank',// 指定窗口打开主标题超链接，'self' | 'blank'，不指定为'blank'
 			left : "center",
 			top : "50%",
@@ -331,14 +455,14 @@ function getChart2(emp_plan, emp_now, emp_off) {
 			name : '出勤',
 			type : 'pie',
 			radius : [ '60%', '75%' ],
-			center: ['50%', '50%'],
+			center : [ '50%', '50%' ],
 			avoidLabelOverlap : false,
 			label : {
 				formatter : '{hr|}\n  {b|{b}：}{c} ',
 				fontSize : fontSize(0.22),
-				//borderColor : '#aaa',
-				//borderWidth : 1,
-				//borderRadius : 4,
+				// borderColor : '#aaa',
+				// borderWidth : 1,
+				// borderRadius : 4,
 				rich : {
 					a : {
 						color : '#999',
@@ -348,7 +472,7 @@ function getChart2(emp_plan, emp_now, emp_off) {
 					hr : {
 						borderColor : '#000066',
 						width : '90%',
-						//borderWidth : 0.5,
+						// borderWidth : 0.5,
 						height : 0
 					},
 					b : {
@@ -369,9 +493,8 @@ function getChart2(emp_plan, emp_now, emp_off) {
 			}, {
 				value : emp_now,
 				name : '已分人数',
-				//url : "toScdzDetail?liner=&fieldword=PO_EMP_NUM_NOW"
-			},
-			]
+			// url : "toScdzDetail?liner=&fieldword=PO_EMP_NUM_NOW"
+			}, ]
 		} ]
 	};
 
@@ -380,12 +503,12 @@ function getChart2(emp_plan, emp_now, emp_off) {
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
 	// 饼图点击跳转到指定页面
-//	myCharts1.on('click', function(param) {
-//		window.open(param.data.url);
-//	});
+	// myCharts1.on('click', function(param) {
+	// window.open(param.data.url);
+	// });
 }
 
-function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data,deptAxis) {
+function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data, deptAxis) {
 	option = {
 		tooltip : {
 			trigger : 'axis',
@@ -397,16 +520,20 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data,deptA
 			}
 		},
 		grid : {
-			x : 80,// 左边距
-			y : 60,// 上边距
-			x2 : 80,// 右边距
+			// x : 80,// 左边距
+			// y : 60,// 上边距
+			// x2 : 80,// 右边距
+			// y2 : 50,// 下边距
+			x : 30,// 左边距
+			y : 55,// 上边距
+			x2 : 30,// 右边距
 			y2 : 50,// 下边距
 			borderWidth : 1
 		},
 		legend : {
-			//orient: 'vertical',
-	        x:'center',      //可设定图例在左、右、居中
-	        top:15,   
+			// orient: 'vertical',
+			x : 'center', // 可设定图例在左、右、居中
+			top : 15,
 			data : [ '产出工时', '实际工时', '生产效率' ],
 			textStyle : {
 				fontSize : fontSize(0.24),// 字体大小
@@ -418,16 +545,16 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data,deptA
 		xAxis : [ {
 			type : 'category',
 			data : xAxis_data,
-			triggerEvent: true,//横坐标点击事件
+			triggerEvent : true,// 横坐标点击事件
 			axisPointer : {
 				type : 'shadow'
 			},
 			axisLabel : {
 				show : true,
-				interval:0,
+				interval : 0,
 				textStyle : {
 					color : '#ffffff',
-					fontSize:fontSize(0.23)
+					fontSize : fontSize(0.23)
 				}
 			},
 			axisLine : {
@@ -438,10 +565,10 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data,deptA
 		} ],
 		yAxis : [ {
 			type : 'value',
-			name:'(小时)',
-			nameTextStyle:{
-				 fontSize :fontSize(0.23)
-			 },
+			name : '(小时)',
+			nameTextStyle : {
+				fontSize : fontSize(0.23)
+			},
 			splitLine : {
 				show : false
 			},
@@ -449,19 +576,20 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data,deptA
 				formatter : '{value}',
 				textStyle : {
 					color : '#ffffff',
-					fontSize:fontSize(0.23)
+					fontSize : fontSize(0.23)
 				}
-			},axisLine : {
+			},
+			axisLine : {
 				lineStyle : {
 					color : '#FFFFFF'
 				}
 			},
 		}, {
 			type : 'value',
-			name:'(%)',
-			nameTextStyle:{
-				 fontSize :fontSize(0.23)
-			 },
+			name : '(%)',
+			nameTextStyle : {
+				fontSize : fontSize(0.23)
+			},
 			splitLine : {
 				show : false
 			},
@@ -469,9 +597,10 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data,deptA
 				formatter : '{value}',
 				textStyle : {
 					color : '#ffffff',
-					fontSize:fontSize(0.23)
+					fontSize : fontSize(0.23)
 				}
-			},axisLine : {
+			},
+			axisLine : {
 				lineStyle : {
 					color : '#FFFFFF'
 				}
@@ -504,29 +633,29 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data,deptA
 			type : 'line',
 			yAxisIndex : 1,
 			data : series3_data,
-			itemStyle:{
-	            normal:{
-	                color:function(params){
-	                    var d=params.value;
-	                    if(d<100){
-	                        return '#fe4365';
-	                    }else{
-	                    	return '#99FFCC';
-	                    }
-	                },
-	                lineStyle: {
-						color: '#99FFCC' //改变折线颜色
+			itemStyle : {
+				normal : {
+					color : function(params) {
+						var d = params.value;
+						if (d < 100) {
+							return '#fe4365';
+						} else {
+							return '#99FFCC';
+						}
+					},
+					lineStyle : {
+						color : '#99FFCC' // 改变折线颜色
 					}
-		
-	            }
-	        },
+
+				}
+			},
 			label : {
 				show : true,
 				position : 'top',
 				formatter : '{c}%',
 				textStyle : {
 					fontSize : fontSize(0.24),// 字体大小
-				}	
+				}
 			},
 		} ]
 	};
@@ -534,27 +663,31 @@ function chartCjbgDiv(xAxis_data, series1_data, series2_data, series3_data,deptA
 	var myCharts1 = echarts.init(document.getElementById('echart_cjbg'));
 	// 将选项对象赋值给echarts对象。
 	myCharts1.setOption(option, true);
-	myCharts1.on('click', function (params) {	
-		if(params.componentType=="xAxis"){			
-			var liner=params.value
-			liner=liner.substring(0,liner.indexOf("\n"))
-			var url=''
-			if(deptId=='88'){
-				var  index=params.value
-				index=index.substring(index.indexOf("第")+1,index.indexOf("名"))
-				index=index-1
-				if(deptAxis.length==0){
+	myCharts1.on('click', function(params) {
+		if (params.componentType == "xAxis") {
+			var liner = params.value
+			liner = liner.substring(0, liner.indexOf("\n"))
+			var url = ''
+			if (deptAxis.length == 0) {
+				return false
+			}
+			if (deptId == '88') {
+				var index = params.value
+				index = index.substring(index.indexOf("第") + 1, index.indexOf("名"))
+				index = index - 1
+				if (deptAxis[index]) {
+					url = "toZzdzkb?inType=apk&liner=" + liner + "&deptId=" + deptAxis[index];
+				} else {
 					return false
 				}
-				url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptAxis[index];
-			}else{
-				url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
+			} else {
+				url = "toZzdzkb?inType=apk&liner=" + liner + "&deptId=" + deptId;
 			}
 			window.open(url);
 		}
 	});
 }
-//此echart暂时未使用
+// 此echart暂时未使用
 function getChart3(done, plan, doneRate) {
 	option = {
 		title : {
@@ -563,7 +696,7 @@ function getChart3(done, plan, doneRate) {
 				color : '#FFFFFF',// 图例文字颜色
 			},
 			left : '15px',
-			top:'10px'
+			top : '10px'
 		},
 		color : [ '#0066FF', '#66CCCC' ],
 		legend : {
@@ -576,7 +709,7 @@ function getChart3(done, plan, doneRate) {
 			y : 'top',
 		},
 		grid : {
-			//left : '3%',
+			// left : '3%',
 			// right : '4%',
 			bottom : '3%',
 			containLabel : true
@@ -592,7 +725,7 @@ function getChart3(done, plan, doneRate) {
 			},
 			axisLabel : {
 				show : true,
-				interval:0,
+				interval : 0,
 				textStyle : {
 					color : '#ffffff'
 				}
@@ -643,18 +776,18 @@ function getChart3(done, plan, doneRate) {
 	myCharts1.setOption(option, true);
 }
 
-//获取屏幕宽度并计算比例-设置echarts文字
-function fontSize(res){
-	  var docEl = document.documentElement,
-	  clientWidth = window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth;
-	  if (!clientWidth) return;
-	  var fontSize = 100 * (clientWidth / 2880);//原：1920/2400/2880
-	  return res*fontSize;
+// 获取屏幕宽度并计算比例-设置echarts文字
+function fontSize(res) {
+	var docEl = document.documentElement, clientWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+	if (!clientWidth)
+		return;
+	var fontSize = 100 * (clientWidth / 2880);// 原：1920/2400/2880
+	return res * fontSize;
 }
 
-function getcolor(value){
+function getcolor(value) {
 	console.log(value);
-		// return value[1];
+	// return value[1];
 }
 
 function getDepList(deptList) {
@@ -672,9 +805,9 @@ function getDepList(deptList) {
 	$("#dep_select").val(deptId)
 }
 function getList() {
-	deptId=$("#dep_select").val()
+	deptId = $("#dep_select").val()
 	var class_no = "999";
-	//var dep_id=$("#dep_select").val();
+	// var dep_id=$("#dep_select").val();
 	var date = $("#date").val();
 	var params = {
 		"class_nos" : class_no,
@@ -689,7 +822,7 @@ function getList() {
 		success : function(res) {
 			// console.log(res)
 			if (res.result) {
-				var data=res.data;
+				var data = res.data;
 				action = true;
 				dealScdzData(data.scdz_data);
 				dealCjbgData(data.cjbg_data);

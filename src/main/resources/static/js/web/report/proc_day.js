@@ -217,8 +217,20 @@ $(function() {
 		  laydate.render({
 		    elem: '#dates',
 		    trigger:'click'
-		    ,range: true
+		    ,range: true,
+			  value:getDateRange(1,0)
 		  });
+
+		//获得日期区间 几天前和几天后
+		function getDateRange(beforeDay,afterDay){
+			//当前日期
+			var day1 = new Date();
+			day1.setDate(day1.getDate() - beforeDay);
+			var day2 = new Date();
+			day2.setDate(day2.getDate() + afterDay);
+			return day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate()+" - "
+				+day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate();
+		}
 		  /*tableSelect=tableSelect.render({
 				elem : '#num',
 				searchKey : 'keyword',

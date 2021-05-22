@@ -13,8 +13,6 @@ var intervaldata = 0;// 获取系统设置的刷新间隔时间-制令单切换
 var rotationdata = 0;// 获取系统设置的刷新间隔时间 -页面数据更新
 
 $(function() {
-	// getDepList(deptList);
-	//getLinerList(linerList);//获取组长-废弃
 
 	intervaldata = interval.data;
 	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间-制令单切换
@@ -447,41 +445,13 @@ function setCxscTable(kanbanData) {
 	}
 }
 
-// 基础数据-部门、组长的下拉框
-function getDepList(deptList) {
-	var res = deptList;
-	// console.log(res)
-	$("#dep_select").empty();
-	var html = "<option value=''>请选择部门</option>";
-	for (j = 0, len = res.data.length; j < len; j++) {
-		var arr = res.data[j];
-		html += "<option value='" + arr.ID + "'>" + arr.ORG_NAME + "</option>";
-	}
-	$("#dep_select").append(html);
-}
-function getLinerList(linerList) {
-	var res = linerList;
-	$("#liner_select").empty();
-	var html = "<option value=''>请选择组长</option>";
-	for (j = 0, len = res.data.length; j < len; j++) {
-		var arr = res.data[j];
-		if (arr.LEAD_BY == nowLiner) {
-			html += "<option value='" + arr.LEAD_BY + "' selected>" + arr.LEAD_BY + "</option>";
-		} else {
-			html += "<option value='" + arr.LEAD_BY + "'>" + arr.LEAD_BY + "</option>";
-		}
-	}
-	$("#liner_select").append(html);
-}
 // 刷新制令单
 function getTaskNoList(task) {
-	//var deptId = "";
-	var liner = nowLiner;
 	var interval = "1";
 	var params = {
 		"taskNo" : task,
 		"deptId" : deptId,
-		"liner" : liner,
+		"liner" : nowLiner,
 		"interval" : interval
 	};
 	$.ajax({
@@ -504,16 +474,12 @@ function getTaskNoList(task) {
 // 刷新工单的数据
 function getList() {
 	var date = $("#date").val();
-	// var sdata = date.substring(0, date.indexOf(" "))
-	// var edata = date.substring(date.indexOf(" ") + 3, date.length);
 	var class_no = $("#class_select").val();
-	// var dep_id=$("#dep_select").val();
-	var liner = $("#liner_select").val();
 	var params = {
 		"class_nos" : class_no,
 		"dep_id" : deptId,
 		"sdata" : date,
-		"liner" : liner
+		"liner" : nowLiner
 	};
 	console.log(params)
 	$.ajax({
@@ -540,12 +506,11 @@ function getList() {
 function getXlpmList(taskno) {
 	var date = $("#date").val();
 	var class_no = $("#class_select").val();
-	var liner = $("#liner_select").val();
 	var params = {
 		"class_nos" : class_no,
 		"dep_id" : deptId,
 		"sdata" : date,
-		"liner" : liner,
+		"liner" : nowLiner,
 		"taskno":taskno
 	};
 	console.log(params)
