@@ -151,7 +151,9 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         for (QuoteBom o: copyQuoteBomList){
             QuoteBom quoteBom = new QuoteBom();
             BeanUtils.copyProperties(o,quoteBom);
+            //存入复制的单关联的bomId或者Id
             quoteBom.setPkBomId(o.getPkBomId()!=null?o.getPkBomId():o.getId());
+            quoteBom.setPkBomId2(o.getId());
             quoteBom.setPkQuote(quote.getId());
             quoteBom.setId(null);
             quoteBom.setBsStatus(0);
@@ -179,7 +181,8 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 
             quoteProcess.setId(null);
             quoteProcess.setPkQuote(quote.getId());
-            quoteProcess.setPkQuoteBom(null);
+            //将旧的关联bom先复制过去
+            quoteProcess.setPkQuoteBom(o.getPkQuoteBom());
             quoteProcess.setBsStatus(0);
             quoteProcess.setBsLinkName(null);
             newQuoteProcessList.add(quoteProcess);

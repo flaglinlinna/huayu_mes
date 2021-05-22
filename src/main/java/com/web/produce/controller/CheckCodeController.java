@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.produce.service.CheckCodeService;
@@ -97,7 +101,11 @@ public class CheckCodeController extends WebController {
 	    public ApiResponseResult subCode(@RequestBody Map<String, Object> params) {
 	        String method = "produce/check_code/subCode";String methodName ="小码校验";
 	        try {
-	        	String taskNo = params.get("taskNo").toString();
+				System.out.println(super.getRequest().getLocalPort()+"");
+				if(!(super.getRequest().getLocalPort()+"").equals("8083")){
+					return  ApiResponseResult.failure("小码校验端口仅支持8083！请在192.168.0.21:8083登录使用");
+				}
+				String taskNo = params.get("taskNo").toString();
 	        	String barcode1 = params.get("barcode1") == null?"":params.get("barcode1").toString();
 	        	String barcode2 = params.get("barcode2") == null?"":params.get("barcode2").toString();
 				String itemCode = params.get("itemCode") == null?"":params.get("itemCode").toString();
@@ -105,12 +113,12 @@ public class CheckCodeController extends WebController {
 	            ApiResponseResult result = checkCodeService.subCode(taskNo,itemCode,linerName,barcode1,barcode2);
 	            logger.debug("小码校验=subCode:");
 	            //暂不写入日志
-//	            getSysLogService().success(module,method, methodName, params);
+	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("小码校验失败！", e);
-//	             getSysLogService().error(module,method, methodName, params+";"+e.toString());
+	             getSysLogService().error(module,method, methodName, params+";"+e.toString());
 	             return ApiResponseResult.failure("小码校验失败！");
 	        }
 	    }

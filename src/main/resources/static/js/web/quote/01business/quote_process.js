@@ -3,6 +3,7 @@
  */
 var pageCurr;
 var totalCount = 0;// 表格记录数
+var materNameFlag = 0;
 $(function() {
 	layui.use([ 'form', 'table', 'tableSelect' ], function() {
 		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect;
@@ -15,7 +16,7 @@ $(function() {
 			height : 'full-65',
 			even : true,// 条纹样式
 			page : true,
-			limit:50,
+			limit:30,
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -31,13 +32,13 @@ $(function() {
 				}
 			},
 			cols : [ [
-				{fixed:'left',type:'checkbox'},
-				{fixed:'left',type : 'numbers'},
-			{fixed:'left',field:'id',title:'ID', width:80, hide:true},
-			{fixed:'left',field : 'bsElement',width : 90,title : '组件名称',style : 'background-color:#d2d2d2'},
-			{fixed:'left',field : 'bsName',width : 150,title : '零件名称',style : 'background-color:#d2d2d2'},
-			{fixed:'left',field : 'bsLinkName',width : 150,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
-				// {field : 'procNo',title : '工序编码',templet : '<div>{{d.proc.procNo}}</div>',style : 'background-color:#d2d2d2'},
+				{type:'checkbox'},
+				{type : 'numbers'},
+			{field:'id',title:'ID', width:80, hide:true},
+			{field : 'bsElement',width : 90,title : '组件名称',style : 'background-color:#d2d2d2'},
+			{field : 'bsName',width : 150,title : '零件名称',style : 'background-color:#d2d2d2'},
+			{field : 'bsLinkName',width : 150,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
+			{field : 'itemType',title : '物料类型',width : 100,style : 'background-color:#d2d2d2'},
 			{field : 'workCenter',title : '工作中心',width : 100,templet :
 				function(d){if(d.bjWorkCenter!=null){
 					return d.bjWorkCenter.workcenterName
@@ -63,7 +64,7 @@ $(function() {
 
 				// ,templet : '#selectBsMaterName'
 				{field : 'bsGroups',width : 130,title : '损耗分组',style : 'background-color:#d2d2d2'},
-				{field : 'bsMaterName',width : 220,title : '材料名称',style : 'background-color:#d2d2d2'},
+				{field : 'bsMaterName',width : 220,title : '材料名称',style : 'background-color:#ffffff',"edit" : "text"},
 				// ,templet : '#selectBsMaterName',,templet : '#selectBsGroups'
 				// {field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
 			// 	templet : function(d) {
@@ -656,7 +657,7 @@ function updateBsMaterName(id,bomId) {
 		});
 }
 
-function saveTable() {
+function saveTable(refresh) {
 	var dates = layui.table.cache['client_procList'];
 	// var tableList = new Array();
 	// console.log(dates);
@@ -676,11 +677,16 @@ function saveTable() {
 		function(data) {
 			if (isLogin(data)) {
 				if (data.result == true) {
-					loadAll();
+					if(refresh){
+						loadAll();
+					}
+					materNameFlag = 1;
 				} else {
 					layer.alert(data.msg, function() {
 						layer.closeAll();
-						loadAll();
+						// return false;
+						// loadAll();
+						materNameFlag = 0;
 					});
 				}
 			}
@@ -771,7 +777,7 @@ function saveProc() {
 		layer.alert("当前模块无数据，“确认提交”不可用")
 		return false;
 	}
-	// console.log(quoteId)
+	console.log(quoteId)
 	var param = {
 		"quoteId" : quoteId,
 		"code" : code
@@ -779,29 +785,44 @@ function saveProc() {
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
-		saveTable();
-		CoreUtil.sendAjax("/quoteProcess/doStatus", JSON.stringify(param), function(data) {
-			if (data.result == true) {
-				layer.alert("确认完成成功", function() {
-					// layer.closeAll();
-					if(data.data =="1"){
-						//项目完成，关闭上一级项目标签页
-						// var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
-						var srcUrl = context + '/quote/toQuoteItem?quoteId='+quoteId+"&style=item";
-						console.log(srcUrl);
-						($(window.parent.document).find(('li[lay-id="'+srcUrl+'"]'))).find(".layui-tab-close").trigger("click")
+		var dates = layui.table.cache['client_procList'];
+		CoreUtil.sendAjax("/quoteProcess/saveTable", JSON.stringify(dates),
+			function(data) {
+				if (isLogin(data)) {
+					if (data.result == true) {
+						CoreUtil.sendAjax("/quoteProcess/doStatus", JSON.stringify(param), function (data) {
+							if (data.result == true) {
+								layer.alert("确认完成成功", function () {
+									// layer.closeAll();
+									if (data.data == "1") {
+										//项目完成，关闭上一级项目标签页
+										// var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
+										var srcUrl = context + '/quote/toQuoteItem?quoteId=' + quoteId + "&style=item";
+										console.log(srcUrl);
+										($(window.parent.document).find(('li[lay-id="' + srcUrl + '"]'))).find(".layui-tab-close").trigger("click")
+									}
+									var thisUrl = context + "/quoteProcess/toQuoteProcess?quoteId=" + quoteId + "&code=" + code;
+									($(window.parent.document).find(('li[lay-id="' + thisUrl + '"]'))).find(".layui-tab-close").trigger("click")
+								});
+							} else {
+								layer.alert(data.msg, function (index) {
+									layer.close(index);
+									// time : 2000, // 2s后自动关闭
+									// btn : [ '知道了' ]
+								});
+							}
+						});
+					} else {
+						layer.alert(data.msg, function() {
+							layer.closeAll();
+							// return false;
+							// loadAll();
+						});
 					}
-					var thisUrl= context +"/quoteProcess/toQuoteProcess?quoteId="+quoteId+"&code="+code;
-					($(window.parent.document).find(('li[lay-id="'+thisUrl+'"]'))).find(".layui-tab-close").trigger("click")
-				});
-			} else {
-				layer.alert(data.msg, function(index){
-					layer.close(index);
-					// time : 2000, // 2s后自动关闭
-					// btn : [ '知道了' ]
-				});
-			}
-		});
+				}
+			});
+
+
 	});
 }
 

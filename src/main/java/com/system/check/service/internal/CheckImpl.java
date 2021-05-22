@@ -232,6 +232,7 @@ public class CheckImpl   implements CheckService {
 	public ApiResponseResult getInfo(Long id, String checkCode) throws Exception {
 		// TODO Auto-generated method stub
 		List<CheckInfo> lc = checkInfoDao.findAllByRecordId(id, checkCode);
+		//结束时间为空,即未审批
 		List<CheckInfo> lc1 = checkInfoDao.findNotByRecordId(id, checkCode);
 		int g = 1;
 		if(lc1.size()>0){
@@ -258,7 +259,7 @@ public class CheckImpl   implements CheckService {
 		//获取流程信息步骤20201218-fyx
 		List<WorkflowStep>  lw = workflowStepDao.findByCheckCode(checkCode);
 		map.put("Lw", lw);
-
+		map.put("Lc",lc);
 		return ApiResponseResult.success().data(map);
 	}
 

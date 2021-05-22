@@ -165,6 +165,13 @@ public class QuoteProcess extends BaseEntity {
 	@Column(length = 100)
 	protected String bsGroups;
 
+	/**
+	 * 物料类型
+	 */
+	@ApiModelProperty(name = "itemType", value = "物料类型")
+	@Column(length = 100)
+	protected String itemType;
+
 
 	/**
 	 * 分组名称列表
@@ -181,6 +188,8 @@ public class QuoteProcess extends BaseEntity {
 //	@Column(length = 1000)
 	@Transient
 	protected String bsProcList;
+
+
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -358,5 +367,13 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setBsComponentList(String bsComponentList) {
 		this.bsComponentList = bsComponentList;
+	}
+
+	public String getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(String itemType) {
+		this.itemType = itemType;
 	}
 }

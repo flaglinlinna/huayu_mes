@@ -189,7 +189,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 	@Override
 	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception {
 //		long startTime=System.currentTimeMillis();   //获取开始时间
-		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuote(0,pkQuote);
+		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuoteOrderById(0,pkQuote);
 //		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlag(0);
 		String excelPath = "static/excelFile/";
 		String fileName = "外购件清单模板.xlsx";
@@ -373,11 +373,14 @@ public class QuoteBomlmpl implements QuoteBomService {
 		//20210112-fyx-关闭待办
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "外购件清单");
 
+		 List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuote(0,Long.parseLong(quoteId));
 		 //20210420-hjj-下发工艺流程(先判断工艺是否为空)
-		if(quoteProcessDao.findByDelFlagAndPkQuote(0,Long.parseLong(quoteId)).size()==0){
+		if(quoteProcessList.size()==0){
+			//工艺为空，根据bom下发工艺
 			quoteProcessService.addProcessByBom(Long.parseLong(quoteId));
 		}else {
-			quoteProcessService.editProcessByBom(Long.parseLong(quoteId));
+			//不为空，则根据bom新增情况下发编辑
+			quoteProcessService.editProcessByBom(quoteProcessList,Long.parseLong(quoteId));
 		}
 		return ApiResponseResult.success("提交成功！").data(data);
 	}

@@ -229,12 +229,20 @@ public class QuoteBom extends BaseEntity {
 	protected Integer outRetrial = 0;
 
 	/**
-	 * 复制的bomId
+	 * 复制的bomId(关联已下发到制造部的材料)
 	 *
 	 */
 	@ApiModelProperty(name = "pkBomId", value = "复制的bomId")
 	@Column(length = 20)
 	protected Long pkBomId;
+
+	/**
+	 * 复制的bomId(关联工艺流程)
+	 *
+	 */
+	@ApiModelProperty(name = "pkBomId2", value = "复制的bomId")
+	@Column(length = 20)
+	protected Long pkBomId2;
 
 	public String getBsElement() {
 		return bsElement;
@@ -458,5 +466,13 @@ public class QuoteBom extends BaseEntity {
 
 	public void setBsGroups(String bsGroups) {
 		this.bsGroups = bsGroups;
+	}
+
+	public Long getPkBomId2() {
+		return pkBomId2;
+	}
+
+	public void setPkBomId2(Long pkBomId2) {
+		this.pkBomId2 = pkBomId2;
 	}
 }

@@ -128,6 +128,11 @@ function getInfo(json) {
                             info += list.Lw[i].bsStepName + " >";
                         } else {
                             info += list.Lw[i].bsStepName + "(" + list.Lw[i].bsCheckName + ")>";
+                            // if(list.Lc[i]!=null){
+                            //     info += list.Lw[i].bsStepName + "(" + list.Lc[i].bsCheckName + ")>";
+                            // }else {
+                            //     info += list.Lw[i].bsStepName + "(" + list.Lw[i].bsCheckName + ")>";
+                            // }
                         }
                     }
                     info = info.substring(0, info.length - 1);
@@ -155,6 +160,7 @@ function child(wname, pid, bsStatus) {
     wn = wname;
     status = bsStatus;
     getInfo({"id": pid, "wname": wname});
+    console.log(pid+"---"+wname);
     if (status == 'end') {
         $('#summit-btn').addClass("layui-btn-disabled").attr("disabled", true);//失效
     } else {
