@@ -113,12 +113,12 @@ public class CheckCodeController extends WebController {
 	            ApiResponseResult result = checkCodeService.subCode(taskNo,itemCode,linerName,barcode1,barcode2);
 	            logger.debug("小码校验=subCode:");
 	            //暂不写入日志
-	            getSysLogService().success(module,method, methodName, params);
+//	            getSysLogService().success(module,method, methodName, params);
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("小码校验失败！", e);
-	             getSysLogService().error(module,method, methodName, params+";"+e.toString());
+//	             getSysLogService().error(module,method, methodName, params+";"+e.toString());
 	             return ApiResponseResult.failure("小码校验失败！");
 	        }
 	    }
