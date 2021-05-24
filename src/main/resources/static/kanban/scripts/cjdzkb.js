@@ -251,9 +251,9 @@ function chartQualDiv(done, plan, xData) {
 			} ]
 	}
 	// 创建echarts对象在哪个节点上
-	var myCharts1 = echarts.init(document.getElementById('echart_qual'));
+	//var myCharts1 = echarts.init(document.getElementById('echart_qual'));
 	// 将选项对象赋值给echarts对象。
-	myCharts1.setOption(option, true);
+	//myCharts1.setOption(option, true);
 }
 
 function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data, color_data, deptAxis) {
