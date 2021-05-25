@@ -176,7 +176,8 @@ $(function() {
 				// 编辑
 				open("编辑项目资料")
 			} else if (obj.event === 'view') {
-				parent.layui.index.openTabsPage(context + '/purchase/toPurchaseEdite?quoteId=' + data.id, '采购填报价格');
+				var titleInfo = "("+data.bsCode.substring(data.bsCode.length-4)+")";
+				parent.layui.index.openTabsPage(context + '/purchase/toPurchaseEdite?quoteId=' + data.id, '采购填报价格'+titleInfo);
 			} else if (obj.event === 'check') {
 				if(data.bsQuoteStatus !="99") {
 					//发起审批前查看是否已经全部填写好价格

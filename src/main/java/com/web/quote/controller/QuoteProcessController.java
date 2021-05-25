@@ -157,8 +157,9 @@ public class QuoteProcessController extends WebController {
         String itemId = params.get("itemId").toString();
         String bsElement = params.get("bsElement").toString();
         String quoteId = params.get("quoteId").toString();
+        String bsBomId = params.get("bsBomId").toString();
         try{
-            ApiResponseResult result = quoteProcessService.add(proc,itemId,quoteId,bsElement);
+            ApiResponseResult result = quoteProcessService.add(proc,itemId,quoteId,bsElement,bsBomId);
             logger.debug("新增报价-工艺流程=add:");
             getSysLogService().success(module,method, methodName,
                     "外购清单:"+itemId+";报价单id:"+quoteId+";工序Id:"+proc);

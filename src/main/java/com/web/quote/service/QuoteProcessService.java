@@ -17,7 +17,7 @@ public interface QuoteProcessService {
 	
    public ApiResponseResult getBomList2(String quoteId)throws Exception;
 	
-   public ApiResponseResult add(String proc,String itemId,String quoteId,String bsElement)  throws Exception;
+   public ApiResponseResult add(String proc,String itemId,String quoteId,String bsElement,String bsBomId)  throws Exception;
 	
    public ApiResponseResult getList(String keyword,String pkQuote, PageRequest pageRequest)  throws Exception;
 	

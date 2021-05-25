@@ -33,6 +33,9 @@ function setData(){
 function setTable(){
 	var list = ItemList.data;
 	var header=ItemList.data.quote
+
+	var data_info=info.data;
+	var titleInfo = "("+data_info.bsCode.substring(data_info.bsCode.length-4)+")";
 	//console.log(ItemList)
 	var html = "";
 	for (var j = 0; j < list.length; j++) {
@@ -66,7 +69,7 @@ function setTable(){
 		}else if(arr.bsCode.indexOf("C00") != -1){
 			link = "/productProcess/toProductProcess?bsType="+Style+"&quoteId="+arr.quote.id+"&bsCode="+arr.bsCode;
 		}
-		html += '<tr><td class="td1" style="width: 20%; "><button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;" onclick=toPage("'+link+'","'+arr.bsName+'")><span>' + arr.bsName + 
+		html += '<tr><td class="td1" style="width: 20%; "><button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;" onclick=toPage("'+link+'","'+arr.bsName+titleInfo+'")><span>' + arr.bsName +
 		'</span></button></td><td  class="td1 '+status_color1+'" style="width: 20%;"><span class="circle '+status_color2+'"></span>' +  status + 
 		'</td><td class="td1" style="width: 20%;">' + person
 				+ '</td><td class="td1" style="width: 20%;">'+beg+

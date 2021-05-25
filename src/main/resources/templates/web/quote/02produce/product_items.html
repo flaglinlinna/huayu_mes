@@ -67,8 +67,13 @@
 		var Style = [[${Style}]];
 		var QuoteType = [[${QuoteType}]];
 		</script>
-		<script th:src="@{/js/web/quote/02produce/product_items.js}"
-			src="/js/web/quote/02produce/product_items.js"></script>
+<!--		<script th:src="@{/js/web/quote/02produce/product_items.js}"-->
+<!--			src="/js/web/quote/02produce/product_items.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/02produce/product_items.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

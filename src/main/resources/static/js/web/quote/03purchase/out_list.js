@@ -175,7 +175,8 @@ $(function() {
 					// 编辑
 					open("编辑项目资料")
 				}else if(obj.event === 'view'){
-					parent.layui.index.openTabsPage(context+'/productProcess/toProductProcess?bsType=out&quoteId='+data.id,'外协填报价格');
+					var titleInfo = "("+data.bsCode.substring(data.bsCode.length-4)+")";
+					parent.layui.index.openTabsPage(context+'/productProcess/toProductProcess?bsType=out&quoteId='+data.id,'外协填报价格'+titleInfo);
 				}else if(obj.event === 'check'){
 					if(data.bsQuoteStatus !="99") {
 						//先判断是否填写完成资料-暂时未校验-20201218-fyx

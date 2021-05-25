@@ -144,10 +144,12 @@ $(function() {
 			},
 			done : function(elem, data) {
 				var da = data.data;
+				console.log(da[0]);
 				form.val("clientProcForm", {
 					"num" : da[0].BS_COMPONENT,
 					"bsElement":da[0].BS_ELEMENT,
-					"wcName":da[0].WORKCENTER_NAME
+					"wcName":da[0].WORKCENTER_NAME,
+					"bsBomId":da[0].ID
 				});
 				form.render();// 重新渲染
 
@@ -480,11 +482,12 @@ $(function() {
 		table.on('tool(procTable)', function(obj) {
 			 var checkValue=$("#num").val();
 			 var bsElement=$("#bsElement").val();
+			var bsBomId=$("#bsBomId").val();
 			 if(checkValue){
 				 var data = obj.data;
 					var tbData = table.cache.procList; //是一个Array
 					if (obj.event == 'doClick') {
-						addSubmit(data.ID,checkValue,bsElement);
+						addSubmit(data.ID,checkValue,bsElement,bsBomId);
 					}
 			 }else{
 				 layer.msg('请先选择零件', {
@@ -550,6 +553,7 @@ $(function() {
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
 			var bsElement=$("#bsElement").val();
+			var bsBomId=$("#bsBomId").val();
 			var checkStatus = table.cache.procList;
 			var procIdList = "";
 			$('#clientProcForm tbody tr td[data-field="checkColumn"] input[type="checkbox"]').each(function(i) {
@@ -569,7 +573,7 @@ $(function() {
 			console.log(data.field)
 			// addSubmit(procIdList,data.field.itemId);
 
-			addSubmit(procIdList, data.field.num,bsElement);
+			addSubmit(procIdList, data.field.num,bsElement,bsBomId);
 
 			//提交后清空勾选
 			$('#clientProcForm tbody tr td[data-field="checkColumn"] input[type="checkbox"]').prop('checked',false);
@@ -890,12 +894,13 @@ function delClientProc(id,type,bsName) {
 }
 
 // 新增工艺流程提交
-function addSubmit(procIdlist, itemIds,bsElement) {
+function addSubmit(procIdlist, itemIds,bsElement,bomId) {
 	var params = {
 		"proc" : procIdlist,
 		"itemId" : itemIds,
 		"quoteId" : quoteId,
-		"bsElement":bsElement
+		"bsElement":bsElement,
+		"bsBomId":bomId
 	};
 
 	CoreUtil.sendAjax("/quoteProcess/add", JSON.stringify(params), function(data) {

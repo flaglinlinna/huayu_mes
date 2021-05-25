@@ -33,7 +33,8 @@ function setData(){
 function setTable(){
 	var list_temp = ItemList.data;
 	var list=[];
-	var header=ItemList.data.quote	
+	var data_info=info.data;
+	var titleInfo = "("+data_info.bsCode.substring(data_info.bsCode.length-4)+")";
 	for(var i=0;i<list_temp.length;i++){//项目顺序排序-2021-01-23
 		var temp=list_temp[i]
 		if(temp.bsCode=="A001"){
@@ -83,7 +84,7 @@ function setTable(){
 		}else if(arr.bsCode=="A004"){//"工艺流程"
 			link="/quoteProcess/toQuoteProcess?quoteId="+arr.quote.id+"&code="+arr.bsCode
 		}
-		html += '<tr><td class="td1" style="width: 20%; "><button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;" onclick=toPage("'+link+'","'+arr.bsName+'")><span>' + arr.bsName + 
+		html += '<tr><td class="td1" style="width: 20%; "><button type="button" class="el-button el-button--success el-button--mini is-plain" style="width: 75%; padding: 5px 0px;" onclick=toPage("'+link+'","'+arr.bsName+titleInfo+'")><span>' + arr.bsName +
 		'</span></button></td><td  class="td1 '+status_color1+'" style="width: 20%;"><span class="circle '+status_color2+'"></span>' +  status + 
 		'</td><td class="td1" style="width: 20%;">' + arr.bsPerson
 				+ '</td><td class="td1" style="width: 20%;">'+beg+

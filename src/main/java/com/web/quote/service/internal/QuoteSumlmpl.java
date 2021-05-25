@@ -368,17 +368,22 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //					bsRadix = new BigDecimal(pm.getBsRadix());
 //				}
 //			}
-			BigDecimal bsAssess = new BigDecimal("0");// 采购价
-			if (pm.getBsAssess() != null) {
-				bsAssess = pm.getBsAssess();
-			}
-			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
-					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0,pm.getBsMaterName());
-			pm.setBsYield(processList.size()>0?processList.get(0).getBsYield():bsYield);
 
+			//采购价
+			BigDecimal bsAssess = pm.getBsAssess()!= null?pm.getBsAssess():new BigDecimal("0");
+
+			if(StringUtils.isEmpty(pm.getBsGroups())){
+				List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
+						pm.getBsComponent(), pm.getBsElement(), pm.getPkQuote(), pm.getBsType(), 0, pm.getBsMaterName());
+				pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);
+			}else {
+				List<ProductProcess> processList1 = productProcessDao.findByDelFlagAndPkQuoteAndBsGroups(0, pm.getPkQuote(), pm.getBsGroups());
+				pm.setBsYield(processList1.size() > 0 ? processList1.get(0).getBsYield() : bsYield);
+			}
 			pm.setBsFee(bsAssess.multiply(pm.getBsQty()));
 			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5));
-			if(("surface").equals(pm.getBsType())){
+			if(("surface").equals(pm.getBsType())&&("KG").equals(pm.getPurchaseUnit())&&("G").equals(pm.getUnit().getUnitCode())){
+				//2021-05-25-hjj 仅在G和KG在除以1000计算
 				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"),5,5));
 			}
 		}
@@ -407,7 +412,11 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0,pm.getBsMaterName());
 			pm.setBsYield(processList.size()>0?processList.get(0).getBsYield():bsYield);
 			pm.setBsFee(bsAssess.multiply(qty).divide(bsRadix, 5, 5));
-			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5).divide(new BigDecimal("1000"),5,5));
+			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5));
+			if(("KG").equals(pm.getPurchaseUnit())&&("G").equals(pm.getUnit().getUnitCode())){
+				//2021-05-25-hjj 仅在G和KG在除以1000计算
+				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"),5,5));
+			}
 		}
 		productMaterDao.saveAll(lpm1);
 		// 五金-人工工时费（元/H）*人数*成型周期(S）/3600 /基数；制费工时费（元/H）*成型周期(S）/3600/ /基数
@@ -539,7 +548,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		HashSet<String> groupSet = new HashSet<>();
 		for(ProductProcess o :processAllList){
 			if(StringUtils.isNotEmpty(o.getBsGroups())){
-				//根据分组和零件名称和组件判断是否加入损耗计算
+				//根据分组和所属零件名称和组件判断是否加入损耗计算
 				if(groupSet.add(o.getBsGroups()+o.getBsLinkName()+o.getBsElement())){
 					processList.add(o);
 				}
@@ -581,9 +590,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()));
 			}else {
 				//本工序损耗
-				o.setBsTheLoss((processList.get(i-1).getBsAllLoss()).divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract((processList.get(i-1).getBsAllLoss())));
+				BigDecimal theBsYield =  o.getBsYield().divide(new BigDecimal("100"),5,5);
+				o.setBsTheLoss((processList.get(i - 1).getBsAllLoss()).divide(theBsYield, 5, 5).subtract((processList.get(i - 1).getBsAllLoss())));
 				//成本累计(含损耗)
-				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()).add(processList.get(i-1).getBsAllLoss()));
+				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()).add(processList.get(i - 1).getBsAllLoss()));
 			}
 //			processList.add(o);
 		}

@@ -172,8 +172,9 @@ $(function() {
 				} else if (obj.event === 'edit') {// 编辑
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteAdd?quoteId='+data.id+'&status='+data.bsStatus,'修改报价单');
 				}else if(obj.event === 'view') {
+					var titleInfo = "("+data.bsCode.substring(data.bsCode.length-4)+")";
 					var srcUrl = context+'/quote/toQuoteItem?quoteId='+data.id+'&style=item';
-					parent.layui.index.openTabsPage(context + '/quote/toQuoteItem?quoteId=' + data.id + '&style=item', '报价项目清单');
+					parent.layui.index.openTabsPage(context + '/quote/toQuoteItem?quoteId=' + data.id + '&style=item', '报价项目清单'+titleInfo);
 					//刷新
 					($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 				}

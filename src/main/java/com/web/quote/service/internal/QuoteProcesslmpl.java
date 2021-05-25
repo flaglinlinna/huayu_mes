@@ -115,23 +115,24 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			}else {
 				procList = quoteProcessDao.getProcByWorkCenterAndOut(o.getPkWorkCenter());
 			}
-			List<Map<String, Object>> mapList = quoteBomDao.getBsMaterName(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
+//			List<Map<String, Object>> mapList = quoteBomDao.getBsMaterName(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
 //			if(mapList.size()==1){
 //				o.setBsMaterName(mapList.get(0).get("BSMATERNAME").toString());
 //			}
 //			List<Map<String, Object>> groupsList = quoteBomDao.getBsGroups(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
 
-			if (StringUtils.isNotEmpty(o.getBsMaterName())) {
-				//根据材料名称找到所属分组及对应的bom
-				if (o.getPkQuoteBom() == null) {
-					for (Map<String, Object> map : mapList) {
-						if (o.getBsMaterName().equals(map.get("BSMATERNAME"))) {
-							o.setPkQuoteBom(Long.parseLong(map.get("ID").toString()));
-							o.setBsGroups(map.get("BSGROUPS") == null ? "" : map.get("BSGROUPS").toString());
-						}
-					}
-				}
-			}
+//			if (StringUtils.isNotEmpty(o.getBsMaterName())) {
+//				//根据材料名称找到所属分组及对应的bom
+//				// 材料名称可以为空(去除这个逻辑)
+//				if (o.getPkQuoteBom() == null) {
+//					for (Map<String, Object> map : mapList) {
+//						if (o.getBsMaterName().equals(map.get("BSMATERNAME"))) {
+//							o.setPkQuoteBom(Long.parseLong(map.get("ID").toString()));
+//							o.setBsGroups(map.get("BSGROUPS") == null ? "" : map.get("BSGROUPS").toString());
+//						}
+//					}
+//				}
+//			}
 			//材料下拉选择
 //			if (mapList.size() > 0) {
 //				o.setBsMaterNameList(JSON.toJSONString(mapList));
@@ -241,7 +242,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 * 增加工艺流程记录
 	 **/
 	@Override
-	public ApiResponseResult add(String proc, String itemId,String quoteId,String bsElement) throws Exception {
+	public ApiResponseResult add(String proc, String itemId,String quoteId,String bsElement,String bsBomId) throws Exception {
 		// TODO Auto-generated method stub
 		String[] procs = proc.split("\\,");
 		List<QuoteProcess> lp = new ArrayList<QuoteProcess>();
@@ -250,6 +251,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		//20210113-fyx-先不删除
 		//quoteProcessDao.delteQuoteProcessByBsNameAndPkQuote(itemId,Long.valueOf(quoteId));//使用零件名字
 //		int j = 1;
+		QuoteBom quoteBom = quoteBomDao.findById(Long.parseLong(bsBomId));
 		Integer a = quoteProcessDao.findMaxBsOrder(0,Long.valueOf(quoteId));
 		int j = (a==null?0:a)+10;
 //		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),itemId);
@@ -271,12 +273,16 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				//--20201222-fyx-获取人工和制费
 				Proc pp1 = procDao.findById(Long.parseLong(pro));
 
-				List<Map<String,Object>> mapList =quoteBomDao.getBsMaterName(pd.getPkQuote(),pd.getBsElement(),pd.getBsName(),proc1.getWorkcenterId());
-				if(mapList.size()==1){
-					pd.setBsMaterName(mapList.get(0).get("BSMATERNAME")==null?"":mapList.get(0).get("BSMATERNAME").toString());
-					pd.setBsGroups(mapList.get(0).get("BSGROUPS")==null?"":mapList.get(0).get("BSGROUPS").toString());
-					pd.setPkQuoteBom(Long.parseLong(mapList.get(0).get("ID").toString()));
-				}
+				pd.setBsMaterName(quoteBom.getBsMaterName());
+				pd.setBsGroups(quoteBom.getBsGroups());
+				pd.setPkQuoteBom(quoteBom.getId());
+				pd.setItemType(quoteBom.getItp().getItemType());
+//				List<Map<String,Object>> mapList =quoteBomDao.getBsMaterName(pd.getPkQuote(),pd.getBsElement(),pd.getBsName(),proc1.getWorkcenterId());
+//				if(mapList.size()==1){
+//					pd.setBsMaterName(mapList.get(0).get("BSMATERNAME")==null?"":mapList.get(0).get("BSMATERNAME").toString());
+//					pd.setBsGroups(mapList.get(0).get("BSGROUPS")==null?"":mapList.get(0).get("BSGROUPS").toString());
+//					pd.setPkQuoteBom(Long.parseLong(mapList.get(0).get("ID").toString()));
+//				}
 
 				// 外协不查询人工制费信息
 				if(!("out").equals(pp1.getBjWorkCenter().getBsCode())) {

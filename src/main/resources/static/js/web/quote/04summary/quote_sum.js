@@ -265,8 +265,8 @@ $(function() {
 					// return Number(d.bsQty)*Number(d.bsAssess)/Number(d.bsRadix);
 					// },
 					totalRow : true},
-				{field : 'bsQty',width : 100,title : 'BOM用量',totalRow : true},
-			{field : 'bsUnit',width : 120,title : 'BOM用量单位'},
+				{field : 'bsQty',width : 100,title : '材料用量',totalRow : true},
+			{field : 'bsUnit',width : 120,title : '材料用量单位'},
 			{field : 'purchaseUnit',width : 80,title : '采购单位'},
 				{field : 'bsGeneral',width : 80,title : '通用物料',	 templet:function(d){
 						return d.bsGeneral =="0"?"否":"是";
@@ -463,7 +463,9 @@ $(function() {
 				{field : 'BS_FEE_MH_ALL',title : '制造成本',width : 80,totalRow : true},
 				{field : 'BS_FEE_WX_ALL',title : '外协成本',width : 80,totalRow : true},
 				{field : 'BS_COST',title : '成本合计',width : 90,totalRow : true},
-				{field : 'BS_YIELD',title : '工序良率%',width : 90},
+				{field : 'BS_YIELD',title : '工序良率%',width : 90,templet:function (d) {
+						return Number(d.BS_YIELD).toFixed(2);
+					}},
 				{field : 'BS_THE_LOSS',title : '工序损耗',width : 90,totalRow : true},
 				{field : 'bsCostLoss',title : '工序成本(含损耗)',width : 130,totalRow : true,templet: function (d) {
 						return (Number(d.BS_COST)+Number(d.BS_THE_LOSS)).toFixed(4);

@@ -62,8 +62,13 @@
             var quoteId=[[${quoteId}]];
             var Style=[[${Style}]];
         </script>
-		<script th:src="@{/js/web/quote/03purchase/purchase_list.js}"
-			src="/js/web/quote/03purchase/purchase_list.js"></script>
+<!--		<script th:src="@{/js/web/quote/03purchase/purchase_list.js}"-->
+<!--			src="/js/web/quote/03purchase/purchase_list.js"></script>-->
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/03purchase/purchase_list.js?ver="+Math.random()+"'><\/script>");
+		</script>
+
 	</div>
 </body>
 </html>

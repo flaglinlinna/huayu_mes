@@ -307,7 +307,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		if(lmp.size()>0){
 			list =productMaterDao.findByPkQuoteAndUser(quoteId,UserUtil.getSessionUser().getId());
 		}else {
-			list = productMaterDao.findByBsAgentAndDelFlagAndPkQuote(0,0,quoteId);
+			list = productMaterDao.findByBsAgentAndDelFlagAndPkQuoteOrderById(0,0,quoteId);
 		}
 
 		XSSFWorkbook workbook = new XSSFWorkbook();

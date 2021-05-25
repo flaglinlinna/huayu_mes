@@ -181,7 +181,8 @@ $(function() {
 				}else if(Style == 'packag'){
 					titel = "组装"+titel;
 				}
-				parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel);
+				var titleInfo = "("+data.bsCode.substring(data.bsCode.length-4)+")";
+				parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel+titleInfo);
 				var srcUrl = context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style;
 				($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 			} else if (obj.event === 'check') {

@@ -22,7 +22,7 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 
 	@Query(value = "SELECT p.* FROM PRICE_PRODUCT_MATER p WHERE p.del_flag = 0 and p.bs_agent = 0 AND p.pk_quote = ?1 and p.bs_Type <> 'out' " +
 			" AND p.pk_item_type_wg IN ( SELECT wr.pk_item_type_wg  FROM BJ_BASE_ITEM_TYPE_WG_ROLE wr WHERE wr.del_flag = 0" +
-			" AND wr.pk_sys_role IN ( SELECT ur.role_id FROM sys_user_role ur WHERE ur.del_flag = 0 AND ur.user_id = ?2 ))" ,nativeQuery = true)
+			" AND wr.pk_sys_role IN ( SELECT ur.role_id FROM sys_user_role ur WHERE ur.del_flag = 0 AND ur.user_id = ?2 )) order by p.id " ,nativeQuery = true)
 	public List<ProductMater> findByPkQuoteAndUser(Long pkQuote,Long userId);
 
 	public List<ProductMater> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
@@ -31,7 +31,7 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 
 	public List<ProductMater> findByDelFlagAndPkQuoteAndBsTypeIsNotAndBsAgent(Integer delFlag,Long pkQuote,String bsType,Integer bsAgent);
 
-	public List<ProductMater> findByBsAgentAndDelFlagAndPkQuote(Integer bsAgent,Integer delFlag,Long pkQuote);
+	public List<ProductMater> findByBsAgentAndDelFlagAndPkQuoteOrderById(Integer bsAgent,Integer delFlag,Long pkQuote);
 
 	public List<ProductMater> findByPkQuoteAndPkBomId(Long pkQuote,Long pkBomId);
 
