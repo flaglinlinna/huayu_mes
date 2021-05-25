@@ -486,9 +486,19 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 String[] bsGroupsArray = new String[lqp.size()];
 		 for(Integer q = 0;q<=lqp.size()-1;q++){
 		 		QuoteProcess qp = lqp.get(q);
+			 if(qp.getProc()==null){
+			 	qp.setProc(procDao.findById((long) qp.getPkProc()));
+			 }
 				if(!("out").equals(qp.getProc().getBjWorkCenter().getBsCode())){
 					if(qp.getBsFeeLh() == null || qp.getBsFeeMh() == null){
-						return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
+						String[] strs = this.getLhBy(qp.getProc().getWorkcenterId(), qp.getPkProc());
+						if (!StringUtils.isEmpty(strs[0])) {
+							qp.setBsFeeLh(new BigDecimal(strs[0]));
+						}
+						if (!StringUtils.isEmpty(strs[1])) {
+							qp.setBsFeeMh(new BigDecimal(strs[1]));
+						}
+//						return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
 					}
 				}
 
