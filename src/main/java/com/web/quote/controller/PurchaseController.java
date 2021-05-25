@@ -1,7 +1,9 @@
 package com.web.quote.controller;
 
+import java.util.List;
 import java.util.Map;
 
+import com.utils.TypeChangeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -211,12 +213,13 @@ public class PurchaseController extends WebController {
 	public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) {
 		String method = "/purchase/doStatus";
 		String methodName = "确认完成";
+		long id = Long.parseLong(params.get("id").toString());
 		try {
-			long id = Long.parseLong(params.get("id").toString());
 //			String bsType = params.get("bsType").toString();
-			ApiResponseResult result = purchaseService.doStatus(id);
+			List<ProductMater> productMaterList = TypeChangeUtils.objectToList(params.get("dates"),ProductMater.class);
+			ApiResponseResult result = purchaseService.doStatus(id,productMaterList);
 			logger.debug("确认完成=doStatus:");
-			getSysLogService().success(module,method, methodName, params);
+			getSysLogService().success(module,method, methodName, id);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();

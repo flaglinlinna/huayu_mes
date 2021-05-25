@@ -194,7 +194,9 @@ public class ProductMaterlmpl implements ProductMaterService {
 //            map.put("bsRadix", bs.getBsRadix());
             map.put("bsQty", bs.getBsQty());
             map.put("bsProQty", bs.getBsProQty());
-            map.put("bsUnit", bs.getBsUnit());
+            if(bs.getUnit()!=null){
+                map.put("bsUnit", bs.getUnit().getUnitCode());
+            }
 //            map.put("fmemo", bs.getFmemo());
 //            map.put("bsSupplier", bs.getBsSupplier());
             map.put("bsWaterGap", bs.getBsWaterGap());
@@ -211,14 +213,14 @@ public class ProductMaterlmpl implements ProductMaterService {
      */
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception{
+    public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode,List<ProductMater> productMaterList2) throws Exception{
     	
     	//判断状态是否已执行过确认提交-lst-20210112
     	int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,quoteId,bsCode, 2);
     	if(i>0){
     		return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
     	}
-    	
+    	productMaterDao.saveAll(productMaterList2);
         List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductMater o : productMaterList) {
 //            if("hardware".equals(bsType)) {

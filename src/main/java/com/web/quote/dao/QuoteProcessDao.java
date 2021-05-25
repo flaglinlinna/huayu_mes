@@ -69,10 +69,11 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	@Query(value = "SELECT DISTINCT f.id id , f.PROC_NAME name FROM bj_base_proc f where DEL_FLAG = 0 and f.WORKCENTER_ID = ?1", nativeQuery = true)
 	public List<Map<String, Object>> getProcByWorkCenterAndOut(Long pkWorkCenter);
 
-	@Query(value = "select distinct t.id,t.PK_BJ_WORK_CENTER, t.BS_ELEMENT,t.BS_COMPONENT,t.bs_mater_Name,c.WORKCENTER_NAME from price_quote_bom t " +
-			" LEFT JOIN BJ_BASE_WORKCENTER c on t.PK_BJ_WORK_CENTER = c.ID where t.pk_quote= ?1  and t.del_Flag= 0 ",
-			countQuery =  " select count(1) from (select distinct t.id, t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT,t.bs_mater_Name from price_quote_bom t" +
-					" where t.pk_quote= ?1  and t.del_Flag= 0)",
+	@Query(value = "select max(t.id) as id ,max(t.PK_BJ_WORK_CENTER) as PK_BJ_WORK_CENTER , max(t.BS_ELEMENT)as BS_ELEMENT ,max(t.BS_COMPONENT) as BS_COMPONENT ,max(t.bs_mater_Name) as bs_mater_Name ,max(c.WORKCENTER_NAME)" +
+			" as WORKCENTER_NAME from" +
+			" price_quote_bom t " +
+			" LEFT JOIN BJ_BASE_WORKCENTER c on t.PK_BJ_WORK_CENTER = c.ID where t.pk_quote= ?1  and t.del_Flag= 0 GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT ",
+			countQuery =  " select count(*)from(select max(t.id) from price_quote_bom t  where t.pk_quote= ?1  and t.del_Flag= 0 GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT)",
 			nativeQuery = true)
 	Page<Map<String, Object>> getBomNameByPage(Long quoteId, Pageable pageable);
 	

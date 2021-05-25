@@ -409,7 +409,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	}
 
 	@Override
-	public ApiResponseResult doStatus(Long quoteId) throws Exception {
+	public ApiResponseResult doStatus(Long quoteId,List<ProductMater> productMaterList2) throws Exception {
 		//未填写的数目
 		Integer notFilled = 0;
 		//待确认的采购信息
@@ -425,6 +425,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		if(productMaterList.size()==0){
 			return ApiResponseResult.failure("确认完成失败！当前报价单无采购信息！");
 		}
+		productMaterDao.saveAll(productMaterList2);
 		//判断是否该用户下的物料类型下的采购单是否评估价格存在空值
 		if(notFilled>0){
 			return ApiResponseResult.failure("确认完成失败！当前还有 "+notFilled +"条信息未填写评估价格");

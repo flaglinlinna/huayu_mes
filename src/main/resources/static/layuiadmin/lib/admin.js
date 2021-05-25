@@ -418,12 +418,13 @@ layui.define("view", function (e) {
         // 	$(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
         // }
 
+        //  ||src.indexOf("/productProcess/toProductProcess")!=-1||src.indexOf("/productMater/toProductMater")!=-1
+
         //hjj-20210125-只针对指定界面进行切换标签后刷新
         if(src =='/quote/toQuoteList' ||src.indexOf('quote/toQuoteItem')!=-1||src=='/console'
             ||src =='/out/toOutList' ||src=="/quoteSum/toQuoteSumList" ||src =="/quoteAll/toQuoteList"
             ||src.indexOf("quoteProdect/toProductItem")!=-1 ||src.indexOf("/quoteProdect/toQuoteProdect")!=-1
-            ||src.indexOf("/purchase/toPurchaseList")!=-1||src.indexOf("/purchase/toPurchaseEdite")!=-1
-            ||src.indexOf("/productProcess/toProductProcess")!=-1||src.indexOf("/productMater/toProductMater")!=-1){
+            ||src.indexOf("/purchase/toPurchaseList")!=-1){
             $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
         }
         //--end

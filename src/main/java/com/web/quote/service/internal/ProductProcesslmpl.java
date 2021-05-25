@@ -429,14 +429,14 @@ public class ProductProcesslmpl implements ProductProcessService {
      */
     @Override
     @Transactional
-    public ApiResponseResult doStatus(Long quoteId, String bsType, String bsCode) throws Exception {
+    public ApiResponseResult doStatus(Long quoteId, String bsType, String bsCode,List<ProductProcess> productProcessList) throws Exception {
 
         //判断状态是否已执行过确认提交-lst-20210112
         int i = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0, quoteId, bsCode, 2);
         if (i > 0) {
             return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
         }
-
+        productProcessDao.saveAll(productProcessList);
         List<ProductProcess> productMaterList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, bsType);
         for (ProductProcess o : productMaterList) {
             if (o.getPkProc() == null) {

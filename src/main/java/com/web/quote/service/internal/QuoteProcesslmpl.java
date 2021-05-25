@@ -144,9 +144,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 
 			//关联到bom，如果材料是辅料，则查询关联的零件名称
 			if(o.getPkQuoteBom()!=null) {
-				if(StringUtils.isEmpty(o.getItemType())){
-					o.setItemType(o.getQuoteBom().getItp().getItemType());
-				}
+//				if(StringUtils.isEmpty(o.getItemType())){
+//					o.setItemType(o.getQuoteBom().getItp().getItemType());
+//				}
 
 				if (("辅料").equals(o.getItemType())){
 //				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
@@ -159,9 +159,15 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					if(componentList.size()>0){
 						o.setBsComponentList(JSON.toJSONString(componentList));
 						o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
+					}else {
+						o.setBsLinkName(o.getBsName());
 					}
+				}else if(StringUtils.isEmpty(o.getItemType())) {
+					//新增的时候为空
+					o.setBsComponentList(JSON.toJSONString(componentList));
+					o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
 				}else {
-					//非辅料(关联零件为自身零件)
+					//非辅料 (关联零件为自身零件)
 					o.setBsLinkName(o.getBsName());
 				}
 			}else {
@@ -273,10 +279,11 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				//--20201222-fyx-获取人工和制费
 				Proc pp1 = procDao.findById(Long.parseLong(pro));
 
-				pd.setBsMaterName(quoteBom.getBsMaterName());
-				pd.setBsGroups(quoteBom.getBsGroups());
+//				pd.setBsMaterName(quoteBom.getBsMaterName());
+//				pd.setBsGroups(quoteBom.getBsGroups());
 				pd.setPkQuoteBom(quoteBom.getId());
-				pd.setItemType(quoteBom.getItp().getItemType());
+//				pd.setItemType(quoteBom.getItp().getItemType());
+
 //				List<Map<String,Object>> mapList =quoteBomDao.getBsMaterName(pd.getPkQuote(),pd.getBsElement(),pd.getBsName(),proc1.getWorkcenterId());
 //				if(mapList.size()==1){
 //					pd.setBsMaterName(mapList.get(0).get("BSMATERNAME")==null?"":mapList.get(0).get("BSMATERNAME").toString());
@@ -457,12 +464,13 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	/**
 	 * 确认完成
 	 * **/
-	 public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
+	 public ApiResponseResult doStatus(String quoteId,String code,List<QuoteProcess> quoteProcessList)throws Exception{
 		 //判断状态是否已执行过确认提交-lst-20210112
 		 int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
 		 if(i>0){
 			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
 		 }
+		 quoteProcessDao.saveAll(quoteProcessList);
 //		 if(quoteProcessDao.getPkQuoteBomNum(Long.parseLong(quoteId)).size()>0){
 //			 return ApiResponseResult.failure("存在相同的材料名称,请检查。");
 //		 }
@@ -506,11 +514,11 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //		 	if(list.size()==1){
 //				return ApiResponseResult.failure("损耗分组不能只存在一条!");
 //			}
-			for(int m = 0;m<list.size()-1;m++){
-				if(list.get(m+1)-list.get(m)!=1){
-					return ApiResponseResult.failure("相同的损耗分组("+bsGroupsString.get(m)+")必须相邻!");
-				}
-			}
+//			for(int m = 0;m<list.size()-1;m++){
+//				if(list.get(m+1)-list.get(m)!=1){
+//					return ApiResponseResult.failure("相同的损耗分组("+bsGroupsString.get(m)+")必须相邻!");
+//				}
+//			}
 		 }
 
 

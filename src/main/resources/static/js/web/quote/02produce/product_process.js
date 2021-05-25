@@ -946,11 +946,13 @@ function addHardware() {
 // }
 
 function Confirm(){
-	saveTable();
+	// saveTable();
+	var dates = layui.table.cache['listTable'];
 	var params = {
 		"id" : quoteId,
 		"bsType":bsType,
-		"bsCode":bsCode
+		"bsCode":bsCode,
+		"dates":dates,
 	};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]

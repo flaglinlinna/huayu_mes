@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface PurchaseService {
 	
@@ -26,7 +27,7 @@ public interface PurchaseService {
 
 	public ApiResponseResult doExcel(MultipartFile[] file, Long quoteId) throws Exception;
 
-	public ApiResponseResult doStatus(Long quoteId) throws Exception;//确认完成
+	public ApiResponseResult doStatus(Long quoteId, List<ProductMater> productMaterList) throws Exception;//确认完成
 	
 	public ApiResponseResult doSumHouLoss(Long quoteId) throws Exception;//计算后工序损耗
 	

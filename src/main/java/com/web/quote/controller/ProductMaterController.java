@@ -2,6 +2,7 @@ package com.web.quote.controller;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
+import com.utils.TypeChangeUtils;
 import com.web.quote.entity.ProductMater;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.service.ProductMaterService;
@@ -142,19 +143,20 @@ public class ProductMaterController extends WebController {
 	@ResponseBody
 	public ApiResponseResult doStatus(@RequestBody Map<String, Object> params) {
 		String method = "/productMater/doStatus";
+		long id = Long.parseLong(params.get("id").toString());
+		String bsType = params.get("bsType").toString();
+		String bsCode = params.get("bsCode").toString();
 		String methodName = "确认完成";
 		try {
-			long id = Long.parseLong(params.get("id").toString());
-			String bsType = params.get("bsType").toString();
-			String bsCode = params.get("bsCode").toString();
-			ApiResponseResult result = productMaterService.doStatus(id,bsType,bsCode);
+			List<ProductMater> quoteBomList = TypeChangeUtils.objectToList(params.get("dates"),ProductMater.class);
+			ApiResponseResult result = productMaterService.doStatus(id,bsType,bsCode,quoteBomList);
 			logger.debug("确认完成=doStatus:");
-			getSysLogService().success(module,method, methodName, params);
+			getSysLogService().success(module,method, methodName, "ID:"+id+"bsType:"+bsType);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("确认完成失败！", e);
-			getSysLogService().error(module,method, methodName,params+":"+ e.toString());
+			getSysLogService().error(module,method, methodName,"ID:"+id+"bsType:"+bsType+":"+ e.toString());
 			return ApiResponseResult.failure("确认完成信息失败！");
 		}
 	}

@@ -293,11 +293,11 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 //		 	if(list.size()==1){
 //				return ApiResponseResult.failure("损耗分组不能只存在一条!");
 //			}
-				for(int m = 0;m<list.size()-1;m++){
-					if(list.get(m+1)-list.get(m)!=1){
-						return ApiResponseResult.failure("相同的损耗分组("+bsGroupsString.get(m)+")必须相邻!");
-					}
-				}
+//				for(int m = 0;m<list.size()-1;m++){
+//					if(list.get(m+1)-list.get(m)!=1){
+//						return ApiResponseResult.failure("相同的损耗分组("+bsGroupsString.get(m)+")必须相邻!");
+//					}
+//				}
 			}
 			quoteBomTempDao.saveAll(quoteBomList);
 			Integer all = maxRow -1;

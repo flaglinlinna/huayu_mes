@@ -266,7 +266,15 @@ $(function() {
 					// },
 					totalRow : true},
 				{field : 'bsQty',width : 100,title : '材料用量',totalRow : true},
-			{field : 'bsUnit',width : 120,title : '材料用量单位'},
+			{field : 'bsUnit',width : 120,title : '材料用量单位',
+				templet:function(d){
+				  if(d.unit!=null){
+				  	return d.unit.unitCode
+				  }else {
+				  	return "";
+				  }
+				},
+			},
 			{field : 'purchaseUnit',width : 80,title : '采购单位'},
 				{field : 'bsGeneral',width : 80,title : '通用物料',	 templet:function(d){
 						return d.bsGeneral =="0"?"否":"是";

@@ -3,6 +3,7 @@ package com.web.quote.controller;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 
+import com.utils.TypeChangeUtils;
 import com.web.quote.entity.QuoteBom;
 import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.QuoteBomService;
@@ -200,8 +201,9 @@ public class QuoteBomController extends WebController {
         String method = "quoteBom/doStatus";String methodName ="提交报价-外购件信息";
         String pkQuote = param.get("quoteId").toString();
         String code = param.get("code").toString();
+		List<QuoteBom> quoteBomList = TypeChangeUtils.objectToList(param.get("dates"),QuoteBom.class);
         try{
-            ApiResponseResult result = quoteBomService.doStatus(pkQuote,code);
+            ApiResponseResult result = quoteBomService.doStatus(pkQuote,code,quoteBomList);
             logger.debug("提交报价-外购件信息=doStatus:");
             getSysLogService().success(module,method, methodName,
                     "报价单id:"+pkQuote);

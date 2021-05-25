@@ -33,7 +33,7 @@ public interface QuoteProcessService {
 
    public ApiResponseResult doBsGroups(Long id,String  bsGroups)throws Exception;
 
-   public ApiResponseResult doStatus(String quoteId,String code)throws Exception;
+   public ApiResponseResult doStatus(String quoteId,String code,List<QuoteProcess> quoteProcessList)throws Exception;
 
    public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception;
    

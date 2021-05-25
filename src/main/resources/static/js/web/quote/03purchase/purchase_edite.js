@@ -401,9 +401,11 @@ function openUpload() {
 }
 
 function confirm() {
-	saveTable();
+	// saveTable();
+	var dates = layui.table.cache['productPriceList'];
 	var params = {
 		"id" : quoteId,
+		"dates" : dates
 	};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]

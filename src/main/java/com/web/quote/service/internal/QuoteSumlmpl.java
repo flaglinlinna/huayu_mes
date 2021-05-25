@@ -382,9 +382,17 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}
 			pm.setBsFee(bsAssess.multiply(pm.getBsQty()));
 			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5));
-			if(("surface").equals(pm.getBsType())&&("KG").equals(pm.getPurchaseUnit())&&("G").equals(pm.getUnit().getUnitCode())){
-				//2021-05-25-hjj 仅在G和KG在除以1000计算
-				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"),5,5));
+			if(("surface").equals(pm.getBsType())){
+
+				//仅在两个单位都为kg的情况下不除1000
+//				if(("KG").equals(pm.getPurchaseUnit())){
+//					if(!("KG").equals(pm.getUnit().getUnitCode())){
+//						pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"),5,5));
+//					}
+//				}else {
+//					pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
+//				}
+				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 			}
 		}
 		productMaterDao.saveAll(lpm3);
@@ -413,10 +421,15 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			pm.setBsYield(processList.size()>0?processList.get(0).getBsYield():bsYield);
 			pm.setBsFee(bsAssess.multiply(qty).divide(bsRadix, 5, 5));
 			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5));
-			if(("KG").equals(pm.getPurchaseUnit())&&("G").equals(pm.getUnit().getUnitCode())){
-				//2021-05-25-hjj 仅在G和KG在除以1000计算
-				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"),5,5));
-			}
+
+//			if(("KG").equals(pm.getPurchaseUnit())){
+//				if(!("KG").equals(pm.getUnit().getUnitCode())){
+//					pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"),5,5));
+//				}
+//			}else {
+//				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
+//			}
+			pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 		}
 		productMaterDao.saveAll(lpm1);
 		// 五金-人工工时费（元/H）*人数*成型周期(S）/3600 /基数；制费工时费（元/H）*成型周期(S）/3600/ /基数

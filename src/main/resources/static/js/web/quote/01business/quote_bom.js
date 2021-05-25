@@ -547,11 +547,11 @@ function saveTable() {
 		function(data) {
 			if (isLogin(data)) {
 				if (data.result == true) {
-					// loadAll();
+					loadAll();
 				} else {
 					layer.alert(data.msg, function() {
 						layer.closeAll();
-						// loadAll();
+						loadAll();
 					});
 				}
 			}
@@ -745,16 +745,15 @@ function delProdErr(obj, id, name) {
 }
 
 function save() {
-	saveTable();
-	// console.log(quoteId,code)
+	var dates = layui.table.cache['quoteBomList'];
 	var param = {
 		"quoteId" : quoteId,
-		"code" : code
+		"code" : code,
+		"dates":dates
 	};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
-		// saveTable();
 		CoreUtil.sendAjax("/quoteBom/doStatus", JSON.stringify(param), function(data) {
 			if (isLogin(data)) {
 				if (data.result == true) {

@@ -18,7 +18,7 @@ public interface ProductMaterService {
 
 	public ApiResponseResult updateUnit(Long id,Long unitId) throws Exception;
 
-	public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception;
+	public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode,List<ProductMater> productMaterList) throws Exception;
 
 	public ApiResponseResult cancelStatus(Long quoteId,String bsType,String bsCode) throws Exception;
 

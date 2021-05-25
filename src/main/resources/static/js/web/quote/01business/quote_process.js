@@ -72,7 +72,7 @@ $(function() {
 			// 	}},
 			{field : 'bsModel',title : '材料规格',width : 240,style : 'background-color:#d2d2d2;overflow:hidden !important',
 					templet : function(d) {
-						if (d.quoteBom == null) {
+						if (d.quoteBom == null||d.bsMaterName==null) {
 							return ""
 						}else if(d.quoteBom.bsModel != null) {
 							return  "<div>"+d.quoteBom.bsModel+"</div>"
@@ -114,14 +114,15 @@ $(function() {
 			table : {
 				url : context + '/quoteProcess/getBomList?quoteId='+quoteId,
 				method : 'get',
-				// width:800,
+				width:800,
 				cols : [ [
 					{type : 'numbers', title : '序号'},
 					{type : 'radio'},
 					{field : 'ID', title : 'id', width : 0, hide : true},
-					{field : 'BS_ELEMENT', title : '组件名称', width : 160},
-					{field : 'BS_COMPONENT', title : '零件名称', width : 160},
-					{field : 'WORKCENTER_NAME', title : '工作中心', width : 160},
+					{field : 'BS_ELEMENT', title : '组件名称', width : 160,style:"overflow:hidden !important"},
+					{field : 'BS_COMPONENT', title : '零件名称', width : 200,style:"overflow:hidden !important"},
+					{field : 'WORKCENTER_NAME', title : '工作中心', width : 160,style:"overflow:hidden !important"},
+					// {field : 'BS_MATER_NAME', title : '材料名称', width : 160},
 				] ],
 				page : true,
 				request : {
@@ -781,52 +782,37 @@ function saveProc() {
 		layer.alert("当前模块无数据，“确认提交”不可用")
 		return false;
 	}
-	console.log(quoteId)
+	var dates = layui.table.cache['client_procList'];
 	var param = {
 		"quoteId" : quoteId,
-		"code" : code
+		"code" : code,
+		"dates":dates
 	};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
-		var dates = layui.table.cache['client_procList'];
-		CoreUtil.sendAjax("/quoteProcess/saveTable", JSON.stringify(dates),
-			function(data) {
-				if (isLogin(data)) {
-					if (data.result == true) {
-						CoreUtil.sendAjax("/quoteProcess/doStatus", JSON.stringify(param), function (data) {
-							if (data.result == true) {
-								layer.alert("确认完成成功", function () {
-									// layer.closeAll();
-									if (data.data == "1") {
-										//项目完成，关闭上一级项目标签页
-										// var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
-										var srcUrl = context + '/quote/toQuoteItem?quoteId=' + quoteId + "&style=item";
-										console.log(srcUrl);
-										($(window.parent.document).find(('li[lay-id="' + srcUrl + '"]'))).find(".layui-tab-close").trigger("click")
-									}
-									var thisUrl = context + "/quoteProcess/toQuoteProcess?quoteId=" + quoteId + "&code=" + code;
-									($(window.parent.document).find(('li[lay-id="' + thisUrl + '"]'))).find(".layui-tab-close").trigger("click")
-								});
-							} else {
-								layer.alert(data.msg, function (index) {
-									layer.close(index);
-									// time : 2000, // 2s后自动关闭
-									// btn : [ '知道了' ]
-								});
-							}
-						});
-					} else {
-						layer.alert(data.msg, function() {
-							layer.closeAll();
-							// return false;
-							// loadAll();
-						});
+		CoreUtil.sendAjax("/quoteProcess/doStatus", JSON.stringify(param), function(data) {
+			if (data.result == true) {
+				layer.alert("确认完成成功", function() {
+					// layer.closeAll();
+					if(data.data =="1"){
+						//项目完成，关闭上一级项目标签页
+						// var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
+						var srcUrl = context + '/quote/toQuoteItem?quoteId='+quoteId+"&style=item";
+						console.log(srcUrl);
+						($(window.parent.document).find(('li[lay-id="'+srcUrl+'"]'))).find(".layui-tab-close").trigger("click")
 					}
-				}
-			});
-
-
+					var thisUrl= context +"/quoteProcess/toQuoteProcess?quoteId="+quoteId+"&code="+code;
+					($(window.parent.document).find(('li[lay-id="'+thisUrl+'"]'))).find(".layui-tab-close").trigger("click")
+				});
+			} else {
+				layer.alert(data.msg, function(index){
+					layer.close(index);
+					// time : 2000, // 2s后自动关闭
+					// btn : [ '知道了' ]
+				});
+			}
+		});
 	});
 }
 

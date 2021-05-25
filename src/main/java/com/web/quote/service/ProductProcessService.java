@@ -18,7 +18,7 @@ public interface ProductProcessService {
 
 	public ApiResponseResult delete(Long id) throws Exception;
 
-	public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode) throws Exception;
+	public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode,List<ProductProcess> quoteBomList) throws Exception;
 
 	public ApiResponseResult cancelStatus(Long quoteId,String bsType,String bsCode) throws Exception;
 

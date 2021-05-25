@@ -341,8 +341,9 @@ public class QuoteBomlmpl implements QuoteBomService {
 	/**
 	 * 确认完成外购件清单 
 	 * **/
-	public ApiResponseResult doStatus(String quoteId,String code)throws Exception{
+	public ApiResponseResult doStatus(String quoteId,String code,List<QuoteBom> quoteBomList2)throws Exception{
 		//判断状态是否已执行过确认提交
+		quoteBomDao.saveAll(quoteBomList2);
 		int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
 		if(i>0){
 			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");

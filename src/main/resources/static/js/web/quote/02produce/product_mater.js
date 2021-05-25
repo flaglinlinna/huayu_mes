@@ -45,12 +45,12 @@ $(function() {
 			  {field : 'bsQty',width : 100,title : '材料用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'bsProQty',width : 100,title : '制品重(g)<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'bsUnit',width : 120,title : '材料用量单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
-			  {field : 'bsGroups',width : 120,title : '损耗分组',style : 'background-color:#ffffff',hide : true},
+			  // {field : 'bsGroups',width : 120,title : '损耗分组',style : 'background-color:#ffffff',hide : true},
 			  /*{field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text',style : 'background-color:#ffffff'},*/
 			  {field : 'bsWaterGap',title : '水口重(g)<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
 			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 60,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (注塑)*/},
 			  //{field : 'bsSupplier',title : '备选供应商',edit : 'text',style : 'background-color:#ffffff'},
-			  //{field : 'fmemo',title : '备注',width : 120,edit : 'text',style : 'background-color:#ffffff'},
+			  {field : 'fmemo',title : '备注',width : 120,edit : 'text',style : 'background-color:#ffffff'},
 			  // {fixed : 'right',title : '操作',align : 'center',width : 120,toolbar : '#optBar'}
 			  ] ],
 			done : function(res, curr, count) {
@@ -90,13 +90,13 @@ $(function() {
 						// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
+						//$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+						//$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 					} else if (bsType == 'packag') {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
-						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
+					//	$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+					//	$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 					}
 				});
 			}
@@ -445,11 +445,13 @@ function exportExcel() {
 }
 
 function Confirm() {
-	saveTable();
+	// saveTable();
+	var dates = layui.table.cache['listTable'];
 	var params = {
 		"id" : quoteId,
 		"bsType" : bsType,
-		"bsCode" : bsCode
+		"bsCode" : bsCode,
+		"dates":dates
 	};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]
@@ -786,13 +788,13 @@ function loadAll() {
 					// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsColor"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
-					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
-					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
+					//$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+					//$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 				} else if (bsType == 'packag') {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
-					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
-					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
+					//$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+					//$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 				}
 			});
 

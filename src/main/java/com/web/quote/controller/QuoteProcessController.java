@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.utils.TypeChangeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -299,8 +300,9 @@ public class QuoteProcessController extends WebController {
         String method = "quoteProcess/doStatus";String methodName ="提交报价-工艺流程";
         String pkQuote = param.get("quoteId").toString();
         String code = param.get("code").toString();
+        List<QuoteProcess> quoteProcessList = TypeChangeUtils.objectToList(param.get("dates"),QuoteProcess.class);
         try{
-            ApiResponseResult result = quoteProcessService.doStatus(pkQuote,code);
+            ApiResponseResult result = quoteProcessService.doStatus(pkQuote,code,quoteProcessList);
             logger.debug("提交报价-工艺流程=doStatus:");
             getSysLogService().success(module,method, methodName,
                     "报价单id:"+pkQuote);
@@ -317,7 +319,7 @@ public class QuoteProcessController extends WebController {
     @RequestMapping(value = "/cancelStatus", method = RequestMethod.POST)
     @ResponseBody
     public ApiResponseResult cancelStatus(@RequestBody Map<String, Object> param) {
-        String method = "quoteProcess/doStatus";String methodName ="取消提交-工艺流程";
+        String method = "quoteProcess/cancelStatus";String methodName ="取消提交-工艺流程";
         String pkQuote = param.get("quoteId").toString();
         String code = param.get("code").toString();
         try{
