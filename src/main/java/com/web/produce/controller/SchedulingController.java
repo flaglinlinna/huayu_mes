@@ -373,7 +373,7 @@ public class SchedulingController extends WebController {
 //            Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingService.getProcessListByProc(keyword, mid);
             logger.debug("获取工艺列表=getProcessLst:");
-            getSysLogService().success(module,method, methodName, "主表id:"+mid);
+            //getSysLogService().success(module,method, methodName, "主表id:"+mid);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -428,7 +428,7 @@ public class SchedulingController extends WebController {
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = schedulingService.getItemList(keyword, mid, super.getPageRequest(sort));
             logger.debug("获取组件列表=getItemList:");
-            getSysLogService().success(module,method, methodName, null);
+            //getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

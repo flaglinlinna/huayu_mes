@@ -107,24 +107,24 @@ $(function() {
 								// url: context +'base/prodproc/getProdList',
 								method : 'get',
 								width:800,
-								cols : [ [ {type : 'numbers', title : '序号'},
-									{type : 'radio'},// 多选 radio
-									{field : 'id', title : 'id', width : 0, hide : true},
-									{field : 'WS_SECTION', title : '工段', width : 70},
-									{field : 'FMEMO', title : '备注', width : 120},
-									{field : 'LINER_NAME', title : '组长', width : 70},
-									{field : 'PROD_DATE', title : '计划日期', width : 100,
+								cols : [ [ {fixed:'left',type : 'numbers', title : '序号'},
+									{fixed:'left',type : 'radio'},// 多选 radio
+									{fixed:'left',field : 'id', title : 'id', width : 0, hide : true},
+									{fixed:'left',field : 'PROD_DATE', title : '计划日期', width : 100,
 										templet:function (d) {
 											if(d.PROD_DATE!=null){
 												return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
 											}
 										}
 									},
-									 {field : 'ITEM_NO', title : '物料编码', width : 190},
+									{fixed:'left',field : 'LINER_NAME', title : '组长', width : 70},
+									{fixed:'left',field : 'ITEM_NO', title : '物料编码', width : 145},
+									{field : 'TASK_NO', title : '制令单号', width : 150},
+									{field : 'WS_SECTION', title : '工段', width : 60},
+									{field : 'FMEMO', title : '备注', width : 80},
 									{field : 'ITEM_NAME', title : '物料描述', width : 240},
 									{field : 'QTY_PLAN', title : '数量', width : 80},
 									{field : 'QUANTITY', title : '投入数量', width : 80},
-									{field : 'TASK_NO', title : '制令单号', width : 170, sort : true},
 								] ],
 								page : false,
 								request : {

@@ -77,7 +77,7 @@ public class QuoteMouldController extends WebController {
             Sort sort = new Sort(Sort.Direction.ASC, "id");
             ApiResponseResult result = quoteMouldService.getList(keyword,pkQuote, super.getPageRequest(sort));
             logger.debug("获取模具清单维护列表=getList:");
-            getSysLogService().success(module,method, methodName, keyword);
+//            getSysLogService().success(module,method, methodName, keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,7 +95,7 @@ public class QuoteMouldController extends WebController {
         try {
             ApiResponseResult result = quoteMouldService.getMouldList();
             logger.debug("获取模具清单维护列表=getMouldList:");
-            getSysLogService().success(module,method, methodName,"" );
+            //getSysLogService().success(module,method, methodName,"" );
             return result;
         } catch (Exception e) {
             e.printStackTrace();

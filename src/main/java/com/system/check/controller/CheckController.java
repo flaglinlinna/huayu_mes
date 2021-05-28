@@ -52,7 +52,7 @@ public class CheckController extends WebController {
 		try {
             ApiResponseResult result = checkService.getInfo(id,wname);
             logger.debug("获取审批初始化信息=getInfo:");
-            getSysLogService().success(module,method, methodName, null);
+            //getSysLogService().success(module,method, methodName, null);
             return result;
 		} catch (Exception e) {
             e.printStackTrace();

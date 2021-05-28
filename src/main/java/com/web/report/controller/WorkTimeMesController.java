@@ -47,7 +47,7 @@ public class WorkTimeMesController extends WebController {
 	        try {
 	            ApiResponseResult result = workTimeMesService.getLinerList(keyword);
 	            logger.debug("获取组长列表信息=getLinerList:");
-	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
+	            //getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 	            return result;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();

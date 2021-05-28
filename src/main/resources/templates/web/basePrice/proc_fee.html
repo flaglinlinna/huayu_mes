@@ -197,8 +197,10 @@
 			</form>
 		</div>
 
-		<script th:src="@{/js/web/basePrice/proc_fee.js}"
-			src="/js/web/basePrice/proc_fee.js"></script>
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/basePrice/proc_fee.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

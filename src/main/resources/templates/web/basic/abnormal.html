@@ -79,7 +79,10 @@
             </div>
         </form>
     </div>
-    <script th:src="@{/js/web/basic/abnormal.js}" src="/js/basic/web/abnormal.js"></script>
+        <script>
+            document.write("<script type='text/javascript' " +
+                "src='/js/basic/web/abnormal.js?ver="+Math.random()+"'><\/script>");
+        </script>
 	</div>
 </body>
 </html>

@@ -51,7 +51,7 @@ public class ProfitProdController extends WebController{
 			mav.setViewName("/web/basePrice/profit_prod");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("获取产品利润率信息维护列表页失败！", e);
+			//logger.error("获取产品利润率信息维护列表页失败！", e);
 		}
 		return mav;
 	}

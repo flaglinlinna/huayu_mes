@@ -47,7 +47,7 @@ public class BadEntryController extends WebController {
 	        String method = "produce/bad_entry/getTaskNo";String methodName ="获取指令单信息";
 	        try {
 	            ApiResponseResult result = badEntryService.getTaskNo(keyword);
-	            logger.debug("获取指令单信息=getTaskNo:");
+	            //logger.debug("获取指令单信息=getTaskNo:");
 //	            getSysLogService().success(module,method, methodName, "关键字:"+keyword+";");
 	            return result;
 	        } catch (Exception e) {

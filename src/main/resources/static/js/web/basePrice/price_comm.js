@@ -17,6 +17,8 @@ $(function() {
 			height:'full-70'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,
+			limit: 50,
+			limits: [30,50,100,200],
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -33,14 +35,14 @@ $(function() {
 				}
 			},
 			cols : [ [
-				{type : 'numbers'},
-				{field : 'enabled', title : '有效状态', templet : '#statusTpl', width : 95},
-				{field : 'itemNo', title : '物料编号', width : 150},
-				{field : 'itemName', title : '物料名称', width : 150},
-				{field : 'rangePrice', title : '价格档位', width : 100},
-				{field : 'priceUn', title : '单价', width : 80},
-				{field : 'unit', title : '单位', width : 80},
-				{field : 'alternativeSuppliers', title : '备选供应商', width : 150},
+				{fixed:'left',type : 'numbers'},
+				{fixed:'left',field : 'enabled', title : '有效状态', templet : '#statusTpl', width : 95},
+				{fixed:'left',field : 'itemNo', title : '物料编码', width : 150},
+				{field : 'itemName', title : '物料名称', width : 180},
+				{field : 'rangePrice', title : '价格档位', width : 80},
+				{field : 'priceUn', title : '单价', width : 70},
+				{field : 'unit', title : '单位', width : 60},
+				{field : 'alternativeSuppliers', title : '备选供应商', width : 120},
 				{field : 'createBy', title : '创建人', width : 80},
 				{field : 'createDate', title : '创建时间', width : 150},
 				{field : 'lastupdateBy', title : '更新人', width : 80},

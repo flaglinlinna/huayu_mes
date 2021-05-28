@@ -54,7 +54,7 @@ public class BjWorkCenterController extends WebController{
             Sort sort = new Sort(Sort.Direction.ASC, "bsCode");
             ApiResponseResult result = workCenterService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取工作中心维护列表=getList:");
-            getSysLogService().success(module,method, methodName, null);
+            //getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

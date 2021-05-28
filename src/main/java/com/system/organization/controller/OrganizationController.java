@@ -88,7 +88,7 @@ public class OrganizationController extends WebController {
 			return api;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("获取权限异常！", e);
+			//logger.error("获取权限异常！", e);
 			getSysLogService().error(module,method,methodName,params+e.toString());
 			return  ApiResponseResult.failure("获取权限操作失败，请联系管理员！");
 		}

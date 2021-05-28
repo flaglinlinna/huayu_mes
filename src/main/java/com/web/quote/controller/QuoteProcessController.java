@@ -103,7 +103,7 @@ public class QuoteProcessController extends WebController {
         	 Sort sort = new Sort(list);
             ApiResponseResult result = quoteProcessService.getList(keyword,pkQuote, super.getPageRequest(sort));
             logger.debug("获取报价工艺流程列表=getList:");
-            getSysLogService().success(module,method, methodName, keyword);
+            //getSysLogService().success(module,method, methodName, keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,7 +121,7 @@ public class QuoteProcessController extends WebController {
             Sort sort =  Sort.unsorted();
             ApiResponseResult result = quoteProcessService.getBomList(keyword,Long.parseLong(quoteId), super.getPageRequest(sort));
             logger.debug("获取报价工艺流程列表=getBomList:");
-            getSysLogService().success(module,method, methodName, keyword);
+            //getSysLogService().success(module,method, methodName, keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,7 +139,7 @@ public class QuoteProcessController extends WebController {
             Sort sort =  Sort.unsorted();
             ApiResponseResult result = quoteProcessService.getAddList(pkWcId,super.getPageRequest(sort));
             logger.debug("获取报价工艺流程列表=getAddList:");
-            getSysLogService().success(module,method, methodName,"" );
+            //getSysLogService().success(module,method, methodName,"" );
             return result;
         } catch (Exception e) {
             e.printStackTrace();

@@ -136,22 +136,16 @@ $(function() {
 								width: 800,
 								url : context + '/produce/rework/getTaskNo',
 								method : 'get',
-								cols : [ [ {
+								cols : [ [ {fixed:'left',
 									type : 'radio'
 								},// 多选 radio
-								, {
+								, {fixed:'left',
 									field : 'id',
 									title : 'id',
 									width : 0,
 									hide : true
 								},
-									{
-										field : 'LINER_NAME',
-										title : '组长',sort: true,
-										width:70,
-										align:'center'
-									},
-									{
+									{fixed:'left',
 										field : 'PROD_DATE',
 										title : '计划日期',
 										width : 100,
@@ -161,21 +155,28 @@ $(function() {
 											}
 										}
 									},
-									{
+									{fixed:'left',
+										field : 'LINER_NAME',
+										title : '组长',
+										width:70,
+										align:'center'
+									},
+									{fixed:'left',
 										field : 'ITEM_NO',
+										width:145,
+										title : '物料编号',align:'center'
+									},
+
+									{
+										field : 'TASK_NO',
+										title : '制令单号',
 										width:150,
-										title : '物料编号',sort: true,align:'center'
+										align:'center'
 									},
 									{
 										field : 'ITEM_NAME',
-										width:220,
-										title : '物料描述',sort: true,align:'center'
-									},
-									{
-										field : 'TASK_NO',
-										title : '制令单号',sort: true,
-										width:150,
-										align:'center'
+										width:250,
+										title : '物料描述',align:'center'
 									},
 
 								] ],

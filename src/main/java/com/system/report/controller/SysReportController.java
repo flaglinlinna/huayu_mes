@@ -74,7 +74,7 @@ public class SysReportController extends WebController {
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("获取配置列表失败！", e);
+            //logger.error("获取配置列表失败！", e);
             getSysLogService().error(module,method, methodName, e.toString());
             return ApiResponseResult.failure("获取配置列表失败！");
         }

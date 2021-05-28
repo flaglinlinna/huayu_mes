@@ -20,6 +20,8 @@ $(function() {
 			height:'full-70'//固定表头&full-查询框高度
 			,even:true,//条纹样式
 			page : true,
+			limit: 50,
+			limits: [30,50,100,200],
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -34,31 +36,32 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {
+			cols : [ [ {fixed:'left',
 				type : 'numbers'
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {field : 'productCode',title : '模具编号',width:150},
-				{field:'img', title:'图片预览'  , width:260,templet:function (d) {
-					if(d.fimg!=null) {
-						// return '<div><a href="/file/get?fsFileId=' + d.fimg + '" target="_black" title="点击查看大图"><img  src="/file/get?fsFileId=' + d.fimg + '" /></div>'
-						return '<div><img  src="/file/get?fsFileId=' + d.fimg + '" /></div>';
-					}else {
-						return "";
-					}
-					}},
-			  {field : 'productName',title : '产品',sort:true,width:100},
-			  {field : 'numHole',title : '穴数',sort:true,width:100},
+			, {fixed:'left',field : 'productCode',title : '模具编号',width:150},
+
+			  {fixed:'left',field : 'productName',title : '产品',width:180},
+			  {field : 'numHole',title : '穴数',width:60},
 			  {field : 'structureMj',title : '模具结构',width:100},
-			  {field : 'mjPrice',title : '模具报价价格(未税)',sort:true,width:160},
-			  {field : 'feeType1',title : '材料成本(未税)',width:160},
-			  {field : 'feeType2',title : '制造成本(未税)',width:160},
+			  {field : 'mjPrice',title : '模具报价价格(未税)',width:140},
+			  {field : 'feeType1',title : '材料成本(未税)',width:120},
+			  {field : 'feeType2',title : '制造成本(未税)',width:120},
 			  {field : 'feeType3',title : '外发纹理费用(未税)',width:140},
 			  // {field : 'feeType4',title : '热流道费用',width:130},
 			  // {field : 'feeProc',title : '评估总费用(未税)',width:100},
-			  {field : 'stQuote',title : '参考报价',width:130},
+			  {field : 'stQuote',title : '参考报价',width:100},
 			  {field : 'feeAll',title : '评估总费用(未税)',width:130},
 			  {field : 'fmemo',title : '备注',width:100},
+				{field:'img', title:'图片预览'  , width:150,templet:function (d) {
+						if(d.fimg!=null) {
+							// return '<div><a href="/file/get?fsFileId=' + d.fimg + '" target="_black" title="点击查看大图"><img  src="/file/get?fsFileId=' + d.fimg + '" /></div>'
+							return '<div><img  src="/file/get?fsFileId=' + d.fimg + '" /></div>';
+						}else {
+							return "";
+						}
+					}},
 			  {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width:120}
 			] ],
 			done : function(res, curr, count) {

@@ -85,7 +85,7 @@ public class QuoteProductController extends WebController {
             ApiResponseResult result = quoteProductService.getList(keyword,style,status,bsCode,bsType,bsStatus,bsFinishTime,
 					bsRemarks,bsProd,bsSimilarProd,bsPosition,bsCustRequire,bsLevel,bsRequire,bsDevType,bsCustName,quoteId,super.getPageRequest(sort));
             logger.debug("获取报价单列表=getList:");
-            getSysLogService().success(module,method, methodName, keyword);
+            //getSysLogService().success(module,method, methodName, keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

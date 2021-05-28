@@ -57,7 +57,7 @@ public class MjProcFeeController extends WebController {
             Sort sort = new Sort(Sort.Direction.ASC, "id");
             ApiResponseResult result = mjProcFeeService.getList(keyword,super.getPageRequest(sort));
             logger.debug("获取模具成本维护列表=getList:");
-            getSysLogService().success(module,method, methodName, keyword);
+            //getSysLogService().success(module,method, methodName, keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

@@ -58,7 +58,7 @@ public class UnitController extends WebController{
             Sort sort = new Sort(Sort.Direction.DESC, "id");
             ApiResponseResult result = unitService.getList(keyword, super.getPageRequest(sort));
             logger.debug("获取基本单位维护列表=getList:");
-            getSysLogService().success(module,method, methodName, null);
+            //getSysLogService().success(module,method, methodName, null);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
