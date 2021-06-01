@@ -798,6 +798,8 @@ public class CheckImpl   implements CheckService {
 	public void autoDoStatus(Long quoteId)throws  Exception{
 		List<Map<String,Object>> mapList = quoteProcessDao.countByBsType(quoteId);
 		List<Map<String,Object>> materList = productMaterDao.countByBsType(quoteId);
+
+		//查找需要重审的类型
 		List<Map<String,Object>> retrialList = quoteBomDao.getRetrial(quoteId);
 		List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
 		//判断是否为复制单审批
@@ -838,14 +840,15 @@ public class CheckImpl   implements CheckService {
 		}
 		//外协为工艺  1.无外协的，2.外协不需要重审 自动完成及审批
 		//2021-04-09 暂时取消外协和采购的自动确认完成
-//		if(!hashMap.containsKey("out")||quoteBomDao.findByDelFlagAndOutRetrial(0,1).size()<=0){
-//			if(lo.size()>0){
-//				Quote o = lo.get(0);
-//				o.setBsStatus2Out(2);
-//				quoteDao.save(o);
-//			}
-//			autoCheck(quoteId,"out");
-//		}
+		//||quoteBomDao.findByDelFlagAndOutRetrial(0,1).size()<=0
+		if(!hashMap.containsKey("out")){
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Out(2);
+				quoteDao.save(o);
+			}
+			autoCheck(quoteId,"out");
+		}
 
 //		if(quoteBomDao.findByDelFlagAndPurchaseRetrial(0,1).size()<=0&&isCopy){
 //			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
@@ -883,15 +886,15 @@ public class CheckImpl   implements CheckService {
 			quoteItemDao.switchStatus(2, quoteId, "B001");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B001");
 
-			//			autoCheck(quoteId,"hardware");
+			autoCheck(quoteId,"hardware");
 
 			//更新完成状态
 			productMaterDao.updateStatus(quoteId,"hardware",1);
-//			if(lo.size()>0){
-//				Quote o = lo.get(0);
-//				o.setBsStatus2Hardware(2);
-//				quoteDao.save(o);
-//			}
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Hardware(2);
+				quoteDao.save(o);
+			}
 		}
 //		else if(isCopy) {
 //			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"hardware",1);
@@ -905,12 +908,12 @@ public class CheckImpl   implements CheckService {
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B003");
 			quoteItemDao.switchStatus(2, quoteId, "C003");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
-//			if(lo.size()>0){
-//				Quote o = lo.get(0);
-//				o.setBsStatus2Surface(2);
-//				quoteDao.save(o);
-//			}
-//			autoCheck(quoteId,"surface");
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Surface(2);
+				quoteDao.save(o);
+			}
+			autoCheck(quoteId,"surface");
 
 			productMaterDao.updateStatus(quoteId,"surface",1);
 		}
@@ -926,12 +929,12 @@ public class CheckImpl   implements CheckService {
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B004");
 			quoteItemDao.switchStatus(2, quoteId, "C004");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
-//			if(lo.size()>0){
-//				Quote o = lo.get(0);
-//				o.setBsStatus2Packag(2);
-//				quoteDao.save(o);
-//			}
-//			autoCheck(quoteId,"packag");
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Packag(2);
+				quoteDao.save(o);
+			}
+			autoCheck(quoteId,"packag");
 
 			productMaterDao.updateStatus(quoteId,"packag",1);
 		}
@@ -947,12 +950,12 @@ public class CheckImpl   implements CheckService {
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B002");
 			quoteItemDao.switchStatus(2, quoteId, "C002");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
-//			if(lo.size()>0){
-//				Quote o = lo.get(0);
-//				o.setBsStatus2Molding(2);
-//				quoteDao.save(o);
-//			}
-//			autoCheck(quoteId,"molding");
+			if(lo.size()>0){
+				Quote o = lo.get(0);
+				o.setBsStatus2Molding(2);
+				quoteDao.save(o);
+			}
+			autoCheck(quoteId,"molding");
 
 			productMaterDao.updateStatus(quoteId,"molding",1);
 		}

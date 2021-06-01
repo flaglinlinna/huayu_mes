@@ -1,11 +1,15 @@
 package com.web.quote.service.internal;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.system.user.dao.SysUserDao;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.entity.Quote;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +52,9 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 	
 	@Autowired
 	QuoteItemDao quoteItemDao;
+
+	@Autowired
+	private SysUserDao sysUserDao;
 	
 	@Autowired
 	QuoteService quoteService;
@@ -100,8 +107,21 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 		Specification<QuoteMould> spec = Specification.where(BaseService.and(filters, QuoteMould.class));
 		Specification<QuoteMould> spec1 = spec.and(BaseService.or(filters1, QuoteMould.class));
 		Page<QuoteMould> page = quoteMouldDao.findAll(spec1, pageRequest);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<QuoteMould> quoteMouldList = page.getContent();
+		List<JSONObject> list = new ArrayList<>();
+		for(QuoteMould quoteMould :quoteMouldList){
+			JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(quoteMould));
+			jsonObject.put("createName",sysUserDao.findById((long)quoteMould.getCreateBy()).getUserName());
+			jsonObject.put("createDate",df.format(quoteMould.getCreateDate()));
+			if(quoteMould.getLastupdateBy()!=null){
+				jsonObject.put("lastupdateName",sysUserDao.findById((long)quoteMould.getCreateBy()).getUserName());
+				jsonObject.put("lastupdateDate",df.format(quoteMould.getLastupdateDate()));
+			}
+			list.add(jsonObject);
+		}
 
-		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+		return ApiResponseResult.success().data(DataGrid.create(list, (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 
 	}

@@ -40,6 +40,10 @@ $(function() {
 			{field : 'bsMoFee',title : '模具成本',width:120, templet : '<div>{{d.mjProcFee.feeAll}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'stQuote',title : '参考报价',width:120, templet : '<div>{{d.mjProcFee.stQuote}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'bsActQuote',title : '实际报价',width:120, "edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
+			{field : 'createName', title : '创建人', width : 80,style : 'background-color:#d2d2d2'},
+			{field : 'createDate', title : '创建时间', width : 150,style : 'background-color:#d2d2d2'},
+			{field : 'lastupdateName', title : '更新人', width : 80,style : 'background-color:#d2d2d2'},
+			{field : 'lastupdateDate', title : '更新时间', width : 150,style : 'background-color:#d2d2d2'},
 			{fixed : 'right',title : '操作',width : 80,align : 'center',toolbar : '#optBar'}
 			] ],
 			done : function(res, curr, count) {

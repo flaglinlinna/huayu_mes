@@ -72,8 +72,10 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	@Query(value = "select max(t.id) as id ,max(t.PK_BJ_WORK_CENTER) as PK_BJ_WORK_CENTER , max(t.BS_ELEMENT)as BS_ELEMENT ,max(t.BS_COMPONENT) as BS_COMPONENT ,max(t.bs_mater_Name) as bs_mater_Name ,max(c.WORKCENTER_NAME)" +
 			" as WORKCENTER_NAME from" +
 			" price_quote_bom t " +
-			" LEFT JOIN BJ_BASE_WORKCENTER c on t.PK_BJ_WORK_CENTER = c.ID where t.pk_quote= ?1  and t.del_Flag= 0 GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT ",
-			countQuery =  " select count(*)from(select max(t.id) from price_quote_bom t  where t.pk_quote= ?1  and t.del_Flag= 0 GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT)",
+			" LEFT JOIN BJ_BASE_WORKCENTER c on t.PK_BJ_WORK_CENTER = c.ID " +
+			" left join BJ_BASE_ITEM_TYPE_WG w on w.id = t.PK_ITEM_TYPE_WG where t.pk_quote= ?1  and t.del_Flag= 0 and w.ITEM_TYPE <> '辅料' GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT ",
+			countQuery =  " select count(*)from(select max(t.id) from price_quote_bom t  left join BJ_BASE_ITEM_TYPE_WG w on w.id = t.PK_ITEM_TYPE_WG where t.pk_quote= ?1 " +
+					" and t.del_Flag= 0 and w.ITEM_TYPE <> '辅料' GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT)",
 			nativeQuery = true)
 	Page<Map<String, Object>> getBomNameByPage(Long quoteId, Pageable pageable);
 	
