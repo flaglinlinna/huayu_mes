@@ -6,7 +6,7 @@ var totalCount = 0;// 表格记录数
 var materNameFlag = 0;
 $(function() {
 	layui.use([ 'form', 'table', 'tableSelect' ], function() {
-		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect;
+		var table = layui.table, table1 = layui.table,form = layui.form, tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect;
 		isComplete()
 		tableIns = table.render({
 			elem : '#client_procList',
@@ -103,6 +103,55 @@ $(function() {
 				});
 				form.render();//刷新表单
 
+			}
+		});
+
+		// 损耗明细模拟
+		tableIns3 = table1.render({
+			elem : '#processLoseTable',
+			// url : context +
+			// '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
+			method : 'get', // 默认：get请求
+			cellMinWidth : 150,
+			// totalRow : true,
+			limit:200,
+			limits: [200,50,100,500,1000,2000,5000],
+			// height : 'full-110',// 固定表头&full-查询框高度
+			even : true,// 条纹样式
+			page : true,
+			request : {
+				pageName : 'page',// 页码的参数名称，默认：page
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			},
+			parseData : function(res) {
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+					// code值为200表示成功
+				}
+			},
+			cols : [ [
+				{type : 'numbers'},
+				//{field : 'BS_ELEMENT',width : 120,title : '组件名称',sort : true,totalRowText : "合计"},
+				{field : 'BS_ELEMENT',title : '组件名称',templet:function (d) {
+						if(d.BS_ORDER!=null){
+							return d.BS_ELEMENT
+						}else {
+							return '小计'
+						}
+					}},
+				{field : 'BS_NAME',title : '零件名称'},
+				{field : 'BS_LINK_NAME',width : 150,title : '所属零件'},
+				{field : 'WORKCENTER_NAME',width : 150,title : '工作中心'},
+				{field : 'PROC_NAME',width : 150,title : '工序名称'},
+				{field : 'BS_ORDER',width : 100,title : '顺序'},
+				{field : 'BS_GROUPS',title : '损耗分组',width : 150}
+			] ],
+			done : function(res, curr, count) {
+				//pageCurr = curr;
 			}
 		});
 
@@ -945,6 +994,34 @@ function getAddList(val) {
 	});
 
 }
+
+//损耗明细模拟
+function openDetail() {
+	tableIns3.reload({
+		url : context + '/quoteProcess/getSumList?quoteId=' + quoteId,
+		done : function(res, curr, count) {
+			var tableIns3 = this.elem.next();
+			res.data.forEach(function(item, index) {
+				if(item.BS_ORDER==null){
+					tableIns3.find('tr[data-index=' + index + ']').find('td').css("background-color", "#FFFF00");
+				}
+			});
+		}
+	})
+	var index = layer.open({
+		type : 1,
+		title : "损耗明细模拟",
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#processLossDiv')
+	});
+	layer.full(index);
+}
+
+
+
 function merge(res, columsName, columsIndex) {
 	var data = res;
 	var mergeIndex = 0;// 定位需要添加合并属性的行数
@@ -993,6 +1070,8 @@ function openProc(id, title) {
 	});
 	layer.full(index);
 }
+
+
 // 重新加载表格（搜索）
 function load(obj) {
 	// 重新加载table

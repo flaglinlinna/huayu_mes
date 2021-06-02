@@ -705,4 +705,32 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //		}
 //		return ApiResponseResult.success();
 	}
+
+
+	@Override
+	public ApiResponseResult getSumList(Long quoteId,PageRequest pageRequest) throws Exception {
+		Page<Map<String, Object>> mapList= quoteProcessDao.getSumList(quoteId,pageRequest);
+//		DataGrid.create(mapList.getContent(), (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize())
+		List<Map<String,Object>> maps =  new ArrayList<>();
+		List<Map<String,Object>> mapOld = mapList.getContent();
+		HashSet<String> groupSet = new HashSet<>();
+		for (int i = mapOld.size()-1; i >= 0; i--) {
+			Map<String, Object> subtotal = new HashMap<>();
+			Map<String, Object> one = mapOld.get(i);
+			Map<String, Object> deepCopy = new HashMap<>();
+			//根据组件和所属零件判断是否有小结
+			if(groupSet.add(one.get("BS_ELEMENT").toString()+one.get("BS_LINK_NAME")+one.get("BS_ORDERS"))){
+				//新增小结
+				subtotal.put("BS_ELEMENT",one.get("BS_ELEMENT"));
+				subtotal.put("BS_LINK_NAME",one.get("BS_LINK_NAME"));
+//			  subtotal.put("BS_ORDERS",one.get("BS_ORDERS"));
+				maps.add(subtotal);
+			}
+			deepCopy.putAll(one);
+			maps.add(deepCopy);
+			//根据组件和所属零件判断是否新增小计计算
+		}
+		Collections.reverse(maps);
+		return ApiResponseResult.success().data(DataGrid.create(maps, (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+	}
 }

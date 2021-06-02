@@ -44,5 +44,7 @@ public interface QuoteProcessService {
    public ApiResponseResult editProcessByBom(List<QuoteProcess> quoteProcessList,Long quoteId);
 
    public ApiResponseResult editProcessList(List<QuoteProcess> quoteProcessList) throws Exception;
+
+   public ApiResponseResult getSumList(Long quoteId,PageRequest pageRequest) throws Exception;
    
 }

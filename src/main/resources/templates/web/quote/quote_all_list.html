@@ -189,10 +189,10 @@ display: none;
         </li>
         {{# if(d.bsStatus2purchase == 0){ }}
            <li  class="">
-       {{# } else if(d.bsStatus2purchase == 1) { }}
-           <li  class="step_active">
-       {{# } else { }}
+       {{# } else if(d.bsStatus2purchase == 2) { }}
            <li  class="step_pass">
+       {{# } else { }}
+           <li  class="step_active">
        {{# } }}
           <div class="step-line"></div>
           <div class="step-content">

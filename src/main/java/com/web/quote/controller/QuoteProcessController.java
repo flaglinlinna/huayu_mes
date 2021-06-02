@@ -363,13 +363,31 @@ public class QuoteProcessController extends WebController {
         try {
             ApiResponseResult result = quoteProcessService.getListByQuoteAndName(quoteId, name);
             logger.debug("获取报价工艺流程列表=getAddList:");
-            getSysLogService().success(module,method, methodName,"" );
+//            getSysLogService().success(module,method, methodName,"" );
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取报价工艺流程-工序列表失败！", e);
             getSysLogService().error(module,method, methodName, "关键字:;"+e.toString());
             return ApiResponseResult.failure("获取报价工艺流程-工序列表失败！");
+        }
+    }
+
+    @ApiOperation(value = "获取损耗明细模拟列表", notes = "获取损耗明细模拟列表", hidden = true)
+    @RequestMapping(value = "/getSumList", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getSumList(String quoteId) {
+        String method = "/quoteProcess/getSumList";
+        String methodName = "获取损耗明细模拟列表";
+        try {
+            ApiResponseResult result = quoteProcessService.getSumList(Long.parseLong(quoteId),super.getPageRequest(Sort.unsorted()));
+            logger.debug("获取损耗明细模拟列表=getList:");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取损耗明细模拟列表失败！", e);
+			getSysLogService().error(module,method, methodName,e.toString());
+            return ApiResponseResult.failure("获取损耗明细模拟列表失败！");
         }
     }
 }

@@ -41,6 +41,7 @@
 						<button class="layui-btn layui-btn-sm" type="button"
 								id="editListBtn" onclick="saveTable(true)">保存</button>
 						<button class="layui-btn layui-btn-sm layui-btn-danger" type="button" id="delListBtn" onclick="delTable()">批量删除</button>
+						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="openDetailBtn" onclick="openDetail()">损耗明细模拟</button>
 					</div>
 				</div>
 			</form>
@@ -137,6 +138,11 @@
 
 				
 			</form>
+		</div>
+
+		<!--损耗明细-->
+		<div id="processLossDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
+			<table id="processLoseTable" lay-filter="processLoseTable"></table>
 		</div>
 
 		<script type="text/html" id="selectBsMaterName" >

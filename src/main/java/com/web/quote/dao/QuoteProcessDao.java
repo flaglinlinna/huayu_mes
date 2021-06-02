@@ -91,4 +91,23 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 
 	@Query(value = "SELECT p.bs_Groups,COUNT(p.bs_Groups)  FROM PRICE_QUOTE_PROCESS p where p.PK_QUOTE =?1 and p.DEL_FLAG = 0 GROUP BY p.bs_Groups HAVING  COUNT( p.bs_Groups ) >1",nativeQuery = true)
 	public List<Map<String, Object>> getBsGroupsNum(Long quoteId);
+
+	@Query(value = "select * from (select pp.id,pp.bs_linK_name,pp.bs_groups,pp.BS_ELEMENT,pp.BS_ORDER,bs_Name," +
+			 " bp.PROC_NAME,bw.workcenter_Name from price_quote_process pp left join BJ_BASE_PROC bp on pp.PK_PROC = bp.id" +
+			" LEFT JOIN BJ_BASE_WORKCENTER bw on bw.id = bp.workcenter_Id  where pp.PK_QUOTE = ?1 and pp.BS_GROUPS is null  and pp.DEL_FLAG = 0 " +
+			"UNION" +
+			" select pp.id,pp.bs_linK_name,pp.bs_groups,pp.BS_ELEMENT,pp.BS_ORDER,bs_Name,bp.PROC_NAME," +
+			"bw.workcenter_Name from price_quote_process pp  left join BJ_BASE_PROC bp on pp.PK_PROC = bp.id LEFT JOIN BJ_BASE_WORKCENTER bw on bw.id = bp.workcenter_Id  where pp.PK_QUOTE = ?1" +
+			" and pp.BS_GROUPS is not null and pp.DEL_FLAG = 0 and pp.bs_order in (select max(p.bs_order) from price_quote_process p " +
+			" where p.PK_QUOTE = ?1 and p.BS_GROUPS is not null and p.DEL_FLAG = 0 GROUP BY p.BS_ELEMENT,p.bs_link_name,p.BS_GROUPS)  " +
+			" ) ORDER BY  BS_ELEMENT,bs_linK_name,BS_ORDER" +
+			" ",nativeQuery = true,
+			countQuery = "select count(id) from (select pp.id from price_quote_process pp left join BJ_BASE_PROC bp on pp.PK_PROC = bp.id" +
+					" LEFT JOIN BJ_BASE_WORKCENTER bw on bw.id = bp.workcenter_Id  where pp.PK_QUOTE = ?1 and pp.BS_GROUPS is null  and pp.DEL_FLAG = 0" +
+					" UNION"  +
+					" select max(pp.id) from price_quote_process pp" +
+					" left join BJ_BASE_PROC bp on pp.PK_PROC = bp.id LEFT JOIN BJ_BASE_WORKCENTER bw on bw.id = bp.workcenter_Id where pp.PK_QUOTE = ?1" +
+					" and pp.BS_GROUPS is not null  and pp.DEL_FLAG = 0 GROUP BY pp.BS_ELEMENT,pp.bs_link_name,pp.BS_GROUPS)")
+	public  Page<Map<String, Object>> getSumList(Long pkQuote,Pageable pageable);
+
 }
