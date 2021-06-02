@@ -142,11 +142,11 @@ $(function() {
 						}else {
 							return '小计'
 						}
-					}},
-				{field : 'BS_NAME',title : '零件名称'},
-				{field : 'BS_LINK_NAME',width : 150,title : '所属零件'},
-				{field : 'WORKCENTER_NAME',width : 150,title : '工作中心'},
-				{field : 'PROC_NAME',width : 150,title : '工序名称'},
+					},style:"overflow:hidden !important"},
+				{field : 'BS_NAME',title : '零件名称',style:"overflow:hidden !important"},
+				{field : 'BS_LINK_NAME',width : 150,title : '所属零件',style:"overflow:hidden !important"},
+				{field : 'WORKCENTER_NAME',width : 150,title : '工作中心',style:"overflow:hidden !important"},
+				{field : 'PROC_NAME',width : 150,title : '工序名称',style:"overflow:hidden !important"},
 				{field : 'BS_ORDER',width : 100,title : '顺序'},
 				{field : 'BS_GROUPS',title : '损耗分组',width : 150}
 			] ],

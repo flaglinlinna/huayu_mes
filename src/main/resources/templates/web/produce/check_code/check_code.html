@@ -67,12 +67,13 @@
 										   type="text"  class="layui-input" readonly="readonly"/>
 
 								</div>
-								<!--<label class="layui-form-label">客户简称</label>-->
-								<!--<div class="layui-input-inline" >-->
-									<!--<input id="cust" name="cust" autocomplete="off"-->
-										<!--style="background: #d7d7d7;" class="layui-input" disabled-->
-										<!--type="text" />-->
-								<!--</div>-->
+								<label class="layui-form-label layui-required">是否校验重码</label>
+								<div class="layui-input-inline">
+									<input type="radio" name="isRecord" value="1" title="是"
+										   checked="" lay-filter="isRecord"> <input
+										type="radio" name="isRecord" value="0" title="否"
+										lay-filter="isRecord">
+								</div>
 							</div>
 							<div class="layui-form-item">
 							<div class="layui-word-aux" style="margin:5px;">一个条码，请在此操作</div>
@@ -181,7 +182,10 @@
 				</div>
 			</div>
 		</div>
-		
+
+		<script th:inline="javascript">
+			var type=[[${type}]];
+		</script>
 
 		<script>
 			document.write("<script type='text/javascript' " +

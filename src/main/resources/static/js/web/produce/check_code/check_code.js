@@ -22,6 +22,9 @@ $(function () {
                     type: 'date' // 默认，可不填
                 });
 
+                // if(type==1){
+                //
+                // }
 
                 tableIns = table.render({
                     elem: '#colTable'

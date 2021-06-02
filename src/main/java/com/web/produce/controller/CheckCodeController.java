@@ -23,6 +23,7 @@ import com.web.produce.service.CheckCodeService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.servlet.ModelAndView;
 
 @Api(description = "小码校验模块")
 @CrossOrigin
@@ -37,8 +38,11 @@ public class CheckCodeController extends WebController {
 	 
 	 @ApiOperation(value = "小码校验页", notes = "小码校验页", hidden = true)
 	    @RequestMapping(value = "/toCheckCode")
-	    public String toCheckCode(){
-	        return "/web/produce/check_code/check_code";
+	    public ModelAndView toCheckCode(String type){
+		 ModelAndView mav = new ModelAndView();
+		 mav.addObject("type", type);
+		 mav.setViewName("/web/produce/check_code/check_code");
+		 return mav;
 	    }
 	 
 	  @ApiOperation(value="获取指令单信息", notes="获取指令单信息", hidden = true)
