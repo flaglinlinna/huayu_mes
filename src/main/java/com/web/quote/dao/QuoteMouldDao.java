@@ -22,7 +22,12 @@ public interface QuoteMouldDao extends CrudRepository<QuoteMould, Long>,JpaSpeci
 	//public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询编号是否存在
 	
 	public List<QuoteMould> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
-	
+
+	@Modifying
+	@Query("update QuoteMould t set t.delFlag=1 where  t.pkQuote=?1")
+	public void deletBypkQuote(Long pkQuote);//根据组件名称修改表数据
+
+
 	@Modifying
     @Query("update QuoteMould t set t.delFlag=1 where t.bsName=?1 and t.pkQuote=?2 and t.delFlag=0")
     public void delteQuoteMouldByBsNameAndPkQuote(String  bsName,Long pkQuote);//根据组件名称修改表数据

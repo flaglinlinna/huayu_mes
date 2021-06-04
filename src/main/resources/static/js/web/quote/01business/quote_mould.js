@@ -4,8 +4,8 @@
 var pageCurr;
 var totalCount = 0;// 表格记录数
 $(function() {
-	layui.use([ 'form', 'table', 'tableSelect' ], function() {
-		var table = layui.table, form = layui.form, tableSelect = layui.tableSelect;
+	layui.use([ 'form', 'table', 'tableSelect','upload' ], function() {
+		var table = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect;
 		isComplete()
 		tableIns = table.render({
 			elem : '#client_procList',
@@ -36,10 +36,10 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {field : 'bsName',title : '零件名称',width:150, style : 'background-color:#d2d2d2'},
 			{field : 'bsMoCode',title : '模具编码',width:150, templet : '<div>{{d.mjProcFee.productCode}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'bsActQuote',title : '实际报价',width:120, "edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
 			{field : 'bsMoName',title : '模具名称',templet : '<div>{{d.mjProcFee.productName}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'bsMoFee',title : '模具成本',width:120, templet : '<div>{{d.mjProcFee.feeAll}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'stQuote',title : '参考报价',width:120, templet : '<div>{{d.mjProcFee.stQuote}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'bsActQuote',title : '实际报价',width:120, "edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
 			{field : 'createName', title : '创建人', width : 80,style : 'background-color:#d2d2d2'},
 			{field : 'createDate', title : '创建时间', width : 150,style : 'background-color:#d2d2d2'},
 			{field : 'lastupdateName', title : '更新人', width : 80,style : 'background-color:#d2d2d2'},
@@ -88,6 +88,36 @@ $(function() {
 			// 重新加载table
 			load(data);
 			return false;
+		});
+
+		// 导入
+		upload.render({
+			elem : '#upload',
+			url : context + '/quoteMould/doExcel',
+			accept : 'file' // 普通文件
+			,
+			data : {
+				pkQuote : function() {
+					return quoteId;
+				}
+			},
+			before : function(obj) { // obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+				layer.load(); // 上传loading
+			},
+			done : function(res, index, upload) {
+				layer.closeAll('loading'); // 关闭loading
+				layer.alert(res.msg, function(index) {
+					layer.close(index);
+					loadAll();
+				});
+
+			},
+			error : function(index, upload) {
+				layer.alert("操作请求错误，请您稍后再试", function() {
+				});
+				layer.closeAll('loading'); // 关闭loading
+				layer.close(index);
+			}
 		});
 
 		tableProc = table.render({
@@ -221,6 +251,14 @@ $(function() {
 		}
 	});
 });
+
+//导出
+function exportExcel(){
+	//导出模板
+	location.href = context + "/quoteMould/export?pkQuote="+quoteId;
+	// location.href = "../../excelFile/排产导入模板.xlsx";//从文件夹内直接提取
+	return false;
+}
 
 function isComplete() {
 	if (iStatus == 2 || iStatus == 3) {

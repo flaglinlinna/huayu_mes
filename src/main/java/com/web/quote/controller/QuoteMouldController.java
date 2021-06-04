@@ -26,6 +26,8 @@ import com.web.quote.service.QuoteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Api(description = "模具清单维护模块")
 @CrossOrigin
 @ControllerAdvice
@@ -227,6 +229,37 @@ public class QuoteMouldController extends WebController {
             logger.error("取消完成-模具清单失败！", e);
             getSysLogService().error(module,method, methodName,"报价单id:"+pkQuote+ e.toString());
             return ApiResponseResult.failure("取消完成-模具清单失败！");
+        }
+    }
+
+    @ApiOperation(value = "导入", notes = "导入", hidden = true)
+    @RequestMapping(value = "/doExcel", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doExcel(MultipartFile[] file, Long pkQuote) throws Exception{
+        String method = "/quoteMould/doExcel";String methodName ="导入";
+        try{
+            ApiResponseResult result = quoteMouldService.doExcel(file,pkQuote);
+            logger.debug("导入=doExcel:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导入失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("导入失败！");
+        }
+    }
+
+    @ApiOperation(value = "导出", notes = "导出", hidden = true)
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @ResponseBody
+    public void export(HttpServletResponse response, Long pkQuote) throws Exception{
+        String method = "/quoteMould/export";String methodName ="导出";
+        try{
+            quoteMouldService.exportExcel(response,pkQuote);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导出失败！", e);
         }
     }
 }

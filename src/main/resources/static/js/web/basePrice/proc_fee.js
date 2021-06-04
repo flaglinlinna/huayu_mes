@@ -144,7 +144,7 @@ $(function() {
 		// 导入
 		upload3.render({
 			elem : '#upload3',
-			url : context + '/basePrice/proc/doExcel',
+			url : context + '/basePrice/procFee/doExcel',
 			accept : 'file' // 普通文件
 			,
 

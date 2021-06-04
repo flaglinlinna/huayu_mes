@@ -8,6 +8,8 @@ import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.Quote;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface QuoteMouldService {
 
    public ApiResponseResult getMouldList()  throws Exception;//获取模具清单
@@ -29,4 +31,8 @@ public interface QuoteMouldService {
    public ApiResponseResult doNoNeed(String quoteId ,String bsCode)throws Exception;
 
    public ApiResponseResult cancelStatus(String quoteId,String code)throws Exception;
+
+   public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception;
+
+   public ApiResponseResult doExcel(MultipartFile[] file, Long pkQuote) throws Exception;
 }

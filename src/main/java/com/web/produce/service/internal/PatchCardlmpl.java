@@ -237,19 +237,54 @@ public class PatchCardlmpl extends PrcUtils implements PatchCardService {
 	@Override
 	@Transactional
 	public ApiResponseResult add(PatchCard patchCard) throws Exception {
-		if (patchCard == null) {
-			return ApiResponseResult.failure("补卡记录不能为空！");
-		}
+			if (patchCard == null) {
+				return ApiResponseResult.failure("补卡记录不能为空！");
+			}
 
-		int cc = patchCardDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0, patchCard.getEmpId(),
-				patchCard.getSignTime(), patchCard.getSignDate());
-		if (cc > 0) {
-			return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
-		}
-		patchCard.setCreateDate(new Date());
-		patchCard.setCreateBy(UserUtil.getSessionUser().getId());
-		patchCard.setDelFlag(0);
-		patchCardDao.save(patchCard);
+			int cc = patchCardDao.countByDelFlagAndEmpIdAndSignTimeAndSignDate(0, patchCard.getEmpId(),
+					patchCard.getSignTime(), patchCard.getSignDate());
+			if (cc > 0) {
+				return ApiResponseResult.failure("该数据已存在!不允许重复添加!");
+			}
+			patchCard.setCreateDate(new Date());
+			patchCard.setCreateBy(UserUtil.getSessionUser().getId());
+			patchCard.setDelFlag(0);
+			patchCardDao.save(patchCard);
+
+			List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+				@Override
+				public CallableStatement createCallableStatement(Connection con) throws SQLException {
+					Long userId = null;
+					try {
+						userId = UserUtil.getSessionUser().getId();
+					}catch (Exception e){
+
+					}
+					String storedProc = "{call  prc_mes_att_carddata_calc (?,?,?,?,?,?,?,?)}";// 调用的sql
+					CallableStatement cs = con.prepareCall(storedProc);
+					cs.setString(1, "");
+					cs.setString(2, "");
+					cs.setString(3, userId+"");
+					cs.setString(4, "");
+					cs.setString(5, "");
+					cs.setLong(6, patchCard.getLineId());
+					cs.registerOutParameter(7, java.sql.Types.INTEGER);// 输出参数 返回标识
+					cs.registerOutParameter(8, java.sql.Types.VARCHAR);// 输出参数 返回标识
+//				cs.registerOutParameter(8, -10);// 输出参数 追溯数据
+					return cs;
+				}
+			}, new CallableStatementCallback() {
+				public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+					List<Object> result = new ArrayList<>();
+					List<Map<String, Object>> l = new ArrayList();
+					cs.execute();
+					result.add(cs.getInt(7));
+					result.add(cs.getString(8));
+					System.out.println(l);
+					return result;
+				}
+			});
+
 
 		return ApiResponseResult.success("补卡记录添加成功！").data(patchCard);
 	}

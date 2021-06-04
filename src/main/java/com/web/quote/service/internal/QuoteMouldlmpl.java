@@ -1,18 +1,26 @@
 package com.web.quote.service.internal;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.system.user.dao.SysUserDao;
+import com.utils.ExcelExport;
+import com.web.basePrice.entity.BjWorkCenter;
+import com.web.basePrice.entity.ItemTypeWg;
+import com.web.basePrice.entity.Unit;
+import com.web.quote.dao.QuoteBomDao;
 import com.web.quote.dao.QuoteDao;
 import com.web.quote.entity.Quote;
+import com.web.quote.entity.QuoteBom;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +43,9 @@ import com.web.quote.dao.QuoteMouldDao;
 import com.web.quote.entity.QuoteMould;
 import com.web.quote.service.QuoteMouldService;
 import com.web.quote.service.QuoteService;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 模具清单维护
@@ -46,9 +57,14 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 
 	@Autowired
 	QuoteMouldDao quoteMouldDao;
+
+	@Autowired
+	QuoteBomDao quoteBomDao;
 	
 	@Autowired
 	MjProcFeeDao mjProcFeeDao;
+
+
 	
 	@Autowired
 	QuoteItemDao quoteItemDao;
@@ -268,5 +284,122 @@ public class QuoteMouldlmpl implements QuoteMouldService{
 
 		todoInfoService.openByIdAndModel(Long.parseLong(quoteId), "模具清单");
 		return ApiResponseResult.success("提交成功！");
+	}
+
+	//防止读取Excel为null转String 报空指针异常
+	public String tranCell(XSSFCell xssfCell)
+	{
+		if(xssfCell==null||("").equals(xssfCell.getRawValue())){
+			return null;
+		}else {
+			if(xssfCell.getCellType()== Cell.CELL_TYPE_FORMULA){
+				try {
+					return String.valueOf(xssfCell.getNumericCellValue());
+				} catch (IllegalStateException e) {
+					return String.valueOf(xssfCell.getRichStringCellValue());
+				}
+			}else {
+				return xssfCell.toString().trim();
+			}
+		}
+	}
+
+	//导入模板
+	@Override
+	public ApiResponseResult doExcel(MultipartFile[] file, Long pkQuote) throws Exception{
+		try {
+//			if(pkQuote ==null){
+//				return ApiResponseResult.failure("导入失败！请检查选中的报价单！");
+//			}
+			Date doExcleDate = new Date();
+			Long userId = UserUtil.getSessionUser().getId();
+			InputStream fin = file[0].getInputStream();
+			XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			//获取最后一行的num，即总行数。此处从0开始计数
+			int maxRow = sheet.getLastRowNum();
+			List<QuoteMould> quoteMouldList = new ArrayList<>();
+			//前两行为标题
+			for (int row = 2; row <= maxRow; row++) {
+				QuoteMould o = new QuoteMould();
+				String bsName = tranCell(sheet.getRow(row).getCell(0));
+				String productCode = tranCell(sheet.getRow(row).getCell(1));
+				String bsActQuote = tranCell(sheet.getRow(row).getCell(2));
+				if(bsName!=null) {
+					if(quoteBomDao.findByDelFlagAndPkQuoteAndBsComponent(0, pkQuote, bsName).size()==0){
+						return ApiResponseResult.failure("外购件中没有 "+bsName +"的零件");
+					}
+					o.setBsName(bsName);
+				}else {
+					return ApiResponseResult.failure("零件名称不能为空");
+				}
+
+				if(productCode!=null) {
+					List<MjProcFee> mjProcFeeList =mjProcFeeDao.findByDelFlagAndProductCode(0, productCode);
+					if(mjProcFeeList.size()==0){
+						return ApiResponseResult.failure("模具成本信息中没有 "+productCode +"的模具编码信息");
+					}
+					o.setPkProcFee(mjProcFeeList.get(0).getId());
+//					o.getBsMoFee()
+				}else {
+					return ApiResponseResult.failure("模具编码不能为空");
+				}
+
+				o.setBsActQuote(new BigDecimal(bsActQuote));
+				o.setPkQuote(pkQuote);
+				o.setCreateBy(userId);
+				o.setCreateDate(doExcleDate);
+//				String productName = tranCell(sheet.getRow(row).getCell(3));
+//				String bsMoFee = tranCell(sheet.getRow(row).getCell(4));
+//				String stQuote = tranCell(sheet.getRow(row).getCell(5));
+//				String createBy = tranCell(sheet.getRow(row).getCell(6));
+//				String createDate = tranCell(sheet.getRow(row).getCell(7));
+				quoteMouldList.add(o);
+
+			}
+			quoteMouldDao.deletBypkQuote(pkQuote);
+			quoteMouldDao.saveAll(quoteMouldList);
+			return ApiResponseResult.success("导入成功");
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
+		}
+	}
+
+
+	@Override
+	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception {
+//		long startTime=System.currentTimeMillis();   //获取开始时间
+		List<QuoteMould> quoteMouldList = quoteMouldDao.findByDelFlagAndPkQuote(0,pkQuote);
+//		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlag(0);
+		String excelPath = "static/excelFile/";
+		String fileName = "报价模具清单.xlsx";
+		String[] map_arr = new String[]{"bsName","productCode","bsActQuote","productName","bsMoFee","stQuote","createBy",
+				"createDate","lastupdateBy","lastupdateDate"};
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		for(QuoteMould o :quoteMouldList){
+			Map<String, Object> map = new HashMap<>();
+			map.put("bsName", o.getBsName());
+			map.put("productCode",o.getMjProcFee().getProductCode());
+			map.put("bsActQuote",o.getBsActQuote());
+			map.put("productName", o.getMjProcFee().getProductName());
+			map.put("bsMoFee",o.getMjProcFee().getFeeAll());
+			map.put("stQuote",o.getMjProcFee().getStQuote());
+			map.put("createBy", sysUserDao.findById((long) o.getCreateBy()).getUserName());
+			map.put("createDate", df.format(o.getCreateDate()));
+			if (o.getLastupdateBy() != null) {
+				map.put("lastupdateBy", sysUserDao.findById((long) o.getCreateBy()).getUserName());
+				map.put("lastupdateDate", df.format(o.getLastupdateDate()));
+			}
+//			map.put("bsExplain",quoteBom.getBsExplain());//lst-20210107-增加采购说明字段
+			list.add(map);
+		}
+		ExcelExport.export(response,list,workbook,map_arr,excelPath+fileName,fileName);
+//		EasyExcelUtils.download(excelPath+fileName,map_arr,map_arr,list);
+//		long endTime=System.currentTimeMillis(); //获取结束时间
+//		System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
 	}
 }

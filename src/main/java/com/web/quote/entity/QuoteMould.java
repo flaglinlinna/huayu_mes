@@ -213,6 +213,7 @@ public class QuoteMould extends BaseEntity {
 	public void setMjProcFee(MjProcFee mjProcFee) {
 		this.mjProcFee = mjProcFee;
 	}
-	
+
+
 	
 }

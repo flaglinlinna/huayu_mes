@@ -30,6 +30,8 @@ public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecifica
 	
 	public List<QuoteBom> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 
+	public List<QuoteBom> findByDelFlagAndPkQuoteAndBsComponent(Integer delFlag,Long pkQuote,String bsComponent);
+
 	public List<QuoteBom> findByDelFlagAndPkQuoteAndPkBomIdIsNull(Integer delFlag,Long pkQuote);
 
 	public List<QuoteBom> findByDelFlagAndPkQuoteOrderById(Integer delFlag,Long pkQuote);

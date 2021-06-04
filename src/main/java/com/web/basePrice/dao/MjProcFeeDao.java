@@ -18,4 +18,6 @@ public interface MjProcFeeDao extends CrudRepository<MjProcFee, Long>,JpaSpecifi
     public MjProcFee findById(long id);
     
     int countByDelFlagAndProductCode(Integer delFlag,String productCode);
+
+    public List<MjProcFee> findByDelFlagAndProductCode(Integer delFlag,String productCode);
 }

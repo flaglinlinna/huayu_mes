@@ -210,8 +210,10 @@ public class MjProcFeeImpl implements MjProcFeeService {
                 map.put("stQuote",mjProcFee.getStQuote());
                 map.put("feeAll",mjProcFee.getFeeAll());
                 map.put("fmemo",mjProcFee.getFmemo());
-                map.put("createBy",sysUserDao.findById((long)mjProcFee.getCreateBy()).getUserName());
-                map.put("createDate",df.format(mjProcFee.getCreateDate()));
+                if(mjProcFee.getCreateBy()!=null) {
+                    map.put("createBy", sysUserDao.findById((long) mjProcFee.getCreateBy()).getUserName());
+                    map.put("createDate", df.format(mjProcFee.getCreateDate()));
+                }
                 if(mjProcFee.getLastupdateBy()!=null){
                     map.put("lastupdateBy",sysUserDao.findById((long)mjProcFee.getCreateBy()).getUserName());
                     map.put("lastupdateDate",df.format(mjProcFee.getLastupdateDate()));
@@ -309,7 +311,13 @@ public class MjProcFeeImpl implements MjProcFeeService {
                 MjProcFee mjProcFee = new MjProcFee();
                 if(StringUtils.isNotEmpty(id)){
                     mjProcFee = mjProcFeeDao.findById(Long.parseLong(id));
+                }else {
+                    //生成模具编号
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                    String dateStr = sdf.format(new Date());
+                    mjProcFee.setProductCode("MJ-" + dateStr);  //编号格式：MJ-年月日时分秒
                 }
+
                 mjProcFee.setProductName(productName);
                 mjProcFee.setNumHole(new BigDecimal(numHole));
                 mjProcFee.setStructureMj(structureMj);
@@ -320,6 +328,10 @@ public class MjProcFeeImpl implements MjProcFeeService {
                 mjProcFee.setStQuote(new BigDecimal(stQuote));
                 mjProcFee.setFeeAll(new BigDecimal(feeAll));
                 mjProcFee.setFmemo(fmemo);
+
+                mjProcFee.setCreateBy(userId);
+                mjProcFee.setCreateDate(doExcleDate);
+
                 mjProcFeeList.add(mjProcFee);
                 successes++;
             }
