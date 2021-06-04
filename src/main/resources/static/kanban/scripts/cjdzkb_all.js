@@ -124,31 +124,42 @@ function dealCjbgData(kanbanList) {
 
 function dealQualData(kanbanList) {
 	console.log(kanbanList)
-	var kanbanData=kanbanList.data.ListResult
-	var done = []
-	var plan = []
-	var xData = []
-	var okCount = []
-	var input = []
-	var deptAxis=[]
-	var itemList=["实际良率","目标良率","投入数量","良品数量"]
-	for(var i=0;i<kanbanData.length;i++){
-		xData.push(kanbanData[i].LINER_NAME+ "\n" + "第" + kanbanData[i].FROWNUM + "名")//组长
-		done.push(kanbanData[i].FOK_RATE_ACT*100)//实际良率 
-		plan.push(kanbanData[i].FOK_RATE*100)//目标良率
-		okCount.push(kanbanData[i].OK_NUM)//良品数
-		input.push(kanbanData[i].QUANTITY)//投入数
-		deptAxis.push(kanbanData[i].DEPT_ID)
+	if (!kanbanList.result) {// 报错时的初始化
+		toClean();
+
+		return false;
 	}
-	chartQualDiv(done, plan,okCount,input,xData,itemList,deptAxis)
+	var kanbanData=kanbanList.data.ListResult
+	if(kanbanData.length>0){
+		var done = []
+		var plan = []
+		var xData = []
+		var okCount = []
+		var input = []
+		var deptAxis=[]
+		var itemList=["实际良率","目标良率","投入数量","良品数量"]
+		for(var i=0;i<kanbanData.length;i++){
+			xData.push(kanbanData[i].LINER_NAME+ "\n" + "第" + kanbanData[i].FROWNUM + "名")//组长
+			done.push(kanbanData[i].FOK_RATE_ACT*100)//实际良率
+			plan.push(kanbanData[i].FOK_RATE*100)//目标良率
+			okCount.push(kanbanData[i].OK_NUM)//良品数
+			input.push(kanbanData[i].QUANTITY)//投入数
+			deptAxis.push(kanbanData[i].DEPT_ID)
+		}
+		chartQualDiv(done, plan,okCount,input,xData,itemList,deptAxis)
+	}else{
+		chartQualDiv([], [], [], [],[] ,[]);
+	}
+
 }
 
 function toClean() {
 	$("#showLine").text("总开线数：0");
 	chartCjbgDiv([], 0, 0, 0);
+	chartQualDiv([], [], [], [],[] ,[],[]);
 }
 
-function chartQualDiv(done, plan,okCount,input, xData,itemList,deptAxis) {
+function chartQualDiv(done, plan,okCount,input, xData,deptAxis) {
 	option={
 			tooltip : {
 				trigger : 'axis',
@@ -167,7 +178,7 @@ function chartQualDiv(done, plan,okCount,input, xData,itemList,deptAxis) {
 				borderWidth : 10
 			},
 			legend : {
-				data : itemList,
+				data : ["实际良率","目标良率","投入数量","良品数量"],
 				// orient: 'vertical',
 				x : 'center', // 可设定图例在左、右、居中
 				top : 10,

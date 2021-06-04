@@ -251,8 +251,10 @@ $(document).ready(function(){
     	});
     	$("#inSearch").hide();
     </script>
-		<script src="/kanban/scripts/cjdzkb_all.js"
-			th:src="@{/kanban/scripts/cjdzkb_all.js}"></script>
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/kanban/scripts/cjdzkb_all.js?ver="+Math.random()+"'><\/script>");
+		</script>
 
 	</div>
 </body>
