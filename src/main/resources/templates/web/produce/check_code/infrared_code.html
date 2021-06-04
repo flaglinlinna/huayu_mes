@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:include="layout :: htmlhead" th:with="title='小码扫描'"></head>
+<head th:include="layout :: htmlhead" th:with="title='红外扫描'"></head>
 <style th:inline="text">
 .layui-form-label {
 	text-align: right;
@@ -68,13 +68,13 @@
 										   type="text"  class="layui-input" readonly="readonly"/>
 
 								</div>
-								<label class="layui-form-label layui-required">是否校验重码</label>
-								<div class="layui-input-inline">
-									<input type="radio" name="isRecord" value="1" title="是"
-										   checked="" lay-filter="isRecord"> <input
-										type="radio" name="isRecord" value="0" title="否"
-										lay-filter="isRecord">
-								</div>
+<!--								<label class="layui-form-label layui-required">是否校验重码</label>-->
+<!--								<div class="layui-input-inline">-->
+<!--									<input type="radio" name="isRecord" value="1" title="是"-->
+<!--										   checked="" lay-filter="isRecord"> <input-->
+<!--										type="radio" name="isRecord" value="0" title="否"-->
+<!--										lay-filter="isRecord">-->
+<!--								</div>-->
 							</div>
 							<div class="layui-form-item">
 							<div class="layui-word-aux" style="margin:5px;">一个条码，请在此操作</div>
@@ -92,24 +92,24 @@
 										   style="background: #d7d7d7;" disabled="disabled"/>
 								</div>
 							</div>
-							<div class="layui-form-item">
-								<div class="layui-word-aux" style="margin:5px;">两个条码，请在此操作</div>
-							</div>
-							<div class="layui-form-item">
-								<div class="layui-inline">
-									<label class="layui-form-label">条码1</label>
-									<div class="layui-input-inline">
-										<input id="barcode1" name="barcode1" autocomplete="off"
-											placeholder="请输入或扫描条码" class="layui-input" type="text" />
-									</div>
-									<label class="layui-form-label">条码2</label>
-									<div class="layui-input-inline">
-										<input id="barcode2" name="barcode2" autocomplete="off"
-											placeholder="请输入或扫描条码" class="layui-input" type="text" />
-									</div>
-									<div class="layui-form-mid layui-word-aux">请输入或者扫描条码后回车</div>
-								</div>
-							</div>
+<!--							<div class="layui-form-item">-->
+<!--								<div class="layui-word-aux" style="margin:5px;">两个条码，请在此操作</div>-->
+<!--							</div>-->
+<!--							<div class="layui-form-item">-->
+<!--								<div class="layui-inline">-->
+<!--									<label class="layui-form-label">条码1</label>-->
+<!--									<div class="layui-input-inline">-->
+<!--										<input id="barcode1" name="barcode1" autocomplete="off"-->
+<!--											placeholder="请输入或扫描条码" class="layui-input" type="text" />-->
+<!--									</div>-->
+<!--									<label class="layui-form-label">条码2</label>-->
+<!--									<div class="layui-input-inline">-->
+<!--										<input id="barcode2" name="barcode2" autocomplete="off"-->
+<!--											placeholder="请输入或扫描条码" class="layui-input" type="text" />-->
+<!--									</div>-->
+<!--									<div class="layui-form-mid layui-word-aux">请输入或者扫描条码后回车</div>-->
+<!--								</div>-->
+<!--							</div>-->
 						</form>
 						</div>
 <!--						<div style="width:30%;display:inline-block"><p>小码投入</p></div>-->
@@ -192,7 +192,7 @@
 
 		<script>
 			document.write("<script type='text/javascript' " +
-					"src='/js/web/produce/check_code/check_code.js?ver="+Math.random()+"'><\/script>");
+					"src='/js/web/produce/check_code/infrared_code.js?ver="+Math.random()+"'><\/script>");
 		</script>
 	</div>
 </body>

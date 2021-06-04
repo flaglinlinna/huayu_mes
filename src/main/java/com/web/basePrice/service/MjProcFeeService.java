@@ -3,6 +3,9 @@ package com.web.basePrice.service;
 import org.springframework.data.domain.PageRequest;
 import com.app.base.data.ApiResponseResult;
 import com.web.basePrice.entity.MjProcFee;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -21,4 +24,8 @@ public interface MjProcFeeService {
 	public ApiResponseResult getFileList(Long customId) throws Exception;
 
 	public ApiResponseResult delFile(Long id,Long fileId) throws Exception;
+
+	public ApiResponseResult doExcel(MultipartFile[] file) throws Exception;
+
+	public void exportExcel(HttpServletResponse response, String keyword) throws Exception;
 }

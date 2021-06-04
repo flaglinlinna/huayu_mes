@@ -1,5 +1,5 @@
 /**
- * 小码校验
+ * 红外扫描
  */
 var pageCurr;
 var tabledata = [];
@@ -12,11 +12,11 @@ $(function () {
                     table1 = layui.table, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect;
                 var laydate = layui.laydate;
 
-                //产出1 投入2
-                if(type==2){
-                    $("input[name='isRecord'][value='0']").prop("checked", "checked");
-                    $("input[name='isRecord']").attr("disabled","disabled");
-                }
+                // //产出1 投入2
+                // if(type==2){
+                //     $("input[name='isRecord'][value='0']").prop("checked", "checked");
+                //     $("input[name='isRecord']").attr("disabled","disabled");
+                // }
                 layui.form.render();
                 // 日期选择器
                 laydate.render({
@@ -332,16 +332,16 @@ function subCode(taskNo, barcode1, barcode2) {
     var itemCode = $('#itemcode').val();
     var linerName = $('#liner').val();
     //是否校验重码 0否1是
-    var checkRep = $("input[name='isRecord']:checked").val();
+    // var checkRep = $("input[name='isRecord']:checked").val();
     var params = {
         "type":type,
         "taskNo": taskNo,
         "barcode1": barcode1,
-        "barcode2": barcode2,
+        // "barcode2": barcode2,
         "itemCode": itemCode,
         "linerName": linerName,
-        "checkRep":checkRep,
-        "prcType":"check",
+        // "checkRep":checkRep
+        "prcType":"infrared",
     }
     var nowTime = new Date().format('yyyy-MM-dd hh:mm:ss');
     CoreUtil.sendAjax("/produce/check_code/subCode", JSON.stringify(params),

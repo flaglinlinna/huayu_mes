@@ -23,6 +23,8 @@ import com.web.basePrice.service.MjProcFeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Api(description = "模具成本维护模块")
 @CrossOrigin
 @ControllerAdvice
@@ -159,6 +161,37 @@ public class MjProcFeeController extends WebController {
             logger.error("删除失败！", e);
             getSysLogService().error(module,method, methodName, params+";"+e.toString());
             return ApiResponseResult.failure("删除失败！");
+        }
+    }
+
+    @ApiOperation(value = "导入", notes = "导入", hidden = true)
+    @RequestMapping(value = "/doExcel", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult doExcel(MultipartFile[] file) throws Exception{
+        String method = "/basePrice/procFee/doExcel";String methodName ="导入";
+        try{
+            ApiResponseResult result = mjProcFeeService.doExcel(file);
+            logger.debug("导入=doExcel:");
+            getSysLogService().success(module,method, methodName, null);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导入失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("导入失败！");
+        }
+    }
+
+    @ApiOperation(value = "导出", notes = "导出", hidden = true)
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @ResponseBody
+    public void export(HttpServletResponse response, String keyword) throws Exception{
+        String method = "/basePrice/baseFee/export";String methodName ="导出";
+        try{
+            mjProcFeeService.exportExcel(response,keyword);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("导出失败！", e);
         }
     }
 }

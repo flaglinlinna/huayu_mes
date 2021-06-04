@@ -44,6 +44,15 @@ public class CheckCodeController extends WebController {
 		 mav.setViewName("/web/produce/check_code/check_code");
 		 return mav;
 	    }
+
+	@ApiOperation(value = "小码校验页", notes = "小码校验页", hidden = true)
+	@RequestMapping(value = "/toInfraredCode")
+	public ModelAndView toInfraredCode(String type){
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("type", type);
+		mav.setViewName("/web/produce/check_code/infrared_code");
+		return mav;
+	}
 	 
 	  @ApiOperation(value="获取指令单信息", notes="获取指令单信息", hidden = true)
 	    @RequestMapping(value = "/getTaskNo", method = RequestMethod.GET)
@@ -99,7 +108,7 @@ public class CheckCodeController extends WebController {
 		}
 	}
 
-	  @ApiOperation(value="小码校验", notes="小码校验", hidden = true)
+	    @ApiOperation(value="小码校验", notes="小码校验", hidden = true)
 	    @RequestMapping(value = "/subCode", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult subCode(@RequestBody Map<String, Object> params) {
@@ -114,7 +123,15 @@ public class CheckCodeController extends WebController {
 	        	String barcode2 = params.get("barcode2") == null?"":params.get("barcode2").toString();
 				String itemCode = params.get("itemCode") == null?"":params.get("itemCode").toString();
 				String linerName = params.get("linerName") == null?"":params.get("linerName").toString();
-	            ApiResponseResult result = checkCodeService.subCode(taskNo,itemCode,linerName,barcode1,barcode2);
+				String checkRep = params.get("checkRep") == null?"":params.get("checkRep").toString();
+				String prcType = params.get("prcType") == null?"":params.get("prcType").toString();
+//				Integer checkRep = params.get("checkRep") == null?null:Integer.parseInt(params.get("checkRep").toString());
+				String type = "";
+				if(params.get("type") != null){
+					//产出1 投入2
+					type = params.get("type").toString().equals("1")?"产出":"投入";
+				}
+	            ApiResponseResult result = checkCodeService.subCode(taskNo,itemCode,linerName,barcode1,barcode2,checkRep,type,prcType);
 	            logger.debug("小码校验=subCode:");
 	            //暂不写入日志
 //	            getSysLogService().success(module,method, methodName, params);

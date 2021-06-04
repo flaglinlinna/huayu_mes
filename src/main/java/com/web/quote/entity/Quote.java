@@ -329,6 +329,14 @@ public class Quote extends BaseEntity {
 	@ApiModelProperty(name = "bsManageFee", value = "管理费用")
 	@Column(precision = 15,scale = 5)
 	protected BigDecimal bsManageFee;
+
+	/**
+	 * 管理费用
+	 */
+	@ApiModelProperty(name = "bsFreight", value = "包装运输费")
+	@Column(precision = 15,scale = 5)
+	protected BigDecimal bsFreight;
+
 	
 	/**
 	 * 功能性能项【多选】
@@ -856,5 +864,13 @@ public class Quote extends BaseEntity {
 
 	public void setBsCopyId(Long bsCopyId) {
 		this.bsCopyId = bsCopyId;
+	}
+
+	public BigDecimal getBsFreight() {
+		return bsFreight;
+	}
+
+	public void setBsFreight(BigDecimal bsFreight) {
+		this.bsFreight = bsFreight;
 	}
 }

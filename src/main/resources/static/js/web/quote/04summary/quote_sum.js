@@ -28,6 +28,18 @@ $(function() {
 
 		});
 
+		$('#freight').bind('keypress', function(event) {
+			if (event.keyCode == "13") {
+				if (/^\d+$/.test($('#freight').val()) == false && /^\d+\.\d+$/.test($('#freight').val()) == false) {
+					layer.msg("请输入数字类型的管理费率");
+					return false;
+				}
+				if($('#freight').val()){
+					updateBsFreight($('#freight').val());
+				}
+			}
+		});
+
 		$('#profitNet').bind('keypress', function(event) {
 			if (event.keyCode == "13") {
 				// alert('你输入的内容为：' + $('#barcode').val());
@@ -96,6 +108,7 @@ $(function() {
 			"bsStage":quote_data.bsStage,
 			"bsLatest":quote_data.bsLatest==0?"否":"是",
 			"createBy" : quote_data.createBy,
+			"freight":quote_data.bsFreight,
 			"bsBade":bsBade,
 			"bsManageFee":quote_data.bsManageFee,
 			"bsProfitProd":quote_data.bsProfitProd,
@@ -904,9 +917,26 @@ function updateBsManageFee(value) {
 			layer.alert(data.msg, function(index) {
 				layer.close(index);
 				window.location.reload();
-				// cleanProdErr();
-				// 加载页面
-				// loadAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
+//修改包装运输费
+function updateBsFreight(value) {
+	var params = {
+		"pkQuote" : quoteId,
+		"bsFreight" : value
+	};
+	CoreUtil.sendAjax("/quoteSum/updateBsFreight", JSON.stringify(params), function(data) {
+		if (data.result) {
+			layer.alert(data.msg, function(index) {
+				layer.close(index);
+				window.location.reload();
 			});
 		} else {
 			layer.alert(data.msg);

@@ -7,6 +7,7 @@ var fileId = "";
 $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect','upload' ], function() {
 		var table = layui.table, form = layui.form,upload = layui.upload,upload2 = layui.upload,
+			upload3 = layui.upload,
 			tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,
 			tableSelect2 = layui.tableSelect,upload = layui.upload;
 
@@ -140,6 +141,32 @@ $(function() {
 			}
 		});
 
+		// 导入
+		upload3.render({
+			elem : '#upload3',
+			url : context + '/basePrice/proc/doExcel',
+			accept : 'file' // 普通文件
+			,
+
+			before : function(obj) { // obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+				layer.load(); // 上传loading
+			},
+			done : function(res, index, upload) {
+				layer.closeAll('loading'); // 关闭loading
+				layer.alert(res.msg, function(index) {
+					layer.close(index);
+					loadAll();
+				});
+
+			},
+			error : function(index, upload) {
+				layer.alert("操作请求错误，请您稍后再试", function() {
+				});
+				layer.closeAll('loading'); // 关闭loading
+				layer.close(index);
+			}
+		});
+
 		//自定义验证规则
 		form.verify({
 			num: function(value){
@@ -257,6 +284,14 @@ function openPage(id, title) {
 		}
 	});
 	layer.full(index);
+}
+
+//导出
+function exportExcel(){
+	//导出模板
+	location.href = context + "/basePrice/procFee/export";
+	// location.href = "../../excelFile/排产导入模板.xlsx";//从文件夹内直接提取
+	return false;
 }
 
 // 添加五金材料

@@ -287,8 +287,11 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			mould_all = mould_all.add(qm.getBsActQuote());// 实际报价
 		}
 
+		if(quote.getBsFreight()==null){
+			quote.setBsFreight(BigDecimal.ZERO);
+		}
 		// 5.生产成本=五金小计+注塑小计+表面处理小计+组装小计+后工序损料
-		BigDecimal p_cb = hardware_all.add(molding_all).add(surface_all).add(packag_all).add(wx_all).add(hou_loss_all);
+		BigDecimal p_cb = hardware_all.add(molding_all).add(surface_all).add(packag_all).add(wx_all).add(hou_loss_all).add(quote.getBsFreight());
 
 		// 6.生产管理费-管理费用的计算=管理费率*产品生产成本
 		BigDecimal gl = quote.getBsManageFee().multiply(p_cb).divide(new BigDecimal(100), 5, 5);
@@ -636,6 +639,18 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			quoteDao.save(o);
 		}
 		return ApiResponseResult.success("修改管理费率成功!");
+	}
+
+	@Override
+	public ApiResponseResult updateBsFreight(long quoteId, BigDecimal bsManageFee) throws Exception {
+		Quote o = quoteDao.findById(quoteId);
+		if (o == null) {
+			return ApiResponseResult.failure("没有这个报价单");
+		} else {
+			o.setBsFreight(bsManageFee);
+			quoteDao.save(o);
+		}
+		return ApiResponseResult.success("修改包装运输费成功!");
 	}
 
 	@Override

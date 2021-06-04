@@ -1,8 +1,15 @@
 package com.web.basePrice.service.internal;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.alibaba.fastjson.JSONObject;
 import com.system.file.dao.CommonFileDao;
 import com.system.file.dao.FsFileDao;
 import com.system.file.entity.CommonFile;
@@ -10,7 +17,12 @@ import com.system.file.entity.FsFile;
 import com.system.user.dao.SysUserDao;
 import com.system.user.entity.SysUser;
 //import com.web.basePrice.entity.CustomQsFile;
+import com.utils.ExcelExport;
+import com.web.basePrice.entity.BjWorkCenter;
+import com.web.basePrice.entity.Proc;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +41,9 @@ import com.web.basePrice.dao.MjProcFeeDao;
 import com.web.basePrice.dao.MjProcFeeDao;
 import com.web.basePrice.entity.MjProcFee;
 import com.web.basePrice.service.MjProcFeeService;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -252,4 +267,100 @@ public class MjProcFeeImpl implements MjProcFeeService {
 
         return ApiResponseResult.success("删除附件成功！");
     }
+
+    //防止读取Excel为null转String 报空指针异常
+    public String tranCell(Object object)
+    {
+        if(object==null||object==""||("").equals(object)){
+            return null;
+        }else return object.toString().trim();
+    }
+
+    @Override
+    public ApiResponseResult doExcel(MultipartFile[] file) throws Exception {
+        try {
+            Date doExcleDate = new Date();
+            Long userId = UserUtil.getSessionUser().getId();
+            InputStream fin = file[0].getInputStream();
+            XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            //获取最后一行的num，即总行数。此处从0开始计数
+            int maxRow = sheet.getLastRowNum();
+			Integer successes = 0;
+            Integer failures = 0;
+            List<MjProcFee> mjProcFeeList = new ArrayList<>();
+            for (int row = 2; row <= maxRow; row++) {
+//				String errInfo = "";
+                //产品*	 穴数*	模具结构	模具报价价格(未税)*	材料成本(未税)*	制造成本(未税)*
+                // 外发纹理费用(未税)*	参考报价*	评估总费用(未税)	备注
+                String id = tranCell(sheet.getRow(row).getCell(0)); //id
+                String productCode = tranCell(sheet.getRow(row).getCell(1));
+                String productName = tranCell(sheet.getRow(row).getCell(2));
+                String numHole = tranCell(sheet.getRow(row).getCell(3));
+                String structureMj = tranCell(sheet.getRow(row).getCell(4));
+                String mjPrice = tranCell(sheet.getRow(row).getCell(5));
+                String feeType1 = tranCell(sheet.getRow(row).getCell(6));
+                String feeType2 = tranCell(sheet.getRow(row).getCell(7));
+                String feeType3 = tranCell(sheet.getRow(row).getCell(8));
+                String stQuote = tranCell(sheet.getRow(row).getCell(9));
+                String feeAll = tranCell(sheet.getRow(row).getCell(10));
+                String fmemo = tranCell(sheet.getRow(row).getCell(11));
+
+                MjProcFee mjProcFee = new MjProcFee();
+                if(StringUtils.isNotEmpty(id)){
+                    mjProcFee = mjProcFeeDao.findById(Long.parseLong(id));
+                }
+                mjProcFee.setProductName(productName);
+                mjProcFee.setNumHole(new BigDecimal(numHole));
+                mjProcFee.setStructureMj(structureMj);
+                mjProcFee.setMjPrice(new BigDecimal(mjPrice));
+                mjProcFee.setFeeType1(new BigDecimal(feeType1));
+                mjProcFee.setFeeType2(new BigDecimal(feeType2));
+                mjProcFee.setFeeType3(new BigDecimal(feeType3));
+                mjProcFee.setStQuote(new BigDecimal(stQuote));
+                mjProcFee.setFeeAll(new BigDecimal(feeAll));
+                mjProcFee.setFmemo(fmemo);
+                mjProcFeeList.add(mjProcFee);
+                successes++;
+            }
+            mjProcFeeDao.saveAll(mjProcFeeList);
+            return ApiResponseResult.success("导入成功!,共导入:" + mjProcFeeList.size() + ";不通过:" + failures);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
+        }
+    }
+
+
+    @Override
+    @Transactional
+    public void exportExcel(HttpServletResponse response, String keyword) throws Exception {
+        // 查询条件1
+        List<SearchFilter> filters = new ArrayList<>();
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        // 查询2
+        List<SearchFilter> filters1 = new ArrayList<>();
+        if (StringUtils.isNotEmpty(keyword)) {
+            filters1.add(new SearchFilter("productName", SearchFilter.Operator.LIKE, keyword));
+        }
+        Specification<MjProcFee> spec = Specification.where(BaseService.and(filters, MjProcFee.class));
+        Specification<MjProcFee> spec1 = spec.and(BaseService.or(filters1, MjProcFee.class));
+        List<MjProcFee> mjProcFeeList = mjProcFeeDao.findAll(spec1);
+        String excelPath = "static/excelFile/";
+        String fileName = "模具成本维护模板.xlsx";
+        String[] map_arr = new String[]{"id","productCode","productName","numHole","structureMj","mjPrice","feeType1","feeType2","feeType3","stQuote","feeAll","fmemo"};
+        XSSFWorkbook workbook = new XSSFWorkbook();
+//		List<Proc> procList = page.getContent();
+//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        for(MjProcFee o :mjProcFeeList){
+            Map<String,Object> map =new HashMap<>();
+            map = JSONObject.parseObject(JSONObject.toJSONString(o),Map.class);
+            mapList.add(map);
+        }
+        ExcelExport.export(response,mapList,workbook,map_arr,excelPath+fileName,fileName);
+
+    }
+
 }
