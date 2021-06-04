@@ -98,8 +98,10 @@ public class kanbanController extends WebController {
 			ApiResponseResult interval = kanbanService.getIntervalTime();
 			ApiResponseResult cjbg_data = kanbanService.getCjbgList("999", deptId, "", this.getIpAddr());
 			ApiResponseResult scdz_data = kanbanService.getScdzList("999", deptId, "", this.getIpAddr());
+			ApiResponseResult zxll_data = kanbanService.getZxllList("999", deptId, "", this.getIpAddr());
 			mav.addObject("cjbg_data", cjbg_data);// 车间看板数据
 			mav.addObject("scdz_data", scdz_data);// 生产电子数据
+			mav.addObject("zxll_data", zxll_data);// 在线良率数据
 			mav.addObject("deptList", deptList);// 部门列表
 			mav.addObject("interval", interval);// 刷新间隔
 			mav.addObject("deptId", deptId);// 部门
@@ -129,8 +131,10 @@ public class kanbanController extends WebController {
 			ApiResponseResult interval = kanbanService.getIntervalTime();
 			ApiResponseResult cjbg_data = kanbanService.getCjbgList("999", tString, "", this.getIpAddr());
 			ApiResponseResult scdz_data = kanbanService.getScdzList("999", tString, "", this.getIpAddr());
+			ApiResponseResult zxll_data = kanbanService.getZxllList("999", tString, "", this.getIpAddr());
 			mav.addObject("cjbg_data", cjbg_data);// 车间看板数据
 			mav.addObject("scdz_data", scdz_data);// 生产电子数据
+			mav.addObject("zxll_data", zxll_data);// 生产电子数据
 			mav.addObject("deptList", deptList);// 部门列表
 			mav.addObject("interval", interval);// 刷新间隔
 			mav.setViewName("/kanban/cjdzkb_all");// 返回路径
@@ -716,6 +720,25 @@ public class kanbanController extends WebController {
 			return ApiResponseResult.failure("获取组长详细看板时间段信息失败！");
 		}
 	}
+	
+	@ApiOperation(value = "获取组长详细看板达成率表格", notes = "获取组长详细看板达成率表格", hidden = true)
+	@RequestMapping(value = "/getFinishRate", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getFinishRate(String taskNo, String deptId, String liner, String interval) {
+		String method = "/kanban/getFinishRate";
+		String methodName = "获取组长详细看板达成率表格";
+		try {
+			ApiResponseResult result = kanbanService.getFinishRate(taskNo, deptId, liner, this.getIpAddr(), "1");
+			logger.debug("获取组长详细看板达成率表格=getFinishRate:" + result);
+			// getSysLogService().success(module,method, methodName, null);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取组长详细看板达成率表格失败！", e);
+			getSysLogService().error(module, method, methodName, e.toString());
+			return ApiResponseResult.failure("获取组长详细看板达成率表格失败！");
+		}
+	}
 	// 复合看板（多个看板部分数据组装拼接合成
 	/**
 	 * 获取看板数据
@@ -729,9 +752,11 @@ public class kanbanController extends WebController {
 		try {
 			ApiResponseResult cjbg_data = kanbanService.getCjbgList(class_nos, dep_id, sdata, this.getIpAddr());
 			ApiResponseResult scdz_data = kanbanService.getScdzList(class_nos, dep_id, sdata, this.getIpAddr());
+			ApiResponseResult zxll_data = kanbanService.getZxllList(class_nos, dep_id, sdata, this.getIpAddr());
 			Map map = new HashMap();
 			map.put("cjbg_data", cjbg_data);
 			map.put("scdz_data", scdz_data);
+			map.put("zxll_data", zxll_data);
 			return ApiResponseResult.success().data(map);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -258,7 +258,7 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		}else{
 			usr_id = su.getId()+"";
 		}
-		List<Object> list = getCxscList2("","",taskNo,deptId,liner,dev_ip,usr_id,interval);
+		List<Object> list = getCxscList2Prc("","",taskNo,deptId,liner,dev_ip,usr_id,interval);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());
 		}
@@ -268,7 +268,30 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 		
 		return ApiResponseResult.success().data(map);		
 	}	
-	
+	/**
+	 * 获取达成率表格-用在拉头看板（zzdzkb）
+	 *2021-6-3
+	 * **/
+	@Override
+	public ApiResponseResult getFinishRate(String taskNo,String deptId,String liner,
+			String dev_ip,String interval)throws Exception{
+		String usr_id = "";
+		SysUser su = UserUtil.getSessionUser();
+		if(su == null){
+			usr_id = "1";
+		}else{
+			usr_id = su.getId()+"";
+		}
+		List<Object> list = getFinishRatePrc("","",taskNo,deptId,liner,dev_ip,usr_id,interval);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("List_result", list.get(2));
+		map.put("Title", list.get(3));
+		
+		return ApiResponseResult.success().data(map);		
+	}	
 	
 	/**
 	 * 获取看板刷新间隔的时间
@@ -286,5 +309,30 @@ public class KanbanImpl extends PrcKanbanUtils  implements KanbanService {
 	@Override
 	public ApiResponseResult getRotationTime()throws Exception{
 		return ApiResponseResult.success().data(kanbanDao.getRotationTime());
+	}
+	/**
+	 * 车间看板新增图表：在线良率图表
+	 * 2021-6-3
+	 * **/
+	@Override
+	public ApiResponseResult getZxllList(String class_id,String deptId, String date,String dev_ip)throws Exception{
+		String usr_id = "";
+		SysUser su = UserUtil.getSessionUser();
+		if(su == null){
+			usr_id = "5602";
+		}else{
+			usr_id = su.getId()+"";
+		}
+		List<Object> list = getZxllListPrc("","",class_id,deptId,date,dev_ip,usr_id);
+		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+			return ApiResponseResult.failure(list.get(1).toString());
+		}
+		Map map = new HashMap();
+		map.put("ListResult", list.get(2));
+		map.put("BegTime", list.get(3));
+		map.put("EndTime", list.get(4));
+		map.put("DeptName", list.get(5));
+		
+		return ApiResponseResult.success().data(map);	
 	}
 }

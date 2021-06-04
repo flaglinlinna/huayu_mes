@@ -216,9 +216,11 @@ $(document).ready(function(){
 				style="width: 100%; height: 290px;"></div>-->
 			<div style="height: 100%;width: 100%;">
 				<div  id="echart_cjbg"
-					style="width: 50%; height: 100%; float: left;margin: auto;"></div>
+					style="width: 33%; height: 100%; float: left;margin: auto;"></div>
 				<div id="echart_scdz"
-					style="width: 49%; height: 100%; float: left;margin: auto;"></div>
+					style="width: 33%; height: 100%; float: left;margin: auto;"></div>
+				<div id="echart_qual"
+					style="width: 33%; height: 100%; float: left;margin: auto;"></div>
 			</div>
 			<div class="boxfoot"></div>
 		</div>
@@ -231,6 +233,7 @@ $(document).ready(function(){
 		<script th:inline="javascript">
         var cjbg_data=[[${cjbg_data}]];
         var scdz_data=[[${scdz_data}]];
+        var zxll_data=[[${zxll_data}]];
         var deptList=[[${deptList}]];
         var interval=[[${interval}]];
         var inType=[[${inType}]];

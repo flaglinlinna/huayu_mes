@@ -10,6 +10,7 @@ $(function() {
 	intervaldata = intervaldata[0].A;// 获取系统设置的刷新间隔时间
 	dealScdzData(scdz_data);
 	dealCjbgData(cjbg_data);
+	dealQualData(zxll_data);
 	interval_do = setInterval(getList, intervaldata * 1000); // 启动,执行默认方法
 
 	$("#searchBtn").click(function() {
@@ -121,11 +122,205 @@ function dealCjbgData(kanbanList) {
 	}
 }
 
+function dealQualData(kanbanList) {
+	console.log(kanbanList)
+	var kanbanData=kanbanList.data.ListResult
+	var done = []
+	var plan = []
+	var xData = []
+	var okCount = []
+	var input = []
+	var deptAxis=[]
+	var itemList=["实际良率","目标良率","投入数量","良品数量"]
+	for(var i=0;i<kanbanData.length;i++){
+		xData.push(kanbanData[i].LINER_NAME+ "\n" + "第" + kanbanData[i].FROWNUM + "名")//组长
+		done.push(kanbanData[i].FOK_RATE_ACT*100)//实际良率 
+		plan.push(kanbanData[i].FOK_RATE*100)//目标良率
+		okCount.push(kanbanData[i].OK_NUM)//良品数
+		input.push(kanbanData[i].QUANTITY)//投入数
+		deptAxis.push(kanbanData[i].DEPT_ID)
+	}
+	chartQualDiv(done, plan,okCount,input,xData,itemList,deptAxis)
+}
+
 function toClean() {
 	$("#showLine").text("总开线数：0");
 	chartCjbgDiv([], 0, 0, 0);
 }
 
+function chartQualDiv(done, plan,okCount,input, xData,itemList,deptAxis) {
+	option={
+			tooltip : {
+				trigger : 'axis',
+				axisPointer : {
+					type : 'cross',
+					crossStyle : {
+						color : '#999'
+					}
+				}
+			},
+			grid : {
+				x : 50,// 左边距
+				y : 55,// 上边距
+				x2 : 30,// 右边距
+				y2 : 50,// 下边距
+				borderWidth : 10
+			},
+			legend : {
+				data : itemList,
+				// orient: 'vertical',
+				x : 'center', // 可设定图例在左、右、居中
+				top : 10,
+				textStyle : {
+					fontSize : fontSize(0.24),// 字体大小
+					color : '#ffffff'// 字体颜色
+				},
+			},
+			color : ['#6699FF', '#00CC66', '#99FFCC' , '#9999FF'],
+			xAxis : [ {
+				type : 'category',
+				data : xData,
+				triggerEvent : true,// 横坐标点击事件
+				axisPointer : {
+					type : 'shadow'
+				},
+				axisLabel : {
+					show : true,
+					interval : 0,
+					textStyle : {
+						color : '#ffffff',
+						fontSize : fontSize(0.23),
+					}
+				},
+				axisLine : {
+					lineStyle : {
+						color : '#FFFFFF'
+					}
+				},
+			} ],
+			yAxis : [{
+				type : 'value',
+				name : '(PCS)',
+				nameTextStyle : {
+					fontSize : fontSize(0.23)
+				},
+				splitLine : {
+					show : false
+				},
+				axisLabel : {
+					// formatter : '{value} ',
+					textStyle : {
+						color : '#ffffff',
+						fontSize : fontSize(0.23),// 字体大小
+					}
+				},
+				axisLine : {
+					lineStyle : {
+						color : '#FFFFFF'
+					}
+				},
+			}, {
+				type : 'value',
+				name : '(%)',
+				min:60,
+				nameTextStyle : {
+					fontSize : fontSize(0.23)
+				},
+				splitLine : {
+					show : false
+				},
+				axisLabel : {
+					// formatter : '{value} ',
+					textStyle : {
+						color : '#ffffff',
+						fontSize : fontSize(0.23),// 字体大小
+					}
+				},
+				axisLine : {
+					lineStyle : {
+						color : '#FFFFFF'
+					}
+				},
+			}],
+			series : [{
+				name : '投入数量',
+				type : 'bar',
+				data : input,
+				label : {
+					show : true,
+					position : 'top',
+					textStyle : {
+						fontSize : fontSize(0.24),// 字体大小
+					}
+				},
+			}, {
+				name : '良品数量',
+				type : 'bar',
+				data : okCount,
+				label : {
+					show : true,
+					position : 'top',
+					textStyle : {
+						fontSize : fontSize(0.24),// 字体大小
+					}
+				},
+			} , {
+				name : '实际良率',
+				type : 'line',
+				data :  done ,
+				yAxisIndex : 1,
+				label : {
+					show : true,
+					position : 'bottom',
+					formatter : '{c}%',
+					textStyle : {
+						fontSize : fontSize(0.24),// 字体大小
+					}
+				},
+			}, {
+				name : '目标良率',
+				type : 'line',
+				data :  plan ,
+				yAxisIndex : 1,
+				label : {
+					show : true,
+					position : 'top',
+					formatter : '{c}%',
+					textStyle : {
+						fontSize : fontSize(0.24),// 字体大小
+					}
+				},
+			}]
+	}
+	 //创建echarts对象在哪个节点上
+	var myCharts1 = echarts.init(document.getElementById('echart_qual'));
+	 //将选项对象赋值给echarts对象。
+	myCharts1.setOption(option, true);
+	myCharts1.on('click', function(params) {
+		if (params.componentType == "xAxis") {
+			var liner = params.value
+			liner = liner.substring(0, liner.indexOf("\n"))
+			// var url="toZzdzkb?inType=apk&liner="+liner+"&deptId="+deptId;
+			var url = ''
+			if (deptAxis.length == 0) {
+				return false
+			}
+			if (deptId == '88') {
+				var index = params.value
+				index = index.substring(index.indexOf("第") + 1, index.indexOf("名"))
+				index = index - 1
+				if (deptAxis[index]) {
+					url = "toZzdzkb?inType=apk&liner=" + liner + "&deptId=" + deptAxis[index];
+				} else {
+					return false
+				}
+			} else {
+				url = "toZzdzkb?inType=apk&liner=" + liner + "&deptId=" + deptId;
+			}
+			window.open(url);
+		}
+	});
+}
 
 function chartScdzDiv(xAxis_data, series1_data, series2_data, series3_data,color_data) {
 	// console.log(color_data);

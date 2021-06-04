@@ -4,6 +4,7 @@ import com.app.base.data.ApiResponseResult;
 
 import java.util.List;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.impl.PublicImpl;
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.boot.security.servlet.ApplicationContextRequestMatcher;
 import org.springframework.data.domain.PageRequest;
@@ -52,4 +53,9 @@ public interface KanbanService {
 	//获取轮播间隔
 	public ApiResponseResult getRotationTime()throws Exception;
 	
+	//车间看板新增图表：在线良率图表-2021-6-3
+	public ApiResponseResult getZxllList(String class_id,  String deptId, String date,String dev_ip)throws Exception;
+
+	//获取达成率表格-用在拉头看板（zzdzkb）
+	public ApiResponseResult getFinishRate(String taskno,String deptId,String liner,String dev_ip,String interval)throws Exception;
 }

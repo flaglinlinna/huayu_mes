@@ -47,7 +47,7 @@ $(function() {
 
 function dealXlpmData(kanbanList) {
 
-	console.log(kanbanList)
+	//console.log(kanbanList)
 	if (kanbanList.result) {
 		var kanbanData_t = kanbanList.data.List_line;
 //		var title = kanbanList.data.Title == null ? "" : kanbanList.data.Title
@@ -109,7 +109,7 @@ function dealXlpmData(kanbanList) {
 
 function dealCxdzData(kanbanList) {
 	
-	console.log(kanbanList)		
+	//console.log(kanbanList)		
 	if (!kanbanList.result) {// 报错时的初始化
 		$("#tableCxdzList").empty();
 		alert(kanbanList.msg)
@@ -402,12 +402,14 @@ function setCxscTable(kanbanData) {
 		var arr = kanbanData[j];
 		
 		var style = "";
-		if (arr.QTY_NG > 0) {
+		if (arr.qty_ng > 0) {
 			style = "style='color:#CC0033'";
 		}
 		
-		html += '<tr><td>' + arr.FTIME + '</td><td>' + arr.QTY_NPT + '</td><td>' + arr.QTY_DONE +
-		'</td><td>' + arr.QTY_OK + '</td><td ' + style + '>' + arr.QTY_NG + '</td></tr> ';
+		html += '<tr><td>' + arr.FTIME + '</td><td>' + arr.QTY_T_TAR + '</td><td>' + arr.QTY_T_ACT +
+		'</td><td>' + arr.RATE_T + '</td><td>' + arr.QTY_C_TAR + '</td><td>' + arr.QTY_C_ACT + 
+		'</td><td>' + arr.RATE_C + '</td><td ' + style + '>' + arr.QTY_NG + 
+		'</td><td>'+arr.RATE_OK+'</td></tr> ';
 		if (j == kanbanData.length - 1) {
 			html += '<tr height=25></tr>'
 		}
@@ -456,7 +458,7 @@ function getTaskNoList(task) {
 	};
 	$.ajax({
 		type : "GET",
-		url : context + "kanban/getCxscList2",
+		url : context + "kanban/getFinishRate",
 		data : params,
 		dataType : "json",
 		success : function(res) {
@@ -520,7 +522,7 @@ function getXlpmList(taskno) {
 		data : params,
 		dataType : "json",
 		success : function(res) {
-			console.log(res)
+			//console.log(res)
 			if (res.result) {
 				//var data = res.data;
 				dealXlpmData(res);
