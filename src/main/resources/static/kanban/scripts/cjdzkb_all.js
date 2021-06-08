@@ -140,8 +140,8 @@ function dealQualData(kanbanList) {
 		var itemList=["实际良率","目标良率","投入数量","良品数量"]
 		for(var i=0;i<kanbanData.length;i++){
 			xData.push(kanbanData[i].LINER_NAME+ "\n" + "第" + kanbanData[i].FROWNUM + "名")//组长
-			done.push(kanbanData[i].FOK_RATE_ACT*100)//实际良率
-			plan.push(kanbanData[i].FOK_RATE*100)//目标良率
+			done.push(kanbanData[i].FOK_RATE_ACT)//实际良率
+			plan.push(kanbanData[i].FOK_RATE)//目标良率
 			okCount.push(kanbanData[i].OK_NUM)//良品数
 			input.push(kanbanData[i].QUANTITY)//投入数
 			deptAxis.push(kanbanData[i].DEPT_ID)

@@ -160,21 +160,21 @@ $(function() {
 				url : context
 						+ '/produce/patch/getTaskNo',
 				method : 'get',
-				cols : [ [ {
+				cols : [ [ {fixed:'left',
 					type : 'radio'
 				},// 多选 radio
-				{field : 'WS_SECTION', title : '工段', width : 70},
-				{field : 'LINER_NAME', title : '组长', width:70},
-				{field : 'WORK_DATE', title : '生产时间',
-					templet:'<div>{{d.WORK_DATE.substring(0,d.WORK_DATE.indexOf(" "))}}</div>',
-					width:100},
-				{field : 'ITEM_NO', title : '物料编码', width:170},
+					{fixed:'left',field : 'WORK_DATE', title : '生产日期',
+						templet:'<div>{{d.WORK_DATE.substring(0,d.WORK_DATE.indexOf(" "))}}</div>',
+						width:100},
+					{fixed:'left',field : 'LINER_NAME', title : '组长', width:70},
+				{fixed:'left',field : 'ITEM_NO', title : '物料编码', width:145},
+					{field : 'TASK_NO', title : '制令单号', width:150},
+					{field : 'WS_SECTION', title : '工段', width : 60},
+					{field : 'FMEMO', title : '备注', width : 80},
 				{field : 'ITEM_NAME', title : '物料描述', width:200},
-				{field : 'FMEMO', title : '备注', width : 120},
-				{field : 'TASK_NO', title : '制令单号', width:175},
 				{field : 'CLASS_NAME', title : '班次', width:60},
 				{field : 'HOUR_TYPE', title : '工时类型', width:80},
-				{field : 'LINE_NAME', title : '线体', width:100}
+				{field : 'LINE_NAME', title : '线体', width:80}
 				] ],
 				parseData : function(res) {
 					console.log(res)

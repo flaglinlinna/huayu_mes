@@ -4,8 +4,9 @@
 var pageCurr;
 var totalCount = 0;// 表格记录数
 $(function() {
-	layui.use([ 'form', 'table', 'tableSelect','upload' ], function() {
-		var table = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect;
+	layui.use([ 'form', 'table', 'tableSelect','upload','tableFilter'  ], function() {
+		var table = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect,
+			tableFilter = layui.tableFilter,tableFilter_1 = layui.tableFilter;
 		isComplete()
 		tableIns = table.render({
 			elem : '#client_procList',
@@ -37,7 +38,7 @@ $(function() {
 			, {field : 'bsName',title : '零件名称',width:150, style : 'background-color:#d2d2d2'},
 			{field : 'bsMoCode',title : '模具编码',width:150, templet : '<div>{{d.mjProcFee.productCode}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'bsActQuote',title : '实际报价',width:120, "edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
-			{field : 'bsMoName',title : '模具名称',templet : '<div>{{d.mjProcFee.productName}}</div>',style : 'background-color:#d2d2d2'},
+			{field : 'bsMoName',title : '模具名称',width:120, templet : '<div>{{d.mjProcFee.productName}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'bsMoFee',title : '模具成本',width:120, templet : '<div>{{d.mjProcFee.feeAll}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'stQuote',title : '参考报价',width:120, templet : '<div>{{d.mjProcFee.stQuote}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'createName', title : '创建人', width : 80,style : 'background-color:#d2d2d2'},
@@ -50,7 +51,7 @@ $(function() {
 				// console.log(res)
 				totalCount = res.count
 				pageCurr = curr;
-
+				localtableFilterIns.reload();
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				layui.each(res.data, function(i, item){
 					if(item.bsStatus=="1"){
@@ -62,6 +63,16 @@ $(function() {
 				merge(res.data, [ 'bsName', ], [ 1, 1 ]);
 			}
 		});
+		var localtableFilterIns = tableFilter.render({
+			'elem' : '#client_procList',
+			'mode' : 'local',//当前页面过滤
+			'filters' : [
+				{field: 'bsName', type:'input'},
+				{field: 'bsMoName', type:'input'}
+			],
+			'done': function(filters){
+			}
+		})
 		/*
 		 * tableSelect=tableSelect.render({ elem : '#num', searchKey :
 		 * 'keyword', checkedKey : 'id', searchPlaceholder : '试着搜索', table : {
@@ -137,6 +148,17 @@ $(function() {
 			] ],
 			data : []
 		});
+		 localtableFilterIns_1 = tableFilter_1.render({
+			'elem' : '#procList',
+			'mode' : 'local',//当前页面过滤
+			'filters' : [
+				{field: 'productCode', type:'input'},
+				{field: 'productName', type:'input'},
+				{field: 'structureMj', type:'input'}
+			],
+			'done': function(filters){
+			}
+		})
 
 		// 监听单元格编辑
 		table.on('edit(client_procTable)', function(obj) {
@@ -448,6 +470,7 @@ function getAddList() {
 			tableProc.reload({
 				data : data.data,
 				done : function(res, curr, count) {
+					localtableFilterIns_1.reload();
 					cleanProc();// 清空之前的选中
 				}
 			});

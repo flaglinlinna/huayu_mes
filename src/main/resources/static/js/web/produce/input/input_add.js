@@ -110,7 +110,7 @@ $(function() {
 								cols : [ [ {fixed:'left',type : 'numbers', title : '序号'},
 									{fixed:'left',type : 'radio'},// 多选 radio
 									{fixed:'left',field : 'id', title : 'id', width : 0, hide : true},
-									{fixed:'left',field : 'PROD_DATE', title : '计划日期', width : 100,
+									{fixed:'left',field : 'PROD_DATE', title : '生产日期', width : 100,
 										templet:function (d) {
 											if(d.PROD_DATE!=null){
 												return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
