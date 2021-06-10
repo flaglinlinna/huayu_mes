@@ -97,6 +97,8 @@ function InitUpload() {
 		url : context + '/file/upload',
 		accept : 'file' // 普通文件
 		,
+		number:10,
+		multiple:true,
 		before : function(obj) { // obj参数包含的信息，跟 choose回调完全一致。
 			layer.load(); // 上传loading
 		},
@@ -104,6 +106,7 @@ function InitUpload() {
 			if (res.result == true) {
 				// document.getElementById("filelist").innerHTML =
 				// $("#filelist").html()+getExcField(_index,res.data)
+				console.log(res.data);
 				var params = {
 					"bsFileName" : res.data.bsName,
 					"pkFileId" : res.data.id

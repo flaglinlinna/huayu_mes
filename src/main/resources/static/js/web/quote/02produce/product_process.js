@@ -23,6 +23,7 @@ $(function() {
 			height:'full-65',//固定表头&full-查询框高度
 			even:true,//条纹样式
 			page : true,
+			totalRow : true,
 			limit:50,
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
@@ -40,7 +41,7 @@ $(function() {
 			},
 			cols : [ [ {type : 'numbers',style:'background-color:#d2d2d2'},
 				{field:"id",title:"ID",hide:true},
-				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2',totalRowText : "合计"},
 				{field : 'bsOrder',width:90, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'proc', width:120, title : '工序名称',style:'background-color:#d2d2d2',
 					templet:function (d) {
@@ -73,7 +74,7 @@ $(function() {
 				/*{field : 'bsModelType', width:100, title : '机台类型',width:90,},*/
 				{field : 'bsModelType',width : 200,title : '机台类型',templet : '#selectModelType',style : 'background-color:#ffffff'},
 				/*{field : 'bsRadix', title : '基数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',style : 'background-color:#ffffff'},*/
-				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:60,edit:'text',hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:60,edit:'text',hide:true,style : 'background-color:#ffffff',totalRow : true},
 				{field : 'bsCycle', title : '成型周期(S)<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text', hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsYield', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsLoss', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:80,edit:'text',hide:true,style : 'background-color:#ffffff'},
@@ -102,7 +103,7 @@ $(function() {
 						}
 					}
 				});
-
+				$(".layui-table-total").find('tr').find('td').css("background-color", "#d2d2d2");
 				//根据不同的类型显示不同的字段
 				res.data.forEach(function (item, index) {
 					if(bsType == 'out'){//外协
@@ -110,6 +111,10 @@ $(function() {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+
+						$(".layui-table-total").find('tr').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+
 					}else if(bsType == 'hardware'){//五金
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
@@ -117,6 +122,10 @@ $(function() {
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+
+						$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
 					}else if(bsType == 'molding'){//注塑
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
@@ -126,6 +135,12 @@ $(function() {
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+
+						$(".layui-table-total").find('tr').find('td[data-field="bsCave"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+
 					}else if(bsType == 'surface'){
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
@@ -133,6 +148,11 @@ $(function() {
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+
+						$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+
 					}else if(bsType == 'packag'){
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
@@ -140,6 +160,10 @@ $(function() {
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+
+						$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
 					}
 				});
 			}
@@ -1260,7 +1284,7 @@ function loadAll() {
 					form.render('select');
 				}
 			});
-
+			$(".layui-table-total").find('tr').find('td').css("background-color", "#d2d2d2");
 			//根据不同的类型显示不同的字段
 			res.data.forEach(function (item, index) {
 				if(bsType == 'out'){//外协
@@ -1268,6 +1292,10 @@ function loadAll() {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsLoss"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+
+					$(".layui-table-total").find('tr').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+
 				}else if(bsType == 'hardware'){//五金
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCycle"]').removeClass("layui-hide");
@@ -1275,6 +1303,10 @@ function loadAll() {
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+
+					$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
 				}else if(bsType == 'molding'){//注塑
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");
@@ -1284,6 +1316,12 @@ function loadAll() {
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+
+					$(".layui-table-total").find('tr').find('td[data-field="bsCave"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+
 				}else if(bsType == 'surface'){
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
@@ -1291,6 +1329,11 @@ function loadAll() {
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+
+					$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
+
 				}else if(bsType == 'packag'){
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCapacity"]').removeClass("layui-hide");
@@ -1298,6 +1341,10 @@ function loadAll() {
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+
+					$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+					$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
 				}
 			});
 

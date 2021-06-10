@@ -174,7 +174,7 @@ $(function() {
 
 						tableIns = table.render({
 							elem : '#quoteBomList',
-							url : context + '/quoteBom/getQuoteBomList?pkQuote=' + quoteId,
+							// url : context + '/quoteBom/getQuoteBomList?pkQuote=' + quoteId,
 							method : 'get' // 默认：get请求
 							,
 							cellMinWidth : 80,
@@ -183,6 +183,7 @@ $(function() {
 							// even : true,// 条纹样式
 							page : true,
 							limit:50,
+							data : [],
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -198,6 +199,7 @@ $(function() {
 								}
 							},
 							cols : [ [
+							{fixed : 'left',type:'checkbox'},
 							{fixed : 'left',type : 'numbers'},
 							{field:'id', title:'ID', width:80,hide:true},
 							{fixed : 'left',field : 'bsElement',title : '组件名称',sort : true,width : 120,edit: "text"},
@@ -263,7 +265,7 @@ $(function() {
 							}
 						});
 
-
+						getTableList();
 						//监听单元格编辑
 						table.on('edit(quoteBomTable)', function(obj){
 							var value = obj.value //得到修改后的值
@@ -506,7 +508,7 @@ function isComplete() {
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
-
+		$("#delListBtn").addClass("layui-btn-disabled").attr("disabled", true)
 	}
 }
 
@@ -557,6 +559,18 @@ function saveTable() {
 			}
 		});
 }
+
+// function  addQuoteBom(){
+// 	var checkStatus = layui.table.checkStatus('quoteBomList').data;
+//
+// 	var newdate = checkStatus.splice(0, 0, checkStatus[0]);
+// 	console.log(newdate)
+// 	// var dates = layui.table.cache['quoteBomList'];
+// 	tableIns.reload({
+// 		data:[],
+// 	});
+//
+// }
 
 function updateRetrial(id,type,value){
 	var params = {
@@ -641,7 +655,7 @@ function openProdErr(id, title) {
 	layer.full(index);
 }
 
-// 添加五金材料
+添加五金材料
 function addQuoteBom() {
 	// 清空弹出框数据
 	cleanProdErr();
@@ -714,13 +728,28 @@ function deleteTemp() {
 }
 
 
-// 删除五金材料
+function delTable(){
+	// var dates = layui.table.cache['client_procList'];
+	var data = layui.table.checkStatus('quoteBomList').data;
+	if(data.length == 0){
+		layer.msg("请先勾选数据!");
+	}else{
+		var id="";
+		for(var i = 0; i < data.length; i++) {
+			id += data[i].id+",";
+		}
+		// delLine(id);
+		delProdErr(null,id,null);
+	}
+}
+
+// 删除外购件信息
 function delProdErr(obj, id, name) {
 	if (id != null) {
 		var param = {
 			"id" : id
 		};
-		layer.confirm('您确定要删除外购件：' + name + '的信息吗？', {
+		layer.confirm('您确定要删除所选的外购件信息吗', {
 			btn : [ '确认', '返回' ]
 		// 按钮
 		}, function() {
@@ -846,4 +875,21 @@ function loadAll2() {
 function cleanProdErr() {
 	$('#quoteBomForm')[0].reset();
 	layui.form.render();// 必须写
+}
+
+function getTableList() {
+
+	tableIns.reload({
+		url : context + '/quoteBom/getQuoteBomList?pkQuote=' + quoteId,
+		done: function(res, curr, count){
+			pageCurr = curr;
+			var tableIns = this.elem.next(); // 当前表格渲染之后的视图
+			layui.each(res.data, function(i, item){
+				if(item.bsStatus=='1') {
+					tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2")
+				}
+			});
+		}
+	})
+
 }

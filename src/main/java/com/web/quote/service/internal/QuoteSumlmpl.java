@@ -599,7 +599,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				o.setBsCost(o.getBsFeeLhAll().add(o.getBsFeeMhAll()).add(o.getBsMaterCost()));
 			}
 			//第一条不用加上成本累计(含损耗) //2021-5-18-hjj 各小计分组的损耗独立计算
-			if(i==0||!(o.getBsGroups()+o.getBsLinkName()+o.getBsElement()).equals(processList.get(i-1).getBsGroups()+processList.get(i-1).getBsLinkName()+processList.get(i-1).getBsElement())) {
+			//o.getBsGroups()+  processList.get(i-1).getBsGroups()+
+			if(i==0||!(o.getBsLinkName()+o.getBsElement()).equals(processList.get(i-1).getBsLinkName()+processList.get(i-1).getBsElement())) {
 				//本工序损耗
 				o.setBsTheLoss(o.getBsCost().divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract(o.getBsCost()));
 				//成本累计(含损耗)

@@ -181,8 +181,8 @@ public class QuoteBomController extends WebController {
 		String method = "quoteBom/deleteQuoteBom";
 		String methodName = "删除外购件信息";
 		try {
-			long id = Long.parseLong(params.get("id").toString());
-			ApiResponseResult result = quoteBomService.deleteQuoteBom(id);
+			String ids = params.get("id").toString();
+			ApiResponseResult result = quoteBomService.deleteQuoteBom(ids);
 			logger.debug("删除外购件信息=delete:");
 			getSysLogService().success(module,method, methodName, params);
 			return result;

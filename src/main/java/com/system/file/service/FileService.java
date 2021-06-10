@@ -21,6 +21,8 @@ public interface FileService {
 	public static final Charset CHARSET = Charset.forName("UTF-8");
 
 	public ApiResponseResult upload(FsFile fsFile, MultipartFile file) throws Exception;
+
+	public ApiResponseResult upload(FsFile fsFile, MultipartFile[] files) throws Exception;
 	
 	public ApiResponseResult uploadByNameAndUrl(String file_name,String url,FsFile fsFile, MultipartFile file) throws Exception;
 

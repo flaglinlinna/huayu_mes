@@ -54,8 +54,13 @@
             var iStatus=nowStatus.data[0].BS_STATUS
         </script>
 
-		<script th:src="@{/js/web/quote/01business/quote_file.js}"
-			src="/js/web/quote/01business/quote_file.js"></script>
+<!--		<script th:src="@{/js/web/quote/01business/quote_file.js}"-->
+<!--			src="/js/web/quote/01business/quote_file.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/01business/quote_file.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

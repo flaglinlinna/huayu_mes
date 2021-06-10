@@ -130,18 +130,23 @@ public class QuoteBomlmpl implements QuoteBomService {
 	/**
 	 * 删除外购件清单列表
 	 * **/
-	public ApiResponseResult deleteQuoteBom(Long id) throws Exception{
-		if(id == null){
+	public ApiResponseResult deleteQuoteBom(String ids) throws Exception{
+		if(StringUtils.isEmpty(ids)){
 			return ApiResponseResult.failure("外购件信息ID不能为空！");
 		}
-		QuoteBom o  = quoteBomDao.findById((long) id);
-		if(o == null){
-			return ApiResponseResult.failure("外购件信息不存在！");
+		String[] id_s = ids.split(",");
+		List<QuoteBom> quoteBomList = new ArrayList<>();
+		for(String id :id_s) {
+			QuoteBom o = quoteBomDao.findById(Long.parseLong(id));
+			if (o == null) {
+				return ApiResponseResult.failure("外购件信息不存在！");
+			}
+			o.setDelTime(new Date());
+			o.setDelFlag(1);
+			o.setDelBy(UserUtil.getSessionUser().getId());
+			quoteBomList.add(o);
 		}
-		o.setDelTime(new Date());
-		o.setDelFlag(1);
-		o.setDelBy(UserUtil.getSessionUser().getId());
-		quoteBomDao.save(o);
+		quoteBomDao.saveAll(quoteBomList);
 		return ApiResponseResult.success("删除成功！");
 	}
 

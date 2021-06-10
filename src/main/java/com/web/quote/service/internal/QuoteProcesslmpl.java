@@ -169,6 +169,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				}else {
 					//非辅料 (关联零件为自身零件)
 					o.setBsLinkName(o.getBsName());
+					o.setBsComponentList(JSON.toJSONString(componentList));
 				}
 			}else {
 				//关联不到bom，则是外协工艺，默认非辅料(关联零件为自身零件)

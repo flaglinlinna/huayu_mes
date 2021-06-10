@@ -17,7 +17,7 @@ public interface QuoteBomService {
 	public ApiResponseResult edit(QuoteBom quoteBom) throws Exception;
 
 	//删除BOM 外购件清单列表
-	public ApiResponseResult deleteQuoteBom(Long id) throws Exception;
+	public ApiResponseResult deleteQuoteBom(String ids) throws Exception;
 
 	public ApiResponseResult updateRetrial(Long id,String type,Integer value)throws Exception;
 

@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -83,6 +81,56 @@ public class FileImpl  implements FileService {
             logger.error("upload file exception", e);
         }
         return ApiResponseResult.failure("上传文件发生异常");
+    }
+
+
+    public ApiResponseResult upload(FsFile fsFile, MultipartFile[] files) throws Exception {
+        String qmsPath = env.getProperty("fs.qms.path");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String ymd = sdf.format(new Date());
+
+        String path = qmsPath + "/" + ymd;
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateFileName = df.format(new Date()) + "_" + new Random().nextInt(1000);
+
+        List<FsFile> fsFileList = new ArrayList<>();
+        for(MultipartFile file:files) {
+             fsFile = new FsFile();
+            if (null == file || file.isEmpty()) {
+                return ApiResponseResult.failure("上传文件不能为空");
+            }
+            try {
+                fsFile.setBsFileSize(file.getSize());
+                if (null == fsFile.getBsContentType()) {
+                    fsFile.setBsContentType(file.getContentType());
+                }
+                if (null == file.getOriginalFilename()) {
+                    fsFile.setBsFileType("Unknown");
+                    return ApiResponseResult.failure("无法识别该文件类型！");
+                }
+
+                String originalFiletype = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
+                fsFile.setBsFileType(originalFiletype);
+
+//            String originalFilename = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf("."));
+                fsFile.setBsName(file.getOriginalFilename());
+                fsFile.setBsFileName(dateFileName + originalFiletype);
+                fsFile.setBsFilePath("/" + ymd);
+                ApiResponseResult result = ftpClientService.uploadFile(path, dateFileName + fsFile.getBsFileType(), new ByteArrayInputStream(file.getBytes()));
+                if (result.isResult()) {
+                    fsFile.setCreateDate(new Date());
+                    fsFileDao.save(fsFile);
+                    fsFileList.add(fsFile);
+                }
+            } catch (IOException e) {
+                logger.error("upload file exception", e);
+                return ApiResponseResult.failure("上传文件发生异常");
+            }
+
+        }
+        return ApiResponseResult.success("文件上传成功！").data(fsFileList);
     }
 
     /**
