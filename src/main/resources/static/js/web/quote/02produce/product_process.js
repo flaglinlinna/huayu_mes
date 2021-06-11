@@ -77,7 +77,7 @@ $(function() {
 				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:60,edit:'text',hide:true,style : 'background-color:#ffffff',totalRow : true},
 				{field : 'bsCycle', title : '成型周期(S)<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text', hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsYield', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsLoss', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:80,edit:'text',hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsLoss', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCave', title : '穴数<span style="color:red;font-size:12px;">*</span>',edit:'text',width:50, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCapacity', title : '产能(个/小时)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:105, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsFeeWxAll', title : '外协价格<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
@@ -234,7 +234,7 @@ $(function() {
 				{field : 'bsYield', title : '工序良率%', width:120,edit:'text'},
 				{field : 'bsCave', title : '穴数',edit:'text', width:80, hide:true},
 				{field : 'bsCapacity', title : '产能(个/小时)',edit:'text', width:105, hide:true},
-				{field : 'bsLoss', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:80,edit:'text',hide:true},
+				{field : 'bsLoss', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true},
 				{field : 'bsFeeWxAll', title : '外协价格<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true},
 
 				// {field : 'fmemo', title : '备注',width:120,edit:'text'},

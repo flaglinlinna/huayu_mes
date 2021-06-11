@@ -400,7 +400,7 @@ $(function() {
 
 				{field : 'bsFeeLhAll',title : '人工总费用',width : 90,totalRow : true,hide : true},
 				{field : 'bsFeeMhAll',title : '制造总费用',width : 90,totalRow : true,hide : true},
-				{field : 'bsFeeWxAll',title : '加工费(含损耗)',width : 120,totalRow : true,hide : true},
+				{field : 'bsFeeWxAll',title : '加工费',width : 90,totalRow : true,hide : true},
 
 				// {field : 'bsFeeLhAll',title : '人工总费用',width : 130,totalRow : true,hide : true},
 				// {field : 'bsFeeMhAll',title : '制费总费用',width : 130,totalRow : true,hide : true},
