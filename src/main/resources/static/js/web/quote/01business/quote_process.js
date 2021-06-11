@@ -326,7 +326,7 @@ $(function() {
 		tableProc = table.render({
 			elem : '#procList',
 			limit : 50,
-			height : 'full-65',
+			height : 'full-110',
 			page:true,
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
@@ -374,13 +374,14 @@ $(function() {
 		
 		tableProcCheck=table.render({
 			elem : '#procListCheck',
-			limit: 20,
+			limit: 500,
+			height : 'full-110',
 			method : 'get' ,// 默认：get请求			
 			cols : 
 				[ [
 					// {type : 'numbers'},
 				    {field : 'checkColumn',type:"checkbox"},
-			        // {field : 'bsName',title : '零件名称',style:'background-color:#d2d2d2'},
+			        {field : 'bsName',title : '零件名称',style:'background-color:#d2d2d2'},
 			        // {field : 'procNo',title : '工序编码',templet:'<div>{{d.proc.procNo}}</div>',style:'background-color:#d2d2d2'},
 			        {field : 'procName',title : '工序名称',minWidth:100,templet:function (d){
 			        	if(d.proc!=null){

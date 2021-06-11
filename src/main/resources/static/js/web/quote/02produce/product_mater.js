@@ -45,6 +45,7 @@ $(function() {
 			  {field : 'bsQty',width : 100,title : '材料用量<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'bsProQty',width : 100,title : '制品重(g)<span style="color:red;font-size:12px;">*</span>',hide : true,edit : 'text',style : 'background-color:#ffffff'},
 			  {field : 'bsUnit',width : 120,title : '材料用量单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
+			  // {field : 'purchaseUnit',width : 120,title : '采购单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
 			  // {field : 'bsGroups',width : 120,title : '损耗分组',style : 'background-color:#ffffff',hide : true},
 			  /*{field : 'bsRadix',width : 80,title : '基数<span style="color:red;font-size:12px;">*</span>',edit : 'text',style : 'background-color:#ffffff'},*/
 			  {field : 'bsWaterGap',title : '水口重(g)<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},

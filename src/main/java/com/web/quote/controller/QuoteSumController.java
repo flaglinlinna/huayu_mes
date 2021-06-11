@@ -252,4 +252,22 @@ public class QuoteSumController extends WebController {
 			return ApiResponseResult.failure("获取损耗明细列表失败！");
 		}
 	}
+
+	@ApiOperation(value = "获取包装运输费列表", notes = "获取包装运输费列表", hidden = true)
+	@RequestMapping(value = "/getFreightList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getFreightList(String quoteId) {
+		String method = "/quoteSum/getFreightList";
+		String methodName = "获取包装运输费列表";
+		try {
+			ApiResponseResult result = quoteSumService.getFreightList(Long.parseLong(quoteId),super.getPageRequest(Sort.unsorted()));
+			logger.debug("获取包装运输费列表=getFreightList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取包装运输费列表失败！", e);
+//			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure("获取包装运输费列表失败！");
+		}
+	}
 }

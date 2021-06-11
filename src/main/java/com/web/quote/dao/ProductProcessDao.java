@@ -86,4 +86,8 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 			" sum(bs_Fee_Wx_All) as bs_Fee_Wx_All" +
 			" from PRICE_PRODUCT_PROCESS pp  where pp.PK_QUOTE = ?1 and pp.BS_GROUPS =?2 and pp.bs_element = ?3 and pp.bs_name =?4 and pp.DEL_FLAG = 0",nativeQuery = true)
 	public List<Map<String,Object>> getSumByBsGroups(Long pkQuote,String bsGroups,String bsElement,String bsLinkName);
+
+	@Query(value = "select * from PRICE_PRODUCT_PROCESS where id in (select max(p.id) as id from PRICE_PRODUCT_PROCESS p  where p.PK_QUOTE = ?1 and p.DEL_FLAG = 0 GROUP BY p.BS_ELEMENT) ",nativeQuery = true,
+			countQuery= "select count(max(p.id)) from PRICE_PRODUCT_PROCESS p  where p.PK_QUOTE = ?1 and p.DEL_FLAG = 0 GROUP BY p.BS_ELEMENT")
+	public Page<ProductProcess> findFreightList(Long pkQuote,Pageable pageable);
 }

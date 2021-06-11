@@ -595,7 +595,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	@Override
 	public ApiResponseResult getListByQuoteAndName(String quoteId, String name) throws Exception {
 		// TODO Auto-generated method stub
-		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
+		//hjj-2021-06-11 查询出所属零件已选工艺
+		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsLinkNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
 		return ApiResponseResult.success().data(lqp);
 	}
 

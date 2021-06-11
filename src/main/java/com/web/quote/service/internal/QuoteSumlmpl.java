@@ -245,6 +245,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		BigDecimal all_lose = new BigDecimal(0);
 		BigDecimal the_lose = new BigDecimal(0);
 
+		BigDecimal bsAllFreight = new BigDecimal(0);
+
 		List<ProductProcess> lpp = productProcessDao.findByDelFlagAndPkQuote(0, Long.valueOf(quoteId));
 		for (ProductProcess pp : lpp) {
 			if (pp.getBsType().equals("hardware")) {
@@ -270,6 +272,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 
 			//20210318-hjj工序损耗
 			all_lose = all_lose.add(pp.getBsTheLoss()==null?the_lose:pp.getBsTheLoss());
+			bsAllFreight = bsAllFreight.add(pp.getBsFreight()==null?BigDecimal.ZERO:pp.getBsFreight());
 
 		}
 		// 3：小计
@@ -287,11 +290,11 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			mould_all = mould_all.add(qm.getBsActQuote());// 实际报价
 		}
 
-		if(quote.getBsFreight()==null){
-			quote.setBsFreight(BigDecimal.ZERO);
-		}
-		// 5.生产成本=五金小计+注塑小计+表面处理小计+组装小计+后工序损料
-		BigDecimal p_cb = hardware_all.add(molding_all).add(surface_all).add(packag_all).add(wx_all).add(hou_loss_all).add(quote.getBsFreight());
+
+		quote.setBsFreight(bsAllFreight);
+
+		// 5.生产成本=五金小计+注塑小计+表面处理小计+组装小计+外协加工+后工序损料+包装运输费
+		BigDecimal p_cb = hardware_all.add(molding_all).add(surface_all).add(packag_all).add(wx_all).add(all_lose).add(quote.getBsFreight());
 
 		// 6.生产管理费-管理费用的计算=管理费率*产品生产成本
 		BigDecimal gl = quote.getBsManageFee().multiply(p_cb).divide(new BigDecimal(100), 5, 5);
@@ -365,17 +368,12 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		// 表面，组装的材料总价格(未税)计算公式-单价*用量/基数 20210225去除了五金
 		List<ProductMater> lpm3 = productMaterDao.findByDelFlagAnd3Tyle(Long.valueOf(quoteId));
 		for (ProductMater pm : lpm3) {
-//			BigDecimal bsRadix = new BigDecimal("1");// 基数
-//			if (!StringUtils.isEmpty(pm.getBsRadix())) {
-//				if (!"1".equals(pm.getBsRadix())) {
-//					bsRadix = new BigDecimal(pm.getBsRadix());
-//				}
-//			}
 
 			//采购价
 			BigDecimal bsAssess = pm.getBsAssess()!= null?pm.getBsAssess():new BigDecimal("0");
 
 			if(StringUtils.isEmpty(pm.getBsGroups())){
+				//材料良率取值: 1取同分组下的工艺顺序号最大第一条，2取材料名称相同的一条
 				List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
 						pm.getBsComponent(), pm.getBsElement(), pm.getPkQuote(), pm.getBsType(), 0, pm.getBsMaterName());
 				pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);
@@ -402,12 +400,12 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		// 注塑的材料总价格(未税)计算公式-材料单价*(制品重(g)+水口重/穴数)/基数  20210225增加了五金
 		List<ProductMater> lpm1 = productMaterDao.findByDelFlagAndMolding(Long.valueOf(quoteId));
 		for (ProductMater pm : lpm1) {
-			BigDecimal bsRadix = new BigDecimal("1");// 基数
-			if (!StringUtils.isEmpty(pm.getBsRadix())) {
-				if (!"1".equals(pm.getBsRadix())) {
-					bsRadix = new BigDecimal(pm.getBsRadix());
-				}
-			}
+//			BigDecimal bsRadix = new BigDecimal("1");// 基数
+//			if (!StringUtils.isEmpty(pm.getBsRadix())) {
+//				if (!"1".equals(pm.getBsRadix())) {
+//					bsRadix = new BigDecimal(pm.getBsRadix());
+//				}
+//			}
 			BigDecimal bsCave = new BigDecimal(pm.getBsCave());// 穴数
 
 			BigDecimal bsWaterGap = new BigDecimal("1");// 水口量
@@ -419,10 +417,21 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			if (pm.getBsAssess() != null) {
 				bsAssess = pm.getBsAssess();
 			}
-			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
-					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0,pm.getBsMaterName());
-			pm.setBsYield(processList.size()>0?processList.get(0).getBsYield():bsYield);
-			pm.setBsFee(bsAssess.multiply(qty).divide(bsRadix, 5, 5));
+
+//			List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
+//					pm.getBsComponent(),pm.getBsElement(),pm.getPkQuote(),pm.getBsType(),0,pm.getBsMaterName());
+//			pm.setBsYield(processList.size()>0?processList.get(0).getBsYield():bsYield);
+
+			if(StringUtils.isEmpty(pm.getBsGroups())){
+				List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
+						pm.getBsComponent(), pm.getBsElement(), pm.getPkQuote(), pm.getBsType(), 0, pm.getBsMaterName());
+				pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);
+			}else {
+				List<ProductProcess> processList1 = productProcessDao.findByDelFlagAndPkQuoteAndBsGroups(0, pm.getPkQuote(), pm.getBsGroups());
+				pm.setBsYield(processList1.size() > 0 ? processList1.get(0).getBsYield() : bsYield);
+			}
+
+			pm.setBsFee(bsAssess.multiply(qty));
 			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5));
 
 //			if(("KG").equals(pm.getPurchaseUnit())){
@@ -791,6 +800,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		return ApiResponseResult.success("设置中标成功！");
 	}
 
+	@Override
 	public ApiResponseResult getSumList(Long quoteId,PageRequest pageRequest) throws Exception {
 		Page<Map<String, Object>> mapList= productProcessDao.getSumList(quoteId,pageRequest);
 //		DataGrid.create(mapList.getContent(), (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize())
@@ -813,9 +823,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		  maps.add(deepCopy);
 		  //根据组件和所属零件判断是否新增小计计算
 		}
+		//倒序反转成正序
 		Collections.reverse(maps);
 		for(Map<String,Object> map :maps){
-			//分组统计
+			//分组统计，查询合计值
 			if(map.get("BS_GROUPS")!=null){
 				List<Map<String,Object>> sumList = productProcessDao.getSumByBsGroups(quoteId,map.get("BS_GROUPS").toString()
 						,map.get("BS_ELEMENT").toString(),map.get("BS_LINK_NAME").toString());
@@ -825,7 +836,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				map.put("BS_FEE_WX_ALL",sumList.get(0).get("BS_FEE_WX_ALL"));
 			}
 			else if(map.get("BS_ORDER")==null){
-				//根据所属零件统计
+				// BS_ORDER顺序号为空，则为小计行 根据所属零件统计
 				BigDecimal BS_MATER_COST = BigDecimal.ZERO;
 				BigDecimal BS_FEE_LH_ALL = BigDecimal.ZERO;
 				BigDecimal BS_FEE_MH_ALL = BigDecimal.ZERO;
@@ -855,5 +866,12 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			}
 		}
 		return ApiResponseResult.success().data(DataGrid.create(maps, (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+	}
+
+	@Override
+	public ApiResponseResult getFreightList(Long quoteId, PageRequest pageRequest) throws Exception {
+		Page<ProductProcess> list = productProcessDao.findFreightList(quoteId,pageRequest);
+		return ApiResponseResult.success().data(DataGrid.create(list.getContent(), (int) list.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+//		return ApiResponseResult.success().data(productProcessDao.findFreightList(quoteId));
 	}
 }

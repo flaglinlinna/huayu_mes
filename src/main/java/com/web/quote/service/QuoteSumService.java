@@ -34,4 +34,6 @@ public interface QuoteSumService {
 	public ApiResponseResult setBade(Long quoteId,Integer bsBade) throws Exception;//设置中标
 
 	public ApiResponseResult getSumList(Long quoteId,PageRequest pageRequest)throws Exception; //获取损耗明细
+
+	public ApiResponseResult getFreightList(Long quoteId,PageRequest pageRequest)throws Exception; //获取包装运输费列表明细
 }

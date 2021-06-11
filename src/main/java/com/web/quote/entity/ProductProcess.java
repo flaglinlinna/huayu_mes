@@ -303,6 +303,10 @@ public class ProductProcess extends BaseEntity {
 	@Column( precision=21, scale=5)
 	protected BigDecimal bsAllLoss;
 
+	@ApiModelProperty(name = "bsFreight", value = "包装运输费")
+	@Column( precision=21, scale=5)
+	protected BigDecimal bsFreight=BigDecimal.ZERO;
+
 	/**
 	 * * 2021-04-14 hjj 增加损耗分组计算
 	 * bsGroups分组名称
@@ -634,5 +638,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsLinkName(String bsLinkName) {
 		this.bsLinkName = bsLinkName;
+	}
+
+	public BigDecimal getBsFreight() {
+		return bsFreight;
+	}
+
+	public void setBsFreight(BigDecimal bsFreight) {
+		this.bsFreight = bsFreight;
 	}
 }

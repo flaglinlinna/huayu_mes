@@ -37,6 +37,8 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	Integer countByDelFlagAndPkQuoteAndPkProcIsNull(Integer delFlag,Long pkQuote);
 
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(Integer delFlag,Long pkQuote,String name);
+
+	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsLinkNameOrderByBsOrder(Integer delFlag,Long pkQuote,String name);
 	
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsNameAndBsOrder(Integer delFlag,Long pkQuote,String name,int order);
 

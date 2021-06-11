@@ -4,7 +4,8 @@
 var pageCurr;
 $(function() {
 	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ], function() {
-		var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table, table1 = layui.table, table2 = layui.table;
+		var form = layui.form, layer = layui.layer, laydate = layui.laydate,
+			table = layui.table, table1 = layui.table, table2 = layui.table,table3 = layui.table;
 
 		initRate();
 		form.verify({
@@ -28,17 +29,17 @@ $(function() {
 
 		});
 
-		$('#freight').bind('keypress', function(event) {
-			if (event.keyCode == "13") {
-				if (/^\d+$/.test($('#freight').val()) == false && /^\d+\.\d+$/.test($('#freight').val()) == false) {
-					layer.msg("请输入数字类型的管理费率");
-					return false;
-				}
-				if($('#freight').val()){
-					updateBsFreight($('#freight').val());
-				}
-			}
-		});
+		// $('#freight').bind('keypress', function(event) {
+		// 	if (event.keyCode == "13") {
+		// 		if (/^\d+$/.test($('#freight').val()) == false && /^\d+\.\d+$/.test($('#freight').val()) == false) {
+		// 			layer.msg("请输入数字类型的管理费率");
+		// 			return false;
+		// 		}
+		// 		if($('#freight').val()){
+		// 			updateBsFreight($('#freight').val());
+		// 		}
+		// 	}
+		// });
 
 		$('#profitNet').bind('keypress', function(event) {
 			if (event.keyCode == "13") {
@@ -220,6 +221,10 @@ $(function() {
 			else if(inputId == "hou_loss_all"){
 				getLossDetail( "损耗明细")
 			}
+			//20210611-hjj-包装运输费
+			else if(inputId == "freight"){
+				getFreightDetail( "包装运输费明细")
+			}
 		}
 
 		// 材料价格明细
@@ -289,9 +294,9 @@ $(function() {
 				},
 			},
 			{field : 'purchaseUnit',width : 80,title : '采购单位'},
-				{field : 'bsGeneral',width : 80,title : '通用物料',	 templet:function(d){
-						return d.bsGeneral =="0"?"否":"是";
-					}},
+			{field : 'bsGeneral',width : 80,title : '通用物料',	 templet:function(d){
+					return d.bsGeneral =="0"?"否":"是";
+				}},
 			// {field : 'bsRadix',width : 80,title : '基数'},
 			// {field : 'bsGear', width:80, title : '价格挡位', edit:'text',templet:'#selectGear'},
 			// {field : 'bsRefer',width : 110,title : '参考价格'},
@@ -537,6 +542,42 @@ $(function() {
 			done : function(res, curr, count) {
 				// console.log(res)
 				// totalCount=res.count
+				pageCurr = curr;
+			}
+		});
+
+
+		tableIns4 = table3.render({
+			elem : '#freightTable',
+			method : 'get' // 默认：get请求
+			,
+			cellMinWidth : 80,
+			totalRow : true,
+			height : 'full-95',// 固定表头&full-查询框高度
+			// even:true,//条纹样式
+			page : true,
+			limit: 200,
+			limits: [30,50,100,200],
+			request : {
+				pageName : 'page', // 页码的参数名称，默认：page
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			},
+			parseData : function(res) {
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+					// code值为200表示成功
+				}
+			},
+			cols : [ [
+				{fixed:'left',type : 'numbers'},
+				{fixed:'left',field : 'bsElement',width : 250,title : '组件名称',totalRowText : "合计"},
+				{fixed:'left',field : 'bsFreight',width : 150,title : '包装运输费','edit':'text',totalRow : true},
+			] ],
+			done : function(res, curr, count) {
 				pageCurr = curr;
 			}
 		});
@@ -884,6 +925,36 @@ function getLossDetail(title){
 	layer.full(index);
 }
 
+function getFreightDetail(title){
+	tableIns4.reload({
+		url : context + '/quoteSum/getFreightList?quoteId=' + quoteId,
+		done : function(res, curr, count) {
+			pageCurr = curr;
+		}
+	})
+	var index = layer.open({
+		type : 1,
+		title : title,
+		fixed : false,
+		btn: ['保存', '关闭'],
+		resize : false,
+		shadeClose : true,
+		btnAlign: 'c',
+		btn1:function(index, layero){
+			saveTable();
+		},
+		btn2:function(index, layero){
+			window.location.reload();
+		},
+		cancel: function(){
+			window.location.reload();
+		},
+		area : [ '550px' ],
+		content : $('#freightDetailDiv')
+	});
+	layer.full(index);
+}
+
 // 修改净利润
 function updateProfitNet(value) {
 	var params = {
@@ -950,6 +1021,30 @@ function clean() {
 	// console.log($('#itemForm')[0])
 	$('#itemForm')[0].reset();
 	layui.form.render();// 必须写
+}
+
+function saveTable() {
+	var dates = layui.table.cache['freightTable'];
+	// console.log(dates);
+	CoreUtil.sendAjax("/productProcess/saveTable", JSON.stringify(dates),
+		function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+						// 重新加载table
+					tableIns4.reload({
+						page : {
+							curr : pageCurr
+							// 从当前页码开始
+						}
+					});
+
+				} else {
+					layer.alert(data.msg, function(index) {
+						layer.close(index);
+					});
+				}
+			}
+		});
 }
 
 function merge(res, columsName, columsIndex) {

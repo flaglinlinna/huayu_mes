@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.web.basePrice.dao.PriceCommDao;
+import com.web.basePrice.dao.UnitDao;
+import com.web.basePrice.entity.Unit;
 import com.web.basic.dao.SysParamDao;
 import com.web.basic.entity.SysParam;
 import org.apache.commons.lang3.StringUtils;
@@ -74,6 +76,8 @@ public class CheckImpl   implements CheckService {
 	private PriceCommDao priceCommDao;
 	@Autowired
 	private SysParamDao sysParamDao;
+	@Autowired
+	private UnitDao unitDao;
 
 	@Override
 	public boolean checkFirst(Long id, String checkCode) throws Exception {
@@ -456,9 +460,19 @@ public class CheckImpl   implements CheckService {
 								pm.setPkBomId(quote.getBsCopyId()==null?qb.getId():qb.getPkBomId());
 								pm.setBsQty(qb.getBsQty());
 								pm.setRetrial(qb.getProductRetrial());
-								pm.setPkUnit(qb.getPkUnit());
 								if (qb.getUnit() != null) {
-									pm.setBsUnit(qb.getUnit().getUnitName()); //hjj-20210120-补充单位名称
+									if(pm.getBsType().equals("surface")){
+										if(StringUtils.isNotEmpty(qb.getPurchaseUnit())){
+											 List<Unit> unitList = unitDao.findByUnitNameAndDelFlag(qb.getPurchaseUnit(),0);
+											 if(unitList.size()>0){
+												pm.setPkUnit(unitList.get(0).getId());
+												pm.setBsUnit(unitList.get(0).getUnitName());
+											}
+										}
+									}else {
+										pm.setPkUnit(qb.getPkUnit());
+										pm.setBsUnit(qb.getUnit().getUnitName()); //hjj-20210120-补充单位名称
+									}
 								}
 								pm.setPurchaseUnit(qb.getPurchaseUnit());
 								pm.setBsAgent(qb.getBsAgent());
