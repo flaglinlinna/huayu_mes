@@ -457,6 +457,8 @@ public class CheckImpl   implements CheckService {
 								pm.setBsComponent(qb.getBsComponent());
 								pm.setBsMaterName(qb.getBsMaterName());
 								pm.setBsModel(qb.getBsModel());
+								//如果是复制单,下发材料关联的bomId与bom关联的bomId要相同(两者关联同一个复制源ID用于关联)
+								//不是复制的单，下发材料关联的bomId则为bom的Id
 								pm.setPkBomId(quote.getBsCopyId()==null?qb.getId():qb.getPkBomId());
 								pm.setBsQty(qb.getBsQty());
 								pm.setRetrial(qb.getProductRetrial());

@@ -122,7 +122,10 @@ $(function() {
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsModelType"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsModelType"]').removeClass("layui-hide");
 
+						$(".layui-table-total").find('tr').find('td[data-field="bsModelType"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
@@ -135,7 +138,10 @@ $(function() {
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsModelType"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsModelType"]').removeClass("layui-hide");
 
+						$(".layui-table-total").find('tr').find('td[data-field="bsModelType"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsCave"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsCycle"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
@@ -148,7 +154,10 @@ $(function() {
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsModelType"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsModelType"]').removeClass("layui-hide");
 
+						$(".layui-table-total").find('tr').find('td[data-field="bsModelType"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
@@ -160,7 +169,10 @@ $(function() {
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsModelType"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsModelType"]').removeClass("layui-hide");
 
+						$(".layui-table-total").find('tr').find('td[data-field="bsModelType"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsYield"]').removeClass("layui-hide");
