@@ -169,7 +169,7 @@ public class SwitchStaffController extends WebController {
 	@ApiOperation(value = "执行人员调整", notes = "执行人员调整", hidden = true)
 	@RequestMapping(value = "/doSwitch", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult doSwitch(String lastTaskNo_id,String lastDatetimeEnd,
+	public ApiResponseResult doSwitch(String lastTaskNo,String lastTaskNo_id,String lastDatetimeEnd,
 			String newTaskNo, String newLineId,String newHourType, String newClassId,
 			String newDatetimeBegin, String empList,String switchType) {
 		String method = "/switch_staff/doSwitch";
@@ -179,7 +179,9 @@ public class SwitchStaffController extends WebController {
 			ApiResponseResult result = switchStaffService.doSwitch(lastTaskNo_id,lastDatetimeEnd,
 					newTaskNo, newLineId,newHourType, newClassId,newDatetimeBegin, empList,switchType,super.getPageRequest(sort));
 			logger.debug("执行人员调整=doSwitch:");
-			// getSysLogService().success(module,method, methodName, null);
+			if(result.isResult()) {
+				getSysLogService().success(module, method, methodName, "类型:" + switchType + ";原制令单号:" + lastTaskNo + ";下线时间:" + lastDatetimeEnd + ";新单号:" + newTaskNo + ";上线时间" + newDatetimeBegin);
+			}
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();

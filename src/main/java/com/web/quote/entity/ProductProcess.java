@@ -318,6 +318,13 @@ public class ProductProcess extends BaseEntity {
 	@Column(length = 100)
 	protected String bsGroups;
 
+	/**
+	 * 复制源ID
+	 */
+	@ApiModelProperty(name="copyId",value="复制源ID")
+	@Column
+	protected Long copyId;
+
 	public Long getPkQuote() {
 		return pkQuote;
 	}
@@ -646,5 +653,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsFreight(BigDecimal bsFreight) {
 		this.bsFreight = bsFreight;
+	}
+
+	public Long getCopyId() {
+		return copyId;
+	}
+
+	public void setCopyId(Long copyId) {
+		this.copyId = copyId;
 	}
 }

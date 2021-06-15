@@ -183,6 +183,8 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             quoteProcess.setPkQuote(quote.getId());
             //将旧的关联bom先复制过去
             quoteProcess.setPkQuoteBom(o.getPkQuoteBom());
+            //将旧的ID做为下发ID关联起来
+            quoteProcess.setCopyId(o.getCopyId()!=null?o.getCopyId():o.getId());
             quoteProcess.setBsStatus(0);
             quoteProcess.setBsLinkName(null);
             newQuoteProcessList.add(quoteProcess);
@@ -214,17 +216,17 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             newProductMaterList.add(productMater);
         }
         productMaterDao.saveAll(newProductMaterList);
-//        List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
-//        List<ProductProcess> newProductProcess = new ArrayList<>();
-//        for(ProductProcess o:productProcessList){
-//            ProductProcess productProcess = new ProductProcess();
-//            BeanUtils.copyProperties(o,productProcess);
-//            productProcess.setId(null);
-//            productProcess.setPkQuote(quote.getId());
-//            productProcess.setBsStatus(0);
-//            newProductProcess.add(productProcess);
-//        }
-//        productProcessDao.saveAll(newProductProcess);
+        List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
+        List<ProductProcess> newProductProcess = new ArrayList<>();
+        for(ProductProcess o:productProcessList){
+            ProductProcess productProcess = new ProductProcess();
+            BeanUtils.copyProperties(o,productProcess);
+            productProcess.setId(null);
+            productProcess.setPkQuote(quote.getId());
+            productProcess.setBsStatus(0);
+            newProductProcess.add(productProcess);
+        }
+        productProcessDao.saveAll(newProductProcess);
         return ApiResponseResult.success("报价单复制成功！");
     }
     /**

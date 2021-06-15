@@ -57,6 +57,10 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
     public void delteQuoteProcessByBsNameAndPkQuote(String  bsName,Long pkQuote);//根据零件名称修改表数据
 
 	@Modifying
+	@Query(value = "update PRICE_QUOTE_PROCESS set DEL_FLAG =1 where PK_QUOTE_BOM in (select PK_BOM_ID2 from PRICE_QUOTE_BOM where DEL_FLAG = 1 and PK_QUOTE = ?1)",nativeQuery = true)
+	public void  deletByQuoteBom(Long pkQuote);
+
+	@Modifying
 	@Query("update QuoteProcess t set t.delFlag=1 where t.pkQuote=?1")
 	Integer delteQuoteProcessByPkQuote(Long pkQuote);
 	

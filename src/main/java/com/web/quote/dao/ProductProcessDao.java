@@ -33,6 +33,12 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsType(Integer delFlag,Long pkQuote,String bsType);
 
+	public List<ProductProcess> findByPkQuoteAndCopyId(Long pkQuote,Long copyId);
+
+	@Modifying
+	@Query(value = "UPDATE PRICE_PRODUCT_PROCESS m set m.DEL_FLAG = 1 where m.PK_QUOTE  = ?1 and m.COPY_ID in (select b.COPY_ID from PRICE_QUOTE_PROCESS b where b.DEL_FLAG = 1 and b.PK_QUOTE = ?1)",nativeQuery = true)
+	Integer deleteByPkQuoteBom(Long pkQuote);
+
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsGroups(Integer delFlag,Long pkQuote,String bsGroups);
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsTypeOrderByBsOrder(Integer delFlag,Long pkQuote,String bsType);

@@ -189,7 +189,12 @@ public class QuoteProcess extends BaseEntity {
 	@Transient
 	protected String bsProcList;
 
-
+	/**
+	 * 复制源ID
+	 */
+	@ApiModelProperty(name="copyId",value="复制源ID")
+	@Column
+	protected Long copyId;
 
 	public Long getPkQuote() {
 		return pkQuote;
@@ -238,8 +243,6 @@ public class QuoteProcess extends BaseEntity {
 	public void setProc(Proc proc) {
 		this.proc = proc;
 	}
-
-	
 
 	public String getBsName() {
 		return bsName;
@@ -375,5 +378,13 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setItemType(String itemType) {
 		this.itemType = itemType;
+	}
+
+	public Long getCopyId() {
+		return copyId;
+	}
+
+	public void setCopyId(Long copyId) {
+		this.copyId = copyId;
 	}
 }

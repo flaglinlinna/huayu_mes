@@ -516,10 +516,17 @@ public class CheckImpl   implements CheckService {
 
 					//2.3根据工作中心下发BOM-工序
 					List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuote(0, c.getBsRecordId());
+					productProcessDao.deleteByPkQuoteBom(c.getBsRecordId());
 					if(lpd.size() > 0){
 						List<ProductProcess> lpp = new ArrayList<ProductProcess>();
 						for(QuoteProcess qb:lpd){
 							ProductProcess pp = new ProductProcess();
+							if (qb.getCopyId() != null) {
+								List<ProductProcess> productProcessList = productProcessDao.findByPkQuoteAndCopyId(quote.getId(), qb.getCopyId());
+								if (productProcessList.size() > 0) {
+									pp = productProcessList.get(0);
+								}
+							}
 							pp.setBsName(qb.getBsName());
 							pp.setBsElement(qb.getBsElement());
 							pp.setBsType(qb.getProc().getBjWorkCenter().getBsCode());//类型
@@ -528,6 +535,7 @@ public class CheckImpl   implements CheckService {
 							pp.setBsLinkName(qb.getBsLinkName());
 							pp.setPkBomId(qb.getPkQuoteBom());
 							pp.setPkQuote(c.getBsRecordId());
+							pp.setCopyId(qb.getCopyId()!=null? qb.getCopyId() : qb.getId());
 							pp.setBsMaterName(qb.getBsMaterName());
 							pp.setBsFeeMh(qb.getBsFeeMh());
 							pp.setBsFeeLh(qb.getBsFeeLh());

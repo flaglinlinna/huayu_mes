@@ -310,6 +310,10 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			}
 		}
 		quoteProcessDao.saveAll(lp);
+		for(QuoteProcess qp:lp){
+			qp.setCopyId(qp.getId());
+			qp.setBsLinkName(qp.getBsName());
+		}
 		
 		return ApiResponseResult.success("新增成功!");
 	}
@@ -649,13 +653,14 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 
 	@Override
 	public ApiResponseResult editProcessByBom(List<QuoteProcess> quoteProcessList,Long quoteId) {
-	 	//复制后的确认完成，1.更新工艺的bom关联关系，2.根据新增bom(如有)下发工艺
+	 	//复制后的确认完成，1.更新工艺的bom关联关系(可能已删除)，2.根据新增bom(如有)下发工艺
 
 		for(QuoteProcess o :quoteProcessList){
 		 QuoteBom quoteBom =quoteBomDao.findByPkBomId2(o.getPkQuoteBom());
-		 o.setPkQuoteBom(quoteBom.getId());
-		 o.setBsMaterName(quoteBom.getBsMaterName());
-		 o.setBsGroups(quoteBom.getBsGroups());
+			 o.setDelFlag(quoteBom.getDelFlag());
+			 o.setPkQuoteBom(quoteBom.getId());
+			 o.setBsMaterName(quoteBom.getBsMaterName());
+			 o.setBsGroups(quoteBom.getBsGroups());
 		}
 //		quoteProcessDao.saveAll(quoteProcessList);
 
@@ -684,28 +689,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		}catch (Exception e){
 			e.printStackTrace();
 		}
-		return ApiResponseResult.success();
-//	 	QuoteProcess o = quoteProcessList.get(0);
 
-//	 	if(o.getPkQuote().equals((quoteBomDao.findById((long) o.getPkQuoteBom()).getPkQuote()))){
-//		}
-	 	//编辑quoteProcess对应的bom
-//		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuoteOrderById(0,quoteId);
-//		List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuote(0,quoteId);
-//		for(QuoteProcess o :quoteProcessList){
-//			List<Map<String, Object>> mapList = quoteBomDao.getBsMaterName(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
-//			if (StringUtils.isNotEmpty(o.getBsMaterName())) {
-//				if (o.getPkQuoteBom() == null) {
-//					for (Map<String, Object> map : mapList) {
-//						if (o.getBsMaterName().equals(map.get("BSMATERNAME"))) {
-//							o.setPkQuoteBom(Long.parseLong(map.get("ID").toString()));
-//							o.setBsGroups(map.get("BSGROUPS") == null ? "" : map.get("BSGROUPS").toString());
-//						}
-//					}
-//				}
-//			}
-//		}
-//		return ApiResponseResult.success();
+		return ApiResponseResult.success();
 	}
 
 

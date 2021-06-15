@@ -473,6 +473,7 @@ function saveData(obj, empIdList) {
 	}
 
 	var params = {
+		"lastTaskNo":obj.lastTaskNo,
 		"lastTaskNo_id" : obj.AFF_ID,
 		"lastDatetimeEnd" : obj.lastDateEnd,
 		"newTaskNo" : obj.newTaskNo,
