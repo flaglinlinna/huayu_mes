@@ -67,6 +67,19 @@ $(function() {
 					if(item.retrial =="1"){
 						tableIns.find('tr[data-index=' + i + ']').find('td').css("background-color", "#FFFF00");
 					}
+					if(item.purchaseUnit=="PCS"){
+						if(item.bsStatus=="1"){
+							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
+							$("select[name='selectUnit']").attr("disabled","disabled");
+							form.render('select');
+						}else {
+							console.log(11111);
+							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
+							tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsQty"]').data('edit',true).css("background-color", "");
+							// $("select[name='selectUnit']").attr("disabled","disabled");
+							form.render('select');
+						}
+					}
 				});
 
 				res.data.forEach(function(item, index) {

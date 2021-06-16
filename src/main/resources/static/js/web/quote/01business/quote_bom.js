@@ -344,7 +344,7 @@ $(function() {
 							    {type : 'numbers'},
 								{type:'checkbox'},
 							    {field : 'checkStatus',width : 100,title : '状态',sort : true,style : 'background-color:#d2d2d2',templet : '#checkStatus'},
-								{field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2'},
+								{field : 'errorInfo',width : 150,title : '错误信息',sort : true,style : 'background-color:#d2d2d2;overflow:hidden !important'},
 								{field : 'bsElement',title : '组件名称',sort : true,width : 120}, 
 								{field : 'bsComponent',title : '零件名称',sort : true,width : 200},
 								{field : 'wc',title : '材料耗用工作中心',sort : true,width : 145,
@@ -359,8 +359,8 @@ $(function() {
 									else {return "";}
 								}},
 								{field : 'bsMaterName',title : '材料名称',sort : true,width : 150},
-								{field : 'bsModel',title : '材料规格',width : 200},
-								{field : 'bsExplain',title : '采购说明',width : 200},
+								{field : 'bsModel',title : '材料规格',width : 200,style:"overflow:hidden !important"},
+								{field : 'bsExplain',title : '采购说明',width : 200,style:"overflow:hidden !important"},
 								{field : 'bsAgent',title : '是否客户代采',width : 120,templet:function (d) {
 										if(d.bsAgent=="1"){
 											return "是"
@@ -368,7 +368,7 @@ $(function() {
 											return "否"
 										}
 									}},
-								{field : 'fmemo',title : '工艺说明',width : 200},
+								{field : 'fmemo',title : '工艺说明',width : 200,style:"overflow:hidden !important"},
 								{field : 'bsQty',title : 'BOM用量',width : 90},
 								// {field : 'bsProQty',title : '制品量',width : 90},
 								{field : 'unit',title : 'BOM用量单位',width : 100,templet : function(d) {

@@ -278,6 +278,7 @@ $(function() {
 				{field : 'bsWaterGap',title : '水口量(g)',width : 90,hide : true}, /*(注塑)*/
 				{field : 'bsCave',title : '穴数',width : 60,hide : true}, /*(注塑)*/
 				{field : 'bsYield',width : 90,title : '工序良率%'},
+				{field : 'bsMaterLose',width : 90,title : '本工序损耗'},
 				{field : 'bsFee',width : 90,title : '材料总价',
 					// templet:function(d){
 					// return Number(d.bsQty)*Number(d.bsAssess)/Number(d.bsRadix);
@@ -397,7 +398,8 @@ $(function() {
 				{field : 'bsYield',title : '工序良率%',width : 100,hide : true},
 				{field : 'bsHouYield',title : '后工序良率%',width : 100,hide : true},
 				{field : 'bsLoss',title : '工序良率%',width : 90,hide : true},
-
+				{field : 'bsLossTheLh',title : '本工序损料(人工)',width : 150,totalRow : true,hide : true},
+				{field : 'bsLossTheMh',title : '本工序损料(制费)',width : 150,totalRow : true,hide : true},
 				{field : 'bsFeeLhAll',title : '人工总费用',width : 90,totalRow : true,hide : true},
 				{field : 'bsFeeMhAll',title : '制造总费用',width : 90,totalRow : true,hide : true},
 				{field : 'bsFeeWxAll',title : '加工费',width : 90,totalRow : true,hide : true},
@@ -405,8 +407,7 @@ $(function() {
 				// {field : 'bsFeeLhAll',title : '人工总费用',width : 130,totalRow : true,hide : true},
 				// {field : 'bsFeeMhAll',title : '制费总费用',width : 130,totalRow : true,hide : true},
 
-				{field : 'bsLossTheLh',title : '本工序损料(人工)',width : 150,totalRow : true,hide : true},
-				{field : 'bsLossTheMh',title : '本工序损料(制费)',width : 150,totalRow : true,hide : true},
+
 				{field : 'bsLossHouLh',title : '后工序损料(人工)',width : 150,totalRow : true,hide : true},
 				{field : 'bsLossHouMh',title : '后工序损料(制费)',width : 150,totalRow : true,hide : true},
 				{field : 'bsHeji',title : '工序损料合计',width : 120,totalRow : true,hide : true,templet: function (d) {
@@ -764,6 +765,10 @@ function getProcessDetail(bsType, title,lhType) {
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsUserNum"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");
+
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossTheLh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossTheLh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsLossTheLh"]').removeClass("layui-hide");
 					} else if(lhType =="mh"&&item.bsType != 'out'){
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsFeeMh"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsFeeMh"]').removeClass("layui-hide");
@@ -775,6 +780,12 @@ function getProcessDetail(bsType, title,lhType) {
 						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsModelType"]').removeClass("layui-hide");
 						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsModelType"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsModelType"]').removeClass("layui-hide");
+
+
+						$('div[lay-id="processTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsLossTheMh"]').removeClass("layui-hide");
+						$('div[lay-id="processTable"]').find('thead').find('th[data-field="bsLossTheMh"]').removeClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsLossTheMh"]').removeClass("layui-hide");
+
 					}
 
 					if (item.bsType == 'out' ) {// 外协

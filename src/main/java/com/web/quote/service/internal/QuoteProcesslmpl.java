@@ -642,6 +642,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				quoteProcess.setCreateDate(date);
 				quoteProcess.setPkWorkCenter(o.getPkBjWorkCenter());
 				quoteProcess.setBsOrder((i+1)*10);
+				quoteProcess.setPurchaseUnit(o.getPurchaseUnit()); //单位为PCS 不参与人工和制费计算
 				quoteProcessList.add(quoteProcess);
 			}
 			quoteProcessDao.saveAll(quoteProcessList);
@@ -670,12 +671,13 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				quoteBom = quoteBomDao.findById((long)o.getPkQuoteBom());
 			}else {
 				quoteBom = quoteBomDao.findByPkBomId2AndPkQuote(o.getPkQuoteBom(), quoteId);
+				o.setBsMaterName(quoteBom.getBsMaterName());
+				o.setPurchaseUnit(quoteBom.getPurchaseUnit()); //单位为PCS 不参与人工和制费计算
 			}
 			 o.setDelFlag(quoteBom.getDelFlag());
 			 o.setPkQuoteBom(quoteBom.getId());
 			 o.setBsElement(quoteBom.getBsElement());
 			 o.setBsName(quoteBom.getBsComponent());
-			 o.setBsMaterName(quoteBom.getBsMaterName());
 			 o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
 			 o.setItemType(quoteBom.getItp().getItemType());
 			 o.setBsGroups(quoteBom.getBsGroups());
@@ -701,6 +703,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				quoteProcess.setCreateDate(date);
 				quoteProcess.setPkWorkCenter(o.getPkBjWorkCenter());
 				quoteProcess.setBsOrder((i+1)*10);
+				quoteProcess.setPurchaseUnit(o.getPurchaseUnit()); //单位为PCS 不参与人工和制费计算
 				quoteProcessList.add(quoteProcess);
 			}
 			quoteProcessDao.saveAll(quoteProcessList);

@@ -325,6 +325,14 @@ public class ProductProcess extends BaseEntity {
 	@Column
 	protected Long copyId;
 
+
+	/**
+	 * 采购单位
+	 */
+	@ApiModelProperty(name = "purchaseUnit", value = "采购单位")
+	@Column(length = 100)
+	protected String purchaseUnit;
+
 	public Long getPkQuote() {
 		return pkQuote;
 	}
@@ -661,5 +669,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setCopyId(Long copyId) {
 		this.copyId = copyId;
+	}
+
+	public String getPurchaseUnit() {
+		return purchaseUnit;
+	}
+
+	public void setPurchaseUnit(String purchaseUnit) {
+		this.purchaseUnit = purchaseUnit;
 	}
 }

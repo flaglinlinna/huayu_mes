@@ -259,6 +259,14 @@ public class ProductMater extends BaseEntity {
 
 
 	/**
+	 * 材料损耗(本工序损耗)
+	 */
+	@ApiModelProperty(name = "bsMaterLose", value = "材料损耗")
+	@Column(precision=21, scale=5)
+	protected BigDecimal bsMaterLose=BigDecimal.ZERO;
+
+
+	/**
 	 * 
 	 */
 	@Transient
@@ -547,5 +555,13 @@ public class ProductMater extends BaseEntity {
 
 	public void setBsGroups(String bsGroups) {
 		this.bsGroups = bsGroups;
+	}
+
+	public BigDecimal getBsMaterLose() {
+		return bsMaterLose;
+	}
+
+	public void setBsMaterLose(BigDecimal bsMaterLose) {
+		this.bsMaterLose = bsMaterLose;
 	}
 }

@@ -89,12 +89,22 @@ $(function() {
 
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				layui.each(res.data, function(i, item){
+					console.log(item.purchaseUnit);
 					if(bsType!="out") {
 						if (item.bsStatus == 1) {
 							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
 							$("select[name='selectModelType']").attr("disabled", "disabled");
 							form.render('select');
 						}
+
+						if(item.purchaseUnit=="PCS"){
+
+								tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
+								tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsYield"]').data('edit',true).css("background-color", "");
+								// $("select[name='selectUnit']").attr("disabled","disabled");
+								form.render('select');
+						}
+
 					}else {
 						if(iStatus>=2){
 							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
