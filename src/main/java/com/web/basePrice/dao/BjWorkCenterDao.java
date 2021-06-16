@@ -1,11 +1,13 @@
 package com.web.basePrice.dao;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.web.basePrice.entity.BjWorkCenter;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,4 +21,7 @@ public interface BjWorkCenterDao extends CrudRepository<BjWorkCenter, Long>,JpaS
     int countByDelFlagAndWorkcenterCode(Integer delFlag,String workcenterCode);
     public List<BjWorkCenter> findByDelFlagAndWorkcenterCode(Integer delFlag,String workCenterCode);
     public BjWorkCenter findById(long id);
+
+    @Query(value = "SELECT id,WORKCENTER_NAME FROM BJ_base_WORKCENTER where DEL_FLAG = 0",nativeQuery = true)
+    public  List<Map<String, Object>> findIdAndName();
 }

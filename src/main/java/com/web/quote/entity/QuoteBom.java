@@ -2,11 +2,7 @@ package com.web.quote.entity;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicUpdate;
@@ -244,6 +240,17 @@ public class QuoteBom extends BaseEntity {
 	@Column(length = 20)
 	protected Long pkBomId2;
 
+
+	@Transient
+	protected String bsUnitList;
+
+	@Transient
+	protected String bsWcList;
+
+	@Transient
+	protected String bsItemTypeList;
+
+
 	public String getBsElement() {
 		return bsElement;
 	}
@@ -474,5 +481,29 @@ public class QuoteBom extends BaseEntity {
 
 	public void setPkBomId2(Long pkBomId2) {
 		this.pkBomId2 = pkBomId2;
+	}
+
+	public String getBsUnitList() {
+		return bsUnitList;
+	}
+
+	public void setBsUnitList(String bsUnitList) {
+		this.bsUnitList = bsUnitList;
+	}
+
+	public String getBsWcList() {
+		return bsWcList;
+	}
+
+	public void setBsWcList(String bsWcList) {
+		this.bsWcList = bsWcList;
+	}
+
+	public String getBsItemTypeList() {
+		return bsItemTypeList;
+	}
+
+	public void setBsItemTypeList(String bsItemTypeList) {
+		this.bsItemTypeList = bsItemTypeList;
 	}
 }

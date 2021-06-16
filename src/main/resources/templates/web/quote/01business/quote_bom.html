@@ -29,6 +29,14 @@
 	/*	overflow:visible;*/
 	/*}*/
 
+	.layui-table-cell, .layui-table-tool-panel li {
+		overflow: visible !important;
+	}
+	.layui-form-select dl { max-height:200px; }
+	.layui-form-select .layui-input {
+		height: 30px;
+	}
+
 </style>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -95,6 +103,7 @@
 			{{#  } }}
 		</script>
 
+
 		<script type="text/html" id="statusTpl1">
 			{{#  if(d.purchaseRetrial){ }}
 			<input type="checkbox" name="purchaseRetrial" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="isStatusTpl1" checked="checked" />
@@ -110,6 +119,52 @@
 			<input type="checkbox" name="outRetrial" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="isStatusTpl2"/>
 			{{#  } }}
 		</script>
+
+		<script type="text/html" id="bsAgentTpl">
+			{{#  if(d.bsAgent){ }}
+			<input type="checkbox" name="bsAgent" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="bsAgentTpl" checked="checked" />
+			{{#  } else { }}
+			<input type="checkbox" name="bsAgent" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="bsAgentTpl"/>
+			{{#  } }}
+		</script>
+
+			<script type="text/html" id="selectWc" >
+				<select name="selectUnit" lay-filter="pkBjWorkCenter" lay-search>
+					<option value="">请选择</option>
+					{{# layui.each($.parseJSON( d.bsWcList ), function(index, item){     }}
+					<option value="{{ item.ID }}"  {{ d.pkBjWorkCenter==item.ID?'selected':''}}>{{ item.WORKCENTER_NAME }}</option>
+					{{# });  }}
+				</select>
+			</script>
+
+			<script type="text/html" id="selectItemType" >
+				<select name="selectUnit" lay-filter="pkItemTypeWg" lay-search>
+					<option value="">请选择</option>
+					{{# layui.each($.parseJSON( d.bsItemTypeList ), function(index, item){     }}
+					<option value="{{ item.ID }}"  {{ d.pkItemTypeWg==item.ID?'selected':''}}>{{ item.ITEM_TYPE }}</option>
+					{{# });  }}
+				</select>
+			</script>
+
+		<script type="text/html" id="selectUnit" >
+			<select name="selectUnit" lay-filter="pkUnit" lay-search>
+				<option value="">请选择</option>
+				{{# layui.each($.parseJSON( d.bsUnitList ), function(index, item){     }}
+				<option value="{{ item.id }}"  {{ d.pkUnit==item.id?'selected':''}}>{{ item.unitCode }}</option>
+				{{# });  }}
+			</select>
+		</script>
+
+		<script type="text/html" id="selectPurchaseUnit" >
+			<select name="selectPurchaseUnit" lay-filter="purchaseUnit" lay-search>
+				<option value="">请选择</option>
+				{{# layui.each($.parseJSON( d.bsUnitList ), function(index, item){     }}
+				<option value="{{ item.unitCode }}"  {{ d.purchaseUnit==item.unitCode?'selected':''}}>{{ item.unitCode }}</option>
+				{{# });  }}
+			</select>
+		</script>
+
+
 
 		</div>
 		<!--添加或编辑外购件清单信息-->

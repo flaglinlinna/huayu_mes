@@ -1,5 +1,6 @@
 package com.web.quote.service.internal;
 
+import com.alibaba.fastjson.JSON;
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
 import com.system.todo.service.TodoInfoService;
@@ -256,13 +257,18 @@ public class QuoteBomlmpl implements QuoteBomService {
 			return ApiResponseResult.success().data(DataGrid.create(quoteBomList, 0,
 					1, 10));
 		}
+		List<Unit> unitList = unitDao.findByDelFlag(0);
+		List<Map<String,Object>> bjWorkCenterList = bjWorkCenterDao.findIdAndName();
+		List<Map<String,Object>> itemTypeList = itemTypeWgDao.findIdAndName();
 		Specification<QuoteBom> spec = Specification.where(BaseService.and(filters, QuoteBom.class));
 		Specification<QuoteBom> spec1 = spec.and(BaseService.or(filters1, QuoteBom.class));
 		Page<QuoteBom> page = quoteBomDao.findAll(spec1, pageRequest);
-//		for(QuoteBom o:page.getContent()){
-//			Map<String,Object> map = new HashMap<>();
-////			map
-//		}
+
+		for(QuoteBom o:page.getContent()){
+			o.setBsUnitList(JSON.toJSONString(unitList));
+			o.setBsItemTypeList(JSON.toJSONString(itemTypeList));
+			o.setBsWcList(JSON.toJSONString(bjWorkCenterList));
+		}
 
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
@@ -379,7 +385,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 		//20210112-fyx-关闭待办
 		 todoInfoService.closeByIdAndModel(Long.parseLong(quoteId), "外购件清单");
 
-		 List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuote(0,Long.parseLong(quoteId));
+		 List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteOrderById(0,Long.parseLong(quoteId));
 		 //20210420-hjj-下发工艺流程(先判断工艺是否为空)
 		if(quoteProcessList.size()==0){
 			//工艺为空，根据bom下发工艺
@@ -406,7 +412,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 		}
 
 		//删除已添加的工艺流程信息
-		quoteProcessDao.delteQuoteProcessByPkQuote(Long.parseLong(quoteId));
+//		quoteProcessDao.delteQuoteProcessByPkQuote(Long.parseLong(quoteId));
 
 		//设置该报价单下的bom状态
 		quoteBomDao.saveQuoteBomByQuoteId(Long.parseLong(quoteId),0);

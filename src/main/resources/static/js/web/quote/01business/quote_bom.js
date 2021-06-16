@@ -202,45 +202,44 @@ $(function() {
 							{fixed : 'left',type:'checkbox'},
 							{fixed : 'left',type : 'numbers'},
 							{field:'id', title:'ID', width:80,hide:true},
-							{fixed : 'left',field : 'bsElement',title : '组件名称',sort : true,width : 120,edit: "text"},
-							{fixed : 'left',field : 'bsComponent',title : '零件名称',sort : true,width : 150,edit: "text"},
-							{fixed : 'left',field : 'wc',title : '工作中心',sort : true,width : 120,
-								templet : function(d) {
-									if (d.wc != null) {return d.wc.workcenterName;} 
-									else {return "";}
-								},style : 'background-color:#d2d2d2'
-							},
-							// {field : 'bsItemCode',title : '材料编码',sort:true,width:120},
-							{field : 'itp',title : '物料类型',sort : true,width : 100,
-								templet : function(d) {
-									if (d.itp != null) {return d.itp.itemType;} 
-									else {return "";}
-							},style : 'background-color:#d2d2d2'},
-							{field : 'bsGroups',title : '损耗分组',width : 120,"edit" : "text"},
-							{field : 'bsMaterName',title : '材料名称',sort : true,width : 200,edit: "text"},
-							{field : 'bsModel',title : '材料规格',width : 200,edit: "text"},
+							{fixed : 'left',field : 'bsElement',title : '组件名称',sort : true,width : 120,edit: "text",style:"overflow:hidden !important"},
+							{fixed : 'left',field : 'bsComponent',title : '零件名称',sort : true,width : 150,edit: "text",style:"overflow:hidden !important"},
+							// {fixed : 'left',field : 'wc',title : '工作中心',sort : true,width : 120,
+							// 	templet : function(d) {
+							// 		if (d.wc != null) {return d.wc.workcenterName;}
+							// 		else {return "";}
+							// 	},style : 'background-color:#d2d2d2'
+							// },
+							// // {field : 'bsItemCode',title : '材料编码',sort:true,width:120},
+							// {field : 'itp',title : '物料类型',sort : true,width : 100,
+							// 	templet : function(d) {
+							// 		if (d.itp != null) {return d.itp.itemType;}
+							// 		else {return "";}
+							// },style : 'background-color:#d2d2d2'},
+							{field : 'pkBjWorkCenter',title : '工作中心',width : 130,templet:'#selectWc'},
+							{field : 'pkItemTypeWg',title : '物料类型',templet : '#selectItemType',width : 110},
+							{field : 'bsGroups',title : '损耗分组',width : 140,"edit" : "text",style:"overflow:hidden !important"},
+							{field : 'bsMaterName',title : '材料名称',sort : true,width : 200,edit: "text",style:"overflow:hidden !important"},
+							{field : 'bsModel',title : '材料规格',width : 200,edit: "text",style:"overflow:hidden !important"},
 
 							{field : 'bsQty',title : 'BOM用量',width : 90,edit: "text"},
 							// {field : 'bsProQty',title : '制品重(g)',width : 90},
-							{field : 'unit',title : 'BOM用量单位',width : 110,
-								templet : function(d) {
-									if (d.unit != null) {return d.unit.unitCode;}
-									else {return "";}
-							},style : 'background-color:#d2d2d2'},
+							// {field : 'unit',title : 'BOM用量单位',width : 110,
+							// 	templet : function(d) {
+							// 		if (d.unit != null) {return d.unit.unitCode;}
+							// 		else {return "";}
+							// },style : 'background-color:#d2d2d2'},
 							// {field : 'bsWaterGap',title : '水口重(g)',width : 90},
 							// {field : 'bsCave',title : '穴数',width : 80},
-							{field : 'purchaseUnit',title : '采购单位',width : 80,style : 'background-color:#d2d2d2'},
-							{field : 'bsAgent',title : '客户代采',width : 80,templet:function (d) {
-									if(d.bsAgent=="1"){
-										return "是"
-									}else {
-										return "否"
-									}
-								},style : 'background-color:#d2d2d2'},
+							// {field : 'purchaseUnit',title : '采购单位',width : 80,style : 'background-color:#d2d2d2'},
+
+							{field : 'pkUnit',title : 'BOM用量单位',width : 110,templet:'#selectUnit'},
+							{field : 'purchaseUnit',title : '采购单位',templet : '#selectPurchaseUnit',width : 110},
+							{field : 'bsAgent',title : '客户代采',width : 80,templet:'#bsAgentTpl'},
 							{field : 'productRetrial',title : '制造评估重审',templet : '#statusTpl',width : 110},
 							// {field : 'purchaseRetrial',title : '采购重申',templet : '#statusTpl1',width : 120},
 							// {field : 'outRetrial',title : '外协重审',templet : '#statusTpl2',width : 120},
-							{field : 'fmemo',title : '工艺说明',width : 200,edit: "text"},
+							{field : 'fmemo',title : '工艺说明',width : 200,edit: "text",style:"overflow:hidden !important"},
 							{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120}
 							] ],
 							done : function(res, curr, count) {
@@ -304,12 +303,17 @@ $(function() {
 							// updateRetrial(id,product,purchase,out);
 						})
 
+						form.on('select()', function (data) {
+							var eleName = data.othis.parents('td').attr('data-field');
+							var tableIndex = data.othis.parents('tr').attr('data-index');
+							layui.table.cache['quoteBomList'][tableIndex][eleName] = data.value;
+						})
+
 						form.on('switch()', function(obj) {
-							// console.log(this.name);
-							var elem = obj.othis.parents('tr').attr('data-index');
-							console.log(elem);
+							var eleName = this.name;
+							var tableIndex = obj.othis.parents('tr').attr('data-index');
 							var checked = obj.elem.checked ? "1" : "0";
-							layui.table.cache['quoteBomList'][elem].productRetrial = checked;
+							layui.table.cache['quoteBomList'][tableIndex][eleName] = checked;
 							// updateRetrial(this.value, this.name, checked);
 						});
 
@@ -655,14 +659,14 @@ function openProdErr(id, title) {
 	layer.full(index);
 }
 
-添加五金材料
+//添加外购件清单信息
 function addQuoteBom() {
 	// 清空弹出框数据
 	cleanProdErr();
 	// 打开弹出框
 	openProdErr(null, "添加外购件清单信息");
 }
-// 新增五金材料提交
+// 新增外购件清单信息提交
 function addSubmit(obj) {
 	obj.field.pkQuote = quoteId;
 	CoreUtil.sendAjax("/quoteBom/add", JSON.stringify(obj.field), function(data) {
@@ -681,7 +685,7 @@ function addSubmit(obj) {
 	});
 }
 
-// 编辑五金材料提交
+// 编辑外购件清单信息提交
 function editSubmit(obj) {
 	CoreUtil.sendAjax("/quoteBom/edit", JSON.stringify(obj.field), function(data) {
 		if (data.result) {

@@ -654,12 +654,30 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	@Override
 	public ApiResponseResult editProcessByBom(List<QuoteProcess> quoteProcessList,Long quoteId) {
 	 	//复制后的确认完成，1.更新工艺的bom关联关系(可能已删除)，2.根据新增bom(如有)下发工艺
-
+		Boolean sameQuote = false;
+		//查出对应的bom是否为同一个标价单下,相同则根据bomID查询 ，不同则根据bomID2查询
+		if(quoteBomDao.findById((long) quoteProcessList.get(0).getPkQuoteBom()).getPkQuote().equals(quoteId)){
+			sameQuote = true;
+		}else {
+			Quote quote = quoteDao.findById((long)quoteId);
+			if(quote.getBsCopyId()==null){
+				sameQuote = true;
+			}
+		}
 		for(QuoteProcess o :quoteProcessList){
-		 QuoteBom quoteBom =quoteBomDao.findByPkBomId2(o.getPkQuoteBom());
+			QuoteBom quoteBom = new QuoteBom();
+			if(sameQuote) {
+				quoteBom = quoteBomDao.findById((long)o.getPkQuoteBom());
+			}else {
+				quoteBom = quoteBomDao.findByPkBomId2AndPkQuote(o.getPkQuoteBom(), quoteId);
+			}
 			 o.setDelFlag(quoteBom.getDelFlag());
 			 o.setPkQuoteBom(quoteBom.getId());
+			 o.setBsElement(quoteBom.getBsElement());
+			 o.setBsName(quoteBom.getBsComponent());
 			 o.setBsMaterName(quoteBom.getBsMaterName());
+			 o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
+			 o.setItemType(quoteBom.getItp().getItemType());
 			 o.setBsGroups(quoteBom.getBsGroups());
 		}
 //		quoteProcessDao.saveAll(quoteProcessList);

@@ -18,7 +18,7 @@ public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecifica
 
 
 
-	public QuoteBom findByPkBomId2(Long PkBomId2);
+	public QuoteBom findByPkBomId2AndPkQuote(Long PkBomId2,Long pkQuote);
 	
 	@Modifying
     @Query("update QuoteBom t set t.bsStatus=?2 where t.pkQuote=?1 and t.delFlag=0")

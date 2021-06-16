@@ -181,9 +181,9 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 
             quoteProcess.setId(null);
             quoteProcess.setPkQuote(quote.getId());
-            //将旧的关联bom先复制过去
+            //将旧的关联bom先复制过去(BOM与工艺流程关联)
             quoteProcess.setPkQuoteBom(o.getPkQuoteBom());
-            //将旧的ID做为下发ID关联起来
+            //将旧的ID做为下发ID关联起来(工艺流程与制造部工艺关联)
             quoteProcess.setCopyId(o.getCopyId()!=null?o.getCopyId():o.getId());
             quoteProcess.setBsStatus(0);
             quoteProcess.setBsLinkName(null);
