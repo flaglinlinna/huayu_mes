@@ -383,7 +383,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			pm.setBsFee(bsAssess.multiply(pm.getBsQty()));
 			pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5));
 			pm.setBsMaterLose(pm.getBsFee().subtract(bsAssess.multiply(pm.getBsQty())));
-//			if(("surface").equals(pm.getBsType())){
+			if(("surface").equals(pm.getBsType())){
 				//仅在两个单位都为kg的情况下不除1000
 //				if(("KG").equals(pm.getPurchaseUnit())){
 //					if(!("KG").equals(pm.getUnit().getUnitCode())){
@@ -392,8 +392,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //				}else {
 //					pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 //				}
-//				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
-//			}
+				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
+				pm.setBsMaterLose(pm.getBsMaterLose().divide(new BigDecimal("1000"), 5, 5));
+			}
 		}
 		productMaterDao.saveAll(lpm3);
 		// 注塑的材料总价格(未税)计算公式-材料单价*(制品重(g)+水口重/穴数)/基数  20210225增加了五金
@@ -437,8 +438,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //			}else {
 //				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 //			}
-//			pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 			pm.setBsMaterLose(pm.getBsFee().subtract(bsAssess.multiply(qty)));
+			pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
+			pm.setBsMaterLose(pm.getBsMaterLose().divide(new BigDecimal("1000"), 5, 5));
 		}
 		productMaterDao.saveAll(lpm1);
 		// 五金-人工工时费（元/H）*人数*成型周期(S）/3600 /基数；制费工时费（元/H）*成型周期(S）/3600/ /基数

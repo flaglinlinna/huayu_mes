@@ -627,10 +627,14 @@ public class ProductProcesslmpl implements ProductProcessService {
         List<ProductProcess> productProcessList = new ArrayList<>();
         for (ProductProcessTemp processTemp : productProcessTempList) {
             ProductProcess process = new ProductProcess();
+            boolean isPcs = false;
             if (processTemp.getMid() != null) {
                 process = productProcessDao.findById((long) processTemp.getMid());
                 process.setLastupdateBy(userId);
                 process.setLastupdateDate(doDate);
+                if(("PCS").equals(process.getPurchaseUnit())){
+                    isPcs = true;
+                }
             } else {
                 process.setCreateDate(doDate);
                 process.setCreateBy(userId);
@@ -641,17 +645,19 @@ public class ProductProcesslmpl implements ProductProcessService {
             process.setBsModelType(processTemp.getBsModelType());
             process.setFmemo(processTemp.getFmemo());
             process.setBsType(processTemp.getBsType());
-            process.setBsCapacity(processTemp.getBsCapacity());
-            process.setBsCave(processTemp.getBsCave());
             if("out".equals(bsType)){
                 process.setBsFeeWxAll(new BigDecimal(processTemp.getBsFeeWxAll()));
                 process.setBsLoss(new BigDecimal(processTemp.getBsLoss()));
             }
-            if (StringUtils.isNotEmpty(processTemp.getBsCycle())) {
-                process.setBsCycle(new BigDecimal(processTemp.getBsCycle()));
-            }
-            if (StringUtils.isNotEmpty(processTemp.getBsUserNum())) {
-                process.setBsUserNum(new BigDecimal(processTemp.getBsUserNum()));
+            if(!isPcs) {
+                if (StringUtils.isNotEmpty(processTemp.getBsCycle())) {
+                    process.setBsCycle(new BigDecimal(processTemp.getBsCycle()));
+                }
+                if (StringUtils.isNotEmpty(processTemp.getBsUserNum())) {
+                    process.setBsUserNum(new BigDecimal(processTemp.getBsUserNum()));
+                }
+                process.setBsCapacity(processTemp.getBsCapacity());
+                process.setBsCave(processTemp.getBsCave());
             }
 //            if(StringUtils.isNotEmpty(processTemp.getBsRadix())){
 //                process.setBsRadix(new BigDecimal(processTemp.getBsRadix()));
