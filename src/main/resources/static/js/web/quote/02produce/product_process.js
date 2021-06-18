@@ -95,14 +95,11 @@ $(function() {
 							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
 							$("select[name='selectModelType']").attr("disabled", "disabled");
 							form.render('select');
-						}
-
-						if(item.purchaseUnit=="PCS"){
-
-								tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
-								tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsYield"]').data('edit',true).css("background-color", "");
-								// $("select[name='selectUnit']").attr("disabled","disabled");
-								form.render('select');
+						}else if(item.purchaseUnit=="PCS") {
+							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
+							tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsYield"]').data('edit', true).css("background-color", "#FFFFFF");
+							$("select[name='selectModelType']").attr("disabled", "disabled");
+							form.render('select');
 						}
 
 					}else {
