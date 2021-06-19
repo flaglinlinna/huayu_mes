@@ -392,8 +392,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //				}else {
 //					pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 //				}
-				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
-				pm.setBsMaterLose(pm.getBsMaterLose().divide(new BigDecimal("1000"), 5, 5));
+				if(!("PCS").equals(pm.getPurchaseUnit())) {
+					pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
+					pm.setBsMaterLose(pm.getBsMaterLose().divide(new BigDecimal("1000"), 5, 5));
+				}
 			}
 		}
 		productMaterDao.saveAll(lpm3);
@@ -439,8 +441,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 //			}
 			pm.setBsMaterLose(pm.getBsFee().subtract(bsAssess.multiply(qty)));
-			pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
-			pm.setBsMaterLose(pm.getBsMaterLose().divide(new BigDecimal("1000"), 5, 5));
+			if(!("PCS").equals(pm.getPurchaseUnit())) {
+				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
+				pm.setBsMaterLose(pm.getBsMaterLose().divide(new BigDecimal("1000"), 5, 5));
+			}
 		}
 		productMaterDao.saveAll(lpm1);
 		// 五金-人工工时费（元/H）*人数*成型周期(S）/3600 /基数；制费工时费（元/H）*成型周期(S）/3600/ /基数
@@ -528,8 +532,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		productProcessDao.saveAll(lpp_surface);
 		// 组装工艺成本-人数*费率/产能/基数;费率/产能/基数
-		List<ProductProcess> lpp_packag = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
-				"packag","PCS");
+		List<ProductProcess> lpp_packag = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId),
+				"packag");
 		for (ProductProcess pp : lpp_packag) {
 			BigDecimal bsRadix = new BigDecimal("1");// 基数
 			if (pp.getBsRadix() != null) {

@@ -442,7 +442,7 @@ public class ProductProcesslmpl implements ProductProcessService {
             if (o.getPkProc() == null) {
                 return ApiResponseResult.failure("工序名称不能为空,请检查后再确认！");
             }
-            if("PCS".equals(o.getPurchaseUnit())){
+            if("PCS".equals(o.getPurchaseUnit())&&!"packag".equals(bsType)){
                 if ( o.getBsYield() == null || o.getBsYield() == BigDecimal.ZERO) {
                     return ApiResponseResult.failure("工序良率不能为空或者0,请检查后再确认！");
                 }
