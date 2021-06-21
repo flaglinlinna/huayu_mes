@@ -404,7 +404,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for (ProductMater pm : lpm1) {
 			BigDecimal qty = BigDecimal.ZERO;
 			//“采购单位”是PCS的物料,材料成本=采购单价*材料用量/工序良率。
-			if(("PCS").equals(pm.getPurchaseUnit())){
+			if(("PCS").equals(pm.getPurchaseUnit())||pm.getBsSingleton()==1){
 				qty = pm.getBsQty();
 			}else {
 				BigDecimal bsWaterGap = new BigDecimal("1");// 水口量
@@ -448,8 +448,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		productMaterDao.saveAll(lpm1);
 		// 五金-人工工时费（元/H）*人数*成型周期(S）/3600 /基数；制费工时费（元/H）*成型周期(S）/3600/ /基数
-		List<ProductProcess> lpp_hardware = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
-				"hardware","PCS");
+		List<ProductProcess> lpp_hardware = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNotAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
+				"hardware",1,"PCS");
 		for (ProductProcess pp : lpp_hardware) {
 			// System.out.println(pp.getId());
 			BigDecimal bsRadix = new BigDecimal("1");// 基数
@@ -477,8 +477,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		productProcessDao.saveAll(lpp_hardware);
 		// 注塑-人工工时费（元/H）*人数*成型周期(S）/3600/ 穴数/基数;制费工时费（元/H）*成型周期(S）/3600/穴数/ 基数
-		List<ProductProcess> lpp_molding = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
-				"molding","PCS");
+		List<ProductProcess> lpp_molding = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNotAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
+				"molding",1,"PCS");
 		for (ProductProcess pp : lpp_molding) {
 			BigDecimal bsRadix = new BigDecimal("1");// 基数
 			if (pp.getBsRadix() != null) {
@@ -505,8 +505,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		productProcessDao.saveAll(lpp_molding);
 		// 更新表面处理-人数*费率/产能/基数;费率/产能/基数
-		List<ProductProcess> lpp_surface = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
-				"surface","PCS");
+		List<ProductProcess> lpp_surface = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNotAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
+				"surface",1,"PCS");
 		for (ProductProcess pp : lpp_surface) {
 			BigDecimal bsRadix = new BigDecimal("1");// 基数
 			if (pp.getBsRadix() != null) {
@@ -531,7 +531,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //					.subtract(pp.getBsFeeMhAll()));
 		}
 		productProcessDao.saveAll(lpp_surface);
-		// 组装工艺成本-人数*费率/产能/基数;费率/产能/基数
+		// 组装工艺成本=人数*费率/产能/基数;费率/产能/基数
 		List<ProductProcess> lpp_packag = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId),
 				"packag");
 		for (ProductProcess pp : lpp_packag) {
@@ -613,12 +613,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			//第一条不用加上成本累计(含损耗) //2021-5-18-hjj 各小计分组的损耗独立计算
 			//o.getBsGroups()+  processList.get(i-1).getBsGroups()+
 			if(i==0||!(o.getBsLinkName()+o.getBsElement()).equals(processList.get(i-1).getBsLinkName()+processList.get(i-1).getBsElement())) {
-				//本工序损耗
-				o.setBsTheLoss(o.getBsCost().divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract(o.getBsCost()));
+				//工序损耗累计
+//				o.setBsTheLoss(o.getBsCost().divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract(o.getBsCost()));
+				//每类损耗明细第1行(即第1个工序)的工序损耗累计为0
+				o.setBsTheLoss(BigDecimal.ZERO);
 				//成本累计(含损耗)
 				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()));
 			}else {
-				//本工序损耗
+				//工序损耗累计
 				BigDecimal theBsYield =  o.getBsYield().divide(new BigDecimal("100"),5,5);
 				o.setBsTheLoss((processList.get(i - 1).getBsAllLoss()).divide(theBsYield, 5, 5).subtract((processList.get(i - 1).getBsAllLoss())));
 				//成本累计(含损耗)

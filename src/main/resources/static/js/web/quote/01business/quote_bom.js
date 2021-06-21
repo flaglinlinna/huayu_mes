@@ -236,6 +236,7 @@ $(function() {
 							{field : 'pkUnit',title : 'BOM用量单位',width : 110,templet:'#selectUnit'},
 							{field : 'purchaseUnit',title : '采购单位',templet : '#selectPurchaseUnit',width : 110},
 							{field : 'bsAgent',title : '客户代采',width : 80,templet:'#bsAgentTpl'},
+							{field : 'bsSingleton',title : '单件',width : 80,templet:'#bsSingletonTpl'},
 							{field : 'productRetrial',title : '制造评估重审',templet : '#statusTpl',width : 110},
 							// {field : 'purchaseRetrial',title : '采购重申',templet : '#statusTpl1',width : 120},
 							// {field : 'outRetrial',title : '外协重审',templet : '#statusTpl2',width : 120},
@@ -261,6 +262,21 @@ $(function() {
 									tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2")
 								}
 								});
+
+								// layuitable =tabelId[0].getElementsByClassName("layui-table-main");
+
+								// $('*[lay-tips]').on('mouseenter', function(){
+								// 	var content = $(this).attr('lay-tips');
+								//
+								// 	this.index = layer.tips('<div style="padding: 10px; font-size: 14px; color: #eee;">'+ content + '</div>', this, {
+								// 		time: -1
+								// 		,maxWidth: 280
+								// 		,tips: [3, '#3A3D49']
+								// 	});
+								// }).on('mouseleave', function(){
+								// 	layer.close(this.index);
+								// });
+
 							}
 						});
 
@@ -893,6 +909,8 @@ function getTableList() {
 					tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2")
 				}
 			});
+
+			$('div[lay-id="quoteBomList"]').find('.layui-table-header').find('th[data-field="purchaseUnit"]').find('span').html('采购单位<i class="layui-icon alone-tips" lay-tips="对于工作中心是五金注塑表面（去除了组装的），针对外购清单中“采购单位”是PCS的物料，只有材料成本，不用计算人工成本制造成本。"></i>');
 		}
 	})
 

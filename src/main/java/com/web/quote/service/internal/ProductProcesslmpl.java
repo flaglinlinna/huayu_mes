@@ -649,7 +649,7 @@ public class ProductProcesslmpl implements ProductProcessService {
                 process.setBsFeeWxAll(new BigDecimal(processTemp.getBsFeeWxAll()));
                 process.setBsLoss(new BigDecimal(processTemp.getBsLoss()));
             }
-            if(!isPcs) {
+            if(!isPcs||("packag").equals(processTemp.getBsType())) {
                 if (StringUtils.isNotEmpty(processTemp.getBsCycle())) {
                     process.setBsCycle(new BigDecimal(processTemp.getBsCycle()));
                 }

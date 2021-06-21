@@ -461,6 +461,10 @@ public class CheckImpl   implements CheckService {
 								//不是复制的单，下发材料关联的bomId则为bom的Id
 								pm.setPkBomId(quote.getBsCopyId()==null?qb.getId():qb.getPkBomId());
 								pm.setBsQty(qb.getBsQty());
+								pm.setBsSingleton(qb.getBsSingleton());
+//								if(pm.getBsSingleton()==1){
+//									pm.setBsQty(qb.getBsQty());
+//								}
 								pm.setRetrial(qb.getProductRetrial());
 								if (qb.getUnit() != null) {
 									if(pm.getBsType().equals("surface")){
@@ -534,6 +538,7 @@ public class CheckImpl   implements CheckService {
 							pp.setPkProc(qb.getPkProc());
 							pp.setPurchaseUnit(qb.getPurchaseUnit());
 							pp.setBsLinkName(qb.getBsLinkName());
+							pp.setBsSingleton(qb.getBsSingleton());
 							pp.setPkBomId(qb.getPkQuoteBom());
 							pp.setPkQuote(c.getBsRecordId());
 							pp.setCopyId(qb.getCopyId()!=null? qb.getCopyId() : qb.getId());

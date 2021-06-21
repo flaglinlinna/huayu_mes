@@ -128,6 +128,14 @@
 			{{#  } }}
 		</script>
 
+		<script type="text/html" id="bsSingletonTpl">
+			{{#  if(d.bsSingleton){ }}
+			<input type="checkbox" name="bsSingleton" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="bsSingletonTpl" checked="checked" />
+			{{#  } else { }}
+			<input type="checkbox" name="bsSingleton" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="bsSingletonTpl"/>
+			{{#  } }}
+		</script>
+
 			<script type="text/html" id="selectWc" >
 				<select name="selectUnit" lay-filter="pkBjWorkCenter" lay-search>
 					<option value="">请选择</option>

@@ -325,6 +325,12 @@ public class ProductProcess extends BaseEntity {
 	@Column
 	protected Long copyId;
 
+	/**
+	 * 单件
+	 */
+	@ApiModelProperty(name = "bsSingleton", value = "单件")
+	@Column
+	protected Integer bsSingleton = 0;
 
 	/**
 	 * 采购单位
@@ -677,5 +683,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setPurchaseUnit(String purchaseUnit) {
 		this.purchaseUnit = purchaseUnit;
+	}
+
+	public Integer getBsSingleton() {
+		return bsSingleton;
+	}
+
+	public void setBsSingleton(Integer bsSingleton) {
+		this.bsSingleton = bsSingleton;
 	}
 }

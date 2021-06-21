@@ -199,6 +199,14 @@ public class QuoteBom extends BaseEntity {
 	protected String bsGroups;
 
 	/**
+	 * 单件
+	 */
+	@ApiModelProperty(name = "bsSingleton", value = "单件")
+	@Column
+	protected Integer bsSingleton = 0;
+
+
+	/**
 	 * 是否制造评估重审
 	 * 0否 1是
 	 */
@@ -505,5 +513,13 @@ public class QuoteBom extends BaseEntity {
 
 	public void setBsItemTypeList(String bsItemTypeList) {
 		this.bsItemTypeList = bsItemTypeList;
+	}
+
+	public Integer getBsSingleton() {
+		return bsSingleton;
+	}
+
+	public void setBsSingleton(Integer bsSingleton) {
+		this.bsSingleton = bsSingleton;
 	}
 }

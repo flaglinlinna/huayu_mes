@@ -66,7 +66,7 @@ $(function() {
 					}else if(item.purchaseUnit=="PCS"){
 						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
 						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsQty"]').data('edit',true).css("background-color", "#FFFFFF");
-						$("select[name='selectUnit']").attr("disabled","disabled");
+						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsUnit"]').find('select[name="selectUnit"]').attr("disabled","disabled");
 						form.render('select');
 					}
 					if(item.retrial =="1"){
@@ -769,8 +769,17 @@ function loadAll() {
 				if(item.bsStatus=="1"){
 					tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
 					$("select[name='selectUnit']").attr("disabled","disabled");
-					form.render('select');
+					layui.form.render('select');
+				}else if(item.purchaseUnit=="PCS"){
+					tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
+					tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsQty"]').data('edit',true).css("background-color", "#FFFFFF");
+					tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsUnit"]').find('select[name="selectUnit"]').attr("disabled","disabled");
+					layui.form.render('select');
 				}
+				if(item.retrial =="1"){
+					tableIns.find('tr[data-index=' + i + ']').find('td').css("background-color", "#FFFF00");
+				}
+
 			});
 
 			res.data.forEach(function(item, index) {
@@ -800,8 +809,8 @@ function loadAll() {
 				} else if (bsType == 'packag') {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 					$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
-					//$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
-					//$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
+					//	$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsGroups"]').removeClass("layui-hide");
+					//	$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsGroups"]').removeClass("layui-hide");
 				}
 			});
 

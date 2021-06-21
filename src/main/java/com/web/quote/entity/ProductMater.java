@@ -244,6 +244,13 @@ public class ProductMater extends BaseEntity {
 	protected Integer retrial = 0;
 
 	/**
+	 * 单件
+	 */
+	@ApiModelProperty(name = "bsSingleton", value = "单件")
+	@Column
+	protected Integer bsSingleton = 0;
+
+	/**
 	 * 复制的bomId
 	 */
 	@ApiModelProperty(name = "pkBomId", value = "复制的bomId")
@@ -563,5 +570,13 @@ public class ProductMater extends BaseEntity {
 
 	public void setBsMaterLose(BigDecimal bsMaterLose) {
 		this.bsMaterLose = bsMaterLose;
+	}
+
+	public Integer getBsSingleton() {
+		return bsSingleton;
+	}
+
+	public void setBsSingleton(Integer bsSingleton) {
+		this.bsSingleton = bsSingleton;
 	}
 }

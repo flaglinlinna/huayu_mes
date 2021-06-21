@@ -98,7 +98,7 @@ $(function() {
 						}else if(item.purchaseUnit=="PCS"&&bsType!='packag') {
 							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
 							tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsYield"]').data('edit', true).css("background-color", "#FFFFFF");
-							$("select[name='selectModelType']").attr("disabled", "disabled");
+							tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsModelType"]').find('select[name="selectModelType"]').attr("disabled","disabled");
 							form.render('select');
 						}
 
@@ -1297,10 +1297,25 @@ function loadAll() {
 
 			var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 			layui.each(res.data, function(i, item){
-				if(item.bsStatus=="1"){
-					tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
-					$("select[name='selectModelType']").attr("disabled","disabled");
-					form.render('select');
+				console.log(item.purchaseUnit);
+				if(bsType!="out") {
+					if (item.bsStatus == 1) {
+						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
+						$("select[name='selectModelType']").attr("disabled", "disabled");
+						layui.form.render('select');
+					}else if(item.purchaseUnit=="PCS"&&bsType!='packag') {
+						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
+						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsYield"]').data('edit', true).css("background-color", "#FFFFFF");
+						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsModelType"]').find('select[name="selectModelType"]').attr("disabled","disabled");
+						layui.form.render('select');
+					}
+
+				}else {
+					if(iStatus>=2){
+						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
+						$("select[name='selectModelType']").attr("disabled", "disabled");
+						layui.form.render('select');
+					}
 				}
 			});
 			$(".layui-table-total").find('tr').find('td').css("background-color", "#d2d2d2");

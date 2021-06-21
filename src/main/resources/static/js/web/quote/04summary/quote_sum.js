@@ -493,7 +493,7 @@ $(function() {
 				{field : 'BS_YIELD',title : '工序良率%',width : 90,templet:function (d) {
 						return Number(d.BS_YIELD).toFixed(2);
 					}},
-				{field : 'BS_THE_LOSS',title : '工序损耗',width : 90,totalRow : true},
+				{field : 'BS_THE_LOSS',title : '工序损耗累计',width : 90,totalRow : true},
 				{field : 'bsCostLoss',title : '工序成本(含损耗)',width : 130,totalRow : true,templet: function (d) {
 						return (Number(d.BS_COST)+Number(d.BS_THE_LOSS)).toFixed(4);
 					}},

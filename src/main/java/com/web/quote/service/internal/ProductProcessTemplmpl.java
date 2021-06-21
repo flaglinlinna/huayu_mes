@@ -378,7 +378,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
 //                    process.setBsUserNum(row6);
                     process.setBsCapacity(row7);
                     process.setBsYield(row6);
-                    if(!isPcs) {
+                    if(!isPcs||("packag").equals(process.getBsType())) {
                         if (!row5.matches("^\\d+$") && !row5.matches("^\\d+\\.\\d+$")) {
                             errInfo = errInfo + "人数必须是数字类型;";
                         } else {

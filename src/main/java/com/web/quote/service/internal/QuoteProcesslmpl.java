@@ -638,6 +638,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				quoteProcess.setBsElement(o.getBsElement());
 				quoteProcess.setItemType(o.getItp().getItemType());
 				quoteProcess.setBsName(o.getBsComponent());
+				quoteProcess.setBsSingleton(o.getBsSingleton());
 				quoteProcess.setCreateBy(userId);
 				quoteProcess.setCreateDate(date);
 				quoteProcess.setPkWorkCenter(o.getPkBjWorkCenter());
@@ -678,6 +679,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			 o.setPkQuoteBom(quoteBom.getId());
 			 o.setBsElement(quoteBom.getBsElement());
 			 o.setBsName(quoteBom.getBsComponent());
+			 o.setBsSingleton(quoteBom.getBsSingleton());
 			 o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
 			 o.setItemType(quoteBom.getItp().getItemType());
 			 o.setBsGroups(quoteBom.getBsGroups());
@@ -699,6 +701,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				quoteProcess.setBsElement(o.getBsElement());
 				quoteProcess.setItemType(o.getItp().getItemType());
 				quoteProcess.setBsName(o.getBsComponent());
+				quoteProcess.setBsSingleton(o.getBsSingleton());
 				quoteProcess.setCreateBy(userId);
 				quoteProcess.setCreateDate(date);
 				quoteProcess.setPkWorkCenter(o.getPkBjWorkCenter());
