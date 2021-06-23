@@ -7,6 +7,50 @@ $(function() {
 		function() {var form = layui.form, layer = layui.layer, 
 		laydate = layui.laydate, table = layui.table;
 						// 按钮监听事件
+
+		tableIns = table.render({
+			elem : '#productFileList',
+			url : context + '/quoteFile/getList?pkQuote=' + 8252,
+			method : 'get', // 默认：get请求
+			cellMinWidth : 80,
+			// toolbar: '#toolbar',
+			height : 'full-65',// 固定表头&full-查询框高度
+			even : true,// 条纹样式
+			page : true,
+			limit:20,
+			request : {
+				pageName : 'page', // 页码的参数名称，默认：page
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			},
+			parseData : function(res) {
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+					// code值为200表示成功
+				}
+			},
+			cols : [ [{type : 'numbers'},
+				{field : 'bsFileName',title : '文件名称',templet : '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="' + context
+						+ '/file/get?fsFileId={{d.pkFileId}}" th:href="@{/file/get?fsFileId={{d.pkFileId}}}">{{ d.bsFileName==null?"":d.bsFileName }}</a></div>'},
+				{field : 'createBy',title : '创建人',width : 200},
+				{field : 'createDate',title : '创建时间',width : 200},
+				// {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 150}
+				] ],
+			done : function(res, curr, count) {
+				// 如果是异步请求数据方式，res即为你接口返回的信息。
+				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+				// console.log(res);
+				// 得到当前页码
+				// console.log(curr);
+				// 得到数据总量
+				// console.log(count);
+				pageCurr = curr;
+			}
+		});
+
 		setData();
 		setTable();
 		form.on('submit(saveData)',function() {

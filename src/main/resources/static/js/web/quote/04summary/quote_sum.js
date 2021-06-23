@@ -268,8 +268,8 @@ $(function() {
 				// 		return '组装'
 				// 	}
 				// },totalRowText : "合计"},
-			//{field : 'bsComponent',width : 120,title : '组件名称',sort : true},
-			{fixed:'left',field : 'bsMaterName',width : 200,title : '材料名称',totalRowText : "合计"},
+			{fixed:'left',field : 'bsComponent',width : 120,title : '零件名称',totalRowText : "合计"},
+			{fixed:'left',field : 'bsMaterName',width : 200,title : '材料名称'},
 			//{field : 'bsMachiningType',title : '加工类型',width : 100,hide : true},/*(表面处理)*/
 			//{field : 'bsColor',title : '配色工艺',width : 100,hide : true},/*(表面处理)*/
 			{fixed:'left',field : 'bsModel',width : 200,title : '材料规格'},

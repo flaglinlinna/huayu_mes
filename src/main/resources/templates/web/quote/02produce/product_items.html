@@ -50,16 +50,8 @@
 			</div>
 
 			<fieldset class="layui-elem-field layui-field-title"></fieldset>
-			<!-- <form id="itemForm" class="layui-form layui-form-pane"
-				lay-filter="itemForm" method="post" action="">
-				<div class="layui-form-item">
-					<div class="layui-input-block" style="width: 100%;" >
-                    <button class="layui-btn layui-btn-sm layui-btn-normal" 
-                    style="width:15%;margin-left:35%;"
-                    lay-submit="" lay-filter="saveData">提 交</button>
-                </div>
-				</div>
-			</form>-->
+
+			<table id="productFileList" lay-filter="productFileTable"></table>
 		</div>
 		<script th:inline="javascript">
 		var ItemList=[[${ItemList}]];
