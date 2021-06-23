@@ -83,6 +83,9 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         }else{
         	quote.setBsProfitProd(getBigDecimal(api.getData()));
         }
+        if(quoteDao.countByDelFlagAndBsProjVerAndBsProdAndBsCustName(0,quote.getBsProjVer(),quote.getBsProd(),quote.getBsCustName())>0){
+            return ApiResponseResult.failure("存在产品型号、客户、版本组合相同的报价单,请修改后保存!");
+        }
         //---end----
     	//1:生成报价编号
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -143,6 +146,9 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         }
         //1.新建报价单
         quote.setBsCopyId(quote.getId());
+        if(quoteDao.countByDelFlagAndBsProjVerAndBsProdAndBsCustName(0,quote.getBsProjVer(),quote.getBsProd(),quote.getBsCustName())>0){
+            return ApiResponseResult.failure("存在产品型号、客户、版本组合相同的报价单,请修改后保存!");
+        }
         quote.setId(null);
         this.add(quote);
         //2.复制报价项目清单 (1 bom,2产品资料 3模具清单 4.工艺流程)
@@ -466,6 +472,12 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         Quote o = quoteDao.findById((long) quote.getId());
         if(o == null){
             return ApiResponseResult.failure("该报价单不存在！");
+        }
+        //产品型号、客户，检查版本号不能重复 ,修改其中一个值就去查询
+        if(!(o.getBsProjVer().equals(quote.getBsProjVer())&&o.getBsProd().equals(quote.getBsProd())&&o.getBsCustName().equals(quote.getBsCustName()))){
+            if(quoteDao.countByDelFlagAndBsProjVerAndBsProdAndBsCustName(0,quote.getBsProjVer(),quote.getBsProd(),quote.getBsCustName())>0){
+                return ApiResponseResult.failure("存在产品型号、客户、版本组合相同的报价单,请修改后保存!");
+            }
         }
         //20201223-fyx-先校验是否维护了利润
         ApiResponseResult api = this.doCheckProfit(quote.getBsDevType(), quote.getBsProdType());

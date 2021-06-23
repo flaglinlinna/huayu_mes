@@ -18,6 +18,9 @@ public interface QuoteDao extends CrudRepository<Quote, Long>,JpaSpecificationEx
 	public int countByDelFlagAndBsCode(Integer delFlag, String bsCode);//查询编号是否存在
 	
 	public List<Quote> findByDelFlagAndId(Integer delFlag,Long id);
+
+//	public List<Quote> findByDelFlagAndId(Integer delFlag,Long id);bsProjVer bsCustName bsProd
+	public int countByDelFlagAndBsProjVerAndBsProdAndBsCustName(Integer delFlag,String bsProjVer,String bsProd,String bsCustName);
 	
 	 @Query(value = "select count(p.id)nums,p.bs_status status from "+Quote.TABLE_NAME+" p where p.del_flag=0 group by p.bs_status ", nativeQuery = true)
 	 public List<Map<String, Object>> getNumByStatus();

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.PageRequest;
@@ -84,9 +85,12 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 				UserUtil.getSessionUser().getFactory() + "", UserUtil.getSessionUser().getId() + "",
 				taskNo,itemCode,linerName,barcode1,barcode2,checkRep,type,prcName);
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
-			return ApiResponseResult.failure(list.get(1).toString());
+			return ApiResponseResult.failure(list.get(3).toString());
 		}
-		return ApiResponseResult.success().data(list.get(2).toString());
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("time",list.get(1).toString());
+		jsonObject.put("count",list.get(2).toString());
+		return ApiResponseResult.success().data(jsonObject);
 	}
 
 
@@ -121,7 +125,7 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
 			@Override
 			public CallableStatement createCallableStatement(Connection con) throws SQLException {
-				String storedProc = "{call   "+prcName+" (?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				String storedProc = "{call   "+prcName+" (?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
 				CallableStatement cs = con.prepareCall(storedProc);
 				cs.setString(1, facoty);
 				cs.setString(2, company);
@@ -134,17 +138,19 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 				cs.setString(9, barcode2);
 				cs.setString(10, checkRep);
 				cs.registerOutParameter(11, java.sql.Types.VARCHAR);// 输出参数 时间信息
-				cs.registerOutParameter(12, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回信息
+				cs.registerOutParameter(12, java.sql.Types.INTEGER);// 输出参数 已扫描数
+				cs.registerOutParameter(13, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(14, java.sql.Types.VARCHAR);// 输出参数 返回信息
 				return cs;
 			}
 		}, new CallableStatementCallback() {
 			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
 				List<Object> result = new ArrayList<>();
 				cs.execute();
-				result.add(cs.getInt(12));
-				result.add(cs.getString(13));
+				result.add(cs.getInt(13));
 				result.add(cs.getString(11));
+				result.add(cs.getString(12));
+				result.add(cs.getString(14));
 				return result;
 			}
 		});

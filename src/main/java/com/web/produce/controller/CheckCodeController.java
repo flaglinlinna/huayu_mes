@@ -1,8 +1,11 @@
 package com.web.produce.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.utils.CodeQueue;
 import com.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,7 +146,9 @@ public class CheckCodeController extends WebController {
 
 	            ApiResponseResult result = checkCodeService.subCode(taskNo,itemCode,linerName,barcode1,barcode2,checkRep,type,prcType);
 				if(result.isResult()){
-					CodeQueue.getCodeQueue().produce( company+ ","+ factory+","+ UserUtil.getSessionUser().getId() + ","+taskNo+","+itemCode+","+linerName+","+type+","+result.getData().toString()+","+prcType);
+					JSONObject jsonObject = (JSONObject) result.getData();
+//					Map<String,Object> map = JSONObject.parseObject(result.getData()));
+					CodeQueue.getCodeQueue().produce( company+ ","+ factory+","+ UserUtil.getSessionUser().getId() + ","+taskNo+","+itemCode+","+linerName+","+type+","+jsonObject.get("time").toString()+","+prcType);
 				}
 				logger.debug("小码校验=subCode:");
 

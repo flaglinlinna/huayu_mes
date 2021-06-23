@@ -203,7 +203,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         errInfo = errInfo + "制品量不能为空;";
                     }
                     if(StringUtils.isNotEmpty(row6)){
-                        List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row6,0);
+                        List<Unit> unitList =unitDao.findByUnitCodeAndDelFlag(row6,0);
                         if(unitList!=null&& unitList.size()>0){
                             temp.setPkUnit(unitList.get(0).getId());
                         }else {
@@ -239,7 +239,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
 
                     if(StringUtils.isNotEmpty(row5)){
                         temp.setBsUnit(row5);
-                        List<Unit> unitList =unitDao.findByUnitNameAndDelFlag(row5,0);
+                        List<Unit> unitList =unitDao.findByUnitCodeAndDelFlag(row5,0);
                         if(unitList!=null&& unitList.size()>0){
                             temp.setPkUnit(unitList.get(0).getId());
                         }else {

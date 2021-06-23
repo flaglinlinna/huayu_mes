@@ -358,11 +358,7 @@ function subCode(taskNo, barcode1, barcode2) {
                     scanTime: nowTime,
                     result: "扫描成功"
                 }
-                var barNum = $("#barNum").val();
-                if(barNum==null||barNum==undefined){
-                    barNum = 0;
-                }
-                $("#barNum").val(Number(barNum)+1);
+                $("#barNum").val(data.data.count);
                 tabledata.push(dataT);
                 tableIns.reload({
                     data: tabledata
