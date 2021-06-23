@@ -168,7 +168,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				}else if(StringUtils.isEmpty(o.getItemType())) {
 					//新增的时候为空
 					o.setBsComponentList(JSON.toJSONString(componentList));
-					o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
+					if(StringUtils.isEmpty(o.getBsLinkName())) {
+						o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
+					}
 				}else {
 					if(StringUtils.isEmpty(o.getBsLinkName())){
 						o.setBsLinkName(o.getBsName());
