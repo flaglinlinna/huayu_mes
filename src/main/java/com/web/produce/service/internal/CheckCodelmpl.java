@@ -89,6 +89,32 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 		return ApiResponseResult.success().data(list.get(2).toString());
 	}
 
+
+	@Override
+	public ApiResponseResult updateCode(String company,String factory,String userId,String taskNo,String itemCode,String linerName,String type,String time,String prcType) throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			String prcName = "prc_mes_cof_bar_s_update";
+//			if (prcType != null) {
+//				if (("check").equals(prcType)) {
+//					prcName = "prc_mes_cof_bar_s_save";
+//				} else if (("infrared").equals(prcType)) {
+//					prcName = "prc_mes_cof_resp_save";
+//				}
+//			}
+
+			List<Object> list = updateCodePrc(company,factory,userId,
+					taskNo,itemCode,linerName,type,time,prcName);
+			if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+				return ApiResponseResult.failure(list.get(1).toString());
+			}
+			return ApiResponseResult.success();
+		}catch (Exception e){
+			e.printStackTrace();
+			return ApiResponseResult.failure().message("");
+		}
+	}
+
 	// 提交条码
 	public List subCodePrc(String company, String facoty, String user_id,String taskNo , String itemCode,
 			String linerName, String barcode1, String barcode2,String checkRep,String type,String prcName) throws Exception {
@@ -107,9 +133,9 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 				cs.setString(8, barcode1);
 				cs.setString(9, barcode2);
 				cs.setString(10, checkRep);
-				cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(11, java.sql.Types.VARCHAR);// 输出参数 时间信息
 				cs.registerOutParameter(12, java.sql.Types.INTEGER);// 输出参数 返回标识
-				cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回信息
 				return cs;
 			}
 		}, new CallableStatementCallback() {
@@ -118,12 +144,46 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 				cs.execute();
 				result.add(cs.getInt(12));
 				result.add(cs.getString(13));
-				result.add(cs.getInt(11));
+				result.add(cs.getString(11));
 				return result;
 			}
 		});
 		return resultList;
 	}
+
+	// 提交条码
+	public List updateCodePrc(String company, String facoty, String user_id,String taskNo , String itemCode,
+						   String linerName, String type,String time,String prcName) throws Exception {
+		List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
+			@Override
+			public CallableStatement createCallableStatement(Connection con) throws SQLException {
+				String storedProc = "{call   "+prcName+" (?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+				CallableStatement cs = con.prepareCall(storedProc);
+				cs.setString(1, facoty);
+				cs.setString(2, company);
+				cs.setString(3, user_id);
+				cs.setString(4, taskNo);
+				cs.setString(5, itemCode);
+				cs.setString(6, linerName);
+				cs.setString(7, type);
+				cs.setString(8, time);
+				cs.registerOutParameter(9, java.sql.Types.INTEGER);// 输出参数 返回标识
+				cs.registerOutParameter(10, java.sql.Types.VARCHAR);// 输出参数 返回标识
+				return cs;
+			}
+		}, new CallableStatementCallback() {
+			public Object doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+				List<Object> result = new ArrayList<>();
+				cs.execute();
+				result.add(cs.getInt(9));
+				result.add(cs.getString(10));
+//				result.add(cs.getInt(11));
+				return result;
+			}
+		});
+		return resultList;
+	}
+
 	@Override
 	public ApiResponseResult getHistoryList(String keyword,Integer errFlag,  String hStartTime, String hEndTime, PageRequest pageRequest)
 			throws Exception {

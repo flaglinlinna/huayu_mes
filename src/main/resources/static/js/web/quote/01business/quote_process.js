@@ -236,6 +236,19 @@ $(function() {
 			// updateProc(Guid,selectValue);
 		})
 
+		form.on('select(selectLink)', function (data) {
+			//获取当前行tr对象
+			var elem = data.othis.parents('tr').attr('data-index');
+			console.log(data.value);
+			//第一列的值是Guid，取guid来判断
+			// var Guid= elem.first().find('td').eq(1).text();
+			//选择的select对象值；
+			// var selectValue = data.value;
+			layui.table.cache['client_procList'][elem].bsLinkName = data.value;
+
+			// updateProc(Guid,selectValue);
+		})
+
 		form.on('select(selectBsGroups)', function (data) {
 			//获取当前行tr对象
 			var elem = data.othis.parents('tr');

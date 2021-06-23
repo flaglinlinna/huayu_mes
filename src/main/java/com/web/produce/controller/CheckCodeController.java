@@ -1,7 +1,10 @@
 package com.web.produce.controller;
 
+import java.util.Date;
 import java.util.Map;
 
+import com.utils.CodeQueue;
+import com.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.PostConstruct;
+
 @Api(description = "小码校验模块")
 @CrossOrigin
 @ControllerAdvice
@@ -35,7 +40,9 @@ public class CheckCodeController extends WebController {
 	 private String module = "小码校验";
 	 @Autowired
 	 private CheckCodeService checkCodeService;
-	 
+
+//	 CodeQueue codeQueue;
+//	  CodeQueue codeQueue = CodeQueue.getCodeQueue();
 	 @ApiOperation(value = "小码校验页", notes = "小码校验页", hidden = true)
 	    @RequestMapping(value = "/toCheckCode")
 	    public ModelAndView toCheckCode(String type){
@@ -131,11 +138,19 @@ public class CheckCodeController extends WebController {
 					//产出1 投入2
 					type = params.get("type").toString().equals("1")?"产出":"投入";
 				}
+				String company = UserUtil.getSessionUser().getCompany()==null?"":UserUtil.getSessionUser().getCompany();
+				String factory = UserUtil.getSessionUser().getFactory()==null?"":UserUtil.getSessionUser().getFactory();
+
 	            ApiResponseResult result = checkCodeService.subCode(taskNo,itemCode,linerName,barcode1,barcode2,checkRep,type,prcType);
-	            logger.debug("小码校验=subCode:");
+				if(result.isResult()){
+					CodeQueue.getCodeQueue().produce( company+ ","+ factory+","+ UserUtil.getSessionUser().getId() + ","+taskNo+","+itemCode+","+linerName+","+type+","+result.getData().toString()+","+prcType);
+				}
+				logger.debug("小码校验=subCode:");
+
 	            //暂不写入日志
 //	            getSysLogService().success(module,method, methodName, params);
 	            return result;
+//	            return null;
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("小码校验失败！", e);
@@ -143,8 +158,32 @@ public class CheckCodeController extends WebController {
 	             return ApiResponseResult.failure("小码校验失败！");
 	        }
 	    }
-	  
-	  @ApiOperation(value = "获取历史列表", notes = "获取历史列表")
+
+		 @PostConstruct
+		 public void runQueue(){
+			 new Thread(){
+				 @Override
+				 public void run() {
+					 try {
+						 while (true) {
+							 String info =  CodeQueue.getCodeQueue().consume();
+							 String[] infoArray = info.split(",");
+//							 System.out.println(infoArray[2]);
+							 try {
+								 ApiResponseResult result = checkCodeService.updateCode(infoArray[0],infoArray[1],infoArray[2],infoArray[3],infoArray[4],infoArray[5],infoArray[6],infoArray[7],"");
+								 System.out.println(result.getData());
+							 }catch (Exception e){
+							 	e.printStackTrace();
+							 }
+							 System.out.println("队列剩余任务："+CodeQueue.getCodeQueue().size()+"个");
+						 }
+					 } catch (InterruptedException ex) {
+					 }
+				 }
+			 }.start();
+		 }
+
+	    @ApiOperation(value = "获取历史列表", notes = "获取历史列表")
 	    @RequestMapping(value = "/getHistoryList", method = RequestMethod.GET)
 	    @ResponseBody
 		public ApiResponseResult getHistoryList(
