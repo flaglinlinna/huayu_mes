@@ -63,6 +63,7 @@ public class QuoteProductController extends WebController {
 			mav.addObject("QuoteType", sysParamSubService.getListByMCode("BJ_LIST_TYPE").getData());//报价类型
 			mav.addObject("ItemList", ItemList);
 			mav.addObject("info", info);
+			mav.addObject("quoteId", quoteId);
 			mav.addObject("Style", style);
 			mav.setViewName("/web/quote/02produce/product_items");// 返回路径
 		} catch (Exception e) {

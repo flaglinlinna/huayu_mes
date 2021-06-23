@@ -10,7 +10,7 @@ $(function() {
 
 		tableIns = table.render({
 			elem : '#productFileList',
-			url : context + '/quoteFile/getList?pkQuote=' + 8252,
+			url : context + '/quoteFile/getList?pkQuote=' + quoteId,
 			method : 'get', // 默认：get请求
 			cellMinWidth : 80,
 			// toolbar: '#toolbar',
