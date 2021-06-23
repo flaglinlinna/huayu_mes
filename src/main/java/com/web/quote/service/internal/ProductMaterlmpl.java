@@ -401,7 +401,7 @@ public class ProductMaterlmpl implements ProductMaterService {
         List<SearchFilter> filters = new ArrayList<>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         filters.add(new SearchFilter("bsSingleton", SearchFilter.Operator.EQ, 0));
-        filters.add(new SearchFilter("purchaseUnit", SearchFilter.Operator.NEQ, "PCS"));
+//        filters.add(new SearchFilter("purchaseUnit", SearchFilter.Operator.NEQ, "PCS"));
         if (StringUtils.isNotEmpty(bsType)) {
             filters.add(new SearchFilter("bsType", SearchFilter.Operator.EQ, bsType));
         }
