@@ -158,7 +158,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					//关联第一个关联零件并返回下拉选择
 						if(componentList.size()>0){
 							o.setBsComponentList(JSON.toJSONString(componentList));
-							o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
+							if(StringUtils.isEmpty(o.getBsLinkName())) {
+								o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
+							}
 						}else {
 							o.setBsLinkName(o.getBsName());
 						}
@@ -168,8 +170,10 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					o.setBsComponentList(JSON.toJSONString(componentList));
 					o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
 				}else {
+					if(StringUtils.isEmpty(o.getBsLinkName())){
+						o.setBsLinkName(o.getBsName());
+					}
 					//非辅料 (关联零件为自身零件)
-					o.setBsLinkName(o.getBsName());
 					o.setBsComponentList(JSON.toJSONString(componentList));
 				}
 			}else {
