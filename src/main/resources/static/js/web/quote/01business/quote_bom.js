@@ -5,10 +5,10 @@ var pageCurr;
 $(function() {
 	layui
 			.use(
-					[ 'form', 'table', 'upload', 'tableSelect' ],
+					[ 'form', 'table', 'upload', 'tableSelect','layer','tableFilter' ],
 					function() {
 						var table = layui.table, table1 = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect
-							, tableSelect2 = layui.tableSelect, tableSelect3 = layui.tableSelect;
+							, tableSelect2 = layui.tableSelect, tableSelect3 = layui.tableSelect,tableFilter = layui.tableFilter;
 						isComplete()
 						tableSelect = tableSelect.render({
 							elem : '#BjWorkCenter',
@@ -405,6 +405,7 @@ $(function() {
 								// console.log(curr);
 								// 得到数据总量
 								// console.log(count);
+								localtableFilterIns.reload();
 								pageCurr = curr;
 							}
 						});
@@ -418,6 +419,20 @@ $(function() {
 							}
 						});
 
+						var localtableFilterIns = tableFilter.render({
+							'elem' : '#quoteBomList',
+							'mode' : 'api',//服务端过滤
+							'filters' : [
+								{field: 'bsElement', type:'checkbox'},
+								{field: 'bsComponent', type:'checkbox'},
+								//{field: 'pkBjWorkCenter', type:'checkbox'},
+								//{field: 'pkItemTypeWg', type:'checkbox'},
+								{field: 'bsGroups', type:'checkbox'},
+								{field: 'bsMaterName', type:'input'},
+							],
+							'done': function(filters){
+							}
+						})
 
 						// 监听工具条
 						table.on('tool(quoteBomTable)', function(obj) {
