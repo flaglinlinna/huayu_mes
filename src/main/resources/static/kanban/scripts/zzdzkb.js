@@ -169,7 +169,7 @@ function toCleanXlpm() {
 function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 	option = {
 		title : {
-			text : '效率:' + eff_rate + '%',
+			text : '效率:' + eff_rate,
 			textStyle : {
 				color : '#CC0033',// 图例文字颜色
 				fontSize : 17,// 字体大小
@@ -271,7 +271,7 @@ function getChartXlpm2(hr_abn, hr_act, hr_st, eff_rate) {
 function getChartXlpm3(done, plan, doneRate) {
 	option = {
 		title : {
-			text : '完工率:' + doneRate + '%',
+			text : '完工率:' + doneRate,
 			textStyle : {
 				color : '#FFFFFF', // 图例文字颜色
 				fontSize : 17,// 字体大小
