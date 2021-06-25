@@ -9,11 +9,20 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
+import com.app.base.data.DataGrid;
+import com.system.file.dao.CommonFileDao;
+import com.system.file.entity.CommonFile;
+import com.system.user.dao.SysUserDao;
+import com.system.user.entity.SysUser;
+import com.utils.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.druid.util.StringUtils;
@@ -32,6 +41,10 @@ public class FileImpl  implements FileService {
     private FtpClientService ftpClientService;
     @Autowired
     private Environment env;
+    @Autowired
+    private CommonFileDao commonFileDao;
+    @Autowired
+    private SysUserDao sysUserDao;
 
     /**
      * 上传文件
@@ -84,7 +97,11 @@ public class FileImpl  implements FileService {
     }
 
 
-    public ApiResponseResult upload(FsFile fsFile, MultipartFile[] files) throws Exception {
+    @Override
+    public ApiResponseResult uploadByBs(FsFile fsFile, MultipartFile file,Long bsId,String bsType) throws Exception {
+        if(null==file || file.isEmpty()) {
+            return ApiResponseResult.failure("上传文件不能为空");
+        }
         String qmsPath = env.getProperty("fs.qms.path");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -95,43 +112,47 @@ public class FileImpl  implements FileService {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         String dateFileName = df.format(new Date()) + "_" + new Random().nextInt(1000);
 
-        List<FsFile> fsFileList = new ArrayList<>();
-        for(MultipartFile file:files) {
-             fsFile = new FsFile();
-            if (null == file || file.isEmpty()) {
-                return ApiResponseResult.failure("上传文件不能为空");
+        try {
+            fsFile.setBsFileSize(file.getSize());
+            if(null==fsFile.getBsContentType()) {
+                fsFile.setBsContentType(file.getContentType());
             }
-            try {
-                fsFile.setBsFileSize(file.getSize());
-                if (null == fsFile.getBsContentType()) {
-                    fsFile.setBsContentType(file.getContentType());
-                }
-                if (null == file.getOriginalFilename()) {
-                    fsFile.setBsFileType("Unknown");
-                    return ApiResponseResult.failure("无法识别该文件类型！");
-                }
+            if(null==file.getOriginalFilename()) {
+                fsFile.setBsFileType("Unknown");
+                return ApiResponseResult.failure("无法识别该文件类型！");
+            }
 
-                String originalFiletype = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
-                fsFile.setBsFileType(originalFiletype);
+            String originalFiletype = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
+            fsFile.setBsFileType(originalFiletype);
 
 //            String originalFilename = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf("."));
-                fsFile.setBsName(file.getOriginalFilename());
-                fsFile.setBsFileName(dateFileName + originalFiletype);
-                fsFile.setBsFilePath("/" + ymd);
-                ApiResponseResult result = ftpClientService.uploadFile(path, dateFileName + fsFile.getBsFileType(), new ByteArrayInputStream(file.getBytes()));
-                if (result.isResult()) {
-                    fsFile.setCreateDate(new Date());
-                    fsFileDao.save(fsFile);
-                    fsFileList.add(fsFile);
-                }
-            } catch (IOException e) {
-                logger.error("upload file exception", e);
-                return ApiResponseResult.failure("上传文件发生异常");
-            }
+            fsFile.setBsName(file.getOriginalFilename());
+            fsFile.setBsFileName(dateFileName + originalFiletype);
+            fsFile.setBsFilePath("/"+ymd);
+            ApiResponseResult result = ftpClientService.uploadFile(path, dateFileName+fsFile.getBsFileType(), new ByteArrayInputStream(file.getBytes()));
+            if(result.isResult()) {
+                fsFile.setCreateDate(new Date());
+                fsFileDao.save(fsFile);
 
+                CommonFile commonFile = new CommonFile();
+                commonFile.setmId(bsId);
+                commonFile.setFileId(fsFile.getId());
+                commonFile.setFileName(fsFile.getBsName());
+                commonFile.setCreateDate(new Date());
+                commonFile.setCreateBy(UserUtil.getSessionUser().getId());
+                commonFile.setBsType(bsType);
+                commonFileDao.save(commonFile);
+
+                return ApiResponseResult.success("文件上传成功！").data(fsFile);
+            }
+        } catch (IOException e) {
+            logger.error("upload file exception", e);
         }
-        return ApiResponseResult.success("文件上传成功！").data(fsFileList);
+        return ApiResponseResult.failure("上传文件发生异常");
     }
+
+
+
 
     /**
      * 下载文件
@@ -290,4 +311,30 @@ public class FileImpl  implements FileService {
         }
         return null;
 	}
+
+    /**
+     * 删除文件
+     * @param mid 业务id，bsType 业务类型
+     * @return
+     * @throws Exception
+     */
+    public ApiResponseResult getListByBs(Long mid, String bsType, PageRequest pageRequest) throws Exception{
+
+        Page<CommonFile> page = fsFileDao.getFileListByBs(mid,bsType,pageRequest);
+        List<HashMap<String,Object>> mapList = new ArrayList<>();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for(CommonFile commonFile:page.getContent()){
+          HashMap map =  JSONObject.parseObject(JSONObject.toJSONString(commonFile),HashMap.class);
+          if(map.get("createBy")!=null){
+              SysUser user = sysUserDao.findById(Long.parseLong(map.get("createBy").toString()));
+              if(user!=null){
+                  map.put("createName",user.getUserName());
+                  map.put("createDate",df.format(commonFile.getCreateDate()));
+              }
+          }
+          mapList.add(map);
+        }
+        return ApiResponseResult.success().data(DataGrid.create(mapList, (int) page.getTotalElements(),
+                pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
 }

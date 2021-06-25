@@ -37,6 +37,7 @@ $(function() {
 			  {fixed:'left',type : 'numbers'},
 			  {field:"id",title:"ID",hide:true},
 			  // {field:"bsStatus",title:"bsStatus",hide:true},
+			  {fixed:'left',field : 'bsElement',title : '组件名称',width : 150,sort : true,style : 'background-color:#d2d2d2'},
 			  {fixed:'left',field : 'bsComponent',title : '零件名称',width : 150,sort : true,style : 'background-color:#d2d2d2'},
 			  // {field : 'bsMachiningType',title : '加工类型<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
 			  // {field : 'bsColor',title : '配色工艺<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (表面处理)*/},
@@ -51,7 +52,7 @@ $(function() {
 			  {field : 'bsWaterGap',title : '水口重(g)<span style="color:red;font-size:12px;">*</span>',width : 100,hide : true,edit : 'text',style : 'background-color:#ffffff' /*(注塑)*/},
 			  {field : 'bsCave',title : '穴数<span style="color:red;font-size:12px;">*</span>',width : 60,hide : true,edit : 'text',style : 'background-color:#ffffff' /* (注塑)*/},
 			  //{field : 'bsSupplier',title : '备选供应商',edit : 'text',style : 'background-color:#ffffff'},
-			  {field : 'fmemo',title : '备注',width : 120,edit : 'text',style : 'background-color:#ffffff'},
+			  {field : 'fmemo',title : '备注',width : 180,edit : 'text',style : 'background-color:#ffffff'},
 			  // {fixed : 'right',title : '操作',align : 'center',width : 120,toolbar : '#optBar'}
 			  ] ],
 			done : function(res, curr, count) {

@@ -37,6 +37,7 @@ height: 30px;
 						<button class="layui-btn layui-btn-sm" id="savebtn"  type="button"  onclick="confirm()">确认完成</button>
 						<button class="layui-btn layui-btn-sm" type="button" id="cancelbtn" onclick="cancelConfirm()">取消完成</button>
 						<button class="layui-btn layui-btn-sm" type="button" id="editListBtn" onclick="saveTable()">保存</button>
+						<button class="layui-btn layui-btn-sm layui-btn-normal"  type="button" id="fileListBtn" onclick="openFileList()">附件管理</button>
 					</div>
 				</div>
         </form>
@@ -59,6 +60,14 @@ height: 30px;
 			 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadChecked()">确认导入</button>
 			 <table id="uploadList" lay-filter="uploadTable"></table>
 		 </div>
+
+
+		 <div id="fileListDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
+			 <button class="layui-btn layui-btn-sm layui-btn-normal" id="uploadBsFile">选择文件</button>
+<!--			 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadChecked()">确认导入</button>-->
+			 <table id="fileList" lay-filter="fileList"></table>
+		 </div>
+
 
 		 <script type="text/html" id="checkStatus">
 			 {{#  if(d.checkStatus == 0){ }}

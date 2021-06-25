@@ -179,7 +179,12 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					o.setBsComponentList(JSON.toJSONString(componentList));
 				}
 			}else {
-				//关联不到bom，则是外协工艺，默认非辅料(关联零件为自身零件)
+				//关联不到bom，则可能是外协工艺，默认非辅料(关联零件为自身零件)
+//				if(o.getBjWorkCenter().getBsCode())
+				Map<String, Object> map = new HashMap<>();
+				map.put("BSCOMPONENT",o.getBsName());
+				componentList.add(map);
+				o.setBsComponentList(JSON.toJSONString(componentList));
 				o.setBsLinkName(o.getBsName());
 			}
 
@@ -212,6 +217,45 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		}
 		quoteProcessDao.saveAll(lqp);
 	}
+
+	//对每个组件在最后增加3行：检验、测试、包装
+	private void updateProcess(Long pkQuote){
+		List<Map<String, Object>> bsNameList = quoteProcessDao.getBsNameGroupByElement(pkQuote);
+		List<String> newName =Arrays.asList("检验","测试","包装");
+		List<QuoteProcess> quoteProcessList = new ArrayList<>();
+		try {
+		for (Map<String,Object> map: bsNameList){
+			List<String> nameList = Arrays.asList(map.get("BSNAME").toString().split(","));
+			if(!nameList.containsAll(newName)){
+				for(Integer a= 0;a<newName.size();a++){
+					QuoteProcess quoteProcess = new QuoteProcess();
+					quoteProcess.setBsElement(map.get("BSELEMENT").toString());
+					quoteProcess.setBsName(newName.get(a));
+					quoteProcess.setBsLinkName(newName.get(a));
+					List<Proc> procList = procDao.findByDelFlagAndProcName(0,newName.get(a));
+					if(procList.size()>0){
+						quoteProcess.setPkProc(procList.get(0).getId());
+						quoteProcess.setPkWorkCenter(procList.get(0).getWorkcenterId());
+					}
+					quoteProcess.setPkQuote(pkQuote);
+					quoteProcess.setCreateBy(UserUtil.getSessionUser().getId());
+					quoteProcess.setCreateDate(new Date());
+					quoteProcess.setBsOrder(Integer.parseInt(map.get("BSORDER").toString())+a+1);
+					quoteProcessList.add(quoteProcess);
+				}
+			}
+		}
+		quoteProcessDao.saveAll(quoteProcessList);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	private void addProcess(List<QuoteProcess> quoteProcessList){
+
+//		quoteProcessDao.saveAll(lqp);
+	}
+
 
 	/**
 	 * 获取工序列表
@@ -653,7 +697,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				quoteProcess.setPurchaseUnit(o.getPurchaseUnit()); //单位为PCS 不参与人工和制费计算
 				quoteProcessList.add(quoteProcess);
 			}
+
 			quoteProcessDao.saveAll(quoteProcessList);
+			updateProcess(quoteId);
 		}catch (Exception e){
 	 		e.printStackTrace();
 		}
@@ -717,6 +763,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				quoteProcessList.add(quoteProcess);
 			}
 			quoteProcessDao.saveAll(quoteProcessList);
+			updateProcess(quoteId);
 		}catch (Exception e){
 			e.printStackTrace();
 		}

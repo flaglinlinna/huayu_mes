@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.app.base.data.ApiResponseResult;
@@ -22,11 +23,14 @@ public interface FileService {
 
 	public ApiResponseResult upload(FsFile fsFile, MultipartFile file) throws Exception;
 
-	public ApiResponseResult upload(FsFile fsFile, MultipartFile[] files) throws Exception;
+	public ApiResponseResult uploadByBs(FsFile fsFile, MultipartFile file,Long bsId,String bsType) throws Exception;
+
 	
 	public ApiResponseResult uploadByNameAndUrl(String file_name,String url,FsFile fsFile, MultipartFile file) throws Exception;
 
 	public ApiResponseResult get(Long fsFileId, HttpServletResponse response) throws Exception;
+
+	public ApiResponseResult getListByBs(Long mid,String bsType, PageRequest pageRequest) throws Exception;
 
 	public ApiResponseResult onlineView(Long fsFileId, HttpServletResponse response) throws Exception;
 

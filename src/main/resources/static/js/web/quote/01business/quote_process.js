@@ -66,7 +66,6 @@ $(function() {
 				{field : 'bsGroups',width : 130,title : '损耗分组',style : 'background-color:#d2d2d2'},
 				{field : 'bsMaterName',width : 220,title : '材料名称',style : 'background-color:#ffffff',"edit" : "text"},
 				// ,templet : '#selectBsMaterName',,templet : '#selectBsGroups'
-				// {field : 'fmemo',title : '备注',"edit" : "number","event" : "dataCol",style : 'background-color:#ffffff',
 			// 	templet : function(d) {
 			// 		if (d.fmemo == null) {return ""} else {return d.fmemo}
 			// 	}},
@@ -80,6 +79,7 @@ $(function() {
 							return ""
 						}}
 			},
+			{field : 'fmemo',title : '备注',"edit" : "text",width : 200,style : 'background-color:#ffffff'},
 			// {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar',style : 'background-color:#ffffff'}
 			] ],
 			done : function(res, curr, count) {

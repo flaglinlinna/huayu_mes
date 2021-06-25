@@ -22,7 +22,7 @@ public class CommonFile extends BaseEntity {
     /**
      * 业务ID
      */
-    @ApiModelProperty(name = "mId", value = "人工制费文件ID")
+    @ApiModelProperty(name = "mId", value = "业务ID")
     @Column
     protected Long mId;
 

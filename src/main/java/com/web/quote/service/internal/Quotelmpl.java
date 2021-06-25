@@ -106,8 +106,13 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     		qi.setPkQuote(quote.getId());
     		qi.setBsCode(qb.getBsCode());
     		qi.setBsName(qb.getBsName());
-    		qi.setToDoBy(qb.getToDoBy());
-    		qi.setBsPerson(qb.getBsPerson());
+//    		qi.setToDoBy(qb.getToDoBy());
+//    		qi.setBsPerson(qb.getBsPerson());
+
+            //建单保存时，代办人都默认为建单人
+            qi.setToDoBy(UserUtil.getSessionUser().getId());
+            qi.setBsPerson(UserUtil.getSessionUser().getUserName());
+
     		qi.setCreateDate(new Date());
     		qi.setCreateBy(UserUtil.getSessionUser().getId());
     		qi.setBsStyle(qb.getBsStyle());

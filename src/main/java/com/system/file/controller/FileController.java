@@ -3,6 +3,7 @@ package com.system.file.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,21 +53,34 @@ public class FileController extends WebController {
 	}
 
 
-	@ApiOperation(value="批量上传文件", notes="批量上传文件")
+	@ApiOperation(value="业务上传文件", notes="业务上传文件")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "file", value = "附件", dataType = "MultipartFile", paramType="query",defaultValue=""),
 	})
-	@RequestMapping(value = "/uploadMultiple", method = RequestMethod.POST)
-	public ApiResponseResult uploadMultiple(MultipartFile[] file) {
+	@RequestMapping(value = "/uploadByBs", method = RequestMethod.POST)
+	public ApiResponseResult uploadByBs(MultipartFile file,Long bsId,String bsType) {
 		try {
 			FsFile fsFile = new FsFile();
-			return fileService.upload(fsFile, file);
+			return fileService.uploadByBs(fsFile, file,bsId,bsType);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			e.printStackTrace();
 			return ApiResponseResult.failure(e.getMessage());
 		}
 	}
+
+	@ApiOperation(value="业务上传文件", notes="业务上传文件")
+	@RequestMapping(value = "/getListByBs", method = RequestMethod.GET)
+	public ApiResponseResult getListByBs(Long bsId,String bsType) {
+		try {
+			return fileService.getListByBs(bsId, bsType,super.getPageRequest(Sort.unsorted()));
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			e.printStackTrace();
+			return ApiResponseResult.failure(e.getMessage());
+		}
+	}
+
 
 	@ApiOperation(value="上传图片", notes="上传图片")
 	@ApiImplicitParams({

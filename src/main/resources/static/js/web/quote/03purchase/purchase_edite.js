@@ -1,7 +1,7 @@
 var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table', 'upload', 'tableSelect' ], function() {
-		var table = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect;
+		var table = layui.table,table2 = layui.table, form = layui.form, upload = layui.upload,upload2 = layui.upload, tableSelect = layui.tableSelect;
 
 
 
@@ -113,6 +113,49 @@ $(function() {
 
 		})
 
+		tableIns3 = table2.render({
+			elem : '#fileList',
+			url : context + '/file/getListByBs?bsId=' + quoteId+"&bsType="+'purchase',
+			method : 'get', // 默认：get请求
+			cellMinWidth : 80,
+			// toolbar: '#toolbar',
+			height : 'full-65',// 固定表头&full-查询框高度
+			even : true,// 条纹样式
+			page : true,
+			limit:20,
+			request : {
+				pageName : 'page', // 页码的参数名称，默认：page
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			},
+			parseData : function(res) {
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+					// code值为200表示成功
+				}
+			},
+			cols : [ [
+				{type : 'numbers'},
+				{field : 'bsFileName',title : '文件名称',width : 200,templet : '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="' + context
+						+ '/file/get?fsFileId={{d.fileId}}" th:href="@{/file/get?fsFileId={{d.fileId}}}">{{ d.fileName==null?"":d.fileName }}</a></div>'},
+				{field : 'createName',title : '创建人',width : 150},
+				{field : 'createDate',title : '创建时间',width : 200},
+				{title : '操作',align : 'center',toolbar : '#optBar',width : 150}
+			] ],
+			done : function(res, curr, count) {
+				// 如果是异步请求数据方式，res即为你接口返回的信息。
+				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+				// console.log(res);
+				// 得到当前页码
+				// console.log(curr);
+				// 得到数据总量
+				// console.log(count);
+				pageCurr = curr;
+			}
+		});
 
 
 		tableIns2 = table.render({
@@ -284,6 +327,36 @@ $(function() {
 			}
 		});
 
+		//上传附件
+		upload2.render({
+			elem: '#uploadBsFile'
+			,url: context+'/file/uploadByBs'
+			,multiple:true,
+			accept: 'file' //普通文件
+			,data: {
+				"bsId": function(){
+					return quoteId;
+				},
+				"bsType": "purchase"
+			}
+			,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致。
+				layer.load(); //上传loading
+			}
+			,done: function(res,index, upload){
+				layer.closeAll('loading'); //关闭loading
+				// if(res.result == true){
+				// 	document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data);
+				// 	_index++;
+				// 	fileId +=res.data.id +",";
+				//
+				// }
+				// $('#fileId').val(fileId);
+			}
+			,error: function(index, upload){
+				layer.closeAll('loading'); //关闭loading
+			}
+		});
+
 	});
 
 });
@@ -396,6 +469,27 @@ function openUpload() {
 		shadeClose : true,
 		area : [ '550px' ],
 		content : $('#uploadDiv')
+	});
+	layer.full(index);
+}
+
+// 打开导入页
+function openFileList() {
+	tableIns2.reload({
+		url : context + '/productMaterTemp/getList?quoteId=' + quoteId + '&bsPurchase=' + 0,
+		done : function(res1, curr, count) {
+			pageCurr = curr;
+		}
+	})
+	// 打开弹出框
+	var index = layer.open({
+		type : 1,
+		title : "采购附件管理",
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#fileListDiv')
 	});
 	layer.full(index);
 }
