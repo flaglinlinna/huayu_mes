@@ -55,14 +55,17 @@ $(function() {
 			  {field : 'stQuote',title : '参考报价',width:100},
 			  {field : 'feeAll',title : '评估总费用(未税)',width:130},
 			  {field : 'fmemo',title : '备注',width:100},
-				{field:'img', title:'图片预览'  , width:150,templet:function (d) {
-						if(d.fimg!=null) {
-							// return '<div><a href="/file/get?fsFileId=' + d.fimg + '" target="_black" title="点击查看大图"><img  src="/file/get?fsFileId=' + d.fimg + '" /></div>'
-							return '<div><img  src="/file/get?fsFileId=' + d.fimg + '" /></div>';
-						}else {
-							return "";
-						}
-					}},
+			  {field : 'lastupdateBy',title : '更新人',width : 100},
+			  {field : 'lastupdateDate',title : '更新时间',width : 150},
+			  {field : 'department',title : '更新人部门',width : 120},
+			  {field:'img', title:'图片预览'  , width:150,templet:function (d) {
+					if(d.fimg!=null) {
+						// return '<div><a href="/file/get?fsFileId=' + d.fimg + '" target="_black" title="点击查看大图"><img  src="/file/get?fsFileId=' + d.fimg + '" /></div>'
+						return '<div><img  src="/file/get?fsFileId=' + d.fimg + '" /></div>';
+					}else {
+						return "";
+					}
+				}},
 			  {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width:120}
 			] ],
 			done : function(res, curr, count) {

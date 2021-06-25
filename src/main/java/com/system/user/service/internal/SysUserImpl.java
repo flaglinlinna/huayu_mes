@@ -18,6 +18,7 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.produce.service.internal.PrcUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ import java.util.regex.Pattern;
 
 @Service(value = "sysUserService")
 @Transactional(propagation = Propagation.REQUIRED)
-public class SysUserImpl implements SysUserService {
+public class SysUserImpl extends PrcUtils implements SysUserService {
 
     @Autowired
     private SysUserDao sysUserDao;
@@ -132,7 +133,7 @@ public class SysUserImpl implements SysUserService {
             o.setEmail(sysUser.getEmail());
             o.setSex(sysUser.getSex());
             o.setRegisterSrc(sysUser.getRegisterSrc());
-
+            o.setDepartment(sysUser.getDepartment());
             //删除原来的角色权限
             List<UserRoleMap> list = userRoleMapDao.findByDelFlagAndUserId(0, o.getId());
             if(list.size() > 0){
@@ -493,6 +494,7 @@ public class SysUserImpl implements SysUserService {
         mapUser.put("email", sysUser.getEmail());
         mapUser.put("sex", sysUser.getSex());
         mapUser.put("status", sysUser.getStatus());
+        mapUser.put("department", sysUser.getDepartment());
       //获取当前用户关联角色信息
         List<Map<String, Object>> list = userRoleMapDao.getRoleIdByUserId(sysUser.getId());
         mapUser.put("userRoles", list);
@@ -1015,5 +1017,15 @@ public class SysUserImpl implements SysUserService {
 		// TODO Auto-generated method stub
 		return sysUserDao.queryTimeOut();
 	}
+
+    @Override
+    public ApiResponseResult getDept() throws  Exception{
+        List<Object> list = getDeptPrc(UserUtil.getSessionUser().getFactory()+"", UserUtil.getSessionUser().getCompany()+"",
+                "","用户部门", "prc_mes_cof_org_chs");
+        if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
+            return ApiResponseResult.failure(list.get(1).toString());
+        }
+        return ApiResponseResult.success("").data(list.get(3));
+    }
 	
 }

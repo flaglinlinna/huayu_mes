@@ -215,6 +215,23 @@ public class SysUserController extends WebController{
         }
     }
 
+    @ApiOperation(value="获取部门下拉信息", notes="获取部门下拉信息", hidden = true)
+    @RequestMapping(value = "/getDept", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getDept() {
+        String method = "/sysUser/getDept";String methodName ="获取部门下拉信息";
+        try {
+            ApiResponseResult result = sysUserService.getDept();
+            logger.debug("获取部门下拉信息=getTaskNo:");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取部门下拉信息失败！", e);
+            getSysLogService().error(module,method, methodName,e.toString());
+            return ApiResponseResult.failure("获取部门下拉信息失败！");
+        }
+    }
+
     @ApiOperation(value = "获取用户和角色信息", notes = "获取用户和角色信息")
     @RequestMapping(value = "/getUserAndRoles", method = RequestMethod.GET)
     @ResponseBody

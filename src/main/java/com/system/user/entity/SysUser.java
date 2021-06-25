@@ -94,6 +94,13 @@ public class SysUser extends BaseEntity {
      */
     @Transient
     protected String orgIds;
+
+	/**
+	 * 部门名称
+	 */
+	@ApiModelProperty(name = "mobile", value = "部门名称")
+	@Column(length = 50)
+	protected String department;
     
 
 	public String getUserCode() {
@@ -184,6 +191,14 @@ public class SysUser extends BaseEntity {
 		this.orgIds = orgIds;
 	}
 
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
@@ -195,6 +210,7 @@ public class SysUser extends BaseEntity {
 		sb.append(",性别:").append(this.sex);
 		sb.append(",邮箱:").append(this.email);
 		sb.append(",电话号码:").append(this.mobile);
+		sb.append(",部门名称:").append(this.department);
 //		sb.append(",registerSrc:").append(this.registerSrc);
 //		sb.append(",roleIds:").append(this.roleIds);
 //		sb.append(",orgIds:").append(this.orgIds);

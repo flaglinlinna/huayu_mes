@@ -66,5 +66,8 @@ public interface SysUserService {
     public ApiResponseResult changPsw(String userCode,String newp) throws Exception;
     
     public ApiResponseResult getOrgList()throws Exception;//获取组织架构表数据
+
+    //用户部门下拉
+    public ApiResponseResult getDept() throws  Exception;
     
 }

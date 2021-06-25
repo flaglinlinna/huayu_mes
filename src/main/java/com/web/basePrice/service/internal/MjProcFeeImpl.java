@@ -215,7 +215,11 @@ public class MjProcFeeImpl implements MjProcFeeService {
                     map.put("createDate", df.format(mjProcFee.getCreateDate()));
                 }
                 if(mjProcFee.getLastupdateBy()!=null){
-                    map.put("lastupdateBy",sysUserDao.findById((long)mjProcFee.getCreateBy()).getUserName());
+                    SysUser updateUser = sysUserDao.findById((long)mjProcFee.getCreateBy());
+                    if(updateUser!=null){
+                        map.put("lastupdateBy",updateUser.getUserName());
+                        map.put("department",updateUser.getDepartment());
+                    }
                     map.put("lastupdateDate",df.format(mjProcFee.getLastupdateDate()));
                 }
                 mapList.add(map);

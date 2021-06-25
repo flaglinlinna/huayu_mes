@@ -123,17 +123,34 @@ $(function () {
                         },
                     },
                     done: function (elem, data) {
-                        // 选择完后的回调，包含2个返回值
-                        // elem:返回之前input对象；data:表格返回的选中的数据 []
                         var da = data.data;
-                        // console.log(da[0].num)
-                        form.val("itemFrom", {
-                            "taskno": da[0].TASK_NO,
-                            "itemcode": da[0].ITEM_NO,
-                            "liner": da[0].LINER_NAME,
-                            // "cust" : da[0].CUST_NAME_S
-                        });
-                        form.render();// 重新渲染
+                        var prodDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(da[0].PROD_DATE);
+                        console.log(new Date().toDateString());
+                        console.log(new Date(prodDate).toDateString());
+                        if (new Date().toDateString() === new Date(prodDate).toDateString()) {
+                            form.val("itemFrom", {
+                                "taskno": da[0].TASK_NO,
+                                "itemcode": da[0].ITEM_NO,
+                                "liner": da[0].LINER_NAME,
+                                // "cust" : da[0].CUST_NAME_S
+                            });
+                            form.render();// 重新渲染
+                        }else {
+                            layer.confirm("选择的计划日期不是今天,是否确认继续操作", {
+                                btn: ["取消","确定"] //按钮
+                            }, function(){
+                                layer.closeAll('dialog');
+                            }, function(){
+                                form.val("itemFrom", {
+                                    "taskno": da[0].TASK_NO,
+                                    "itemcode": da[0].ITEM_NO,
+                                    "liner": da[0].LINER_NAME,
+                                    // "cust" : da[0].CUST_NAME_S
+                                });
+                                form.render();// 重新渲染
+                            });
+
+                        }
                     }
                 });
 

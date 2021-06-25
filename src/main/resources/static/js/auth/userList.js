@@ -7,7 +7,7 @@ $(function() {
     layui.use(['table','tableSelect'], function(){
         var table = layui.table
             ,form = layui.form, formSelects = layui.formSelects,
-            tableSelect = layui.tableSelect;
+            tableSelect = layui.tableSelect,tableSelect2 = layui.tableSelect;
 
         tableIns=table.render({
             elem: '#uesrList'
@@ -143,6 +143,64 @@ $(function() {
 				form.render();// 重新渲染 
 			}
 		});
+
+        tableSelect = tableSelect2.render({
+            elem : '#department',
+            searchKey : 'keyword',
+            checkedKey : 'DEPT_NAME',
+            page: true,
+            searchPlaceholder : '试着搜索',
+            table : {
+                url : context + '/sysUser/getDept',
+                method : 'get',
+                cols : [ [ {field : 'checkColumn',
+                    type : 'radio'
+                },// 多选 radio
+                    {
+                        field : 'DEPT_NAME',
+                        title : '部门名称',
+                        align:"center"
+                    } ] ],
+                parseData : function(res) {
+                    //console.log(res)
+                    if (res.result) {
+                        // 可进行数据操作
+                        return {
+                            "count" : 0,
+                            "msg" : res.msg,
+                            "data" : res.data,
+                            "code" : res.status
+                            // code值为200表示成功
+                        }
+                    }
+
+                }, done: function(res, curr, count){
+                    if($("#department").val()){
+                        var strs = $("#department").val();
+                        for(var i=0;i<res.data.length;i++){
+                                if(res.data[i].DEPT_NAME == strs){
+                                    console.log("111");
+                                    res.data[i]["LAY_CHECKED"]='true';
+                                    $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').prop('checked', true);
+                                    $('tbody tr[data-index="'+i+'"] td[data-field="checkColumn"] input[type="checkbox"]').next().addClass('layui-form-checked');
+                                }
+                        }
+                    }
+
+                }
+            },
+            done : function(elem, data) {
+
+                // 选择完后的回调，包含2个返回值
+                // elem:返回之前input对象；data:表格返回的选中的数据 []
+                var da = data.data[0];
+                console.log(da)
+                form.val("userForm", {
+                    "department" : da.DEPT_NAME,
+                });
+                form.render();// 重新渲染
+            }
+        });
 
         //监听在职操作
         form.on('switch(isStatusTpl)', function(obj){
@@ -402,6 +460,11 @@ function getUserAndRoles(obj,id) {
                         formSelects.value('disasterType', disArray);
                     }*/
                     $("#orgIds").val(data.data.Org_id==null?'':data.data.Org_id);
+
+
+                    $('#department').val(data.data.user.department==null?'':data.data.user.department)
+                    $('#department').attr("ts-selected",data.data.user.department==null?'':data.data.user.department);
+
                     $('#orgInfo').val(data.data.Org_name==null?'':data.data.Org_name)
                     $('#orgInfo').attr("ts-selected",data.data.Org_id==null?'':data.data.Org_id);
                     
