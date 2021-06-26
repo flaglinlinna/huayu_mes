@@ -161,13 +161,13 @@ public class QuoteController extends WebController {
     public ApiResponseResult getList(String keyword,String status,String bsCode,String bsType,String bsStatus,
 									 String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
 									 String bsPosition ,String bsCustRequire,String bsLevel,String bsRequire,
-									 String bsDevType,String bsCustName,String quoteId) {
+									 String bsDevType,String bsCustName,String quoteId,String userName) {
         String method = "quote/getList";String methodName ="获取报价单列表";
         try {
             Sort sort = new Sort(Sort.Direction.ASC, "id");
             ApiResponseResult result = quoteService.getList(quoteId,keyword, status, bsCode,bsType,bsStatus,bsFinishTime,
 					bsRemarks,bsProd,bsSimilarProd,bsPosition,bsCustRequire,bsLevel,bsRequire,bsDevType,
-					bsCustName,super.getPageRequest(sort));
+					bsCustName,userName,super.getPageRequest(sort));
             logger.debug("获取报价单列表=getList:");
             getSysLogService().success(module,method, methodName, keyword);
             return result;

@@ -71,6 +71,13 @@
 							<input id="bsRemarks" autocomplete="off" name="bsRemarks"
 								class="layui-input" type="text" />
 						</div>
+
+						<label class="layui-form-label layui-required">项目总量</label>
+						<div class="layui-input-inline">
+							<input id="bsTotal" autocomplete="off" name="bsTotal"
+								   class="layui-input" type="text" lay-verify="required|double"/>
+						</div>
+
 					</div>
 				</div>
 				<hr style="margin-top: 10px; margin-bottom: 10px;">
@@ -259,8 +266,14 @@
 		var Fee = [[${Fee}]];
 		var bsCopyId=[[${bsCopyId}]];
 		</script>
-		<script th:src="@{/js/web/quote/01business/quote_add.js}"
-			src="/js/web/quote/01business/quote_add.js"></script>
+<!--		<script th:src="@{/js/web/quote/01business/quote_add.js}"-->
+<!--			src="/js/web/quote/01business/quote_add.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/01business/quote_add.js?ver="+Math.random()+"'><\/script>");
+		</script>
+
 	</div>
 </body>
 </html>

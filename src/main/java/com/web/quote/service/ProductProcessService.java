@@ -16,6 +16,8 @@ public interface ProductProcessService {
 
 	public ApiResponseResult edit(ProductProcess productProcess)throws Exception;
 
+	public ApiResponseResult editFileId(Long id,Long fileId,String fileName)throws Exception;
+
 	public ApiResponseResult delete(Long id) throws Exception;
 
 	public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode,List<ProductProcess> quoteBomList) throws Exception;

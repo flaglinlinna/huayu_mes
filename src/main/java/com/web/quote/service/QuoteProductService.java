@@ -11,7 +11,7 @@ public interface QuoteProductService {
 	public ApiResponseResult getList(String keyword,String style,String status,String bsCode,String bsType,String bsStatus,
 									 String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
 									 String bsPosition ,String bsCustRequire,String bsLevel,String bsRequire,
-									 String bsDevType,String bsCustName,String quoteId,PageRequest pageRequest)throws Exception;//获取列表
+									 String bsDevType,String bsCustName,String quoteId,String userName,PageRequest pageRequest)throws Exception;//获取列表
 
 	public ApiResponseResult getItemPage(Long id,String bsStyle)throws Exception;//获取待办项数据
 	

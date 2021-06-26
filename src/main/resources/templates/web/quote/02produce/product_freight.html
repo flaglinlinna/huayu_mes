@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='报价包装运输费信息'">
+<meta charset="UTF-8">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<META HTTP-EQUIV="expires" CONTENT="0">
+</head>
+<style>
+	.layui-table-cell, .layui-table-tool-panel li {
+		overflow: visible !important;
+	}
+
+	.layui-form-select .layui-input {
+		height: 30px;
+	}
+</style>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div style="margin: 10px">
+			<form id="prodErrSearch" class="layui-form layui-form-pane"
+				method="post" action="" style="margin-top: 5px;">
+				<div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+						<div class="layui-input-inline">
+							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
+								placeholder="请输入关键字" class="layui-input" type="text" />
+						</div>
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+							lay-filter="searchSubmit">查询</button>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+
+						<button class="layui-btn layui-btn-sm" type="button"
+								id="editListBtn" onclick="saveTable()">保存</button>
+					</div>
+				</div>
+			</form>
+
+			<div class="table-responsive" id="table_and_page_div_id" >
+			<table id="listTable" lay-filter="listTable"></table>
+			</div>
+
+			<script type="text/html" id="optBar">
+				<button id="upload" type="button" style="display: none"></button>
+          {{# if(iStatus==2){ }}
+                 <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
+                 <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
+          {{# } else { }}
+		  		<a class="layui-btn layui-btn-xs" lay-event="edit" >附件上传</a>
+                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">附件删除</a>
+          {{# } }}
+         </script>
+		</div>
+
+
+		<script th:inline="javascript">
+            var bsType=[[${bsType}]];
+            var quoteId=[[${quoteId}]];
+            // var Jitai = [[${Jitai}]];
+            // var bsCode=[[${bsCode}]];
+            var nowStatus=[[${nowStatus}]];
+			var iStatus = nowStatus;
+			// if(bsType!="out") {
+			// 	 iStatus = nowStatus.data[0].BS_STATUS;
+			// }else {
+			// 	iStatus = nowStatus.data;
+			// }
+            // var bomNameList=[[${bomNameList}]];
+        </script>
+
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/02produce/product_freight.js?ver="+Math.random()+"'><\/script>");
+		</script>
+	</div>
+</body>
+</html>

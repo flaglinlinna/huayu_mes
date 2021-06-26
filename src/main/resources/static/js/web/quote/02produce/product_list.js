@@ -62,19 +62,27 @@ $(function() {
 				{fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true},
 				{fixed:'left',field : 'bsStatus',title : '状态',width : 100,templet : function(d) {
 						if(d.bsQuoteStatus !="99") {
-							if (d.bsStatus == "0") {
-								return "草稿"
-							} else if (d.bsStatus == "1") {
-								return "进行中"
-							} else if (d.bsStatus == "2") {
-								return "已完成"
-							} else if (d.bsStatus == "3") {
-								return "待提交审批"
-							} else if (d.bsStatus == "4") {
-								return "审批中"
+							if (d.bsStatus.length < 4) {
+								if (d.bsStatus == "0") {
+									return "草稿"
+								} else if (d.bsStatus == "1") {
+									return "进行中"
+								} else if (d.bsStatus == "2") {
+									return "已完成"
+								} else if (d.bsStatus == "3") {
+									return "待提交审批"
+								} else if (d.bsStatus == "4") {
+									return "审批中"
+								} else {
+									return "已关闭"
+								}
+							}else {
+								if(d.bsStatus == "2222"){
+									return "已完成"
+								}else {
+									return "进行中"
+								}
 							}
-						}else {
-							return "已关闭"
 						}
 					},sort: true},
 				{field : 'bsType',title : '报价类型',width : 120,
@@ -107,6 +115,8 @@ $(function() {
 							return "否";
 						}
 					}},
+				{field : 'userName',title : '创建人',width : 140, sort: true},
+				{field : 'createDate',title : '创建时间',width : 140, sort: true},
 				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150}
 				] ],
 			done : function(res, curr, count) {
@@ -115,16 +125,24 @@ $(function() {
 				res.data.forEach(function(item, index) {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
 					if(item.bsQuoteStatus !="99") {
-						if (item.bsStatus == 0) {
-							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6699CC');
-						} else if (item.bsStatus == "1") {
-							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
-						} else if (item.bsStatus == "2") {
-							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
-						} else if (item.bsStatus == "3") {
-							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6495ED');
-						} else if (item.bsStatus == "4") {
-							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#4169E1');
+						if (item.bsStatus.length < 4) {
+							if (item.bsStatus == 0) {
+								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6699CC');
+							} else if (item.bsStatus == "1") {
+								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
+							} else if (item.bsStatus == "2") {
+								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
+							} else if (item.bsStatus == "3") {
+								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6495ED');
+							} else if (item.bsStatus == "4") {
+								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#4169E1');
+							}
+						}else {
+						    if (item.bsStatus == "2222") {
+								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
+							}else {
+								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
+							}
 						}
 					}else {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');
@@ -154,7 +172,8 @@ $(function() {
 						{ "key":"PAHS", "value":"PAHS"},{ "key":"CA65", "value":"CA65"}
 						,{ "key":"3BPA", "value":"3BPA"},{ "key":"HFS", "value":"HFS"}
 						,{ "key":"无卤", "value":"无卤"},{ "key":"其他", "value":"其他"}]},
-				{field: 'bsCustRequire', type:'input'}
+				{field: 'bsCustRequire', type:'input'},
+				{field: 'userName', type:'input'},
 			],
 			'done': function(filters){}
 		})
@@ -184,6 +203,13 @@ $(function() {
 				var titleInfo = "("+data.bsCode.substring(data.bsCode.length-4)+")";
 				parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel+titleInfo);
 				var srcUrl = context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style;
+				($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
+			} else if (obj.event === 'openFreight') {
+				//20210119-fyx-根据不同的类型标题不一样
+				var titel = '包装运输费填报';
+				var titleInfo = "("+data.bsCode.substring(data.bsCode.length-4)+")";
+				parent.layui.index.openTabsPage(context + '/productProcess/toProductFreight?quoteId=' + data.id + "&style=" + Style, titel+titleInfo);
+				var srcUrl = context + '/productProcess/toProductFreight?quoteId=' + data.id + "&style=" + Style;
 				($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 			} else if (obj.event === 'check') {
 				// 先判断是否填写完成资料-暂时未校验-20201218-fyx

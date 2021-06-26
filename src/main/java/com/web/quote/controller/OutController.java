@@ -56,13 +56,13 @@ public class OutController extends WebController {
 	public ApiResponseResult getList(String quoteId,String keyword,String bsStatus,String bsCode,String bsType,
 									 String bsFinishTime,String bsRemarks,String bsProd,String bsProdType,String bsSimilarProd,
 									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
-									 String bsDevType,String bsCustName) {
+									 String bsDevType,String bsCustName,String userName) {
 		String method = "/out/getQuoteList";
 		String methodName = "获取报价单列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = outService.getList(quoteId,keyword, bsStatus,bsCode,bsType,bsFinishTime,bsRemarks,
-					bsProd,bsProdType,bsSimilarProd,bsPosition,bsCustRequire,bsLevel,bsRequire,bsDevType,bsCustName,super.getPageRequest(sort));
+					bsProd,bsProdType,bsSimilarProd,bsPosition,bsCustRequire,bsLevel,bsRequire,bsDevType,bsCustName,userName,super.getPageRequest(sort));
 			logger.debug(methodName+"=getQuoteList:");
 			return result;
 		} catch (Exception e) {

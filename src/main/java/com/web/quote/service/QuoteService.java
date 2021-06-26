@@ -17,7 +17,7 @@ public interface QuoteService {
 	public ApiResponseResult getList(String quoteId,String keyword,String status,String bsCode,String bsType,String bsStatus,
 									 String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
 									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
-									 String bsDevType,String bsCustName,PageRequest pageRequest)throws Exception;//获取报价单列表
+									 String bsDevType,String bsCustName,String userName,PageRequest pageRequest)throws Exception;//获取报价单列表
 
 	public ApiResponseResult edit(Quote quote)throws Exception;
 	
@@ -40,4 +40,6 @@ public interface QuoteService {
 	public ApiResponseResult doCheckProfit(String bsDevType,String bsProdType)throws Exception;//20201223-校验是否维护了利润
 
 	public ApiResponseResult getOutStatus(Long id) throws Exception;
+
+	public ApiResponseResult getFreightStatus(Long id) throws Exception;
 }

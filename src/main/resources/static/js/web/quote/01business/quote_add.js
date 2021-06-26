@@ -66,7 +66,7 @@ $(function() {
 				"id" : quoteId
 			};
 			CoreUtil.sendAjax("/quote/getSingleAll", JSON.stringify(param), function(data) {
-				// console.log(data.data)
+				console.log(data.data)
 				if (data.result) {
 					form.val("itemForm", {
 						"id" : data.data.id,
@@ -88,6 +88,7 @@ $(function() {
 						"bsFunction" : data.data.bsFunction,
 						"bsLevel" : data.data.bsLevel,
 						"bsCustRequire" : data.data.bsCustRequire,
+						"bsTotal":data.data.bsTotal
 					});
 					setCheckboxValues('material', data.data.bsMaterial)
 					setCheckboxValues('require', data.data.bsRequire)

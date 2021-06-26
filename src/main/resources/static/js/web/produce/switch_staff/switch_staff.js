@@ -174,19 +174,11 @@ $(function() {
 							}, {
 								field : 'EMP_NAME',
 								title : '姓名',
-
 								sort : true
-							}, {
-								field : 'TIME_BEGIN',
-								title : '上线时间',
-
-								sort : true
-							}, {
-								field : 'TIME_END',
-								title : '下线时间',
-
-								sort : true
-							} ] ],
+							}, {field : 'TIME_BEGIN', title : '上线时间', sort : true},
+								{field : 'TIME_END', title : '下线时间', sort : true},
+								{field : 'TIME_BEGIN_HD', title : '统一上线时间', sort : true},
+								{field : 'TIME_END_HD', title : '统一下线时间', sort : true}] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}

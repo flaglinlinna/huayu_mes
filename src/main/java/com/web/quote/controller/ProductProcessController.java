@@ -73,6 +73,23 @@ public class ProductProcessController extends WebController {
 		return mav;
 	}
 
+	@ApiOperation(value = "报价工艺流程列表页", notes = "报价工艺流程列表页", hidden = true)
+	@RequestMapping(value = "/toProductFreight")
+	public ModelAndView toProductFreight(String bsType,String quoteId) {
+		ModelAndView mav = new ModelAndView();
+		try {
+
+			mav.addObject("bsType", bsType);
+			mav.addObject("quoteId", quoteId);
+			mav.addObject("nowStatus", quoteService.getFreightStatus(Long.parseLong(quoteId)));
+			mav.setViewName("/web/quote/02produce/product_freight");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价工艺流程信息失败！", e);
+		}
+		return mav;
+	}
+
 	@ApiOperation(value = "新增报价工艺流程信息", notes = "新增报价工艺流程信息", hidden = true)
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
@@ -108,6 +125,32 @@ public class ProductProcessController extends WebController {
 			logger.error("报价工艺流程信息编辑失败！", e);
 			getSysLogService().error(module, method, methodName, productProcess.toString() + "," + e.toString());
 			return ApiResponseResult.failure("报价工艺流程信息编辑失败！");
+		}
+	}
+
+	@ApiOperation(value = "编辑包装运输费附件信息", notes = "编辑包装运输费附件信息", hidden = true)
+	@RequestMapping(value = "/editFileId", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult editFileId(@RequestBody Map<String, Object> params) {
+		String method = "productProcess/editFileId";
+		String methodName = "编辑包装运输费附件信息";
+		try {
+			Long fileId = null;
+			Long id = Long.parseLong(params.get("id").toString());
+			if(params.get("fileId")!=null&&!("").equals(params.get("fileId"))){
+				fileId = Long.parseLong(params.get("fileId").toString());
+			}
+//			Long fileId = Long.parseLong(params.get("fileId")==null?.toString());
+			String fileName = params.get("fileName")==null?"":params.get("fileName").toString();
+			ApiResponseResult result = productProcessService.editFileId(id,fileId,fileName);
+//			logger.debug("编辑报价工艺流程信息=edit:");
+//			getSysLogService().success(module, method, methodName, productProcess.toString());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("编辑包装运输费附件信息失败！", e);
+//			getSysLogService().error(module, method, methodName, productProcess.toString() + "," + e.toString());
+			return ApiResponseResult.failure("编辑包装运输费附件信息失败！");
 		}
 	}
 

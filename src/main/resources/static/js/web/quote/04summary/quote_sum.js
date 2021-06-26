@@ -577,6 +577,10 @@ $(function() {
 				{fixed:'left',type : 'numbers'},
 				{fixed:'left',field : 'bsElement',width : 250,title : '组件名称',totalRowText : "合计"},
 				{fixed:'left',field : 'bsFreight',width : 150,title : '包装运输费','edit':'text',totalRow : true},
+
+				{field : 'fileName',title : '附件信息',width : 200,templet : '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="' + context
+						+ '/file/get?fsFileId={{d.fileId}}" th:href="@{/file/get?fsFileId={{d.fileId}}}">{{ d.fileName==null?"":d.fileName }}</a></div>'},
+
 			] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;

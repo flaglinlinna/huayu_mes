@@ -141,11 +141,11 @@ $(function() {
 								{
 								field : 'EMP_CODE',
 								title : '员工工号',
-								width : 100
+								width : 90
 							}, {
 								field : 'EMP_NAME',
 								title : '员工姓名',
-								width : 100
+								width : 90
 							},
 								{
 									field : 'LINER_NAME',
@@ -156,16 +156,26 @@ $(function() {
 								{
 								field : 'TIME_BEGIN',
 								title : '上线时间',
-								width : 180
+								width : 170
 							}, {
 								field : 'TIME_END',
 								title : '下线时间',
-								width : 180
+								width : 170
 							},{
 							 	field : 'TIME_BEGIN_HD',
 							 	title : '统一上线时间',
-							 	width : 180
+							 	width : 170
 							 }, {
+									field : 'TIME_END_HD',
+									title : '统一下线时间',
+									width : 170
+								},
+								{
+									field : 'CREATE_DATE',
+									title : '分配时间',
+									width : 170
+								},
+								{
 								title : '操作',
 								align : 'center',
 								toolbar : '#optBar1',

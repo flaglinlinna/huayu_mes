@@ -464,6 +464,13 @@ public class Quote extends BaseEntity {
 	@Column
 	protected Long bsCopyId;
 
+	/**
+	 * 项目总量
+	 * **/
+	@ApiModelProperty(name="bsTotal",value="项目总量")
+	@Column
+	protected String bsTotal;
+
 
 	public BigDecimal getBsProfitNet() {
 		return bsProfitNet;
@@ -872,5 +879,13 @@ public class Quote extends BaseEntity {
 
 	public void setBsFreight(BigDecimal bsFreight) {
 		this.bsFreight = bsFreight;
+	}
+
+	public String getBsTotal() {
+		return bsTotal;
+	}
+
+	public void setBsTotal(String bsTotal) {
+		this.bsTotal = bsTotal;
 	}
 }

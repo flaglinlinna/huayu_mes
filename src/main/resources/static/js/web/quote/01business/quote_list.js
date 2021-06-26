@@ -113,6 +113,8 @@ $(function() {
 				// {field : 'bsProjVer',title : '版本',width : 140,sort: true},
 
 				// {field : 'bsStage',title : '报价阶段',width : 200,sort: true},
+				{field : 'userName',title : '创建人',width : 140, sort: true},
+				{field : 'createDate',title : '创建时间',width : 140, sort: true},
 				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 300}
 				] ],
 				done : function(res, curr, count) {
@@ -155,7 +157,9 @@ $(function() {
 							{ "key":"PAHS", "value":"PAHS"},{ "key":"CA65", "value":"CA65"}
 							,{ "key":"3BPA", "value":"3BPA"},{ "key":"HFS", "value":"HFS"}
 							,{ "key":"无卤", "value":"无卤"},{ "key":"其他", "value":"其他"}]},
-					{field: 'bsCustRequire', type:'input'}
+					{field: 'bsCustRequire', type:'input'},
+					{field: 'userName', type:'input'},
+					// {field: 'createDate', type:'date'},
 				],
 				'done': function(filters){
 				}

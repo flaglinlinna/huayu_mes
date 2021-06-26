@@ -290,14 +290,15 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     public ApiResponseResult getList(String quoteId,String keyword,String status,String bsCode,String bsType,String bsStatus,
                                      String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
                                      String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
-                                     String bsDevType,String bsCustName,PageRequest pageRequest)throws Exception{
+                                     String bsDevType,String bsCustName,String userName,PageRequest pageRequest)throws Exception{
 
         String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
                 + "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_position,p.bs_Manage_fee,  " +
                 "p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
-                "p.bs_Cust_Require,i.bs_status bs_status_check,p.bs_proj_ver,p.bs_bade,p.bs_latest,p.bs_stage  from "+Quote.TABLE_NAME+" p " +
+                "p.bs_Cust_Require,i.bs_status bs_status_check,p.bs_proj_ver,p.bs_bade,p.bs_latest,p.bs_stage ,u.USER_NAME,TO_CHAR(p.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss') from "+Quote.TABLE_NAME+" p " +
                 " left join (select t.pk_quote,min(t.bs_status)bs_status from "+QuoteItem.TABLE_NAME+" t where " +
                 " t.bs_style='item' group by t.pk_quote) i on i.pk_quote=p.id"
+                + " LEFT JOIN SYS_USER u on u.id = p.create_by"
                 + "  where p.del_flag=0";
 
         if(StringUtils.isNotEmpty(quoteId)&&!("null").equals(quoteId)){
@@ -345,9 +346,14 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         if(StringUtils.isNotEmpty(bsCustName)){
             sql += "  and p.bs_Cust_Name like '%" + bsCustName + "%'";
         }
+
+        if(StringUtils.isNotEmpty(userName)){
+            sql += "  and u.USER_NAME like '%" + userName + "%'";
+        }
+
         if (StringUtils.isNotEmpty(keyword)) {
 			sql += "  and INSTR((p.bs_Code || p.bs_Prod ||p.bs_Similar_Prod ||p.bs_Remarks ||p.bs_Cust_Name" +
-                    "||p.bs_Dev_Type ||p.bs_Cust_Require || p.bs_position || p.bs_Require ||p.bs_Level ||p.bs_Dev_Type), '"
+                    "||p.bs_Dev_Type ||p.bs_Cust_Require || p.bs_position || p.bs_Require ||p.bs_Level ||p.bs_Dev_Type ||u.user_name), '"
 					+ keyword + "') > 0 ";
         }
         
@@ -395,6 +401,8 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             map1.put("bsBade",object[23]);
             map1.put("bsLatest",object[24]);
             map1.put("bsStage",object[25]);
+            map1.put("userName",object[26]);
+            map1.put("createDate",object[27]);
             list_new.add(map1);
         }
 
@@ -513,6 +521,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         o.setBsLevel(quote.getBsLevel());
         o.setBsCustRequire(quote.getBsCustRequire());
 
+        o.setBsTotal(quote.getBsTotal());
 //        o.setBsBade(quote.getBsBade());
         o.setBsProjVer(quote.getBsProjVer());
         o.setBsLatest(quote.getBsLatest());
@@ -657,5 +666,11 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     public ApiResponseResult getOutStatus(Long id) throws Exception {
         Quote o = quoteDao.findById((long) id);
         return ApiResponseResult.success().data(o.getBsStatus2Out());
+    }
+
+    @Override
+    public ApiResponseResult getFreightStatus(Long id) throws Exception {
+        Quote o = quoteDao.findById((long) id);
+        return ApiResponseResult.success().data(""+o.getBsStatus2Hardware()+o.getBsStatus2Molding()+o.getBsStatus2Packag()+o.getBsStatus2Surface());
     }
 }

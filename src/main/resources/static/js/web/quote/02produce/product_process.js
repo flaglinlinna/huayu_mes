@@ -1426,11 +1426,3 @@ function cleanProcessTemp() {
 	layui.form.render();// 必须写
 }
 
-
-function show(obj) {
-	console.log(obj);
-	tipsVal=layer.tips("<div style='color:#000000;'>"+obj+"</div>",node,{tips:[3,"#fff"]});
-}
-function closeTips() {//关闭显示的信息
-	layer.close(tipsVal);
-}

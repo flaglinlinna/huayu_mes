@@ -149,6 +149,19 @@ public class ProductProcesslmpl implements ProductProcessService {
         return ApiResponseResult.success("编辑成功！");
     }
 
+    @Override
+    @Transactional
+    public ApiResponseResult editFileId(Long id,Long fileId,String fileName) throws Exception {
+        ProductProcess o = productProcessDao.findById((long) id);
+        if (o == null) {
+            return ApiResponseResult.failure("该组件信息不存在！");
+        }
+        o.setFileId(fileId);
+        o.setFileName(fileName);
+        productProcessDao.save(o);
+        return ApiResponseResult.success("编辑成功！");
+    }
+
     /**
      * 删除异常类别
      */

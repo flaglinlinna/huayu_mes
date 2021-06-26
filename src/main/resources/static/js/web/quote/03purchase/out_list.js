@@ -114,6 +114,9 @@ $(function() {
 							return "否";
 						}
 					}},
+				{field : 'bsTotal',title : '项目总量',width : 140, sort: true},
+				{field : 'userName',title : '创建人',width : 140, sort: true},
+				{field : 'createDate',title : '创建时间',width : 140, sort: true},
 				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150}
 				] ],
 				done : function(res, curr, count) {

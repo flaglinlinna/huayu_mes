@@ -292,6 +292,13 @@ public class ProductMater extends BaseEntity {
 	@Column(length = 200)
 	protected String bsGroups;
 
+	/**
+	 * 模具费用
+	 */
+	@ApiModelProperty(name = "mjPrice", value = "模具费用")
+	@Column(length = 50)
+	protected String mjPrice;
+
 	public int getBsStatus() {
 		return bsStatus;
 	}
@@ -578,5 +585,13 @@ public class ProductMater extends BaseEntity {
 
 	public void setBsSingleton(Integer bsSingleton) {
 		this.bsSingleton = bsSingleton;
+	}
+
+	public String getMjPrice() {
+		return mjPrice;
+	}
+
+	public void setMjPrice(String mjPrice) {
+		this.mjPrice = mjPrice;
 	}
 }

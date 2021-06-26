@@ -326,7 +326,9 @@ $(function () {
                         ,{field:'TIME_BEGIN', title:'上线时间', width:150,}
                         ,{field:'TIME_END', title:'下线时间', width:150,}
                         ,{field:'CREATE_DATE', title:'分配时间', width:150,}
-                        ,{field:'FTIMES', title:'上线时长(小时)', width:120,}
+                        ,{field:'FTIMES', title:'上线时长(小时)', width:120,},
+                        {field : 'TIME_BEGIN_HD', title : '统一上线时间', sort : true, width:150},
+                        {field : 'TIME_END_HD', title : '统一下线时间', sort : true, width:150}
                         // ,{fixed:'right', title:'操作', align:'center', toolbar:'#optBar2'}
                     ]]
                     ,done: function(res, curr, count){

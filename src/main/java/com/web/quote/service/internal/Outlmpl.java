@@ -48,7 +48,7 @@ public class Outlmpl extends BaseSql implements OutService {
     public ApiResponseResult getList(String quoteId,String keyword,String bsStatus,String bsCode,String bsType,
 									 String bsFinishTime,String bsRemarks,String bsProd,String bsProdType,String bsSimilarProd,
 									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
-									 String bsDevType,String bsCustName,PageRequest pageRequest) throws Exception {
+									 String bsDevType,String bsCustName,String userName,PageRequest pageRequest) throws Exception {
     	String statusTemp = "";
     	if(StringUtils.isNotEmpty(bsStatus)){
 			statusTemp = "and p.bs_status2out = " +bsStatus;
@@ -56,8 +56,9 @@ public class Outlmpl extends BaseSql implements OutService {
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
 				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_status2out col ,p.bs_position," +
 				"p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
-				"p.bs_Cust_Require,p.bs_proj_ver,p.bs_bade,p.bs_latest,p.bs_stage from "+Quote.TABLE_NAME+" p "
-						+ " where p.del_flag=0 and p.bs_step>=2 "+statusTemp;
+				"p.bs_Cust_Require,p.bs_proj_ver,p.bs_bade,p.bs_latest,p.bs_stage,u.USER_NAME,TO_CHAR(p.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss'),p.bs_total from "+Quote.TABLE_NAME+" p "
+				+ " LEFT JOIN SYS_USER u on u.id = p.create_by"
+				+ " where p.del_flag=0 and p.bs_step>=2 "+statusTemp;
 		if(StringUtils.isNotEmpty(quoteId)&&!("null").equals(quoteId)){
 			sql += "and p.id = " + quoteId + "";
 		}
@@ -106,9 +107,14 @@ public class Outlmpl extends BaseSql implements OutService {
 		if(StringUtils.isNotEmpty(bsCustName)){
 			sql += "  and p.bs_Cust_Name like '%" + bsCustName + "%'";
 		}
+
+		if(StringUtils.isNotEmpty(userName)){
+			sql += "  and u.USER_NAME like '%" + userName + "%'";
+		}
+
 		if (StringUtils.isNotEmpty(keyword)) {
 			sql += "  and INSTR((p.bs_Code || p.bs_Prod ||p.bs_Similar_Prod ||p.bs_Remarks ||p.bs_Cust_Name" +
-					"||p.bs_Dev_Type ||p.bs_Cust_Require || p.bs_position || p.bs_Require ||p.bs_Level ||p.bs_Dev_Type), '"
+					"||p.bs_Dev_Type ||p.bs_Cust_Require || p.bs_position || p.bs_Require ||p.bs_Level ||p.bs_Dev_Type ||u.userName), '"
 					+ keyword + "') > 0 ";
 		}
 		sql += "  order by p.bs_code desc";
@@ -153,6 +159,10 @@ public class Outlmpl extends BaseSql implements OutService {
 			map1.put("bsBade",object[22]);
 			map1.put("bsLatest",object[23]);
 			map1.put("bsStage",object[24]);
+
+			map1.put("userName",object[25]);
+			map1.put("createDate",object[26]);
+			map1.put("bsTotal",object[27]);
 			
 			list_new.add(map1);
 		}

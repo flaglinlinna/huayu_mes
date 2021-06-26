@@ -12,7 +12,7 @@ public interface OutService {
 	public ApiResponseResult getList(String quoteId,String keyword,String bsStatus,String bsCode,String bsType,
 									 String bsFinishTime,String bsRemarks,String bsProd,String bsProdType,String bsSimilarProd,
 									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
-									 String bsDevType,String bsCustName,PageRequest pageRequest) throws Exception;
+									 String bsDevType,String bsCustName,String userName,PageRequest pageRequest) throws Exception;
 
 	public ApiResponseResult getQuoteList(String keyword,String quoteId,PageRequest pageRequest) throws Exception;
 
