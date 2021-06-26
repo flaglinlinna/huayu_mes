@@ -89,14 +89,14 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 errInfo = errInfo + "成型周期不能为空;";
             }
         }
-        if(StringUtils.isNotEmpty(productProcess.getBsRadix())) {
-            if (!productProcess.getBsRadix().matches("^\\d+\\.\\d+$")
-                    && !productProcess.getBsRadix().matches("^^\\d+$")){
-                errInfo = errInfo + "基数需输入数字;";
-            }
-        }else {
-            errInfo = errInfo + "基数需输入数字;";
-        }
+//        if(StringUtils.isNotEmpty(productProcess.getBsRadix())) {
+//            if (!productProcess.getBsRadix().matches("^\\d+\\.\\d+$")
+//                    && !productProcess.getBsRadix().matches("^^\\d+$")){
+//                errInfo = errInfo + "基数需输入数字;";
+//            }
+//        }else {
+//            errInfo = errInfo + "基数需输入数字;";
+//        }
         if(StringUtils.isNotEmpty(productProcess.getBsUserNum())) {
             if (!productProcess.getBsUserNum().matches("^\\d+\\.\\d+$")
                     && !productProcess.getBsUserNum().matches("^^\\d+$")) {
@@ -194,11 +194,11 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
             //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
             //外协报价导入顺序: 零件名称、工序顺序、工序名称、机台类型、损耗率、外协价格 、备注
 
-            //2021-04-29 模板变更 五金  组件名称1 、零件名称2、工序顺序3、工序名称4、机台类型5、人数6、成型周期(S)7、工序良率8
-                                //注塑 组件名称1 、零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7、穴数8
-                                //组装 组件名称1 、零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
-                                //表面 组件名称1 、零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
-                                //外协:组件名称1 、零件名称1、工序顺序2、工序名称3、机台类型4、损耗率5、外协价格6 、备注7
+            //2021-04-29 模板变更 五金  组件名称1 、零件名称2、工序顺序3、工序名称4、机台类型5、人数6、成型周期(S)7、工序良率8、备注9
+                                //注塑 组件名称1 、零件名称2、工序顺序3、工序名称4、机台类型5、人数6、成型周期(S)7、工序良率8、穴数9、备注10
+                                //组装 组件名称1 、零件名称2、工序顺序3、工序名称4、机台类型5、人数6、工序良率7、产能8、备注9
+                                //表面 组件名称1 、零件名称2、工序顺序3、工序名称4、机台类型5、人数6、工序良率7、产能8、备注9
+                                //外协:组件名称1 、零件名称2、工序顺序3、工序名称4、机台类型5、损耗率6、外协价格7 、备注8
             Integer successes = 0;
             Integer failures = 0;
             Set<Long> improtIdList = new HashSet<Long>();
@@ -219,7 +219,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 String row6 = tranCell(xssfCell6);
                 String row7 = tranCell(sheet.getRow(row).getCell(8));
                 String row8 = tranCell(sheet.getRow(row).getCell(9));
-//                String row9 = tranCell(sheet.getRow(row).getCell(9));
+                String row9 = tranCell(sheet.getRow(row).getCell(10));
 //                String row10 = tranCell(sheet.getRow(row).getCell(10));
                 ProductProcessTemp process = new ProductProcessTemp();
 
@@ -333,7 +333,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                     if(!row7.matches("^\\d+\\.\\d+$")&&!row7.matches("^\\d+$")){
                         errInfo = errInfo + "工序良率必须是数字类型;";
                     }
-//                    process.setFmemo(row10);
+                    process.setFmemo(row9);
                 }
                 else if(("hardware").equals(bsType)){
                     //五金
@@ -353,7 +353,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                     if(!row7.matches("^\\d+$")&&!row7.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "工序良率必须是数字类型;";
                     }
-//                    process.setFmemo(row9);
+                    process.setFmemo(row8);
                 }
                 else if(("out").equals(bsType)){
                     if(StringUtils.isNotEmpty(row5)) {
@@ -379,7 +379,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                     }else {
                         errInfo = errInfo + "外协价格不能为空;";
                 }
-//                    process.setBsLoss(bsLoss);
+                    process.setFmemo(row7);
                 }
                 else {
                     //组装和表面
@@ -399,7 +399,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                     if(!row6.matches("^\\d+$")&&!row6.matches("^\\d+\\.\\d+$")){
                         errInfo = errInfo + "工序良率必须数字类型;";
                     }
-//                    process.setFmemo(row9);
+                    process.setFmemo(row8);
                 }
                 process.setErrorInfo(errInfo);
                 if(errInfo ==""){

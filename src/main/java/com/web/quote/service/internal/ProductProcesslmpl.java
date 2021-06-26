@@ -214,16 +214,16 @@ public class ProductProcesslmpl implements ProductProcessService {
 
         if (("hardware").equals(bsType)) {
             fileName = "五金工艺模板.xlsx";
-            map_arr = new String[]{"id", "bsElement","bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsCycle", "bsYield"};
+            map_arr = new String[]{"id", "bsElement","bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsCycle", "bsYield", "fmemo"};
         } else if (("molding").equals(bsType)) {
             fileName = "注塑工艺模板.xlsx";
-            map_arr = new String[]{"id", "bsElement","bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsCycle", "bsYield", "bsCave"};
+            map_arr = new String[]{"id", "bsElement","bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsCycle", "bsYield", "bsCave", "fmemo"};
         } else if (("surface").equals(bsType)) {
             fileName = "表面处理工艺模板.xlsx";
-            map_arr = new String[]{"id","bsElement", "bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsYield", "bsCapacity"};
+            map_arr = new String[]{"id","bsElement", "bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsYield", "bsCapacity", "fmemo"};
         } else if (("packag").equals(bsType)) {
             fileName = "组装工艺模板.xlsx";
-            map_arr = new String[]{"id", "bsElement","bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsYield", "bsCapacity"};
+            map_arr = new String[]{"id", "bsElement","bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsYield", "bsCapacity", "fmemo"};
         } else if (("out").equals(bsType)) {
             fileName = "外协填报价格模板.xlsx";
             map_arr = new String[]{"id","bsElement", "bsName", "bsOrder", "procName", "bsModelType", "bsLoss", "bsFeeWxAll", "fmemo"};

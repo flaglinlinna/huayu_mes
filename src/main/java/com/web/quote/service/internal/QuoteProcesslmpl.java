@@ -148,7 +148,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //					o.setItemType(o.getQuoteBom().getItp().getItemType());
 //				}
 
-				if (("辅料").equals(o.getItemType())){
+				if (o.getItemType().startsWith("辅料")){
 //				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
 					//2021-05-19 物料类型为 辅料 的，工序名称默认为 组装（如果存在组装工序）
 					if(o.getPkProc()==null&&packagList.size()>0){
@@ -708,6 +708,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 
 	@Override
 	public ApiResponseResult editProcessByBom(List<QuoteProcess> quoteProcessList,Long quoteId) {
+		List<String> newName =Arrays.asList("测试","检验","包装");
 	 	//复制后的确认完成，1.更新工艺的bom关联关系(可能已删除)，2.根据新增bom(如有)下发工艺
 		Boolean sameQuote = false;
 		//查出对应的bom是否为同一个标价单下,相同则根据bomID查询 ，不同则根据bomID2查询
@@ -719,23 +720,30 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				sameQuote = true;
 			}
 		}
-		for(QuoteProcess o :quoteProcessList){
-			QuoteBom quoteBom = new QuoteBom();
-			if(sameQuote) {
-				quoteBom = quoteBomDao.findById((long)o.getPkQuoteBom());
-			}else {
-				quoteBom = quoteBomDao.findByPkBomId2AndPkQuote(o.getPkQuoteBom(), quoteId);
-				o.setBsMaterName(quoteBom.getBsMaterName());
-				o.setPurchaseUnit(quoteBom.getPurchaseUnit()); //单位为PCS 不参与人工和制费计算
+		for(QuoteProcess o :quoteProcessList) {
+			if (o.getPkQuoteBom()!=null) {
+				QuoteBom quoteBom = new QuoteBom();
+				if (sameQuote) {
+					quoteBom = quoteBomDao.findById((long) o.getPkQuoteBom());
+				} else {
+					quoteBom = quoteBomDao.findByPkBomId2AndPkQuote(o.getPkQuoteBom(), quoteId);
+					o.setBsMaterName(quoteBom.getBsMaterName());
+					o.setPurchaseUnit(quoteBom.getPurchaseUnit()); //单位为PCS 不参与人工和制费计算
+				}
+				o.setDelFlag(quoteBom.getDelFlag());
+				o.setPkQuoteBom(quoteBom.getId());
+				o.setBsElement(quoteBom.getBsElement());
+				o.setBsName(quoteBom.getBsComponent());
+//				if(quoteBom.getBsSingleton().equals(o.getBsSingleton())){
+//
+//				}
+				o.setBsSingleton(quoteBom.getBsSingleton());
+				o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
+				o.setItemType(quoteBom.getItp().getItemType());
+				o.setBsGroups(quoteBom.getBsGroups());
+			} else if(newName.contains(o.getBsName())){
+
 			}
-			 o.setDelFlag(quoteBom.getDelFlag());
-			 o.setPkQuoteBom(quoteBom.getId());
-			 o.setBsElement(quoteBom.getBsElement());
-			 o.setBsName(quoteBom.getBsComponent());
-			 o.setBsSingleton(quoteBom.getBsSingleton());
-			 o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
-			 o.setItemType(quoteBom.getItp().getItemType());
-			 o.setBsGroups(quoteBom.getBsGroups());
 		}
 //		quoteProcessDao.saveAll(quoteProcessList);
 
@@ -764,6 +772,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			}
 			quoteProcessDao.saveAll(quoteProcessList);
 			updateProcess(quoteId);
+			quoteProcessDao.deletByBsSingleton(quoteId,newName);
 		}catch (Exception e){
 			e.printStackTrace();
 		}

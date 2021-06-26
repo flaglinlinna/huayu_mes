@@ -121,4 +121,7 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 	@Query(value = "select BS_ELEMENT as BSELEMENT,wm_concat(bs_Name) as bsName, max(BS_ORDER) as bsorder,sum(BS_SINGLETON) as BS_SINGLETON from PRICE_QUOTE_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 GROUP BY BS_ELEMENT HAVING sum(BS_SINGLETON) = 0",nativeQuery = true)
 	public List<Map<String, Object>> getBsNameGroupByElement(Long quoteId);
 
+	@Modifying
+	@Query(value = "DELETE PRICE_QUOTE_PROCESS where PK_QUOTE = ?1 and BS_ELEMENT in (select DISTINCT(BS_ELEMENT)  from PRICE_QUOTE_BOM where BS_SINGLETON = 1 and PK_QUOTE = ?1 ) and bs_name in ?2",nativeQuery = true)
+	public Integer deletByBsSingleton(Long pkQuote,List<String> bsName);
 }

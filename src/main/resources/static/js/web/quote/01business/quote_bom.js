@@ -850,7 +850,7 @@ function cancelStatus() {
 		"quoteId" : quoteId,
 		"code" : code
 	};
-	layer.confirm('取消完成会清除工艺流程,确认取消确认完成吗？', {
+	layer.confirm('确认取消确认完成吗？', {
 		btn : [ '确认', '返回' ]
 	}, function() {
 		CoreUtil.sendAjax("/quoteBom/cancelStatus", JSON.stringify(param), function(data) {

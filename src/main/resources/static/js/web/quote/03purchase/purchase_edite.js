@@ -51,7 +51,9 @@ $(function() {
 				{field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
 				{field : 'bsUnit',width : 100,title : 'BOM用量单位',style : 'background-color:#d2d2d2',templet:function (d){
 						if(d.unit!=null){
-							return d.unit.unitCode;
+							return d.unit.unitCode==undefined?"":d.unit.unitCode;
+						}else {
+							return "";
 						}
 					}},
 				{field : 'bsAssess',width : 120,title : '含税价格(元/KG)<span style="color:red;font-size:12px;">*</span>',edit : 'number',style : 'background-color:#ffffff'},
@@ -192,7 +194,9 @@ $(function() {
 				  {field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
 				  {field : 'bsUnit',width : 100,title : 'BOM用量单位',style : 'background-color:#d2d2d2',templet:function (d){
 						  if(d.unit!=null){
-							  return d.unit.unitCode;
+							  return d.unit.unitCode==undefined?"":d.unit.unitCode;
+						  }else {
+						  	return "";
 						  }
 					  }},
 					{field : 'purchaseUnit',width : 110,title : '采购单位',style : 'background-color:#d2d2d2'},
