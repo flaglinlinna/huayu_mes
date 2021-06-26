@@ -194,11 +194,11 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
             //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
             //外协报价导入顺序: 零件名称、工序顺序、工序名称、机台类型、损耗率、外协价格 、备注
 
-            //2021-04-29 模板变更 五金  零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7
-                                //注塑 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7、穴数8
-                                //组装 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
-                                //表面 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
-                                //外协:零件名称1、工序顺序2、工序名称3、机台类型4、损耗率5、外协价格6 、备注7
+            //2021-04-29 模板变更 五金  组件名称1 、零件名称2、工序顺序3、工序名称4、机台类型5、人数6、成型周期(S)7、工序良率8
+                                //注塑 组件名称1 、零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7、穴数8
+                                //组装 组件名称1 、零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
+                                //表面 组件名称1 、零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
+                                //外协:组件名称1 、零件名称1、工序顺序2、工序名称3、机台类型4、损耗率5、外协价格6 、备注7
             Integer successes = 0;
             Integer failures = 0;
             Set<Long> improtIdList = new HashSet<Long>();
@@ -207,19 +207,20 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 XSSFCell midCell = sheet.getRow(row).getCell(0);
                 midCell.setCellType(midCell.CELL_TYPE_STRING);
                 String id = tranCell(midCell);
-                String bsName = tranCell(sheet.getRow(row).getCell(1));
-                String bsOrder = tranCell(sheet.getRow(row).getCell(2));
-                String procName = tranCell(tranCell(sheet.getRow(row).getCell(3)));
-                String bsModelType = tranCell(tranCell(sheet.getRow(row).getCell(4)));
+                String bsElement = tranCell(sheet.getRow(row).getCell(1));
+                String bsName = tranCell(sheet.getRow(row).getCell(2));
+                String bsOrder = tranCell(sheet.getRow(row).getCell(3));
+                String procName = tranCell(tranCell(sheet.getRow(row).getCell(4)));
+                String bsModelType = tranCell(tranCell(sheet.getRow(row).getCell(5)));
 
-                String row5 = tranCell(sheet.getRow(row).getCell(5));
-                XSSFCell xssfCell6 = sheet.getRow(row).getCell(6);
+                String row5 = tranCell(sheet.getRow(row).getCell(6));
+                XSSFCell xssfCell6 = sheet.getRow(row).getCell(7);
                 xssfCell6.setCellType(midCell.CELL_TYPE_STRING);
                 String row6 = tranCell(xssfCell6);
-                String row7 = tranCell(sheet.getRow(row).getCell(7));
-                String row8 = tranCell(sheet.getRow(row).getCell(8));
-                String row9 = tranCell(sheet.getRow(row).getCell(9));
-                String row10 = tranCell(sheet.getRow(row).getCell(10));
+                String row7 = tranCell(sheet.getRow(row).getCell(8));
+                String row8 = tranCell(sheet.getRow(row).getCell(9));
+//                String row9 = tranCell(sheet.getRow(row).getCell(9));
+//                String row10 = tranCell(sheet.getRow(row).getCell(10));
                 ProductProcessTemp process = new ProductProcessTemp();
 
                 ProductProcess processMain = new ProductProcess();
@@ -232,6 +233,13 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 //设置类型
                 process.setBsType(bsType);
                 process.setPkQuote(quoteId);
+
+                if(StringUtils.isNotEmpty(bsElement)){
+                    process.setBsElement(bsElement);
+                }else {
+                    errInfo += "组件名称不能为空;";
+                }
+
                 if(StringUtils.isNotEmpty(bsName)){
                     process.setBsName(bsName);
                 }else {

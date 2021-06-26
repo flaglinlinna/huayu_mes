@@ -205,7 +205,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         //组装工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
         //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
 
-        //2021-04-29 模板变更
+        //2021-04-29 模板变更  （0626 增加组件名称）
         // 五金  零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7
         //注塑 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7、穴数8
         //组装 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
@@ -214,19 +214,19 @@ public class ProductProcesslmpl implements ProductProcessService {
 
         if (("hardware").equals(bsType)) {
             fileName = "五金工艺模板.xlsx";
-            map_arr = new String[]{"id", "bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsCycle", "bsYield"};
+            map_arr = new String[]{"id", "bsElement","bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsCycle", "bsYield"};
         } else if (("molding").equals(bsType)) {
             fileName = "注塑工艺模板.xlsx";
-            map_arr = new String[]{"id", "bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsCycle", "bsYield", "bsCave"};
+            map_arr = new String[]{"id", "bsElement","bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsCycle", "bsYield", "bsCave"};
         } else if (("surface").equals(bsType)) {
             fileName = "表面处理工艺模板.xlsx";
-            map_arr = new String[]{"id", "bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsYield", "bsCapacity"};
+            map_arr = new String[]{"id","bsElement", "bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsYield", "bsCapacity"};
         } else if (("packag").equals(bsType)) {
             fileName = "组装工艺模板.xlsx";
-            map_arr = new String[]{"id", "bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsYield", "bsCapacity"};
+            map_arr = new String[]{"id", "bsElement","bsName", "bsOrder", "procName", "bsModelType", "bsUserNum", "bsYield", "bsCapacity"};
         } else if (("out").equals(bsType)) {
             fileName = "外协填报价格模板.xlsx";
-            map_arr = new String[]{"id", "bsName", "bsOrder", "procName", "bsModelType", "bsLoss", "bsFeeWxAll", "fmemo"};
+            map_arr = new String[]{"id","bsElement", "bsName", "bsOrder", "procName", "bsModelType", "bsLoss", "bsFeeWxAll", "fmemo"};
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
         Resource resource = new ClassPathResource(excelPath + fileName);
@@ -244,6 +244,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         for (ProductProcess bs : productProcessesList) {
             Map<String, Object> map = new HashMap<>();
             map.put("id", bs.getId());
+            map.put("bsElement", bs.getBsElement());
             map.put("bsName", bs.getBsName());
             map.put("bsOrder", bs.getBsOrder());
             if (bs.getProc() != null) {

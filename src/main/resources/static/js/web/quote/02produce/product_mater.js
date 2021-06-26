@@ -67,6 +67,7 @@ $(function() {
 					}else if(item.purchaseUnit=="PCS"){
 						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
 						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsQty"]').data('edit',true).css("background-color", "#FFFFFF");
+						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="fmemo"]').data('edit',true).css("background-color", "#FFFFFF");
 						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsUnit"]').find('select[name="selectUnit"]').attr("disabled","disabled");
 						form.render('select');
 					}

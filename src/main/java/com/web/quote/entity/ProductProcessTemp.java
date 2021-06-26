@@ -76,6 +76,14 @@ public class ProductProcessTemp extends BaseEntity {
     @JoinColumn(name = "pkQuote", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     protected Quote quote;
+
+
+	/**
+	 * Bom组件名称
+	 */
+	@ApiModelProperty(name = "bsElement", value = "Bom组件名称")
+	@Column(length = 100)
+	protected String bsElement;
     
     /**
 	 * Bom零件名称
@@ -329,5 +337,13 @@ public class ProductProcessTemp extends BaseEntity {
 
 	public void setBsFeeWxAll(String bsFeeWxAll) {
 		this.bsFeeWxAll = bsFeeWxAll;
+	}
+
+	public String getBsElement() {
+		return bsElement;
+	}
+
+	public void setBsElement(String bsElement) {
+		this.bsElement = bsElement;
 	}
 }

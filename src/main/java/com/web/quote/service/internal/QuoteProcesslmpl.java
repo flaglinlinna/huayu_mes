@@ -221,7 +221,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	//对每个组件在最后增加3行：检验、测试、包装
 	private void updateProcess(Long pkQuote){
 		List<Map<String, Object>> bsNameList = quoteProcessDao.getBsNameGroupByElement(pkQuote);
-		List<String> newName =Arrays.asList("检验","测试","包装");
+		List<String> newName =Arrays.asList("测试","检验","包装");
 		List<QuoteProcess> quoteProcessList = new ArrayList<>();
 		try {
 		for (Map<String,Object> map: bsNameList){

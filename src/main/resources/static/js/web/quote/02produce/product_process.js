@@ -9,6 +9,7 @@
 var pageCurr;
 var _index = 0;
 var fileId = "";
+var tipsVal;
 $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
 		var table = layui.table, table2 = layui.table,form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect,
@@ -75,7 +76,9 @@ $(function() {
 				/*{field : 'bsModelType', width:100, title : '机台类型',width:90,},*/
 				{field : 'bsModelType',width : 200,title : '机台类型',templet : '#selectModelType',style : 'background-color:#ffffff'},
 				/*{field : 'bsRadix', title : '基数<span style="color:red;font-size:12px;">*</span>',width:90,edit:'text',style : 'background-color:#ffffff'},*/
-				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:60,edit:'text',hide:true,style : 'background-color:#ffffff',totalRow : true},
+				{field : 'bsUserNum', title : '人数<span style="color:red;font-size:12px;">*</span>',width:60,edit:'text',hide:true,style : 'background-color:#ffffff',totalRow : true,templet:function (d) {
+						return "<label οnmοuseοver=\"show('"+d.bsUserNum+"');\" οnmοuseleave='closeTips();'>" + d.bsUserNum + "</label>";
+					}},
 				{field : 'bsCycle', title : '成型周期(S)<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text', hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsYield', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsLoss', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
@@ -90,7 +93,7 @@ $(function() {
 
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				layui.each(res.data, function(i, item){
-					console.log(item.purchaseUnit);
+					// console.log(item.purchaseUnit);
 					if(bsType!="out") {
 						if (item.bsStatus == 1) {
 							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
@@ -1423,4 +1426,13 @@ function cleanProdErr() {
 function cleanProcessTemp() {
 	$('#productProcessTempForm')[0].reset();
 	layui.form.render();// 必须写
+}
+
+
+function show(obj) {
+	console.log(obj);
+	tipsVal=layer.tips("<div style='color:#000000;'>"+obj+"</div>",node,{tips:[3,"#fff"]});
+}
+function closeTips() {//关闭显示的信息
+	layer.close(tipsVal);
 }

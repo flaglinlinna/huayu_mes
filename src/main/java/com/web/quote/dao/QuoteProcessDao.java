@@ -118,7 +118,7 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 					" and pp.BS_GROUPS is not null  and pp.DEL_FLAG = 0 GROUP BY pp.BS_ELEMENT,pp.bs_link_name,pp.BS_GROUPS)")
 	public  Page<Map<String, Object>> getSumList(Long pkQuote,Pageable pageable);
 
-	@Query(value = "select BS_ELEMENT as BSELEMENT,wm_concat(bs_Name) as bsName, max(BS_ORDER) as bsorder from PRICE_QUOTE_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 GROUP BY BS_ELEMENT",nativeQuery = true)
+	@Query(value = "select BS_ELEMENT as BSELEMENT,wm_concat(bs_Name) as bsName, max(BS_ORDER) as bsorder,sum(BS_SINGLETON) as BS_SINGLETON from PRICE_QUOTE_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 GROUP BY BS_ELEMENT HAVING sum(BS_SINGLETON) = 0",nativeQuery = true)
 	public List<Map<String, Object>> getBsNameGroupByElement(Long quoteId);
 
 }

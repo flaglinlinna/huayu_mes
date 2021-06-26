@@ -63,7 +63,7 @@ $(function() {
 			// }},
 
 				// ,templet : '#selectBsMaterName'
-				{field : 'bsGroups',width : 130,title : '损耗分组',style : 'background-color:#d2d2d2'},
+				{field : 'bsGroups',width : 130,title : '损耗分组',"edit" : "text",style : 'background-color:#ffffff'},
 				{field : 'bsMaterName',width : 220,title : '材料名称',style : 'background-color:#ffffff',"edit" : "text"},
 				// ,templet : '#selectBsMaterName',,templet : '#selectBsGroups'
 			// 	templet : function(d) {
