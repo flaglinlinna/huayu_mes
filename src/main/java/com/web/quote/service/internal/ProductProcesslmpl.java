@@ -411,7 +411,7 @@ public class ProductProcesslmpl implements ProductProcessService {
             } else {
                 map.put("bsTypeList",null);
             }
-            map.put("allUser",sumUser.get(0).get("ALLUSER"));
+            map.put("allUser",sumUser.get(0).get("ALLUSER")==null?0:sumUser.get(0).get("ALLUSER"));
             if(minCapacity.size()>0){
                 map.put("minCapacity",minCapacity.get(0).get("MINCAPACITY"));
             }else {
