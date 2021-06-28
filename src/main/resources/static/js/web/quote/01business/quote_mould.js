@@ -33,18 +33,18 @@ $(function() {
 				// code值为200表示成功
 				}
 			},
-			cols : [ [ {type : 'numbers'}
+			cols : [ [ {fixed : 'left',type : 'numbers'}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
-			, {field : 'bsName',title : '零件名称',width:150, style : 'background-color:#d2d2d2'},
-			{field : 'bsMoCode',title : '模具编码',width:150, templet : '<div>{{d.mjProcFee.productCode}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'bsActQuote',title : '实际报价',width:120, "edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
-			{field : 'bsMoName',title : '模具名称',width:120, templet : '<div>{{d.mjProcFee.productName}}</div>',style : 'background-color:#d2d2d2'},
+			, {fixed : 'left',field : 'bsName',title : '零件名称',width:200, style : 'background-color:#d2d2d2'},
+			{fixed : 'left',field : 'bsMoName',title : '模具名称',width:200, templet : '<div>{{d.mjProcFee.productName}}</div>',style : 'background-color:#d2d2d2'},
+			{fixed : 'left',field : 'bsActQuote',title : '实际报价',width:120, "edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
 			{field : 'bsMoFee',title : '模具成本',width:120, templet : '<div>{{d.mjProcFee.feeAll}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'stQuote',title : '参考报价',width:120, templet : '<div>{{d.mjProcFee.stQuote}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'createName', title : '创建人', width : 80,style : 'background-color:#d2d2d2'},
 			{field : 'createDate', title : '创建时间', width : 150,style : 'background-color:#d2d2d2'},
 			{field : 'lastupdateName', title : '更新人', width : 80,style : 'background-color:#d2d2d2'},
 			{field : 'lastupdateDate', title : '更新时间', width : 150,style : 'background-color:#d2d2d2'},
+			{field : 'bsMoCode',title : '模具编码',width:150, templet : '<div>{{d.mjProcFee.productCode}}</div>',style : 'background-color:#d2d2d2'},
 			{fixed : 'right',title : '操作',width : 80,align : 'center',toolbar : '#optBar'}
 			] ],
 			done : function(res, curr, count) {
@@ -67,8 +67,8 @@ $(function() {
 			'elem' : '#client_procList',
 			'mode' : 'local',//当前页面过滤
 			'filters' : [
-				{field: 'bsName', type:'input'},
-				{field: 'bsMoName', type:'input'}
+				{field: 'bsName', type:'checkbox'},
+				{field: 'bsMoName', type:'checkbox'}
 			],
 			'done': function(filters){
 			}

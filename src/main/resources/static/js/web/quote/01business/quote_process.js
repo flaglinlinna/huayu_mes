@@ -5,8 +5,8 @@ var pageCurr;
 var totalCount = 0;// 表格记录数
 var materNameFlag = 0;
 $(function() {
-	layui.use([ 'form', 'table', 'tableSelect' ], function() {
-		var table = layui.table, table1 = layui.table,form = layui.form, tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect;
+	layui.use([ 'form', 'table', 'tableSelect','tableFilter'  ], function() {
+		var table = layui.table, table1 = layui.table,form = layui.form, tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,tableFilter = layui.tableFilter;
 		isComplete()
 		tableIns = table.render({
 			elem : '#client_procList',
@@ -32,13 +32,13 @@ $(function() {
 				}
 			},
 			cols : [ [
-				{type:'checkbox'},
-				{type : 'numbers'},
-			{field:'id',title:'ID', width:80, hide:true},
-			{field : 'bsElement',width : 90,title : '组件名称',style : 'background-color:#d2d2d2'},
-			{field : 'bsName',width : 150,title : '零件名称',style : 'background-color:#d2d2d2'},
-			{field : 'bsLinkName',width : 150,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
-			{field : 'itemType',title : '物料类型',width : 100,style : 'background-color:#d2d2d2'},
+				{fixed : 'left',type:'checkbox'},
+				{fixed : 'left',type : 'numbers'},
+			{fixed : 'left',field:'id',title:'ID', width:80, hide:true},
+			{fixed : 'left',field : 'bsElement',width : 150,title : '组件名称',style : 'background-color:#d2d2d2'},
+			{fixed : 'left',field : 'bsName',width : 180,title : '零件名称',style : 'background-color:#d2d2d2'},
+			{fixed : 'left',field : 'bsLinkName',width : 150,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
+			{field : 'itemType',title : '物料类型',width : 130,style : 'background-color:#d2d2d2'},
 			{field : 'workCenter',title : '工作中心',width : 100,templet :
 				function(d){if(d.bjWorkCenter!=null){
 					return d.bjWorkCenter.workcenterName
@@ -85,6 +85,7 @@ $(function() {
 			done : function(res, curr, count) {
 
 				totalCount = res.count
+				localtableFilterIns.reload();
 				pageCurr = curr;
 				var tableView = this.elem.next(); // 当前表格渲染之后的视图
 				//merge(res.data, [ 'bsElement'], [3,3]);
@@ -136,21 +137,22 @@ $(function() {
 			cols : [ [
 				{type : 'numbers'},
 				//{field : 'BS_ELEMENT',width : 120,title : '组件名称',sort : true,totalRowText : "合计"},
-				{field : 'BS_ELEMENT',title : '组件名称',templet:function (d) {
+				{field : 'BS_ELEMENT',width : 150,title : '组件名称',templet:function (d) {
 						if(d.BS_ORDER!=null){
 							return d.BS_ELEMENT
 						}else {
 							return '小计'
 						}
 					},style:"overflow:hidden !important"},
-				{field : 'BS_NAME',title : '零件名称',style:"overflow:hidden !important"},
+				{field : 'BS_NAME',width : 180,title : '零件名称',style:"overflow:hidden !important"},
 				{field : 'BS_LINK_NAME',width : 150,title : '所属零件',style:"overflow:hidden !important"},
-				{field : 'WORKCENTER_NAME',width : 150,title : '工作中心',style:"overflow:hidden !important"},
+				{field : 'WORKCENTER_NAME',width : 130,title : '工作中心',style:"overflow:hidden !important"},
 				{field : 'PROC_NAME',width : 150,title : '工序名称',style:"overflow:hidden !important"},
 				{field : 'BS_ORDER',width : 100,title : '顺序'},
 				{field : 'BS_GROUPS',title : '损耗分组',width : 150}
 			] ],
 			done : function(res, curr, count) {
+				localtableFilterIns.reload();
 				//pageCurr = curr;
 			}
 		});
@@ -486,6 +488,20 @@ $(function() {
 		// 	}
 		// });
 
+		var localtableFilterIns = tableFilter.render({
+			'elem' : '#client_procList',
+			'mode' : 'api',//服务端过滤
+			'filters' : [
+				{field: 'bsElement', type:'checkbox'},
+				{field: 'bsName', type:'checkbox'},
+				{field: 'itemType', type:'checkbox'},
+				{field: 'workCenter', type:'checkbox'},
+				{field: 'bsGroups', type:'checkbox'},
+				{field: 'bsMaterName', type:'input'},
+			],
+			'done': function(filters){
+			}
+		})
 
 		// 监听工具条
 		table.on('tool(client_procTable)', function(obj) {

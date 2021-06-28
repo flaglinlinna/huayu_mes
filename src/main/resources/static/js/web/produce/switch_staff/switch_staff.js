@@ -163,22 +163,25 @@ $(function() {
 								type : 'numbers'
 							}, {
 								type : "checkbox"
-							}, {
-								field : 'EMP_ID',
-								title : 'ID',
-								width : 90
-							}, {
+							},  {
 								field : 'EMP_CODE',
 								title : '工号',
+								width : 80,
 								sort : true
 							}, {
 								field : 'EMP_NAME',
 								title : '姓名',
+								width : 80,
 								sort : true
-							}, {field : 'TIME_BEGIN', title : '上线时间', sort : true},
-								{field : 'TIME_END', title : '下线时间', sort : true},
-								{field : 'TIME_BEGIN_HD', title : '统一上线时间', sort : true},
-								{field : 'TIME_END_HD', title : '统一下线时间', sort : true}] ],
+							}, {field : 'TIME_BEGIN', title : '上线时间', width : 145,sort : true},
+								{field : 'TIME_BEGIN_HD', title : '统一上线时间', width : 145,sort : true},
+								{field : 'TIME_END', title : '下线时间', width : 145,sort : true},
+								{field : 'TIME_END_HD', title : '统一下线时间',width : 145, sort : true},
+								{
+									field : 'EMP_ID',
+									title : 'ID',
+									width : 80
+								}] ],
 							done : function(res, curr, count) {
 								pageCurr = curr;
 							}
@@ -234,22 +237,23 @@ $(function() {
 								url : context
 										+ '/produce/switch_staff/getTaskNo',
 								method : 'get',
-								cols : [ [ {
+								cols : [ [ {fixed:'left',
 									type : 'radio'
 								},// 多选 radio
-								 {field : 'id', title : 'id', width : 0, hide : true},
-									{field : 'WS_SECTION', title : '工段', width : 70},
-									{field : 'LINER_NAME', title : '组长', width : 75},
+								 {fixed:'left',field : 'id', title : 'id', width : 0, hide : true},
+									{fixed:'left',field : 'WORK_DATE', title : '生产时间',templet:function (d) {
+											if(d.WORK_DATE!=null){
+												return d.WORK_DATE.slice(0,4)+"-"+ d.WORK_DATE.slice(5,7)+"-"+d.WORK_DATE.slice(8,10)
+											}
+										}, width : 100},
+									{fixed:'left',field : 'LINER_NAME', title : '组长', width : 70},
+									{fixed:'left',field : 'ITEM_NO', title : '物料编码', width : 145},
 									{field : 'TASK_NO', title : '制令单号', width : 150},
-									{field : 'ITEM_NAME', title : '物料描述', width : 160},
-									{field : 'ITEM_NO', title : '物料编码', width : 160},
-									{field : 'FMEMO', title : '备注', width : 120},
+									{field : 'WS_SECTION', title : '工段', width : 60},
+									{field : 'FMEMO', title : '备注', width : 80},
 									{field : 'CUST_NAME_S', title : '客户', width : 80},
-									{field : 'WORK_DATE', title : '生产时间',templet:function (d) {
-							if(d.WORK_DATE!=null){
-								return d.WORK_DATE.slice(0,4)+"-"+ d.WORK_DATE.slice(5,7)+"-"+d.WORK_DATE.slice(8,10)
-							}
-						}, width : 150} ] ],
+									{field : 'ITEM_NAME', title : '物料描述', width : 160}
+									 ] ],
 								parseData : function(res) {
 									// console.log(res)
 									if (res.result) {
@@ -287,17 +291,17 @@ $(function() {
 								url : context
 										+ '/produce/switch_staff/getNewTaskNo',
 								method : 'get',
-								cols : [ [ {
+								cols : [ [ {fixed:'left',
 									type : 'radio'
 								},// 多选 radio
-								{field : 'id', title : 'id', width : 0, hide : true},
-								{field : 'WS_SECTION', title : '工段', width : 70},
-								{field : 'LINER_NAME', title : '组长', width : 75},
+								{fixed:'left',field : 'id', title : 'id', width : 0, hide : true},
+								{fixed:'left',field : 'LINER_NAME', title : '组长', width : 70},
+								{fixed:'left',field : 'ITEM_NO', title : '物料编码', width : 145},
 								{field : 'TASK_NO', title : '制令单号', width : 150},
-								{field : 'ITEM_NAME', title : '物料描述', width : 250},
-								{field : 'ITEM_NO', title : '物料编码', width : 170},
-								{field : 'FMEMO', title : '备注', width : 120},
-								{field : 'CUST_NAME_S', title : '客户', width : 100}
+								{field : 'WS_SECTION', title : '工段', width : 60},
+								{field : 'FMEMO', title : '备注', width : 80},
+								{field : 'CUST_NAME_S', title : '客户', width : 80},
+								{field : 'ITEM_NAME', title : '物料描述', width : 250}
 									] ],
 								parseData : function(res) {
 									// console.log(res)

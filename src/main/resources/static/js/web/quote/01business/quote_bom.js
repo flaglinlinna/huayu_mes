@@ -202,8 +202,8 @@ $(function() {
 							{fixed : 'left',type:'checkbox'},
 							{fixed : 'left',type : 'numbers'},
 							{field:'id', title:'ID', width:80,hide:true},
-							{fixed : 'left',field : 'bsElement',title : '组件名称',sort : true,width : 120,edit: "text",style:"overflow:hidden !important"},
-							{fixed : 'left',field : 'bsComponent',title : '零件名称',sort : true,width : 150,edit: "text",style:"overflow:hidden !important"},
+							{fixed : 'left',field : 'bsElement',title : '组件名称',sort : true,width : 150,edit: "text",style:"overflow:hidden !important"},
+							{fixed : 'left',field : 'bsComponent',title : '零件名称',sort : true,width : 180,edit: "text",style:"overflow:hidden !important"},
 							// {fixed : 'left',field : 'wc',title : '工作中心',sort : true,width : 120,
 							// 	templet : function(d) {
 							// 		if (d.wc != null) {return d.wc.workcenterName;}
@@ -217,7 +217,7 @@ $(function() {
 							// 		else {return "";}
 							// },style : 'background-color:#d2d2d2'},
 							{field : 'pkBjWorkCenter',title : '工作中心',width : 130,templet:'#selectWc'},
-							{field : 'pkItemTypeWg',title : '物料类型',templet : '#selectItemType',width : 110},
+							{field : 'pkItemTypeWg',title : '物料类型',templet : '#selectItemType',width : 150},
 							{field : 'bsGroups',title : '损耗分组',width : 140,"edit" : "text",style:"overflow:hidden !important"},
 							{field : 'bsMaterName',title : '材料名称',sort : true,width : 200,edit: "text",style:"overflow:hidden !important"},
 							{field : 'bsModel',title : '材料规格',width : 200,edit: "text",style:"overflow:hidden !important"},

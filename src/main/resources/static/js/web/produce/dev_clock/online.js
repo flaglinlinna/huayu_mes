@@ -20,8 +20,8 @@ $(function() {
 									,even:true,//条纹样式
 									toolbar: '#toolbar', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 									page : true,
-									limit: 30,
-									limits: [30,50,100,200],
+									limit: 20,
+									limits: [20,50,100,200],
 									request : {
 										pageName : 'page',// 页码的参数名称，默认：page
 										limitName : 'rows', // 每页数据量的参数名，默认：limit
@@ -48,7 +48,7 @@ $(function() {
 										{fixed:'left',
 											field : 'linerName',
 											title : '组长',
-											width : 80,
+											width : 70,
 											// templet:function (d){
 											// 	var list=d.linerName;
 											// 	return list[0].LINER_NAME;
@@ -57,13 +57,13 @@ $(function() {
 											{fixed:'left',
 												field : 'taskNo',
 												title : '制令单号',
-												width : 160
+												width : 150
 											},
 
 											{fixed:'left',
 												field : 'classId',
 												title : '班次',
-												width : 70,
+												width : 60,
 												templet:function (d){	
 								                	if(d.classId=="1"){
 								                		return "白班"
@@ -76,29 +76,29 @@ $(function() {
 											},
 											{fixed:'left',
 												field : 'workDate',
-												title : '生产时间',
+												title : '生产日期',
 												width : 100,
 												templet : '<div>{{d.workDate?DateUtils.formatterDate(d.workDate):""}}</div>',
 											},
 											{
 												field : 'hourType',
 												title : '工时类型',
-												width : 90
+												width : 80
 											},
 											{
 												field : 'lineName',
 												title : '线体',
-												width : 90
+												width : 80
 											},
 										{
 											field : 'createDate',
 											title : '创建时间',
-											width : 150,
+											width : 145,
 											templet : '<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
 										},{
 												field : 'lastupdateDate',
 												title : '更新时间',
-												width : 150,
+												width : 145,
 												templet : '<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
 											},
 											 {
@@ -106,7 +106,7 @@ $(function() {
 												title : '操作',
 												align : 'center',
 												toolbar : '#optBar',
-												width : 150
+												width : 120
 											} ] ],
 									done : function(res, curr, count) {
 										// 如果是异步请求数据方式，res即为你接口返回的信息。
@@ -134,52 +134,53 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {
+							cols : [ [ {fixed:'left',
 								type : 'numbers'
 							},
-								 {type:'checkbox' },
-								{
+								 {fixed:'left',type:'checkbox' },
+								{fixed:'left',
 								field : 'EMP_CODE',
-								title : '员工工号',
-								width : 90
-							}, {
+								title : '工号',
+								width : 80
+							}, {fixed:'left',
 								field : 'EMP_NAME',
-								title : '员工姓名',
-								width : 90
+								title : '姓名',
+								width : 80
 							},
-								{
+								{fixed:'left',
 									field : 'LINER_NAME',
 									title : '组长',
-									width : 75
+									width : 70
 								},
 							 	
 								{
 								field : 'TIME_BEGIN',
 								title : '上线时间',
-								width : 170
+								width : 145
 							}, {
+									field : 'TIME_BEGIN_HD',
+									title : '统一上线时间',
+									width : 145
+								},
+								{
 								field : 'TIME_END',
 								title : '下线时间',
-								width : 170
-							},{
-							 	field : 'TIME_BEGIN_HD',
-							 	title : '统一上线时间',
-							 	width : 170
-							 }, {
+								width : 145
+							}, {
 									field : 'TIME_END_HD',
 									title : '统一下线时间',
-									width : 170
+									width : 145
 								},
 								{
 									field : 'CREATE_DATE',
 									title : '分配时间',
-									width : 170
+									width : 145
 								},
 								{
 								title : '操作',
 								align : 'center',
 								toolbar : '#optBar1',
-								width : 120
+								width : 80
 							} ] ],
 							data : []
 						});
