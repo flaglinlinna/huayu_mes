@@ -13,8 +13,67 @@ var tipsVal;
 $(function() {
 	layui.use([ 'form', 'table','upload','tableSelect' ], function() {
 		var table = layui.table, table2 = layui.table,form = layui.form,upload = layui.upload,tableSelect = layui.tableSelect,
-			tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect,tableSelect3 = layui.tableSelect,upload2 =layui.upload;
+			tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect,
+			tableSelect3 = layui.tableSelect,upload2 =layui.upload,element = layui.element,upload3 =layui.upload;
+
 		isComplete()
+
+		if(bsType=='out'){
+			$('#fileListBtn').show();
+		}
+
+
+		element.on('tab(tabFilter)', function () {
+			var tableId = this.getAttribute('lay-id');
+			if(tableId=='list1'){
+
+			}else if(tableId =='list2'){
+				tableIns = table.render({
+					elem : '#productFileList',
+					url : context + '/quoteFile/getList?pkQuote=' + quoteId,
+					method : 'get', // 默认：get请求
+					cellMinWidth : 80,
+					// toolbar: '#toolbar',
+					height : 'full-65',// 固定表头&full-查询框高度
+					even : true,// 条纹样式
+					page : true,
+					limit:20,
+					request : {
+						pageName : 'page', // 页码的参数名称，默认：page
+						limitName : 'rows' // 每页数据量的参数名，默认：limit
+					},
+					parseData : function(res) {
+						// 可进行数据操作
+						return {
+							"count" : res.data.total,
+							"msg" : res.msg,
+							"data" : res.data.rows,
+							"code" : res.status
+							// code值为200表示成功
+						}
+					},
+					cols : [ [{type : 'numbers'},
+						{field : 'bsFileName',title : '文件名称',templet : '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="' + context
+								+ '/file/get?fsFileId={{d.pkFileId}}" th:href="@{/file/get?fsFileId={{d.pkFileId}}}">{{ d.bsFileName==null?"":d.bsFileName }}</a></div>'},
+						{field : 'createBy',title : '创建人',width : 200},
+						{field : 'createDate',title : '创建时间',width : 200},
+						// {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 150}
+					] ],
+					done : function(res, curr, count) {
+						// 如果是异步请求数据方式，res即为你接口返回的信息。
+						// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+						// console.log(res);
+						// 得到当前页码
+						// console.log(curr);
+						// 得到数据总量
+						// console.log(count);
+						pageCurr = curr;
+					}
+				});
+
+			}
+		});
+
 		tableIns = table.render({
 			elem : '#listTable',
 			url : context + '/productProcess/getList?bsType='+bsType+'&quoteId='+quoteId,
@@ -42,7 +101,8 @@ $(function() {
 			},
 			cols : [ [ {type : 'numbers',style:'background-color:#d2d2d2'},
 				{field:"id",title:"ID",hide:true},
-				{field : 'bsElement',title : '组件名称',width : 150,sort : true,style : 'background-color:#d2d2d2',totalRowText : "合计"},
+				{field : 'bsElement',title : '组件名称',width : 150,sort : true,style : 'background-color:#d2d2d2',totalRowText : "合计",
+					templet:'<div><span title="{{d.bsElement}} 总人数:{{d.allUser}} 产能{{d.minCapacity}}">{{d.bsElement}}</span></div>'},
 				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'bsOrder',width:90, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'proc', width:120, title : '工序名称',style:'background-color:#d2d2d2',
@@ -87,8 +147,15 @@ $(function() {
 				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
 				] ],
 			done : function(res, curr, count) {
-				pageCurr = curr;
+				if(res.data==""){
+					$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
+					$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
+					$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
+					// $("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+					$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
+				}
 
+				pageCurr = curr;
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				layui.each(res.data, function(i, item){
 					// console.log(item.purchaseUnit);
@@ -286,6 +353,37 @@ $(function() {
 			}
 		});
 
+		//上传附件
+		upload3.render({
+			elem: '#uploadBsFile'
+			,url: context+'/file/uploadByBs'
+			,multiple:true,
+			accept: 'file' //普通文件
+			,data: {
+				"bsId": function(){
+					return quoteId;
+				},
+				"bsType": "out"
+			}
+			,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致。
+				layer.load(); //上传loading
+			}
+			,done: function(res,index, upload){
+				layer.closeAll('loading'); //关闭loading
+				loadFile();
+				// if(res.result == true){
+				// 	document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data);
+				// 	_index++;
+				// 	fileId +=res.data.id +",";
+				//
+				// }
+				// $('#fileId').val(fileId);
+			}
+			,error: function(index, upload){
+				layer.closeAll('loading'); //关闭loading
+			}
+		});
+
 		//上传控件
 		upload2.render({
 			elem: '#upload2'
@@ -416,6 +514,14 @@ $(function() {
 		});
 
 
+		// 监听工具条
+		table.on('tool(fileList)', function(obj) {
+			var data = obj.data;
+			if (obj.event === 'del') {
+				// console.log(data);
+				delFile(data.id);
+			}
+		});
 
 		// setData();
 		// positiveNum
@@ -547,6 +653,51 @@ $(function() {
 		form.on('switch(isStatusTpl)', function(obj) {
 			setStatus(obj, this.value, this.name, obj.elem.checked);
 		});
+
+		tableIns3 = table2.render({
+			elem : '#fileList',
+			url : context + '/file/getListByBs?bsId=' + quoteId+"&bsType="+'out',
+			method : 'get', // 默认：get请求
+			cellMinWidth : 80,
+			// toolbar: '#toolbar',
+			height : 'full-65',// 固定表头&full-查询框高度
+			even : true,// 条纹样式
+			page : true,
+			limit:20,
+			request : {
+				pageName : 'page', // 页码的参数名称，默认：page
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			},
+			parseData : function(res) {
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+					// code值为200表示成功
+				}
+			},
+			cols : [ [
+				{type : 'numbers'},
+				{field : 'bsFileName',title : '文件名称',width : 200,templet : '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="' + context
+						+ '/file/get?fsFileId={{d.fileId}}" th:href="@{/file/get?fsFileId={{d.fileId}}}">{{ d.fileName==null?"":d.fileName }}</a></div>'},
+				{field : 'createName',title : '创建人',width : 150},
+				{field : 'createDate',title : '创建时间',width : 200},
+				{title : '操作',align : 'center',toolbar : '#optBar',width : 150}
+			] ],
+			done : function(res, curr, count) {
+				// 如果是异步请求数据方式，res即为你接口返回的信息。
+				// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+				// console.log(res);
+				// 得到当前页码
+				// console.log(curr);
+				// 得到数据总量
+				// console.log(count);
+				pageCurr = curr;
+			}
+		});
+
 		// 监听工具条
 		table.on('tool(listTable)', function(obj) {
 			var data = obj.data;
@@ -789,6 +940,57 @@ $(function() {
 		})
 	});
 });
+
+// 打开导入页
+function openFileList() {
+	// 打开弹出框
+	var index = layer.open({
+		type : 1,
+		title : "外协附件管理",
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#fileListDiv')
+	});
+	layer.full(index);
+}
+
+function delFile(id) {
+	if (id != null) {
+		var param = {
+			"id" : id
+		};
+		CoreUtil.sendAjax("/file/deleteBsFile", JSON.stringify(param), function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					// 回调弹框
+					layer.alert("删除成功！", function(index) {
+						layer.close(index);
+						// 加载load方法
+						loadFile();
+					});
+				} else {
+					layer.alert(data, function(index) {
+						layer.close(index);
+					});
+				}
+			}
+		});
+
+	}
+}
+
+function loadFile() {
+	// 重新加载table
+	tableIns3.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
+		}
+	});
+}
+
 function isComplete() {
 	if (iStatus >= 2) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)

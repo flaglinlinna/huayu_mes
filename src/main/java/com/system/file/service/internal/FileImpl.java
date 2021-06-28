@@ -244,6 +244,32 @@ public class FileImpl  implements FileService {
         fsFileDao.save(fsFile);
         return ApiResponseResult.success("文件删除成功！");
     }
+
+    /**
+     * 删除业务文件
+     * @param ids
+     * @return
+     * @throws Exception
+     */
+    public ApiResponseResult deleteBsFile(String ids) throws Exception{
+        if(ids == null){
+            return ApiResponseResult.failure("记录ID不能为空！");
+        }
+        String[] idsArry = ids.split(",");
+        List<CommonFile> commonFileList = new ArrayList<>();
+        for(String id:idsArry){
+            CommonFile file = commonFileDao.findById(Long.parseLong(id));
+            if(null==file) {
+                return ApiResponseResult.failure("文件不存在或已被删除");
+            }
+            file.setDelFlag(1);
+            file.setDelTime(new Date());
+            file.setDelBy(UserUtil.getSessionUser().getId());
+            commonFileList.add(file);
+        }
+        commonFileDao.saveAll(commonFileList);
+        return ApiResponseResult.success("文件删除成功！");
+    }
     
     public ApiResponseResult uploadByNameAndUrl(String file_name,String url,FsFile fsFile, MultipartFile file) throws Exception {
         if(null==file || file.isEmpty()) {

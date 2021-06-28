@@ -98,4 +98,12 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	@Query(value = "select * from PRICE_PRODUCT_PROCESS where id in (select max(p.id) as id from PRICE_PRODUCT_PROCESS p  where p.PK_QUOTE = ?1 and p.DEL_FLAG = 0 GROUP BY p.BS_ELEMENT) ",nativeQuery = true,
 			countQuery= "select count(max(p.id)) from PRICE_PRODUCT_PROCESS p  where p.PK_QUOTE = ?1 and p.DEL_FLAG = 0 GROUP BY p.BS_ELEMENT")
 	public Page<ProductProcess> findFreightList(Long pkQuote,Pageable pageable);
+
+	//查找各个组件下的总人数和最小产能
+	@Query(value = "select BS_ELEMENT,sum(BS_USER_NUM) as allUser,min(BS_CAPACITY) as minCapacity from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 and  BS_ELEMENT = ?2 GROUP BY BS_ELEMENT",nativeQuery = true)
+	public  List<Map<String,Object>> getSumByBsElement(Long pkQuote,String bsElement);
+
+	//查找各个组件下的总人数和最小产能
+	@Query(value = "select BS_ELEMENT,min(BS_CAPACITY) as minCapacity from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 and  BS_ELEMENT = ?2 and BS_CAPACITY !=0 GROUP BY BS_ELEMENT",nativeQuery = true)
+	public  List<Map<String,Object>> getMinByBsElement(Long pkQuote,String bsElement);
 }

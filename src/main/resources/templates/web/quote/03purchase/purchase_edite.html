@@ -62,10 +62,29 @@ height: 30px;
 		 </div>
 
 
-		 <div id="fileListDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
-			 <button class="layui-btn layui-btn-sm layui-btn-normal" id="uploadBsFile">选择文件</button>
-<!--			 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadChecked()">确认导入</button>-->
-			 <table id="fileList" lay-filter="fileList"></table>
+<!--		 <div id="fileListDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">-->
+<!--			 -->
+<!--			 <button class="layui-btn layui-btn-sm layui-btn-normal" id="uploadBsFile">选择文件</button>-->
+<!--&lt;!&ndash;			 <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="uploadChecked()">确认导入</button>&ndash;&gt;-->
+<!--			 <table id="fileList" lay-filter="fileList"></table>-->
+<!--		 </div>-->
+
+		 <div class="layui-tab layui-tab-brief" id="fileListDiv" lay-filter="tabFilter">
+			 <ul class="layui-tab-title">
+				 <li lay-id="list1"  class="layui-this">附件管理</li>
+				 <li lay-id="list2">产品资料</li>
+			 </ul>
+			 <div class="layui-tab-content" style="height: 100px; display: block">
+				 <div class="layui-tab-item layui-show">
+					 <!--附件管理列表-->
+					 <button class="layui-btn layui-btn-sm layui-btn-normal" id="uploadBsFile">选择文件</button>
+					 <table id="fileList" lay-filter="fileList"></table>
+				 </div>
+				 <div class="layui-tab-item">
+					 <!--工单组件列表-->
+					 <table id="productFileList" lay-filter="productFileList"></table>
+				 </div>
+			 </div>
 		 </div>
 
 
@@ -88,10 +107,10 @@ height: 30px;
 			 </select>
 		 </script>
 
-         <!--<script type="text/html" id="optBar">-->
-                 <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
-                 <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
-         <!--</script>-->
+         <script type="text/html" id="optBar">
+<!--                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+         </script>
 
          <script type="text/html" id="selectGear" >
             <select name="selectGear" lay-filter="selectGear" lay-search>

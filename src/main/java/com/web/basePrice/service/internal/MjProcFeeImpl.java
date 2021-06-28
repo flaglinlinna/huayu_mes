@@ -130,6 +130,9 @@ public class MjProcFeeImpl implements MjProcFeeService {
 	o.setFeeType4(mjProcFee.getFeeType4());//
 	o.setStQuote(mjProcFee.getStQuote());//参考报价
 	o.setFeeAll(mjProcFee.getFeeAll());//评估总费用（含税）
+
+    o.setBsCave(mjProcFee.getBsCave());
+    o.setBsMater(mjProcFee.getBsMater());
     
     mjProcFeeDao.save(o);
         String[] fileIds =  mjProcFee.getFileId().split(",");
@@ -210,6 +213,8 @@ public class MjProcFeeImpl implements MjProcFeeService {
                 map.put("stQuote",mjProcFee.getStQuote());
                 map.put("feeAll",mjProcFee.getFeeAll());
                 map.put("fmemo",mjProcFee.getFmemo());
+                map.put("bsCave",mjProcFee.getBsCave());
+                map.put("bsMater",mjProcFee.getBsMater());
                 if(mjProcFee.getCreateBy()!=null) {
                     map.put("createBy", sysUserDao.findById((long) mjProcFee.getCreateBy()).getUserName());
                     map.put("createDate", df.format(mjProcFee.getCreateDate()));

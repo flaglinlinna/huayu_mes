@@ -54,6 +54,8 @@ $(function() {
 			  // {field : 'feeProc',title : '评估总费用(未税)',width:100},
 			  {field : 'stQuote',title : '参考报价',width:100},
 			  {field : 'feeAll',title : '评估总费用(未税)',width:130},
+				{field : 'bsCave',title : '模穴数',width:100},
+				{field : 'bsMater',title : '模仁材质',width:130},
 			  {field : 'fmemo',title : '备注',width:100},
 			  {field : 'lastupdateBy',title : '更新人',width : 100},
 			  {field : 'lastupdateDate',title : '更新时间',width : 150},
@@ -225,6 +227,8 @@ $(function() {
 				"feeAll":obj.feeAll,
 				"stQuote":obj.stQuote,
 				"fmemo" : obj.fmemo,
+				"bsCave":obj.bsCave,
+				"bsMater":obj.bsMater
 			});
 			if(obj.fimg){
 				$('#demo1').attr('src',  context + "/file/view?fsFileId="+obj.fimg);

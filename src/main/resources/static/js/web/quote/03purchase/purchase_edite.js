@@ -1,7 +1,8 @@
 var pageCurr;
 $(function() {
 	layui.use([ 'form', 'table', 'upload', 'tableSelect' ], function() {
-		var table = layui.table,table2 = layui.table, form = layui.form, upload = layui.upload,upload2 = layui.upload, tableSelect = layui.tableSelect;
+		var table = layui.table,table2 = layui.table, form = layui.form,
+			upload = layui.upload,upload2 = layui.upload, tableSelect = layui.tableSelect ,element = layui.element;
 
 
 
@@ -95,6 +96,57 @@ $(function() {
 						form.render('select');
 				    }
 				  });
+			}
+		});
+
+		element.on('tab(tabFilter)', function () {
+			var tableId = this.getAttribute('lay-id');
+			if(tableId=='list1'){
+
+			}else if(tableId =='list2'){
+				tableIns = table.render({
+					elem : '#productFileList',
+					url : context + '/quoteFile/getList?pkQuote=' + quoteId,
+					method : 'get', // 默认：get请求
+					cellMinWidth : 80,
+					// toolbar: '#toolbar',
+					height : 'full-65',// 固定表头&full-查询框高度
+					even : true,// 条纹样式
+					page : true,
+					limit:20,
+					request : {
+						pageName : 'page', // 页码的参数名称，默认：page
+						limitName : 'rows' // 每页数据量的参数名，默认：limit
+					},
+					parseData : function(res) {
+						// 可进行数据操作
+						return {
+							"count" : res.data.total,
+							"msg" : res.msg,
+							"data" : res.data.rows,
+							"code" : res.status
+							// code值为200表示成功
+						}
+					},
+					cols : [ [{type : 'numbers'},
+						{field : 'bsFileName',title : '文件名称',templet : '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="' + context
+								+ '/file/get?fsFileId={{d.pkFileId}}" th:href="@{/file/get?fsFileId={{d.pkFileId}}}">{{ d.bsFileName==null?"":d.bsFileName }}</a></div>'},
+						{field : 'createBy',title : '创建人',width : 200},
+						{field : 'createDate',title : '创建时间',width : 200},
+						// {fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 150}
+					] ],
+					done : function(res, curr, count) {
+						// 如果是异步请求数据方式，res即为你接口返回的信息。
+						// 如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+						// console.log(res);
+						// 得到当前页码
+						// console.log(curr);
+						// 得到数据总量
+						// console.log(count);
+						pageCurr = curr;
+					}
+				});
+
 			}
 		});
 
@@ -263,6 +315,16 @@ $(function() {
 				getProdErr(data, data.id);
 			}
 		});
+
+		// 监听工具条
+		table.on('tool(fileList)', function(obj) {
+			var data = obj.data;
+			if (obj.event === 'del') {
+				// console.log(data);
+				delFile(data.id);
+			}
+		});
+
 		// 监听提交
 		form.on('submit(addSubmit)', function(data) {
 			if (data.field.id == null || data.field.id == "") {
@@ -348,6 +410,7 @@ $(function() {
 			}
 			,done: function(res,index, upload){
 				layer.closeAll('loading'); //关闭loading
+				loadFile();
 				// if(res.result == true){
 				// 	document.getElementById("filelist").innerHTML = $("#filelist").html()+getExcField(_index,res.data);
 				// 	_index++;
@@ -390,7 +453,6 @@ function cancelConfirm(){
 }
 
 function isComplete() {
-	console.log(nowStatus);
 	if (nowStatus.data == 0) {
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
@@ -479,12 +541,7 @@ function openUpload() {
 
 // 打开导入页
 function openFileList() {
-	tableIns2.reload({
-		url : context + '/productMaterTemp/getList?quoteId=' + quoteId + '&bsPurchase=' + 0,
-		done : function(res1, curr, count) {
-			pageCurr = curr;
-		}
-	})
+
 	// 打开弹出框
 	var index = layer.open({
 		type : 1,
@@ -618,6 +675,31 @@ function delProdErr(obj, id, name) {
 	}
 }
 
+function delFile(id) {
+	if (id != null) {
+		var param = {
+			"id" : id
+		};
+		CoreUtil.sendAjax("/file/deleteBsFile", JSON.stringify(param), function(data) {
+			if (isLogin(data)) {
+				if (data.result == true) {
+					// 回调弹框
+					layer.alert("删除成功！", function(index) {
+						layer.close(index);
+						// 加载load方法
+						loadFile();
+					});
+				} else {
+					layer.alert(data, function(index) {
+						layer.close(index);
+					});
+				}
+			}
+		});
+
+	}
+}
+
 // 重新加载表格（搜索）
 function load(obj) {
 	var scrollTop;
@@ -691,6 +773,16 @@ function loadAll() {
 function loadAll2() {
 	// 重新加载table
 	tableIns2.reload({
+		page : {
+			curr : pageCurr
+			// 从当前页码开始
+		}
+	});
+}
+
+function loadFile() {
+	// 重新加载table
+	tableIns3.reload({
 		page : {
 			curr : pageCurr
 			// 从当前页码开始

@@ -134,6 +134,20 @@ public class MjProcFee extends BaseEntity {
 		@Column(length = 200)
 		protected String fileId;
 
+		/**
+		 * 模穴数
+		 */
+		@ApiModelProperty(name = "bsCave", value = "模穴数")
+		@Column(length = 50)
+		protected String bsCave;
+
+		/**
+		 * 模仁材质
+		 */
+		@ApiModelProperty(name = "bsMater", value = "模仁材质")
+		@Column(length = 50)
+		protected String bsMater;
+
 	public Long getProductTypeId() {
 		return productTypeId;
 	}
@@ -260,5 +274,21 @@ public class MjProcFee extends BaseEntity {
 
 	public void setFileId(String fileId) {
 		this.fileId = fileId;
+	}
+
+	public String getBsCave() {
+		return bsCave;
+	}
+
+	public void setBsCave(String bsCave) {
+		this.bsCave = bsCave;
+	}
+
+	public String getBsMater() {
+		return bsMater;
+	}
+
+	public void setBsMater(String bsMater) {
+		this.bsMater = bsMater;
 	}
 }

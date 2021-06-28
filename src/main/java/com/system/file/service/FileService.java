@@ -35,6 +35,8 @@ public interface FileService {
 	public ApiResponseResult onlineView(Long fsFileId, HttpServletResponse response) throws Exception;
 
 	public ApiResponseResult delete(Long fsFileId) throws Exception;
+
+	public ApiResponseResult deleteBsFile(String ids) throws Exception;
 	
 	public ApiResponseResult viewByUrl(String url,String fileName, HttpServletResponse response) throws Exception;
 

@@ -46,6 +46,9 @@
 								id="cancelbtn" onclick="cancelConfirm()">取消完成</button>
 						<button class="layui-btn layui-btn-sm" type="button"
 								id="editListBtn" onclick="saveTable()">保存</button>
+						<button class="layui-btn layui-btn-sm layui-btn-normal"  type="button" id="fileListBtn"
+							style="display: none"	onclick="openFileList()">附件管理</button>
+
 					</div>
 				</div>
 			</form>
@@ -226,27 +229,27 @@
 					</div>
 				</div>
 
-				<div class="layui-form-item" style="display: none" id ="fileDiv1">
-					<div id="itemDiv1" class="layui-form-item" >
-						<label class="layui-form-label">附件上传</label>
-						<div class="layui-input-inline" style="width:70%;">
-							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload2">
-								<i class="layui-icon layui-icon-upload-circle"></i>上传
-							</button>
-						</div>
-					</div>
-				</div>
-				<div class="layui-form-item" style="display: none"  id ="fileDiv2">
-					<div id="itemDiv2" class="layui-form-item">
-						<label class="layui-form-label">附件列表</label>
-						<div class="layui-input-inline" style="width:70%;">
-							<!--<div style="position:relative;padding:10px 30px;width:90%">-->
-							<div  id="filelist" name="fftp">
-							</div>
-							<!--</div>-->
-						</div>
-					</div>
-				</div>
+<!--				<div class="layui-form-item" style="display: none" id ="fileDiv1">-->
+<!--					<div id="itemDiv1" class="layui-form-item" >-->
+<!--						<label class="layui-form-label">附件上传</label>-->
+<!--						<div class="layui-input-inline" style="width:70%;">-->
+<!--							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="upload2">-->
+<!--								<i class="layui-icon layui-icon-upload-circle"></i>上传-->
+<!--							</button>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--				<div class="layui-form-item" style="display: none"  id ="fileDiv2">-->
+<!--					<div id="itemDiv2" class="layui-form-item">-->
+<!--						<label class="layui-form-label">附件列表</label>-->
+<!--						<div class="layui-input-inline" style="width:70%;">-->
+<!--							&lt;!&ndash;<div style="position:relative;padding:10px 30px;width:90%">&ndash;&gt;-->
+<!--							<div  id="filelist" name="fftp">-->
+<!--							</div>-->
+<!--							&lt;!&ndash;</div>&ndash;&gt;-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
 
 				<div class="layui-form-item">
 					<div class="layui-input-block" style="margin-left: 10px;">
@@ -370,6 +373,24 @@
 			<button class="layui-btn layui-btn-sm layui-btn-normal"
 				onclick="uploadChecked()">确认导入</button>
 			<table id="uploadList" lay-filter="uploadTable"></table>
+		</div>
+
+		<div class="layui-tab layui-tab-brief" id="fileListDiv" lay-filter="tabFilter">
+			<ul class="layui-tab-title">
+				<li lay-id="list1"  class="layui-this">附件管理</li>
+				<li lay-id="list2">产品资料</li>
+			</ul>
+			<div class="layui-tab-content" style="height: 100px; display: block">
+				<div class="layui-tab-item layui-show">
+					<!--附件管理列表-->
+					<button class="layui-btn layui-btn-sm layui-btn-normal" id="uploadBsFile">选择文件</button>
+					<table id="fileList" lay-filter="fileList"></table>
+				</div>
+				<div class="layui-tab-item">
+					<!--工单组件列表-->
+					<table id="productFileList" lay-filter="productFileList"></table>
+				</div>
+			</div>
 		</div>
 
 		<script th:inline="javascript">

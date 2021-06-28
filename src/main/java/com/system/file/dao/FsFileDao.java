@@ -30,7 +30,7 @@ public interface FsFileDao extends CrudRepository<FsFile, Long>, JpaSpecificatio
 
     public FsFile findById(long id);
 
-    @Query(value = "select c from CommonFile c where c.mId=:mid and c.bsType =:bsType",
-    countQuery = "select count(c.fileId) from CommonFile c where c.mId=:mid and c.bsType =:bsType")
+    @Query(value = "select c from CommonFile c where c.mId=:mid and c.bsType =:bsType and c.delFlag = 0",
+    countQuery = "select count(c.fileId) from CommonFile c where c.mId=:mid and c.bsType =:bsType and c.delFlag = 0")
     public Page<CommonFile> getFileListByBs(@Param("mid") Long mid, @Param("bsType") String bsType, Pageable pageable);
 }

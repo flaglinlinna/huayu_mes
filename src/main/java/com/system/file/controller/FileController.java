@@ -4,10 +4,7 @@ package com.system.file.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.app.base.control.WebController;
@@ -20,6 +17,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+
+import java.util.Map;
 
 /**
  * 文件管理
@@ -69,7 +68,7 @@ public class FileController extends WebController {
 		}
 	}
 
-	@ApiOperation(value="业务上传文件", notes="业务上传文件")
+	@ApiOperation(value="业务文件列表", notes="业务文件列表")
 	@RequestMapping(value = "/getListByBs", method = RequestMethod.GET)
 	public ApiResponseResult getListByBs(Long bsId,String bsType) {
 		try {
@@ -78,6 +77,21 @@ public class FileController extends WebController {
 			logger.error(e.getMessage(), e);
 			e.printStackTrace();
 			return ApiResponseResult.failure(e.getMessage());
+		}
+	}
+
+	@ApiOperation(value = "删除", notes = "删除",hidden = true)
+	@RequestMapping(value = "/deleteBsFile", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult delete(@RequestBody Map<String, Object> params){
+		try{
+			String ids = params.get("id").toString() ;
+			ApiResponseResult result = fileService.deleteBsFile(ids);
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("删除失败！", e);
+			return ApiResponseResult.failure("删除失败！");
 		}
 	}
 
