@@ -42,8 +42,8 @@ $(function() {
 			}
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {fixed:'left',field : 'productCode',title : '模具编号',width:150},
-
 			  {fixed:'left',field : 'productName',title : '产品',width:180},
+				{fixed:'left',field : 'stQuote',title : '参考报价',width:100},
 			  {field : 'numHole',title : '穴数',width:60},
 			  {field : 'structureMj',title : '模具结构',width:100},
 			  {field : 'mjPrice',title : '模具报价价格(未税)',width:140},
@@ -52,7 +52,6 @@ $(function() {
 			  {field : 'feeType3',title : '外发纹理费用(未税)',width:140},
 			  // {field : 'feeType4',title : '热流道费用',width:130},
 			  // {field : 'feeProc',title : '评估总费用(未税)',width:100},
-			  {field : 'stQuote',title : '参考报价',width:100},
 			  {field : 'feeAll',title : '评估总费用(未税)',width:130},
 				// {field : 'bsCave',title : '模穴数',width:100},
 				{field : 'bsMater',title : '模仁材质',width:130},

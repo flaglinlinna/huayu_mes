@@ -195,7 +195,7 @@ function chartQualDiv(done, plan,okCount,input, xData,deptAxis) {
 				borderWidth : 10
 			},
 			legend : {
-				data : ["实际良率","目标良率","投入数量","良品数量"],
+				data : ["实际良率","目标良率","投入数量","在线良品"],
 				// orient: 'vertical',
 				x : 'center', // 可设定图例在左、右、居中
 				top : 10,
@@ -282,7 +282,7 @@ function chartQualDiv(done, plan,okCount,input, xData,deptAxis) {
 					}
 				},
 			}, {
-				name : '良品数量',
+				name : '在线良品',
 				type : 'bar',
 				data : okCount,
 				label : {

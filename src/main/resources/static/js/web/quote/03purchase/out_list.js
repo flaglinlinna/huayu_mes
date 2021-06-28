@@ -80,7 +80,8 @@ $(function() {
 								return "已关闭"
 							}
 						},sort: true},
-				{field : 'bsType',title : '报价类型', width : 120,templet:function (d) {
+					{field : 'bsTotal',title : '项目总量',width : 80},
+					{field : 'bsType',title : '报价类型', width : 120,templet:function (d) {
 						 if(d.bsType=="YSBJ"){
 							 return "衍生报价";
 						 }else if(d.bsType =="XPBJ"){
@@ -114,9 +115,8 @@ $(function() {
 							return "否";
 						}
 					}},
-				{field : 'bsTotal',title : '项目总量',width : 140, sort: true},
-				{field : 'userName',title : '创建人',width : 140, sort: true},
-				{field : 'createDate',title : '创建时间',width : 140, sort: true},
+				{field : 'userName',title : '创建人',width : 100, sort: true},
+				{field : 'createDate',title : '创建时间',width : 145, sort: true},
 				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150}
 				] ],
 				done : function(res, curr, count) {

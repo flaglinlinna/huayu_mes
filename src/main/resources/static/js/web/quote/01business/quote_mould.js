@@ -37,41 +37,41 @@ $(function() {
 			// ,{field:'id', title:'ID', width:80, unresize:true, sort:true}
 			, {fixed : 'left',field : 'bsName',title : '零件名称',width:200, style : 'background-color:#d2d2d2'},
 			{fixed : 'left',field : 'bsMoName',title : '模具名称',width:200, templet : '<div>{{d.mjProcFee.productName}}</div>',style : 'background-color:#d2d2d2'},
-			{fixed : 'left',field : 'bsActQuote',title : '实际报价',width:120, "edit" : "number","event" : "dataCol",width : 80,style : 'background-color:#ffffff'},
+			{fixed : 'left',field : 'bsActQuote',title : '实际报价',width:80, "edit" : "number","event" : "dataCol",style : 'background-color:#ffffff'},
+			{field : 'stQuote',title : '参考报价',width:80, templet : '<div>{{d.mjProcFee.stQuote}}</div>',style : 'background-color:#d2d2d2'},
+				{field : 'numHole',title : '穴数',width:60, templet :
+						function (d){
+							if(d.mjProcFee.numHole!=null){
+								return d.mjProcFee.numHole;
+							}else {
+								return ""
+							}
+						},style : 'background-color:#d2d2d2'},
+				{field : 'bsMater',title : '模仁材质',width:100,templet :
+						function (d){
+							if(d.mjProcFee.bsMater!=null){
+								return d.mjProcFee.bsMater;
+							}else {
+								return ""
+							}
+						},style : 'background-color:#d2d2d2'},
+				{field : 'structureMj',title : '模具结构',width:100, templet :
+						function (d){
+							if(d.mjProcFee.structureMj!=null){
+								return d.mjProcFee.structureMj;
+							}else {
+								return ""
+							}
+						},style : 'background-color:#d2d2d2'},
 			{field : 'feeType1',title : '材料成本(未税)',width:120, templet : '<div>{{d.mjProcFee.feeType1}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'feeType2',title : '制造成本(未税)',width:120, templet : '<div>{{d.mjProcFee.feeType2}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'feeType3',title : '外发纹理费用(未税)',width:140, templet : '<div>{{d.mjProcFee.feeType3}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'bsMoFee',title : '模具成本',width:120, templet : '<div>{{d.mjProcFee.feeAll}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'stQuote',title : '参考报价',width:120, templet : '<div>{{d.mjProcFee.stQuote}}</div>',style : 'background-color:#d2d2d2'},
 			{field : 'createName', title : '创建人', width : 80,style : 'background-color:#d2d2d2'},
 			{field : 'createDate', title : '创建时间', width : 150,style : 'background-color:#d2d2d2'},
 			{field : 'lastupdateName', title : '更新人', width : 80,style : 'background-color:#d2d2d2'},
 			{field : 'lastupdateDate', title : '更新时间', width : 150,style : 'background-color:#d2d2d2'},
 			{field : 'bsMoCode',title : '模具编码',width:150, templet : '<div>{{d.mjProcFee.productCode}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'bsMoName',title : '穴数',width:100, templet :
-					function (d){
-						if(d.mjProcFee.numHole!=null){
-							return d.mjProcFee.numHole;
-						}else {
-							return ""
-						}
-					},style : 'background-color:#d2d2d2'},
-			{field : 'bsMoName',title : '模仁材质',width:100,templet :
-					function (d){
-						if(d.mjProcFee.bsMater!=null){
-							return d.mjProcFee.bsMater;
-						}else {
-							return ""
-						}
-					},style : 'background-color:#d2d2d2'},
-			{field : 'structureMj',title : '模具结构',width:100, templet :
-					function (d){
-						if(d.mjProcFee.structureMj!=null){
-							return d.mjProcFee.structureMj;
-						}else {
-							return ""
-						}
-					},style : 'background-color:#d2d2d2'},
 			{fixed : 'right',title : '操作',width : 80,align : 'center',toolbar : '#optBar'}
 			] ],
 			done : function(res, curr, count) {

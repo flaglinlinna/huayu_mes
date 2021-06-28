@@ -102,7 +102,7 @@ $(function() {
 			cols : [ [ {type : 'numbers',style:'background-color:#d2d2d2'},
 				{field:"id",title:"ID",hide:true},
 				{field : 'bsElement',title : '组件名称',width : 150,sort : true,style : 'background-color:#d2d2d2',totalRowText : "合计",
-					templet:'<div><span title="{{d.bsElement}} 总人数:{{d.allUser}} 产能{{d.minCapacity}}">{{d.bsElement}}</span></div>'},
+					templet:'<div><span title="{{d.bsElement}} 。总人数：{{d.allUser}}，最小产能：{{d.minCapacity}}">{{d.bsElement}}</span></div>'},
 				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'bsOrder',width:90, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'proc', width:120, title : '工序名称',style:'background-color:#d2d2d2',

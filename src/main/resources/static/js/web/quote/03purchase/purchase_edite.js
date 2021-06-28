@@ -64,6 +64,7 @@ $(function() {
 				// {field : 'bsWaterGap',title : '水口量(g)',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				// {field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				{field : 'purchaseUnit',width : 110,title : '采购单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
+				{field : 'mjPrice',width : 70,title : '模具费',edit : 'number',style : 'background-color:#ffffff'},
 				{
 					field: 'bsGeneral', width: 80, title: '通用物料', style: 'background-color:#d2d2d2',
 					templet: function (d) {
@@ -78,7 +79,6 @@ $(function() {
 				},
 				{field : 'bsRefer',width : 90,title : '参考价格',style : 'background-color:#d2d2d2'},
 				{field : 'bsGear',width : 120,title : '价格挡位',style : 'background-color:#d2d2d2'},
-				{field : 'mjPrice',width : 120,title : '模具费',edit : 'number',style : 'background-color:#ffffff'},
 				// {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},
 
 				//{field : 'bsExplain',width : 110,title : '采购说明',style : 'background-color:#d2d2d2'},

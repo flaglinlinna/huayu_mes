@@ -61,7 +61,7 @@ $(function() {
 				cols : [ [ {fixed:'left',type : 'numbers'},
 				 {fixed:'left',field : 'bsCode',title : '报价单编号',width : 150,sort: true},
 					{fixed:'left',field : 'bsProd',title : '产品型号',width : 120,sort: true},
-					{fixed:'left',field : 'bsProjVer',title : '版本',width : 80,sort: true},
+					{fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true},
 				 {fixed:'left',field : 'bsStatus',title : '状态',width : 90,templet:function (d) {
 						if(d.bsStatus=="0"){
 							return "进行中"
@@ -113,8 +113,8 @@ $(function() {
 				// {field : 'bsProjVer',title : '版本',width : 140,sort: true},
 
 				// {field : 'bsStage',title : '报价阶段',width : 200,sort: true},
-				{field : 'userName',title : '创建人',width : 140, sort: true},
-				{field : 'createDate',title : '创建时间',width : 140, sort: true},
+				{field : 'userName',title : '创建人',width : 100, sort: true},
+				{field : 'createDate',title : '创建时间',width : 145, sort: true},
 				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 300}
 				] ],
 				done : function(res, curr, count) {
