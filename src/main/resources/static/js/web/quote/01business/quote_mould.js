@@ -45,10 +45,10 @@ $(function() {
 			{field : 'lastupdateName', title : '更新人', width : 80,style : 'background-color:#d2d2d2'},
 			{field : 'lastupdateDate', title : '更新时间', width : 150,style : 'background-color:#d2d2d2'},
 			{field : 'bsMoCode',title : '模具编码',width:150, templet : '<div>{{d.mjProcFee.productCode}}</div>',style : 'background-color:#d2d2d2'},
-			{field : 'bsMoName',title : '模穴数',width:100, templet :
+			{field : 'bsMoName',title : '穴数',width:100, templet :
 					function (d){
-						if(d.mjProcFee.bsCave!=null){
-							return d.mjProcFee.bsCave;
+						if(d.mjProcFee.numHole!=null){
+							return d.mjProcFee.numHole;
 						}else {
 							return ""
 						}
@@ -159,7 +159,7 @@ $(function() {
 			{field : 'productName',title : '产品名称',minWidth : 200},
 			{field : 'stQuote',title : '参考报价',minWidth : 100}, 
 			{field : 'feeAll',title : '评估总费用（含税）',minWidth : 200},
-			{field : 'bsCave',title : '模穴数',minWidth : 100},
+			{field : 'numHole',title : '模穴数',minWidth : 100},
 			{field : 'bsMater',title : '模仁材质',minWidth : 200},
 			{field : 'structureMj',title : '模具结构',minWidth : 200},
 			// {type: 'toolbar',title: '操作',width: 160,align : 'center',toolbar:'#moveBar'}
