@@ -144,32 +144,28 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 
 			//关联到bom，如果材料是辅料，则查询关联的零件名称
 			if(o.getPkQuoteBom()!=null) {
-//				if(StringUtils.isEmpty(o.getItemType())){
-//					o.setItemType(o.getQuoteBom().getItp().getItemType());
-//				}
 
-				if (o.getItemType().startsWith("辅料")){
+				if(StringUtils.isEmpty(o.getItemType())) {
+					//新增的时候为空
+					o.setBsComponentList(JSON.toJSONString(componentList));
+					if(StringUtils.isEmpty(o.getBsLinkName())) {
+						o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
+					}
+
+				}else if (o.getItemType().startsWith("辅料")){
 //				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
 					//2021-05-19 物料类型为 辅料 的，工序名称默认为 组装（如果存在组装工序）
 					if(o.getPkProc()==null&&packagList.size()>0){
 						o.setPkProc(packagList.get(0).getId());
 					}
-
 					//关联第一个关联零件并返回下拉选择
-						if(componentList.size()>0){
-							o.setBsComponentList(JSON.toJSONString(componentList));
-							if(StringUtils.isEmpty(o.getBsLinkName())) {
-								o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
-							}
-						}else {
-							o.setBsLinkName(o.getBsName());
+					if(componentList.size()>0){
+						o.setBsComponentList(JSON.toJSONString(componentList));
+						if(StringUtils.isEmpty(o.getBsLinkName())) {
+							o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
 						}
-
-				}else if(StringUtils.isEmpty(o.getItemType())) {
-					//新增的时候为空
-					o.setBsComponentList(JSON.toJSONString(componentList));
-					if(StringUtils.isEmpty(o.getBsLinkName())) {
-						o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
+					}else {
+						o.setBsLinkName(o.getBsName());
 					}
 				}else {
 					if(StringUtils.isEmpty(o.getBsLinkName())){
