@@ -6,9 +6,9 @@ var set_main_id;
 $(function() {
 	layui
 			.use(
-					[ 'form', 'table', 'laydate' ],
+					[ 'form', 'table', 'laydate','tableFilter' ],
 					function() {
-						var table = layui.table, form = layui.form, laydate = layui.laydate;
+						var table = layui.table, form = layui.form, laydate = layui.laydate,tableFilter = layui.tableFilter;
 
 						tableIns = table
 								.render({
@@ -20,8 +20,8 @@ $(function() {
 									,even:true,//条纹样式
 									toolbar: '#toolbar', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 									page : true,
-									limit: 20,
-									limits: [20,50,100,200],
+									limit: 30,
+									limits: [30,50,100,200],
 									request : {
 										pageName : 'page',// 页码的参数名称，默认：page
 										limitName : 'rows', // 每页数据量的参数名，默认：limit
@@ -112,6 +112,7 @@ $(function() {
 										// 如果是异步请求数据方式，res即为你接口返回的信息。
 										// 如果是直接赋值的方式，res即为：{data: [], count:
 										// 99} data为当前页数据、count为数据总长度
+										localtableFilterIns.reload();
 										pageCurr = curr;
 									}
 								});
@@ -119,6 +120,8 @@ $(function() {
 							elem : '#empList',
 							method : 'post',// 默认：get请求
 							page : true,
+							limit: 200,
+							limits: [100,200,500,1000],
 							height:'full-80',//固定表头&full-查询框高度
 							request : {
 								pageName : 'page',// 页码的参数名称，默认：page
@@ -134,47 +137,47 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {fixed:'left',
+							cols : [ [ {
 								type : 'numbers'
 							},
-								 {fixed:'left',type:'checkbox' },
-								{fixed:'left',
+								 {type:'checkbox' },
+								{
 								field : 'EMP_CODE',
 								title : '工号',
-								width : 80
-							}, {fixed:'left',
+								width : 80, sort: true
+							}, {
 								field : 'EMP_NAME',
 								title : '姓名',
-								width : 80
+								width : 100, sort: true
 							},
-								{fixed:'left',
+								{
 									field : 'LINER_NAME',
 									title : '组长',
-									width : 70
+									width : 70, sort: true
 								},
 							 	
 								{
 								field : 'TIME_BEGIN',
 								title : '上线时间',
-								width : 145
+								width : 145, sort: true
 							}, {
 									field : 'TIME_BEGIN_HD',
 									title : '统一上线时间',
-									width : 145
+									width : 145, sort: true
 								},
 								{
 								field : 'TIME_END',
 								title : '下线时间',
-								width : 145
+								width : 145, sort: true
 							}, {
 									field : 'TIME_END_HD',
 									title : '统一下线时间',
-									width : 145
+									width : 145, sort: true
 								},
 								{
 									field : 'CREATE_DATE',
 									title : '分配时间',
-									width : 145
+									width : 145, sort: true
 								},
 								{
 								title : '操作',
@@ -218,7 +221,20 @@ $(function() {
 							};
 						});
 
-						
+						var localtableFilterIns = tableFilter.render({
+							'elem' : '#empList',
+							'mode' : 'api',//服务端过滤
+							'filters' : [
+								{field: 'EMP_NAME', type:'checkbox'},
+								{field: 'LINER_NAME', type:'checkbox'},
+								{field: 'TIME_BEGIN_HD', type:'checkbox'},
+								{field: 'TIME_END_HD', type:'checkbox'},
+								{field: 'CREATE_DATE', type:'checkbox'},
+							],
+							'done': function(filters){
+							}
+						})
+
 						// 监听工具条
 						table.on('tool(onlineTable)', function(obj) {
 							var data = obj.data;
@@ -400,6 +416,7 @@ function getMainInfo(id) {
 						data : data.data,
 						done : function(res, curr,
 								count) {
+							localtableFilterIns.reload();
 							pageCurr = curr;
 						}
 					})

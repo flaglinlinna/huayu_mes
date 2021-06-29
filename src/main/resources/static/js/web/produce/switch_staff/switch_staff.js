@@ -19,12 +19,12 @@ $(function() {
 							where : {},
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
-							height : 'full-140'// 固定表头&full-查询框高度
+							height : 'full-70'// 固定表头&full-查询框高度
 							,
 							even : true,// 条纹样式
 							page : true,
-							limit : 50,
-							limits : [ 50, 100, 200, 500, 1000, 5000 ],
+							limit : 200,
+							limits : [ 200, 500, 800,1000, 5000 ],
 							data : [],
 							request : {
 								pageName : 'page' // 页码的参数名称，默认：page
@@ -128,12 +128,12 @@ $(function() {
 							where : {},
 							method : 'get',// 默认：get请求
 							defaultToolbar : [],
-							height : 'full-220'// 固定表头&full-查询框高度
+							height : 'full-70'// 固定表头&full-查询框高度
 							,
 							even : true,// 条纹样式
 							page : true,
-							limit : 50,
-							limits : [ 50, 100, 200, 500, 1000, 5000 ],
+							limit : 200,
+							limits : [ 200, 500, 800, 1000, 5000 ],
 							data : [],
 							request : {
 								pageName : 'page' // 页码的参数名称，默认：page

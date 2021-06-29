@@ -21,7 +21,7 @@ $(function() {
 									,
 									defaultToolbar : [],
 									cellMinWidth : 80,
-									height:'full-295'//固定表头&full-查询框高度
+									height:'full-70'//固定表头&full-查询框高度
 									,even:true,//条纹样式
 									page : true,
 									limit:200,
@@ -108,26 +108,26 @@ $(function() {
 								method : 'get',
 								width : 800,
 								cols : [ [
-									{type:'numbers',title:"序号"},
-									{
+									{fixed:'left',type:'numbers',title:"序号"},
+									{fixed:'left',
 									type : 'radio',
 									
 								},// 多选 radio
-								 {field : 'id', title : 'id', width : 0, hide : true},
-									{field : 'WS_SECTION', title : '工段', width : 70},
-									{field : 'LINER_NAME', title : '组长', width : 70, sort : true},
-									{field : 'PROD_DATE', title : '计划日期', width : 100, sort : true,
+								 {fixed:'left',field : 'id', title : 'id', width : 0, hide : true},
+									{fixed:'left',field : 'PROD_DATE', title : '生产日期', width : 100, sort : true,
 										templet:function (d) {
 											if(d.PROD_DATE!=null){
 												return /\d{4}-\d{1,2}-\d{1,2}/g.exec(d.PROD_DATE)
 											}
 										}
 									},
-									 {field : 'ITEM_NO', title : '物料编码', width : 170, sort : true},
-									{field : 'ITEM_NAME', title : '物料描述', width : 260, sort : true},
-									{field : 'FMEMO', title : '备注', width : 120},
+									{fixed:'left',field : 'LINER_NAME', title : '组长', width : 70, sort : true},
+									 {fixed:'left',field : 'ITEM_NO', title : '物料编码', width : 145, sort : true},
 									{field : 'TASK_NO', title : '制令单号', width : 150, sort : true},
-									{field : 'CUST_NAME_S', title : '客户简称', width : 100, sort : true} ] ],
+									{field : 'WS_SECTION', title : '工段', width : 60},
+									{field : 'FMEMO', title : '备注', width : 80},
+									{field : 'CUST_NAME_S', title : '客户', width : 80, sort : true} ,
+									{field : 'ITEM_NAME', title : '物料描述', width : 260, sort : true}] ],
 								page : false,
 								request : {
 									pageName : 'page' // 页码的参数名称，默认：page
@@ -343,7 +343,7 @@ $(function() {
 							defaultToolbar : [],
 							page : true,
 							data : [],
-							height:'full-80'//固定表头&full-查询框高度
+							height:'full-70'//固定表头&full-查询框高度
 								,even:true,//条纹样式
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
