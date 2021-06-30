@@ -1,14 +1,12 @@
 package com.web.produce.controller;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import com.alibaba.fastjson.JSON;
+import java.util.Map;
 import com.alibaba.fastjson.JSONObject;
 import com.utils.CodeQueue;
 import com.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
@@ -43,9 +39,9 @@ public class CheckCodeController extends WebController {
 	 private String module = "小码校验";
 	 @Autowired
 	 private CheckCodeService checkCodeService;
+	 @Autowired
+	 private Environment env;
 
-//	 CodeQueue codeQueue;
-//	  CodeQueue codeQueue = CodeQueue.getCodeQueue();
 	 @ApiOperation(value = "小码校验页", notes = "小码校验页", hidden = true)
 	    @RequestMapping(value = "/toCheckCode")
 	    public ModelAndView toCheckCode(String type){
@@ -77,7 +73,7 @@ public class CheckCodeController extends WebController {
 	        } catch (Exception e) {
 	        	 e.printStackTrace();
 	             logger.error("获取指令单信息失败！", e);
-				getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+				getSysLogService().error(module,method, methodName,"关键字"+keyword+";"+e.toString());
 	             return ApiResponseResult.failure("获取指令单信息失败！");
 	        }
 	    }
@@ -95,7 +91,7 @@ public class CheckCodeController extends WebController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取产品编码信息失败！", e);
-			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			getSysLogService().error(module,method, methodName,"关键字"+keyword+";"+e.toString());
 			return ApiResponseResult.failure("获取产品编码信息失败！");
 		}
 	}
@@ -113,7 +109,7 @@ public class CheckCodeController extends WebController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取组长信息失败！", e);
-			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			getSysLogService().error(module,method, methodName,"关键字"+keyword+";"+e.toString());
 			return ApiResponseResult.failure("获取组长信息失败！");
 		}
 	}
@@ -122,7 +118,7 @@ public class CheckCodeController extends WebController {
 	    @RequestMapping(value = "/subCode", method = RequestMethod.POST)
 	    @ResponseBody
 	    public ApiResponseResult subCode(@RequestBody Map<String, Object> params) {
-	        String method = "produce/check_code/subCode";String methodName ="小码校验";
+//	        String method = "produce/check_code/subCode";String methodName ="小码校验";
 	        try {
 				System.out.println(super.getRequest().getLocalPort()+"");
 				if(!(super.getRequest().getLocalPort()+"").equals("8083")){
@@ -170,19 +166,24 @@ public class CheckCodeController extends WebController {
 				 @Override
 				 public void run() {
 					 try {
-						 while (true) {
-							 String info =  CodeQueue.getCodeQueue().consume();
-							 String[] infoArray = info.split(",");
+						 String serverPort = env.getProperty("server.port");
+						 System.out.println("端口号为:"+serverPort);
+						 if(("8083").equals(serverPort)) {
+							 while (true) {
+								 String info = CodeQueue.getCodeQueue().consume();
+								 String[] infoArray = info.split(",");
 //							 System.out.println(infoArray[2]);
-							 try {
-								 ApiResponseResult result = checkCodeService.updateCode(infoArray[0],infoArray[1],infoArray[2],infoArray[3],infoArray[4],infoArray[5],infoArray[6],infoArray[7],"");
-								 System.out.println(result.getData());
-							 }catch (Exception e){
-							 	e.printStackTrace();
+								 try {
+									 ApiResponseResult result = checkCodeService.updateCode(infoArray[0], infoArray[1], infoArray[2], infoArray[3], infoArray[4], infoArray[5], infoArray[6], infoArray[7], "");
+									 System.out.println(result.getData());
+								 } catch (Exception e) {
+									 e.printStackTrace();
+								 }
+								 System.out.println("队列剩余任务：" + CodeQueue.getCodeQueue().size() + "个");
 							 }
-							 System.out.println("队列剩余任务："+CodeQueue.getCodeQueue().size()+"个");
 						 }
 					 } catch (InterruptedException ex) {
+					 	ex.printStackTrace();
 					 }
 				 }
 			 }.start();

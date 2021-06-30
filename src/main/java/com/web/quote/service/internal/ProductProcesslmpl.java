@@ -491,12 +491,18 @@ public class ProductProcesslmpl implements ProductProcessService {
                     return ApiResponseResult.failure("人数、穴数、成型周期和工序良率不能为空,请检查后再确认！");
                 }
             } else if ("surface".equals(bsType)) {
-                if (o.getBsUserNum() == null || o.getBsYield() == null || o.getBsCapacity() == null
+                if(o.getBsUserNum() ==BigDecimal.ZERO&&o.getBsYield() == BigDecimal.ZERO&&("0").equals(o.getBsCapacity())){
+
+                }
+                else if (o.getBsUserNum() == null || o.getBsYield() == null || o.getBsCapacity() == null
                         || o.getBsUserNum() == BigDecimal.ZERO || o.getBsYield() == BigDecimal.ZERO || o.getBsCapacity() == "0") {
                     return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
                 }
             } else if ("packag".equals(bsType)) {
-                if (o.getBsUserNum() == null || o.getBsYield() == null || o.getBsCapacity() == null
+                if(o.getBsUserNum() == BigDecimal.ZERO&&o.getBsYield() == BigDecimal.ZERO&&("0").equals(o.getBsCapacity())){
+
+                }
+                else if (o.getBsUserNum() == null || o.getBsYield() == null || o.getBsCapacity() == null
                         || o.getBsUserNum() == BigDecimal.ZERO || o.getBsYield() == BigDecimal.ZERO || o.getBsCapacity() == "0") {
                     return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
                 }
