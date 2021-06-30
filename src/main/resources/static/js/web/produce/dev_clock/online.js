@@ -48,7 +48,8 @@ $(function() {
 										{fixed:'left',
 											field : 'linerName',
 											title : '组长',
-											width : 70,
+											width : 95,
+											sort: true
 											// templet:function (d){
 											// 	var list=d.linerName;
 											// 	return list[0].LINER_NAME;
@@ -57,9 +58,15 @@ $(function() {
 											{fixed:'left',
 												field : 'taskNo',
 												title : '制令单号',
-												width : 150
+												width : 150,
+												sort: true
 											},
-
+										{fixed:'left',
+											field : 'lineName',
+											title : '线体',
+											width : 100,
+											sort: true
+										},
 											{fixed:'left',
 												field : 'classId',
 												title : '班次',
@@ -74,31 +81,30 @@ $(function() {
 								                	}
 								                }
 											},
-											{fixed:'left',
+										{fixed:'left',
+											field : 'hourType',
+											title : '工时类型',
+											width : 120,
+											sort: true
+										},
+											{
 												field : 'workDate',
-												title : '生产日期',
-												width : 100,
+												title : '统一上线日期',
+												width : 150,
+										        sort: true,
 												templet : '<div>{{d.workDate?DateUtils.formatterDate(d.workDate):""}}</div>',
-											},
-											{
-												field : 'hourType',
-												title : '工时类型',
-												width : 80
-											},
-											{
-												field : 'lineName',
-												title : '线体',
-												width : 80
 											},
 										{
 											field : 'createDate',
 											title : '创建时间',
 											width : 145,
+											sort: true,
 											templet : '<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>',
 										},{
 												field : 'lastupdateDate',
 												title : '更新时间',
 												width : 145,
+												sort: true,
 												templet : '<div>{{d.lastupdateDate?DateUtils.formatDate(d.lastupdateDate):""}}</div>',
 											},
 											 {
@@ -116,6 +122,21 @@ $(function() {
 										pageCurr = curr;
 									}
 								});
+
+						localtableFilterIns = tableFilter.render({
+							'elem' : '#onlineList',
+							'mode' : 'api',//服务器过滤
+							'filters' : [
+								{field: 'linerName', type:'input'},
+								{field: 'taskNo', type:'input'},
+								{field: 'workDate', type:'checkbox'},
+								{field: 'hourType', type:'checkbox'},
+								{field: 'lineName', type:'checkbox'},
+							],
+							'done': function(filters){
+							}
+						})
+
 						tableEmp = table.render({
 							elem : '#empList',
 							method : 'post',// 默认：get请求
@@ -144,16 +165,16 @@ $(function() {
 								{
 								field : 'EMP_CODE',
 								title : '工号',
-								width : 80, sort: true
+								width : 95, sort: true
 							}, {
 								field : 'EMP_NAME',
 								title : '姓名',
-								width : 100, sort: true
+								width : 95, sort: true
 							},
 								{
 									field : 'LINER_NAME',
 									title : '组长',
-									width : 70, sort: true
+									width : 70
 								},
 							 	
 								{
@@ -223,13 +244,14 @@ $(function() {
 
 						 localtableFilterIns = tableFilter.render({
 							'elem' : '#empList',
-							'mode' : 'local',//服务端过滤
+							'mode' : 'local',//本地过滤
 							'filters' : [
-								{field: 'EMP_NAME', type:'checkbox'},
-								{field: 'LINER_NAME', type:'checkbox'},
+								{field: 'EMP_CODE', type:'input'},
+								{field: 'EMP_NAME', type:'input'},
+								//{field: 'TIME_BEGIN', type:'checkbox'},
 								{field: 'TIME_BEGIN_HD', type:'checkbox'},
 								{field: 'TIME_END_HD', type:'checkbox'},
-								{field: 'TIME_END', type:'checkbox'},
+								//{field: 'TIME_END', type:'checkbox'},
 								{field: 'CREATE_DATE', type:'checkbox'},
 							],
 							'done': function(filters){

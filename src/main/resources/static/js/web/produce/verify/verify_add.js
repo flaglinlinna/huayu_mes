@@ -1,15 +1,16 @@
 /**
  * 上线确认
  */
-var pageCurr;
+var pageCurr,localtableFilterIns;
 var tabledata = [];
 $(function() {
 	layui
 			.use(
-					[ 'table', 'form', 'layedit', 'laydate', 'tableSelect' ],
+					[ 'table', 'form', 'layedit', 'laydate', 'tableSelect','tableFilter' ],
 					function() {
-						var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table, table1 = layui.table, laydate = layui.laydate, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect;
-						;
+						var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table, table1 = layui.table,
+							laydate = layui.laydate, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect,tableFilter = layui.tableFilter;
+
 						tableIns = table
 								.render({
 									elem : '#colTable'
@@ -97,6 +98,19 @@ $(function() {
 										}
 									}
 								});
+
+						localtableFilterIns = tableFilter.render({
+							'elem' : '#colTable',
+							'mode' : 'local',//本地过滤
+							'filters' : [
+								{field: 'EMP_CODE', type:'input'},
+								{field: 'EMP_NAME', type:'input'},
+								{field: 'DEV_IP', type:'checkbox'},
+							],
+							'done': function(filters){
+							}
+						})
+
 						tableSelect = tableSelect.render({
 							elem : '#num',
 							searchKey : 'keyword',

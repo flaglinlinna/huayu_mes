@@ -9,9 +9,9 @@ $(function() {
 	layui
 			.use(
 					[ 'table', 'form', 'layedit', 'tableSelect', 'laydate',
-							'layer' ],
+							'layer' ,'tableFilter'],
 					function() {
-						var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table, tableSelect = layui.tableSelect;
+						var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table, tableSelect = layui.tableSelect,tableFilter = layui.tableFilter;
 						form.render();
 						tableIns = table.render({
 							elem : '#colTable',
@@ -74,32 +74,34 @@ $(function() {
 							}, {fixed:'left',
 								field : 'TASK_NO_OFF',
 								title : '原制令单',
-								width : 150
+								width : 150,
+								sort : true
 							}, {
 								field : 'TIME_ON',
 								title : '上线时间',
-								width : 150,
+								width : 145,
 								sort : true
 							}, {
 								field : 'TIME_OFF',
 								title : '下线时间',
-								width : 150
+								width : 145,
+								sort : true
 							}, {
 								field : 'LINE_NAM_ON',
 								title : '上线线体',
-								width : 90
+								width : 100
 							}, {
 								field : 'LINE_NAM_OFF',
 								title : '下线线体',
-								width : 90
+								width : 100
 							}, {
 								field : 'LINER_ON',
 								title : '上线组长',
-								width : 90
+								width : 100
 							}, {
 								field : 'LINER_OFF',
 								title : '下线组长',
-								width : 90
+								width : 100
 							}, {
 								field : 'HOUR_TYPE_ON',
 								title : '上线工时类型',
@@ -121,6 +123,21 @@ $(function() {
 								pageCurr = curr;
 							}
 						});
+
+						localtableFilterIns = tableFilter.render({
+							'elem' : '#colTable',
+							'mode' : 'local',//本地过滤
+							'filters' : [
+								{field: 'TASK_NO_ON', type:'checkbox'},
+								{field: 'TASK_NO_OFF', type:'checkbox'},
+								{field: 'LINE_NAM_ON', type:'checkbox'},
+								{field: 'LINE_NAM_OFF', type:'checkbox'},
+								{field: 'LINER_ON', type:'checkbox'},
+								{field: 'LINER_OFF', type:'checkbox'},
+							],
+							'done': function(filters){
+							}
+						})
 
 						empTableIns = table.render({
 							elem : '#empTable',
@@ -166,12 +183,12 @@ $(function() {
 							},  {
 								field : 'EMP_CODE',
 								title : '工号',
-								width : 80,
+								width : 100,
 								sort : true
 							}, {
 								field : 'EMP_NAME',
 								title : '姓名',
-								width : 80,
+								width : 100,
 								sort : true
 							}, {field : 'TIME_BEGIN', title : '上线时间', width : 145,sort : true},
 								{field : 'TIME_BEGIN_HD', title : '统一上线时间', width : 145,sort : true},
@@ -183,9 +200,23 @@ $(function() {
 									width : 80
 								}] ],
 							done : function(res, curr, count) {
+								localtableFilterIns.reload();
 								pageCurr = curr;
 							}
 						});
+
+						localtableFilterIns = tableFilter.render({
+							'elem' : '#empTable',
+							'mode' : 'local',//本地过滤
+							'filters' : [
+								{field: 'EMP_CODE', type:'input'},
+								{field: 'EMP_NAME', type:'input'},
+								{field: 'TIME_BEGIN_HD', type:'checkbox'},
+								{field: 'TIME_END_HD', type:'checkbox'},
+							],
+							'done': function(filters){
+							}
+						})
 
 						// 按钮监听事件
 						form.on('submit(saveData)', function(data) {
@@ -241,11 +272,11 @@ $(function() {
 									type : 'radio'
 								},// 多选 radio
 								 {fixed:'left',field : 'id', title : 'id', width : 0, hide : true},
-									{fixed:'left',field : 'WORK_DATE', title : '生产时间',templet:function (d) {
+									{fixed:'left',field : 'WORK_DATE', title : '统一上线日期',templet:function (d) {
 											if(d.WORK_DATE!=null){
 												return d.WORK_DATE.slice(0,4)+"-"+ d.WORK_DATE.slice(5,7)+"-"+d.WORK_DATE.slice(8,10)
 											}
-										}, width : 100},
+										}, width : 110},
 									{fixed:'left',field : 'LINER_NAME', title : '组长', width : 70},
 									{fixed:'left',field : 'ITEM_NO', title : '物料编码', width : 145},
 									{field : 'TASK_NO', title : '制令单号', width : 150},
@@ -414,6 +445,7 @@ function getEmpList(aff_id) {
 		where : params,
 		done : function(res1, curr, count) {
 			// console.log(res1)
+			localtableFilterIns.reload();
 			pageCurr = curr;
 		}
 	})
@@ -452,6 +484,7 @@ function getList(dates, keyword) {
 		url : context + '/produce/switch_staff/getList',
 		where : params,
 		done : function(res1, curr, count) {
+			localtableFilterIns.reload();
 			pageCurr = curr;
 		}
 	})
@@ -493,6 +526,7 @@ function saveData(obj, empIdList) {
 				layer.alert("调整成功")
 				getEmpList(obj.AFF_ID)
 			}
+			localtableFilterIns.reload();
 			pageCurr = curr;
 		}
 	})
@@ -506,6 +540,7 @@ function clean() {
 		where : '',
 		done : function(res1, curr, count) {
 			// console.log(curr)
+			localtableFilterIns.reload();
 			pageCurr = curr;
 		}
 	})
@@ -529,6 +564,7 @@ function cleanInput() {
 		where : '',
 		done : function(res1, curr, count) {
 			// console.log(curr)
+			localtableFilterIns.reload();
 			pageCurr = curr;
 		}
 	})

@@ -540,7 +540,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> lpp_packag = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId),
 				"packag");
 		for (ProductProcess pp : lpp_packag) {
-			if (!(("0").equals(pp.getBsUserNum()) && ("0").equals(pp.getBsYield()) && ("0").equals(pp.getBsCapacity()))) {
+			if (("0").equals(pp.getBsUserNum()) && ("0").equals(pp.getBsYield()) && ("0").equals(pp.getBsCapacity()) ) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
