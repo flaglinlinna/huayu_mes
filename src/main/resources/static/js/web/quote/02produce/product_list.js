@@ -62,7 +62,7 @@ $(function() {
 				{fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true},
 				{fixed:'left',field : 'bsStatus',title : '状态',width : 100,templet : function(d) {
 						if(d.bsQuoteStatus !="99") {
-							if (d.bsStatus.length < 4) {
+							if (d.bsStatus < 99) {
 								if (d.bsStatus == "0") {
 									return "草稿"
 								} else if (d.bsStatus == "1") {
@@ -125,7 +125,7 @@ $(function() {
 				res.data.forEach(function(item, index) {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
 					if(item.bsQuoteStatus !="99") {
-						if (item.bsStatus.length < 4) {
+						if (item.bsStatus <99) {
 							if (item.bsStatus == 0) {
 								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6699CC');
 							} else if (item.bsStatus == "1") {

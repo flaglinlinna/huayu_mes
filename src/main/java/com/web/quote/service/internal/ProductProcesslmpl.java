@@ -533,13 +533,18 @@ public class ProductProcesslmpl implements ProductProcessService {
                     if (baseFeeList.size() == 0) {
                         return ApiResponseResult.failure("存在工序未维护人工制费,请检查后再确认！");
                     } else {
-                        String expiresTime = sdf.format(baseFeeList.get(0).getExpiresTime());
-                        if ((sdf.parse(expiresTime)).compareTo(sdf.parse(currentTime)) >= 0) {
-                            //失效日期大于今天
+                        if(baseFeeList.get(0).getExpiresTime()!=null) {
+                            String expiresTime = sdf.format(baseFeeList.get(0).getExpiresTime());
+                            if ((sdf.parse(expiresTime)).compareTo(sdf.parse(currentTime)) >= 0) {
+                                //失效日期大于今天
+                                o.setBsFeeMh(BigDecimal.ZERO);
+                                o.setBsFeeLh(new BigDecimal(baseFeeList.get(0).getFeeLh()));
+                            } else {
+                                return ApiResponseResult.failure("存在工序维护的人工制费已失效,请检查后再确认！");
+                            }
+                        }else {
                             o.setBsFeeMh(BigDecimal.ZERO);
                             o.setBsFeeLh(new BigDecimal(baseFeeList.get(0).getFeeLh()));
-                        } else {
-                            return ApiResponseResult.failure("存在工序维护的人工制费已失效,请检查后再确认！");
                         }
                     }
                 }

@@ -45,11 +45,11 @@
 			<table id="listTable" lay-filter="listTable" style="margin:0px;"></table>
 			<script type="text/html" id="optBar">
 				{{# if(d.bsStatus.length >= 4){ }}
-            	<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="openFreight">查看</a>
+            	<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="openFreight">查看详情</a>
 				{{# } else { }}
 				<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看进度</a>
+				<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="check">审批</a>
 				{{# } }}
-            <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="check">审批</a>
             </script>
 		</div>
 		<div id="setItemPage" class="layer_self_wrap" style="width:500px;display:none;">
