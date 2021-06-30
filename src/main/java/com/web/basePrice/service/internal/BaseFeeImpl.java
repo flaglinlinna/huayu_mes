@@ -342,7 +342,8 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 				String feeLh = tranCell(sheet.getRow(row).getCell(2));//人工费率（元/小时）
 				String feeMh = tranCell(sheet.getRow(row).getCell(3));//制费费率（元/小时）
 				BaseFee baseFee = new BaseFee();
-					List<Proc> procList = procDao.findByDelFlagAndProcNo(1,procNo);
+//					List<Proc> procList = procDao.findByDelFlagAndProcNo(0,procNo);
+				    List<Proc> procList = procDao.findByDelFlagAndProcName(0,procNo);
 					if(procList.size()>0){
 						Proc proc = procList.get(0);
 						baseFee.setProcId(proc.getId());
@@ -352,13 +353,16 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 						failures++;
 						continue;
 					}
-					List<BjModelType> bjModelTypeList = bjModelTypeDao.findByDelFlagAndModelCode(0,modelCode);
-					if(bjModelTypeList.size()>0){
-						baseFee.setMhType(bjModelTypeList.get(0).getModelName());
-						baseFee.setModelCode(modelCode.trim());
-					}else {
-						failures++;
-						continue;
+//					List<BjModelType> bjModelTypeList = bjModelTypeDao.findByDelFlagAndModelCode(0,modelCode);
+					if(StringUtils.isNotEmpty(modelCode)) {
+						List<BjModelType> bjModelTypeList = bjModelTypeDao.findByDelFlagAndModelName(0, modelCode);
+						if (bjModelTypeList.size() > 0) {
+							baseFee.setMhType(bjModelTypeList.get(0).getModelName());
+							baseFee.setModelCode(modelCode.trim());
+						} else {
+							failures++;
+							continue;
+						}
 					}
 					List<BaseFee> baseFeeList1 =baseFeeDao.findByDelFlagAndProcIdAndMhTypeAndWorkCenterId(0,baseFee.getProcId(),baseFee.getMhType(),baseFee.getWorkcenterId());
 					if(baseFeeList1.size()>0){
@@ -467,9 +471,9 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 		List<Map<String, Object>> mapList = new ArrayList<>();
 		for (BaseFee baseFee: baseFeeList) {
 			Map<String, Object> map = new HashMap<>();
-			map.put("procNo", baseFee.getProc()!=null?baseFee.getProc().getProcNo():"");
+			map.put("procNo", baseFee.getProc()!=null?baseFee.getProc().getProcName():"");
 			List<BjModelType> bjModelTypeList = bjModelTypeDao.findByDelFlagAndModelName (0,baseFee.getMhType());
-			map.put("modelCode", bjModelTypeList.size()>0?bjModelTypeList.get(0).getModelCode():"");
+			map.put("modelCode", bjModelTypeList.size()>0?bjModelTypeList.get(0).getModelName():"");
 			map.put("feeLh", baseFee.getFeeLh());
 			map.put("feeMh",baseFee.getFeeMh());
 			mapList.add(map);

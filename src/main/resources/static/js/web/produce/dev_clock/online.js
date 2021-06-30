@@ -1,7 +1,7 @@
 /**
  * 上线人员信息管理
  */
-var pageCurr,tableEmp;
+var pageCurr,tableEmp,localtableFilterIns;
 var set_main_id;
 $(function() {
 	layui
@@ -221,14 +221,15 @@ $(function() {
 							};
 						});
 
-						var localtableFilterIns = tableFilter.render({
+						 localtableFilterIns = tableFilter.render({
 							'elem' : '#empList',
-							'mode' : 'api',//服务端过滤
+							'mode' : 'local',//服务端过滤
 							'filters' : [
 								{field: 'EMP_NAME', type:'checkbox'},
 								{field: 'LINER_NAME', type:'checkbox'},
 								{field: 'TIME_BEGIN_HD', type:'checkbox'},
 								{field: 'TIME_END_HD', type:'checkbox'},
+								{field: 'TIME_END', type:'checkbox'},
 								{field: 'CREATE_DATE', type:'checkbox'},
 							],
 							'done': function(filters){
