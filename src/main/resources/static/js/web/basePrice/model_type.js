@@ -1,11 +1,11 @@
 /**
  * 人工制费维护管理
  */
-var pageCurr;
+var pageCurr,localtableFilterIns;
 $(function() {
-	layui.use([ 'form', 'table', 'tableSelect','upload' ],
+	layui.use([ 'form', 'table', 'tableSelect','upload','tableFilter' ],
 		function() {
-			var table = layui.table, form = layui.form, tableSelect = layui.tableSelect,upload = layui.upload;
+			var table = layui.table, form = layui.form, tableSelect = layui.tableSelect,upload = layui.upload,tableFilter = layui.tableFilter;
 			tableIns = table.render({
 				elem : '#colsList',
 				url : context + '/basePrice/modelType/getList',
@@ -31,19 +31,32 @@ $(function() {
 					}
 				},
 				cols : [ [ {type : 'numbers'},
-					{field : 'workCenterName',title : '工作中心',minWidth : 150,align: "center"},
+					{field : 'workCenterName',title : '工作中心',minWidth : 150,sort: true,align: "center"},
 					// {field : 'procName',title : '工序',width : 100},
-					{field : 'modelCode',title : '机台编码',minWidth : 120,align: "center"},
-					{field : 'modelName',title : '机台描述',minWidth : 200,align: "center"},
+					{field : 'modelCode',title : '机台编码',minWidth : 120,sort: true,align: "center"},
+					{field : 'modelName',title : '机台描述',minWidth : 200,sort: true,align: "center"},
 					{field : 'createBy',title : '创建人',width : 100},
 					{field : 'createDate',title : '创建时间',width : 150},
 					{field : 'lastupdateBy',title : '更新人',width : 100},
 					{field : 'lastupdateDate',title : '更新时间',width : 150},
 					{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120} ] ],
 				done : function(res, curr, count) {
+					localtableFilterIns.reload();
 					pageCurr = curr;
 				}
 			});
+
+			localtableFilterIns = tableFilter.render({
+				'elem' : '#colsList',
+				'mode' : 'api',//服务器过滤
+				'filters' : [
+					{field: 'workCenterName', type:'checkbox'},
+					{field: 'modelName', type:'input'},
+				],
+				'done': function(filters){
+				}
+			})
+
 			// 工序列表
 			procTableSelect = tableSelect.render({
 				elem : '#procName',

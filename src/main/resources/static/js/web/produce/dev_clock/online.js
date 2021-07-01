@@ -195,11 +195,11 @@ $(function() {
 									title : '统一下线时间',
 									width : 145, sort: true
 								},
-								{
+								/*{
 									field : 'CREATE_DATE',
 									title : '分配时间',
 									width : 145, sort: true
-								},
+								},*/
 								{
 								title : '操作',
 								align : 'center',
@@ -252,7 +252,7 @@ $(function() {
 								{field: 'TIME_BEGIN_HD', type:'checkbox'},
 								{field: 'TIME_END_HD', type:'checkbox'},
 								//{field: 'TIME_END', type:'checkbox'},
-								{field: 'CREATE_DATE', type:'checkbox'},
+								//{field: 'CREATE_DATE', type:'checkbox'},
 							],
 							'done': function(filters){
 							}

@@ -1,14 +1,14 @@
 /**
  * 人工制费维护管理
  */
-var pageCurr;
+var pageCurr,localtableFilterIns;
 var _index = 0;
 var fileId = "";
 $(function() {
-	layui.use([ 'form', 'table', 'tableSelect' ,'upload','laydate'],
+	layui.use([ 'form', 'table', 'tableSelect' ,'upload','laydate','tableFilter'],
 		function() {
 			var table = layui.table, form = layui.form, tableSelect = layui.tableSelect,laydate = layui.laydate,
-				tableSelect1 = layui.tableSelect,upload = layui.upload,upload2 = layui.upload;
+				tableSelect1 = layui.tableSelect,upload = layui.upload,upload2 = layui.upload,tableFilter = layui.tableFilter;
 			tableIns = table.render({
 				elem : '#colsList',
 				url : context + '/basePrice/baseFee/getList',
@@ -35,21 +35,35 @@ $(function() {
 				},
 				cols : [ [ {type : 'numbers'},
 					// {field : 'enabled',title : '有效状态',templet : '#statusTpl',width : 95},
-					{field : 'workcenter',title : '工作中心',width : 140},
-					{field : 'procName',title : '工序',width : 200},
-					{field : 'mhType',title : '机台类型',width : 160},
-					{field : 'feeLh',title : '人工费用（元/小时）',width : 150},
-					{field : 'feeMh',title : '制造费用（元/小时）',width : 150},
-					{field : 'expiresTime',title : '失效时间',width : 150},
+					{field : 'workcenter',title : '工作中心',width : 140,sort:true},
+					{field : 'procName',title : '工序',width : 200,sort:true},
+					{field : 'mhType',title : '机台类型',width : 160,sort:true},
+					{field : 'feeLh',title : '人工费用(元/小时)',width : 150,sort:true},
+					{field : 'feeMh',title : '制造费用(元/小时)',width : 150,sort:true},
+					{field : 'expiresTime',title : '失效时间',width : 150,sort:true},
 					{field : 'createBy',title : '创建人',width : 80},
 					{field : 'createDate',title : '创建时间',width : 150},
 					{field : 'lastupdateBy',title : '更新人',width : 80},
 					{field : 'lastupdateDate',title : '更新时间',width : 150},
 					{fixed : 'right',title : '操作',align : 'center',toolbar : '#optBar',width : 120} ] ],
 				done : function(res, curr, count) {
+					localtableFilterIns.reload();
 					pageCurr = curr;
 				}
 			});
+
+			localtableFilterIns = tableFilter.render({
+				'elem' : '#colsList',
+				'mode' : 'api',//服务器过滤
+				'filters' : [
+					{field: 'workcenter', type:'checkbox'},
+					{field: 'procName', type:'input'},
+					{field: 'mhType', type:'checkbox'},
+				],
+				'done': function(filters){
+				}
+			})
+
 			// 工序列表
 			procTableSelect = tableSelect.render({
 				elem : '#procName',
@@ -190,6 +204,7 @@ $(function() {
 				doStatus(obj, this.value, this.name,
 					obj.elem.checked);
 			});
+
 
 			// 监听工具条
 			table.on('tool(colsTable)', function(obj) {

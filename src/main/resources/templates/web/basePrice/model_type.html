@@ -88,8 +88,11 @@
 				</div>
 			</form>
 		</div>
-		<script th:src="@{/js/web/basePrice/model_type.js}"
-			src="/js/web/basePrice/model_type.js"></script>
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/basePrice/model_type.js?ver="+Math.random()+"'><\/script>");
+		</script>
 	</div>
 </body>
 </html>

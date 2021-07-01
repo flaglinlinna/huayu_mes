@@ -1,10 +1,10 @@
 /**
  * 工序维护管理
  */
-var pageCurr;
+var pageCurr,localtableFilterIns;
 $(function() {
-	layui.use([ 'form', 'table','tableSelect','upload'  ], function() {
-		var table = layui.table, form = layui.form,tableSelect = layui.tableSelect,upload = layui.upload;
+	layui.use([ 'form', 'table','tableSelect','upload','tableFilter'   ], function() {
+		var table = layui.table, form = layui.form,tableSelect = layui.tableSelect,upload = layui.upload,tableFilter = layui.tableFilter;
 
 		tableIns = table.render({
 			elem : '#procList',
@@ -34,14 +34,14 @@ $(function() {
 				type : 'numbers'
 			}, {
 				field : 'workCenter',
-				title : '工作中心名称',
+				title : '工作中心名称',width : 150,sort: true
 			}, {
 				field : 'procNo',
-				title : '工序编号',
-				width:90
+				title : '工序编号',sort: true,
+				width:100
 			}, {
 				field : 'procName',
-				title : '工序名称',
+				title : '工序名称',sort: true,
 				width:200
 			}, {
 				field : 'checkStatus',
@@ -80,9 +80,21 @@ $(function() {
 				// console.log(curr);
 				// 得到数据总量
 				// console.log(count);
+				localtableFilterIns.reload();
 				pageCurr = curr;
 			}
 		});
+
+		localtableFilterIns = tableFilter.render({
+			'elem' : '#procList',
+			'mode' : 'api',//服务器过滤
+			'filters' : [
+				{field: 'workCenter', type:'checkbox'},
+				{field: 'procName', type:'input'},
+			],
+			'done': function(filters){
+			}
+		})
 
 		tableSelect = tableSelect
 			.render({

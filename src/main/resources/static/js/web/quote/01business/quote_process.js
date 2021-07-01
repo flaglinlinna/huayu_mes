@@ -1,12 +1,13 @@
 /**
  * 产品工艺流程
  */
-var pageCurr;
+var pageCurr,localtableFilterIns;
 var totalCount = 0;// 表格记录数
 var materNameFlag = 0;
 $(function() {
 	layui.use([ 'form', 'table', 'tableSelect','tableFilter'  ], function() {
-		var table = layui.table, table1 = layui.table,form = layui.form, tableSelect = layui.tableSelect,tableSelect1 = layui.tableSelect,tableFilter = layui.tableFilter;
+		var table = layui.table, table1 = layui.table,form = layui.form, tableSelect = layui.tableSelect,
+			tableSelect1 = layui.tableSelect,tableFilter = layui.tableFilter;
 		isComplete()
 		tableIns = table.render({
 			elem : '#client_procList',
@@ -35,11 +36,11 @@ $(function() {
 				{fixed : 'left',type:'checkbox'},
 				{fixed : 'left',type : 'numbers'},
 			{fixed : 'left',field:'id',title:'ID', width:80, hide:true},
-			{fixed : 'left',field : 'bsElement',width : 150,title : '组件名称',style : 'background-color:#d2d2d2'},
-			{fixed : 'left',field : 'bsName',width : 180,title : '零件名称',style : 'background-color:#d2d2d2'},
-			{fixed : 'left',field : 'bsLinkName',width : 150,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
-			{field : 'itemType',title : '物料类型',width : 130,style : 'background-color:#d2d2d2'},
-			{field : 'workCenter',title : '工作中心',width : 100,templet :
+			{fixed : 'left',field : 'bsElement',width : 150,sort:true,title : '组件名称',style : 'background-color:#d2d2d2'},
+			{fixed : 'left',field : 'bsName',width : 180,sort:true,title : '零件名称',style : 'background-color:#d2d2d2'},
+			{fixed : 'left',field : 'bsLinkName',width : 150,sort:true,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
+			{field : 'itemType',title : '物料类型',width : 120,sort:true,style : 'background-color:#d2d2d2'},
+			{field : 'workCenter',title : '工作中心',width : 120,sort:true,templet :
 				function(d){if(d.bjWorkCenter!=null){
 					return d.bjWorkCenter.workcenterName
 						}else {
@@ -47,7 +48,7 @@ $(function() {
 				}
 					},
 				style : 'background-color:#d2d2d2'},
-				{field : 'pkProc',title : '工序名称',width : 180,templet :  '#selectProc',style : 'background-color:#ffffff'},
+				{field : 'pkProc',title : '工序名称',width : 180,sort:true,templet :  '#selectProc',style : 'background-color:#ffffff'},
 				{field : 'bsOrder',title : '顺序',width : 60,"edit" : "number","event" : "dataCol",sort:true,style : 'background-color:#ffffff'},
 			// {field : 'bsFeeLh',title : '是否已维护人工制费',width : 140,style : 'background-color:#d2d2d2',align : 'center',
 			// 	templet : function(d) {
@@ -385,7 +386,7 @@ $(function() {
 			{type: 'toolbar',title: '操作',width: 70,align : 'center',toolbar: '#clickBar'
 	        }] ],
 			data:[]
-		});	
+		});
 		
 		tableProcCheck=table.render({
 			elem : '#procListCheck',
@@ -488,12 +489,12 @@ $(function() {
 		// 	}
 		// });
 
-		var localtableFilterIns = tableFilter.render({
+		localtableFilterIns = tableFilter.render({
 			'elem' : '#client_procList',
 			'mode' : 'api',//服务端过滤
 			'filters' : [
 				{field: 'bsElement', type:'checkbox'},
-				{field: 'bsName', type:'checkbox'},
+				{field: 'bsName', type:'input'},
 				{field: 'itemType', type:'checkbox'},
 				{field: 'workCenter', type:'checkbox'},
 				{field: 'bsGroups', type:'checkbox'},
