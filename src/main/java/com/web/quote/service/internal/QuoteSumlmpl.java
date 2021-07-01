@@ -451,7 +451,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> lpp_hardware = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNotAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
 				"hardware",1,"PCS");
 		for (ProductProcess pp : lpp_hardware) {
-			if (!(("0").equals(pp.getBsUserNum()) && ("0").equals(pp.getBsYield()) && ("0").equals(pp.getBsCapacity()))) {
+			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
@@ -481,7 +481,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> lpp_molding = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNotAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
 				"molding",1,"PCS");
 		for (ProductProcess pp : lpp_molding) {
-			if (!(("0").equals(pp.getBsUserNum()) && ("0").equals(pp.getBsYield()) && ("0").equals(pp.getBsCapacity()))) {
+			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
@@ -511,7 +511,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> lpp_surface = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNotAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
 				"surface",1,"PCS");
 		for (ProductProcess pp : lpp_surface) {
-			if (!(("0").equals(pp.getBsUserNum()) && ("0").equals(pp.getBsYield()) && ("0").equals(pp.getBsCapacity()))) {
+			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
@@ -540,7 +540,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> lpp_packag = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId),
 				"packag");
 		for (ProductProcess pp : lpp_packag) {
-			if (("0").equals(pp.getBsUserNum()) && ("0").equals(pp.getBsYield()) && ("0").equals(pp.getBsCapacity()) ) {
+			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {

@@ -294,7 +294,7 @@ $(function() {
 				  }
 				},
 			},
-			{field : 'purchaseUnit',width : 80,title : '采购单位'},
+			{field : 'purchaseUnit',width : 100,title : '采购单位'},
 			{field : 'bsGeneral',width : 80,title : '通用物料',	 templet:function(d){
 					return d.bsGeneral =="0"?"否":"是";
 				}},
@@ -655,6 +655,8 @@ function getMaterDetail(bsType, title) {
 		url : context + '/productMater/getList?quoteId=' + quoteId + '&bsType=' + bsType +'&bsAgent=0',
 		done : function(res1, curr, count) {
 			pageCurr = curr;
+			$('div[lay-id="materTable"]').find('.layui-table-header').find('th[data-field="purchaseUnit"]').find('span').html('采购单位<i class="layui-icon alone-tips" lay-tips="采购单位下为PCS,计算公式=材料单价*材料用量/工序良率"></i>');
+
 			res1.data.forEach(function(item, index) {
 				// if (bsType == 'hardware') {// 五金
 				// 	$('div[lay-id="materTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");

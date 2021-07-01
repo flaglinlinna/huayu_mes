@@ -228,10 +228,11 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					quoteProcess.setBsElement(map.get("BSELEMENT").toString());
 					quoteProcess.setBsName(newName.get(a));
 					quoteProcess.setBsLinkName(newName.get(a));
-					List<Proc> procList = procDao.findByDelFlagAndProcName(0,newName.get(a));
-					if(procList.size()>0){
-						quoteProcess.setPkProc(procList.get(0).getId());
-						quoteProcess.setPkWorkCenter(procList.get(0).getWorkcenterId());
+//					List<Proc> procList = procDao.findByDelFlagAndProcName(0,newName.get(a));
+					List<BaseFee> baseFeeList = baseFeeDao.findByProcNameAndDelFlag(newName.get(a),0 );
+					if(baseFeeList.size()>0){
+						quoteProcess.setPkProc(baseFeeList.get(0).getProcId());
+						quoteProcess.setPkWorkCenter(baseFeeList.get(0).getWorkcenterId());
 					}
 					quoteProcess.setPkQuote(pkQuote);
 					quoteProcess.setCreateBy(UserUtil.getSessionUser().getId());

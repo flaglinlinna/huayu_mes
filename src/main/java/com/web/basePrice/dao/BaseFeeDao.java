@@ -19,6 +19,8 @@ public interface BaseFeeDao extends CrudRepository<BaseFee, Long>,JpaSpecificati
     public BaseFee findById(long id);
     
     public List<BaseFee> findByDelFlagAndWorkcenterIdAndProcId(Integer delFlag,Long wid,Long procId);
+
+    public List<BaseFee> findByProcNameAndDelFlag(String procName,Integer delFlag);
     
     //public List<BaseFee> findByDelFlagAndWorkcenterId(Integer delFlag,Long wid);
     
