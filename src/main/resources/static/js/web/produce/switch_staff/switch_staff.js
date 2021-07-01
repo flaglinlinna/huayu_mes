@@ -281,6 +281,9 @@ $(function() {
 									{fixed:'left',field : 'ITEM_NO', title : '物料编码', width : 145},
 									{field : 'TASK_NO', title : '制令单号', width : 150},
 									{field : 'WS_SECTION', title : '工段', width : 60},
+									{field : 'LINE_NAME', title : '线体', width : 80},
+									{field : 'HOUR_TYPE', title : '工时类型', width : 80},
+									{field : 'CLASS_NAME', title : '班次', width : 160},
 									{field : 'FMEMO', title : '备注', width : 80},
 									{field : 'CUST_NAME_S', title : '客户', width : 80},
 									{field : 'ITEM_NAME', title : '物料描述', width : 160}
