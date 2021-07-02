@@ -99,7 +99,9 @@ $(function() {
 					// code值为200表示成功
 				}
 			},
-			cols : [ [ {type : 'numbers',style:'background-color:#d2d2d2'},
+			cols : [ [
+				{type : 'checkbox',style:'background-color:#d2d2d2'},
+				{type : 'numbers',style:'background-color:#d2d2d2'},
 				{field:"id",title:"ID",hide:true},
 				{field : 'bsElement',title : '组件名称',width : 150,sort : true,style : 'background-color:#d2d2d2',totalRowText : "合计",
 					templet:'<div><span title="{{d.bsElement}} 。总人数：{{d.allUser}}，最小产能：{{d.minCapacity}}">{{d.bsElement}}</span></div>'},
@@ -149,6 +151,7 @@ $(function() {
 			done : function(res, curr, count) {
 				if(res.data==""){
 					$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
+					$("#delbtn").addClass("layui-btn-disabled").attr("disabled", true)
 					$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 					$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 					// $("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
@@ -353,6 +356,66 @@ $(function() {
 			}
 		});
 
+		tableSelect2 = tableSelect2.render({
+			elem : '#bsElement',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '试着搜索',
+			table : {
+				url : context + '/productProcess/getBomByQuoteId?quoteId='+quoteId+'&bsType='+bsType,
+				method : 'get',
+				// width:800,
+				cols : [ [
+					{type : 'numbers', title : '序号'},
+					{type : 'radio'},
+					{field : 'ID', title : 'id', width : 0, hide : true},
+					{field : 'BS_ELEMENT', title : '组件名称', width : 160,style:"overflow:hidden !important"},
+					{field : 'BS_COMPONENT', title : '零件名称', width : 200,style:"overflow:hidden !important"},
+					// {field : 'WORKCENTER_NAME', title : '工作中心', width : 160,style:"overflow:hidden !important"},
+					// {field : 'BS_MATER_NAME', title : '材料名称', width : 160},
+				] ],
+				page : true,
+				request : {
+					pageName : 'page' // 页码的参数名称，默认：page
+					,
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+				parseData : function(res) {
+					if (res.result) {
+						// 可进行数据操作
+						return {
+							"count" : res.data.total,
+							"msg" : res.msg,
+							"data" : res.data.rows,
+							"code" : res.status
+							// code值为200表示成功
+						}
+					}
+				},
+			},
+			done : function(elem, data) {
+				var da = data.data;
+				// console.log(da[0]);
+				form.val("productProcessForm", {
+					// "num" : da[0].BS_COMPONENT,
+					"bsElement":da[0].BS_ELEMENT,
+					"bsName":da[0].BS_COMPONENT,
+					// "bsBomId":da[0].ID
+				});
+				form.render();// 重新渲染
+
+				// initLinkList
+				if(da[0].BS_ELEMENT){
+					initLinkList(da[0].BS_ELEMENT);
+				}
+				// else{
+				// 	tableProcCheck.reload({
+				// 		data:[]
+				// 	});
+				// }
+			}
+		});
+
 		//上传附件
 		upload3.render({
 			elem: '#uploadBsFile'
@@ -439,7 +502,7 @@ $(function() {
 							}else {
 								return "未维护"
 							}
-						} },
+						},sort:true },
 				] ],
 				page : false,
 				request : {
@@ -847,15 +910,15 @@ $(function() {
 				"bsLoss":obj.bsLoss,
 				"bsFeeWxAll":obj.bsFeeWxAll
 			});
-			if(obj.fileId!=null) {
-				var params = {
-					"id": obj.fileId,
-					"bsName": obj.fileName,
-					"qsFileId": obj.id,
-					"bsContentType": "stp"
-				}
-				document.getElementById("filelist").innerHTML = $("#filelist").html() + getExcFieldBefore(params, params.qsFileId, "/productProcess/delFile");
-			}
+			// if(obj.fileId!=null) {
+			// 	var params = {
+			// 		"id": obj.fileId,
+			// 		"bsName": obj.fileName,
+			// 		"qsFileId": obj.id,
+			// 		"bsContentType": "stp"
+			// 	}
+			// 	document.getElementById("filelist").innerHTML = $("#filelist").html() + getExcFieldBefore(params, params.qsFileId, "/productProcess/delFile");
+			// }
 			//获取附件文件
 			// CoreUtil.sendAjax("/productProcess/getFileList?customId="+obj.id,"",
 			// 	function(data) {
@@ -994,11 +1057,37 @@ function loadFile() {
 function isComplete() {
 	if (iStatus >= 2) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
+		$("#delbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
 	}
+}
+
+function initLinkList(bsElement){
+	CoreUtil.sendAjax("/productProcess/getLinkByBsName?quoteId="+quoteId+"&bsName="+bsElement,"",
+		function(data) {
+			console.log(data);
+			var bomlist = data.data;
+			$("#bsLinkName").empty();
+			for (var i = 0; i < bomlist.length; i++) {
+				if (i == 0) {
+					$("#bsLinkName").append("<option value=''> 请选择</option>");
+				}
+				$("#bsLinkName").append(
+					"<option value='" + bomlist[i].BSCOMPONENT + "'>"
+					+ bomlist[i].BSCOMPONENT + "</option>");
+			}
+
+			layui.form.render();
+		}, "GET", false, function(res) {
+			layer.alert(res.msg);
+		});
+
+
+	// getLinkByBsName
+
 }
 
 function initSelect() {
@@ -1130,12 +1219,11 @@ function openProdErr(id, title) {
 		$('#bsName').prop("disabled","disabled");
 		$('#procName').prop("disabled","disabled");
 	}
-	if(bsType =="surface"){
-		console.log("111111111");
-		$('#fileDiv1').show();
-		$('#fileDiv2').show();
-	}
-	layui.form.render('');
+	// if(bsType =="surface"){
+	// 	$('#fileDiv1').show();
+	// 	$('#fileDiv2').show();
+	// }
+	// layui.form.render('');
 	selectDiv();
 	var index=layer.open({
 		type : 1,
@@ -1401,12 +1489,20 @@ function editSubmitTemp(obj) {
 }
 
 // 删除五金工艺
-function delProdErr(obj, id, name) {
-	if (id != null) {
+function delProdErr() {
+	var checkdata = layui.table.checkStatus("listTable").data;
+	var ids = "";
+	for(var i = 0;i<checkdata.length;i++){
+		ids = ids+ checkdata[i].id+',';
+	}
+
+	console.log(ids);
+
+	if (ids != null) {
 		var param = {
-			"id" : id
+			"id" : ids
 		};
-		layer.confirm('您确定要删除工艺：' + name + '吗？', {
+		layer.confirm('您确定要删除所选的工艺吗？', {
 			btn : [ '确认', '返回' ]
 			// 按钮
 		}, function() {
@@ -1617,9 +1713,9 @@ function loadAll2() {
 // 清空新增表单数据
 function cleanProdErr() {
 	$('#productProcessForm')[0].reset();
-	_index = 0;
-	document.getElementById("filelist").innerHTML = "";
-	layui.form.render();// 必须写
+	// _index = 0;
+	// document.getElementById("filelist").innerHTML = "";
+	// layui.form.render();// 必须写
 }
 
 // 清空新增表单数据

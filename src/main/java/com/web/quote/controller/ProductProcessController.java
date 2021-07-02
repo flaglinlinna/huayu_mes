@@ -161,8 +161,8 @@ public class ProductProcessController extends WebController {
 		String method = "productProcess/delete";
 		String methodName = "删除报价工艺流程信息";
 		try {
-			long id = Long.parseLong(params.get("id").toString());
-			ApiResponseResult result = productProcessService.delete(id);
+			String id = params.get("id").toString();
+			ApiResponseResult result = productProcessService.deleteIds(id);
 			logger.debug("删除报价工艺流程信息=delete:");
 			getSysLogService().success(module,method, methodName, params);
 			return result;
@@ -174,24 +174,43 @@ public class ProductProcessController extends WebController {
 		}
 	}
 
-//	@ApiOperation(value = "获取报价工艺流程列表", notes = "获取报价工艺流程列表", hidden = true)
-//	@RequestMapping(value = "/getBomByQuoteId", method = RequestMethod.GET)
-//	@ResponseBody
-//	public ApiResponseResult getList(String keyword,String bsType,String quoteId) {
-//		String method = "/productProcess/getList";
-//		String methodName = "获取报价工艺流程列表";
-//		try {
+	@ApiOperation(value = "获取报价Bom列表,下拉选择", notes = "获取报价Bom列表", hidden = true)
+	@RequestMapping(value = "/getBomByQuoteId", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getBomByQuoteId(String keyword,String bsType,String quoteId) {
+		String method = "/productProcess/getBomByQuoteId";
+		String methodName = "获取报价工艺流程BOM列表";
+		try {
+			Sort sort = new Sort(Sort.Direction.DESC, "id");
+			ApiResponseResult result = productProcessService.getBomList(keyword,Long.parseLong(quoteId),bsType, super.getPageRequest(sort));
+			logger.debug("获取报价工艺流程列表=getList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价工艺流程列表失败！", e);
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure("获取报价工艺流程列表失败！");
+		}
+	}
+
+	@ApiOperation(value = "获取关联材料名称", notes = "获取关联材料名称", hidden = true)
+	@RequestMapping(value = "/getLinkByBsName", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getLinkByBsName(String bsName,String quoteId) {
+//		String method = "/productProcess/getLinkByBsName";
+//		String methodName = "获取关联材料名称";
+		try {
 //			Sort sort = new Sort(Sort.Direction.DESC, "id");
-//			ApiResponseResult result = productProcessService.getList(keyword,bsType,quoteId, super.getPageRequest(sort));
-//			logger.debug("获取报价工艺流程列表=getList:");
-//			return result;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			logger.error("获取报价工艺流程列表失败！", e);
+			ApiResponseResult result = productProcessService.getLinkNameList(Long.parseLong(quoteId),bsName);
+			logger.debug("获取关联材料名称=getList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取关联材料名称失败！", e);
 //			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
-//			return ApiResponseResult.failure("获取报价工艺流程列表失败！");
-//		}
-//	}
+			return ApiResponseResult.failure("获取关联材料名称失败！");
+		}
+	}
 
 	@ApiOperation(value = "获取报价工艺流程列表", notes = "获取报价工艺流程列表", hidden = true)
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)

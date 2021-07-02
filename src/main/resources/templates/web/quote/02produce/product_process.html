@@ -34,8 +34,10 @@
 							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
 							<i class="layui-icon">&#xe669;</i>重置
 						</button>
-<!--						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button"-->
-<!--							id="addbtn" onclick="addHardware()">添加信息</button>-->
+						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button"
+							id="addbtn" onclick="addHardware()">添加信息</button>
+						<button class="layui-btn layui-btn-sm layui-btn-danger" type="button"
+								id="delbtn" onclick="delProdErr()">删除</button>
 						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button"
 							id="exportbtn" onclick="exportExcel()">导出模板</button>
 						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button"
@@ -90,10 +92,14 @@
 
         <script type="text/html" id="selectModelType" >
             <select name="selectModelType" lay-filter="selectModelType" lay-search>
+			{{#  if(d.bsTypeList != null){ }}
               <option value="">请选择</option>
               {{# layui.each($.parseJSON( d.bsTypeList ), function(index, item){     }}
                <option value="{{ item.MODEL_CODE }}"  {{ d.bsModelType==item.MODEL_CODE?'selected':''}}>{{ item.MODEL_NAME }}</option>
               {{# });  }}
+			{{#  } else { }}
+				<option value="">请选择</option>
+			{{#  } }}
             </select>
          </script>
 
@@ -106,6 +112,15 @@
 				<input id="pageNum" type="hidden" name="pageNum" /> <input id="id"
 					type="hidden" name="id" /><input id="fileId"  type="hidden" name="fileId" />
 				<input id="fileName"  type="hidden" name="fileName" />
+
+				<div class="layui-form-item">
+				<label class="layui-form-label layui-required">选择组件</label>
+					<div class="layui-input-block">
+					<input class="layui-input" type="text" id="bsElement" name="bsElement" lay-filter="bsElement"
+						   placeholder="请选择组件"  readonly="readonly"/>
+					</div>
+				</div>
+
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">零件名称</label>
 					<div class="layui-input-block">
@@ -114,6 +129,16 @@
 						</select>
 					</div>
 				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">所属零件名称</label>
+					<div class="layui-input-block">
+						<select id="bsLinkName" name="bsLinkName" lay-verify="required"
+								lay-filter="bsLinkName" lay-search>
+						</select>
+					</div>
+				</div>
+
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">工序</label>
 					<div class="layui-input-block">

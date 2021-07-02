@@ -17,6 +17,7 @@ import com.web.basePrice.dao.BaseFeeDao;
 import com.web.basePrice.entity.BaseFee;
 import com.web.basePrice.entity.BaseFeeFile;
 import com.web.basePrice.entity.MjProcFee;
+import com.web.quote.dao.*;
 import com.web.quote.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -42,11 +43,6 @@ import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.ProcDao;
 import com.web.basePrice.entity.Proc;
-import com.web.quote.dao.ProductProcessDao;
-import com.web.quote.dao.ProductProcessTempDao;
-import com.web.quote.dao.QuoteDao;
-import com.web.quote.dao.QuoteItemDao;
-import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.service.ProductProcessService;
 import com.web.quote.service.QuoteProductService;
 
@@ -72,6 +68,8 @@ public class ProductProcesslmpl implements ProductProcessService {
     private QuoteDao quoteDao;
     @Autowired
     private BaseFeeDao baseFeeDao;
+    @Autowired
+    private QuoteBomDao quoteBomDao;
 
     /**
      * 新增报价单
@@ -181,6 +179,29 @@ public class ProductProcesslmpl implements ProductProcessService {
         o.setDelFlag(1);
         o.setDelBy(UserUtil.getSessionUser().getId());
         productProcessDao.save(o);
+        return ApiResponseResult.success("删除成功！");
+    }
+
+    /**
+     * 删除异常类别
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult deleteIds(String ids) throws Exception {
+        String[] idsArry = ids.split(",");
+        List<ProductProcess> ppList = new ArrayList<>();
+        for(String id : idsArry){
+            ProductProcess o = productProcessDao.findById( Long.parseLong(id));
+            if (o == null) {
+                return ApiResponseResult.failure("制造工艺不存在！");
+            }
+            o.setDelTime(new Date());
+            o.setDelFlag(1);
+            o.setDelBy(UserUtil.getSessionUser().getId());
+            ppList.add(o);
+        }
+
+        productProcessDao.saveAll(ppList);
         return ApiResponseResult.success("删除成功！");
     }
 
@@ -800,4 +821,21 @@ public class ProductProcesslmpl implements ProductProcessService {
         productProcessDao.saveAll(productProcessList);
         return ApiResponseResult.success();
     }
+
+    /**
+     * 获取bom列表-下拉选择
+     **/
+    @Override
+    public ApiResponseResult getBomList(String keyword, Long quoteId,String bsType,PageRequest pageRequest) throws Exception {
+        Page<Map<String, Object>> page=productProcessDao.getBomNameByPage(quoteId,bsType,pageRequest);
+        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+                pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
+
+    @Override
+    public ApiResponseResult getLinkNameList(Long quoteId, String bsElement) throws Exception {
+        //    List<Map<String, Object>> componentList = quoteBomDao.getBsComponent(Long.parseLong(pkQuote),o.getBsElement());
+        return ApiResponseResult.success().data(quoteBomDao.getBsComponent(quoteId,bsElement));
+    }
+
 }

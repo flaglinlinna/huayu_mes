@@ -32,7 +32,7 @@ $(function() {
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
 							},
 							parseData : function(res) {
-								 console.log(res)
+								 // console.log(res)
 								if (!res.result) {
 									return {
 										"count" : 0,
@@ -241,7 +241,7 @@ $(function() {
 
 						form.on('radio(switchType)', function(data) {
 							var value = data.value;
-							console.log(value)
+							// console.log(value)
 							if (value == "下线") {
 								$("#switchTask").hide();
 								cleanInput()
@@ -516,13 +516,13 @@ function saveData(obj, empIdList) {
 		"empList" : empIdList,
 		"switchType" : obj.switchType
 	}
-	console.log(params)
+	// console.log(params)
 	tableIns.reload({
 		url : context + '/produce/switch_staff/doSwitch',
 		where : params,
 		done : function(res1, curr, count) {
 
-			console.log(res1)
+			// console.log(res1)
 			if (res1.code == "1") {
 				layer.alert(res1.msg)
 			} else {			

@@ -421,10 +421,11 @@ layui.define("view", function (e) {
         //  ||src.indexOf("/productProcess/toProductProcess")!=-1||src.indexOf("/productMater/toProductMater")!=-1
 
         //hjj-20210125-只针对指定界面进行切换标签后刷新
-        if(src =='/quote/toQuoteList' ||src.indexOf('quote/toQuoteItem')!=-1||src=='/console'
+        if(src =='/quote/toQuoteList' ||src.indexOf('quote/toQuoteItem')!=-1||src=='/console/toConsole'
             ||src =='/out/toOutList' ||src=="/quoteSum/toQuoteSumList" ||src =="/quoteAll/toQuoteList"
             ||src.indexOf("quoteProdect/toProductItem")!=-1 ||src.indexOf("/quoteProdect/toQuoteProdect")!=-1
             ||src.indexOf("/purchase/toPurchaseList")!=-1){
+            console.log(src)
             $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);
         }
         //--end
@@ -443,7 +444,7 @@ layui.define("view", function (e) {
         // }
 
         //hjj-20210125-只针对指定界面进行关闭标签后刷新
-        if(src =='/quote/toQuoteList' ||src.indexOf('quote/toQuoteItem')!=-1||src=='/console'
+        if(src =='/quote/toQuoteList' ||src.indexOf('quote/toQuoteItem')!=-1||src=='/console/toConsole'
             ||src =='/out/toOutList' ||src=="/quoteSum/toQuoteSumList" ||src =="/quoteAll/toQuoteList"
             ||src.indexOf("quoteProdect/toProductItem")!=-1|| src.indexOf("quoteProdect/toQuoteProdect")!=-1){
             $(".layadmin-tabsbody-item.layui-show").find("iframe").attr("src", src);

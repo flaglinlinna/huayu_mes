@@ -106,4 +106,16 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	//查找各个组件下的总人数和最小产能
 	@Query(value = "select BS_ELEMENT,min(BS_CAPACITY) as minCapacity from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 and  BS_ELEMENT = ?2 and BS_CAPACITY !=0 GROUP BY BS_ELEMENT",nativeQuery = true)
 	public  List<Map<String,Object>> getMinByBsElement(Long pkQuote,String bsElement);
+
+	//新增制造工艺的下拉组件零件选择
+	@Query(value = "select max(t.id) as id , max(t.BS_ELEMENT)as BS_ELEMENT ,max(t.BS_COMPONENT) as BS_COMPONENT ,max(t.bs_mater_Name) as bs_mater_Name ,max(c.WORKCENTER_NAME)" +
+			" as WORKCENTER_NAME from" +
+			" price_quote_bom t " +
+			" LEFT JOIN BJ_BASE_WORKCENTER c on t.PK_BJ_WORK_CENTER = c.ID " +
+			" where t.pk_quote= ?1  and t.del_Flag= 0 and  c.bs_code = ?2 GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT ",
+			countQuery =  " select count(*)from(select max(t.id) from price_quote_bom t  left join BJ_BASE_WORKCENTER w on w.id = t.PK_BJ_WORK_CENTER where t.pk_quote= ?1 " +
+					" and t.del_Flag= 0  and w.bs_code = ?2 GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT)",
+			nativeQuery = true)
+	Page<Map<String, Object>> getBomNameByPage(Long quoteId,String bsType, Pageable pageable);
+
 }

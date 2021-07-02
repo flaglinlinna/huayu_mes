@@ -20,6 +20,8 @@ public interface ProductProcessService {
 
 	public ApiResponseResult delete(Long id) throws Exception;
 
+	public ApiResponseResult deleteIds(String ids) throws Exception;
+
 	public ApiResponseResult doStatus(Long quoteId,String bsType,String bsCode,List<ProductProcess> quoteBomList) throws Exception;
 
 	public ApiResponseResult cancelStatus(Long quoteId,String bsType,String bsCode) throws Exception;
@@ -45,5 +47,7 @@ public interface ProductProcessService {
 
 	public ApiResponseResult editProcessList(List<ProductProcess> productProcessList) throws Exception;
 
+	public ApiResponseResult getBomList(String keyword,Long quoteId,String bsType, PageRequest pageRequest)  throws Exception;//获取物料列表
 
+	public ApiResponseResult getLinkNameList(Long quoteId,String bsElement) throws  Exception;
 }

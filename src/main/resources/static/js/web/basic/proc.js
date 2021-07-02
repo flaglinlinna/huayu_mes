@@ -112,14 +112,14 @@ $(function() {
 					break;
 				case 'doDelete':
 					var data = checkStatus.data;
-					console.log(data)
+					// console.log(data)
 					if(data.length == 0){
 						layer.msg("请先勾选数据!");
 					}else{
 						var id="";
 						for(var i = 0; i < data.length; i++) {
 							id += data[i].id+",";
-							console.log(data[i])
+							// console.log(data[i])
 						}
 						delLine(id);
 					}
