@@ -245,6 +245,7 @@ public class BarcodeRulelmpl extends PrcUtils implements BarcodeRuleService {
 				ll.add(o);
 			}
 		}
+		barcodeRuleDao.deleteByRuleD(id_s);
 		barcodeRuleDao.saveAll(ll);
 		return ApiResponseResult.success("删除成功！");
 	}

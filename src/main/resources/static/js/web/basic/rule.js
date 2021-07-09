@@ -235,7 +235,7 @@ $(function() {
 					}else{
 						var id="";
 						for(var i = 0; i < data.length; i++) {
-							id += data[i].id+",";
+							id += data[i].ID+",";
 							console.log(data[i])
 						}
 						delBarcodeRule("", id, "选中的");
