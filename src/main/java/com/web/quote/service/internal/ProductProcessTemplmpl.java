@@ -217,7 +217,12 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
                 XSSFCell xssfCell6 = sheet.getRow(row).getCell(7);
                 xssfCell6.setCellType(midCell.CELL_TYPE_STRING);
                 String row6 = tranCell(xssfCell6);
-                String row7 = tranCell(sheet.getRow(row).getCell(8));
+
+                XSSFCell xssfCell7 = sheet.getRow(row).getCell(8);
+                xssfCell7.setCellType(midCell.CELL_TYPE_STRING);
+                String row7 = tranCell(xssfCell7);
+
+//                String row7 = tranCell(sheet.getRow(row).getCell(8));
                 String row8 = tranCell(sheet.getRow(row).getCell(9));
                 String row9 = tranCell(sheet.getRow(row).getCell(10));
 //                String row10 = tranCell(sheet.getRow(row).getCell(10));

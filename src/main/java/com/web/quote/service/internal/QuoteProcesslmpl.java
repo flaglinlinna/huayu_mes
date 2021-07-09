@@ -181,7 +181,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				map.put("BSCOMPONENT",o.getBsName());
 				componentList.add(map);
 				o.setBsComponentList(JSON.toJSONString(componentList));
-				o.setBsLinkName(o.getBsName());
+				if(StringUtils.isEmpty(o.getBsLinkName())) {
+					o.setBsLinkName(o.getBsName());
+				}
 			}
 
 			if(procList.size() >0){

@@ -71,7 +71,9 @@ $(function() {
 							return "待提交审批"
 						}else if(d.bsStatus=="4"){
 							return "审批中"
-						}else if(d.bsStatus=="99"){
+						}else if(d.bsStatus=="5"){
+							return "被驳回"
+						} else if(d.bsStatus=="99"){
 							return "已关闭"
 						}
 				},sort: true},
@@ -130,7 +132,9 @@ $(function() {
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6495ED');
 						}else if(item.bsStatus=="4"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#4169E1');
-						}else if(item.bsStatus=="99"){
+						}else if(item.bsStatus=="5"){
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#FF0000');
+						} else if(item.bsStatus=="99"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');
 						}
 					});

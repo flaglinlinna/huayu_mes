@@ -64,6 +64,9 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 
 	public List<ProductMater> findByDelFlagAndPkQuoteAndBsType(Integer delFlag,Long pkQuote,String bsType);
 
+	public List<ProductMater> findByDelFlagAndPkQuoteAndBsTypeAndBsSingleton(Integer delFlag,Long pkQuote,String bsType,Integer bsSingleton);
+
+
 	public List<ProductMater> findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(Integer delFlag,Long pkQuote,String bsType,Integer retrial);
 
 	//20210116 hjj 新增外协材料价格计算 ，20210225 hjj 修改五金计算的方式 or map.bsType ='out'

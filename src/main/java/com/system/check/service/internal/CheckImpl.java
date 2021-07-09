@@ -89,7 +89,28 @@ public class CheckImpl   implements CheckService {
 	}
 
 	@Override
+	public boolean checkLast(Long id, String checkCode) throws Exception {
+		// TODO Auto-generated method stub
+		//找到当前审批项
+		List<CheckInfo> lc = checkInfoDao.findNotByRecordId(id, checkCode);
+		if(lc.size()>0){
+			CheckInfo checkInfo = lc.get(0);
+			//如果当前是第一步
+			if(checkInfo.getBsCheckGrade()==1){
+				return true;
+			}else {
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+
+
+	@Override
 	public boolean addCheckFirst(CheckInfo checkInfo) throws Exception {
+//		checkInfo.getBsCheckGrade()
 		// TODO Auto-generated method stub
 		List<CheckInfo> lc = new ArrayList<CheckInfo>();
 		List<WorkflowStep>  lw = workflowStepDao.findAllByCheckCode(1,checkInfo.getBsCheckCode());
@@ -232,10 +253,48 @@ public class CheckImpl   implements CheckService {
 		return sr;
 	}
 
+
+
+	@Override
+	public ApiResponseResult doBackToBusiness(CheckInfo ci) throws Exception {
+		// TODO Auto-generated method stub
+//		CheckInfo sr1 = this.getNewCheck(ci);
+		//找到当前审批项
+		List<CheckInfo> lc = checkInfoDao.findNotByRecordId(ci.getBsRecordId(), ci.getBsCheckCode());
+		if(lc.size()>0){
+//			sr1.setId();
+			//主管驳回给业务员的情况下
+			CheckInfo checkInfo =  lc.get(0);
+			checkInfo.setLastupdateDate(new Date());
+			checkInfo.setBsStepCheckStatus(2);
+			checkInfoDao.save(checkInfo);
+		}else {
+			CheckInfo sr1 = this.getNewCheck(ci);
+			sr1.setLastupdateDate(new Date());
+			sr1.setBsStepCheckStatus(2);
+			sr1.setBsCheckBy(UserUtil.getSessionUser().getUserCode());
+			sr1.setBsCheckName(UserUtil.getSessionUser().getUserName());
+			sr1.setBsCheckId(UserUtil.getSessionUser().getId());
+			checkInfoDao.save(sr1);
+		}
+		//修改报价单为驳回状态
+		Quote quote = quoteDao.findById((long)ci.getBsRecordId());
+		quote.setBsStatus(5);
+		quote.setBsStatus2(5);
+		quoteDao.save(quote);
+
+		return ApiResponseResult.success();
+	}
+
 	@Override
 	public ApiResponseResult getInfo(Long id, String checkCode) throws Exception {
 		// TODO Auto-generated method stub
-		List<CheckInfo> lc = checkInfoDao.findAllByRecordId(id, checkCode);
+		List<CheckInfo> lc = new ArrayList<>();
+		if(("QUOTE_NEW").equals(checkCode)) {
+			lc = checkInfoDao.findAllByBusiness(id, checkCode);
+		}else {
+			lc = checkInfoDao.findAllByRecordId(id, checkCode);
+		}
 		//结束时间为空,即未审批
 		List<CheckInfo> lc1 = checkInfoDao.findNotByRecordId(id, checkCode);
 		int g = 1;
@@ -413,6 +472,7 @@ public class CheckImpl   implements CheckService {
 						quote.setBsStatus(1);
 						quote.setBsStep(2);
 						quote.setBsEndTime1(new Date());
+						quote.setBsStatus2(0);
 						quote.setBsStatus2Hardware(1);//把第二个流程的置为进行中
 						quote.setBsStatus2Molding(1);
 						quote.setBsStatus2Out(1);

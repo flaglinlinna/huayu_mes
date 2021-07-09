@@ -35,13 +35,13 @@ public class Quote extends BaseEntity {
 	private static final long serialVersionUID = 4625660587007894370L;
 	public static final String TABLE_NAME = "price_quote";
 	
-	/**
+	 /**
      * 1-业务部状态
-     * 0：草稿，
-     * 1:进行中
-     * 2:已完成
+     * 0:进行中
+     * 1:已完成
 	 * 3:待发起
 	 * 4:审批中
+	 * 5:被驳回(重新下发)
      * 99:关闭
      */
 	@Column
@@ -49,12 +49,13 @@ public class Quote extends BaseEntity {
 	@ApiModelProperty(name="bsStatus",value="状态")
     protected int bsStatus = 0;
 	
-	/**
-     * 2-制造部+采购部+外协部的状态
-     * 0:草稿
-     * 1:进行中
-     * 2:已完成
-     */
+	 /**
+	 * 2-制造部+采购部+外协部的状态
+	 * 0:草稿
+	 * 1:进行中
+	 * 2:已完成
+	 * 5:驳回中
+	 */
 	@Column
 	@ApiModelProperty(name="bsStatus2",value="状态")
     protected int bsStatus2 = 0;
@@ -73,6 +74,8 @@ public class Quote extends BaseEntity {
      * 0:草稿
      * 1:进行中
      * 2:已完成
+	 * 3：待提交审批
+	 * 4：审批中
      */
 	@Column
 	@ApiModelProperty(name="bsStatus2Molding",value="状态")
@@ -82,6 +85,8 @@ public class Quote extends BaseEntity {
      * 0:草稿
      * 1:进行中
      * 2:已完成
+	 * 3:待提交审批
+	 * 4:审批中
      */
 	@Column
 	@ApiModelProperty(name="bsStatus2Surface",value="状态")

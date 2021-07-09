@@ -144,7 +144,7 @@ $(function() {
 				{field : 'bsLoss', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCave', title : '穴数<span style="color:red;font-size:12px;">*</span>',edit:'text',width:50, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCapacity', title : '产能(个/小时)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:105, hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsFeeWxAll', title : '外协价格<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsFeeWxAll', title : '外协价格(未税)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:130, hide:true,style : 'background-color:#ffffff'},
 				{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff',width:180},
 				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
 				] ],
@@ -157,7 +157,7 @@ $(function() {
 					// $("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
 					$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
 				}
-
+				// $('div[lay-id="listTable"]').find('.layui-table-header').find('th[data-field="bsFeeWxAll"]').find('span').html('外协价格<i class="layui-icon alone-tips" lay-tips="未税"></i>');
 				pageCurr = curr;
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				layui.each(res.data, function(i, item){

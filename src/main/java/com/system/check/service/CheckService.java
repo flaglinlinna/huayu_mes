@@ -12,7 +12,11 @@ public interface CheckService {
 
 	public boolean checkFirst(Long id, String checkCode) throws Exception;
 
+	public boolean checkLast(Long id, String checkCode) throws Exception;
+
 	public boolean addCheckFirst(CheckInfo checkInfoSrm) throws Exception;
+
+	public ApiResponseResult doBackToBusiness(CheckInfo ci) throws Exception;
 
 	public ApiResponseResult getInfo(Long id, String checkCode) throws Exception;
 

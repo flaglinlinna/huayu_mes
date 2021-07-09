@@ -30,6 +30,7 @@ $(function() {
 						"code" : res.status
 					}
 				}
+				console.log(res);
 				var all = 0;
 				res.data.Nums.forEach(function(item, index) {
 					if (item.STATUS == '1') {
@@ -62,6 +63,9 @@ $(function() {
 				{fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true},
 				{fixed:'left',field : 'bsStatus',title : '状态',width : 100,templet : function(d) {
 						if(d.bsQuoteStatus !="99") {
+							if(d.bsStatus2 =='5'){
+								return '驳回'
+							}
 							if (d.bsStatus < 99) {
 								if (d.bsStatus == "0") {
 									return "草稿"
@@ -73,6 +77,8 @@ $(function() {
 									return "待提交审批"
 								} else if (d.bsStatus == "4") {
 									return "审批中"
+								}  else if (d.bsStatus == "5") {
+									return "驳回"
 								} else {
 									return "已关闭"
 								}
@@ -125,23 +131,27 @@ $(function() {
 				res.data.forEach(function(item, index) {
 					$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
 					if(item.bsQuoteStatus !="99") {
-						if (item.bsStatus <99) {
-							if (item.bsStatus == 0) {
-								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6699CC');
-							} else if (item.bsStatus == "1") {
-								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
-							} else if (item.bsStatus == "2") {
-								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
-							} else if (item.bsStatus == "3") {
-								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6495ED');
-							} else if (item.bsStatus == "4") {
-								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#4169E1');
-							}
+						if(item.bsStatus2=="5"){
+							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#FF0000');
 						}else {
-						    if (item.bsStatus == "2222") {
-								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
-							}else {
-								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
+							if (item.bsStatus < 99) {
+								if (item.bsStatus == 0) {
+									$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6699CC');
+								} else if (item.bsStatus == "1") {
+									$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
+								} else if (item.bsStatus == "2") {
+									$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
+								} else if (item.bsStatus == "3") {
+									$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6495ED');
+								} else if (item.bsStatus == "4") {
+									$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#4169E1');
+								}
+							} else {
+								if (item.bsStatus == "2222") {
+									$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
+								} else {
+									$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
+								}
 							}
 						}
 					}else {

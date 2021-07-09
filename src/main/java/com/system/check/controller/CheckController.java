@@ -71,21 +71,27 @@ public class CheckController extends WebController {
 	public ApiResponseResult doCheck(CheckInfo checkInfo) {
         String method = "/check/doCheck";String methodName ="提交审批";
 		try {
-			//判断是否是第一次发起审批
-			if(checkService.checkFirst(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode())){
-				//1.首次发起审批
-				//新增流程信息
-				checkService.addCheckFirst(checkInfo);
-			}else{
-				//2.判断此用户是否有审核权限
-				if(checkService.checkSecond(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode())){
-                    //2.1 审批
-					checkService.doCheck(checkInfo);
-                }else{
-				    //2.2 无审批权限，返回提示信息
-                    return ApiResponseResult.failure("当前用户在该步骤无审批权限");
-                }
-			}
+			//判断是否是第一步业务员的驳回
+//			if(checkInfo.getBsStepCheckStatus()==2&&checkService.checkLast(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode()))
+//			{
+//				checkService.doBackToBusiness(checkInfo);
+//			}else {
+				//判断是否是第一次发起审批(结束时间判断)
+				if (checkService.checkFirst(checkInfo.getBsRecordId(), checkInfo.getBsCheckCode())) {
+					//1.首次发起审批
+					//新增流程信息
+					checkService.addCheckFirst(checkInfo);
+				} else {
+					//2.判断此用户是否有审核权限
+					if (checkService.checkSecond(checkInfo.getBsRecordId(), checkInfo.getBsCheckCode())) {
+						//2.1 审批
+						checkService.doCheck(checkInfo);
+					} else {
+						//2.2 无审批权限，返回提示信息
+						return ApiResponseResult.failure("当前用户在该步骤无审批权限");
+					}
+				}
+//			}
             logger.debug("提交审批=doCheck:");
             getSysLogService().success(module,method, methodName, null);
 			return ApiResponseResult.success("提交审批成功");

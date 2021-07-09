@@ -11,6 +11,7 @@ import com.system.user.dao.SysUserDao;
 import com.utils.ExcelExport;
 import com.web.basePrice.dao.*;
 import com.web.basePrice.entity.*;
+import com.web.basic.service.SysParamService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -60,6 +61,9 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 
 	@Autowired
 	private SysUserDao sysUserDao;
+
+	@Autowired
+	private SysParamService sysParamService;
 		
 	/**
 	 * 新增人工制费信息维护
@@ -325,6 +329,18 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 	@Override
 	public ApiResponseResult doExcel(MultipartFile[] file) throws Exception {
 		try {
+
+			Date expiresTime = null;
+			Object data = sysParamService.getValueByCodeList("BJ_EXPIRES_TIME").getData();
+			if(data==null){
+				return ApiResponseResult.success("没有维护系统参数失效时间(BJ_EXPIRES_TIME)");
+			}else {
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(new Date());
+				calendar.add(Calendar.MONTH, 1);
+				expiresTime = calendar.getTime();
+			}
+
 			Date doExcleDate = new Date();
 			Long userId = UserUtil.getSessionUser().getId();
 			InputStream fin = file[0].getInputStream();
@@ -364,12 +380,15 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 							continue;
 						}
 					}
+					//根据 工序ID和机台和工作中心id判断是否新增或编辑
 					List<BaseFee> baseFeeList1 =baseFeeDao.findByDelFlagAndProcIdAndMhTypeAndWorkCenterId(0,baseFee.getProcId(),baseFee.getMhType(),baseFee.getWorkcenterId());
 					if(baseFeeList1.size()>0){
 						baseFee.setId(baseFeeList1.get(0).getId());
 						baseFee.setLastupdateBy(userId);
 						baseFee.setLastupdateDate(doExcleDate);
+//						baseFee.setExpiresTime(expiresTime);
 					}else {
+						baseFee.setExpiresTime(expiresTime);
 						baseFee.setCreateBy(userId);
 						baseFee.setCreateDate(doExcleDate);
 					}
@@ -387,6 +406,7 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 					}
 					baseFeeList.add(baseFee);
 			}
+
 			baseFeeDao.saveAll(baseFeeList);
 			return ApiResponseResult.success("导入成功!,共导入:"+baseFeeList.size()+";不通过:"+failures);
 		}
