@@ -59,7 +59,7 @@ td {
 }
 
 table, table tr td {
-	border: 2px solid #333399;
+	/*border: 2px solid #333399;*/
 	border-collapse: collapse;
 }
 
@@ -77,7 +77,15 @@ table, table tr td {
 .tablebox table tr th {
 	background: #333399;
 	cursor: pointer;
-	border: 2px solid #333300;
+	/*border: 2px solid #333300;*/
+}
+.tablebox table tr td { /*20201204新增*/
+	background-color: transparent;
+}
+
+.tbl-body tr:nth-child(even) td, .tbl-body1 tr:nth-child(even) td {
+	/*20201204新增*/
+	background-color: rgba(31, 31, 156, .5);
 }
 
 th {
