@@ -494,27 +494,7 @@ public class ProductProcesslmpl implements ProductProcessService {
 
         productProcessDao.saveAll(productProcessList);
 
-        List <ProductMater> materList = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingleton(0,quoteId,bsType,0);
-        for(ProductMater pm :materList){
-            if(StringUtils.isEmpty(pm.getBsGroups())){
-                List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
-                        pm.getBsComponent(), pm.getBsElement(), pm.getPkQuote(), pm.getBsType(), 0, pm.getBsMaterName());
-//                pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);
-                if(processList.size()>0){
-                    if (processList.get(0).getBsYield().compareTo(BigDecimal.ZERO)!=1){
-                        return ApiResponseResult.failure("工艺顺序"+processList.get(0).getBsOrder()+"零件名称:"+pm.getBsComponent()+"对应的材料的工序良率为0，请检查");
-                    }
-                }
-            }else {
-                List<ProductProcess> processList1 = productProcessDao.findByDelFlagAndPkQuoteAndBsGroups(0, pm.getPkQuote(), pm.getBsGroups());
-//                pm.setBsYield(processList1.size() > 0 ? processList1.get(0).getBsYield() : bsYield);
-                if(processList1.size()>0){
-                    if (processList1.get(0).getBsYield().compareTo(BigDecimal.ZERO)!=1){
-                        return ApiResponseResult.failure("工艺顺序"+processList1.get(0).getBsOrder()+"损耗分组:"+pm.getBsGroups()+"对应的材料的工序良率为0，请检查");
-                    }
-                }
-            }
-        }
+
 
         List<ProductProcess> productMaterList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, bsType);
         for (ProductProcess o : productMaterList) {
@@ -598,6 +578,29 @@ public class ProductProcesslmpl implements ProductProcessService {
 //            o.setLastupdateDate(new Date());
 //            o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
+
+        List <ProductMater> materList = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingleton(0,quoteId,bsType,0);
+        for(ProductMater pm :materList){
+            if(StringUtils.isEmpty(pm.getBsGroups())){
+                List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
+                        pm.getBsComponent(), pm.getBsElement(), pm.getPkQuote(), pm.getBsType(), 0, pm.getBsMaterName());
+//                pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);
+                if(processList.size()>0){
+                    if (processList.get(0).getBsYield().compareTo(BigDecimal.ZERO)!=1){
+                        return ApiResponseResult.failure("工艺顺序"+processList.get(0).getBsOrder()+"零件名称:"+pm.getBsComponent()+"对应的材料的工序良率为0，请检查");
+                    }
+                }
+            }else {
+                List<ProductProcess> processList1 = productProcessDao.findByDelFlagAndPkQuoteAndBsGroups(0, pm.getPkQuote(), pm.getBsGroups());
+//                pm.setBsYield(processList1.size() > 0 ? processList1.get(0).getBsYield() : bsYield);
+                if(processList1.size()>0){
+                    if (processList1.get(0).getBsYield().compareTo(BigDecimal.ZERO)!=1){
+                        return ApiResponseResult.failure("工艺顺序"+processList1.get(0).getBsOrder()+"损耗分组:"+pm.getBsGroups()+"对应的材料的工序良率为0，请检查");
+                    }
+                }
+            }
+        }
+
 //        productProcessDao.saveAll(productMaterList);
         productProcessDao.doProcessStatusByType(UserUtil.getSessionUser().getId(), new Date(), quoteId, bsType);
         if (!("out").equals(bsType)) {

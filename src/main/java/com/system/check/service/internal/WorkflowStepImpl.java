@@ -76,6 +76,7 @@ public class WorkflowStepImpl implements WorkflowStepService {
         o.setBsCheckName(workflowStep.getBsCheckName());
         o.setBsStepName(workflowStep.getBsStepName());
         o.setBsCheckBy(workflowStep.getBsCheckBy());
+        o.setBsCheckId(workflowStep.getBsCheckId());
         o.setBsCheckGrade(workflowStep.getBsCheckGrade());
         workflowStepDao.save(o);
         return ApiResponseResult.success("编辑成功！");

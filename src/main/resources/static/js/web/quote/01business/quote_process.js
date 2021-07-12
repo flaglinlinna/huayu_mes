@@ -38,7 +38,7 @@ $(function() {
 			{fixed : 'left',field:'id',title:'ID', width:80, hide:true},
 			{fixed : 'left',field : 'bsElement',width : 150,sort:true,title : '组件名称',style : 'background-color:#d2d2d2'},
 			{fixed : 'left',field : 'bsName',width : 180,sort:true,title : '零件名称',style : 'background-color:#d2d2d2'},
-			{fixed : 'left',field : 'bsLinkName',width : 150,sort:true,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
+			{field : 'bsLinkName',width : 150,sort:true,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
 			{field : 'itemType',title : '物料类型',width : 120,sort:true,style : 'background-color:#d2d2d2'},
 			{field : 'workCenter',title : '工作中心',width : 120,sort:true,templet :
 				function(d){if(d.bjWorkCenter!=null){
@@ -84,7 +84,7 @@ $(function() {
 			// {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar',style : 'background-color:#ffffff'}
 			] ],
 			done : function(res, curr, count) {
-
+				// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
 				totalCount = res.count
 				localtableFilterIns.reload();
 				pageCurr = curr;

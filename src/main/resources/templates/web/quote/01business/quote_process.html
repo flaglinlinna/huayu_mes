@@ -7,13 +7,22 @@
 <style>
 	.layui-table-cell, .layui-table-tool-panel li {
 		overflow: visible !important;
+		/*position :relative;*/
 	}
+
+	/*.layui-table-body, .layui-table-box, .layui-table-cell {*/
+	/*	overflow: visible ;*/
+	/*	!*position :relative;*!*/
+	/*}*/
 
 	.layui-form-select .layui-input {
 		height: 30px;
+		overflow: visible;!important;
+		/*position :relative;*/
+		/*z-index: auto;*/
 	}
 </style>
-<body class="layui-layout-body">
+<body class="layui-layout-body" style="position: relative">
 	<div class="layui-layout layui-layout-admin">
 		<div style="margin: 10px">
 			<form id="infoSearch" class="layui-form layui-form-pane"

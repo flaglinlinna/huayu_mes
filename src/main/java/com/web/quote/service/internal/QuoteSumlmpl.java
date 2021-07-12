@@ -583,7 +583,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> processList = new ArrayList<>();
 		HashSet<String> groupSet = new HashSet<>();
 		for(ProductProcess o :processAllList){
-			if (!(o.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && o.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(o.getBsCapacity()) )) {
+			if (("PCS".equals(o.getPurchaseUnit())&&!"packag".equals(o.getBsType()))||("out").equals(o.getBsType())||!(o.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && o.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(o.getBsCapacity()) )) {
 				if (StringUtils.isNotEmpty(o.getBsGroups())) {
 					//根据分组和所属零件名称和组件判断是否加入损耗计算
 					if (groupSet.add(o.getBsGroups() + o.getBsLinkName() + o.getBsElement())) {

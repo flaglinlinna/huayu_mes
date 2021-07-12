@@ -710,8 +710,15 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		List<String> newName =Arrays.asList("测试","检验","包装");
 	 	//复制后的确认完成，1.更新工艺的bom关联关系(可能已删除)，2.根据新增bom(如有)下发工艺
 		Boolean sameQuote = false;
-		//查出对应的bom是否为同一个标价单下,相同则根据bomID查询 ，不同则根据bomID2查询
-		if(quoteBomDao.findById((long) quoteProcessList.get(0).getPkQuoteBom()).getPkQuote().equals(quoteId)){
+		Long BomID = null;
+		for(QuoteProcess quoteProcess :quoteProcessList){
+			if(quoteProcess.getPkQuoteBom()!= null){
+				BomID = quoteProcess.getPkQuoteBom();
+				break;
+			}
+		}
+		//查出对应的bom是否为同一个标价单下,相同则根据bomID查询 ，不同则根据bomID2查询(做修改)
+		if(quoteBomDao.findById((long) BomID).getPkQuote().equals(quoteId)){
 			sameQuote = true;
 		}else {
 			Quote quote = quoteDao.findById((long)quoteId);
@@ -726,16 +733,15 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					quoteBom = quoteBomDao.findById((long) o.getPkQuoteBom());
 				} else {
 					quoteBom = quoteBomDao.findByPkBomId2AndPkQuote(o.getPkQuoteBom(), quoteId);
-					o.setBsMaterName(quoteBom.getBsMaterName());
-					o.setPurchaseUnit(quoteBom.getPurchaseUnit()); //单位为PCS 不参与人工和制费计算
 				}
+				o.setBsMaterName(quoteBom.getBsMaterName());
+				//单位为PCS 不参与人工和制费计算
+				o.setPurchaseUnit(quoteBom.getPurchaseUnit());
+				//bom中可能已经删除
 				o.setDelFlag(quoteBom.getDelFlag());
 				o.setPkQuoteBom(quoteBom.getId());
 				o.setBsElement(quoteBom.getBsElement());
 				o.setBsName(quoteBom.getBsComponent());
-//				if(quoteBom.getBsSingleton().equals(o.getBsSingleton())){
-//
-//				}
 				o.setBsSingleton(quoteBom.getBsSingleton());
 				o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
 				o.setItemType(quoteBom.getItp().getItemType());
