@@ -41,6 +41,9 @@ public class ItemTypeWgImpl extends  BasePriceUtils implements ItemTypeWgService
 		if (itemTypeWg == null) {
 			return ApiResponseResult.failure("外购物料类型不能为空！");
 		}
+		if(itemTypeWgDao.findByItemTypeAndDelFlag(itemTypeWg.getItemType(),0).size()>0){
+			return ApiResponseResult.failure(itemTypeWg.getItemType()+"已存在，物料类型不能重复！");
+		}
 		itemTypeWg.setCreateDate(new Date());
 		itemTypeWg.setCreateBy(UserUtil.getSessionUser().getId());
 		itemTypeWgDao.save(itemTypeWg);
@@ -60,6 +63,11 @@ public class ItemTypeWgImpl extends  BasePriceUtils implements ItemTypeWgService
 			return ApiResponseResult.failure("外购物料类型信息ID不能为空！");
 		}
 		ItemTypeWg o = itemTypeWgDao.findById((long) itemTypeWg.getId());
+		if(!itemTypeWg.getItemType().equals(o.getItemType())){
+			if(itemTypeWgDao.findByItemTypeAndDelFlag(itemTypeWg.getItemType(),0).size()>0){
+				return ApiResponseResult.failure(itemTypeWg.getItemType()+"已存在，物料类型不能重复！");
+			}
+		}
 		if (o == null) {
 			return ApiResponseResult.failure("该外购物料类型信息不存在！");
 		}

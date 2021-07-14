@@ -25,6 +25,8 @@
 .layui-layer-dialog .layui-layer-content {
 	background-color: red;
 }
+
+
 </style>
 <body class="layui-layout-body">
 <div th:replace="audio/fragment/audio :: audio"></div>
@@ -45,7 +47,7 @@
 				<div class="layui-colla-item">
 					<h2 class="layui-colla-title">填写信息</h2>
 					<div class="layui-colla-content layui-show" style="width:100%">
-						<div style="width:85%;display:inline-block">
+						<div style="width:75%;display:inline-block">
 						<form id="itemFrom" class="layui-form layui-form-pane"
 							lay-filter="itemFrom" method="post" action="">
 							<div class="layui-form-item">
@@ -112,7 +114,11 @@
 							</div>
 						</form>
 						</div>
-<!--						<div style="width:30%;display:inline-block"><p>小码投入</p></div>-->
+<!--						<div style="width:25%;display:inline">-->
+<!--							<label style="line-height">AAAAAAAAAAAA</label>-->
+<!--						</div>-->
+						<div style="width:25%;display:inline;float: right;line-height: 70px;">
+							<p id="titleType" style="font-size: 40px;color:red"></p></div>
 					</div>
 				</div>
 			</div>

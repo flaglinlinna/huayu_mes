@@ -91,7 +91,6 @@ $(function() {
 				var tableView = this.elem.next(); // 当前表格渲染之后的视图
 				//merge(res.data, [ 'bsElement'], [3,3]);
 				//merge(res.data, [ 'bsName'], [4,4]);
-				// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
 
 				res.data.forEach(function (item, index) {
 					// console.log(item);

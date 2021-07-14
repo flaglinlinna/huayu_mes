@@ -375,10 +375,13 @@ public class QuoteBomlmpl implements QuoteBomService {
 			if(o.getBsStatus()==0){
 				quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A003");
 				quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A003");
-				quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A004");
-				quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A004");
+//				quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A004");
+//				quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A004");
 			}
 		}
+
+		quoteItemDao.switchStatus(1, Long.parseLong(quoteId), "A004");
+		quoteItemDao.setBegTime(new Date(), Long.parseLong(quoteId), "A004");
 
 		Object data = quoteService.doItemFinish(code, Long.parseLong(quoteId)).getData();
 		

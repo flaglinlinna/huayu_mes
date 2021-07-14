@@ -91,12 +91,16 @@ function getInfo(json) {
         success: function (res) {
             console.log(res);
             if (res.result === true) {
-
                 var list = res.data;
 
-                if (list.grade == '1') {
-                    $("#th").attr("disabled", "disabled");//失效
+                if(json.wname!='QUOTE_NEW'){
+
+                }else {
+                    if (list.grade == '1') {
+                        $("#th").attr("disabled", "disabled");//失效
+                    }
                 }
+
 
                 if (list.data.length == 0) {
                     document.getElementById('timeline').innerHTML = "";

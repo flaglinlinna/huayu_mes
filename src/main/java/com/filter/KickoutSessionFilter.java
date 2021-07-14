@@ -128,7 +128,6 @@ public class KickoutSessionFilter extends AccessControlFilter {
 		}
 		
 		Session session = subject.getSession();
-		System.out.println(session.getTimeout());
 		logger.debug("==session时间设置：" + String.valueOf(session.getTimeout())
 				+ "===========");
 		
@@ -139,6 +138,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 //            String username = user.getFcode();
 			String username = user.getUserCode();
 			logger.debug("===当前用户username：==" + username);
+			System.out.println(username+path);
 			Serializable sessionId = session.getId();
 			logger.debug("===当前用户sessionId：==" + sessionId);
 			// 读取缓存用户 没有就存入

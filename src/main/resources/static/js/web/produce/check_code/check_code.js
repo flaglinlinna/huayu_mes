@@ -16,7 +16,27 @@ $(function () {
                 if(type==2){
                     $("input[name='isRecord'][value='0']").prop("checked", "checked");
                     $("input[name='isRecord']").attr("disabled","disabled");
+                    $('#titleType').html("小码投入(不校验重码 )");
+                }else if(type==1){
+                    $('#titleType').html("小码产出(校验重码 )");
                 }
+
+                form.on("radio(isRecord)", function (data) {
+                    var titleType = "小码";
+                    if(type==2){
+                        titleType += "投入"
+                    }else {
+                        titleType += "产出"
+                    }
+                    var val = data.value;
+                    if(val==1){
+                        titleType += "(校验重码 )"
+                    }else {
+                        titleType += "(不校验重码 )"
+                    }
+                    $('#titleType').html(titleType);
+                });
+
                 layui.form.render();
                 // 日期选择器
                 laydate.render({

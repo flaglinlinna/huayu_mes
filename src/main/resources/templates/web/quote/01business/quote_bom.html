@@ -57,13 +57,13 @@
 							<i class="layui-icon">&#xe669;</i>重置
 						</button>
 
-						<shiro:hasPermission name="bom-add">
-							<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="addbtn" onclick="addQuoteBom()">添加</button>
-						</shiro:hasPermission>
-						<shiro:lacksPermission name="bom-add">
-							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button" id="addbtn" disabled="disabled" onclick="addQuoteBom()">添加</button>
-						</shiro:lacksPermission>
-
+<!--						<shiro:hasPermission name="bom-add">-->
+<!--							<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="addbtn" onclick="addQuoteBom()">添加</button>-->
+<!--						</shiro:hasPermission>-->
+<!--						<shiro:lacksPermission name="bom-add">-->
+<!--							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button" id="addbtn" disabled="disabled" onclick="addQuoteBom()">添加</button>-->
+<!--						</shiro:lacksPermission>-->
+						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="addbtn" onclick="addQuoteBom()">添加</button>
 <!--						 <button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="addbtn" onclick="addQuoteBom()">添加</button>-->
                          <button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="exportbtn" onclick="exportExcel()">导出模板</button>
                          <button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="loadbtn" onclick="openUpload()">导入数据</button>

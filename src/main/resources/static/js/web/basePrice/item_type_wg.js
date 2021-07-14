@@ -173,8 +173,8 @@ function editSubmit(obj) {
 						loadAll();
 					});
 				} else {
-					layer.alert(data.msg, function() {
-						layer.closeAll();
+					layer.alert(data.msg, function(index) {
+						layer.close(index);
 					});
 				}
 			}, "POST", false, function(res) {

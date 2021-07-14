@@ -170,13 +170,13 @@ $(function() {
 		function getUrl(inputId) {
 			// 材料成本
 			if (inputId == "cl_hardware") {
-				getMaterDetail("hardware", "五金材料成本=材料单价(KG)/1000*(制品重(g)+水口重/穴数)/工序良率")
+				getMaterDetail("hardware", "五金材料成本=材料单价(含税)(KG)/1000*(制品重(g)+水口重/穴数)/工序良率/税率")
 			} else if (inputId == "cl_molding") {
-				getMaterDetail("molding", "注塑材料成本=材料单价(KG)/1000*(制品重(g)+水口重/穴数)/工序良率")
+				getMaterDetail("molding", "注塑材料成本=材料单价(含税)(KG)/1000*(制品重(g)+水口重/穴数)/工序良率/税率")
 			} else if (inputId == "cl_surface") {
-				getMaterDetail("surface", "表面处理材料成本=材料料单价(KG)/1000*材料用量/工序良率")
+				getMaterDetail("surface", "表面处理材料成本=材料单价(含税)(KG)/1000*材料用量/工序良率/税率")
 			} else if (inputId == "cl_packag") {
-				getMaterDetail("packag", "组装材料成本=材料单价(PCS)*材料用量/工序良率")
+				getMaterDetail("packag", "组装材料成本=材料单价(含税)(PCS)*材料用量/工序良率/税率")
 			}
 			// 人工和制费
 			// else if (inputId == "lh_hardware" ) {
@@ -273,7 +273,7 @@ $(function() {
 			//{field : 'bsMachiningType',title : '加工类型',width : 100,hide : true},/*(表面处理)*/
 			//{field : 'bsColor',title : '配色工艺',width : 100,hide : true},/*(表面处理)*/
 			{fixed:'left',field : 'bsModel',width : 200,title : '材料规格'},
-			{field : 'bsAssess',width : 80,title : '材料单价'},
+			{field : 'bsAssess',width : 80,title : '材料单价(含税)'},
 			{field : 'bsProQty',width : 90,title : '制品重(g)',totalRow : true,hide : true},
 				{field : 'bsWaterGap',title : '水口量(g)',width : 90,hide : true}, /*(注塑)*/
 				{field : 'bsCave',title : '穴数',width : 60,hide : true}, /*(注塑)*/
@@ -402,7 +402,7 @@ $(function() {
 				{field : 'bsLossTheMh',title : '本工序损料(制费)',width : 150,totalRow : true,hide : true},
 				{field : 'bsFeeLhAll',title : '人工总费用',width : 90,totalRow : true,hide : true},
 				{field : 'bsFeeMhAll',title : '制造总费用',width : 90,totalRow : true,hide : true},
-				{field : 'bsFeeWxAll',title : '加工费',width : 90,totalRow : true,hide : true},
+				{field : 'bsFeeWxAll',title : '加工费(未税)',width : 90,totalRow : true,hide : true},
 
 				// {field : 'bsFeeLhAll',title : '人工总费用',width : 130,totalRow : true,hide : true},
 				// {field : 'bsFeeMhAll',title : '制费总费用',width : 130,totalRow : true,hide : true},

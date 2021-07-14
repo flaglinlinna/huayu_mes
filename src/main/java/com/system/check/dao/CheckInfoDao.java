@@ -21,7 +21,7 @@ public interface CheckInfoDao extends CrudRepository<CheckInfo, Long>, JpaSpecif
 	@Query(value = "select * from (select p.*  from "+ CheckInfo.TABLE_NAME +" p "+
 			" where p.bs_Record_Id = (?1) and p.bs_check_Code= (?2) and p.del_flag=0  " +
 			" union select t.*  from "+ CheckInfo.TABLE_NAME +" t where t.bs_Record_Id = (?1) " +
-			"and t.del_flag=0 and t.bs_Check_Grade = 1 and t.bs_Step_Check_Status = 2  ) a  order by a.lastupdate_date ", nativeQuery = true)
+			"and t.del_flag=0 and t.bs_Check_Grade = 0 and t.bs_Step_Check_Status = 2  ) a  order by a.lastupdate_date ", nativeQuery = true)
     public List<CheckInfo> findAllByBusiness(Long id, String checkCode);
 
 		@Query(value = "select p.*  from "+ CheckInfo.TABLE_NAME +" p "+

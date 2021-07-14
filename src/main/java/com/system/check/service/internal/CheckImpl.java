@@ -386,39 +386,39 @@ public class CheckImpl   implements CheckService {
 				//20210121-fyx-修改列表状态
 				if(StringUtils.equals("QUOTE_NEW", s.getBsCheckCode())){//新增报价单
 					if(quote != null){
-						quote.setBsStatus(3);//审批中
+						quote.setBsStatus(1);//进行中
 						quoteDao.save(quote);
 					}
 				}else if(StringUtils.equals("out", s.getBsCheckCode())){//外协
 					if(quote != null){
-						quote.setBsStatus2Out(3);//审批中
+						quote.setBsStatus2Out(1);//进行中
 						quoteDao.save(quote);
 					}
 				}else if(StringUtils.equals("hardware", s.getBsCheckCode())){//五金
 					if(quote != null){
-						quote.setBsStatus2Hardware(3);//审批中
+						quote.setBsStatus2Hardware(1);//进行中
 						quoteDao.save(quote);
 					}
 				}else if(StringUtils.equals("molding", s.getBsCheckCode())){//注塑
 					if(quote != null){
-						quote.setBsStatus2Molding(3);//审批中
+						quote.setBsStatus2Molding(1);//进行中
 						quoteDao.save(quote);
 					}
 				}else if(StringUtils.equals("surface", s.getBsCheckCode())){//表面处理
 					if(quote != null){
-						quote.setBsStatus2Surface(3);//审批中
+						quote.setBsStatus2Surface(1);//进行中
 						quoteDao.save(quote);
 					}
 				}else if(StringUtils.equals("packag", s.getBsCheckCode())){//组装
 //					Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
 					if(quote != null){
-						quote.setBsStatus2Packag(4);//审批中
+						quote.setBsStatus2Packag(1);//进行中
 						quoteDao.save(quote);
 					}
 				}else if(StringUtils.equals("QUOTE_PUR", s.getBsCheckCode())){//采购部
 //					Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
 					if(quote != null){
-						quote.setBsStatus2Purchase(4);//审批中
+						quote.setBsStatus2Purchase(1);//进行中
 						quoteDao.save(quote);
 					}
 				}
@@ -482,21 +482,27 @@ public class CheckImpl   implements CheckService {
 						quoteDao.save(quote);
 					}
 					//2.1下发制造部待办项目-材料+工序
-					List<QuoteItemBase> lqb = quoteItemBaseDao.findByDelFlagAndStyles(0);
-					List<QuoteItem> lqi = new ArrayList<QuoteItem>();
-					for(QuoteItemBase qb:lqb){
-						QuoteItem qi = new QuoteItem();
-						qi.setPkQuote(quote.getId());
-						qi.setBsCode(qb.getBsCode());
-						qi.setBsName(qb.getBsName());
-						qi.setToDoBy(qb.getToDoBy());
-						qi.setBsPerson(qb.getBsPerson());
-						qi.setCreateDate(new Date());
-						qi.setCreateBy(UserUtil.getSessionUser().getId());
-						qi.setBsStatus(1);//lst-20210106-状态变更：进行中
-						qi.setBsBegTime(new Date());
-						qi.setBsStyle(qb.getBsStyle());
-						lqi.add(qi);
+					List<QuoteItem> lqi = quoteItemDao.findByDelFlagAndPkQuote(0,c.getBsRecordId());
+					if(lqi.size()>0){
+						for(QuoteItem qi :lqi){
+							qi.setBsStatus(1);//lst-20210106-状态变更：进行中
+						}
+					}else {
+						List<QuoteItemBase> lqb = quoteItemBaseDao.findByDelFlagAndStyles(0);
+						for (QuoteItemBase qb : lqb) {
+							QuoteItem qi = new QuoteItem();
+							qi.setPkQuote(quote.getId());
+							qi.setBsCode(qb.getBsCode());
+							qi.setBsName(qb.getBsName());
+							qi.setToDoBy(qb.getToDoBy());
+							qi.setBsPerson(qb.getBsPerson());
+							qi.setCreateDate(new Date());
+							qi.setCreateBy(UserUtil.getSessionUser().getId());
+							qi.setBsStatus(1);//lst-20210106-状态变更：进行中
+							qi.setBsBegTime(new Date());
+							qi.setBsStyle(qb.getBsStyle());
+							lqi.add(qi);
+						}
 					}
 					quoteItemDao.saveAll(lqi);
 					//2.2根据工作中心下发BOM-材料

@@ -357,20 +357,22 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 
 	/**
 	 * 第二步全部审批通过后，计算物料的价格，工序的人工费和制费
-	 * 五金计算公式修改成和注塑一样 20210225-hjj
+	 * 五金计算公式修改成和注塑一样 20210225-hjj 材料单价含税需除以系统税率
 	 * 材料关联工序，计算损耗
 	 */
 	@Override
 	public ApiResponseResult countMeterAndProcess(String quoteId) throws Exception {
 		// TODO Auto-generated method stub
 		List<SysParam> sysParams = sysParamDao.findByDelFlagAndParamCode(0, "BJ_YIELD");
+		List<SysParam> rateList = sysParamDao.findByDelFlagAndParamCode(0, "BJ_TAX_RATE");
 		BigDecimal bsYield =  sysParams.size()>0?new BigDecimal(sysParams.get(0).getParamValue()):new BigDecimal("100");
+		BigDecimal taxRate =  rateList.size()>0?new BigDecimal(rateList.get(0).getParamValue()):new BigDecimal("100");
 		// 表面，组装的材料总价格(未税)计算公式=单价*用量/基数 20210225去除了五金
 		List<ProductMater> lpm3 = productMaterDao.findByDelFlagAnd3Tyle(Long.valueOf(quoteId));
 		for (ProductMater pm : lpm3) {
 			//采购价
 			BigDecimal bsAssess = pm.getBsAssess()!= null?pm.getBsAssess():new BigDecimal("0");
-			pm.setBsFee(bsAssess.multiply(pm.getBsQty()));
+			pm.setBsFee(bsAssess.multiply(pm.getBsQty()).divide(taxRate,5,5));
 			if(pm.getBsSingleton()!=1) {
 				if(StringUtils.isEmpty(pm.getBsGroups())){
 					//材料良率取值: 1取同分组下的工艺顺序号最大第一条，2取材料名称相同的一条
@@ -383,7 +385,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				}
 				pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(), 5, 5));
 			}
-			pm.setBsMaterLose(pm.getBsFee().subtract(bsAssess.multiply(pm.getBsQty())));
+			pm.setBsMaterLose(pm.getBsFee().subtract(bsAssess.multiply(pm.getBsQty()).divide(taxRate,5,5)));
 			if(("surface").equals(pm.getBsType())){
 				//仅在两个单位都为kg的情况下不除1000
 //				if(("KG").equals(pm.getPurchaseUnit())){
@@ -406,7 +408,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			BigDecimal qty = BigDecimal.ZERO;
 			BigDecimal bsAssess = new BigDecimal("0");// 采购价
 			if (pm.getBsAssess() != null) {
-				bsAssess = pm.getBsAssess();
+				bsAssess = pm.getBsAssess().divide(taxRate,5,5);
 			}
 
 			//“采购单位”是PCS的物料,材料成本=采购单价*材料用量/工序良率。
@@ -449,10 +451,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		productMaterDao.saveAll(lpm1);
 		// 五金-人工工时费（元/H）*人数*成型周期(S）/3600 /基数；制费工时费（元/H）*成型周期(S）/3600/ /基数
-		List<ProductProcess> lpp_hardware = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNotAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
-				"hardware",1,"PCS");
+		List<ProductProcess> lpp_hardware = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNot(0, Long.valueOf(quoteId),
+				"hardware",1);
 		for (ProductProcess pp : lpp_hardware) {
-			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
+			if (!("PCS").equals(pp.getPurchaseUnit())&&!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
@@ -479,10 +481,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		productProcessDao.saveAll(lpp_hardware);
 		// 注塑-人工工时费（元/H）*人数*成型周期(S）/3600/ 穴数/基数;制费工时费（元/H）*成型周期(S）/3600/穴数/ 基数
-		List<ProductProcess> lpp_molding = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNotAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
-				"molding",1,"PCS");
+		List<ProductProcess> lpp_molding = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNot(0, Long.valueOf(quoteId),
+				"molding",1);
 		for (ProductProcess pp : lpp_molding) {
-			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
+			if (!("PCS").equals(pp.getPurchaseUnit())&&!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
@@ -509,10 +511,10 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		productProcessDao.saveAll(lpp_molding);
 		// 更新表面处理-人数*费率/产能/基数;费率/产能/基数
-		List<ProductProcess> lpp_surface = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNotAndPurchaseUnitIsNot(0, Long.valueOf(quoteId),
-				"surface",1,"PCS");
+		List<ProductProcess> lpp_surface = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNot(0, Long.valueOf(quoteId),
+				"surface",1);
 		for (ProductProcess pp : lpp_surface) {
-			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
+			if (!("PCS").equals(pp.getPurchaseUnit())&&!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()))) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
@@ -538,8 +540,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 		productProcessDao.saveAll(lpp_surface);
 		// 组装工艺成本=人数*费率/产能/基数;费率/产能/基数
-		List<ProductProcess> lpp_packag = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, Long.valueOf(quoteId),
-				"packag");
+		List<ProductProcess> lpp_packag = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNot(0, Long.valueOf(quoteId),
+				"packag",1);
 		for (ProductProcess pp : lpp_packag) {
 			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
