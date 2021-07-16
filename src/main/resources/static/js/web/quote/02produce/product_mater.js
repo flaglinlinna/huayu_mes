@@ -58,6 +58,10 @@ $(function() {
 			done : function(res, curr, count) {
 				pageCurr = curr;
 
+				if(bsStatus2 == 5){
+					$(".layui-table-box").find('tr').find('td').data('edit', false).css("background-color", "#d2d2d2");
+				}
+
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				layui.each(res.data, function(i, item){
 					if(item.bsStatus=="1"){

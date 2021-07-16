@@ -53,8 +53,8 @@ public class ProductProcessController extends WebController {
 		ModelAndView mav = new ModelAndView();
 		try {
 
-			quoteService.getItemStatus(Long.parseLong(quoteId),bsCode);
-			quoteService.getOutStatus(Long.parseLong(quoteId));
+//			quoteService.getItemStatus(Long.parseLong(quoteId),bsCode);
+//			quoteService.getOutStatus(Long.parseLong(quoteId));
 			mav.addObject("bsType", bsType);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("bsCode", bsCode);
@@ -63,6 +63,7 @@ public class ProductProcessController extends WebController {
 			}else {
 				mav.addObject("nowStatus", quoteService.getOutStatus(Long.parseLong(quoteId)));
 			}
+			mav.addObject("bsStatus2", quoteService.getStatus2(Long.parseLong(quoteId)).getData());
 			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());
 			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径

@@ -57,6 +57,7 @@ public class ProductMaterController extends WebController {
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("bsCode", bsCode);
 			mav.addObject("nowStatus", iStatus);
+			mav.addObject("bsStatus2", quoteService.getStatus2(Long.parseLong(quoteId)).getData());
 			mav.addObject("bomNameList",productMaterService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_mater");// 返回路径
 		} catch (Exception e) {

@@ -39,7 +39,9 @@ public interface QuoteService {
 	
 	public ApiResponseResult doCheckProfit(String bsDevType,String bsProdType)throws Exception;//20201223-校验是否维护了利润
 
-	public ApiResponseResult getOutStatus(Long id) throws Exception;
+	public ApiResponseResult getOutStatus(Long id) throws Exception;//外协填写审批状态
 
-	public ApiResponseResult getFreightStatus(Long id) throws Exception;
+	public ApiResponseResult getStatus2(Long id) throws Exception;//外协填写审批状态
+
+	public ApiResponseResult getFreightStatus(Long id) throws Exception; //获取包装运输费填写审批状态
 }
