@@ -13,6 +13,7 @@ import com.web.basePrice.dao.*;
 import com.web.basePrice.entity.*;
 import com.web.basic.service.SysParamService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -353,10 +354,20 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 			List<BaseFee> baseFeeList = new ArrayList<>();
 			for (int row = 1; row <= maxRow; row++) {
 //				String errInfo = "";
-				String procNo = tranCell(sheet.getRow(row).getCell(0));
-				String modelCode = tranCell(sheet.getRow(row).getCell(1));
-				String feeLh = tranCell(sheet.getRow(row).getCell(2));//人工费率（元/小时）
-				String feeMh = tranCell(sheet.getRow(row).getCell(3));//制费费率（元/小时）
+				String workName = tranCell(sheet.getRow(row).getCell(0)); //工作中心
+				String procNo = tranCell(sheet.getRow(row).getCell(1)); //工序名称
+				String modelCode = tranCell(sheet.getRow(row).getCell(2));//机台名称
+				String feeLh = tranCell(sheet.getRow(row).getCell(3));//人工费率（元/小时）
+				String feeMh = tranCell(sheet.getRow(row).getCell(4));//制费费率（元/小时）
+//				String expiredTime = tranCell(sheet.getRow(row).getCell(5));//失效时间
+				XSSFCell cell5 = sheet.getRow(row).getCell(5);
+				cell5.setCellType(XSSFCell.CELL_TYPE_STRING);
+				String expiredTime = tranCell(cell5);
+//				cell.setCellType(XSSFCell.CELL_TYPE_STRING);
+				if(StringUtils.isNotEmpty(expiredTime)){
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					expiresTime = dateFormat.parse(expiredTime);
+				}
 				BaseFee baseFee = new BaseFee();
 //					List<Proc> procList = procDao.findByDelFlagAndProcNo(0,procNo);
 				    List<Proc> procList = procDao.findByDelFlagAndProcName(0,procNo);
@@ -386,7 +397,7 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 						baseFee.setId(baseFeeList1.get(0).getId());
 						baseFee.setLastupdateBy(userId);
 						baseFee.setLastupdateDate(doExcleDate);
-//						baseFee.setExpiresTime(expiresTime);
+						baseFee.setExpiresTime(expiresTime);
 					}else {
 						baseFee.setExpiresTime(expiresTime);
 						baseFee.setCreateBy(userId);
@@ -485,17 +496,19 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 
 		String excelPath = "static/excelFile/";
 		String fileName = "人工制费维护模板.xlsx";
-		String[] map_arr = new String[]{"procNo","modelCode","feeLh","feeMh"};
+		String[] map_arr = new String[]{"wcName","procNo","modelCode","feeLh","feeMh","expiresTime"};
 		XSSFWorkbook workbook = new XSSFWorkbook();
 //		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		List<Map<String, Object>> mapList = new ArrayList<>();
 		for (BaseFee baseFee: baseFeeList) {
 			Map<String, Object> map = new HashMap<>();
+			map.put("wcName", baseFee.getProc()!=null?baseFee.getProc().getBjWorkCenter().getWorkcenterName():"");
 			map.put("procNo", baseFee.getProc()!=null?baseFee.getProc().getProcName():"");
 			List<BjModelType> bjModelTypeList = bjModelTypeDao.findByDelFlagAndModelName (0,baseFee.getMhType());
 			map.put("modelCode", bjModelTypeList.size()>0?bjModelTypeList.get(0).getModelName():"");
 			map.put("feeLh", baseFee.getFeeLh());
 			map.put("feeMh",baseFee.getFeeMh());
+			map.put("expiresTime", baseFee.getExpiresTime()!=null?baseFee.getExpiresTime():"");
 			mapList.add(map);
 		}
 		ExcelExport.exportByRow(response,mapList,workbook,map_arr,excelPath+fileName,fileName,1);

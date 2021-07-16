@@ -373,6 +373,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			//采购价
 			BigDecimal bsAssess = pm.getBsAssess()!= null?pm.getBsAssess():new BigDecimal("0");
 			pm.setBsFee(bsAssess.multiply(pm.getBsQty()).divide(taxRate,5,5));
+			//单件不用良率
 			if(pm.getBsSingleton()!=1) {
 				if(StringUtils.isEmpty(pm.getBsGroups())){
 					//材料良率取值: 1取同分组下的工艺顺序号最大第一条，2取材料名称相同的一条
@@ -395,6 +396,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //				}else {
 //					pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 //				}
+				//单位非PCS 除以1000(除组装外)
 				if(!("PCS").equals(pm.getPurchaseUnit())) {
 					pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 					pm.setBsMaterLose(pm.getBsMaterLose().divide(new BigDecimal("1000"), 5, 5));
@@ -411,10 +413,20 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				bsAssess = pm.getBsAssess().divide(taxRate,5,5);
 			}
 
+			if(StringUtils.isEmpty(pm.getBsGroups())){
+				List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
+						pm.getBsComponent(), pm.getBsElement(), pm.getPkQuote(), pm.getBsType(), 0, pm.getBsMaterName());
+				pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);
+			}else {
+				List<ProductProcess> processList1 = productProcessDao.findByDelFlagAndPkQuoteAndBsGroups(0, pm.getPkQuote(), pm.getBsGroups());
+				pm.setBsYield(processList1.size() > 0 ? processList1.get(0).getBsYield() : bsYield);
+			}
+
 			//“采购单位”是PCS的物料,材料成本=采购单价*材料用量/工序良率。
 			if(("PCS").equals(pm.getPurchaseUnit())||pm.getBsSingleton()==1){
 				qty = pm.getBsQty();
 				pm.setBsFee(bsAssess.multiply(qty));
+				pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5));
 			}else {
 				BigDecimal bsWaterGap = new BigDecimal("1");// 水口量
 				if (pm.getBsWaterGap() != null) {
@@ -423,14 +435,6 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				BigDecimal bsCave = new BigDecimal(pm.getBsCave());// 穴数
 				qty = bsWaterGap.divide(bsCave, 5, 5).add(pm.getBsProQty());// 水口重/穴数+制品重(g)
 
-				if(StringUtils.isEmpty(pm.getBsGroups())){
-					List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
-							pm.getBsComponent(), pm.getBsElement(), pm.getPkQuote(), pm.getBsType(), 0, pm.getBsMaterName());
-					pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);
-				}else {
-					List<ProductProcess> processList1 = productProcessDao.findByDelFlagAndPkQuoteAndBsGroups(0, pm.getPkQuote(), pm.getBsGroups());
-					pm.setBsYield(processList1.size() > 0 ? processList1.get(0).getBsYield() : bsYield);
-				}
 				pm.setBsFee(bsAssess.multiply(qty));
 				pm.setBsFee((pm.getBsFee().multiply(new BigDecimal("100"))).divide(pm.getBsYield(),5,5));
 
@@ -444,6 +448,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 //			}
 			pm.setBsMaterLose(pm.getBsFee().subtract(bsAssess.multiply(qty)));
+			//单位非PCS 除以1000(除组装外)
 			if(!("PCS").equals(pm.getPurchaseUnit())) {
 				pm.setBsFee(pm.getBsFee().divide(new BigDecimal("1000"), 5, 5));
 				pm.setBsMaterLose(pm.getBsMaterLose().divide(new BigDecimal("1000"), 5, 5));
@@ -454,7 +459,13 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> lpp_hardware = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNot(0, Long.valueOf(quoteId),
 				"hardware",1);
 		for (ProductProcess pp : lpp_hardware) {
-			if (!("PCS").equals(pp.getPurchaseUnit())&&!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
+			if(pp.getBsUserNum()==null){
+				pp.setBsUserNum(BigDecimal.ZERO);
+			}
+			if(pp.getBsCapacity()==null){
+				pp.setBsCapacity("0");
+			}
+			if (!("PCS").equals(pp.getPurchaseUnit())&&!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0  && ("0").equals(pp.getBsCapacity()) )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
@@ -484,7 +495,13 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> lpp_molding = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNot(0, Long.valueOf(quoteId),
 				"molding",1);
 		for (ProductProcess pp : lpp_molding) {
-			if (!("PCS").equals(pp.getPurchaseUnit())&&!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
+			if(pp.getBsUserNum()==null){
+				pp.setBsUserNum(BigDecimal.ZERO);
+			}
+			if(pp.getBsCycle()==null){
+				pp.setBsCycle(BigDecimal.ZERO);
+			}
+			if (!("PCS").equals(pp.getPurchaseUnit())&&!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0  && pp.getBsCycle().compareTo(BigDecimal.ZERO)==0 )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
@@ -514,7 +531,13 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> lpp_surface = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNot(0, Long.valueOf(quoteId),
 				"surface",1);
 		for (ProductProcess pp : lpp_surface) {
-			if (!("PCS").equals(pp.getPurchaseUnit())&&!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()))) {
+			if(pp.getBsUserNum()==null){
+				pp.setBsUserNum(BigDecimal.ZERO);
+			}
+			if(pp.getBsCapacity()==null){
+				pp.setBsCapacity("0");
+			}
+			if (!("PCS").equals(pp.getPurchaseUnit())&&!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0  && ("0").equals(pp.getBsCapacity()))) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
@@ -543,7 +566,13 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> lpp_packag = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNot(0, Long.valueOf(quoteId),
 				"packag",1);
 		for (ProductProcess pp : lpp_packag) {
-			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && pp.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(pp.getBsCapacity()) )) {
+			if(pp.getBsUserNum()==null){
+				pp.setBsUserNum(BigDecimal.ZERO);
+			}
+			if(pp.getBsCapacity()==null){
+				pp.setBsCapacity("0");
+			}
+			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0  && ("0").equals(pp.getBsCapacity()) )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
 				if (pp.getBsRadix() != null) {
 					if (!"1".equals(pp.getBsRadix())) {
@@ -585,7 +614,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<ProductProcess> processList = new ArrayList<>();
 		HashSet<String> groupSet = new HashSet<>();
 		for(ProductProcess o :processAllList){
-			if (("PCS".equals(o.getPurchaseUnit())&&!"packag".equals(o.getBsType()))||("out").equals(o.getBsType())||!(o.getBsUserNum().compareTo(BigDecimal.ZERO)==0 && o.getBsYield().compareTo(BigDecimal.ZERO)==0 && ("0").equals(o.getBsCapacity()) )) {
+			//首先过滤采购单位为PCS且非组装 及人数为0 不参与计算
+			if (("PCS".equals(o.getPurchaseUnit())&&!"packag".equals(o.getBsType()))||("out").equals(o.getBsType())||!(o.getBsUserNum().compareTo(BigDecimal.ZERO)==0 )) {
 				if (StringUtils.isNotEmpty(o.getBsGroups())) {
 					//根据分组和所属零件名称和组件判断是否加入损耗计算
 					if (groupSet.add(o.getBsGroups() + o.getBsLinkName() + o.getBsElement())) {
@@ -600,7 +630,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		Collections.reverse(processList);
 		for(Integer i=0;i<processList.size();i++){
 			ProductProcess o = processList.get(i);
-			//成本 = 人工制费 + 制造费用 + 材料费用
+			//成本(bsCost) = 人工制费 + 制造费用 + 材料费用
 			// 外协损耗改成工序良率计算
 			if(o.getBsType().equals("out")){
 				o.setBsCost(o.getBsFeeWxAll());
@@ -623,7 +653,6 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				o.setBsCost(o.getBsFeeLhAll()==null?BigDecimal.ZERO:o.getBsFeeLhAll().add(o.getBsFeeMhAll()==null?BigDecimal.ZERO:o.getBsFeeMhAll()).add(o.getBsMaterCost()));
 			}
 			//第一条不用加上成本累计(含损耗) //2021-5-18-hjj 各小计分组的损耗独立计算
-			//o.getBsGroups()+  processList.get(i-1).getBsGroups()+
 			if(i==0||!(o.getBsLinkName()+o.getBsElement()).equals(processList.get(i-1).getBsLinkName()+processList.get(i-1).getBsElement())) {
 				//工序损耗累计
 //				o.setBsTheLoss(o.getBsCost().divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract(o.getBsCost()));

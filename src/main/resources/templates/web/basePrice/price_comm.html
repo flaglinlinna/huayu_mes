@@ -52,19 +52,20 @@
 				<input id="pageNum" type="hidden" name="pageNum" />
 				<input id="id" type="hidden" name="id" />
 				<div class="layui-form-item">
-					<label class="layui-form-label layui-required">物料编码</label>
+					<label class="layui-form-label">物料编码</label>
 					<div class="layui-input-inline">
 						<input id="itemNo" name="itemNo" lay-verify="required" lay-filter ="itemNo"
 							   readonly="readonly" autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">物料名称</label>
+					<label class="layui-form-label layui-required">物料名称</label>
 					<div class="layui-input-inline">
-						<input id="itemName" name="itemName" style="background: #d7d7d7"
-							 readonly="readonly" autocomplete="off" class="layui-input" type="text" />
+						<input id="itemName" name="itemName"
+							   autocomplete="off" class="layui-input" type="text" />
 					</div>
 				</div>
+<!--				style="background: #d7d7d7" readonly="readonly"-->
 				<div class="layui-form-item">
 					<label class="layui-form-label layui-required">价格档位</label>
 					<div class="layui-input-inline">

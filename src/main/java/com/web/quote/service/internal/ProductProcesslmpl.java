@@ -420,6 +420,9 @@ public class ProductProcesslmpl implements ProductProcessService {
 
         List<Map<String, Object>> mapList = new ArrayList<>();
 
+        List<Map<String, Object>> sumUser = productProcessDao.getSumByBsElement(Long.parseLong(quoteId),bsType);
+        List<Map<String, Object>> minCapacity = productProcessDao.getMinCapaCityGroupBy(Long.parseLong(quoteId),bsType);
+
         for (ProductProcess pm : page.getContent()) {
 
             Map<String,Object> map =new HashMap<>();
@@ -427,20 +430,32 @@ public class ProductProcesslmpl implements ProductProcessService {
             List<Map<String, Object>> lm = productProcessDao.findByWorkcenter(pm.getPkProc(), pm.getProc().getBjWorkCenter().getId());
 
             //待优化
-            List<Map<String, Object>> sumUser = productProcessDao.getSumByBsElement(Long.parseLong(quoteId),pm.getBsElement());
-            List<Map<String, Object>> minCapacity = productProcessDao.getMinByBsElement(Long.parseLong(quoteId),pm.getBsElement());
             if (lm.size() > 0) {
                 String str1 = JSON.toJSONString(lm); //此行转换
                 map.put("bsTypeList",str1);
             } else {
                 map.put("bsTypeList",null);
             }
-            map.put("allUser",sumUser.get(0).get("ALLUSER")==null?0:sumUser.get(0).get("ALLUSER"));
-            if(minCapacity.size()>0){
-                map.put("minCapacity",minCapacity.get(0).get("MINCAPACITY"));
-            }else {
-                map.put("minCapacity",0);
+
+            for(Map<String,Object> map1 :sumUser){
+                if(pm.getBsElement().equals(map1.get("BS_ELEMENT"))){
+                    map.put("allUser",map1.get("ALLUSER")==null?0:map1.get("ALLUSER"));
+                    map.put("allBsFeeLh",map1.get("BSFEELHALL")==null?0:map1.get("BSFEELHALL"));
+                }
             }
+
+            for(Map<String,Object> map2 :minCapacity){
+                if(map2.get("BS_ELEMENT").equals(pm.getBsElement())){
+                    map.put("minCapacity",map2.get("MINCAPACITY")==null?0:map2.get("MINCAPACITY"));
+                }
+            }
+
+//            map.put("allUser",sumUser.get(0).get("ALLUSER")==null?0:sumUser.get(0).get("ALLUSER"));
+//            if(minCapacity.size()>0){
+//                map.put("minCapacity",minCapacity.get(0).get("MINCAPACITY"));
+//            }else {
+//                map.put("minCapacity",0);
+//            }
             mapList.add(map);
         }
 

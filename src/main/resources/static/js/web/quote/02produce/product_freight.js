@@ -57,7 +57,7 @@ $(function() {
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				layui.each(res.data, function(i, item){
 					console.log(iStatus.data);
-				if(iStatus.data=='2222'){
+				if(iStatus.data=='2'){
 					tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
 					// $("select[name='selectModelType']").attr("disabled", "disabled");
 					layui.form.render('select');

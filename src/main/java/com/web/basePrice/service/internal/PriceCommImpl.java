@@ -263,10 +263,11 @@ public class PriceCommImpl extends PrcUtils implements PriceCommService {
 //				String errInfo = "";
 				String id = tranCell(sheet.getRow(row).getCell(0)); //id
 				String itemNo = tranCell(sheet.getRow(row).getCell(1));
-				String rangePrice = tranCell(sheet.getRow(row).getCell(2));
-				String priceUn = tranCell(sheet.getRow(row).getCell(3));
-				String unitCode = tranCell(sheet.getRow(row).getCell(4));
-				String suppliers = tranCell(sheet.getRow(row).getCell(5));
+				String itemName = tranCell(sheet.getRow(row).getCell(2));
+				String rangePrice = tranCell(sheet.getRow(row).getCell(3));
+				String priceUn = tranCell(sheet.getRow(row).getCell(4));
+				String unitCode = tranCell(sheet.getRow(row).getCell(5));
+				String suppliers = tranCell(sheet.getRow(row).getCell(6));
 				PriceComm priceComm = new PriceComm();
 				if(StringUtils.isNotEmpty(id)){
 					priceComm = priceCommDao.findById(Long.parseLong(id));
@@ -338,7 +339,7 @@ public class PriceCommImpl extends PrcUtils implements PriceCommService {
 
 		String excelPath = "static/excelFile/";
 		String fileName = "物料通用价格维护模板.xlsx";
-		String[] map_arr = new String[]{"id","itemNo","rangePrice","priceUn","unitCode","suppliers"};
+		String[] map_arr = new String[]{"id","itemNo","itemName","rangePrice","priceUn","unitCode","suppliers"};
 		XSSFWorkbook workbook = new XSSFWorkbook();
 //		List<Proc> procList = page.getContent();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -348,6 +349,7 @@ public class PriceCommImpl extends PrcUtils implements PriceCommService {
 			map.put("id", priceComm.getId());
 			map.put("itemNo", priceComm.getItemNo());
 			map.put("priceUn", priceComm.getPriceUn());
+			map.put("itemName", priceComm.getItemName());
 			if(priceComm.getUnit()!=null){
 //				map.put("workCenterId", proc.getBjWorkCenter().getId());
 				map.put("unitCode", priceComm.getUnit().getUnitCode());

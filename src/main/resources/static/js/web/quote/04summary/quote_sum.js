@@ -340,6 +340,8 @@ $(function() {
 			},
 			cols : [ [ 
 			   {fixed:'left',type : 'numbers'},
+				{fixed:'left',field : 'bsElement',width : 150,title : '组件名称',totalRowText : "合计",
+					templet:'<div><span title="{{d.bsElement}} 。总人数：{{d.allUser}}，人工费合计：{{d.allBsFeeLh}}">{{d.bsElement}}</span></div>'},
 			   {fixed:'left',field : 'bsName',width : 150,title : '零件名称',totalRowText : "合计"},
 			   {fixed:'left',field : 'workcenterName',width : 150,title : '工作中心',
 					templet : function(d) {
@@ -390,7 +392,7 @@ $(function() {
 				//{field : 'bsRadix',title : '基数',width : 90,hide : true},
 
 				{field : 'bsFeeLh',title : '人工费(元/小时)',width : 120,hide : true},
-				{field : 'bsUserNum',title : '人数',width : 70,hide : true},
+				{field : 'bsUserNum',title : '人数',width : 70,hide : true,totalRow : true},
 				{field : 'bsFeeMh',title : '制造费(元/小时)',width : 120,hide : true},
 				{field : 'bsCycle',title : '成型周期(S)',width : 100,hide : true},
 				{field : 'bsCave',title : '穴数',width : 60,hide : true},

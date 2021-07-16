@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.web.quote.entity.QuoteItemBase;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,10 @@ public interface QuoteItemDao extends CrudRepository<QuoteItem, Long>,JpaSpecifi
 	public List<QuoteItem> findByDelFlag(Integer delFlag);
 	public QuoteItem findById(long id);
 	public List<QuoteItem> findByDelFlagAndPkQuote(Integer delFlag,Long PkQuote);
+
+	@Query(value = "select map from QuoteItem map  where map.delFlag=?1 and map.pkQuote=?2 and map.bsStyle in ('mater','process') ")
+	public  List<QuoteItem> findByDelFlagAndStyles(Integer delFlag,Long PkQuote);
+
 	public List<QuoteItem> findByDelFlagAndPkQuoteAndBsStyle(Integer delFlag,Long PkQuote,String bsStyle);
 	
 	public List<QuoteItem> findByDelFlagAndPkQuoteAndBsStyleAndBsStatus(Integer delFlag,Long PkQuote,String bsStyle,int bsStatus);

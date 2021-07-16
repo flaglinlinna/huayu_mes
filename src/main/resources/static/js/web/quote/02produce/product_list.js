@@ -82,13 +82,9 @@ $(function() {
 								} else {
 									return "已关闭"
 								}
-							}else {
-								if(d.bsStatus == "2222"){
-									return "已完成"
-								}else {
-									return "进行中"
-								}
 							}
+						}else {
+							return "已关闭"
 						}
 					},sort: true},
 				{field : 'bsType',title : '报价类型',width : 120,
@@ -146,12 +142,6 @@ $(function() {
 								} else if (item.bsStatus == "4") {
 									$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#4169E1');
 								}
-							} else {
-								if (item.bsStatus == "2222") {
-									$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
-								} else {
-									$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
-								}
 							}
 						}
 					}else {
@@ -198,29 +188,39 @@ $(function() {
 				open("编辑项目资料")
 			} else if (obj.event === 'view') {
 				//20210119-fyx-根据不同的类型标题不一样
-				var titel = '填报项目';
-				if(Style == 'out'){//外协
-					titel = "外协"+titel;
-				}else if(Style == 'hardware'){//五金
-					titel = "五金"+titel;
-				}else if(Style == 'molding'){//注塑
-					titel = "注塑"+titel;
-				}else if(Style == 'surface'){
-					titel = "表面处理"+titel;
-				}else if(Style == 'packag'){
-					titel = "组装"+titel;
+				if (Style == "freight") {
+					var titel = '包装运输费填报';
+					var titleInfo = "(" + data.bsCode.substring(data.bsCode.length - 4) + ")";
+					parent.layui.index.openTabsPage(context + '/productProcess/toProductFreight?quoteId=' + data.id + "&style=" + Style, titel + titleInfo);
+					var srcUrl = context + '/productProcess/toProductFreight?quoteId=' + data.id + "&style=" + Style;
+					($(window.parent.document).find(('iframe[src="' + srcUrl + '"]'))).attr('src', srcUrl);
+				} else{
+					var titel = '填报项目';
+					if (Style == 'out') {//外协
+						titel = "外协" + titel;
+					} else if (Style == 'hardware') {//五金
+						titel = "五金" + titel;
+					} else if (Style == 'molding') {//注塑
+						titel = "注塑" + titel;
+					} else if (Style == 'surface') {
+						titel = "表面处理" + titel;
+					} else if (Style == 'packag') {
+						titel = "组装" + titel;
+					}
+					var titleInfo = "(" + data.bsCode.substring(data.bsCode.length - 4) + ")";
+					parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel + titleInfo);
+					var srcUrl = context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style;
+					($(window.parent.document).find(('iframe[src="' + srcUrl + '"]'))).attr('src', srcUrl);
 				}
-				var titleInfo = "("+data.bsCode.substring(data.bsCode.length-4)+")";
-				parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel+titleInfo);
-				var srcUrl = context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style;
-				($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 			} else if (obj.event === 'openFreight') {
 				//20210119-fyx-根据不同的类型标题不一样
-				var titel = '包装运输费填报';
-				var titleInfo = "("+data.bsCode.substring(data.bsCode.length-4)+")";
-				parent.layui.index.openTabsPage(context + '/productProcess/toProductFreight?quoteId=' + data.id + "&style=" + Style, titel+titleInfo);
-				var srcUrl = context + '/productProcess/toProductFreight?quoteId=' + data.id + "&style=" + Style;
-				($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
+				if(Style =="freight"){
+					var titel = '包装运输费填报';
+					var titleInfo = "("+data.bsCode.substring(data.bsCode.length-4)+")";
+					parent.layui.index.openTabsPage(context + '/productProcess/toProductFreight?quoteId=' + data.id + "&style=" + Style, titel+titleInfo);
+					var srcUrl = context + '/productProcess/toProductFreight?quoteId=' + data.id + "&style=" + Style;
+					($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
+				}
 			} else if (obj.event === 'check') {
 				// 先判断是否填写完成资料-暂时未校验-20201218-fyx
 				if(data.bsQuoteStatus !="99") {

@@ -46,8 +46,8 @@ $(function() {
 							return '外协'
 						}
 				}}, 
-				{fixed:'left',field : 'bsComponent',width : 150,title : '零件名称',sort : true,style : 'background-color:#d2d2d2'},
-				{fixed:'left',field : 'bsMaterName',width : 200,title : '材料名称',sort : true,style : 'background-color:#d2d2d2'},
+				{fixed:'left',field : 'bsComponent',width : 150,title : '零件名称',sort : true,style : 'background-color:#d2d2d2;overflow:hidden !important'},
+				{fixed:'left',field : 'bsMaterName',width : 200,title : '材料名称',sort : true,style : 'background-color:#d2d2d2;overflow:hidden !important'},
 				{field : 'bsModel',width : 200,title : '材料规格',style : 'background-color:#d2d2d2;overflow:hidden !important'},
 				{field : 'bsQty',width : 100,title : 'BOM用量',style : 'background-color:#d2d2d2'},
 				{field : 'bsUnit',width : 100,title : 'BOM用量单位',style : 'background-color:#d2d2d2',templet:function (d){

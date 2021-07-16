@@ -127,7 +127,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			for (int row = 2; row <= maxRow; row++) {
 				String errInfo = "";
 				QuoteBomTemp temp = new QuoteBomTemp();
-				String mid = tranCell(sheet.getRow(row).getCell(0)); //2021-04-09 去除id ，excel暂时不去除
+				String mid = tranCell(sheet.getRow(row).getCell(0)); //2021-04-09 去除id做删改，直接新增 ，excel暂时不去除
 
 				String wc = tranCell(sheet.getRow(row).getCell(1));
 				if(!StringUtils.isNotEmpty(wc)){

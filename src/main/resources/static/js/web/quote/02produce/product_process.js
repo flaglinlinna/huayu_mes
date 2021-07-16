@@ -103,9 +103,9 @@ $(function() {
 				{type : 'checkbox',style:'background-color:#d2d2d2'},
 				{type : 'numbers',style:'background-color:#d2d2d2'},
 				{field:"id",title:"ID",hide:true},
-				{field : 'bsElement',title : '组件名称',width : 150,sort : true,style : 'background-color:#d2d2d2',totalRowText : "合计",
+				{field : 'bsElement',title : '组件名称',width : 150,sort : true,style : 'background-color:#d2d2d2;overflow:hidden !important',totalRowText : "合计",
 					templet:'<div><span title="{{d.bsElement}} 。总人数：{{d.allUser}}，最小产能：{{d.minCapacity}}">{{d.bsElement}}</span></div>'},
-				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2'},
+				{field : 'bsName', width:150, title : '零件名称',sort:true,style:'background-color:#d2d2d2;overflow:hidden !important'},
 				{field : 'bsOrder',width:90, title : '工艺顺序',sort:true,style:'background-color:#d2d2d2'},
 				{field : 'proc', width:120, title : '工序名称',style:'background-color:#d2d2d2',
 					templet:function (d) {
@@ -145,7 +145,7 @@ $(function() {
 				{field : 'bsCave', title : '穴数<span style="color:red;font-size:12px;">*</span>',edit:'text',width:50, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCapacity', title : '产能(个/小时)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:105, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsFeeWxAll', title : '外协价格(未税)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:130, hide:true,style : 'background-color:#ffffff'},
-				{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff',width:180},
+				{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff;overflow:hidden !important',width:180},
 				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
 				] ],
 			done : function(res, curr, count) {

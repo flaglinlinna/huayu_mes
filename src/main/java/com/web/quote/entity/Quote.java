@@ -100,6 +100,16 @@ public class Quote extends BaseEntity {
 	@Column
 	@ApiModelProperty(name="bsStatus2Packag",value="状态")
     protected int bsStatus2Packag = 0;
+
+	/**
+	 * 2-制造部状态-包装运输费
+	 * 0:草稿
+	 * 1:进行中
+	 * 2:已完成
+	 */
+	@Column
+	@ApiModelProperty(name="bsStatus2Freight",value="状态")
+	protected int bsStatus2Freight = 0;
 	
 	/**
      * 2-采购部状态
@@ -892,5 +902,13 @@ public class Quote extends BaseEntity {
 
 	public void setBsTotal(String bsTotal) {
 		this.bsTotal = bsTotal;
+	}
+
+	public int getBsStatus2Freight() {
+		return bsStatus2Freight;
+	}
+
+	public void setBsStatus2Freight(int bsStatus2Freight) {
+		this.bsStatus2Freight = bsStatus2Freight;
 	}
 }

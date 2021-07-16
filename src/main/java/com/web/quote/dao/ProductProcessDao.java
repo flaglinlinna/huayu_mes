@@ -102,12 +102,12 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	public Page<ProductProcess> findFreightList(Long pkQuote,Pageable pageable);
 
 	//查找各个组件下的总人数和最小产能
-	@Query(value = "select BS_ELEMENT,sum(BS_USER_NUM) as allUser,min(BS_CAPACITY) as minCapacity from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 and  BS_ELEMENT = ?2 GROUP BY BS_ELEMENT",nativeQuery = true)
-	public  List<Map<String,Object>> getSumByBsElement(Long pkQuote,String bsElement);
+	@Query(value = "select BS_ELEMENT ,sum(BS_USER_NUM) as allUser,sum(bs_Fee_Lh_All) as bsFeeLhAll from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 and bs_TYPE =?2 GROUP BY BS_ELEMENT",nativeQuery = true)
+	public  List<Map<String,Object>> getSumByBsElement(Long pkQuote,String bsType);
 
 	//查找各个组件下的总人数和最小产能
-	@Query(value = "select BS_ELEMENT,min(BS_CAPACITY) as minCapacity from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 and  BS_ELEMENT = ?2 and BS_CAPACITY !=0 GROUP BY BS_ELEMENT",nativeQuery = true)
-	public  List<Map<String,Object>> getMinByBsElement(Long pkQuote,String bsElement);
+	@Query(value = "select BS_ELEMENT,min(BS_CAPACITY) as minCapacity from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 and BS_CAPACITY !=0 and bs_TYPE =?2 GROUP BY BS_ELEMENT",nativeQuery = true)
+	public  List<Map<String,Object>> getMinCapaCityGroupBy(Long pkQuote,String bsType);
 
 	//新增制造工艺的下拉组件零件选择
 	@Query(value = "select max(t.id) as id , max(t.BS_ELEMENT)as BS_ELEMENT ,max(t.BS_COMPONENT) as BS_COMPONENT ,max(t.bs_mater_Name) as bs_mater_Name ,max(c.WORKCENTER_NAME)" +

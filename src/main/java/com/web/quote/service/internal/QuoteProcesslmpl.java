@@ -743,7 +743,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				o.setBsElement(quoteBom.getBsElement());
 				o.setBsName(quoteBom.getBsComponent());
 				o.setBsSingleton(quoteBom.getBsSingleton());
-				o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
+				//不修改工作中心
+//				o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
 				o.setItemType(quoteBom.getItp().getItemType());
 				o.setBsGroups(quoteBom.getBsGroups());
 			} else if(newName.contains(o.getBsName())){

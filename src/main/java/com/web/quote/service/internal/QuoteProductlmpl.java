@@ -52,7 +52,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 			}else if(style.equals("packag")){
 				temp = "  p.bs_status2packag ";
 			}else if(style.equals("freight")){
-				temp = "p.bs_status2hardware||p.bs_status2molding||p.bs_status2surface||p.bs_status2packag";
+				temp = "p.bs_status2freight";
 			}
 		}
     	if(StringUtils.isNotEmpty(status)){
@@ -64,6 +64,8 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 				statusTemp = "and  p.bs_status2surface ="+status;
 			}else if(style.equals("packag")){
 				statusTemp = "and  p.bs_status2packag ="+status;
+			}else if(style.equals("freight")){
+				statusTemp = "and  p.bs_status2freight ="+status;
 			}
 		}
     	String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"

@@ -194,6 +194,12 @@ public class CheckImpl   implements CheckService {
 				quote.setBsStatus2Purchase(4);//审批中
 				quoteDao.save(quote);
 			}
+		}else if(StringUtils.equals("freight", checkInfo.getBsCheckCode())){//采购部
+			Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
+			if(quote != null){
+				quote.setBsStatus2Freight(4);//审批中
+				quoteDao.save(quote);
+			}
 		}
 		//--end
 		return true;
@@ -421,6 +427,12 @@ public class CheckImpl   implements CheckService {
 						quote.setBsStatus2Purchase(1);//进行中
 						quoteDao.save(quote);
 					}
+				}else if(StringUtils.equals("freight", s.getBsCheckCode())){//包装运输
+//					Quote quote = quoteDao.findById((long) checkInfo.getBsRecordId());
+					if(quote != null){
+						quote.setBsStatus2Freight(1);//进行中
+						quoteDao.save(quote);
+					}
 				}
 			}
 			checkInfoDao.saveAll(lcr);
@@ -479,13 +491,14 @@ public class CheckImpl   implements CheckService {
 						quote.setBsStatus2Purchase(1);
 						quote.setBsStatus2Packag(1);
 						quote.setBsStatus2Surface(1);
+						quote.setBsStatus2Freight(1);
 						quoteDao.save(quote);
 					}
 					//2.1下发制造部待办项目-材料+工序
-					List<QuoteItem> lqi = quoteItemDao.findByDelFlagAndPkQuote(0,c.getBsRecordId());
+					List<QuoteItem> lqi = quoteItemDao.findByDelFlagAndStyles(0,c.getBsRecordId());
 					if(lqi.size()>0){
 						for(QuoteItem qi :lqi){
-							qi.setBsStatus(1);//lst-20210106-状态变更：进行中
+//							qi.setBsStatus(1);//lst-20210106-状态变更：进行中
 						}
 					}else {
 						List<QuoteItemBase> lqb = quoteItemBaseDao.findByDelFlagAndStyles(0);
@@ -637,7 +650,8 @@ public class CheckImpl   implements CheckService {
 				 */
 				if(c.getBsRecordId() != null){
 					if(c.getBsCheckCode().equals("hardware") || c.getBsCheckCode().equals("molding") ||
-							c.getBsCheckCode().equals("surface") || c.getBsCheckCode().equals("packag")){
+							c.getBsCheckCode().equals("surface") || c.getBsCheckCode().equals("packag")
+							||c.getBsCheckCode().equals("freight")){
 						//1.1获取报价单，修改状态为“已完成”
 						Quote quote = quoteDao.findById((long) c.getBsRecordId());
 						if(quote != null){
@@ -650,6 +664,8 @@ public class CheckImpl   implements CheckService {
 								quote.setBsStatus2Surface(2);
 							}else if(c.getBsCheckCode().equals("packag")){
 								quote.setBsStatus2Packag(2);
+							}else if(c.getBsCheckCode().equals("freight")){
+								quote.setBsStatus2Freight(2);
 							}
 							quoteDao.save(quote);
 
