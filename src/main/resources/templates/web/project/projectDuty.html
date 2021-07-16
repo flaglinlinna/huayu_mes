@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='在建项目档案表信息'">
+<meta charset="UTF-8">
+</head>
+<style>
+    .layui-form-pane .layui-form-label{
+        width: 200px;
+    }
+</style>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+	 <div style="margin: 10px">
+	 <form id="clientSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 5px;">
+           <div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 150px;">关键字查询:</label>
+						<div class="layui-input-inline">
+							<input id="keywordSearch" name="keywordSearch" autocomplete="off"
+								placeholder="请输入关键字" class="layui-input" type="text" />
+						</div>
+						
+						 <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="searchSubmit">查询</button>
+					<button type="reset" class="layui-btn layui-btn-primary layui-btn-sm"
+							title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+					
+					</div>
+				</div>
+        </form>
+         <hr class="layui-bg-black"/>
+
+         <button class="layui-btn layui-btn-sm layui-btn-normal" onclick="addClient()">新建项目档案</button>
+        <table id="clientList" lay-filter="clientTable"></table>
+
+        <script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+	 </div>
+	 <!--添加或编辑客户信息-->
+    <div id="setClient" class="layer_self_wrap" style="width:500px;display:none;">
+        <form id="clientForm" class="layui-form layui-form-pane" lay-filter="clientForm" method="post" action="" style="margin-top: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum"/>
+            <input id="id" type="hidden" name="id"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">项目编码</label>
+                <div class="layui-input-inline">
+                    <input id="projectCode" name="projectCode" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">项目名称</label>
+                <div class="layui-input-inline">
+                    <input id="projectName" name="projectName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">项目经理</label>
+                <div class="layui-input-inline">
+                    <input id="manageName" name="manageName" lay-verify="required" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">预计完成时间(蓝图阶段)</label>
+                <div class="layui-input-inline">
+                    <input id="startTime1" name="startTime1"  lay-filter="startTime1" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">实际完成时间(蓝图阶段)</label>
+                <div class="layui-input-inline">
+                    <input id="endTime1" name="endTime1" lay-filter="endTime1" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">预计完成时间(开发测试阶段)</label>
+                <div class="layui-input-inline">
+                    <input id="startTime2" name="startTime2" lay-filter="startTime2"  autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">实际完成时间(开发测试阶段)</label>
+                <div class="layui-input-inline">
+                    <input id="endTime2" name="endTime2" lay-filter="endTime2"  autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">预计完成时间(上线实施)</label>
+                <div class="layui-input-inline">
+                    <input id="startTime3" name="startTime3"  lay-filter="startTime3" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">实际完成时间(上线实施)</label>
+                <div class="layui-input-inline">
+                    <input id="endTime3" name="endTime3" lay-filter="endTime3" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">预计完成时间(验收结案阶段)</label>
+                <div class="layui-input-inline">
+                    <input id="startTime4" name="startTime4" lay-filter="startTime4" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">实际完成时间(验收结案阶段)</label>
+                <div class="layui-input-inline">
+                    <input id="endTime4" name="endTime4" lay-filter="endTime4" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">最新说明</label>
+                <div class="layui-input-inline">
+<!--                    <input id="latestShow" name="latestShow"  autocomplete="off" class="layui-input" type="text"/>-->
+                    <textarea id="latestShow" name="latestShow" placeholder="请输入最新说明"
+                              lay-verify="required" class="layui-textarea"></textarea>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button class="layui-btn layui-btn-sm"  lay-submit="" lay-filter="addSubmit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+<!--    <script th:src="@{/js/web/project/projectDuty.js}" src="/js/web/project/projectDuty.js"></script>-->
+
+        <script>
+            document.write("<script type='text/javascript' " +
+                "src='/js/web/project/projectDuty.js?ver="+Math.random()+"'><\/script>");
+        </script>
+
+	</div>
+</body>
+</html>
