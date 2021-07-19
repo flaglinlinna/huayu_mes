@@ -183,7 +183,7 @@ public class ProductProcessTemplmpl implements ProductProcessTempService {
             XSSFSheet sheet = workbook.getSheetAt(0);
             //获取最后一行的num，即总行数。此处从0开始计数
             int maxRow = sheet.getLastRowNum();
-            if(idList.size()!=maxRow-1){
+            if(idList.size()!=maxRow-1&&!bsType.equals("out")){
                 return ApiResponseResult.failure("导入失败！导入的行数与原工艺信息行量不符！");
             }
             List<ProductProcessTemp> tempList = new ArrayList<>();

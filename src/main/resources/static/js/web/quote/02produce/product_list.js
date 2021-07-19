@@ -228,7 +228,7 @@ $(function() {
 						'quoteId': data.id,
 						'bsType': Style
 					}, function (data1) {
-						if (data1.result) {
+						// if (data1.result) {
 							layer.open({
 								type: 2,
 								title: '审批',
@@ -246,14 +246,16 @@ $(function() {
 									} else {
 										iframe.child(Style, data.id, 'check');
 									}
+									iframe.radioSelect(data1.result);
 
 								}, end: function () {
 									loadAll();
 								}
 							});
-						} else {
-							layer.alert(data1.msg);
-						}
+						// }
+						// else {
+						// 	layer.alert(data1.msg);
+						// }
 					}, "GET", false, function (res) {
 						layer.alert(res.msg);
 					});

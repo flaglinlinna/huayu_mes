@@ -11,10 +11,10 @@ import org.hibernate.annotations.NotFoundAction;
 import javax.persistence.*;
 
 /**
- * 外购物料类型
+ * 工艺关联角色信息管理
  *
  */
-@Entity(name = "ItemTypeWgRole")
+@Entity(name = "ProcRole")
 @Table(name = ProcRole.TABLE_NAME)
 @DynamicUpdate
 @ApiModel

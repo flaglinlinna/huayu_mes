@@ -396,6 +396,17 @@ public class ProductProcesslmpl implements ProductProcessService {
     @Transactional
     public ApiResponseResult getList(String keyword, String bsType, String quoteId, PageRequest pageRequest) throws Exception {
         // 查询条件1
+        if(bsType.equals("out")){
+//            UserUtil.getSessionUser().getId();
+            try {
+                Page<ProductProcess>  page =  productProcessDao.findOutListByUserId(Long.parseLong(quoteId),UserUtil.getSessionUser().getId(),pageRequest);
+                return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+                        pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+          }
         List<SearchFilter> filters = new ArrayList<>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         if (StringUtils.isNotEmpty(bsType)) {

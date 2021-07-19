@@ -172,6 +172,16 @@ function child(wname, pid, bsStatus) {
     }
 }
 
+//判断是否完全确认完成
+function radioSelect(complete){
+    if(!complete){
+        $("#agree").attr("disabled", "disabled");//失效
+        $("#th").attr("checked", true);//失效
+    }
+    // $("#agree").attr("disabled", "disabled");//失效
+
+}
+
 function getRadio(status) {
     if (status == 1) {
         return "通过"

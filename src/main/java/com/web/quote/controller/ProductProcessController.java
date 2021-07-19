@@ -228,6 +228,9 @@ public class ProductProcessController extends WebController {
 //			list.add(order2);
 			list.add(order3);
 			Sort sort = new Sort(list);
+			if(bsType.equals("out")){
+				sort = Sort.unsorted();
+			}
 			ApiResponseResult result = productProcessService.getList(keyword,bsType,quoteId, super.getPageRequest(sort));
 			logger.debug("获取报价工艺流程列表=getList:");
 			return result;
