@@ -7,7 +7,8 @@ $(function() {
     layui.use(['table','tableSelect'], function(){
         var table = layui.table
             ,form = layui.form, formSelects = layui.formSelects,
-            tableSelect = layui.tableSelect,tableSelect2 = layui.tableSelect;
+            tableSelect = layui.tableSelect,tableSelect2 = layui.tableSelect
+            ,tableSelect3 = layui.tableSelect,tableSelect4 = layui.tableSelect;
 
         tableIns=table.render({
             elem: '#uesrList'
@@ -199,6 +200,88 @@ $(function() {
                     "department" : da.DEPT_NAME,
                 });
                 form.render();// 重新渲染
+            }
+        });
+
+        tableSelect = tableSelect3.render({
+            elem : '#weChatDept',
+            // searchKey : 'keyword',
+            // checkedKey : 'DEPT_NAME',
+            page: true,
+            // searchPlaceholder : '试着搜索',
+            table : {
+                url : context + '/sysUser/getWechatDept',
+                method : 'get',
+                cols : [ [
+                    {field : 'checkColumn', type : 'radio'},
+                    // {field : 'id', type : 'hidden'},
+                    {field : 'name', title : '部门名称', align:"center"}
+                ] ],
+                parseData : function(res) {
+                    //console.log(res)
+                    if (res.result) {
+                        // 可进行数据操作
+                        return {
+                            "count" : 0,
+                            "msg" : res.msg,
+                            "data" : res.data.department,
+                            "code" : res.status
+                            // code值为200表示成功
+                        }
+                    }
+                }},
+            done : function(elem, data) {
+
+                // 选择完后的回调，包含2个返回值
+                // elem:返回之前input对象；data:表格返回的选中的数据 []
+                var da = data.data[0];
+                console.log(da)
+                form.val("userForm", {
+                    "weChatDeptId" : da.id,
+                    "weChatDept":da.name
+                });
+                form.render();// 重新渲染
+
+                 tableSelect4.render({
+                    elem : '#weChatUser',
+                    searchKey : 'keyword',
+                    // checkedKey : 'DEPT_NAME',
+                    page: true,
+                    searchPlaceholder : '试着搜索',
+                    table : {
+                        url : context + '/sysUser/getUserByDept?deptId='+da.id,
+                        method : 'get',
+                        cols : [ [
+                            {field : 'checkColumn', type : 'radio'},
+                            // {field : 'userid', type : 'hidden'},
+                            {field : 'name', title : '用户名称', align:"center"}
+                        ] ],
+                        parseData : function(res) {
+                            //console.log(res)
+                            if (res.result) {
+                                // 可进行数据操作
+                                return {
+                                    "count" : 0,
+                                    "msg" : res.msg,
+                                    "data" : res.data.userlist,
+                                    "code" : res.status
+                                    // code值为200表示成功
+                                }
+                            }
+                        }},
+                    done : function(elem, data) {
+
+                        // 选择完后的回调，包含2个返回值
+                        // elem:返回之前input对象；data:表格返回的选中的数据 []
+                        var da = data.data[0];
+                        console.log(da)
+                        form.val("userForm", {
+                            "weChatUser" : da.name,
+                            "weChatUserId":da.userid
+                        });
+                        form.render();// 重新渲染
+                    }
+                });
             }
         });
 

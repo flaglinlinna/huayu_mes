@@ -1,6 +1,7 @@
 package com.system.user.controller;
 
 
+import com.system.wechat.service.WechatSettingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,6 +35,9 @@ public class SysUserController extends WebController{
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private WechatSettingService wechatSettingService;
 
     @ApiOperation(value = "新增(编辑)用户", notes = "新增(编辑)用户")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -229,6 +233,40 @@ public class SysUserController extends WebController{
             logger.error("获取部门下拉信息失败！", e);
             getSysLogService().error(module,method, methodName,e.toString());
             return ApiResponseResult.failure("获取部门下拉信息失败！");
+        }
+    }
+
+    @ApiOperation(value="获取企业微信部门下拉信息", notes="获取企业微信部门下拉信息", hidden = true)
+    @RequestMapping(value = "/getWechatDept", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getWechatDept() {
+        String method = "/sysUser/getWechatDept";String methodName ="获取企业微信部门下拉信息";
+        try {
+            ApiResponseResult result = wechatSettingService.getDepartment();
+            logger.debug("获取企业微信部门下拉信息=getTaskNo:");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取企业微信部门下拉信息！", e);
+            getSysLogService().error(module,method, methodName,e.toString());
+            return ApiResponseResult.failure("获取企业微信部门下拉信息！");
+        }
+    }
+
+    @ApiOperation(value="获取企业微信用户下拉信息", notes="获取企业微信用户下拉信息", hidden = true)
+    @RequestMapping(value = "/getUserByDept", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResponseResult getUserByDept(String deptId) {
+        String method = "/sysUser/getUserByDept";String methodName ="获取企业微信用户下拉信息";
+        try {
+            ApiResponseResult result = wechatSettingService.getUserByDept(deptId);
+            logger.debug("获取企业微信用户下拉信息=getUserByDept:");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取企业微信用户下拉信息失败！", e);
+            getSysLogService().error(module,method, methodName,e.toString());
+            return ApiResponseResult.failure("获取企业微信用户下拉信息失败！");
         }
     }
 
