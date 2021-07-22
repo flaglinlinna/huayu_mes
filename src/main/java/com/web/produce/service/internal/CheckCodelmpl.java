@@ -191,11 +191,11 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 	}
 
 	@Override
-	public ApiResponseResult getHistoryList(String keyword,Integer errFlag,  String hStartTime, String hEndTime, PageRequest pageRequest)
+	public ApiResponseResult getHistoryList(String keyword,Integer errFlag,  String hStartTime, String hEndTime,String scanType,String scanFrom, PageRequest pageRequest)
 			throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = getBarHistoryPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
-				errFlag,hStartTime,hEndTime,keyword,
+				errFlag,hStartTime,hEndTime,keyword,scanType,scanFrom,
 				pageRequest.getPageNumber()+1,pageRequest.getPageSize(),"prc_mes_cof_bar_s_chs");
 		if (!list.get(0).toString().equals("0")) {// 存储过程调用失败 //判断返回游标
 			return ApiResponseResult.failure(list.get(1).toString());

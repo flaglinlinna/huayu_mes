@@ -44,7 +44,8 @@ public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecifica
 	@Query(value = "select distinct t.bs_groups as bsGroups from price_quote_bom t  where t.pk_quote=?1  and t.del_Flag=0 and t.bs_element = ?2 and t.bs_component =?3 and t.pk_bj_work_center = ?4 and t.bs_groups is not null ", nativeQuery = true)
 	public List<Map<String, Object>> getBsGroups(Long quoteId,String bsElement,String component,Long pkWorkCenterId);
 
-	@Query(value = " SELECT DISTINCT p.BS_NAME as BSCOMPONENT,min(p.BS_ORDER) as BS_ORDER from PRICE_QUOTE_PROCESS p where (p.ITEM_TYPE not like '辅料%' or p.ITEM_TYPE is null) and p.PK_QUOTE = ?1 and p.bs_Element =  ?2 GROUP BY p.BS_NAME order by BS_ORDER ", nativeQuery = true)
+	//把物料类型是辅料XXX的所在零件也显示出来 (p.ITEM_TYPE not like '辅料%' or p.ITEM_TYPE is null) and
+	@Query(value = " SELECT DISTINCT p.BS_NAME as BSCOMPONENT,min(p.BS_ORDER) as BS_ORDER from PRICE_QUOTE_PROCESS p where  p.PK_QUOTE = ?1 and p.bs_Element =  ?2 GROUP BY p.BS_NAME order by BS_ORDER ", nativeQuery = true)
 	List<Map<String, Object>> getBsComponent(Long quoteId,String bsElement);
 
 	public List<QuoteBom> findByDelFlagAndBsMaterName(Integer delFlag,String bsMaterName);

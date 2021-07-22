@@ -371,12 +371,22 @@ public class BaseFeeImpl extends BasePriceUtils implements BaseFeeService {
 				BaseFee baseFee = new BaseFee();
 //					List<Proc> procList = procDao.findByDelFlagAndProcNo(0,procNo);
 				    List<Proc> procList = procDao.findByDelFlagAndProcName(0,procNo);
-					if(procList.size()>0){
+					if(procList.size()==1){
 						Proc proc = procList.get(0);
 						baseFee.setProcId(proc.getId());
 						baseFee.setProcName(proc.getProcName());
 						baseFee.setWorkcenterId(proc.getWorkcenterId());
-					}else {
+					}else if(procList.size()>1){
+						if(StringUtils.isNotEmpty(workName)) {
+							for (Proc proc : procList) {
+								if (workName.equals(proc.getBjWorkCenter().getWorkcenterName())){
+									baseFee.setProcId(proc.getId());
+									baseFee.setProcName(proc.getProcName());
+									baseFee.setWorkcenterId(proc.getWorkcenterId());
+								}
+							}
+						}
+					} else {
 						failures++;
 						continue;
 					}

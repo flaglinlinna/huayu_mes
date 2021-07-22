@@ -86,6 +86,11 @@ $(function() {
 				//{field : 'bsSupplier',width : 110,title : '供应商',edit : 'text',style : 'background-color:#ffffff'}
 				] ],
 			done : function(res, curr, count) {
+
+				if(bsStatus2 == 5){
+					$(".layui-table-box").find('tr').find('td').data('edit', false).css("background-color", "#d2d2d2");
+				}
+
 				// pageCurr = curr;
 				 var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				  layui.each(res.data, function(i, item){
@@ -453,7 +458,7 @@ function cancelConfirm(){
 }
 
 function isComplete() {
-	if (nowStatus.data == 0) {
+	if (nowStatus.data == 0 ||bsStatus2 == 5) {
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
 		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true);

@@ -57,7 +57,7 @@ $(function() {
 			} ] ],
 			done : function(res, curr, count) {
 				pageCurr = curr;
-				merge(res.data, [ 'itemType', ], [ 1, 1 ]);
+				merge(res.data, [ 'procName'], [ 0, 1 ]);
 			}
 		});
 

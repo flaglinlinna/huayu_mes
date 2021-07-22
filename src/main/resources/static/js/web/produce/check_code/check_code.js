@@ -14,25 +14,27 @@ $(function () {
 
                 //产出1 投入2
                 if(type==2){
+                    $('#title').html("小码投入");
                     $("input[name='isRecord'][value='0']").prop("checked", "checked");
                     $("input[name='isRecord']").attr("disabled","disabled");
-                    $('#titleType').html("小码投入(不校验重码 )");
+                    $('#titleType').html("小码投入<br>(不校验重码)");
                 }else if(type==1){
-                    $('#titleType').html("小码产出(校验重码 )");
+                    $('#title').html("小码产出");
+                    $('#titleType').html("小码产出<br>(校验重码)");
                 }
 
                 form.on("radio(isRecord)", function (data) {
                     var titleType = "小码";
                     if(type==2){
-                        titleType += "投入"
+                        titleType += "投入<br>"
                     }else {
-                        titleType += "产出"
+                        titleType += "产出<br>"
                     }
                     var val = data.value;
                     if(val==1){
-                        titleType += "(校验重码 )"
+                        titleType += "(校验重码)"
                     }else {
-                        titleType += "(不校验重码 )"
+                        titleType += "(不校验重码)"
                     }
                     $('#titleType').html(titleType);
                 });
@@ -237,6 +239,7 @@ $(function () {
                 // 监听提交
                 form.on('submit(hsearchSubmit)', function (data) {
                     data.field.errorFlag = $("#errorFlag").prop('checked') ? 1 : 0
+                    data.field.scanType = type==1?"投入":"产出"
                     hTableIns.reload({
                         url: context
                             + '/produce/check_code/getHistoryList',
@@ -257,7 +260,8 @@ $(function () {
                     elem: '#hcolTable',
                     where: {},
                     method: 'get',// 默认：get请求
-                    defaultToolbar: [],
+                    toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
+                    defaultToolbar: ['filter', 'exports', 'print'],
                     page: true,
                     data: [],
                     height: 'full-80'//固定表头&full-查询框高度
@@ -283,7 +287,8 @@ $(function () {
                         {fixed: 'left', field: 'TASK_NO', title: '制令单号', width: 150},
                         {field: 'CHK_RESULT', title: '扫描结果', width: 100},
                         {field: 'CREATE_DATE', title: '扫描时间', width: 145},
-                        {field: 'USER_NAME', title: '扫描人', width: 70},
+                        {field: 'USER_NAME', title: '扫描人', width: 80},
+                        {field: 'CHK_REP', title: '校验规则', width: 110},
                         {field: "FMEMO", title: '备注', width: 300, hide: true},
                         {field: 'BARCODE_S_2', title: '条码2', width: 200}
                     ]],

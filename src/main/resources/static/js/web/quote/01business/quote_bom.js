@@ -8,7 +8,8 @@ $(function() {
 					[ 'form', 'table', 'upload', 'tableSelect','layer','tableFilter' ],
 					function() {
 						var table = layui.table, table1 = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect
-							, tableSelect2 = layui.tableSelect, tableSelect3 = layui.tableSelect,tableFilter = layui.tableFilter;
+							, tableSelect2 = layui.tableSelect, tableSelect3 = layui.tableSelect,tableFilter = layui.tableFilter
+							, tableSelect4 = layui.tableSelect;
 						isComplete()
 						tableSelect = tableSelect.render({
 							elem : '#BjWorkCenter',
@@ -172,6 +173,7 @@ $(function() {
 							}
 						});
 
+
 						tableIns = table.render({
 							elem : '#quoteBomList',
 							// url : context + '/quoteBom/getQuoteBomList?pkQuote=' + quoteId,
@@ -221,7 +223,7 @@ $(function() {
 							{field : 'bsGroups',title : '损耗分组',width : 140,"edit" : "text",style:"overflow:hidden !important"},
 							{field : 'bsMaterName',title : '材料名称',sort : true,width : 200,edit: "text",style:"overflow:hidden !important"},
 							{field : 'bsModel',title : '材料规格',width : 200,edit: "text",style:"overflow:hidden !important"},
-
+							// {field : 'priceComm',title : '通用价格',event:'priceComm',width : 200,style:"overflow:hidden !important"},
 							{field : 'bsQty',title : 'BOM用量',width : 90,edit: "text"},
 							// {field : 'bsProQty',title : '制品重(g)',width : 90},
 							// {field : 'unit',title : 'BOM用量单位',width : 110,
@@ -299,6 +301,8 @@ $(function() {
 								}
 							}
 						});
+
+
 
 						//监听机台类型下拉选择 并修改
 						form.on('select(selectRetrial)', function (data) {
@@ -436,6 +440,7 @@ $(function() {
 
 						// 监听工具条
 						table.on('tool(quoteBomTable)', function(obj) {
+
 							var data = obj.data;
 							if (obj.event === 'del') {
 								// 删除
@@ -443,8 +448,29 @@ $(function() {
 							} else if (obj.event === 'edit') {
 								// 编辑
 								getProdErr(data, data.id);
+							} else if(obj.event =='priceComm'){
+								var tableIndex = obj.tr.attr('data-index');
+								console.log(tableIndex);
+								selectPriceComm(obj,tableIndex);
 							}
 						});
+
+
+						function selectPriceComm(obj,tableIndex){
+							// tableIns3.find('tr[data-index=' + index + ']').find('td').css("background-color", "#FFFF00");
+
+							$('#quoteBomList').find('tr[data-index=' + tableIndex + ']').find('td[data-field=priceComm]').find('div').html("12343");
+							console.log($('#quoteBomList').find('tr[data-index=' + tableIndex + ']').find('td[data-field=priceComm]').find('div'));
+							// console.log(input);
+							// var newNode = document.createElement("p");
+							// var input2 = document.insertBefore(newNode,input);
+							// var input = document.createElement('input');
+							// input.setAttribute('id', "addbtn");
+							// layui.table.cache['quoteBomList'][tableIndex]["priceComm"] = "checked";
+							// input.click();
+							return false;
+						}
+
 						// 监听提交
 						form.on('submit(addSubmit)', function(data) {
 							if (data.field.id == null || data.field.id == "") {

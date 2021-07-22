@@ -440,6 +440,7 @@ public class SysUserImpl extends PrcUtils implements SysUserService {
         	map.put("status", su.getStatus());
         	map.put("createDate", su.getCreateDate());
         	map.put("realName", su.getRealName());
+            map.put("department", su.getDepartment());
         	List<SysRole> lr = sysRoleDao.getRoleByUser(su.getId());
         	List mll = new ArrayList<>();
         	if(lr.size() > 0){

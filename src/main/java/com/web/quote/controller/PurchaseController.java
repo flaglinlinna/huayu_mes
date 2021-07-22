@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.utils.TypeChangeUtils;
+import com.web.quote.service.QuoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,8 @@ public class PurchaseController extends WebController {
 
 	@Autowired
 	private PurchaseService purchaseService;
+	@Autowired
+	private QuoteService quoteService;
 	
 	@ApiOperation(value = "采购部报价单页", notes = "采购部报价单页", hidden = true)
 	@RequestMapping(value = "/toPurchaseList")
@@ -61,6 +64,7 @@ public class PurchaseController extends WebController {
 			ApiResponseResult iStatus =purchaseService.getStatus(Long.parseLong(quoteId),0);
 			mav.addObject("nowStatus", iStatus);
 			mav.addObject("quoteId", quoteId);
+			mav.addObject("bsStatus2", quoteService.getStatus2(Long.parseLong(quoteId)).getData());
 			mav.setViewName("/web/quote/03purchase/purchase_edite");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -49,6 +49,7 @@ $(function() {
                // ,{field:'realName', title:'真实名称', width:100}
                 //,{field:'email', title: '邮箱', width:180}
                 //,{field:'sex', title: '性别', width:70,sort:true}
+                ,{field:'department', title: '部门', width:120,sort:true}
                 ,{field:'status', title:'状态',width:95,align:'center',templet:'#statusTpl'}
                 ,{field:'roles', title: '拥有角色', minWidth:130}
                 ,{field:'createDate', title: '添加时间', width:150,templet:'<div>{{d.createDate?DateUtils.formatDate(d.createDate):""}}</div>'}

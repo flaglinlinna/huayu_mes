@@ -63,8 +63,14 @@
 			</form>
 		</div>
 
-		<script th:src="@{/js/web/basePrice/proc_role.js}"
-			src="/js/web/basePrice/proc_role.js"></script>
+<!--		<script th:src="@{/js/web/basePrice/proc_role.js}"-->
+<!--			src="/js/web/basePrice/proc_role.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/basePrice/proc_role.js?ver="+Math.random()+"'><\/script>");
+		</script>
+
 	</div>
 </body>
 </html>

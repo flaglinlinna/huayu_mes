@@ -196,11 +196,13 @@ public class CheckCodeController extends WebController {
 				@RequestParam(value = "hkeywork", required = false) String hkeywork,
 				@RequestParam(value = "errorFlag", required = false) Integer errorFlag,
 				@RequestParam(value = "hStartTime", required = false) String hStartTime,
-				@RequestParam(value = "hEndTime", required = false) String hEndTime){
+				@RequestParam(value = "hEndTime", required = false) String hEndTime,
+				@RequestParam(value = "scanType", required = false) String scanType,
+				@RequestParam(value = "scanFrom", required = false) String scanFrom){
 		  String method = "/product/check_code/getHistoryList";String methodName ="获取历史列表";
 	        try {
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result =checkCodeService.getHistoryList(hkeywork,errorFlag,hStartTime,hEndTime, super.getPageRequest(sort));
+	            ApiResponseResult result =checkCodeService.getHistoryList(hkeywork,errorFlag,hStartTime,hEndTime,scanType,scanFrom, super.getPageRequest(sort));
 	            logger.debug(methodName+"=getList:");
 //	            getSysLogService().success(module,method, methodName, null);
 	            return result;
