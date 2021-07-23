@@ -251,13 +251,12 @@ $(function () {
                                     $('div[lay-id="hcolTable"]').find('thead').find('th[data-field="FMEMO"]').removeClass("layui-hide");
                                 });
                             }
-                            if(!res.result){
+                            console.log(res);
+                            if(res.code=="1"){
                                 layer.alert(res.msg, function(index) {
                                     layer.close(index);
                                 });
                             }
-
-
                         }
                     });
                     return false;
