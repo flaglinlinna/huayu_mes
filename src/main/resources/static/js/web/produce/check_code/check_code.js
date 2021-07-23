@@ -69,7 +69,6 @@ $(function () {
                         limitName: 'rows' // 每页数据量的参数名，默认：limit
                     },
                     parseData: function (res) {
-
                         // 可进行数据操作
                         return {
                             "count": res.data.total,
@@ -239,7 +238,7 @@ $(function () {
                 // 监听提交
                 form.on('submit(hsearchSubmit)', function (data) {
                     data.field.errorFlag = $("#errorFlag").prop('checked') ? 1 : 0
-                    data.field.scanType = type==1?"投入":"产出"
+                    data.field.scanType = type==1?"产出":"投入"
                     hTableIns.reload({
                         url: context
                             + '/produce/check_code/getHistoryList',
@@ -252,6 +251,13 @@ $(function () {
                                     $('div[lay-id="hcolTable"]').find('thead').find('th[data-field="FMEMO"]').removeClass("layui-hide");
                                 });
                             }
+                            if(!res.result){
+                                layer.alert(res.msg, function(index) {
+                                    layer.close(index);
+                                });
+                            }
+
+
                         }
                     });
                     return false;
@@ -271,6 +277,14 @@ $(function () {
                         limitName: 'rows' // 每页数据量的参数名，默认：limit
                     },
                     parseData: function (res) {// 可进行数据操作
+                        if(!res.result){
+                            return {
+                                "count" : 0,
+                                "msg" : res.msg,
+                                "data" : [],
+                                "code" : res.status
+                            }
+                        }
                         return {
                             "count": res.data.total,
                             "msg": res.msg,
