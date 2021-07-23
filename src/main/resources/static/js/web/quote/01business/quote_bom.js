@@ -185,6 +185,7 @@ $(function() {
 							// even : true,// 条纹样式
 							page : true,
 							limit:50,
+							limits: [50,100,200,300],
 							data : [],
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
@@ -425,7 +426,7 @@ $(function() {
 
 						var localtableFilterIns = tableFilter.render({
 							'elem' : '#quoteBomList',
-							'mode' : 'api',//服务端过滤
+							'mode' : 'local',//服务端过滤
 							'filters' : [
 								{field: 'bsElement', type:'checkbox'},
 								{field: 'bsComponent', type:'checkbox'},

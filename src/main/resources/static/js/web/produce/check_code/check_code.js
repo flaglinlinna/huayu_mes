@@ -61,7 +61,9 @@ $(function () {
                     defaultToolbar: [],
                     height: 'full-380'//固定表头&full-查询框高度
                     , even: true,//条纹样式
-                    page: false,
+                    page: true,
+                    limit: 100,
+                    limits: [100,500,1000,2000,3000],
                     data: [],
                     request: {
                         pageName: 'page' // 页码的参数名称，默认：page
@@ -122,7 +124,9 @@ $(function () {
                             {field: 'CUST_NAME_S', title: '客户简称', width: 100},
                             {field: 'ITEM_NAME', title: '物料描述', width: 240},
                         ]],
-                        page: false,
+                        page: true,
+                        limit: 100,
+                        limits: [100,500,1000,2000,3000],
                         request: {
                             pageName: 'page' // 页码的参数名称，默认：page
                             ,
@@ -319,6 +323,8 @@ $(function () {
                     // toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
                     // defaultToolbar: ['filter', 'exports', 'print'],
                     page: true,
+                    limit: 100,
+                    limits: [100,500,1000,2000,3000],
                     data: [],
                     height: 'full-80'//固定表头&full-查询框高度
                     , even: true,//条纹样式
@@ -346,13 +352,13 @@ $(function () {
                     cols: [[
                         {fixed: 'left', type: 'numbers'},
                         {fixed: 'left', field: "ITEM_NO", title: '产品编码', width: 140},
-                        {fixed: 'left', field: 'LINER_NAME', title: '组长', width: 70},
-                        {fixed: 'left', field: 'BARCODE_S_1', title: '条码1', width: 220},
-                        {fixed: 'left', field: 'TASK_NO', title: '制令单号', width: 150},
-                        {field: 'CHK_RESULT', title: '扫描结果', width: 100},
+                        {fixed: 'left', field: 'BARCODE_S_1', title: '条码1', width: 250},
+                        {field: 'LINER_NAME', title: '组长', width: 70},
+                        {field: 'TASK_NO', title: '制令单号', width: 150},
+                        {field: 'CHK_REP', title: '校验规则', width: 90},
+                        {field: 'CHK_RESULT', title: '扫描结果', width: 90},
                         {field: 'CREATE_DATE', title: '扫描时间', width: 145},
-                        {field: 'USER_NAME', title: '扫描人', width: 80},
-                        {field: 'CHK_REP', title: '校验规则', width: 110},
+                        {field: 'USER_NAME', title: '扫描人', width: 90},
                         {field: "FMEMO", title: '备注', width: 300, hide: true},
                         {field: 'BARCODE_S_2', title: '条码2', width: 200}
                     ]],

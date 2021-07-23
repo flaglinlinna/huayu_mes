@@ -18,6 +18,7 @@ $(function() {
 			even : true,// 条纹样式
 			page : true,
 			limit:30,
+			limits: [30,50,100,200,300],
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -37,7 +38,7 @@ $(function() {
 				{fixed : 'left',type : 'numbers'},
 			{fixed : 'left',field:'id',title:'ID', width:80, hide:true},
 			{fixed : 'left',field : 'bsElement',width : 150,sort:true,title : '组件名称',style : 'background-color:#d2d2d2'},
-			{fixed : 'left',field : 'bsName',width : 180,sort:true,title : '零件名称',style : 'background-color:#d2d2d2'},
+			{fixed : 'left',field : 'bsName',width : 200,sort:true,title : '零件名称',style : 'background-color:#d2d2d2'},
 			{field : 'bsLinkName',width : 150,sort:true,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
 			{field : 'itemType',title : '物料类型',width : 120,sort:true,style : 'background-color:#d2d2d2'},
 			{field : 'workCenter',title : '工作中心',width : 120,sort:true,templet :
@@ -490,10 +491,10 @@ $(function() {
 
 		localtableFilterIns = tableFilter.render({
 			'elem' : '#client_procList',
-			'mode' : 'api',//服务端过滤
+			'mode' : 'local',//服务端过滤
 			'filters' : [
 				{field: 'bsElement', type:'checkbox'},
-				{field: 'bsName', type:'input'},
+				{field: 'bsName', type:'checkbox'},
 				{field: 'itemType', type:'checkbox'},
 				{field: 'workCenter', type:'checkbox'},
 				{field: 'bsGroups', type:'checkbox'},
