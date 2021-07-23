@@ -457,10 +457,9 @@ $(function() {
 
 
 						function selectPriceComm(obj,tableIndex){
-							// tableIns3.find('tr[data-index=' + index + ']').find('td').css("background-color", "#FFFF00");
-
-							$('#quoteBomList').find('tr[data-index=' + tableIndex + ']').find('td[data-field=priceComm]').find('div').html("12343");
-							console.log($('#quoteBomList').find('tr[data-index=' + tableIndex + ']').find('td[data-field=priceComm]').find('div'));
+							var input1 = $('div[lay-id="quoteBomList"]').find('tr[data-index=' + tableIndex + ']').find('td[data-field=priceComm]').find('div').document;
+							var input2 = input1.createElement("input");
+							// console.log($('div[lay-id="quoteBomList"]').find('tr[data-index=' + tableIndex + ']').find('td[data-field=priceComm]').find('div'));
 							// console.log(input);
 							// var newNode = document.createElement("p");
 							// var input2 = document.insertBefore(newNode,input);

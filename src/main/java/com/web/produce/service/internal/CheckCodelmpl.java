@@ -10,12 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+import com.utils.ExcelExport;
+import com.utils.TypeChangeUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.base.data.ApiResponseResult;
 import com.utils.UserUtil;
 import com.web.produce.service.CheckCodeService;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 小码校验
@@ -191,7 +197,7 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 	}
 
 	@Override
-	public ApiResponseResult getHistoryList(String keyword,Integer errFlag,  String hStartTime, String hEndTime,String scanType,String scanFrom, PageRequest pageRequest)
+	public ApiResponseResult getHistoryList(String keyword, Integer errFlag, String hStartTime, String hEndTime, String scanType, String scanFrom, PageRequest pageRequest)
 			throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = getBarHistoryPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
@@ -204,5 +210,27 @@ public class CheckCodelmpl extends PrcUtils implements CheckCodeService {
 		map.put("total", list.get(2));
 		map.put("rows", list.get(3));
 		return ApiResponseResult.success("").data(map);
+	}
+
+	@Override
+	public void exportExcel(HttpServletResponse response,String keyword,Integer errFlag,  String hStartTime, String hEndTime,String scanType,String scanFrom, PageRequest pageRequest)
+			throws Exception {
+		// TODO Auto-generated method stub
+		List<Object> list = getBarHistoryPrc(UserUtil.getSessionUser().getCompany()+"",UserUtil.getSessionUser().getFactory()+"",UserUtil.getSessionUser().getId()+"",
+				errFlag,hStartTime,hEndTime,keyword,scanType,scanFrom,
+				1,99999,"prc_mes_cof_bar_s_chs");
+		if (list.get(0).toString().equals("0")) {
+			String excelPath = "static/excelFile/";
+			String fileName = "小码历史查询模板.xlsx";
+			String[] map_arr = new String[]{"ITEM_NO","LINER_NAME","BARCODE_S_1","TASK_NO","CHK_RESULT","CREATE_DATE","USER_NAME","CHK_REP","FMEMO","BARCODE_S_2"};
+			XSSFWorkbook workbook = new XSSFWorkbook();
+//			Map map = new HashMap();
+//			List<Map> mapList=	TypeChangeUtils.objectToList(list.get(3),Map.class);
+//			list.get(3);
+			List<Map<String, Object>> mapList = (List<Map<String, Object>>)list.get(3);
+			ExcelExport.exportByRow(response,mapList,workbook,map_arr,excelPath+fileName,"小码"+scanType+"历史查询("+hStartTime+"-"+hEndTime+").xlsx",1);
+
+		}
+
 	}
 }

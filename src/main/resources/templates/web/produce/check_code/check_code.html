@@ -142,10 +142,10 @@
 										<form class="layui-form layui-form-pane" action="" id="hsearch_item_form" lay-filter="hsearch_item_form">
 
 											<div class="layui-form-item">
-												<label class="layui-form-label" style="width: 100px">关键字</label>
+												<label class="layui-form-label" style="width: 100px">产品编码</label>
 												<div class="layui-input-inline"  style="width:140px;">
-													<input  name="hkeywork" autocomplete="off"
-															placeholder="请输入关键字" class="layui-input" type="text"/>
+													<input  name="hkeywork" autocomplete="off" id="hkeywork"
+															placeholder="请输入产品编码" class="layui-input" type="text"/>
 												</div>
 
 
@@ -178,6 +178,10 @@
 												<div class="layui-input-inline">
 													<button class="layui-btn layui-btn-sm" lay-submit=""
 															type="button" lay-filter="hsearchSubmit" >查询</button>
+
+													<button class="layui-btn layui-btn-sm"
+															type="button" id="exportBtn" onclick="exportExcel()" >导出</button>
+
 													<button type="reset"
 															class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
 														<i class="layui-icon">&#xe669;</i>重置

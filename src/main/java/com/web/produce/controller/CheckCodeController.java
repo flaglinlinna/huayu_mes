@@ -28,6 +28,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 
 @Api(description = "小码校验模块")
 @CrossOrigin
@@ -213,4 +214,24 @@ public class CheckCodeController extends WebController {
 	            return ApiResponseResult.failure(methodName+"失败！");
 	        }
 		}
+
+	@ApiOperation(value = "导出", notes = "导出", hidden = true)
+	@RequestMapping(value = "/export", method = RequestMethod.GET)
+	@ResponseBody
+	public void export(HttpServletResponse response,
+					   @RequestParam(value = "hkeywork", required = false) String hkeywork,
+					   @RequestParam(value = "errorFlag", required = false) Integer errorFlag,
+					   @RequestParam(value = "hStartTime", required = false) String hStartTime,
+					   @RequestParam(value = "hEndTime", required = false) String hEndTime,
+					   @RequestParam(value = "scanType", required = false) String scanType,
+					   @RequestParam(value = "scanFrom", required = false) String scanFrom) throws Exception{
+		String method = "/product/check_code/export";String methodName ="导出";
+		try{
+			Sort sort = Sort.unsorted();
+			checkCodeService.exportExcel(response,hkeywork,errorFlag,hStartTime,hEndTime,scanType,scanFrom, super.getPageRequest(sort));
+		}catch (Exception e){
+			e.printStackTrace();
+			logger.error("导出失败！", e);
+		}
+	}
 }

@@ -10,7 +10,7 @@ $(function () {
             function () {
                 var form = layui.form, layer = layui.layer, layedit = layui.layedit, table = layui.table,
                     table1 = layui.table, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect;
-                var laydate = layui.laydate;
+                var laydate = layui.laydate,tableSelect2 = layui.tableSelect;
 
                 //产出1 投入2
                 if(type==2){
@@ -191,25 +191,11 @@ $(function () {
                     table: {
                         url: context + '/produce/check_code/getItemCode',
                         method: 'get',
-                        cols: [[{
-                            type: 'radio'
-                        },// 多选 radio
-                            {
-                                field: 'ITEM_NO',
-                                title: '物料编号',
-                                width: 150,
-                                sort: true
-                            }, {
-                                field: 'ITEM_NAME',
-                                title: '物料描述',
-                                width: 400
-                            },
-                            {
-                                field: 'ITEM_NAME_S',
-                                title: '物料简称',
-                                width: 110,
-                                sort: true
-                            },
+                        cols: [[
+                            {type: 'radio'},// 多选 radio
+                            {field: 'ITEM_NO', title: '物料编号', width: 150, sort: true},
+                            {field: 'ITEM_NAME', title: '物料描述', width: 400},
+                            {field: 'ITEM_NAME_S', title: '物料简称', width: 110, sort: true},
                         ]],
                         parseData: function (res) {
                             //console.log(res)
@@ -229,6 +215,50 @@ $(function () {
                         var da = data.data;
                         form.val("itemFrom", {
                             "itemcode": da[0].ITEM_NO,
+                            // "itemName":da[0].ITEM_NAME,
+                        });
+                        form.render();// 重新渲染
+                    }
+                });
+
+                tableSelect2 = tableSelect2.render({
+                    elem: '#hkeywork',
+                    searchKey: 'keyword',
+                    checkedKey: 'ITEM_NO',
+                    searchPlaceholder: '试着搜索',
+                    page: true,
+                    request: {
+                        pageName: 'page' // 页码的参数名称，默认：page
+                        ,
+                        limitName: 'rows' // 每页数据量的参数名，默认：limit
+                    },
+                    table: {
+                        url: context + '/produce/check_code/getItemCode',
+                        method: 'get',
+                        cols: [[
+                            {type: 'radio'},// 多选 radio
+                            {field: 'ITEM_NO', title: '物料编号', width: 150, sort: true},
+                            {field: 'ITEM_NAME', title: '物料描述', width: 400},
+                            {field: 'ITEM_NAME_S', title: '物料简称', width: 110, sort: true},
+                        ]],
+                        parseData: function (res) {
+                            //console.log(res)
+                            if (res.result) {
+                                // 可进行数据操作
+                                return {
+                                    "count": res.data.total,
+                                    "msg": res.msg,
+                                    "data": res.data.rows,
+                                    "code": res.status
+                                    // code值为200表示成功
+                                }
+                            }
+                        },
+                    },
+                    done: function (elem, data) {
+                        var da = data.data;
+                        form.val("hsearch_item_form", {
+                            "hkeywork": da[0].ITEM_NO,
                             // "itemName":da[0].ITEM_NAME,
                         });
                         form.render();// 重新渲染
@@ -261,12 +291,33 @@ $(function () {
                     });
                     return false;
                 });
+
+
+
+                // // 监听提交
+                // form.on('submit(exportExcel)', function (data) {
+                //
+                //     console.log($("#hsearch_item_form").serialize());
+                //
+                //     // $('#exportBtn').addClass("layui-btn-disabled").attr("disabled",true);
+                //     //
+                //     // data.field.errorFlag = $("#errorFlag").prop('checked') ? 1 : 0
+                //     // data.field.scanType = type==1?"产出":"投入"
+                //     // location.href = context + "/produce/check_code/export?hkeywork=" + data.field.hkeywork
+                //     // +"&errorFlag=" +data.field.errorFlag +"&hStartTime=" +data.field.hStartTime +"&hEndTime=" +data.field.hEndTime
+                //     //     +"&scanType=" +data.field.scanType +"&scanFrom=" +data.field.scanFrom;
+                //     //
+                //     // $('#exportBtn').removeClass("layui-btn-disabled").attr("disabled", false);//有效
+                //     //
+                //     // return false;
+                // });
+
                 hTableIns = table1.render({// 历史
                     elem: '#hcolTable',
                     where: {},
                     method: 'get',// 默认：get请求
-                    toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
-                    defaultToolbar: ['filter', 'exports', 'print'],
+                    // toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
+                    // defaultToolbar: ['filter', 'exports', 'print'],
                     page: true,
                     data: [],
                     height: 'full-80'//固定表头&full-查询框高度
@@ -358,6 +409,21 @@ $(function () {
             }
         });
 });
+
+function exportExcel(){
+    // data.field.errorFlag = $("#errorFlag").prop('checked') ? 1 : 0
+    // data.field.scanType = type==1?"产出":"投入"
+    if(!$('#hStartTime').val()||!$('#hEndTime').val()){
+        layer.alert("请输入开始时间和结束时间");
+        return false;
+    }
+    var errorFlag = $("#errorFlag").prop('checked') ? 1 : 0;
+    var scanType = type==1?"产出":"投入"
+    // console.log($("#hsearch_item_form").serialize());
+    $('#exportBtn').addClass("layui-btn-disabled").attr("disabled",true);
+    location.href = context + "/produce/check_code/export?"+$("#hsearch_item_form").serialize()+"&scanType="+scanType+"&errorFlag="+errorFlag;
+    // $('#exportBtn').removeClass("layui-btn-disabled").attr("disabled", false);//有效
+}
 
 function initSelect() {
     CoreUtil.sendAjax("/produce/check_code/getLiner", "",
