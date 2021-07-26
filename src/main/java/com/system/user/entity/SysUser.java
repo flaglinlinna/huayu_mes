@@ -98,10 +98,39 @@ public class SysUser extends BaseEntity {
 	/**
 	 * 部门名称
 	 */
-	@ApiModelProperty(name = "mobile", value = "部门名称")
+	@ApiModelProperty(name = "department", value = "部门名称")
 	@Column(length = 50)
 	protected String department;
-    
+
+
+	//用于关联企业微信，推送审批消息
+	/**
+	 * 企业微信部门名称
+	 */
+	@ApiModelProperty(name = "weChatDept", value = "企业微信部门名称")
+	@Column(length = 50)
+	protected String weChatDept;
+
+	/**
+	 * 企业微信部门ID
+	 */
+	@ApiModelProperty(name = "weChatDeptId", value = "企业微信部门ID")
+	@Column(length = 50)
+	protected String weChatDeptId;
+
+	/**
+	 * 企业微信用户名称
+	 */
+	@ApiModelProperty(name = "weChatUser", value = "企业微信用户名称")
+	@Column(length = 50)
+	protected String weChatUser;
+
+	/**
+	 * 企业微信用户ID
+	 */
+	@ApiModelProperty(name = "weChatUserId", value = "企业微信用户ID")
+	@Column(length = 200)
+	protected String weChatUserId;
 
 	public String getUserCode() {
 		return userCode;
@@ -197,6 +226,38 @@ public class SysUser extends BaseEntity {
 
 	public void setDepartment(String department) {
 		this.department = department;
+	}
+
+	public String getWeChatDept() {
+		return weChatDept;
+	}
+
+	public void setWeChatDept(String weChatDept) {
+		this.weChatDept = weChatDept;
+	}
+
+	public String getWeChatDeptId() {
+		return weChatDeptId;
+	}
+
+	public void setWeChatDeptId(String weChatDeptId) {
+		this.weChatDeptId = weChatDeptId;
+	}
+
+	public String getWeChatUser() {
+		return weChatUser;
+	}
+
+	public void setWeChatUser(String weChatUser) {
+		this.weChatUser = weChatUser;
+	}
+
+	public String getWeChatUserId() {
+		return weChatUserId;
+	}
+
+	public void setWeChatUserId(String weChatUserId) {
+		this.weChatUserId = weChatUserId;
 	}
 
 	@Override

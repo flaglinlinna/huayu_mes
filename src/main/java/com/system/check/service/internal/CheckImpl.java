@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
+import com.system.user.dao.SysUserDao;
+import com.system.wechat.service.WechatSettingService;
 import com.web.basePrice.dao.PriceCommDao;
 import com.web.basePrice.dao.UnitDao;
 import com.web.basePrice.entity.Unit;
@@ -55,6 +58,9 @@ public class CheckImpl   implements CheckService {
 	@Autowired
 	private TodoInfoService todoInfoService;
 	@Autowired
+	private WechatSettingService wechatSettingService;
+
+	@Autowired
 	private TodoInfoDao todoInfoDao;
 	@Autowired
 	private QuoteDao quoteDao;
@@ -73,9 +79,9 @@ public class CheckImpl   implements CheckService {
 	@Autowired
 	private QuoteSumService quoteSumService;
 	@Autowired
-	private PriceCommDao priceCommDao;
-	@Autowired
 	private SysParamDao sysParamDao;
+	@Autowired
+	private SysUserDao sysUserDao;
 	@Autowired
 	private UnitDao unitDao;
 
@@ -242,6 +248,10 @@ public class CheckImpl   implements CheckService {
 		tf.setBsStartTime(new Date());
 		tf.setBsType(2);//审批类型
 		tf.setBsRouter(ci.getBsCheckCode());
+		SysUser sysUser = sysUserDao.findById((long)ci.getBsCheckId());
+		if(sysUser!=null&&sysUser.getUserName()!=null) {
+			this.sendToWechat(quote, ci.getBsStepCheckStatus()+"",ci.getBsCheckComments(), UserUtil.getSessionUser().getUserName(), sysUser.getWeChatUserId());
+		}
 		todoInfoService.add(tf);
 	}
 	private CheckInfo getNewCheck(CheckInfo c){
@@ -1125,6 +1135,30 @@ public class CheckImpl   implements CheckService {
 			lce.add(sr);
 		}
 		checkInfoDao.saveAll(lce);
+	}
+
+	public void sendToWechat(Quote quote,String checkStatus,String bsCheckComments,String name,String UserId) throws Exception {
+
+		JSONObject sendDate = new JSONObject();
+		JSONObject content =  new JSONObject();
+		String msg = "";
+		if(checkStatus.equals("1")){
+			msg+= "<font color=\"info\">"+name+"提交了报价单，请您及时审批。</font>";
+		}else {
+			msg+= "<font color=\"info\">"+name+"</font><font color=\"red\">驳回了报价单，驳回原因："+bsCheckComments+",请您及时审批。";
+		}
+		msg+= "\n>客户："+quote.getBsCustName()+ "\n>产品型号："+quote.getBsProd()+
+				"\n>版本："+quote.getBsProjVer()+ "\n>报价单号："+quote.getBsCode();
+		content.put("content",msg);
+		sendDate.put("touser",UserId);
+		sendDate.put("msgtype","markdown");
+		sendDate.put("markdown",content);
+
+		//表示是否开启重复消息检查，0表示否，1表示是，默认0
+		sendDate.put("enable_duplicate_check",0);
+		//表示是否重复消息检查的时间间隔，默认1800s，最大不超过4小时
+		sendDate.put("duplicate_check_interval",1800);
+		wechatSettingService.sendMessage(sendDate);
 	}
 
 

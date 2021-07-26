@@ -74,4 +74,19 @@ public class WechatSettingImpl implements WechatSettingService {
         }
         return ApiResponseResult.failure();
     }
+
+    @Override
+    public ApiResponseResult sendMessage(JSONObject jsonObject) throws Exception {
+        ApiResponseResult data = this.getToken();
+        if(data.isResult()){
+            WechatSetting setting =(WechatSetting)data.getData();
+            jsonObject.put("agentid",setting.getAgentId());
+            String requestDate = HttpRequestUtil.sendJsonPost("https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token="+setting.getAccessToken(),jsonObject,null);
+            JSONObject json = JSONObject.parseObject(requestDate);
+            if(json.get("errmsg")!=null){
+                return ApiResponseResult.success().data(json);
+            }
+        }
+        return ApiResponseResult.failure();
+    }
 }

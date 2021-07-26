@@ -134,6 +134,12 @@ public class SysUserImpl extends PrcUtils implements SysUserService {
             o.setSex(sysUser.getSex());
             o.setRegisterSrc(sysUser.getRegisterSrc());
             o.setDepartment(sysUser.getDepartment());
+
+            o.setWeChatDept(sysUser.getWeChatDept());
+            o.setWeChatDeptId(sysUser.getWeChatDeptId());
+            o.setWeChatUser(sysUser.getWeChatUser());
+            o.setWeChatUserId(sysUser.getWeChatUserId());
+
             //删除原来的角色权限
             List<UserRoleMap> list = userRoleMapDao.findByDelFlagAndUserId(0, o.getId());
             if(list.size() > 0){
@@ -219,6 +225,12 @@ public class SysUserImpl extends PrcUtils implements SysUserService {
         o.setMobile(sysUser.getMobile());
         o.setEmail(sysUser.getEmail());
         o.setSex(sysUser.getSex());
+
+        o.setWeChatDept(sysUser.getWeChatDept());
+        o.setWeChatDeptId(sysUser.getWeChatDeptId());
+        o.setWeChatUser(sysUser.getWeChatUser());
+        o.setWeChatUserId(sysUser.getWeChatUserId());
+
         sysUserDao.save(o);
 
         return ApiResponseResult.success("编辑成功！");
@@ -379,6 +391,11 @@ public class SysUserImpl extends PrcUtils implements SysUserService {
         map.put("status", o.getStatus());
         map.put("roleNames", roleNames);
 
+        map.put("weChatDept", o.getWeChatDept());
+        map.put("weChatDeptId", o.getWeChatDeptId());
+        map.put("weChatUser", o.getWeChatUser());
+        map.put("weChatUserId", o.getWeChatUserId());
+
         return ApiResponseResult.success().data(map);
     }
 
@@ -441,6 +458,10 @@ public class SysUserImpl extends PrcUtils implements SysUserService {
         	map.put("createDate", su.getCreateDate());
         	map.put("realName", su.getRealName());
             map.put("department", su.getDepartment());
+            map.put("weChatDept", su.getWeChatDept());
+            map.put("weChatDeptId", su.getWeChatDeptId());
+            map.put("weChatUser", su.getWeChatUser());
+            map.put("weChatUserId", su.getWeChatUserId());
         	List<SysRole> lr = sysRoleDao.getRoleByUser(su.getId());
         	List mll = new ArrayList<>();
         	if(lr.size() > 0){
@@ -496,6 +517,12 @@ public class SysUserImpl extends PrcUtils implements SysUserService {
         mapUser.put("sex", sysUser.getSex());
         mapUser.put("status", sysUser.getStatus());
         mapUser.put("department", sysUser.getDepartment());
+
+        mapUser.put("weChatDept", sysUser.getWeChatDept());
+        mapUser.put("weChatDeptId", sysUser.getWeChatDeptId());
+        mapUser.put("weChatUser", sysUser.getWeChatUser());
+        mapUser.put("weChatUserId", sysUser.getWeChatUserId());
+
       //获取当前用户关联角色信息
         List<Map<String, Object>> list = userRoleMapDao.getRoleIdByUserId(sysUser.getId());
         mapUser.put("userRoles", list);

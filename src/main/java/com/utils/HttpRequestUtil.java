@@ -1,5 +1,17 @@
 package com.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,11 +23,32 @@ import java.util.Map;
 
 public class HttpRequestUtil {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // 发送 GET 请求
-        String s = HttpRequestUtil.sendGet("https://qyapi.weixin.qq.com/cgi-bin/gettoken", "corpid=wwa088950b6c2196c8&" +
-                "corpsecret=ixuAN57wJE8_HJPYDi_yf9p4j0mFUtj9FKMd5cNO2g4");
-        System.out.println(s);
+//        String s = HttpRequestUtil.sendGet("https://qyapi.weixin.qq.com/cgi-bin/gettoken", "corpid=ww69b0e0e28870bba6&" +
+//                "corpsecret=zzuOsL86jArCoJNH9s_87xT67HtpwUbvXEMVC7Xz0H8");
+//        System.out.println(s);
+
+        JSONObject sendDate = new JSONObject();
+        JSONObject content =  new JSONObject();
+        String msg = "<font color=\"info\">"+"梁工"+"</font><font color=\"red\">驳回了报价单，驳回原因:xxxxxxxxxxxxx,请您及时审批。</font>" +
+                "\n>客户名称："+"华勤-三星"+
+                "\n>产品型号："+"P653S11"+
+                "\n>版本："+"20210715"+
+                "\n>报价单号："+"EQ20210722100206";
+        content.put("content",msg);
+        sendDate.put("agentid",1000006);
+        sendDate.put("msgtype","markdown");
+        sendDate.put("markdown",content);
+        sendDate.put("touser","7139A91B-96B4-4D64-91B5-10126E81C2B8");
+
+        //表示是否开启重复消息检查，0表示否，1表示是，默认0
+        sendDate.put("enable_duplicate_check",1);
+        //表示是否重复消息检查的时间间隔，默认1800s，最大不超过4小时
+        sendDate.put("duplicate_check_interval",1800);
+
+        String requestDate = HttpRequestUtil.sendJsonPost("https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token="+"Y7uZ5quGgAFSS7UtVYvq2QtRbVvxy-05AEMA6v5LK9a4psQDeV-KezRS8k5heDgTWsrSpug6YYUyJMOzNYJy9NHfhP_mdRL4Pxtg0l5cadGFvueKosnlVANv7gRLJ9xzZg2b9s5I7oxBfk62TkB6Cya-uTT2V4FOq-SSyCOw1YaFRCTz3ZMmsUgTtqtNts-R5BD5VazgOzWFtkI3eecxsw",sendDate,null);
+        System.out.println(requestDate);
     }
 
     /**
@@ -125,4 +158,45 @@ public class HttpRequestUtil {
         }
         return result;
     }
+
+
+    public static String sendJsonPost(String url, JSONObject jsonObject, String encoding) throws IOException {
+        String body = "";
+        if(StringUtils.isEmpty(encoding)){
+            encoding = "UTF-8";
+        }
+        //创建httpclient对象
+        CloseableHttpClient client = HttpClients.createDefault();
+        //创建post方式请求对象
+        HttpPost httpPost = new HttpPost(url);
+
+        //装填参数
+        StringEntity s = new StringEntity(jsonObject.toString(), "utf-8");
+        s.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,
+                "application/json"));
+        //设置参数到请求对象中
+        httpPost.setEntity(s);
+//        System.out.println("请求地址："+url);
+//        System.out.println("请求参数："+nvps.toString());
+
+        //设置header信息
+        //指定报文头【Content-type】、【User-Agent】
+//        httpPost.setHeader("Content-type", "application/x-www-form-urlencoded");
+        httpPost.setHeader("Content-type", "application/json");
+//        httpPost.setHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+
+        //执行请求操作，并拿到结果（同步阻塞）
+        CloseableHttpResponse response = client.execute(httpPost);
+        //获取结果实体
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+            //按指定编码转换结果实体为String类型
+            body = EntityUtils.toString(entity, encoding);
+        }
+        EntityUtils.consume(entity);
+        //释放链接
+        response.close();
+        return body;
+    }
+
 }

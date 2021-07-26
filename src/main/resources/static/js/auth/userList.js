@@ -551,7 +551,12 @@ function getUserAndRoles(obj,id) {
 
                     $('#orgInfo').val(data.data.Org_name==null?'':data.data.Org_name)
                     $('#orgInfo').attr("ts-selected",data.data.Org_id==null?'':data.data.Org_id);
-                    
+
+                    $('#weChatDept').val(data.data.user.weChatDept==null?'':data.data.user.weChatDept)
+                    $('#weChatDeptId').val(data.data.user.weChatDeptId==null?'':data.data.user.weChatDeptId)
+                    $('#weChatUser').val(data.data.user.weChatUser==null?'':data.data.user.weChatUser)
+                    $('#weChatUserId').val(data.data.user.weChatUserId==null?'':data.data.user.weChatUserId)
+
                     var userRoles = data.data.user.userRoles;
                     var disArray = [];
                     layui.each(userRoles, function (index, like) {
