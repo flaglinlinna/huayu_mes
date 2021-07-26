@@ -149,6 +149,13 @@ public class QuoteBom extends BaseEntity {
 	protected BigDecimal bsQty;
 
 	/**
+	 * 物料通用价格
+	 */
+	@ApiModelProperty(name = "priceComm", value = "物料通用价格")
+	@Column(length = 50)
+	protected BigDecimal priceComm;
+
+	/**
 	 * 制品量
 	 */
 	@ApiModelProperty(name = "bsProQty", value = "制品量")
@@ -258,6 +265,13 @@ public class QuoteBom extends BaseEntity {
 	@Transient
 	protected String bsItemTypeList;
 
+	public BigDecimal getPriceComm() {
+		return priceComm;
+	}
+
+	public void setPriceComm(BigDecimal priceComm) {
+		this.priceComm = priceComm;
+	}
 
 	public String getBsElement() {
 		return bsElement;

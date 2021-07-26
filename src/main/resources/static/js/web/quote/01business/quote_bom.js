@@ -2,6 +2,7 @@
  * 外购件清单维护
  */
 var pageCurr;
+var tableIndex2;
 $(function() {
 	layui
 			.use(
@@ -174,6 +175,49 @@ $(function() {
 						});
 
 
+						tableSelect4 = tableSelect4.render({
+							elem : '#priceComm',
+							searchKey : 'keyword',
+							checkedKey : 'id',
+							searchPlaceholder : '关键字搜索',
+							table : {
+								url : context + '/basePrice/priceComm/getList',
+								method : 'get',
+								parseData : function(res) {
+									// 可进行数据操作
+									return {
+										"count" : res.data.total,
+										"msg" : res.msg,
+										"data" : res.data.rows,
+										"code" : res.status
+										// code值为200表示成功
+									}
+								},
+								cols : [ [ {type : 'radio'},// 单选 radio
+									{field : 'id',title : 'id',width : 0,hide : true},
+									{field : 'itemName', title : '物料名称', width : 180},
+									{field : 'priceUn', title : '单价', width : 70},
+									{field : 'alternativeSuppliers', title : '备选供应商', width : 120},
+									{field : 'createBy', title : '创建人', width : 80}, ] ],
+								page : true,
+								request : {
+									pageName : 'page', // 页码的参数名称，默认：page
+									limitName : 'rows' // 每页数据量的参数名，默认：limit
+								},
+							},
+							done : function(elem, data) {
+								var da = data.data;
+								// 选择完后的回调，包含2个返回值
+								// elem:返回之前input对象；data:表格返回的选中的数据 []
+								// form.val("quoteBomForm", {
+								// 	"purchaseUnit" : da[0].unitCode
+								// });
+								// form.render();// 重新渲染
+								$('div[lay-id="quoteBomList"]').find('tr[data-index=' + tableIndex2 + ']').find('td[data-field=priceComm]').find('div').html(da[0].priceUn);
+								layui.table.cache['quoteBomList'][tableIndex2]["priceComm"] = da[0].priceUn;
+							}
+						});
+
 						tableIns = table.render({
 							elem : '#quoteBomList',
 							// url : context + '/quoteBom/getQuoteBomList?pkQuote=' + quoteId,
@@ -185,8 +229,8 @@ $(function() {
 							// even : true,// 条纹样式
 							page : true,
 							limit:50,
-							limits: [50,100,200,300],
 							data : [],
+							limits: [50,100,200,300],
 							request : {
 								pageName : 'page', // 页码的参数名称，默认：page
 								limitName : 'rows' // 每页数据量的参数名，默认：limit
@@ -224,7 +268,7 @@ $(function() {
 							{field : 'bsGroups',title : '损耗分组',width : 140,"edit" : "text",style:"overflow:hidden !important"},
 							{field : 'bsMaterName',title : '材料名称',sort : true,width : 200,edit: "text",style:"overflow:hidden !important"},
 							{field : 'bsModel',title : '材料规格',width : 200,edit: "text",style:"overflow:hidden !important"},
-							// {field : 'priceComm',title : '通用价格',event:'priceComm',width : 200,style:"overflow:hidden !important"},
+							{field : 'priceComm',title : '通用价格',event:'priceComm',width : 100,edit: "text",style:"overflow:hidden !important"},
 							{field : 'bsQty',title : 'BOM用量',width : 90,edit: "text"},
 							// {field : 'bsProQty',title : '制品重(g)',width : 90},
 							// {field : 'unit',title : 'BOM用量单位',width : 110,
@@ -296,10 +340,19 @@ $(function() {
 								//console.log(data.id,value)
 								// dobsGroups(data.id,value)
 								var bsQty = data.bsQty;
+								var priceComm = data.priceComm;
 								if (/^\d+$/.test(bsQty) == false && /^\d+\.\d+$/.test(bsQty) == false) {
 									layer.msg("Bom用量只能输入数字");
 									return false;
 								}
+								if(priceComm!=null){
+									if (/^\d+$/.test(priceComm) == false && /^\d+\.\d+$/.test(priceComm) == false) {
+										layer.msg("通用价格只能输入数字");
+										return false;
+									}
+								}
+
+
 							}
 						});
 
@@ -450,26 +503,15 @@ $(function() {
 								// 编辑
 								getProdErr(data, data.id);
 							} else if(obj.event =='priceComm'){
-								var tableIndex = obj.tr.attr('data-index');
-								console.log(tableIndex);
-								selectPriceComm(obj,tableIndex);
+								tableIndex2 = obj.tr.attr('data-index');
+								if (iStatus != 2) {
+									$('#priceComm').click();
+								}
 							}
 						});
 
 
-						function selectPriceComm(obj,tableIndex){
-							var input1 = $('div[lay-id="quoteBomList"]').find('tr[data-index=' + tableIndex + ']').find('td[data-field=priceComm]').find('div').document;
-							var input2 = input1.createElement("input");
-							// console.log($('div[lay-id="quoteBomList"]').find('tr[data-index=' + tableIndex + ']').find('td[data-field=priceComm]').find('div'));
-							// console.log(input);
-							// var newNode = document.createElement("p");
-							// var input2 = document.insertBefore(newNode,input);
-							// var input = document.createElement('input');
-							// input.setAttribute('id', "addbtn");
-							// layui.table.cache['quoteBomList'][tableIndex]["priceComm"] = "checked";
-							// input.click();
-							return false;
-						}
+
 
 						// 监听提交
 						form.on('submit(addSubmit)', function(data) {

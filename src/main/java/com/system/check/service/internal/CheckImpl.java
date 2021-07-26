@@ -570,19 +570,23 @@ public class CheckImpl   implements CheckService {
 									pm.setBsGeneral(0);
 								} else {
 									//hjj-20210122 不是代采,先查询物料通用价格
-									List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(qb.getBsMaterName());
-									if (lm.size() > 0) {
-										String priceUn = lm.get(0).get("PRICE_UN").toString();
-										String rangePrice = lm.get(0).get("RANGE_PRICE").toString();
-										if (StringUtils.isNotEmpty(priceUn)) {
-											pm.setBsGear(rangePrice);
-											pm.setBsRefer(new BigDecimal(priceUn));
-											pm.setBsAssess(new BigDecimal(priceUn));
-											pm.setBsGeneral(1);
-										}
-									} else {
-										pm.setBsGeneral(0);
-									}
+									//hjj-20210723 不是代采，采购价格取bom中的通用价格
+									pm.setBsAssess(qb.getPriceComm());
+									pm.setBsRefer(qb.getPriceComm());
+									pm.setBsGeneral(1);
+//									List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(qb.getBsMaterName());
+//									if (lm.size() > 0) {
+//										String priceUn = lm.get(0).get("PRICE_UN").toString();
+//										String rangePrice = lm.get(0).get("RANGE_PRICE").toString();
+//										if (StringUtils.isNotEmpty(priceUn)) {
+//											pm.setBsGear(rangePrice);
+//											pm.setBsRefer(new BigDecimal(priceUn));
+//											pm.setBsAssess(new BigDecimal(priceUn));
+//											pm.setBsGeneral(1);
+//										}
+//									} else {
+//										pm.setBsGeneral(0);
+//									}
 								}
 //								pm.setBsRadix(qb.getBsRadix());
 								pm.setBsExplain(qb.getBsExplain());//lst-20210107-增采购说明字段
