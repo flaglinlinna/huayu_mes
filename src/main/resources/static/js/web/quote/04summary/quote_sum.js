@@ -273,7 +273,7 @@ $(function() {
 			//{field : 'bsMachiningType',title : '加工类型',width : 100,hide : true},/*(表面处理)*/
 			//{field : 'bsColor',title : '配色工艺',width : 100,hide : true},/*(表面处理)*/
 			{fixed:'left',field : 'bsModel',width : 200,title : '材料规格'},
-			{field : 'bsAssess',width : 80,title : '材料单价(含税)'},
+			{field : 'bsAssess',width : 120,title : '材料单价(含税)'},
 			{field : 'bsProQty',width : 90,title : '制品重(g)',totalRow : true,hide : true},
 				{field : 'bsWaterGap',title : '水口量(g)',width : 90,hide : true}, /*(注塑)*/
 				{field : 'bsCave',title : '穴数',width : 60,hide : true}, /*(注塑)*/
@@ -495,7 +495,7 @@ $(function() {
 				{field : 'BS_YIELD',title : '工序良率%',width : 90,templet:function (d) {
 						return Number(d.BS_YIELD).toFixed(2);
 					}},
-				{field : 'BS_THE_LOSS',title : '工序损耗累计',width : 90,totalRow : true},
+				{field : 'BS_THE_LOSS',title : '工序损耗累计',width : 110,totalRow : true},
 				{field : 'bsCostLoss',title : '工序成本(含损耗)',width : 130,totalRow : true,templet: function (d) {
 						return (Number(d.BS_COST)+Number(d.BS_THE_LOSS)).toFixed(4);
 					}},

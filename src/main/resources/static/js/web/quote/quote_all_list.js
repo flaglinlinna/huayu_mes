@@ -57,7 +57,7 @@ $(function() {
 				{fixed:'left',field : 'bsCode',title : '报价单编号',width : 150,sort: true},
 					{fixed:'left',field : 'bsProd',title : '产品型号',width : 120,sort: true},
 					{fixed:'left',fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true},
-					{field : 'bsStatus',title : '状态',width : 341,templet:'#statusTpl',sort: true},
+					{field : 'bsStatus',title : '状态',width : 400,templet:'#statusTpl',sort: true},
 				{field : 'bsType',title : '报价类型', width : 120,templet:function (d) {
 						 if(d.bsType=="YSBJ"){
 							 return "衍生报价";
@@ -84,7 +84,7 @@ $(function() {
 				{field : 'bsRequire',title : '环保要求',width : 140,sort: true},
 				{field : 'bsLevel',title : '防水防尘等级',width : 140,sort: true},
 				{field : 'bsCustRequire',title : '客户其他要求',width : 200,sort: true},
-				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150}
+				//{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150}
 				] ],
 				done : function(res, curr, count) {
 					//

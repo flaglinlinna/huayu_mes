@@ -58,13 +58,14 @@ $(function() {
 							return "";
 						}
 					}},
-				{field : 'bsAssess',width : 120,title : '含税价格(元/KG)<span style="color:red;font-size:12px;">*</span>',edit : 'number',style : 'background-color:#ffffff'},
+				{field : 'bsAssess',width : 90,title : '含税价格<span style="color:red;font-size:12px;">*</span>',edit : 'number',style : 'background-color:#ffffff'},
 				// {field : 'bsProQty',width : 100,title : '制品重(g)',style : 'background-color:#d2d2d2'},
 				//{field : 'bsMachiningType',title : '加工类型',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
 				//{field : 'bsColor',title : '配色工艺',width : 100,style : 'background-color:#d2d2d2'},// (表面处理)
 				// {field : 'bsWaterGap',title : '水口量(g)',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				// {field : 'bsCave',title : '穴数',width : 100,style : 'background-color:#d2d2d2'}, // (注塑)
 				{field : 'purchaseUnit',width : 110,title : '采购单位',templet : '#selectUnit',style : 'background-color:#ffffff'},
+				{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff;overflow:hidden !important',width:180},
 				{field : 'mjPrice',width : 70,title : '模具费',edit : 'number',style : 'background-color:#ffffff'},
 				{
 					field: 'bsGeneral', width: 80, title: '通用物料', style: 'background-color:#d2d2d2',
@@ -78,8 +79,8 @@ $(function() {
 						}
 					}
 				},
-				{field : 'bsRefer',width : 90,title : '参考价格',style : 'background-color:#d2d2d2'},
-				{field : 'bsGear',width : 120,title : '价格挡位',style : 'background-color:#d2d2d2'},
+				{field : 'bsRefer',width : 80,title : '参考价格',style : 'background-color:#d2d2d2'},
+				{field : 'bsGear',width : 80,title : '价格挡位',style : 'background-color:#d2d2d2'},
 				// {field : 'bsRadix',title : '基数',style : 'background-color:#d2d2d2'},
 
 				//{field : 'bsExplain',width : 110,title : '采购说明',style : 'background-color:#d2d2d2'},
