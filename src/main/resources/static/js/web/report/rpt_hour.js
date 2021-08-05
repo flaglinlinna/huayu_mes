@@ -362,10 +362,12 @@ function getReport(dates) {
 	// 	"dates" : dates,
 	// 	"keyword" : keyword,
 	// }
+	layer.load();
 	tableIns.reload({
 		url:context+'/report/rpt_hour/getReport',
 		where:dates,
 		done: function(res1, curr, count){
+			layer.closeAll('loading');
 			pageCurr=curr;
 		}
 	})
