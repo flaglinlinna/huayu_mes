@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='各部UPPH日报表'"></head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div>
+			<form id="searchFrom" class="layui-form layui-form-pane" lay-filter="searchFrom"
+				method="post" action="" style="margin-top: 5px;">
+				<div class="layui-form-item" style="margin-bottom: 0px">
+					<div class="layui-inline">
+
+							<label class="layui-form-label layui-required ">生产日期</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" lay-verify="required" name="dates"
+									placeholder="请选择日期范围" id="dates">
+							</div>
+							<label class="layui-form-label">产品编码:</label>
+				            <div class="layui-input-inline">
+					            <input name="itemNo" id="itemNo" placeholder="请输入产品编码" autocomplete="off" class="layui-input"  >
+				            </div>
+					</div>
+					<div class="layui-inline">
+							<label class="layui-form-label layui-required">组长名称:</label>
+							<div class="layui-input-inline">
+								<input name="linerName" id="linerName" lay-verify="required" placeholder="请输入组长名称" autocomplete="off" class="layui-input"  >
+							</div>
+							<label class="layui-form-label">制令单:</label>
+							<div class="layui-input-inline">
+								<input name="taskNo" id="taskNo" placeholder="请输入制令单" autocomplete="off" class="layui-input"  >
+							</div>
+						
+						<button class="layui-btn layui-btn-sm" lay-submit
+							lay-filter="searchSubmit">查询</button>
+						<button type="reset"
+							class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+							<i class="layui-icon">&#xe669;</i>重置
+						</button>
+					</div>
+				</div>
+			</form>
+			<table id="listTable" lay-filter="listTable"></table>
+		</div>
+		<div id="getData" class="layer_self_wrap"
+			style=" display: none;margin:0px;">
+			<form id="dataFrom" class="layui-form layui-form-pane"
+				lay-filter="dataFrom" method="post" action=""
+				style="margin: 20px;">
+				
+				<table id="dataTable" lay-filter="dataTable"></table>
+			</form>
+		</div>
+		<!--<script type="text/html" id="optBar">-->
+            <!--<a class="layui-btn layui-btn-xs" lay-event="detail">详细</a>-->
+        <!--</script>-->
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/report/rpt_hour.js?ver="+Math.random()+"'><\/script>");
+		</script>
+			<!--<script th:inline="javascript">-->
+		        <!--var departList=[[${Depart}]];-->
+		        <!--var depart_select = document.getElementById("depart");-->
+		        <!--if(departList.result){-->
+		        	<!--var data = departList.data;-->
+		        	<!--for (var i = 0; i < data.length; i++) {-->
+		        		<!--$('#depart').append("<option value="+data[i].ID+">"+data[i].LEAD_BY+"</option>");// 下拉菜单里添加元素-->
+		        	<!--}-->
+		        <!--}-->
+		    <!--</script>-->
+	</div>
+</body>
+</html>
