@@ -14,7 +14,8 @@ $(function() {
 			height:'full-70',//固定表头&full-查询框高度
 			cellMinWidth : 80,
 			page : true,
-			limit: 90,
+			limit: 100,
+			limits: [50,100,200,300],
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -87,7 +88,7 @@ $(function() {
 
 		localtableFilterIns = tableFilter.render({
 			'elem' : '#procList',
-			'mode' : 'api',//服务器过滤
+			'mode' : 'local',//服务器过滤
 			'filters' : [
 				{field: 'workCenter', type:'checkbox'},
 				{field: 'procName', type:'input'},

@@ -14,6 +14,8 @@ $(function() {
 			cellMinWidth : 80,
 			height:'full-70',//固定表头&full-查询框高度
 			page : true,
+			limit: 50,
+			limits: [50,100,200,300,500],
 			request : {
 				pageName : 'page' // 页码的参数名称，默认：page
 				,
@@ -154,7 +156,7 @@ $(function() {
 			var data = obj.data;
 			if (obj.event === 'del') {
 				// 删除
-				delData(data, data.id, data.itemType);
+				delData(data, data.id, data.procName);
 			} else if (obj.event === 'edit') {
 				// 编辑
 				getData(data);
@@ -185,11 +187,11 @@ $(function() {
 			
 			form.val("itemForm", {
 				"id" : obj.id,
-				"itemTypeId" : obj.pkItemTypeWg,
-				"itemType" : obj.itemType
+				"pkProc" : obj.pkProc,
+				"procName" : obj.procName
 			});
-			getRoleListByType(obj.pkItemTypeWg);
-			openData(obj.id, "外购物料类型")
+			getRoleListByType(obj.pkProc);
+			openData(obj.id, "工艺")
 		}
 
 

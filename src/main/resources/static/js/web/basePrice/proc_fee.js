@@ -22,7 +22,7 @@ $(function() {
 			,even:true,//条纹样式
 			page : true,
 			limit: 50,
-			limits: [30,50,100,200],
+			limits: [50,100,200,300,500],
 			request : {
 				pageName : 'page', // 页码的参数名称，默认：page
 				limitName : 'rows' // 每页数据量的参数名，默认：limit
