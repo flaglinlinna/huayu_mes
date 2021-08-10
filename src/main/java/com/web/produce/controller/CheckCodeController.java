@@ -199,11 +199,12 @@ public class CheckCodeController extends WebController {
 				@RequestParam(value = "hStartTime", required = false) String hStartTime,
 				@RequestParam(value = "hEndTime", required = false) String hEndTime,
 				@RequestParam(value = "scanType", required = false) String scanType,
-				@RequestParam(value = "scanFrom", required = false) String scanFrom){
+				@RequestParam(value = "scanFrom", required = false) String scanFrom,
+				@RequestParam(value = "barCode", required = false) String barCode){
 		  String method = "/product/check_code/getHistoryList";String methodName ="获取历史列表";
 	        try {
 	            Sort sort = new Sort(Sort.Direction.DESC, "id");
-	            ApiResponseResult result =checkCodeService.getHistoryList(hkeywork,errorFlag,hStartTime,hEndTime,scanType,scanFrom, super.getPageRequest(sort));
+	            ApiResponseResult result =checkCodeService.getHistoryList(hkeywork,errorFlag,hStartTime,hEndTime,scanType,scanFrom,barCode, super.getPageRequest(sort));
 	            logger.debug(methodName+"=getList:");
 //	            getSysLogService().success(module,method, methodName, null);
 	            return result;
@@ -224,11 +225,12 @@ public class CheckCodeController extends WebController {
 					   @RequestParam(value = "hStartTime", required = false) String hStartTime,
 					   @RequestParam(value = "hEndTime", required = false) String hEndTime,
 					   @RequestParam(value = "scanType", required = false) String scanType,
-					   @RequestParam(value = "scanFrom", required = false) String scanFrom) throws Exception{
+					   @RequestParam(value = "scanFrom", required = false) String scanFrom,
+					   @RequestParam(value = "barCode", required = false) String barCode) throws Exception{
 		String method = "/product/check_code/export";String methodName ="导出";
 		try{
 			Sort sort = Sort.unsorted();
-			checkCodeService.exportExcel(response,hkeywork,errorFlag,hStartTime,hEndTime,scanType,scanFrom, super.getPageRequest(sort));
+			checkCodeService.exportExcel(response,hkeywork,errorFlag,hStartTime,hEndTime,scanType,scanFrom,barCode, super.getPageRequest(sort));
 		}catch (Exception e){
 			e.printStackTrace();
 			logger.error("导出失败！", e);

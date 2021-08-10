@@ -68,7 +68,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
 				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_status2purchase col ,p.bs_position," +
 				"p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
-				" p.bs_Cust_Require,p.bs_proj_ver,p.bs_bade,p.bs_latest,p.bs_stage ,u.USER_NAME,TO_CHAR(p.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss'),p.bs_total from "+Quote.TABLE_NAME+" p "
+				" p.bs_Cust_Require,p.bs_proj_ver,p.bs_bade,p.bs_latest,p.bs_stage ,u.USER_NAME,TO_CHAR(p.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss'),p.bs_total,p.bs_status2 from "+Quote.TABLE_NAME+" p "
 				+ " LEFT JOIN SYS_USER u on u.id = p.create_by"
 				+ " where p.del_flag=0 and p.bs_step>=2  "+statusTemp;
 		if(StringUtils.isNotEmpty(quoteId)&&!("null").equals(quoteId)){
@@ -176,6 +176,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			map1.put("userName",object[25]);
 			map1.put("createDate",object[26]);
 			map1.put("bsTotal",object[27]);
+			map1.put("bsStatus2", object[28]);
 
 
 			list_new.add(map1);

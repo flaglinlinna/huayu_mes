@@ -142,14 +142,15 @@ public class RptHourlmpl extends ReportPrcUtils implements RptHourService {
 				beginTime, endTime,linerName,itemNo+"",taskNo+"",pageRequest);
 		if (list.get(0).toString().equals("0")) {
 			String excelPath = "static/excelFile/";
-			String fileName = "小码历史查询模板.xlsx";
-			String[] map_arr = new String[]{"ITEM_NO","LINER_NAME","BARCODE_S_1","TASK_NO","CHK_RESULT","CREATE_DATE","USER_NAME","CHK_REP","FMEMO","BARCODE_S_2"};
+			String fileName = "UPH日报表模板.xlsx";
+			String[] map_arr = new String[]{"ITEM_NO","LINER_NAME","TASK_NO","FDAY","TIME_BG","TIME_END","TIME_NUM","TIME_BG_ACT","TIME_END_ACT","QTY_T_TAR"
+			,"QTY_T_ACT","RATE_T","QTY_C_TAR","QTY_C_ACT","RATE_C","QTY_NG","RATE_OK"};
 			XSSFWorkbook workbook = new XSSFWorkbook();
 //			Map map = new HashMap();
 //			List<Map> mapList=	TypeChangeUtils.objectToList(list.get(3),Map.class);
 //			list.get(3);
 			List<Map<String, Object>> mapList = (List<Map<String, Object>>)list.get(3);
-//			ExcelExport.exportByRow(response,mapList,workbook,map_arr,excelPath+fileName,"小码"+scanType+"历史查询("+hStartTime+"-"+hEndTime+").xlsx",1);
+			ExcelExport.exportByRow(response,mapList,workbook,map_arr,excelPath+fileName,"UPH日报表查询导出.xlsx",2);
 
 		}
 

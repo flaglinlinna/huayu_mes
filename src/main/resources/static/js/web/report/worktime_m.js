@@ -47,7 +47,9 @@ $(function() {
 								// code值为200表示成功
 								}
 							},
-							cols : [ [ {
+							cols :
+								[ [
+								{
 								type : 'numbers'
 							},
 							{

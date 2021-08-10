@@ -149,8 +149,17 @@
 												</div>
 
 
-												<div class="layui-input-inline"  style="width:120px;">
-													<input type="checkbox" name="errorFlag"  id= "errorFlag" title="显示错误">
+<!--												<div class="layui-input-inline"  style="width:120px;">-->
+<!--													<input type="checkbox" name="errorFlag"  id= "errorFlag" title="显示错误">-->
+<!--												</div>-->
+
+												<label class="layui-form-label">扫描结果</label>
+												<div class="layui-input-inline" style="width:100px;">
+													<select id="errorFlag" name="errorFlag" class="layui-input">
+														<option value="2">全部</option>
+														<option value="0">正确</option>
+														<option value="1">错误</option>
+													</select>
 												</div>
 
 												<label class="layui-form-label">扫描来源</label>
@@ -165,8 +174,15 @@
 
 											</div>
 											<div class="layui-form-item">
+
+												<label class="layui-form-label" style="width: 100px">条码</label>
+												<div class="layui-input-inline"  style="width:180px;">
+													<input  name="barCode" autocomplete="off" id="barCodes"
+															placeholder="请输入条码" class="layui-input" type="text"/>
+												</div>
+
 												<label class="layui-form-label layui-required"  style="width: 100px">开始日期</label>
-												<div class="layui-input-inline" style="width:120px;">
+												<div class="layui-input-inline" style="width:140px;">
 													<input type="text" name="hStartTime" autocomplete="off"
 														   placeholder="请选择开始日期" lay-verify="required" class="layui-input" readonly="readonly"id="hStartTime">
 												</div>

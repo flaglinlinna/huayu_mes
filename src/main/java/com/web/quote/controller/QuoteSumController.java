@@ -195,6 +195,26 @@ public class QuoteSumController extends WebController {
 		}
 	}
 
+	@ApiOperation(value = "修改毛利率", notes = "修改修改毛利率包装运输费", hidden = true)
+	@RequestMapping(value = "/updateMlRate", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult updateMlRate(@RequestBody Map<String, Object> params) {
+		long pkQuote = Long.parseLong(params.get("pkQuote").toString()) ;
+		BigDecimal bsFreight = new BigDecimal(params.get("ml_rate").toString());
+		String method = "/quoteSum/updateMlRate";
+		String methodName = "修改毛利率";
+		try {
+			ApiResponseResult result = quoteSumService.updateMlRate(pkQuote,bsFreight);
+			logger.debug(methodName+"=getQuoteList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(methodName+"失败！", e);
+//			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure(methodName+"失败！");
+		}
+	}
+
 
 	@ApiOperation(value="设置中标",notes="设置中标",hidden=true)
 	@RequestMapping(value="/setBade",method=RequestMethod.POST)

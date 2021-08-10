@@ -151,14 +151,15 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 XSSFCell midCell = sheet.getRow(row).getCell(0);
                 midCell.setCellType(midCell.CELL_TYPE_STRING);
                 String mid = tranCell(midCell);
-                String row1 = tranCell(sheet.getRow(row).getCell(1));
-                String row2 = tranCell(sheet.getRow(row).getCell(2));
-                String row3 = tranCell(sheet.getRow(row).getCell(3));
-                String row4 = tranCell(sheet.getRow(row).getCell(4));
-                String row5 = tranCell(sheet.getRow(row).getCell(5));
-                String row6 = tranCell(sheet.getRow(row).getCell(6));
-                String row7 = tranCell(sheet.getRow(row).getCell(7));
-                String row8 = tranCell(sheet.getRow(row).getCell(8));
+                String bsElement = tranCell(sheet.getRow(row).getCell(1)); //新增组件名称
+                String row1 = tranCell(sheet.getRow(row).getCell(2));
+                String row2 = tranCell(sheet.getRow(row).getCell(3));
+                String row3 = tranCell(sheet.getRow(row).getCell(4));
+                String row4 = tranCell(sheet.getRow(row).getCell(5));
+                String row5 = tranCell(sheet.getRow(row).getCell(6));
+                String row6 = tranCell(sheet.getRow(row).getCell(7));
+                String row7 = tranCell(sheet.getRow(row).getCell(8));
+                String row8 = tranCell(sheet.getRow(row).getCell(9));
                 ProductMaterTemp temp = new ProductMaterTemp();
 
                 if(StringUtils.isNotEmpty(mid)){

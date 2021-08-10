@@ -271,7 +271,7 @@ $(function () {
 
                 // 监听提交
                 form.on('submit(hsearchSubmit)', function (data) {
-                    data.field.errorFlag = $("#errorFlag").prop('checked') ? 1 : 0
+                    // data.field.errorFlag = $("#errorFlag").prop('checked') ? 1 : 0
                     data.field.scanType = type==1?"产出":"投入"
                     hTableIns.reload({
                         url: context
@@ -423,11 +423,13 @@ function exportExcel(){
         layer.alert("请输入开始时间和结束时间");
         return false;
     }
-    var errorFlag = $("#errorFlag").prop('checked') ? 1 : 0;
+    // var url = "hStartTime="+$('#hStartTime').val()+"&hEndTime="+$('#hEndTime').val()+"&hkeywork="+$('#hkeywork').val()
+    //     +"&scanFrom="+$('#scanFrom').val();
+    // var errorFlag = $("#errorFlag").prop('checked') ? 1 : 0;
     var scanType = type==1?"产出":"投入"
     // console.log($("#hsearch_item_form").serialize());
     $('#exportBtn').addClass("layui-btn-disabled").attr("disabled",true);
-    location.href = context + "/produce/check_code/export?"+$("#hsearch_item_form").serialize()+"&scanType="+scanType+"&errorFlag="+errorFlag;
+    location.href = context + "/produce/check_code/export?"+$("#hsearch_item_form").serialize()+"&scanType="+scanType;
     // $('#exportBtn').removeClass("layui-btn-disabled").attr("disabled", false);//有效
 }
 

@@ -306,16 +306,21 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		if (profitNet != null) {
 			// 系统报价：生产成本FEE_PROD_NET+管理费用FEE_MANAGE+净利润PROFIT_NET
 			BigDecimal bj_all = p_cb.add(gl).add(profitNet);
-			// 毛利：管理费用FEE_MANAGE+净利润PROFIT_NET
-			BigDecimal ml = gl.add(profitNet);
+			// 毛利：管理费用FEE_MANAGE+净利润PROFIT_NET  修改为
+			BigDecimal ml = BigDecimal.ZERO;
+			if(quote.getBsRate()!=null){
+				 ml =p_cb.multiply(new BigDecimal("100").subtract(quote.getBsRate())).divide(new BigDecimal("100"));
+				profitNet = ml.subtract(gl);
+			}
+//			BigDecimal ml = gl.add(profitNet);
 			// 毛利率：毛利/系统报价
-			BigDecimal ml_rate = ml.multiply(new BigDecimal("100")).divide(bj_all, 5, 5);
+//			BigDecimal ml_rate = ml.multiply(new BigDecimal("100")).divide(bj_all, 5, 5);
 			// 净利率：净利润/系统报价
 			BigDecimal profit_gs = profitNet.multiply(new BigDecimal("100")).divide(bj_all, 5, 5);
 
 			map.put("bj_all", bj_all); // 系统报价
 			map.put("ml", ml); // 毛利
-			map.put("ml_rate", ml_rate + "%"); // 毛利率
+			map.put("ml_rate", quote.getBsRate()); // 毛利率
 			map.put("profit_gs", profit_gs + "%"); // 净利率
 
 		}
@@ -707,6 +712,18 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			quoteDao.save(o);
 		}
 		return ApiResponseResult.success("修改包装运输费成功!");
+	}
+
+	@Override
+	public ApiResponseResult updateMlRate(long quoteId, BigDecimal bsManageFee) throws Exception {
+		Quote o = quoteDao.findById(quoteId);
+		if (o == null) {
+			return ApiResponseResult.failure("没有这个报价单");
+		} else {
+			o.setBsRate(bsManageFee);
+			quoteDao.save(o);
+		}
+		return ApiResponseResult.success("修改毛利率成功!");
 	}
 
 	@Override

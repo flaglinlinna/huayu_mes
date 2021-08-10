@@ -26,6 +26,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -152,16 +153,16 @@ public class ProductMaterlmpl implements ProductMaterService {
         if(("hardware").equals(bsType)){
             fileName = "五金材料模板.xlsx";
 //            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsRadix","bsSupplier","fmemo"};
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsProQty","bsUnit","bsWaterGap","bsCave"};
+            map_arr = new String[]{"id","bsElement","bsComponent","bsMaterName","bsModel","bsQty","bsProQty","bsUnit","bsWaterGap","bsCave"};
         }else if(("molding").equals(bsType)){
             fileName = "注塑材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsProQty","bsUnit","bsWaterGap","bsCave"};
+            map_arr = new String[]{"id","bsElement","bsComponent","bsMaterName","bsModel","bsQty","bsProQty","bsUnit","bsWaterGap","bsCave"};
         }else if(("surface").equals(bsType)){
             fileName = "表面处理材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit"};
+            map_arr = new String[]{"id","bsElement","bsComponent","bsMaterName","bsModel","bsQty","bsUnit"};
         }else if(("packag").equals(bsType)){
             fileName = "组装材料模板.xlsx";
-            map_arr = new String[]{"id","bsComponent","bsMaterName","bsModel","bsQty","bsUnit"};
+            map_arr = new String[]{"id","bsElement","bsComponent","bsMaterName","bsModel","bsQty","bsUnit"};
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
 //        Resource resource = new ClassPathResource(excelPath+fileName);
@@ -174,7 +175,8 @@ public class ProductMaterlmpl implements ProductMaterService {
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));
         Specification<ProductMater> spec = Specification.where(BaseService.and(filters, ProductMater.class));
-        List<ProductMater> productMaterList  = productMaterDao.findAll(spec);
+        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        List<ProductMater> productMaterList  = productMaterDao.findAll(spec,sort);
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (ProductMater bs : productMaterList) {
             Map<String, Object> map = new HashMap<>();
@@ -188,6 +190,7 @@ public class ProductMaterlmpl implements ProductMaterService {
 //            }else if(("packag").equals(bsType)){
 //                map.put("bsType", "组装");
 //            }
+            map.put("bsElement", bs.getBsElement());
             map.put("bsComponent", bs.getBsComponent());
             map.put("bsMaterName", bs.getBsMaterName());
             map.put("bsModel", bs.getBsModel());

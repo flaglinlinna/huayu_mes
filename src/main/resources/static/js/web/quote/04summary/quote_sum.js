@@ -29,17 +29,17 @@ $(function() {
 
 		});
 
-		// $('#freight').bind('keypress', function(event) {
-		// 	if (event.keyCode == "13") {
-		// 		if (/^\d+$/.test($('#freight').val()) == false && /^\d+\.\d+$/.test($('#freight').val()) == false) {
-		// 			layer.msg("请输入数字类型的管理费率");
-		// 			return false;
-		// 		}
-		// 		if($('#freight').val()){
-		// 			updateBsFreight($('#freight').val());
-		// 		}
-		// 	}
-		// });
+		$('#ml_rate').bind('keypress', function(event) {
+			if (event.keyCode == "13") {
+				if (/^\d+$/.test($('#ml_rate').val()) == false && /^\d+\.\d+$/.test($('#ml_rate').val()) == false) {
+					layer.msg("请输入数字类型的毛利率");
+					return false;
+				}
+				if($('#ml_rate').val()){
+					updateMlRate($('#ml_rate').val());
+				}
+			}
+		});
 
 		$('#profitNet').bind('keypress', function(event) {
 			if (event.keyCode == "13") {
@@ -54,7 +54,7 @@ $(function() {
 
 					var bj_all = Number(quoteDetail.data.gl) + Number(quoteDetail.data.p_cb) + Number($('#profitNet').val());
 					var ml = Number(quoteDetail.data.gl) + Number($('#profitNet').val());
-					var ml_rate = ml / bj_all * 100;
+					var ml_rate = Number(quoteDetail.data.ml_rate);
 					var profit_gs = $('#profitNet').val() / bj_all * 100;
 					var gl_rate = Number($('#gl').val()) / bj_all *100;
 					var p_cb_rate = Number($('#p_cb').val()) / bj_all *100;
@@ -64,7 +64,7 @@ $(function() {
 						// "ml_rate" : ml_rate.toFixed(5) + "%",
 						// "profit_gs" : profit_gs.toFixed(5) + "%"
 					})
-					$('#ml_rate').html(ml_rate.toFixed(2) + "%");
+					$('#ml_rate').html(ml_rate.toFixed(2));
 					$('#profit_gs').html(profit_gs.toFixed(2) + "%");
 					$("#gl_rate").html(gl_rate.toFixed(2) + "%");
 					$("#p_cb_rate").html(p_cb_rate.toFixed(2) + "%");
@@ -81,7 +81,8 @@ $(function() {
 		$('#ml,#gl').bind('keypress', function(event) {
 			if (event.keyCode == "13") {
 				var bj_all = Number($('#gl').val()) + Number(quoteDetail.data.p_cb) + Number($('#profitNet').val());
-				var ml_rate = Number($('#ml').val()) / bj_all * 100;
+				// var ml_rate = Number($('#ml').val()) / bj_all * 100;
+				var ml_rate = Number(quoteDetail.data.ml_rate);
 				var profit_gs = $('#profitNet').val() / bj_all * 100;
 				form.val("itemForm", {
 					"bj_all" : bj_all.toFixed(5),
@@ -89,7 +90,7 @@ $(function() {
 					// "ml_rate" : ml_rate.toFixed(5) + "%",
 					// "profit_gs" : profit_gs.toFixed(5) + "%"
 				})
-				$('#ml_rate').html(ml_rate.toFixed(2) + "%");
+				$('#ml_rate').html(ml_rate.toFixed(2));
 				$('#profit_gs').html(profit_gs.toFixed(2) + "%");
 				layui.form.render('');
 			}
@@ -608,13 +609,16 @@ $(function() {
 
 //初始化比例
 function initRate() {
+	console.log(quoteDetail);
 	var bj_all = Number(quoteDetail.data.gl) + Number(quoteDetail.data.p_cb) + Number(quoteDetail.data.profitNet);
 	var ml = Number(quoteDetail.data.gl) + Number(quoteDetail.data.profitNet);
-	var ml_rate = ml / bj_all * 100;
+	var ml_rate = Number(quoteDetail.data.ml_rate);
+	// var ml_rate = ml / bj_all * 100;
 	var profit_gs = Number(quoteDetail.data.profitNet) / bj_all * 100;
 	var gl_rate = Number(quoteDetail.data.gl) / bj_all *100;
 	var p_cb_rate = Number(quoteDetail.data.p_cb) / bj_all *100;
-	$('#ml_rate').html(ml_rate.toFixed(2) + "%");
+	// $('#ml_rate').html(ml_rate.toFixed(2) + "%");
+	$('#ml_rate').val(ml_rate);
 	$('#profit_gs').html(profit_gs.toFixed(2) + "%");
 	$("#gl_rate").html(gl_rate.toFixed(2) + "%");
 	$("#p_cb_rate").html(p_cb_rate.toFixed(2) + "%");
@@ -1023,6 +1027,26 @@ function updateBsFreight(value) {
 		"bsFreight" : value
 	};
 	CoreUtil.sendAjax("/quoteSum/updateBsFreight", JSON.stringify(params), function(data) {
+		if (data.result) {
+			layer.alert(data.msg, function(index) {
+				layer.close(index);
+				window.location.reload();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
+//修改保底毛利率
+function updateMlRate(value) {
+	var params = {
+		"pkQuote" : quoteId,
+		"ml_rate" : value
+	};
+	CoreUtil.sendAjax("/quoteSum/updateMlRate", JSON.stringify(params), function(data) {
 		if (data.result) {
 			layer.alert(data.msg, function(index) {
 				layer.close(index);

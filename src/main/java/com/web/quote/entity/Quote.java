@@ -289,7 +289,7 @@ public class Quote extends BaseEntity {
     protected ProfitProd profitProd;*/
 	
 	/**
-	 * 产品利润率
+	 * 产品利润率(保底毛利率)
 	 */
 	@ApiModelProperty(name = "bsProfitProd", value = "产品利润率")
 	@Column(precision = 15,scale = 5)
@@ -301,6 +301,13 @@ public class Quote extends BaseEntity {
 	@ApiModelProperty(name = "bsProfitNet", value = "净利润")
 	@Column(precision = 15,scale = 5)
 	protected BigDecimal bsProfitNet;
+
+	/**
+	 * 毛利率(手工录入)
+	 */
+	@ApiModelProperty(name = "bsProfitProd", value = "毛利率(手工录入)")
+	@Column(precision = 15,scale = 5)
+	protected BigDecimal bsRate;
 	
 	
 	/**
@@ -910,5 +917,13 @@ public class Quote extends BaseEntity {
 
 	public void setBsStatus2Freight(int bsStatus2Freight) {
 		this.bsStatus2Freight = bsStatus2Freight;
+	}
+
+	public BigDecimal getBsRate() {
+		return bsRate;
+	}
+
+	public void setBsRate(BigDecimal bsRate) {
+		this.bsRate = bsRate;
 	}
 }

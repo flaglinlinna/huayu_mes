@@ -17,7 +17,7 @@ $(function() {
 			data : [],
 			// height: 'full',
 			page : true,
-			limit: 100,
+			limit:100,
 			limits: [100,200,300,500],
 			// totalRow :true,
 			request : {
@@ -51,24 +51,24 @@ $(function() {
 				// }
 			},
 			cols : [ [
-					{fixed:'left',type : 'numbers'},
-					{fixed:'left',field : 'ITEM_NO', title : '产品编码',  width : 150,},
-					{fixed:'left',field : 'LINER_NAME', title : '组长', width : 80,},
-				    {fixed:'left',field : 'TASK_NO', title : '制令单号', width : 150,},
-					{field : 'FDAY', title : '统计日期', sort : true, width : 100,},
-					{field : 'TIME_BG', title : '开始时段', width : 80,},
-					{field : 'TIME_END', title : '结束时段', width : 80,},
-					{field : 'TIME_NUM', title : '实际分钟',  width : 80,},
-					{field : 'TIME_BG_ACT', title : '统一上线', width : 80,},
-					{field : 'TIME_END_ACT', title : '统一下线', width : 80,},
+					{type : 'numbers'},
+					{field : 'ITEM_NO', title : '产品编码',  width : 130,},
+					{field : 'LINER_NAME', title : '组长', width : 80,},
+				    {field : 'TASK_NO', title : '制令单号', width : 150,},
+					{field : 'FDAY', title : '统计日期', sort : true, width : 140,},
+					{field : 'TIME_BG', title : '开始时间段', width : 100,},
+					{field : 'TIME_END', title : '结束时间段', width : 100,},
+					{field : 'TIME_NUM', title : '实际分钟数',  width : 100,},
+					{field : 'TIME_BG_ACT', title : '上班时间', width : 80,},
+					{field : 'TIME_END_ACT', title : '下班时间', width : 80,},
 					{field : 'QTY_T_TAR', title : '投入目标',  width : 80,},
 					{field : 'QTY_T_ACT', title : '投入实际', width : 80,},
-					{field : 'RATE_T', title : '投入达成率', width : 90,},
-					{field : 'QTY_C_TAR', title : '产出目标',  width : 80,},
+					{field : 'RATE_T', title : '投入达成率', width : 150,},
+					{field : 'QTY_C_TAR', title : '产出目标',  width : 110,},
 					{field : 'QTY_C_ACT', title : '产出实际', width : 80,},
-					{field : 'RATE_C', title : '产出达成率', width : 90,},
-					{field : 'QTY_NG', title : '在线不良数', width : 90,},
-					{field : 'RATE_OK', title : '在线良率', width : 80,},
+					{field : 'RATE_C', title : '产出达成率', width : 110,},
+					{field : 'QTY_NG', title : '在线不良数', width : 110,},
+					{field : 'RATE_OK', title : '在线良率', width : 100,},
 
 				 ] ],
 			done : function(res, curr, count) {
@@ -367,10 +367,24 @@ function getReport(dates) {
 		url:context+'/report/rpt_hour/getReport',
 		where:dates,
 		done: function(res1, curr, count){
-			layer.closeAll('loading');
+			layer.closeAll('loading'); //关闭loading
 			pageCurr=curr;
 		}
 	})
 	localtableFilterIns.reload();
 }
 
+function exportExcel(){
+	if(!$('#dates').val()){
+		layer.alert("请输入开始时间和结束时间");
+		return false;
+	}
+	layer.load();
+	$('#exportBtn').addClass("layui-btn-disabled").attr("disabled",true);
+	location.href = context + "/report/rpt_hour/export?"+$("#searchFrom").serialize()+"&rows=99999";
+
+	setTimeout(function(){
+		layer.closeAll('loading'); //关闭loading
+		$('#exportBtn').removeClass("layui-btn-disabled").attr("disabled", false);
+	},5000);
+}

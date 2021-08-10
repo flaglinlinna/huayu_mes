@@ -59,7 +59,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">版本</label>
+						<label class="layui-form-label" style="width: 130px">版本</label>
 						<div class="layui-input-inline" style="width: 130px;">
 							<input id="bsProjVer" lay-verify="required" name="bsProjVer"
 								   readonly="readonly" autocomplete="off" class="layui-input grey" type="text" />
@@ -91,7 +91,7 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">产品类型</label>
+						<label class="layui-form-label" style="width: 130px">产品类型</label>
 						<div class="layui-input-inline" style="width: 130px;">
 							<input id="bsProdType" lay-verify="required" name="bsProdType"
 								   readonly="readonly"	autocomplete="off" class="layui-input grey" type="text" />
@@ -124,10 +124,10 @@
 					</div>
 
 					<div class="layui-inline">
-						<label class="layui-form-label">保底毛利率%</label>
+						<label class="layui-form-label"  style="width: 130px">保底毛利率%(E)</label>
 						<div class="layui-input-inline" style="width: 130px;">
 							<input id="bsProfitProd" lay-verify="required" name="bsProfitProd"
-								   readonly="readonly" autocomplete="off" class="layui-input grey" type="text" />
+								   autocomplete="off" readonly="readonly" class="layui-input grey" type="text" />
 						</div>
 					</div>
 
@@ -160,17 +160,17 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">生产成本(A)</label>
-						<div class="layui-input-block" style="width: 160px;">
+						<label class="layui-form-label"style="width: 130px">生产成本(A)</label>
+						<div class="layui-input-block" style="margin-left:130px;width: 160px;">
 							<input id="p_cb" name="p_cb" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
-							<span id="p_cb_rate"
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>
+<!--							<span id="p_cb_rate"-->
+<!--								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>-->
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label"><a data-type="mould_all">模具费用</a></label>
-						<div class="layui-input-block" style="width: 160px;">
+						<label class="layui-form-label"style="width: 130px"><a data-type="mould_all">模具费用</a></label>
+						<div class="layui-input-block" style="margin-left:130px;width: 120px;">
 							<input id="mould_all" name="mould_all" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
 						</div>
@@ -194,20 +194,22 @@
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">净利润(C)</label>
-						<div class="layui-input-block" style="width: 160px;">
+						<label class="layui-form-label"style="width: 130px">净利润(C=Y-B)</label>
+						<div class="layui-input-block" style="margin-left:130px;width: 160px;">
 							<input id="profitNet" name ="profitNet" lay-filter="profitNet" lay-verify="num"
-								   autocomplete="off" class="layui-input" type="text" />
+								   autocomplete="off" readonly="readonly" class="layui-input grey" type="text" />
 							<span id ="profit_gs" style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">毛利(Y=B+C)</label>
-						<div class="layui-input-block" style="width: 160px;">
+						<label class="layui-form-label"style="width: 130px">毛利(Y=A*(100-F))</label>
+						<div class="layui-input-block" style="margin-left:130px;width: 120px;">
 							<input id="ml" name="ml" autocomplete="off" readonly="readonly"
 								   class="layui-input grey" type="text" />
-							<span id="ml_rate"
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>
+<!--							<input id="ml_rate" name="ml_rate" autocomplete="off" readonly="readonly"-->
+<!--								   class="layui-input grey" type="text" />-->
+<!--							<span id="ml_rate" contenteditable="true"-->
+<!--								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #FFFAF0; white-space: nowrap; padding: 7px 12px;">0%</span>-->
 						</div>
 					</div>
 					<!--<div class="layui-inline">-->
@@ -219,6 +221,16 @@
 					<!--</div>-->
 				</div>
 
+				<div class="layui-form-item">
+
+					<div class="layui-inline">
+						<label class="layui-form-label"style="width: 150px">毛利率%(F)</label>
+							<div class="layui-input-block" style="margin-left:150px;width: 160px;">
+								<input id="ml_rate" name="ml_rate" autocomplete="off"
+								 class="layui-input " type="text" />
+						</div>
+					</div>
+				</div>
 
 				<fieldset class="layui-elem-field layui-field-title"
 					style="margin: 10px 0 10px;">

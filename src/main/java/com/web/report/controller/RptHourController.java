@@ -96,7 +96,7 @@ public class RptHourController extends WebController {
 					   @RequestParam(value = "itemNo",required = false) String itemNo,
 					   @RequestParam(value = "linerName",required = false) String linerName,
 					   @RequestParam(value = "taskNo",required = false) String taskNo) throws Exception{
-		String method = "/product/check_code/export";String methodName ="导出";
+		String method = "/report/rpt_hour/export";String methodName ="导出";
 		try{
 			String[] date = {"",""};
 			if(StringUtils.isNotEmpty(dates)){

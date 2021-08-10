@@ -1222,12 +1222,12 @@ public class PrcUtils {
 
     public List getBarHistoryPrc(String company,String facoty,String user_id,Integer errFlag,
                               String  hStartTime,String hEndTime,String keyword,
-                               String  ScanType,String scanFrom,
+                               String  ScanType,String scanFrom,String barCode,
                               int page,int rows,String prc_name) throws Exception {
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
-                String storedProc = "{call  "+prc_name+" (?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
+                String storedProc = "{call  "+prc_name+" (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";// 调用的sql
                 CallableStatement cs = con.prepareCall(storedProc);
                 cs.setString(1, company);
                 cs.setString(2, facoty);
@@ -1237,12 +1237,13 @@ public class PrcUtils {
                 cs.setString(6, hStartTime);
                 cs.setString(7, hEndTime);
                 cs.setString(8, keyword);
-                cs.setInt(9, rows);
-                cs.setInt(10, page);
-                cs.registerOutParameter(11, java.sql.Types.INTEGER);// 输出参数 返回标识
-                cs.registerOutParameter(12, java.sql.Types.VARCHAR);// 输出参数 返回标识
-                cs.registerOutParameter(13, java.sql.Types.INTEGER);// 总记录数
-                cs.registerOutParameter(14, -10);// 输出参数 追溯数据
+                cs.setString(9, barCode);
+                cs.setInt(10, rows);
+                cs.setInt(11, page);
+                cs.registerOutParameter(12, java.sql.Types.INTEGER);// 输出参数 返回标识
+                cs.registerOutParameter(13, java.sql.Types.VARCHAR);// 输出参数 返回标识
+                cs.registerOutParameter(14, java.sql.Types.INTEGER);// 总记录数
+                cs.registerOutParameter(15, -10);// 输出参数 追溯数据
                 return cs;
             }
         }, new CallableStatementCallback() {
@@ -1250,12 +1251,12 @@ public class PrcUtils {
                 List<Object> result = new ArrayList<>();
                 List<Map<String, Object>> l = new ArrayList();
                 cs.execute();
-                result.add(cs.getInt(11));
-                result.add(cs.getString(12));
-                if (cs.getString(11).toString().equals("0")) {
-                    result.add(cs.getString(13));
+                result.add(cs.getInt(12));
+                result.add(cs.getString(13));
+                if (cs.getString(12).toString().equals("0")) {
+                    result.add(cs.getString(14));
                     // 游标处理
-                    ResultSet rs = (ResultSet) cs.getObject(14);
+                    ResultSet rs = (ResultSet) cs.getObject(15);
 
                     try {
                         l = fitMap(rs);

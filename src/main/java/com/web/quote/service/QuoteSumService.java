@@ -26,6 +26,7 @@ public interface QuoteSumService {
 
 	public ApiResponseResult updateBsFreight(long quoteId, BigDecimal bsManageFee)throws Exception;
 
+	public ApiResponseResult updateMlRate(long quoteId, BigDecimal bsManageFee)throws Exception;
 
 	public ApiResponseResult getQuoteBomByQuote(String quoteId)throws Exception;//查询总费用
 	
