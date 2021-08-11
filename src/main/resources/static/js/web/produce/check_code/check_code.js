@@ -293,6 +293,7 @@ $(function () {
                             }
                         }
                     });
+                    $('#exportBtn').removeClass("layui-btn-disabled").attr("disabled", false);//有效
                     return false;
                 });
 
