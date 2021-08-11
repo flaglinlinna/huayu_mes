@@ -279,7 +279,7 @@ $(function () {
                         where: data.field,
                         done: function (res, curr, count) {
                             pageCurr = curr;
-                            if (data.field.errorFlag == 1) {
+                            if (data.field.errorFlag == 1||data.field.errorFlag == 2) {
                                 res.data.forEach(function (item, index) {
                                     $('div[lay-id="hcolTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="FMEMO"]').removeClass("layui-hide");
                                     $('div[lay-id="hcolTable"]').find('thead').find('th[data-field="FMEMO"]').removeClass("layui-hide");
