@@ -39,6 +39,10 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 
 	public List<ProductMater> findByPkQuoteAndDelFlagAndBsGroups(Long pkQuote,Integer delFlag,String bsGroups);
 
+	//损耗明细材料成本取数
+	@Query(value = "select * from  PRICE_PRODUCT_MATER where  BS_MATER_NAME in( select BS_MATER_NAME from price_product_process where PK_QUOTE = ?1 and BS_LINK_NAME = ?2 and pk_proc = ?3 and bs_Element =?4) and PK_QUOTE = ?1 and bs_Element =?4",nativeQuery = true)
+	public List<ProductMater> findByProcessLost(Long pkQuote,String bsLinkName,Long pkProc,String bsElement);
+
 	public List<ProductMater> findByPkQuoteAndDelFlagAndBsMaterName(Long pkQuote,Integer delFlag,String bsMaterName);
 
 	Integer countByDelFlagAndPkQuoteAndBsAssessIsNull(Integer delFlag,Long pkQuote);

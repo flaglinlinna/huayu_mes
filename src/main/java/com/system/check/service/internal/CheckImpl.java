@@ -1,11 +1,7 @@
 package com.system.check.service.internal;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.system.user.dao.SysUserDao;
@@ -616,12 +612,18 @@ public class CheckImpl   implements CheckService {
 					productProcessDao.deleteByPkQuoteBom(c.getBsRecordId());
 					if(lpd.size() > 0){
 						List<ProductProcess> lpp = new ArrayList<ProductProcess>();
+						Set<String> procSet = new HashSet<String>();
 						for(QuoteProcess qb:lpd){
 							ProductProcess pp = new ProductProcess();
 							if (qb.getCopyId() != null) {
 								List<ProductProcess> productProcessList = productProcessDao.findByPkQuoteAndCopyId(quote.getId(), qb.getCopyId());
 								if (productProcessList.size() > 0) {
 									pp = productProcessList.get(0);
+								}
+							}
+							if(qb.getProc().getProcName().equals("喷涂")){
+								if(!procSet.add("喷涂"+qb.getBjWorkCenter().getWorkcenterName())){
+									continue;
 								}
 							}
 							pp.setBsName(qb.getBsName());
@@ -863,6 +865,8 @@ public class CheckImpl   implements CheckService {
 						}
 					}
 					quote.setBsStep(2);
+//					//修改状态为驳回
+//					quote.setBsStatus2(5);
 					quote.setLastupdateBy(userId);
 					quoteDao.save(quote);
 				}

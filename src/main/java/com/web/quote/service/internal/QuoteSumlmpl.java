@@ -642,14 +642,19 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //				o.setBsYield(new BigDecimal("100").subtract(o.getBsLoss()));
 				o.setBsYield(o.getBsLoss());
 			}else {
+				//损耗材料的材料成本取数 1分组不为空,取出所有材料名称对应bom;2分组不为空,取对应材料名称的材料成本
+				 //修改 根据损耗明细中的组件名称、所属零件、工作中心、工序到工艺流程中取对应的材料名称，再合计这些材料的材料成本
 				List<ProductMater> pmList = new ArrayList<>();
-				if(StringUtils.isNotEmpty(o.getBsGroups())){
-					pmList= productMaterDao.findByPkQuoteAndDelFlagAndBsGroups(o.getPkQuote(),0,o.getBsGroups());
-				}else {
-//					pmList = productMaterDao.findByBsElementAndBsComponentAndPkQuoteAndBsTypeAndDelFlag(
-//							o.getBsElement(), o.getBsName(), o.getPkQuote(), o.getBsType(), 0);
-					pmList = productMaterDao.findByPkQuoteAndDelFlagAndBsMaterName(o.getPkQuote(),0,o.getBsMaterName());
-				}
+				pmList = productMaterDao.findByProcessLost(o.getPkQuote(), o.getBsLinkName(), o.getPkProc(), o.getBsElement());
+
+//				if(StringUtils.isNotEmpty(o.getBsGroups())){
+//					pmList= productMaterDao.findByPkQuoteAndDelFlagAndBsGroups(o.getPkQuote(),0,o.getBsGroups());
+//					pmList = productMaterDao.findByProcessLost(o.getPkQuote(), o.getBsLinkName(), o.getPkProc(), o.getBsElement());
+//				}else {
+////					pmList = productMaterDao.findByBsElementAndBsComponentAndPkQuoteAndBsTypeAndDelFlag(
+////							o.getBsElement(), o.getBsName(), o.getPkQuote(), o.getBsType(), 0);
+//					pmList = productMaterDao.findByPkQuoteAndDelFlagAndBsMaterName(o.getPkQuote(),0,o.getBsMaterName());
+//				}
 				BigDecimal materCost = BigDecimal.ZERO;
 				for(ProductMater pm:pmList){
 					materCost = materCost.add(pm.getBsFee());
