@@ -65,7 +65,7 @@ $(function() {
 				{fixed:'left',field : 'bsStatus',title : '状态',width : 100,templet : function(d) {
 						if(d.bsQuoteStatus !="99") {
 							if(d.bsStatus2 =='5'){
-								return '驳回'
+								return '驳回中'
 							}
 							if (d.bsStatus < 99) {
 								if (d.bsStatus == "0") {

@@ -9,10 +9,10 @@ layui.use('layer', function(){
     	    name:'level',
     	    tips: '请选择退回操作部门',
     	    data: [
-    	        {name: '制造部-五金', value: 1},
-    	        {name: '制造部-注塑', value: 2},
-    	        {name: '制造部-表面处理', value: 3},
-    	        {name: '制造部-组装', value: 4},
+    	        {name: '制造部-五金', value: 'hardware'},
+    	        {name: '制造部-注塑', value: 'molding'},
+    	        {name: '制造部-表面处理', value: 'surface'},
+    	        {name: '制造部-组装', value: 'packag'},
     	        {name: '采购部', value: 5},
     	        {name: '外协部', value: 6},
     	    ]

@@ -13,9 +13,17 @@ import com.system.check.entity.CheckInfo;
 
 public interface CheckInfoDao extends CrudRepository<CheckInfo, Long>, JpaSpecificationExecutor<CheckInfo> {
 
-	@Query(value = "select p.*  from "+ CheckInfo.TABLE_NAME +" p "+
-			" where p.bs_Record_Id = (?1) and p.bs_check_Code= (?2) and p.del_flag=0 order by p.id ", nativeQuery = true)
-	public List<CheckInfo> findAllByRecordId(Long id, String checkCode);
+//	@Query(value = "select p.*  from "+ CheckInfo.TABLE_NAME +" p "+
+//			" where p.bs_Record_Id = (?1) and p.bs_check_Code= (?2) and p.del_flag=0 order by p.id ", nativeQuery = true)
+//	public List<CheckInfo> findAllByRecordId(Long id, String checkCode);
+
+
+	@Query(value = "select * from (select p.*  from "+ CheckInfo.TABLE_NAME +" p "+
+			" where p.bs_Record_Id = (?1) and p.bs_check_Code= (?2) and p.del_flag=0 " +
+			"union select t.*  from sys_check_info t where t.bs_Record_Id = (?1) " +
+			"and t.del_flag=0  and BS_CHECK_CODE ='QUOTE' and t.bs_Step_Check_Status = 2 and t.BS_CHECK_DES like (?3)) a  order by a.lastupdate_date ", nativeQuery = true)
+	public List<CheckInfo> findAllByRecordId(Long id, String checkCode,String checkCodeLike);
+
 
 	//营销关联查找出被驳回的信息
 	@Query(value = "select * from (select p.*  from "+ CheckInfo.TABLE_NAME +" p "+

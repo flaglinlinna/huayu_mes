@@ -305,7 +305,7 @@ public class CheckImpl   implements CheckService {
 		if(("QUOTE_NEW").equals(checkCode)) {
 			lc = checkInfoDao.findAllByBusiness(id, checkCode);
 		}else {
-			lc = checkInfoDao.findAllByRecordId(id, checkCode);
+			lc = checkInfoDao.findAllByRecordId(id, checkCode,"%"+checkCode+"%");
 		}
 		//结束时间为空,即未审批
 		List<CheckInfo> lc1 = checkInfoDao.findNotByRecordId(id, checkCode);
@@ -845,16 +845,16 @@ public class CheckImpl   implements CheckService {
 				if(quote != null){
 					quote.setLastupdateDate(new Date());
 					for(String str:strs){
-						if(str.equals("1")){//制造部-五金
+						if(str.equals("hardware")){//制造部-五金
 							quote.setBsStatus2Hardware(1);
 							productMaterDao.updateStatus(checkInfo.getBsRecordId(), "hardware", 0);
-						}else if(str.equals("2")){//制造部-注塑
+						}else if(str.equals("molding")){//制造部-注塑
 							quote.setBsStatus2Molding(1);
 							productMaterDao.updateStatus(checkInfo.getBsRecordId(), "molding", 0);
-						}else if(str.equals("3")){//制造部-表面处理
+						}else if(str.equals("surface")){//制造部-表面处理
 							quote.setBsStatus2Surface(1);
 							productMaterDao.updateStatus(checkInfo.getBsRecordId(), "surface", 0);
-						}else if(str.equals("4")){//制造部-组装
+						}else if(str.equals("packag")){//制造部-组装
 							quote.setBsStatus2Packag(1);
 							productMaterDao.updateStatus(checkInfo.getBsRecordId(), "packag", 0);
 						}else if(str.equals("5")){//采购部
