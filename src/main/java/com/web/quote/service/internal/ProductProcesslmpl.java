@@ -517,13 +517,19 @@ public class ProductProcesslmpl implements ProductProcessService {
         if (i > 0) {
             return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
         }
-
+        //保存当前界面上的所有填写的工序信息
         productProcessDao.saveAll(productProcessList);
 
+        List<ProductProcess> processAllList = new ArrayList<>();
 
-
-        List<ProductProcess> productMaterList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, bsType);
-        for (ProductProcess o : productMaterList) {
+        if(bsType.equals("out")) {
+            //查询该用户下的所有外协工序信息
+            processAllList = productProcessDao.findAllOutListByUserId(quoteId, UserUtil.getSessionUser().getId());
+        }else {
+            //该类型下的所有工序
+            processAllList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, bsType);
+        }
+        for (ProductProcess o : processAllList) {
             if (o.getPkProc() == null) {
                 return ApiResponseResult.failure("工序名称不能为空,请检查后再确认！");
             }
@@ -559,6 +565,7 @@ public class ProductProcesslmpl implements ProductProcessService {
                 if (o.getBsFeeWxAll() == null || o.getBsLoss() == null) {
                     return ApiResponseResult.failure("损耗率、外协价格不能为空,请检查后再确认！");
                 }
+                o.setBsStatus(1);
             }
             if(!("out").equals(o.getBsType())) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -628,8 +635,9 @@ public class ProductProcesslmpl implements ProductProcessService {
         }
 
 //        productProcessDao.saveAll(productMaterList);
-        productProcessDao.doProcessStatusByType(UserUtil.getSessionUser().getId(), new Date(), quoteId, bsType);
         if (!("out").equals(bsType)) {
+            //更新确认完成字段
+            productProcessDao.doProcessStatusByType(UserUtil.getSessionUser().getId(), new Date(), quoteId, bsType);
             //项目状态设置-状态 2：已完成
             quoteItemDao.switchStatus(2, quoteId, bsCode);
             //设置结束时间
@@ -645,6 +653,11 @@ public class ProductProcesslmpl implements ProductProcessService {
         } else {
             //20210121-fyx-外协
             List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
+
+             Integer unfinished = productProcessDao.countByPkQuoteAndDelFlagAndBsTypeAndBsStatus(quoteId,0,"out",0);
+             if(unfinished>0){
+                 return ApiResponseResult.failure("存在其他用户的"+unfinished+"个外协信息未确认完成！");
+             }
             if (lo.size() > 0) {
                 Quote o = lo.get(0);
                 o.setBsStatus2Out(3);
@@ -686,7 +699,12 @@ public class ProductProcesslmpl implements ProductProcessService {
             //quoteItemDao.setEndTime(null, quoteId, bsCode);
             //取消报价单对应类别的完成状态
             quoteProductService.doItemFinish(bsCode, quoteId, 1);
-            List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, bsType);
+            List<ProductProcess> productProcessList = new ArrayList<>();
+            if("out".equals(bsType)){
+             productProcessList = productProcessDao.findAllOutListByUserId(quoteId, UserUtil.getSessionUser().getId());
+            }else {
+             productProcessList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, bsType);
+            }
             for (ProductProcess o : productProcessList) {
                 //修改所有工艺为未完成
                 o.setBsStatus(0);

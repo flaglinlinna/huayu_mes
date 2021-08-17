@@ -21,6 +21,8 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	public List<ProductProcess> findAll();
 	public ProductProcess findById(long id);
 	public List<ProductProcess> findByDelFlag(Integer delFlag);
+
+	public List<ProductProcess> findByBsTypeAndPkProcAndDelFlagAndPkQuote(String bsType,Long pkProc,Integer delFlag,Long pkQuote);
 	
 	public List<ProductProcess> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 
@@ -126,4 +128,10 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 					" and p.pk_proc in (select wr.pk_proc from BJ_BASE_PROC_ROLE wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from sys_user_role ur where ur.del_flag=0 and ur.user_id=?2)) ")
 	public Page<ProductProcess> findOutListByUserId(long pkQuote, Long userId,Pageable pageable);
 
+
+	@Query(value = "select * from PRICE_PRODUCT_PROCESS p  where p.PK_QUOTE = ?1 and p.DEL_FLAG = 0 and p.bs_Type ='out' " +
+			" and p.pk_proc in (select wr.pk_proc from BJ_BASE_PROC_ROLE wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from sys_user_role ur where ur.del_flag=0 and ur.user_id=?2)) order by p.bs_order",nativeQuery = true)
+	public List<ProductProcess> findAllOutListByUserId(long pkQuote, Long userId);
+
+	public Integer countByPkQuoteAndDelFlagAndBsTypeAndBsStatus(Long pkQuote,Integer delFlag,String bsType,Integer bsStatus);
 }

@@ -283,9 +283,10 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		if(quote.getBsStatus2Purchase() ==2 ||quote.getBsStatus2Purchase() ==4){
 			return ApiResponseResult.failure("发起审批后不能取消确认");
 		}
-		List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+//		List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+		List<ProductMater> productMaterList = productMaterDao.selectPurchaseByUserId(quoteId,UserUtil.getSessionUser().getId());
 		for(ProductMater o : productMaterList){
-			//修改所有材料为未完成
+			//hjj-修改所有材料为未完成,只改成取消对应用户的材料单
 			o.setBsStatusPurchase(0);
 			o.setLastupdateDate(new Date());
 			o.setLastupdateBy(UserUtil.getSessionUser().getId());
@@ -354,7 +355,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 //			map.put("bsRadix", productMater.getBsRadix());
 			map.put("bsExplain", productMater.getBsExplain());
 //			if(productMater.getBsGeneral()!=null){
-				map.put("bsGeneral", productMater.getBsGeneral()==1?"是":"否");
+			map.put("bsGeneral", productMater.getBsGeneral()==1?"是":"否");
 
 			map.put("bsGear", productMater.getBsGear());
 			map.put("bsRefer", productMater.getBsRefer());
@@ -441,7 +442,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		productMaterDao.saveAll(productMaterList2);
 		//判断是否该用户下的物料类型下的采购单是否评估价格存在空值
 		if(notFilled>0){
-			return ApiResponseResult.failure("确认完成失败！当前还有 "+notFilled +"条信息未填写评估价格");
+			return ApiResponseResult.failure("确认完成失败！当前其他用户还有 "+notFilled +"条信息未填写评估价格");
 		}else {
 			for(ProductMater o:productMaterList){
 				o.setBsStatusPurchase(1);

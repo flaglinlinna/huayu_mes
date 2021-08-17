@@ -622,6 +622,7 @@ public class CheckImpl   implements CheckService {
 								}
 							}
 							if(qb.getProc().getProcName().equals("喷涂")){
+								//同个工作中心下，只有一个喷涂
 								if(!procSet.add("喷涂"+qb.getBjWorkCenter().getWorkcenterName())){
 									continue;
 								}
@@ -820,7 +821,7 @@ public class CheckImpl   implements CheckService {
 		}*/
 		SysUser user = UserUtil.getSessionUser();
 		Long userId = user != null ? user.getId() : 0;
-		//判断是否是第一次发起审批
+		//判断是否是第一次发起审批, 该
 		if(this.checkFirst(checkInfo.getBsRecordId(),checkInfo.getBsCheckCode())){
 			if(checkInfo.getBsStepCheckStatus() != 1){
 				//驳回

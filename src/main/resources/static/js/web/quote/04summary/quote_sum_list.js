@@ -73,7 +73,9 @@ $(function () {
                     title: '状态',
                     width: 80,
                     templet: function (d) {
-                        if (d.bsStatus == "0") {
+                        if(d.bsStatus2 =='5'){
+                            return "驳回中"
+                        }else if (d.bsStatus == "0") {
                             return "草稿"
                         } else if (d.bsStatus == "1") {
                             return "进行中"
@@ -162,6 +164,9 @@ $(function () {
                         $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
                     } else if (item.bsStatus == "2") {
                         $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
+                    }
+                    if(item.bsStatus2==5){
+                        $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#FF0000');
                     }
                 });
             }

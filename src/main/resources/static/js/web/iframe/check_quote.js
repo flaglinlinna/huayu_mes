@@ -143,6 +143,7 @@ layui.use('layer', function(){
                                     ' </li>';
                             }
                         }
+
                         document.getElementById('timeline').innerHTML = timeHtml;
                     }
 

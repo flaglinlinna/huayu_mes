@@ -56,13 +56,123 @@
 </fieldset>
 <hr>
 <div class="layui-card">
-    <div class="layui-card-body" >
-        <ul class="layui-timeline" id="timeline">
+    <div id ="pageInfo">
+        <div class="layui-card-body"  style="height:120px;overflow:auto" >
+            <ul class="layui-timeline" id="timeline">
+    1
+            </ul>
 
-        </ul>
-
+        </div>
     </div>
 </div>
+
+<script>
+    function getInfo(json){
+        $.ajax({
+            url: context+'/check/getInfo',
+            type: "post",
+            data: json,
+            dataType: "json",
+            success: function (res) {
+                console.log(res);
+                if(res.result===true){
+                    var workFlow = res.data.Lw;
+                    for(var i =0;i<res.data.Lw.length;i++){
+                        if(workFlow[i].bsCheckGrade ==1){
+                            $("#span-1").html(workFlow[i].bsStepName)
+                        }else if(workFlow[i].bsCheckGrade ==2){
+                            $("#span-2").html(workFlow[i].bsStepName+"("+workFlow[i].bsCheckName+")")
+                        }else if(workFlow[i].bsCheckGrade ==3){
+                            $("#span-3").html(workFlow[i].bsStepName+"("+workFlow[i].bsCheckName+")")
+                        }
+                    }
+                    var list = res.data;
+                    step = list.grade;
+                    if(list.grade == '1'){
+                        //$("#th").attr("disabled","disabled");//失效
+                        $("#low_flag").show();
+                    }else{
+                        $("#low_flag").hide();
+                    }
+                    //隐藏
+                    if(list.grade == '2'){
+                        $("#end-btn").show();
+                        $("#end-span").show();
+                        $("#sure-span").text("总经理审批");
+                    }else{
+                        $("#end-btn").hide();
+                        $("#end-span").hide();
+                        $("#sure-span").text("同意");
+                    }
+                    //end
+
+                    //已完成
+                    if(status == '2'){
+                        setLiColor(4)
+                    }else{
+                        setLiColor(list.grade)
+                    }
+
+                    if(list.data.length == 0){
+                        document.getElementById('timeline').innerHTML = "";
+                    }else{
+                        // var timeHtml = '';
+                        // for(var i=0; i<list.data.length; i++){
+                        //     if(CheckIsNullOrEmpty(list.data[i].lastupdateDate)){
+                        //         timeHtml += '<li class="layui-timeline-item">'+ getIcon(list.data[i].bsStepCheckStatus)+
+                        //             /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
+                        //             ' <div class="layui-timeline-content layui-text">'+
+                        //             '  <div class="layui-timeline-title">'+
+                        //             '   <span style="padding-right:20px;">'+'['+getRadio(list.data[i].bsStepCheckStatus)+']'+list.data[i].createDate+'</span>  '+list.data[i].bsCheckName+','+list.data[i].bsCheckComments+
+                        //             '  </div>'+
+                        //             ' </div>'+
+                        //             ' </li>';
+                        //     }
+                        // }
+                        // document.getElementById('timeline').innerHTML = timeHtml;
+                        // var data = list.data;
+                        console.log(list.data.length);
+                        //调用分页
+                        layui.use(['laypage','layer'], function () {
+                            var page = layui.laypage;
+
+                            page.render({
+                                elem: 'pageInfo',
+                                count: list.data.length,
+                                // first: "首页",
+                                // last: "尾页",
+                                // layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+                                jump: function (obj,first) {
+                                    arr = [],thisData = list.data.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+                                    console.log(thisData);
+                                    layui.each(thisData, function(i, item){
+                                        arr.push('<li class="layui-timeline-item">'+ getIcon(list.data[i].bsStepCheckStatus)+
+                                            /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
+                                            ' <div class="layui-timeline-content layui-text">'+
+                                            '  <div class="layui-timeline-title">'+
+                                            '   <span style="padding-right:20px;">'+'['+getRadio(list.data[i].bsStepCheckStatus)+']'+list.data[i].createDate+'</span>  '+list.data[i].bsCheckName+','+list.data[i].bsCheckComments+
+                                            '  </div>'+
+                                            ' </div>'+
+                                            ' </li>');
+                                    });
+                                    arr.join('');
+                                }
+                            });
+                        })
+                        // document.getElementById('timeline').innerHTML = arr;
+
+                        document.getElementById('timeline').innerHTML = "";
+                    }
+
+                }else{
+                    layer.msg(res.msg);
+                }
+                // parent.layer.iframeAuto(index);
+            }
+
+        });
+    }
+</script>
 <hr>
 <textarea name="desc" id="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
 <hr>
@@ -79,7 +189,10 @@
     </div>
 </div>
 
-   
-    <script src="/js/web/iframe/check_quote.js" th:src="@{/js/web/iframe/check_quote.js}"></script>
+
+<script>
+    document.write("<script type='text/javascript' " +
+        "src='/js/web/iframe/check_quote.js?ver="+Math.random()+"'><\/script>");
+</script>
 </body>
 </html>

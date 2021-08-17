@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import com.web.basic.dao.SysParamDao;
 import com.web.basic.entity.SysParam;
+import com.web.quote.dao.*;
+import com.web.quote.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,16 +22,6 @@ import com.utils.BaseSql;
 import com.utils.UserUtil;
 import com.web.basePrice.dao.ProdTypDao;
 import com.web.basePrice.entity.ProdTyp;
-import com.web.quote.dao.ProductMaterDao;
-import com.web.quote.dao.ProductProcessDao;
-import com.web.quote.dao.QuoteDao;
-import com.web.quote.dao.QuoteMouldDao;
-import com.web.quote.dao.QuoteSumBomDao;
-import com.web.quote.entity.ProductMater;
-import com.web.quote.entity.ProductProcess;
-import com.web.quote.entity.Quote;
-import com.web.quote.entity.QuoteMould;
-import com.web.quote.entity.QuoteSumBom;
 import com.web.quote.service.QuoteSumService;
 
 @Service(value = "QuoteSumService")
@@ -50,7 +42,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 	private ProdTypDao prodTypDao;
 	@Autowired
 	private SysParamDao sysParamDao;
-
+	@Autowired
+	private QuoteProcessDao quoteProcessDao;
 	/**
 	 * 查询列表
 	 */
@@ -67,7 +60,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
 				+ "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,decode(p.bs_end_time3,null,'1','2') col ,p.bs_position,"
 				+ "p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level,"
-				+ "p.bs_Cust_Require,p.bs_Bade,p.bs_proj_ver,p.bs_latest,p.bs_stage from " + Quote.TABLE_NAME + " p " + " where p.del_flag=0 and p.bs_step>2 "
+				+ "p.bs_Cust_Require,p.bs_Bade,p.bs_proj_ver,p.bs_latest,p.bs_stage,p.bs_status2  from " + Quote.TABLE_NAME + " p " + " where p.del_flag=0 and p.bs_step>2 "
 				+ statusTemp;
 		if (StringUtils.isNotEmpty(quoteId) && !("null").equals(quoteId)) {
 			sql += "and p.id = " + quoteId + "";
@@ -163,6 +156,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			map1.put("bsProjVer",object[22]);
 			map1.put("bsLatest",object[23]);
 			map1.put("bsStage",object[24]);
+			map1.put("bsStatus2", object[25]);
 
 			list_new.add(map1);
 		}
@@ -380,7 +374,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 			pm.setBsFee(bsAssess.multiply(pm.getBsQty()).divide(taxRate,5,5));
 			//单件不用良率
 			if(pm.getBsSingleton()!=1) {
-				if(StringUtils.isEmpty(pm.getBsGroups())){
+				List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkQuoteBom(0,pm.getPkQuote(),pm.getId());
+				if(quoteProcessList.size()>0){
+					QuoteProcess quoteProcess = quoteProcessList.get(0);
+					if(quoteProcess.getProc().getProcName().equals("喷涂")){
+						List<ProductProcess> processList = productProcessDao.findByBsTypeAndPkProcAndDelFlagAndPkQuote(pm.getBsType(),quoteProcess.getPkProc(),0, quoteProcess.getPkQuote());
+						pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);
+					}
+				} else if(StringUtils.isEmpty(pm.getBsGroups())){
 					//材料良率取值: 1取同分组下的工艺顺序号最大第一条，2取材料名称相同的一条
 					List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
 							pm.getBsComponent(), pm.getBsElement(), pm.getPkQuote(), pm.getBsType(), 0, pm.getBsMaterName());
@@ -418,7 +419,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				bsAssess = pm.getBsAssess().divide(taxRate,5,5);
 			}
 
-			if(StringUtils.isEmpty(pm.getBsGroups())){
+			List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkQuoteBom(0,pm.getPkQuote(),pm.getId());
+			if(quoteProcessList.size()>0){
+				QuoteProcess quoteProcess = quoteProcessList.get(0);
+				if(quoteProcess.getProc().getProcName().equals("喷涂")){
+					List<ProductProcess> processList = productProcessDao.findByBsTypeAndPkProcAndDelFlagAndPkQuote(pm.getBsType(),quoteProcess.getPkProc(),0, quoteProcess.getPkQuote());
+					pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);
+				}
+			}else if(StringUtils.isEmpty(pm.getBsGroups())){
 				List<ProductProcess> processList = productProcessDao.findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(
 						pm.getBsComponent(), pm.getBsElement(), pm.getPkQuote(), pm.getBsType(), 0, pm.getBsMaterName());
 				pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);

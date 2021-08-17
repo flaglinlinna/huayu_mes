@@ -123,8 +123,13 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 					"left join (select pm.bs_element,pm.bs_component,pm.bs_mater_name,sum(pm.bs_fee)bs_fee from price_product_mater pm where pm.del_flag=0 and pm.pk_quote=?1 and pm.bs_element=?2 and pm.bs_component=?3   group by pm.bs_element,pm.bs_component,pm.bs_mater_name)B "+
 					"on a.bs_element = b.bs_element and a.bs_component = b.bs_component and a.bs_mater_name = b.bs_mater_name "+
 					"order by a.bs_element,A.bs_component", nativeQuery = true)	
-public List<Map<String, Object>> getBomThree(Long quoteId,String element,String compent);
+	public List<Map<String, Object>> getBomThree(Long quoteId,String element,String compent);
 
 	@Query(value = "select BS_TYPE as type,count(1) as num from PRICE_PRODUCT_MATER where PK_QUOTE = ?1 and DEL_FLAG = 0 GROUP BY  BS_TYPE", nativeQuery = true)
 	public List<Map<String, Object>> countByBsType(Long quoteId);
+
+	//查询该用户下填写采购的信息单
+	@Query(value = "select p.* from PRICE_PRODUCT_MATER p where p.del_flag=0 and p.bs_agent = 0 and p.pk_quote=?1 and p.bs_Type <> 'out' " +
+			"and p.pk_item_type_wg in (select wr.pk_item_type_wg from "+ItemTypeWgRole.TABLE_NAME+" wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from "+UserRoleMap.TABLE_NAME+" ur where ur.del_flag=0 and ur.user_id=?2))", nativeQuery = true)
+	public List<ProductMater> selectPurchaseByUserId(Long quoteId,Long userId);
 }
