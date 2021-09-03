@@ -68,7 +68,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 **/
 	@Override
 	public ApiResponseResult getBomList(String keyword, Long quoteId,PageRequest pageRequest) throws Exception {
-		Page<Map<String, Object>> page=quoteProcessDao.getBomNameByPage(quoteId,pageRequest);
+		Page<Map<String, Object>> page=quoteProcessDao.getBomNameByPage(quoteId,keyword,pageRequest);
 //		return ApiResponseResult.success().data(list);
 		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
 				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
@@ -153,6 +153,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					}
 
 				}else if (o.getItemType().startsWith("辅料")){
+
 //				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
 					//2021-05-19 物料类型为 辅料 的，工序名称默认为 组装（如果存在组装工序）
 					if(o.getPkProc()==null&&packagList.size()>0){
@@ -190,6 +191,22 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				//工序下拉框
 				o.setBsProcList(JSON.toJSONString(procList));
 			}
+
+			//bom中零件名称被修改，对应的修改关联零件
+			Boolean isComponentIn = false;
+			if(componentList.size()>0){
+				if(!o.getBsLinkName().equals(o.getBsName())){
+					for(Map<String,Object> map:componentList){
+						if(map.get("BSCOMPONENT").toString().equals(o.getBsLinkName())){
+							isComponentIn = true;
+						}
+					}
+					if(!isComponentIn){
+						o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
+					}
+				}
+			}
+
 		}
 		//20201222-fyx
 		updateLwAndHw(Long.valueOf(pkQuote));
@@ -224,11 +241,14 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		try {
 		for (Map<String,Object> map: bsNameList){
 			List<String> nameList = Arrays.asList(map.get("BSNAME").toString().split(","));
+			List<String> idsList = Arrays.asList(map.get("IDS").toString().split(","));
+			String s= Collections.min(idsList);
+			int minIndex = idsList.indexOf(s);
 			if(!nameList.containsAll(newName)){
 				for(Integer a= 0;a<newName.size();a++){
 					QuoteProcess quoteProcess = new QuoteProcess();
 					quoteProcess.setBsElement(map.get("BSELEMENT").toString());
-					quoteProcess.setBsName(nameList.get(0));
+					quoteProcess.setBsName(nameList.get(minIndex));
 					quoteProcess.setBsLinkName(nameList.get(0));
 //					List<Proc> procList = procDao.findByDelFlagAndProcName(0,newName.get(a));
 					List<BaseFee> baseFeeList = baseFeeDao.findByProcNameAndDelFlag(newName.get(a),0 );
@@ -525,6 +545,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		 if(i>0){
 			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
 		 }
+
+
+
 		 quoteProcessDao.saveAll(quoteProcessList);
 //		 if(quoteProcessDao.getPkQuoteBomNum(Long.parseLong(quoteId)).size()>0){
 //			 return ApiResponseResult.failure("存在相同的材料名称,请检查。");
@@ -563,7 +586,13 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //					}
 //				}
 				bsGroupsArray[q]= qp.getBsGroups();
-			}
+
+			 if(StringUtils.isNotEmpty(qp.getBsMaterName())){
+				 if(quoteBomDao.findByDelFlagAndBsMaterNameAndPkQuote(0,qp.getBsMaterName(),qp.getPkQuote()).size()==0){
+					 return ApiResponseResult.failure("外购件清单中不存在 "+qp.getBsMaterName()+" 的材料名称");
+				 }
+			 }
+		}
 
 		 for(Integer k = 0;k<= bsGroupsArray.length-1;k++){
 			 List<Integer> list = new ArrayList<>();
@@ -660,11 +689,24 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
 		for(QuoteProcess qp:quoteProcessList){
 			if(StringUtils.isNotEmpty(qp.getBsMaterName())){
-				if(quoteBomDao.findByDelFlagAndBsMaterName(0,qp.getBsMaterName()).size()==0){
+				if(quoteBomDao.findByDelFlagAndBsMaterNameAndPkQuote(0,qp.getBsMaterName(),qp.getPkQuote()).size()==0){
 					return ApiResponseResult.failure("外购件清单中不存在 "+qp.getBsMaterName()+" 的材料名称");
 				}
 			}
+			if(StringUtils.isNotEmpty(qp.getBsGroups())){
+				if(quoteBomDao.findByDelFlagAndPkQuoteAndBsGroups(0,qp.getPkQuote(),qp.getBsGroups()).size()==0){
+					return ApiResponseResult.success().data(qp.getBsGroups());
+				}
+			}
 		}
+		quoteProcessDao.saveAll(quoteProcessList);
+		return ApiResponseResult.success();
+	}
+
+	@Override
+	public ApiResponseResult editProcessListAgain(List<QuoteProcess> quoteProcessList) throws Exception {
+		// TODO Auto-generated method stub
+//		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
 		quoteProcessDao.saveAll(quoteProcessList);
 		return ApiResponseResult.success();
 	}
@@ -746,7 +788,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				//不修改工作中心
 //				o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
 				o.setItemType(quoteBom.getItp().getItemType());
-				o.setBsGroups(quoteBom.getBsGroups());
+//				o.setBsGroups(quoteBom.getBsGroups());
 			} else if(newName.contains(o.getBsName())){
 
 			}

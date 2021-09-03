@@ -57,7 +57,7 @@ $(function() {
 				{fixed:'left',field : 'bsCode',title : '报价单编号',width : 150,sort: true},
 					{fixed:'left',field : 'bsProd',title : '产品型号',width : 120,sort: true},
 					{fixed:'left',fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true},
-					{field : 'bsStatus',title : '状态',width : 400,templet:'#statusTpl',sort: true},
+					{field : 'bsStatus',title : '状态',width : 300,templet:'#statusTpl',sort: true},
 				{field : 'bsType',title : '报价类型', width : 120,templet:function (d) {
 						 if(d.bsType=="YSBJ"){
 							 return "衍生报价";

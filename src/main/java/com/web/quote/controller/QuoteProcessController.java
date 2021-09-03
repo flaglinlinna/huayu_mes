@@ -292,7 +292,9 @@ public class QuoteProcessController extends WebController {
             return ApiResponseResult.failure("删除失败！");
         }
     }
-	
+
+
+
 	@ApiOperation(value = "提交报价-工艺流程", notes = "提交报价-工艺流程",hidden = true)
     @RequestMapping(value = "/doStatus", method = RequestMethod.POST)
     @ResponseBody
@@ -300,6 +302,7 @@ public class QuoteProcessController extends WebController {
         String method = "quoteProcess/doStatus";String methodName ="提交报价-工艺流程";
         String pkQuote = param.get("quoteId").toString();
         String code = param.get("code").toString();
+//        String again = param.get("again").toString();
         List<QuoteProcess> quoteProcessList = TypeChangeUtils.objectToList(param.get("dates"),QuoteProcess.class);
         try{
             ApiResponseResult result = quoteProcessService.doStatus(pkQuote,code,quoteProcessList);
@@ -343,6 +346,25 @@ public class QuoteProcessController extends WebController {
         String method = "quoteProcess/saveTable";String methodName ="页面编辑保存";
         try{
             ApiResponseResult result = quoteProcessService.editProcessList(quoteProcessList);
+            logger.debug("页面编辑保存=saveTable:");
+            getSysLogService().success(module,method, methodName,
+                    "");
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("页面编辑保存失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
+            return ApiResponseResult.failure("页面编辑保存失败！");
+        }
+    }
+
+    @ApiOperation(value = "页面编辑保存", notes = "页面编辑保存",hidden = true)
+    @RequestMapping(value = "/saveTableAgain", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponseResult saveTableAgain(@RequestBody List<QuoteProcess> quoteProcessList) {
+        String method = "quoteProcess/saveTableAgain";String methodName ="页面编辑保存";
+        try{
+            ApiResponseResult result = quoteProcessService.editProcessListAgain(quoteProcessList);
             logger.debug("页面编辑保存=saveTable:");
             getSysLogService().success(module,method, methodName,
                     "");

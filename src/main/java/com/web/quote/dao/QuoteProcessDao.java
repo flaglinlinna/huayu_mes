@@ -42,6 +42,8 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(Integer delFlag,Long pkQuote,String name);
 
+	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsElementAndBsGroupsAndBsLinkName(Integer delFlag,Long pkQuote,String bsElement,String bsGroups,String bsLineName);
+
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsLinkNameOrderByBsOrder(Integer delFlag,Long pkQuote,String name);
 	
 	public List<QuoteProcess> findByDelFlagAndPkQuoteAndBsNameAndBsOrder(Integer delFlag,Long pkQuote,String name,int order);
@@ -83,11 +85,13 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 			" as WORKCENTER_NAME from" +
 			" price_quote_bom t " +
 			" LEFT JOIN BJ_BASE_WORKCENTER c on t.PK_BJ_WORK_CENTER = c.ID " +
-			" left join BJ_BASE_ITEM_TYPE_WG w on w.id = t.PK_ITEM_TYPE_WG where t.pk_quote= ?1  and t.del_Flag= 0 and w.ITEM_TYPE <> '辅料' GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT ",
+			" left join BJ_BASE_ITEM_TYPE_WG w on w.id = t.PK_ITEM_TYPE_WG where t.pk_quote= ?1  and t.del_Flag= 0" +
+//			" and (case when ?2 is not null  then INSTR((t.BS_ELEMENT || t.BS_COMPONENT || t.bs_mater_Name ),?2)>0 else true end) is true" +
+			" and w.ITEM_TYPE <> '辅料' GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT ",
 			countQuery =  " select count(*)from(select max(t.id) from price_quote_bom t  left join BJ_BASE_ITEM_TYPE_WG w on w.id = t.PK_ITEM_TYPE_WG where t.pk_quote= ?1 " +
 					" and t.del_Flag= 0 and w.ITEM_TYPE <> '辅料' GROUP BY t.PK_BJ_WORK_CENTER,t.BS_ELEMENT,t.BS_COMPONENT)",
 			nativeQuery = true)
-	Page<Map<String, Object>> getBomNameByPage(Long quoteId, Pageable pageable);
+	Page<Map<String, Object>> getBomNameByPage(Long quoteId,String keyWord, Pageable pageable);
 	
 	@Modifying
     @Query("update QuoteProcess t set t.bsStatus=?1 where t.pkQuote=?2 and t.delFlag=0")
@@ -120,7 +124,7 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
 					" and pp.BS_GROUPS is not null  and pp.DEL_FLAG = 0 GROUP BY pp.BS_ELEMENT,pp.bs_link_name,pp.BS_GROUPS)")
 	public  Page<Map<String, Object>> getSumList(Long pkQuote,Pageable pageable);
 
-	@Query(value = "select BS_ELEMENT as BSELEMENT,wm_concat(bs_Name) as bsName, max(BS_ORDER) as bsorder,sum(BS_SINGLETON) as BS_SINGLETON from PRICE_QUOTE_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 GROUP BY BS_ELEMENT HAVING sum(BS_SINGLETON) = 0",nativeQuery = true)
+	@Query(value = "select BS_ELEMENT as BSELEMENT,wm_concat(bs_Name) as bsName,wm_concat(PK_QUOTE_BOM) as ids, max(BS_ORDER) as bsorder,sum(BS_SINGLETON) as BS_SINGLETON from PRICE_QUOTE_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 GROUP BY BS_ELEMENT HAVING sum(BS_SINGLETON) = 0",nativeQuery = true)
 	public List<Map<String, Object>> getBsNameGroupByElement(Long quoteId);
 
 	@Modifying

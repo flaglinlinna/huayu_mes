@@ -27,6 +27,8 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 
 	public List<ProductMater> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 
+	public List<ProductMater> findByDelFlagAndPkQuoteAndBsElementAndBsMaterName(Integer delFlag,Long pkQuote,String bsElement,String bsMaterName);
+
 	public List<ProductMater> findByDelFlagAndPkQuoteOrderById(Integer delFlag,Long pkQuote);
 
 	public List<ProductMater> findByDelFlagAndPkQuoteAndBsTypeIsNotAndBsAgent(Integer delFlag,Long pkQuote,String bsType,Integer bsAgent);
@@ -36,6 +38,8 @@ public interface ProductMaterDao extends CrudRepository<ProductMater, Long>,JpaS
 	public List<ProductMater> findByPkQuoteAndPkBomId(Long pkQuote,Long pkBomId);
 
 	public List<ProductMater> findByBsElementAndBsComponentAndPkQuoteAndBsTypeAndDelFlag(String element,String component, Long pkQuote,String bsType,Integer delFlag);
+
+	public List<ProductMater> findByBsElementAndBsMaterNameAndPkQuoteAndDelFlag(String element,String bsMaterName, Long pkQuote,Integer delFlag);
 
 	public List<ProductMater> findByPkQuoteAndDelFlagAndBsGroups(Long pkQuote,Integer delFlag,String bsGroups);
 

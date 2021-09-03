@@ -57,22 +57,63 @@
 							<i class="layui-icon">&#xe669;</i>重置
 						</button>
 
-<!--						<shiro:hasPermission name="bom-add">-->
-<!--							<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="addbtn" onclick="addQuoteBom()">添加</button>-->
+						<shiro:hasPermission name="bom-add">
+							<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="addbtn" onclick="addQuoteBom()">添加</button>
+						</shiro:hasPermission>
+						<shiro:lacksPermission name="bom-add">
+							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button" id="addbtn" disabled="disabled" onclick="addQuoteBom()">添加</button>
+						</shiro:lacksPermission>
+
+<!--						<shiro:hasPermission name="bom-export">-->
+							<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="exportbtn" onclick="exportExcel()">导出模板</button>
 <!--						</shiro:hasPermission>-->
-<!--						<shiro:lacksPermission name="bom-add">-->
-<!--							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button" id="addbtn" disabled="disabled" onclick="addQuoteBom()">添加</button>-->
+<!--						<shiro:lacksPermission name="bom-export">-->
+<!--							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button" id="exportbtn" disabled="disabled" onclick="exportExcel()">导出模板</button>-->
 <!--						</shiro:lacksPermission>-->
-						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="addbtn" onclick="addQuoteBom()">添加</button>
+
+						<shiro:hasPermission name="bom-upload">
+							<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="loadbtn" onclick="openUpload()">导入数据</button>
+						</shiro:hasPermission>
+						<shiro:lacksPermission name="bom-upload">
+							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button" id="loadbtn" onclick="openUpload()" disabled="disabled">导入数据</button>
+						</shiro:lacksPermission>
+
+						<shiro:hasPermission name="bom-dostatus">
+							<button class="layui-btn layui-btn-sm" id="savebtn" type="button" onclick="save()">确认完成</button>
+							</shiro:hasPermission>
+						<shiro:lacksPermission name="bom-dostatus">
+							<button class="layui-btn layui-btn-sm layui-btn-disabled" id="savebtn" type="button" disabled="disabled" onclick="save()">确认完成</button>
+						</shiro:lacksPermission>
+
+						<shiro:hasPermission name="bom-saveTable">
+							<button class="layui-btn layui-btn-sm" type="button" id="editListBtn" onclick="saveTable()">保存</button>
+						</shiro:hasPermission>
+						<shiro:lacksPermission name="bom-saveTable">
+							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button" id="editListBtn" onclick="saveTable()"  disabled="disabled">保存</button>
+						</shiro:lacksPermission>
+
+						<shiro:hasPermission name="bom-cancel">
+							<button class="layui-btn layui-btn-sm" type="button" id="cancelbtn" onclick="cancelStatus()">取消完成</button>
+						</shiro:hasPermission>
+						<shiro:lacksPermission name="bom-cancel">
+							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button" id="cancelbtn" onclick="cancelStatus()"  disabled="disabled">取消完成</button>
+						</shiro:lacksPermission>
+
+						<shiro:hasPermission name="bom-delete">
+							<button class="layui-btn layui-btn-sm layui-btn-danger" type="button" id="delListBtn" onclick="delTable()">批量删除</button>
+						</shiro:hasPermission>
+						<shiro:lacksPermission name="bom-delete">
+							<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled" type="button" id="delListBtn" onclick="delTable()"  disabled="disabled">批量删除</button>
+						</shiro:lacksPermission>
+
+<!--						<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="addbtn" onclick="addQuoteBom()">添加</button>-->
 <!--						 <button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="addbtn" onclick="addQuoteBom()">添加</button>-->
-                         <button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="exportbtn" onclick="exportExcel()">导出模板</button>
-                         <button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="loadbtn" onclick="openUpload()">导入数据</button>
-                         <button class="layui-btn layui-btn-sm" id="savebtn" type="button" onclick="save()">确认完成</button>
-						 <button class="layui-btn layui-btn-sm" type="button"
-								id="cancelbtn" onclick="cancelStatus()">取消完成</button>
-						<button class="layui-btn layui-btn-sm" type="button"
-								id="editListBtn" onclick="saveTable()">保存</button>
-						<button class="layui-btn layui-btn-sm layui-btn-danger" type="button" id="delListBtn" onclick="delTable()">批量删除</button>
+<!--                         <button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="exportbtn" onclick="exportExcel()">导出模板</button>-->
+<!--                         <button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="loadbtn" onclick="openUpload()">导入数据</button>-->
+<!--						<button class="layui-btn layui-btn-sm" id="savebtn" type="button" onclick="save()">确认完成</button>-->
+<!--						 <button class="layui-btn layui-btn-sm" type="button" id="cancelbtn" onclick="cancelStatus()">取消完成</button>-->
+<!--						<button class="layui-btn layui-btn-sm" type="button" id="editListBtn" onclick="saveTable()">保存</button>-->
+<!--						<button class="layui-btn layui-btn-sm layui-btn-danger" type="button" id="delListBtn" onclick="delTable()">批量删除</button>-->
 					</div>
 				</div>
 			</form>	

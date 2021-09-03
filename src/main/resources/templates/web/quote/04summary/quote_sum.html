@@ -185,12 +185,11 @@
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label" style="width: 150px">管理费用(B=A*D/100)</label>
+						<label class="layui-form-label" style="width: 150px">管理费用(B=A/(1-D)-A)</label>
 						<div class="layui-input-block" style="margin-left:150px;width: 160px;">
 							<input id="gl" name="gl" autocomplete="off"
 								   readonly="readonly" class="layui-input grey" type="text" />
-							<span id ="gl_rate"
-								style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>
+<!--							<span id ="gl_rate" style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>-->
 						</div>
 					</div>
 					<div class="layui-inline">
@@ -198,11 +197,11 @@
 						<div class="layui-input-block" style="margin-left:130px;width: 160px;">
 							<input id="profitNet" name ="profitNet" lay-filter="profitNet" lay-verify="num"
 								   autocomplete="off" readonly="readonly" class="layui-input grey" type="text" />
-							<span id ="profit_gs" style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>
+<!--							<span id ="profit_gs" style="position: absolute; top: 8%; right: 0%; display: table-cell; background-color: #d2d2d2; white-space: nowrap; padding: 7px 12px;">0%</span>-->
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label"style="width: 130px">毛利(Y=A*(100-F))</label>
+						<label class="layui-form-label"style="width: 130px">毛利(Y=A/(1-F)-A)</label>
 						<div class="layui-input-block" style="margin-left:130px;width: 120px;">
 							<input id="ml" name="ml" autocomplete="off" readonly="readonly"
 								   class="layui-input grey" type="text" />

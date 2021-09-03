@@ -762,10 +762,34 @@ function saveTable(refresh) {
 		function(data) {
 			if (isLogin(data)) {
 				if (data.result == true) {
-					if(refresh){
-						loadAll();
+					if(data.data!=null){
+						layer.confirm('损耗分组:'+ data.data +'不在外购清单中，这会导致损耗明细中的材料成本归集不到，是否继续。', {
+							btn : [ '继续', '返回' ]
+							// 按钮
+						}, function() {
+							CoreUtil.sendAjax("/quoteProcess/saveTableAgain", JSON.stringify(dates), function(data) {
+								if (isLogin(data)) {
+									if (data.result == true) {
+										// 回调弹框
+										if(refresh){
+											layer.closeAll();
+											loadAll();
+										}
+										materNameFlag = 1;
+									} else {
+										layer.alert(data, function() {
+											layer.closeAll();
+										});
+									}
+								}
+							});
+						});
+					}else {
+						if(refresh){
+							loadAll();
+						}
+						materNameFlag = 1;
 					}
-					materNameFlag = 1;
 				} else {
 					layer.alert(data.msg, function() {
 						layer.closeAll();

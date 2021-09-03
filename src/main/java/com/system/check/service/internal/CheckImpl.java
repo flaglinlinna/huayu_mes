@@ -623,7 +623,7 @@ public class CheckImpl   implements CheckService {
 							}
 							if(qb.getProc().getProcName().equals("喷涂")){
 								//同个工作中心下，只有一个喷涂
-								if(!procSet.add("喷涂"+qb.getBjWorkCenter().getWorkcenterName())){
+								if(!procSet.add("喷涂"+qb.getBjWorkCenter().getWorkcenterName()+qb.getBsElement())){
 									continue;
 								}
 							}

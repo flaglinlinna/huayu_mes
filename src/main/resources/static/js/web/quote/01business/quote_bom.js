@@ -128,7 +128,7 @@ $(function() {
 								// elem:返回之前input对象；data:表格返回的选中的数据 []
 								form.val("quoteBomForm", {
 									"pkUnit" : da[0].id,
-									"Unit" : da[0].unitName
+									"Unit" : da[0].unitCode
 								});
 								form.render();// 重新渲染
 							}
@@ -881,7 +881,8 @@ function save() {
 	var param = {
 		"quoteId" : quoteId,
 		"code" : code,
-		"dates":dates
+		"dates":dates,
+		"again":1
 	};
 	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
 		btn : [ '确认', '返回' ]

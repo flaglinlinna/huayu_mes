@@ -26,6 +26,10 @@
 	background-color: red;
 }
 </style>
+<script>
+	var test = new
+	ModbusRTU({CommNo:"COM2",BaudRate:"9600",DataBit:"8",CheckBit:"N",StopBit:"1",License:'d41d8cd98f00b204e9800998ecf8427e'});
+</script>
 <body class="layui-layout-body">
 <div th:replace="audio/fragment/audio :: audio"></div>
 <div th:replace="audio/fragment/saomiao :: saomiao"></div>
@@ -166,7 +170,11 @@
 														class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
 													<i class="layui-icon">&#xe669;</i>重置
 												</button>
+
+													<button class="layui-btn layui-btn-sm" type="button"
+													onclick="send()">查询</button>
 												</div>
+												<textarea id="t_sdata" style="width:100%;height:80px;" />01 02 00 00 00 20 79 D2</textarea>
 
 											</div>
 										</form>
@@ -193,7 +201,14 @@
 		<script>
 			document.write("<script type='text/javascript' " +
 					"src='/js/web/produce/check_code/infrared_code.js?ver="+Math.random()+"'><\/script>");
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/produce/check_code/ModbusRTU.js?ver="+Math.random()+"'><\/script>");
+
+			
 		</script>
+<!--		<script th:src="@{/js/web/produce/check_code/jquery-1.11.1.min.js}" src="/js/web/produce/check_code/jquery-1.11.1.min.js"></script>-->
+
+<!--		<script th:src="@{/js/web/produce/check_code/ModbusRTU.js}" src="/js/web/produce/check_code/ModbusRTU.js"></script>-->
 	</div>
 </body>
 </html>

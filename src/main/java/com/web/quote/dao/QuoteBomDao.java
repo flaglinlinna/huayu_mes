@@ -30,6 +30,8 @@ public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecifica
 	
 	public List<QuoteBom> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
 
+	public List<QuoteBom> findByDelFlagAndPkQuoteAndBsGroups(Integer delFlag,Long pkQuote,String bsGroups);
+
 	public List<QuoteBom> findByDelFlagAndPkQuoteAndBsComponent(Integer delFlag,Long pkQuote,String bsComponent);
 
 	public List<QuoteBom> findByDelFlagAndPkQuoteAndPkBomIdIsNull(Integer delFlag,Long pkQuote);
@@ -48,7 +50,7 @@ public interface QuoteBomDao extends CrudRepository<QuoteBom, Long>,JpaSpecifica
 	@Query(value = " SELECT DISTINCT p.BS_NAME as BSCOMPONENT,min(p.BS_ORDER) as BS_ORDER from PRICE_QUOTE_PROCESS p where  p.PK_QUOTE = ?1 and p.bs_Element =  ?2 GROUP BY p.BS_NAME order by BS_ORDER ", nativeQuery = true)
 	List<Map<String, Object>> getBsComponent(Long quoteId,String bsElement);
 
-	public List<QuoteBom> findByDelFlagAndBsMaterName(Integer delFlag,String bsMaterName);
+	public List<QuoteBom> findByDelFlagAndBsMaterNameAndPkQuote(Integer delFlag,String bsMaterName,Long pkQuote);
 
 	@Query(value = " select c.BS_CODE as bsCode, sum(m.PRODUCT_RETRIAL) as RETRIAL from PRICE_QUOTE_BOM  m LEFT JOIN " +
 			" BJ_BASE_WORKCENTER c on c.id = m.PK_BJ_WORK_CENTER  where m.PK_QUOTE = ?1 GROUP BY c.BS_CODE",nativeQuery = true)
