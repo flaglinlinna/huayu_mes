@@ -82,7 +82,7 @@ public class CheckController extends WebController {
 					//新增流程信息
 					checkService.addCheckFirst(checkInfo);
 				} else {
-					//2.判断此用户是否有审核权限
+					//2.判断此用户是否有审核权限 ，被驳回到第一层业务员发起审批(只能由被驳回的人去审批)
 					if (checkService.checkSecond(checkInfo.getBsRecordId(), checkInfo.getBsCheckCode())) {
 						//2.1 审批
 						checkService.doCheck(checkInfo);

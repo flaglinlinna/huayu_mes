@@ -131,7 +131,7 @@ public class QuoteBom extends BaseEntity {
 	 * 材料规格
 	 */
 	@ApiModelProperty(name = "bsModel", value = "材料规格")
-	@Column(length = 200)
+	@Column(length = 500)
 	protected String bsModel;
 	
 	/**

@@ -210,6 +210,7 @@ $(function() {
 									var iframe = window['layui-layer-iframe' + index];
 									// 向子页面的全局函数child传参，流程编码
 									if (data.bsStatus == '2') {
+										//报价单外协已完成，传入end ,让提交按钮失效
 										iframe.child(Style, data.id, 'end');
 									} else {
 										iframe.child(Style, data.id, 'check');

@@ -151,6 +151,13 @@ public class QuoteProcess extends BaseEntity {
 	protected String bsMaterName;
 
 	/**
+	 * 材料规格
+	 */
+	@ApiModelProperty(name = "bsModel", value = "材料规格")
+	@Column(length = 500)
+	protected String bsModel;
+
+	/**
 	 * 材料名称列表
 	 */
 //	@ApiModelProperty(name = "bsMaterNameList", value = "材料名称列表")
@@ -416,5 +423,13 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setBsSingleton(Integer bsSingleton) {
 		this.bsSingleton = bsSingleton;
+	}
+
+	public String getBsModel() {
+		return bsModel;
+	}
+
+	public void setBsModel(String bsModel) {
+		this.bsModel = bsModel;
 	}
 }

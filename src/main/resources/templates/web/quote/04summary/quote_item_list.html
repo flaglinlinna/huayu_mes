@@ -60,8 +60,14 @@
             var quoteId=[[${quoteId}]];
             var Style=[[${Style}]];
         </script>
-		<script th:src="@{/js/web/quote/04summary/quote_item_list.js}"
-			src="/js/web/quote/04summary/quote_item_list.js"></script>
+<!--		<script th:src="@{/js/web/quote/04summary/quote_item_list.js}"-->
+<!--			src="/js/web/quote/04summary/quote_item_list.js"></script>-->
+
+		<script>
+			document.write("<script type='text/javascript' " +
+					"src='/js/web/quote/04summary/quote_item_list.js?ver="+Math.random()+"'><\/script>");
+		</script>
+
 	</div>
 </body>
 </html>

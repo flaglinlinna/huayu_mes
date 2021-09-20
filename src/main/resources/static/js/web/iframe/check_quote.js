@@ -126,11 +126,21 @@ layui.use('layer', function(){
                     }else{
                     	setLiColor(list.grade)
                     }
-                    
+                    var timeHtml = '';
+                    var nowHtml =''; //当前的步骤流程信息显示在最后面
                     if(list.data.length == 0){
-                        document.getElementById('timeline').innerHTML = "";
+                        if(timeHtml==""){
+                            timeHtml += '<li class="layui-timeline-item">' + getIcon(3) +
+                                /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
+                                ' <div class="layui-timeline-content layui-text">' +
+                                '  <div class="layui-timeline-title">' +
+                                '   <span style="padding-right:20px;">' + '[' + getRadio(3) + ']'+'</span>  ' +"等待发起审核" +
+                                '  </div>' +
+                                ' </div>' +
+                                ' </li>';
+                        }
+                        document.getElementById('timeline').innerHTML = timeHtml;
                     }else{
-                        var timeHtml = '';
                         for(var i=0; i<list.data.length; i++){
                             if(CheckIsNullOrEmpty(list.data[i].lastupdateDate)){
                                 timeHtml += '<li class="layui-timeline-item">'+ getIcon(list.data[i].bsStepCheckStatus)+
@@ -141,10 +151,30 @@ layui.use('layer', function(){
                                     '  </div>'+
                                     ' </div>'+
                                     ' </li>';
+                            }else {
+                                nowHtml += '<li class="layui-timeline-item">' + getIcon(3) +
+                                    /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
+                                    ' <div class="layui-timeline-content layui-text">' +
+                                    '  <div class="layui-timeline-title">' +
+                                    '   <span style="padding-right:20px;">' + '[' + getRadio(3) + ']'+'</span>  ' +"等待"+ list.data[i].bsCheckName + "审核" +
+                                    '  </div>' +
+                                    ' </div>' +
+                                    ' </li>';
                             }
                         }
+                        if(nowHtml==""){
+                            nowHtml = '<li class="layui-timeline-item">' + getIcon(3) +
+                                /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
+                                ' <div class="layui-timeline-content layui-text">' +
+                                '  <div class="layui-timeline-title">' +
+                                '   <span style="padding-right:20px;">' + '[' + getRadio(3) + ']'+'</span>  ' +"等待发起审核" +
+                                '  </div>' +
+                                ' </div>' +
+                                ' </li>';
+                        }
 
-                        document.getElementById('timeline').innerHTML = timeHtml;
+
+                        document.getElementById('timeline').innerHTML = timeHtml+nowHtml;
                     }
 
                 }else{
@@ -201,6 +231,8 @@ layui.use('layer', function(){
             return "通过"
         }else if(status == 2){
             return "驳回"
+        }else if (status == 3) {
+            return "等待审核"
         }
     }
     function CheckIsNullOrEmpty(value) {
@@ -212,7 +244,9 @@ layui.use('layer', function(){
     function getIcon(status){
         if(status == 1){
             return "<i class='layui-icon iconfont icon-extend-queren' style='position:absolute;left:-2px;color:#7CCD7C'></i>"
-        }else{
+        }else if(status == 2){
             return "<i class='layui-icon iconfont icon-extend-tuihui ' style='position:absolute;left:-2px;color:#EE6A50'></i>"
+        }else {
+            return "<i class='layui-icon iconfont icon-extend-baogongtongji- ' style='position:absolute;left:-2px;color:#FFFF00'></i>"
         }
     }

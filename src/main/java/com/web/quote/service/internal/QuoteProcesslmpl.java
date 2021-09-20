@@ -727,6 +727,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				quoteProcess.setPkQuoteBom(o.getId());
 //				quoteProcess.setQuoteBom(o);
 				quoteProcess.setBsMaterName(o.getBsMaterName());
+				quoteProcess.setBsModel(o.getBsModel());
 				quoteProcess.setBsElement(o.getBsElement());
 				quoteProcess.setItemType(o.getItp().getItemType());
 				quoteProcess.setBsName(o.getBsComponent());
@@ -783,6 +784,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				o.setDelFlag(quoteBom.getDelFlag());
 				o.setPkQuoteBom(quoteBom.getId());
 				o.setBsElement(quoteBom.getBsElement());
+				o.setBsModel(quoteBom.getBsModel());
 				o.setBsName(quoteBom.getBsComponent());
 				o.setBsSingleton(quoteBom.getBsSingleton());
 				//不修改工作中心

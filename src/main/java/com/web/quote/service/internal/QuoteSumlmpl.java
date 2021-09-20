@@ -660,23 +660,38 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				//2021-08-31 损耗明细中这个顺序号在工艺流程中的
 				// 损耗分组如果为空，根据组件名称、材料名称、材料规格相同的（同一组件中，材料名称+材料规格不会重复）到所有的材料成本中合计；
 				// 如果损耗分组有值，根据工艺流程中该损耗分组的材料名称成本中合计。
+//				BigDecimal bsFeeLhAll = o.getBsFeeLhAll()==null?BigDecimal.ZERO:o.getBsFeeLhAll();
+//				BigDecimal bsFeeMhAll = o.getBsFeeMhAll()==null?BigDecimal.ZERO:o.getBsFeeMhAll();
+
+				BigDecimal bsFeeLhAll = BigDecimal.ZERO;
+				BigDecimal bsFeeMhAll =BigDecimal.ZERO;
 
 				if(StringUtils.isNotEmpty(o.getBsGroups())){
 					//1.找出同个分组及组件所属零件相同下的所有工艺，再找出对应的材料成本(材料名称和组件查找对应的材料成本)
+					List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuoteAndBsElementAndBsGroupsAndBsLinkName(0, o.getPkQuote(), o.getBsElement(),o.getBsGroups(),o.getBsLinkName());
+
 					List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndBsElementAndBsGroupsAndBsLinkName(0, o.getPkQuote(), o.getBsElement(),o.getBsGroups(),o.getBsLinkName());
+
 					for(QuoteProcess qp:quoteProcessList){
 						if(StringUtils.isNotEmpty(qp.getBsMaterName())){
-							List<ProductMater> pm =	productMaterDao.findByDelFlagAndPkQuoteAndBsElementAndBsMaterName(0,qp.getPkQuote(),qp.getBsElement(),qp.getBsMaterName());
+							List<ProductMater> pm =	productMaterDao.findByDelFlagAndPkQuoteAndBsElementAndBsMaterNameAndBsModel(0,qp.getPkQuote(),qp.getBsElement(),qp.getBsMaterName(), qp.getBsModel());
 							if (pm.size() > 0) {
 								pmList.addAll(pm);
 							}
 						}
 					}
-//					pmList= productMaterDao.findByPkQuoteAndDelFlagAndBsGroups(o.getPkQuote(),0,o.getBsGroups());
+
+					for(ProductProcess qp:productProcessList){
+						bsFeeLhAll = bsFeeLhAll.add(qp.getBsFeeLhAll()==null?BigDecimal.ZERO:qp.getBsFeeLhAll());
+						bsFeeMhAll = bsFeeMhAll.add(qp.getBsFeeMhAll()==null?BigDecimal.ZERO:qp.getBsFeeMhAll());
+					}
+			//		pmList= productMaterDao.findByPkQuoteAndDelFlagAndBsGroups(o.getPkQuote(),0,o.getBsGroups());
 			//		pmList = productMaterDao.findByProcessLost(o.getPkQuote(), o.getBsLinkName(), o.getPkProc(), o.getBsElement());
 				}else {
-					pmList = productMaterDao.findByBsElementAndBsMaterNameAndPkQuoteAndDelFlag(
-							o.getBsElement(), o.getBsMaterName(), o.getPkQuote(), 0);
+					bsFeeLhAll = o.getBsFeeLhAll()==null?BigDecimal.ZERO:o.getBsFeeLhAll();
+					bsFeeMhAll = o.getBsFeeMhAll()==null?BigDecimal.ZERO:o.getBsFeeMhAll();
+
+					pmList = productMaterDao.findByDelFlagAndPkQuoteAndBsElementAndBsMaterNameAndBsModel(0,o.getPkQuote(),o.getBsElement(),o.getBsMaterName(), o.getBsModel());
 //					pmList = productMaterDao.findByPkQuoteAndDelFlagAndBsMaterName(o.getPkQuote(),0,o.getBsMaterName());
 				}
 				BigDecimal materCost = BigDecimal.ZERO;
@@ -684,7 +699,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 					materCost = materCost.add(pm.getBsFee());
 				}
 				o.setBsMaterCost(materCost);
-				o.setBsCost(o.getBsFeeLhAll()==null?BigDecimal.ZERO:o.getBsFeeLhAll().add(o.getBsFeeMhAll()==null?BigDecimal.ZERO:o.getBsFeeMhAll()).add(o.getBsMaterCost()));
+
+				o.setBsCost(bsFeeLhAll.add(bsFeeMhAll).add(o.getBsMaterCost()));
 			}
 			//第一条不用加上成本累计(含损耗) //2021-5-18-hjj 各小计分组的损耗独立计算
 			if(i==0||!(o.getBsLinkName()+o.getBsElement()).equals(processList.get(i-1).getBsLinkName()+processList.get(i-1).getBsElement())) {

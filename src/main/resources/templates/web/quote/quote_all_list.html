@@ -213,6 +213,21 @@ display: none;
             <div class="sub_title">外协部</div>
           </div>
         </li>
+    {{# if(d.bsStatus2freight == 0){ }}
+    <li  class="">
+        {{# } else if(d.bsStatus2freight == 1) { }}
+    <li  class="step_active">
+        {{# } else { }}
+    <li  class="step_pass">
+        {{# } }}
+        <div class="step-line"></div>
+        <div class="step-content">
+            <div class="step-num">2</div>
+            <div class="sub_title">包装运输</div>
+            <div class="step-sub">
+            </div>
+        </div>
+    </li>
         {{# if(d.bsStatus3 == 0){ }}
            <li  class="">
        {{# } else if(d.bsStatus3 == 1) { }}

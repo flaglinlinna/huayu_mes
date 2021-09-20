@@ -114,6 +114,9 @@ public class CheckImpl   implements CheckService {
 	public boolean addCheckFirst(CheckInfo checkInfo) throws Exception {
 //		checkInfo.getBsCheckGrade()
 		// TODO Auto-generated method stub
+
+		closeTodo(checkInfo.getBsCheckCode(),checkInfo.getBsRecordId());
+
 		List<CheckInfo> lc = new ArrayList<CheckInfo>();
 		List<WorkflowStep>  lw = workflowStepDao.findAllByCheckCode(1,checkInfo.getBsCheckCode());
 		SysUser user = UserUtil.getSessionUser();
@@ -147,6 +150,7 @@ public class CheckImpl   implements CheckService {
 			sr.setBsCheckDes("");
 			sr.setBsCheckBy("");
 			sr.setBsCheckId(w2.getBsCheckId());
+			sr.setBsCheckName(w2.getBsCheckName());
 			lc.add(sr);
 			//20200615-待办
 			this.sendTodo(sr);
@@ -239,11 +243,18 @@ public class CheckImpl   implements CheckService {
 		if(quote!=null){
 			bsCode = "(" +quote.getBsCode() +")";
 		}
-		tf.setBsTitle("您有"+ci.getBsStepName()+"待审批"+bsCode);
+		if(ci.getBsStepCheckStatus()==1){
+			tf.setBsTitle("您有"+ci.getBsStepName()+"待审批"+bsCode);
+		}else {
+			tf.setBsTitle("您有发起的审批被驳回，请重新发起审批"+bsCode);
+		}
+//		tf.setBsTitle("您有"+ci.getBsStepName()+"待审批"+bsCode);
 		tf.setBsReferId(ci.getBsRecordId());
 		tf.setBsStartTime(new Date());
 		tf.setBsType(2);//审批类型
 		tf.setBsRouter(ci.getBsCheckCode());
+
+		//企业微信消息推送
 		SysUser sysUser = sysUserDao.findById((long)ci.getBsCheckId());
 		if(sysUser!=null&&sysUser.getUserName()!=null) {
 			this.sendToWechat(quote, ci.getBsStepCheckStatus()+"",ci.getBsCheckComments(), UserUtil.getSessionUser().getUserName(), sysUser.getWeChatUserId());
@@ -367,7 +378,7 @@ public class CheckImpl   implements CheckService {
 			ci.setBsStepCheckStatus(c.getBsStepCheckStatus());
 			ci.setBsCheckDes(c.getBsCheckDes());
 			ci.setLastupdateDate(new Date());
-			ci.setBsStepCheckStatus(2);
+//			ci.setBsStepCheckStatus(2);
 			ci.setBsCheckPerson(UserUtil.getSessionUser().getUserCode());
 			ci.setBsCheckBy(UserUtil.getSessionUser().getUserCode());
 			ci.setBsCheckName(UserUtil.getSessionUser().getUserName());
@@ -389,7 +400,8 @@ public class CheckImpl   implements CheckService {
 				cr.setBsCheckGrade(s.getBsCheckGrade());
 				cr.setCreateDate(new Date());
 				cr.setBsCheckId(s.getBsCheckId());
-				lcr.add(cr);
+				//不保存，只发生提示，下一步业务员都可以发起审批
+//				lcr.add(cr);
 
 				//20200615-待办
 				this.sendTodo(cr);
@@ -398,7 +410,7 @@ public class CheckImpl   implements CheckService {
 				//20210121-fyx-修改列表状态
 				if(StringUtils.equals("QUOTE_NEW", s.getBsCheckCode())){//新增报价单
 					if(quote != null){
-						quote.setBsStatus(1);//进行中
+						quote.setBsStatus(3);//等待发起审批(被驳回)
 						quoteDao.save(quote);
 					}
 				}else if(StringUtils.equals("out", s.getBsCheckCode())){//外协
@@ -478,6 +490,7 @@ public class CheckImpl   implements CheckService {
 				//20200615-fyx-关闭待办
 				//todoInfoDao.closeByBsReferIdAndBsRouter(ci.getBsRecordId(), ci.getBsCheckCode());
 				this.sendTodo(sr);
+
 			}else{
 				//流程结束
 				//1.如果是“QUOTE_NEW”第一步，业务部流程审批
@@ -629,6 +642,7 @@ public class CheckImpl   implements CheckService {
 							}
 							pp.setBsName(qb.getBsName());
 							pp.setBsElement(qb.getBsElement());
+							pp.setBsModel(qb.getBsModel());
 //							pp.setBsType(qb.getProc().getBjWorkCenter().getBsCode());//类型
 							pp.setBsType(qb.getBjWorkCenter().getBsCode());
 							pp.setBsOrder(qb.getBsOrder());

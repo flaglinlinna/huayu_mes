@@ -9,13 +9,15 @@ layui.use('layer', function () {
             var radioVal = $('input:radio[name="checkRadio"]:checked').val();
             var cc = $('#desc').val();
             var json = {"bsRecordId": ppid, "bsStepCheckStatus": radioVal, "bsCheckComments": cc, "bsCheckCode": wn}
+            layer.load(); // 开启loading，前端防止重复点击
             $.ajax({
                 url: context + '/check/doCheck',
                 type: "post",
                 data: json,
                 dataType: "json",
                 success: function (res) {
-                    // console.log(res)
+                    layer.closeAll('loading'); // 关闭loading
+                    console.log(res)
                     if (res.result === true) {
                         parent.layer.close(index);
                         layer.msg(res.msg, {
@@ -92,33 +94,42 @@ function getInfo(json) {
             console.log(res);
             if (res.result === true) {
                 var list = res.data;
+                if (list.grade == '1') {
+                    $("#summit-btn").html("发起")
+                }
 
                 if(json.wname!='QUOTE_NEW'){
 
                 }else {
                     if (list.grade == '1') {
                         $("#th").attr("disabled", "disabled");//失效
+
                     }
                 }
 
-
-                if (list.data.length == 0) {
-                    document.getElementById('timeline').innerHTML = "";
-                } else {
-                    var timeHtml = '';
-                    for (var i = 0; i < list.data.length; i++) {
-                        if (CheckIsNullOrEmpty(list.data[i].lastupdateDate)) {
-                            timeHtml += '<li class="layui-timeline-item">' + getIcon(list.data[i].bsStepCheckStatus) +
-                                /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
-                                ' <div class="layui-timeline-content layui-text">' +
-                                '  <div class="layui-timeline-title">' +
-                                '   <span style="padding-right:20px;">' + '[' + getRadio(list.data[i].bsStepCheckStatus) + ']' + list.data[i].lastupdateDate + '</span>  ' + list.data[i].bsCheckName + ',' + list.data[i].bsCheckComments +
-                                '  </div>' +
-                                ' </div>' +
-                                ' </li>';
-                        }
+                var timeHtml = '';
+                var nowHtml =''; //当前的步骤流程信息显示在最后面
+                for (var i = 0; i < list.data.length; i++) {
+                    //更新时间不为空则为下一步需要审批的步骤
+                    if (CheckIsNullOrEmpty(list.data[i].lastupdateDate)) {
+                        timeHtml += '<li class="layui-timeline-item">' + getIcon(list.data[i].bsStepCheckStatus) +
+                            /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
+                            ' <div class="layui-timeline-content layui-text">' +
+                            '  <div class="layui-timeline-title">' +
+                            '   <span style="padding-right:20px;">' + '[' + getRadio(list.data[i].bsStepCheckStatus) + ']' + list.data[i].lastupdateDate + '</span>  ' + list.data[i].bsCheckName + ',' + list.data[i].bsCheckComments +
+                            '  </div>' +
+                            ' </div>' +
+                            ' </li>';
+                    }else {
+                            nowHtml += '<li class="layui-timeline-item">' + getIcon(3) +
+                            /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
+                            ' <div class="layui-timeline-content layui-text">' +
+                            '  <div class="layui-timeline-title">' +
+                            '   <span style="padding-right:20px;">' + '[' + getRadio(3) + ']'+'</span>  ' +"等待"+ list.data[i].bsCheckName + "审核" +
+                            '  </div>' +
+                            ' </div>' +
+                            ' </li>';
                     }
-                    document.getElementById('timeline').innerHTML = timeHtml;
                 }
 
                 //20201228-fyx-流程信息 flow_info
@@ -130,6 +141,16 @@ function getInfo(json) {
                         if (i == 0) {
                             // info += list.Lw[i].bsStepName+"("+list.curBy+")>";
                             info += list.Lw[i].bsStepName + " >";
+                            if(timeHtml==''&&nowHtml==''){
+                                nowHtml += '<li class="layui-timeline-item">' + getIcon(3) +
+                                    /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
+                                    ' <div class="layui-timeline-content layui-text">' +
+                                    '  <div class="layui-timeline-title">' +
+                                    '   <span style="padding-right:20px;">' + '[' + getRadio(3) + ']'+'</span>  ' +"等待"+ list.Lw[i].bsStepName +
+                                    '  </div>' +
+                                    ' </div>' +
+                                    ' </li>';
+                            }
                         } else {
                             info += list.Lw[i].bsStepName + "(" + list.Lw[i].bsCheckName + ")>";
                             // if(list.Lc[i]!=null){
@@ -142,7 +163,17 @@ function getInfo(json) {
                     info = info.substring(0, info.length - 1);
                     document.getElementById('flow_info').innerHTML = info;
                 }
-
+                // if(timeHtml==""){
+                //     timeHtml += '<li class="layui-timeline-item">' + getIcon(3) +
+                //         /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
+                //         ' <div class="layui-timeline-content layui-text">' +
+                //         '  <div class="layui-timeline-title">' +
+                //         '   <span style="padding-right:20px;">' + '[' + getRadio(3) + ']'+'</span>  ' +"等待发起审核" +
+                //         '  </div>' +
+                //         ' </div>' +
+                //         ' </li>';
+                // }
+                document.getElementById('timeline').innerHTML = timeHtml+nowHtml;
 
             } else {
                 layer.msg(res.msg);
@@ -187,6 +218,8 @@ function getRadio(status) {
         return "通过"
     } else if (status == 2) {
         return "驳回"
+    }else if (status == 3) {
+        return "等待审核"
     }
 }
 
@@ -200,7 +233,9 @@ function CheckIsNullOrEmpty(value) {
 function getIcon(status) {
     if (status == 1) {
         return "<i class='layui-icon iconfont icon-extend-queren' style='position:absolute;left:-2px;color:#7CCD7C'></i>"
-    } else {
+    } else if(status ==2){
         return "<i class='layui-icon iconfont icon-extend-tuihui ' style='position:absolute;left:-2px;color:#EE6A50'></i>"
+    }else {
+        return "<i class='layui-icon iconfont icon-extend-baogongtongji- ' style='position:absolute;left:-2px;color:#FFFF00'></i>"
     }
 }

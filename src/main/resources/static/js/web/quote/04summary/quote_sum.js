@@ -269,18 +269,19 @@ $(function() {
 				// 		return '组装'
 				// 	}
 				// },totalRowText : "合计"},
-			{fixed:'left',field : 'bsComponent',width : 120,title : '零件名称',totalRowText : "合计"},
+			{fixed:'left',field : 'bsElement',width : 120,title : '组件名称',totalRowText : "合计"},
+			{fixed:'left',field : 'bsComponent',width : 120,title : '零件名称'},
 			{fixed:'left',field : 'bsMaterName',width : 200,title : '材料名称'},
 			//{field : 'bsMachiningType',title : '加工类型',width : 100,hide : true},/*(表面处理)*/
 			//{field : 'bsColor',title : '配色工艺',width : 100,hide : true},/*(表面处理)*/
 			{fixed:'left',field : 'bsModel',width : 200,title : '材料规格'},
 			{field : 'bsAssess',width : 120,title : '材料单价(含税)'},
 			{field : 'bsProQty',width : 90,title : '制品重(g)',totalRow : true,hide : true},
-				{field : 'bsWaterGap',title : '水口量(g)',width : 90,hide : true}, /*(注塑)*/
-				{field : 'bsCave',title : '穴数',width : 60,hide : true}, /*(注塑)*/
-				{field : 'bsYield',width : 90,title : '工序良率%'},
-				{field : 'bsMaterLose',width : 90,title : '本工序损耗'},
-				{field : 'bsFee',width : 90,title : '材料总价',
+			{field : 'bsWaterGap',title : '水口量(g)',width : 90,hide : true}, /*(注塑)*/
+			{field : 'bsCave',title : '穴数',width : 60,hide : true}, /*(注塑)*/
+			{field : 'bsYield',width : 90,title : '工序良率%'},
+			{field : 'bsMaterLose',width : 90,title : '本工序损耗'},
+			{field : 'bsFee',width : 90,title : '材料总价',
 					// templet:function(d){
 					// return Number(d.bsQty)*Number(d.bsAssess)/Number(d.bsRadix);
 					// },
@@ -910,6 +911,7 @@ function getLossDetail(title){
 					onwanceTotal += Number(item.BS_COST) + Number(item.BS_THE_LOSS);
 					yieldTotal *= Number(item.BS_YIELD) / 100;
 					bsCost += Number(item.BS_COST);
+					// console.log(item.BS_COST);
 					bsTheLostTotal += Number(item.BS_THE_LOSS);
 					bsMaterTotal +=Number(item.BS_MATER_COST);
 					bsLhAll +=Number(item.BS_FEE_LH_ALL);

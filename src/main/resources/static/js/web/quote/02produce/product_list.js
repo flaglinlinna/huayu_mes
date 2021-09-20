@@ -243,6 +243,8 @@ $(function() {
 									var iframe = window['layui-layer-iframe' + index];
 									// 向子页面的全局函数child传参，流程编码
 									if (data.bsStatus == '2') {
+
+										//制造部各个部门的审批状态，2已完成，控制按钮提交失效
 										iframe.child(Style, data.id, 'end');
 									} else {
 										iframe.child(Style, data.id, 'check');

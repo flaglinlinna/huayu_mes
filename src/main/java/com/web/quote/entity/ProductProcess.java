@@ -104,6 +104,13 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "bsMaterName", value = "材料名称")
 	@Column(length = 500)
 	protected String bsMaterName;
+
+	/**
+	 * 材料规格
+	 */
+	@ApiModelProperty(name = "bsModel", value = "材料规格")
+	@Column(length = 500)
+	protected String bsModel;
     
     /**
      * 关联工序表
@@ -691,5 +698,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsSingleton(Integer bsSingleton) {
 		this.bsSingleton = bsSingleton;
+	}
+
+	public String getBsModel() {
+		return bsModel;
+	}
+
+	public void setBsModel(String bsModel) {
+		this.bsModel = bsModel;
 	}
 }

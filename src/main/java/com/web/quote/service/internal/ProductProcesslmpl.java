@@ -612,6 +612,11 @@ public class ProductProcesslmpl implements ProductProcessService {
 //            o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
 
+        List <ProductMater> materList2 = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,"molding");
+        for(ProductMater o :materList2){
+
+        }
+
         List <ProductMater> materList = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingleton(0,quoteId,bsType,0);
         for(ProductMater pm :materList){
             if(StringUtils.isEmpty(pm.getBsGroups())){
