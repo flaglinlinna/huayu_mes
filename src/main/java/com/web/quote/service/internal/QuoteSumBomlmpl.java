@@ -160,16 +160,28 @@ public class QuoteSumBomlmpl extends BaseSql implements QuoteSumBomService {
 //			filters1.add(new SearchFilter("rangePrice", SearchFilter.Operator.LIKE, keyword));
 //			filters1.add(new SearchFilter("alternativeSuppliers", SearchFilter.Operator.LIKE, keyword));
 		}
-		Specification<QuoteSumBom> spec = Specification.where(BaseService.and(filters, QuoteSumBom.class));
-		Specification<QuoteSumBom> spec1 = spec.and(BaseService.or(filters1, QuoteSumBom.class));
-		Page<QuoteSumBom> page = quoteSumBomDao.findAll(spec1, pageRequest);
-		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+//		Specification<QuoteSumBom> spec = Specification.where(BaseService.and(filters, QuoteSumBom.class));
+//		Specification<QuoteSumBom> spec1 = spec.and(BaseService.or(filters1, QuoteSumBom.class));
+//		Page<QuoteSumBom> page = quoteSumBomDao.findAll(spec1, pageRequest);
+		List<QuoteSumBom> quoteSumBomList  =quoteSumBomDao.findByDelFlagAndPkQuote(0,quoteId);
+//		return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+//				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+		return ApiResponseResult.success().data(quoteSumBomList);
 	}
 
 	@Override
 	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception {
-		List<QuoteSumBom> quoteBomList = quoteSumBomDao.findByDelFlagAndPkQuote(0,pkQuote);
+		List<QuoteSumBom> quoteBomList = new ArrayList<>();
+		List<QuoteSumBom> quoteSumBomList = quoteSumBomDao.findByDelFlagAndPkQuoteAndParenId(0,pkQuote,0L);
+		for(QuoteSumBom o:quoteSumBomList){
+			quoteBomList.add(o);
+			List<QuoteSumBom> quoteSumBomList2 = quoteSumBomDao.findByDelFlagAndPkQuoteAndParenId(0,pkQuote,o.getId());
+			for(QuoteSumBom o2:quoteSumBomList2){
+				quoteBomList.add(o2);
+				List<QuoteSumBom> quoteSumBomList3 = quoteSumBomDao.findByDelFlagAndPkQuoteAndParenId(0,pkQuote,o2.getId());
+				quoteBomList.addAll(quoteSumBomList3);
+			}
+		}
 		String excelPath = "static/excelFile/";
 		String fileName = "虚拟料号导入模板.xlsx";
 		String[] map_arr = new String[]{"id","bsItemCode","bsItemCodeReal","bsMaterName","wcName"};

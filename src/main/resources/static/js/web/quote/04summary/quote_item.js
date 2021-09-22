@@ -4,54 +4,79 @@
 var pageCurr;
 var totalCount = 0;// 表格记录数
 $(function() {
-	layui.use([ 'form', 'table','upload', 'tableSelect' ], function() {
-		var table = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect;
+	layui.use([ 'form', 'table','upload', 'tableSelect','treeTable' ], function() {
+		var table = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect,treetable = layui.treeTable;
 
 		// isComplete()
-		tableIns = table.render({
-			elem : '#client_procList',
+		// tableIns = table.render({
+		// 	elem : '#client_procList',
+		// 	url : context + '/quoteItem/getItemList?pkQuote=' + quoteId,
+		// 	method : 'get',// 默认：get请求
+		// 	// , toolbar: '#toolbar',
+		// 	cellMinWidth : 80,
+		// 	height : 'full-65',
+		// 	// even : true,// 条纹样式
+		// 	page : true,
+		// 	limit:20,
+		// 	request : {
+		// 		pageName : 'page' // 页码的参数名称，默认：page
+		// 		,
+		// 		limitName : 'rows' // 每页数据量的参数名，默认：limit
+		// 	},
+		// 	parseData : function(res) {
+		// 		// 可进行数据操作
+		// 		return {
+		// 			"count" : res.data.total,
+		// 			"msg" : res.msg,
+		// 			"data" : res.data.rows,
+		// 			"code" : res.status
+		// 		// code值为200表示成功
+		// 		}
+		// 	},
+		// 	cols : [ [ {type : 'numbers'},
+		// 		{field : 'bsItemCode',title : '虚拟料号',width: 160,style : 'background-color:#d2d2d2',align: 'center'},
+		// 		{field : 'bsItemCodeReal',title : '实际料号',edit:'text',minWidth: 120,align: 'center',style : 'background-color:#ffffff'},
+		// 		{field : 'bsMaterName',title : '物料描述',minWidth: 160,style : 'background-color:#d2d2d2',align: 'center'},
+		// 		{field : 'workcenterName',title : '工作中心',minWidth: 120,style : 'background-color:#d2d2d2',align: 'center',templet:function (d) {
+		// 				if(d.wc!=null){
+		// 					return d.wc.workcenterName;
+		// 				}else {
+		// 					return "";
+		// 				}
+		// 			}},
+		// 		// {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar'}
+		// 	] ],
+		// 	done : function(res, curr, count) {
+		// 		// console.log(res)
+		// 		totalCount = res.count
+		// 		pageCurr = curr;
+		// 		// merge(res.data, [ 'bsName', ], [ 1, 1 ]);
+		// 	}
+		// });
+
+		var	tableIns = treetable.render({
+			elem: '#client_procList',
+			//data: [{"id":1,"pid":0,"title":"1-1"},{"id":2,"pid":0,"title":"1-2"},{"id":3,"pid":0,"title":"1-3"},{"id":4,"pid":1,"title":"1-1-1"},{"id":5,"pid":1,"title":"1-1-2"},{"id":6,"pid":2,"title":"1-2-1"},{"id":7,"pid":2,"title":"1-2-3"},{"id":8,"pid":3,"title":"1-3-1"},{"id":9,"pid":3,"title":"1-3-2"},{"id":10,"pid":4,"title":"1-1-1-1"},{"id":11,"pid":4,"title":"1-1-1-2"}],
 			url : context + '/quoteItem/getItemList?pkQuote=' + quoteId,
-			method : 'get',// 默认：get请求
-			// , toolbar: '#toolbar',
-			cellMinWidth : 80,
-			height : 'full-65',
-			// even : true,// 条纹样式
-			page : true,
-			limit:20,
-			request : {
-				pageName : 'page' // 页码的参数名称，默认：page
-				,
-				limitName : 'rows' // 每页数据量的参数名，默认：limit
+			// data:permList,
+			icon_key: 'bsItemCode',
+			parent_key:'parenId',
+			is_checkbox: false,
+			end: function(e){
+				form.render();
 			},
-			parseData : function(res) {
-				// 可进行数据操作
-				return {
-					"count" : res.data.total,
-					"msg" : res.msg,
-					"data" : res.data.rows,
-					"code" : res.status
-				// code值为200表示成功
-				}
-			},
-			cols : [ [ {type : 'numbers'},
-				{field : 'bsItemCode',title : '虚拟料号',width: 160,style : 'background-color:#d2d2d2',align: 'center'},
-				{field : 'bsItemCodeReal',title : '实际料号',edit:'text',minWidth: 120,align: 'center',style : 'background-color:#ffffff'},
-				{field : 'bsMaterName',title : '物料描述',minWidth: 160,style : 'background-color:#d2d2d2',align: 'center'},
-				{field : 'workcenterName',title : '工作中心',minWidth: 120,style : 'background-color:#d2d2d2',align: 'center',templet:function (d) {
-						if(d.wc!=null){
-							return d.wc.workcenterName;
-						}else {
-							return "";
-						}
+			cols : [
+				{key : 'bsItemCode',title : '虚拟料号',width: 160,style : 'background-color:#d2d2d2',align: 'center'},
+				{key : '',title : '实际料号',edit:'text',minWidth: 120,align: 'center',style : 'background-color:#ffffff',template: function(r){
+						return r.bsItemCodeReal==null?'':r.bsItemCodeReal;
+					}
+				},
+				{key : 'bsMaterName',title : '物料描述',minWidth: 160,style : 'background-color:#d2d2d2',align: 'center'},
+				{key : '',title : '工作中心',minWidth: 120,style : 'background-color:#d2d2d2',align: 'center',template: function(r){
+						return r.wc==null?'':r.wc.workcenterName;
 					}},
 				// {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar'}
-			] ],
-			done : function(res, curr, count) {
-				// console.log(res)
-				totalCount = res.count
-				pageCurr = curr;
-				// merge(res.data, [ 'bsName', ], [ 1, 1 ]);
-			}
+			]
 		});
 
 		table.on('edit(client_procList)',function (obj) {

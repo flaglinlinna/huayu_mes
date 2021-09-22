@@ -2,7 +2,7 @@ package com.web.gantt.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.utils.HardwareUtil;
+//import com.utils.HardwareUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -70,18 +70,18 @@ public class GanttController extends WebController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/getCPUSerial")
-	@ResponseBody
-	public String getCPUSerial(String img) {
-
-		try {
-			return 	HardwareUtil.getCPUSerial()+"_"+ HardwareUtil.getMACAddress();
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("获取CPU序列号失败！", e);
-			return e.toString();
-		}
-	}
+//	@RequestMapping(value = "/getCPUSerial")
+//	@ResponseBody
+//	public String getCPUSerial(String img) {
+//
+//		try {
+//			return 	HardwareUtil.getCPUSerial()+"_"+ HardwareUtil.getMACAddress();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error("获取CPU序列号失败！", e);
+//			return e.toString();
+//		}
+//	}
 
 	
 

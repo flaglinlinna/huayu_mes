@@ -230,7 +230,7 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                         }else if("0.0".equals(row8)){
                             errInfo = errInfo + "穴数不能是0;";
                         }
-                    }else {
+                    }else if(!("molding").equals(bsType)){
                         errInfo = errInfo + "穴数不能为空;";
                     }
 

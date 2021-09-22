@@ -87,7 +87,7 @@ $(function() {
 					// 	$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
 					// 	$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
 					// } else
-					if (bsType == 'molding' ||bsType == 'hardware') {// 注塑 20210225-hjj-五金材料更改计算方式
+					if (bsType == 'hardware') {// 注塑 20210225-hjj-五金材料更改计算方式
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsWaterGap"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsProQty"]').removeClass("layui-hide");
@@ -97,6 +97,16 @@ $(function() {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsProQty"]').removeClass("layui-hide");
 
+					}else if(bsType == 'molding'){
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsWaterGap"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCave"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsProQty"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsQty"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsQty"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsWaterGap"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsCave"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsProQty"]').removeClass("layui-hide");
+						tableIns.find('tr[data-index=' + index + ']').find('td[data-field="bsCave"]').data('edit',false).css("background-color", "#d2d2d2");
 					} else if (bsType == 'surface') {
 						// $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsMachiningType"]').removeClass("layui-hide");
 						// $('div[lay-id="listTable"]').find('thead').find('th[data-field="bsMachiningType"]').removeClass("layui-hide");

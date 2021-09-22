@@ -1,5 +1,6 @@
 package com.web.quote.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.app.base.control.WebController;
 import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.QuoteBom;
@@ -89,14 +90,14 @@ public class QuoteItemController extends WebController {
 	@ApiOperation(value = "获取虚拟物料对应列表", notes = "获取虚拟物料对应列表", hidden = true)
 	@RequestMapping(value = "/getItemList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getItemList(Long pkQuote,String keyword) {
+	public Object getItemList(Long pkQuote,String keyword) {
 		String method = "/quoteItem/getItemList";
 		String methodName = "获取报价单列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = quoteSumBomService.getItemList(pkQuote,keyword,super.getPageRequest(sort));
 			logger.debug(methodName+"=getList:");
-			return result;
+			return result.getData();
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(methodName+"失败！", e);

@@ -12,6 +12,7 @@ public interface QuoteSumBomDao extends CrudRepository<QuoteSumBom, Long>,JpaSpe
 
 	public List<QuoteSumBom> findAll();
 	public List<QuoteSumBom> findByDelFlagAndPkQuote(Integer delFlag,Long pkQuote);
+	public List<QuoteSumBom> findByDelFlagAndPkQuoteAndParenId(Integer delFlag,Long pkQuote,Long parentId);
 	public QuoteSumBom findById(long id);
 
 

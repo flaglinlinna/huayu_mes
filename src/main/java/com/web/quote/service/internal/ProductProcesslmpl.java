@@ -613,10 +613,15 @@ public class ProductProcesslmpl implements ProductProcessService {
         }
 
         List <ProductMater> materList2 = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,"molding");
-        for(ProductMater o :materList2){
-
+        for(ProductMater pm :materList2){
+            for (ProductProcess o : processAllList) {
+                if(o.getBsMaterName().equals(pm.getBsMaterName())&&o.getBsModel().equals(pm.getBsModel())&&o.getBsElement().equals(pm.getBsElement())){
+                    pm.setBsCave(o.getBsCave());
+                    continue;
+                }
+            }
         }
-
+        productMaterDao.saveAll(materList2);
         List <ProductMater> materList = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingleton(0,quoteId,bsType,0);
         for(ProductMater pm :materList){
             if(StringUtils.isEmpty(pm.getBsGroups())){

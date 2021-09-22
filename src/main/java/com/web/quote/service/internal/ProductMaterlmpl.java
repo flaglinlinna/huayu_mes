@@ -236,7 +236,7 @@ public class ProductMaterlmpl implements ProductMaterService {
                     return ApiResponseResult.failure("用量不能为空,请检查后再确认！");
                 }
             }else if("molding".equals(bsType)||"hardware".equals(bsType)) {
-                if ( o.getBsProQty() == null || o.getBsCave() == null ||("0").equals(o.getBsCave()) || o.getBsWaterGap() == null) {
+                if ( o.getBsProQty() == null  ||("0").equals(o.getBsCave()) || o.getBsWaterGap() == null) {
                     return ApiResponseResult.failure("制品重(g)、穴数、水口数不能为空,请检查后再确认！");
                 }
             }else if("surface".equals(bsType)) {
