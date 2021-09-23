@@ -7,6 +7,7 @@ import com.app.base.data.ApiResponseResult;
 import com.web.quote.entity.Quote;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface QuoteProcessService {
@@ -48,5 +49,7 @@ public interface QuoteProcessService {
    public ApiResponseResult editProcessListAgain(List<QuoteProcess> quoteProcessList) throws Exception;
 
    public ApiResponseResult getSumList(Long quoteId,PageRequest pageRequest) throws Exception;
+
+   public void exportExcel(HttpServletResponse response, String bsType, Long quoteId) throws Exception;
    
 }

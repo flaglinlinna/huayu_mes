@@ -1,14 +1,20 @@
 package com.web.quote.service.internal;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
+import com.utils.ExcelExport;
 import com.web.quote.dao.QuoteDao;
+import com.web.quote.entity.ProductProcess;
 import com.web.quote.entity.Quote;
 import com.web.quote.entity.QuoteBom;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,6 +39,8 @@ import com.web.quote.dao.QuoteProcessDao;
 import com.web.quote.entity.QuoteProcess;
 import com.web.quote.service.QuoteProcessService;
 import com.web.quote.service.QuoteService;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 报价工艺流程表
@@ -856,5 +864,45 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		}
 		Collections.reverse(maps);
 		return ApiResponseResult.success().data(DataGrid.create(maps, (int) mapList.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+	}
+
+	@Override
+	public void exportExcel(HttpServletResponse response, String bsType, Long quoteId) throws Exception {
+			String excelPath = "static/excelFile/";
+			String fileName = "";
+			String[] map_arr = null;
+			fileName = "工艺流程导出.xlsx";
+			map_arr = new String[]{"bsElement", "bsName", "bsLinkName", "itemType", "workCenter", "pkProc", "bsOrder", "bsGroups","bsMaterName","bsModel","fmemo"};
+			XSSFWorkbook workbook = new XSSFWorkbook();
+			Resource resource = new ClassPathResource(excelPath + fileName);
+//			InputStream in = resource.getInputStream();
+			List<QuoteProcess> productProcessesList = quoteProcessDao.findByDelFlagAndPkQuote(0,quoteId);
+			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+			for (QuoteProcess bs : productProcessesList) {
+				Map<String, Object> map = new HashMap<>();
+				map.put("id", bs.getId());
+				map.put("bsElement", bs.getBsElement());
+				map.put("bsName", bs.getBsName());
+				map.put("bsOrder", bs.getBsOrder());
+				if (bs.getProc() != null) {
+					map.put("pkProc", bs.getProc().getProcName());
+				} else {
+					map.put("pkProc", "");
+				}
+//            map.put("bsModelType", bs.getBsModelType());
+				if (bs.getBjWorkCenter() != null) {
+					map.put("workCenter", bs.getBjWorkCenter().getWorkcenterName());
+				}
+				map.put("bsLinkName", bs.getBsLinkName());
+				map.put("itemType", bs.getItemType());
+				map.put("bsGroups", bs.getBsGroups());
+				map.put("fmemo", bs.getFmemo());
+				map.put("bsMaterName", bs.getBsMaterName());
+				map.put("bsModel", bs.getBsModel());
+				map.put("fmemo", bs.getFmemo());
+				list.add(map);
+			}
+			ExcelExport.export(response, list, workbook, map_arr, excelPath + fileName, fileName);
+
 	}
 }

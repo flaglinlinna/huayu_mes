@@ -26,6 +26,8 @@ import com.web.quote.service.QuoteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Api(description = "报价工艺流程模块")
 @CrossOrigin
 @ControllerAdvice
@@ -410,6 +412,22 @@ public class QuoteProcessController extends WebController {
             logger.error("获取损耗明细模拟列表失败！", e);
 			getSysLogService().error(module,method, methodName,e.toString());
             return ApiResponseResult.failure("获取损耗明细模拟列表失败！");
+        }
+    }
+
+    @ApiOperation(value="导出数据", notes="导出数据", hidden = true)
+    @RequestMapping(value = "/exportExcel", method = RequestMethod.GET)
+    @ResponseBody
+    public void exportExcel(HttpServletResponse response, String bsType, Long pkQuote) {
+        String method = "/productProcess/exportExcel";String methodName ="导出数据";
+        try {
+            logger.debug("导出数据=exportExcel:");
+            getSysLogService().success(module,method, methodName, "");
+            quoteProcessService.exportExcel(response,bsType,pkQuote);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("导出数据失败！", e);
+            getSysLogService().error(module,method, methodName, e.toString());
         }
     }
 }

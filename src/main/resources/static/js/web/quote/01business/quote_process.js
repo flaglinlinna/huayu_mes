@@ -14,6 +14,7 @@ $(function() {
 			url : context + '/quoteProcess/getList?pkQuote='+ quoteId,
 			method : 'get', // 默认：get请求
 			cellMinWidth : 80,
+			toolbar: '#toolbar',
 			height : 'full-65',
 			even : true,// 条纹样式
 			page : true,
@@ -741,6 +742,12 @@ function updateBsMaterName(id,bomId) {
 			}
 		});
 }
+
+// 导出数据
+function exportExcel() {
+	location.href = context + "/quoteProcess/exportExcel?pkQuote=" + quoteId;
+}
+
 
 function saveTable(refresh) {
 	var dates = layui.table.cache['client_procList'];
