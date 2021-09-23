@@ -489,7 +489,8 @@ function subCode(taskNo, barcode1, barcode2) {
                     result: "扫描成功"
                 }
                 $("#barNum").val(data.data.count);
-                tabledata.push(dataT);
+                //添加到数组的第一个位置
+                tabledata.unshift(dataT);
                 tableIns.reload({
                     data: tabledata
                 });
