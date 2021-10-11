@@ -10,10 +10,7 @@ import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.UnitDao;
 import com.web.basePrice.entity.Unit;
-import com.web.quote.dao.ProductMaterDao;
-import com.web.quote.dao.QuoteDao;
-import com.web.quote.dao.QuoteItemDao;
-import com.web.quote.dao.QuoteProcessDao;
+import com.web.quote.dao.*;
 import com.web.quote.entity.*;
 import com.web.quote.service.ProductMaterService;
 import com.web.quote.service.QuoteProductService;
@@ -44,6 +41,9 @@ public class ProductMaterlmpl implements ProductMaterService {
 	
 	@Autowired
     private ProductMaterDao productMaterDao;
+
+    @Autowired
+    private ProductProcessDao productProcessDao;
 
     @Autowired
     private UnitDao unitDao;
@@ -437,6 +437,46 @@ public class ProductMaterlmpl implements ProductMaterService {
         return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
+
+
+    /**
+     * 查询列表
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getListByLose(String keyword,String materId, String quoteId,String bsAgent,PageRequest pageRequest) throws Exception {
+        // 查询条件1
+        ProductProcess o = productProcessDao.findById(Long.parseLong(materId));
+        //损耗材料的材料成本取数 1分组不为空,取出所有材料名称对应bom;2分组不为空,取对应材料名称的材料成本
+        //修改 根据损耗明细中的组件名称、所属零件、工作中心、工序到工艺流程中取对应的材料名称，再合计这些材料的材料成本
+        List<ProductMater> pmList = new ArrayList<>();
+//				pmList = productMaterDao.findByProcessLost(o.getPkQuote(), o.getBsLinkName(), o.getPkProc(), o.getBsElement());
+        //2021-08-31 损耗明细中这个顺序号在工艺流程中的
+        // 损耗分组如果为空，根据组件名称、材料名称、材料规格相同的（同一组件中，材料名称+材料规格不会重复）到所有的材料成本中合计；
+        // 如果损耗分组有值，根据工艺流程中该损耗分组的材料名称成本中合计。
+
+        if(StringUtils.isNotEmpty(o.getBsGroups())){
+            //1.找出同个分组及组件所属零件相同下的所有工艺，再找出对应的材料成本(材料名称和组件查找对应的材料成本)
+            List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuoteAndBsElementAndBsGroupsAndBsLinkName(0, o.getPkQuote(), o.getBsElement(),o.getBsGroups(),o.getBsLinkName());
+
+            List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndBsElementAndBsGroupsAndBsLinkName(0, o.getPkQuote(), o.getBsElement(),o.getBsGroups(),o.getBsLinkName());
+
+            for(QuoteProcess qp:quoteProcessList){
+                if(StringUtils.isNotEmpty(qp.getBsMaterName())){
+                    List<ProductMater> pm =	productMaterDao.findByDelFlagAndPkQuoteAndBsElementAndBsMaterNameAndBsModelAndBsAgent(0,qp.getPkQuote(),qp.getBsElement(),qp.getBsMaterName(), qp.getBsModel(),0);
+                    if (pm.size() > 0) {
+                        pmList.addAll(pm);
+                    }
+                }
+            }
+       }else {
+            pmList = productMaterDao.findByDelFlagAndPkQuoteAndBsElementAndBsMaterNameAndBsModel(0,o.getPkQuote(),o.getBsElement(),o.getBsMaterName(), o.getBsModel());
+     }
+
+        return ApiResponseResult.success().data(pmList);
+    }
+
+
 
     /**
      * 修改单位

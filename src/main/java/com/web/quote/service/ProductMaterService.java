@@ -28,6 +28,9 @@ public interface ProductMaterService {
 
 	public ApiResponseResult getList(String keyword,String bsType, String quoteId,String bsAgent,PageRequest pageRequest) throws Exception;
 
+	public ApiResponseResult getListByLose(String keyword,String materId, String quoteId,String bsAgent,PageRequest pageRequest) throws Exception;
+
+
     public ApiResponseResult getListByPkQuote(Long pkQuote, PageRequest pageRequest) throws Exception;
 
 	public void exportExcel(HttpServletResponse response, String bsType, Long quoteId) throws Exception;

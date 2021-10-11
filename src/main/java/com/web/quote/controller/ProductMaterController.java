@@ -231,6 +231,25 @@ public class ProductMaterController extends WebController {
 		}
 	}
 
+	@ApiOperation(value = "获取五金材料列表(根据损耗查找)", notes = "获取五金材料列表(根据损耗查找)", hidden = true)
+	@RequestMapping(value = "/getListByLose", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getListByLose(String keyword,String materId,String quoteId,String bsAgent) {
+		String method = "/productMater/getListByLose";
+		String methodName = "获取五金材料列表(根据损耗查找)";
+		try {
+			Sort sort = new Sort(Sort.Direction.ASC, "id");
+			ApiResponseResult result = productMaterService.getListByLose(keyword,materId,quoteId,bsAgent, super.getPageRequest(sort));
+			logger.debug("获取五金材料列表(根据损耗查找)=getList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取五金材料列表失败！", e);
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure("获取五金材料列表失败(根据损耗查找)！");
+		}
+	}
+
 	@ApiOperation(value = "获取报价单下五金材料列表", notes = "获取报价单下五金材料列表", hidden = true)
 	@RequestMapping(value = "/getListByPkQuote", method = RequestMethod.GET)
 	@ResponseBody

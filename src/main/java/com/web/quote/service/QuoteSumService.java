@@ -5,6 +5,7 @@ import com.web.quote.entity.ProductMater;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 
 public interface QuoteSumService {
@@ -15,6 +16,8 @@ public interface QuoteSumService {
 									 String bsDevType,String bsCustName,PageRequest pageRequest) throws Exception;
 
 	public ApiResponseResult getQuoteList(String keyword,String quoteId,PageRequest pageRequest) throws Exception;
+
+	public void exportExcel(HttpServletResponse response, Long quoteId) throws Exception;
 
 	public ApiResponseResult getSumByQuote(String quoteId)throws Exception;
 

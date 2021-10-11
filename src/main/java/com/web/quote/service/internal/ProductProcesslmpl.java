@@ -245,7 +245,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         //表面工艺导入顺序: 零件名称、工序顺序、工序名称、机台类型、基数、人数、产能、工序良率、备注
 
         //2021-04-29 模板变更  （0626 增加组件名称）
-        // 五金  零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7
+        //五金 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7
         //注塑 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、成型周期(S)6、工序良率7、穴数8
         //组装 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
         //表面 零件名称1、工序顺序2、工序名称3、机台类型4、人数5、工序良率6、产能7
@@ -474,6 +474,83 @@ public class ProductProcesslmpl implements ProductProcessService {
                 pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
     }
 
+
+    /**
+     * 查询列表
+     */
+    @Override
+    @Transactional
+    public ApiResponseResult getListByLose(String keyword, String processID, String quoteId, PageRequest pageRequest) throws Exception {
+        List<SearchFilter> filters = new ArrayList<>();
+        ProductProcess o = productProcessDao.findById(Long.parseLong(processID));
+
+        if(o.getBsGroups()!=null){
+            filters.add(new SearchFilter("bsGroups", SearchFilter.Operator.EQ, o.getBsGroups()));
+            filters.add(new SearchFilter("bsLinkName", SearchFilter.Operator.EQ, o.getBsLinkName()));
+            filters.add(new SearchFilter("bsElement", SearchFilter.Operator.EQ, o.getBsElement()));
+        }else {
+            filters.add(new SearchFilter("id", SearchFilter.Operator.EQ, o.getId()));
+        }
+        filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+
+        if (!"null".equals(quoteId) && quoteId != null) {
+            filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));
+        } else {
+            List<ProductProcess> productMaterList = new ArrayList<>();
+            return ApiResponseResult.success().data(DataGrid.create(productMaterList, 0,
+                    1, 10));
+        }
+        // 查询2
+        List<SearchFilter> filters1 = new ArrayList<>();
+        Specification<ProductProcess> spec = Specification.where(BaseService.and(filters, ProductProcess.class));
+        Specification<ProductProcess> spec1 = spec.and(BaseService.or(filters1, ProductProcess.class));
+        Page<ProductProcess> page = productProcessDao.findAll(spec1, pageRequest);
+
+//        List<Map<String, Object>> mapList = new ArrayList<>();
+
+//        List<Map<String, Object>> sumUser = productProcessDao.getSumByBsElement(Long.parseLong(quoteId),bsType);
+//        List<Map<String, Object>> minCapacity = productProcessDao.getMinCapaCityGroupBy(Long.parseLong(quoteId),bsType);
+
+//        for (ProductProcess pm : page.getContent()) {
+//
+//            Map<String,Object> map =new HashMap<>();
+//            map = JSONObject.parseObject(JSONObject.toJSONString(pm),Map.class);
+//            List<Map<String, Object>> lm = productProcessDao.findByWorkcenter(pm.getPkProc(), pm.getProc().getBjWorkCenter().getId());
+//
+//            //待优化
+//            if (lm.size() > 0) {
+//                String str1 = JSON.toJSONString(lm); //此行转换
+//                map.put("bsTypeList",str1);
+//            } else {
+//                map.put("bsTypeList",null);
+//            }
+//
+//            for(Map<String,Object> map1 :sumUser){
+//                if(pm.getBsElement().equals(map1.get("BS_ELEMENT"))){
+//                    map.put("allUser",map1.get("ALLUSER")==null?0:map1.get("ALLUSER"));
+//                    map.put("allBsFeeLh",map1.get("BSFEELHALL")==null?0:map1.get("BSFEELHALL"));
+//                }
+//            }
+//
+//            for(Map<String,Object> map2 :minCapacity){
+//                if(map2.get("BS_ELEMENT").equals(pm.getBsElement())){
+//                    map.put("minCapacity",map2.get("MINCAPACITY")==null?0:map2.get("MINCAPACITY"));
+//                }
+//            }
+//
+////            map.put("allUser",sumUser.get(0).get("ALLUSER")==null?0:sumUser.get(0).get("ALLUSER"));
+////            if(minCapacity.size()>0){
+////                map.put("minCapacity",minCapacity.get(0).get("MINCAPACITY"));
+////            }else {
+////                map.put("minCapacity",0);
+////            }
+//            mapList.add(map);
+//        }
+
+        return ApiResponseResult.success().data(DataGrid.create(page.getContent(), (int) page.getTotalElements(),
+                pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+    }
+
     /**
      * 查询报价单下 工艺列表
      */
@@ -612,16 +689,19 @@ public class ProductProcesslmpl implements ProductProcessService {
 //            o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
 
-        List <ProductMater> materList2 = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,"molding");
-        for(ProductMater pm :materList2){
-            for (ProductProcess o : processAllList) {
-                if(o.getBsMaterName().equals(pm.getBsMaterName())&&o.getBsModel().equals(pm.getBsModel())&&o.getBsElement().equals(pm.getBsElement())){
-                    pm.setBsCave(o.getBsCave());
-                    continue;
+        //如果是注塑工艺的确认，把穴数带过去
+        if(bsType.equals("molding")) {
+            List<ProductMater> materList2 = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, "molding");
+            for (ProductMater pm : materList2) {
+                for (ProductProcess o : processAllList) {
+                    if (o.getBsMaterName().equals(pm.getBsMaterName())&& o.getBsElement().equals(pm.getBsElement())&& o.getBsName().equals(pm.getBsComponent())) {
+                        pm.setBsCave(o.getBsCave());
+                        continue;
+                    }
                 }
             }
+            productMaterDao.saveAll(materList2);
         }
-        productMaterDao.saveAll(materList2);
         List <ProductMater> materList = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingleton(0,quoteId,bsType,0);
         for(ProductMater pm :materList){
             if(StringUtils.isEmpty(pm.getBsGroups())){
@@ -637,8 +717,10 @@ public class ProductProcesslmpl implements ProductProcessService {
                 List<ProductProcess> processList1 = productProcessDao.findByDelFlagAndPkQuoteAndBsGroups(0, pm.getPkQuote(), pm.getBsGroups());
 //                pm.setBsYield(processList1.size() > 0 ? processList1.get(0).getBsYield() : bsYield);
                 if(processList1.size()>0){
-                    if (processList1.get(0).getBsYield().compareTo(BigDecimal.ZERO)!=1){
-                        return ApiResponseResult.failure("工艺顺序"+processList1.get(0).getBsOrder()+"损耗分组:"+pm.getBsGroups()+"对应的材料的工序良率为0，请检查");
+                    if(processList1.get(0).getBsYield()!=null) {
+                        if (processList1.get(0).getBsYield().compareTo(BigDecimal.ZERO) != 1) {
+                            return ApiResponseResult.failure("工艺顺序" + processList1.get(0).getBsOrder() + "损耗分组:" + pm.getBsGroups() + "对应的材料的工序良率为0，请检查");
+                        }
                     }
                 }
             }

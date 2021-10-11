@@ -242,6 +242,28 @@ public class ProductProcessController extends WebController {
 		}
 	}
 
+	@ApiOperation(value = "获取报价工艺流程列表", notes = "获取报价工艺流程列表", hidden = true)
+	@RequestMapping(value = "/getListByLose", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getListByLose(String keyword,String processId,String quoteId) {
+		String method = "/productProcess/getListByLose";
+		String methodName = "获取报价工艺流程列表";
+		try {
+			Sort.Order order3 = new Sort.Order(Sort.Direction.ASC, "bsOrder");
+			List<Sort.Order> list = new ArrayList<>();
+			list.add(order3);
+			Sort sort = new Sort(list);
+			ApiResponseResult result = productProcessService.getListByLose(keyword,processId,quoteId, super.getPageRequest(sort));
+			logger.debug("获取报价工艺流程列表=getList:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价工艺流程列表失败！", e);
+			getSysLogService().error(module,method, methodName,"关键字"+keyword==null?";":keyword+";"+e.toString());
+			return ApiResponseResult.failure("获取报价工艺流程列表失败！");
+		}
+	}
+
 	@ApiOperation(value = "获取报价单下报价工艺流程列表", notes = "获取报价单下报价工艺流程列表", hidden = true)
 	@RequestMapping(value = "/getListByPkQuote", method = RequestMethod.GET)
 	@ResponseBody

@@ -359,7 +359,7 @@ function subCode(taskNo, barcode1, barcode2) {
                     result: "扫描成功"
                 }
                 $("#barNum").val(data.data);
-                tabledata.push(dataT);
+                tabledata.unshift(dataT);
                 tableIns.reload({
                     data: tabledata
                 });

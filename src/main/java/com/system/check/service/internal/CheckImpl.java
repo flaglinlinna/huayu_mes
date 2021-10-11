@@ -255,10 +255,10 @@ public class CheckImpl   implements CheckService {
 		tf.setBsRouter(ci.getBsCheckCode());
 
 		//企业微信消息推送
-		SysUser sysUser = sysUserDao.findById((long)ci.getBsCheckId());
-		if(sysUser!=null&&sysUser.getUserName()!=null) {
-			this.sendToWechat(quote, ci.getBsStepCheckStatus()+"",ci.getBsCheckComments(), UserUtil.getSessionUser().getUserName(), sysUser.getWeChatUserId());
-		}
+//		SysUser sysUser = sysUserDao.findById((long)ci.getBsCheckId());
+//		if(sysUser!=null&&sysUser.getWeChatUserId()!=null) {
+//			this.sendToWechat(quote, ci.getBsStepCheckStatus()+"",ci.getBsCheckComments(), UserUtil.getSessionUser().getUserName(), sysUser.getWeChatUserId());
+//		}
 		todoInfoService.add(tf);
 	}
 	private CheckInfo getNewCheck(CheckInfo c){

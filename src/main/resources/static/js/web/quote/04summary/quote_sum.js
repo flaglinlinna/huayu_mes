@@ -2,11 +2,14 @@
  * 报价单
  */
 var pageCurr;
+var table4;
+var table5
 $(function() {
 	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ], function() {
 		var form = layui.form, layer = layui.layer, laydate = layui.laydate,
 			table = layui.table, table1 = layui.table, table2 = layui.table,table3 = layui.table;
-
+		table4 =layui.table;
+		table5 =layui.table;
 		initRate();
 		form.verify({
 			num : function(value) {
@@ -489,10 +492,10 @@ $(function() {
 					},
 				{field : 'BS_ORDER',width : 60,title : '顺序'},
 				{field : 'BS_GROUPS',title : '损耗分组',width : 90},
-				{field : 'BS_MATER_COST',title : '材料成本',width : 88,totalRow : true},
-				{field : 'BS_FEE_LH_ALL',title : '人工成本',width : 80,totalRow : true},
-				{field : 'BS_FEE_MH_ALL',title : '制造成本',width : 80,totalRow : true},
-				{field : 'BS_FEE_WX_ALL',title : '外协成本',width : 80,totalRow : true},
+				{field : 'BS_MATER_COST',title : '材料成本',width : 88,totalRow : true ,templet: '<div><a  style="text-decoration:underline;color:blue;cursor: pointer;"; onclick="showUser({{d.ID}})">{{ d.BS_MATER_COST==null?0:d.BS_MATER_COST }}</a></div>'},
+				{field : 'BS_FEE_LH_ALL',title : '人工成本',width : 80,totalRow : true,templet: '<div><a  style="text-decoration:underline;color:blue;cursor: pointer;"; onclick="showProcess({{d.ID}})">{{ d.BS_FEE_LH_ALL==null?0:d.BS_FEE_LH_ALL }}</a></div>'},
+				{field : 'BS_FEE_MH_ALL',title : '制造成本',width : 80,totalRow : true,templet: '<div><a  style="text-decoration:underline;color:blue;cursor: pointer;"; onclick="showProcess({{d.ID}})">{{ d.BS_FEE_MH_ALL==null?0:d.BS_FEE_MH_ALL }}</a></div>'},
+				{field : 'BS_FEE_WX_ALL',title : '外协成本',width : 80,totalRow : true,templet: '<div><a  style="text-decoration:underline;color:blue;cursor: pointer;"; onclick="showProcess({{d.ID}})">{{ d.BS_FEE_WX_ALL==null?0:d.BS_FEE_WX_ALL }}</a></div>'},
 				{field : 'BS_COST',title : '成本合计',width : 90,totalRow : true},
 				{field : 'BS_YIELD',title : '工序良率%',width : 90,templet:function (d) {
 						return Number(d.BS_YIELD).toFixed(2);
@@ -595,6 +598,10 @@ $(function() {
 		 $('#detailBtn').click(function(){
 			 parent.layui.index.openTabsPage(context+'/quoteSum/toQuoteTree?quoteId='+quoteId,'报价汇总树');
 		 })
+
+		$('#exportBtn').click(function(){
+			location.href = context + "/quoteSum/exportExcel?pkQuote="+quoteId;
+		})
 
 		// $('#editBtn').click(function(){
 		// 	// $(":input").attr("disabled","disabled");
@@ -1119,4 +1126,235 @@ function merge(res, columsName, columsIndex) {
 		mergeIndex = 0;
 		mark = 1;
 	}
+}
+
+function showUser(id) {
+	console.log(id);
+	if(id==undefined||id==null){
+		return;
+	}
+	// roleId = id;
+	// 材料价格明细
+	tableIns5 = table4.render({
+		elem : '#DetailList',
+		url : context + '/productMater/getListByLose?quoteId=' + quoteId + '&materId=' + id +'&bsAgent=0',
+		// url : context + '/purchase/getQuoteList?quoteId='+quoteId,
+		method : 'get' // 默认：get请求
+		,
+		cellMinWidth : 80,
+		totalRow : true,
+		height : 'full-95',// 固定表头&full-查询框高度
+		// even:true,//条纹样式
+		page : false,
+		// limit: 200,
+		// limits: [50,100,200,300,500],
+		request : {
+			pageName : 'page', // 页码的参数名称，默认：page
+			limitName : 'rows' // 每页数据量的参数名，默认：limit
+		},
+		parseData : function(res) {
+			// 可进行数据操作
+			return {
+				"count" : res.data.total,
+				"msg" : res.msg,
+				"data" : res.data,
+				"code" : res.status
+				// code值为200表示成功
+			}
+		},
+		cols : [ [
+			{fixed:'left',type : 'numbers'},
+			{fixed:'left',field : 'bsType',width : 100,title : '类型',sort : true,
+			 templet : function(d) {
+				if (d.bsType == 'hardware') {// * 五金:hardware
+					return '五金'
+				} else if (d.bsType == 'molding') {// * 注塑:molding
+					return '注塑'
+				} else if (d.bsType == 'surface') {// * 表面处理:surface
+					return '表面处理'
+				} else if (d.bsType == 'packag') {// * 组装:packag
+					return '组装'
+				}
+			},totalRowText : "合计"},
+			{fixed:'left',field : 'bsElement',width : 120,title : '组件名称'},
+			{fixed:'left',field : 'bsComponent',width : 120,title : '零件名称'},
+			{fixed:'left',field : 'bsMaterName',width : 200,title : '材料名称'},
+			{field : 'bsModel',width : 200,title : '材料规格'},
+			{field : 'bsAssess',width : 120,title : '材料单价(含税)'},
+			{field : 'bsProQty',width : 90,title : '制品重(g)',totalRow : true,hide : true},
+			{field : 'bsWaterGap',title : '水口量(g)',width : 90,hide : true}, /*(注塑)*/
+			{field : 'bsCave',title : '穴数',width : 60,hide : true}, /*(注塑)*/
+			{field : 'bsYield',width : 90,title : '工序良率%'},
+			{field : 'bsMaterLose',width : 90,title : '本工序损耗'},
+			{field : 'bsFee',width : 90,title : '材料总价',
+				// templet:function(d){
+				// return Number(d.bsQty)*Number(d.bsAssess)/Number(d.bsRadix);
+				// },
+				totalRow : true},
+			{field : 'bsQty',width : 100,title : '材料用量',totalRow : true},
+			{field : 'bsUnit',width : 120,title : '材料用量单位',
+				templet:function(d){
+					if(d.unit!=null){
+						return d.unit.unitCode
+					}else {
+						return "";
+					}
+				},
+			},
+			{field : 'purchaseUnit',width : 100,title : '采购单位'},
+			{field : 'bsGeneral',width : 80,title : '通用物料',	 templet:function(d){
+					return d.bsGeneral =="0"?"否":"是";
+				}},
+		] ],
+		done : function(res, curr, count) {
+			pageCurr = curr;
+		}
+	});
+
+	var index = layer.open({
+		type : 1,
+		title : "材料损耗",
+		fixed : true,
+		resize : true,
+		shadeClose : false,
+		content : $('#userShow'),
+		end : function() {
+			// location.reload();
+		}
+	});
+	layer.full(index);
+}
+
+
+function showProcess(id) {
+	console.log(id);
+	if(id==undefined||id==null){
+		return;
+	}
+	// roleId = id;
+	// 材料价格明细
+	tableIns1 = table5.render({
+		elem : '#ProcessDetailList',
+		url : context + '/productProcess/getListByLose?processId='+id+'&quoteId='+quoteId,
+		method : 'get', // 默认：get请求
+		cellMinWidth : 80,
+		totalRow : true,
+		limit: 200,
+		page:true,
+		limits: [50,100,200,300,500],
+		height : 'full-110',// 固定表头&full-查询框高度
+		even : true,// 条纹样式
+		page : true,
+		request : {
+			pageName : 'page',// 页码的参数名称，默认：page
+			limitName : 'rows' // 每页数据量的参数名，默认：limit
+		},
+		parseData : function(res) {
+			// 可进行数据操作
+			return {
+				"count" : res.data.total,
+				"msg" : res.msg,
+				"data" : res.data.rows,
+				"code" : res.status
+				// code值为200表示成功
+			}
+		},
+		cols : [ [
+			{fixed:'left',type : 'numbers'},
+			{fixed:'left',field : 'bsElement',width : 150,title : '组件名称',totalRowText : "合计",
+				templet:'<div><span title="{{d.bsElement}} 。总人数：{{d.allUser}}，人工费合计：{{d.allBsFeeLh}}">{{d.bsElement}}</span></div>'},
+			{fixed:'left',field : 'bsName',width : 150,title : '零件名称',totalRowText : "合计"},
+			{fixed:'left',field : 'workcenterName',width : 150,title : '工作中心',
+				templet : function(d) {
+					if (d.proc != null) {
+						if (d.proc.bjWorkCenter != null) {
+							return d.proc.bjWorkCenter.workcenterName == null || undefined ? "" : d.proc.bjWorkCenter.workcenterName;
+						} else {
+							return "";
+						}
+					} else {
+						return "";
+					}
+				}},
+
+			{fixed:'left',field : 'proc',width : 100,title : '工序名称',
+				templet : function(d) {
+					if (d.proc != null) {
+						return d.proc.procName == null || undefined ? "" : d.proc.procName;
+					} else {
+						return "";
+					}
+				}},
+			{fixed:'left',field : 'bsOrder',width : 60,title : '顺序'},
+			// {field : 'procfmemo',width : 100,title : '工序说明',
+			//   templet : function(d) {
+			// 	if (d.proc != null) {
+			// 		return d.proc.fmemo == null || undefined ? "" : d.proc.fmemo;
+			// 	} else {
+			// 		return "";
+			// 	}
+			// }},
+			{fixed:'left',field : 'bsGroups',title : '损耗分组',width : 80},
+			{field : 'bsModelType',title : '机台类型',width : 160,hide : true,templet:function (d) {
+					if (d.bsTypeList != null) {
+						var modelJson = JSON.parse(d.bsTypeList);
+						if (modelJson != null && modelJson != "") {
+							for (var i = 0; i < modelJson.length; i++) {
+								if (d.bsModelType == modelJson[i].MODEL_CODE) {
+									return modelJson[i].MODEL_NAME;
+								}
+							}
+							return "";
+						}
+					}else {
+						return "";
+					}
+				}},
+			//{field : 'bsRadix',title : '基数',width : 90,hide : true},
+
+			{field : 'bsFeeLh',title : '人工费(元/小时)',width : 120},
+			{field : 'bsUserNum',title : '人数',width : 70,totalRow : true},
+			{field : 'bsFeeMh',title : '制造费(元/小时)',width : 120},
+			{field : 'bsCycle',title : '成型周期(S)',width : 100},
+			{field : 'bsCave',title : '穴数',width : 60},
+			{field : 'bsCapacity',title : '产能(个/小时)',width : 120},
+			{field : 'bsYield',title : '工序良率%',width : 100},
+			{field : 'bsHouYield',title : '后工序良率%',width : 100},
+			{field : 'bsLoss',title : '工序良率%',width : 90},
+			{field : 'bsLossTheLh',title : '本工序损料(人工)',width : 150,totalRow : true},
+			{field : 'bsLossTheMh',title : '本工序损料(制费)',width : 150,totalRow : true},
+			{field : 'bsFeeLhAll',title : '人工总费用',width : 90,totalRow : true},
+			{field : 'bsFeeMhAll',title : '制造总费用',width : 90,totalRow : true},
+			{field : 'bsFeeWxAll',title : '加工费(未税)',width : 90,totalRow : true},
+
+			// {field : 'bsFeeLhAll',title : '人工总费用',width : 130,totalRow : true,hide : true},
+			// {field : 'bsFeeMhAll',title : '制费总费用',width : 130,totalRow : true,hide : true},
+
+
+			{field : 'bsLossHouLh',title : '后工序损料(人工)',width : 150,totalRow : true,hide : true},
+			{field : 'bsLossHouMh',title : '后工序损料(制费)',width : 150,totalRow : true,hide : true},
+			{field : 'bsHeji',title : '工序损料合计',width : 120,totalRow : true,hide : true,templet: function (d) {
+					return (Number(d.bsLossTheLh)+Number(d.bsLossTheMh)+Number(d.bsLossHouLh)+Number(d.bsLossHouMh)).toFixed(4);
+				}
+			},
+			//{field : 'bsHeji',title : '工序损料合计',width : 120,totalRow : true,hide : false},
+			{field : 'fmemo',title : '备注',hide : true}
+		] ],
+		done : function(res, curr, count) {
+			//pageCurr = curr;
+		}
+	});
+
+	var index = layer.open({
+		type : 1,
+		title : "人工制费损耗",
+		fixed : true,
+		resize : true,
+		shadeClose : false,
+		content : $('#userProcess'),
+		end : function() {
+			// location.reload();
+		}
+	});
+	layer.full(index);
 }

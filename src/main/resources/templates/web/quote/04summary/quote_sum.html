@@ -43,6 +43,7 @@
 			<form id="itemForm" class="layui-form layui-form-pane"
 				lay-filter="itemForm" method="post" action="">
 				<h3 style="text-align: center;">华誉精密产品-报价汇总单</h3>
+				<button type="button" class="layui-btn layui-btn-xs" id="exportBtn" style="float:right;margin-right:30px;margin-top:-20px;">导出分工序报表</button>
 				<button type="button" class="layui-btn layui-btn-xs" id="detailBtn" style="float:right;margin-right:30px;margin-top:-20px;">查看详情</button>
 <!--				<button type="button" class="layui-btn layui-btn-xs" id="editBtn" style="float:right;margin-right:10px;margin-top:-20px;">编辑</button>-->
 				<fieldset class="layui-elem-field layui-field-title"
@@ -413,6 +414,16 @@
 		<!--包装运输费用明细-->
 		<div id="freightDetailDiv" class="layer_self_wrap" style="display:none;margin-left: 10px;">
 			<table id="freightTable" lay-filter="freightTable"></table>
+		</div>
+
+		<div id="userShow" style="display: none">
+			<button class="layui-btn layui-btn-sm layui-btn-normal" style="margin-left: 20px" id="exportUser" onclick="exportUser()">导出</button>
+			<table id="DetailList" lay-filter="DetailListTable"></table>
+		</div>
+
+		<div id="userProcess" style="display: none">
+			<button class="layui-btn layui-btn-sm layui-btn-normal" style="margin-left: 20px" id="exportUser" onclick="exportUser()">导出</button>
+			<table id="ProcessDetailList" lay-filter="ProcessDetailListTable"></table>
 		</div>
 
 		<script th:inline="javascript">

@@ -8,9 +8,12 @@ import com.web.quote.dao.*;
 import com.web.quote.entity.*;
 import com.web.quote.service.QuoteSumBomService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -32,6 +35,8 @@ public class QuoteSumBomlmpl extends BaseSql implements QuoteSumBomService {
 	private QuoteDao quoteDao;
 	@Autowired
 	private QuoteSumBomDao quoteSumBomDao;
+	@Autowired
+	QuoteProcessDao quoteProcessDao;
 
 	/**
 	 * 查询列表
@@ -169,8 +174,8 @@ public class QuoteSumBomlmpl extends BaseSql implements QuoteSumBomService {
 		return ApiResponseResult.success().data(quoteSumBomList);
 	}
 
-	@Override
-	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception {
+	public void exportExcel2(HttpServletResponse response, Long pkQuote) throws Exception {
+		//按3层的树状结构导出
 		List<QuoteSumBom> quoteBomList = new ArrayList<>();
 		List<QuoteSumBom> quoteSumBomList = quoteSumBomDao.findByDelFlagAndPkQuoteAndParenId(0,pkQuote,0L);
 		for(QuoteSumBom o:quoteSumBomList){
@@ -201,6 +206,47 @@ public class QuoteSumBomlmpl extends BaseSql implements QuoteSumBomService {
 		ExcelExport.export(response,list,workbook,map_arr,excelPath+fileName,fileName);
 	}
 
+	@Override
+	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception {
+		String excelPath = "static/excelFile/";
+		String fileName = "";
+		String[] map_arr = null;
+		fileName = "虚拟料号对应.xlsx";
+		map_arr = new String[]{"id","gradation","bsItemCodeReal","bsElement", "bsName", "bsLinkName", "itemType", "workCenter", "pkProc", "bsOrder", "bsGroups","bsMaterName","bsModel","fmemo"};
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		Resource resource = new ClassPathResource(excelPath + fileName);
+//			InputStream in = resource.getInputStream();
+		List<QuoteProcess> productProcessesList = quoteProcessDao.findByDelFlagAndPkQuote(0,pkQuote);
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for (QuoteProcess bs : productProcessesList) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", bs.getId());
+			map.put("gradation", bs.getGradation());
+			map.put("bsElement", bs.getBsElement());
+			map.put("bsItemCodeReal", bs.getBsItemCodeReal());
+			map.put("bsName", bs.getBsName());
+			map.put("bsOrder", bs.getBsOrder());
+			if (bs.getProc() != null) {
+				map.put("pkProc", bs.getProc().getProcName());
+			} else {
+				map.put("pkProc", "");
+			}
+//            map.put("bsModelType", bs.getBsModelType());
+			if (bs.getBjWorkCenter() != null) {
+				map.put("workCenter", bs.getBjWorkCenter().getWorkcenterName());
+			}
+			map.put("bsLinkName", bs.getBsLinkName());
+			map.put("itemType", bs.getItemType());
+			map.put("bsGroups", bs.getBsGroups());
+			map.put("fmemo", bs.getFmemo());
+			map.put("bsMaterName", bs.getBsMaterName());
+			map.put("bsModel", bs.getBsModel());
+			map.put("fmemo", bs.getFmemo());
+			list.add(map);
+		}
+		ExcelExport.export(response, list, workbook, map_arr, excelPath + fileName, fileName);
+	}
+
 
 	//防止读取Excel为null转String 报空指针异常
 	public String tranCell(Object object)
@@ -211,8 +257,8 @@ public class QuoteSumBomlmpl extends BaseSql implements QuoteSumBomService {
 	}
 
 	//导入模板
-	@Override
-	public ApiResponseResult doExcel(MultipartFile[] file, Long pkQuote) throws Exception{
+//	@Override
+	public ApiResponseResult doExcel2(MultipartFile[] file, Long pkQuote) throws Exception{
 		try {
 
 			Date doExcleDate = new Date();
@@ -245,6 +291,50 @@ public class QuoteSumBomlmpl extends BaseSql implements QuoteSumBomService {
 			}
 			quoteSumBomDao.saveAll(quoteSumBomList);
 			return ApiResponseResult.success("导入成功,共导入"+quoteSumBomList.size()+";条,失败:"+fail);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return ApiResponseResult.failure("导入失败！请查看导入文件数据格式是否正确！");
+		}
+	}
+
+	@Override
+	public ApiResponseResult doExcel(MultipartFile[] file, Long pkQuote) throws Exception{
+		try {
+			Date doExcleDate = new Date();
+			Long userId = UserUtil.getSessionUser().getId();
+			InputStream fin = file[0].getInputStream();
+			XSSFWorkbook workbook = new XSSFWorkbook(fin);//创建工作薄
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			//获取最后一行的num，即总行数。此处从0开始计数
+			int maxRow = sheet.getLastRowNum();
+			List<QuoteProcess> quoteProcessList = new ArrayList<>();
+			Integer fail = 0;
+			//前两行为标题
+			for (int row = 2; row <= maxRow; row++) {
+				QuoteProcess quoteProcess = new QuoteProcess();
+				String ids =  tranCell(sheet.getRow(row).getCell(0));
+//				String gradation =  tranCell(sheet.getRow(row).getCell(1));
+				String bsItemCodeReal =  tranCell(sheet.getRow(row).getCell(2));
+
+				XSSFCell xssfCell1 = sheet.getRow(row).getCell(1);
+				xssfCell1.setCellType(xssfCell1.CELL_TYPE_STRING);
+				String gradation = tranCell(xssfCell1);
+
+				if(StringUtils.isNotEmpty(ids)){
+					quoteProcess = quoteProcessDao.findById(Long.parseLong(ids));
+				}else {
+					fail++;
+					continue;
+				}
+				quoteProcess.setBsItemCodeReal(bsItemCodeReal);
+				quoteProcess.setLastupdateDate(doExcleDate);
+				quoteProcess.setGradation(gradation);
+				quoteProcess.setLastupdateBy(userId);
+				quoteProcessList.add(quoteProcess);
+			}
+			quoteProcessDao.saveAll(quoteProcessList);
+			return ApiResponseResult.success("导入成功,共导入"+quoteProcessList.size()+";条,失败:"+fail);
 		}
 		catch (Exception e){
 			e.printStackTrace();

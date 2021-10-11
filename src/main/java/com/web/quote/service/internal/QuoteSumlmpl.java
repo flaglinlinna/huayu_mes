@@ -1,28 +1,35 @@
 package com.web.quote.service.internal;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.utils.*;
+import com.utils.enumeration.BasicStateEnum;
 import com.web.basic.dao.SysParamDao;
 import com.web.basic.entity.SysParam;
 import com.web.quote.dao.*;
 import com.web.quote.entity.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.base.data.ApiResponseResult;
 import com.app.base.data.DataGrid;
-import com.utils.BaseSql;
-import com.utils.UserUtil;
 import com.web.basePrice.dao.ProdTypDao;
 import com.web.basePrice.entity.ProdTyp;
 import com.web.quote.service.QuoteSumService;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Service(value = "QuoteSumService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -187,6 +194,82 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 
 		return ApiResponseResult.success()
 				.data(DataGrid.create(list, (int) count, pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+	}
+
+	public void exportExcel(HttpServletResponse response, Long quoteId) throws Exception {
+		String excelPath = "static/excelFile/";
+		String fileName = "分工序报表.xlsx";
+		String[] map_arr = new String[]{"bsName","procName", "bsCave", "bsYield", "bsGroups", "bsFeeLH", "bsUserNum", "bsCycle", "bsLossFeeLh",
+				"bsFeeLhAll","bsModelType", "bsFeeLH", "bsLossFeeMh", "bsFeeMhAll", "bsMaterName", "bsModel", "bsAssess", "bsProQty", "bsWaterGap"
+		,"bsMaterLose","bsFee", "bsQty", "bsUnit", "purchaseUnit"};
+
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		Resource resource = new ClassPathResource(excelPath + fileName);
+//		InputStream in = resource.getInputStream();
+		List<SearchFilter> filters = new ArrayList<>();
+		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+		filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));
+		Specification<ProductProcess> spec = Specification.where(BaseService.and(filters, ProductProcess.class));
+		List<String> wcList =Arrays.asList("hardware|五金","packag|组装","surface|表面处理","molding|注塑");
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for(String wc :wcList) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("bsName", wc.split("\\|")[1]);
+			list.add(map);
+			List<ProductProcess> productProcessesList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId,wc.split("\\|")[0]);
+			for (ProductProcess bs : productProcessesList) {
+				map = new HashMap<>();
+				map.put("id", bs.getId());
+//			map.put("bsElement", bs.getBsElement());
+				map.put("bsName", bs.getBsName());
+				if (bs.getProc() != null) {
+					map.put("procName", bs.getProc().getProcName());
+				} else {
+					map.put("procName", "");
+				}
+				map.put("bsCave", bs.getBsCave());
+				map.put("bsYield", bs.getBsYield());
+				map.put("bsGroups", bs.getBsGroups());
+				map.put("bsFeeLH", bs.getBsFeeLh());
+				map.put("bsUserNum", bs.getBsUserNum());
+				map.put("bsCycle", bs.getBsCycle());
+				map.put("bsLossFeeLh", bs.getBsLossTheLh());
+				map.put("bsFeeLhAll", bs.getBsFeeLhAll());
+				if (bs.getBjModelType() != null) {
+					map.put("bsModelType", bs.getBjModelType().getModelName());
+				}
+				map.put("bsFeeMH", bs.getBsFeeMh());
+				map.put("bsLossFeeMh", bs.getBsFeeMh());
+				map.put("bsFeeMhAll", bs.getBsFeeMhAll());
+				if (bs.getPkBomId() != null) {
+					ProductMater pm = productMaterDao.findByDelFlagAndPkBomIdAndPkQuote(0, bs.getPkBomId(), bs.getPkQuote());
+					map.put("bsWaterGap", pm.getBsWaterGap());
+					map.put("bsCave", pm.getBsCave());
+					map.put("bsMaterName", pm.getBsMaterName());
+					map.put("purchaseUnit", pm.getPurchaseUnit());
+					map.put("bsMaterLose", pm.getBsMaterLose());
+//				pm.getBsMaterLose()
+					if (pm.getUnit() != null) {
+						map.put("bsUnit", pm.getUnit().getUnitCode());
+					}
+					map.put("bsModel", pm.getBsModel());
+					map.put("bsAssess", pm.getBsAssess());
+					map.put("bsProQty", pm.getBsProQty());
+					map.put("bsQty", pm.getBsQty());
+					map.put("bsFee", pm.getBsFee());
+				}
+//			map.put("bsUserNum", bs.getBsUserNum());
+//			map.put("bsCycle", bs.getBsCycle());
+//			map.put("bsYield", bs.getBsYield());
+//			map.put("fmemo", bs.getFmemo());
+//			map.put("bsCave", bs.getBsCave());
+//			map.put("bsCapacity", bs.getBsCapacity());
+//			map.put("bsLoss", bs.getBsLoss());
+//			map.put("bsFeeWxAll", bs.getBsFeeWxAll());
+				list.add(map);
+			}
+		}
+		ExcelExport.export(response, list, workbook, map_arr, excelPath + fileName, fileName);
 	}
 
 	@Override

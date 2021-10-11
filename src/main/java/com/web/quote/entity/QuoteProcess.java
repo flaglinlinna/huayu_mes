@@ -217,6 +217,27 @@ public class QuoteProcess extends BaseEntity {
 	@Column(length = 100)
 	protected String purchaseUnit;
 
+	/**
+	 * 物料编码-虚拟
+	 */
+	@ApiModelProperty(name = "bsItemCode", value = "物料编码")
+	@Column(length = 50)
+	protected String bsItemCode;
+
+	/**
+	 * 物料编码-真实
+	 */
+	@ApiModelProperty(name = "bsItemCodeReal", value = "物料编码-真实")
+	@Column(length = 50)
+	protected String bsItemCodeReal;
+
+	/**
+	 * 层数
+	 */
+	@ApiModelProperty(name = "gradation", value = "层数")
+	@Column(length = 50)
+	protected String gradation;
+
 	public Long getPkQuote() {
 		return pkQuote;
 	}
@@ -431,5 +452,29 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setBsModel(String bsModel) {
 		this.bsModel = bsModel;
+	}
+
+	public String getBsItemCode() {
+		return bsItemCode;
+	}
+
+	public void setBsItemCode(String bsItemCode) {
+		this.bsItemCode = bsItemCode;
+	}
+
+	public String getBsItemCodeReal() {
+		return bsItemCodeReal;
+	}
+
+	public void setBsItemCodeReal(String bsItemCodeReal) {
+		this.bsItemCodeReal = bsItemCodeReal;
+	}
+
+	public String getGradation() {
+		return gradation;
+	}
+
+	public void setGradation(String gradation) {
+		this.gradation = gradation;
 	}
 }

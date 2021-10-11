@@ -54,29 +54,120 @@ $(function() {
 		// 	}
 		// });
 
-		var	tableIns = treetable.render({
-			elem: '#client_procList',
-			//data: [{"id":1,"pid":0,"title":"1-1"},{"id":2,"pid":0,"title":"1-2"},{"id":3,"pid":0,"title":"1-3"},{"id":4,"pid":1,"title":"1-1-1"},{"id":5,"pid":1,"title":"1-1-2"},{"id":6,"pid":2,"title":"1-2-1"},{"id":7,"pid":2,"title":"1-2-3"},{"id":8,"pid":3,"title":"1-3-1"},{"id":9,"pid":3,"title":"1-3-2"},{"id":10,"pid":4,"title":"1-1-1-1"},{"id":11,"pid":4,"title":"1-1-1-2"}],
-			url : context + '/quoteItem/getItemList?pkQuote=' + quoteId,
-			// data:permList,
-			icon_key: 'bsItemCode',
-			parent_key:'parenId',
-			is_checkbox: false,
-			end: function(e){
-				form.render();
+		// var	tableIns = treetable.render({
+		// 	elem: '#client_procList',
+		// 	//data: [{"id":1,"pid":0,"title":"1-1"},{"id":2,"pid":0,"title":"1-2"},{"id":3,"pid":0,"title":"1-3"},{"id":4,"pid":1,"title":"1-1-1"},{"id":5,"pid":1,"title":"1-1-2"},{"id":6,"pid":2,"title":"1-2-1"},{"id":7,"pid":2,"title":"1-2-3"},{"id":8,"pid":3,"title":"1-3-1"},{"id":9,"pid":3,"title":"1-3-2"},{"id":10,"pid":4,"title":"1-1-1-1"},{"id":11,"pid":4,"title":"1-1-1-2"}],
+		// 	url : context + '/quoteItem/getItemList?pkQuote=' + quoteId,
+		// 	// data:permList,
+		// 	icon_key: 'bsItemCode',
+		// 	parent_key:'parenId',
+		// 	is_checkbox: false,
+		// 	end: function(e){
+		// 		form.render();
+		// 	},
+		// 	cols : [
+		// 		{key : 'bsItemCode',title : '虚拟料号',width: 160,style : 'background-color:#d2d2d2',align: 'center'},
+		// 		{key : '',title : '实际料号',edit:'text',minWidth: 120,align: 'center',style : 'background-color:#ffffff',template: function(r){
+		// 				return r.bsItemCodeReal==null?'':r.bsItemCodeReal;
+		// 			}
+		// 		},
+		// 		{key : 'bsMaterName',title : '物料描述',minWidth: 160,style : 'background-color:#d2d2d2',align: 'center'},
+		// 		{key : '',title : '工作中心',minWidth: 120,style : 'background-color:#d2d2d2',align: 'center',template: function(r){
+		// 				return r.wc==null?'':r.wc.workcenterName;
+		// 			}},
+		// 		// {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar'}
+		// 	]
+		// });
+
+		var tableIns = table.render({
+			elem : '#client_procList',
+			url : context + '/quoteProcess/getList?pkQuote='+ quoteId,
+			method : 'get', // 默认：get请求
+			cellMinWidth : 80,
+			toolbar: '#toolbar',
+			height : 'full-65',
+			even : true,// 条纹样式
+			page : true,
+			limit:30,
+			limits: [30,50,100,200,300],
+			request : {
+				pageName : 'page', // 页码的参数名称，默认：page
+				limitName : 'rows' // 每页数据量的参数名，默认：limit
 			},
-			cols : [
-				{key : 'bsItemCode',title : '虚拟料号',width: 160,style : 'background-color:#d2d2d2',align: 'center'},
-				{key : '',title : '实际料号',edit:'text',minWidth: 120,align: 'center',style : 'background-color:#ffffff',template: function(r){
-						return r.bsItemCodeReal==null?'':r.bsItemCodeReal;
-					}
+			parseData : function(res) {
+				// 可进行数据操作
+				return {
+					"count" : res.data.total,
+					"msg" : res.msg,
+					"data" : res.data.rows,
+					"code" : res.status
+					// code值为200表示成功
+				}
+			},
+			cols : [ [
+				{fixed : 'left',type:'checkbox'},
+				// {fixed : 'left',type : 'numbers'},
+				{fixed : 'left',field:'id',title:'ID', width:80, hide:true},
+				{fixed : 'left',field : 'gradation',width : 80,sort:true,title : '层数',style : 'background-color:#d2d2d2'},
+				{fixed : 'left',field : 'bsItemCodeReal',width : 150,sort:true,title : '真实料号',style : 'background-color:#d2d2d2'},
+				{fixed : 'left',field : 'bsElement',width : 150,sort:true,title : '组件名称',style : 'background-color:#d2d2d2'},
+				{fixed : 'left',field : 'bsName',width : 200,sort:true,title : '零件名称',style : 'background-color:#d2d2d2'},
+				{fixed : 'left',field : 'bsLinkName',width : 180,sort:true,title : '所属零件',style : 'background-color:#ffffff'},
+				{field : 'itemType',title : '物料类型',width : 120,sort:true,style : 'background-color:#d2d2d2'},
+				{field : 'workCenter',title : '工作中心',width : 120,sort:true,templet :
+						function(d){if(d.bjWorkCenter!=null){
+							return d.bjWorkCenter.workcenterName
+						}else {
+							return "";
+						}
+						},
+					style : 'background-color:#d2d2d2'},
+				{field : 'pkProc',title : '工序名称',width : 180,sort:true,style : 'background-color:#ffffff',templet : function(d) {
+						if (d.proc == null||d.proc==null) {
+							return ""
+						}else if(d.proc.procName != null) {
+							return  "<div>"+d.proc.procName+"</div>"
+						}else {
+							return ""
+						}}},
+				{field : 'bsOrder',title : '顺序',width : 60,"edit" : "number","event" : "dataCol",sort:true,style : 'background-color:#ffffff'},
+				{field : 'bsGroups',width : 130,title : '损耗分组',"edit" : "text",style : 'background-color:#ffffff'},
+				{field : 'bsMaterName',width : 220,title : '材料名称',style : 'background-color:#ffffff',"edit" : "text"},
+				{field : 'bsModel',title : '材料规格',width : 240,style : 'background-color:#d2d2d2;overflow:hidden !important',
+					templet : function(d) {
+						if (d.quoteBom == null||d.bsMaterName==null) {
+							return ""
+						}else if(d.quoteBom.bsModel != null) {
+							return  "<div>"+d.quoteBom.bsModel+"</div>"
+						}else {
+							return ""
+						}}
 				},
-				{key : 'bsMaterName',title : '物料描述',minWidth: 160,style : 'background-color:#d2d2d2',align: 'center'},
-				{key : '',title : '工作中心',minWidth: 120,style : 'background-color:#d2d2d2',align: 'center',template: function(r){
-						return r.wc==null?'':r.wc.workcenterName;
-					}},
-				// {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar'}
-			]
+				{field : 'fmemo',title : '备注',"edit" : "text",width : 200,style : 'background-color:#ffffff'},
+				// {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar',style : 'background-color:#ffffff'}
+			] ],
+			done : function(res, curr, count) {
+				// $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible');
+				totalCount = res.count
+				// localtableFilterIns.reload();
+				pageCurr = curr;
+				var tableView = this.elem.next(); // 当前表格渲染之后的视图
+				//merge(res.data, [ 'bsElement'], [3,3]);
+				//merge(res.data, [ 'bsName'], [4,4]);
+
+				res.data.forEach(function (item, index) {
+					// console.log(item);
+					if(item.bsStatus =='1'){
+						tableView.find('tr[data-index=' + index + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
+						$("select[name='selectBsMaterName']").attr("disabled","disabled");
+						$("select[name='selectBsGroups']").attr("disabled","disabled");
+						$("select[name='selectProc']").attr("disabled","disabled");
+						form.render('select');
+					}
+				});
+				form.render();//刷新表单
+
+			}
 		});
 
 		table.on('edit(client_procList)',function (obj) {

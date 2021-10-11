@@ -13,6 +13,7 @@ import com.web.quote.service.QuoteSumService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,22 @@ public class QuoteSumController extends WebController {
 			logger.error("报价单汇详情页失败！", e);
 		}
 		return mav;
+	}
+
+	@ApiOperation(value="导出数据", notes="导出数据", hidden = true)
+	@RequestMapping(value = "/exportExcel", method = RequestMethod.GET)
+	@ResponseBody
+	public void exportExcel(HttpServletResponse response, Long pkQuote) {
+		String method = "/quoteSum/exportExcel";String methodName ="导出数据";
+		try {
+			logger.debug("导出数据=exportExcel:");
+			getSysLogService().success(module,method, methodName, "");
+			quoteSumService.exportExcel(response,pkQuote);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("导出数据失败！", e);
+			getSysLogService().error(module,method, methodName, e.toString());
+		}
 	}
 
 	@ApiOperation(value = "获取报价单列表", notes = "获取报价单列表", hidden = true)

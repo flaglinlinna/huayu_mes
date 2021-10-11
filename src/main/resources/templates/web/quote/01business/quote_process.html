@@ -5,22 +5,32 @@
 <meta charset="UTF-8">
 </head>
 <style>
-	.layui-table-cell, .layui-table-tool-panel li {
-		overflow: visible !important;
-		/*position :relative;*/
-	}
-
-	/*.layui-table-body, .layui-table-box, .layui-table-cell {*/
-	/*	overflow: visible ;*/
-	/*	!*position :relative;*!*/
-	/*}*/
-
 	.layui-form-select .layui-input {
 		height: 30px;
 		overflow: visible;!important;
 		/*position :relative;*/
 		/*z-index: auto;*/
 	}
+	.layui-table-cell, .layui-table-tool-panel li {
+		overflow: visible !important;
+		/*position :relative;*/
+	}
+	.layui-form-select dl{z-index:9999;}
+	/*.layui-table-cell{overflow:visible;}*/
+	.layui-table-box{overflow:visible;}
+	.layui-table-body{overflow:visible;}
+	/* 设置下拉框的高度与表格单元相同 */
+	td .layui-form-select{
+		/*margin-top: -10px;*/
+		margin-left: -15px;
+		margin-right: -15px;
+	}
+	/* 防止下拉框的下拉列表被隐藏---必须设置--- */
+	.layui-table-col-special > .layui-table-cell {
+		overflow: visible;
+	}
+
+
 </style>
 <body class="layui-layout-body" style="position: relative">
 	<div class="layui-layout layui-layout-admin">
@@ -211,7 +221,7 @@
 		</script>
 
 		<script type="text/html" id="selectLink" >
-			<select name="selectLink" lay-filter="selectLink" lay-search>
+			<select name="selectLink" style="position: absolute;z-index: 9999" lay-filter="selectLink" lay-search>
 				{{# if(d.bsComponentList!=null){ }}
 				<option value="">请选择</option>
 				{{# layui.each($.parseJSON( d.bsComponentList ), function(index, item){     }}
