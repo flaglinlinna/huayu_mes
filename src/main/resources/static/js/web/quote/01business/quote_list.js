@@ -199,7 +199,7 @@ $(function() {
 						if (data.bsStatusCheck > 1) {
 							layer.open({
 								type: 2,
-								title: '报价单核查审批',
+								title: '报价单核查审批('+data.bsCode+")",
 								area: ['600px', '480px'],
 								fixed: false,
 								maxmin: true,

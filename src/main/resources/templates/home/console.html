@@ -167,6 +167,9 @@
 							}else if(dd[j].bsRouter == "QUOTE"){
 								dd[j].bsModel="报价单列表"
 								url = context+"/quoteSum/toQuoteSumList?quoteId="+dd[j].bsReferId;
+							}else if(dd[j].bsRouter == "freight"){
+								dd[j].bsModel="报价单列表"
+								url = context+"/quoteProdect/toQuoteProdect?style=freight&quoteId="+dd[j].bsReferId;
 							}
 							check_html += '<dd><div class="layui-status-img"><a href="javascript:;"></a></div><div> <a  lay-href="'+url+'" lay-text="'+dd[j].bsModel+'">'+dd[j].bsTitle+'</a>  </div></dd>'
 						}

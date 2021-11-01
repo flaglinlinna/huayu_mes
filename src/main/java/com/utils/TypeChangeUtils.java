@@ -3,6 +3,7 @@ package com.utils;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,14 +29,5 @@ public class TypeChangeUtils {
         return null;
     }
 
-    public static List<Map<String,Object>> objectToListMap(Object object){
-        try {
-//           for(Object o : List<Map>)
-            return null;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
-        return null;
-    }
 }

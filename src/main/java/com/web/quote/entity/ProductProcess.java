@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 
 import com.web.basePrice.entity.BjModelType;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.annotation.Transient;
@@ -289,6 +290,13 @@ public class ProductProcess extends BaseEntity {
 	@ApiModelProperty(name = "pkBomId", value = "复制的bomId")
 	@Column(length = 20)
 	protected Long pkBomId;
+
+//	/**
+//	 * 工艺ID ，避免重复下发及修改
+//	 */
+//	@ApiModelProperty(name = "pkQuoteProcessId", value = "避免重复下发及修改")
+//	@Column(length = 20)
+//	protected Long pkQuoteProcessId;
 
 	/**
 	 * * 2021-03-18 hjj 修改损耗计算方式

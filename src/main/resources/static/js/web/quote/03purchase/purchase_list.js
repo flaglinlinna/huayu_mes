@@ -203,7 +203,7 @@ $(function() {
 						if (data1.result) {
 							layer.open({
 								type: 2,
-								title: '审批',
+								title: '采购审批('+data.bsCode+")",
 								area: ['600px', '480px'],
 								fixed: false,
 								maxmin: true,

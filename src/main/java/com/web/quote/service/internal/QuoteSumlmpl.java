@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import com.utils.*;
 import com.utils.enumeration.BasicStateEnum;
+import com.web.basePrice.dao.BjModelTypeDao;
+import com.web.basePrice.entity.BjModelType;
 import com.web.basic.dao.SysParamDao;
 import com.web.basic.entity.SysParam;
 import com.web.quote.dao.*;
@@ -51,6 +53,8 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 	private SysParamDao sysParamDao;
 	@Autowired
 	private QuoteProcessDao quoteProcessDao;
+	@Autowired
+	private BjModelTypeDao bjModelTypeDao;
 	/**
 	 * 查询列表
 	 */
@@ -211,14 +215,16 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));
 		Specification<ProductProcess> spec = Specification.where(BaseService.and(filters, ProductProcess.class));
 		List<String> wcList =Arrays.asList("hardware|五金","packag|组装","surface|表面处理","molding|注塑");
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<List<Map<String, Object>>> allList = new ArrayList<>();
 		for(String wc :wcList) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("bsName", wc.split("\\|")[1]);
-			list.add(map);
+			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//			Map<String, Object> map = new HashMap<>();
+//			map.put("bsName", wc.split("\\|")[1]);
+//			list.add(map);
 			List<ProductProcess> productProcessesList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId,wc.split("\\|")[0]);
 			for (ProductProcess bs : productProcessesList) {
-				map = new HashMap<>();
+				Map<String, Object> map = new HashMap<>();
 				map.put("id", bs.getId());
 //			map.put("bsElement", bs.getBsElement());
 				map.put("bsName", bs.getBsName());
@@ -235,9 +241,17 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				map.put("bsCycle", bs.getBsCycle());
 				map.put("bsLossFeeLh", bs.getBsLossTheLh());
 				map.put("bsFeeLhAll", bs.getBsFeeLhAll());
-				if (bs.getBjModelType() != null) {
-					map.put("bsModelType", bs.getBjModelType().getModelName());
-				}
+				map.put("bsModelType", bs.getBsModelType());
+//				if(StringUtils.isNotEmpty(bs.getBsModelType())){
+//					List<BjModelType> bjModelType = bjModelTypeDao.findByDelFlagAndModelCode(0,bs.getBsModelType());
+//					if(bjModelType.size()>0){
+//						map.put("bsModelType", bjModelType.get(0).getModelName());
+//					}
+//				}
+
+//				if (bs.getBsModelType() != null) {
+//					map.put("bsModelType", bs.getBjModelType().getModelName());
+//				}
 				map.put("bsFeeMH", bs.getBsFeeMh());
 				map.put("bsLossFeeMh", bs.getBsFeeMh());
 				map.put("bsFeeMhAll", bs.getBsFeeMhAll());
@@ -268,8 +282,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //			map.put("bsFeeWxAll", bs.getBsFeeWxAll());
 				list.add(map);
 			}
+			allList.add(list);
 		}
-		ExcelExport.export(response, list, workbook, map_arr, excelPath + fileName, fileName);
+		ExcelExport.exportBySheetAndRow(response, allList, workbook, 4,map_arr, excelPath + fileName, fileName,2);
 	}
 
 	@Override

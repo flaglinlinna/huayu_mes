@@ -68,7 +68,7 @@ public class Quote extends BaseEntity {
      */
 	@Column
 	@ApiModelProperty(name="bsStatus2Hardware",value="状态")
-    protected int bsStatus2Hardware = 0;
+    protected int bsStatus2Hardware = 1;
 	/**
      * 2-制造部状态-注塑
      * 0:草稿
@@ -79,7 +79,7 @@ public class Quote extends BaseEntity {
      */
 	@Column
 	@ApiModelProperty(name="bsStatus2Molding",value="状态")
-    protected int bsStatus2Molding = 0;
+    protected int bsStatus2Molding = 1;
 	/**
      * 2-制造部状态-表面处理
      * 0:草稿
@@ -90,7 +90,7 @@ public class Quote extends BaseEntity {
      */
 	@Column
 	@ApiModelProperty(name="bsStatus2Surface",value="状态")
-    protected int bsStatus2Surface = 0;
+    protected int bsStatus2Surface = 1;
 	/**
      * 2-制造部状态-组装
      * 0:草稿
@@ -99,7 +99,7 @@ public class Quote extends BaseEntity {
      */
 	@Column
 	@ApiModelProperty(name="bsStatus2Packag",value="状态")
-    protected int bsStatus2Packag = 0;
+    protected int bsStatus2Packag = 1;
 
 	/**
 	 * 2-制造部状态-包装运输费
@@ -109,7 +109,7 @@ public class Quote extends BaseEntity {
 	 */
 	@Column
 	@ApiModelProperty(name="bsStatus2Freight",value="状态")
-	protected int bsStatus2Freight = 0;
+	protected int bsStatus2Freight = 1;
 	
 	/**
      * 2-采购部状态
@@ -119,7 +119,7 @@ public class Quote extends BaseEntity {
      */
 	@Column
 	@ApiModelProperty(name="bsStatus2Surface",value="状态")
-    protected int bsStatus2Purchase = 0;
+    protected int bsStatus2Purchase = 1;
 	/**
      * 2-外协部状态
      * 0:草稿
@@ -128,7 +128,7 @@ public class Quote extends BaseEntity {
      */
 	@Column
 	@ApiModelProperty(name="bsStatus2Out",value="状态")
-    protected int bsStatus2Out = 0;
+    protected int bsStatus2Out = 1;
 	
 	/**
      * 3-业务部状态

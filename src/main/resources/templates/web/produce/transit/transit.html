@@ -1,102 +1,109 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="layout :: htmlhead" th:with="title='中转送检'"></head>
 <style th:inline="text">
-.layui-form-label {
-	text-align: right;
-}
+	.layui-form-label {
+		text-align: right;
+	}
 
-.layui-form-switch {
-	margin-top: 0px;
-}
+	.layui-form-switch {
+		margin-top: 0px;
+	}
 
-.layui-form-radio {
-	margin: 0px 10px 0 0;
-}
+	.layui-form-radio {
+		margin: 0px 10px 0 0;
+	}
 
-.long-item .layui-form-label {
-	width: 160px;
-}
+	.long-item .layui-form-label {
+		width: 160px;
+	}
 
-.long-item .layui-input-block {
-	margin-left: 160px;
-}
+	.long-item .layui-input-block {
+		margin-left: 160px;
+	}
 </style>
 <body class="layui-layout-body">
 <div th:replace="audio/fragment/audio :: audio"></div>
 <div th:replace="audio/fragment/saomiao :: saomiao"></div>
-	<div class="layui-layout layui-layout-admin">
-		<!--头-->
-		<!--<div th:replace="fragments/head :: header"></div>-->
-		<div class="layui-tab layui-tab-card">
-			<ul class="layui-tab-title">
-				<li class="layui-this">中转送检录入</li>
-				<li>历史查询</li>
-			</ul>
-			<div class="layui-tab-content">
-				<div class="layui-tab-item layui-show">
-				
+<div class="layui-layout layui-layout-admin">
+	<!--头-->
+	<!--<div th:replace="fragments/head :: header"></div>-->
+	<div class="layui-tab layui-tab-card">
+		<ul class="layui-tab-title">
+			<li class="layui-this">中转送检录入</li>
+			<li>历史查询</li>
+		</ul>
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show">
 
-		<div style="margin: 5px">
-			<div class="layui-collapse" lay-accordion="">
-				<div class="layui-colla-item">
-					<h2 class="layui-colla-title">填写信息</h2>
-					<div class="layui-colla-content layui-show">
-						<form id="itemFrom" class="layui-form layui-form-pane"
-							lay-filter="itemFrom" method="post" action="">
-							<div class="layui-form-item">
-								<label class="layui-form-label layui-required">送检节点</label>
-								<div class="layui-input-inline">
-									<select id="proc" lay-filter="proc" autocomplete="off"
-										lay-verify="required" class="layui-select" lay-search>
 
-									</select>
-								</div>
-								<label class="layui-form-label layui-required">送检类型</label>
-								<div class="layui-input-inline">
-									<select id="in_type" lay-filter="in_type" autocomplete="off"
-										lay-verify="required" class="layui-select" lay-search>
+				<div style="margin: 5px">
+					<div class="layui-collapse" lay-accordion="">
+						<div class="layui-colla-item">
+							<h2 class="layui-colla-title">填写信息</h2>
+							<div class="layui-colla-content layui-show">
+								<form id="itemFrom" class="layui-form layui-form-pane"
+									  lay-filter="itemFrom" method="post" action="">
+									<div class="layui-form-item">
+										<label class="layui-form-label layui-required">送检节点</label>
+										<div class="layui-input-inline">
+											<select id="proc" lay-filter="proc" autocomplete="off"
+													lay-verify="required" class="layui-select" lay-search>
 
-									</select>
-								</div>
-								</div>
-								<div class="layui-form-item">
-								<label class="layui-form-label layui-required">条码</label>
-								<div class="layui-input-inline">
-									<input id="barcode" name="barcode" autocomplete="off"
-										class="layui-input"placeholder="请输入或者扫描条码后回车"  type="text" />
-								</div>
+											</select>
+										</div>
+
+											<label class="layui-form-label layui-required">条码</label>
+											<div class="layui-input-inline">
+												<input id="barcode" name="barcode" autocomplete="off"
+													   class="layui-input"placeholder="请输入或者扫描条码后回车"  type="text" />
+											</div>
+
+									</div>
+										<!--								<label class="layui-form-label layui-required">送检类型</label>-->
+										<!--								<div class="layui-input-inline">-->
+										<!--									<select id="in_type" lay-filter="in_type" autocomplete="off"-->
+										<!--										lay-verify="required" class="layui-select" lay-search>-->
+
+										<!--									</select>-->
+										<!--								</div>-->
+										<!--								</div>-->
+										<!--								<div class="layui-form-item">-->
+										<!--								<label class="layui-form-label layui-required">条码</label>-->
+										<!--								<div class="layui-input-inline">-->
+										<!--									<input id="barcode" name="barcode" autocomplete="off"-->
+										<!--										class="layui-input"placeholder="请输入或者扫描条码后回车"  type="text" />-->
+										<!--								</div>-->
+								</form>
 							</div>
-						</form>
+						</div>
 					</div>
+					<fieldset class="layui-elem-field layui-field-title">
+						<legend style="font-size: 14px;">条码列表</legend>
+					</fieldset>
+					<table id="colTable" lay-filter="colTable" style="margin-top: -20px;"></table>
 				</div>
-			</div>
-			<fieldset class="layui-elem-field layui-field-title">
-				<legend style="font-size: 14px;">条码列表</legend>
-			</fieldset>
-			<table id="colTable" lay-filter="colTable" style="margin-top: -20px;"></table>
-		</div>
-		
-		</div>
-				<div class="layui-tab-item">
-					<div style="margin: 5px">
-					<!--查询面板-->
-        <div th:replace="web/fragment/search_history :: searcher"></div> 
-						<fieldset class="layui-elem-field layui-field-title">
-							<legend style="font-size: 14px;">条码列表</legend>
-						</fieldset>
-						<table id="hcolTable" lay-filter="hcolTable"
-							style="margin-top: -20px;"></table>
-					</div>
-				</div>
-			</div>
-		</div>
 
-		<script>
-			document.write("<script type='text/javascript' " +
-					"src='/js/web/produce/transit/transit.js?ver="+Math.random()+"'><\/script>");
-		</script>
+			</div>
+			<div class="layui-tab-item">
+				<div style="margin: 5px">
+					<!--查询面板-->
+					<div th:replace="web/fragment/search_history :: searcher"></div>
+					<fieldset class="layui-elem-field layui-field-title">
+						<legend style="font-size: 14px;">条码列表</legend>
+					</fieldset>
+					<table id="hcolTable" lay-filter="hcolTable"
+						   style="margin-top: -20px;"></table>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	<script>
+		document.write("<script type='text/javascript' " +
+				"src='/js/web/produce/transit/transit.js?ver="+Math.random()+"'><\/script>");
+	</script>
+</div>
 </body>
 </html>

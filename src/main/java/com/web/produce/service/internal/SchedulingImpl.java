@@ -1499,6 +1499,8 @@ public class SchedulingImpl implements SchedulingService {
     //获取上线人员清单 存储过程调用
     public List getEmpListPrc(String facoty, String company, Long mid, String startTime, String endTime, String keyword,
                               int page, int rows, String prc_name) throws Exception{
+        System.out.println("获取排产信息列表开始");
+        Long start1 = System.currentTimeMillis();;
         List resultList = (List) jdbcTemplate.execute(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
@@ -1544,6 +1546,7 @@ public class SchedulingImpl implements SchedulingService {
             }
 
         });
+        System.out.println("获取排产信息列表结束，运行时间："+(System.currentTimeMillis()-start1)+"ms");
         return resultList;
     }
 

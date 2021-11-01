@@ -410,7 +410,7 @@ public class CheckImpl   implements CheckService {
 				//20210121-fyx-修改列表状态
 				if(StringUtils.equals("QUOTE_NEW", s.getBsCheckCode())){//新增报价单
 					if(quote != null){
-						quote.setBsStatus(3);//等待发起审批(被驳回)
+						quote.setBsStatus(5);//等待发起审批(被驳回)
 						quoteDao.save(quote);
 					}
 				}else if(StringUtils.equals("out", s.getBsCheckCode())){//外协
@@ -504,13 +504,13 @@ public class CheckImpl   implements CheckService {
 						quote.setBsStep(2);
 						quote.setBsEndTime1(new Date());
 						quote.setBsStatus2(0);
-						quote.setBsStatus2Hardware(1);//把第二个流程的置为进行中
-						quote.setBsStatus2Molding(1);
-						quote.setBsStatus2Out(1);
-						quote.setBsStatus2Purchase(1);
-						quote.setBsStatus2Packag(1);
-						quote.setBsStatus2Surface(1);
-						quote.setBsStatus2Freight(1);
+//						quote.setBsStatus2Hardware(1);//把第二个流程的置为进行中
+//						quote.setBsStatus2Molding(1);
+//						quote.setBsStatus2Out(1);
+//						quote.setBsStatus2Purchase(1);
+//						quote.setBsStatus2Packag(1);
+//						quote.setBsStatus2Surface(1);
+//						quote.setBsStatus2Freight(1);
 						quoteDao.save(quote);
 					}
 					//2.1下发制造部待办项目-材料+工序
@@ -590,8 +590,8 @@ public class CheckImpl   implements CheckService {
 								} else {
 									//hjj-20210122 不是代采,先查询物料通用价格
 									//hjj-20210723 不是代采，采购价格取bom中的通用价格
-									pm.setBsAssess(qb.getPriceComm());
-									pm.setBsRefer(qb.getPriceComm());
+//									pm.setBsAssess(qb.getPriceComm());
+//									pm.setBsRefer(qb.getPriceComm());
 									pm.setBsGeneral(1);
 //									List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(qb.getBsMaterName());
 //									if (lm.size() > 0) {
@@ -623,6 +623,14 @@ public class CheckImpl   implements CheckService {
 					//2.3根据工作中心下发BOM-工序
 					List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuote(0, c.getBsRecordId());
 					productProcessDao.deleteByPkQuoteBom(c.getBsRecordId());
+
+					Integer num = productProcessDao.countByPkQuoteAndDelFlag( c.getBsRecordId(),0);
+					//表示已下发过，找出没有下发过的工艺
+//					if(num>0){
+//
+//					}
+
+
 					if(lpd.size() > 0){
 						List<ProductProcess> lpp = new ArrayList<ProductProcess>();
 						Set<String> procSet = new HashSet<String>();
@@ -632,6 +640,12 @@ public class CheckImpl   implements CheckService {
 								List<ProductProcess> productProcessList = productProcessDao.findByPkQuoteAndCopyId(quote.getId(), qb.getCopyId());
 								if (productProcessList.size() > 0) {
 									pp = productProcessList.get(0);
+								}
+							}else if(num>0){
+								List<ProductProcess> productProcessList = productProcessDao.findByPkQuoteAndCopyId(quote.getId(), qb.getId());
+								if (productProcessList.size() > 0) {
+									pp = productProcessList.get(0);
+//									pp.setDelFlag(qb);
 								}
 							}
 							if(qb.getProc().getProcName().equals("喷涂")){
@@ -657,6 +671,7 @@ public class CheckImpl   implements CheckService {
 							pp.setBsFeeMh(qb.getBsFeeMh());
 							pp.setBsFeeLh(qb.getBsFeeLh());
 							pp.setBsGroups(qb.getBsGroups());
+//							pp.setPkQuoteProcessId(qb.getId());
 							lpp.add(pp);
 						}
 						productProcessDao.saveAll(lpp);

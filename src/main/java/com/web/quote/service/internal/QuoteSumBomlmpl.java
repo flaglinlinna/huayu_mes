@@ -208,6 +208,7 @@ public class QuoteSumBomlmpl extends BaseSql implements QuoteSumBomService {
 
 	@Override
 	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception {
+		List<String> newName =Arrays.asList("测试","检验","包装");
 		String excelPath = "static/excelFile/";
 		String fileName = "";
 		String[] map_arr = null;
@@ -220,17 +221,20 @@ public class QuoteSumBomlmpl extends BaseSql implements QuoteSumBomService {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for (QuoteProcess bs : productProcessesList) {
 			Map<String, Object> map = new HashMap<>();
+			if (bs.getProc() != null) {
+				map.put("pkProc", bs.getProc().getProcName());
+				if(newName.contains(map.get("pkProc").toString())){
+					continue;
+				}
+			} else {
+				map.put("pkProc", "");
+			}
 			map.put("id", bs.getId());
 			map.put("gradation", bs.getGradation());
 			map.put("bsElement", bs.getBsElement());
 			map.put("bsItemCodeReal", bs.getBsItemCodeReal());
 			map.put("bsName", bs.getBsName());
 			map.put("bsOrder", bs.getBsOrder());
-			if (bs.getProc() != null) {
-				map.put("pkProc", bs.getProc().getProcName());
-			} else {
-				map.put("pkProc", "");
-			}
 //            map.put("bsModelType", bs.getBsModelType());
 			if (bs.getBjWorkCenter() != null) {
 				map.put("workCenter", bs.getBjWorkCenter().getWorkcenterName());

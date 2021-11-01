@@ -132,11 +132,25 @@ function getInfo(json) {
                     }
                 }
 
+                if(list.data.length>1) {
+                    if (list.data[list.data.length - 1].bsStepCheckStatus == 2) {
+                        nowHtml += '<li class="layui-timeline-item">' + getIcon(3) +
+                            /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
+                            ' <div class="layui-timeline-content layui-text">' +
+                            '  <div class="layui-timeline-title">' +
+                            '   <span style="padding-right:20px;">' + '[' + getRadio(3) + ']' + '</span>  ' + "等待业务员重新发起提交" +
+                            '  </div>' +
+                            ' </div>' +
+                            ' </li>';
+                    }
+                }
+
                 //20201228-fyx-流程信息 flow_info
                 if (list.Lw.length == 0) {
                     document.getElementById('flow_info').innerHTML = "请先配置流程步骤!";
                 } else {
                     var info = "审批:";
+                    console.log(list);
                     for (var i = 0; i < list.Lw.length; i++) {
                         if (i == 0) {
                             // info += list.Lw[i].bsStepName+"("+list.curBy+")>";
@@ -163,16 +177,6 @@ function getInfo(json) {
                     info = info.substring(0, info.length - 1);
                     document.getElementById('flow_info').innerHTML = info;
                 }
-                // if(timeHtml==""){
-                //     timeHtml += '<li class="layui-timeline-item">' + getIcon(3) +
-                //         /*  '<i class="layui-icon '+getIcon(list.data[i].bsStepCheckStatus)+'"></i>'+ */
-                //         ' <div class="layui-timeline-content layui-text">' +
-                //         '  <div class="layui-timeline-title">' +
-                //         '   <span style="padding-right:20px;">' + '[' + getRadio(3) + ']'+'</span>  ' +"等待发起审核" +
-                //         '  </div>' +
-                //         ' </div>' +
-                //         ' </li>';
-                // }
                 document.getElementById('timeline').innerHTML = timeHtml+nowHtml;
 
             } else {
@@ -189,7 +193,7 @@ var wn = '';
 var status = 'end';
 
 function child(wname, pid, bsStatus) {
-    console.log()
+    console.log(bsStatus)
     //接受流程类型参数
     ppid = pid;
     wn = wname;

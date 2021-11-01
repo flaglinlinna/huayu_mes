@@ -785,7 +785,9 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				} else {
 					quoteBom = quoteBomDao.findByPkBomId2AndPkQuote(o.getPkQuoteBom(), quoteId);
 				}
-				o.setBsMaterName(quoteBom.getBsMaterName());
+				if(StringUtils.isNotEmpty(o.getBsMaterName())) {
+					o.setBsMaterName(quoteBom.getBsMaterName());
+				}
 				//单位为PCS 不参与人工和制费计算
 				o.setPurchaseUnit(quoteBom.getPurchaseUnit());
 				//bom中可能已经删除

@@ -2,6 +2,7 @@
  * 报价单-列表
  */
 var pageCurr;
+var bsTypeName;
 $(function() {
 	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer','tableFilter' ], function() {
 		var form = layui.form, layer = layui.layer, laydate = layui.laydate, table = layui.table,tableFilter = layui.tableFilter;
@@ -199,14 +200,19 @@ $(function() {
 					var titel = '填报项目';
 					if (Style == 'out') {//外协
 						titel = "外协" + titel;
+						bsTypeName = "外协"
 					} else if (Style == 'hardware') {//五金
 						titel = "五金" + titel;
+						bsTypeName = "五金"
 					} else if (Style == 'molding') {//注塑
 						titel = "注塑" + titel;
+						bsTypeName = "注塑"
 					} else if (Style == 'surface') {
 						titel = "表面处理" + titel;
+						bsTypeName = "表面处理"
 					} else if (Style == 'packag') {
 						titel = "组装" + titel;
+						bsTypeName = "组装"
 					}
 					var titleInfo = "(" + data.bsCode.substring(data.bsCode.length - 4) + ")";
 					parent.layui.index.openTabsPage(context + '/quoteProdect/toProductItem?quoteId=' + data.id + "&style=" + Style, titel + titleInfo);
@@ -223,6 +229,21 @@ $(function() {
 					($(window.parent.document).find(('iframe[src="'+srcUrl+'"]'))).attr('src',srcUrl);
 				}
 			} else if (obj.event === 'check') {
+
+				if (Style == 'out') {//外协
+					bsTypeName = "外协"
+				} else if (Style == 'hardware') {//五金
+					bsTypeName = "五金"
+				} else if (Style == 'molding') {//注塑
+					bsTypeName = "注塑"
+				} else if (Style == 'surface') {
+					bsTypeName = "表面处理"
+				} else if (Style == 'packag') {
+					bsTypeName = "组装"
+				}else if (Style == "freight") {
+					bsTypeName = "包装运输费"
+				}
+
 				// 先判断是否填写完成资料-暂时未校验-20201218-fyx
 				if(data.bsQuoteStatus !="99") {
 					CoreUtil.sendAjax("/quoteProdect/doCheckBefore", {
@@ -232,7 +253,7 @@ $(function() {
 						// if (data1.result) {
 							layer.open({
 								type: 2,
-								title: '审批',
+								title: bsTypeName+'审批('+data.bsCode+")",
 								area: ['600px', '480px'],
 								fixed: false,
 								maxmin: true,
