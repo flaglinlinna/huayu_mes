@@ -3,6 +3,10 @@
  */
 var pageCurr;
 var tabledata = [];
+var interval = "";
+var comName = "";
+var comFlag = 0;
+var lastFlag = 0;
 $(function () {
     layui
         .use(
@@ -12,11 +16,6 @@ $(function () {
                     table1 = layui.table, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect;
                 var laydate = layui.laydate;
 
-                // //产出1 投入2
-                // if(type==2){
-                //     $("input[name='isRecord'][value='0']").prop("checked", "checked");
-                //     $("input[name='isRecord']").attr("disabled","disabled");
-                // }
                 layui.form.render();
                 // 日期选择器
                 laydate.render({
@@ -61,11 +60,11 @@ $(function () {
                         {fixed: "left", type: 'numbers'},
                         {fixed: "left", field: 'itemCode', title: '产品编码', width: 150},
                         {fixed: "left", field: 'linerName', title: '组长', width: 70, sort: true},
-                        {fixed: "left", field: 'barcode1', title: '条码1', width: 230, sort: true},
+                        // {fixed: "left", field: 'barcode1', title: '条码1', width: 230, sort: true},
                         {fixed: "left", field: 'taskNo', title: '制令单号', width: 150, sort: true},
                         {field: 'scanTime', title: '扫描时间', width: 150, sort: true},
                         {field: 'result', title: '扫描结果', width: 90},
-                        {field: 'barcode2', title: '条码2', width: 230, sort: true}
+                        // {field: 'barcode2', title: '条码2', width: 230, sort: true}
                     ]],
                     done: function (res, curr, count) {
                         pageCurr = curr;
@@ -138,6 +137,7 @@ $(function () {
                 });
 
                 initSelect();
+                initComSelect();
 
                 tableSelect1 = tableSelect1.render({
                     elem: '#itemcode',
@@ -257,52 +257,173 @@ $(function () {
 
             });
 
-    $('#barcode').bind('keypress', function (event) {
-        if (event.keyCode == "13") {
-            $('#barcode1').val("");
-            $('#barcode2').val("");
-            if ($('#barcode').val()) {
-                if ($('#itemcode').val() || $('#taskno').val()) {
-                    subCode($('#taskno').val(), $('#barcode').val(), "")
-                    $('#barcode').val("");
-                } else {
-                    layer.alert("请选择制令单号或产品编码!");
-                }
+            $('#barcode').bind('keypress', function (event) {
+                if (event.keyCode == "13") {
+                    $('#barcode1').val("");
+                    $('#barcode2').val("");
+                    if ($('#barcode').val()) {
+                        if ($('#itemcode').val() || $('#taskno').val()) {
+                            subCode($('#taskno').val(), $('#barcode').val(), "")
+                            $('#barcode').val("");
+                        } else {
+                            layer.alert("请选择制令单号或产品编码!");
+                        }
 
-            } else {
-                layer.alert("请先扫描条码!");
-            }
-        }
-    });
-    $('#barcode1').bind('keypress', function (event) {
-        if (event.keyCode == "13") {
-            $('#barcode').val("");
-            $('#barcode2').val("");
-            $('#barcode2').focus();
-        }
-    });
-    $('#barcode2').bind(
-        'keypress',
-        function (event) {
-            if (event.keyCode == "13") {
-                $('#barcode').val("");
-                if ($('#barcode1').val() != ""
-                    && $('#barcode2').val() != "") {
-                    if ($('#taskno').val()) {
-                        subCode($('#taskno').val(), $('#barcode1').val(),
-                            $('#barcode2').val())
-                        $('#barcode').val("");
-                        $('#barcode1').val("");
-                        $('#barcode2').val("");
                     } else {
-                        layer.alert("请选择制令单号!");
+                        layer.alert("请先扫描条码!");
                     }
-                } else {
-                    layer.alert("请先扫描条码!");
+                }
+            });
+            $('#barcode1').bind('keypress', function (event) {
+                if (event.keyCode == "13") {
+                    $('#barcode').val("");
+                    $('#barcode2').val("");
+                    $('#barcode2').focus();
+                }
+            });
+            $('#barcode2').bind(
+                'keypress',
+                function (event) {
+                    if (event.keyCode == "13") {
+                        $('#barcode').val("");
+                        if ($('#barcode1').val() != ""
+                            && $('#barcode2').val() != "") {
+                            if ($('#taskno').val()) {
+                                subCode($('#taskno').val(), $('#barcode1').val(),
+                                    $('#barcode2').val())
+                                $('#barcode').val("");
+                                $('#barcode1').val("");
+                                $('#barcode2').val("");
+                            } else {
+                                layer.alert("请选择制令单号!");
+                            }
+                        } else {
+                            layer.alert("请先扫描条码!");
+                        }
+                    }
+                });
+
+
+});
+
+//开始定时发送数据
+function startSend() {
+    // 0.2s 发送一次数据
+    interval = setInterval(function(){ sendCom(); }, 200);
+    $("#sendBtn").addClass("layui-btn-disabled").attr("disabled", true).html("扫描计数中")
+    $("#stopSend").removeClass("layui-btn-disabled").attr("disabled", false)
+}
+//关闭发送数据
+function stopSend() {
+    clearInterval(interval);
+    $("#sendBtn").removeClass("layui-btn-disabled").attr("disabled", false).html("开始计数")
+    $("#stopSend").addClass("layui-btn-disabled").attr("disabled", true)
+}
+
+//
+function confirmCom(){
+    var portName = $('#COM').val();
+    comName = portName;
+    console.log(comName);
+    // beginSend();
+}
+
+//初始化下拉框
+function initComSelect(){
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:8001/WebService.asmx/GetAllPort",
+        dataType:"xml",
+        beforeSend: function (request) {
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        },
+        success: function (data) {
+            // 这里获取的data就是一个xml对象，这个对象可以按照dom树格式来解析
+            if($(data).find("ResultMsgOfString").find("ErrCode").text()=="false"){
+                // alert("请检查是否启动红外串口通信服务");
+
+            }
+            var selectList = $(data).find("ResultMsgOfString").find("Data").text().split(",");
+            for (var i = 0; i < selectList.length; i++) {
+                if (i == 0) {
+                    $("#COM").append("<option value=''> 请选择串口号</option>");
+                }
+                $("#COM").append(
+                    "<option value='" + selectList[i] + "'>"
+                    + selectList[i] + "</option>");
+            }
+
+        },
+        error: function (request, errorInfo) {
+            // alert("请检查是否启动红外串口通信服务");
+            // layer.confirm('请检查是否启动红外串口通信服务？点击确认可下载', {
+            //     btn: ['确认','返回'] //按钮
+            // }, function(){
+            //     location.href = "../../ortherFile/comWeb.7z";//从文件夹内直接提取
+            // }, function(){
+            //     layer.closeAll();
+            //     loadAll();
+            // });
+        }
+    });
+}
+
+//发送数据
+function sendCom() {
+    if(comName==null){
+        alert("请先确认串口")
+    }
+    var portName = $('#COM').val();
+    comName = portName;
+    var params = {
+        "portName":comName,
+        "command": "01 02 00 00 00 20 79 D2",
+    }
+    $.ajax({
+        type: "POST",
+        // data: jsonData,
+        url: "http://127.0.0.1:8001/WebService.asmx/GetAccessDoorState",
+        data:params,
+        dataType:"xml",
+        beforeSend: function (request) {
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        },
+        success: function (data) {
+            // 这里获取的data就是一个xml对象，这个对象可以按照dom树格式来解析
+            // console.log($(data).find("ResultMsgOfString").find("ErrMsg").text());
+            // console.log($(data).find("ResultMsgOfString").find("ErrCode").text());
+            if($(data).find("ResultMsgOfString").find("ErrCode").text()=="false"){
+                //停止定时器
+                stopSend();
+                alert($(data).find("ResultMsgOfString").find("ErrMsg").text());
+            }else {
+                if(comFlag!=$(data).find("ResultMsgOfString").find("Data").text()){
+                    if(comFlag==1&&$(data).find("ResultMsgOfString").find("Data").text()=="0"){
+                       //调用存储过程
+                        comFlag = $(data).find("ResultMsgOfString").find("Data").text();
+                        console.log("调用存储过程");
+                        subCode($('#taskno').val())
+                    }else {
+                        comFlag = $(data).find("ResultMsgOfString").find("Data").text();
+                    }
                 }
             }
-        });
-});
+
+
+            // var name=$(data).find("ResultMsgOfString").find("ErrMsg").each(function(){
+            //     console.log($(this).text());
+            //     // alert($(this).find("name").text());
+            //     // alert($(this).find("age").text());
+            // });
+
+        },
+        error: function (request, errorInfo) {
+        }
+    });
+
+
+}
+
 
 function initSelect() {
     CoreUtil.sendAjax("/produce/check_code/getLiner", "",
@@ -328,7 +449,7 @@ function initSelect() {
         });
 }
 
-function subCode(taskNo, barcode1, barcode2) {
+function subCode(taskNo) {
     var itemCode = $('#itemcode').val();
     var linerName = $('#liner').val();
     //是否校验重码 0否1是
@@ -336,7 +457,7 @@ function subCode(taskNo, barcode1, barcode2) {
     var params = {
         "type":type,
         "taskNo": taskNo,
-        "barcode1": barcode1,
+        // "barcode1": barcode1,
         // "barcode2": barcode2,
         "itemCode": itemCode,
         "linerName": linerName,
@@ -351,14 +472,14 @@ function subCode(taskNo, barcode1, barcode2) {
                 playSaoMiaoMusic();
                 var dataT = {
                     taskNo: taskNo,
-                    barcode1: barcode1,
-                    barcode2: barcode2,
+                    // barcode1: barcode1,
+                    // barcode2: barcode2,
                     itemCode: itemCode,
                     linerName: linerName,
                     scanTime: nowTime,
                     result: "扫描成功"
                 }
-                $("#barNum").val(data.data);
+                $("#barNum").val(data.data.count);
                 tabledata.unshift(dataT);
                 tableIns.reload({
                     data: tabledata

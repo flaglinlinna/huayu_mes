@@ -27,8 +27,8 @@
 }
 </style>
 <script>
-	var test = new
-	ModbusRTU({CommNo:"COM2",BaudRate:"9600",DataBit:"8",CheckBit:"N",StopBit:"1",License:'d41d8cd98f00b204e9800998ecf8427e'});
+	// var test = new
+	// ModbusRTU({CommNo:"COM2",BaudRate:"9600",DataBit:"8",CheckBit:"N",StopBit:"1",License:'d41d8cd98f00b204e9800998ecf8427e'});
 </script>
 <body class="layui-layout-body">
 <div th:replace="audio/fragment/audio :: audio"></div>
@@ -64,6 +64,15 @@
 									<select id=liner name="liner" lay-filter="liner">
 									</select>
 								</div>
+
+
+								<label class="layui-form-label">红外串口号</label>
+								<div class="layui-input-inline">
+									<select id=COM name="COM" lay-filter="COM">
+									</select>
+								</div>
+<!--								<button class="layui-btn layui-btn-sm" type="button" id="comBtn"-->
+<!--										onclick="confirmCom()">确认串口</button>-->
 							</div>
 							<div class="layui-form-item">
 								<label class="layui-form-label">产品编码</label>
@@ -81,13 +90,12 @@
 <!--								</div>-->
 							</div>
 							<div class="layui-form-item">
-							<div class="layui-word-aux" style="margin:5px;">一个条码，请在此操作</div>
-								<label class="layui-form-label">条码1</label>
-								<div class="layui-input-inline">
-									<input id="barcode" name="barcode" autocomplete="off"
-										placeholder="请输入或扫描条码" class="layui-input" type="text" />
-								</div>
-								<div class="layui-form-mid layui-word-aux">请输入或者扫描条码后回车</div>
+							<div class="layui-word-aux" style="margin:5px;">计数情况</div>
+
+								<button class="layui-btn layui-btn-sm" type="button" id="sendBtn"
+										onclick="startSend()" >开始计数</button>
+								<button class="layui-btn layui-btn-sm" type="button" id="stopBtn"
+										onclick="stopSend()" >停止计数</button>
 
 								<label class="layui-form-label">今天已扫描数</label>
 								<div class="layui-input-inline">
@@ -96,24 +104,7 @@
 										   style="background: #d7d7d7;" disabled="disabled"/>
 								</div>
 							</div>
-<!--							<div class="layui-form-item">-->
-<!--								<div class="layui-word-aux" style="margin:5px;">两个条码，请在此操作</div>-->
-<!--							</div>-->
-<!--							<div class="layui-form-item">-->
-<!--								<div class="layui-inline">-->
-<!--									<label class="layui-form-label">条码1</label>-->
-<!--									<div class="layui-input-inline">-->
-<!--										<input id="barcode1" name="barcode1" autocomplete="off"-->
-<!--											placeholder="请输入或扫描条码" class="layui-input" type="text" />-->
-<!--									</div>-->
-<!--									<label class="layui-form-label">条码2</label>-->
-<!--									<div class="layui-input-inline">-->
-<!--										<input id="barcode2" name="barcode2" autocomplete="off"-->
-<!--											placeholder="请输入或扫描条码" class="layui-input" type="text" />-->
-<!--									</div>-->
-<!--									<div class="layui-form-mid layui-word-aux">请输入或者扫描条码后回车</div>-->
-<!--								</div>-->
-<!--							</div>-->
+
 						</form>
 						</div>
 <!--						<div style="width:30%;display:inline-block"><p>小码投入</p></div>-->
@@ -174,7 +165,7 @@
 													<button class="layui-btn layui-btn-sm" type="button"
 													onclick="send()">查询</button>
 												</div>
-												<textarea id="t_sdata" style="width:100%;height:80px;" />01 02 00 00 00 20 79 D2</textarea>
+<!--												<textarea id="t_sdata" style="width:100%;height:80px;" />01 02 00 00 00 20 79 D2</textarea>-->
 
 											</div>
 										</form>
@@ -201,8 +192,8 @@
 		<script>
 			document.write("<script type='text/javascript' " +
 					"src='/js/web/produce/check_code/infrared_code.js?ver="+Math.random()+"'><\/script>");
-			document.write("<script type='text/javascript' " +
-					"src='/js/web/produce/check_code/ModbusRTU.js?ver="+Math.random()+"'><\/script>");
+			// document.write("<script type='text/javascript' " +
+			// 		"src='/js/web/produce/check_code/ModbusRTU.js?ver="+Math.random()+"'><\/script>");
 
 			
 		</script>

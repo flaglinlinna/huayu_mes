@@ -239,13 +239,13 @@
             <systemPath>${basedir}/src/main/resources/lib/jacob.jar</systemPath>
         </dependency>
 
-        <dependency>
-            <groupId>org.hyperic</groupId>
-            <artifactId>sigar</artifactId>
-            <version>1.6.4</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/resources/lib/sigar-1.6.4.jar</systemPath>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.hyperic</groupId>-->
+<!--            <artifactId>sigar</artifactId>-->
+<!--            <version>1.6.4</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${basedir}/src/main/resources/lib/sigar-1.6.4.jar</systemPath>-->
+<!--        </dependency>-->
 
         <!-- <dependency>
             <groupId>com.ZKFingerReader</groupId>
