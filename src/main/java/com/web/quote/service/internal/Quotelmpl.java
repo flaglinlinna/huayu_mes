@@ -679,4 +679,11 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         Quote o = quoteDao.findById((long) id);
         return ApiResponseResult.success().data(""+o.getBsStatus2Hardware()+o.getBsStatus2Molding()+o.getBsStatus2Packag()+o.getBsStatus2Surface());
     }
+
+    @Override
+    public ApiResponseResult getMonBadeList(PageRequest pageRequest) throws Exception {
+        Page<Map<String, Object>> list = quoteDao.getMonBade(pageRequest);
+        return ApiResponseResult.success().data(DataGrid.create(list.getContent(), (int) list.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+//        return null;
+    }
 }

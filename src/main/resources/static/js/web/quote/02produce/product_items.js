@@ -106,6 +106,10 @@ function setTable(){
 			status= "已完成"
 			status_color1="orange"
 			status_color2 ="bgorange"
+		}else if(arr.bsStatus=="3"){
+			status= "不需要填写"
+			status_color1="orange"
+			status_color2 ="bgorange"
 		}
 		if(arr.bsCode.indexOf("B00") != -1 ){
 			//材料

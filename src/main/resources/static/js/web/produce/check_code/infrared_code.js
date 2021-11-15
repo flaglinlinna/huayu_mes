@@ -200,6 +200,7 @@ $(function () {
                 // 监听提交
                 form.on('submit(hsearchSubmit)', function (data) {
                     data.field.errorFlag = $("#errorFlag").prop('checked') ? 1 : 0
+                    data.field.scanType = type==1?"产出":"投入"
                     hTableIns.reload({
                         url: context
                             + '/produce/check_code/getHistoryList',
@@ -242,13 +243,13 @@ $(function () {
                         {fixed: 'left', type: 'numbers'},
                         {fixed: 'left', field: "ITEM_NO", title: '产品编码', width: 140},
                         {fixed: 'left', field: 'LINER_NAME', title: '组长', width: 70},
-                        {fixed: 'left', field: 'BARCODE_S_1', title: '条码1', width: 220},
+                        // {fixed: 'left', field: 'BARCODE_S_1', title: '条码1', width: 220},
                         {fixed: 'left', field: 'TASK_NO', title: '制令单号', width: 150},
                         {field: 'CHK_RESULT', title: '扫描结果', width: 100},
                         {field: 'CREATE_DATE', title: '扫描时间', width: 145},
                         {field: 'USER_NAME', title: '扫描人', width: 70},
                         {field: "FMEMO", title: '备注', width: 300, hide: true},
-                        {field: 'BARCODE_S_2', title: '条码2', width: 200}
+                        // {field: 'BARCODE_S_2', title: '条码2', width: 200}
                     ]],
                     done: function (res, curr, count) {
                         pageCurr = curr;
@@ -326,6 +327,23 @@ function confirmCom(){
     comName = portName;
     console.log(comName);
     // beginSend();
+}
+
+function exportExcel(){
+    // data.field.errorFlag = $("#errorFlag").prop('checked') ? 1 : 0
+    // data.field.scanType = type==1?"产出":"投入"
+    if(!$('#hStartTime').val()||!$('#hEndTime').val()){
+        layer.alert("请输入开始时间和结束时间");
+        return false;
+    }
+    // var url = "hStartTime="+$('#hStartTime').val()+"&hEndTime="+$('#hEndTime').val()+"&hkeywork="+$('#hkeywork').val()
+    //     +"&scanFrom="+$('#scanFrom').val();
+    // var errorFlag = $("#errorFlag").prop('checked') ? 1 : 0;
+    var scanType = type==1?"产出":"投入"
+    // console.log($("#hsearch_item_form").serialize());
+    $('#exportBtn').addClass("layui-btn-disabled").attr("disabled",true);
+    location.href = context + "/produce/check_code/export?"+$("#hsearch_item_form").serialize()+"&scanType="+scanType;
+    // $('#exportBtn').removeClass("layui-btn-disabled").attr("disabled", false);//有效
 }
 
 //初始化下拉框

@@ -987,16 +987,16 @@ public class CheckImpl   implements CheckService {
 
 		//工艺自动完成
 		if(!hashMap.containsKey("hardware")){
-			quoteItemDao.switchStatus(2, quoteId, "C001");
+			quoteItemDao.switchStatus(3, quoteId, "C001");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
 		}if(!hashMap.containsKey("surface")){
-			quoteItemDao.switchStatus(2, quoteId, "C003");
+			quoteItemDao.switchStatus(3, quoteId, "C003");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
 		}if(!hashMap.containsKey("packag")){
-			quoteItemDao.switchStatus(2, quoteId, "C004");
+			quoteItemDao.switchStatus(3, quoteId, "C004");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
 		}if(!hashMap.containsKey("molding")){
-			quoteItemDao.switchStatus(2, quoteId, "C002");
+			quoteItemDao.switchStatus(3, quoteId, "C002");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
 		}
 		//外协为工艺  1.无外协的，2.外协不需要重审 自动完成及审批
@@ -1027,24 +1027,24 @@ public class CheckImpl   implements CheckService {
 
 		//材料自动完成(材料为空的情况下)
 		if(!materMap.containsKey("hardware")){
-			quoteItemDao.switchStatus(2, quoteId, "B001");
+			quoteItemDao.switchStatus(3, quoteId, "B001");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B001");
 		}if(!materMap.containsKey("surface")){
-			quoteItemDao.switchStatus(2, quoteId, "B003");
+			quoteItemDao.switchStatus(3, quoteId, "B003");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B003");
 		}if(!materMap.containsKey("packag")){
-			quoteItemDao.switchStatus(2, quoteId, "B004");
+			quoteItemDao.switchStatus(3, quoteId, "B004");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B004");
 		}if(!materMap.containsKey("molding")){
-			quoteItemDao.switchStatus(2, quoteId, "B002");
+			quoteItemDao.switchStatus(3, quoteId, "B002");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B002");
 		}
 
 		//材料和工艺自动完成情况下(即是该工作中心下无需填写的数据)则自动审批
 		if((!materMap.containsKey("hardware")&&!hashMap.containsKey("hardware"))||((("0").equals(retrialMap.get("hardware"))||!retrialMap.containsKey("hardware"))&&isCopy)){
-			quoteItemDao.switchStatus(2, quoteId, "C001");
+			quoteItemDao.switchStatus(3, quoteId, "C001");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
-			quoteItemDao.switchStatus(2, quoteId, "B001");
+			quoteItemDao.switchStatus(3, quoteId, "B001");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B001");
 
 			autoCheck(quoteId,"hardware");
@@ -1065,9 +1065,9 @@ public class CheckImpl   implements CheckService {
 //			productMaterDao.saveAll(productMaterList);
 //		}
 		if((!materMap.containsKey("surface")&&!hashMap.containsKey("surface"))||((("0").equals(retrialMap.get("surface"))||!retrialMap.containsKey("surface"))&&isCopy)){
-			quoteItemDao.switchStatus(2, quoteId, "B003");
+			quoteItemDao.switchStatus(3, quoteId, "B003");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B003");
-			quoteItemDao.switchStatus(2, quoteId, "C003");
+			quoteItemDao.switchStatus(3, quoteId, "C003");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
 			if(lo.size()>0){
 				Quote o = lo.get(0);
@@ -1086,9 +1086,9 @@ public class CheckImpl   implements CheckService {
 //			productMaterDao.saveAll(productMaterList);
 //		}
 		if((!materMap.containsKey("packag")&&!hashMap.containsKey("packag"))||((("0").equals(retrialMap.get("packag"))||!retrialMap.containsKey("packag"))&isCopy)){
-			quoteItemDao.switchStatus(2, quoteId, "B004");
+			quoteItemDao.switchStatus(3, quoteId, "B004");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B004");
-			quoteItemDao.switchStatus(2, quoteId, "C004");
+			quoteItemDao.switchStatus(3, quoteId, "C004");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
 			if(lo.size()>0){
 				Quote o = lo.get(0);
@@ -1107,9 +1107,9 @@ public class CheckImpl   implements CheckService {
 //			productMaterDao.saveAll(productMaterList);
 //		}
 		if((!materMap.containsKey("molding")&&!hashMap.containsKey("molding"))||((("0").equals(retrialMap.get("molding"))||!retrialMap.containsKey("molding"))&&isCopy)){
-			quoteItemDao.switchStatus(2, quoteId, "B002");
+			quoteItemDao.switchStatus(3, quoteId, "B002");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B002");
-			quoteItemDao.switchStatus(2, quoteId, "C002");
+			quoteItemDao.switchStatus(3, quoteId, "C002");
 			quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
 			if(lo.size()>0){
 				Quote o = lo.get(0);

@@ -205,7 +205,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		String fileName = "分工序报表.xlsx";
 		String[] map_arr = new String[]{"bsName","procName", "bsCave", "bsYield", "bsGroups", "bsFeeLH", "bsUserNum", "bsCycle", "bsLossFeeLh",
 				"bsFeeLhAll","bsModelType", "bsFeeLH", "bsLossFeeMh", "bsFeeMhAll", "bsMaterName", "bsModel", "bsAssess", "bsProQty", "bsWaterGap"
-		,"bsMaterLose","bsFee", "bsQty", "bsUnit", "purchaseUnit"};
+		,"bsMaterLose","bsFee", "bsQty", "bsUnit", "purchaseUnit",""};
 
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		Resource resource = new ClassPathResource(excelPath + fileName);

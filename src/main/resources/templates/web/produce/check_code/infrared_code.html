@@ -123,6 +123,58 @@
 					<!--查询面板-->
 <!--       			 <div th:replace="web/fragment/search_history :: searcher"></div> -->
 
+<!--						<div class="layui-collapse">-->
+<!--							<div class="layui-colla-item">-->
+<!--								<h2 class="layui-colla-title">查询条件</h2>-->
+<!--								<div class="layui-colla-content layui-show">-->
+<!--									<div id="hsearchParam" >-->
+<!--										<form class="layui-form layui-form-pane" action="" id="hsearch_item_form" lay-filter="hsearch_item_form">-->
+
+<!--											<div class="layui-form-item">-->
+<!--												<label class="layui-form-label" style="width: 100px">关键字</label>-->
+<!--												<div class="layui-input-inline"  style="width:140px;">-->
+<!--													<input  name="hkeywork" autocomplete="off"-->
+<!--															placeholder="请输入关键字" class="layui-input" type="text"/>-->
+<!--												</div>-->
+<!--												<label class="layui-form-label"  style="width: 100px">开始日期</label>-->
+<!--												<div class="layui-input-inline" style="width:120px;">-->
+<!--													<input type="text" name="hStartTime" autocomplete="off"-->
+<!--														   placeholder="请选择开始日期" lay-verify="required" class="layui-input" readonly="readonly"id="hStartTime">-->
+<!--												</div>-->
+<!--												<label class="layui-form-label"  style="width: 100px">结束日期</label>-->
+<!--												<div class="layui-input-inline" style="width:120px;">-->
+<!--													<input type="text" name="hEndTime" autocomplete="off"-->
+<!--														   placeholder="请选择结束日期" lay-verify="required" class="layui-input" readonly="readonly" id="hEndTime">-->
+<!--												</div>-->
+
+<!--&lt;!&ndash;												<label class="layui-form-label">查询错误</label>&ndash;&gt;-->
+<!--												<div class="layui-input-inline"  style="width:120px;">-->
+<!--													<input type="checkbox" name="errorFlag"  id= "errorFlag" title="显示错误">-->
+<!--&lt;!&ndash;													<input type="checkbox" name="like[read]" title="阅读" checked="">&ndash;&gt;-->
+<!--&lt;!&ndash;													<input type="checkbox" name="like[game]" title="游戏">&ndash;&gt;-->
+<!--												</div>-->
+
+<!--												<div class="layui-input-inline">-->
+<!--												<button class="layui-btn layui-btn-sm" lay-submit=""-->
+<!--														type="button" lay-filter="hsearchSubmit" >查询</button>-->
+<!--												<button type="reset"-->
+<!--														class="layui-btn layui-btn-primary layui-btn-sm" title="重置">-->
+<!--													<i class="layui-icon">&#xe669;</i>重置-->
+<!--												</button>-->
+
+<!--													<button class="layui-btn layui-btn-sm" type="button"-->
+<!--													onclick="send()">查询</button>-->
+<!--												</div>-->
+<!--&lt;!&ndash;												<textarea id="t_sdata" style="width:100%;height:80px;" />01 02 00 00 00 20 79 D2</textarea>&ndash;&gt;-->
+
+<!--											</div>-->
+<!--										</form>-->
+
+<!--									</div>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--						</div>-->
+
 						<div class="layui-collapse">
 							<div class="layui-colla-item">
 								<h2 class="layui-colla-title">查询条件</h2>
@@ -131,42 +183,67 @@
 										<form class="layui-form layui-form-pane" action="" id="hsearch_item_form" lay-filter="hsearch_item_form">
 
 											<div class="layui-form-item">
-												<label class="layui-form-label" style="width: 100px">关键字</label>
+												<label class="layui-form-label" style="width: 100px">产品编码</label>
 												<div class="layui-input-inline"  style="width:140px;">
-													<input  name="hkeywork" autocomplete="off"
-															placeholder="请输入关键字" class="layui-input" type="text"/>
+													<input  name="hkeywork" autocomplete="off" id="hkeywork"
+															placeholder="请输入产品编码" class="layui-input" type="text"/>
 												</div>
-												<label class="layui-form-label"  style="width: 100px">开始日期</label>
-												<div class="layui-input-inline" style="width:120px;">
+
+
+												<!--												<div class="layui-input-inline"  style="width:120px;">-->
+												<!--													<input type="checkbox" name="errorFlag"  id= "errorFlag" title="显示错误">-->
+												<!--												</div>-->
+
+												<label class="layui-form-label">扫描结果</label>
+												<div class="layui-input-inline" style="width:100px;">
+													<select id="errorFlag" name="errorFlag" class="layui-input">
+														<option value="2">全部</option>
+														<option value="0">正确</option>
+														<option value="1">错误</option>
+													</select>
+												</div>
+
+												<label class="layui-form-label">扫描来源</label>
+												<div class="layui-input-inline" style="width:100px;">
+													<select id="scanFrom" name="scanFrom" class="layui-input">
+														<option value="小码">小码</option>
+														<option value="红外">红外</option>
+														<option value="全部">全部</option>
+													</select>
+												</div>
+
+
+											</div>
+											<div class="layui-form-item">
+
+												<label class="layui-form-label" style="width: 100px">条码</label>
+												<div class="layui-input-inline"  style="width:180px;">
+													<input  name="barCode" autocomplete="off" id="barCodes"
+															placeholder="请输入条码" class="layui-input" type="text"/>
+												</div>
+
+												<label class="layui-form-label layui-required"  style="width: 100px">开始日期</label>
+												<div class="layui-input-inline" style="width:140px;">
 													<input type="text" name="hStartTime" autocomplete="off"
 														   placeholder="请选择开始日期" lay-verify="required" class="layui-input" readonly="readonly"id="hStartTime">
 												</div>
-												<label class="layui-form-label"  style="width: 100px">结束日期</label>
+												<label class="layui-form-label layui-required"  style="width: 100px">结束日期</label>
 												<div class="layui-input-inline" style="width:120px;">
 													<input type="text" name="hEndTime" autocomplete="off"
 														   placeholder="请选择结束日期" lay-verify="required" class="layui-input" readonly="readonly" id="hEndTime">
 												</div>
-
-<!--												<label class="layui-form-label">查询错误</label>-->
-												<div class="layui-input-inline"  style="width:120px;">
-													<input type="checkbox" name="errorFlag"  id= "errorFlag" title="显示错误">
-<!--													<input type="checkbox" name="like[read]" title="阅读" checked="">-->
-<!--													<input type="checkbox" name="like[game]" title="游戏">-->
-												</div>
-
 												<div class="layui-input-inline">
-												<button class="layui-btn layui-btn-sm" lay-submit=""
-														type="button" lay-filter="hsearchSubmit" >查询</button>
-												<button type="reset"
-														class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
-													<i class="layui-icon">&#xe669;</i>重置
-												</button>
+													<button class="layui-btn layui-btn-sm" lay-submit=""
+															type="button" lay-filter="hsearchSubmit" >查询</button>
 
-													<button class="layui-btn layui-btn-sm" type="button"
-													onclick="send()">查询</button>
+													<button class="layui-btn layui-btn-sm"
+															type="button" id="exportBtn" onclick="exportExcel()" >导出</button>
+
+													<button type="reset"
+															class="layui-btn layui-btn-primary layui-btn-sm" title="重置">
+														<i class="layui-icon">&#xe669;</i>重置
+													</button>
 												</div>
-<!--												<textarea id="t_sdata" style="width:100%;height:80px;" />01 02 00 00 00 20 79 D2</textarea>-->
-
 											</div>
 										</form>
 
@@ -174,7 +251,6 @@
 								</div>
 							</div>
 						</div>
-
 						<fieldset class="layui-elem-field layui-field-title">
 							<legend style="font-size: 14px;">条码列表</legend>
 						</fieldset>

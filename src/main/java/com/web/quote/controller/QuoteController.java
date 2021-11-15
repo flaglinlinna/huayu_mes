@@ -81,6 +81,19 @@ public class QuoteController extends WebController {
 		}
 		return mav;
 	}
+
+	@ApiOperation(value = "中标报表页", notes = "中标报表页", hidden = true)
+	@RequestMapping(value = "/toBadeList")
+	public ModelAndView toBadeList() {
+		ModelAndView mav = new ModelAndView();
+		try {
+			mav.setViewName("/web/quote/quote_bade");// 返回路径
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("中标报表页！", e);
+		}
+		return mav;
+	}
 	
 	@ApiOperation(value = "报价信息项目列表页", notes = "报价信息项目列表页", hidden = true)
 	@RequestMapping(value = "/toQuoteItem")
@@ -169,7 +182,7 @@ public class QuoteController extends WebController {
 					bsRemarks,bsProd,bsSimilarProd,bsPosition,bsCustRequire,bsLevel,bsRequire,bsDevType,
 					bsCustName,userName,super.getPageRequest(sort));
             logger.debug("获取报价单列表=getList:");
-            getSysLogService().success(module,method, methodName, keyword);
+//            getSysLogService().success(module,method, methodName, keyword);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,7 +191,26 @@ public class QuoteController extends WebController {
             return ApiResponseResult.failure("获取报价单列表失败！");
         }
     }
-	
+
+	@ApiOperation(value = "获取报价中标率列表", notes = "获取报价单列表",hidden = true)
+	@RequestMapping(value = "/getMonBadeList", method = RequestMethod.GET)
+	@ResponseBody
+	public ApiResponseResult getMonBadeList() {
+		String method = "quote/getMonBadeList";String methodName ="获取报价单列表";
+		try {
+			Sort sort = Sort.unsorted();
+			ApiResponseResult result = quoteService.getMonBadeList(super.getPageRequest(sort));
+			logger.debug("获取报价中标率列表=getList:");
+//			getSysLogService().success(module,method, methodName, keyword);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取报价单列表失败！", e);
+//			getSysLogService().error(module,method, methodName, "关键字:"+keyword+";"+e.toString());
+			return ApiResponseResult.failure("获取报价单列表失败！");
+		}
+	}
+
 	@ApiOperation(value = "获取报价单-项目列表", notes = "获取报价单-项目列表",hidden = true)
     @RequestMapping(value = "/getItemPage", method = RequestMethod.GET)
     @ResponseBody
@@ -187,7 +219,7 @@ public class QuoteController extends WebController {
         try {
             ApiResponseResult result = quoteService.getItemPage(id,bsStyle);
             logger.debug("获取报价单-项目列表=getItemPage:");
-            getSysLogService().success(module,method, methodName, id);
+//            getSysLogService().success(module,method, methodName, id);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

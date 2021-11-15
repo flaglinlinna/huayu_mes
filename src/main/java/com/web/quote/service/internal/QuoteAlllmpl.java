@@ -1,10 +1,8 @@
 package com.web.quote.service.internal;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +31,8 @@ public class QuoteAlllmpl  extends BaseSql implements QuoteAllService {
 	@Autowired
     private QuoteDao quoteDao;
 
+	@Autowired
+    private QuoteItemDao quoteItemDao;
 
     /**
      * 获取报价单列表
@@ -120,9 +120,24 @@ public class QuoteAlllmpl  extends BaseSql implements QuoteAllService {
         List<Map<String, Object>> list_new = new ArrayList<Map<String, Object>>();
         for (int i=0;i<list.size();i++) {
             Object[] object=(Object[]) list.get(i);
-            Map<String, Object> map1 = new HashMap<>();
+            Map<String, Object> map1 = new LinkedHashMap<>();
             map1.put("id", object[0]);
             map1.put("bsCode", object[1]);
+            List<QuoteItem> quoteItemList = quoteItemDao.findByDelFlagAndPkQuote(0,Long.parseLong(object[0].toString()));
+            for(QuoteItem quoteItem :quoteItemList){
+                String bsStatus1 = "";
+                if(quoteItem.getBsStatus()==1){
+                    bsStatus1 = "进行中";
+                }else if(quoteItem.getBsStatus()==2){
+                    bsStatus1 = "已完成";
+                }else {
+                    bsStatus1 = "不需要填写";
+                }
+                map1.put(quoteItem.getBsCode(),bsStatus1);
+                map1.put(quoteItem.getBsCode()+"Begin",quoteItem.getBsBegTime());
+                map1.put(quoteItem.getBsCode()+"End",quoteItem.getBsEndTime());
+                map1.put(quoteItem.getBsCode()+"Time",DateUtil.subtractTime(quoteItem.getBsBegTime(),quoteItem.getBsEndTime()));
+            }
             map1.put("bsType", object[2]);
             map1.put("bsStatus", object[3]);
             map1.put("bsFinishTime", object[4]);

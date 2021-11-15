@@ -3,6 +3,8 @@ package com.web.quote.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -45,4 +47,17 @@ public interface QuoteDao extends CrudRepository<Quote, Long>,JpaSpecificationEx
 	 @Query(value = "select map from Quote map  where map.delFlag=0 and map.bsStatus2Hardware=2 and  map.bsStatus2Molding=2 and map.bsStatus2Surface=2 and map.bsStatus2Packag=2 and map.bsStatus2Out=2 and  map.bsStatus2Purchase=2 and map.bsStatus2Freight=2 and  map.id =?1")
 	 public  List<Quote> findByDelFlagAndStatus2AndId(Long id);
 
+
+	 @Query(value = "select to_char(create_date,'yyyy-mm') as monthChar,count(id) as allCount ,sum(bs_bade) as badeCount," +
+			 " CASE" +
+			 " WHEN sum(bs_bade) /count(id) is null THEN ''" +
+			 "WHEN sum(bs_bade) /count(id) is not null THEN TO_CHAR ( NVL(ROUND" +
+			 "(sum(bs_bade) /count(id), 4) * 100,0),'fm9999999990.00') || '%'" +
+			 "ELSE '' END as Monpercent" +
+			 " from PRICE_QUOTE group by to_char(create_date,'yyyy-mm')" +
+			 "order by to_char(create_date,'yyyy-mm')",
+			 countQuery = "select count(*) from (select to_char(create_date,'yyyy-mm')  from PRICE_QUOTE group by to_char(create_date,'yyyy-mm')" +
+					 "order by to_char(create_date,'yyyy-mm') )",
+			 nativeQuery = true)
+	public Page<Map<String, Object>> getMonBade(Pageable pageable);
 }

@@ -52,12 +52,13 @@ $(function() {
 						"code" : res.status
 					}
 				},
-				cols : [ [ 
-				{fixed:'left',type : 'numbers'},
-				{fixed:'left',field : 'bsCode',title : '报价单编号',width : 150,sort: true},
-					{fixed:'left',field : 'bsProd',title : '产品型号',width : 120,sort: true},
-					{fixed:'left',fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true},
-					{field : 'bsStatus',title : '状态',width : 300,templet:'#statusTpl',sort: true},
+				cols : [
+					[
+				{fixed:'left',type : 'numbers',	rowspan : 2,colspan : 1,},
+				{fixed:'left',field : 'bsCode',title : '报价单编号',width : 150,sort: true,	rowspan : 2,colspan : 1,},
+					{fixed:'left',field : 'bsProd',title : '产品型号',width : 120,sort: true,	rowspan : 2,colspan : 1,},
+					{fixed:'left',fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true,	rowspan : 2,colspan : 1,},
+					{field : 'bsStatus',title : '状态',width : 300,templet:'#statusTpl',sort: true,	rowspan : 2,colspan : 1,},
 				{field : 'bsType',title : '报价类型', width : 120,templet:function (d) {
 						 if(d.bsType=="YSBJ"){
 							 return "衍生报价";
@@ -66,26 +67,98 @@ $(function() {
 						 }else {
 							 return "";
 						 }
-				},sort: true},
+				},sort: true,	rowspan : 2,colspan : 1},
 
-				{field : 'bsCustName',title : '客户名称',width : 120,sort: true},
+				{field : 'bsCustName',title : '客户名称',width : 120,sort: true,	rowspan : 2,colspan : 1,},
 
-				{field : 'bsProdType',title : '产品类型',width : 140, sort: true},
-				{field : 'bsDevType',title : '机种型号',width : 140, sort: true},
-				{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140},
-				{field : 'bsSimilarProd',title : '相似型号',width : 150,sort: true},
-				{field : 'bsRemarks',title : '报价备注',width : 170,sort: true},
-				{field : 'bsPosition',title : '市场定位',width : 150,sort: true},
-				{field : 'bsMaterial',title : '客户提供资料',width : 140, sort: true},
-				{field : 'bsChkOutItem',title : '外观检验项',width : 140, sort: true},
-				{field : 'bsChkOut',title : '外观检验',width : 150,sort: true},
-				{field : 'bsFunctionItem',title : '功能性能项',width : 140,sort: true},
-				{field : 'bsFunction',title : '功能性能',width : 140,sort: true},
-				{field : 'bsRequire',title : '环保要求',width : 140,sort: true},
-				{field : 'bsLevel',title : '防水防尘等级',width : 140,sort: true},
-				{field : 'bsCustRequire',title : '客户其他要求',width : 200,sort: true},
+				{field : 'bsProdType',title : '产品类型',width : 140, sort: true,	rowspan : 2,colspan : 1,},
+				{field : 'bsDevType',title : '机种型号',width : 140, sort: true,	rowspan : 2,colspan : 1,},
+				{field : 'bsFinishTime',title : '完成日期',sort: true, width : 140,	rowspan : 2,colspan : 1,},
+				{field : 'bsSimilarProd',title : '相似型号',width : 150,sort: true,	rowspan : 2,colspan : 1,},
+
+				{field : 'bsSimilarProd',title : '五金资料评估',align : 'center',width : 150,sort: true,	rowspan : 1,colspan : 4,},
+				{field : 'bsSimilarProd',title : '注塑资料评估',align : 'center',width : 150,sort: true,	rowspan : 1,colspan : 4,},
+				{field : 'bsSimilarProd',title : '表面处理资料评估',align : 'center',width : 150,sort: true,	rowspan : 1,colspan : 4,},
+				{field : 'bsSimilarProd',title : '组装资料评估',align : 'center',width : 150,sort: true,	rowspan : 1,colspan : 4,},
+				{field : 'bsRemarks',title : '报价备注',width : 170,sort: true,	rowspan : 2,colspan : 1},
+
+				{field : 'bsPosition',title : '市场定位',width : 150,sort: true,	rowspan : 2,colspan : 1},
+				{field : 'bsMaterial',title : '客户提供资料',width : 140, sort: true,	rowspan : 2,colspan : 1},
+				{field : 'bsChkOutItem',title : '外观检验项',width : 140, sort: true,	rowspan : 2,colspan : 1},
+				{field : 'bsChkOut',title : '外观检验',width : 150,sort: true,	rowspan : 2,colspan : 1},
+				{field : 'bsFunctionItem',title : '功能性能项',width : 140,sort: true,	rowspan : 2,colspan : 1},
+				{field : 'bsFunction',title : '功能性能',width : 140,sort: true,	rowspan : 2,colspan : 1},
+				{field : 'bsRequire',title : '环保要求',width : 140,sort: true,	rowspan : 2,colspan : 1},
+				{field : 'bsLevel',title : '防水防尘等级',width : 140,sort: true,	rowspan : 2,colspan : 1},
+				{field : 'bsCustRequire',title : '客户其他要求',width : 200,sort: true,	rowspan : 2,colspan : 1},
 				//{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150}
-				] ],
+				],[
+						{field : 'B001',title : '材料是否报价',width : 150,sort: true,	rowspan : 1,colspan : 1},
+						{field : 'B001Time',title : '材料填写时间',width : 150,sort: true,	rowspan : 1,colspan : 1,templet: function (d){
+							if(d.B001Time>=4){
+								return '<div class="progress_bar"> <span>'+d.B001Time+'</span></div>'
+							}else {
+								return '<div class="progress_bar2"> <span>'+d.B001Time+'</span></div>'
+							}
+							}},
+						{field : 'C001',title : '工艺是否报价',width : 150,sort: true,	rowspan : 1,colspan : 1},
+						{field : 'C001Time',title : '工艺填写时间',width : 150,sort: true,	rowspan : 1,colspan : 1,templet: function (d){
+								if(d.C001Time>=4){
+									return '<div class="progress_bar"> <span>'+d.C001Time+'</span></div>'
+								}else {
+									return '<div class="progress_bar2"> <span>'+d.C001Time+'</span></div>'
+								}
+							}},
+						{field : 'B002',title : '材料需要报价',width : 150,sort: true,	rowspan : 1,colspan : 1},
+						{field : 'B002Time',title : '材料填写时间',width : 150,sort: true,	rowspan : 1,colspan : 1,templet: function (d){
+								if(d.B002Time>=4){
+									return '<div class="progress_bar"> <span>'+d.B002Time+'</span></div>'
+								}else {
+									return '<div class="progress_bar2"> <span>'+d.B002Time+'</span></div>'
+								}
+							}},
+						{field : 'C001',title : '工艺是否报价',width : 150,sort: true,	rowspan : 1,colspan : 1},
+						{field : 'C002Time',title : '工艺填写时间',width : 150,sort: true,	rowspan : 1,colspan : 1,templet: function (d){
+								if(d.C002Time>=4){
+									return '<div class="progress_bar"> <span>'+d.C002Time+'</span></div>'
+								}else {
+									return '<div class="progress_bar2"> <span>'+d.C002Time+'</span></div>'
+								}
+							}},
+						{field : 'B003',title : '材料是否报价',width : 150,sort: true,	rowspan : 1,colspan : 1},
+						{field : 'B003Time',title : '材料填写时间',width : 150,sort: true,	rowspan : 1,colspan : 1,templet: function (d){
+								if(d.B003Time>=4){
+									return '<div class="progress_bar"> <span>'+d.B003Time+'</span></div>'
+								}else {
+									return '<div class="progress_bar2"> <span>'+d.B003Time+'</span></div>'
+								}
+							}},
+						{field : 'C001',title : '工艺是否报价',width : 150,sort: true,	rowspan : 1,colspan : 1},
+						{field : 'C003Time',title : '工艺填写时间',width : 150,sort: true,	rowspan : 1,colspan : 1,templet: function (d){
+								if(d.C003Time>=4){
+									return '<div class="progress_bar"> <span>'+d.C003Time+'</span></div>'
+								}else {
+									return '<div class="progress_bar2"> <span>'+d.C003Time+'</span></div>'
+								}
+							}},
+						{field : 'B004',title : '材料是否报价',width : 150,sort: true,	rowspan : 1,colspan : 1},
+						{field : 'B004Time',title : '材料填写时间',width : 150,sort: true,	rowspan : 1,colspan : 1,templet: function (d){
+								if(d.B004Time>=4){
+									return '<div class="progress_bar"> <span>'+d.B004Time+'</span></div>'
+								}else {
+									return '<div class="progress_bar2"> <span>'+d.B004Time+'</span></div>'
+								}
+							}},
+						{field : 'C001',title : '工艺是否报价',width : 150,sort: true,	rowspan : 1,colspan : 1},
+						{field : 'C004Time',title : '工艺填写时间',width : 150,sort: true,	rowspan : 1,colspan : 1,templet: function (d){
+								if(d.C004Time>=4){
+									return '<div class="progress_bar"> <span>'+d.C004Time+'</span></div>'
+								}else {
+									return '<div class="progress_bar2"> <span>'+d.C004Time+'</span></div>'
+								}
+							}},
+					]
+				],
 				done : function(res, curr, count) {
 					//
 					pageCurr = curr;
