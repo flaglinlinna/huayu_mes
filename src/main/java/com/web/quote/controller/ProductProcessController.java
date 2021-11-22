@@ -460,8 +460,7 @@ public class ProductProcessController extends WebController {
 		try{
 			ApiResponseResult result = productProcessService.editProcessList(productProcessList);
 			logger.debug("页面编辑保存=saveTable:");
-			getSysLogService().success(module,method, methodName,
-					"");
+			getSysLogService().success(module,method, methodName, "");
 			return result;
 		}catch(Exception e){
 			e.printStackTrace();

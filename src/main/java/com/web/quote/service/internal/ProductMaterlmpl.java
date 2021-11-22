@@ -15,6 +15,7 @@ import com.web.quote.entity.*;
 import com.web.quote.service.ProductMaterService;
 import com.web.quote.service.QuoteProductService;
 
+import com.web.quote.service.QuoteSumService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -52,12 +53,14 @@ public class ProductMaterlmpl implements ProductMaterService {
     private QuoteDao quoteDao;
 
     @Autowired
-    QuoteProcessDao quoteProcessDao;
+    private QuoteProcessDao quoteProcessDao;
     
     @Autowired
     private QuoteItemDao quoteItemDao;
     @Autowired
     private QuoteProductService quoteProductService;
+    @Autowired
+    private QuoteSumService quoteSumService;
 	
 	/**
      * 新增
@@ -262,8 +265,23 @@ public class ProductMaterlmpl implements ProductMaterService {
         quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
         
       //20210121-fyx-统一修改状态,返回是否全部完成 0否1是
-        Object data = quoteProductService.doItemFinish(bsCode, quoteId,3).getData();
+        Object data = quoteProductService.doItemFinish(bsCode, quoteId,2).getData();
 //        quoteDao.findById(quoteId);
+
+        //2021/11/19 全部确认完成后开始计算价格
+        //判断是否开始计算价格
+        //判断制造部+采购部+外协部 是否全部审批完成
+        List<Quote> lq = quoteDao.findByDelFlagAndStatus2AndId(quoteId);
+        if(lq.size()>0){
+            Quote quote = lq.get(0);
+            quote.setBsStep(3);
+            quote.setBsStatus2(2);
+            quote.setBsEndTime2(new Date());
+            quote.setBsStatus3(1);
+            quoteDao.save(quote);
+            quoteSumService.countMeterAndProcess(quoteId+"");
+        }
+//        quoteSumService.countMeterAndProcess(quoteId+"");
         return ApiResponseResult.success("确认完成成功！").data(data);
     }
 
@@ -272,6 +290,11 @@ public class ProductMaterlmpl implements ProductMaterService {
     public ApiResponseResult cancelStatus(Long quoteId, String bsType, String bsCode) throws Exception {
         Quote quote = quoteDao.findById((long) quoteId);
         Integer quoteStatus = 0; //判断当前报价单是否已经发起审核
+
+        if(quote.getBsStatus2()==5){
+            return ApiResponseResult.failure("报价单在驳回修改中，等待重新下发");
+        }
+
         if(bsType.equals("hardware")){
             quoteStatus = quote.getBsStatus2Hardware();
         }else if(bsType.equals("molding")){
@@ -281,9 +304,9 @@ public class ProductMaterlmpl implements ProductMaterService {
         }else if(bsType.equals("packag")){
             quoteStatus = quote.getBsStatus2Packag();
         }
-        if(quoteStatus ==4||quoteStatus==2) {
-            return ApiResponseResult.failure("发起审批后不能取消确认");
-        } else {
+//        if(quoteStatus ==4||quoteStatus==2) {
+//            return ApiResponseResult.failure("发起审批后不能取消确认");
+//        }else {
 //            List<QuoteItem> quoteItemList = quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,quoteId,bsCode);
 //            if(quoteItemList.size()>0){
 //                if(quoteItemList.get(0).getBsEndTime()==null){
@@ -305,7 +328,7 @@ public class ProductMaterlmpl implements ProductMaterService {
             }
             productMaterDao.saveAll(productMaterList);
             return ApiResponseResult.success("取消完成成功");
-        }
+//        }
 
     }
 

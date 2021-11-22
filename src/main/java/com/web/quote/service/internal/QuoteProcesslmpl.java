@@ -249,15 +249,20 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		try {
 		for (Map<String,Object> map: bsNameList){
 			List<String> nameList = Arrays.asList(map.get("BSNAME").toString().split(","));
+			List<String> procNameList = Arrays.asList(map.get("PROCNAMES").toString().split(","));
 			List<String> idsList = Arrays.asList(map.get("IDS").toString().split(","));
 			String s= Collections.min(idsList);
 			int minIndex = idsList.indexOf(s);
-			if(!nameList.containsAll(newName)){
+			List<String> origin = new ArrayList<>();
+			origin.addAll(procNameList);
+			origin.retainAll(newName);
+			if(origin.size()<=0){
 				for(Integer a= 0;a<newName.size();a++){
 					QuoteProcess quoteProcess = new QuoteProcess();
 					quoteProcess.setBsElement(map.get("BSELEMENT").toString());
 					quoteProcess.setBsName(nameList.get(minIndex));
 					quoteProcess.setBsLinkName(nameList.get(0));
+					quoteProcess.setBsGroups("组装");
 //					List<Proc> procList = procDao.findByDelFlagAndProcName(0,newName.get(a));
 					List<BaseFee> baseFeeList = baseFeeDao.findByProcNameAndDelFlag(newName.get(a),0 );
 					if(baseFeeList.size()>0){

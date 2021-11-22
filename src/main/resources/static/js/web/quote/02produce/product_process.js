@@ -145,6 +145,8 @@ $(function() {
 				{field : 'bsLoss', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCave', title : '穴数<span style="color:red;font-size:12px;">*</span>',edit:'text',width:50, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCapacity', title : '产能(个/小时)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:105, hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsjianche', title : '检测项目',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
+				{field : 'bsjianche', title : '检测项目费用',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsFeeWxAll', title : '外协价格(未税)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
 				{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff;overflow:hidden !important',width:180},
 				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
@@ -256,7 +258,10 @@ $(function() {
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsYield"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsModelType"]').removeClass("layui-hide");
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsModelType"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsjianche"]').removeClass("layui-hide");
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsjianche"]').removeClass("layui-hide");
 
+						$(".layui-table-total").find('tr').find('td[data-field="bsjianche"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsModelType"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsCapacity"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsUserNum"]').removeClass("layui-hide");

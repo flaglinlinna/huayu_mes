@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.web.basePrice.dao.UnitDao;
 import com.web.basePrice.entity.Unit;
+import com.web.quote.service.QuoteSumService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -52,6 +53,8 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	private UnitDao unitDao;
 	@Autowired
 	private PriceCommDao priceCommDao;
+	@Autowired
+	private QuoteSumService quoteSumService;
 	/**
 	 * 查询列表
 	 */
@@ -280,9 +283,11 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	@Override
 	public ApiResponseResult cancelStatus(Long quoteId) throws Exception {
 		Quote quote = quoteDao.findById((long) quoteId);
-		if(quote.getBsStatus2Purchase() ==2 ||quote.getBsStatus2Purchase() ==4){
-			return ApiResponseResult.failure("发起审批后不能取消确认");
-		}
+		quote.setBsStatus2Purchase(1);
+		quoteDao.save(quote);
+//		if(quote.getBsStatus2Purchase() ==2 ||quote.getBsStatus2Purchase() ==4){
+//			return ApiResponseResult.failure("发起审批后不能取消确认");
+//		}
 //		List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
 		List<ProductMater> productMaterList = productMaterDao.selectPurchaseByUserId(quoteId,UserUtil.getSessionUser().getId());
 		for(ProductMater o : productMaterList){
@@ -455,9 +460,23 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
     	List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
     	if(lo.size()>0){
     		Quote o = lo.get(0);
-    		o.setBsStatus2Purchase(3);
+    		o.setBsStatus2Purchase(2);
     		quoteDao.save(o);
     	}
+
+		//2021/11/19 全部确认完成后开始计算价格
+		//判断是否开始计算价格
+		//判断制造部+采购部+外协部 是否全部审批完成
+		List<Quote> lq = quoteDao.findByDelFlagAndStatus2AndId(quoteId);
+		if(lq.size()>0){
+			Quote quote = lq.get(0);
+			quote.setBsStep(3);
+			quote.setBsStatus2(2);
+			quote.setBsEndTime2(new Date());
+			quote.setBsStatus3(1);
+			quoteDao.save(quote);
+			quoteSumService.countMeterAndProcess(quoteId+"");
+		}
 		return ApiResponseResult.success("确认完成成功！");
 	}
 

@@ -223,6 +223,14 @@ public class QuoteBomTemp extends BaseEntity {
 	@Column(length = 150)
 	protected Integer bsAgent = 0;
 
+	/**
+	 * 是否单件
+	 * 0否 1是
+	 */
+	@ApiModelProperty(name = "bsSingleton", value = "是否单件")
+	@Column(length = 150)
+	protected Integer bsSingleton = 0;
+
 
 	/**
 	 * 采购说明
@@ -461,5 +469,13 @@ public class QuoteBomTemp extends BaseEntity {
 
 	public void setBsGroups(String bsGroups) {
 		this.bsGroups = bsGroups;
+	}
+
+	public Integer getBsSingleton() {
+		return bsSingleton;
+	}
+
+	public void setBsSingleton(Integer bsSingleton) {
+		this.bsSingleton = bsSingleton;
 	}
 }

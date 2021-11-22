@@ -129,6 +129,8 @@ $(function() {
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
 						}else if(item.bsStatus=="1"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
+							// console.log($('div[lay-id="listTable"]').find("div[class='layui-table-body']").find('tr[data-index="' + index + '"]').find('td[data-field="25"]').find(['a[name="pushBtn"]']));
+							$('div[lay-id="listTable"]').find("div[class='layui-table-fixed layui-table-fixed-r']").find("div[class='layui-table-body']").find('tr[data-index="' + index + '"]').find('td[data-field="25"]').find('a[name="pushBtn"]').html("取消下发");
 						}else if(item.bsStatus=="3"){
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6495ED');
 						}else if(item.bsStatus=="4"){
@@ -229,6 +231,25 @@ $(function() {
 				}else if(obj.event ==='copy'){
 					//复制报价单
 					parent.layui.index.openTabsPage(context+'/quote/toQuoteAdd?quoteId='+data.id+'&bsCopyId='+data.id,'复制报价单');
+				}else if(obj.event ==='push'){
+					if(data.bsStatus == "99"){
+						layer.msg('报价单已关闭，不允许下发修改!', {
+							time: 5000, //2s后自动关闭
+							btn: ['知道了']
+						});
+					}else if(data.bsStatus==1) {
+						layer.confirm('你确认取消下发：【' + data.bsCode + '】的信息吗？', {
+							btn: ['确认', '返回']
+						}, function () {
+							push(data.id);
+						});
+					}else {
+						layer.confirm('您确认信息填写完全并下发：【' + data.bsCode + '】的信息吗？', {
+							btn: ['确认', '返回']
+						}, function () {
+							push(data.id);
+						});
+					}
 				}
 			});
 			
@@ -303,6 +324,30 @@ function del(id){
 				layer.alert("操作请求错误，请您稍后再试");
 			});
 }
+
+//下推报价单
+function push(id){
+	var param = {
+		"id" : id,
+		// "bsStatus":'99'
+	};
+	CoreUtil.sendAjax("/quote/doPush", JSON.stringify(param),
+		function(data) {
+			if (data.result) {
+				layer.alert(data.msg,function(){
+					layer.closeAll();
+					loadAll();
+				})
+			} else {
+				layer.alert(data.msg)
+			}
+		}, "POST", false, function(res) {
+			layer.alert("操作请求错误，请您稍后再试");
+		});
+}
+
+
+
 function loadAll() {
 	// 重新加载table
 	tableIns.reload({

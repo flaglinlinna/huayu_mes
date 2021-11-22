@@ -265,7 +265,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 		List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
 		Integer completed = 0;
 		if(code.equals("B001") || code.equals("C001")){//五金
-			if(status==3) {
+			if(status==2) {
 				List<QuoteItem> lqii = quoteItemDao.getStatusByHardware(quoteId);
 				if (lqii.size() == 0) {
 					//2.2 全部完成审批
@@ -284,7 +284,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 				}
 			}
 		}else if(code.equals("B002") || code.equals("C002")){//注塑
-			if(status==3) {
+			if(status==2) {
 				List<QuoteItem> lqii = quoteItemDao.getStatusByMolding(quoteId);
 				if(lqii.size()== 0){
 					//2.2 全部完成审批
@@ -307,7 +307,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 				}
 			}
 		}else if(code.equals("B003") || code.equals("C003")){//表面处理
-				if(status==3) {
+				if(status==2) {
 					List<QuoteItem> lqii = quoteItemDao.getStatusBySurface(quoteId);
 					if (lqii.size() == 0) {
 						//2.2 全部完成审批
@@ -331,7 +331,7 @@ public class QuoteProductlmpl extends BaseSql implements QuoteProductService {
 					}
 				}
 		}else if(code.equals("B004") || code.equals("C004")){//组装
-			if(status==3) {
+			if(status==2) {
 				List<QuoteItem> lqii = quoteItemDao.getStatusByPackag(quoteId);
 				if (lqii.size() == 0) {
 					//2.2 全部完成审批

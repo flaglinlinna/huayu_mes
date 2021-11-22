@@ -37,13 +37,13 @@ $(function() {
 				width:120
 			},{
 				field : 'ALLCOUNT',
-				title : '总数',
+				title : '报价申请数',
 				width:95
 			},
 
 			{
 				field : 'BADECOUNT',
-				title : '中标数',
+				title : '报价中标数',
 				width:80,templet: function (d){
 					if(d.BADECOUNT==null){
 						return "0"

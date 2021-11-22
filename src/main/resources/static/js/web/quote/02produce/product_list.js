@@ -121,7 +121,7 @@ $(function() {
 					}},
 				{field : 'userName',title : '创建人',width : 100, sort: true},
 				{field : 'createDate',title : '创建时间',width : 145, sort: true},
-				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 150}
+				{fixed : 'right',title : '操作',toolbar : '#optBar',width : 100}
 				] ],
 			done : function(res, curr, count) {
 				localtableFilterIns.reload();

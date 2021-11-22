@@ -203,9 +203,9 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 	public void exportExcel(HttpServletResponse response, Long quoteId) throws Exception {
 		String excelPath = "static/excelFile/";
 		String fileName = "分工序报表.xlsx";
-		String[] map_arr = new String[]{"bsName","procName", "bsCave", "bsYield", "bsGroups", "bsFeeLH", "bsUserNum", "bsCycle", "bsLossFeeLh",
+		String[] map_arr = new String[]{"bsElement","bsName","procName", "bsCave", "bsYield", "bsGroups", "bsFeeLH", "bsUserNum", "bsCycle", "bsLossFeeLh",
 				"bsFeeLhAll","bsModelType", "bsFeeLH", "bsLossFeeMh", "bsFeeMhAll", "bsMaterName", "bsModel", "bsAssess", "bsProQty", "bsWaterGap"
-		,"bsMaterLose","bsFee", "bsQty", "bsUnit", "purchaseUnit",""};
+		,"bsMaterLose","bsFee", "bsQty", "bsUnit", "purchaseUnit","bsFreight"};
 
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		Resource resource = new ClassPathResource(excelPath + fileName);
@@ -217,6 +217,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		List<String> wcList =Arrays.asList("hardware|五金","packag|组装","surface|表面处理","molding|注塑");
 //		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		List<List<Map<String, Object>>> allList = new ArrayList<>();
+		List<Map<String, Object>> list5 = new ArrayList<Map<String, Object>>();
 		for(String wc :wcList) {
 			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 //			Map<String, Object> map = new HashMap<>();
@@ -227,6 +228,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				Map<String, Object> map = new HashMap<>();
 				map.put("id", bs.getId());
 //			map.put("bsElement", bs.getBsElement());
+				map.put("bsElement", bs.getBsElement());
 				map.put("bsName", bs.getBsName());
 				if (bs.getProc() != null) {
 					map.put("procName", bs.getProc().getProcName());
@@ -255,6 +257,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 				map.put("bsFeeMH", bs.getBsFeeMh());
 				map.put("bsLossFeeMh", bs.getBsFeeMh());
 				map.put("bsFeeMhAll", bs.getBsFeeMhAll());
+				map.put("bsFreight",bs.getBsFreight());
 				if (bs.getPkBomId() != null) {
 					ProductMater pm = productMaterDao.findByDelFlagAndPkBomIdAndPkQuote(0, bs.getPkBomId(), bs.getPkQuote());
 					map.put("bsWaterGap", pm.getBsWaterGap());
@@ -282,9 +285,16 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 //			map.put("bsFeeWxAll", bs.getBsFeeWxAll());
 				list.add(map);
 			}
+			if(list.size()>0) {
+				Map<String, Object> map2 = new HashMap<>();
+				map2.put("bsElement", wc.split("\\|")[1]);
+				list5.add(map2);
+			}
+			list5.addAll(list);
 			allList.add(list);
 		}
-		ExcelExport.exportBySheetAndRow(response, allList, workbook, 4,map_arr, excelPath + fileName, fileName,2);
+		allList.add(list5);
+		ExcelExport.exportBySheetAndRow(response, allList, workbook, 5,map_arr, excelPath + fileName, fileName,1);
 	}
 
 	@Override

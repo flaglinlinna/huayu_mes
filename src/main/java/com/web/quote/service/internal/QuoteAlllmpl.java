@@ -128,16 +128,18 @@ public class QuoteAlllmpl  extends BaseSql implements QuoteAllService {
                 String bsStatus1 = "";
                 if(quoteItem.getBsStatus()==1){
                     bsStatus1 = "进行中";
+                    map1.put(quoteItem.getBsCode()+"Time",DateUtil.subtractTime(quoteItem.getBsBegTime(),quoteItem.getBsEndTime()));
                 }else if(quoteItem.getBsStatus()==2){
                     bsStatus1 = "已完成";
+                    map1.put(quoteItem.getBsCode()+"Time",DateUtil.subtractTime(quoteItem.getBsBegTime(),quoteItem.getBsEndTime()));
                 }else {
                     bsStatus1 = "不需要填写";
+                    map1.put(quoteItem.getBsCode()+"Time","");
                 }
                 map1.put(quoteItem.getBsCode(),bsStatus1);
-                map1.put(quoteItem.getBsCode()+"Begin",quoteItem.getBsBegTime());
-                map1.put(quoteItem.getBsCode()+"End",quoteItem.getBsEndTime());
-                map1.put(quoteItem.getBsCode()+"Time",DateUtil.subtractTime(quoteItem.getBsBegTime(),quoteItem.getBsEndTime()));
-            }
+//                map1.put(quoteItem.getBsCode()+"Begin",quoteItem.getBsBegTime());
+//                map1.put(quoteItem.getBsCode()+"End",quoteItem.getBsEndTime());
+                    }
             map1.put("bsType", object[2]);
             map1.put("bsStatus", object[3]);
             map1.put("bsFinishTime", object[4]);

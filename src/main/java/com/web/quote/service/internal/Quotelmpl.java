@@ -3,15 +3,15 @@ package com.web.quote.service.internal;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.utils.BaseSql;
+import com.web.basePrice.dao.*;
+import com.web.basePrice.entity.BaseFee;
+import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.*;
 import com.web.quote.entity.*;
+import com.web.quote.service.QuoteProcessService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,6 @@ import com.utils.BaseService;
 import com.utils.SearchFilter;
 import com.utils.UserUtil;
 import com.utils.enumeration.BasicStateEnum;
-import com.web.basePrice.dao.ProdTypDao;
-import com.web.basePrice.dao.ProfitProdDao;
 import com.web.basePrice.entity.ProdTyp;
 import com.web.basePrice.entity.ProfitProd;
 import com.web.quote.service.QuoteService;
@@ -59,6 +57,8 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     private QuoteItemBaseDao quoteItemBaseDao;
 	@Autowired
     private TodoInfoService todoInfoService;
+    @Autowired
+    private QuoteProcessService quoteProcessService;
 	@Autowired
 	private SysUserDao sysUserDao;
 	@Autowired
@@ -67,6 +67,15 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     private ProductMaterDao productMaterDao;
     @Autowired
     private ProductProcessDao productProcessDao;
+
+    @Autowired
+    private ProcDao procDao;
+
+    @Autowired
+    private BaseFeeDao baseFeeDao;
+    @Autowired
+    private UnitDao unitDao;
+
 	/**
      * 新增报价单
      */
@@ -685,5 +694,259 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         Page<Map<String, Object>> list = quoteDao.getMonBade(pageRequest);
         return ApiResponseResult.success().data(DataGrid.create(list.getContent(), (int) list.getTotalElements(), pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 //        return null;
+    }
+
+
+     /**
+     * 1.检验数据(去掉了确认完成和审批，所以需要工艺和模具清单数据检查)
+     * 2.下推数据 （根据已存在的工艺和材料进行更新，不存在的进行新增，需要考虑复制情况)
+     * **/
+    @Override
+    public ApiResponseResult doPush(Long id) throws Exception {
+        Quote quote = quoteDao.findById((long) id);
+        if(quote==null){
+            return ApiResponseResult.failure("报价单不能为空");
+        }else if(quote.getBsStatus()==1){
+            quote.setBsStatus(0);
+            quoteDao.save(quote);
+            return ApiResponseResult.success("取消下发成功");
+        }
+        //校验数据
+        if(quoteProcessDao.countByDelFlagAndPkQuoteAndPkProcIsNull(0,id)>0){
+            return ApiResponseResult.failure("请填写完所有工序");
+        }
+        List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatusOrderByBsOrder(0,id,0);
+
+        String[] bsGroupsArray = new String[lqp.size()];
+        for(Integer q = 0;q<=lqp.size()-1;q++){
+            QuoteProcess qp = lqp.get(q);
+            if(qp.getProc()==null){
+                qp.setProc(procDao.findById((long) qp.getPkProc()));
+            }
+            if(!("out").equals(qp.getProc().getBjWorkCenter().getBsCode())){
+                if(qp.getBsFeeLh() == null || qp.getBsFeeMh() == null){
+                    String[] strs = this.getLhBy(qp.getProc().getWorkcenterId(), qp.getPkProc());
+                    if (!StringUtils.isEmpty(strs[0])) {
+                        qp.setBsFeeLh(new BigDecimal(strs[0]));
+                    }
+                    if (!StringUtils.isEmpty(strs[1])) {
+                        qp.setBsFeeMh(new BigDecimal(strs[1]));
+                    }
+//						return ApiResponseResult.failure("有未维护的人工制费,请先维护!");
+                }
+            }
+
+            bsGroupsArray[q]= qp.getBsGroups();
+
+            if(StringUtils.isNotEmpty(qp.getBsMaterName())){
+                if(quoteBomDao.findByDelFlagAndBsMaterNameAndPkQuote(0,qp.getBsMaterName(),qp.getPkQuote()).size()==0){
+                    return ApiResponseResult.failure("外购件清单中不存在 "+qp.getBsMaterName()+" 的材料名称，无法进行损耗计算");
+                }
+            }
+        }
+
+        int count =quoteMouldDao.countByDelFlagAndPkQuoteAndBsActQuote(0,id,null);
+        if(count>0){
+            return ApiResponseResult.failure("提交失败：实际报价不可为空，请检查数据");
+        }
+
+
+        //2.1下发制造部待办项目-材料+工序
+        List<QuoteItem> lqi = quoteItemDao.findByDelFlagAndStyles(0,id);
+        if(lqi.size()>0){
+            for(QuoteItem qi :lqi){
+//							qi.setBsStatus(1);//lst-20210106-状态变更：进行中
+            }
+        }else {
+            List<QuoteItemBase> lqb = quoteItemBaseDao.findByDelFlagAndStyles(0);
+            for (QuoteItemBase qb : lqb) {
+                QuoteItem qi = new QuoteItem();
+                qi.setPkQuote(quote.getId());
+                qi.setBsCode(qb.getBsCode());
+                qi.setBsName(qb.getBsName());
+                qi.setToDoBy(qb.getToDoBy());
+                qi.setBsPerson(qb.getBsPerson());
+                qi.setCreateDate(new Date());
+                qi.setCreateBy(UserUtil.getSessionUser().getId());
+                qi.setBsStatus(1);//lst-20210106-状态变更：进行中
+                qi.setBsBegTime(new Date());
+                qi.setBsStyle(qb.getBsStyle());
+                lqi.add(qi);
+            }
+        }
+        quoteItemDao.saveAll(lqi);
+        //2.2根据工作中心下发BOM-材料
+        //先判断是否为复制单，复制单情况更新，非复制单新增
+        List<QuoteBom> lql = quoteBomDao.findByDelFlagAndPkQuoteAndBsMaterNameIsNotNullOrderById(0, id);
+        productMaterDao.deleteByPkQuoteBom(id);
+        if (lql.size() > 0) {
+            List<ProductMater> lpm = new ArrayList<ProductMater>();
+            for (QuoteBom qb : lql) {
+                ProductMater pm = new ProductMater();
+                if (qb.getPkBomId() != null) {
+                    List<ProductMater> productMaterList = productMaterDao.findByPkQuoteAndPkBomId(quote.getId(), qb.getPkBomId());
+                    if (productMaterList.size() > 0) {
+                        pm = productMaterList.get(0);
+                    }
+                }
+                pm.setBsType(qb.getWc().getBsCode());//类型
+                pm.setBsComponent(qb.getBsComponent());
+                pm.setBsMaterName(qb.getBsMaterName());
+                pm.setBsModel(qb.getBsModel());
+                //如果是复制单,下发材料关联的bomId与bom关联的bomId要相同(两者关联同一个复制源ID用于关联)
+                //不是复制的单，下发材料关联的bomId则为bom的Id
+                pm.setPkBomId(quote.getBsCopyId()==null?qb.getId():qb.getPkBomId());
+                pm.setBsQty(qb.getBsQty());
+                pm.setBsSingleton(qb.getBsSingleton());
+//								if(pm.getBsSingleton()==1){
+//									pm.setBsQty(qb.getBsQty());
+//								}
+                pm.setRetrial(qb.getProductRetrial());
+                if (qb.getUnit() != null) {
+                    if(pm.getBsType().equals("surface")){
+                        if(StringUtils.isNotEmpty(qb.getPurchaseUnit())){
+                            List<Unit> unitList = unitDao.findByUnitNameAndDelFlag(qb.getPurchaseUnit(),0);
+                            if(unitList.size()>0){
+                                pm.setPkUnit(unitList.get(0).getId());
+                                pm.setBsUnit(unitList.get(0).getUnitName());
+                            }
+                        }
+                    }else {
+                        pm.setPkUnit(qb.getPkUnit());
+                        pm.setBsUnit(qb.getUnit().getUnitName()); //hjj-20210120-补充单位名称
+                    }
+                }
+                pm.setPurchaseUnit(qb.getPurchaseUnit());
+                pm.setBsAgent(qb.getBsAgent());
+//							pm.setBsGeneral();
+//							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
+//							pm.setBsWaterGap(qb.getBsWaterGap()); hjj-20210220 去掉水口和穴数，
+                if ((qb.getBsAgent() == 1)) {
+                    //客户代采的评估价格为0
+                    pm.setBsAssess(BigDecimal.ZERO);
+                    pm.setBsGeneral(0);
+                } else {
+                    //hjj-20210122 不是代采,先查询物料通用价格
+                    //hjj-20210723 不是代采，采购价格取bom中的通用价格
+//									pm.setBsAssess(qb.getPriceComm());
+//									pm.setBsRefer(qb.getPriceComm());
+                    pm.setBsGeneral(1);
+//									List<Map<String, Object>> lm = priceCommDao.findByDelFlagAndItemName(qb.getBsMaterName());
+//									if (lm.size() > 0) {
+//										String priceUn = lm.get(0).get("PRICE_UN").toString();
+//										String rangePrice = lm.get(0).get("RANGE_PRICE").toString();
+//										if (StringUtils.isNotEmpty(priceUn)) {
+//											pm.setBsGear(rangePrice);
+//											pm.setBsRefer(new BigDecimal(priceUn));
+//											pm.setBsAssess(new BigDecimal(priceUn));
+//											pm.setBsGeneral(1);
+//										}
+//									} else {
+//										pm.setBsGeneral(0);
+//									}
+                }
+//								pm.setBsRadix(qb.getBsRadix());
+                pm.setBsExplain(qb.getBsExplain());//lst-20210107-增采购说明字段
+//								pm.setBsProQty(qb.getBsProQty());
+                pm.setPkQuote(id);
+                pm.setPkItemTypeWg(qb.getPkItemTypeWg());//fyx-20210114-物料类型
+                pm.setBsElement(qb.getBsElement());//fyx-20210115-组件名称
+                pm.setBsGroups(qb.getBsGroups());//hjj-20210415-损耗分组
+                lpm.add(pm);
+            }
+            productMaterDao.saveAll(lpm);
+        }
+
+
+        //2.3根据工作中心下发BOM-工序
+        List<QuoteProcess> lpd = quoteProcessDao.findByDelFlagAndPkQuote(0,id);
+        productProcessDao.deleteByPkQuoteBom(id);
+
+        Integer num = productProcessDao.countByPkQuoteAndDelFlag( id,0);
+        //表示已下发过，找出没有下发过的工艺
+//					if(num>0){
+//
+//					}
+
+
+        if(lpd.size() > 0){
+            List<ProductProcess> lpp = new ArrayList<ProductProcess>();
+            Set<String> procSet = new HashSet<String>();
+            for(QuoteProcess qb:lpd){
+                ProductProcess pp = new ProductProcess();
+                if (qb.getCopyId() != null) {
+                    List<ProductProcess> productProcessList = productProcessDao.findByPkQuoteAndCopyId(quote.getId(), qb.getCopyId());
+                    if (productProcessList.size() > 0) {
+                        pp = productProcessList.get(0);
+                    }
+                }else if(num>0){
+                    List<ProductProcess> productProcessList = productProcessDao.findByPkQuoteAndCopyId(quote.getId(), qb.getId());
+                    if (productProcessList.size() > 0) {
+                        pp = productProcessList.get(0);
+//									pp.setDelFlag(qb);
+                    }
+                }
+                if(qb.getProc().getProcName().equals("喷涂")){
+                    //同个工作中心下，只有一个喷涂
+                    if(!procSet.add("喷涂"+qb.getBjWorkCenter().getWorkcenterName()+qb.getBsElement())){
+                        continue;
+                    }
+                }
+                pp.setBsName(qb.getBsName());
+                pp.setBsElement(qb.getBsElement());
+                pp.setBsModel(qb.getBsModel());
+//							pp.setBsType(qb.getProc().getBjWorkCenter().getBsCode());//类型
+                pp.setBsType(qb.getBjWorkCenter().getBsCode());
+                pp.setBsOrder(qb.getBsOrder());
+                pp.setPkProc(qb.getPkProc());
+                pp.setPurchaseUnit(qb.getPurchaseUnit());
+                pp.setBsLinkName(qb.getBsLinkName());
+                pp.setBsSingleton(qb.getBsSingleton());
+                pp.setPkBomId(qb.getPkQuoteBom());
+                pp.setPkQuote(id);
+                pp.setCopyId(qb.getCopyId()!=null? qb.getCopyId() : qb.getId());
+                pp.setBsMaterName(qb.getBsMaterName());
+                pp.setBsFeeMh(qb.getBsFeeMh());
+                pp.setBsFeeLh(qb.getBsFeeLh());
+                pp.setBsGroups(qb.getBsGroups());
+//							pp.setPkQuoteProcessId(qb.getId());
+                lpp.add(pp);
+            }
+            productProcessDao.saveAll(lpp);
+        }
+
+
+        //修改报价状态
+        quote.setLastupdateDate(new Date());
+        quote.setBsStatus(1);
+        quote.setBsStep(2);
+        quote.setBsEndTime1(new Date());
+        quote.setBsStatus2(0);
+        quoteDao.save(quote);
+
+        return  ApiResponseResult.success().message("下推成功");
+    }
+
+    /**
+     * 根据工作中心id和工序id查询人工和制费
+     * @param w_id
+     * @param p_id
+     * @return
+     */
+    private String[] getLhBy(Long w_id,Long p_id ){
+        String[] strs = new String[2];
+        strs[0]="";strs[1]="";
+        List<BaseFee> lbl = baseFeeDao.findByDelFlagAndWorkcenterIdAndProcId(0, w_id, p_id);
+        if(lbl.size() == 0){
+            lbl = baseFeeDao.findByDelFlagAndWorkcenterIdAndProcIdIsNull(0, w_id);
+            if(lbl.size()>0){
+                strs[0] = lbl.get(0).getFeeLh();
+                strs[1] = lbl.get(0).getFeeMh();
+            }
+        }else{
+            strs[0] = lbl.get(0).getFeeLh();
+            strs[1] = lbl.get(0).getFeeMh();
+        }
+        return strs;
     }
 }

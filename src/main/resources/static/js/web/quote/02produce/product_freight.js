@@ -282,6 +282,50 @@ function isComplete() {
 }
 
 
+function Confirm(){
+	// saveTable();
+	var dates = layui.table.cache['listTable'];
+	var params = {
+		"id" : quoteId,
+		"bsType":"freight",
+		"bsCode":"freight",
+		"dates":dates,
+	};
+	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+		btn : [ '确认', '返回' ]
+	}, function() {
+		CoreUtil.sendAjax("/productProcess/doStatus", JSON.stringify(params), function(
+			data) {
+			if (data.result) {
+				layer.alert("确认完成成功", function() {
+					// layer.closeAll();
+					//项目完成，关闭上一级项目标签页
+					layer.closeAll();
+					// parent.layui.admin.events.closeThisTabs();
+					if(data.data =="1") {
+						var srcUrl = context + '/quoteProdect/toProductItem?quoteId=' + quoteId + "&style=" + bsType;
+						console.log(srcUrl);
+						($(window.parent.document).find(('li[lay-id="' + srcUrl + '"]'))).find(".layui-tab-close").trigger("click")
+					}
+					var thisUrl = "";
+					if(bsType!="out") {
+						thisUrl = context + "/productProcess/toProductProcess?bsType=" + bsType + "&quoteId=" + quoteId + "&bsCode=" + bsCode;
+					}else{
+						thisUrl = context + "/productProcess/toProductProcess?bsType=" + bsType + "&quoteId=" + quoteId;
+					}
+					($(window.parent.document).find(('li[lay-id="' + thisUrl + '"]'))).find(".layui-tab-close").trigger("click")
+
+
+				});
+			} else {
+				layer.alert(data.msg);
+			}
+		}, "POST", false, function(res) {
+			layer.alert(res.msg);
+		});
+	});
+}
+
 // 上传控件
 function uploadFile(id) {
 	// console.log(id);

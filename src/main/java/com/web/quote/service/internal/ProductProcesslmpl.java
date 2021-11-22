@@ -3,11 +3,7 @@ package com.web.quote.service.internal;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +15,7 @@ import com.web.basePrice.entity.BaseFeeFile;
 import com.web.basePrice.entity.MjProcFee;
 import com.web.quote.dao.*;
 import com.web.quote.entity.*;
+import com.web.quote.service.QuoteSumService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -73,7 +70,8 @@ public class ProductProcesslmpl implements ProductProcessService {
     private BaseFeeDao baseFeeDao;
     @Autowired
     private QuoteBomDao quoteBomDao;
-
+    @Autowired
+    private QuoteSumService quoteSumService;
     /**
      * 新增报价单
      */
@@ -589,6 +587,12 @@ public class ProductProcesslmpl implements ProductProcessService {
     @Override
     @Transactional
     public ApiResponseResult doStatus(Long quoteId, String bsType, String bsCode,List<ProductProcess> productProcessList) throws Exception {
+
+        if(bsCode.equals("freight")){
+            Quote quote = quoteDao.findById((long)quoteId);
+            quote.setBsStatus2Freight(2);
+            quoteDao.save(quote);
+        }
         //判断状态是否已执行过确认提交-lst-20210112
         int i = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0, quoteId, bsCode, 2);
         if (i > 0) {
@@ -737,8 +741,8 @@ public class ProductProcesslmpl implements ProductProcessService {
             //增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(), UserUtil.getSessionUser().getId(), quoteId, bsCode);
 
-            //20210121-fyx-统一修改状态
-            Object data = quoteProductService.doItemFinish(bsCode, quoteId, 3).getData();
+            //20210121-fyx-统一修改状态 ，两个完成就默认完成
+            Object data = quoteProductService.doItemFinish(bsCode, quoteId, 2).getData();
             //20201225-fyx-计算后工序良率
             this.updateHouYield(quoteId, bsType);
             return ApiResponseResult.success("确认完成成功！").data(data);
@@ -752,10 +756,25 @@ public class ProductProcesslmpl implements ProductProcessService {
              }
             if (lo.size() > 0) {
                 Quote o = lo.get(0);
-                o.setBsStatus2Out(3);
+                o.setBsStatus2Out(2);
                 quoteDao.save(o);
             }
         }
+
+        //2021/11/19 全部确认完成后开始计算价格
+        //判断是否开始计算价格
+        //判断制造部+采购部+外协部 是否全部审批完成
+        List<Quote> lq = quoteDao.findByDelFlagAndStatus2AndId(quoteId);
+        if(lq.size()>0){
+            Quote quote = lq.get(0);
+            quote.setBsStep(3);
+            quote.setBsStatus2(2);
+            quote.setBsEndTime2(new Date());
+            quote.setBsStatus3(1);
+            quoteDao.save(quote);
+            quoteSumService.countMeterAndProcess(quoteId+"");
+        }
+
         return ApiResponseResult.success("确认完成成功！");
     }
 
@@ -763,6 +782,10 @@ public class ProductProcesslmpl implements ProductProcessService {
     @Override
     public ApiResponseResult cancelStatus(Long quoteId, String bsType, String bsCode) throws Exception {
         Quote quote = quoteDao.findById((long) quoteId);
+
+        if(quote.getBsStatus2()==5){
+            return ApiResponseResult.failure("报价单在驳回修改中，等待重新下发");
+        }
         Integer quoteStatus = 0; //判断当前报价单是否已经发起审核
         if (bsType.equals("hardware")) {
             quoteStatus = quote.getBsStatus2Hardware();
@@ -776,9 +799,10 @@ public class ProductProcesslmpl implements ProductProcessService {
             quoteStatus = quote.getBsStatus2Out();
         }
 
-        if (quoteStatus == 4 || quoteStatus == 2) {
-            return ApiResponseResult.failure("发起审批后不能取消确认");
-        } else {
+//        if (quoteStatus == 4 || quoteStatus == 2) {
+//            return ApiResponseResult.failure("发起审批后不能取消确认");
+//        }
+//        else {
 //                List<QuoteItem> quoteItemList = quoteItemDao.findByDelFlagAndPkQuoteAndBsCode(0,quoteId,bsCode);
 //                if(quoteItemList.size()>0){
 //                    if(quoteItemList.get(0).getBsEndTime()==null){
@@ -805,7 +829,7 @@ public class ProductProcesslmpl implements ProductProcessService {
             }
             productProcessDao.saveAll(productProcessList);
             return ApiResponseResult.success("取消完成成功");
-        }
+//        }
 
     }
 

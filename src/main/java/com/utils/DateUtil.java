@@ -16,17 +16,14 @@ public class DateUtil {
      * @throws ParseException
      */
     public static String subtractTime(Date beginTime,Date endTime) throws ParseException {
-            if(endTime!=null){
-                BigDecimal bigDecimal = new BigDecimal(((endTime.getTime() - beginTime.getTime()) / (60* 1000)));
-                return bigDecimal.divide(new BigDecimal(60),2).toString();
-//                return String.valueOf(((endTime.getTime() - beginTime.getTime()) / ( 1000)) );
-
-            }else {
-                return "";
-//                endTime = new Date();
-//                return String.valueOf(((endTime.getTime() - beginTime.getTime()) / (60 * 60 * 1000)) % 24);
+            if(endTime==null) {
+                endTime = new Date();
             }
-
+        BigDecimal endDecimal = new BigDecimal(endTime.getTime());
+        BigDecimal beginDecimal = new BigDecimal(beginTime.getTime());
+        BigDecimal subTime =  endDecimal.subtract(beginDecimal).divide(new BigDecimal(1000),2).divide(new BigDecimal(60),2).divide(new BigDecimal(60),2);
+//        BigDecimal bigDecimal = new BigDecimal(((endTime.getTime() - beginTime.getTime()) / (60* 1000)));
+        return subTime.toString();
 //        System.out.println((((d2.getTime() - d1.getTime()) / (24 * 60 * 60 * 1000))) / 365 + "年");
 //        System.out.println((d2.getTime() - d1.getTime()) / (24 * 60 * 60 * 1000) + "天");
 //        System.out.println((((d2.getTime() - d1.getTime()) / (60 * 60 * 1000)) % 24) + "小时");

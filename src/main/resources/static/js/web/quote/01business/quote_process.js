@@ -82,6 +82,7 @@ $(function() {
 							return ""
 						}}
 			},
+			{field : 'bsjianche',title : '检测项目',"edit" : "text",width : 150,style : 'background-color:#ffffff'},
 			{field : 'fmemo',title : '备注',"edit" : "text",width : 200,style : 'background-color:#ffffff'},
 			// {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar',style : 'background-color:#ffffff'}
 			] ],

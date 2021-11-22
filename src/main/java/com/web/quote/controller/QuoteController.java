@@ -200,7 +200,7 @@ public class QuoteController extends WebController {
 		try {
 			Sort sort = Sort.unsorted();
 			ApiResponseResult result = quoteService.getMonBadeList(super.getPageRequest(sort));
-			logger.debug("获取报价中标率列表=getList:");
+			logger.debug("获取报价中标率列表=getMonBadeList:");
 //			getSysLogService().success(module,method, methodName, keyword);
 			return result;
 		} catch (Exception e) {
@@ -339,4 +339,19 @@ public class QuoteController extends WebController {
             return ApiResponseResult.failure("获取用户姓名信息失败！");
         }
     }
+
+
+	@ApiOperation(value = "下推数据到制造部", notes = "下推数据到制造部", hidden = true)
+	@RequestMapping(value = "/doPush", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult doPush(@RequestBody Map<String, Object> param) throws Exception{
+		try{
+			Long id = Long.parseLong(param.get("id").toString()) ;
+			ApiResponseResult result = quoteService.doPush(id);
+			return result;
+		}catch (Exception e){
+			e.printStackTrace();
+			return ApiResponseResult.failure("下推数据到制造部失败！");
+		}
+	}
 }

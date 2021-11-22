@@ -14,7 +14,7 @@ public interface QuoteService {
 	
 	public ApiResponseResult getProdType()throws Exception;//获取产品类型
 
-	public ApiResponseResult getMonBadeList(PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getMonBadeList(PageRequest pageRequest) throws Exception; //获取报价中标率列表
 	
 	public ApiResponseResult getList(String quoteId,String keyword,String status,String bsCode,String bsType,String bsStatus,
 									 String bsFinishTime,String bsRemarks,String bsProd,String bsSimilarProd,
@@ -46,4 +46,8 @@ public interface QuoteService {
 	public ApiResponseResult getStatus2(Long id) throws Exception;//外协填写审批状态
 
 	public ApiResponseResult getFreightStatus(Long id) throws Exception; //获取包装运输费填写审批状态
+
+
+	//去除审批逻辑，改为直接下发到制造部。 根据已存在的工艺和材料进行更新，不存在的进行新增
+	public ApiResponseResult doPush(Long id) throws Exception;
 }

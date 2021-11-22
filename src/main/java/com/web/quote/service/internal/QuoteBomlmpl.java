@@ -200,7 +200,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 		String excelPath = "static/excelFile/";
 		String fileName = "外购件清单模板.xlsx";
 		String[] map_arr = new String[]{"id","wcName","itemType","bsAgent","bsElement","bsComponent","bsMaterName","bsModel",
-										"bsGroups","fmemo","bsQty","unitName","purchaseUnit","bsExplain"};
+										"bsGroups","bsSingleton","fmemo","bsQty","unitName","purchaseUnit","bsExplain"};
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for(QuoteBom quoteBom :quoteBomList){
@@ -212,6 +212,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 			map.put("bsMaterName",quoteBom.getBsMaterName());
 			map.put("bsModel",quoteBom.getBsModel());
 			map.put("bsGroups",quoteBom.getBsGroups());
+			map.put("bsSingleton",quoteBom.getBsSingleton()==1?"是":"否");
 			if(quoteBom.getItp()!=null) {
 				map.put("itemType", quoteBom.getItp().getItemType());
 			}

@@ -185,10 +185,14 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 //					errInfo += "材料规格不能为空;";
 //				}
 				String bsGroups = tranCell(sheet.getRow(row).getCell(8));
+				String bsSingleton = tranCell(sheet.getRow(row).getCell(9));
+				if(bsSingleton.equals("1")||bsSingleton.equals("是")){
+					temp.setBsSingleton(1);
+				}
 				temp.setBsGroups(bsGroups);
 				bsGroupsArray[row]= bsGroups;
-				String fmemo = tranCell(sheet.getRow(row).getCell(9));
-				String bsQty = tranCell(sheet.getRow(row).getCell(10)); //hjj-20210119增加用量字段
+				String fmemo = tranCell(sheet.getRow(row).getCell(10));
+				String bsQty = tranCell(sheet.getRow(row).getCell(11)); //hjj-20210119增加用量字段
 //				String bsProQty = tranCell(sheet.getRow(row).getCell(10));
 //				if(StringUtils.isNoneEmpty(bsQty)){
 //					if(!bsQty.matches("^\\d+\\.\\d+$") && !bsQty.matches("^^\\d+$")){
@@ -203,7 +207,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 //					}
 //				}
 
-				String unit = tranCell(sheet.getRow(row).getCell(11));
+				String unit = tranCell(sheet.getRow(row).getCell(12));
 				if(StringUtils.isNotEmpty(unit)) {
 //					List<Unit> unitList = unitDao.findByUnitNameAndDelFlag(unit, 0);
 					List<Unit> unitList = unitDao.findByUnitCodeAndDelFlag(unit, 0);
@@ -217,7 +221,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 //					errInfo += "单位不能为空";
 //				}
 				temp.setBsQty(bsQty);
-				String purchaseUnit = tranCell(sheet.getRow(row).getCell(12));
+				String purchaseUnit = tranCell(sheet.getRow(row).getCell(13));
 				if(StringUtils.isNotEmpty(purchaseUnit)){
 					List<Unit> unitList = unitDao.findByUnitCodeAndDelFlag(purchaseUnit, 0);
 					if(unitList.size()==0) {
@@ -228,7 +232,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 
 //				String bsWaterGap = tranCell(sheet.getRow(row).getCell(12));
 //				String bsCave = tranCell(sheet.getRow(row).getCell(13));
-				String bsExplain = tranCell(sheet.getRow(row).getCell(13));//lst-20210107增加采购说明字段
+				String bsExplain = tranCell(sheet.getRow(row).getCell(14));//lst-20210107增加采购说明字段
 
 
 //				temp.setBsWaterGap(bsWaterGap);
