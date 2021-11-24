@@ -356,6 +356,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			quoteBom.setBsAgent(temp.getBsAgent());
 			quoteBom.setBsRadix(temp.getBsRadix());
 			quoteBom.setBsExplain(temp.getBsExplain());
+			quoteBom.setBsSingleton(temp.getBsSingleton());
 			quoteBom.setCreateBy(userId);
 			quoteBom.setCreateDate(doExcelDate);
 			quoteBomList.add(quoteBom);

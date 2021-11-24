@@ -289,7 +289,14 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 //			return ApiResponseResult.failure("发起审批后不能取消确认");
 //		}
 //		List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
-		List<ProductMater> productMaterList = productMaterDao.selectPurchaseByUserId(quoteId,UserUtil.getSessionUser().getId());
+		Long userId = UserUtil.getSessionUser().getId();
+		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(userId);
+		List<ProductMater> productMaterList = new ArrayList<>();
+		if(lmp.size()>0) {
+			productMaterList = productMaterDao.selectPurchaseByUserId(quoteId, UserUtil.getSessionUser().getId());
+		}else {
+			 productMaterList = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+		}
 		for(ProductMater o : productMaterList){
 			//hjj-修改所有材料为未完成,只改成取消对应用户的材料单
 			o.setBsStatusPurchase(0);

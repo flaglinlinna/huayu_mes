@@ -59,7 +59,7 @@ $(function () {
                     // ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
                     ,
                     defaultToolbar: [],
-                    height: 'full-380'//固定表头&full-查询框高度
+                    height: 'full-240'//固定表头&full-查询框高度
                     , even: true,//条纹样式
                     page: true,
                     limit: 100,

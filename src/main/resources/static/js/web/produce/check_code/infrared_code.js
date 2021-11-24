@@ -16,6 +16,21 @@ $(function () {
                     table1 = layui.table, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect;
                 var laydate = layui.laydate;
 
+
+                //产出1 投入2
+                if(type==2){
+                    console.log(type);
+                    $('#title').html("红外投入");
+                    // $("input[name='isRecord'][value='0']").prop("checked", "checked");
+                    // $("input[name='isRecord']").attr("disabled","disabled");
+                    $('#titleType').html("红外投入");
+                }else if(type==1){
+                    console.log(type);
+                    $('#title').html("红外产出");
+                    $('#titleType').html("红外产出");
+                }
+
+
                 layui.form.render();
                 // 日期选择器
                 laydate.render({
@@ -36,7 +51,7 @@ $(function () {
                     // ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
                     ,
                     defaultToolbar: [],
-                    height: 'full-380'//固定表头&full-查询框高度
+                    height: 'full-240'//固定表头&full-查询框高度
                     , even: true,//条纹样式
                     page: false,
                     data: [],
@@ -374,14 +389,14 @@ function initComSelect(){
         },
         error: function (request, errorInfo) {
             // alert("请检查是否启动红外串口通信服务");
-            // layer.confirm('请检查是否启动红外串口通信服务？点击确认可下载', {
-            //     btn: ['确认','返回'] //按钮
-            // }, function(){
-            //     location.href = "../../ortherFile/comWeb.7z";//从文件夹内直接提取
-            // }, function(){
-            //     layer.closeAll();
-            //     loadAll();
-            // });
+            layer.confirm('请检查是否启动红外串口通信服务？点击确认可下载', {
+                btn: ['确认','返回'] //按钮
+            }, function(){
+                location.href = "../../ortherFile/comWeb.7z";//从文件夹内直接提取
+            }, function(){
+                layer.closeAll();
+                loadAll();
+            });
         }
     });
 }
@@ -436,6 +451,7 @@ function sendCom() {
 
         },
         error: function (request, errorInfo) {
+            stopSend();
         }
     });
 
