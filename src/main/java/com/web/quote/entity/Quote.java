@@ -316,6 +316,13 @@ public class Quote extends BaseEntity {
 	@ApiModelProperty(name = "bsCustName", value = "客户名称")
 	@Column(length = 150)
 	protected String bsCustName;
+
+	/**
+	 * 客户经理名称
+	 */
+	@ApiModelProperty(name = "bsCustManage", value = "客户经理名称")
+	@Column(length = 150)
+	protected String bsCustManage;
 	
 	/**
 	 * 市场定位
@@ -925,5 +932,13 @@ public class Quote extends BaseEntity {
 
 	public void setBsRate(BigDecimal bsRate) {
 		this.bsRate = bsRate;
+	}
+
+	public String getBsCustManage() {
+		return bsCustManage;
+	}
+
+	public void setBsCustManage(String bsCustManage) {
+		this.bsCustManage = bsCustManage;
 	}
 }

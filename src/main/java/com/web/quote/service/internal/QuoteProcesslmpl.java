@@ -160,7 +160,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 						o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
 					}
 
-				}else if (o.getItemType().startsWith("辅料")){
+				}else if (o.getItemType().startsWith("辅料")||o.getItemType().startsWith("油漆")){
 
 //				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
 					//2021-05-19 物料类型为 辅料 的，工序名称默认为 组装（如果存在组装工序）
@@ -249,7 +249,10 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		try {
 		for (Map<String,Object> map: bsNameList){
 			List<String> nameList = Arrays.asList(map.get("BSNAME").toString().split(","));
-			List<String> procNameList = Arrays.asList(map.get("PROCNAMES").toString().split(","));
+			List<String> procNameList = new ArrayList<>();
+			if(map.get("PROCNAMES")!=null){
+				procNameList = Arrays.asList(map.get("PROCNAMES").toString().split(","));
+			}
 			List<String> idsList = Arrays.asList(map.get("IDS").toString().split(","));
 			String s= Collections.min(idsList);
 			int minIndex = idsList.indexOf(s);
@@ -778,6 +781,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			sameQuote = true;
 		}else {
 			Quote quote = quoteDao.findById((long)quoteId);
+			//非复制的情况下，pkQuote是相同的
 			if(quote.getBsCopyId()==null){
 				sameQuote = true;
 			}

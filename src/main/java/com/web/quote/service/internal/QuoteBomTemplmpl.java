@@ -157,40 +157,50 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 					} else {
 						errInfo +=  "没有维护:"+ itp+" 物料类型;";
 					}
-				}
-
-				String bsAgent = tranCell(sheet.getRow(row).getCell(3)); //是否代采
-				if(StringUtils.isNotEmpty(bsAgent)) {
-					if (("是").equals(bsAgent)) {
+					if(itp.contains("代采")){
 						temp.setBsAgent(1);
 					}
 				}
 
-				String bsElement = tranCell(sheet.getRow(row).getCell(4));
+				//2021/11/29 去掉Excel中的代采字段，由物料类型的名称判断
+//				String bsAgent = tranCell(sheet.getRow(row).getCell(3)); //是否代采
+//				if(StringUtils.isNotEmpty(bsAgent)) {
+//					if (("是").equals(bsAgent)) {
+//						temp.setBsAgent(1);
+//					}
+//				}
+
+
+				String bsElement = tranCell(sheet.getRow(row).getCell(3));
 
 				if(!StringUtils.isNotEmpty(bsElement)){
 					errInfo += "组件名称不能为空;";
 				}
-				String bsComponent = tranCell(sheet.getRow(row).getCell(5));
+				String bsComponent = tranCell(sheet.getRow(row).getCell(4));
 				if(!StringUtils.isNotEmpty(bsComponent)){
 					errInfo += "零件名称不能为空;";
 				}
 
-				String bsMaterName = tranCell(sheet.getRow(row).getCell(6));
+				String bsMaterName = tranCell(sheet.getRow(row).getCell(5));
 //				if(!StringUtils.isNotEmpty(bsMaterName)){
 //					errInfo += "材料名称不能为空;";
 //				}
-				String bsModel = tranCell(sheet.getRow(row).getCell(7));
+				String bsModel = tranCell(sheet.getRow(row).getCell(6));
 //				if(!StringUtils.isNotEmpty(bsModel)){
 //					errInfo += "材料规格不能为空;";
 //				}
-				String bsGroups = tranCell(sheet.getRow(row).getCell(8));
-				String bsSingleton = tranCell(sheet.getRow(row).getCell(9));
-				if(bsSingleton.equals("1")||bsSingleton.equals("是")){
+				String bsGroups = tranCell(sheet.getRow(row).getCell(7));
+				String bsSingleton = tranCell(sheet.getRow(row).getCell(8));
+				if(("1").equals(bsSingleton)||("是").equals(bsSingleton)){
 					temp.setBsSingleton(1);
 				}
 				temp.setBsGroups(bsGroups);
 				bsGroupsArray[row]= bsGroups;
+				String bsInjection = tranCell(sheet.getRow(row).getCell(9));
+				if(("1").equals(bsInjection)||("是").equals(bsInjection)){
+					temp.setBsInjection(1);
+				}
+
 				String fmemo = tranCell(sheet.getRow(row).getCell(10));
 				String bsQty = tranCell(sheet.getRow(row).getCell(11)); //hjj-20210119增加用量字段
 //				String bsProQty = tranCell(sheet.getRow(row).getCell(10));
@@ -334,6 +344,7 @@ public class QuoteBomTemplmpl implements QuoteBomTempService {
 			quoteBom.setBsMaterName(temp.getBsMaterName());
 			quoteBom.setBsElement(temp.getBsElement());
 			quoteBom.setBsModel(temp.getBsModel());
+			quoteBom.setBsInjection(temp.getBsInjection());
 //			if(StringUtils.isNotEmpty(temp.getBsProQty())){
 //				quoteBom.setBsProQty(new BigDecimal(temp.getBsProQty()));
 //			}

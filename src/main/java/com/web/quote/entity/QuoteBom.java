@@ -214,6 +214,14 @@ public class QuoteBom extends BaseEntity {
 
 
 	/**
+	 * 模内注塑
+	 */
+	@ApiModelProperty(name = "bsInjection", value = "模内注塑")
+	@Column
+	protected Integer bsInjection = 0;
+
+
+	/**
 	 * 是否制造评估重审
 	 * 0否 1是
 	 */
@@ -535,5 +543,13 @@ public class QuoteBom extends BaseEntity {
 
 	public void setBsSingleton(Integer bsSingleton) {
 		this.bsSingleton = bsSingleton;
+	}
+
+	public Integer getBsInjection() {
+		return bsInjection;
+	}
+
+	public void setBsInjection(Integer bsInjection) {
+		this.bsInjection = bsInjection;
 	}
 }

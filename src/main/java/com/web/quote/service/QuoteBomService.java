@@ -19,18 +19,21 @@ public interface QuoteBomService {
 	//删除BOM 外购件清单列表
 	public ApiResponseResult deleteQuoteBom(String ids) throws Exception;
 
+	public ApiResponseResult getBomDetail(Long ids) throws Exception;
+
 	public ApiResponseResult updateRetrial(Long id,String type,Integer value)throws Exception;
 
 	public ApiResponseResult updateBsGroups(Long id,String bsGroups)throws Exception;
 
 
+	//导出BOM Excel
 	public void exportExcel(HttpServletResponse response, Long pkQuote) throws Exception;
 
 	//导入BOM Excel
 	public ApiResponseResult doQuoteBomExcel(MultipartFile[] file, Long pkQuote) throws Exception;
 
 	//获取BOM(外购件清单)列表
-	public ApiResponseResult getQuoteBomList(String keyword, String pkQuote, PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getQuoteBomList(String keyword, String pkQuote,String bsElement, PageRequest pageRequest) throws Exception;
 	
 	//确认完成外购件清单 （修改项目状态加保存界面编辑）
 	public ApiResponseResult doStatus(String quoteId,String code,List<QuoteBom> quoteBomList)throws Exception;

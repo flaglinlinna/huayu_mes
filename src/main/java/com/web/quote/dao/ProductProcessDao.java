@@ -38,6 +38,8 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsType(Integer delFlag,Long pkQuote,String bsType);
 
+	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsSingletonIsNot(Integer delFlag,Long pkQuote,Integer bsSingleton);
+
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNot(Integer delFlag,Long pkQuote,String bsType,Integer bsSingleton);
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonIsNotAndPurchaseUnitIsNot(Integer delFlag,Long pkQuote,String bsType,Integer bsSingleton,String unit);
@@ -49,6 +51,8 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 	Integer deleteByPkQuoteBom(Long pkQuote);
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsGroups(Integer delFlag,Long pkQuote,String bsGroups);
+
+	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonOrderByBsOrder(Integer delFlag,Long pkQuote,String bsType,Integer bsSingleton);
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsTypeOrderByBsOrder(Integer delFlag,Long pkQuote,String bsType);
 
@@ -125,10 +129,16 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 			nativeQuery = true)
 	Page<Map<String, Object>> getBomNameByPage(Long quoteId,String bsType, Pageable pageable);
 
+//	@Query(value = "select * from PRICE_PRODUCT_PROCESS p  where p.PK_QUOTE = ?1 and p.DEL_FLAG = 0 and p.bs_Type ='out' " +
+//			" and p.pk_proc in (select wr.pk_proc from BJ_BASE_PROC_ROLE wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from sys_user_role ur where ur.del_flag=0 and ur.user_id=?2)) order by p.bs_order",nativeQuery = true,
+//			countQuery="select count(*) from PRICE_PRODUCT_PROCESS p  where p.PK_QUOTE = ?1 and p.DEL_FLAG = 0 and p.bs_Type ='out' " +
+//					" and p.pk_proc in (select wr.pk_proc from BJ_BASE_PROC_ROLE wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from sys_user_role ur where ur.del_flag=0 and ur.user_id=?2)) ")
+//	public Page<ProductProcess> findOutListByUserId(long pkQuote, Long userId,Pageable pageable);
+
 	@Query(value = "select * from PRICE_PRODUCT_PROCESS p  where p.PK_QUOTE = ?1 and p.DEL_FLAG = 0 and p.bs_Type ='out' " +
-			" and p.pk_proc in (select wr.pk_proc from BJ_BASE_PROC_ROLE wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from sys_user_role ur where ur.del_flag=0 and ur.user_id=?2)) order by p.bs_order",nativeQuery = true,
+			" ",nativeQuery = true,
 			countQuery="select count(*) from PRICE_PRODUCT_PROCESS p  where p.PK_QUOTE = ?1 and p.DEL_FLAG = 0 and p.bs_Type ='out' " +
-					" and p.pk_proc in (select wr.pk_proc from BJ_BASE_PROC_ROLE wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from sys_user_role ur where ur.del_flag=0 and ur.user_id=?2)) ")
+					" ")
 	public Page<ProductProcess> findOutListByUserId(long pkQuote, Long userId,Pageable pageable);
 
 

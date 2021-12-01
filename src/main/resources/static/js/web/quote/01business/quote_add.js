@@ -81,7 +81,7 @@ $(function() {
 						"bsDevType" : data.data.bsDevType,
 						"bsProjVer":data.data.bsProjVer,
 						"bsStage":data.data.bsStage,
-						"bsLatest":data.data.bsLatest,
+						"bsCustManage":data.data.bsCustManage,
 						"bsCustName" : data.data.bsCustName,
 						"bsPosition" : data.data.bsPosition,
 						"bsChkOut" : data.data.bsChkOut,

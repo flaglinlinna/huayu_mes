@@ -116,7 +116,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 		o.setBsMaterName(quoteBom.getBsMaterName().trim());
 		o.setBsModel(quoteBom.getBsModel());
 		o.setPurchaseUnit(quoteBom.getPurchaseUnit());
-//		o.setBsQty(quoteBom.getBsQty());
+		o.setBsQty(quoteBom.getBsQty());
 		o.setBsRadix(quoteBom.getBsRadix());
 		o.setBsExplain(quoteBom.getBsExplain());
 //		o.setBsUnit(quoteBom.getBsUnit());
@@ -177,7 +177,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 	}
 
 	/**
-	 * 外购件清单列表修改重审状态
+	 * 外购件清单列表修改分组
 	 * **/
 	public ApiResponseResult updateBsGroups(Long id,String bsGroups) throws Exception{
 		if(id == null){
@@ -199,8 +199,9 @@ public class QuoteBomlmpl implements QuoteBomService {
 //		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlag(0);
 		String excelPath = "static/excelFile/";
 		String fileName = "外购件清单模板.xlsx";
-		String[] map_arr = new String[]{"id","wcName","itemType","bsAgent","bsElement","bsComponent","bsMaterName","bsModel",
-										"bsGroups","bsSingleton","fmemo","bsQty","unitName","purchaseUnit","bsExplain"};
+//		去掉代采 "bsAgent"
+		String[] map_arr = new String[]{"id","wcName","itemType","bsElement","bsComponent","bsMaterName","bsModel",
+										"bsGroups","bsSingleton","bsInjection","fmemo","bsQty","unitName","purchaseUnit","bsExplain"};
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for(QuoteBom quoteBom :quoteBomList){
@@ -211,6 +212,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 			map.put("bsComponent",quoteBom.getBsComponent());
 			map.put("bsMaterName",quoteBom.getBsMaterName());
 			map.put("bsModel",quoteBom.getBsModel());
+			map.put("bsInjection",quoteBom.getBsInjection()==1?"是":"否");
 			map.put("bsGroups",quoteBom.getBsGroups());
 			map.put("bsSingleton",quoteBom.getBsSingleton()==1?"是":"否");
 			if(quoteBom.getItp()!=null) {
@@ -242,7 +244,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 	/**
 	 * 获取报价单列表
 	 * **/
-	public ApiResponseResult getQuoteBomList(String keyword,String pkQuote,PageRequest pageRequest) throws Exception{
+	public ApiResponseResult getQuoteBomList(String keyword,String pkQuote,String bsElement,PageRequest pageRequest) throws Exception{
 		// 查询条件1
 		List<SearchFilter> filters = new ArrayList<>();
 		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
@@ -250,6 +252,9 @@ public class QuoteBomlmpl implements QuoteBomService {
 		List<SearchFilter> filters1 = new ArrayList<>();
 		if (StringUtils.isNotEmpty(keyword)) {
 			filters1.add(new SearchFilter("bsComponent", SearchFilter.Operator.LIKE, keyword));
+		}
+		if (StringUtils.isNotEmpty(bsElement)&&!"null".equals(bsElement)){
+			filters1.add(new SearchFilter("bsElement", SearchFilter.Operator.LIKE, bsElement));
 		}
 		if (!"null".equals(pkQuote)&&pkQuote!=null) {
 			filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
@@ -440,6 +445,21 @@ public class QuoteBomlmpl implements QuoteBomService {
 		// TODO Auto-generated method stub
 //		List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsNameOrderByBsOrder(0,Long.valueOf(quoteId),name);
 		quoteBomDao.saveAll(quoteBomList);
+		long quoteId = quoteBomList.get(0).getPkQuote();
+		List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteOrderById(0,quoteId);
+		//20210420-hjj-下发工艺流程(先判断工艺是否为空)
+		if(quoteProcessList.size()==0){
+			//工艺为空，根据bom下发工艺
+			quoteProcessService.addProcessByBom(quoteId);
+		}else {
+			//不为空，则根据bom新增情况下发编辑
+			quoteProcessService.editProcessByBom(quoteProcessList,quoteId);
+		}
 		return ApiResponseResult.success();
+	}
+
+	@Override
+	public ApiResponseResult getBomDetail(Long ids) throws Exception {
+		return ApiResponseResult.success().data(quoteBomDao.findById(ids));
 	}
 }

@@ -121,12 +121,18 @@
 							<!--</select>-->
 						<!--</div>-->
 
-						<label class="layui-form-label layui-required">是否最新</label>
-						<div class="layui-input-inline" style="width: 200px;">
-							<input type="radio" name="bsLatest" lay-filter="bsLatest"
-								   value="1" title="是&#12288;">
-							<input type="radio" name="bsLatest" lay-filter="bsLatest" value="0" title="否" checked>
+<!--						<label class="layui-form-label layui-required">是否最新</label>-->
+<!--						<div class="layui-input-inline" style="width: 180px;">-->
+<!--							<input type="radio" name="bsLatest" lay-filter="bsLatest"-->
+<!--								   value="1" title="是&#12288;">-->
+<!--							<input type="radio" name="bsLatest" lay-filter="bsLatest" value="0" title="否" checked>-->
 
+<!--						</div>-->
+
+						<label class="layui-form-label">相似产品</label>
+						<div class="layui-input-inline" style="width: 180px;">
+							<input id="bsSimilarProd" autocomplete="off" name="bsSimilarProd"
+								   class="layui-input" type="text" />
 						</div>
 
 					</div>
@@ -134,15 +140,16 @@
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-inline">
-					<label class="layui-form-label">相似产品</label>
-					<div class="layui-input-inline" style="width: 160px;">
-						<input id="bsSimilarProd" autocomplete="off" name="bsSimilarProd"
-							class="layui-input" type="text" />
-					</div>
+
 						<label class="layui-form-label layui-required">客户名称</label>
-						<div class="layui-input-inline" style="width: 180px;">
+						<div class="layui-input-inline" style="width: 160px;">
 							<input id="bsCustName" lay-verify="required" autocomplete="off"
 								name="bsCustName" class="layui-input" type="text" />
+						</div>
+						<label class="layui-form-label">客户经理名称</label>
+						<div class="layui-input-inline" style="width: 180px;">
+							<input id="bsCustManage" autocomplete="off" name="bsCustManage"
+								   class="layui-input" type="text" />
 						</div>
 						<label class="layui-form-label layui-required">市场定位</label>
 						<div class="layui-input-inline" style="width: 350px;">

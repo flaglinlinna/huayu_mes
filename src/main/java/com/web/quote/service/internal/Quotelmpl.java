@@ -181,6 +181,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         }
         quoteBomDao.saveAll(newQuoteBomList);
 
+
         List<QuoteFile> copyQuoteFileList =  quoteFileDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
         List<QuoteFile> newQuoteFileList = new ArrayList<>();
         for (QuoteFile o: copyQuoteFileList){
@@ -193,9 +194,19 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         }
         quoteFileDao.saveAll(newQuoteFileList);
 
+        //2.3 工艺需要判断工序 是否是检验测试包装
+        List<String> newName =Arrays.asList("测试","检验","包装");
+
         List<QuoteProcess> copyQuoteProcessList = quoteProcessDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
         List<QuoteProcess> newQuoteProcessList = new ArrayList<>();
         for (QuoteProcess o: copyQuoteProcessList){
+
+            if(o.getPkProc()!=null&&o.getProc()!=null){
+                if(newName.contains(o.getProc().getProcName())){
+                    break;
+                }
+            }
+
             QuoteProcess quoteProcess = new QuoteProcess();
             BeanUtils.copyProperties(o,quoteProcess);
 
@@ -239,6 +250,11 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuote(0,quote.getBsCopyId());
         List<ProductProcess> newProductProcess = new ArrayList<>();
         for(ProductProcess o:productProcessList){
+            if(o.getPkProc()!=null&&o.getProc()!=null){
+                if(newName.contains(o.getProc().getProcName())){
+                    break;
+                }
+            }
             ProductProcess productProcess = new ProductProcess();
             BeanUtils.copyProperties(o,productProcess);
             productProcess.setId(null);
@@ -304,7 +320,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         String sql = "select distinct p.id,p.bs_Code,p.bs_Type,p.bs_Status,p.bs_Finish_Time,p.bs_Remarks,p.bs_Prod,"
                 + "p.bs_Similar_Prod,p.bs_Dev_Type,p.bs_Prod_Type,p.bs_Cust_Name,p.bs_position,p.bs_Manage_fee,  " +
                 "p.bs_Material,p.bs_Chk_Out_Item,p.bs_Chk_Out,p.bs_Function_Item,p.bs_Function,p.bs_Require,p.bs_Level," +
-                "p.bs_Cust_Require,i.bs_status bs_status_check,p.bs_proj_ver,p.bs_bade,p.bs_latest,p.bs_stage ,u.USER_NAME,TO_CHAR(p.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss') from "+Quote.TABLE_NAME+" p " +
+                "p.bs_Cust_Require,i.bs_status bs_status_check,p.bs_proj_ver,p.bs_bade,p.bs_latest,p.bs_stage ,u.USER_NAME,TO_CHAR(p.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss'),p.bs_cust_manage from "+Quote.TABLE_NAME+" p " +
                 " left join (select t.pk_quote,min(t.bs_status)bs_status from "+QuoteItem.TABLE_NAME+" t where " +
                 " t.bs_style='item' group by t.pk_quote) i on i.pk_quote=p.id"
                 + " LEFT JOIN SYS_USER u on u.id = p.create_by"
@@ -412,6 +428,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             map1.put("bsStage",object[25]);
             map1.put("userName",object[26]);
             map1.put("createDate",object[27]);
+            map1.put("bsCustManage",object[28]);
             list_new.add(map1);
         }
 
@@ -535,6 +552,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         o.setBsProjVer(quote.getBsProjVer());
         o.setBsLatest(quote.getBsLatest());
         o.setBsStage(quote.getBsStage());
+        o.setBsCustManage(quote.getBsCustManage());
         quoteDao.save(o);
         return ApiResponseResult.success("编辑成功！");
     }

@@ -74,20 +74,20 @@
 						</shiro:lacksPermission>
 
 
-						<shiro:hasPermission name="quoteProcess-dostatus">
-							<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="savebtn" onclick="saveProc()">确认完成</button>
-						</shiro:hasPermission>
-						<shiro:lacksPermission name="quoteProcess-dostatus">
-							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button"  disabled="disabled" >确认完成</button>
-						</shiro:lacksPermission>
+<!--						<shiro:hasPermission name="quoteProcess-dostatus">-->
+<!--							<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="savebtn" onclick="saveProc()">确认完成</button>-->
+<!--						</shiro:hasPermission>-->
+<!--						<shiro:lacksPermission name="quoteProcess-dostatus">-->
+<!--							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button"  disabled="disabled" >确认完成</button>-->
+<!--						</shiro:lacksPermission>-->
 
 
-						<shiro:hasPermission name="quoteProcess-cancel">
-							<button class="layui-btn layui-btn-sm" type="button" id="cancelbtn" onclick="cancelStatus()">取消完成</button>
-						</shiro:hasPermission>
-						<shiro:lacksPermission name="quoteProcess-cancel">
-							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button"  disabled="disabled">取消完成</button>
-						</shiro:lacksPermission>
+<!--						<shiro:hasPermission name="quoteProcess-cancel">-->
+<!--							<button class="layui-btn layui-btn-sm" type="button" id="cancelbtn" onclick="cancelStatus()">取消完成</button>-->
+<!--						</shiro:hasPermission>-->
+<!--						<shiro:lacksPermission name="quoteProcess-cancel">-->
+<!--							<button class="layui-btn layui-btn-sm layui-btn-disabled" type="button"  disabled="disabled">取消完成</button>-->
+<!--						</shiro:lacksPermission>-->
 
 
 						<shiro:hasPermission name="quoteProcess-save">
@@ -201,6 +201,160 @@
 				
 
 				
+			</form>
+		</div>
+
+		<div id="setQuoteBom" class="layer_self_wrap" style="display: none; margin-left: 10px;">
+
+			<form id="quoteBomForm" class="layui-form layui-form-pane"
+				  lay-filter="quoteBomForm" method="post" action=""
+				  style="margin-top: 20px;">
+				<input id="pageNum2" type="hidden" name="pageNum" />
+				<input id="id2" type="hidden" name="id" />
+				<input id="pkQuote" type="hidden" name="pkQuote" />
+				<input id="pkBjWorkCenter" type="hidden" name="pkBjWorkCenter" />
+				<input id="pkItemTypeWg" type="hidden" name="pkItemTypeWg" />
+				<input id="pkUnit" type="hidden" name="pkUnit" />
+
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label layui-required">组件名称</label>
+						<div class="layui-input-block" style="width:200px">
+							<input id="bsElement2" name="bsElement" placeholder="请输入组件名称"
+								   lay-verify="required" autocomplete="off" class="layui-input"
+								   type="text" />
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label layui-required ">零件名称</label>
+						<div class="layui-input-block" style="width:200px">
+							<input id="bsComponent" name="bsComponent" placeholder="请输入零件名称"
+								   lay-verify="required" autocomplete="off" class="layui-input"
+								   type="text" />
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label layui-required">工作中心</label>
+						<div class="layui-input-block" style="width:200px">
+							<input id="BjWorkCenter" name="BjWorkCenter"
+								   lay-filter="BjWorkCenter" lay-verify="required"
+								   readonly="readonly" placeholder="请选择工作中心" class="layui-input"
+								   type="text" autocomplete="off" />
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label layui-required">物料类型</label>
+						<div class="layui-input-block" style="width:200px">
+							<!--<select id="pkItemTypeWg" name="pkItemTypeWg" lay-filter="pkItemTypeWg" placeholder="请选择物料类型"   autocomplete="off" >-->
+							<!--</select>-->
+							<input id="ItemTypeWg" name="ItemTypeWg" lay-filter="ItemTypeWg"
+								   lay-verify="required" readonly="readonly" placeholder="请选择物料类型"
+								   class="layui-input" type="text" autocomplete="off" />
+						</div>
+					</div>
+				</div>
+
+				<input id="priceComm" name="priceComm" lay-filter="priceComm"
+					   readonly="readonly" placeholder="请选择物料类型"
+					   class="layui-input" type="hidden" autocomplete="off" />
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">材料名称</label>
+					<div class="layui-input-block" style="width:530px">
+						<input id="bsMaterName" name="bsMaterName" lay-verify="required"
+							   placeholder="请输入材料名称" autocomplete="off" class="layui-input"
+							   type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label ">BOM用量</label>
+						<div class="layui-input-block" style="width:200px">
+							<input id="bsQty" name="bsQty" placeholder="请输入BOM用量"
+								   lay-verify="double" autocomplete="off" class="layui-input"
+								   type="text" />
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label ">是否客户代采</label>
+						<div class="layui-input-block" style="width:200px">
+							<select id="bsAgent" name="bsAgent"  lay-filter="bsAgent" >
+								<option value="">请选择</option>
+								<option value="0">否</option>
+								<option value="1">是</option>
+							</select>
+						</div>
+					</div>
+
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label layui-required">BOM用量单位</label>
+						<div class="layui-input-block" style="width:200px">
+							<!--<select id="pkUnit" name="pkUnit" placeholder="请选择单位" lay-filter="pkUnit"   autocomplete="off">-->
+							<!--</select>-->
+							<input id="Unit" name="Unit" lay-filter="Unit" readonly="readonly"
+								   placeholder="请选择单位" class="layui-input" type="text"
+								   autocomplete="off" />
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label ">采购单位</label>
+						<div class="layui-input-block" style="width:200px">
+							<input id="purchaseUnit" name="purchaseUnit" lay-filter="purchaseUnit"
+								   placeholder="请输入采购单位"
+								   autocomplete="off" class="layui-input"
+								   type="text" />
+						</div>
+					</div>
+				</div>
+
+
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">材料规格</label>
+					<div class="layui-input-block" style="width:530px">
+						<textarea id="bsModel" name="bsModel" placeholder="请输入材料规格"
+								  lay-verify="required" class="layui-textarea"></textarea>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label layui-required">工艺说明</label>
+					<div class="layui-input-block" style="width:530px">
+						<input id="fmemo" name="fmemo" placeholder="请输入工艺说明"
+							   lay-verify="required" autocomplete="off" class="layui-input"
+							   type="text" />
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label ">采购说明</label>
+					<div class="layui-input-block" style="width:530px">
+						<input id="bsExplain" name="bsExplain" placeholder="请输入采购说明"
+							   autocomplete="off" class="layui-input"
+							   type="text" />
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label ">损耗合计分组</label>
+					<div class="layui-input-block" style="width:530px">
+						<input id="bsGroups" name="bsGroups" placeholder="请输入损耗合计分组名称"
+							   autocomplete="off" class="layui-input"
+							   type="text" />
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-input-block" style="margin-left: 10px;">
+						<button class="layui-btn layui-btn-sm" lay-submit=""
+								lay-filter="addBomSubmit">提交</button>
+						<button type="reset"
+								class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+					</div>
+				</div>
 			</form>
 		</div>
 

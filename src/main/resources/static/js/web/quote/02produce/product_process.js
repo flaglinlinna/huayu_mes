@@ -183,6 +183,12 @@ $(function() {
 						}
 
 					}else {
+
+						if (item.bsStatus == 1) {
+							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
+							$("select[name='selectModelType']").attr("disabled", "disabled");
+							form.render('select');
+						}
 						if(iStatus>=2){
 							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
 							$("select[name='selectModelType']").attr("disabled", "disabled");

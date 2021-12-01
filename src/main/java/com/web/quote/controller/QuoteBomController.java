@@ -39,12 +39,14 @@ public class QuoteBomController extends WebController {
 
 	@ApiOperation(value = "报价项目-Bom", notes = "报价项目-Bom", hidden = true)
 	@RequestMapping(value = "/toQuoteBom")
-	public ModelAndView toQuoteBom(String quoteId,String code) {
+	public ModelAndView toQuoteBom(String quoteId,String code,String bomId,String bsElement) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),code);
 			mav.addObject("code", code);
 			mav.addObject("quoteId", quoteId);
+			mav.addObject("bomId", bomId);
+			mav.addObject("bsElement", bsElement);
 			mav.addObject("nowStatus", iStatus);
 			mav.setViewName("/web/quote/01business/quote_bom");// 返回路径
 		} catch (Exception e) {
@@ -89,6 +91,24 @@ public class QuoteBomController extends WebController {
 			logger.error("编辑外购件清单信息编辑失败！", e);
 			getSysLogService().error(module, method, methodName, quoteBom.toString() + "," + e.toString());
 			return ApiResponseResult.failure("编辑外购件清单信息编辑失败！");
+		}
+	}
+
+	@ApiOperation(value = "获取外购件清单信息详细信息", notes = "获取外购件清单信息详细信息", hidden = true)
+	@RequestMapping(value = "/getDetail", method = RequestMethod.POST)
+	@ResponseBody
+	public ApiResponseResult getDetail(@RequestBody Map<String, Object> params) {
+//		String method = "quoteBom/getDetail";
+//		String methodName = "获取外购件清单信息详细信息";
+		long id = Long.parseLong(params.get("id").toString());
+		try {
+			ApiResponseResult result = quoteBomService.getBomDetail(id);
+			logger.debug("获取外购件清单信息详细信息=getDetail:");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取外购件清单信息详细信息失败！", e);
+			return ApiResponseResult.failure("获取外购件清单信息详细信息失败！");
 		}
 	}
 
@@ -142,11 +162,11 @@ public class QuoteBomController extends WebController {
 	@ApiOperation(value = "获取报价BOM清单列表", notes = "获取报价BOM清单列表",hidden = true)
 	@RequestMapping(value = "/getQuoteBomList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getQuoteBomList(String keyword,String pkQuote) {
+	public ApiResponseResult getQuoteBomList(String keyword,String pkQuote,String bsElement) {
 		String method = "quoteBom/getQuoteBomList";String methodName ="获取报价BOM清单列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.ASC, "id");
-			ApiResponseResult result = quoteBomService.getQuoteBomList(keyword,pkQuote, super.getPageRequest(sort));
+			ApiResponseResult result = quoteBomService.getQuoteBomList(keyword,pkQuote,bsElement, super.getPageRequest(sort));
 			logger.debug("获取报价BOM清单列表=getList:");
 			return result;
 		} catch (Exception e) {

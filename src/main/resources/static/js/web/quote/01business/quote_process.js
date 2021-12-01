@@ -7,14 +7,15 @@ var materNameFlag = 0;
 $(function() {
 	layui.use([ 'form', 'table', 'tableSelect','tableFilter'  ], function() {
 		var table = layui.table, table1 = layui.table,form = layui.form, tableSelect = layui.tableSelect,
-			tableSelect1 = layui.tableSelect,tableFilter = layui.tableFilter;
+			tableSelect1 = layui.tableSelect,tableFilter = layui.tableFilter
+			,tableSelect3 = layui.tableSelect,tableSelect4 = layui.tableSelect,tableSelect5 = layui.tableSelect;
 		isComplete()
 		tableIns = table.render({
 			elem : '#client_procList',
 			url : context + '/quoteProcess/getList?pkQuote='+ quoteId,
 			method : 'get', // 默认：get请求
 			cellMinWidth : 80,
-			toolbar: '#toolbar',
+			// toolbar: '#toolbar',
 			height : 'full-65',
 			even : true,// 条纹样式
 			page : true,
@@ -38,7 +39,15 @@ $(function() {
 				{fixed : 'left',type:'checkbox'},
 				{fixed : 'left',type : 'numbers'},
 			{fixed : 'left',field:'id',title:'ID', width:80, hide:true},
-			{fixed : 'left',field : 'bsElement',width : 150,sort:true,title : '组件名称',style : 'background-color:#d2d2d2'},
+			{fixed : 'left',field : 'bsElement',width : 150,sort:true,title : '组件名称',style : 'background-color:#d2d2d2',
+				templet: function (d) {
+					if (d.bsElement != null) {
+						var parms = d.pkQuote+","+d.id+",'"+d.quote.bsCode+"'"+",'"+d.bsElement+"'";
+						return '<div><a  style="text-decoration:underline;color:blue;cursor: pointer;"; onclick="toBomPage('+parms+')">' + d.bsElement + '</a></div>'
+					} else {
+						return '';
+					}
+				}},
 			{fixed : 'left',field : 'bsName',width : 200,sort:true,title : '零件名称',style : 'background-color:#d2d2d2'},
 			{fixed : 'left',field : 'bsLinkName',width : 180,sort:true,title : '所属零件',style : 'background-color:#ffffff',templet :  '#selectLink'},
 			{field : 'itemType',title : '物料类型',width : 120,sort:true,style : 'background-color:#d2d2d2'},
@@ -67,7 +76,15 @@ $(function() {
 
 				// ,templet : '#selectBsMaterName'
 				{field : 'bsGroups',width : 130,title : '损耗分组',"edit" : "text",style : 'background-color:#ffffff'},
-				{field : 'bsMaterName',width : 220,title : '材料名称',style : 'background-color:#ffffff',"edit" : "text"},
+				{field : 'bsMaterName',width : 220,title : '材料名称',
+					templet: function (d){
+						if(d.bsMaterName!=null){
+							return 	'<div><a  style="text-decoration:underline;color:blue;cursor: pointer;"; onclick="openBomEdit('+d.pkQuoteBom+')">'+d.bsMaterName+'</a></div>'
+						}else {
+							return '';
+						}
+					}
+						},
 				// ,templet : '#selectBsMaterName',,templet : '#selectBsGroups'
 			// 	templet : function(d) {
 			// 		if (d.fmemo == null) {return ""} else {return d.fmemo}
@@ -82,7 +99,7 @@ $(function() {
 							return ""
 						}}
 			},
-			{field : 'bsjianche',title : '检测项目',"edit" : "text",width : 150,style : 'background-color:#ffffff'},
+			// {field : 'bsjianche',title : '检测项目',"edit" : "text",width : 150,style : 'background-color:#ffffff'},
 			{field : 'fmemo',title : '备注',"edit" : "text",width : 200,style : 'background-color:#ffffff'},
 			// {fixed : 'right',title : '操作',width : 100,align : 'center',toolbar : '#optBar',style : 'background-color:#ffffff'}
 			] ],
@@ -216,6 +233,129 @@ $(function() {
 						data:[]
 					});
 				}
+			}
+		});
+
+
+		tableSelect3 = tableSelect3.render({
+			elem : '#BjWorkCenter',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '内部编码搜索',
+			table : {
+				url : context + '/basePrice/workCenter/getList',
+				method : 'get',
+				parseData : function(res) {// 可进行数据操作
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+				cols : [ [ {type : 'radio'},// 单选 radio
+					{field : 'id',title : 'id',width : 0,hide : true},
+					{type : 'numbers'},
+					{field : 'workcenterCode',title : '工作中心编号',},
+					{field : 'workcenterName',title : '工作中心名称',},
+					{field : 'fmemo',title : '备注'} ] ],
+				page : true,
+				request : {
+					pageName : 'page', // 页码的参数名称，默认：page
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+
+			},
+			done : function(elem, data) {
+				var da = data.data;
+				// 选择完后的回调，包含2个返回值
+				// elem:返回之前input对象；data:表格返回的选中的数据 []
+				form.val("quoteBomForm", {
+					"pkBjWorkCenter" : da[0].id,
+					"BjWorkCenter" : da[0].workcenterName,
+				});
+				form.render();// 重新渲染
+			}
+		});
+
+		tableSelect4 = tableSelect4.render({
+			elem : '#ItemTypeWg',
+			searchKey : 'keyword',
+			checkedKey : 'ID',
+			searchPlaceholder : '关键字搜索',
+			table : {
+				url : context + '/basePrice/itemTypeWg/getList',
+				method : 'get',
+				parseData : function(res) {// 可进行数据操作
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+				cols : [ [ {type : 'radio'},// 单选 radio
+					{type : 'numbers'},
+					{field : 'id',title : 'id',width : 0,hide : true},
+					{field : 'itemType',title : '物料类型',width : 150},
+					{field : 'fmemo',title : '备注',width : 150} ] ],
+				page : true,
+				request : {
+					pageName : 'page', // 页码的参数名称，默认：page
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+			},
+			done : function(elem, data) {// elem:返回之前input对象；data:表格返回的选中的数据
+				// []
+				var da = data.data;
+				form.val("quoteBomForm", {
+					"pkItemTypeWg" : da[0].id,
+					"ItemTypeWg" : da[0].itemType
+				});
+				form.render();// 重新渲染
+			}
+		});
+
+		tableSelect5 = tableSelect5.render({
+			elem : '#Unit',
+			searchKey : 'keyword',
+			checkedKey : 'id',
+			searchPlaceholder : '关键字搜索',
+			table : {
+				url : context + '/basePrice/unit/getList',
+				method : 'get',
+				parseData : function(res) {
+					// 可进行数据操作
+					return {
+						"count" : res.data.total,
+						"msg" : res.msg,
+						"data" : res.data.rows,
+						"code" : res.status
+						// code值为200表示成功
+					}
+				},
+				cols : [ [ {type : 'radio'},// 单选 radio
+					{field : 'id',title : 'id',width : 0,hide : true},
+					{type : 'numbers'},
+					{field : 'unitCode',title : '单位编码'},
+					{field : 'unitName',title : '单位名称',} ] ],
+				page : true,
+				request : {
+					pageName : 'page', // 页码的参数名称，默认：page
+					limitName : 'rows' // 每页数据量的参数名，默认：limit
+				},
+			},
+			done : function(elem, data) {
+				var da = data.data;
+				// 选择完后的回调，包含2个返回值
+				// elem:返回之前input对象；data:表格返回的选中的数据 []
+				form.val("quoteBomForm", {
+					"pkUnit" : da[0].id,
+					"Unit" : da[0].unitCode
+				});
+				form.render();// 重新渲染
 			}
 		});
 
@@ -699,6 +839,13 @@ $(function() {
 				});
 			});
 		}
+
+		// 监听提交
+		form.on('submit(addBomSubmit)', function(data) {
+			editBomSubmit(data);
+			return false;
+		});
+
 		// 填写备注
 		function doFmemo(id, fmemo) {
 			var param = {
@@ -722,6 +869,84 @@ $(function() {
 		}
 	});
 });
+
+// 编辑外购件清单信息提交
+function editBomSubmit(obj) {
+	CoreUtil.sendAjax("/quoteBom/edit", JSON.stringify(obj.field), function(data) {
+		if (data.result) {
+			layer.alert("操作成功", function() {
+				layer.closeAll();
+				// cleanProdErr();
+				layui.form.render();// 必须写
+				// 加载页面
+				loadAll();
+			});
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+}
+
+function toBomPage(pkQuote,id,bsCode,bsElement){
+	console.log(bsCode);
+	var titleInfo = "("+bsCode.substring(bsCode.length-4)+")";
+	var link="/quoteBom/toQuoteBom?bsElement="+bsElement+"&quoteId="+pkQuote+"&code="+"A001";
+	parent.layui.index.openTabsPage(link,bsElement+titleInfo);
+}
+
+// 编辑Bom的弹出框
+function openBomEdit(id, title) {
+	var params = {
+		"id" : id,
+	};
+	CoreUtil.sendAjax("/quoteBom/getDetail", JSON.stringify(params), function(data) {
+		if (data.result) {
+			var obj = data.data;
+			layui.form.val("quoteBomForm", {
+				"id" : obj.id,
+				"bsComponent" : obj.bsComponent,
+				"bsElement" : obj.bsElement,
+				"pkBjWorkCenter" : obj.pkBjWorkCenter,
+				"BjWorkCenter" : obj.pkBjWorkCenter==null?"":obj.wc.workcenterName,
+				"pkItemTypeWg" : obj.pkItemTypeWg,
+				"ItemTypeWg" : obj.pkItemTypeWg==null?"":obj.itp.itemType,
+				"bsMaterName" : obj.bsMaterName,
+				"bsModel" : obj.bsModel,
+				"bsExplain" : obj.bsExplain,
+				"bsGroups":obj.bsGroups,
+				"fmemo" : obj.fmemo,
+				"bsProQty" : obj.bsProQty,
+				"pkUnit" : obj.pkUnit,
+				"Unit" : obj.pkUnit==null?"":obj.pkUnit.unitName,
+				"purchaseUnit": obj.purchaseUnit,
+				"bsAgent":obj.bsAgent,
+				"bsQty":obj.bsQty,
+			});
+			layui.form.render();// 必须写
+		} else {
+			layer.alert(data.msg);
+		}
+	}, "POST", false, function(res) {
+		layer.alert(res.msg);
+	});
+
+	var index = layer.open({
+		type : 1,
+		title : title,
+		fixed : false,
+		resize : false,
+		shadeClose : true,
+		area : [ '550px' ],
+		content : $('#setQuoteBom'),
+		end : function() {
+			$('#quoteBomForm')[0].reset();
+			layui.form.render();// 必须写
+		}
+	});
+	layer.full(index);
+}
 
 //更新材料名称
 function updateBsMaterName(id,bomId) {

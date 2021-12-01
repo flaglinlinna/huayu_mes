@@ -58,8 +58,8 @@ public class OrganizationController extends WebController {
 		ModelAndView mav = new ModelAndView("/system/organization/orgList");
 		try {
 			List<SysOrganization> permList = organizationService.permList();
-			logger.debug("组织列表查询=permList:" + permList);
-			getSysLogService().success(module,method,methodName,permList);
+//			logger.debug("组织列表查询=permList:" + permList);
+//			getSysLogService().success(module,method,methodName,permList);
 			mav.addObject("permList", permList);
 			mav.addObject("msg", "ok");
 		} catch (Exception e) {

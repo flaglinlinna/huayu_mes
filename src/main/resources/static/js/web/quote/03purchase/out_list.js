@@ -128,6 +128,7 @@ $(function() {
 				done : function(res, curr, count) {
 					pageCurr = curr;
 					localtableFilterIns.reload();
+					var tableIns2 = this.elem.next();
 					res.data.forEach(function (item, index) {
 						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
 						if(item.bsQuoteStatus !="99") {
@@ -148,6 +149,7 @@ $(function() {
 							if(item.bsStatus2==5){
 								$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#FF0000');
 							}
+
 
 						}else {
 							$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#979797');

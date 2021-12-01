@@ -276,7 +276,7 @@ public class ProductProcesslmpl implements ProductProcessService {
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
         filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, quoteId));
         Specification<ProductProcess> spec = Specification.where(BaseService.and(filters, ProductProcess.class));
-        List<ProductProcess> productProcessesList = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeOrderByBsOrder(0,quoteId,bsType);
+        List<ProductProcess> productProcessesList = productProcessDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonOrderByBsOrder(0,quoteId,bsType,0);
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (ProductProcess bs : productProcessesList) {
             Map<String, Object> map = new HashMap<>();
@@ -407,6 +407,7 @@ public class ProductProcesslmpl implements ProductProcessService {
           }
         List<SearchFilter> filters = new ArrayList<>();
         filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+        filters.add(new SearchFilter("bsSingleton", SearchFilter.Operator.EQ, 0));
         if (StringUtils.isNotEmpty(bsType)) {
             filters.add(new SearchFilter("bsType", SearchFilter.Operator.EQ, bsType));
         }
@@ -698,7 +699,7 @@ public class ProductProcesslmpl implements ProductProcessService {
             List<ProductMater> materList2 = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, "molding");
             for (ProductMater pm : materList2) {
                 for (ProductProcess o : processAllList) {
-                    if (o.getBsMaterName().equals(pm.getBsMaterName())&& o.getBsElement().equals(pm.getBsElement())&& o.getBsName().equals(pm.getBsComponent())) {
+                    if (pm.getBsMaterName().equals(o.getBsMaterName())&& o.getBsElement().equals(pm.getBsElement())&& o.getBsName().equals(pm.getBsComponent())) {
                         pm.setBsCave(o.getBsCave());
                         continue;
                     }
@@ -750,10 +751,10 @@ public class ProductProcesslmpl implements ProductProcessService {
             //20210121-fyx-外协
             List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
 
-             Integer unfinished = productProcessDao.countByPkQuoteAndDelFlagAndBsTypeAndBsStatus(quoteId,0,"out",0);
-             if(unfinished>0){
-                 return ApiResponseResult.failure("存在其他用户的"+unfinished+"个外协信息未确认完成！");
-             }
+//             Integer unfinished = productProcessDao.countByPkQuoteAndDelFlagAndBsTypeAndBsStatus(quoteId,0,"out",0);
+//             if(unfinished>0){
+//                 return ApiResponseResult.failure("存在其他用户的"+unfinished+"个外协信息未确认完成！");
+//             }
             if (lo.size() > 0) {
                 Quote o = lo.get(0);
                 o.setBsStatus2Out(2);
