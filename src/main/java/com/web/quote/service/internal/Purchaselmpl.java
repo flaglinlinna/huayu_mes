@@ -194,13 +194,19 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 
 
 	@Override
-	public ApiResponseResult getQuoteList(String keyword, String quoteId, PageRequest pageRequest) throws Exception {
+	public ApiResponseResult getQuoteList(String keyword, String quoteId,String bsAgent, PageRequest pageRequest) throws Exception {
 		// TODO Auto-generated method stub
 
 		//代采的材料不显示  bs_agent = 0
-		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.bs_agent = 0 and p.pk_quote="+quoteId;
+		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
 		//20210113-fyx-去掉外协--?
 		hql += " and p.bs_Type <> 'out' " ;
+
+		if(bsAgent==null||("0").equals(bsAgent)||("null").equals(bsAgent)){
+			hql += " and p.bs_agent = " +0;
+		}else if(("1").equals(bsAgent)) {
+			hql += " and p.bs_agent = " +1;
+		}
 
 		if (StringUtils.isNotEmpty(keyword)) {
 			hql += "  and INSTR((p.bs_component || p.bs_mater_name ||p.bs_model ||p.fmemo ||p.bs_unit" +
@@ -210,11 +216,11 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 
 		//根据角色过滤可以查看的物料类型
 		//1：如果设置了角色过滤的则过滤物料，否则认为是管理员可以查看全部方便测试
-		SysUser user = UserUtil.getSessionUser();
-		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(user.getId());
-		if(lmp.size()>0){
-			hql += " and p.pk_item_type_wg in (select wr.pk_item_type_wg from "+ItemTypeWgRole.TABLE_NAME+" wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from "+UserRoleMap.TABLE_NAME+" ur where ur.del_flag=0 and ur.user_id="+user.getId()+")) ";
-		}
+//		SysUser user = UserUtil.getSessionUser();
+//		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(user.getId());
+//		if(lmp.size()>0){
+//			hql += " and p.pk_item_type_wg in (select wr.pk_item_type_wg from "+ItemTypeWgRole.TABLE_NAME+" wr where wr.del_flag=0 and wr.pk_sys_role in (select ur.role_id from "+UserRoleMap.TABLE_NAME+" ur where ur.del_flag=0 and ur.user_id="+user.getId()+")) ";
+//		}
 
 
 
@@ -323,10 +329,12 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	/**
 	 * 导出数据
 	 */
-	public void exportExcel(HttpServletResponse response, Long quoteId) throws Exception{
+	public void exportExcel(HttpServletResponse response, Long quoteId,String bsAgent) throws Exception{
 //		String hql = "select p.* from "+ProductMater.TABLE_NAME+" p where p.del_flag=0 and p.pk_quote="+quoteId;
 //		Map<String, Object> param = new HashMap<String, Object>();
 //		List<ProductMater> list = createSQLQuery(hql, param, ProductMater.class);
+
+
 
 		List<ProductMater> list = new ArrayList<>();
 		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(UserUtil.getSessionUser().getId());
@@ -336,12 +344,14 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			list = productMaterDao.findByBsAgentAndDelFlagAndPkQuoteOrderById(0,0,quoteId);
 		}
 
+		list = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeIsNot(0,quoteId,"out");
+
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		String filePath = "static/excelFile/采购填报价格模板.xlsx";
 		Resource resource = new ClassPathResource("static/excelFile/采购填报价格模板.xlsx");
 		InputStream in = resource.getInputStream();
-		String[] map_arr = new String[]{"id","bsType","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","purchaseUnit",
-				"bsGeneral","bsGear","bsRefer","bsAssess","fmemo","bsSupplier","bsExplain"};
+		String[] map_arr = new String[]{"id","bsType","bsComponent","bsMaterName","bsModel","bsQty","bsUnit","bsAssess","purchaseUnit",
+				"fmemo","mjPrice","bsGeneral","bsRefer","bsGear"};
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		for(ProductMater productMater : list){
 			Map<String, Object> map = new HashMap<>();
@@ -368,7 +378,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			map.put("bsExplain", productMater.getBsExplain());
 //			if(productMater.getBsGeneral()!=null){
 			map.put("bsGeneral", productMater.getBsGeneral()==1?"是":"否");
-
+			map.put("mjPrice",productMater.getMjPrice());
 			map.put("bsGear", productMater.getBsGear());
 			map.put("bsRefer", productMater.getBsRefer());
 			map.put("bsAssess", productMater.getBsAssess());
@@ -401,11 +411,12 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 
 			for (int row = 2; row <= maxRow; row++) {
 				String id = tranCell(sheet.getRow(row).getCell(0));
-				String purchaseUnit = tranCell(sheet.getRow(row).getCell(7));
-				String bsGear = tranCell(sheet.getRow(row).getCell(9));
-				String bsAssess = tranCell(sheet.getRow(row).getCell(11));
-				String fmemo = tranCell(sheet.getRow(row).getCell(12));
-				String bsSupplier = tranCell(sheet.getRow(row).getCell(13));
+//				String bsGear = tranCell(sheet.getRow(row).getCell(9));
+				String bsAssess = tranCell(sheet.getRow(row).getCell(7));
+				String purchaseUnit = tranCell(sheet.getRow(row).getCell(8));
+				String fmemo = tranCell(sheet.getRow(row).getCell(9));
+				String mjPrice = tranCell(sheet.getRow(row).getCell(10));
+//				String bsSupplier = tranCell(sheet.getRow(row).getCell(13));
 				ProductMater productMater = new ProductMater();
 				if(StringUtils.isNotEmpty(id)){
 					productMater = productMaterDao.findById(Long.parseLong(id));
@@ -418,10 +429,11 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 				}
 				productMater.setPurchaseUnit(purchaseUnit);
 				productMater.setPkQuote(quoteId);
-				productMater.setBsGear(bsGear);
+//				productMater.setBsGear(bsGear);
 				productMater.setBsAssess(new BigDecimal(bsAssess));
 				productMater.setFmemo(fmemo);
-				productMater.setBsSupplier(bsSupplier);
+				productMater.setMjPrice(mjPrice);
+//				productMater.setBsSupplier(bsSupplier);
 
 				hardwareMaterList.add(productMater);
 			}

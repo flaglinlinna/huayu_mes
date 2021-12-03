@@ -724,7 +724,9 @@ function load(obj) {
 	// 重新加载table
 	tableIns.reload({
 		where : {
-			keyword : obj.field.keywordSearch
+			keyword : obj.field.keywordSearch,
+			bsAgent:obj.field.bsAgent
+
 		},
 		page : {
 			curr : pageCurr
@@ -804,7 +806,8 @@ function cleanProdErr() {
 }
 
 function exportExcel() {
-	location.href = context + "/purchase/exportExcel?pkQuote=" + quoteId;
+	var bsAgent = $('#bsAgent').val();
+	location.href = context + "/purchase/exportExcel?pkQuote=" + quoteId+"&bsAgent="+bsAgent;
 }
 
 function doGear(id, gearPrice) {

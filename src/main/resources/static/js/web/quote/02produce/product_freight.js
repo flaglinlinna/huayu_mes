@@ -45,7 +45,14 @@ $(function() {
 			cols : [ [
 				{type : 'numbers'},
 				{field : 'bsElement',width : 300,title : '组件名称',totalRowText : "合计"},
-				{field : 'bsFreight',width : 90,title : '包装运输费','edit':'text',totalRow : true},
+				{field : 'bsFreight',width : 90,title : '包装运输费','edit':'text',totalRow : true,
+					templet: function (d) {
+						if(d.bsFreight==0){
+							return ""
+						}else {
+							return  d.bsFreight;
+						}
+					}},
 				{field : 'fileName',title : '附件信息',width : 450,templet : '<div><a style="cursor: pointer;color: blue;text-decoration:underline;" href="' + context
 						+ '/file/get?fsFileId={{d.fileId}}" th:href="@{/file/get?fsFileId={{d.fileId}}}">{{ d.fileName==null?"":d.fileName }}</a></div>'},
 

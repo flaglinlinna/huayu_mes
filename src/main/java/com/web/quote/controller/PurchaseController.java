@@ -87,7 +87,7 @@ public class PurchaseController extends WebController {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
 			ApiResponseResult result = purchaseService.getList(quoteId,keyword, bsStatus,bsCode,bsType,bsFinishTime,bsRemarks,
 					bsProd,bsProdType,bsSimilarProd,bsPosition,bsCustRequire,bsLevel,bsRequire,bsDevType,bsCustName,userName,super.getPageRequest(sort));
-			logger.debug(methodName+"=getQuoteList:");
+			logger.debug(methodName+"=getList:");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,12 +100,12 @@ public class PurchaseController extends WebController {
 	@ApiOperation(value = "获取采购部材料价格填写列表", notes = "获取采购部材料价格填写列表", hidden = true)
 	@RequestMapping(value = "/getQuoteList", method = RequestMethod.GET)
 	@ResponseBody
-	public ApiResponseResult getQuoteList(String keyword,String quoteId) {
+	public ApiResponseResult getQuoteList(String keyword,String quoteId,String bsAgent) {
 		String method = "/purchase/getQuoteList";
 		String methodName = "获取采购部材料价格填写列表";
 		try {
 			Sort sort = new Sort(Sort.Direction.DESC, "id");
-			ApiResponseResult result = purchaseService.getQuoteList(keyword,quoteId, super.getPageRequest(sort));
+			ApiResponseResult result = purchaseService.getQuoteList(keyword,quoteId,bsAgent, super.getPageRequest(sort));
 			logger.debug(methodName+"=getQuoteList:");
 			return result;
 		} catch (Exception e) {
@@ -159,12 +159,12 @@ public class PurchaseController extends WebController {
 	@ApiOperation(value="导出数据", notes="导出数据", hidden = true)
 	@RequestMapping(value = "/exportExcel", method = RequestMethod.GET)
 	@ResponseBody
-	public void exportExcel(HttpServletResponse response,Long pkQuote) {
+	public void exportExcel(HttpServletResponse response,Long pkQuote,String bsAgent) {
 		String method = "/purchase/exportExcel";String methodName ="导出数据";
 		try {
 			logger.debug("导出数据=exportExcel:");
 			getSysLogService().success(module,method, methodName, "");
-			purchaseService.exportExcel(response,pkQuote);
+			purchaseService.exportExcel(response,pkQuote,bsAgent);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("导出数据失败！", e);

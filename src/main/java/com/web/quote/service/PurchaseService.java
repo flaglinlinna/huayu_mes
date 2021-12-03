@@ -15,7 +15,7 @@ public interface PurchaseService {
 									 String bsPosition,String bsCustRequire,String bsLevel,String bsRequire,
 									 String bsDevType,String bsCustName,String userName,PageRequest pageRequest) throws Exception;
 
-	public ApiResponseResult getQuoteList(String keyword,String quoteId,PageRequest pageRequest) throws Exception;
+	public ApiResponseResult getQuoteList(String keyword,String quoteId,String bsAgent,PageRequest pageRequest) throws Exception;
 
 	public ApiResponseResult edit(ProductMater productMater) throws Exception;
 
@@ -23,7 +23,7 @@ public interface PurchaseService {
 
 	public ApiResponseResult getStatus(Long pkQuote,Integer bsStatusPurchase) throws Exception;
 
-	public void exportExcel(HttpServletResponse response, Long quoteId) throws Exception;
+	public void exportExcel(HttpServletResponse response, Long quoteId,String bsAgent) throws Exception;
 
 	public ApiResponseResult doExcel(MultipartFile[] file, Long quoteId) throws Exception;
 

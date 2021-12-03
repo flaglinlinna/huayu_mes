@@ -116,14 +116,7 @@ $(function() {
 							return "";
 						}
 					}},
-				// {field : 'procfmemo', width:100, title : '工序说明',style:'background-color:#d2d2d2',
-				// 	templet:function (d) {
-				// 		if(d.proc!=null){
-				// 			return d.proc.fmemo==null||undefined?"":d.proc.fmemo;
-				// 		}else {
-				// 			return "";
-				// 		}
-				// 	}},
+
 				{field : 'workcenterName', width:120, title : '工作中心',style:'background-color:#d2d2d2'
 					,templet:function (d) {
 						if(d.proc!=null){
@@ -207,6 +200,11 @@ $(function() {
 
 						$(".layui-table-total").find('tr').find('td[data-field="bsFeeWxAll"]').removeClass("layui-hide");
 						$(".layui-table-total").find('tr').find('td[data-field="bsLoss"]').removeClass("layui-hide");
+
+						//机台类型增加隐藏
+						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsModelType"]').addClass("layui-hide");
+						$('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsModelType"]').addClass("layui-hide");
+						$(".layui-table-total").find('tr').find('td[data-field="bsModelType"]').addClass("layui-hide");
 
 					}else if(bsType == 'hardware'){//五金
 						$('div[lay-id="listTable"]').find('thead').find('th[data-field="bsCycle"]').removeClass("layui-hide");

@@ -3,7 +3,9 @@
  */
 var pageCurr;
 var table4;
-var table5
+var table5;
+var bsCode = quoteDetail.data.Quote.bsCode;
+var titleInfo = "("+bsCode.substring(bsCode.length-4)+")";
 $(function() {
 	layui.use([ 'table', 'form', 'layedit', 'laydate', 'layer' ], function() {
 		var form = layui.form, layer = layui.layer, laydate = layui.laydate,
@@ -596,7 +598,7 @@ $(function() {
 		
 		//详情按钮
 		 $('#detailBtn').click(function(){
-			 parent.layui.index.openTabsPage(context+'/quoteSum/toQuoteTree?quoteId='+quoteId,'报价汇总树');
+			 parent.layui.index.openTabsPage(context+'/quoteSum/toQuoteTree?quoteId='+quoteId,'报价汇总树'+titleInfo);
 		 })
 
 		$('#exportBtn').click(function(){
