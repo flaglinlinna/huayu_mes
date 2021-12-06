@@ -238,6 +238,13 @@ public class QuoteProcess extends BaseEntity {
 	@Column(length = 50)
 	protected String gradation;
 
+	/**
+	 * 模内注塑
+	 */
+	@ApiModelProperty(name = "bsInjection", value = "模内注塑")
+	@Column
+	protected Integer bsInjection = 0;
+
 	public Long getPkQuote() {
 		return pkQuote;
 	}
@@ -476,5 +483,13 @@ public class QuoteProcess extends BaseEntity {
 
 	public void setGradation(String gradation) {
 		this.gradation = gradation;
+	}
+
+	public Integer getBsInjection() {
+		return bsInjection;
+	}
+
+	public void setBsInjection(Integer bsInjection) {
+		this.bsInjection = bsInjection;
 	}
 }

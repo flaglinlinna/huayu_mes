@@ -73,13 +73,13 @@ $(function () {
                     title: '状态',
                     width: 80,
                     templet: function (d) {
-                        if(d.bsStatus2 =='5'){
+                        if(d.bsStatus3 =='5'){
                             return "驳回中"
-                        }else if (d.bsStatus == "0") {
+                        }else if (d.bsStatus3 == "0") {
                             return "草稿"
-                        } else if (d.bsStatus == "1") {
+                        } else if (d.bsStatus3 == "1") {
                             return "进行中"
-                        } else if (d.bsStatus == "2") {
+                        } else if (d.bsStatus3 == "2") {
                             return "已完成"
                         }
                     }
@@ -158,14 +158,14 @@ $(function () {
                 localtableFilterIns.reload();
                 res.data.forEach(function (item, index) {
                     $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('color', '#fff');
-                    if (item.bsStatus == 0) {
+                    if (item.bsStatus3 == 0) {
                         $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#6699CC');
-                    } else if (item.bsStatus == "1") {
+                    } else if (item.bsStatus3 == "1") {
                         $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#7ED321');
-                    } else if (item.bsStatus == "2") {
+                    } else if (item.bsStatus3 == "2") {
                         $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#F5A623');
                     }
-                    if(item.bsStatus2==5){
+                    if(item.bsStatus3==5){
                         $('div[lay-id="listTable"]').find('tr[data-index="' + index + '"]').find('td[data-field="bsStatus"]').css('background-color', '#FF0000');
                     }
                 });
@@ -268,6 +268,10 @@ $(function () {
                 var titleInfo = "("+data.bsCode.substring(data.bsCode.length-4)+")";
                 parent.layui.index.openTabsPage(context + '/quoteSum/toQuoteSum?quoteId=' + data.id, '报价单汇总详情'+titleInfo);
             } else if (obj.event === 'check') {
+                if(data.bsStatus3==0){
+                    layer.alert("报价单未填写完成,草稿状态不能发起审批！");
+                    return;
+                }
                 // 先判断是否填写完成资料-暂时未校验-20201218-fyx
                 if (true) {
                     layer.open({

@@ -835,6 +835,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
                     }
                 }
                 pm.setPurchaseUnit(qb.getPurchaseUnit());
+                pm.setBsInjection(qb.getBsInjection());
                 pm.setBsAgent(qb.getBsAgent());
 //							pm.setBsGeneral();
 //							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
@@ -918,6 +919,7 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
                 pp.setBsOrder(qb.getBsOrder());
                 pp.setPkProc(qb.getPkProc());
                 pp.setPurchaseUnit(qb.getPurchaseUnit());
+                pp.setBsInjection(qb.getBsInjection());
                 pp.setBsLinkName(qb.getBsLinkName());
                 pp.setBsSingleton(qb.getBsSingleton());
                 pp.setPkBomId(qb.getPkQuoteBom());
@@ -937,7 +939,9 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         //修改报价状态
         quote.setLastupdateDate(new Date());
         quote.setBsStatus(1);
-        quote.setBsStep(2);
+        //直接报价汇总总显示单据，并显示为草稿状态
+        quote.setBsStep(3);
+        quote.setBsStatus3(0);
         quote.setBsEndTime1(new Date());
         quote.setBsStatus2(0);
         quoteDao.save(quote);

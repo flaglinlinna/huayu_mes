@@ -579,6 +579,7 @@ public class CheckImpl   implements CheckService {
 									}
 								}
 								pm.setPurchaseUnit(qb.getPurchaseUnit());
+								pm.setBsInjection(qb.getBsInjection());
 								pm.setBsAgent(qb.getBsAgent());
 //							pm.setBsGeneral();
 //							pm.setBsCave(qb.getBsCave()); //hjj-20210121-模板导入新增水口重和穴数
@@ -662,6 +663,7 @@ public class CheckImpl   implements CheckService {
 							pp.setBsOrder(qb.getBsOrder());
 							pp.setPkProc(qb.getPkProc());
 							pp.setPurchaseUnit(qb.getPurchaseUnit());
+							pp.setBsInjection(qb.getBsInjection());
 							pp.setBsLinkName(qb.getBsLinkName());
 							pp.setBsSingleton(qb.getBsSingleton());
 							pp.setPkBomId(qb.getPkQuoteBom());

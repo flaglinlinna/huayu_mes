@@ -13,6 +13,8 @@ import com.web.basePrice.dao.BaseFeeDao;
 import com.web.basePrice.entity.BaseFee;
 import com.web.basePrice.entity.BaseFeeFile;
 import com.web.basePrice.entity.MjProcFee;
+import com.web.basic.dao.SysParamDao;
+import com.web.basic.entity.SysParam;
 import com.web.quote.dao.*;
 import com.web.quote.entity.*;
 import com.web.quote.service.QuoteSumService;
@@ -70,6 +72,8 @@ public class ProductProcesslmpl implements ProductProcessService {
     private BaseFeeDao baseFeeDao;
     @Autowired
     private QuoteBomDao quoteBomDao;
+    @Autowired
+    private SysParamDao sysParamDao;
     @Autowired
     private QuoteSumService quoteSumService;
     /**
@@ -589,44 +593,52 @@ public class ProductProcesslmpl implements ProductProcessService {
     @Transactional
     public ApiResponseResult doStatus(Long quoteId, String bsType, String bsCode,List<ProductProcess> productProcessList) throws Exception {
 
+
+        //判断是否全部完成标识
+        boolean allFinished = true;
+
         if(bsCode.equals("freight")){
             Quote quote = quoteDao.findById((long)quoteId);
             quote.setBsStatus2Freight(2);
             quoteDao.save(quote);
         }
         //判断状态是否已执行过确认提交-lst-20210112
-        int i = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0, quoteId, bsCode, 2);
-        if (i > 0) {
-            return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
-        }
+//        int i = quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0, quoteId, bsCode, 2);
+//        if (i > 0) {
+//            return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
+//        }
         //保存当前界面上的所有填写的工序信息
         productProcessDao.saveAll(productProcessList);
 
         List<ProductProcess> processAllList = new ArrayList<>();
 
-        if(bsType.equals("out")) {
-            //查询该用户下的所有外协工序信息
-            processAllList = productProcessDao.findAllOutListByUserId(quoteId, UserUtil.getSessionUser().getId());
-        }else {
+//        if(bsType.equals("out")) {
+//            //查询该用户下的所有外协工序信息
+//            processAllList = productProcessDao.findAllOutListByUserId(quoteId, UserUtil.getSessionUser().getId());
+//        }else {
             //该类型下的所有工序
-            processAllList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, bsType);
-        }
+        processAllList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, bsType);
+//        }
         for (ProductProcess o : processAllList) {
             if (o.getPkProc() == null) {
-                return ApiResponseResult.failure("工序名称不能为空,请检查后再确认！");
+//                return ApiResponseResult.failure("工序名称不能为空,请检查后再确认！");
+                allFinished = false;
             }
             if("PCS".equals(o.getPurchaseUnit())&&!"packag".equals(bsType)){
                 if ( o.getBsYield() == null || o.getBsYield() == BigDecimal.ZERO) {
-                    return ApiResponseResult.failure("工序良率不能为空或者0,请检查后再确认！");
+//                    return ApiResponseResult.failure("工序良率不能为空或者0,请检查后再确认！");
+                    allFinished = false;
                 }
             }
             else if ("hardware".equals(bsType)) {
                 if (o.getBsUserNum() == null || o.getBsCycle() == null || o.getBsYield() == null) {
-                    return ApiResponseResult.failure("人数、成型周期和工序良率不能为空或者0,请检查后再确认！");
+//                    return ApiResponseResult.failure("人数、成型周期和工序良率不能为空或者0,请检查后再确认！");
+                    allFinished = false;
                 }
             } else if ("molding".equals(bsType)) {
                 if (o.getBsUserNum() == null || o.getBsCycle() == null || o.getBsYield() == null) {
-                    return ApiResponseResult.failure("人数、穴数、成型周期和工序良率不能为空,请检查后再确认！");
+//                    return ApiResponseResult.failure("人数、穴数、成型周期和工序良率不能为空,请检查后再确认！");
+                    allFinished = false;
                 }
             } else if ("surface".equals(bsType)) {
                 if(o.getBsUserNum() ==BigDecimal.ZERO&&o.getBsYield() == BigDecimal.ZERO&&("0").equals(o.getBsCapacity())){
@@ -634,20 +646,23 @@ public class ProductProcesslmpl implements ProductProcessService {
                 }
                 else if (o.getBsUserNum() == null || o.getBsYield() == null || o.getBsCapacity() == null
                         || o.getBsUserNum() == BigDecimal.ZERO || o.getBsYield() == BigDecimal.ZERO || o.getBsCapacity() == "0") {
-                    return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
+//                    return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
+                    allFinished = false;
                 }
             } else if ("packag".equals(bsType)) {
                 if(o.getBsUserNum() == BigDecimal.ZERO&&o.getBsYield() == BigDecimal.ZERO&&("0").equals(o.getBsCapacity())){
 
                 }
                 else if (o.getBsUserNum() == null || o.getBsYield() == null || o.getBsCapacity() == null) {
-                    return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
+//                    return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
+                    allFinished = false;
                 }
             } else if ("out".equals(bsType)) {
                 if (o.getBsFeeWxAll() == null || o.getBsLoss() == null) {
-                    return ApiResponseResult.failure("损耗率、外协价格不能为空,请检查后再确认！");
+//                    return ApiResponseResult.failure("损耗率、外协价格不能为空,请检查后再确认！");
+                    allFinished = false;
                 }
-                o.setBsStatus(1);
+//                o.setBsStatus(1);
             }
             if(!("out").equals(o.getBsType())) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -655,7 +670,8 @@ public class ProductProcesslmpl implements ProductProcessService {
                 if (StringUtils.isNotEmpty(o.getBsModelType())) {
                     List<BaseFee> baseFeeList = baseFeeDao.findByDelFlagAndProcIdAndModelCodeAndWorkCenterId(0, o.getPkProc(), o.getBsModelType(), o.getProc().getWorkcenterId());
                     if (baseFeeList.size() == 0) {
-                        return ApiResponseResult.failure("存在工序:" + o.getProc().getProcName() + "未维护人工制费,请检查后再确认！");
+//                        return ApiResponseResult.failure("存在工序:" + o.getProc().getProcName() + "未维护人工制费,请检查后再确认！");
+                        allFinished = false;
                     } else {
                         if(baseFeeList.get(0).getExpiresTime()!=null) {
                             String expiresTime = sdf.format(baseFeeList.get(0).getExpiresTime());
@@ -707,6 +723,11 @@ public class ProductProcesslmpl implements ProductProcessService {
             }
             productMaterDao.saveAll(materList2);
         }
+
+        //材料的工序损耗由工艺带出
+//        List<SysParam> sysParams = sysParamDao.findByDelFlagAndParamCode(0, "BJ_YIELD");
+//        BigDecimal bsYield =  sysParams.size()>0?new BigDecimal(sysParams.get(0).getParamValue()):new BigDecimal("100");
+//
         List <ProductMater> materList = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndBsSingleton(0,quoteId,bsType,0);
         for(ProductMater pm :materList){
             if(StringUtils.isEmpty(pm.getBsGroups())){
@@ -714,7 +735,9 @@ public class ProductProcesslmpl implements ProductProcessService {
                         pm.getBsComponent(), pm.getBsElement(), pm.getPkQuote(), pm.getBsType(), 0, pm.getBsMaterName());
 //                pm.setBsYield(processList.size() > 0 ? processList.get(0).getBsYield() : bsYield);
                 if(processList.size()>0){
-                    if (processList.get(0).getBsYield().compareTo(BigDecimal.ZERO)!=1){
+                    if(processList.get(0).getBsYield()==null){
+
+                    }else if (processList.get(0).getBsYield().compareTo(BigDecimal.ZERO)!=1){
                         return ApiResponseResult.failure("工艺顺序"+processList.get(0).getBsOrder()+"零件名称:"+pm.getBsComponent()+"对应的材料的工序良率为0，请检查");
                     }
                 }
@@ -723,7 +746,9 @@ public class ProductProcesslmpl implements ProductProcessService {
 //                pm.setBsYield(processList1.size() > 0 ? processList1.get(0).getBsYield() : bsYield);
                 if(processList1.size()>0){
                     if(processList1.get(0).getBsYield()!=null) {
-                        if (processList1.get(0).getBsYield().compareTo(BigDecimal.ZERO) != 1) {
+                        if(processList1.get(0).getBsYield()==null){
+
+                        }else if (processList1.get(0).getBsYield().compareTo(BigDecimal.ZERO) != 1) {
                             return ApiResponseResult.failure("工艺顺序" + processList1.get(0).getBsOrder() + "损耗分组:" + pm.getBsGroups() + "对应的材料的工序良率为0，请检查");
                         }
                     }
@@ -733,20 +758,22 @@ public class ProductProcesslmpl implements ProductProcessService {
 
 //        productProcessDao.saveAll(productMaterList);
         if (!("out").equals(bsType)) {
-            //更新确认完成字段
-            productProcessDao.doProcessStatusByType(UserUtil.getSessionUser().getId(), new Date(), quoteId, bsType);
-            //项目状态设置-状态 2：已完成
-            quoteItemDao.switchStatus(2, quoteId, bsCode);
-            //设置结束时间
-            quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
-            //增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
-            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(), UserUtil.getSessionUser().getId(), quoteId, bsCode);
+            if(allFinished) {
+                //更新确认完成字段
+                productProcessDao.doProcessStatusByType(UserUtil.getSessionUser().getId(), new Date(), quoteId, bsType);
+                //项目状态设置-状态 2：已完成
+                quoteItemDao.switchStatus(2, quoteId, bsCode);
+                //设置结束时间
+                quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
+                //增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
+                quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(), UserUtil.getSessionUser().getId(), quoteId, bsCode);
 
-            //20210121-fyx-统一修改状态 ，两个完成就默认完成
-            Object data = quoteProductService.doItemFinish(bsCode, quoteId, 2).getData();
-            //20201225-fyx-计算后工序良率
-            this.updateHouYield(quoteId, bsType);
-            return ApiResponseResult.success("确认完成成功！").data(data);
+                //20210121-fyx-统一修改状态 ，两个完成就默认完成
+                Object data = quoteProductService.doItemFinish(bsCode, quoteId, 2).getData();
+                //20201225-fyx-计算后工序良率
+//                this.updateHouYield(quoteId, bsType);
+//                return ApiResponseResult.success("保存成功！").data(data);
+            }
         } else {
             //20210121-fyx-外协
             List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
@@ -755,10 +782,12 @@ public class ProductProcesslmpl implements ProductProcessService {
 //             if(unfinished>0){
 //                 return ApiResponseResult.failure("存在其他用户的"+unfinished+"个外协信息未确认完成！");
 //             }
-            if (lo.size() > 0) {
-                Quote o = lo.get(0);
-                o.setBsStatus2Out(2);
-                quoteDao.save(o);
+            if(allFinished) {
+                if (lo.size() > 0) {
+                    Quote o = lo.get(0);
+                    o.setBsStatus2Out(2);
+                    quoteDao.save(o);
+                }
             }
         }
 
@@ -773,9 +802,8 @@ public class ProductProcesslmpl implements ProductProcessService {
             quote.setBsEndTime2(new Date());
             quote.setBsStatus3(1);
             quoteDao.save(quote);
-            quoteSumService.countMeterAndProcess(quoteId+"");
         }
-
+        quoteSumService.countMeterAndProcess(quoteId+"");
         return ApiResponseResult.success("确认完成成功！");
     }
 

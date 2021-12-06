@@ -299,6 +299,13 @@ public class ProductMater extends BaseEntity {
 	@Column(length = 50)
 	protected String mjPrice;
 
+	/**
+	 * 模内注塑
+	 */
+	@ApiModelProperty(name = "bsInjection", value = "模内注塑")
+	@Column
+	protected Integer bsInjection = 0;
+
 	public int getBsStatus() {
 		return bsStatus;
 	}
@@ -593,5 +600,13 @@ public class ProductMater extends BaseEntity {
 
 	public void setMjPrice(String mjPrice) {
 		this.mjPrice = mjPrice;
+	}
+
+	public Integer getBsInjection() {
+		return bsInjection;
+	}
+
+	public void setBsInjection(Integer bsInjection) {
+		this.bsInjection = bsInjection;
 	}
 }

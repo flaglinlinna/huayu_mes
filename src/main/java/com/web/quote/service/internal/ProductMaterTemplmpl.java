@@ -310,14 +310,19 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 String bsModel = tranCell(sheet.getRow(row).getCell(4));
                 String bsQty = tranCell(sheet.getRow(row).getCell(5));
                 String BsUnit = tranCell(sheet.getRow(row).getCell(6));
-                String purchaseUnit = tranCell(sheet.getRow(row).getCell(7));
-                String bsGeneral = tranCell(sheet.getRow(row).getCell(8));
-                String bsGear = tranCell(sheet.getRow(row).getCell(9));
-                String bsRefer = tranCell(sheet.getRow(row).getCell(10));
-                String bsAssess = tranCell(sheet.getRow(row).getCell(11));
-                String fmemo = tranCell(sheet.getRow(row).getCell(12));
-                String bsSupplier = tranCell(sheet.getRow(row).getCell(13));
-                String bsExplain = tranCell(sheet.getRow(row).getCell(14));
+
+                String bsAssess = tranCell(sheet.getRow(row).getCell(7));
+                String purchaseUnit = tranCell(sheet.getRow(row).getCell(8));
+                String fmemo = tranCell(sheet.getRow(row).getCell(9));
+                String mjPrice = tranCell(sheet.getRow(row).getCell(10));
+
+                String bsGeneral = tranCell(sheet.getRow(row).getCell(11));
+                String bsRefer = tranCell(sheet.getRow(row).getCell(12));
+                String bsGear = tranCell(sheet.getRow(row).getCell(13));
+
+//                String bsSupplier = tranCell(sheet.getRow(row).getCell(13));
+//                String bsExplain = tranCell(sheet.getRow(row).getCell(14));
+
                 ProductMaterTemp temp = new ProductMaterTemp();
                 temp.setBsPurchase(0);
                 temp.setCreateBy(userId);
@@ -372,8 +377,8 @@ public class ProductMaterTemplmpl implements ProductMaterTempService {
                 temp.setBsRefer(bsRefer);
                 temp.setBsAssess(bsAssess);
                 temp.setFmemo(fmemo);
-                temp.setBsSupplier(bsSupplier);
-                temp.setBsExplain(bsExplain);
+//                temp.setBsSupplier(bsSupplier);
+//                temp.setBsExplain(bsExplain);
                 if(errInfo ==""){
                     temp.setCheckStatus(0);
                     successes ++;

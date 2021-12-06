@@ -354,6 +354,13 @@ public class ProductProcess extends BaseEntity {
 	@Column(length = 100)
 	protected String purchaseUnit;
 
+	/**
+	 * 模内注塑
+	 */
+	@ApiModelProperty(name = "bsInjection", value = "模内注塑")
+	@Column
+	protected Integer bsInjection = 0;
+
 	public Long getPkQuote() {
 		return pkQuote;
 	}
@@ -714,5 +721,13 @@ public class ProductProcess extends BaseEntity {
 
 	public void setBsModel(String bsModel) {
 		this.bsModel = bsModel;
+	}
+
+	public Integer getBsInjection() {
+		return bsInjection;
+	}
+
+	public void setBsInjection(Integer bsInjection) {
+		this.bsInjection = bsInjection;
 	}
 }

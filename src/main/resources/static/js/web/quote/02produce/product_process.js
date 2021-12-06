@@ -16,7 +16,7 @@ $(function() {
 			tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect,
 			tableSelect3 = layui.tableSelect,upload2 =layui.upload,element = layui.element,upload3 =layui.upload;
 
-		isComplete()
+		// isComplete()
 
 		if(bsType=='out'){
 			$('#fileListBtn').show();
@@ -138,8 +138,8 @@ $(function() {
 				{field : 'bsLoss', title : '工序良率%<span style="color:red;font-size:12px;">*</span>', width:90,edit:'text',hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCave', title : '穴数<span style="color:red;font-size:12px;">*</span>',edit:'text',width:50, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsCapacity', title : '产能(个/小时)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:105, hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsjianche', title : '检测项目',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
-				{field : 'bsjianche', title : '检测项目费用',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
+				// {field : 'bsjianche', title : '检测项目',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
+				// {field : 'bsjianche', title : '检测项目费用',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
 				{field : 'bsFeeWxAll', title : '外协价格(未税)<span style="color:red;font-size:12px;">*</span>',edit:'text',width:120, hide:true,style : 'background-color:#ffffff'},
 				{field : 'fmemo', title : '备注',edit:'text',style : 'background-color:#ffffff;overflow:hidden !important',width:180},
 				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
@@ -159,16 +159,17 @@ $(function() {
 				layui.each(res.data, function(i, item){
 					// console.log(item.purchaseUnit);
 
-					if(bsStatus2 == 5){
-						$(".layui-table-box").find('tr').find('td').data('edit', false).css("background-color", "#d2d2d2");
-					}
+					// if(bsStatus2 == 5){
+					// 	$(".layui-table-box").find('tr').find('td').data('edit', false).css("background-color", "#d2d2d2");
+					// }
 
 					if(bsType!="out") {
-						if (item.bsStatus == 1) {
-							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
-							$("select[name='selectModelType']").attr("disabled", "disabled");
-							form.render('select');
-						}else if(item.purchaseUnit=="PCS"&&bsType!='packag') {
+						// if (item.bsStatus == 1) {
+						// 	tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
+						// 	$("select[name='selectModelType']").attr("disabled", "disabled");
+						// 	form.render('select');
+						// }else
+							if(item.purchaseUnit=="PCS"&&bsType!='packag') {
 							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
 							tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsYield"]').data('edit', true).css("background-color", "#FFFFFF");
 							tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsModelType"]').find('select[name="selectModelType"]').attr("disabled","disabled");

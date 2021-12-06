@@ -72,11 +72,12 @@ $(function() {
 
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				layui.each(res.data, function(i, item){
-					if(item.bsStatus=="1"){
-						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
-						 $("select[name='selectUnit']").attr("disabled","disabled");
-						form.render('select');
-					}else if(item.purchaseUnit=="PCS"){
+					// if(item.bsStatus=="1"){
+					// 	tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
+					// 	 $("select[name='selectUnit']").attr("disabled","disabled");
+					// 	form.render('select');
+					// }else
+					if(item.purchaseUnit=="PCS"){
 						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
 						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsQty"]').data('edit',true).css("background-color", "#FFFFFF");
 						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="fmemo"]').data('edit',true).css("background-color", "#FFFFFF");
@@ -489,14 +490,14 @@ function Confirm() {
 		"bsCode" : bsCode,
 		"dates":dates
 	};
-	layer.confirm('一经提交则不得再修改，确定要提交吗？', {
-		btn : [ '确认', '返回' ]
-	}, function() {
+	// layer.confirm('一经提交则不得再修改，确定要提交吗？', {
+	// 	btn : [ '确认', '返回' ]
+	// }, function() {
 		CoreUtil.sendAjax("/productMater/doStatus", JSON.stringify(params), function(data) {
 			if (data.result) {
 				// parent.layui.admin.events.closeThisTabs(); 先关闭执行不了js
-				layer.alert("确认完成成功", function() {
-					layer.closeAll();
+				// layer.alert("确认完成成功", function() {
+				// 	layer.closeAll();
 					if(data.data =="1"){
 						//项目完成，关闭上一级项目标签页
 						// var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
@@ -506,14 +507,14 @@ function Confirm() {
 					}
 					var thisUrl= context +"/productMater/toProductMater?bsType="+bsType+"&quoteId="+quoteId+"&bsCode="+bsCode;
 					($(window.parent.document).find(('li[lay-id="'+thisUrl+'"]'))).find(".layui-tab-close").trigger("click")
-				});
+				// });
 			} else {
 					layer.alert(data.msg);
 			}
 		}, "POST", false, function(res) {
 			layer.alert(res.msg);
 		});
-	});
+	// });
 }
 
 function cancelConfirm(){

@@ -215,7 +215,14 @@ public class ProductMaterlmpl implements ProductMaterService {
     }
 
     /**
-     * 确认完成
+     * 确认完成 修改成保存按钮触发
+     *
+     * 	   保存触发逻辑
+     * 	   1.先保存
+     * 	   2.校验填写的数据是否全部完成，全部完成则更新当前任务为已完成
+     * 	   3.判断步骤2校验工艺和材料是否都完成，更新状态
+     * 	   4.判断步骤3校验所有必填内容(材料、工艺、采购、包装、外协)是否都完成，更新草稿状态为进行中
+     * 	   5.计算价格
      */
     @Override
     @Transactional
@@ -226,50 +233,49 @@ public class ProductMaterlmpl implements ProductMaterService {
     	if(i>0){
     		return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
     	}
+    	//判断是否全部完成标识
+    	boolean allFinished = true;
     	productMaterDao.saveAll(productMaterList2);
         List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductMater o : productMaterList) {
-//            if("hardware".equals(bsType)) {
-//                if (o.getBsQty() == null ) {
-//                    return ApiResponseResult.failure("用量存在空值,请检查后再确认！");
-//                }
-//            }else
             if(("PCS").equals(o.getPurchaseUnit())){
                 if ( o.getBsQty() == null ) {
-                    return ApiResponseResult.failure("用量不能为空,请检查后再确认！");
+                       allFinished = false;
+//                    return ApiResponseResult.failure("用量不能为空,请检查后再确认！");
                 }
             }else if("molding".equals(bsType)||"hardware".equals(bsType)) {
                 if ( o.getBsProQty() == null  ||("0").equals(o.getBsCave()) || o.getBsWaterGap() == null) {
-                    return ApiResponseResult.failure("制品重(g)、穴数、水口数不能为空,请检查后再确认！");
+                    allFinished = false;
+//                    return ApiResponseResult.failure("制品重(g)、穴数、水口数不能为空,请检查后再确认！");
                 }
             }else if("surface".equals(bsType)) {
 //                o.getBsColor() == null || o.getBsMachiningType() == null || 配色工艺、加工类型、
                 if ( o.getBsQty() == null ) {
-                    return ApiResponseResult.failure("用量不能为空,请检查后再确认！");
+                    allFinished = false;
+//                    return ApiResponseResult.failure("用量不能为空,请检查后再确认！");
                 }
             }else if("packag".equals(bsType)) {
                 if (o.getBsQty() == null ) {
-                    return ApiResponseResult.failure("用量存在空值,请检查后再确认！");
+                    allFinished = false;
+//                    return ApiResponseResult.failure("用量存在空值,请检查后再确认！");
                 }
             }
-            o.setBsStatus(1);
+//            o.setBsStatus(1);
             o.setLastupdateDate(new Date());
             o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
         productMaterDao.saveAll(productMaterList);
-        //项目状态设置-状态 2：已完成
-      	quoteItemDao.switchStatus(2, quoteId, bsCode);
-       //增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
-        quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, bsCode);
-        //设置结束时间
-        quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
-        
-      //20210121-fyx-统一修改状态,返回是否全部完成 0否1是
-        Object data = quoteProductService.doItemFinish(bsCode, quoteId,2).getData();
-//        quoteDao.findById(quoteId);
+        if(allFinished) {
+            //项目状态设置-状态 2：已完成
+            quoteItemDao.switchStatus(2, quoteId, bsCode);
+            //增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(), UserUtil.getSessionUser().getId(), quoteId, bsCode);
+            //设置结束时间
+            quoteItemDao.setEndTime(new Date(), quoteId, bsCode);
+            //20210121-fyx-统一修改状态,返回是否全部完成 0否1是
+            Object data = quoteProductService.doItemFinish(bsCode, quoteId,2).getData();
+        }
 
-        //2021/11/19 全部确认完成后开始计算价格
-        //判断是否开始计算价格
         //判断制造部+采购部+外协部 是否全部审批完成
         List<Quote> lq = quoteDao.findByDelFlagAndStatus2AndId(quoteId);
         if(lq.size()>0){
@@ -279,10 +285,9 @@ public class ProductMaterlmpl implements ProductMaterService {
             quote.setBsEndTime2(new Date());
             quote.setBsStatus3(1);
             quoteDao.save(quote);
-            quoteSumService.countMeterAndProcess(quoteId+"");
         }
-//        quoteSumService.countMeterAndProcess(quoteId+"");
-        return ApiResponseResult.success("确认完成成功！").data(data);
+        quoteSumService.countMeterAndProcess(quoteId+"");
+        return ApiResponseResult.success("确认完成成功！").data("data");
     }
 
     //取消完成
@@ -494,7 +499,7 @@ public class ProductMaterlmpl implements ProductMaterService {
             }
        }else {
             pmList = productMaterDao.findByDelFlagAndPkQuoteAndBsElementAndBsMaterNameAndBsModel(0,o.getPkQuote(),o.getBsElement(),o.getBsMaterName(), o.getBsModel());
-     }
+            }
 
         return ApiResponseResult.success().data(pmList);
     }
@@ -561,6 +566,7 @@ public class ProductMaterlmpl implements ProductMaterService {
 		//注塑-材料单价*(制品重(g)+水口重/穴数)/基数
 		return null;
 	}
+
 
     @Override
     public ApiResponseResult editMaterList(List<ProductMater> productMaterList) throws Exception {

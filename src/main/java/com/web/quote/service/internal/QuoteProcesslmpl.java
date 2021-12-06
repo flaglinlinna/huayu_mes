@@ -752,6 +752,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				quoteProcess.setCreateDate(date);
 				quoteProcess.setPkWorkCenter(o.getPkBjWorkCenter());
 				quoteProcess.setBsOrder((i+1)*10);
+				quoteProcess.setBsInjection(o.getBsInjection());
 				quoteProcess.setPurchaseUnit(o.getPurchaseUnit()); //单位为PCS 不参与人工和制费计算
 				quoteProcessList.add(quoteProcess);
 			}
@@ -806,6 +807,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				o.setBsModel(quoteBom.getBsModel());
 				o.setBsName(quoteBom.getBsComponent());
 				o.setBsSingleton(quoteBom.getBsSingleton());
+				o.setBsInjection(quoteBom.getBsInjection());
 				//不修改工作中心
 //				o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
 				o.setItemType(quoteBom.getItp().getItemType());

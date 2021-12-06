@@ -450,52 +450,63 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 	public ApiResponseResult doStatus(Long quoteId,List<ProductMater> productMaterList2) throws Exception {
 		//未填写的数目
 		Integer notFilled = 0;
+		//判断是否全部完成标识
+		boolean allFinished = true;
 		//待确认的采购信息
 		List<ProductMater> productMaterList = new ArrayList<>();
-		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(UserUtil.getSessionUser().getId());
-		if(lmp.size()>0){
-			notFilled = productMaterDao.countByPkQuoteAndUserId(quoteId,UserUtil.getSessionUser().getId());
-			productMaterList =productMaterDao.findByPkQuoteAndUser(quoteId,UserUtil.getSessionUser().getId());
-		}else {
-			notFilled =productMaterDao.countByDelFlagAndPkQuoteAndBsAssessIsNullAndBsTypeIsNotAndBsAgent(0,quoteId,"out",0);
-			productMaterList = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeIsNotAndBsAgent(0,quoteId,"out",0);
-		}
+//		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(UserUtil.getSessionUser().getId());
+//		if(lmp.size()>0){
+//			notFilled = productMaterDao.countByPkQuoteAndUserId(quoteId,UserUtil.getSessionUser().getId());
+//			productMaterList =productMaterDao.findByPkQuoteAndUser(quoteId,UserUtil.getSessionUser().getId());
+//		}else {
+//			notFilled =productMaterDao.countByDelFlagAndPkQuoteAndBsAssessIsNullAndBsTypeIsNotAndBsAgent(0,quoteId,"out",0);
+//			productMaterList = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeIsNotAndBsAgent(0,quoteId,"out",0);
+//		}
+		productMaterList = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeIsNotAndBsAgent(0,quoteId,"out",0);
 		if(productMaterList.size()==0){
 			return ApiResponseResult.failure("确认完成失败！当前报价单无采购信息！");
 		}
 		productMaterDao.saveAll(productMaterList2);
 		//判断是否该用户下的物料类型下的采购单是否评估价格存在空值
-		if(notFilled>0){
-			return ApiResponseResult.failure("确认完成失败！当前其他用户还有 "+notFilled +"条信息未填写评估价格");
-		}else {
+//		if(notFilled>0){
+//			return ApiResponseResult.failure("确认完成失败！当前其他用户还有 "+notFilled +"条信息未填写评估价格");
+//		}else {
 			for(ProductMater o:productMaterList){
-				o.setBsStatusPurchase(1);
-				o.setLastupdateDate(new Date());
-				o.setLastupdateBy(UserUtil.getSessionUser().getId());
+				if(o.getBsAssess()==null){
+					allFinished = false;
+				}else {
+//				o.setBsStatusPurchase(1);
+					o.setLastupdateDate(new Date());
+					o.setLastupdateBy(UserUtil.getSessionUser().getId());
+				}
 			}
 			productMaterDao.saveAll(productMaterList);
-		}
+//		}
+		List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
 		//20210121-fyx-确认完成修改状态
-    	List<Quote> lo = quoteDao.findByDelFlagAndId(0,quoteId);
-    	if(lo.size()>0){
-    		Quote o = lo.get(0);
-    		o.setBsStatus2Purchase(2);
-    		quoteDao.save(o);
-    	}
+		if(allFinished) {
+			if (lo.size() > 0) {
+				Quote o = lo.get(0);
+				o.setBsStatus2Purchase(2);
+				quoteDao.save(o);
+			}
+		}
 
 		//2021/11/19 全部确认完成后开始计算价格
 		//判断是否开始计算价格
 		//判断制造部+采购部+外协部 是否全部审批完成
-		List<Quote> lq = quoteDao.findByDelFlagAndStatus2AndId(quoteId);
-		if(lq.size()>0){
-			Quote quote = lq.get(0);
-			quote.setBsStep(3);
-			quote.setBsStatus2(2);
-			quote.setBsEndTime2(new Date());
-			quote.setBsStatus3(1);
-			quoteDao.save(quote);
-			quoteSumService.countMeterAndProcess(quoteId+"");
+		if(allFinished) {
+			List<Quote> lq = quoteDao.findByDelFlagAndStatus2AndId(quoteId);
+			if (lq.size() > 0) {
+				Quote quote = lq.get(0);
+				quote.setBsStep(3);
+				quote.setBsStatus2(2);
+				quote.setBsEndTime2(new Date());
+				quote.setBsStatus3(1);
+				quoteDao.save(quote);
+			}
 		}
+		quoteSumService.countMeterAndProcess(quoteId + "");
 		return ApiResponseResult.success("确认完成成功！");
 	}
 
