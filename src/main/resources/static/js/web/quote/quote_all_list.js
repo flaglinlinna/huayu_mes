@@ -57,11 +57,11 @@ $(function() {
 				cols : [
 					[
 				{fixed:'left',type : 'numbers',	rowspan : 2,colspan : 1,},
-				{fixed:'left',field : 'bsCode',title : '报价单编号',width : 150,sort: true,	rowspan : 2,colspan : 1,},
+				{fixed:'left',field : 'bsCode',title : '报价单编号',width : 140,sort: true,	rowspan : 2,colspan : 1,},
 					{fixed:'left',field : 'bsProd',title : '产品型号',width : 120,sort: true,	rowspan : 2,colspan : 1,},
 					{fixed:'left',fixed:'left',field : 'bsProjVer',title : '版本',width : 100,sort: true,	rowspan : 2,colspan : 1,},
 					{field : 'bsStatus',title : '状态',width : 370,templet:'#statusTpl',sort: true,	rowspan : 2,colspan : 1,},
-				{field : 'bsType',title : '报价类型', width : 120,templet:function (d) {
+				{field : 'bsType',title : '报价类型', width : 100,templet:function (d) {
 						 if(d.bsType=="YSBJ"){
 							 return "衍生报价";
 						 }else if(d.bsType =="XPBJ"){
@@ -70,7 +70,8 @@ $(function() {
 							 return "";
 						 }
 				},sort: true,	rowspan : 2,colspan : 1},
-
+						{field : 'bsCustManage',title : '客户经理',width : 120,sort: true},
+						{field : 'userName',title : '创建人',width : 90, sort: true},
 				{field : 'bsCustName',title : '客户名称',width : 120,sort: true,	rowspan : 2,colspan : 1,},
 
 				{field : 'bsProdType',title : '产品类型',width : 140, sort: true,	rowspan : 2,colspan : 1,},
