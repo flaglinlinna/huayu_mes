@@ -375,10 +375,10 @@ public class QuoteBomlmpl implements QuoteBomService {
 	public ApiResponseResult doStatus(String quoteId,String code,List<QuoteBom> quoteBomList2)throws Exception{
 		//判断状态是否已执行过确认提交
 		quoteBomDao.saveAll(quoteBomList2);
-		int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
-		if(i>0){
-			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
-		}
+//		int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
+//		if(i>0){
+//			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
+//		}
 		List<QuoteBom> quoteBomList = quoteBomDao.findByDelFlagAndPkQuote(0,Long.parseLong(quoteId));
 		if(quoteBomList.size()<=0){
 			return ApiResponseResult.failure("外购件清单信息为空，请先填写后确认提交。");

@@ -93,16 +93,18 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	@Override
 	public ApiResponseResult getList(String keyword,String pkQuote, PageRequest pageRequest) throws Exception {
 		// 查询条件1
-		List<SearchFilter> filters = new ArrayList<>();
-		filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
-		// 查询2
-		List<SearchFilter> filters1 = new ArrayList<>();
-		if (StringUtils.isNotEmpty(keyword)) {
-			filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("proc.procName", SearchFilter.Operator.LIKE, keyword));
-			filters1.add(new SearchFilter("proc.procNo", SearchFilter.Operator.LIKE, keyword));
-		}
-		filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
+		try {
+
+			List<SearchFilter> filters = new ArrayList<>();
+			filters.add(new SearchFilter("delFlag", SearchFilter.Operator.EQ, BasicStateEnum.FALSE.intValue()));
+			// 查询2
+			List<SearchFilter> filters1 = new ArrayList<>();
+			if (StringUtils.isNotEmpty(keyword)) {
+				filters1.add(new SearchFilter("bsName", SearchFilter.Operator.LIKE, keyword));
+				filters1.add(new SearchFilter("proc.procName", SearchFilter.Operator.LIKE, keyword));
+				filters1.add(new SearchFilter("proc.procNo", SearchFilter.Operator.LIKE, keyword));
+			}
+			filters.add(new SearchFilter("pkQuote", SearchFilter.Operator.EQ, pkQuote));
 		/*if (!"null".equals(pkQuote)&&pkQuote!=null) {
 			
 		}else {
@@ -110,19 +112,19 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 			return ApiResponseResult.success().data(DataGrid.create(quoteProcessList, (int) quoteProcessList.size(),
 					pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 		}*/
-		Specification<QuoteProcess> spec = Specification.where(BaseService.and(filters, QuoteProcess.class));
-		Specification<QuoteProcess> spec1 = spec.and(BaseService.or(filters1, QuoteProcess.class));
-		Page<QuoteProcess> page = quoteProcessDao.findAll(spec1, pageRequest);
-		List<QuoteProcess> quoteProcessList = page.getContent();
-		List<Proc> packagList = procDao.findByDelFlagAndProcName(0,"组装");
-		for(QuoteProcess o:quoteProcessList) {
-			List<Map<String, Object>> componentList = quoteBomDao.getBsComponent(Long.parseLong(pkQuote),o.getBsElement());
-			List<Map<String, Object>> procList = new ArrayList<>();
-			if(!("out").equals(o.getBjWorkCenter().getBsCode())){
-				procList = quoteProcessDao.getProcByWorkCenter(o.getPkWorkCenter());
-			}else {
-				procList = quoteProcessDao.getProcByWorkCenterAndOut(o.getPkWorkCenter());
-			}
+			Specification<QuoteProcess> spec = Specification.where(BaseService.and(filters, QuoteProcess.class));
+			Specification<QuoteProcess> spec1 = spec.and(BaseService.or(filters1, QuoteProcess.class));
+			Page<QuoteProcess> page = quoteProcessDao.findAll(spec1, pageRequest);
+			List<QuoteProcess> quoteProcessList = page.getContent();
+			List<Proc> packagList = procDao.findByDelFlagAndProcName(0, "组装");
+			for (QuoteProcess o : quoteProcessList) {
+				List<Map<String, Object>> componentList = quoteBomDao.getBsComponent(Long.parseLong(pkQuote), o.getBsElement());
+				List<Map<String, Object>> procList = new ArrayList<>();
+				if (!("out").equals(o.getBjWorkCenter().getBsCode())) {
+					procList = quoteProcessDao.getProcByWorkCenter(o.getPkWorkCenter());
+				} else {
+					procList = quoteProcessDao.getProcByWorkCenterAndOut(o.getPkWorkCenter());
+				}
 //			List<Map<String, Object>> mapList = quoteBomDao.getBsMaterName(o.getPkQuote(), o.getBsElement(), o.getBsName(), o.getPkWorkCenter());
 //			if(mapList.size()==1){
 //				o.setBsMaterName(mapList.get(0).get("BSMATERNAME").toString());
@@ -141,86 +143,91 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 //					}
 //				}
 //			}
-			//材料下拉选择
+				//材料下拉选择
 //			if (mapList.size() > 0) {
 //				o.setBsMaterNameList(JSON.toJSONString(mapList));
 //			}
-			//损耗分组下拉选择
+				//损耗分组下拉选择
 //			if (groupsList.size() > 0) {
 //				o.setBsGroupsList(JSON.toJSONString(groupsList));
 //			}
 
-			//关联到bom，如果材料是辅料，则查询关联的零件名称
-			if(o.getPkQuoteBom()!=null) {
+				//关联到bom，如果材料是辅料，则查询关联的零件名称
+				if (o.getPkQuoteBom() != null) {
 
-				if(StringUtils.isEmpty(o.getItemType())) {
-					//新增的时候为空
-					o.setBsComponentList(JSON.toJSONString(componentList));
-					if(StringUtils.isEmpty(o.getBsLinkName())) {
-						o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
-					}
-
-				}else if (o.getItemType().startsWith("辅料")||o.getItemType().startsWith("油漆")){
-
-//				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
-					//2021-05-19 物料类型为 辅料 的，工序名称默认为 组装（如果存在组装工序）
-					if(o.getPkProc()==null&&packagList.size()>0){
-						o.setPkProc(packagList.get(0).getId());
-					}
-					//关联第一个关联零件并返回下拉选择
-					if(componentList.size()>0){
+					if (StringUtils.isEmpty(o.getItemType())) {
+						//新增的时候为空
 						o.setBsComponentList(JSON.toJSONString(componentList));
-						if(StringUtils.isEmpty(o.getBsLinkName())) {
+						if (StringUtils.isEmpty(o.getBsLinkName())) {
 							o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
 						}
-					}else {
-						o.setBsLinkName(o.getBsName());
+
+					} else if (o.getItemType().startsWith("辅料") || o.getItemType().startsWith("油漆")) {
+
+//				if (("辅料").equals(o.getQuoteBom().getItp().getItemType())) {
+						//2021-05-19 物料类型为 辅料 的，工序名称默认为 组装（如果存在组装工序）
+						if (o.getPkProc() == null && packagList.size() > 0) {
+							o.setPkProc(packagList.get(0).getId());
+						}
+						//关联第一个关联零件并返回下拉选择
+						if (componentList.size() > 0) {
+							o.setBsComponentList(JSON.toJSONString(componentList));
+							if (StringUtils.isEmpty(o.getBsLinkName())) {
+								o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
+							}
+						} else {
+							o.setBsLinkName(o.getBsName());
+						}
+					} else {
+						if (StringUtils.isEmpty(o.getBsLinkName())) {
+							o.setBsLinkName(o.getBsName());
+						}
+						//非辅料 (关联零件为自身零件)
+						o.setBsComponentList(JSON.toJSONString(componentList));
 					}
-				}else {
-					if(StringUtils.isEmpty(o.getBsLinkName())){
-						o.setBsLinkName(o.getBsName());
-					}
-					//非辅料 (关联零件为自身零件)
-					o.setBsComponentList(JSON.toJSONString(componentList));
-				}
-			}else {
-				//关联不到bom，则可能是外协工艺，默认非辅料(关联零件为自身零件)
+				} else {
+					//关联不到bom，则可能是外协工艺，默认非辅料(关联零件为自身零件)
 //				if(o.getBjWorkCenter().getBsCode())
-				Map<String, Object> map = new HashMap<>();
-				map.put("BSCOMPONENT",o.getBsName());
-				componentList.add(map);
-				o.setBsComponentList(JSON.toJSONString(componentList));
-				if(StringUtils.isEmpty(o.getBsLinkName())) {
-					o.setBsLinkName(o.getBsName());
+					Map<String, Object> map = new HashMap<>();
+					map.put("BSCOMPONENT", o.getBsName());
+					componentList.add(map);
+					o.setBsComponentList(JSON.toJSONString(componentList));
+					if (StringUtils.isEmpty(o.getBsLinkName())) {
+						o.setBsLinkName(o.getBsName());
+					}
 				}
-			}
 
-			if(procList.size() >0){
-				//工序下拉框
-				o.setBsProcList(JSON.toJSONString(procList));
-			}
+				if (procList.size() > 0) {
+					//工序下拉框
+					o.setBsProcList(JSON.toJSONString(procList));
+				}
 
-			//bom中零件名称被修改，对应的修改关联零件
-			Boolean isComponentIn = false;
-			if(componentList.size()>0){
-				if(!o.getBsLinkName().equals(o.getBsName())){
-					for(Map<String,Object> map:componentList){
-						if(map.get("BSCOMPONENT").toString().equals(o.getBsLinkName())){
-							isComponentIn = true;
+				//bom中零件名称被修改，对应的修改关联零件
+				Boolean isComponentIn = false;
+				if (componentList.size() > 0) {
+					if (!o.getBsLinkName().equals(o.getBsName())) {
+						for (Map<String, Object> map : componentList) {
+							if (map.get("BSCOMPONENT").toString().equals(o.getBsLinkName())) {
+								isComponentIn = true;
+							}
+						}
+						if (!isComponentIn) {
+							o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
 						}
 					}
-					if(!isComponentIn){
-						o.setBsLinkName(componentList.get(0).get("BSCOMPONENT").toString());
-					}
 				}
-			}
 
+			}
+			//20201222-fyx
+			updateLwAndHw(Long.valueOf(pkQuote));
+			//--end
+			return ApiResponseResult.success().data(DataGrid.create(quoteProcessList, (int) page.getTotalElements(),
+					pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
+		}catch (Exception e){
+			e.printStackTrace();
+			return ApiResponseResult.success().data(DataGrid.create(null, 0,
+					pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 		}
-		//20201222-fyx
-		updateLwAndHw(Long.valueOf(pkQuote));
-		//--end
-		return ApiResponseResult.success().data(DataGrid.create(quoteProcessList, (int) page.getTotalElements(),
-				pageRequest.getPageNumber() + 1, pageRequest.getPageSize()));
 
 	}
 	
