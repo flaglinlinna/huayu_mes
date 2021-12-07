@@ -549,8 +549,8 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				o.setDelBy(UserUtil.getSessionUser().getId());
 				quoteProcessList.add(o);
 		}
-	        quoteProcessDao.saveAll(quoteProcessList);
-	        return ApiResponseResult.success("删除成功！");
+		quoteProcessDao.saveAll(quoteProcessList);
+		return ApiResponseResult.success("删除成功！");
 	}
 	/**
 	 * 确认完成

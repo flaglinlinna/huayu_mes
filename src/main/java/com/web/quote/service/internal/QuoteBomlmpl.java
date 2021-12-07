@@ -124,6 +124,20 @@ public class QuoteBomlmpl implements QuoteBomService {
 		o.setLastupdateDate(new Date());
 		o.setLastupdateBy(UserUtil.getSessionUser().getId());
 		quoteBomDao.save(o);
+
+		List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndPkQuoteBom(0,o.getPkQuote(),o.getId());
+		for(QuoteProcess quoteProcess:quoteProcessList){
+			quoteProcess.setBsElement(o.getBsElement());
+			quoteProcess.setBsName(o.getBsComponent());
+			quoteProcess.setItemType(o.getItp().getItemType());
+			quoteProcess.setBsGroups(o.getBsGroups());
+			quoteProcess.setBsMaterName(o.getBsMaterName());
+			quoteProcess.setBsModel(o.getBsModel());
+			quoteProcess.setPurchaseUnit(o.getPurchaseUnit());
+//			quoteProcess.set
+		}
+		quoteProcessDao.saveAll(quoteProcessList);
+
 		return ApiResponseResult.success("编辑成功！");
 
 	}
