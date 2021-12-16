@@ -59,7 +59,7 @@ $(function () {
             }, {
                 fixed: 'left', field: 'bsCode',
                 title: '报价单编号',
-                width: 150,
+                width: 140,
                 sort: true
             },
                 {
@@ -98,7 +98,9 @@ $(function () {
                         }
                     }
                 },
-                {field: 'bsStage', title: '报价阶段', width: 120, sort: true},
+
+                {field : 'bsCustManage',title : '客户经理',width : 120,sort: true},
+                {field : 'userName',title : '创建人',width : 90, sort: true},
                 {
                     field: 'bsBade',
                     title: '中标状态',
@@ -122,6 +124,7 @@ $(function () {
                     width: 140,
                     sort: true
                 },
+                {field: 'bsStage', title: '报价阶段', width: 100, sort: true},
                 // {field : 'bsDevType', title : '机种型号', width : 140, sort : true},
                 {field: 'bsFinishTime', title: '完成日期', sort: true, width: 140},
                 {field: 'bsSimilarProd', title: '相似型号', width: 150},
@@ -141,13 +144,13 @@ $(function () {
                     field: 'bsCustRequire', title: '客户其他要求', width: 200
                 },
                 {
-                    field: 'bsLatest', title: '是否最新', width: 100, sort: true, templet: function (d) {
-                        if (d.bsLatest == "1") {
-                            return "是";
-                        } else {
-                            return "否";
-                        }
-                    }
+                    // field: 'bsLatest', title: '是否最新', width: 100, sort: true, templet: function (d) {
+                    //     if (d.bsLatest == "1") {
+                    //         return "是";
+                    //     } else {
+                    //         return "否";
+                    //     }
+                    // }
                 },
                 {
                     fixed: 'right', title: '操作', toolbar: '#optBar', width: 210
