@@ -145,14 +145,14 @@ $(function() {
 				// {fixed : 'right', title : '操作', align : 'center',width:120, toolbar : '#optBar'}
 				] ],
 			done : function(res, curr, count) {
-				if(res.data==""){
-					$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
-					$("#delbtn").addClass("layui-btn-disabled").attr("disabled", true)
-					$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
-					$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
-					// $("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
-					$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
-				}
+				// if(res.data==""){
+				// 	$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
+				// 	$("#delbtn").addClass("layui-btn-disabled").attr("disabled", true)
+				// 	$("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
+				// 	$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
+				// 	// $("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
+				// 	$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
+				// }
 				// $('div[lay-id="listTable"]').find('.layui-table-header').find('th[data-field="bsFeeWxAll"]').find('span').html('外协价格<i class="layui-icon alone-tips" lay-tips="未税"></i>');
 				pageCurr = curr;
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
@@ -169,7 +169,7 @@ $(function() {
 						// 	$("select[name='selectModelType']").attr("disabled", "disabled");
 						// 	form.render('select');
 						// }else
-							if(item.purchaseUnit=="PCS"&&bsType!='packag') {
+						if((item.purchaseUnit=="PCS"||item.bsInjection==1)&&bsType!='packag') {
 							tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
 							tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsYield"]').data('edit', true).css("background-color", "#FFFFFF");
 							tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsModelType"]').find('select[name="selectModelType"]').attr("disabled","disabled");
@@ -1620,7 +1620,7 @@ function loadAll() {
 						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
 						$("select[name='selectModelType']").attr("disabled", "disabled");
 						layui.form.render('select');
-					}else if(item.purchaseUnit=="PCS"&&bsType!='packag') {
+					}else if((item.purchaseUnit=="PCS"||item.bsInjection==1)&&bsType!='packag') {
 						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2");
 						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsYield"]').data('edit', true).css("background-color", "#FFFFFF");
 						tableIns.find('tr[data-index=' + i + ']').find('td[data-field="bsModelType"]').find('select[name="selectModelType"]').attr("disabled","disabled");

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.system.log.service.SysLogService;
 import com.utils.*;
 import com.utils.enumeration.BasicStateEnum;
 import com.web.basePrice.dao.BjModelTypeDao;
@@ -55,6 +56,13 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 	private QuoteProcessDao quoteProcessDao;
 	@Autowired
 	private BjModelTypeDao bjModelTypeDao;
+
+	@Autowired
+	private SysLogService sysLogService;
+	public SysLogService getSysLogService(){
+		return this.sysLogService;
+	}
+
 	/**
 	 * 查询列表
 	 */
@@ -529,7 +537,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for (ProductMater pm : lpm1) {
 
 			if(pm.getBsQty()==null||pm.getBsCave()==null||pm.getBsWaterGap()==null||pm.getBsProQty()==null){
-				break;
+				continue;
 			}
 			BigDecimal qty = BigDecimal.ZERO;
 			BigDecimal bsAssess = new BigDecimal("0");// 采购价
@@ -592,14 +600,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for (ProductProcess pp : lpp_hardware) {
 			if(pp.getBsUserNum()==null){
 				pp.setBsUserNum(BigDecimal.ZERO);
-				break;
+				continue;
 			}
 			if(pp.getBsCycle()==null){
 				pp.setBsCycle(BigDecimal.ZERO);
-				break;
+				continue;
 			}
 			if(pp.getBsYield()==null){
-				break;
+				continue;
 			}
 			if(pp.getBsCapacity()==null){
 				pp.setBsCapacity("0");
@@ -636,17 +644,17 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for (ProductProcess pp : lpp_molding) {
 			if(pp.getBsUserNum()==null){
 				pp.setBsUserNum(BigDecimal.ZERO);
-				break;
+				continue;
 			}
 			if(pp.getBsCycle()==null){
 				pp.setBsCycle(BigDecimal.ZERO);
-				break;
+				continue;
 			}
 			if(pp.getBsYield()==null){
-				break;
+				continue;
 			}
 			if(pp.getBsCave()==null){
-				break;
+				continue;
 			}
 
 
@@ -682,14 +690,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for (ProductProcess pp : lpp_surface) {
 			if(pp.getBsUserNum()==null){
 				pp.setBsUserNum(BigDecimal.ZERO);
-				break;
+				continue;
 			}
 			if(pp.getBsCapacity()==null){
 				pp.setBsCapacity("0");
-				break;
+				continue;
 			}
 			if(pp.getBsYield()==null){
-				break;
+				continue;
 			}
 			if (!("PCS").equals(pp.getPurchaseUnit())&&!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0  && ("0").equals(pp.getBsCapacity()))) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
@@ -722,14 +730,14 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for (ProductProcess pp : lpp_packag) {
 			if(pp.getBsUserNum()==null){
 				pp.setBsUserNum(BigDecimal.ZERO);
-				break;
+				continue;
 			}
 			if(pp.getBsCapacity()==null){
 				pp.setBsCapacity("0");
-				break;
+				continue;
 			}
 			if(pp.getBsYield()==null){
-				break;
+				continue;
 			}
 			if (!(pp.getBsUserNum().compareTo(BigDecimal.ZERO)==0  && ("0").equals(pp.getBsCapacity()) )) {
 				BigDecimal bsRadix = new BigDecimal("1");// 基数
@@ -775,7 +783,7 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		for(ProductProcess o :processAllList){
 			//首先过滤采购单位为PCS且非组装 及人数为0 不参与计算
 			if(o.getBsUserNum()==null){
-				break;
+				continue;
 			}
 			if (("PCS".equals(o.getPurchaseUnit())&&!"packag".equals(o.getBsType()))||("out").equals(o.getBsType())||!(o.getBsUserNum().compareTo(BigDecimal.ZERO)==0 )) {
 				if (StringUtils.isNotEmpty(o.getBsGroups())) {
@@ -790,80 +798,91 @@ public class QuoteSumlmpl extends BaseSql implements QuoteSumService {
 		}
 //		processList = processList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ProductProcess::getBsGroups))), ArrayList::new));
 		Collections.reverse(processList);
-		for(Integer i=0;i<processList.size();i++){
-			ProductProcess o = processList.get(i);
-			//成本(bsCost) = 人工制费 + 制造费用 + 材料费用
-			// 外协损耗改成工序良率计算
-			if(o.getBsType().equals("out")){
-				o.setBsCost(o.getBsFeeWxAll());
+		try {
+
+			for (Integer i = 0; i < processList.size(); i++) {
+				ProductProcess o = processList.get(i);
+				//成本(bsCost) = 人工制费 + 制造费用 + 材料费用
+				// 外协损耗改成工序良率计算
+				if (o.getBsType().equals("out")) {
+					o.setBsCost(o.getBsFeeWxAll());
 //				o.setBsYield(new BigDecimal("100").subtract(o.getBsLoss()));
-				o.setBsYield(o.getBsLoss());
-			}else {
-				//损耗材料的材料成本取数 1分组不为空,取出所有材料名称对应bom;2分组不为空,取对应材料名称的材料成本
-				 //修改 根据损耗明细中的组件名称、所属零件、工作中心、工序到工艺流程中取对应的材料名称，再合计这些材料的材料成本
-				List<ProductMater> pmList = new ArrayList<>();
+					o.setBsYield(o.getBsLoss());
+				} else {
+					//损耗材料的材料成本取数 1分组不为空,取出所有材料名称对应bom;2分组不为空,取对应材料名称的材料成本
+					//修改 根据损耗明细中的组件名称、所属零件、工作中心、工序到工艺流程中取对应的材料名称，再合计这些材料的材料成本
+					List<ProductMater> pmList = new ArrayList<>();
 //				pmList = productMaterDao.findByProcessLost(o.getPkQuote(), o.getBsLinkName(), o.getPkProc(), o.getBsElement());
-				//2021-08-31 损耗明细中这个顺序号在工艺流程中的
-				// 损耗分组如果为空，根据组件名称、材料名称、材料规格相同的（同一组件中，材料名称+材料规格不会重复）到所有的材料成本中合计；
-				// 如果损耗分组有值，根据工艺流程中该损耗分组的材料名称成本中合计。
+					//2021-08-31 损耗明细中这个顺序号在工艺流程中的
+					// 损耗分组如果为空，根据组件名称、材料名称、材料规格相同的（同一组件中，材料名称+材料规格不会重复）到所有的材料成本中合计；
+					// 如果损耗分组有值，根据工艺流程中该损耗分组的材料名称成本中合计。
 //				BigDecimal bsFeeLhAll = o.getBsFeeLhAll()==null?BigDecimal.ZERO:o.getBsFeeLhAll();
 //				BigDecimal bsFeeMhAll = o.getBsFeeMhAll()==null?BigDecimal.ZERO:o.getBsFeeMhAll();
 
-				BigDecimal bsFeeLhAll = BigDecimal.ZERO;
-				BigDecimal bsFeeMhAll =BigDecimal.ZERO;
+					BigDecimal bsFeeLhAll = BigDecimal.ZERO;
+					BigDecimal bsFeeMhAll = BigDecimal.ZERO;
 
-				if(StringUtils.isNotEmpty(o.getBsGroups())){
-					//1.找出同个分组及组件所属零件相同下的所有工艺，再找出对应的材料成本(材料名称和组件查找对应的材料成本)
-					List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuoteAndBsElementAndBsGroupsAndBsLinkName(0, o.getPkQuote(), o.getBsElement(),o.getBsGroups(),o.getBsLinkName());
+					if (StringUtils.isNotEmpty(o.getBsGroups())) {
+						//1.找出同个分组及组件所属零件相同下的所有工艺，再找出对应的材料成本(材料名称和组件查找对应的材料成本)
+						List<ProductProcess> productProcessList = productProcessDao.findByDelFlagAndPkQuoteAndBsElementAndBsGroupsAndBsLinkName(0, o.getPkQuote(), o.getBsElement(), o.getBsGroups(), o.getBsLinkName());
 
-					List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndBsElementAndBsGroupsAndBsLinkName(0, o.getPkQuote(), o.getBsElement(),o.getBsGroups(),o.getBsLinkName());
+						List<QuoteProcess> quoteProcessList = quoteProcessDao.findByDelFlagAndPkQuoteAndBsElementAndBsGroupsAndBsLinkName(0, o.getPkQuote(), o.getBsElement(), o.getBsGroups(), o.getBsLinkName());
 
-					for(QuoteProcess qp:quoteProcessList){
-						if(StringUtils.isNotEmpty(qp.getBsMaterName())){
-							List<ProductMater> pm =	productMaterDao.findByDelFlagAndPkQuoteAndBsElementAndBsMaterNameAndBsModel(0,qp.getPkQuote(),qp.getBsElement(),qp.getBsMaterName(), qp.getBsModel());
-							if (pm.size() > 0) {
-								pmList.addAll(pm);
+						for (QuoteProcess qp : quoteProcessList) {
+							if (StringUtils.isNotEmpty(qp.getBsMaterName())) {
+								List<ProductMater> pm = productMaterDao.findByDelFlagAndPkQuoteAndBsElementAndBsMaterNameAndBsModel(0, qp.getPkQuote(), qp.getBsElement(), qp.getBsMaterName(), qp.getBsModel());
+								if (pm.size() > 0) {
+									pmList.addAll(pm);
+								}
 							}
 						}
-					}
 
-					for(ProductProcess qp:productProcessList){
-						bsFeeLhAll = bsFeeLhAll.add(qp.getBsFeeLhAll()==null?BigDecimal.ZERO:qp.getBsFeeLhAll());
-						bsFeeMhAll = bsFeeMhAll.add(qp.getBsFeeMhAll()==null?BigDecimal.ZERO:qp.getBsFeeMhAll());
-					}
-			//		pmList= productMaterDao.findByPkQuoteAndDelFlagAndBsGroups(o.getPkQuote(),0,o.getBsGroups());
-			//		pmList = productMaterDao.findByProcessLost(o.getPkQuote(), o.getBsLinkName(), o.getPkProc(), o.getBsElement());
-				}else {
-					bsFeeLhAll = o.getBsFeeLhAll()==null?BigDecimal.ZERO:o.getBsFeeLhAll();
-					bsFeeMhAll = o.getBsFeeMhAll()==null?BigDecimal.ZERO:o.getBsFeeMhAll();
+						for (ProductProcess qp : productProcessList) {
+							bsFeeLhAll = bsFeeLhAll.add(qp.getBsFeeLhAll() == null ? BigDecimal.ZERO : qp.getBsFeeLhAll());
+							bsFeeMhAll = bsFeeMhAll.add(qp.getBsFeeMhAll() == null ? BigDecimal.ZERO : qp.getBsFeeMhAll());
+						}
+						//		pmList= productMaterDao.findByPkQuoteAndDelFlagAndBsGroups(o.getPkQuote(),0,o.getBsGroups());
+						//		pmList = productMaterDao.findByProcessLost(o.getPkQuote(), o.getBsLinkName(), o.getPkProc(), o.getBsElement());
+					} else {
+						bsFeeLhAll = o.getBsFeeLhAll() == null ? BigDecimal.ZERO : o.getBsFeeLhAll();
+						bsFeeMhAll = o.getBsFeeMhAll() == null ? BigDecimal.ZERO : o.getBsFeeMhAll();
 
-					pmList = productMaterDao.findByDelFlagAndPkQuoteAndBsElementAndBsMaterNameAndBsModel(0,o.getPkQuote(),o.getBsElement(),o.getBsMaterName(), o.getBsModel());
+						pmList = productMaterDao.findByDelFlagAndPkQuoteAndBsElementAndBsMaterNameAndBsModel(0, o.getPkQuote(), o.getBsElement(), o.getBsMaterName(), o.getBsModel());
 //					pmList = productMaterDao.findByPkQuoteAndDelFlagAndBsMaterName(o.getPkQuote(),0,o.getBsMaterName());
-				}
-				BigDecimal materCost = BigDecimal.ZERO;
-				for(ProductMater pm:pmList){
-					materCost = materCost.add(pm.getBsFee());
-				}
-				o.setBsMaterCost(materCost);
+					}
+					BigDecimal materCost = BigDecimal.ZERO;
+					for (ProductMater pm : pmList) {
+						materCost = materCost.add(pm.getBsFee() == null ? BigDecimal.ZERO : pm.getBsFee());
+					}
+					o.setBsMaterCost(materCost);
 
-				o.setBsCost(bsFeeLhAll.add(bsFeeMhAll).add(o.getBsMaterCost()));
-			}
-			//第一条不用加上成本累计(含损耗) //2021-5-18-hjj 各小计分组的损耗独立计算
-			if(i==0||!(o.getBsLinkName()+o.getBsElement()).equals(processList.get(i-1).getBsLinkName()+processList.get(i-1).getBsElement())) {
-				//工序损耗累计
+					o.setBsCost(bsFeeLhAll.add(bsFeeMhAll).add(o.getBsMaterCost()));
+				}
+				//第一条不用加上成本累计(含损耗) //2021-5-18-hjj 各小计分组的损耗独立计算
+				if (i == 0 || !(o.getBsLinkName() + o.getBsElement()).equals(processList.get(i - 1).getBsLinkName() + processList.get(i - 1).getBsElement())) {
+					//工序损耗累计
 //				o.setBsTheLoss(o.getBsCost().divide(o.getBsYield(),5,5).multiply(new BigDecimal("100")).subtract(o.getBsCost()));
-				//每类损耗明细第1行(即第1个工序)的工序损耗累计为0
-				o.setBsTheLoss(BigDecimal.ZERO);
-				//成本累计(含损耗)
-				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()));
-			}else {
-				//工序损耗累计
-				BigDecimal theBsYield =  o.getBsYield().divide(new BigDecimal("100"),5,5);
-				o.setBsTheLoss((processList.get(i - 1).getBsAllLoss()).divide(theBsYield, 5, 5).subtract((processList.get(i - 1).getBsAllLoss())));
-				//成本累计(含损耗)
-				o.setBsAllLoss(o.getBsCost().add(o.getBsTheLoss()).add(processList.get(i - 1).getBsAllLoss()));
-			}
+					//每类损耗明细第1行(即第1个工序)的工序损耗累计为0
+					o.setBsTheLoss(BigDecimal.ZERO);
+					//成本累计(含损耗)
+					BigDecimal bsCost = o.getBsCost() == null ? BigDecimal.ZERO : o.getBsCost();
+					BigDecimal bsTheLoss = o.getBsTheLoss() == null ? BigDecimal.ZERO : o.getBsTheLoss();
+					o.setBsAllLoss(bsCost.add(bsTheLoss));
+				} else {
+					//工序损耗累计
+					BigDecimal theBsYieldTemp = o.getBsYield() == null ? bsYield : o.getBsYield();
+					BigDecimal theBsYield = theBsYieldTemp.divide(new BigDecimal("100"), 5, 5);
+					o.setBsTheLoss((processList.get(i - 1).getBsAllLoss()).divide(theBsYield, 5, 5).subtract((processList.get(i - 1).getBsAllLoss())));
+					//成本累计(含损耗)
+					BigDecimal bsCost = o.getBsCost() == null ? BigDecimal.ZERO : o.getBsCost();
+					BigDecimal bsTheLoss = o.getBsTheLoss() == null ? BigDecimal.ZERO : o.getBsTheLoss();
+					o.setBsAllLoss(bsCost.add(bsTheLoss).add(processList.get(i - 1).getBsAllLoss() == null ? BigDecimal.ZERO : processList.get(i - 1).getBsAllLoss()));
+				}
 //			processList.add(o);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			getSysLogService().error("报价汇总","报价汇总", "countMeterAndProcess",e.getMessage());
 		}
 		productProcessDao.saveAll(processList);
 		return ApiResponseResult.success();

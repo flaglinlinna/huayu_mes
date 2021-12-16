@@ -620,6 +620,9 @@ public class ProductProcesslmpl implements ProductProcessService {
         processAllList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, bsType);
 //        }
         for (ProductProcess o : processAllList) {
+            if(o.getBsSingleton()==0){
+                continue;
+            }
             if (o.getPkProc() == null) {
 //                return ApiResponseResult.failure("工序名称不能为空,请检查后再确认！");
                 allFinished = false;

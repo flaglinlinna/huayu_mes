@@ -345,6 +345,7 @@ $(function() {
 		// 监听搜索框
 		form.on('submit(searchSubmit)', function(data) {
 			// 重新加载table
+			console.log(data);
 			load(data);
 			return false;
 		});
@@ -398,6 +399,24 @@ $(function() {
 				layer.closeAll('loading'); // 关闭loading
 				layer.close(index);
 			}
+		});
+
+		//监听机台类型下拉选择 并修改
+		form.on('select(bsAgent)', function (data) {
+			// 重新加载table
+			tableIns.reload({
+				where : {
+					keyword : $('#keywordSearch').val(),
+					bsAgent:data.value
+				},
+				page : {
+					curr : pageCurr
+					// 从当前页码开始
+				},done: function (res, curr, count) {
+
+				}
+			});
+			return false;
 		});
 
 		//上传附件

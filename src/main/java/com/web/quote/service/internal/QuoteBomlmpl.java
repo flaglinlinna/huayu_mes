@@ -375,6 +375,11 @@ public class QuoteBomlmpl implements QuoteBomService {
 	public ApiResponseResult doStatus(String quoteId,String code,List<QuoteBom> quoteBomList2)throws Exception{
 		//判断状态是否已执行过确认提交
 		quoteBomDao.saveAll(quoteBomList2);
+		for (QuoteBom quoteBom:quoteBomList2){
+			if(StringUtils.isEmpty(quoteBom.getBsMaterName())){
+				return ApiResponseResult.failure("保存成功，请继续填写完所有材料名称");
+			}
+		}
 //		int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
 //		if(i>0){
 //			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");

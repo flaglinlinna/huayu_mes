@@ -128,13 +128,15 @@
              {{#  } }}
          </script>
 		 <script type="text/html" id="optBar">
-                 {{# if(iStatus==2){ }}
-                 <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
-                 <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
-                 {{# } else { }}
-                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-                 {{# } }}              
+			 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+<!--                 {{# if(iStatus==2){ }}-->
+<!--                 <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>-->
+<!--                 <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>-->
+<!--                 {{# } else { }}-->
+<!--                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+<!--                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+<!--                 {{# } }}              -->
          </script>
 
 		<script type="text/html" id="selectRetrial" >
@@ -288,9 +290,9 @@
 					</div>
 				</div>
 
-				<input id="priceComm" name="priceComm" lay-filter="priceComm"
-					   lay-verify="required" readonly="readonly" placeholder="请选择物料类型"
-					   class="layui-input" type="hidden" autocomplete="off" />
+<!--				<input id="priceComm" name="priceComm" lay-filter="priceComm"-->
+<!--					   lay-verify="required" readonly="readonly" placeholder="请选择物料类型"-->
+<!--					   class="layui-input" type="hidden" autocomplete="off" />-->
 
 				<div class="layui-form-item">
 					    <label class="layui-form-label">材料名称</label>
@@ -381,7 +383,7 @@
 					<label class="layui-form-label layui-required">工艺说明</label>
 					<div class="layui-input-block" style="width:530px">
 						<input id="fmemo" name="fmemo" placeholder="请输入工艺说明"
-							lay-verify="required" autocomplete="off" class="layui-input"
+						 autocomplete="off" class="layui-input"
 							type="text" />
 					</div>
 				</div>

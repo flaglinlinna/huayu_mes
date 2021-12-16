@@ -20,18 +20,19 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableAsync
 @SpringBootApplication
-public class WYApplication extends SpringBootServletInitializer{
+//SpringBootServletInitializer
+public class WYApplication {
 	
 
 	public static void main(String[] args) {
 		SpringApplication.run(WYApplication.class, args);
 	}
 	
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		 
-        return application.sources(WYApplication.class);
-    }
+//	@Override
+//	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+//
+//        return application.sources(WYApplication.class);
+//    }
 	/**  
      * 文件上传配置  
      * @return  

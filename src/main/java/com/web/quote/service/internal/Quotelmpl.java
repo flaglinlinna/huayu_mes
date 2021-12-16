@@ -203,7 +203,8 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 
             if(o.getPkProc()!=null&&o.getProc()!=null){
                 if(newName.contains(o.getProc().getProcName())){
-                    break;
+//                    break;
+                    continue;
                 }
             }
 
@@ -730,14 +731,17 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             return ApiResponseResult.success("取消下发成功");
         }
         //校验数据
-        if(quoteProcessDao.countByDelFlagAndPkQuoteAndPkProcIsNull(0,id)>0){
-            return ApiResponseResult.failure("请填写完所有工序");
-        }
+//        if(quoteProcessDao.countByDelFlagAndPkQuoteAndPkProcIsNull(0,id)>0){
+//            return ApiResponseResult.failure("请填写完所有工序");
+//        }
         List<QuoteProcess> lqp = quoteProcessDao.findByDelFlagAndPkQuoteAndBsStatusOrderByBsOrder(0,id,0);
 
         String[] bsGroupsArray = new String[lqp.size()];
         for(Integer q = 0;q<=lqp.size()-1;q++){
             QuoteProcess qp = lqp.get(q);
+            if(qp.getPkProc()==null){
+                return ApiResponseResult.failure("组件为:"+qp.getBsElement()+"工序不能为空，请填写完所有工序");
+            }
             if(qp.getProc()==null){
                 qp.setProc(procDao.findById((long) qp.getPkProc()));
             }
@@ -946,6 +950,8 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         quote.setBsStatus2(0);
         quoteDao.save(quote);
 
+        //自动审批
+        autoDoStatus(id);
         return  ApiResponseResult.success().message("下推成功");
     }
 
@@ -970,5 +976,178 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
             strs[1] = lbl.get(0).getFeeMh();
         }
         return strs;
+    }
+
+    public void autoDoStatus(Long quoteId)throws  Exception{
+        List<Map<String,Object>> mapList = quoteProcessDao.countByBsType(quoteId);
+        List<Map<String,Object>> materList = productMaterDao.countByBsType(quoteId);
+
+        //查找需要重审的类型
+        List<Map<String,Object>> retrialList = quoteBomDao.getRetrial(quoteId);
+        List<Quote> lo = quoteDao.findByDelFlagAndId(0, quoteId);
+        //判断是否为复制单审批
+        Boolean isCopy = false;
+        if(lo.size()>0){
+            Quote o = lo.get(0);
+            isCopy = (o.getBsCopyId()!=null);
+        }
+        HashMap hashMap = new HashMap();
+        HashMap materMap = new HashMap();
+        HashMap retrialMap = new HashMap();
+        for(Map map :mapList){
+            hashMap.put(map.get("TYPE"),map.get("NUM"));
+        }
+        for(Map map : materList){
+            materMap.put(map.get("TYPE"),map.get("NUM"));
+        }
+        for(Map map : retrialList){
+            retrialMap.put(map.get("BSCODE"),map.get("RETRIAL"));
+        }
+        //项目状态设置-状态 2：已完成
+        //增加处理人-20210112-lst-param(用户名,用户id,报价单ID,项目编码)
+        // 不设置结束时间,为空则为自动完成
+
+        //工艺自动完成
+        if(!hashMap.containsKey("hardware")){
+            quoteItemDao.switchStatus(3, quoteId, "C001");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
+        }if(!hashMap.containsKey("surface")){
+            quoteItemDao.switchStatus(3, quoteId, "C003");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
+        }if(!hashMap.containsKey("packag")){
+            quoteItemDao.switchStatus(3, quoteId, "C004");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
+        }if(!hashMap.containsKey("molding")){
+            quoteItemDao.switchStatus(3, quoteId, "C002");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
+        }
+        //外协为工艺  1.无外协的，2.外协不需要重审 自动完成及审批
+        //2021-04-09 暂时取消外协和采购的自动确认完成
+        //||quoteBomDao.findByDelFlagAndOutRetrial(0,1).size()<=0
+        if(!hashMap.containsKey("out")){
+            if(lo.size()>0){
+                Quote o = lo.get(0);
+                o.setBsStatus2Out(2);
+                quoteDao.save(o);
+            }
+//            autoCheck(quoteId,"out");
+        }
+
+//		if(quoteBomDao.findByDelFlagAndPurchaseRetrial(0,1).size()<=0&&isCopy){
+//			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuote(0,quoteId);
+//			for(ProductMater o : productMaterList) {
+//				o.setBsStatusPurchase(1);
+//			}
+//			if(lo.size()>0){
+//				Quote o = lo.get(0);
+//				o.setBsStatus2Purchase(2);
+//				quoteDao.save(o);
+//			}
+//			productMaterDao.saveAll(productMaterList);
+//			autoCheck(quoteId,"QUOTE_PUR");
+//		}
+
+        //材料自动完成(材料为空的情况下)
+        if(!materMap.containsKey("hardware")){
+            quoteItemDao.switchStatus(3, quoteId, "B001");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B001");
+        }if(!materMap.containsKey("surface")){
+            quoteItemDao.switchStatus(3, quoteId, "B003");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B003");
+        }if(!materMap.containsKey("packag")){
+            quoteItemDao.switchStatus(3, quoteId, "B004");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B004");
+        }if(!materMap.containsKey("molding")){
+            quoteItemDao.switchStatus(3, quoteId, "B002");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B002");
+        }
+
+        //材料和工艺自动完成情况下(即是该工作中心下无需填写的数据)则自动审批
+        if((!materMap.containsKey("hardware")&&!hashMap.containsKey("hardware"))||((("0").equals(retrialMap.get("hardware"))||!retrialMap.containsKey("hardware"))&&isCopy)){
+            quoteItemDao.switchStatus(3, quoteId, "C001");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
+            quoteItemDao.switchStatus(3, quoteId, "B001");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B001");
+
+//            autoCheck(quoteId,"hardware");
+
+            //更新完成状态
+            productMaterDao.updateStatus(quoteId,"hardware",1);
+            if(lo.size()>0){
+                Quote o = lo.get(0);
+                o.setBsStatus2Hardware(2);
+                quoteDao.save(o);
+            }
+        }
+//		else if(isCopy) {
+//			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"hardware",1);
+//			for(ProductMater o : productMaterList) {
+//				o.setBsStatus(1);
+//			}
+//			productMaterDao.saveAll(productMaterList);
+//		}
+        if((!materMap.containsKey("surface")&&!hashMap.containsKey("surface"))||((("0").equals(retrialMap.get("surface"))||!retrialMap.containsKey("surface"))&&isCopy)){
+            quoteItemDao.switchStatus(3, quoteId, "B003");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B003");
+            quoteItemDao.switchStatus(3, quoteId, "C003");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
+            if(lo.size()>0){
+                Quote o = lo.get(0);
+                o.setBsStatus2Surface(2);
+                quoteDao.save(o);
+            }
+//            autoCheck(quoteId,"surface");
+
+            productMaterDao.updateStatus(quoteId,"surface",1);
+        }
+//		else if(isCopy) {
+//			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"surface",1);
+//			for(ProductMater o : productMaterList) {
+//				o.setBsStatus(1);
+//			}
+//			productMaterDao.saveAll(productMaterList);
+//		}
+        if((!materMap.containsKey("packag")&&!hashMap.containsKey("packag"))||((("0").equals(retrialMap.get("packag"))||!retrialMap.containsKey("packag"))&isCopy)){
+            quoteItemDao.switchStatus(3, quoteId, "B004");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B004");
+            quoteItemDao.switchStatus(3, quoteId, "C004");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
+            if(lo.size()>0){
+                Quote o = lo.get(0);
+                o.setBsStatus2Packag(2);
+                quoteDao.save(o);
+            }
+//            autoCheck(quoteId,"packag");
+
+            productMaterDao.updateStatus(quoteId,"packag",1);
+        }
+//		else if(isCopy) {
+//			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"packag",1);
+//			for(ProductMater o : productMaterList) {
+//				o.setBsStatus(1);
+//			}
+//			productMaterDao.saveAll(productMaterList);
+//		}
+        if((!materMap.containsKey("molding")&&!hashMap.containsKey("molding"))||((("0").equals(retrialMap.get("molding"))||!retrialMap.containsKey("molding"))&&isCopy)){
+            quoteItemDao.switchStatus(3, quoteId, "B002");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B002");
+            quoteItemDao.switchStatus(3, quoteId, "C002");
+            quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
+            if(lo.size()>0){
+                Quote o = lo.get(0);
+                o.setBsStatus2Molding(2);
+                quoteDao.save(o);
+            }
+//            autoCheck(quoteId,"molding");
+
+            productMaterDao.updateStatus(quoteId,"molding",1);
+        }
+//		else if(isCopy) {
+//			List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsTypeAndRetrialIsNot(0,quoteId,"molding",1);
+//			for(ProductMater o : productMaterList) {
+//				o.setBsStatus(1);
+//			}
+//			productMaterDao.saveAll(productMaterList);
+//		}
     }
 }

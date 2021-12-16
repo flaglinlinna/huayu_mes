@@ -564,19 +564,34 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 	 * **/
 	 public ApiResponseResult doStatus(String quoteId,String code,List<QuoteProcess> quoteProcessList)throws Exception{
 		 //判断状态是否已执行过确认提交-lst-20210112
-		 int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
-		 if(i>0){
-			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
-		 }
+//		 int i=quoteItemDao.countByDelFlagAndPkQuoteAndBsCodeAndBsStatus(0,Long.parseLong(quoteId),code, 2);
+//		 if(i>0){
+//			return ApiResponseResult.failure("此项目已完成，请不要重复确认提交。");
+//		 }
 
 
 
 		 quoteProcessDao.saveAll(quoteProcessList);
+		 for(QuoteProcess o:quoteProcessList){
+			 List<QuoteBom> quoteBomList = new ArrayList<>();
+		 	if(o.getBsMaterName()==null){
+		 		 quoteBomList =  quoteBomDao.findByDelFlagAndPkQuoteAndPkBomId(0,o.getPkQuote(),o.getPkQuoteBom());
+		 		for(QuoteBom quoteBom:quoteBomList){
+		 			quoteBom.setBsGroups(o.getBsGroups());
+				}
+			}else {
+				quoteBomList =  quoteBomDao.findByDelFlagAndBsComponentAndBsElementAndBsMaterNameAndPkQuote(0,o.getBsName(),o.getBsElement(),o.getBsMaterName(),o.getPkQuote());
+				for(QuoteBom quoteBom:quoteBomList){
+					quoteBom.setBsGroups(o.getBsGroups());
+				}
+			}
+			 quoteBomDao.saveAll(quoteBomList);
+		 }
 //		 if(quoteProcessDao.getPkQuoteBomNum(Long.parseLong(quoteId)).size()>0){
 //			 return ApiResponseResult.failure("存在相同的材料名称,请检查。");
 //		 }
 		 if(quoteProcessDao.countByDelFlagAndPkQuoteAndPkProcIsNull(0,Long.parseLong(quoteId))>0){
-			 return ApiResponseResult.failure("请填写完所有工序");
+			 return ApiResponseResult.failure("请在工艺流程中填写完所有工序");
 		 }
 //		 if(quoteProcessDao.getBsGroupsNum(Long.parseLong(quoteId)).size()>0){
 //			 return ApiResponseResult.failure("存在相同损耗合计分组名称,请检查。");
@@ -716,11 +731,26 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 					return ApiResponseResult.failure("外购件清单中不存在 "+qp.getBsMaterName()+" 的材料名称");
 				}
 			}
-			if(StringUtils.isNotEmpty(qp.getBsGroups())){
-				if(quoteBomDao.findByDelFlagAndPkQuoteAndBsGroups(0,qp.getPkQuote(),qp.getBsGroups()).size()==0){
-					return ApiResponseResult.success().data(qp.getBsGroups());
+//			if(StringUtils.isNotEmpty(qp.getBsGroups())){
+//				if(quoteBomDao.findByDelFlagAndPkQuoteAndBsGroups(0,qp.getPkQuote(),qp.getBsGroups()).size()==0){
+//					return ApiResponseResult.success().data(qp.getBsGroups());
+//				}
+//			}
+
+				List<QuoteBom> quoteBomList = new ArrayList<>();
+				if(qp.getBsMaterName()==null){
+					quoteBomList =  quoteBomDao.findByDelFlagAndPkQuoteAndPkBomId(0,qp.getPkQuote(),qp.getPkQuoteBom());
+					for(QuoteBom quoteBom:quoteBomList){
+						quoteBom.setBsGroups(qp.getBsGroups());
+					}
+				}else {
+					quoteBomList =  quoteBomDao.findByDelFlagAndBsComponentAndBsElementAndBsMaterNameAndPkQuote(0,qp.getBsName(),qp.getBsElement(),qp.getBsMaterName(),qp.getPkQuote());
+					for(QuoteBom quoteBom:quoteBomList){
+						quoteBom.setBsGroups(qp.getBsGroups());
+					}
 				}
-			}
+				quoteBomDao.saveAll(quoteBomList);
+
 		}
 		quoteProcessDao.saveAll(quoteProcessList);
 		return ApiResponseResult.success();
@@ -781,7 +811,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 		for(QuoteProcess quoteProcess :quoteProcessList){
 			if(quoteProcess.getPkQuoteBom()!= null){
 				BomID = quoteProcess.getPkQuoteBom();
-				break;
+				continue;
 			}
 		}
 		//查出对应的bom是否为同一个标价单下,相同则根据bomID查询 ，不同则根据bomID2查询(做修改)
@@ -818,7 +848,7 @@ public class QuoteProcesslmpl implements QuoteProcessService {
 				//不修改工作中心
 //				o.setPkWorkCenter(quoteBom.getPkBjWorkCenter());
 				o.setItemType(quoteBom.getItp().getItemType());
-//				o.setBsGroups(quoteBom.getBsGroups());
+				o.setBsGroups(quoteBom.getBsGroups());
 			} else if(newName.contains(o.getBsName())){
 
 			}
