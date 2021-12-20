@@ -84,7 +84,7 @@ $(function() {
 });
 
 function isComplete() {
-	if (iStatus == 2) {
+	if (nowStatus == 1) {
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
 	}

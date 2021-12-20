@@ -42,12 +42,12 @@ public class QuoteBomController extends WebController {
 	public ModelAndView toQuoteBom(String quoteId,String code,String bomId,String bsElement) {
 		ModelAndView mav = new ModelAndView();
 		try {
-			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),code);
+			ApiResponseResult iStatus =quoteService.getStatus(Long.parseLong(quoteId));
 			mav.addObject("code", code);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("bomId", bomId);
 			mav.addObject("bsElement", bsElement);
-			mav.addObject("nowStatus", iStatus);
+			mav.addObject("nowStatus", iStatus.getData());
 			mav.setViewName("/web/quote/01business/quote_bom");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

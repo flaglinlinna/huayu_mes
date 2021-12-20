@@ -81,7 +81,7 @@ $(function() {
 				localtableFilterIns.reload();
 				var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 				layui.each(res.data, function(i, item){
-					if(item.bsStatus=="1"){
+					if(nowStatus==1){
 						tableIns.find('tr[data-index=' + i + ']').find('td').data('edit',false).css("background-color", "#d2d2d2");
 					}
 				});
@@ -325,7 +325,7 @@ function exportExcel(){
 }
 
 function isComplete() {
-	if (iStatus == 2 || iStatus == 3) {
+	if (nowStatus == 1) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#nobtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)

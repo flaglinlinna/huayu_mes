@@ -97,8 +97,11 @@ public interface QuoteProcessDao extends CrudRepository<QuoteProcess, Long>,JpaS
     @Query("update QuoteProcess t set t.bsStatus=?1 where t.pkQuote=?2 and t.delFlag=0")
     public void saveQuoteProcessByQuoteId(Integer bsStatus,Long  quoteId);//变更字段状态
 
-	@Query(value = "select BS_TYPE as type,count(1) as num from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 GROUP BY  BS_TYPE", nativeQuery = true)
+	@Query(value = "select BS_TYPE as type,count(1) as num,sum(BS_STATUS) as status from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and DEL_FLAG = 0 GROUP BY  BS_TYPE", nativeQuery = true)
 	public List<Map<String, Object>> countByBsType(Long quoteId);
+
+//	@Query(value = "select BS_TYPE as type,count(1) as num from PRICE_PRODUCT_PROCESS where PK_QUOTE = ?1 and bs and DEL_FLAG = 0 GROUP BY  BS_TYPE", nativeQuery = true)
+//	public List<Map<String, Object>> countBsStatusByBsType(Long quoteId);
 
 	@Query(value = "SELECT p.PK_QUOTE_BOM,COUNT(p.PK_QUOTE_BOM)  FROM PRICE_QUOTE_PROCESS p where p.PK_QUOTE =?1 and p.DEL_FLAG = 0 GROUP BY p.PK_QUOTE_BOM HAVING  COUNT( p.PK_QUOTE_BOM ) >1",nativeQuery = true)
 	public List<Map<String, Object>> getPkQuoteBomNum(Long quoteId);

@@ -596,7 +596,7 @@ public class ProductProcesslmpl implements ProductProcessService {
 
         //判断是否全部完成标识
         boolean allFinished = true;
-
+        boolean thisFinished = true;
         if(bsCode.equals("freight")){
             Quote quote = quoteDao.findById((long)quoteId);
             quote.setBsStatus2Freight(2);
@@ -620,50 +620,58 @@ public class ProductProcesslmpl implements ProductProcessService {
         processAllList = productProcessDao.findByDelFlagAndPkQuoteAndBsType(0, quoteId, bsType);
 //        }
         for (ProductProcess o : processAllList) {
+            thisFinished = true;
             if(o.getBsSingleton()==0){
                 continue;
             }
             if (o.getPkProc() == null) {
 //                return ApiResponseResult.failure("工序名称不能为空,请检查后再确认！");
                 allFinished = false;
+                thisFinished = false;
             }
             if("PCS".equals(o.getPurchaseUnit())&&!"packag".equals(bsType)){
                 if ( o.getBsYield() == null || o.getBsYield() == BigDecimal.ZERO) {
 //                    return ApiResponseResult.failure("工序良率不能为空或者0,请检查后再确认！");
                     allFinished = false;
+                    thisFinished = false;
                 }
             }
             else if ("hardware".equals(bsType)) {
                 if (o.getBsUserNum() == null || o.getBsCycle() == null || o.getBsYield() == null) {
 //                    return ApiResponseResult.failure("人数、成型周期和工序良率不能为空或者0,请检查后再确认！");
                     allFinished = false;
+                    thisFinished = false;
                 }
             } else if ("molding".equals(bsType)) {
                 if (o.getBsUserNum() == null || o.getBsCycle() == null || o.getBsYield() == null) {
 //                    return ApiResponseResult.failure("人数、穴数、成型周期和工序良率不能为空,请检查后再确认！");
                     allFinished = false;
+                    thisFinished = false;
                 }
             } else if ("surface".equals(bsType)) {
                 if(o.getBsUserNum() ==BigDecimal.ZERO&&o.getBsYield() == BigDecimal.ZERO&&("0").equals(o.getBsCapacity())){
-
+                //都填0的情况下，计算忽略
                 }
                 else if (o.getBsUserNum() == null || o.getBsYield() == null || o.getBsCapacity() == null
                         || o.getBsUserNum() == BigDecimal.ZERO || o.getBsYield() == BigDecimal.ZERO || o.getBsCapacity() == "0") {
 //                    return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
                     allFinished = false;
+                    thisFinished = false;
                 }
             } else if ("packag".equals(bsType)) {
                 if(o.getBsUserNum() == BigDecimal.ZERO&&o.getBsYield() == BigDecimal.ZERO&&("0").equals(o.getBsCapacity())){
-
+                  //都填0的情况下，计算忽略
                 }
                 else if (o.getBsUserNum() == null || o.getBsYield() == null || o.getBsCapacity() == null) {
 //                    return ApiResponseResult.failure("人数、工序良率、产能不能为空,请检查后再确认！");
                     allFinished = false;
+                    thisFinished = false;
                 }
             } else if ("out".equals(bsType)) {
                 if (o.getBsFeeWxAll() == null || o.getBsLoss() == null) {
 //                    return ApiResponseResult.failure("损耗率、外协价格不能为空,请检查后再确认！");
                     allFinished = false;
+                    thisFinished = false;
                 }
 //                o.setBsStatus(1);
             }
@@ -675,6 +683,7 @@ public class ProductProcesslmpl implements ProductProcessService {
                     if (baseFeeList.size() == 0) {
 //                        return ApiResponseResult.failure("存在工序:" + o.getProc().getProcName() + "未维护人工制费,请检查后再确认！");
                         allFinished = false;
+                        thisFinished = false;
                     } else {
                         if(baseFeeList.get(0).getExpiresTime()!=null) {
                             String expiresTime = sdf.format(baseFeeList.get(0).getExpiresTime());
@@ -708,7 +717,9 @@ public class ProductProcesslmpl implements ProductProcessService {
                     }
                 }
             }
-//            o.setBsStatus(1);
+            if(thisFinished) {
+                o.setBsStatus(1);
+            }
 //            o.setLastupdateDate(new Date());
 //            o.setLastupdateBy(UserUtil.getSessionUser().getId());
         }
@@ -806,6 +817,7 @@ public class ProductProcesslmpl implements ProductProcessService {
             quote.setBsStatus3(1);
             quoteDao.save(quote);
         }
+        productProcessDao.saveAll(productProcessList);
         quoteSumService.countMeterAndProcess(quoteId+"");
         return ApiResponseResult.success("确认完成成功！");
     }

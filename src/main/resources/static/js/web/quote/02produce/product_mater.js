@@ -428,7 +428,7 @@ $(function() {
 });
 
 function isComplete() {
-	if (iStatus == 2) {
+	if (bsStatus3 >= 2) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)

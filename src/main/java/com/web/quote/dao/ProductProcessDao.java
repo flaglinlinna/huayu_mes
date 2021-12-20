@@ -52,6 +52,8 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsGroups(Integer delFlag,Long pkQuote,String bsGroups);
 
+	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsGroupsOrderByBsOrderDesc(Integer delFlag,Long pkQuote,String bsGroups);
+
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsTypeAndBsSingletonOrderByBsOrder(Integer delFlag,Long pkQuote,String bsType,Integer bsSingleton);
 
 	public List<ProductProcess> findByDelFlagAndPkQuoteAndBsTypeOrderByBsOrder(Integer delFlag,Long pkQuote,String bsType);
@@ -79,6 +81,9 @@ public interface ProductProcessDao extends CrudRepository<ProductProcess, Long>,
 //	public List<ProductProcess> findSumList2(Long pkQuote);
 
 	public List<ProductProcess> findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagAndBsMaterNameOrderByBsOrderDesc(String bsName,String element,Long pkQuote,String bsType,Integer delFlag,String bsMaterName);
+
+
+	public List<ProductProcess> findByBsNameAndBsElementAndPkQuoteAndBsTypeAndDelFlagOrderByBsOrderDesc(String bsName,String element,Long pkQuote,String bsType,Integer delFlag);
 
 	@Query(value = "select * from (select pp.id,pp.bs_linK_name,pp.bs_groups,pp.BS_ELEMENT,pp.BS_ORDER,bs_Name,bs_Mater_Cost,bs_Fee_Lh_All,bs_Fee_Mh_All,bs_Fee_Wx_All,bs_Yield," +
 			"bs_The_Loss,pp.BS_COST,pp.BS_ALL_LOSS,bp.PROC_NAME,bw.workcenter_Name from PRICE_PRODUCT_PROCESS pp left join BJ_BASE_PROC bp on pp.PK_PROC = bp.id" +

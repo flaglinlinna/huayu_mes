@@ -64,6 +64,7 @@ public class ProductProcessController extends WebController {
 				mav.addObject("nowStatus", quoteService.getOutStatus(Long.parseLong(quoteId)));
 			}
 			mav.addObject("bsStatus2", quoteService.getStatus2(Long.parseLong(quoteId)).getData());
+			mav.addObject("bsStatus3", quoteService.getStatus3(Long.parseLong(quoteId)).getData());
 			mav.addObject("Jitai", sysParamSubService.getListByMCode("BJ_BASE_MACHINE_TYPE").getData());
 			mav.addObject("bomNameList",productProcessService.getBomSelect(quoteId));
 			mav.setViewName("/web/quote/02produce/product_process");// 返回路径

@@ -36,10 +36,10 @@ public class QuoteFileController extends WebController {
 	public ModelAndView toProductFile(String quoteId,String code) {
 		ModelAndView mav = new ModelAndView();
 		try {
-			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),code);
+			ApiResponseResult iStatus =quoteService.getStatus(Long.parseLong(quoteId));
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("code", code);
-			mav.addObject("nowStatus", iStatus);
+			mav.addObject("nowStatus", iStatus.getData());
 			mav.setViewName("/web/quote/01business/quote_file");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

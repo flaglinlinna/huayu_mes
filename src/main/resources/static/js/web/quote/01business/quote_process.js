@@ -114,7 +114,7 @@ $(function() {
 
 				res.data.forEach(function (item, index) {
 					// console.log(item);
-					if(item.bsStatus =='1'){
+					if(nowStatus ==1){
 						tableView.find('tr[data-index=' + index + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
 						$("select[name='selectBsMaterName']").attr("disabled","disabled");
 						$("select[name='selectBsGroups']").attr("disabled","disabled");
@@ -1090,8 +1090,9 @@ function updateBsGroups(id,bsGroups) {
 		});
 }
 
-function isComplete() {
-	if (iStatus == 2) {
+function isComplete(){
+		console.log(nowStatus);
+	if (nowStatus == 1) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true)
@@ -1422,7 +1423,7 @@ function loadAll() {
 
 			res.data.forEach(function (item, index) {
 				// console.log(item);
-				if(item.bsStatus =='1'){
+				if(nowStatus ==1){
 					tableView.find('tr[data-index=' + index + ']').find('td').data('edit',false).css("background-color", "#d2d2d2")
 					$("select[name='selectBsMaterName']").attr("disabled","disabled");
 					$("select[name='selectBsGroups']").attr("disabled","disabled");

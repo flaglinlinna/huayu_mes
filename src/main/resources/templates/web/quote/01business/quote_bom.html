@@ -130,14 +130,16 @@
 		 <script type="text/html" id="optBar">
 			 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 			 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-<!--                 {{# if(iStatus==2){ }}-->
-<!--                 <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>-->
-<!--                 <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>-->
-<!--                 {{# } else { }}-->
-<!--                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
-<!--                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
-<!--                 {{# } }}              -->
          </script>
+
+
+			<!--                 {{# if(iStatus==2){ }}-->
+			<!--                 <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>-->
+			<!--                 <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>-->
+			<!--                 {{# } else { }}-->
+			<!--                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+			<!--                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+			<!--                 {{# } }}              -->
 
 		<script type="text/html" id="selectRetrial" >
 			<select name="selectRetrial" lay-filter="selectRetrial" lay-search>
@@ -431,7 +433,7 @@
 			var bsElement=[[${bsElement}]];
 			var bomId=[[${bomId}]];
             var nowStatus=[[${nowStatus}]];
-            var iStatus=nowStatus.data[0].BS_STATUS
+            // var iStatus=nowStatus.data[0].BS_STATUS
         </script>
 
 <!--		<script th:src="@{/js/web/quote/01business/quote_bom.js}"-->

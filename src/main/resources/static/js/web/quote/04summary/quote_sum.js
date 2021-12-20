@@ -502,7 +502,7 @@ $(function() {
 				{field : 'BS_YIELD',title : '工序良率%',width : 90,templet:function (d) {
 						return Number(d.BS_YIELD).toFixed(2);
 					}},
-				{field : 'BS_THE_LOSS',title : '工序损耗累计',width : 110,totalRow : true},
+				{field : 'BS_THE_LOSS',title : '工序损耗累计',width : 125,totalRow : true},
 				{field : 'bsCostLoss',title : '工序成本(含损耗)',width : 130,totalRow : true,templet: function (d) {
 						return (Number(d.BS_COST)+Number(d.BS_THE_LOSS)).toFixed(4);
 					}},
@@ -511,6 +511,7 @@ $(function() {
 			] ],
 			done : function(res, curr, count) {
 				//pageCurr = curr;
+				$('div[lay-id="processLoseTable"]').find('.layui-table-header').find('th[data-field="BS_THE_LOSS"]').find('span').html('工序损耗累计<i class="layui-icon alone-tips" lay-tips="造成上工序损耗"></i>');
 			}
 		});
 
@@ -945,6 +946,8 @@ function getLossDetail(title){
 			this.elem.next().find('.layui-table-total td[data-field="BS_COST"] .layui-table-cell').text(bsCost.toFixed(2));
 
 			this.elem.next().find('.layui-table-total td[data-field="BS_YIELD"] .layui-table-cell').text(yieldTotal.toFixed(2)+"%");
+			$('div[lay-id="processLoseTable"]').find('.layui-table-header').find('th[data-field="BS_THE_LOSS"]').find('span').html('工序损耗累计<i class="layui-icon alone-tips" lay-tips="造成上工序损耗"></i>');
+
 		}
 	})
 	var index = layer.open({

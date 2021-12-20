@@ -57,10 +57,10 @@ public class QuoteMouldController extends WebController {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ApiResponseResult bomNameList=quoteMouldService.getBomList(quoteId);
-			ApiResponseResult iStatus =quoteService.getItemStatus(Long.parseLong(quoteId),code);
+			ApiResponseResult iStatus =quoteService.getStatus(Long.parseLong(quoteId));
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("code", code);
-			mav.addObject("nowStatus", iStatus);
+			mav.addObject("nowStatus", iStatus.getData());
 			mav.addObject("bomNameList", bomNameList);
 			mav.setViewName("/web/quote/01business/quote_mould");// 返回路径
 		} catch (Exception e) {

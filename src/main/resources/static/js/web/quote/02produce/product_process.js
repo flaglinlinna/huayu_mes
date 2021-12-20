@@ -16,7 +16,7 @@ $(function() {
 			tableSelect1 = layui.tableSelect,tableSelect2 = layui.tableSelect,
 			tableSelect3 = layui.tableSelect,upload2 =layui.upload,element = layui.element,upload3 =layui.upload;
 
-		// isComplete()
+		isComplete()
 
 		if(bsType=='out'){
 			$('#fileListBtn').show();
@@ -1071,7 +1071,7 @@ function loadFile() {
 }
 
 function isComplete() {
-	if (iStatus >= 2 ||bsStatus2 ==5) {
+	if (bsStatus3 >=2) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#delbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)

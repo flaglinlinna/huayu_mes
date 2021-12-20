@@ -84,6 +84,7 @@ public class QuoteBomlmpl implements QuoteBomService {
 //			return ApiResponseResult.failure("外协不允许在清单中,请到“工艺流程”中选择外协。");
 //		}
 		//--end
+		quoteItemDao.switchStatus(1, quoteBom.getPkQuote(), "A001");
 		quoteBomDao.save(quoteBom);
 		return ApiResponseResult.success("外购件清单信息新增成功！").data(quoteBom);
 	}

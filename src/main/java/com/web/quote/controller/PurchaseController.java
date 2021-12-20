@@ -65,6 +65,7 @@ public class PurchaseController extends WebController {
 			mav.addObject("nowStatus", iStatus);
 			mav.addObject("quoteId", quoteId);
 			mav.addObject("bsStatus2", quoteService.getStatus2(Long.parseLong(quoteId)).getData());
+			mav.addObject("bsStatus3", quoteService.getStatus3(Long.parseLong(quoteId)).getData());
 			mav.setViewName("/web/quote/03purchase/purchase_edite");// 返回路径
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -11,7 +11,7 @@ $(function() {
 						var table = layui.table, table1 = layui.table, form = layui.form, upload = layui.upload, tableSelect = layui.tableSelect, tableSelect1 = layui.tableSelect
 							, tableSelect2 = layui.tableSelect, tableSelect3 = layui.tableSelect,tableFilter = layui.tableFilter
 							, tableSelect4 = layui.tableSelect;
-						// isComplete()
+						isComplete()
 						tableSelect = tableSelect.render({
 							elem : '#BjWorkCenter',
 							searchKey : 'keyword',
@@ -284,9 +284,9 @@ $(function() {
 								pageCurr = curr;
 								var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 								layui.each(res.data, function(i, item){
-								// if(item.bsStatus=='1') {
-								// 	tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2")
-								// }
+									if(nowStatus==1) {
+										tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2")
+									}
 								});
 
 								// layuitable =tabelId[0].getElementsByClassName("layui-table-main");
@@ -483,9 +483,9 @@ $(function() {
 								getProdErr(data, data.id);
 							} else if(obj.event =='priceComm'){
 								tableIndex2 = obj.tr.attr('data-index');
-								if (iStatus != 2) {
-									$('#priceComm').click();
-								}
+								// if (iStatus != 2) {
+								// 	$('#priceComm').click();
+								// }
 							}
 						});
 
@@ -584,7 +584,8 @@ $(function() {
 });
 
 function isComplete() {
-	if (iStatus == 2) {
+	console.log(nowStatus);
+	if (nowStatus == 1) {
 		$("#addbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		// $("#exportbtn").addClass("layui-btn-disabled").attr("disabled", true)
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true)
@@ -968,7 +969,7 @@ function getTableList() {
 			pageCurr = curr;
 			var tableIns = this.elem.next(); // 当前表格渲染之后的视图
 			layui.each(res.data, function(i, item){
-				if(item.bsStatus=='1') {
+				if(nowStatus==1) {
 					tableIns.find('tr[data-index=' + i + ']').find('td').data('edit', false).css("background-color", "#d2d2d2")
 				}
 			});

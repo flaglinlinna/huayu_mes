@@ -452,6 +452,8 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 		Integer notFilled = 0;
 		//判断是否全部完成标识
 		boolean allFinished = true;
+		//判断该条数据完成标识
+		boolean thisFinished = true;
 		//待确认的采购信息
 		List<ProductMater> productMaterList = new ArrayList<>();
 //		List<Map<String, Object>> lmp = productMaterDao.getRoleByUid(UserUtil.getSessionUser().getId());
@@ -474,6 +476,7 @@ public class Purchaselmpl extends BaseSql implements PurchaseService {
 			for(ProductMater o:productMaterList){
 				if(o.getBsAssess()==null){
 					allFinished = false;
+//					thisFinished = false;
 				}else {
 //				o.setBsStatusPurchase(1);
 					o.setLastupdateDate(new Date());

@@ -12,6 +12,7 @@ import com.web.basePrice.entity.Unit;
 import com.web.quote.dao.*;
 import com.web.quote.entity.*;
 import com.web.quote.service.QuoteProcessService;
+import com.web.quote.service.QuoteProductService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,8 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     private TodoInfoService todoInfoService;
     @Autowired
     private QuoteProcessService quoteProcessService;
+    @Autowired
+    private QuoteProductService quoteProductService;
 	@Autowired
 	private SysUserDao sysUserDao;
 	@Autowired
@@ -697,9 +700,21 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
     }
 
     @Override
+    public ApiResponseResult getStatus(Long id) throws Exception {
+        Quote o = quoteDao.findById((long) id);
+        return ApiResponseResult.success().data(o.getBsStatus());
+    }
+
+    @Override
     public ApiResponseResult getStatus2(Long id) throws Exception {
         Quote o = quoteDao.findById((long) id);
         return ApiResponseResult.success().data(o.getBsStatus2());
+    }
+
+    @Override
+    public ApiResponseResult getStatus3(Long id) throws Exception {
+        Quote o = quoteDao.findById((long) id);
+        return ApiResponseResult.success().data(o.getBsStatus3());
     }
 
     @Override
@@ -726,8 +741,12 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         if(quote==null){
             return ApiResponseResult.failure("报价单不能为空");
         }else if(quote.getBsStatus()==1){
+            if(quote.getBsStatus3()==2){
+                return ApiResponseResult.failure("报价单已审批完，不能重新下发");
+            }
             quote.setBsStatus(0);
             quoteDao.save(quote);
+
             return ApiResponseResult.success("取消下发成功");
         }
         //校验数据
@@ -811,14 +830,20 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
                         pm = productMaterList.get(0);
                     }
                 }
+
                 pm.setBsType(qb.getWc().getBsCode());//类型
+//                if(pm.getId()==null){
+//
+//                }
                 pm.setBsComponent(qb.getBsComponent());
                 pm.setBsMaterName(qb.getBsMaterName());
                 pm.setBsModel(qb.getBsModel());
                 //如果是复制单,下发材料关联的bomId与bom关联的bomId要相同(两者关联同一个复制源ID用于关联)
                 //不是复制的单，下发材料关联的bomId则为bom的Id
                 pm.setPkBomId(quote.getBsCopyId()==null?qb.getId():qb.getPkBomId());
-                pm.setBsQty(qb.getBsQty());
+                if(pm.getBsQty()==null) {
+                    pm.setBsQty(qb.getBsQty());
+                }
                 pm.setBsSingleton(qb.getBsSingleton());
 //								if(pm.getBsSingleton()==1){
 //									pm.setBsQty(qb.getBsQty());
@@ -955,6 +980,17 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         return  ApiResponseResult.success().message("下推成功");
     }
 
+
+//    public ApiResponseResult cancelStatus(Long quoteId, String bsType, String bsCode)throws Exception{
+//        //项目状态设置-状态 1：未完成
+//        quoteItemDao.switchStatus(1, quoteId, bsCode);
+//        //设置结束时间
+//        //quoteItemDao.setEndTime(null, quoteId, bsCode);
+//        //取消报价单对应类别的完成状态
+//        quoteProductService.doItemFinish(bsCode, quoteId, 1);
+//        return ApiResponseResult.success();
+//    }
+
     /**
      * 根据工作中心id和工序id查询人工和制费
      * @param w_id
@@ -996,9 +1032,11 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         HashMap retrialMap = new HashMap();
         for(Map map :mapList){
             hashMap.put(map.get("TYPE"),map.get("NUM"));
+            hashMap.put(map.get("TYPE")+"STATUS",map.get("STATUS"));
         }
         for(Map map : materList){
             materMap.put(map.get("TYPE"),map.get("NUM"));
+            materMap.put(map.get("TYPE")+"STATUS",map.get("STATUS"));
         }
         for(Map map : retrialList){
             retrialMap.put(map.get("BSCODE"),map.get("RETRIAL"));
@@ -1011,15 +1049,38 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         if(!hashMap.containsKey("hardware")){
             quoteItemDao.switchStatus(3, quoteId, "C001");
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
-        }if(!hashMap.containsKey("surface")){
+        }else {
+            if(new BigDecimal(hashMap.get("hardware").toString()).compareTo(new BigDecimal(hashMap.get("hardwareSTATUS").toString()))>0){
+                quoteItemDao.switchStatus(1, quoteId, "C001");
+//                quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
+            }
+        }
+        if(!hashMap.containsKey("surface")){
             quoteItemDao.switchStatus(3, quoteId, "C003");
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C003");
-        }if(!hashMap.containsKey("packag")){
+        }else {
+            if(new BigDecimal(hashMap.get("surface").toString()).compareTo(new BigDecimal(hashMap.get("surfaceSTATUS").toString()))>0){
+                quoteItemDao.switchStatus(1, quoteId, "C003");
+//                quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
+            }
+        }
+        if(!hashMap.containsKey("packag")){
             quoteItemDao.switchStatus(3, quoteId, "C004");
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C004");
-        }if(!hashMap.containsKey("molding")){
+        }else {
+            if(new BigDecimal(hashMap.get("packag").toString()).compareTo(new BigDecimal(hashMap.get("packagSTATUS").toString()))>0){
+                quoteItemDao.switchStatus(1, quoteId, "C004");
+//                quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
+            }
+        }
+        if(!hashMap.containsKey("molding")){
             quoteItemDao.switchStatus(3, quoteId, "C002");
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C002");
+        }else {
+            if(new BigDecimal(hashMap.get("molding").toString()).compareTo(new BigDecimal(hashMap.get("moldingSTATUS").toString()))>0){
+                quoteItemDao.switchStatus(1, quoteId, "C002");
+//                quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "C001");
+            }
         }
         //外协为工艺  1.无外协的，2.外协不需要重审 自动完成及审批
         //2021-04-09 暂时取消外协和采购的自动确认完成
@@ -1051,15 +1112,37 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
         if(!materMap.containsKey("hardware")){
             quoteItemDao.switchStatus(3, quoteId, "B001");
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B001");
-        }if(!materMap.containsKey("surface")){
+        }else {
+            if(new BigDecimal(materMap.get("hardware").toString()).compareTo(new BigDecimal(materMap.get("hardwareSTATUS").toString()))>0) {
+            quoteItemDao.switchStatus(1, quoteId, "B001");
+            }
+        }
+        if(!materMap.containsKey("surface")){
             quoteItemDao.switchStatus(3, quoteId, "B003");
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B003");
-        }if(!materMap.containsKey("packag")){
+        }else {
+            if(new BigDecimal(materMap.get("surface").toString()).compareTo(new BigDecimal(materMap.get("surfaceSTATUS").toString()))>0) {
+
+                quoteItemDao.switchStatus(1, quoteId, "B003");
+            }
+        }
+        if(!materMap.containsKey("packag")){
             quoteItemDao.switchStatus(3, quoteId, "B004");
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B004");
-        }if(!materMap.containsKey("molding")){
+        }else {
+            if(new BigDecimal(materMap.get("packag").toString()).compareTo(new BigDecimal(materMap.get("packagSTATUS").toString()))>0) {
+
+                quoteItemDao.switchStatus(1, quoteId, "B004");
+            }
+        }
+        if(!materMap.containsKey("molding")){
             quoteItemDao.switchStatus(3, quoteId, "B002");
             quoteItemDao.setPerson(UserUtil.getSessionUser().getUserName(),UserUtil.getSessionUser().getId(),quoteId, "B002");
+        }else {
+            if(new BigDecimal(materMap.get("molding").toString()).compareTo(new BigDecimal(materMap.get("moldingSTATUS").toString()))>0) {
+
+                quoteItemDao.switchStatus(1, quoteId, "B002");
+            }
         }
 
         //材料和工艺自动完成情况下(即是该工作中心下无需填写的数据)则自动审批
@@ -1149,5 +1232,27 @@ public class Quotelmpl  extends BaseSql implements QuoteService {
 //			}
 //			productMaterDao.saveAll(productMaterList);
 //		}
+        Quote quote = lo.get(0);
+        if(quoteItemDao.getStatusByHardware(quoteId).size()>0){
+            quote.setBsStatus2Hardware(1);
+        }else {
+            quote.setBsStatus2Hardware(2);
+        }
+        if(quoteItemDao.getStatusByMolding(quoteId).size()>0){
+            quote.setBsStatus2Molding(1);
+        }else {
+            quote.setBsStatus2Molding(2);
+        }
+        if(quoteItemDao.getStatusBySurface(quoteId).size()>0){
+            quote.setBsStatus2Surface(1);
+        }else {
+            quote.setBsStatus2Surface(2);
+        }
+        if(quoteItemDao.getStatusByPackag(quoteId).size()>0){
+            quote.setBsStatus2Packag(1);
+        }else {
+            quote.setBsStatus2Packag(2);
+        }
+        quoteDao.save(quote);
     }
 }

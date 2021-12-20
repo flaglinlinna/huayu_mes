@@ -43,7 +43,11 @@ public interface QuoteService {
 
 	public ApiResponseResult getOutStatus(Long id) throws Exception;//外协填写审批状态
 
-	public ApiResponseResult getStatus2(Long id) throws Exception;//外协填写审批状态
+	public ApiResponseResult getStatus(Long id) throws Exception;//制造部填写审批状态
+
+	public ApiResponseResult getStatus2(Long id) throws Exception;//制造部填写审批状态
+
+	public ApiResponseResult getStatus3(Long id) throws Exception;//业务填写审批状态
 
 	public ApiResponseResult getFreightStatus(Long id) throws Exception; //获取包装运输费填写审批状态
 

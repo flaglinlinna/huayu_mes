@@ -479,7 +479,7 @@ function cancelConfirm(){
 }
 
 function isComplete() {
-	if (nowStatus.data == 0 ||bsStatus2 == 5) {
+	if (bsStatus3 >=2) {
 		$("#loadbtn").addClass("layui-btn-disabled").attr("disabled", true);
 		$("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
 		$("#editListBtn").addClass("layui-btn-disabled").attr("disabled", true);
@@ -599,7 +599,10 @@ function confirm() {
 					// $("#savebtn").addClass("layui-btn-disabled").attr("disabled", true);
 					// // 加载页面
 					// loadAll();
+					var srcUrl = context + '/purchase/toPurchaseList';
+					($(window.parent.document).find(('iframe[src="' + srcUrl + '"]'))).attr('src', srcUrl);
 					parent.layui.admin.events.closeThisTabs();
+
 				});
 			} else {
 				layer.alert(data.msg);

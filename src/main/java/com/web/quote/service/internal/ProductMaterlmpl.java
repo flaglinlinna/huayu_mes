@@ -235,34 +235,42 @@ public class ProductMaterlmpl implements ProductMaterService {
     	}
     	//判断是否全部完成标识
     	boolean allFinished = true;
+        //判断该条数据完成标识
+        boolean thisFinished = true;
     	productMaterDao.saveAll(productMaterList2);
         List<ProductMater> productMaterList  = productMaterDao.findByDelFlagAndPkQuoteAndBsType(0,quoteId,bsType);
         for(ProductMater o : productMaterList) {
             if(("PCS").equals(o.getPurchaseUnit())){
                 if ( o.getBsQty() == null ) {
                        allFinished = false;
+                        thisFinished = false;
 //                    return ApiResponseResult.failure("用量不能为空,请检查后再确认！");
                 }
             }else if("molding".equals(bsType)||"hardware".equals(bsType)) {
                 if ( o.getBsProQty() == null  ||("0").equals(o.getBsCave()) || o.getBsWaterGap() == null) {
                     allFinished = false;
+                    thisFinished = false;
 //                    return ApiResponseResult.failure("制品重(g)、穴数、水口数不能为空,请检查后再确认！");
                 }
             }else if("surface".equals(bsType)) {
 //                o.getBsColor() == null || o.getBsMachiningType() == null || 配色工艺、加工类型、
                 if ( o.getBsQty() == null ) {
                     allFinished = false;
+                    thisFinished = false;
 //                    return ApiResponseResult.failure("用量不能为空,请检查后再确认！");
                 }
             }else if("packag".equals(bsType)) {
                 if (o.getBsQty() == null ) {
                     allFinished = false;
+                    thisFinished = false;
 //                    return ApiResponseResult.failure("用量存在空值,请检查后再确认！");
                 }
             }
-//            o.setBsStatus(1);
-            o.setLastupdateDate(new Date());
-            o.setLastupdateBy(UserUtil.getSessionUser().getId());
+            if(thisFinished) {
+                 o.setBsStatus(1);
+                o.setLastupdateDate(new Date());
+                o.setLastupdateBy(UserUtil.getSessionUser().getId());
+            }
         }
         productMaterDao.saveAll(productMaterList);
         if(allFinished) {
